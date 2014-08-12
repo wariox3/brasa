@@ -1,0 +1,21 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<div class="container">    
+    <h3>Lista de documentos</h3>    
+    <table class="table table-hover table-bordered table-striped"> 
+        <tr>
+            <th>ID</th>            
+            <th>Nombre</th>                
+            <th></th>                
+        </tr>
+        {% for documento in arDocumentos %}           
+        <tr>
+            <td>{{ documento.codigoDocumentoPK }}</td>            
+            <td>{{ documento.nombreDocumento }}</td>
+            <td style="text-align: center"><a href="{{ path('brs_inv_movientos_lista', { 'codigoDocumento': documento.codigoDocumentoPK }) }}"><IMG SRC="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+            
+        </tr>   
+        {% endfor %}            
+    </table>    
+</div>
+{% endblock %}

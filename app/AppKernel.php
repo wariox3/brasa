@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Brasa\GeneralBundle\BrasaGeneralBundle(),
             new Brasa\SeguridadBundle\BrasaSeguridadBundle(),
+            new Brasa\InventarioBundle\BrasaInventarioBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
