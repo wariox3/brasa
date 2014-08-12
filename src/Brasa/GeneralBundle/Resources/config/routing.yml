@@ -5,3 +5,8 @@ brasa_general_inicio:
 brs_gen_base_terceros:
     path:     /general/base/terceros
     defaults: { _controller: BrasaGeneralBundle:BaseTerceros:lista }
+    
+#Utilidades    
+brs_gen_buscar_tercero:
+    pattern:  /general/buscar/tercero/
+    defaults: { _controller: BrasaGeneralBundle:Busquedas:buscarTercero }     

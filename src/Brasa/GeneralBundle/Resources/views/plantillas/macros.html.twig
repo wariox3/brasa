@@ -1,0 +1,7 @@
+{% macro textboxtercero(valor,span,requerido,autofocus,id) %}
+    <input id="{{id}}"  name="{{id}}"  type="{{ tipo | default('text') }}" class="span{{span}}" value="{{ valor }}" {{ requerido ? 'required="required"' :'true' }} placeholder="Tercero" {{ autofocus ? 'autofocus="required"' :'true' }}/>
+{% endmacro %}
+
+{% macro textboxitem(valor,span,requerido,autofocus) %}
+    <input type="text" id="codigoitem" class="span{{span}}" name="TxtCodigoItem" type="{{ tipo | default('text') }}" value="{{valor}}" placeholder="Código Item" {{ requerido ? 'required="required"' :'true' }}  {{ autofocus ? 'autofocus="required"' :'false' }}>
+{% endmacro %}

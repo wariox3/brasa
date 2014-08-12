@@ -34,6 +34,13 @@ class InvDocumentos
      */
     protected $documentoTipoRel;     
     
+    /**
+     * @ORM\OneToMany(targetEntity="InvMovimientos", mappedBy="documentoRel")
+     */
+    protected $movimientosRel;
+
+  
+    
 
     /**
      * Get codigoDocumentoPk
@@ -113,4 +120,45 @@ class InvDocumentos
     {
         return $this->documentoTipoRel;
     }
+
+    /**
+     * Add movimientosRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientos $movimientosRel
+     * @return InvDocumentos
+     */
+    public function addMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimientos $movimientosRel)
+    {
+        $this->movimientosRel[] = $movimientosRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove movimientosRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientos $movimientosRel
+     */
+    public function removeMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimientos $movimientosRel)
+    {
+        $this->movimientosRel->removeElement($movimientosRel);
+    }
+
+    /**
+     * Get movimientosRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMovimientosRel()
+    {
+        return $this->movimientosRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }

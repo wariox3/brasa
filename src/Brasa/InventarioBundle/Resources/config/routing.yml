@@ -5,3 +5,7 @@ brs_inv_documentos_lista:
 brs_inv_movientos_lista:
     path:     /inventario/movimientos/lista/{codigoDocumento}
     defaults: { _controller: BrasaInventarioBundle:Movimientos:lista }
+
+brs_inv_movientos_nuevo:
+    path:     /inventario/movimientos/nuevo/{codigoDocumento}/{codigoMovimiento}
+    defaults: { _controller: BrasaInventarioBundle:Movimientos:nuevo }    
