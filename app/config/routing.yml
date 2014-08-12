@@ -1,0 +1,8 @@
+brasa_seguridad:
+    resource: "@BrasaSeguridadBundle/Resources/config/routing.yml"
+    prefix:   /
+
+brasa_general:
+    resource: "@BrasaGeneralBundle/Resources/config/routing.yml"
+    prefix:   /
+

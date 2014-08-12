@@ -1,0 +1,27 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<div class="container">    
+    <h3>Lista de terceros</h3>    
+    <table class="table table-hover table-bordered table-striped"> 
+        <tr>
+            <th>ID</th>            
+            <th>Nombre</th>                
+        </tr>
+        {% for tercero in arTerceros %}           
+        <tr>
+            <td>{{ tercero.codigoPK }}</td>            
+            <td>{{ tercero.nombreCorto }}</td>
+        </tr>   
+        {% endfor %}            
+    </table> 
+    <!-- Botones Menu Items -->
+    <div class="btn-toolbar" style="float: right">
+        <div class="btn-group">                    
+            <a class="btn btn-default" href="{{ path('brasa_general_inicio') }}" style="float:left">Nuevo</a>
+            <button class="btn btn-danger" type="submit" name="OpSubmit" value="OpEliminar" >Eliminar</button>
+
+        </div>                   
+    </div>                            
+    <!-- Fin Botones Menu Items -->     
+</div>
+{% endblock %}

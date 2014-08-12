@@ -1,0 +1,7 @@
+brasa_general_inicio:
+    path:     /
+    defaults: { _controller: BrasaGeneralBundle:Default:index }
+
+brs_gen_base_terceros:
+    path:     /general/base/terceros
+    defaults: { _controller: BrasaGeneralBundle:BaseTerceros:lista }

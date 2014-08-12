@@ -1,0 +1,41 @@
+
+{% block stylesheets %}            
+<link href="{{ asset('bootstrap-3.2.0-dist/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+<link href="{{ asset('css/signin.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}                 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>Inicio de sesion Soga!</title>
+    </head>
+    <body>
+        <div class="container">
+            <form class="form-signin" role="form" action="{{ path('login_check') }}" method="post">
+                <h2 class="form-signin-heading">Inicio sesion</h2>
+                <input type="email" class="form-control" placeholder="Email address" id="username" name="_username" required autofocus>
+                <input type="password" class="form-control" placeholder="Password" id="password" name="_password" required>
+
+                <label class="checkbox">
+                    <input type="checkbox" value="remember-me"> Recordarme
+                </label>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+                
+                <a class="btn btn-lg btn-default btn-block" href="{{ path('registro') }}">Nuevo usuario</a>
+                <center>
+                {% if error %}
+                    <div id="informacion" class="alert alert-block alert-error fade in" width="10px">
+                        
+                        <div>{{ error.message }}</div>
+                    </div>    
+                {% endif %}         
+            </form>
+        </div>
+    </body>
+</html>
