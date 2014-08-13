@@ -21,7 +21,7 @@ class BusquedasController extends Controller {
                 $arItem = $em->getRepository('zikmontInventarioBundle:InvItem')->findAll();
         }
         else {
-            $arTerceros = $em->getRepository('zikmontFrontEndBundle:GenTerceros')->findAll();
+            $arTerceros = $em->getRepository('BrasaGeneralBundle:GenTerceros')->findAll();
         }
 
         return $this->render('BrasaGeneralBundle:Busquedas:buscarTercero.html.twig', array("arTerceros" => $arTerceros));

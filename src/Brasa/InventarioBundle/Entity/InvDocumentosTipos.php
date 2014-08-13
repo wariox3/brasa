@@ -24,12 +24,18 @@ class InvDocumentosTipos
     private $nombreDocumentoTipo;
     
     /**
+     * @ORM\OneToMany(targetEntity="InvMovimientos", mappedBy="documentoTipoRel")
+     */
+    protected $movimientosRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="InvDocumentos", mappedBy="documentoTipoRel")
      */
     protected $documentosRel;    
     
     public function __construct()
     {        
+        $this->movimientosRel = new ArrayCollection();
         $this->documentosRel = new ArrayCollection();
     }    
     
@@ -100,5 +106,38 @@ class InvDocumentosTipos
     public function getDocumentosRel()
     {
         return $this->documentosRel;
+    }
+
+    /**
+     * Add movimientosRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientos $movimientosRel
+     * @return InvDocumentosTipos
+     */
+    public function addMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimientos $movimientosRel)
+    {
+        $this->movimientosRel[] = $movimientosRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove movimientosRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientos $movimientosRel
+     */
+    public function removeMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimientos $movimientosRel)
+    {
+        $this->movimientosRel->removeElement($movimientosRel);
+    }
+
+    /**
+     * Get movimientosRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMovimientosRel()
+    {
+        return $this->movimientosRel;
     }
 }

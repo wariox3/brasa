@@ -9,3 +9,15 @@ brs_inv_movientos_lista:
 brs_inv_movientos_nuevo:
     path:     /inventario/movimientos/nuevo/{codigoDocumento}/{codigoMovimiento}
     defaults: { _controller: BrasaInventarioBundle:Movimientos:nuevo }    
+    
+brs_inv_movientos_detalle:
+    path:     /inventario/movimientos/detalle/{codigoMovimiento}
+    defaults: { _controller: BrasaInventarioBundle:Movimientos:detalle }    
+        
+brs_inv_movimientos_agregar_item:
+    path:     /inventario/movimientos/agregar/item/{codigoMovimiento}
+    defaults: { _controller: BrasaInventarioBundle:Movimientos:detalle }    
+    
+brs_inv_movimientos_agregar_item_documento:
+    path:     /inventario/movimientos/agregar/item/documento/{codigoMovimiento}
+    defaults: { _controller: BrasaInventarioBundle:Movimientos:detalle }    

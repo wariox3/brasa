@@ -27,14 +27,14 @@
                 <td>{{ movimiento.fecha |date("Y/m/d")  }}</td>
                 <td>{{ movimiento.soporte }}</td>
                 <td>{{ movimiento.codigoTerceroFk }}</td>  
-                <td>{{ movimiento.terceroRel.nombreCortoTercero }}</td>  
-                <td style="text-align: right">{{ movimiento.subtotal | number_format(2, '.', ',')}}</td>            
+                <td>{{ movimiento.terceroRel.nombreCorto }}</td>  
+                <td style="text-align: right">{{ movimiento.vrSubtotal | number_format(2, '.', ',')}}</td>            
                 <td>                
                     {% if movimiento.estadoAutorizado == 1 %} <span class="label label-info">Aut</span> {% endif %}
                     {% if movimiento.estadoImpreso == 1 %} <span class="label label-info">Imp</span> {% endif %}                     
                     {% if movimiento.estadoAnulado == 1 %} <span class="label label-important">Anu</span> {% endif %}                     
                 </td>                
-                <td style="text-align: center"><a href="{{ path('inventario_movimientos_detalle', { 'codigoMovimiento': movimiento.codigoMovimientoPk }) }}"><img src="{{ asset('bundles/zikmont/imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_inv_movientos_detalle', { 'codigoMovimiento': movimiento.codigoMovimientoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ movimiento.codigoMovimientoPk }}" /></td>            
             </tr>
 

@@ -172,8 +172,39 @@ class InvMovimientos
      * @ORM\ManyToOne(targetEntity="InvDocumentos", inversedBy="movimientosRel")
      * @ORM\JoinColumn(name="codigo_documento_fk", referencedColumnName="codigo_documento_pk")
      */
-    protected $documentoRel;    
+    protected $documentoRel;   
     
+    /**
+     * @ORM\ManyToOne(targetEntity="InvDocumentosTipos", inversedBy="movimientosRel")
+     * @ORM\JoinColumn(name="codigo_documento_tipo_fk", referencedColumnName="codigo_documento_tipo_pk")
+     */
+    protected $documentoTipoRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTerceros", inversedBy="movimientosRel")
+     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
+     */
+    protected $terceroRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="InvMovimientosDetalles", mappedBy="movimientoRel")
+     */
+    protected $movimientosDetallesRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="InvMovimientosDescuentosFinancieros", mappedBy="movimientoRel")
+     */
+    protected $descuentosFinancierosRel;     
+    
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosDetallesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->descuentosFinancierosRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoMovimientoPk
@@ -206,29 +237,6 @@ class InvMovimientos
     public function getCodigoDocumentoFk()
     {
         return $this->codigoDocumentoFk;
-    }
-
-    /**
-     * Set documentoRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumentos $documentoRel
-     * @return InvMovimientos
-     */
-    public function setDocumentoRel(\Brasa\InventarioBundle\Entity\InvDocumentos $documentoRel = null)
-    {
-        $this->documentoRel = $documentoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get documentoRel
-     *
-     * @return \Brasa\InventarioBundle\Entity\InvDocumentos 
-     */
-    public function getDocumentoRel()
-    {
-        return $this->documentoRel;
     }
 
     /**
@@ -896,5 +904,140 @@ class InvMovimientos
     public function getEstadoContabilizado()
     {
         return $this->estadoContabilizado;
+    }
+
+    /**
+     * Set documentoRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvDocumentos $documentoRel
+     * @return InvMovimientos
+     */
+    public function setDocumentoRel(\Brasa\InventarioBundle\Entity\InvDocumentos $documentoRel = null)
+    {
+        $this->documentoRel = $documentoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get documentoRel
+     *
+     * @return \Brasa\InventarioBundle\Entity\InvDocumentos 
+     */
+    public function getDocumentoRel()
+    {
+        return $this->documentoRel;
+    }
+
+    /**
+     * Set documentoTipoRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvDocumentosTipos $documentoTipoRel
+     * @return InvMovimientos
+     */
+    public function setDocumentoTipoRel(\Brasa\InventarioBundle\Entity\InvDocumentosTipos $documentoTipoRel = null)
+    {
+        $this->documentoTipoRel = $documentoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get documentoTipoRel
+     *
+     * @return \Brasa\InventarioBundle\Entity\InvDocumentosTipos 
+     */
+    public function getDocumentoTipoRel()
+    {
+        return $this->documentoTipoRel;
+    }
+
+    /**
+     * Set terceroRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTerceros $terceroRel
+     * @return InvMovimientos
+     */
+    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTerceros $terceroRel = null)
+    {
+        $this->terceroRel = $terceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTerceros 
+     */
+    public function getTerceroRel()
+    {
+        return $this->terceroRel;
+    }
+
+    /**
+     * Add movimientosDetallesRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientosDetalles $movimientosDetallesRel
+     * @return InvMovimientos
+     */
+    public function addMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientosDetalles $movimientosDetallesRel)
+    {
+        $this->movimientosDetallesRel[] = $movimientosDetallesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove movimientosDetallesRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientosDetalles $movimientosDetallesRel
+     */
+    public function removeMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientosDetalles $movimientosDetallesRel)
+    {
+        $this->movimientosDetallesRel->removeElement($movimientosDetallesRel);
+    }
+
+    /**
+     * Get movimientosDetallesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMovimientosDetallesRel()
+    {
+        return $this->movimientosDetallesRel;
+    }
+
+    /**
+     * Add descuentosFinancierosRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientosDescuentosFinancieros $descuentosFinancierosRel
+     * @return InvMovimientos
+     */
+    public function addDescuentosFinancierosRel(\Brasa\InventarioBundle\Entity\InvMovimientosDescuentosFinancieros $descuentosFinancierosRel)
+    {
+        $this->descuentosFinancierosRel[] = $descuentosFinancierosRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove descuentosFinancierosRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientosDescuentosFinancieros $descuentosFinancierosRel
+     */
+    public function removeDescuentosFinancierosRel(\Brasa\InventarioBundle\Entity\InvMovimientosDescuentosFinancieros $descuentosFinancierosRel)
+    {
+        $this->descuentosFinancierosRel->removeElement($descuentosFinancierosRel);
+    }
+
+    /**
+     * Get descuentosFinancierosRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDescuentosFinancierosRel()
+    {
+        return $this->descuentosFinancierosRel;
     }
 }
