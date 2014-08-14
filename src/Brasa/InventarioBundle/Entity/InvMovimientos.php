@@ -169,6 +169,18 @@ class InvMovimientos
     private $estadoContabilizado = 0;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercerosDirecciones", inversedBy="movimientosRel")
+     * @ORM\JoinColumn(name="codigo_direccion_fk", referencedColumnName="codigo_direccion_pk")
+     */
+    protected $direccionRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenFormasPago", inversedBy="movimientosRel")
+     * @ORM\JoinColumn(name="codigo_forma_pago_fk", referencedColumnName="codigo_forma_pago_pk")
+     */
+    protected $formaPagoRel;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="InvDocumentos", inversedBy="movimientosRel")
      * @ORM\JoinColumn(name="codigo_documento_fk", referencedColumnName="codigo_documento_pk")
      */
@@ -1039,5 +1051,51 @@ class InvMovimientos
     public function getDescuentosFinancierosRel()
     {
         return $this->descuentosFinancierosRel;
+    }
+
+    /**
+     * Set direccionRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTercerosDirecciones $direccionRel
+     * @return InvMovimientos
+     */
+    public function setDireccionRel(\Brasa\GeneralBundle\Entity\GenTercerosDirecciones $direccionRel = null)
+    {
+        $this->direccionRel = $direccionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get direccionRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTercerosDirecciones 
+     */
+    public function getDireccionRel()
+    {
+        return $this->direccionRel;
+    }
+
+    /**
+     * Set formaPagoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenFormasPago $formaPagoRel
+     * @return InvMovimientos
+     */
+    public function setFormaPagoRel(\Brasa\GeneralBundle\Entity\GenFormasPago $formaPagoRel = null)
+    {
+        $this->formaPagoRel = $formaPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get formaPagoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenFormasPago 
+     */
+    public function getFormaPagoRel()
+    {
+        return $this->formaPagoRel;
     }
 }

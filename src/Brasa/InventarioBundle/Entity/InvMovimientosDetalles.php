@@ -63,29 +63,29 @@ class InvMovimientosDetalles
     private $cantidadAfectada = 0;      
     
     /**
-     * @ORM\Column(name="costo", type="float")
+     * @ORM\Column(name="vr_costo", type="float")
      */    
-    private $costo = 0;
+    private $vrCosto = 0;
 
     /**
-     * @ORM\Column(name="total_costo", type="float")
+     * @ORM\Column(name="vr_total_costo", type="float")
      */    
-    private $totalCosto = 0;    
+    private $vrTotalCosto = 0;    
     
     /**
-     * @ORM\Column(name="costo_promedio", type="float")
+     * @ORM\Column(name="vr_costo_promedio", type="float")
      */    
-    private $costoPromedio = 0;    
+    private $vrCostoPromedio = 0;    
     
     /**
-     * @ORM\Column(name="precio", type="float")
+     * @ORM\Column(name="vr_precio", type="float")
      */    
-    private $precio = 0;
+    private $vrPrecio = 0;
 
     /**
-     * @ORM\Column(name="subtotal", type="float")
+     * @ORM\Column(name="vr_subtotal", type="float")
      */    
-    private $subTotal = 0;
+    private $vrSubTotal = 0;
 
     /**
      * @ORM\Column(name="porcentaje_iva", type="integer")
@@ -93,9 +93,9 @@ class InvMovimientosDetalles
     private $porcentajeIva = 0;
     
     /**
-     * @ORM\Column(name="valor_total_iva", type="float")
+     * @ORM\Column(name="vr_iva", type="float")
      */    
-    private $valorTotalIva = 0;
+    private $vrIva = 0;
 
     /**
      * @ORM\Column(name="porcentaje_descuento", type="float")
@@ -103,19 +103,19 @@ class InvMovimientosDetalles
     private $porcentajeDescuento = 0;
 
     /**
-     * @ORM\Column(name="valor_total_descuento", type="float")
+     * @ORM\Column(name="vr_descuento", type="float")
      */    
-    private $valorTotalDescuento = 0;
+    private $vrDescuento = 0;
 
     /**
-     * @ORM\Column(name="total_bruto", type="float")
+     * @ORM\Column(name="vr_bruto", type="float")
      */    
-    private $totalBruto = 0;    
+    private $vrBruto = 0;    
     
     /**
-     * @ORM\Column(name="total", type="float")
+     * @ORM\Column(name="vr_total", type="float")
      */    
-    private $total = 0;
+    private $vrTotal = 0;
 
     /**
      * @ORM\Column(name="operacion_inventario", type="bigint")
@@ -164,6 +164,8 @@ class InvMovimientosDetalles
      */
     protected $movimientoRel;  
     
+
+
 
     /**
      * Get codigoDetalleMovimientoPk
@@ -383,118 +385,118 @@ class InvMovimientosDetalles
     }
 
     /**
-     * Set costo
+     * Set vrCosto
      *
-     * @param float $costo
+     * @param float $vrCosto
      * @return InvMovimientosDetalles
      */
-    public function setCosto($costo)
+    public function setVrCosto($vrCosto)
     {
-        $this->costo = $costo;
+        $this->vrCosto = $vrCosto;
 
         return $this;
     }
 
     /**
-     * Get costo
+     * Get vrCosto
      *
      * @return float 
      */
-    public function getCosto()
+    public function getVrCosto()
     {
-        return $this->costo;
+        return $this->vrCosto;
     }
 
     /**
-     * Set totalCosto
+     * Set vrTotalCosto
      *
-     * @param float $totalCosto
+     * @param float $vrTotalCosto
      * @return InvMovimientosDetalles
      */
-    public function setTotalCosto($totalCosto)
+    public function setVrTotalCosto($vrTotalCosto)
     {
-        $this->totalCosto = $totalCosto;
+        $this->vrTotalCosto = $vrTotalCosto;
 
         return $this;
     }
 
     /**
-     * Get totalCosto
+     * Get vrTotalCosto
      *
      * @return float 
      */
-    public function getTotalCosto()
+    public function getVrTotalCosto()
     {
-        return $this->totalCosto;
+        return $this->vrTotalCosto;
     }
 
     /**
-     * Set costoPromedio
+     * Set vrCostoPromedio
      *
-     * @param float $costoPromedio
+     * @param float $vrCostoPromedio
      * @return InvMovimientosDetalles
      */
-    public function setCostoPromedio($costoPromedio)
+    public function setVrCostoPromedio($vrCostoPromedio)
     {
-        $this->costoPromedio = $costoPromedio;
+        $this->vrCostoPromedio = $vrCostoPromedio;
 
         return $this;
     }
 
     /**
-     * Get costoPromedio
+     * Get vrCostoPromedio
      *
      * @return float 
      */
-    public function getCostoPromedio()
+    public function getVrCostoPromedio()
     {
-        return $this->costoPromedio;
+        return $this->vrCostoPromedio;
     }
 
     /**
-     * Set precio
+     * Set vrPrecio
      *
-     * @param float $precio
+     * @param float $vrPrecio
      * @return InvMovimientosDetalles
      */
-    public function setPrecio($precio)
+    public function setVrPrecio($vrPrecio)
     {
-        $this->precio = $precio;
+        $this->vrPrecio = $vrPrecio;
 
         return $this;
     }
 
     /**
-     * Get precio
+     * Get vrPrecio
      *
      * @return float 
      */
-    public function getPrecio()
+    public function getVrPrecio()
     {
-        return $this->precio;
+        return $this->vrPrecio;
     }
 
     /**
-     * Set subTotal
+     * Set vrSubTotal
      *
-     * @param float $subTotal
+     * @param float $vrSubTotal
      * @return InvMovimientosDetalles
      */
-    public function setSubTotal($subTotal)
+    public function setVrSubTotal($vrSubTotal)
     {
-        $this->subTotal = $subTotal;
+        $this->vrSubTotal = $vrSubTotal;
 
         return $this;
     }
 
     /**
-     * Get subTotal
+     * Get vrSubTotal
      *
      * @return float 
      */
-    public function getSubTotal()
+    public function getVrSubTotal()
     {
-        return $this->subTotal;
+        return $this->vrSubTotal;
     }
 
     /**
@@ -521,26 +523,26 @@ class InvMovimientosDetalles
     }
 
     /**
-     * Set valorTotalIva
+     * Set vrIva
      *
-     * @param float $valorTotalIva
+     * @param float $vrIva
      * @return InvMovimientosDetalles
      */
-    public function setValorTotalIva($valorTotalIva)
+    public function setVrIva($vrIva)
     {
-        $this->valorTotalIva = $valorTotalIva;
+        $this->vrIva = $vrIva;
 
         return $this;
     }
 
     /**
-     * Get valorTotalIva
+     * Get vrIva
      *
      * @return float 
      */
-    public function getValorTotalIva()
+    public function getVrIva()
     {
-        return $this->valorTotalIva;
+        return $this->vrIva;
     }
 
     /**
@@ -567,72 +569,72 @@ class InvMovimientosDetalles
     }
 
     /**
-     * Set valorTotalDescuento
+     * Set vrDescuento
      *
-     * @param float $valorTotalDescuento
+     * @param float $vrDescuento
      * @return InvMovimientosDetalles
      */
-    public function setValorTotalDescuento($valorTotalDescuento)
+    public function setVrDescuento($vrDescuento)
     {
-        $this->valorTotalDescuento = $valorTotalDescuento;
+        $this->vrDescuento = $vrDescuento;
 
         return $this;
     }
 
     /**
-     * Get valorTotalDescuento
+     * Get vrDescuento
      *
      * @return float 
      */
-    public function getValorTotalDescuento()
+    public function getVrDescuento()
     {
-        return $this->valorTotalDescuento;
+        return $this->vrDescuento;
     }
 
     /**
-     * Set totalBruto
+     * Set vrBruto
      *
-     * @param float $totalBruto
+     * @param float $vrBruto
      * @return InvMovimientosDetalles
      */
-    public function setTotalBruto($totalBruto)
+    public function setVrBruto($vrBruto)
     {
-        $this->totalBruto = $totalBruto;
+        $this->vrBruto = $vrBruto;
 
         return $this;
     }
 
     /**
-     * Get totalBruto
+     * Get vrBruto
      *
      * @return float 
      */
-    public function getTotalBruto()
+    public function getVrBruto()
     {
-        return $this->totalBruto;
+        return $this->vrBruto;
     }
 
     /**
-     * Set total
+     * Set vrTotal
      *
-     * @param float $total
+     * @param float $vrTotal
      * @return InvMovimientosDetalles
      */
-    public function setTotal($total)
+    public function setVrTotal($vrTotal)
     {
-        $this->total = $total;
+        $this->vrTotal = $vrTotal;
 
         return $this;
     }
 
     /**
-     * Get total
+     * Get vrTotal
      *
      * @return float 
      */
-    public function getTotal()
+    public function getVrTotal()
     {
-        return $this->total;
+        return $this->vrTotal;
     }
 
     /**

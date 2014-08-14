@@ -13,10 +13,16 @@ brs_inv_movientos_nuevo:
 brs_inv_movientos_detalle:
     path:     /inventario/movimientos/detalle/{codigoMovimiento}
     defaults: { _controller: BrasaInventarioBundle:Movimientos:detalle }    
-        
+               
+#Consultas
+brs_inv_consultas_item:
+    path:     /inventario/consutlas/item/{codigoItem}
+    defaults: { _controller: BrasaInventarioBundle:Consultas:item }    
+
+#Acciones
 brs_inv_movimientos_agregar_item:
     path:     /inventario/movimientos/agregar/item/{codigoMovimiento}
-    defaults: { _controller: BrasaInventarioBundle:Movimientos:detalle }    
+    defaults: { _controller: BrasaInventarioBundle:MovimientosAgregarItem:listaItem }    
     
 brs_inv_movimientos_agregar_item_documento:
     path:     /inventario/movimientos/agregar/item/documento/{codigoMovimiento}

@@ -163,7 +163,7 @@
                                 <input type="hidden" name="LblCodigoDetalle[]" value="{{ movimientoDetalle.codigoDetalleMovimientoPk }}">
                                 <span class="badge">{{ movimientoDetalle.codigoDetalleMovimientoPk }}</span>
                             </td>
-                            <td><a href="#" id="{{ path('inventario_consultas_item', { 'codigoItem':  movimientoDetalle.itemRel.codigoItemPk }) }}" >{{ movimientoDetalle.itemRel.codigoItemPk }}</a></td>
+                            <td><a href="#" id="{{ path('brs_inv_consultas_item', { 'codigoItem':  movimientoDetalle.itemRel.codigoItemPk }) }}" >{{ movimientoDetalle.itemRel.codigoItemPk }}</a></td>
                             <td>{{ movimientoDetalle.itemRel.descripcion }}</td>
                             <td>{{ movimientoDetalle.itemRel.unidadMedidaRel.nombre }}</td>
                             <!-- maneja lote -->
@@ -198,7 +198,7 @@
                                 {% endif %}            
                             <td><input style="width:50px; text-align: right" type="text" name="TxtCantidad[]" onkeypress="return validarNumeros(event)" value="{{ movimientoDetalle.cantidad }}" {% if arDocumentoConfiguracion.editarCantidad == 0 %} readonly="true" {% endif %} size="5"/></td>
                             <td><input style="width:50px; text-align: right" type="text" name="TxtDescuento[]"  value="{{ movimientoDetalle.porcentajeDescuento }}" {% if arDocumentoConfiguracion.editarDescuento == 0 %} readonly="true" {% endif %} size="5"/></td>
-                            <td><input style="width:50px; text-align: right" type="text" name="TxtPrecio[]"  value="{{ movimientoDetalle.precio }}" {% if arDocumentoConfiguracion.editarPrecio == 0 %} readonly="true" {% endif %} size="15" style="width:100px; text-align: right"/></td>
+                            <td><input style="width:50px; text-align: right" type="text" name="TxtPrecio[]"  value="{{ movimientoDetalle.vrPrecio }}" {% if arDocumentoConfiguracion.editarPrecio == 0 %} readonly="true" {% endif %} size="15" style="width:100px; text-align: right"/></td>
                             {% else %}
 
                             <td>
@@ -227,8 +227,8 @@
                             {% endif %}
 
                             <td style="text-align: right">{{ movimientoDetalle.porcentajeIva }}</td>
-                            <td style="text-align: right">{{ movimientoDetalle.subTotal | number_format(2, '.', ',') }}</td>
-                            <td style="text-align: right">{{ movimientoDetalle.total | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ movimientoDetalle.vrSubTotal | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ movimientoDetalle.vrTotal | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ movimientoDetalle.cantidad - movimientoDetalle.cantidadAfectada}}</td>
                             <td>{{ movimientoDetalle.codigoDetalleMovimientoEnlace }}</td>
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ movimientoDetalle.codigoDetalleMovimientoPk }}" /></td>
