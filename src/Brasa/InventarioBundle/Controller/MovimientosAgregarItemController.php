@@ -28,7 +28,7 @@ class MovimientosAgregarItemController extends Controller
                         foreach ($arrControles['LblCodigoItem'] as $intCodigoItem) {  
                             if($arrControles['TxtCantidad'][$intIndice] != "" && $arrControles['TxtCantidad'][$intIndice] != 0) {
                                 $arItem = $this->getDoctrine()->getRepository('BrasaInventarioBundle:InvItem')->find($intCodigoItem);            
-                                //$arItem = $em->getRepository('zikmontInventarioBundle:InvItem')->find($intCodigoItem);                    
+                                //$arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($intCodigoItem);                    
                                 $intCantidad = $arrControles['TxtCantidad'][$intIndice];
 
                                 $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();                    
@@ -71,10 +71,10 @@ class MovimientosAgregarItemController extends Controller
      */
     public function documentosControlDetalleAction($codigoMovimiento) {                
         $request = $this->getRequest();                   
-        $em = $this->getDoctrine()->getEntityManager();        
-        $arMovimiento = new \zikmont\InventarioBundle\Entity\InvMovimientos();
-        $arMovimiento = $em->getRepository('zikmontInventarioBundle:InvMovimientos')->find($codigoMovimiento);        
-        $arMovimientosDetalle = $em->getRepository('zikmontInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientesAfectar($arMovimiento->getCodigoDocumentoFk(), $arMovimiento->getCodigoTerceroFk());               
+        $em = $this->getDoctrine()->getEntityManager();  
+        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
+        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);        
+        $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientesAfectar($arMovimiento->getCodigoDocumentoFk(), $arMovimiento->getCodigoTerceroFk());               
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $intIndice = 0;
@@ -83,10 +83,10 @@ class MovimientosAgregarItemController extends Controller
                     foreach ($arrControles['LblCodigoDetalle'] as $intCodigoDetalle) {
                         if($arrControles['TxtCantidad'][$intIndice] != "" && $arrControles['TxtCantidad'][$intIndice] != 0) {
                             $intCantidad = $arrControles['TxtCantidad'][$intIndice];
-                            $arMovimientoDetalle = new \zikmont\InventarioBundle\Entity\InvMovimientosDetalles();
-                            $arMovimientoDetalle = $em->getRepository('zikmontInventarioBundle:InvMovimientosDetalles')->find($intCodigoDetalle);                            
+                            $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
+                            $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($intCodigoDetalle);                            
                             if(($arMovimientoDetalle->getCantidadAfectada() + $intCantidad) <= $arMovimientoDetalle->getCantidad()) {
-                                $arMovimientoDetalleAct = new \zikmont\InventarioBundle\Entity\InvMovimientosDetalles();                
+                                $arMovimientoDetalleAct = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();                
                                 $arMovimientoDetalleAct->setMovimientoRel($arMovimiento);                                
                                 $arMovimientoDetalleAct->setItemRel($arMovimientoDetalle->getItemRel());
                                 $arMovimientoDetalleAct->setCodigoBodegaFk($arMovimientoDetalle->getCodigoBodegaFk());
@@ -99,21 +99,21 @@ class MovimientosAgregarItemController extends Controller
                                 $arMovimientoDetalleAct->setPorcentajeDescuento($arMovimientoDetalle->getPorcentajeDescuento());                                
                                 $arMovimientoDetalleAct->setCodigoDetalleMovimientoEnlace($arMovimientoDetalle->getCodigoDetalleMovimientoPk());                                                                
                                 //La operacion de inventario se le asigna al autorizar
-                                //$arMovimientoDetalleAct->setOperacionInventario($em->getRepository('zikmontInventarioBundle:InvItem')->DevOperacionInventario($arMovimientoOrigen->getDocumentoRel()->getOperacionInventario(), $arMovimientoDetalle->getItemMD()->getItemServicio()));
+                                //$arMovimientoDetalleAct->setOperacionInventario($em->getRepository('BrasaInventarioBundle:InvItem')->DevOperacionInventario($arMovimientoOrigen->getDocumentoRel()->getOperacionInventario(), $arMovimientoDetalle->getItemMD()->getItemServicio()));
                                 
                                 //Para heredar el precio del documento control
-                                $arDocumentoControl = new \zikmont\InventarioBundle\Entity\InvDocumentosControl();
-                                $arDocumentoControl = $em->getRepository('zikmontInventarioBundle:InvDocumentosControl')->find(array('codigoDocumentoPadrePk' => $arMovimiento->getCodigoDocumentoFk(), 'codigoDocumentoHijoPk' => $arMovimientoDetalle->getMovimientoRel()->getCodigoDocumentoFk()));
+                                $arDocumentoControl = new \Brasa\InventarioBundle\Entity\InvDocumentosControl();
+                                $arDocumentoControl = $em->getRepository('BrasaInventarioBundle:InvDocumentosControl')->find(array('codigoDocumentoPadrePk' => $arMovimiento->getCodigoDocumentoFk(), 'codigoDocumentoHijoPk' => $arMovimientoDetalle->getMovimientoRel()->getCodigoDocumentoFk()));
                                 if($arDocumentoControl->getHeredaPrecio() == 1) {
                                     $arMovimientoDetalleAct->setPrecio($arMovimientoDetalle->getPrecio());
                                     $arMovimientoDetalleAct->setPorcentajeDescuento($arMovimientoDetalle->getPorcentajeDescuento());                                                                                                        
                                 }
                                 else {
                                     if($arMovimiento->getDocumentoRel()->getTipoValor() == 2)                        
-                                        $arMovimientoDetalleAct->setPrecio($em->getRepository('zikmontInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));
+                                        $arMovimientoDetalleAct->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));
 
                                     if($arMovimiento->getDocumentoRel()->getTipoValor() == 1)                        
-                                        $arMovimientoDetalleAct->setPrecio($em->getRepository('zikmontInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));                                    
+                                        $arMovimientoDetalleAct->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));                                    
                                 }
                                 if($arMovimientoDetalle->getMovimientoRel()->getDocumentoRel()->getCodigoDocumentoTipoFk() == 9) {
                                     $arMovimientoDetalleAct->setAfectarRemision(1);
@@ -128,14 +128,14 @@ class MovimientosAgregarItemController extends Controller
                         $intIndice++;
                     }
                     
-                    $em->getRepository('zikmontInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
+                    $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
                     
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }                
             }                          
         }
         
-        return $this->render('zikmontInventarioBundle:Movimientos:documentosControlDetalle.html.twig', 
+        return $this->render('BrasaInventarioBundle:Movimientos:documentosControlDetalle.html.twig', 
                 array(
                     'arMovimientosDetalle' => $arMovimientosDetalle,
                     'arMovimiento' => $arMovimiento));                                        

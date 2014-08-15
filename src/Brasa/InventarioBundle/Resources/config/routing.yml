@@ -26,7 +26,7 @@ brs_inv_movimientos_agregar_item:
     
 brs_inv_movimientos_agregar_item_documento:
     path:     /inventario/movimientos/agregar/item/documento/{codigoMovimiento}
-    defaults: { _controller: BrasaInventarioBundle:Movimientos:detalle }    
+    defaults: { _controller: BrasaInventarioBundle:MovimientosAgregarItem:documentosControlDetalle }    
     
 brs_inv_movimientos_agregar_descuento_financiero:
     path:     /inventario/movimientos/agregar/descuento/financiero/{codigoMovimiento}

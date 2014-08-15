@@ -21,7 +21,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $objRepositorio = $this->getEntityManager();              
         $objQuery = $objRepositorio->createQueryBuilder()
                 ->select('md.codigoItemFk, md.codigoBodegaFk, md.loteFk, SUM(md.cantidadOperada) as cantidadOperada')                
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')                
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')                
                 ->leftJoin("md.movimientoRel", "m")
                 ->where('md.operacionInventario != 0 AND md.estadoAutorizado = 1 AND md.codigoItemFk = ' . $indCodigoItem)
                 ->groupBy('md.codigoItemFk, md.codigoBodegaFk, md.loteFk'); 
@@ -45,7 +45,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('md.codigoDetalleMovimientoPk, md.codigoItemFk, md.codigoBodegaFk, md.loteFk, md.cantidadOperada')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin("md.movimientoRel", "m")
                 ->where('md.operacionInventario != 0 AND md.estadoAutorizado = 1')
                 ->orderBy("m.fecha", 'ASC');
@@ -73,7 +73,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('md.codigoDetalleMovimientoPk, md.cantidadOperada, md.costo, doc.generaCostoPromedio')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin("md.movimientoRel", "m")
                 ->leftJoin("m.documentoRel", "doc")
                 ->where('md.operacionInventario != 0 AND md.estadoAutorizado = 1')
@@ -107,7 +107,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('md')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin("md.movimientoRel", "m")
                 ->where('md.operacionInventario != :operacion')
                 ->setParameter('operacion', 0)
@@ -144,7 +144,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('md.codigoItemFk, md.codigoBodegaFk, md.loteFk, SUM(md.cantidad) as cantidad, item.itemServicio')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->where('md.codigoMovimientoFk = :codigoMovimientoFk')
                 ->andWhere('md.afectarRemision = 0')
                 ->leftJoin('md.itemRel', 'item')
@@ -163,7 +163,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('SUM(md.totalBruto) as totalBruto, item.cuentaCompras')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin('md.itemRel', 'item')
                 ->where('md.codigoMovimientoFk = :codigoMovimientoFk')
                 ->groupBy('item.cuentaCompras')
@@ -181,7 +181,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('SUM(md.totalBruto) as totalBruto, item.cuentaDevolucionCompras')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin('md.itemRel', 'item')
                 ->where('md.codigoMovimientoFk = :codigoMovimientoFk')
                 ->groupBy('item.cuentaDevolucionCompras')
@@ -199,7 +199,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('SUM(md.totalBruto) as totalBruto, item.cuentaVentas')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin('md.itemRel', 'item')
                 ->where('md.codigoMovimientoFk = :codigoMovimientoFk')
                 ->groupBy('item.cuentaVentas')
@@ -217,7 +217,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('SUM(md.subTotal) as subTotal, item.cuentaDevolucionVentas')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin('md.itemMD', 'item')
                 ->where('md.codigoMovimientoFk = :codigoMovimientoFk')
                 ->groupBy('item.cuentaDevolucionVentas')
@@ -236,7 +236,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('SUM(md.totalCosto) as totalCosto, item.cuentaCosto')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin('md.itemRel', 'item')
                 ->where('md.codigoMovimientoFk = :codigoMovimientoFk')
                 ->groupBy('item.cuentaCosto')
@@ -254,7 +254,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('SUM(md.costo) as costo, item.cuentaInventario')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin('md.itemRel', 'item')
                 ->where('md.codigoMovimientoFk = :codigoMovimientoFk')
                 ->groupBy('item.cuentaInventario')
@@ -273,7 +273,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('md.cantidad, movimientos.fecha, movimientos.numeroMovimiento')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin('md.movimientoRel', 'movimientos')
                 ->leftJoin('movimientos.terceroRel', 'terceros')
                 ->where('md.codigoItemFk = :codigoItemFk AND md.estadoAutorizado = 1 AND movimientos.codigoDocumentoFk = 4')
@@ -293,7 +293,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('md.cantidad')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin('md.movimientoRel', 'movimientos')
                 ->where('md.codigoItemFk = :codigoItemFk AND md.estadoAutorizado = 1 AND movimientos.codigoDocumentoFk = 4')
                 ->setParameter('codigoItemFk', $codigoProducto)
@@ -309,10 +309,10 @@ class InvMovimientosDetallesRepository extends EntityRepository {
      */
     public function EstableceLoteMovimientoDetalle($codigoMovimientoDetalle) {
         $em = $this->getEntityManager();
-        $arMovimientoDetalle = new \zikmont\InventarioBundle\Entity\InvMovimientosDetalles();
-        $arMovimientoDetalle = $em->getRepository('zikmontInventarioBundle:InvMovimientosDetalles')->find($codigoMovimientoDetalle);
-        $arLotes = new \zikmont\InventarioBundle\Entity\InvLotes();
-        $arLotes = $em->getRepository('zikmontInventarioBundle:InvLotes')->findOneBy(array('codigoItemFk' => $arMovimientoDetalle->getItemMD()->getCodigoItemPk()));
+        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
+        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($codigoMovimientoDetalle);
+        $arLotes = new \Brasa\InventarioBundle\Entity\InvLotes();
+        $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->findOneBy(array('codigoItemFk' => $arMovimientoDetalle->getItemMD()->getCodigoItemPk()));
         if(count($arLotes) > 0) {
             $arMovimientoDetalle->setLoteFk($arLotes->getLoteFk());
             $arMovimientoDetalle->setCodigoBodegaFk($arLotes->getCodigoBodegaFk());
@@ -326,7 +326,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('COUNT(md.codigoDetalleMovimientoPk) as cantidad')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->where('md.codigoMovimientoFk = :codigoMovimientoFk')                
                 ->setParameter('codigoMovimientoFk', $codigoMovimiento)
                 ->getQuery();
@@ -337,27 +337,27 @@ class InvMovimientosDetallesRepository extends EntityRepository {
     
     public function DevMovimientosDetallesPendientesAfectar($codigoDocumentoControl, $intCodigoTerceroPk) {        
         $em = $this->getEntityManager();
-        $arDocumento = new \zikmont\InventarioBundle\Entity\InvDocumentos();
-        $arDocumento = $em->getRepository('zikmontInventarioBundle:InvDocumentos')->find($codigoDocumentoControl);
-        $arDocumentoConfiguracion = new \zikmont\InventarioBundle\Entity\InvDocumentos();
-        $arDocumentoConfiguracion = $em->getRepository('zikmontInventarioBundle:InvDocumentosConfiguracion')->find($codigoDocumentoControl);
+        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumentos();
+        $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->find($codigoDocumentoControl);
+        $arDocumentoConfiguracion = new \Brasa\InventarioBundle\Entity\InvDocumentos();
+        $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentosConfiguracion')->find($codigoDocumentoControl);
         $strSql = "SELECT
                     inv_movimientos_detalles.codigo_detalle_movimiento_pk AS codigoDetalleMovimientoPk,
                     inv_movimientos_detalles.codigo_item_fk AS codigoItemPk,
                     inv_item.descripcion AS descripcion,
                     inv_movimientos_detalles.lote_fk AS loteFk,
                     inv_movimientos_detalles.codigo_bodega_fk AS codigoBodegaFk,
-                    inv_movimientos_detalles.precio AS precio,                    
+                    inv_movimientos_detalles.vr_precio AS vrPrecio,                    
                     inv_movimientos_detalles.porcentaje_iva AS porcentajeIva,
-                    inv_movimientos_detalles.subtotal AS subTotal,
+                    inv_movimientos_detalles.vr_subtotal AS vrSubTotal,
                     inv_movimientos_detalles.porcentaje_descuento AS porcentajeDescuento,
-                    inv_movimientos_detalles.total AS total,
+                    inv_movimientos_detalles.vr_total AS vrTotal,
                     inv_movimientos_detalles.cantidad AS cantidad,
                     inv_movimientos_detalles.cantidad_afectada AS cantidadAfectada,
                     (inv_movimientos_detalles.cantidad - inv_movimientos_detalles.cantidad_afectada) AS cantidadPendiente,
-                    inv_documentos.nombre AS nombreDocumento,                    
+                    inv_documentos.nombre_documento AS nombreDocumento,                    
                     inv_movimientos.numero_movimiento AS numeroDocumento,
-                    gen_terceros.nombre_corto_tercero AS nombreCortoTercero
+                    gen_terceros.nombre_corto AS nombreCortoTercero
                    FROM
                         (
                         inv_documentos_control
@@ -393,7 +393,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('md')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->where('(md.cantidad - md.cantidadAfectada) > 0 AND md.estadoAutorizado = 1 AND md.estadoCerrado = 0')
                 ->leftJoin("md.movimientoRel", "m");
         
@@ -433,7 +433,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('SUM(md.subTotal * doc.operacionComercial)')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->leftJoin("md.movimientoRel", "m")
                 ->leftJoin("m.documentoRel", "doc")
                 ->where('m.codigoDocumentoTipoFk = ' . $intCodigoTipoDocumento)
@@ -454,10 +454,10 @@ class InvMovimientosDetallesRepository extends EntityRepository {
     
     public function CrearDetalleTraslado($intMovimientoDetalle) {
         $em = $this->getEntityManager();
-        $arMovimientoDetalle = new \zikmont\InventarioBundle\Entity\InvMovimientosDetalles();
-        $arMovimientoDetalle = $em->getRepository('zikmontInventarioBundle:InvMovimientosDetalles')->find($intMovimientoDetalle);
-        $arMovimientoDetalleEntrada = new \zikmont\InventarioBundle\Entity\InvMovimientosDetalles();
-        $arMovimientoDetalleSalida = new \zikmont\InventarioBundle\Entity\InvMovimientosDetalles();
+        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
+        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($intMovimientoDetalle);
+        $arMovimientoDetalleEntrada = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
+        $arMovimientoDetalleSalida = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
         //Salida
         $arMovimientoDetalleSalida = clone $arMovimientoDetalle;
         $arMovimientoDetalleSalida->setOperacionInventario(-1);
@@ -486,7 +486,7 @@ class InvMovimientosDetallesRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                 ->select('md.codigoItemFk, md.codigoBodegaFk, md.loteFk, SUM(md.cantidad - md.cantidadAfectada) as cantidad')
-                ->from('zikmontInventarioBundle:InvMovimientosDetalles', 'md')
+                ->from('BrasaInventarioBundle:InvMovimientosDetalles', 'md')
                 ->where('movimiento.codigoDocumentoTipoFk = 9')
                 ->andWhere('movimiento.estadoAutorizado = 1')
                 ->leftJoin('md.movimientoRel', 'movimiento')

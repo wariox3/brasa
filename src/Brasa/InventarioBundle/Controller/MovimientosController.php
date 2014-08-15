@@ -179,8 +179,8 @@ class MovimientosController extends Controller
                 case "OpImprimir";
                     $strResultado = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
                     if ($strResultado == "") {
-                        $Impresion = new Control_Impresion_Inventario();
-                        $Impresion->CounstruirImpresion($em, $arMovimiento);
+                        //$Impresion = new Control_Impresion_Inventario();
+                        //$Impresion->CounstruirImpresion($em, $arMovimiento);
                     }
                     else
                         $objMensaje->Mensaje("error", "No se pudo imprimir el documento: " . $strResultado, $this);
