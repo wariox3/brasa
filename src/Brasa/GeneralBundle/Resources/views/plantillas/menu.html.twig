@@ -8,10 +8,28 @@
             <a class="navbar-brand" href="{{ path('brasa_general_inicio') }}">Brasa V1.0.0</a>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="{{ path('brasa_general_inicio') }}">Inicio</a> </li>
+            <ul class="nav navbar-nav">                
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Base <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">General</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Inventario</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
+                            </ul>
+                        </li>                        
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Consultas <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
                         <li class="divider"></li>
@@ -24,26 +42,64 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Movimientos <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Procesos <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
                         <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">General</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>                       
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Movimientos <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Inventario</a>
                             <ul class="dropdown-menu">
                                 <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 8 }) }}">Solicitudes</a></li>
                                 <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 5 }) }}">Ordenes de compra</a></li>
                                 <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Compras</a></li>
-                                <li class="dropdown-submenu">
-                                    <a href="#">Herramientas</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brasa_general_inicio') }}">Intercambio de datos - Contai</a></li>
-                                    </ul>
-                                </li>
+                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Entradas</a></li>
+                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Salidas</a></li>
+                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Traslados</a></li>
+                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Pedidos</a></li>
+                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Remisiones</a></li>
+                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Facturas</a></li>
+                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Orden de produccion</a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Herramientas <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">General</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Informes <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">General</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>                
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

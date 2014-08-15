@@ -105,12 +105,12 @@
     <!-- Fin Encabezado Movimiento -->
     <form action="{{ path('brs_inv_movientos_detalle', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}" method="post" novalidate>
         <div class="btn-group">
-            <a  class="btn btn-default" id="{{ path('brs_inv_movientos_nuevo',{'codigoDocumento': arDocumento.codigoDocumentoPK, 'codigoMovimiento': 0}) }}" href="#" data-reveal-id="nuevoMovimientoModal" data-animation="fade">Nuevo</a>
-                {% if arMovimiento.estadoAutorizado == 1 %}
-            <button class="btn btn-default" type="submit" name="OpSubmit" disabled >Editar</button>
-                {% else %}
-            <a class="btn btn-default" id="{{ path('brs_inv_movientos_nuevo',{'codigoDocumento': arDocumento.codigoDocumentoPK, 'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}" href="#" data-reveal-id="nuevoMovimientoModal" >Editar</a>
-                {% endif %}              
+            <a  class="btn btn-default" href="{{ path('brs_inv_movientos_nuevo', { 'codigoDocumento': arDocumento.codigoDocumentoPk, 'codigoMovimiento': 0 }) }}">Nuevo</a>
+            {% if arMovimiento.estadoAutorizado == 1 %}
+                <button class="btn btn-default" type="submit" name="OpSubmit" disabled >Editar</button>
+            {% else %}
+                <a class="btn btn-default" href="{{ path('brs_inv_movientos_nuevo', { 'codigoDocumento': arDocumento.codigoDocumentoPk, 'codigoMovimiento': arMovimiento.codigoMovimientoPk }) }}">Editar</a>
+            {% endif %}              
             <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAutorizar" {% if arMovimiento.estadoAutorizado == 1 %} disabled {% endif %}>Autorizar</button>
             <button type="button" class="btn btn-default" type="submit" name="OpSubmit" value="OpDesAutorizar" {% if arMovimiento.estadoAutorizado == 0 or arMovimiento.estadoImpreso == 1 %} disabled {% endif %}>Desautorizar</button>
             <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAnular" {% if arMovimiento.estadoAutorizado == 0 or arMovimiento.estadoAnulado == 1 or arMovimiento.estadoImpreso == 0 %} disabled {% endif %} onclick="javascript:if (!confirm('Esta seguro que desea anular el documento?'))
@@ -118,14 +118,15 @@
             <button class="btn btn-default " type="submit" name="OpSubmit" value="OpImprimir" {% if arMovimiento.estadoAutorizado == 0 %} disabled {% endif %}>Imprimir</button>
         </div>
     </form>
-        <br />
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#detalles" data-toggle="tab">Detalles</a></li>
-            <li><a href="#conceptos" data-toggle="tab">Conceptos</a></li>
-        </ul>
+    <br />
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#detalles" data-toggle="tab">Detalles</a></li>
+        <li><a href="#conceptos" data-toggle="tab">Conceptos</a></li>
+    </ul>
 
-        <div class="tab-content">
-            <div class="tab-pane active" id="detalles">
+    <div class="tab-content">
+        <div class="tab-pane active" id="detalles">
+            <form action="{{ path('brs_inv_movientos_detalle', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}" method="post" novalidate>
                 <!-- Menu Encabezado Movimiento -->
                 <div id="detalles" style="width: 99.5%">
                     <table class="table table-striped table-bordered table-condensed">
@@ -207,7 +208,7 @@
                                 <span class="badge badge-info">C</span>
                                     {% endif %}
                             </td>
-                            <td><a href="#" id="{{ path('inventario_consultas_item', { 'codigoItem':  movimientoDetalle.itemRel.codigoItemPk }) }}" >{{ movimientoDetalle.itemRel.codigoItemPk }}</a></td>
+                            <td><a href="#" id="{{ path('brs_inv_consultas_item', { 'codigoItem':  movimientoDetalle.itemRel.codigoItemPk }) }}" >{{ movimientoDetalle.itemRel.codigoItemPk }}</a></td>
                             <td>{{ movimientoDetalle.itemRel.descripcion }}</td>
                             <td>{{ movimientoDetalle.itemRel.unidadMedidaRel.nombre }}</td>
                                 {% if arDocumentoConfiguracion.manejaLote == 1 %}
@@ -223,7 +224,7 @@
                                 {% endif %}                                        
                             <td style="text-align: right">{{ movimientoDetalle.cantidad | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ movimientoDetalle.porcentajeDescuento | number_format(0, '.', ',') }}</td>
-                            <td style="text-align: right">{{ movimientoDetalle.precio | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ movimientoDetalle.vrPrecio | number_format(2, '.', ',') }}</td>
                             {% endif %}
 
                             <td style="text-align: right">{{ movimientoDetalle.porcentajeIva }}</td>
@@ -246,18 +247,17 @@
                     </div>
 
                     <div class="btn-toolbar divDerecho">
-
-                        {% if arMovimiento.estadoAutorizado == 0 %}
+                            {% if arMovimiento.estadoAutorizado == 0 %}
                         <div class="btn-group">
-                                {% if arDocumentoConfiguracion.agregarItem == 1 %}
+                                    {% if arDocumentoConfiguracion.agregarItem == 1 %}
                             <button class="btn btn-default" Id="BtnAgregar" type="submit" name="OpSubmit" value="OpAgregarItem" {% if arMovimiento.estadoAutorizado == 1 %} disabled {% endif %}>Agregar</button>
                             <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_inv_movimientos_agregar_item', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}', 'AgregarItems', 600, 900)">Buscar Item</a>
-                                {% endif %}
-                                {% if arDocumentoConfiguracion.agregarItemDocumentoControl == 1 %}
+                                    {% endif %}
+                                    {% if arDocumentoConfiguracion.agregarItemDocumentoControl == 1 %}
                             <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_inv_movimientos_agregar_item_documento', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}', 'AgregarItems', 600, 900)">Agregar Item de documento</a>
-                                {% endif %}
+                                    {% endif %}
                         </div>
-                        {% endif %}
+                            {% endif %}
 
                         <div class="btn-group">
                             <button class="btn btn-default" type="submit" name="OpSubmit" value="OpCerrarDetalles" {% if arMovimiento.estadoAutorizado == 0 %} disabled {% endif %}>Cerrar</button>
@@ -266,76 +266,78 @@
                         </div>
                     </div>
                     <!-- Fin Botones Menu Items -->
+
                     <br/><br/>
                     <hr/>
                 </div>
-            </div>
-            <div class="tab-pane" id="conceptos">
-                <!--Tabla de otros Conceptos -->
-                <h2>Otros Conceptos <small><label id="lblNombreDocumento">Retenciones</label></small></h2>
-                <!-- tabla de retenciones -->
-                <table class="table table-striped table-bordered table-condensed">
-                    <tr>
-                        <th>ID</th>
-                        <th>Concepto</th>
-                        <th>Base</th>
-                        <th>%</th>
-                        <th>Valor</th>
-                    </tr>
-                    {% for movimientoRetencion in arMovimientosRetenciones %}
-                    <tr>
-                        <td>{{ movimientoRetencion.codigoMovimientoRetencionPk }}</td>
-                        <td>{{ movimientoRetencion.conceptoRetencionRel.nombreConceptoRetencion }}</td>
-                        <td style="text-align: right">{{ movimientoRetencion.baseRetencion | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ movimientoRetencion.porcentajeRetencion | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ movimientoRetencion.valorTotalRetencion | number_format(2, '.', ',') }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <div class="btn-toolbar divDerecho">
-                    <div class="btn-group">
-                        <a class="btn btn-mini" href="javascript:abrirVentana3('{{ path('brs_inv_movimientos_agregar_item', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}', 'AgregarItems', 600, 900)">Agregar retencion</a>
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpEliminar">Eliminar</button>
-                    </div>
-                </div><br>                
-                <!--Fin tabla de otros Conceptos -->
-
-                <!--Tabla de descuentos financieros -->
-                <h2><small><label id="lblNombreDocumento">Descuentos financieros</label></small></h2>
-                <table class="table table-striped table-bordered table-condensed">
-                    <tr>
-                        <th>ID</th>
-                        <th>Descuento</th>
-                        <th>Base</th>
-                        <th>%</th>
-                        <th>Valor</th>
-                        <th></th>
-                    </tr>
-                    {% for arMovimientosDescuentosFinancieros in arMovimientosDescuentosFinancieros %}
-                    <tr>
-                        <td>{{ arMovimientosDescuentosFinancieros.codigoMovimientoDescuentoFinancieroPk }}</td>
-                        <td>{{ arMovimientosDescuentosFinancieros.descuentoFinancieroRel.nombre }}</td>
-                        <td style="text-align: right">{{ arMovimientosDescuentosFinancieros.base | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arMovimientosDescuentosFinancieros.porcentaje | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arMovimientosDescuentosFinancieros.valorTotal | number_format(2, '.', ',') }}</td>
-                        <td><input type="checkbox" name="ChkSeleccionarDescuentoFinanciero[]" value="{{ arMovimientosDescuentosFinancieros.codigoMovimientoDescuentoFinancieroPk }}" /></td>            
-                    </tr>
-                    {% endfor %}
-                </table>
-                <div class="btn-toolbar divDerecho">
-                    {% if arMovimiento.estadoAutorizado == 1 and arMovimiento.estadoImpreso == 0 %}
-                    <div class="btn-group"><a class="btn btn-mini" href="javascript:abrirVentana3('{{ path('inventario_movimientos_agregar_descuento_financiero', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}', 'AgregarItems', 600, 900)">Agregar descuento</a></div>                            
-
-                    <div class="btn-group">
-                        <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpEliminarDescuentoFinanciero">Eliminar</button>
-                    </div>
-                    {% endif %}                        
-                </div>
-                <!--Fin tabla de otros Conceptos -->
-            </div>
+            </form>
         </div>
-   
+        <div class="tab-pane" id="conceptos">
+            <!--Tabla de otros Conceptos -->
+            <h2>Otros Conceptos <small><label id="lblNombreDocumento">Retenciones</label></small></h2>
+            <!-- tabla de retenciones -->
+            <table class="table table-striped table-bordered table-condensed">
+                <tr>
+                    <th>ID</th>
+                    <th>Concepto</th>
+                    <th>Base</th>
+                    <th>%</th>
+                    <th>Valor</th>
+                </tr>
+                    {% for movimientoRetencion in arMovimientosRetenciones %}
+                <tr>
+                    <td>{{ movimientoRetencion.codigoMovimientoRetencionPk }}</td>
+                    <td>{{ movimientoRetencion.conceptoRetencionRel.nombreConceptoRetencion }}</td>
+                    <td style="text-align: right">{{ movimientoRetencion.baseRetencion | number_format(2, '.', ',') }}</td>
+                    <td style="text-align: right">{{ movimientoRetencion.porcentajeRetencion | number_format(2, '.', ',') }}</td>
+                    <td style="text-align: right">{{ movimientoRetencion.valorTotalRetencion | number_format(2, '.', ',') }}</td>
+                </tr>
+                    {% endfor %}
+            </table>
+            <div class="btn-toolbar divDerecho">
+                <div class="btn-group">
+                    <a class="btn btn-mini" href="javascript:abrirVentana3('{{ path('brs_inv_movimientos_agregar_item', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}', 'AgregarItems', 600, 900)">Agregar retencion</a>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpEliminar">Eliminar</button>
+                </div>
+            </div><br>                
+            <!--Fin tabla de otros Conceptos -->
+
+            <!--Tabla de descuentos financieros -->
+            <h2><small><label id="lblNombreDocumento">Descuentos financieros</label></small></h2>
+            <table class="table table-striped table-bordered table-condensed">
+                <tr>
+                    <th>ID</th>
+                    <th>Descuento</th>
+                    <th>Base</th>
+                    <th>%</th>
+                    <th>Valor</th>
+                    <th></th>
+                </tr>
+                    {% for arMovimientosDescuentosFinancieros in arMovimientosDescuentosFinancieros %}
+                <tr>
+                    <td>{{ arMovimientosDescuentosFinancieros.codigoMovimientoDescuentoFinancieroPk }}</td>
+                    <td>{{ arMovimientosDescuentosFinancieros.descuentoFinancieroRel.nombre }}</td>
+                    <td style="text-align: right">{{ arMovimientosDescuentosFinancieros.base | number_format(2, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arMovimientosDescuentosFinancieros.porcentaje | number_format(2, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arMovimientosDescuentosFinancieros.valorTotal | number_format(2, '.', ',') }}</td>
+                    <td><input type="checkbox" name="ChkSeleccionarDescuentoFinanciero[]" value="{{ arMovimientosDescuentosFinancieros.codigoMovimientoDescuentoFinancieroPk }}" /></td>            
+                </tr>
+                    {% endfor %}
+            </table>
+            <div class="btn-toolbar divDerecho">
+                    {% if arMovimiento.estadoAutorizado == 1 and arMovimiento.estadoImpreso == 0 %}
+                <div class="btn-group"><a class="btn btn-mini" href="javascript:abrirVentana3('{{ path('brs_inv_movimientos_agregar_descuento_financiero', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}', 'AgregarItems', 600, 900)">Agregar descuento</a></div>                            
+
+                <div class="btn-group">
+                    <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpEliminarDescuentoFinanciero">Eliminar</button>
+                </div>
+                    {% endif %}                        
+            </div>
+            <!--Fin tabla de otros Conceptos -->
+        </div>
+    </div>
+
 </div>    
 {% endblock %}

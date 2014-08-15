@@ -36,7 +36,7 @@ class InvItem
     /**
      * @ORM\Column(name="vr_costo_promedio", type="float")
      */
-    private $vrcCostoPromedio = 0;    
+    private $vrCostoPromedio = 0;    
     
     /**
      * @ORM\Column(name="vr_precio_predeterminado", type="float", nullable=true)
@@ -775,5 +775,28 @@ class InvItem
     public function getMovimientosDetallesRel()
     {
         return $this->movimientosDetallesRel;
+    }
+
+    /**
+     * Set vrCostoPromedio
+     *
+     * @param float $vrCostoPromedio
+     * @return InvItem
+     */
+    public function setVrCostoPromedio($vrCostoPromedio)
+    {
+        $this->vrCostoPromedio = $vrCostoPromedio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCostoPromedio
+     *
+     * @return float 
+     */
+    public function getVrCostoPromedio()
+    {
+        return $this->vrCostoPromedio;
     }
 }

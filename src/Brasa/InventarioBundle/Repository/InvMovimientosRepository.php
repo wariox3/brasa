@@ -115,7 +115,7 @@ class InvMovimientosRepository extends EntityRepository {
                                 //Calcular costo promedio y asignarlo al item
                             }
                             else
-                                $arMovimientoDetalleAct->setCosto($arMovimientoDetalleAct->getItemRel()->getCostoPromedio());
+                                $arMovimientoDetalleAct->setVrCosto($arMovimientoDetalleAct->getItemRel()->getVrCostoPromedio());
                             $em->persist($arMovimientoDetalleAct);
                             $em->flush();
                             
@@ -458,7 +458,7 @@ class InvMovimientosRepository extends EntityRepository {
             $douTotalIva = 0;
             $douTotalDescuento = 0;
             $douTotal = 0;
-            $douSubTotal = $arMovimientoDetalle->getCantidad() * $arMovimientoDetalle->getPrecio();
+            $douSubTotal = $arMovimientoDetalle->getCantidad() * $arMovimientoDetalle->getVrPrecio();
             if ($arMovimientoDetalle->getPorcentajeDescuento() > 0)
                 $douTotalDescuento = $douSubTotal * ($arMovimientoDetalle->getPorcentajeDescuento() / 100);
             $douTotalBruto = $douSubTotal - $douTotalDescuento;
