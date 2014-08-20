@@ -1,0 +1,100 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+
+<div class="left_articles">
+    <div class="page-header">
+        <h1>Detalles pendientes</h1>
+    </div>
+
+    <table class="table table-striped table-bordered table-condensed">
+        <tr>
+            <th></th>
+            <th>Documento</th>
+            <th>Nro</th>
+            <th>Tercero</th>
+            <th>Item</th>
+            <th>Descripcion</th>
+            <th>Ex</th>
+            <th>Rem</th>
+            <th>Res</th>
+            <th>Disp</th>
+            <th>O.C</th>
+            <th>Cant</th>
+            <th>Pend</th>
+            <th>Subtotal</th>
+            <th></th>
+        </tr>
+
+        {% for movimientoDetalle in arMovimientosDetalle %}
+        <tr>
+            <td><input type="hidden" name="LblCodigoDetalle[]" value="{{ movimientoDetalle.codigoDetalleMovimientoPk }}"><span class="badge">{{ movimientoDetalle.codigoDetalleMovimientoPk }}</span></td>
+            <td>{{ movimientoDetalle.movimientoRel.documentoRel.nombreDocumento }}</td>
+            <td>{{ movimientoDetalle.movimientoRel.numeroMovimiento }}</td>
+            <td>{{ movimientoDetalle.movimientoRel.terceroRel.nombreCorto }}</td>
+            <td><a href="#" id="{{ path('brs_inv_consultas_item', { 'codigoItem':  movimientoDetalle.itemRel.codigoItemPk }) }}" >{{ movimientoDetalle.itemRel.codigoItemPk }}</a></td>
+            <td>{{ movimientoDetalle.itemRel.descripcion }}</td>
+            <td style="text-align: right">{{ movimientoDetalle.itemRel.cantidadExistencia }}</td>
+            <td style="text-align: right">{{ movimientoDetalle.itemRel.cantidadRemisionada }}</td>
+            <td style="text-align: right">{{ movimientoDetalle.itemRel.cantidadReservada }}</td>
+            <td style="text-align: right">{{ movimientoDetalle.itemRel.cantidadDisponible }}</td>
+            <td style="text-align: right">{{ movimientoDetalle.itemRel.cantidadOrdenCompra }}</td>
+            <td style="text-align: right">{{ movimientoDetalle.cantidad }}</td>
+            <td style="text-align: right">{{ movimientoDetalle.cantidad - movimientoDetalle.cantidadAfectada}}</td>
+            <td style="text-align: right">{{ movimientoDetalle.vrSubTotal | number_format(2, '.', ',') }}</td>
+            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ movimientoDetalle.codigoDetalleMovimientoPk }}" /></td>
+        </tr>
+        {% endfor %}
+   </table>
+    <!-- Formulario de busqueda -->
+    <form id="FrmBusqueda" action="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoMovimiento': 0, 'codigoDocumentoTipo': intCodigoDocumentoTipo }) }}" method="POST" novalidate>
+    <div class="well">
+        <table class="main-all-table-form">
+            <tr>
+                <td class="td-label">Tipo documento:</td>
+                <td>
+                     <select name="CboDocumentosTipo">
+                         <option value="">Seleccione</option>
+                         {% for documentoTipo in arDocumentosTipos%}
+                         <option value="{{documentoTipo.codigoDocumentoTipoPk}}" {%if documentoTipo.codigoDocumentoTipoPk == intCodigoDocumentoTipo %} selected="selected" {%endif%}>{{documentoTipo.nombreDocumentoTipo}}</option>
+                         {%endfor%}
+                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">Documento:</td>
+                <td>
+                     <select name="CboDocumentos">
+                         <option value="">Seleccione</option>
+                         {% for documento in arDocumentos%}
+                         <option value="{{documento.codigoDocumentoPk}}" {%if documento.codigoDocumentoPk == intCodigoDocumento%} selected="selected" {%endif%}>{{documento.nombreDocumento}}</option>
+                         {%endfor%}
+                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">Movimiento:</td>
+                <td class="td-in" ><input class="span1" name="TxtCodigoMovimiento" onkeypress="return validarNumeros(event)" type="text" size="15"/></td>
+            </tr>
+            <tr>
+                <td class="td-label">Numero:</td>
+                <td class="td-in" ><input class="span1" name="TxtNumeroMovimiento" onkeypress="return validarNumeros(event)" type="text" size="15"/></td></td>
+            </tr>
+            <tr>
+                <td class="td-label">Tercero:</td>
+                <td class="td-in" ><input class="span5" name="TxtCodigoTercero" onkeypress="return validarNumeros(event)" type="text" size="15"/></td>
+            </tr>
+
+            <tr>
+                <td class="td-label">Fecha:</td>
+                <td class="td-in" >Desde<input class="span2" type="text" name="TxtFechaDesde" id="FechaDesde"/> Hasta <input class="span2" type="text" name="TxtFechaHasta" id="FechaHasta"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="td-in" ><button class="btn btn-primary" type="submit" name="OpSubmit" value="OpActualizarDetalles">Buscar</button></td>
+            </tr>
+        </table>
+    </div>
+    </form>
+    <!-- Fin formulario de busqueda -->
+</div>
+{% endblock %}

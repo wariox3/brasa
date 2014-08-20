@@ -33,11 +33,7 @@ class InvDocumentosTipos
      */
     protected $documentosRel;    
     
-    public function __construct()
-    {        
-        $this->movimientosRel = new ArrayCollection();
-        $this->documentosRel = new ArrayCollection();
-    }    
+    
     
     
 
@@ -140,4 +136,13 @@ class InvDocumentosTipos
     {
         return $this->movimientosRel;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->documentosRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }

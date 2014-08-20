@@ -2,6 +2,21 @@
     <input id="{{id}}"  name="{{id}}"  type="{{ tipo | default('text') }}" class="span{{span}}" value="{{ valor }}" {{ requerido ? 'required="required"' :'true' }} placeholder="Tercero" {{ autofocus ? 'autofocus="required"' :'true' }}/>
 {% endmacro %}
 
-{% macro textboxitem(valor,span,requerido,autofocus) %}
-    <input type="text" id="codigoitem" class="span{{span}}" name="TxtCodigoItem" type="{{ tipo | default('text') }}" value="{{valor}}" placeholder="Código Item" {{ requerido ? 'required="required"' :'true' }}  {{ autofocus ? 'autofocus="required"' :'false' }}>
+{% macro textboxitem(valor,span,requerido,autofocus) %}    
+    <div class="form-group">
+        <label for="TxtDescripcion" class="col-sm-2 control-label">Item</label>
+        <div class="col-sm-10">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="input-group">
+                <input type="text" class="form-control" id="TxtDescripcion" name="TxtDescripcion" value="" placeholder="Descripcion"/>
+              <span class="input-group-btn">
+                <input type="text" class="btn btn-default" id="TxtCodigoItem" name="TxtCodigoItem" value=""/>
+                <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_inv_buscar_item') }}', 'BuscarItem', 600, 900)">Buscar</a>
+              </span>
+            </div><!-- /input-group -->
+          </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+        </div>
+    </div>    
 {% endmacro %}

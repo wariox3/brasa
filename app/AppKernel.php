@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Brasa\SeguridadBundle\BrasaSeguridadBundle(),
             new Brasa\InventarioBundle\BrasaInventarioBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Brasa\TesoreriaBundle\BrasaTesoreriaBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

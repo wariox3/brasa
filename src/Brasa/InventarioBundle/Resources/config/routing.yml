@@ -2,22 +2,52 @@ brs_inv_documentos_lista:
     path:     /inventario/documentos/lista/{codigoTipoDocumento}
     defaults: { _controller: BrasaInventarioBundle:Documentos:lista }
 
-brs_inv_movientos_lista:
+brs_inv_movimientos_lista:
     path:     /inventario/movimientos/lista/{codigoDocumento}
     defaults: { _controller: BrasaInventarioBundle:Movimientos:lista }
 
-brs_inv_movientos_nuevo:
+brs_inv_movimientos_nuevo:
     path:     /inventario/movimientos/nuevo/{codigoDocumento}/{codigoMovimiento}
     defaults: { _controller: BrasaInventarioBundle:Movimientos:nuevo }    
     
-brs_inv_movientos_detalle:
+brs_inv_movimientos_detalle:
     path:     /inventario/movimientos/detalle/{codigoMovimiento}
-    defaults: { _controller: BrasaInventarioBundle:Movimientos:detalle }    
-               
+    defaults: { _controller: BrasaInventarioBundle:Movimientos:detalle }       
+    
 #Consultas
+brs_inv_consultas_kardex:
+  pattern: /inventario/consultas/kardex
+  defaults: { _controller: BrasaInventarioBundle:Consultas:kardex} 
+  
+brs_inv_consultas_disponibles:
+  pattern: /inventario/consultas/disponibles
+  defaults: { _controller: BrasaInventarioBundle:Consultas:disponibles}   
+  
+brs_inv_consultas_inventario_valorizado:
+  pattern: /inventario/consultas/inventario/valorizado
+  defaults: { _controller: BrasaInventarioBundle:Consultas:inventarioValorizado}  
+  requirements:
+        id:  \d+   
+  
 brs_inv_consultas_item:
     path:     /inventario/consutlas/item/{codigoItem}
-    defaults: { _controller: BrasaInventarioBundle:Consultas:item }    
+    defaults: { _controller: BrasaInventarioBundle:Consultas:item } 
+        
+brs_inv_consultas_existencias:
+  pattern: /inventario/consultas/existencias
+  defaults: { _controller: BrasaInventarioBundle:Consultas:existencias} 
+
+brs_inv_consultas_movimientos_pendientes:
+  pattern: /inventario/consultas/movimientos/pendientes/{codigoDocumentoTipo}
+  defaults: { _controller: BrasaInventarioBundle:Movimientos:movimientospendientes} 
+  requirements:
+        id:  \d+  
+        
+brs_inv_consultas_movimientos_pendientes_detalles:
+  pattern: /inventario/consultas/movimientos/pendientes/detalles/{codigoMovimiento}/{codigoDocumentoTipo}
+  defaults: { _controller: BrasaInventarioBundle:Consultas:movimientosPendientesDetalles, codigoMovimiento: 0, codigoDocumentoTipo: 0 } 
+  requirements:
+        id:  \d+    
 
 #Acciones
 brs_inv_movimientos_agregar_item:
@@ -31,3 +61,8 @@ brs_inv_movimientos_agregar_item_documento:
 brs_inv_movimientos_agregar_descuento_financiero:
     path:     /inventario/movimientos/agregar/descuento/financiero/{codigoMovimiento}
     defaults: { _controller: BrasaInventarioBundle:MovimientosAgregarDescuentoFinanciero:lista }    
+    
+#Utilidades    
+brs_inv_buscar_item:
+    pattern:  /inventario/buscar/item/
+    defaults: { _controller: BrasaInventarioBundle:Busquedas:buscarItem }         

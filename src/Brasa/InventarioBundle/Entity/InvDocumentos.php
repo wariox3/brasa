@@ -211,6 +211,12 @@ class InvDocumentos
     protected $documentoTipoRel;     
     
     /**
+     * @ORM\ManyToOne(targetEntity="InvDocumentosSubtipos", inversedBy="documentosRel")
+     * @ORM\JoinColumn(name="codigo_documento_subtipo_fk", referencedColumnName="codigo_documento_subtipo_pk")
+     */
+    protected $documentoSubtipoRel; 
+    
+    /**
      * @ORM\OneToMany(targetEntity="InvMovimientos", mappedBy="documentoRel")
      */
     protected $movimientosRel;
@@ -1003,5 +1009,28 @@ class InvDocumentos
     public function getTipoTercero()
     {
         return $this->tipoTercero;
+    }
+
+    /**
+     * Set documentoSubtipoRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvDocumentosSubtipos $documentoSubtipoRel
+     * @return InvDocumentos
+     */
+    public function setDocumentoSubtipoRel(\Brasa\InventarioBundle\Entity\InvDocumentosSubtipos $documentoSubtipoRel = null)
+    {
+        $this->documentoSubtipoRel = $documentoSubtipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get documentoSubtipoRel
+     *
+     * @return \Brasa\InventarioBundle\Entity\InvDocumentosSubtipos 
+     */
+    public function getDocumentoSubtipoRel()
+    {
+        return $this->documentoSubtipoRel;
     }
 }

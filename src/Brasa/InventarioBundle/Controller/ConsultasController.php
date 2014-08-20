@@ -7,22 +7,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ConsultasController extends Controller {
 
     public function kardexAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();        
-        $objFunciones = new \zikmont\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
+        $objFunciones = new \Brasa\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
         $arrControles = $request->request->All();        
         $arMovimientosDetalle = "";        
 
         if ($request->getMethod() == 'POST') {
             $intItem = $objFunciones->DevCodigoItem($arrControles['TxtCodigoItem']);
             $intCodigoTercero = $objFunciones->DevCodigoTercero($arrControles['terceroconsulta']);            
-            $arMovimientosDetalle = $em->getRepository('zikmontInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetalles($intItem, $arrControles['CboDocumentos'], $intCodigoTercero, $arrControles['TxtLote'], $arrControles['CboBodegas'], $arrControles['TxtFechaDesde'], $arrControles['TxtFechaHasta']);
+            $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetalles($intItem, $arrControles['CboDocumentos'], $intCodigoTercero, $arrControles['TxtLote'], $arrControles['CboBodegas'], $arrControles['TxtFechaDesde'], $arrControles['TxtFechaHasta']);
         }
 
-        $arDocumentos = $em->getRepository('zikmontInventarioBundle:InvDocumentos')->DevDocumentos();
-        $arBodegas = new \zikmont\InventarioBundle\Entity\InvBodegas();
-        $arBodegas = $em->getRepository('zikmontInventarioBundle:InvBodegas')->findAll();
-        return $this->render('zikmontInventarioBundle:Consultas/Inventario:kardex.html.twig', array(
+        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->DevDocumentos();
+        $arBodegas = new \Brasa\InventarioBundle\Entity\InvBodegas();
+        $arBodegas = $em->getRepository('BrasaInventarioBundle:InvBodegas')->findAll();
+        return $this->render('BrasaInventarioBundle:Consultas/Inventario:kardex.html.twig', array(
                     'arMovimientosDetalle' => $arMovimientosDetalle,
                     'arDocumentos' => $arDocumentos,
                     'arBodegas' => $arBodegas,                                        
@@ -35,22 +35,22 @@ class ConsultasController extends Controller {
      * */
     public function disponiblesAction() {
         $request = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $arrControles = $request->request->All();
         $arLotes = "";
         $arPedidos = "";
         $arOrdenes = "";
         $intCodigoProducto = "";
-        $arMovimientosDetalleRemisiones = new \zikmont\InventarioBundle\Entity\InvMovimientosDetalles();
+        $arMovimientosDetalleRemisiones = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
         if ($request->getMethod() == 'POST') {
             $intCodigoProducto = $arrControles['TxtCodigoItem'];
-            $arLotes = $em->getRepository('zikmontInventarioBundle:InvLotes')->DevLotesExistencia($intCodigoProducto);
-            $arPedidos = $em->getRepository('zikmontInventarioBundle:InvMovimientosDetalles')->DevPedidosPendientes($intCodigoProducto);
-            $arMovimientosDetalleRemisiones = $em->getRepository('zikmontInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientes(0, 9);
+            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistencia($intCodigoProducto);
+            $arPedidos = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevPedidosPendientes($intCodigoProducto);
+            $arMovimientosDetalleRemisiones = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientes(0, 9);
         }
 
-        return $this->render('zikmontInventarioBundle:Consultas/Inventario:disponibles.html.twig', array(
+        return $this->render('BrasaInventarioBundle:Consultas/Inventario:disponibles.html.twig', array(
                     'arLotes' => $arLotes,
                     'arMovimientosDetalleRemisiones' => $arMovimientosDetalleRemisiones,
                     'arPedidos' => $arPedidos,
@@ -59,22 +59,22 @@ class ConsultasController extends Controller {
     }
 
     public function existenciasAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $objFunciones = new \zikmont\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
+        $objFunciones = new \Brasa\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
         $arrControles = $request->request->All();
-        $arLotes = new \zikmont\InventarioBundle\Entity\InvLotes();
+        $arLotes = new \Brasa\InventarioBundle\Entity\InvLotes();
         if ($request->getMethod() == 'POST') {
             $intItem = $objFunciones->DevCodigoItem($arrControles['TxtCodigoItem']);
-            $arLotes = $em->getRepository('zikmontInventarioBundle:InvLotes')->DevLotesExistenciaFiltro($intItem, $arrControles['CboBodegas'], $arrControles['TxtLote']);            
+            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistenciaFiltro($intItem, $arrControles['CboBodegas'], $arrControles['TxtLote']);            
         }
         else 
-            $arLotes = $em->getRepository('zikmontInventarioBundle:InvLotes')->DevLotesExistenciaFiltro();            
+            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistenciaFiltro();            
         
         
-        $arBodegas = new \zikmont\InventarioBundle\Entity\InvBodegas();
-        $arBodegas = $em->getRepository('zikmontInventarioBundle:InvBodegas')->findAll();                
-        return $this->render('zikmontInventarioBundle:Consultas/Inventario:existencias.html.twig', array(
+        $arBodegas = new \Brasa\InventarioBundle\Entity\InvBodegas();
+        $arBodegas = $em->getRepository('BrasaInventarioBundle:InvBodegas')->findAll();                
+        return $this->render('BrasaInventarioBundle:Consultas/Inventario:existencias.html.twig', array(
             'arLotes' => $arLotes,                                                 
             'arBodegas' => $arBodegas,
             'arrControles' => $arrControles));
@@ -82,8 +82,8 @@ class ConsultasController extends Controller {
     
     public function inventarioValorizadoAction() {
         $request = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager(); 
-        $arTemporalInventarioValorizado = new \zikmont\InventarioBundle\Entity\InvTemporalInventarioValorizado();        
+        $em = $this->getDoctrine()->getManager();
+        $arTemporalInventarioValorizado = new \Brasa\InventarioBundle\Entity\InvTemporalInventarioValorizado();        
         $intUltimoItem = "";        
         $dateDesde = "";
         $dateHasta = "";
@@ -98,25 +98,25 @@ class ConsultasController extends Controller {
             $dateHasta = $arrControles['TxtFechaHasta'];
             
             
-            $objQuery = $em->createQuery('DELETE FROM zikmontInventarioBundle:InvTemporalInventarioValorizado')->getResult();            
+            $objQuery = $em->createQuery('DELETE FROM BrasaInventarioBundle:InvTemporalInventarioValorizado')->getResult();            
             
-            $arItems = new \zikmont\InventarioBundle\Entity\InvItem();
+            $arItems = new \Brasa\InventarioBundle\Entity\InvItem();
             if($intUltimoItem != "")                            
-                $arItems = $em->getRepository('zikmontInventarioBundle:InvItem')->findBy(array('codigoItemPk' => $intUltimoItem));
+                $arItems = $em->getRepository('BrasaInventarioBundle:InvItem')->findBy(array('codigoItemPk' => $intUltimoItem));
             else
-                $arItems = $em->getRepository('zikmontInventarioBundle:InvItem')->findAll();
+                $arItems = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();
             foreach ($arItems as $arItem) {
                 $douCostoPromedio = 0;
                 $intExistenciaAnterior = 0;
-                $arMovimientosDetalles = new \zikmont\InventarioBundle\Entity\InvMovimientosDetalles();
-                $arMovimientosDetalles = $em->getRepository('zikmontInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesGeneranCosto($dateDesde, $dateHasta, $arItem->getCodigoItemPk()); 
+                $arMovimientosDetalles = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
+                $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesGeneranCosto($dateDesde, $dateHasta, $arItem->getCodigoItemPk()); 
                 foreach ($arMovimientosDetalles as $arMovimientoDetalle) {
                     if($arMovimientoDetalle['generaCostoPromedio'] == 1)
-                        $douCostoPromedio = \zikmont\InventarioBundle\Repository\InvMovimientosDetallesRepository::CacularCostoPromedio($intExistenciaAnterior, $arMovimientoDetalle['cantidadOperada'], $douCostoPromedio, $arMovimientoDetalle['costo']);                                                                            
+                        $douCostoPromedio = \Brasa\InventarioBundle\Repository\InvMovimientosDetallesRepository::CacularCostoPromedio($intExistenciaAnterior, $arMovimientoDetalle['cantidadOperada'], $douCostoPromedio, $arMovimientoDetalle['costo']);                                                                            
                     $intExistenciaAnterior = $intExistenciaAnterior + $arMovimientoDetalle['cantidadOperada'];
                 } 
                 if($intExistenciaAnterior > 0) {
-                    $arRegistroInventarioValorizado = new \zikmont\InventarioBundle\Entity\InvTemporalInventarioValorizado();
+                    $arRegistroInventarioValorizado = new \Brasa\InventarioBundle\Entity\InvTemporalInventarioValorizado();
                     $arRegistroInventarioValorizado->setItemRel($arItem);  
                     $arRegistroInventarioValorizado->setCostoPromedio($douCostoPromedio);
                     $arRegistroInventarioValorizado->setSaldo($intExistenciaAnterior);
@@ -125,9 +125,9 @@ class ConsultasController extends Controller {
                     $em->flush();
                 }
             } 
-            $arTemporalInventarioValorizado = $em->getRepository('zikmontInventarioBundle:InvTemporalInventarioValorizado')->findAll();
+            $arTemporalInventarioValorizado = $em->getRepository('BrasaInventarioBundle:InvTemporalInventarioValorizado')->findAll();
         }        
-        return $this->render('zikmontInventarioBundle:Consultas/Inventario:inventarioValorizado.html.twig', array(
+        return $this->render('BrasaInventarioBundle:Consultas/Inventario:inventarioValorizado.html.twig', array(
                     'arTemporalInventarioValorizado' => $arTemporalInventarioValorizado,
                     'ultimo_item' => $intUltimoItem,
                     'fecha_desde'=>$dateDesde,
@@ -136,24 +136,24 @@ class ConsultasController extends Controller {
     }    
 
     public function itemAction($codigoItem) {
-        $em = $this->getDoctrine()->getEntityManager();
-        $arItem = new \zikmont\InventarioBundle\Entity\InvItem();
-        $arItem = $em->getRepository('zikmontInventarioBundle:InvItem')->find($codigoItem);
-        $arLotes = new \zikmont\InventarioBundle\Entity\InvLotes();        
-        $arLotes = $em->getRepository('zikmontInventarioBundle:InvLotes')->DevLotesExistencia($codigoItem);
-        return $this->render('zikmontInventarioBundle:Consultas/Inventario:item.html.twig', array('arLotes' => $arLotes, 'arItem' => $arItem));
+        $em = $this->getDoctrine()->getManager();
+        $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
+        $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($codigoItem);
+        $arLotes = new \Brasa\InventarioBundle\Entity\InvLotes();        
+        $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistencia($codigoItem);
+        return $this->render('BrasaInventarioBundle:Consultas/Inventario:item.html.twig', array('arLotes' => $arLotes, 'arItem' => $arItem));
     }
     
     public function generalAnalisisGeneralAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $arCierreMesInventario = new \zikmont\InventarioBundle\Entity\InvCierresMes();
-        $arCierreMesInventario = $em->getRepository('zikmontInventarioBundle:InvCierresMes')->findAll();
-        return $this->render('zikmontFrontEndBundle:Consultas/General:analisisGeneral.html.twig', array('arCierreMesInventario' => $arCierreMesInventario));
+        $em = $this->getDoctrine()->getManager();
+        $arCierreMesInventario = new \Brasa\InventarioBundle\Entity\InvCierresMes();
+        $arCierreMesInventario = $em->getRepository('BrasaInventarioBundle:InvCierresMes')->findAll();
+        return $this->render('BrasaFrontEndBundle:Consultas/General:analisisGeneral.html.twig', array('arCierreMesInventario' => $arCierreMesInventario));
     }
     
     public function comercialesPresupuestosAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        return $this->render('zikmontFrontEndBundle:Consultas/Comerciales:presupuestos.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        return $this->render('BrasaFrontEndBundle:Consultas/Comerciales:presupuestos.html.twig');
     }    
 
     /*
@@ -162,14 +162,14 @@ class ConsultasController extends Controller {
 
     public function movimientosPendientesAction($codigoDocumentoTipo) {
         $request = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager();
-        $arMovimientos = new \zikmont\InventarioBundle\Entity\InvMovimientos();
-        $arMovimientos = $em->getRepository('zikmontInventarioBundle:InvMovimientos')->findBy(array('codigoDocumentoTipoFk' => $codigoDocumentoTipo, 'estadoAutorizado' => 1, 'estadoCerrado' => 0));
+        $em = $this->getDoctrine()->getManager();
+        $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimientos();
+        $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->findBy(array('codigoDocumentoTipoFk' => $codigoDocumentoTipo, 'estadoAutorizado' => 1, 'estadoCerrado' => 0));
         if ($request->getMethod() == 'POST') {
 
         }
 
-        return $this->render('zikmontFrontEndBundle:Movimientos:movimientosPendientes.html.twig', array('arMovimientos' => $arMovimientos));
+        return $this->render('BrasaFrontEndBundle:Movimientos:movimientosPendientes.html.twig', array('arMovimientos' => $arMovimientos));
     }
 
     /**
@@ -179,19 +179,19 @@ class ConsultasController extends Controller {
      */
     public function movimientosPendientesDetallesAction($codigoMovimiento, $codigoDocumentoTipo) {
         $request = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager();
-        $arDocumentosTipos = new \zikmont\InventarioBundle\Entity\InvDocumentosTipos();        
-        $arDocumentosTipos = $em->getRepository('zikmontInventarioBundle:InvDocumentosTipos')->findAll();
-        $arDocumentos = new \zikmont\InventarioBundle\Entity\InvDocumentos();
-        $arDocumentos = $em->getRepository('zikmontInventarioBundle:InvDocumentos')->findAll();
+        $em = $this->getDoctrine()->getManager();
+        $arDocumentosTipos = new \Brasa\InventarioBundle\Entity\InvDocumentosTipos();        
+        $arDocumentosTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentosTipos')->findAll();
+        $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumentos();
+        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->findAll();
 
-        $arMovimientosDetalle = $em->getRepository('zikmontInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientes(0, $codigoDocumentoTipo);
+        $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientes(0, $codigoDocumentoTipo);
 
         if ($request->getMethod() == 'POST') {
 
         }
 
-        return $this->render('zikmontInventarioBundle:Consultas/Inventario:movimientosPendientesDetalles.html.twig', array(
+        return $this->render('BrasaInventarioBundle:Consultas/Inventario:movimientosPendientesDetalles.html.twig', array(
                     'arMovimientosDetalle' => $arMovimientosDetalle,
                     'arDocumentos' => $arDocumentos,
                     'arDocumentosTipos' => $arDocumentosTipos,

@@ -10,3 +10,4 @@ brs_gen_base_terceros:
 brs_gen_buscar_tercero:
     pattern:  /general/buscar/tercero/
     defaults: { _controller: BrasaGeneralBundle:Busquedas:buscarTercero }     
+    

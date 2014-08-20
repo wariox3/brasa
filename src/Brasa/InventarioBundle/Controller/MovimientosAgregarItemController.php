@@ -8,7 +8,7 @@ class MovimientosAgregarItemController extends Controller
     
     public function listaItemAction($codigoMovimiento) {                
         $request = $this->getRequest();                   
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $arItemes = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();     
         $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
         $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
@@ -71,7 +71,7 @@ class MovimientosAgregarItemController extends Controller
      */
     public function documentosControlDetalleAction($codigoMovimiento) {                
         $request = $this->getRequest();                   
-        $em = $this->getDoctrine()->getEntityManager();  
+        $em = $this->getDoctrine()->getManager(); 
         $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
         $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);        
         $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientesAfectar($arMovimiento->getCodigoDocumentoFk(), $arMovimiento->getCodigoTerceroFk());               
@@ -110,10 +110,10 @@ class MovimientosAgregarItemController extends Controller
                                 }
                                 else {
                                     if($arMovimiento->getDocumentoRel()->getTipoValor() == 2)                        
-                                        $arMovimientoDetalleAct->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));
+                                        $arMovimientoDetalleAct->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));
 
                                     if($arMovimiento->getDocumentoRel()->getTipoValor() == 1)                        
-                                        $arMovimientoDetalleAct->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));                                    
+                                        $arMovimientoDetalleAct->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));                                    
                                 }
                                 if($arMovimientoDetalle->getMovimientoRel()->getDocumentoRel()->getCodigoDocumentoTipoFk() == 9) {
                                     $arMovimientoDetalleAct->setAfectarRemision(1);

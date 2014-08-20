@@ -34,11 +34,37 @@
                         <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
                         <li class="divider"></li>
                         <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">General</a>
+                            <a tabindex="-1" href="#">Inventario</a>
+                            <ul class="dropdown-menu"> 
+                                <li><a href="{{ path('brs_inv_consultas_kardex') }}">Kardex</a></li>
+                                <li><a href="{{ path('brs_inv_consultas_disponibles') }}">Disponibles</a></li>
+                                <li><a href="{{ path('brs_inv_consultas_existencias') }}">Existencias</a></li>
+                                <li><a href="{{ path('brs_inv_consultas_inventario_valorizado', { 'codigoDocumentoTipo': 8 }) }}">Inventario valorizado</a></li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Movimienos</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1" href="#">Solicitudes</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 8 }) }}">Detalles (Pendientes)</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1" href="#">Ordenes de compra</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 5 }) }}">Detalles (Pendientes)</a></li>
+                                            </ul>
+                                        </li>                                        
+                                    </ul>
+                                </li>                                
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Otras</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
                             </ul>
-                        </li>
+                        </li>                        
                     </ul>
                 </li>
                 <li class="dropdown">

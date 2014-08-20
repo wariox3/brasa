@@ -1,0 +1,56 @@
+
+{% extends 'zikmontFrontEndBundle::layout_app.html.twig' %}
+{% block content %}
+<div class="left_articles">
+    <p class="description"><h1><br />Inventario Valorizado</h1></p>
+    {% import 'zikmontFrontEndBundle:Plantillas:macros.html.twig' as utilidades %}
+    <hr/>
+
+    <form class="well" action="{{ path('inventario_consultas_inventario_valorizado') }}" method="post" novalidate >
+        <table class="main-all-table-form">
+            <tr>
+
+                <tr>
+                    <div class="input-prepend">
+                        <span class="add-on-zikmont">Producto</span>
+                            {% if ultimo_item is not null %} {%set ultimo_item =  ultimo_item%} {% endif %}
+                            {{ utilidades.textboxitem(ultimo_item,7,false,false) }}
+                    </div>
+                </tr>
+
+                <tr>
+                    <div class="input-prepend">
+                        <span class="add-on-zikmont">Fecha</span>
+                        <input type="text" id="FechaDesde" class="span2" name="TxtFechaDesde" value="{{fecha_desde}}" placeholder="Desde"/>
+                      - <input type="text" id="FechaHasta" class="span2" name="TxtFechaHasta" value="{{fecha_hasta}}" placeholder="Hasta"/>
+                    </div>
+                </tr>
+
+                <td></td>
+                <td><button type="submit" name="register_submit" id="register_submit" class="btn btn-primary">Buscar</button></td>
+              </tr>
+           </tr>
+       </table>
+    </form>
+
+<hr/>
+    <table class="table table-striped table-bordered table-condensed">
+        <tr>            
+            <th>Item</th>
+            <th>Descripcion</th>            
+            <th style="text-align: right">Saldo</th>
+            <th style="text-align: right">Cto Prom</th>
+            <th style="text-align: right">Total</th>
+        </tr>
+        {% for arTemporalInventarioValorizado in arTemporalInventarioValorizado %}        
+            <tr>
+                <td>{{ arTemporalInventarioValorizado.itemRel.codigoItemPk }}</td>
+                <td>{{ arTemporalInventarioValorizado.itemRel.descripcion }}</td>
+                <td style="text-align: right">{{ arTemporalInventarioValorizado.saldo | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arTemporalInventarioValorizado.costoPromedio | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ (arTemporalInventarioValorizado.costoPromedio * arTemporalInventarioValorizado.saldo) | number_format(2, '.', ',') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

@@ -3,7 +3,7 @@
        
 <div class="container">
 {% import 'BrasaGeneralBundle:plantillas:macros.html.twig' as utilidades %}          
-    <form class="form-horizontal" role="form" id="FrmNuevo" action="{{ path('brs_inv_movientos_nuevo', { 'codigoDocumento': codigoDocumento, 'codigoMovimiento': 0  }) }}" method="post">
+    <form class="form-horizontal" role="form" id="FrmNuevo" action="{{ path('brs_inv_movimientos_nuevo', { 'codigoDocumento': codigoDocumento, 'codigoMovimiento': 0  }) }}" method="post">
         <h3>{%if arMovimiento is defined and arMovimiento is not null%}Editar {%else%}Crear {%endif%} Documento</h3>
         {% if codigoDocumento is defined %}
         <input name="iddocumento" type="hidden" value="{{codigoDocumento}}" />
@@ -55,7 +55,7 @@
 
 
         <div class="modal-footer">
-            <a class="btn btn-default" href="{{ path('brs_inv_movientos_lista', { 'codigoDocumento': codigoDocumento }) }}">Cancelar</a>
+            <a class="btn btn-default" href="{{ path('brs_inv_movimientos_lista', { 'codigoDocumento': codigoDocumento }) }}">Cancelar</a>
             <button id="link_guardar" class="btn btn-primary" type="submit" name="OpSubmit" value="OpGuardar">Guardar</button>           
         </div>
 

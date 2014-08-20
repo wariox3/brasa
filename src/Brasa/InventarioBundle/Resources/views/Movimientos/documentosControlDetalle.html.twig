@@ -32,11 +32,11 @@
                     <td>{{ movimientoDetalle.loteFk }}</td>                                                   
                     <td>{{ movimientoDetalle.codigoBodegaFk }}</td>                                                    
                     
-                    <td style="text-align: right">{{ movimientoDetalle.precio | number_format(2, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ movimientoDetalle.vrPrecio | number_format(2, '.', ',') }}</td> 
                     <td style="text-align: right">{{ movimientoDetalle.porcentajeIva | number_format(2, '.', ',') }}</td>  
-                    <td style="text-align: right">{{ movimientoDetalle.subTotal | number_format(2, '.', ',') }}</td>  
+                    <td style="text-align: right">{{ movimientoDetalle.vrSubTotal | number_format(2, '.', ',') }}</td>  
                     <td style="text-align: right">{{ movimientoDetalle.porcentajeDescuento | number_format(2, '.', ',') }}</td>  
-                    <td style="text-align: right">{{ movimientoDetalle.total | number_format(2, '.', ',') }}</td>     
+                    <td style="text-align: right">{{ movimientoDetalle.vrTotal | number_format(2, '.', ',') }}</td>     
                     <td style="text-align: right">{{ movimientoDetalle.cantidadPendiente | number_format(0, '.', ',') }}</td>  
                     <td><input class="input-grid" type="text" name="TxtCantidad[]" value="0" size="5" style="width:50px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()" /></td>                    
 

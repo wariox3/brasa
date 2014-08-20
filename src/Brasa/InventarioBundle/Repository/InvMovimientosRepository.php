@@ -111,7 +111,7 @@ class InvMovimientosRepository extends EntityRepository {
                             $arMovimientoDetalleAct->setOperacionInventario($intOperacionInventario);
                             //Si es un documento generador de costo
                             if($arMovimiento->getDocumentoRel()->getGeneraCostoPromedio() == 1) {
-                                $arMovimientoDetalleAct->setCosto($arMovimientoDetalleAct->getPrecio());
+                                $arMovimientoDetalleAct->setVrCosto($arMovimientoDetalleAct->getVrPrecio());
                                 //Calcular costo promedio y asignarlo al item
                             }
                             else

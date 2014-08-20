@@ -149,15 +149,15 @@ class InvItem
      * @ORM\OneToMany(targetEntity="InvMovimientosDetalles", mappedBy="itemRel")
      */
     protected $movimientosDetallesRel;
-
-    public function __construct()
-    {
-        $this->movimientosDetallesRel = new ArrayCollection();
-    }
     
 
-
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosDetallesRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoItemPk
@@ -239,26 +239,26 @@ class InvItem
     }
 
     /**
-     * Set vrcCostoPromedio
+     * Set vrCostoPromedio
      *
-     * @param float $vrcCostoPromedio
+     * @param float $vrCostoPromedio
      * @return InvItem
      */
-    public function setVrcCostoPromedio($vrcCostoPromedio)
+    public function setVrCostoPromedio($vrCostoPromedio)
     {
-        $this->vrcCostoPromedio = $vrcCostoPromedio;
+        $this->vrCostoPromedio = $vrCostoPromedio;
 
         return $this;
     }
 
     /**
-     * Get vrcCostoPromedio
+     * Get vrCostoPromedio
      *
      * @return float 
      */
-    public function getVrcCostoPromedio()
+    public function getVrCostoPromedio()
     {
-        return $this->vrcCostoPromedio;
+        return $this->vrCostoPromedio;
     }
 
     /**
@@ -775,28 +775,5 @@ class InvItem
     public function getMovimientosDetallesRel()
     {
         return $this->movimientosDetallesRel;
-    }
-
-    /**
-     * Set vrCostoPromedio
-     *
-     * @param float $vrCostoPromedio
-     * @return InvItem
-     */
-    public function setVrCostoPromedio($vrCostoPromedio)
-    {
-        $this->vrCostoPromedio = $vrCostoPromedio;
-
-        return $this;
-    }
-
-    /**
-     * Get vrCostoPromedio
-     *
-     * @return float 
-     */
-    public function getVrCostoPromedio()
-    {
-        return $this->vrCostoPromedio;
     }
 }

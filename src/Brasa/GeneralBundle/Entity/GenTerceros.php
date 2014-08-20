@@ -188,12 +188,7 @@ class GenTerceros
      * @ORM\OneToMany(targetEntity="Brasa\InventarioBundle\Entity\InvMovimientos", mappedBy="terceroRel")
      */
     protected $movimientosRel;    
-    
-    public function __construct()
-    {
-        $this->tercerosDireccionesRel = new ArrayCollection();
-        $this->movimientosRel = new ArrayCollection();
-    }        
+          
     
 
     /**
@@ -984,4 +979,13 @@ class GenTerceros
     {
         return $this->tercerosDireccionesRel;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tercerosDireccionesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }

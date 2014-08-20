@@ -120,7 +120,7 @@ class MovimientosController extends Controller
 
             $em->persist($arMovimientoNuevo);
             $em->flush();                
-            return $this->redirect($this->generateUrl('brs_inv_movientos_detalle', array('codigoMovimiento' => $arMovimientoNuevo->getCodigoMovimientoPk())));
+            return $this->redirect($this->generateUrl('brs_inv_movimientos_detalle', array('codigoMovimiento' => $arMovimientoNuevo->getCodigoMovimientoPk())));
         }
         
         $arMovimiento = null;

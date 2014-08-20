@@ -22,7 +22,7 @@ class InvItemRepository extends EntityRepository {
             $em = $this->getEntityManager();
             $query = $em->createQueryBuilder()
                     ->select('item')
-                    ->from('zikmontInventarioBundle:InvItem', 'item')
+                    ->from('BrasaInventarioBundle:InvItem', 'item')
                     ->where($em->createQueryBuilder()->expr()->like('item.descripcion', $em->createQueryBuilder()->expr()->literal('%' . $strDescripcion . '%')))
                     ->orWhere($em->createQueryBuilder()->expr()->like('item.codigoItemPk', $em->createQueryBuilder()->expr()->literal('%' . $strDescripcion . '%')))
                     ->getQuery();
@@ -43,7 +43,7 @@ class InvItemRepository extends EntityRepository {
             $em = $this->getEntityManager();
             $query = $em->createQueryBuilder()
                     ->select('item')
-                    ->from('zikmontFrontEndBundle:Item', 'item')
+                    ->from('BrasaFrontEndBundle:Item', 'item')
                     ->where($em->createQueryBuilder()->expr()->like('item.codigoBarras', $em->createQueryBuilder()->expr()->literal('%' . $strCodigoBarras . '%')))
                     ->getQuery();
             $arResultado = $query->getResult();
@@ -55,7 +55,7 @@ class InvItemRepository extends EntityRepository {
     
     public function ReiniciarExistencias() {
         $em = $this->getEntityManager();
-        $dql = "UPDATE zikmontInventarioBundle:InvItem l SET l.cantidadExistencia = 0";
+        $dql = "UPDATE BrasaInventarioBundle:InvItem l SET l.cantidadExistencia = 0";
         $query = $em->createQuery($dql);
         $arItems = $query->getResult();
         return $arItems;
@@ -78,8 +78,8 @@ class InvItemRepository extends EntityRepository {
     
     public function MoverExistencia($intItem, $intCantidad) {
         $em = $this->getEntityManager();
-        $arItem = new \zikmont\InventarioBundle\Entity\InvItem();
-        $arItem = $em->getRepository('zikmontInventarioBundle:InvItem')->find($intItem);
+        $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
+        $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($intItem);
         $arItem->setCantidadExistencia($arItem->getCantidadExistencia() + $intCantidad);        
         $em->persist($arItem);
         $em->flush();        
@@ -87,8 +87,8 @@ class InvItemRepository extends EntityRepository {
 
     public function MoverRemision($intItem, $intCantidad) {
         $em = $this->getEntityManager();
-        $arItem = new \zikmont\InventarioBundle\Entity\InvItem();
-        $arItem = $em->getRepository('zikmontInventarioBundle:InvItem')->find($intItem);
+        $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
+        $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($intItem);
         $arItem->setCantidadRemisionada($arItem->getCantidadRemisionada() + $intCantidad);        
         $em->persist($arItem);
         $em->flush();        

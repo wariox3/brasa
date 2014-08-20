@@ -1,0 +1,72 @@
+{% extends '::base.html.twig' %}
+{% import 'BrasaGeneralBundle:plantillas:macros.html.twig' as utilidades %}
+{% block content %}
+<div class="container">
+    <p class="description"><h4>Consultar disponibles</h4></p>          
+    <hr/>
+    
+    <!-- Formulario de busqueda -->    
+    <form id="FrmBusqueda" action="{{ path('brs_inv_consultas_disponibles') }}" method="post">
+        <div class="well">
+            {% if ultimo_item is not null %} {%set ultimo_item =  ultimo_item%} {% endif %}
+            {{ utilidades.textboxitem(ultimo_item,7,true,true) }}
+            <button type="submit"  name="OpSubmit" value="OpActualizarDetalles" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>     
+    <hr/>
+    
+    <!-- tabla de datos disponibles-->
+    <p class="description"><h4>Existencia</h4></p>
+    <table class="table table-striped table-bordered table-condensed">
+        <tr>
+            <th>Bodega</th>
+            <th>Lote</th>
+            <th>Vencimiento</th>                                                                      
+            <th>Existencia</th>
+            <th>Remision</th>
+            <th>Reserva</th>
+            <th>Disponible</th>                            
+            <th>Acciones</th>                    
+        </tr>
+
+        {% for arLotes in arLotes %}
+            <tr>                                                                              
+                <td>{{ arLotes.nombreBodega }}</td>  
+                <td>{{ arLotes.loteFk }}</td>                  
+                <td>{{ arLotes.fechaVencimiento | date("d/m/Y") }}</td>                              
+                <td style="text-align: right">{{ arLotes.existencia | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arLotes.cantidadRemisionada | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arLotes.cantidadReservada | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arLotes.cantidadDisponible | number_format(0, '.', ',') }}</td>                                                  
+                <td></td>                                                   
+            </tr>
+        {% endfor %}  
+    </table>  
+    <hr>    
+    <!-- Fin tabla de datos disponibles-->
+       
+    <h5>Remisiones</h5>
+    <table class="table table-striped table-bordered table-condensed">
+        <tr>
+            <th></th>
+            <th>Documento</th>
+            <th>Nro</th>
+            <th>Tercero</th>
+            <th>Cant</th>
+            <th>Pend</th>
+        </tr>
+
+        {% for movimientoDetalle in arMovimientosDetalleRemisiones %}
+        <tr>
+            <td><input type="hidden" name="LblCodigoDetalle[]" value="{{ movimientoDetalle.codigoDetalleMovimientoPk }}"><span class="badge">{{ movimientoDetalle.codigoDetalleMovimientoPk }}</span></td>
+            <td>{{ movimientoDetalle.movimientoRel.documentoRel.nombre }}</td>
+            <td>{{ movimientoDetalle.movimientoRel.numeroMovimiento }}</td>
+            <td>{{ movimientoDetalle.movimientoRel.terceroRel.nombreCortoTercero }}</td>
+            <td style="text-align: right">{{ movimientoDetalle.cantidad }}</td>
+            <td style="text-align: right">{{ movimientoDetalle.cantidad - movimientoDetalle.cantidadAfectada}}</td>                        
+        </tr>
+        {% endfor %}
+    </table>                
+    <hr>        
+</div>
+{% endblock %}

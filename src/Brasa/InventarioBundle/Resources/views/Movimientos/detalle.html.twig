@@ -103,13 +103,13 @@
         </table>
     </div>
     <!-- Fin Encabezado Movimiento -->
-    <form action="{{ path('brs_inv_movientos_detalle', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}" method="post" novalidate>
+    <form action="{{ path('brs_inv_movimientos_detalle', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}" method="post" novalidate>
         <div class="btn-group">
-            <a  class="btn btn-default" href="{{ path('brs_inv_movientos_nuevo', { 'codigoDocumento': arDocumento.codigoDocumentoPk, 'codigoMovimiento': 0 }) }}">Nuevo</a>
+            <a  class="btn btn-default" href="{{ path('brs_inv_movimientos_nuevo', { 'codigoDocumento': arDocumento.codigoDocumentoPk, 'codigoMovimiento': 0 }) }}">Nuevo</a>
             {% if arMovimiento.estadoAutorizado == 1 %}
                 <button class="btn btn-default" type="submit" name="OpSubmit" disabled >Editar</button>
             {% else %}
-                <a class="btn btn-default" href="{{ path('brs_inv_movientos_nuevo', { 'codigoDocumento': arDocumento.codigoDocumentoPk, 'codigoMovimiento': arMovimiento.codigoMovimientoPk }) }}">Editar</a>
+                <a class="btn btn-default" href="{{ path('brs_inv_movimientos_nuevo', { 'codigoDocumento': arDocumento.codigoDocumentoPk, 'codigoMovimiento': arMovimiento.codigoMovimientoPk }) }}">Editar</a>
             {% endif %}              
             <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAutorizar" {% if arMovimiento.estadoAutorizado == 1 %} disabled {% endif %}>Autorizar</button>
             <button type="button" class="btn btn-default" type="submit" name="OpSubmit" value="OpDesAutorizar" {% if arMovimiento.estadoAutorizado == 0 or arMovimiento.estadoImpreso == 1 %} disabled {% endif %}>Desautorizar</button>
@@ -126,7 +126,7 @@
 
     <div class="tab-content">
         <div class="tab-pane active" id="detalles">
-            <form action="{{ path('brs_inv_movientos_detalle', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}" method="post" novalidate>
+            <form action="{{ path('brs_inv_movimientos_detalle', {'codigoMovimiento': arMovimiento.codigoMovimientoPk}) }}" method="post" novalidate>
                 <!-- Menu Encabezado Movimiento -->
                 <div id="detalles" style="width: 99.5%">
                     <table class="table table-striped table-bordered table-condensed">
@@ -242,7 +242,7 @@
                     <!-- Botones Menu Items -->
                     <div class="btn-toolbar" style="float:left">
                         <div class="btn-group">
-                            <a class="btn btn-default" href="{{ path('brs_inv_movientos_lista', { 'codigoDocumento': arMovimiento.codigoDocumentoFk }) }}" style="float:left">Volver</a>
+                            <a class="btn btn-default" href="{{ path('brs_inv_movimientos_lista', { 'codigoDocumento': arMovimiento.codigoDocumentoFk }) }}" style="float:left">Volver</a>
                         </div>
                     </div>
 
