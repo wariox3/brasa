@@ -1,0 +1,282 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<div class="container">  
+<form class="well" id="FrmNuevo" action="{{path('maestros_inventario_documentos_nuevo', { 'codigoDocumentoPk':  0 })}}" method="post">
+        {% import 'zikmontContabilidadBundle:Plantillas:macros.html.twig' as utilidades %}
+        
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>{%if arDocumento is not null%}Editar documento{%else%}Crear documento{%endif%}</h3>
+            </div>
+            <div class="modal-body">
+                <div class="well">
+                    <div class="tabbable"> <!-- Only required for left/right tabs -->
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab1" data-toggle="tab">General</a></li>
+                            <li><a href="#tab2" data-toggle="tab">Contable</a></li>
+                            <li><a href="#tab3" data-toggle="tab">Interface</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab1">
+                                <table>
+                                    {% if arDocumento is defined and arDocumento is not null %}
+                                    <tr>
+                                        <td><strong>Codigo:</strong><br/></td>
+                                        <td><input type="text" class="span4" readonly="true" name="TxtCodigoDocumento" {% if arDocumento is defined and arDocumento is not null %} value="{{arDocumento.codigoDocumentoPk}}" readonly="true" {% endif %}/></td>
+                                    </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <td><strong>Tipo:</strong><br/></td>
+                                        <td>
+                                            <select name="CboDocumentosTipos" required autofocus>
+                                                <option value="">Seleccione</option>
+                                                {% for documentoTipo in arDocumentosTipos %}
+                                                        <option value="{{documentoTipo.codigoDocumentoTipoPk}}" {%if arDocumento.codigoDocumentoTipoFk is defined %} {%if documentoTipo.codigoDocumentoTipoPk == arDocumento.codigoDocumentoTipoFk %} selected {%endif%} {%endif%}>{{documentoTipo.nombre}}</option>
+                                                {%endfor%}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>SubTipo:</strong><br/></td>
+                                        <td>
+                                            <select name="CboDocumentosSubTipos" required>
+                                                <option value="">Seleccione</option>
+                                                {% for arDocumentosSubTipos in arDocumentosSubTipos %}
+                                                        <option value="{{arDocumentosSubTipos.codigoDocumentoSubtipoPk}}" {%if arDocumento.codigoDocumentoSubtipoFk is defined %} {%if arDocumentosSubTipos.codigoDocumentoSubtipoPk == arDocumento.codigoDocumentoSubtipoFk %} selected {%endif%} {%endif%}>{{arDocumentosSubTipos.nombre}}</option>
+                                                {%endfor%}
+                                            </select>
+                                        </td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td><strong>Descripcion:</strong><br/></td>
+                                        <td><input type="text" class="span4" name="TxtNombreDocumento" {% if arDocumento is defined and arDocumento is not null %} value="{{arDocumento.nombre}}" {% endif %} placeholder="Nombre" required/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Abreviatura:</strong><br/></td>
+                                        <td><input type="text" class="span4" name="TxtAbreviatura" {% if arDocumento is defined and arDocumento is not null %} value="{{arDocumento.abreviatura}}" {% endif %} placeholder="Abreviatura" required/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Consecutivo:</strong><br/></td>
+                                        <td><input type="text" class="span4" name="TxtConsecutivo" {% if arDocumento is defined and arDocumento is not null %} value="{{arDocumento.consecutivo}}" {% endif %} placeholder="Consecutivo"/></td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td><strong>Operacion inventario:</strong><br/></td>
+                                        <td><input type="text" class="span4" name="TxtOperacionInventario" {% if arDocumento is defined and arDocumento is not null %} value="{{arDocumento.operacionInventario}}" {% endif %} placeholder="Operacion inventario"/></td>
+                                    </tr>                                    
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="tab2">
+                                <table>
+                                    <tr>
+                                        <td><strong>Comprobante:</strong><br/></td>
+                                        <td>
+                                            <select name="CboComprobanteContable" autofocus>
+                                                <option value="">--- Seleccione ---</option>
+                                                {% for comprobanteContable in arComprobantesContables %}
+                                                        <option value="{{comprobanteContable.codigoComprobanteContablePk}}" {%if arDocumento.codigoComprobanteContableFk is defined %} {%if comprobanteContable.codigoComprobanteContablePk == arDocumento.codigoComprobanteContableFk %} selected {%endif%} {%endif%}>{{comprobanteContable.codigoComprobanteContablePk}}-{{comprobanteContable.nombreComprobanteContable}}</option>
+                                                {%endfor%}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tipo Cta Ingreso:</strong><br/></td>
+                                        {%if arDocumento.tipoCuentaIngreso is defined %} {%set tipoCuentaIngreso = arDocumento.tipoCuentaIngreso %} {% else %} {%set tipoCuentaIngreso = '' %} {% endif %}
+                                        <td>{{ utilidades.cboTipoRegistro(tipoCuentaIngreso, 4, false, false, "CboTipoRegistroCuentaIngreso", "width:100px", "CboTipoRegistroCuentaIngreso") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tipo Cta Costo:</strong><br/></td>
+                                        {%if arDocumento.tipoCuentaCosto is defined %} {%set tipoCuentaCosto = arDocumento.tipoCuentaCosto %} {% else %} {%set tipoCuentaCosto = '' %} {% endif %}
+                                        <td>{{ utilidades.cboTipoRegistro(tipoCuentaCosto,4,false,false,"CboTipoRegistroCuentaCosto", "width:100px", "CboTipoRegistroCuentaCosto") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cta Iva:</strong><br/></td>
+                                        {% if arDocumento is defined and arDocumento is not null and arDocumento.cuentaIvaRel.nombreCuenta is defined %}
+                                            {%set CuentaIva =  [arDocumento.codigoCuentaIvaFk, arDocumento.cuentaIvaRel.nombreCuenta]|join('-')  %}
+                                        {% else %} {%set CuentaIva = ''%} {% endif %}
+                                        <td>{{ utilidades.textboxcuentas(CuentaIva,4,false,false,"TxtCuentaIva", "width:300px", "TxtCuentaIva") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong></strong><br/></td>
+                                        {%if arDocumento.tipoCuentaIva is defined %} {%set tipoCuentaIva = arDocumento.tipoCuentaIva %} {% else %} {%set tipoCuentaIva = '' %} {% endif %}
+                                        <td>{{ utilidades.cboTipoRegistro(tipoCuentaIva,4,false,false,"CboTipoRegistroCuentaIva", "width:100px", "CboTipoRegistroCuentaIva") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cta Rte Fte:</strong><br/></td>
+                                        {% if arDocumento is defined and arDocumento is not null and arDocumento.cuentaRetencionFuenteRel.nombreCuenta is defined %}
+                                            {%set CuentaRetencionFuente =  [arDocumento.codigoCuentaRetencionFuenteFk, arDocumento.cuentaRetencionFuenteRel.nombreCuenta]|join('-')  %}
+                                        {% else %} {%set CuentaRetencionFuente = ''%} {% endif %}
+                                        <td>{{ utilidades.textboxcuentas(CuentaRetencionFuente,4,false,false,"TxtCuentaRetencionFuente", "width:300px", "TxtCuentaRetencionFuente") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong></strong><br/></td>
+                                        {%if arDocumento.tipoCuentaRetencionFuente is defined %} {%set tipoCuentaRetencionFuente = arDocumento.tipoCuentaRetencionFuente %} {% else %} {%set tipoCuentaRetencionFuente = '' %} {% endif %}
+                                        <td>{{ utilidades.cboTipoRegistro(tipoCuentaRetencionFuente,4,false,false,"CboTipoRegistroCuentaRetencionFuente", "width:100px", "CboTipoRegistroCuentaRetencionFuente") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cta Rte CREE:</strong><br/></td>
+                                        {% if arDocumento is defined and arDocumento is not null and arDocumento.cuentaRetencionCREERel.nombreCuenta is defined %}
+                                            {%set CuentaRetencionCREE =  [arDocumento.codigoCuentaRetencionCREEFk, arDocumento.cuentaRetencionCREERel.nombreCuenta]|join('-')  %}
+                                        {% else %} {%set CuentaRetencionCREE = ''%} {% endif %}
+                                        <td>{{ utilidades.textboxcuentas(CuentaRetencionCREE,4,false,false,"TxtCuentaRetencionCREE", "width:300px", "TxtCuentaRetencionCREE") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong></strong><br/></td>
+                                        {%if arDocumento.tipoCuentaRetencionCREE is defined %} {%set tipoCuentaRetencionCREE = arDocumento.tipoCuentaRetencionCREE %} {% else %} {%set tipoCuentaRetencionCREE = '' %} {% endif %}
+                                        <td>{{ utilidades.cboTipoRegistro(tipoCuentaRetencionCREE,4,false,false,"CboTipoRegistroCuentaRetencionCREE", "width:100px", "CboTipoRegistroCuentaRetencionCREE") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cta Rte Iva:</strong><br/></td>
+                                        {% if arDocumento is defined and arDocumento is not null and arDocumento.cuentaRetencionIvaRel.nombreCuenta is defined %}
+                                            {%set CuentaRetencionIva =  [arDocumento.codigoCuentaRetencionIvaFk, arDocumento.cuentaRetencionIvaRel.nombreCuenta]|join('-')  %}
+                                        {% else %} {%set CuentaRetencionIva = ''%} {% endif %}
+                                        <td>{{ utilidades.textboxcuentas(CuentaRetencionIva,4,false,false,"TxtCuentaRetencionIva", "width:300px", "TxtCuentaRetencionIva") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong></strong><br/></td>
+                                        {%if arDocumento.tipoCuentaRetencionIva is defined %} {%set tipoCuentaRetencionIva = arDocumento.tipoCuentaRetencionIva %} {% else %} {%set tipoCuentaRetencionIva = '' %} {% endif %}
+                                        <td>{{ utilidades.cboTipoRegistro(tipoCuentaRetencionIva,4,false,false,"CboTipoRegistroCuentaRetencionIva", "width:100px", "CboTipoRegistroCuentaRetencionIva") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cta tesoreria:</strong><br/></td>
+                                        {% if arDocumento is defined and arDocumento is not null and arDocumento.cuentaTesoreriaRel.nombreCuenta is defined %}
+                                            {%set CuentaTesoreria =  [arDocumento.codigoCuentaTesoreriaFk, arDocumento.cuentaTesoreriaRel.nombreCuenta]|join('-')  %}
+                                        {% else %} {%set CuentaTesoreria = ''%} {% endif %}
+                                        <td>{{ utilidades.textboxcuentas(CuentaTesoreria,4,false,false,"TxtCuentaTesoreria", "width:300px", "TxtCuentaTesoreria") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong></strong><br/></td>
+                                        {%if arDocumento.tipoCuentaTesoreria is defined %} {%set tipoCuentaTesoreria = arDocumento.tipoCuentaTesoreria %} {% else %} {%set tipoCuentaTesoreria = '' %} {% endif %}
+                                        <td>{{ utilidades.cboTipoRegistro(tipoCuentaTesoreria,4,false,false,"CboTipoRegistroCuentaTesoreria", "width:100px", "CboTipoRegistroCuentaTesoreria") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cta cartera:</strong><br/></td>
+                                        {% if arDocumento is defined and arDocumento is not null and arDocumento.cuentaCarteraRel.nombreCuenta is defined %}
+                                            {%set CuentaCartera =  [arDocumento.codigoCuentaCarteraFk, arDocumento.cuentaCarteraRel.nombreCuenta]|join('-')  %}
+                                        {% else %} {%set CuentaCartera = ''%} {% endif %}
+                                        <td>{{ utilidades.textboxcuentas(CuentaCartera,4,false,false,"TxtCuentaCartera", "width:300px", "TxtCuentaCartera") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong></strong><br/></td>
+                                        {%if arDocumento.tipoCuentaCartera is defined %} {%set tipoCuentaCartera = arDocumento.tipoCuentaCartera %} {% else %} {%set tipoCuentaCartera = '' %} {% endif %}
+                                        <td>{{ utilidades.cboTipoRegistro(tipoCuentaCartera,4,false,false,"CboTipoRegistroCuentaCartera", "width:100px", "CboTipoRegistroCuentaCartera") }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="tab3">
+                                <table>
+                                    <tr>
+                                        <td  COLSPAN=2">
+                                            <strong>Agregar item:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.agregarItem == 1 %} checked="true" {% endif %} name="ChkAgregarItem" id="ChkAgregarItem"/>                                            
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Agregar item de documento control:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.agregarItemDocumentoControl == 1 %} checked="true" {% endif %} name="ChkAgregarItemDocumentoControl"/>                                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Exige tercero de documento control:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.exigeTerceroDocumentoControl == 1 %} checked="true" {% endif %} name="ChkExigeTerceroDocumentoControl"/>
+                                        </td>                                        
+                                    </tr>
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Maneja lote:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.manejaLote == 1 %} checked="true" {% endif %} name="ChkManejaLote"/>                                            
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Maneja bodega:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.manejaBodega == 1 %} checked="true" {% endif %} name="ChkManejaBodega"/>
+                                        </td>                                        
+                                    </tr>                                    
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Editar lote:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.editarLote == 1 %} checked="true" {% endif %} name="ChkEditarLote"/>
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Editar cantidad:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.editarCantidad == 1 %} checked="true" {% endif %} name="ChkEditarCantidad"/>
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Editar descuento:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.editarDescuento == 1 %} checked="true" {% endif %} name="ChkEditarDescuento"/>
+                                        </td>                                        
+                                    </tr>
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Editar precio:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.editarPrecio == 1 %} checked="true" {% endif %} name="ChkEditarPrecio"/>
+                                        </td>                                        
+                                    </tr>
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Requiere fecha 1:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.requiereFecha1 == 1 %} checked="true" {% endif %} name="ChkRequiereFecha1"/>
+                                        </td>                                        
+                                    </tr>   
+                                    <tr>
+                                        <td><strong>Nombre fecha1:</strong><br></td>
+                                        <td><input type="text" class="span3" name="TxtNombreFecha1" {% if arDocumento is defined and arDocumento is not null %} value="{{arDocumentoConfiguracion.nombreFecha1}}" {% endif %} placeholder="Nombre fecha 1"/></td>
+                                    </tr>                                     
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Requiere fecha 2:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.requiereFecha2 == 1 %} checked="true" {% endif %} name="ChkRequiereFecha2"/>                                            
+                                        </td>                                        
+                                    </tr>        
+                                    <tr>
+                                        <td><strong>Nombre fecha 2:</strong><br></td>
+                                        <td><input type="text" class="span3" name="TxtNombreFecha2" {% if arDocumento is defined and arDocumento is not null %} value="{{arDocumentoConfiguracion.nombreFecha2}}" {% endif %} placeholder="Nombre fecha 2"/></td>
+                                    </tr>                                       
+                                    <tr>
+                                        <td><strong>Tipo precio:</strong><br/></td>
+                                        <td>
+                                            <select name="CboTipoPrecio" >
+                                                <option value=""></option>                                                
+                                                    <option value="1" {%if arDocumento is defined and arDocumento is not null %} {%if arDocumento.tipoValor == 1 %} selected {%endif%}{%endif%}>Precio compra</option>
+                                                    <option value="2" {%if arDocumento is defined and arDocumento is not null %} {%if arDocumento.tipoValor == 2 %} selected {%endif%}{%endif%}>Precio Venta</option>                                                
+                                            </select>
+                                        </td>
+                                    </tr>  
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Requiere direccion envio:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.requiereDireccion == 1 %} checked="true" {% endif %} name="ChkRequiereDireccion"/>                                            
+                                        </td>                                        
+                                    </tr>                                            
+                                    <tr>
+                                        <td COLSPAN=2">
+                                            <strong>Maneja fletes:</strong>
+                                            <input type="checkbox" {% if arDocumento is defined and arDocumento is not null and arDocumentoConfiguracion.manejaFletes == 1 %} checked="true" {% endif %} name="ChkManejaFletes"/>                                            
+                                        </td>                                        
+                                    </tr>                                    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+</div>
+            <div class="modal-footer">
+                <a class="btn" href="{{ path('maestros_inventario_documentos_lista') }}">Cancelar</a>                   
+                <button id="link_guardar" class="btn btn-primary" type="submit" name="OpSubmit" value="OpGuardar">Guardar</button>
+            </div>
+
+
+
+        </form>
+    
+{% endblock %}

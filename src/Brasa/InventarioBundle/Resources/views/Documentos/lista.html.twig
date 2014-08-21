@@ -7,7 +7,7 @@
             <th>ID</th>
             <th></th>
             <th>Nombre</th>                
-            <th>Op</th>
+            <th>Operacion</th>
             <th>Consecutivo</th>
 
             <th></th>
@@ -25,7 +25,15 @@
             <td>{{ documento.codigoDocumentoPK }}</td>
             <td>{{ documento.abreviatura }}</td>
             <td>{{ documento.nombreDocumento }}</td>
-            <td>{{ documento.operacionInventario }}</td>                 
+            {% if documento.operacionInventario == 1 %}
+                <td>Entrada</td>                             
+            {% endif %}            
+            {% if documento.operacionInventario == -1 %}
+                <td>Salida</td>                             
+            {% endif %}            
+            {% if documento.operacionInventario == 0 %}
+                <td>Neutro</td>                             
+            {% endif %}                
             <td>{{ documento.consecutivo }}</td>                 
             <td style="text-align: center"><a href="{{ path('brs_inv_movimientos_lista', { 'codigoDocumento': documento.codigoDocumentoPK }) }}"><IMG SRC="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
             <td style="text-align: center"><a  href="{{ path('brs_inv_movimientos_nuevo',{'codigoDocumento': documento.codigoDocumentoPK, 'codigoMovimiento': 0}) }}"><IMG SRC="{{ asset('imagenes/bootstrap/glyphicons_036_file.png') }}" width=16 height=16></a></td>                

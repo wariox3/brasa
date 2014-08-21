@@ -25,13 +25,13 @@ class TesCuentasPagarRepository extends EntityRepository
         $arCuentaPagar->setMovimientoRel($arMovimiento);
         $arCuentaPagar->setTerceroRel($arMovimiento->getTerceroRel());
         $arCuentaPagar->setSoporte($arMovimiento->getSoporte());
-        $arCuentaPagar->setValorOriginal($arMovimiento->getTotal());          
-        $arCuentaPagar->setSaldo($arMovimiento->getTotal());
+        $arCuentaPagar->setValorOriginal($arMovimiento->getVrTotal());          
+        $arCuentaPagar->setSaldo($arMovimiento->getVrTotal());
         if($arMovimiento->getDocumentoRel()->getTipoAsientoTesoreria() == 1)
-            $arCuentaPagar->setDebitos ($arMovimiento->getTotal());
+            $arCuentaPagar->setDebitos ($arMovimiento->getVrTotal());
         
         if($arMovimiento->getDocumentoRel()->getTipoAsientoTesoreria() == 2)
-            $arCuentaPagar->setCreditos($arMovimiento->getTotal());        
+            $arCuentaPagar->setCreditos($arMovimiento->getVrTotal());        
         
         
         $em->persist($arCuentaPagar);

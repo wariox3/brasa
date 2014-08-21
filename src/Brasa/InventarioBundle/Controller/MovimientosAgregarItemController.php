@@ -36,12 +36,12 @@ class MovimientosAgregarItemController extends Controller
                                 $arMovimientoDetalle->setCantidad($intCantidad);
 
                                 if($arMovimiento->getDocumentoRel()->getTipoValor() == 2) {
-                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $intCodigoItem));                                    
+                                    $arMovimientoDetalle->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $intCodigoItem));                                    
                                 }                       
                                     
 
                                 if($arMovimiento->getDocumentoRel()->getTipoValor() == 1)                        
-                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $intCodigoItem));
+                                    $arMovimientoDetalle->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $intCodigoItem));
 
                                 $arMovimientoDetalle->setItemRel($arItem);
                                 if($arMovimiento->getTerceroRel()->getCodigoClasificacionTributariaFk() == 1)

@@ -1,20 +1,18 @@
 
-{% extends 'zikmontFrontEndBundle::layout_app.html.twig' %}
+{% extends '::base.html.twig' %}
+{% import 'BrasaGeneralBundle:plantillas:macros.html.twig' as utilidades %}
 {% block content %}
-<div class="left_articles">                
+<div class="container">                
     <p class="description"><h1>Consulta de kardex</h1></p>          
-
-{% import 'zikmontFrontEndBundle:Plantillas:macros.html.twig' as utilidades %}
-
 <hr/>
 
-<form class="well" action="{{ path('inventario_consultas_kardex') }}" method="post" novalidate >
+<form class="well" action="{{ path('brs_inv_consultas_kardex') }}" method="post" novalidate >
     <table class="main-all-table-form">
         <tr>
             
             <tr>
                 <div class="input-prepend">
-                    <span class="add-on-zikmont">Producto</span>
+                    <span class="add-on-zikmont"></span>
                         {% if arrControles %} {%set ultimo_item = arrControles.TxtCodigoItem %} {% else %} {%set ultimo_item = '' %} {% endif %} 
                         {{ utilidades.textboxitem(ultimo_item,7,false,false) }}
                 </div>
@@ -53,7 +51,7 @@
                      <select name="CboDocumentos">
                         <option value="">Seleccione</option>
                                      {% for documento in arDocumentos%}
-                        <option value="{{documento.codigoDocumentoPk}}" {% if arrControles %} {% if arrControles.CboDocumentos == documento.codigoDocumentoPk %} selected {%endif%}{%endif%}>{{documento.nombre}}</option>
+                        <option value="{{documento.codigoDocumentoPk}}" {% if arrControles %} {% if arrControles.CboDocumentos == documento.codigoDocumentoPk %} selected {%endif%}{%endif%}>{{documento.nombreDocumento}}</option>
                          {%endfor%}
                     </select>               
 
@@ -103,19 +101,19 @@
                 <td>{{ movimientoDetalle.codigoDetalleMovimientoPk }}</td>  
                 <td>{{ movimientoDetalle.itemRel.codigoItemPk }}</td>
                 <td>{{ movimientoDetalle.itemRel.descripcion }}</td>                      
-                <td>{{ movimientoDetalle.movimientoRel.documentoRel.nombre }}</td>                             
+                <td>{{ movimientoDetalle.movimientoRel.documentoRel.nombreDocumento }}</td>                             
                 <td>{{ movimientoDetalle.movimientoRel.numeroMovimiento }}</td>                              
                 <td>{{ movimientoDetalle.movimientoRel.fecha | date("d/m/Y H:i:s") }}</td>                              
-                <td>{{ movimientoDetalle.movimientoRel.terceroRel.nombreCortoTercero }}</td>                              
+                <td>{{ movimientoDetalle.movimientoRel.terceroRel.nombreCorto }}</td>                              
                 <td>{{ movimientoDetalle.loteFk }}</td>                                                   
                 <td>{{ movimientoDetalle.codigoBodegaFk }}</td>                                                                        
                 <td>{{ movimientoDetalle.cantidadOperada }}</td>                                         
         {% set Saldo = (Saldo + movimientoDetalle.cantidadOperada) %}
                 <td>{{ Saldo }}</td>                                         
-                <td>{{ movimientoDetalle.costo | number_format(2, '.', ',') }}</td>
-                <td>{{ movimientoDetalle.costoPromedio | number_format(2, '.', ',') }}</td>
-                <td>{{ movimientoDetalle.precio | number_format(2, '.', ',') }}</td>                                         
-                <td style="text-align: center"><a href="{{ path('inventario_movimientos_detalle', { 'codigoMovimiento': movimientoDetalle.codigoMovimientoFk }) }}" target="blank"><img src="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_152_new_window.png') }}" width=18 height=18></a></td>
+                <td>{{ movimientoDetalle.vrCosto | number_format(2, '.', ',') }}</td>
+                <td>{{ movimientoDetalle.vrCostoPromedio | number_format(2, '.', ',') }}</td>
+                <td>{{ movimientoDetalle.vrPrecio | number_format(2, '.', ',') }}</td>                                         
+                <td style="text-align: center"><a href="{{ path('brs_inv_movimientos_detalle', { 'codigoMovimiento': movimientoDetalle.codigoMovimientoFk }) }}" target="blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=18 height=18></a></td>
             </tr>
     {% endfor %}            
 

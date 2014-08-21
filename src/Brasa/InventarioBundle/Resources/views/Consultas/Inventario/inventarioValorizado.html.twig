@@ -1,12 +1,12 @@
 
-{% extends 'zikmontFrontEndBundle::layout_app.html.twig' %}
+{% extends '::base.html.twig' %}
+{% import 'BrasaGeneralBundle:plantillas:macros.html.twig' as utilidades %}
 {% block content %}
-<div class="left_articles">
-    <p class="description"><h1><br />Inventario Valorizado</h1></p>
-    {% import 'zikmontFrontEndBundle:Plantillas:macros.html.twig' as utilidades %}
+<div class="container">
+    <p class="description"><h1><br />Inventario Valorizado</h1></p>    
     <hr/>
 
-    <form class="well" action="{{ path('inventario_consultas_inventario_valorizado') }}" method="post" novalidate >
+    <form class="well" action="{{ path('brs_inv_consultas_inventario_valorizado') }}" method="post" novalidate >
         <table class="main-all-table-form">
             <tr>
 

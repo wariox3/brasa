@@ -8,14 +8,13 @@ class ConsultasController extends Controller {
 
     public function kardexAction() {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
-        $objFunciones = new \Brasa\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
+        $request = $this->getRequest();                
         $arrControles = $request->request->All();        
         $arMovimientosDetalle = "";        
 
         if ($request->getMethod() == 'POST') {
-            $intItem = $objFunciones->DevCodigoItem($arrControles['TxtCodigoItem']);
-            $intCodigoTercero = $objFunciones->DevCodigoTercero($arrControles['terceroconsulta']);            
+            $intItem = $arrControles['TxtCodigoItem'];
+            $intCodigoTercero = $arrControles['terceroconsulta'];            
             $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetalles($intItem, $arrControles['CboDocumentos'], $intCodigoTercero, $arrControles['TxtLote'], $arrControles['CboBodegas'], $arrControles['TxtFechaDesde'], $arrControles['TxtFechaHasta']);
         }
 
@@ -61,11 +60,11 @@ class ConsultasController extends Controller {
     public function existenciasAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $objFunciones = new \Brasa\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
+        
         $arrControles = $request->request->All();
         $arLotes = new \Brasa\InventarioBundle\Entity\InvLotes();
         if ($request->getMethod() == 'POST') {
-            $intItem = $objFunciones->DevCodigoItem($arrControles['TxtCodigoItem']);
+            $intItem = $arrControles['TxtCodigoItem'];
             $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistenciaFiltro($intItem, $arrControles['CboBodegas'], $arrControles['TxtLote']);            
         }
         else 
@@ -148,12 +147,12 @@ class ConsultasController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $arCierreMesInventario = new \Brasa\InventarioBundle\Entity\InvCierresMes();
         $arCierreMesInventario = $em->getRepository('BrasaInventarioBundle:InvCierresMes')->findAll();
-        return $this->render('BrasaFrontEndBundle:Consultas/General:analisisGeneral.html.twig', array('arCierreMesInventario' => $arCierreMesInventario));
+        return $this->render('BrasaGeneralBundle:Consultas/General:analisisGeneral.html.twig', array('arCierreMesInventario' => $arCierreMesInventario));
     }
     
     public function comercialesPresupuestosAction() {
         $em = $this->getDoctrine()->getManager();
-        return $this->render('BrasaFrontEndBundle:Consultas/Comerciales:presupuestos.html.twig');
+        return $this->render('BrasaGeneralBundle:Consultas/Comerciales:presupuestos.html.twig');
     }    
 
     /*
@@ -169,7 +168,7 @@ class ConsultasController extends Controller {
 
         }
 
-        return $this->render('BrasaFrontEndBundle:Movimientos:movimientosPendientes.html.twig', array('arMovimientos' => $arMovimientos));
+        return $this->render('BrasaGeneralBundle:Movimientos:movimientosPendientes.html.twig', array('arMovimientos' => $arMovimientos));
     }
 
     /**

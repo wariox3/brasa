@@ -1,0 +1,31 @@
+{% extends 'BrasaGeneralBundle::layout_app.html.twig' %}
+{% block content %}
+
+{% block javascripts %}
+
+
+{% endblock %}
+<div class="left_articles">                
+
+    <div class="page-header">
+        <h2>Listado bodegas</h2>
+        <a  class="btn btn-mini" id="{{ path('maestros_inventario_bodegas_nuevo', { 'codigoBodegaPk':  0 }) }}"><image src="{{ asset('bundles/Brasa/imagenes/tema1/glyphicons_190_circle_plus.png') }}" width=20 height=20> Crear bodega</a>
+    </div>        
+
+    <table  class="table table-striped table-bordered table-condensed" style="width: 0%"> 
+        <tr>
+            <th>Codigo</th>
+            <th>Nombre</th>
+            <th></th>
+        </tr>
+
+        {% for arBodegas in arBodegas %}
+        <tr>
+            <td>{{ arBodegas.codigoBodegaPk }}</td>
+            <td>{{ arBodegas.nombre }}</td>
+            <td style="text-align: center"><a id="{{ path('maestros_inventario_bodegas_nuevo', { 'codigoBodegaPk':  arBodegas.codigoBodegaPk }) }}" ><img src="{{ asset('bundles/Brasa/imagenes/tema1/glyphicons_151_edit.png') }}" width=20 height=20></a></td>            
+        </tr>   
+        {% endfor %}            
+    </table>   
+</div>
+{% endblock %}

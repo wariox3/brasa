@@ -1,31 +1,29 @@
 
-{% extends 'zikmontFrontEndBundle::layout_app.html.twig' %}
+{% extends '::base.html.twig' %}
+{% import 'BrasaGeneralBundle:plantillas:macros.html.twig' as utilidades %}
 {% block content %}
-<div class="left_articles">
-    <p class="description"><h1>Existencias</h1></p>
-
-    {% import 'zikmontFrontEndBundle:Plantillas:macros.html.twig' as utilidades %}
+<div class="container">
+    <p class="description"><h1>Existencias</h1></p>   
     <hr/>
         <!-- Formulario de busqueda -->
-        <form id="FrmBusqueda" class="well" action="{{ path('inventario_consultas_existencias')}}" method="POST" novalidate>
+        <form id="FrmBusqueda" class="well" action="{{ path('brs_inv_consultas_existencias')}}" method="POST" novalidate>
             <table class="main-all-table-form">
-                <tr>
-                    
-                    <div class="input-prepend">
-                        <span class="add-on-zikmont">Item</span>
+                <tr>       
+                    <td>
                         {% if arrControles %} {%set ultimo_item = arrControles.TxtCodigoItem %} {% else %} {%set ultimo_item = '' %} {% endif %} 
-                        {{ utilidades.textboxitem(ultimo_item,7,false,false) }}
-                    </div>
+                        {{ utilidades.textboxitem(ultimo_item,7,false,false) }}                    
+                    </td>
                 </tr>
                 
                 <tr>
-                    <div class="input-prepend">
+                    <td>                                            
                         <span class="add-on-zikmont">Lote</span>
                         <input type="text" class="span2" name="TxtLote" {% if arrControles %} value="{{arrControles.TxtLote}}" {% endif %}>
-                    </div>
+                    </td>
                 </tr>           
                 
                 <tr>
+                    <td>
                     <div class="input-prepend">
                         <span class="add-on-zikmont">Bodega</span>                                                      
                         <select name="CboBodegas">
@@ -35,6 +33,7 @@
                             {%endfor%}
                         </select>
                     </div>                    
+                    </td>                        
                 </tr>
                     
                 <tr>

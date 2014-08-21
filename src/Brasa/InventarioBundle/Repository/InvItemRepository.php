@@ -43,7 +43,7 @@ class InvItemRepository extends EntityRepository {
             $em = $this->getEntityManager();
             $query = $em->createQueryBuilder()
                     ->select('item')
-                    ->from('BrasaFrontEndBundle:Item', 'item')
+                    ->from('BrasaGeneralBundle:Item', 'item')
                     ->where($em->createQueryBuilder()->expr()->like('item.codigoBarras', $em->createQueryBuilder()->expr()->literal('%' . $strCodigoBarras . '%')))
                     ->getQuery();
             $arResultado = $query->getResult();

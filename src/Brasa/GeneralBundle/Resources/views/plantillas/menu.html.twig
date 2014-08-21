@@ -12,8 +12,6 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Base <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
-                        <li class="divider"></li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">General</a>
                             <ul class="dropdown-menu">
@@ -23,7 +21,21 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Inventario</a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
+                                <li><a href="{{ path('brs_inv_base_documentos_lista') }}">Documentos</a></li>
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Lista precios</a></li>
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Lista costos</a></li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Productos</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_gen_base_terceros') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_gen_base_terceros') }}">Marcas</a></li>                                        
+                                        <li><a href="{{ path('brs_gen_base_terceros') }}">Unidades medida</a></li>
+                                        <li><a href="{{ path('brs_gen_base_terceros') }}">Lineas</a></li>
+                                        <li><a href="{{ path('brs_gen_base_terceros') }}">Grupos</a></li>
+                                        <li><a href="{{ path('brs_gen_base_terceros') }}">Subgrupos</a></li>
+                                    </ul>
+                                </li>                                
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Bodegas</a></li>
                             </ul>
                         </li>                        
                     </ul>
@@ -31,15 +43,13 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Consultas <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
-                        <li class="divider"></li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Inventario</a>
                             <ul class="dropdown-menu"> 
                                 <li><a href="{{ path('brs_inv_consultas_kardex') }}">Kardex</a></li>
                                 <li><a href="{{ path('brs_inv_consultas_disponibles') }}">Disponibles</a></li>
                                 <li><a href="{{ path('brs_inv_consultas_existencias') }}">Existencias</a></li>
-                                <li><a href="{{ path('brs_inv_consultas_inventario_valorizado', { 'codigoDocumentoTipo': 8 }) }}">Inventario valorizado</a></li>
+                                <li><a href="{{ path('brs_inv_consultas_inventario_valorizado') }}">Inventario valorizado</a></li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Movimienos</a>
                                     <ul class="dropdown-menu">
@@ -55,6 +65,18 @@
                                                 <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 5 }) }}">Detalles (Pendientes)</a></li>
                                             </ul>
                                         </li>                                        
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1" href="#">Pedidos</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 3 }) }}">Detalles (Pendientes)</a></li>
+                                            </ul>
+                                        </li>                                                                                
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1" href="#">Remision</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 9 }) }}">Detalles (Pendientes)</a></li>
+                                            </ul>
+                                        </li>                                                                                                                        
                                     </ul>
                                 </li>                                
                             </ul>
@@ -70,12 +92,15 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Procesos <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
-                        <li class="divider"></li>
                         <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">General</a>
+                            <a tabindex="-1" href="#">Inventario</a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Regenerar</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_inv_procesos_regenerar_kardex') }}">Kardex</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -86,16 +111,16 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Inventario</a>
                             <ul class="dropdown-menu">
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 8 }) }}">Solicitudes</a></li>
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 5 }) }}">Ordenes de compra</a></li>
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Compras</a></li>
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Entradas</a></li>
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Salidas</a></li>
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Traslados</a></li>
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Pedidos</a></li>
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Remisiones</a></li>
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Facturas</a></li>
-                                <li><a tabindex="-1" href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Orden de produccion</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 8 }) }}">Solicitudes</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 5 }) }}">Ordenes de compra</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 1 }) }}">Compras</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 6 }) }}">Entradas</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 2 }) }}">Salidas</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 10 }) }}">Traslados</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 3 }) }}">Pedidos</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 9 }) }}">Remisiones</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 4 }) }}">Facturas</a></li>
+                                <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 7 }) }}">Orden de produccion</a></li>
                             </ul>
                         </li>
                     </ul>

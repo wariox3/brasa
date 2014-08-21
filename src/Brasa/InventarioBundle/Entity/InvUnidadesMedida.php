@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * zikmont\InventarioBundle\Entity\UnidadesMedida
+ * Brasa\InventarioBundle\Entity\UnidadesMedida
  *
  * @ORM\Table(name="inv_unidades_medida")
  * @ORM\Entity(repositoryClass="Brasa\InventarioBundle\Repository\InvUnidadesMedidaRepository")

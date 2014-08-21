@@ -46,12 +46,12 @@ class MovimientosController extends Controller
                             $codigoDocumento, 
                             $arrControles['TxtCodigoMovimiento'], 
                             $arrControles['TxtNumeroMovimiento'], 
-                            $objFunciones->DevCodigoTercero($arrControles['TxtCodigoTercero']), 
+                            $arrControles['TxtCodigoTercero'], 
                             $objChkFecha, 
                             $arrControles['TxtFechaDesde'], 
                             $arrControles['TxtFechaHasta'],
-                            $arrControles['CboAutorizado'],
-                            $arrControles['CboImpreso']);
+                            "",
+                            "");
                     break;
             }
         } else {
@@ -114,7 +114,7 @@ class MovimientosController extends Controller
             }
                             
             if($request->request->get('CboDirecciones')) {
-                $arDireccion = $em->getRepository('BrasaFrontEndBundle:GenTercerosDirecciones')->find($request->request->get('CboDirecciones'));
+                $arDireccion = $em->getRepository('BrasaGeneralBundle:GenTercerosDirecciones')->find($request->request->get('CboDirecciones'));
                 $arMovimientoNuevo->setDireccionRel($arDireccion);
             }
 
@@ -127,7 +127,7 @@ class MovimientosController extends Controller
         $arTercerosDirecciones = null;        
         if ($codigoMovimiento != null && $codigoMovimiento != "" && $codigoMovimiento != 0) {
             $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);                    
-            //$arTercerosDirecciones = $em->getRepository('BrasaFrontEndBundle:GenTercerosDirecciones')->findBy(array('codigoTerceroFk' => $arMovimiento->getCodigoTerceroFk()));        
+            //$arTercerosDirecciones = $em->getRepository('BrasaGeneralBundle:GenTercerosDirecciones')->findBy(array('codigoTerceroFk' => $arMovimiento->getCodigoTerceroFk()));        
         }       
             
         
@@ -144,7 +144,7 @@ class MovimientosController extends Controller
     public function detalleAction($codigoMovimiento) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
-        $objMensaje = $this->get('mi_mensaje');
+        $objMensaje = $this->get('mensajes_brasa');
         $arMovimientosDetallesFrm = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();       
         $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
         $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);

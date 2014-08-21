@@ -69,7 +69,7 @@ swiftmailer:
     spool:     { type: memory }
 
 services:
-    mi_mensaje:
+    mensajes_brasa:
         class:        Brasa\GeneralBundle\MisClases\Mensajes
         
 knp_paginator:

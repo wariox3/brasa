@@ -15,8 +15,8 @@ class GenTercerosDireccionesRepository extends EntityRepository
     public function DevDireccionesTercero($codigoTerceroFk)
     {
         $em = $this->getEntityManager();
-        $arDirecciones = new \zikmont\FrontEndBundle\Entity\GenTercerosDirecciones();
-        $arDirecciones = $em->getRepository('zikmontFrontEndBundle:GenTercerosDirecciones')->findBy(array('codigoTerceroFk' => $codigoTerceroFk));
+        $arDirecciones = new \Brasa\GeneralBundle\Entity\GenTercerosDirecciones();
+        $arDirecciones = $em->getRepository('BrasaFrontEndBundle:GenTercerosDirecciones')->findBy(array('codigoTerceroFk' => $codigoTerceroFk));
         
         return $arDirecciones;
     }

@@ -9,13 +9,12 @@
 </script>
 <div class="container">
     <div class="page-header">
-        <h2>{{arDocumento.nombreDocumento}} {{ arMovimiento.numeroMovimiento }}
+        <h2>{{arDocumento.nombreDocumento}} {{ arMovimiento.numeroMovimiento }}</h2>
             {% if arMovimiento.estadoAutorizado == 1 %} <span class="label label-info">Autorizado</span> {% endif %}
             {% if arMovimiento.estadoCerrado == 1 %} <span class="label label-info">Cerrado</span> {% endif %}
             {% if arMovimiento.estadoImpreso == 1 %} <span class="label label-info">Impreso</span> {% endif %}
-            {% if arMovimiento.estadoAnulado == 1 %} <span class="label label-important">Anulado</span> {% endif %}
-            <small><label id="lblNombreDocumento">Detalles del movimiento {{ arMovimiento.codigoMovimientoPk }}</label></small>
-        </h2>
+            {% if arMovimiento.estadoAnulado == 1 %} <span class="label label-danger">Anulado</span> {% endif %}
+            <small><label id="lblNombreDocumento">Detalles del movimiento {{ arMovimiento.codigoMovimientoPk }}</label></small>        
     </div>
 
     <!-- Encabezado Movimiento -->
@@ -260,7 +259,7 @@
                             {% endif %}
 
                         <div class="btn-group">
-                            <button class="btn btn-default" type="submit" name="OpSubmit" value="OpCerrarDetalles" {% if arMovimiento.estadoAutorizado == 0 %} disabled {% endif %}>Cerrar</button>
+                            <button class="btn btn-default" type="submit" name="OpSubmit" value="OpCerrarDetalles" {% if arMovimiento.estadoAutorizado == 0 or arMovimiento.estadoAnulado == 1 %} disabled {% endif %}>Cerrar</button>
                             <button class="btn btn-danger" type="submit" name="OpSubmit" value="OpEliminar" {% if arMovimiento.estadoAutorizado == 1 %} disabled {% endif %}>Eliminar</button>
                             <button class="btn btn-primary" type="submit" name="OpSubmit" value="OpActualizarDetalles" {% if arMovimiento.estadoAutorizado == 1 %} disabled {% endif %} >Guardar Cambios</button>
                         </div>

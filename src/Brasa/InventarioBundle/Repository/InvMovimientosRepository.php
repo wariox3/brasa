@@ -302,16 +302,16 @@ class InvMovimientosRepository extends EntityRepository {
                             $arMovimientoDetalleAct = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($arMovimientoDetalle->getCodigoDetalleMovimientoPk());
                             $arMovimientoDetalleAct->setEstadoAnulado(1);
                             $arMovimientoDetalleAct->setCantidad(0);
-                            $arMovimientoDetalleAct->setPrecio(0);
+                            $arMovimientoDetalleAct->setVrPrecio(0);
                             $arMovimientoDetalleAct->setPorcentajeDescuento(0);
                             $arMovimientoDetalleAct->setCantidadOperada(0);
-                            $arMovimientoDetalleAct->setSubTotal(0);
-                            $arMovimientoDetalleAct->setTotalBruto(0);
-                            $arMovimientoDetalleAct->setValorTotalDescuento(0);
-                            $arMovimientoDetalleAct->setValorTotalIva(0);
-                            $arMovimientoDetalleAct->setTotal(0);
-                            $arMovimientoDetalleAct->setCosto(0);
-                            $arMovimientoDetalleAct->setCostoPromedio(0);
+                            $arMovimientoDetalleAct->setVrSubTotal(0);
+                            $arMovimientoDetalleAct->setVrBruto(0);
+                            $arMovimientoDetalleAct->setVrDescuento(0);
+                            $arMovimientoDetalleAct->setVrIva(0);
+                            $arMovimientoDetalleAct->setVrTotal(0);
+                            $arMovimientoDetalleAct->setVrCosto(0);
+                            $arMovimientoDetalleAct->setVrCostoPromedio(0);
                             $em->persist($arMovimientoDetalleAct);
                             $em->flush();
                         }                        
@@ -348,16 +348,16 @@ class InvMovimientosRepository extends EntityRepository {
                     }                    
                     
                     $arMovimiento->setEstadoAnulado(1);
-                    $arMovimiento->setSubTotal(0);
-                    $arMovimiento->setTotal(0);
-                    $arMovimiento->setTotalBruto(0);
-                    $arMovimiento->setTotalNeto(0);
-                    $arMovimiento->setValorOtrasRetenciones(0);
-                    $arMovimiento->setValorRetencionFuente(0);
-                    $arMovimiento->setValorRetencionIvaVentas(0);
-                    $arMovimiento->setValorRetencionCREE(0);
-                    $arMovimiento->setValorTotalDescuento(0);
-                    $arMovimiento->setValorTotalIva(0);
+                    $arMovimiento->setVrSubTotal(0);
+                    $arMovimiento->setVrTotal(0);
+                    $arMovimiento->setVrBruto(0);
+                    $arMovimiento->setVrNeto(0);
+                    $arMovimiento->setVrOtrasRetenciones(0);
+                    $arMovimiento->setVrRetencionFuente(0);
+                    $arMovimiento->setVrRetencionIvaVentas(0);
+                    $arMovimiento->setVrRetencionCREE(0);
+                    $arMovimiento->setVrDescuento(0);
+                    $arMovimiento->setVrIva(0);
                     $em->persist($arMovimiento);
                     $em->flush();
                     $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);

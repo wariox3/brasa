@@ -1,0 +1,86 @@
+{% extends 'zikmontGeneralBundle::layout_app.html.twig' %}
+{% block content %}
+
+{% block javascripts %}
+
+
+{% endblock %}
+    <div class="left_articles">                
+
+        <div class="page-header">
+            <h2>Listado de Productos</h2>
+            <a  class="btn btn-mini" id="{{ path('maestros_inventario_items_nuevo', { 'codigoItemPk':  0 }) }}"><image src="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_190_circle_plus.png') }}" width=20 height=20> Crear Producto</a>
+        </div>
+        
+        <form id="FrmBusqueda" action="{{ path('maestros_inventario_items_lista') }}" method="POST" novalidate>
+        <div class="well">
+            <table class="main-all-table-form">
+                
+                <tr>  
+                    
+                    <div class="input-prepend">
+                        <span class="add-on-zikmont">Cod. Barras</span>
+                        <input type="text" class="span2" name="TxtCodigoBarras" {% if codigo_barras is defined %} value="{{codigo_barras}}" {% endif%} onclick="this.select()" size="15" autofocus="true"/>
+                    </div>
+                </tr>
+                
+                <tr>
+                    <div class="input-prepend">
+                        <span class="add-on-zikmont">Cod. Item</span>
+                        <input type="text" class="span2" name="TxtCodigoItem" {% if ultimo_item is defined %} value="{{ultimo_item}}" {% endif%} onkeypress="return validarNumeros(event)" onclick="this.select()"  size="15"/>
+                    </div>
+                </tr>
+                
+                <tr>
+                    <div class="input-prepend">
+                        <span class="add-on-zikmont">Descripcion</span>
+                        <input type="text" class="span6" name="TxtDescripcionItem" {% if ultima_descripcion is defined %} value="{{ultima_descripcion}}" {% endif%} onclick="this.select()" size="15"/>
+                    </div>
+                </tr>
+                
+                <tr>
+               
+            </tr>
+                
+                <tr>                
+                    <td></td>
+                    <td><button class="btn btn-primary" type="submit" name="OpSubmit" value="OpActualizarDetalles">Buscar</button></td>
+                </tr>            
+            </table>
+        </div>
+        </form>
+
+        <table  class="table table-striped table-bordered table-condensed"> 
+            <tr>
+                <th>Código</th>
+                <th>Descripción</th>                
+                <th>Marca</th>                
+                <th>U. Medida</th>                               
+                <th>Iva</th>                
+                <th>Costo Pred.</th>                
+                <th>Precio Pred.</th>                
+                <th>Código EAN</th>
+                <th>Código Barra</th>
+                <th></th>
+                <th>ver</th>
+            </tr>
+
+        {% for item in arItems %}
+            <tr>
+                <td><a href="#" id="{{ path('inventario_consultas_item', { 'codigoItem':  item.codigoItemPk }) }}" >{{ item.codigoItemPk }}</a></td>                
+                <td>{{ item.descripcion }}</td>
+                <td>{{ item.marcasRel.nombreMarca }}</td>
+                <td>{% if item.codigoUnidadMedidaFk != null %} {{ item.unidadMedidaRel.nombre }} {% endif %}</td>                
+                <td>{{ item.porcentajeIva }}</td>
+                <td>{{ item.costoPredeterminado }}</td>
+                <td>{{ item.precioPredeterminado }}</td>
+                <td>{{ item.codigoEAN }}</td>
+                <td>{{ item.codigoBarras }}</td>
+                <td style="text-align: center"><a id="{{ path('maestros_inventario_items_nuevo', { 'codigoItemPk':  item.codigoItemPk }) }}" ><img src="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                <td style="text-align: center"><a href="{{ path('maestros_inventario_items_detalle', { 'codigoItemPk': item.codigoItemPk }) }}"><img src="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                            
+            </tr>   
+        {% endfor %}            
+        </table>   
+
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+<form class="well" id="FrmNuevo" action="{{path('maestros_inventario_listas_precios_nuevo', { 'codigoListaPreciosPk':  0 })}}" method="post"> 
+    <script>
+        $('#myModal').modal('toggle');
+        </script>
+
+        <div class="modal hide" id="myModal">    
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>{%if arListaPrecios is not null%}Editar lista precios{%else%}Crear lista precios{%endif%}</h3>
+            </div>    
+            <div class="modal-body">                             
+                <div class="well">      
+                    <table>
+                        {% if arListaPrecios is defined and arListaPrecios is not null %}
+                            <tr>
+                                <td><strong>Codigo:</strong><br/></td>
+                                <td><input type="text" class="span4" readonly="true" name="TxtCodigoListaPrecios" {% if arListaPrecios is defined and arListaPrecios is not null %} value="{{arListaPrecios.codigoListaPreciosPk}}" readonly="true" {% endif %}/></td>              
+                            <tr> 
+                        {% endif %}
+                                <tr>
+                                    <td><strong>Nombre:</strong><br/></td>
+                                    <td><input type="text" class="span4" name="TxtNombre" {% if arListaPrecios is defined and arListaPrecios is not null %} value="{{arListaPrecios.nombre}}" {% endif %} placeholder="Nombre" required autofocus/></td>              
+                                <tr>                                        
+                            </table>            
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn" data-dismiss="modal">Cancelar</a>                
+                        <button id="link_guardar" class="btn btn-primary" type="submit" name="OpSubmit" value="OpGuardar">Guardar</button>
+                    </div>  
+                </div>
+            </form> 

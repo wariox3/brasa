@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+
+    <div class="left_articles">
+
+        <form id="FrmBusqueda" action="{{ path('maestros_inventario_documentos_detalle', { 'codigoDocumentoPk': arDocumento.codigoDocumentoPk }) }}" method="POST" novalidate>
+            <div class="page-header">
+                <h2>Detalle de documento</h2>
+            </div>        
+            <h4>Documentos control</h4>
+            <table  class="table table-striped table-bordered table-condensed">
+                <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Hereda precio</th>
+                    <th></th>
+                </tr>
+                {% for documentoControl in arDocumentosControl %}
+                    <tr>
+                        <td>{{ documentoControl.codigoDocumentoHijoPk }}</td>
+                        <td>{{ documentoControl.documentoHijoRel.nombre }}</td> 
+                        <td>{{ documentoControl.heredaPrecio }}</td> 
+                        <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ documentoControl.codigoDocumentoHijoPk }}" /></td>            
+                    </tr>
+                {% endfor %}
+
+            </table>
+            <div class="btn-toolbar" style="float:left">
+                <div class="btn-group">
+                <a class="btn btn-mini" href="{{ path('maestros_inventario_documentos_lista') }}" style="float:left">Volver</a>
+                </div>
+            </div>
+            <!-- Botones Menu Items -->
+            <div class="btn-toolbar" style="float: right">
+                <div class="btn-group">    
+                    <select name="CboDocumentos">
+                        <option value="">---Seleccione tipo---</option>
+                        {% for documento in arDocumentos %}
+                                <option value="{{documento.codigoDocumentoPk}}">{{documento.nombre}}</option>
+                        {%endfor%}
+                    </select>
+                    <button class="btn btn-toolbar btn-mini" type="submit" name="OpSubmit" value="OpAgregar" >Agregar</button>
+                    <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpEliminar" >Eliminar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

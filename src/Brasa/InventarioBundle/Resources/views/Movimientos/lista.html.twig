@@ -59,7 +59,7 @@
     <hr/>
 
     <!-- Formulario de busqueda -->    
-    <form class="form-horizontal" role="form" id="FrmBusqueda" action="{{ path('brs_inv_movimientos_nuevo', { 'codigoDocumento': arDocumento.codigoDocumentoPK, 'codigoMovimiento':0 }) }}" method="POST" novalidate>
+    <form class="form-horizontal" role="form" id="FrmBusqueda" action="{{ path('brs_inv_movimientos_lista', { 'codigoDocumento': arDocumento.codigoDocumentoPK, 'codigoMovimiento':0 }) }}" method="POST" novalidate>
         <div class="well">
             <div class="form-group">
                 <label for="TxtCodigoMovimiento" class="col-sm-2 control-label">Codigo</label>
