@@ -27,7 +27,7 @@ class DocumentosController extends Controller
         $arDocumentosTipos = new \Brasa\InventarioBundle\Entity\InvDocumentosTipos();
         $arDocumentosSubTipos = new \Brasa\InventarioBundle\Entity\InvDocumentosSubtipos();
         $arComprobantesContables = new \Brasa\ContabilidadBundle\Entity\CtbComprobantesContables();
-        $objFunciones = new \Brasa\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
+        //$objFunciones = new \Brasa\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
         if ($request->getMethod() == 'POST') {
             if (($request->request->get('TxtCodigoDocumento'))) {
                 $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->find($request->request->get('TxtCodigoDocumento'));
@@ -229,7 +229,7 @@ class DocumentosController extends Controller
         $arDocumentosSubTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentosSubTipos')->findAll();   
         $arComprobantesContables = $em->getRepository('BrasaContabilidadBundle:CtbComprobantesContables')->findAll();   
         
-        return $this->render('BrasaInventarioBundle:Maestros/Documentos:nuevo.html.twig', array(
+        return $this->render('BrasaInventarioBundle:Base/Documentos:nuevo.html.twig', array(
             'arDocumento' => $arDocumento,
             'arDocumentoConfiguracion' => $arDocumentoConfiguracion,
             'arDocumentosTipos' => $arDocumentosTipos,

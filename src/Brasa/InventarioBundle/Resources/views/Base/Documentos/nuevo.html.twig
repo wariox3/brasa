@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 {% block content %}
 <div class="container">  
-<form class="well" id="FrmNuevo" action="{{path('maestros_inventario_documentos_nuevo', { 'codigoDocumentoPk':  0 })}}" method="post">
+<form class="well" id="FrmNuevo" action="{{path('brs_inv_base_documentos_nuevo', { 'codigoDocumentoPk':  0 })}}" method="post">
         {% import 'zikmontContabilidadBundle:Plantillas:macros.html.twig' as utilidades %}
         
             <div class="modal-header">

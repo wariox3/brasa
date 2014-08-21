@@ -28,10 +28,6 @@ class CtbComprobantesContables
      */
     protected $documentosRel;
 
-    public function __construct()
-    {
-        $this->documentosRel = new ArrayCollection();
-    }
     
 
     /**
