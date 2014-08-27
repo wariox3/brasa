@@ -1,12 +1,12 @@
-{% extends 'zikmontFrontEndBundle::layout_app.html.twig' %}
+{% extends '::base.html.twig' %}
 {% block content %}
-    <form action="{{ path('maestros_inventario_listas_precios_lista') }}" method="POST">        
-    <div class="left_articles">                
+    
+    <div class="container">                
         <div class="page-header">
             <h2>Listado listas de precios</h2>
-            <a  class="btn btn-mini" id="{{ path('maestros_inventario_listas_precios_nuevo', { 'codigoListaPreciosPk':  0 }) }}"><image src="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_190_circle_plus.png') }}" width=20 height=20> Crear lista precios</a>            
+            <a class="btn btn-mini" href="{{ path('brs_inv_base_listas_precios_nuevo', { 'codigoListaPreciosPk':  0 }) }}"><image src="{{ asset('imagenes/bootstrap/glyphicons_190_circle_plus.png') }}" width=20 height=20> Crear lista precios</a>            
         </div>
-
+        <form action="{{ path('brs_inv_base_listas_precios_lista') }}" method="POST">        
         <table  class="table table-striped table-bordered table-condensed"> 
             <tr>
                 <th>Codigo</th>
@@ -26,17 +26,19 @@
                 <td>{{ arListaPrecios.fechaCreacion |date("Y/m/d") }}</td>
                 <td>{{ arListaPrecios.vigenteHasta |date("Y/m/d")}}</td>
                 <td style="text-align: center">{% if arListaPrecios.estadoInactiva == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a id="{{ path('maestros_inventario_listas_precios_nuevo', { 'codigoListaPreciosPk':  arListaPrecios.codigoListaPreciosPk }) }}" ><IMG SRC="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_151_edit.png') }}" WIDTH=20 HEIGHT=20></a></td>
-                <td style="text-align: center"><a href="{{ path('maestros_inventario_listas_precios_detalle', { 'codigoListaPreciosPk': arListaPrecios.codigoListaPreciosPk }) }}"><IMG SRC="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_152_new_window.png') }}" WIDTH=20 HEIGHT=20></a></td>
+                <td style="text-align: center"><a id="{{ path('brs_inv_base_listas_precios_nuevo', { 'codigoListaPreciosPk':  arListaPrecios.codigoListaPreciosPk }) }}" ><IMG SRC="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" WIDTH=20 HEIGHT=20></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_inv_base_listas_precios_detalle', { 'codigoListaPreciosPk': arListaPrecios.codigoListaPreciosPk }) }}"><IMG SRC="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" WIDTH=20 HEIGHT=20></a></td>
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arListaPrecios.codigoListaPreciosPk }}" /></td>                
             </tr>   
         {% endfor %}            
         </table>   
+        <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">  
+                <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpInactivarListas" >Inactivar/Activar seleccionados</button>  
+            </div>
+        </div>        
+        </form>
     </div>
-    <div class="btn-toolbar" style="float: right">
-        <div class="btn-group">  
-            <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpInactivarListas" >Inactivar/Activar seleccionados</button>  
-        </div>
-    </div>           
-    </form>
+           
+
 {% endblock %}

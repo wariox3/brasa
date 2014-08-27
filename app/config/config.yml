@@ -72,6 +72,7 @@ services:
     mensajes_brasa:
         class:        Brasa\GeneralBundle\MisClases\Mensajes
         
+        
 knp_paginator:
     page_range: 5                      # default page range used in pagination control
     default_options:

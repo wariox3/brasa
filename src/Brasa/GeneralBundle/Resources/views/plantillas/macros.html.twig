@@ -20,3 +20,69 @@
         </div>
     </div>    
 {% endmacro %}
+{% macro textboxcuentas(valor,span,requerido,autofocus,id, style, name) %}
+
+    <script type="text/javascript">
+        $().ready(function() {
+            $("#{{id}}").autocomplete("{{path('buscarcuentas')}}", {
+                width: 400,
+                selectFirst: false
+            });
+        })
+    </script> 
+
+    <input id="{{id}}"  name="{{name}}" style="{{style}}" type="{{ tipo | default('text') }}" class="span{{span}}" value="{{ valor }}" {{ requerido ? 'required="required"' :'false' }} placeholder="Cuenta" {{ autofocus ? 'autofocus="required"' :'false' }}/>
+
+{% endmacro %}
+
+{% macro textboxbanco(valor,span,requerido,autofocus,id, style, name) %}   
+    <script type="text/javascript">
+   $().ready(function() {
+        $("#{{id}}").autocomplete("{{path('buscarbancos')}}", {
+                width: 400,
+                selectFirst: false
+        });                        
+        $('#{{id}}').change(function() {            
+            // Asignacion del texto seleccionado
+            $("#{{id}}").result(log).next().click(function() {
+                $(this).prev().search();
+            });
+            
+        });
+   })
+    </script> 
+
+    <input id="{{id}}"  name="{{name}}" style="{{style}}" type="{{ tipo | default('text') }}" class="span{{span}}" value="{{ valor }}" {{ requerido ? 'required="required"' :'true' }} placeholder="Banco" {{ autofocus ? 'autofocus="required"' :'true' }}/>
+
+{% endmacro %}    
+    
+{% macro textboximpuestos(valor,span,requerido,autofocus,id, style, name) %}
+
+    <script type="text/javascript">
+        $().ready(function() {
+            $("#{{id}}").autocomplete("{{path('buscarimpuestos')}}", {
+                width: 400,
+                selectFirst: false
+            });
+        })
+    </script> 
+
+    <input id="{{id}}"  name="{{name}}" style="{{style}}" type="{{ tipo | default('text') }}" class="span{{span}}" value="{{ valor }}" {{ requerido ? 'required="required"' :'false' }} placeholder="Imp" {{ autofocus ? 'autofocus="required"' :'false' }}/>
+
+{% endmacro %}
+    
+{% macro cboTipoRegistro(valor,span,requerido,autofocus,id, style, name) %}   
+    <select id="{{id}}" name="{{name}}" style="{{style}}" {{ requerido ? 'required="required"' :'false' }} {{ autofocus ? 'autofocus="required"' :'false' }}>                       
+        <option value="0" {% if valor == 0 %} selected {% endif %}></option>
+        <option value="1" {% if valor == 1 %} selected {% endif %}>Debito</option>
+        <option value="2" {% if valor == 2 %} selected {% endif %}>Credito</option>
+    </select>
+{% endmacro %}   
+    
+{% macro cboTipoBool(valor,span,requerido,autofocus,id, style, name) %}   
+    <select id="{{id}} "class="span{{span}}" name="{{name}}" style="{{style}}" {{ requerido ? 'required="required"' :'false' }} {{ autofocus ? 'autofocus="required"' :'false' }}>                       
+        <option value="0" {% if valor == 0 %} selected {% endif %}></option>
+        <option value="1" {% if valor == 1 %} selected {% endif %}>SI</option>
+        <option value="2" {% if valor == 2 %} selected {% endif %}>NO</option>
+    </select>
+{% endmacro %}     

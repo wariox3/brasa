@@ -22,12 +22,12 @@
                             <a tabindex="-1" href="#">Inventario</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ path('brs_inv_base_documentos_lista') }}">Documentos</a></li>
-                                <li><a href="{{ path('brs_gen_base_terceros') }}">Lista precios</a></li>
-                                <li><a href="{{ path('brs_gen_base_terceros') }}">Lista costos</a></li>
+                                <li><a href="{{ path('brs_inv_base_listas_precios_lista') }}">Lista precios</a></li>
+                                <li><a href="{{ path('brs_inv_base_listas_costos_lista') }}">Lista costos</a></li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Productos</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_gen_base_terceros') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_inv_base_items_lista') }}">Lista</a></li>
                                         <li><a href="{{ path('brs_gen_base_terceros') }}">Marcas</a></li>                                        
                                         <li><a href="{{ path('brs_gen_base_terceros') }}">Unidades medida</a></li>
                                         <li><a href="{{ path('brs_gen_base_terceros') }}">Lineas</a></li>
@@ -80,13 +80,7 @@
                                     </ul>
                                 </li>                                
                             </ul>
-                        </li>
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Otras</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
-                            </ul>
-                        </li>                        
+                        </li>                      
                     </ul>
                 </li>
                 <li class="dropdown">

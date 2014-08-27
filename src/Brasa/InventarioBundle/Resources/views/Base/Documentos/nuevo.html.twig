@@ -1,8 +1,9 @@
 {% extends '::base.html.twig' %}
+{% import 'BrasaGeneralBundle:plantillas:macros.html.twig' as utilidades %}
 {% block content %}
 <div class="container">  
 <form class="well" id="FrmNuevo" action="{{path('brs_inv_base_documentos_nuevo', { 'codigoDocumentoPk':  0 })}}" method="post">
-        {% import 'zikmontContabilidadBundle:Plantillas:macros.html.twig' as utilidades %}
+        
         
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
@@ -31,7 +32,7 @@
                                             <select name="CboDocumentosTipos" required autofocus>
                                                 <option value="">Seleccione</option>
                                                 {% for documentoTipo in arDocumentosTipos %}
-                                                        <option value="{{documentoTipo.codigoDocumentoTipoPk}}" {%if arDocumento.codigoDocumentoTipoFk is defined %} {%if documentoTipo.codigoDocumentoTipoPk == arDocumento.codigoDocumentoTipoFk %} selected {%endif%} {%endif%}>{{documentoTipo.nombre}}</option>
+                                                        <option value="{{documentoTipo.codigoDocumentoTipoPk}}" {%if arDocumento.codigoDocumentoTipoFk is defined %} {%if documentoTipo.codigoDocumentoTipoPk == arDocumento.codigoDocumentoTipoFk %} selected {%endif%} {%endif%}>{{documentoTipo.nombreDocumentoTipo}}</option>
                                                 {%endfor%}
                                             </select>
                                         </td>
@@ -271,7 +272,7 @@
                 </div>
 </div>
             <div class="modal-footer">
-                <a class="btn" href="{{ path('maestros_inventario_documentos_lista') }}">Cancelar</a>                   
+                <a class="btn" href="{{ path('brs_inv_base_documentos_lista') }}">Cancelar</a>                   
                 <button id="link_guardar" class="btn btn-primary" type="submit" name="OpSubmit" value="OpGuardar">Guardar</button>
             </div>
 

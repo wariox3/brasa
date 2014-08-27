@@ -172,7 +172,7 @@
                             <td>
                                 <input style="width:80px" type="text" id="TxtLote[{{movimientoDetalle.codigoDetalleMovimientoPk}}]" name="TxtLote[]" value="{{ movimientoDetalle.loteFk }}" size="15" readonly="true"/>
                                             {% if arDocumentoConfiguracion.editarLote == 1 %}
-                                <a href="javascript:abrirVentana3('{{ path('inventario_movimientos_agregar_lote', { 'codigoMovimientoDetalle': movimientoDetalle.codigoDetalleMovimientoPk }) }}', 'AgregarLote', 600, 900)" ><IMG SRC="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_090_table.png') }}" WIDTH=18 HEIGHT=18></a>
+                                <a href="javascript:abrirVentana3('{{ path('brs_inv_movimientos_agregar_lote', { 'codigoMovimientoDetalle': movimientoDetalle.codigoDetalleMovimientoPk }) }}', 'AgregarLote', 600, 900)" ><IMG SRC="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" WIDTH=18 HEIGHT=18></a>
                                             {% endif %}
                             </td>
 

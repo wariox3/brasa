@@ -52,7 +52,11 @@ brs_inv_consultas_movimientos_pendientes_detalles:
 #Acciones
 brs_inv_movimientos_agregar_item:
     path:     /inventario/movimientos/agregar/item/{codigoMovimiento}
-    defaults: { _controller: BrasaInventarioBundle:MovimientosAgregarItem:listaItem }    
+    defaults: { _controller: BrasaInventarioBundle:MovimientosAgregarItem:listaItem }
+    
+brs_inv_movimientos_agregar_lote:
+  pattern: /inventario/movimientos/agregar/lote/{codigoMovimientoDetalle}
+  defaults: { _controller: BrasaInventarioBundle:MovimientosAgregarLote:lista}     
     
 brs_inv_movimientos_agregar_item_documento:
     path:     /inventario/movimientos/agregar/item/documento/{codigoMovimiento}
@@ -87,15 +91,15 @@ brs_inv_base_documentos_detalle:
   defaults: { _controller: BrasaInventarioBundle:Documentos:detalle} 
   
 brs_inv_base_items_lista:
-    pattern:  /maestros/inventario/items/lista
+    pattern:  /inventario/base/items/lista
     defaults: { _controller: BrasaInventarioBundle:Items:lista }
 
 brs_inv_base_items_nuevo:
-  pattern: /maestros/inventario/items/nuevo/{codigoItemPk}
+  pattern: /inventario/base/items/nuevo/{codigoItemPk}
   defaults: { _controller: BrasaInventarioBundle:Items:nuevo}          
 
 brs_inv_base_items_detalle:
-  pattern: /maestros/inventario/items/detalle/{codigoItemPk}
+  pattern: /inventario/base/items/detalle/{codigoItemPk}
   defaults: { _controller: BrasaInventarioBundle:Items:detalle} 
 
 brs_inv_base_marcas_lista:
@@ -123,33 +127,33 @@ brs_inv_base_unidadesmedida_nuevo:
   defaults: { _controller: BrasaInventarioBundle:UnidadesMedida:nuevo} 
 
 brs_inv_base_listas_costos_lista:
-    pattern:  /maestros/inventario/listas/costos/lista
+    pattern:  /inventario/base/listas/costos/lista
     defaults: { _controller: BrasaInventarioBundle:ListasCostos:listar }  
     
 brs_inv_base_listas_costos_nuevo:
-    pattern:  /maestros/inventario/listas/costos/nuevo{codigoListaCostosPk}
+    pattern:  /inventario/base/listas/costos/nuevo{codigoListaCostosPk}
     defaults: { _controller: BrasaInventarioBundle:ListasCostos:nuevo } 
     
 brs_inv_base_listas_costos_detalle:
-    pattern:  /maestros/inventario/listas/costos/detalle/{codigoListaCostosPk}/
+    pattern:  /inventario/base/listas/costos/detalle/{codigoListaCostosPk}/
     defaults: { _controller: BrasaInventarioBundle:ListasCostos:detalle }     
 
 brs_inv_base_listas_costos_detalle_nuevo:
-    pattern:  /maestros/inventario/listas/costos/detalle/nuevo/{codigoListaCostosPk}/{codigoListaCostosDetallePk}/
+    pattern:  /inventario/base/listas/costos/detalle/nuevo/{codigoListaCostosPk}/{codigoListaCostosDetallePk}/
     defaults: { _controller: BrasaInventarioBundle:ListasCostos:detalleNuevo }     
       
 brs_inv_base_listas_precios_lista:
-    pattern:  /maestros/inventario/listas/precios/lista
+    pattern:  /inventario/base/listas/precios/lista
     defaults: { _controller: BrasaInventarioBundle:ListasPrecios:listar }  
     
 brs_inv_base_listas_precios_nuevo:
-    pattern:  /maestros/inventario/listas/precios/nuevo{codigoListaPreciosPk}
+    pattern:  /inventario/base/listas/precios/nuevo/{codigoListaPreciosPk}
     defaults: { _controller: BrasaInventarioBundle:ListasPrecios:nuevo } 
     
 brs_inv_base_listas_precios_detalle:
-    pattern:  /maestros/inventario/listas/precios/detalle/{codigoListaPreciosPk}/
+    pattern:  /inventario/base/listas/precios/detalle/{codigoListaPreciosPk}/
     defaults: { _controller: BrasaInventarioBundle:ListasPrecios:detalle }     
 
 brs_inv_base_listas_precios_detalle_nuevo:
-    pattern:  /maestros/inventario/listas/precios/detalle/nuevo/{codigoListaPreciosPk}/{codigoListaPreciosDetallePk}/
+    pattern:  /inventario/base/listas/precios/detalle/nuevo/{codigoListaPreciosPk}/{codigoListaPreciosDetallePk}/
     defaults: { _controller: BrasaInventarioBundle:ListasPrecios:detalleNuevo }     
