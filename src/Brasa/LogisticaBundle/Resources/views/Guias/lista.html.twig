@@ -15,8 +15,8 @@
                 <th>Destino</th>
                 <th>Ruta</th>
                 <th>Unidades</th>
-                <th>Peso Real</th>
-                <th>Peso Volumen</th>
+                <th>P. Real</th>
+                <th>P. Volumen</th>
                 <th>Flete</th>
                 <th>Manejo</th>                
                 <th></th>
@@ -34,9 +34,9 @@
                 <td>{{ arGuias.terceroRel.nombreCorto  }}</td>
                 <td>{{ arGuias.ciudadDestinoRel.nombre  }}</td>
                 <td>{{ arGuias.rutaRel.nombre  }}</td>
-                <td style="text-align: right">{{ arGuias.ctUnidades | number_format(2, '.', ',')}}</td>            
-                <td style="text-align: right">{{ arGuias.ctPesoReal | number_format(2, '.', ',')}}</td>            
-                <td style="text-align: right">{{ arGuias.ctPesoVolumen | number_format(2, '.', ',')}}</td>            
+                <td style="text-align: right">{{ arGuias.ctUnidades | number_format(0, '.', ',')}}</td>            
+                <td style="text-align: right">{{ arGuias.ctPesoReal | number_format(0, '.', ',')}}</td>            
+                <td style="text-align: right">{{ arGuias.ctPesoVolumen | number_format(0, '.', ',')}}</td>            
                 <td style="text-align: right">{{ arGuias.vrFlete | number_format(2, '.', ',')}}</td>            
                 <td style="text-align: right">{{ arGuias.vrManejo | number_format(2, '.', ',')}}</td>                           
                 <td style="text-align: center"><a href="{{ path('brs_log_guias_nuevo', { 'codigoGuia': arGuias.codigoGuiaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_030_pencil.png') }}" width=22 height=22></a></td>                
