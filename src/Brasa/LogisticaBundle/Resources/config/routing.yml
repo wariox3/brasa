@@ -1,0 +1,27 @@
+brs_log_guias_lista:
+    path:     /logistica/guias/lista
+    defaults: { _controller: BrasaLogisticaBundle:Guias:lista }
+
+brs_log_guias_detalle:
+    path:     /logistica/guias/detalle
+    defaults: { _controller: BrasaLogisticaBundle:Guias:lista }
+    
+brs_log_guias_nuevo:
+    path:     /logistica/guias/nuevo/{codigoGuia}
+    defaults: { _controller: BrasaLogisticaBundle:Guias:nuevo }    
+    
+brs_log_despachos_lista:
+    path:     /logistica/despachos/lista
+    defaults: { _controller: BrasaLogisticaBundle:Despachos:lista }
+
+brs_log_despachos_detalle:
+    path:     /logistica/despachos/detalle/{codigoDespacho}
+    defaults: { _controller: BrasaLogisticaBundle:Despachos:detalle }
+    
+brs_log_despachos_nuevo:
+    path:     /logistica/despachos/nuevo/{codigoDespacho}
+    defaults: { _controller: BrasaLogisticaBundle:Despachos:nuevo }   
+
+brs_log_despachos_agregar_guia:
+    path:     /logistica/despachos/agregar/guia/{codigoDespacho}
+    defaults: { _controller: BrasaLogisticaBundle:DespachosAgregarGuia:lista }

@@ -92,4 +92,12 @@ class CtbComprobantesContables
     {
         return $this->documentosRel;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->documentosRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }

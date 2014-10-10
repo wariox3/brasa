@@ -26,5 +26,29 @@ class BusquedasController extends Controller {
 
         return $this->render('BrasaGeneralBundle:Busquedas:buscarTercero.html.twig', array("arTerceros" => $arTerceros));
     }
+    
+    public function buscarCiudadAction($campoCodigo, $campoNombre) {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $request = $this->getRequest();
+
+        if ($request->getMethod() == 'POST') {
+            if ($request->request->get('TxtCodigo') != "" && is_numeric($request->request->get('TxtCodigo'))) {
+                $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findBy(array('codigoItemPk' => $request->request->get('TxtCodigoItem')));
+            } elseif ($request->request->get('TxtDescripcionItem') != "") {
+                $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->BuscarDescripcionItem($request->request->get('TxtDescripcionItem'));
+            }
+            // Todos los productos
+            else
+                $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();
+        }
+        else {
+            $arCiudades = $em->getRepository('BrasaGeneralBundle:GenCiudades')->findAll();
+        }
+
+        return $this->render('BrasaGeneralBundle:Busquedas:buscarCiudad.html.twig', array(
+            "arCiudades" => $arCiudades,
+            "campoCodigo" => $campoCodigo,
+            "campoNombre" => $campoNombre));
+    }    
 
 }

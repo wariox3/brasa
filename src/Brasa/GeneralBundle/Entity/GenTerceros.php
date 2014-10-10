@@ -19,14 +19,19 @@ class GenTerceros
     private $codigoTerceroPk;
 
     /**
-     * @ORM\Column(name="nombre_corto", type="string", length=50)
+     * @ORM\Column(name="nit", type="string", length=11)
      */
-    private $nombreCorto;
-
+    private $nit;    
+    
     /**
      * @ORM\Column(name="digito_verificacion", type="string", length=1, nullable=true)
      */
-    private $digitoVerificacion;    
+    private $digitoVerificacion;     
+    
+    /**
+     * @ORM\Column(name="nombre_corto", type="string", length=50)
+     */
+    private $nombreCorto;   
     
     /**
      * @ORM\Column(name="nombres", type="string", length=50, nullable=true)
@@ -189,7 +194,10 @@ class GenTerceros
      */
     protected $movimientosRel;    
           
-    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogGuias", mappedBy="terceroRel")
+     */
+    protected $guiasRel;    
 
     /**
      * Get codigoTerceroPk
@@ -988,4 +996,60 @@ class GenTerceros
         $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Add guiasRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasRel
+     * @return GenTerceros
+     */
+    public function addGuiasRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasRel)
+    {
+        $this->guiasRel[] = $guiasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove guiasRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasRel
+     */
+    public function removeGuiasRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasRel)
+    {
+        $this->guiasRel->removeElement($guiasRel);
+    }
+
+    /**
+     * Get guiasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGuiasRel()
+    {
+        return $this->guiasRel;
+    }
+
+    /**
+     * Set nit
+     *
+     * @param string $nit
+     * @return GenTerceros
+     */
+    public function setNit($nit)
+    {
+        $this->nit = $nit;
+
+        return $this;
+    }
+
+    /**
+     * Get nit
+     *
+     * @return string 
+     */
+    public function getNit()
+    {
+        return $this->nit;
+    }
 }

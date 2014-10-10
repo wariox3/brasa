@@ -1,3 +1,7 @@
+brasa_logistica:
+    resource: "@BrasaLogisticaBundle/Resources/config/routing.yml"
+    prefix:   /
+
 brasa_cartera:
     resource: "@BrasaCarteraBundle/Resources/config/routing.yml"
     prefix:   /

@@ -30,21 +30,41 @@ class GenCiudades
     private $codigoDepartamentoFk;     
 
     /**
+     * @ORM\Column(name="codigo_ruta_predeterminada_fk", type="integer")
+     */
+    private $codigoRutaPredeterminadaFk;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="GenDepartamentos", inversedBy="ciudadesRel")
      * @ORM\JoinColumn(name="codigo_departamento_fk", referencedColumnName="codigo_departamento_pk")
      */
     protected $departamentoRel;    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\LogisticaBundle\Entity\LogRutas", inversedBy="ciudadesRel")
+     * @ORM\JoinColumn(name="codigo_ruta_predeterminada_fk", referencedColumnName="codigo_ruta_pk")
+     */
+    protected $rutaRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="GenTercerosDirecciones", mappedBy="ciudadRel")
      */
     protected $tercerosDireccionesRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogGuias", mappedBy="ciudadDestinoRel")
+     */
+    protected $guiasRel;     
+    
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->tercerosDireccionesRel = new ArrayCollection();
-    }  
-
+        $this->tercerosDireccionesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->guiasRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoCiudadPk
@@ -156,5 +176,84 @@ class GenCiudades
     public function getTercerosDireccionesRel()
     {
         return $this->tercerosDireccionesRel;
+    }
+
+    /**
+     * Add guiasRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasRel
+     * @return GenCiudades
+     */
+    public function addGuiasRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasRel)
+    {
+        $this->guiasRel[] = $guiasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove guiasRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasRel
+     */
+    public function removeGuiasRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasRel)
+    {
+        $this->guiasRel->removeElement($guiasRel);
+    }
+
+    /**
+     * Get guiasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGuiasRel()
+    {
+        return $this->guiasRel;
+    }
+
+    /**
+     * Set codigoRutaPredeterminadaFk
+     *
+     * @param integer $codigoRutaPredeterminadaFk
+     * @return GenCiudades
+     */
+    public function setCodigoRutaPredeterminadaFk($codigoRutaPredeterminadaFk)
+    {
+        $this->codigoRutaPredeterminadaFk = $codigoRutaPredeterminadaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRutaPredeterminadaFk
+     *
+     * @return integer 
+     */
+    public function getCodigoRutaPredeterminadaFk()
+    {
+        return $this->codigoRutaPredeterminadaFk;
+    }
+
+    /**
+     * Set rutaRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogRutas $rutaRel
+     * @return GenCiudades
+     */
+    public function setRutaRel(\Brasa\LogisticaBundle\Entity\LogRutas $rutaRel = null)
+    {
+        $this->rutaRel = $rutaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogRutas 
+     */
+    public function getRutaRel()
+    {
+        return $this->rutaRel;
     }
 }
