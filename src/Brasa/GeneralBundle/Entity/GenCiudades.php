@@ -56,7 +56,17 @@ class GenCiudades
      */
     protected $guiasRel;     
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogDespachos", mappedBy="ciudadOrigenRel")
+     */
+    protected $despachosCiudadOrigenRel;    
 
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogDespachos", mappedBy="ciudadDestinoRel")
+     */
+    protected $despachosCiudadDestinoRel;        
+
+    
     /**
      * Constructor
      */
@@ -64,6 +74,8 @@ class GenCiudades
     {
         $this->tercerosDireccionesRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->guiasRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->despachosCiudadOrigenRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->despachosCiudadDestinoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -123,6 +135,29 @@ class GenCiudades
     }
 
     /**
+     * Set codigoRutaPredeterminadaFk
+     *
+     * @param integer $codigoRutaPredeterminadaFk
+     * @return GenCiudades
+     */
+    public function setCodigoRutaPredeterminadaFk($codigoRutaPredeterminadaFk)
+    {
+        $this->codigoRutaPredeterminadaFk = $codigoRutaPredeterminadaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRutaPredeterminadaFk
+     *
+     * @return integer 
+     */
+    public function getCodigoRutaPredeterminadaFk()
+    {
+        return $this->codigoRutaPredeterminadaFk;
+    }
+
+    /**
      * Set departamentoRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenDepartamentos $departamentoRel
@@ -143,6 +178,29 @@ class GenCiudades
     public function getDepartamentoRel()
     {
         return $this->departamentoRel;
+    }
+
+    /**
+     * Set rutaRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogRutas $rutaRel
+     * @return GenCiudades
+     */
+    public function setRutaRel(\Brasa\LogisticaBundle\Entity\LogRutas $rutaRel = null)
+    {
+        $this->rutaRel = $rutaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogRutas 
+     */
+    public function getRutaRel()
+    {
+        return $this->rutaRel;
     }
 
     /**
@@ -212,48 +270,68 @@ class GenCiudades
     }
 
     /**
-     * Set codigoRutaPredeterminadaFk
+     * Add despachosCiudadOrigenRel
      *
-     * @param integer $codigoRutaPredeterminadaFk
+     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadOrigenRel
      * @return GenCiudades
      */
-    public function setCodigoRutaPredeterminadaFk($codigoRutaPredeterminadaFk)
+    public function addDespachosCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadOrigenRel)
     {
-        $this->codigoRutaPredeterminadaFk = $codigoRutaPredeterminadaFk;
+        $this->despachosCiudadOrigenRel[] = $despachosCiudadOrigenRel;
 
         return $this;
     }
 
     /**
-     * Get codigoRutaPredeterminadaFk
+     * Remove despachosCiudadOrigenRel
      *
-     * @return integer 
+     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadOrigenRel
      */
-    public function getCodigoRutaPredeterminadaFk()
+    public function removeDespachosCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadOrigenRel)
     {
-        return $this->codigoRutaPredeterminadaFk;
+        $this->despachosCiudadOrigenRel->removeElement($despachosCiudadOrigenRel);
     }
 
     /**
-     * Set rutaRel
+     * Get despachosCiudadOrigenRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogRutas $rutaRel
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDespachosCiudadOrigenRel()
+    {
+        return $this->despachosCiudadOrigenRel;
+    }
+
+    /**
+     * Add despachosCiudadDestinoRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadDestinoRel
      * @return GenCiudades
      */
-    public function setRutaRel(\Brasa\LogisticaBundle\Entity\LogRutas $rutaRel = null)
+    public function addDespachosCiudadDestinoRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadDestinoRel)
     {
-        $this->rutaRel = $rutaRel;
+        $this->despachosCiudadDestinoRel[] = $despachosCiudadDestinoRel;
 
         return $this;
     }
 
     /**
-     * Get rutaRel
+     * Remove despachosCiudadDestinoRel
      *
-     * @return \Brasa\LogisticaBundle\Entity\LogRutas 
+     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadDestinoRel
      */
-    public function getRutaRel()
+    public function removeDespachosCiudadDestinoRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadDestinoRel)
     {
-        return $this->rutaRel;
+        $this->despachosCiudadDestinoRel->removeElement($despachosCiudadDestinoRel);
+    }
+
+    /**
+     * Get despachosCiudadDestinoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDespachosCiudadDestinoRel()
+    {
+        return $this->despachosCiudadDestinoRel;
     }
 }

@@ -24,6 +24,16 @@ class LogDespachos
     private $fecha;    
     
     /**
+     * @ORM\Column(name="codigo_ciudad_origen_fk", type="integer", nullable=true)
+     */    
+    private $codigoCiudadOrigenFk;     
+
+    /**
+     * @ORM\Column(name="codigo_ciudad_destino_fk", type="integer", nullable=true)
+     */    
+    private $codigoCiudadDestinoFk;    
+    
+    /**
      * @ORM\Column(name="estado_anulado", type="boolean")
      */    
     private $estadoAnulado = 0;  
@@ -44,6 +54,18 @@ class LogDespachos
      */
     protected $guiasDetallesRel;     
 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudades", inversedBy="despachosCiudadOrigenRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_origen_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadOrigenRel;     
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudades", inversedBy="despachosCiudadDestinoRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_destino_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadDestinoRel;        
     /**
      * Constructor
      */
@@ -86,6 +108,52 @@ class LogDespachos
     }
 
     /**
+     * Set codigoCiudadOrigenFk
+     *
+     * @param integer $codigoCiudadOrigenFk
+     * @return LogDespachos
+     */
+    public function setCodigoCiudadOrigenFk($codigoCiudadOrigenFk)
+    {
+        $this->codigoCiudadOrigenFk = $codigoCiudadOrigenFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadOrigenFk
+     *
+     * @return integer 
+     */
+    public function getCodigoCiudadOrigenFk()
+    {
+        return $this->codigoCiudadOrigenFk;
+    }
+
+    /**
+     * Set codigoCiudadDestinoFk
+     *
+     * @param integer $codigoCiudadDestinoFk
+     * @return LogDespachos
+     */
+    public function setCodigoCiudadDestinoFk($codigoCiudadDestinoFk)
+    {
+        $this->codigoCiudadDestinoFk = $codigoCiudadDestinoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadDestinoFk
+     *
+     * @return integer 
+     */
+    public function getCodigoCiudadDestinoFk()
+    {
+        return $this->codigoCiudadDestinoFk;
+    }
+
+    /**
      * Set estadoAnulado
      *
      * @param boolean $estadoAnulado
@@ -106,6 +174,29 @@ class LogDespachos
     public function getEstadoAnulado()
     {
         return $this->estadoAnulado;
+    }
+
+    /**
+     * Set estadoGenerado
+     *
+     * @param boolean $estadoGenerado
+     * @return LogDespachos
+     */
+    public function setEstadoGenerado($estadoGenerado)
+    {
+        $this->estadoGenerado = $estadoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGenerado
+     *
+     * @return boolean 
+     */
+    public function getEstadoGenerado()
+    {
+        return $this->estadoGenerado;
     }
 
     /**
@@ -165,25 +256,48 @@ class LogDespachos
     }
 
     /**
-     * Set estadoGenerado
+     * Set ciudadOrigenRel
      *
-     * @param boolean $estadoGenerado
+     * @param \Brasa\GeneralBundle\Entity\GenCiudades $ciudadOrigenRel
      * @return LogDespachos
      */
-    public function setEstadoGenerado($estadoGenerado)
+    public function setCiudadOrigenRel(\Brasa\GeneralBundle\Entity\GenCiudades $ciudadOrigenRel = null)
     {
-        $this->estadoGenerado = $estadoGenerado;
+        $this->ciudadOrigenRel = $ciudadOrigenRel;
 
         return $this;
     }
 
     /**
-     * Get estadoGenerado
+     * Get ciudadOrigenRel
      *
-     * @return boolean 
+     * @return \Brasa\GeneralBundle\Entity\GenCiudades 
      */
-    public function getEstadoGenerado()
+    public function getCiudadOrigenRel()
     {
-        return $this->estadoGenerado;
+        return $this->ciudadOrigenRel;
+    }
+
+    /**
+     * Set ciudadDestinoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudades $ciudadDestinoRel
+     * @return LogDespachos
+     */
+    public function setCiudadDestinoRel(\Brasa\GeneralBundle\Entity\GenCiudades $ciudadDestinoRel = null)
+    {
+        $this->ciudadDestinoRel = $ciudadDestinoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadDestinoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudades 
+     */
+    public function getCiudadDestinoRel()
+    {
+        return $this->ciudadDestinoRel;
     }
 }

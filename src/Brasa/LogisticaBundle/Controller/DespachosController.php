@@ -69,13 +69,18 @@ class DespachosController extends Controller
     public function nuevoAction($codigoDespacho = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();                
-        if ($request->getMethod() == 'POST') {            
+        if ($request->getMethod() == 'POST') { 
+            $arCiudad = new \Brasa\GeneralBundle\Entity\GenCiudades();
             if (($request->request->get('TxtCodigoDespacho'))) {
                 $arDespachoNuevo = $em->getRepository('BrasaLogisticaBundle:LogDespachos')->find($request->request->get('TxtCodigoDespacho'));
             } else {
                 $arDespachoNuevo = new \Brasa\LogisticaBundle\Entity\LogDespachos();
             }                
-            $arDespachoNuevo->setFecha(date_create(date('Y-m-d H:i:s')));                                                                            
+            $arDespachoNuevo->setFecha(date_create(date('Y-m-d H:i:s')));           
+            $arCiudad = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadOrigen'));
+            $arDespachoNuevo->setCiudadOrigenRel($arCiudad);
+            $arCiudad = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
+            $arDespachoNuevo->setCiudadDestinoRel($arCiudad);
             $arDespachoNuevo->setComentarios($request->request->get('TxtComentarios'));
 
             $em->persist($arDespachoNuevo);

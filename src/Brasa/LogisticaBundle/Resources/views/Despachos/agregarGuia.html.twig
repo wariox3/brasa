@@ -26,6 +26,7 @@
             <th>ID</th>
             <th>Fecha</th>
             <th>Soporte</th>
+            <th>Destino</th>
             <th>Unidades</th>                
             <th>P. Real</th>
             <th></th>
@@ -36,6 +37,7 @@
             <td><input type="hidden" name="LblCodigoGuia[]" value="{{ arGuias.codigoGuiaPk }}">{{ arGuias.codigoGuiaPk }}</td>  
             <td>{{ arGuias.fechaIngreso |date("Y/m/d")  }}</td>
             <td>{{ arGuias.documentoCliente }}</td>
+            <td>{{ arGuias.ciudadDestinoRel.nombre }}</td>
             <td style="text-align: right">{{ arGuias.ctUnidades | number_format(2, '.', ',') }}</td>
             <td style="text-align: right">{{ arGuias.ctPesoReal | number_format(2, '.', ',') }}</td>
             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arGuias.codigoGuiaPk }}" /></td>

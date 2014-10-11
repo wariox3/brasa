@@ -16,8 +16,8 @@
     <div class="well">
         <table width="100%" border="1">
             <tr>
-                <td class="td-label">Tercero:</td>
-                <td class="td-in-well" ></td>
+                <td class="td-label">Numero:</td>
+                <td class="td-in-well">{{ arDespacho.codigoDespachoPk }}</td>
 
                 <td class="td-label">Fecha:</td>
                 <td class="td-in-well">{{ arDespacho.fecha|date("Y/m/d H:i:s") }}</td>
@@ -25,13 +25,13 @@
                 <td class="td-label">Rte Fuente:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
-                <td class="td-label">Sub Total:</td>
+                <td class="td-label">Flete:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
             </tr>
 
             <tr>
-                <td class="td-label">Direccion:</td>
-                <td class="td-in-well" ></td>
+                <td class="td-label">Origen:</td>
+                <td class="td-in-well">{{ arDespacho.ciudadOrigenRel.nombre }}</td>
 
                 <td class="td-label">Fecha:</td>
                 <td class="td-in-well"></td>
@@ -39,15 +39,14 @@
                 <td class="td-label">Rte CREE:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
-                <td class="td-label">(-)Descuento:</td>
+                <td class="td-label">(-)Anticipo:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
             </tr>
 
             <tr>
-                <td class="td-label">Forma Pago:</td>
-                <td class="td-in-well" ></td>
-
+                <td class="td-label">Destino:</td>
+                <td class="td-in-well">{{ arDespacho.ciudadDestinoRel.nombre }}</td>
 
                 <td class="td-label">Fecha:</td>
                 <td class="td-in-well"></td>
@@ -55,7 +54,7 @@
                 <td class="td-label">Retenciones:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
-                <td class="td-label">Total Bruto:</td>
+                <td class="td-label">(-)Ind. Ccio y Rte Fte:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
 
@@ -63,7 +62,7 @@
 
             <tr>
 
-                <td class="td-label">Soporte:</td>
+                <td class="td-label">:</td>
                 <td class="td-in-well" ></td>
 
                 <td class="td-label">Fletes:</td>
@@ -72,7 +71,7 @@
                 <td class="td-label">Rte Iva:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
-                <td class="td-label">(+)Iva</td>
+                <td class="td-label">(+)Flete adicional:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
 
