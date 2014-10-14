@@ -2,16 +2,19 @@
 {% block content %}
 {% block javascripts %} 
     <script>
-            function enviarValores(codigo,nombre,campoCodigo, campoNombre) {                                                                               
-                window.opener.document.getElementById(campoCodigo).value=codigo;
-		window.opener.document.getElementById(campoNombre).value=nombre;
+            function enviarValores(codigo,nombre) {
+                var txtCodigo = "TxtCodigoConductor";
+                var txtNombre = "TxtNombreConductor";                
+                               
+                window.opener.document.getElementById(txtCodigo).value=codigo;
+		window.opener.document.getElementById(txtNombre).value=nombre;
 		self.close();
             }
     </script>
 {% endblock %}
 <div class="container"> 
     <div class="well">        
-        <form class="form-horizontal" role="form"  id="FrmBusqueda" action="{{ path('brs_gen_buscar_ciudad', {'campoCodigo': campoCodigo , 'campoNombre': campoNombre}) }}" method="POST" novalidate>
+        <form class="form-horizontal" role="form"  id="FrmBusqueda" action="{{ path('brs_log_buscar_conductor') }}" method="POST" novalidate>
             <div class="form-group">
                 <label for="TxtCodigo" class="col-sm-2 control-label">Codigo</label>
                 <div class="col-sm-10">
@@ -33,7 +36,7 @@
             </div>
         </form>    
     </div>
-    <form id="FrmListado" action="{{ path('brs_gen_buscar_ciudad', {'campoCodigo': campoCodigo , 'campoNombre': campoNombre}) }}" method="post">        
+    <form id="FrmListado" action="{{ path('brs_gen_buscar_tercero') }}" method="post">        
         <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>ID</th>
@@ -41,11 +44,11 @@
                 <th></th>
             </tr>
 
-            {% for arCiudades in arCiudades %}
+            {% for arConductores in arConductores %}
             <tr> 
-                <td><input type="hidden" name="LblCodigoTercero[]" value="{{ arCiudades.codigoCiudadPk }}">{{ arCiudades.codigoCiudadPk }}</td>  
-                <td>{{ arCiudades.nombre }}</td>                 
-                <td style="text-align: center"><a href="#"><image src="{{asset('imagenes/bootstrap/glyphicons_206_ok_2.png')}}" title="Seleccionar" onclick="enviarValores('{{ arCiudades.codigoCiudadPk }}','{{ arCiudades.nombre }}','{{ campoCodigo }}','{{ campoNombre }}')"/></a></td>
+                <td><input type="hidden" name="LblCodigoConductor[]" value="{{ arConductores.codigoConductorPk }}">{{ arConductores.codigoConductorPk }}</td>  
+                <td>{{ arConductores.nombreCorto }}</td>                 
+                <td style="text-align: center"><a href="#"><image src="{{asset('imagenes/bootstrap/glyphicons_206_ok_2.png')}}" title="Seleccionar" onclick="enviarValores('{{ arConductores.codigoConductorPk }}','{{ arConductores.nombreCorto }}')"/></a></td>
             </tr>
             {% endfor %}                                
         </table>

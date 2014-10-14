@@ -34,6 +34,56 @@ class LogDespachos
     private $codigoCiudadDestinoFk;    
     
     /**
+     * @ORM\Column(name="codigo_conductor_fk", type="integer", nullable=true)
+     */    
+    private $codigoConductorFk;    
+    
+    /**
+     * @ORM\Column(name="vr_flete", type="float")
+     */
+    private $vrFlete = 0;
+    
+    /**
+     * @ORM\Column(name="vr_anticipo", type="float")
+     */
+    private $vrAnticipo = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_industria_comercio", type="float")
+     */
+    private $vrIndustriaComercio = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_retencion_fuente", type="float")
+     */
+    private $vrRetencionFuente = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_neto", type="float")
+     */
+    private $vrNeto = 0;      
+    
+    /**
+     * @ORM\Column(name="vr_otros_descuentos", type="float")
+     */
+    private $vrOtrosDescuentos = 0;     
+
+    /**
+     * @ORM\Column(name="ct_peso_real", type="integer")
+     */
+    private $ctPesoReal = 0;    
+
+    /**
+     * @ORM\Column(name="ct_peso_volumen", type="integer")
+     */
+    private $ctPesoVolumen = 0;        
+
+    /**
+     * @ORM\Column(name="ct_unidades", type="integer")
+     */
+    private $ctUnidades = 0;    
+    
+    /**
      * @ORM\Column(name="estado_anulado", type="boolean")
      */    
     private $estadoAnulado = 0;  
@@ -65,7 +115,14 @@ class LogDespachos
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudades", inversedBy="despachosCiudadDestinoRel")
      * @ORM\JoinColumn(name="codigo_ciudad_destino_fk", referencedColumnName="codigo_ciudad_pk")
      */
-    protected $ciudadDestinoRel;        
+    protected $ciudadDestinoRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="LogConductores", inversedBy="despachosRel")
+     * @ORM\JoinColumn(name="codigo_conductor_fk", referencedColumnName="codigo_conductor_pk")
+     */
+    protected $conductorRel;     
+    
     /**
      * Constructor
      */
@@ -299,5 +356,258 @@ class LogDespachos
     public function getCiudadDestinoRel()
     {
         return $this->ciudadDestinoRel;
+    }
+
+    /**
+     * Set codigoConductorFk
+     *
+     * @param integer $codigoConductorFk
+     * @return LogDespachos
+     */
+    public function setCodigoConductorFk($codigoConductorFk)
+    {
+        $this->codigoConductorFk = $codigoConductorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConductorFk
+     *
+     * @return integer 
+     */
+    public function getCodigoConductorFk()
+    {
+        return $this->codigoConductorFk;
+    }
+
+    /**
+     * Set conductorRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogConductores $conductorRel
+     * @return LogDespachos
+     */
+    public function setConductorRel(\Brasa\LogisticaBundle\Entity\LogConductores $conductorRel = null)
+    {
+        $this->conductorRel = $conductorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get conductorRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogConductores 
+     */
+    public function getConductorRel()
+    {
+        return $this->conductorRel;
+    }
+
+    /**
+     * Set vrFlete
+     *
+     * @param float $vrFlete
+     * @return LogDespachos
+     */
+    public function setVrFlete($vrFlete)
+    {
+        $this->vrFlete = $vrFlete;
+
+        return $this;
+    }
+
+    /**
+     * Get vrFlete
+     *
+     * @return float 
+     */
+    public function getVrFlete()
+    {
+        return $this->vrFlete;
+    }
+
+    /**
+     * Set vrAnticipo
+     *
+     * @param float $vrAnticipo
+     * @return LogDespachos
+     */
+    public function setVrAnticipo($vrAnticipo)
+    {
+        $this->vrAnticipo = $vrAnticipo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAnticipo
+     *
+     * @return float 
+     */
+    public function getVrAnticipo()
+    {
+        return $this->vrAnticipo;
+    }
+
+    /**
+     * Set vrIndustriaComercio
+     *
+     * @param float $vrIndustriaComercio
+     * @return LogDespachos
+     */
+    public function setVrIndustriaComercio($vrIndustriaComercio)
+    {
+        $this->vrIndustriaComercio = $vrIndustriaComercio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIndustriaComercio
+     *
+     * @return float 
+     */
+    public function getVrIndustriaComercio()
+    {
+        return $this->vrIndustriaComercio;
+    }
+
+    /**
+     * Set vrRetencionFuente
+     *
+     * @param float $vrRetencionFuente
+     * @return LogDespachos
+     */
+    public function setVrRetencionFuente($vrRetencionFuente)
+    {
+        $this->vrRetencionFuente = $vrRetencionFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get vrRetencionFuente
+     *
+     * @return float 
+     */
+    public function getVrRetencionFuente()
+    {
+        return $this->vrRetencionFuente;
+    }
+
+    /**
+     * Set vrNeto
+     *
+     * @param float $vrNeto
+     * @return LogDespachos
+     */
+    public function setVrNeto($vrNeto)
+    {
+        $this->vrNeto = $vrNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrNeto
+     *
+     * @return float 
+     */
+    public function getVrNeto()
+    {
+        return $this->vrNeto;
+    }
+
+    /**
+     * Set vrOtrosDescuentos
+     *
+     * @param float $vrOtrosDescuentos
+     * @return LogDespachos
+     */
+    public function setVrOtrosDescuentos($vrOtrosDescuentos)
+    {
+        $this->vrOtrosDescuentos = $vrOtrosDescuentos;
+
+        return $this;
+    }
+
+    /**
+     * Get vrOtrosDescuentos
+     *
+     * @return float 
+     */
+    public function getVrOtrosDescuentos()
+    {
+        return $this->vrOtrosDescuentos;
+    }
+
+    /**
+     * Set ctPesoReal
+     *
+     * @param integer $ctPesoReal
+     * @return LogDespachos
+     */
+    public function setCtPesoReal($ctPesoReal)
+    {
+        $this->ctPesoReal = $ctPesoReal;
+
+        return $this;
+    }
+
+    /**
+     * Get ctPesoReal
+     *
+     * @return integer 
+     */
+    public function getCtPesoReal()
+    {
+        return $this->ctPesoReal;
+    }
+
+    /**
+     * Set ctPesoVolumen
+     *
+     * @param integer $ctPesoVolumen
+     * @return LogDespachos
+     */
+    public function setCtPesoVolumen($ctPesoVolumen)
+    {
+        $this->ctPesoVolumen = $ctPesoVolumen;
+
+        return $this;
+    }
+
+    /**
+     * Get ctPesoVolumen
+     *
+     * @return integer 
+     */
+    public function getCtPesoVolumen()
+    {
+        return $this->ctPesoVolumen;
+    }
+
+    /**
+     * Set ctUnidades
+     *
+     * @param integer $ctUnidades
+     * @return LogDespachos
+     */
+    public function setCtUnidades($ctUnidades)
+    {
+        $this->ctUnidades = $ctUnidades;
+
+        return $this;
+    }
+
+    /**
+     * Get ctUnidades
+     *
+     * @return integer 
+     */
+    public function getCtUnidades()
+    {
+        return $this->ctUnidades;
     }
 }

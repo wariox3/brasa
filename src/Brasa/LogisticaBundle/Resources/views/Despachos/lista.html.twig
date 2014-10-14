@@ -11,7 +11,7 @@
                 <th>Fecha</th>
                 <th>Origen</th>
                 <th>Destino</th>
-                <th></th>
+                <th>Conductor</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -24,9 +24,7 @@
                 <td>{{ arDespachos.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arDespachos.ciudadOrigenRel.nombre  }}</td>
                 <td>{{ arDespachos.ciudadDestinoRel.nombre  }}</td>
-                <td>                
-                    {% if arDespachos.estadoAnulado == 1 %} <span class="label label-important">Anu</span> {% endif %}                     
-                </td>                
+                <td>{{ arDespachos.conductorRel.nombreCorto  }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_log_despachos_nuevo', { 'codigoDespacho': arDespachos.codigoDespachoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_030_pencil.png') }}" width=22 height=22></a></td>                
                 <td style="text-align: center"><a href="{{ path('brs_log_despachos_detalle', { 'codigoDespacho': arDespachos.codigoDespachoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDespachos.codigoDespachoPk }}" /></td>            

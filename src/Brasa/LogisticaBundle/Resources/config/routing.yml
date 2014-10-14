@@ -25,3 +25,8 @@ brs_log_despachos_nuevo:
 brs_log_despachos_agregar_guia:
     path:     /logistica/despachos/agregar/guia/{codigoDespacho}
     defaults: { _controller: BrasaLogisticaBundle:DespachosAgregarGuia:lista }
+    
+#Utilidades    
+brs_log_buscar_conductor:
+    pattern:  /logistica/buscar/conductor/
+    defaults: { _controller: BrasaLogisticaBundle:Busquedas:buscarConductor }     

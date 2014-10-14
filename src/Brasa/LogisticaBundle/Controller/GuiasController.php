@@ -8,9 +8,9 @@ class GuiasController extends Controller
 {
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();                
-        $arGuias = new \Brasa\LogisticaBundle\Entity\LogGuias();            
-        
+        $request = $this->getRequest();
+        $arGuias = new \Brasa\LogisticaBundle\Entity\LogGuias();
+
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -43,49 +43,50 @@ class GuiasController extends Controller
                 case "OpBuscar";
                     $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimientos();
                     $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->DevMovimientosFiltro(
-                            $codigoDocumento, 
-                            $arrControles['TxtCodigoMovimiento'], 
-                            $arrControles['TxtNumeroMovimiento'], 
-                            $arrControles['TxtCodigoTercero'], 
-                            $objChkFecha, 
-                            $arrControles['TxtFechaDesde'], 
+                            $codigoDocumento,
+                            $arrControles['TxtCodigoMovimiento'],
+                            $arrControles['TxtNumeroMovimiento'],
+                            $arrControles['TxtCodigoTercero'],
+                            $objChkFecha,
+                            $arrControles['TxtFechaDesde'],
                             $arrControles['TxtFechaHasta'],
                             "",
                             "");
                     break;
             }
-        } else {            
+        } else {
             $arGuias = $em->getRepository('BrasaLogisticaBundle:LogGuias')->findAll();
-        }                    
+        }
 
         return $this->render('BrasaLogisticaBundle:Guias:lista.html.twig', array(
             'arGuias' => $arGuias));
     }
-    
+
     /**
      * Crear un nuevo movimiento
      * @return type
      */
     public function nuevoAction($codigoGuia = 0) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();                
-        if ($request->getMethod() == 'POST') {            
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
             $arCiudad = new \Brasa\GeneralBundle\Entity\GenCiudades();
             $arTercero = new \Brasa\GeneralBundle\Entity\GenTerceros();
+            $arTipoServicio = new \Brasa\LogisticaBundle\Entity\LogTiposServicio();
             if (($request->request->get('TxtCodigoGuia'))) {
                 $arGuiaNueva = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($request->request->get('TxtCodigoGuia'));
             } else {
                 $arGuiaNueva = new \Brasa\LogisticaBundle\Entity\LogGuias();
-            }            
+            }
             $arTercero = $em->getRepository('BrasaGeneralBundle:GenTerceros')->find($request->request->get('TxtCodigoTercero'));
             $arGuiaNueva->setTerceroRel($arTercero);
-            $arGuiaNueva->setFechaIngreso(date_create(date('Y-m-d H:i:s')));                                                                            
-            $arGuiaNueva->setDocumentoCliente($request->request->get('TxtDocumentoCliente'));            
-            $arGuiaNueva->setNombreDestinatario($request->request->get('TxtNombreDestinatario'));            
-            $arGuiaNueva->setDireccionDestinatario($request->request->get('TxtDireccionDestinatario'));            
-            $arGuiaNueva->setTelefonoDestinatario($request->request->get('TxtTelefonoDestinatario'));            
+            $arGuiaNueva->setFechaIngreso(date_create(date('Y-m-d H:i:s')));
+            $arGuiaNueva->setDocumentoCliente($request->request->get('TxtDocumentoCliente'));
+            $arGuiaNueva->setNombreDestinatario($request->request->get('TxtNombreDestinatario'));
+            $arGuiaNueva->setDireccionDestinatario($request->request->get('TxtDireccionDestinatario'));
+            $arGuiaNueva->setTelefonoDestinatario($request->request->get('TxtTelefonoDestinatario'));
             $arCiudad = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
-            $arGuiaNueva->setCiudadDestinoRel($arCiudad);            
+            $arGuiaNueva->setCiudadDestinoRel($arCiudad);
             $arGuiaNueva->setRutaRel($arCiudad->getRutaRel());
             $arGuiaNueva->setComentarios($request->request->get('TxtComentarios'));
             $arGuiaNueva->setCtUnidades($request->request->get('TxtUnidades'));
@@ -94,30 +95,37 @@ class GuiasController extends Controller
             $arGuiaNueva->setVrDeclarado($request->request->get('TxtDeclarado'));
             $arGuiaNueva->setVrFlete($request->request->get('TxtFlete'));
             $arGuiaNueva->setVrManejo($request->request->get('TxtManejo'));
+            $arGuiaNueva->setVrRecaudo($request->request->get('TxtRecaudo'));
+            $arGuiaNueva->setContenido($request->request->get('TxtContenido'));            
+            $arTipoServicio = $em->getRepository ('BrasaLogisticaBundle:LogTiposServicio')->find($request->request->get('CboTiposServicio'));
+            $arGuiaNueva->setTipoServicioRel($arTipoServicio);            
             
             $em->persist($arGuiaNueva);
-            $em->flush();                
+            $em->flush();
             return $this->redirect($this->generateUrl('brs_log_guias_lista'));
         }
-        
-        $arGuia = null;        
+
+        $arGuia = null;
+        $arTiposServicio = new \Brasa\LogisticaBundle\Entity\LogTiposServicio();
+        $arTiposServicio = $em->getRepository('BrasaLogisticaBundle:LogTiposServicio')->findAll();
         if ($codigoGuia != null && $codigoGuia != "" && $codigoGuia != 0) {
-            $arGuia = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($codigoGuia);                                
-        }       
-            
-        
+            $arGuia = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($codigoGuia);
+        }
+
+
         return $this->render('BrasaLogisticaBundle:Guias:nuevo.html.twig', array(
-            'arGuia' => $arGuia));
-    }    
-    
+            'arGuia' => $arGuia,
+            'arTiposServicio' => $arTiposServicio));
+    }
+
     /**
      * Lista los movimientos detalle (Detalles) segun encabezado - Filtro
      */
     public function detalleAction($codigoMovimiento) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();    
+        $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arMovimientosDetallesFrm = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();       
+        $arMovimientosDetallesFrm = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
         $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
         $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
         if ($request->getMethod() == 'POST') {
@@ -231,11 +239,11 @@ class GuiasController extends Controller
                                     $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->EstableceLoteMovimientoDetalle($arMovimientoDetalle->getCodigoDetalleMovimientoPk());
                                 $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
                             }
-                        }                        
+                        }
                     }
                     break;
-                    
-                case "OpEliminarDescuentoFinanciero";                    
+
+                case "OpEliminarDescuentoFinanciero";
                     if(count($arrDescuentosFinancierosSeleccionados) > 0) {
                         foreach ($arrDescuentosFinancierosSeleccionados AS $codigoMovimientoDescuentoFinanciero) {
                             $arMovimientoDescuentoFinanciero = new \Brasa\InventarioBundle\Entity\InvDescuentosFinancieros();
@@ -243,16 +251,16 @@ class GuiasController extends Controller
                             $em->remove($arMovimientoDescuentoFinanciero);
                             $em->flush();
                         }
-                    }                    
+                    }
                     $em->getRepository('BrasaInventarioBundle:InvMovimientos')->LiquidarRetenciones($codigoMovimiento);
-                    break;                    
+                    break;
             }
         }
         //No mostrar registros de control traslados
         if($arMovimiento->getCodigoDocumentoTipoFk() == 10) {
             $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->findBy(array('codigoMovimientoFk' => $codigoMovimiento, 'operacionInventario' => 0));
         }
-        else {                        
+        else {
             $dql   = "SELECT md FROM BrasaInventarioBundle:InvMovimientosDetalles md WHERE md.codigoMovimientoFk = " . $codigoMovimiento;
             $query = $em->createQuery($dql);
             $paginator = $this->get('knp_paginator');
@@ -261,7 +269,7 @@ class GuiasController extends Controller
         $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumentos();
         $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->find($arMovimiento->getCodigoDocumentoFk());
         $arDocumentoConfiguracion = new \Brasa\InventarioBundle\Entity\InvDocumentosConfiguracion();
-        $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentosConfiguracion')->find($arMovimiento->getCodigoDocumentoFk());        
+        $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentosConfiguracion')->find($arMovimiento->getCodigoDocumentoFk());
         $arMovimientosRetenciones = new \Brasa\InventarioBundle\Entity\InvMovimientosRetenciones();
         $arMovimientosRetenciones = $em->getRepository('BrasaInventarioBundle:InvMovimientosRetenciones')->findBy(array('codigoMovimientoFk' => $codigoMovimiento));
         $arMovimientosDescuentosFinancieros = new \Brasa\InventarioBundle\Entity\InvMovimientosDescuentosFinancieros();
@@ -272,6 +280,6 @@ class GuiasController extends Controller
                     'arDocumentoConfiguracion' => $arDocumentoConfiguracion,
                     'arMovimientosRetenciones' => $arMovimientosRetenciones,
                     'arMovimientosDescuentosFinancieros' => $arMovimientosDescuentosFinancieros));
-    }    
-        
+    }
+
 }

@@ -74,6 +74,11 @@ class LogGuias
     private $codigoRutaFk;     
     
     /**
+     * @ORM\Column(name="codigo_tipo_servicio_fk", type="integer", nullable=true)
+     */    
+    private $codigoTipoServicioFk;    
+    
+    /**
      * @ORM\Column(name="ct_unidades", type="integer")
      */
     private $ctUnidades = 0;
@@ -109,9 +114,19 @@ class LogGuias
     private $vrManejo = 0;
 
     /**
+     * @ORM\Column(name="vr_recaudo", type="float")
+     */
+    private $vrRecaudo = 0;    
+    
+    /**
      * @ORM\Column(name="estado_anulada", type="boolean")
      */    
     private $estadoAnulada = 0;             
+
+    /**
+     * @ORM\Column(name="contenido", type="string", length=500, nullable=true)
+     */    
+    private $contenido;     
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=500, nullable=true)
@@ -142,6 +157,11 @@ class LogGuias
      */
     protected $rutaRel;    
     
+    /**
+     * @ORM\ManyToOne(targetEntity="LogTiposServicio", inversedBy="guiasRel")
+     * @ORM\JoinColumn(name="codigo_tipo_servicio_fk", referencedColumnName="codigo_tipo_servicio_pk")
+     */
+    protected $tipoServicioRel;     
 
     /**
      * Get codigoGuiaPk
@@ -703,5 +723,97 @@ class LogGuias
     public function getRutaRel()
     {
         return $this->rutaRel;
+    }
+
+    /**
+     * Set contenido
+     *
+     * @param string $contenido
+     * @return LogGuias
+     */
+    public function setContenido($contenido)
+    {
+        $this->contenido = $contenido;
+
+        return $this;
+    }
+
+    /**
+     * Get contenido
+     *
+     * @return string 
+     */
+    public function getContenido()
+    {
+        return $this->contenido;
+    }
+
+    /**
+     * Set vrRecaudo
+     *
+     * @param float $vrRecaudo
+     * @return LogGuias
+     */
+    public function setVrRecaudo($vrRecaudo)
+    {
+        $this->vrRecaudo = $vrRecaudo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrRecaudo
+     *
+     * @return float 
+     */
+    public function getVrRecaudo()
+    {
+        return $this->vrRecaudo;
+    }
+
+    /**
+     * Set codigoTipoServicioFk
+     *
+     * @param integer $codigoTipoServicioFk
+     * @return LogGuias
+     */
+    public function setCodigoTipoServicioFk($codigoTipoServicioFk)
+    {
+        $this->codigoTipoServicioFk = $codigoTipoServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoServicioFk
+     *
+     * @return integer 
+     */
+    public function getCodigoTipoServicioFk()
+    {
+        return $this->codigoTipoServicioFk;
+    }
+
+    /**
+     * Set tipoServicioRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogTiposServicio $tipoServicioRel
+     * @return LogGuias
+     */
+    public function setTipoServicioRel(\Brasa\LogisticaBundle\Entity\LogTiposServicio $tipoServicioRel = null)
+    {
+        $this->tipoServicioRel = $tipoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoServicioRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogTiposServicio 
+     */
+    public function getTipoServicioRel()
+    {
+        return $this->tipoServicioRel;
     }
 }

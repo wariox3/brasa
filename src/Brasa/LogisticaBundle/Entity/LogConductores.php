@@ -18,7 +18,16 @@ class LogConductores
      */
     private $codigoConductorPk;  
     
-
+    /**
+     * @ORM\Column(name="nombre_corto", type="string", length=50)
+     */
+    private $nombreCorto; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="LogDespachos", mappedBy="conductorRel")
+     */
+    protected $despachosRel;    
+    
     /**
      * Get codigoConductorPk
      *
@@ -27,5 +36,68 @@ class LogConductores
     public function getCodigoConductorPk()
     {
         return $this->codigoConductorPk;
+    }
+
+    /**
+     * Set nombreCorto
+     *
+     * @param string $nombreCorto
+     * @return LogConductores
+     */
+    public function setNombreCorto($nombreCorto)
+    {
+        $this->nombreCorto = $nombreCorto;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreCorto
+     *
+     * @return string 
+     */
+    public function getNombreCorto()
+    {
+        return $this->nombreCorto;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->despachosRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add despachosRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosRel
+     * @return LogConductores
+     */
+    public function addDespachosRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosRel)
+    {
+        $this->despachosRel[] = $despachosRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove despachosRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosRel
+     */
+    public function removeDespachosRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosRel)
+    {
+        $this->despachosRel->removeElement($despachosRel);
+    }
+
+    /**
+     * Get despachosRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDespachosRel()
+    {
+        return $this->despachosRel;
     }
 }

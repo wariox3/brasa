@@ -71,6 +71,7 @@ class DespachosController extends Controller
         $request = $this->getRequest();                
         if ($request->getMethod() == 'POST') { 
             $arCiudad = new \Brasa\GeneralBundle\Entity\GenCiudades();
+            $arConductor = new \Brasa\LogisticaBundle\Entity\LogConductores();
             if (($request->request->get('TxtCodigoDespacho'))) {
                 $arDespachoNuevo = $em->getRepository('BrasaLogisticaBundle:LogDespachos')->find($request->request->get('TxtCodigoDespacho'));
             } else {
@@ -81,6 +82,11 @@ class DespachosController extends Controller
             $arDespachoNuevo->setCiudadOrigenRel($arCiudad);
             $arCiudad = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
             $arDespachoNuevo->setCiudadDestinoRel($arCiudad);
+            $arConductor = $em->getRepository('BrasaLogisticaBundle:LogConductores')->find($request->request->get('TxtCodigoConductor'));
+            $arDespachoNuevo->setConductorRel($arConductor);
+            $arDespachoNuevo->setVrFlete($request->request->get('TxtFlete'));
+            $arDespachoNuevo->setVrAnticipo($request->request->get('TxtAnticipo'));
+            $arDespachoNuevo->setVrNeto($arDespachoNuevo->getVrFlete() - $arDespachoNuevo->getVrAnticipo());
             $arDespachoNuevo->setComentarios($request->request->get('TxtComentarios'));
 
             $em->persist($arDespachoNuevo);

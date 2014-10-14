@@ -22,25 +22,25 @@
                 <td class="td-label">Fecha:</td>
                 <td class="td-in-well">{{ arDespacho.fecha|date("Y/m/d H:i:s") }}</td>
 
-                <td class="td-label">Rte Fuente:</td>
-                <td class="td-in-well-numerico" align="right">$ </td>
+                <td class="td-label">(-)Otros Dctos:</td>
+                <td class="td-in-well-numerico" align="right">$ {{ arDespacho.vrOtrosDescuentos | number_format(2, '.', ',') }}</td>
 
                 <td class="td-label">Flete:</td>
-                <td class="td-in-well-numerico" align="right">$ </td>
+                <td class="td-in-well-numerico" align="right">$ {{ arDespacho.vrFlete | number_format(2, '.', ',') }}</td>
             </tr>
 
             <tr>
                 <td class="td-label">Origen:</td>
                 <td class="td-in-well">{{ arDespacho.ciudadOrigenRel.nombre }}</td>
 
-                <td class="td-label">Fecha:</td>
-                <td class="td-in-well"></td>
+                <td class="td-label">Peso Real:</td>
+                <td class="td-in-well" align="right">{{ arDespacho.ctPesoReal | number_format(0, '.', ',') }}</td>
 
-                <td class="td-label">Rte CREE:</td>
+                <td class="td-label">:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
                 <td class="td-label">(-)Anticipo:</td>
-                <td class="td-in-well-numerico" align="right">$ </td>
+                <td class="td-in-well-numerico" align="right">$ {{ arDespacho.vrAnticipo | number_format(2, '.', ',') }}</td>
 
             </tr>
 
@@ -48,10 +48,10 @@
                 <td class="td-label">Destino:</td>
                 <td class="td-in-well">{{ arDespacho.ciudadDestinoRel.nombre }}</td>
 
-                <td class="td-label">Fecha:</td>
-                <td class="td-in-well"></td>
+                <td class="td-label">Peso Volumen:</td>
+                <td class="td-in-well" align="right">{{ arDespacho.ctPesoVolumen | number_format(0, '.', ',') }}</td>
 
-                <td class="td-label">Retenciones:</td>
+                <td class="td-label">:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
                 <td class="td-label">(-)Ind. Ccio y Rte Fte:</td>
@@ -62,13 +62,13 @@
 
             <tr>
 
+                <td class="td-label">Conductor:</td>
+                <td class="td-in-well">{{ arDespacho.conductorRel.nombreCorto }}</td>
+
+                <td class="td-label">Unidades:</td>
+                <td class="td-in-well-numerico" align="right">{{ arDespacho.ctUnidades | number_format(0, '.', ',') }}</td>
+
                 <td class="td-label">:</td>
-                <td class="td-in-well" ></td>
-
-                <td class="td-label">Fletes:</td>
-                <td class="td-in-well-numerico" align="right">$ </td>
-
-                <td class="td-label">Rte Iva:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
                 <td class="td-label">(+)Flete adicional:</td>
@@ -81,14 +81,14 @@
                 <td class="td-label"></td>
                 <td class="td-in-well" ></td>
 
-                <td class="td-label">Descuentos Fro:</td>
+                <td class="td-label">:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
-                <td class="td-label">Total:</td>
+                <td class="td-label">:</td>
                 <td class="td-in-well-numerico" align="right">$ </td>
 
                 <td class="td-label">Total Neto:</td>
-                <td class="td-in-well-numerico" align="right">$ </td>
+                <td class="td-in-well-numerico" align="right">$ {{ arDespacho.vrNeto | number_format(2, '.', ',') }}</td>
             </tr>
             <tr>
                 <td colspan="8">Comentarios:{{ arDespacho.comentarios }}</td>
