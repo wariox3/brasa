@@ -34,6 +34,11 @@ class LogRutas
     protected $guiasRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="LogDespachos", mappedBy="rutaRel")
+     */
+    protected $despachosRel;     
+    
+    /**
      * Get codigoRutaPk
      *
      * @return integer 
@@ -137,5 +142,38 @@ class LogRutas
     public function getGuiasRel()
     {
         return $this->guiasRel;
+    }
+
+    /**
+     * Add despachosRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosRel
+     * @return LogRutas
+     */
+    public function addDespachosRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosRel)
+    {
+        $this->despachosRel[] = $despachosRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove despachosRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosRel
+     */
+    public function removeDespachosRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosRel)
+    {
+        $this->despachosRel->removeElement($despachosRel);
+    }
+
+    /**
+     * Get despachosRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDespachosRel()
+    {
+        return $this->despachosRel;
     }
 }

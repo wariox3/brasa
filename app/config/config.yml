@@ -70,7 +70,7 @@ swiftmailer:
 
 services:
     mensajes_brasa:
-        class:        Brasa\GeneralBundle\MisClases\Mensajes
+        class:        Brasa\GeneralBundle\MisClases\Mensajes        
         
         
 knp_paginator:
@@ -83,3 +83,4 @@ knp_paginator:
     template:
         pagination: KnpPaginatorBundle:Pagination:sliding.html.twig     # sliding pagination controls template
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template        
+              

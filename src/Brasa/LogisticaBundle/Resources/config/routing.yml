@@ -30,3 +30,12 @@ brs_log_despachos_agregar_guia:
 brs_log_buscar_conductor:
     pattern:  /logistica/buscar/conductor/
     defaults: { _controller: BrasaLogisticaBundle:Busquedas:buscarConductor }     
+    
+brs_log_buscar_vehiculo:
+    pattern:  /logistica/buscar/vehiculo/
+    defaults: { _controller: BrasaLogisticaBundle:Busquedas:buscarVehiculo }     
+    
+brs_log_buscar_ruta:
+    pattern:  /logistica/buscar/ruta/
+    defaults: { _controller: BrasaLogisticaBundle:Busquedas:buscarRuta }    
+          

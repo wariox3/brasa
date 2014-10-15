@@ -19,6 +19,11 @@ class LogDespachos
     private $codigoDespachoPk;
     
     /**
+     * @ORM\Column(name="codigo_despacho_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoDespachoTipoFk;     
+    
+    /**
      * @ORM\Column(name="fecha", type="datetime", nullable=true)
      */    
     private $fecha;    
@@ -34,9 +39,19 @@ class LogDespachos
     private $codigoCiudadDestinoFk;    
     
     /**
+     * @ORM\Column(name="codigo_ruta_fk", type="integer", nullable=true)
+     */    
+    private $codigoRutaFk;     
+    
+    /**
      * @ORM\Column(name="codigo_conductor_fk", type="integer", nullable=true)
      */    
     private $codigoConductorFk;    
+    
+    /**
+     * @ORM\Column(name="codigo_vehiculo_fk", type="string", nullable=true, length=10)
+     */    
+    private $codigoVehiculoFk;     
     
     /**
      * @ORM\Column(name="vr_flete", type="float")
@@ -118,10 +133,28 @@ class LogDespachos
     protected $ciudadDestinoRel;     
     
     /**
+     * @ORM\ManyToOne(targetEntity="LogRutas", inversedBy="despachosRel")
+     * @ORM\JoinColumn(name="codigo_ruta_fk", referencedColumnName="codigo_ruta_pk")
+     */
+    protected $rutaRel;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="LogConductores", inversedBy="despachosRel")
      * @ORM\JoinColumn(name="codigo_conductor_fk", referencedColumnName="codigo_conductor_pk")
      */
     protected $conductorRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="LogVehiculos", inversedBy="despachosRel")
+     * @ORM\JoinColumn(name="codigo_vehiculo_fk", referencedColumnName="codigo_vehiculo_pk")
+     */
+    protected $vehiculoRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="LogDespachosTipos", inversedBy="despachosRel")
+     * @ORM\JoinColumn(name="codigo_despacho_tipo_fk", referencedColumnName="codigo_despacho_tipo_pk")
+     */
+    protected $despachoTipoRel;    
     
     /**
      * Constructor
@@ -609,5 +642,143 @@ class LogDespachos
     public function getCtUnidades()
     {
         return $this->ctUnidades;
+    }
+
+    /**
+     * Set codigoVehiculoFk
+     *
+     * @param string $codigoVehiculoFk
+     * @return LogDespachos
+     */
+    public function setCodigoVehiculoFk($codigoVehiculoFk)
+    {
+        $this->codigoVehiculoFk = $codigoVehiculoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoVehiculoFk
+     *
+     * @return string 
+     */
+    public function getCodigoVehiculoFk()
+    {
+        return $this->codigoVehiculoFk;
+    }
+
+    /**
+     * Set vehiculoRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogVehiculos $vehiculoRel
+     * @return LogDespachos
+     */
+    public function setVehiculoRel(\Brasa\LogisticaBundle\Entity\LogVehiculos $vehiculoRel = null)
+    {
+        $this->vehiculoRel = $vehiculoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculoRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogVehiculos 
+     */
+    public function getVehiculoRel()
+    {
+        return $this->vehiculoRel;
+    }
+
+    /**
+     * Set codigoDespachoTipoFk
+     *
+     * @param integer $codigoDespachoTipoFk
+     * @return LogDespachos
+     */
+    public function setCodigoDespachoTipoFk($codigoDespachoTipoFk)
+    {
+        $this->codigoDespachoTipoFk = $codigoDespachoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDespachoTipoFk
+     *
+     * @return integer 
+     */
+    public function getCodigoDespachoTipoFk()
+    {
+        return $this->codigoDespachoTipoFk;
+    }
+
+    /**
+     * Set despachoTipoRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogDespachosTipos $despachoTipoRel
+     * @return LogDespachos
+     */
+    public function setDespachoTipoRel(\Brasa\LogisticaBundle\Entity\LogDespachosTipos $despachoTipoRel = null)
+    {
+        $this->despachoTipoRel = $despachoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get despachoTipoRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogDespachosTipos 
+     */
+    public function getDespachoTipoRel()
+    {
+        return $this->despachoTipoRel;
+    }
+
+    /**
+     * Set codigoRutaFk
+     *
+     * @param integer $codigoRutaFk
+     * @return LogDespachos
+     */
+    public function setCodigoRutaFk($codigoRutaFk)
+    {
+        $this->codigoRutaFk = $codigoRutaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRutaFk
+     *
+     * @return integer 
+     */
+    public function getCodigoRutaFk()
+    {
+        return $this->codigoRutaFk;
+    }
+
+    /**
+     * Set rutaRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogRutas $rutaRel
+     * @return LogDespachos
+     */
+    public function setRutaRel(\Brasa\LogisticaBundle\Entity\LogRutas $rutaRel = null)
+    {
+        $this->rutaRel = $rutaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogRutas 
+     */
+    public function getRutaRel()
+    {
+        return $this->rutaRel;
     }
 }

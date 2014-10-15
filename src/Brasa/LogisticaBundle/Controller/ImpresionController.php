@@ -1,0 +1,22 @@
+<?php
+
+namespace Brasa\LogisticaBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+
+class ImpresionController extends Controller
+{
+    public function manifiestoAction($name = 'Mario Andres') {
+        $facade = $this->get('ps_pdf.facade');
+        $response = new Response();
+        $this->render('BrasaLogisticaBundle:Despachos:prueba.pdf.twig', array(), $response);
+        
+        $xml = $response->getContent();
+        
+        $content = $facade->render($xml);
+        
+        return new Response($content, 200, array('content-type' => 'application/pdf'));
+    } 
+        
+}

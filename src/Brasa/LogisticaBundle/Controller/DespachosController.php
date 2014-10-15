@@ -23,7 +23,7 @@ class DespachosController extends Controller
                         $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Autorizar($codigoMovimiento);
                     break;
 
-                case "OpImprimir";
+                case "OpImprimir";                    
                     foreach ($arrSeleccionados AS $codigoMovimiento)
                         $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
                     break;
@@ -70,20 +70,25 @@ class DespachosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();                
         if ($request->getMethod() == 'POST') { 
-            $arCiudad = new \Brasa\GeneralBundle\Entity\GenCiudades();
-            $arConductor = new \Brasa\LogisticaBundle\Entity\LogConductores();
+            
             if (($request->request->get('TxtCodigoDespacho'))) {
                 $arDespachoNuevo = $em->getRepository('BrasaLogisticaBundle:LogDespachos')->find($request->request->get('TxtCodigoDespacho'));
             } else {
                 $arDespachoNuevo = new \Brasa\LogisticaBundle\Entity\LogDespachos();
-            }                
+            }  
+            $arDespachoTipo = $em->getRepository ('BrasaLogisticaBundle:LogDespachosTipos')->find($request->request->get('CboDespachosTipos'));
+            $arDespachoNuevo->setDespachoTipoRel($arDespachoTipo);
             $arDespachoNuevo->setFecha(date_create(date('Y-m-d H:i:s')));           
-            $arCiudad = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadOrigen'));
-            $arDespachoNuevo->setCiudadOrigenRel($arCiudad);
-            $arCiudad = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
-            $arDespachoNuevo->setCiudadDestinoRel($arCiudad);
+            $arCiudadOrigen = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadOrigen'));
+            $arDespachoNuevo->setCiudadOrigenRel($arCiudadOrigen);
+            $arCiudadDestino = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
+            $arDespachoNuevo->setCiudadDestinoRel($arCiudadDestino);
             $arConductor = $em->getRepository('BrasaLogisticaBundle:LogConductores')->find($request->request->get('TxtCodigoConductor'));
             $arDespachoNuevo->setConductorRel($arConductor);
+            $arRuta = $em->getRepository('BrasaLogisticaBundle:LogRutas')->find($request->request->get('TxtCodigoRuta'));            
+            $arDespachoNuevo->setRutaRel($arRuta);
+            $arVehiculo = $em->getRepository('BrasaLogisticaBundle:LogVehiculos')->find($request->request->get('TxtVehiculo'));            
+            $arDespachoNuevo->setVehiculoRel($arVehiculo);
             $arDespachoNuevo->setVrFlete($request->request->get('TxtFlete'));
             $arDespachoNuevo->setVrAnticipo($request->request->get('TxtAnticipo'));
             $arDespachoNuevo->setVrNeto($arDespachoNuevo->getVrFlete() - $arDespachoNuevo->getVrAnticipo());
@@ -94,14 +99,18 @@ class DespachosController extends Controller
             return $this->redirect($this->generateUrl('brs_log_despachos_lista'));
         }
         
-        $arDespacho = null;        
+        $arDespacho = null;  
+        $arDespachosTipos = new \Brasa\LogisticaBundle\Entity\LogDespachosTipos();
+        $arDespachosTipos = $em->getRepository('BrasaLogisticaBundle:LogDespachosTipos')->findAll();                                
+        
         if ($codigoDespacho != null && $codigoDespacho != "" && $codigoDespacho != 0) {
             $arDespacho = $em->getRepository('BrasaLogisticaBundle:LogDespachos')->find($codigoDespacho);                                
         }       
             
         
         return $this->render('BrasaLogisticaBundle:Despachos:nuevo.html.twig', array(
-            'arDespacho' => $arDespacho));
+            'arDespacho' => $arDespacho,
+            'arDespachosTipos' => $arDespachosTipos));
     }    
     
     /**
@@ -133,11 +142,11 @@ class DespachosController extends Controller
                     }                        
                     break;
 
-                case "OpImprimir";
+                case "OpImprimir";                         
                     $strResultado = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
                     if ($strResultado == "") {
-                        //$Impresion = new Control_Impresion_Inventario();
-                        //$Impresion->CounstruirImpresion($em, $arMovimiento);
+                        $Impresion = new Control_Impresion_Inventario();
+                        $Impresion->CounstruirImpresion($em, $arMovimiento);
                     }
                     else
                         $objMensaje->Mensaje("error", "No se pudo imprimir el documento: " . $strResultado, $this);

@@ -14,6 +14,17 @@
             </div>
             {% endif %}
             <div class="form-group">
+                <label for="CboDespachosTipos" class="col-sm-2 control-label">Tipo:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="CboDespachosTipos" required>
+                        <option value="">Seleccione</option>
+                        {% for arDespachosTipos in arDespachosTipos %}
+                                <option value="{{arDespachosTipos.codigoDespachoTipoPk}}" {%if arDespachosTipos.codigoDepartamentoFk is defined %} {%if departamento.codigoDepartamentoPk == arCiudad.codigoDepartamentoFk %} selected {%endif%} {%endif%}>{{arDespachosTipos.nombre}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>            
+            <div class="form-group">
                 <label for="TxtNombreCiudadOrigen" class="col-sm-2 control-label">Origen</label>
                 <div class="col-sm-10">
                 <div class="row">
@@ -44,7 +55,23 @@
                   </div><!-- /.col-lg-6 -->
                 </div><!-- /.row -->
                 </div>
-            </div>             
+            </div>       
+            <div class="form-group">
+                <label for="TxtNombreRuta" class="col-sm-2 control-label">Ruta:</label>
+                <div class="col-sm-10">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="TxtNombreRuta" name="TxtNombreRuta" value="{% if arGuia is defined and arGuia is not null %} {{arGuia.ciudadDestinoRel.nombre}} {%endif%}" placeholder="Ruta"/>
+                      <span class="input-group-btn">
+                        <input type="text" class="btn btn-default" id="TxtCodigoRuta" name="TxtCodigoRuta" value=""/>
+                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_log_buscar_ruta') }}', 'BuscarRuta', 600, 900)">Buscar</a>
+                      </span>
+                    </div><!-- /input-group -->
+                  </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+                </div>
+            </div>            
             <div class="form-group">
                 <label for="TxtNombreConductor" class="col-sm-2 control-label">Conductor:</label>
                 <div class="col-sm-10">
@@ -55,6 +82,21 @@
                       <span class="input-group-btn">
                         <input type="text" class="btn btn-default" id="TxtCodigoConductor" name="TxtCodigoConductor" value=""/>
                         <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_log_buscar_conductor') }}', 'BuscarConductor', 600, 900)">Buscar</a>
+                      </span>
+                    </div><!-- /input-group -->
+                  </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+                </div>
+            </div>    
+            <div class="form-group">
+                <label for="TxtVehiculo" class="col-sm-2 control-label">Vehiculo:</label>
+                <div class="col-sm-10">
+                <div class="row">
+                  <div class="col-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                        <input type="text" class="form-control" id="TxtVehiculo" name="TxtVehiculo" value="{% if arGuia is defined and arGuia is not null %} {{arGuia.ciudadDestinoRel.nombre}} {%endif%}" placeholder="vehiculo"/>
+                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_log_buscar_vehiculo') }}', 'BuscarConductor', 600, 900)">Buscar</a>                                                                      
                       </span>
                     </div><!-- /input-group -->
                   </div><!-- /.col-lg-6 -->
