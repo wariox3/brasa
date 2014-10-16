@@ -49,6 +49,11 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion", mappedBy="usuarioRel")
+     */
+    protected $usuariosConfiguracionRel;    
+    
     public function __construct()
     {
         $this->isActive = true;
@@ -219,5 +224,38 @@ class User implements UserInterface, \Serializable
     public function getNombreCorto()
     {
         return $this->nombreCorto;
+    }
+
+    /**
+     * Add usuariosConfiguracionRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion $usuariosConfiguracionRel
+     * @return User
+     */
+    public function addUsuariosConfiguracionRel(\Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion $usuariosConfiguracionRel)
+    {
+        $this->usuariosConfiguracionRel[] = $usuariosConfiguracionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove usuariosConfiguracionRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion $usuariosConfiguracionRel
+     */
+    public function removeUsuariosConfiguracionRel(\Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion $usuariosConfiguracionRel)
+    {
+        $this->usuariosConfiguracionRel->removeElement($usuariosConfiguracionRel);
+    }
+
+    /**
+     * Get usuariosConfiguracionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsuariosConfiguracionRel()
+    {
+        return $this->usuariosConfiguracionRel;
     }
 }

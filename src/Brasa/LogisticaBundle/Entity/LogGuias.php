@@ -79,6 +79,22 @@ class LogGuias
     private $codigoTipoServicioFk;    
     
     /**
+     * @ORM\Column(name="codigo_tipo_pago_fk", type="integer", nullable=true)
+     */    
+    private $codigoTipoPagoFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_punto_operacion_ingreso_fk", type="integer", nullable=true)
+     */    
+    private $codigoPuntoOperacionIngresoFk;     
+
+    /**
+     * @ORM\Column(name="codigo_punto_operacion_actual_fk", type="integer", nullable=true)
+     */    
+    private $codigoPuntoOperacionActualFk;     
+   
+    
+    /**
      * @ORM\Column(name="ct_unidades", type="integer")
      */
     private $ctUnidades = 0;
@@ -119,10 +135,25 @@ class LogGuias
     private $vrRecaudo = 0;    
     
     /**
+     * @ORM\Column(name="vr_abonos", type="float")
+     */
+    private $vrAbonos = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_neto", type="float")
+     */
+    private $vrNeto = 0;    
+    
+    /**
+     * @ORM\Column(name="estado_impreso", type="boolean")
+     */    
+    private $estadoImpreso = 0;             
+
+    /**
      * @ORM\Column(name="estado_anulada", type="boolean")
      */    
-    private $estadoAnulada = 0;             
-
+    private $estadoAnulada = 0;    
+    
     /**
      * @ORM\Column(name="contenido", type="string", length=500, nullable=true)
      */    
@@ -138,9 +169,15 @@ class LogGuias
      * @ORM\JoinColumn(name="codigo_despacho_fk", referencedColumnName="codigo_despacho_pk")
      */
     protected $despachoRel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudades", inversedBy="guiasCiudadOrigenRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_origen_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadOrigenRel;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudades", inversedBy="guiasRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudades", inversedBy="guiasCiudadDestinoRel")
      * @ORM\JoinColumn(name="codigo_ciudad_destino_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadDestinoRel;     
@@ -161,8 +198,26 @@ class LogGuias
      * @ORM\ManyToOne(targetEntity="LogTiposServicio", inversedBy="guiasRel")
      * @ORM\JoinColumn(name="codigo_tipo_servicio_fk", referencedColumnName="codigo_tipo_servicio_pk")
      */
-    protected $tipoServicioRel;     
+    protected $tipoServicioRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="LogTiposPago", inversedBy="guiasRel")
+     * @ORM\JoinColumn(name="codigo_tipo_pago_fk", referencedColumnName="codigo_tipo_pago_pk")
+     */
+    protected $tipoPagoRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="LogPuntosOperacion", inversedBy="guiasPuntoOperacionIngresoRel")
+     * @ORM\JoinColumn(name="codigo_punto_operacion_ingreso_fk", referencedColumnName="codigo_punto_operacion_pk")
+     */
+    protected $puntoOperacionIngresoRel;     
 
+    /**
+     * @ORM\ManyToOne(targetEntity="LogPuntosOperacion", inversedBy="guiasPuntoOperacionActualRel")
+     * @ORM\JoinColumn(name="codigo_punto_operacion_actual_fk", referencedColumnName="codigo_punto_operacion_pk")
+     */
+    protected $puntoOperacionActualRel;    
+    
     /**
      * Get codigoGuiaPk
      *
@@ -815,5 +870,235 @@ class LogGuias
     public function getTipoServicioRel()
     {
         return $this->tipoServicioRel;
+    }
+
+    /**
+     * Set ciudadOrigenRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudades $ciudadOrigenRel
+     * @return LogGuias
+     */
+    public function setCiudadOrigenRel(\Brasa\GeneralBundle\Entity\GenCiudades $ciudadOrigenRel = null)
+    {
+        $this->ciudadOrigenRel = $ciudadOrigenRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadOrigenRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudades 
+     */
+    public function getCiudadOrigenRel()
+    {
+        return $this->ciudadOrigenRel;
+    }
+
+    /**
+     * Set estadoImpreso
+     *
+     * @param boolean $estadoImpreso
+     * @return LogGuias
+     */
+    public function setEstadoImpreso($estadoImpreso)
+    {
+        $this->estadoImpreso = $estadoImpreso;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoImpreso
+     *
+     * @return boolean 
+     */
+    public function getEstadoImpreso()
+    {
+        return $this->estadoImpreso;
+    }
+
+    /**
+     * Set codigoPuntoOperacionIngresoFk
+     *
+     * @param integer $codigoPuntoOperacionIngresoFk
+     * @return LogGuias
+     */
+    public function setCodigoPuntoOperacionIngresoFk($codigoPuntoOperacionIngresoFk)
+    {
+        $this->codigoPuntoOperacionIngresoFk = $codigoPuntoOperacionIngresoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuntoOperacionIngresoFk
+     *
+     * @return integer 
+     */
+    public function getCodigoPuntoOperacionIngresoFk()
+    {
+        return $this->codigoPuntoOperacionIngresoFk;
+    }
+
+    /**
+     * Set codigoPuntoOperacionActualFk
+     *
+     * @param integer $codigoPuntoOperacionActualFk
+     * @return LogGuias
+     */
+    public function setCodigoPuntoOperacionActualFk($codigoPuntoOperacionActualFk)
+    {
+        $this->codigoPuntoOperacionActualFk = $codigoPuntoOperacionActualFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuntoOperacionActualFk
+     *
+     * @return integer 
+     */
+    public function getCodigoPuntoOperacionActualFk()
+    {
+        return $this->codigoPuntoOperacionActualFk;
+    }
+
+    /**
+     * Set puntoOperacionIngresoRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntoOperacionIngresoRel
+     * @return LogGuias
+     */
+    public function setPuntoOperacionIngresoRel(\Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntoOperacionIngresoRel = null)
+    {
+        $this->puntoOperacionIngresoRel = $puntoOperacionIngresoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puntoOperacionIngresoRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogPuntosOperacion 
+     */
+    public function getPuntoOperacionIngresoRel()
+    {
+        return $this->puntoOperacionIngresoRel;
+    }
+
+    /**
+     * Set puntoOperacionActualRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntoOperacionActualRel
+     * @return LogGuias
+     */
+    public function setPuntoOperacionActualRel(\Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntoOperacionActualRel = null)
+    {
+        $this->puntoOperacionActualRel = $puntoOperacionActualRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puntoOperacionActualRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogPuntosOperacion 
+     */
+    public function getPuntoOperacionActualRel()
+    {
+        return $this->puntoOperacionActualRel;
+    }
+
+    /**
+     * Set vrAbonos
+     *
+     * @param float $vrAbonos
+     * @return LogGuias
+     */
+    public function setVrAbonos($vrAbonos)
+    {
+        $this->vrAbonos = $vrAbonos;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAbonos
+     *
+     * @return float 
+     */
+    public function getVrAbonos()
+    {
+        return $this->vrAbonos;
+    }
+
+    /**
+     * Set vrNeto
+     *
+     * @param float $vrNeto
+     * @return LogGuias
+     */
+    public function setVrNeto($vrNeto)
+    {
+        $this->vrNeto = $vrNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrNeto
+     *
+     * @return float 
+     */
+    public function getVrNeto()
+    {
+        return $this->vrNeto;
+    }
+
+    /**
+     * Set codigoTipoPagoFk
+     *
+     * @param integer $codigoTipoPagoFk
+     * @return LogGuias
+     */
+    public function setCodigoTipoPagoFk($codigoTipoPagoFk)
+    {
+        $this->codigoTipoPagoFk = $codigoTipoPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoPagoFk
+     *
+     * @return integer 
+     */
+    public function getCodigoTipoPagoFk()
+    {
+        return $this->codigoTipoPagoFk;
+    }
+
+    /**
+     * Set tipoPagoRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogTiposPago $tipoPagoRel
+     * @return LogGuias
+     */
+    public function setTipoPagoRel(\Brasa\LogisticaBundle\Entity\LogTiposPago $tipoPagoRel = null)
+    {
+        $this->tipoPagoRel = $tipoPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPagoRel
+     *
+     * @return \Brasa\LogisticaBundle\Entity\LogTiposPago 
+     */
+    public function getTipoPagoRel()
+    {
+        return $this->tipoPagoRel;
     }
 }

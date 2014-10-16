@@ -70,9 +70,11 @@ class GuiasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
-            $arCiudad = new \Brasa\GeneralBundle\Entity\GenCiudades();
+            $arCiudadDestino = new \Brasa\GeneralBundle\Entity\GenCiudades();
             $arTercero = new \Brasa\GeneralBundle\Entity\GenTerceros();
             $arTipoServicio = new \Brasa\LogisticaBundle\Entity\LogTiposServicio();
+            $arUsuarioConfiguracion = new \Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion();            
+            $arUsuarioConfiguracion = $em->getRepository('BrasaLogisticaBundle:LogUsuariosConfiguracion')->find($this->getUser()->getId());
             if (($request->request->get('TxtCodigoGuia'))) {
                 $arGuiaNueva = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($request->request->get('TxtCodigoGuia'));
             } else {
@@ -84,10 +86,13 @@ class GuiasController extends Controller
             $arGuiaNueva->setDocumentoCliente($request->request->get('TxtDocumentoCliente'));
             $arGuiaNueva->setNombreDestinatario($request->request->get('TxtNombreDestinatario'));
             $arGuiaNueva->setDireccionDestinatario($request->request->get('TxtDireccionDestinatario'));
-            $arGuiaNueva->setTelefonoDestinatario($request->request->get('TxtTelefonoDestinatario'));
-            $arCiudad = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
-            $arGuiaNueva->setCiudadDestinoRel($arCiudad);
-            $arGuiaNueva->setRutaRel($arCiudad->getRutaRel());
+            $arGuiaNueva->setTelefonoDestinatario($request->request->get('TxtTelefonoDestinatario'));            
+            $arGuiaNueva->setCiudadOrigenRel($arUsuarioConfiguracion->getPuntoOperacionRel()->getCiudadOrigenRel());            
+            $arCiudadDestino = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
+            $arGuiaNueva->setCiudadDestinoRel($arCiudadDestino);            
+            $arGuiaNueva->setRutaRel($arCiudadDestino->getRutaRel());
+            $arGuiaNueva->setPuntoOperacionIngresoRel($arUsuarioConfiguracion->getPuntoOperacionRel());
+            $arGuiaNueva->setPuntoOperacionActualRel($arUsuarioConfiguracion->getPuntoOperacionRel());
             $arGuiaNueva->setComentarios($request->request->get('TxtComentarios'));
             $arGuiaNueva->setCtUnidades($request->request->get('TxtUnidades'));
             $arGuiaNueva->setCtPesoReal($request->request->get('TxtPesoReal'));
@@ -102,7 +107,7 @@ class GuiasController extends Controller
             
             $em->persist($arGuiaNueva);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_log_guias_lista'));
+            return $this->redirect($this->generateUrl('brs_log_guias_detalle', array('codigoGuia' => $arGuiaNueva->getCodigoGuiaPk())));
         }
 
         $arGuia = null;
@@ -111,8 +116,6 @@ class GuiasController extends Controller
         if ($codigoGuia != null && $codigoGuia != "" && $codigoGuia != 0) {
             $arGuia = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($codigoGuia);
         }
-
-
         return $this->render('BrasaLogisticaBundle:Guias:nuevo.html.twig', array(
             'arGuia' => $arGuia,
             'arTiposServicio' => $arTiposServicio));
@@ -121,13 +124,12 @@ class GuiasController extends Controller
     /**
      * Lista los movimientos detalle (Detalles) segun encabezado - Filtro
      */
-    public function detalleAction($codigoMovimiento) {
+    public function detalleAction($codigoGuia) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $objMensaje = $this->get('mensajes_brasa');
-        $arMovimientosDetallesFrm = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
+        $objMensaje = $this->get('mensajes_brasa');        
+        $arGuia = new \Brasa\LogisticaBundle\Entity\LogGuias();
+        $arGuia = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($codigoGuia);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -157,13 +159,8 @@ class GuiasController extends Controller
                     break;
 
                 case "OpImprimir";
-                    $strResultado = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
-                    if ($strResultado == "") {
-                        //$Impresion = new Control_Impresion_Inventario();
-                        //$Impresion->CounstruirImpresion($em, $arMovimiento);
-                    }
-                    else
-                        $objMensaje->Mensaje("error", "No se pudo imprimir el documento: " . $strResultado, $this);
+                    $objFormatoGuia = new \Brasa\LogisticaBundle\Formatos\FormatoGuia();
+                    $objFormatoGuia->Generar($this, $codigoGuia);
                     break;
 
                 case "OpEliminar";
@@ -256,30 +253,13 @@ class GuiasController extends Controller
                     break;
             }
         }
-        //No mostrar registros de control traslados
-        if($arMovimiento->getCodigoDocumentoTipoFk() == 10) {
-            $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->findBy(array('codigoMovimientoFk' => $codigoMovimiento, 'operacionInventario' => 0));
-        }
-        else {
-            $dql   = "SELECT md FROM BrasaInventarioBundle:InvMovimientosDetalles md WHERE md.codigoMovimientoFk = " . $codigoMovimiento;
-            $query = $em->createQuery($dql);
-            $paginator = $this->get('knp_paginator');
-            $arMovimientosDetalle = $paginator->paginate($query, $this->get('request')->query->get('page', 1)/*page number*/,3);
-        }
-        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumentos();
-        $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->find($arMovimiento->getCodigoDocumentoFk());
-        $arDocumentoConfiguracion = new \Brasa\InventarioBundle\Entity\InvDocumentosConfiguracion();
-        $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentosConfiguracion')->find($arMovimiento->getCodigoDocumentoFk());
-        $arMovimientosRetenciones = new \Brasa\InventarioBundle\Entity\InvMovimientosRetenciones();
-        $arMovimientosRetenciones = $em->getRepository('BrasaInventarioBundle:InvMovimientosRetenciones')->findBy(array('codigoMovimientoFk' => $codigoMovimiento));
-        $arMovimientosDescuentosFinancieros = new \Brasa\InventarioBundle\Entity\InvMovimientosDescuentosFinancieros();
-        $arMovimientosDescuentosFinancieros = $em->getRepository('BrasaInventarioBundle:InvMovimientosDescuentosFinancieros')->findBy(array('codigoMovimientoFk' => $codigoMovimiento));
-        return $this->render('BrasaInventarioBundle:Movimientos:detalle.html.twig', array('arMovimiento' => $arMovimiento,
-                    'arMovimientosDetalle' => $arMovimientosDetalle,
-                    'arDocumento' => $arDocumento,
-                    'arDocumentoConfiguracion' => $arDocumentoConfiguracion,
-                    'arMovimientosRetenciones' => $arMovimientosRetenciones,
-                    'arMovimientosDescuentosFinancieros' => $arMovimientosDescuentosFinancieros));
+
+        //$dql   = "SELECT md FROM BrasaInventarioBundle:InvMovimientosDetalles md WHERE md.codigoMovimientoFk = " . $codigoMovimiento;
+        //$query = $em->createQuery($dql);
+        //$paginator = $this->get('knp_paginator');
+        //$arMovimientosDetalle = $paginator->paginate($query, $this->get('request')->query->get('page', 1)/*page number*/,3);
+        
+        return $this->render('BrasaLogisticaBundle:Guias:detalle.html.twig', array('arGuia' => $arGuia));
     }
 
 }

@@ -1,0 +1,118 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+<div class="container">
+    <div class="page-header">
+        <h3>Guia {{ arGuia.codigoGuiaPk }}</h3>
+            {% if arGuia.estadoAnulada == 1 %} <span class="label label-danger">Anulado</span> {% endif %}            
+    </div>
+    <div>
+    <form action="{{ path('brs_log_guias_detalle', {'codigoGuia': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a  class="btn btn-default" href="{{ path('brs_log_guias_nuevo', { 'codigoGuia': 0 }) }}">Nuevo</a>            
+                <button class="btn btn-default " type="submit" name="OpSubmit" value="OpImprimir">Imprimir</button>
+                <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAnular" {% if arGuia.estadoImpreso == 0 or arGuia.estadoAnulado == 1%} disabled {% endif %} onclick="javascript:if (!confirm('Esta seguro que desea anular el documento?')) return false;">Anular</button>                            
+            </div>
+        </div>        
+    </form>
+    </div>  
+    <br/><br/>
+    <!-- Encabezado Movimiento -->
+    <div class="well">        
+        <table width="100%" border="1">
+            <tr>
+                <td class="td-label">Numero:</td>
+                <td class="td-in-well">{{ arGuia.codigoGuiaPk }}</td>
+
+                <td class="td-label">Fecha:</td>
+                <td class="td-in-well">{{ arGuia.fechaIngreso|date("Y/m/d H:i:s") }}</td>
+
+                <td class="td-label"></td>
+                <td class="td-in-well-numerico" align="right"></td>
+
+                <td class="td-label">Flete:</td>
+                <td class="td-in-well-numerico" align="right">$ {{ arGuia.vrFlete | number_format(2, '.', ',') }}</td>
+            </tr>
+
+            <tr>
+                <td class="td-label">Origen:</td>
+                <td class="td-in-well">{{ arGuia.ciudadOrigenRel.nombre }}</td>
+
+                <td class="td-label">Peso Real:</td>
+                <td class="td-in-well" align="right">{{ arGuia.ctPesoReal | number_format(0, '.', ',') }}</td>
+
+                <td class="td-label"></td>
+                <td class="td-in-well-numerico" align="right"></td>
+
+                <td class="td-label">Manejo:</td>
+                <td class="td-in-well-numerico" align="right">$ {{ arGuia.vrManejo | number_format(2, '.', ',') }}</td>
+
+            </tr>
+
+            <tr>
+                <td class="td-label">Destino:</td>
+                <td class="td-in-well">{{ arGuia.ciudadDestinoRel.nombre }}</td>
+
+                <td class="td-label">Peso Volumen:</td>
+                <td class="td-in-well" align="right">{{ arGuia.ctPesoVolumen | number_format(0, '.', ',') }}</td>
+
+                <td class="td-label"></td>
+                <td class="td-in-well-numerico" align="right"> </td>
+
+                <td class="td-label">Abonos:</td>
+                <td class="td-in-well-numerico" align="right">$ {{ arGuia.vrAbonos | number_format(2, '.', ',') }}</td>
+
+
+            </tr>
+
+            <tr>
+
+                <td class="td-label">Punto Ingreso:</td>
+                <td class="td-in-well">{{ arGuia.puntoOperacionIngresoRel.nombre }}</td>
+
+                <td class="td-label">Unidades:</td>
+                <td class="td-in-well-numerico" align="right">{{ arGuia.ctUnidades | number_format(0, '.', ',') }}</td>
+
+                <td class="td-label"></td>
+                <td class="td-in-well-numerico" align="right"></td>
+
+                <td class="td-label">Total Neto:</td>
+                <td class="td-in-well-numerico" align="right">$ {{ arGuia.vrNeto | number_format(2, '.', ',') }}</td>
+            </tr>
+
+            <tr>
+                <td class="td-label">Punto Actual:</td>
+                <td class="td-in-well" >{{ arGuia.puntoOperacionActualRel.nombre }}</td>
+
+                <td class="td-label"></td>
+                <td class="td-in-well-numerico" align="right"> </td>
+
+                <td class="td-label"></td>
+                <td class="td-in-well-numerico" align="right"> </td>
+
+                <td class="td-label"></td>
+                <td class="td-in-well-numerico" align="right"> </td>
+            </tr>
+            <tr>
+                <td colspan="8">Comentarios:{{ arGuia.comentarios }}</td>
+            </tr>
+        </table>
+    </div>
+    <!-- Fin Encabezado Movimiento -->
+    <form action="{{ path('brs_log_guias_detalle', {'codigoGuia': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a class="btn btn-default" href="{{ path('brs_log_guias_lista') }}" style="float:left">Volver</a>
+            </div>
+        </div>        
+
+    </form>
+    <br />
+</div>    
+{% endblock %}

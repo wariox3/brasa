@@ -3,8 +3,8 @@ brs_log_guias_lista:
     defaults: { _controller: BrasaLogisticaBundle:Guias:lista }
 
 brs_log_guias_detalle:
-    path:     /logistica/guias/detalle
-    defaults: { _controller: BrasaLogisticaBundle:Guias:lista }
+    path:     /logistica/guias/detalle/{codigoGuia}
+    defaults: { _controller: BrasaLogisticaBundle:Guias:detalle }
     
 brs_log_guias_nuevo:
     path:     /logistica/guias/nuevo/{codigoGuia}

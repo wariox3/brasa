@@ -20,7 +20,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "knplabs/knp-paginator-bundle": "~2.4",
         "phpoffice/phpexcel": "dev-develop",
-        "wisembly/excelant": "*"
+        "wisembly/excelant": "*",
+        "royopa/fpdf-symfony2": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

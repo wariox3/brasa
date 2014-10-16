@@ -142,14 +142,11 @@ class DespachosController extends Controller
                     }                        
                     break;
 
-                case "OpImprimir";                         
-                    $strResultado = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
-                    if ($strResultado == "") {
-                        $Impresion = new Control_Impresion_Inventario();
-                        $Impresion->CounstruirImpresion($em, $arMovimiento);
+                case "OpImprimir";   
+                    if($arDespacho->getEstadoGenerado() == 0) {
+                        $reporte = new \Brasa\LogisticaBundle\Formatos\FormatoManifiesto();
+                        $reporte->Generar($this);                        
                     }
-                    else
-                        $objMensaje->Mensaje("error", "No se pudo imprimir el documento: " . $strResultado, $this);
                     break;
 
                 case "OpRetirar";
@@ -164,53 +161,7 @@ class DespachosController extends Controller
                             }
                         }                        
                     }
-                    break;
-
-                case "OpActualizarDetalles";
-                    $strResultado = $this->GuardarCambios($arrControles);
-                    if ($strResultado != "")
-                        $objMensaje->Mensaje("error", $strResultado, $this);
-                    else
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
-                    break;
-                    
-                case "OpAgregarItem";
-                    if(isset($arrControles['TxtCodigoItem'])) {
-                        if ($arrControles['TxtCodigoItem'] != "") {
-                            $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
-                            $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findBy(array('codigoBarras' => $arrControles['TxtCodigoItem']));
-                            //$arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($arItem[0]);
-                            if (count($arItem) > 0) {
-                                $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
-
-                                $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                                $arMovimientoDetalle->setMovimientoRel($arMovimiento);
-                                $arMovimientoDetalle->setCantidad(1);
-
-                                if ($arMovimiento->getDocumentoRel()->getTipoValor() == 2)
-                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arItem[0]->getCodigoItemPk()));
-
-                                if ($arMovimiento->getDocumentoRel()->getTipoValor() == 1)
-                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arItem[0]->getCodigoItemPk()));
-
-                                $arMovimientoDetalle->setLoteFk("SL");
-                                $arMovimientoDetalle->setFechaVencimiento(date_create('2020/12/30'));
-                                $arMovimientoDetalle->setCodigoBodegaFk(1);
-
-                                $arMovimientoDetalle->setItemMD($arItem[0]);
-                                $arMovimientoDetalle->setPorcentajeIva($arItem[0]->getPorcentajeIva());
-                                $em->persist($arMovimientoDetalle);
-                                $em->flush();
-                                if ($arMovimiento->getCodigoDocumentoTipoFk() == 4 && $arMovimiento->getDocumentoRel()->getOperacionInventario() == -1)
-                                    $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->EstableceLoteMovimientoDetalle($arMovimientoDetalle->getCodigoDetalleMovimientoPk());
-                                $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
-                            }
-                        }                        
-                    }
-                    break;
-                    
-                   
+                    break;                                                          
             }
         }
         

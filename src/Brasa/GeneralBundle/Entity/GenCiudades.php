@@ -52,9 +52,14 @@ class GenCiudades
     protected $tercerosDireccionesRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogGuias", mappedBy="ciudadOrigenRel")
+     */
+    protected $guiasCiudadOrigenRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogGuias", mappedBy="ciudadDestinoRel")
      */
-    protected $guiasRel;     
+    protected $guiasCiudadDestinoRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogDespachos", mappedBy="ciudadOrigenRel")
@@ -66,6 +71,11 @@ class GenCiudades
      */
     protected $despachosCiudadDestinoRel;        
 
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogPuntosOperacion", mappedBy="ciudadOrigenRel")
+     */
+    protected $puntosOperacionCiudadOrigenRel;    
+    
     
     /**
      * Constructor
@@ -333,5 +343,104 @@ class GenCiudades
     public function getDespachosCiudadDestinoRel()
     {
         return $this->despachosCiudadDestinoRel;
+    }
+
+    /**
+     * Add guiasCiudadOrigenRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadOrigenRel
+     * @return GenCiudades
+     */
+    public function addGuiasCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadOrigenRel)
+    {
+        $this->guiasCiudadOrigenRel[] = $guiasCiudadOrigenRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove guiasCiudadOrigenRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadOrigenRel
+     */
+    public function removeGuiasCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadOrigenRel)
+    {
+        $this->guiasCiudadOrigenRel->removeElement($guiasCiudadOrigenRel);
+    }
+
+    /**
+     * Get guiasCiudadOrigenRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGuiasCiudadOrigenRel()
+    {
+        return $this->guiasCiudadOrigenRel;
+    }
+
+    /**
+     * Add guiasCiudadDestinoRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadDestinoRel
+     * @return GenCiudades
+     */
+    public function addGuiasCiudadDestinoRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadDestinoRel)
+    {
+        $this->guiasCiudadDestinoRel[] = $guiasCiudadDestinoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove guiasCiudadDestinoRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadDestinoRel
+     */
+    public function removeGuiasCiudadDestinoRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadDestinoRel)
+    {
+        $this->guiasCiudadDestinoRel->removeElement($guiasCiudadDestinoRel);
+    }
+
+    /**
+     * Get guiasCiudadDestinoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGuiasCiudadDestinoRel()
+    {
+        return $this->guiasCiudadDestinoRel;
+    }
+
+    /**
+     * Add puntosOperacionCiudadOrigenRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntosOperacionCiudadOrigenRel
+     * @return GenCiudades
+     */
+    public function addPuntosOperacionCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntosOperacionCiudadOrigenRel)
+    {
+        $this->puntosOperacionCiudadOrigenRel[] = $puntosOperacionCiudadOrigenRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove puntosOperacionCiudadOrigenRel
+     *
+     * @param \Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntosOperacionCiudadOrigenRel
+     */
+    public function removePuntosOperacionCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntosOperacionCiudadOrigenRel)
+    {
+        $this->puntosOperacionCiudadOrigenRel->removeElement($puntosOperacionCiudadOrigenRel);
+    }
+
+    /**
+     * Get puntosOperacionCiudadOrigenRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPuntosOperacionCiudadOrigenRel()
+    {
+        return $this->puntosOperacionCiudadOrigenRel;
     }
 }

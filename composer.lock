@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0a0a345db74b2159cfa1bc62c0160f07",
+    "hash": "f000a796cb7f42a9f8d0590629f676d3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -291,16 +291,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "fec965d330c958e175c39e61c3f6751955af32d0"
+                "reference": "0368bc031976126e5d36d37d2c56155092b6575b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/fec965d330c958e175c39e61c3f6751955af32d0",
-                "reference": "fec965d330c958e175c39e61c3f6751955af32d0",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/0368bc031976126e5d36d37d2c56155092b6575b",
+                "reference": "0368bc031976126e5d36d37d2c56155092b6575b",
                 "shasum": ""
             },
             "require": {
@@ -312,7 +312,7 @@
                 "symfony/console": "~2.0"
             },
             "suggest": {
-                "symfony/console": "Allows use of the command line interface"
+                "symfony/console": "For helpful console commands such as SQL execution and import of files."
             },
             "type": "library",
             "autoload": {
@@ -326,23 +326,20 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/",
-                    "role": "Creator"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com",
-                    "homepage": "http://www.instaclick.com"
-                },
-                {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
                     "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
                 }
             ],
             "description": "Database Abstraction Layer",
@@ -353,7 +350,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2014-01-01 16:43:57"
+            "time": "2014-10-16 11:56:49"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -1085,6 +1082,43 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "royopa/fpdf-symfony2",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/royopa/fpdf-symfony2.git",
+                "reference": "e028eeae19a5c349948c8da9fe04e15270cf748f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/royopa/fpdf-symfony2/zipball/e028eeae19a5c349948c8da9fe04e15270cf748f",
+                "reference": "e028eeae19a5c349948c8da9fe04e15270cf748f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "FPDF_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3"
+            ],
+            "authors": [
+                {
+                    "name": "Rodrigo Prado de Jesus",
+                    "email": "royopa@gmail.com"
+                }
+            ],
+            "description": "fpdf vendor for use with symfony2, based on toooni/fpdf",
+            "homepage": "http://github.com/royopa",
+            "time": "2014-07-23 19:39:41"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -1840,7 +1874,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpoffice/phpexcel": 20
+        "phpoffice/phpexcel": 20,
+        "royopa/fpdf-symfony2": 20
     },
     "prefer-stable": false,
     "platform": {
