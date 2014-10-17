@@ -18,15 +18,6 @@ class GuiasController extends Controller
             if (isset($arrControles['ChkFecha']))
                 $objChkFecha = $arrControles['ChkFecha'];
             switch ($request->request->get('OpSubmit')) {
-                case "OpAutorizar";
-                    foreach ($arrSeleccionados AS $codigoMovimiento)
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Autorizar($codigoMovimiento);
-                    break;
-
-                case "OpImprimir";
-                    foreach ($arrSeleccionados AS $codigoMovimiento)
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
-                    break;
 
                 case "OpEliminar";
                     foreach ($arrSeleccionados AS $codigoMovimiento) {
@@ -69,56 +60,74 @@ class GuiasController extends Controller
     public function nuevoAction($codigoGuia = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');        
         if ($request->getMethod() == 'POST') {
+            $booError = false;
             $arCiudadDestino = new \Brasa\GeneralBundle\Entity\GenCiudades();
+            $arCiudadDestino = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
+            if($arCiudadDestino == null) {
+                $objMensaje->Mensaje("error", "La ciudad seleccionada no existe", $this);
+                    $form = $this->createFormBuilder()->getForm();
+                $form->submit($request->request->get($form->getName()));
+                if ($form->isValid()) {
+                    return $this->redirect($this->generateUrl('task_success'));
+                }
+                $booError = true;
+            }
             $arTercero = new \Brasa\GeneralBundle\Entity\GenTerceros();
             $arTipoServicio = new \Brasa\LogisticaBundle\Entity\LogTiposServicio();
+            $arTipoPago = new \Brasa\LogisticaBundle\Entity\LogTiposPago();
             $arUsuarioConfiguracion = new \Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion();            
             $arUsuarioConfiguracion = $em->getRepository('BrasaLogisticaBundle:LogUsuariosConfiguracion')->find($this->getUser()->getId());
-            if (($request->request->get('TxtCodigoGuia'))) {
-                $arGuiaNueva = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($request->request->get('TxtCodigoGuia'));
-            } else {
-                $arGuiaNueva = new \Brasa\LogisticaBundle\Entity\LogGuias();
+            if($booError == false) {
+                if (($request->request->get('TxtCodigoGuia'))) {
+                    $arGuiaNueva = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($request->request->get('TxtCodigoGuia'));
+                } else {
+                    $arGuiaNueva = new \Brasa\LogisticaBundle\Entity\LogGuias();
+                }
+                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTerceros')->find($request->request->get('TxtCodigoTercero'));
+                $arGuiaNueva->setTerceroRel($arTercero);
+                $arGuiaNueva->setFechaIngreso(date_create(date('Y-m-d H:i:s')));
+                $arGuiaNueva->setDocumentoCliente($request->request->get('TxtDocumentoCliente'));
+                $arGuiaNueva->setNombreDestinatario($request->request->get('TxtNombreDestinatario'));
+                $arGuiaNueva->setDireccionDestinatario($request->request->get('TxtDireccionDestinatario'));
+                $arGuiaNueva->setTelefonoDestinatario($request->request->get('TxtTelefonoDestinatario'));            
+                $arGuiaNueva->setCiudadOrigenRel($arUsuarioConfiguracion->getPuntoOperacionRel()->getCiudadOrigenRel());                        
+                $arGuiaNueva->setCiudadDestinoRel($arCiudadDestino);            
+                $arGuiaNueva->setRutaRel($arCiudadDestino->getRutaRel());
+                $arGuiaNueva->setPuntoOperacionIngresoRel($arUsuarioConfiguracion->getPuntoOperacionRel());
+                $arGuiaNueva->setPuntoOperacionActualRel($arUsuarioConfiguracion->getPuntoOperacionRel());
+                $arGuiaNueva->setComentarios($request->request->get('TxtComentarios'));
+                $arGuiaNueva->setCtUnidades($request->request->get('TxtUnidades'));
+                $arGuiaNueva->setCtPesoReal($request->request->get('TxtPesoReal'));
+                $arGuiaNueva->setCtPesoVolumen($request->request->get('TxtPesoVolumen'));
+                $arGuiaNueva->setVrDeclarado($request->request->get('TxtDeclarado'));
+                $arGuiaNueva->setVrFlete($request->request->get('TxtFlete'));
+                $arGuiaNueva->setVrManejo($request->request->get('TxtManejo'));
+                $arGuiaNueva->setVrRecaudo($request->request->get('TxtRecaudo'));
+                $arGuiaNueva->setContenido($request->request->get('TxtContenido'));            
+                $arTipoServicio = $em->getRepository ('BrasaLogisticaBundle:LogTiposServicio')->find($request->request->get('CboTiposServicio'));
+                $arGuiaNueva->setTipoServicioRel($arTipoServicio);            
+                $arTipoPago = $em->getRepository ('BrasaLogisticaBundle:LogTiposPago')->find($request->request->get('CboTiposPago'));
+                $arGuiaNueva->setTipoPagoRel($arTipoPago);
+                $em->persist($arGuiaNueva);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_log_guias_detalle', array('codigoGuia' => $arGuiaNueva->getCodigoGuiaPk())));                
             }
-            $arTercero = $em->getRepository('BrasaGeneralBundle:GenTerceros')->find($request->request->get('TxtCodigoTercero'));
-            $arGuiaNueva->setTerceroRel($arTercero);
-            $arGuiaNueva->setFechaIngreso(date_create(date('Y-m-d H:i:s')));
-            $arGuiaNueva->setDocumentoCliente($request->request->get('TxtDocumentoCliente'));
-            $arGuiaNueva->setNombreDestinatario($request->request->get('TxtNombreDestinatario'));
-            $arGuiaNueva->setDireccionDestinatario($request->request->get('TxtDireccionDestinatario'));
-            $arGuiaNueva->setTelefonoDestinatario($request->request->get('TxtTelefonoDestinatario'));            
-            $arGuiaNueva->setCiudadOrigenRel($arUsuarioConfiguracion->getPuntoOperacionRel()->getCiudadOrigenRel());            
-            $arCiudadDestino = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
-            $arGuiaNueva->setCiudadDestinoRel($arCiudadDestino);            
-            $arGuiaNueva->setRutaRel($arCiudadDestino->getRutaRel());
-            $arGuiaNueva->setPuntoOperacionIngresoRel($arUsuarioConfiguracion->getPuntoOperacionRel());
-            $arGuiaNueva->setPuntoOperacionActualRel($arUsuarioConfiguracion->getPuntoOperacionRel());
-            $arGuiaNueva->setComentarios($request->request->get('TxtComentarios'));
-            $arGuiaNueva->setCtUnidades($request->request->get('TxtUnidades'));
-            $arGuiaNueva->setCtPesoReal($request->request->get('TxtPesoReal'));
-            $arGuiaNueva->setCtPesoVolumen($request->request->get('TxtPesoVolumen'));
-            $arGuiaNueva->setVrDeclarado($request->request->get('TxtDeclarado'));
-            $arGuiaNueva->setVrFlete($request->request->get('TxtFlete'));
-            $arGuiaNueva->setVrManejo($request->request->get('TxtManejo'));
-            $arGuiaNueva->setVrRecaudo($request->request->get('TxtRecaudo'));
-            $arGuiaNueva->setContenido($request->request->get('TxtContenido'));            
-            $arTipoServicio = $em->getRepository ('BrasaLogisticaBundle:LogTiposServicio')->find($request->request->get('CboTiposServicio'));
-            $arGuiaNueva->setTipoServicioRel($arTipoServicio);            
-            
-            $em->persist($arGuiaNueva);
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_log_guias_detalle', array('codigoGuia' => $arGuiaNueva->getCodigoGuiaPk())));
         }
 
         $arGuia = null;
         $arTiposServicio = new \Brasa\LogisticaBundle\Entity\LogTiposServicio();
         $arTiposServicio = $em->getRepository('BrasaLogisticaBundle:LogTiposServicio')->findAll();
+        $arTiposPago = new \Brasa\LogisticaBundle\Entity\LogTiposPago();
+        $arTiposPago = $em->getRepository('BrasaLogisticaBundle:LogTiposPago')->findAll();        
         if ($codigoGuia != null && $codigoGuia != "" && $codigoGuia != 0) {
             $arGuia = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($codigoGuia);
         }
         return $this->render('BrasaLogisticaBundle:Guias:nuevo.html.twig', array(
             'arGuia' => $arGuia,
-            'arTiposServicio' => $arTiposServicio));
+            'arTiposServicio' => $arTiposServicio,
+            'arTiposPago' => $arTiposPago));
     }
 
     /**

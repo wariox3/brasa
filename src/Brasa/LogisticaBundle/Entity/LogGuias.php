@@ -153,6 +153,26 @@ class LogGuias
      * @ORM\Column(name="estado_anulada", type="boolean")
      */    
     private $estadoAnulada = 0;    
+
+    /**
+     * @ORM\Column(name="estado_entregada", type="boolean")
+     */    
+    private $estadoEntregada = 0;    
+    
+    /**
+     * @ORM\Column(name="estado_descargada", type="boolean")
+     */    
+    private $estadoDescargada = 0;    
+    
+    /**
+     * @ORM\Column(name="fecha_entrega", type="datetime", nullable=true)
+     */    
+    private $fechaEntrega;
+    
+    /**
+     * @ORM\Column(name="fecha_descargada", type="datetime", nullable=true)
+     */    
+    private $fechaDescargada;    
     
     /**
      * @ORM\Column(name="contenido", type="string", length=500, nullable=true)
@@ -1100,5 +1120,97 @@ class LogGuias
     public function getTipoPagoRel()
     {
         return $this->tipoPagoRel;
+    }
+
+    /**
+     * Set estadoEntregada
+     *
+     * @param boolean $estadoEntregada
+     * @return LogGuias
+     */
+    public function setEstadoEntregada($estadoEntregada)
+    {
+        $this->estadoEntregada = $estadoEntregada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoEntregada
+     *
+     * @return boolean 
+     */
+    public function getEstadoEntregada()
+    {
+        return $this->estadoEntregada;
+    }
+
+    /**
+     * Set estadoDescargada
+     *
+     * @param boolean $estadoDescargada
+     * @return LogGuias
+     */
+    public function setEstadoDescargada($estadoDescargada)
+    {
+        $this->estadoDescargada = $estadoDescargada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoDescargada
+     *
+     * @return boolean 
+     */
+    public function getEstadoDescargada()
+    {
+        return $this->estadoDescargada;
+    }
+
+    /**
+     * Set fechaEntrega
+     *
+     * @param \DateTime $fechaEntrega
+     * @return LogGuias
+     */
+    public function setFechaEntrega($fechaEntrega)
+    {
+        $this->fechaEntrega = $fechaEntrega;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEntrega
+     *
+     * @return \DateTime 
+     */
+    public function getFechaEntrega()
+    {
+        return $this->fechaEntrega;
+    }
+
+    /**
+     * Set fechaDescargada
+     *
+     * @param \DateTime $fechaDescargada
+     * @return LogGuias
+     */
+    public function setFechaDescargada($fechaDescargada)
+    {
+        $this->fechaDescargada = $fechaDescargada;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDescargada
+     *
+     * @return \DateTime 
+     */
+    public function getFechaDescargada()
+    {
+        return $this->fechaDescargada;
     }
 }

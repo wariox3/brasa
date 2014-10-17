@@ -9,6 +9,14 @@ brs_log_guias_detalle:
 brs_log_guias_nuevo:
     path:     /logistica/guias/nuevo/{codigoGuia}
     defaults: { _controller: BrasaLogisticaBundle:Guias:nuevo }    
+
+brs_log_guias_funciones_entregar:
+    path:     /logistica/guias/funciones/entregar
+    defaults: { _controller: BrasaLogisticaBundle:GuiasFunciones:entregar }    
+    
+brs_log_guias_funciones_descargar:
+    path:     /logistica/guias/funciones/descargar
+    defaults: { _controller: BrasaLogisticaBundle:GuiasFunciones:descargar }    
     
 brs_log_despachos_lista:
     path:     /logistica/despachos/lista
