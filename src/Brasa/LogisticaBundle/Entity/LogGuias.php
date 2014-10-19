@@ -155,6 +155,11 @@ class LogGuias
     private $estadoAnulada = 0;    
 
     /**
+     * @ORM\Column(name="estado_despachada", type="boolean")
+     */    
+    private $estadoDespachada = 0;    
+    
+    /**
      * @ORM\Column(name="estado_entregada", type="boolean")
      */    
     private $estadoEntregada = 0;    
@@ -1212,5 +1217,28 @@ class LogGuias
     public function getFechaDescargada()
     {
         return $this->fechaDescargada;
+    }
+
+    /**
+     * Set estadoDespachada
+     *
+     * @param boolean $estadoDespachada
+     * @return LogGuias
+     */
+    public function setEstadoDespachada($estadoDespachada)
+    {
+        $this->estadoDespachada = $estadoDespachada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoDespachada
+     *
+     * @return boolean 
+     */
+    public function getEstadoDespachada()
+    {
+        return $this->estadoDespachada;
     }
 }

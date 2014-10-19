@@ -128,21 +128,36 @@
                             <a tabindex="-1" href="#">Logistica</a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">                                    
-                                    <a tabindex="-1" href="#">Guias</a>
+                                    <a tabindex="-1" href="#">Operativo</a>
                                     <ul class="dropdown-menu">                                        
-                                        <li><a href="{{ path('brs_log_guias_lista') }}">Lista</a></li>
-                                        <li><a href="{{ path('brs_log_guias_funciones_entregar') }}">Fechas de entrega</a></li>
-                                        <li><a href="{{ path('brs_log_guias_funciones_descargar') }}">Descargar</a></li>
+                                        <li class="dropdown-submenu">                                    
+                                            <a tabindex="-1" href="#">Guias</a>
+                                            <ul class="dropdown-menu">                                        
+                                                <li><a href="{{ path('brs_log_guias_lista') }}">Lista</a></li>
+                                                <li><a href="{{ path('brs_log_guias_funciones_entregar') }}">Fechas de entrega</a></li>
+                                                <li><a href="{{ path('brs_log_guias_funciones_descargar') }}">Descargar</a></li>
+                                            </ul>                                    
+                                        </li>
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1" href="#">Despachos</a>
+                                            <ul class="dropdown-menu">                                        
+                                                <li><a href="{{ path('brs_log_despachos_lista') }}">Lista</a></li>
+                                            </ul>                                    
+                                        </li>
+
                                     </ul>                                    
                                 </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Despachos</a>
+                                <li class="dropdown-submenu">                                    
+                                    <a tabindex="-1" href="#">Comercial</a>
                                     <ul class="dropdown-menu">                                        
-                                        <li><a href="{{ path('brs_log_despachos_lista') }}">Lista</a></li>
-                                        <li><a href="{{ path('brs_log_despachos_lista') }}">Fechas de entrega</a></li>
-                                        <li><a href="{{ path('brs_log_guias_lista') }}">Descargar</a></li>
+                                        <li class="dropdown-submenu">                                    
+                                            <a tabindex="-1" href="#">Facturas</a>
+                                            <ul class="dropdown-menu">                                        
+                                                <li><a href="{{ path('brs_log_guias_lista') }}">Lista</a></li>
+                                            </ul>                                    
+                                        </li>
                                     </ul>                                    
-                                </li>
+                                </li>                                
                             </ul>
                         </li>                        
                     </ul>

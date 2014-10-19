@@ -25,13 +25,26 @@ class DespachosAgregarGuiaController extends Controller
                 case "OpAgregar";                    
                     $arrSeleccionados = $request->request->get('ChkSeleccionar');
                     if (count($arrSeleccionados) > 0) {
+                        $intUnidades = $arDespacho->getCtUnidades();
+                        $intPesoReal = $arDespacho->getCtPesoReal();
+                        $intPesoVolumen = $arDespacho->getCtPesoVolumen();
                         foreach ($arrSeleccionados AS $codigoGuia) {
                             $arGuia = new \Brasa\LogisticaBundle\Entity\LogGuias();
                             $arGuia = $em->getRepository('BrasaLogisticaBundle:LogGuias')->find($codigoGuia);
+                            $arGuia->setEstadoDespachada(1);
                             $arGuia->setDespachoRel($arDespacho);
                             $em->persist($arGuia);
                             $em->flush();
-                        }                        
+                            $intUnidades = $intUnidades + $arGuia->getCtUnidades();
+                            $intPesoReal = $intPesoReal + $arGuia->getCtPesoReal();
+                            $intPesoVolumen = $intPesoVolumen + $arGuia->getCtPesoVolumen();
+                        }
+                        
+                        $arDespacho->setCtUnidades($intUnidades);
+                        $arDespacho->setCtPesoReal($intPesoReal);
+                        $arDespacho->setCtPesoVolumen($intPesoVolumen);
+                        $em->persist($arDespacho);
+                        $em->flush();
                     }                                                                    
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                                        
                     break;      
