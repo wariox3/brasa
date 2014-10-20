@@ -1,0 +1,175 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+
+<div class="container">
+    <form class="form-horizontal" role="form" id="FrmNuevo" action="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': 0  }) }}" method="post">
+        <h3>{%if arGuia is defined and arGuia is not null%}Editar {%else%}Nueva {%endif%} Guia</h3>
+        <div class="well">
+            {% if arGuia is defined and arGuia is not null %}
+            <div class="form-group">
+                <label for="TxtCodigoGuia" class="col-sm-2 control-label">Codigo guia</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtCodigoGuia" name="TxtCodigoGuia" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.codigoGuiaPk}}" readonly="true"{% endif %}/>
+                </div>
+            </div>
+            {%set Tercero = arGuia.codigoTerceroFk  %}
+            {% else %}
+                {%set Tercero = ''%}
+            {% endif %}
+            <div class="form-group">
+                <label for="CboTiposServicio" class="col-sm-2 control-label">Tipo servicio:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="CboTiposServicio" required>
+                        <option value="">Seleccione</option>
+                        {% for arTiposServicio in arTiposServicio %}
+                                <option value="{{arTiposServicio.codigoTipoServicioPk}}" {%if arCiudad.codigoDepartamentoFk is defined %} {%if departamento.codigoDepartamentoPk == arCiudad.codigoDepartamentoFk %} selected {%endif%} {%endif%}>{{arTiposServicio.nombre}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>   
+            <div class="form-group">
+                <label for="CboTiposPago" class="col-sm-2 control-label">Tipo pago:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="CboTiposPago" required>
+                        <option value="">Seleccione</option>
+                        {% for arTiposPago in arTiposPago %}
+                                <option value="{{arTiposPago.codigoTipoPagoPk}}" {%if arCiudad.codigoDepartamentoFk is defined %} {%if departamento.codigoDepartamentoPk == arCiudad.codigoDepartamentoFk %} selected {%endif%} {%endif%}>{{arTiposPago.nombre}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>             
+            <div class="form-group">
+                <label for="TxtNombreTercero" class="col-sm-2 control-label">Tercero:</label>
+                <div class="col-sm-10">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="TxtNombreTercero" name="TxtNombreTercero" value="{% if arMovimiento is defined and arMovimiento is not null %} {{arMovimiento.terceroRel.nombreCorto}} {%endif%}" placeholder="Codigo tercero"/>
+                      <span class="input-group-btn">
+                        <input type="text" class="btn btn-default" id="TxtCodigoTercero" name="TxtCodigoTercero" value="{{Tercero}}" required/>
+                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_gen_buscar_tercero') }}', 'BuscarTercero', 600, 900)">Buscar</a>
+                      </span>
+                    </div><!-- /input-group -->
+                  </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="TxtDocumentoCliente" class="col-sm-2 control-label">Documento cliente:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtDocumentoCliente" name="TxtDocumentoCliente" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.documentoCliente}}" {% endif %} placeholder="documento cliente"/>
+                </div>
+            </div>
+        </div>
+        <div class="well">
+            <div class="form-group">
+                <label for="TxtNombreDestinatario" class="col-sm-2 control-label">Nombre destinatario:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtNombreDestinatario" name="TxtNombreDestinatario" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.nombreDestinatario}}" {% endif %} placeholder="nombre destinatario"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="TxtDireccionDestinatario" class="col-sm-2 control-label">Direccion destinatario:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtDireccionDestinatario" name="TxtDireccionDestinatario" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.direccionDestinatario}}" {% endif %} placeholder="direccion destinatario"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="TxtTelefonoDestinatario" class="col-sm-2 control-label">Telefono destinatario:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtTelefonoDestinatario" name="TxtTelefonoDestinatario" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.telefonoDestinatario}}" {% endif %} placeholder="telefono destinatario"/>
+                </div>
+            </div>
+            {% if arGuia is defined and arGuia is not null %}
+                {%set Ciudad =  arGuia.codigoCiudadDestinoFk  %}
+            {% else %}
+                {%set Ciudad = ''%}
+            {% endif %}
+            <div class="form-group">
+                <label for="TxtNombreCiudadDestino" class="col-sm-2 control-label">Ciudad:</label>
+                <div class="col-sm-10">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="TxtNombreCiudadDestino" name="TxtNombreCiudadDestino" value="{% if arGuia is defined and arGuia is not null %} {{arGuia.ciudadDestinoRel.nombre}} {%endif%}" placeholder="Codigo ciudad"/>
+                      <span class="input-group-btn">
+                        <input type="text" class="btn btn-default" id="TxtCodigoCiudadDestino" name="TxtCodigoCiudadDestino" value="{{Ciudad}}" required/>
+                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_gen_buscar_ciudad', {'campoCodigo': 'TxtCodigoCiudadDestino', 'campoNombre': 'TxtNombreCiudadDestino'}) }}', 'BuscarCiudad', 600, 900)">Buscar</a>
+                      </span>
+                    </div><!-- /input-group -->
+                  </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+                </div>
+            </div>
+
+        </div>
+        <div class="well">
+            <div class="form-group">
+                <label for="TxtUnidades" class="col-sm-2 control-label">Unidades:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtUnidades" name="TxtUnidades" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.ctUnidades}}" {% endif %} placeholder="unidades"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="TxtPesoReal" class="col-sm-2 control-label">Peso real:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtPesoReal" name="TxtPesoReal" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.ctPesoReal}}" {% endif %} placeholder="peso real"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="TxtPesoVolumen" class="col-sm-2 control-label">Peso volumen:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtPesoVolumen" name="TxtPesoVolumen" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.ctPesoVolumen}}" {% endif %} placeholder="peso volumen"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="TxtDeclarado" class="col-sm-2 control-label">Declarado:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtDeclarado" name="TxtDeclarado" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.vrDeclarado}}" {% endif %} placeholder="Declarado"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="TxtFlete" class="col-sm-2 control-label">Flete:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtFlete" name="TxtFlete" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.vrFlete}}" {% endif %} placeholder="Flete"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="TxtManejo" class="col-sm-2 control-label">Manejo:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtManejo" name="TxtManejo" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.vrManejo}}" {% endif %} placeholder="Manejo"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="TxtRecaudo" class="col-sm-2 control-label">Recaudo:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="TxtRecaudo" name="TxtRecaudo" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.vrRecaudo}}" {% endif %} placeholder="Recaudo"/>
+                </div>
+            </div>            
+        </div>
+        <div class="well">
+            <div class="form-group">
+                <label for="TxtContenido" class="col-sm-2 control-label">Contenido:</label>
+                <div class="col-sm-10">
+                    <textarea type="text" class="form-control" id="TxtContenido" rows=2 name="TxtContenido" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.contenido}}" {% endif %} placeholder="Contenido"> </textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="TxtComentarios" class="col-sm-2 control-label">Comentarios:</label>
+                <div class="col-sm-10">
+                    <textarea type="text" class="form-control" id="TxtComentarios" rows=3 name="TxtComentarios" {% if arGuia is defined and arGuia is not null %} value="{{arGuia.comentarios}}" {% endif %} placeholder="Comentarios"> </textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <a class="btn btn-default" href="{{ path('brs_tte_guias_lista') }}">Cancelar</a>
+            <button id="link_guardar" class="btn btn-primary" type="submit" name="OpSubmit" value="OpGuardar">Guardar</button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

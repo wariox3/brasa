@@ -41,7 +41,7 @@ class GenCiudades
     protected $departamentoRel;    
 
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\LogisticaBundle\Entity\LogRutas", inversedBy="ciudadesRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\TransporteBundle\Entity\TteRutas", inversedBy="ciudadesRel")
      * @ORM\JoinColumn(name="codigo_ruta_predeterminada_fk", referencedColumnName="codigo_ruta_pk")
      */
     protected $rutaRel;    
@@ -52,27 +52,27 @@ class GenCiudades
     protected $tercerosDireccionesRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogGuias", mappedBy="ciudadOrigenRel")
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteGuias", mappedBy="ciudadOrigenRel")
      */
     protected $guiasCiudadOrigenRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogGuias", mappedBy="ciudadDestinoRel")
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteGuias", mappedBy="ciudadDestinoRel")
      */
     protected $guiasCiudadDestinoRel;     
     
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogDespachos", mappedBy="ciudadOrigenRel")
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteDespachos", mappedBy="ciudadOrigenRel")
      */
     protected $despachosCiudadOrigenRel;    
 
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogDespachos", mappedBy="ciudadDestinoRel")
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteDespachos", mappedBy="ciudadDestinoRel")
      */
     protected $despachosCiudadDestinoRel;        
 
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogPuntosOperacion", mappedBy="ciudadOrigenRel")
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TtePuntosOperacion", mappedBy="ciudadOrigenRel")
      */
     protected $puntosOperacionCiudadOrigenRel;    
     
@@ -193,10 +193,10 @@ class GenCiudades
     /**
      * Set rutaRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogRutas $rutaRel
+     * @param \Brasa\TransporteBundle\Entity\TteRutas $rutaRel
      * @return GenCiudades
      */
-    public function setRutaRel(\Brasa\LogisticaBundle\Entity\LogRutas $rutaRel = null)
+    public function setRutaRel(\Brasa\TransporteBundle\Entity\TteRutas $rutaRel = null)
     {
         $this->rutaRel = $rutaRel;
 
@@ -206,7 +206,7 @@ class GenCiudades
     /**
      * Get rutaRel
      *
-     * @return \Brasa\LogisticaBundle\Entity\LogRutas 
+     * @return \Brasa\TransporteBundle\Entity\TteRutas 
      */
     public function getRutaRel()
     {
@@ -249,10 +249,10 @@ class GenCiudades
     /**
      * Add guiasRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasRel
      * @return GenCiudades
      */
-    public function addGuiasRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasRel)
+    public function addGuiasRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasRel)
     {
         $this->guiasRel[] = $guiasRel;
 
@@ -262,9 +262,9 @@ class GenCiudades
     /**
      * Remove guiasRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasRel
      */
-    public function removeGuiasRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasRel)
+    public function removeGuiasRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasRel)
     {
         $this->guiasRel->removeElement($guiasRel);
     }
@@ -282,10 +282,10 @@ class GenCiudades
     /**
      * Add despachosCiudadOrigenRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadOrigenRel
+     * @param \Brasa\TransporteBundle\Entity\TteDespachos $despachosCiudadOrigenRel
      * @return GenCiudades
      */
-    public function addDespachosCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadOrigenRel)
+    public function addDespachosCiudadOrigenRel(\Brasa\TransporteBundle\Entity\TteDespachos $despachosCiudadOrigenRel)
     {
         $this->despachosCiudadOrigenRel[] = $despachosCiudadOrigenRel;
 
@@ -295,9 +295,9 @@ class GenCiudades
     /**
      * Remove despachosCiudadOrigenRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadOrigenRel
+     * @param \Brasa\TransporteBundle\Entity\TteDespachos $despachosCiudadOrigenRel
      */
-    public function removeDespachosCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadOrigenRel)
+    public function removeDespachosCiudadOrigenRel(\Brasa\TransporteBundle\Entity\TteDespachos $despachosCiudadOrigenRel)
     {
         $this->despachosCiudadOrigenRel->removeElement($despachosCiudadOrigenRel);
     }
@@ -315,10 +315,10 @@ class GenCiudades
     /**
      * Add despachosCiudadDestinoRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadDestinoRel
+     * @param \Brasa\TransporteBundle\Entity\TteDespachos $despachosCiudadDestinoRel
      * @return GenCiudades
      */
-    public function addDespachosCiudadDestinoRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadDestinoRel)
+    public function addDespachosCiudadDestinoRel(\Brasa\TransporteBundle\Entity\TteDespachos $despachosCiudadDestinoRel)
     {
         $this->despachosCiudadDestinoRel[] = $despachosCiudadDestinoRel;
 
@@ -328,9 +328,9 @@ class GenCiudades
     /**
      * Remove despachosCiudadDestinoRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadDestinoRel
+     * @param \Brasa\TransporteBundle\Entity\TteDespachos $despachosCiudadDestinoRel
      */
-    public function removeDespachosCiudadDestinoRel(\Brasa\LogisticaBundle\Entity\LogDespachos $despachosCiudadDestinoRel)
+    public function removeDespachosCiudadDestinoRel(\Brasa\TransporteBundle\Entity\TteDespachos $despachosCiudadDestinoRel)
     {
         $this->despachosCiudadDestinoRel->removeElement($despachosCiudadDestinoRel);
     }
@@ -348,10 +348,10 @@ class GenCiudades
     /**
      * Add guiasCiudadOrigenRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadOrigenRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasCiudadOrigenRel
      * @return GenCiudades
      */
-    public function addGuiasCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadOrigenRel)
+    public function addGuiasCiudadOrigenRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasCiudadOrigenRel)
     {
         $this->guiasCiudadOrigenRel[] = $guiasCiudadOrigenRel;
 
@@ -361,9 +361,9 @@ class GenCiudades
     /**
      * Remove guiasCiudadOrigenRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadOrigenRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasCiudadOrigenRel
      */
-    public function removeGuiasCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadOrigenRel)
+    public function removeGuiasCiudadOrigenRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasCiudadOrigenRel)
     {
         $this->guiasCiudadOrigenRel->removeElement($guiasCiudadOrigenRel);
     }
@@ -381,10 +381,10 @@ class GenCiudades
     /**
      * Add guiasCiudadDestinoRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadDestinoRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasCiudadDestinoRel
      * @return GenCiudades
      */
-    public function addGuiasCiudadDestinoRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadDestinoRel)
+    public function addGuiasCiudadDestinoRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasCiudadDestinoRel)
     {
         $this->guiasCiudadDestinoRel[] = $guiasCiudadDestinoRel;
 
@@ -394,9 +394,9 @@ class GenCiudades
     /**
      * Remove guiasCiudadDestinoRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadDestinoRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasCiudadDestinoRel
      */
-    public function removeGuiasCiudadDestinoRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasCiudadDestinoRel)
+    public function removeGuiasCiudadDestinoRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasCiudadDestinoRel)
     {
         $this->guiasCiudadDestinoRel->removeElement($guiasCiudadDestinoRel);
     }
@@ -414,10 +414,10 @@ class GenCiudades
     /**
      * Add puntosOperacionCiudadOrigenRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntosOperacionCiudadOrigenRel
+     * @param \Brasa\TransporteBundle\Entity\TtePuntosOperacion $puntosOperacionCiudadOrigenRel
      * @return GenCiudades
      */
-    public function addPuntosOperacionCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntosOperacionCiudadOrigenRel)
+    public function addPuntosOperacionCiudadOrigenRel(\Brasa\TransporteBundle\Entity\TtePuntosOperacion $puntosOperacionCiudadOrigenRel)
     {
         $this->puntosOperacionCiudadOrigenRel[] = $puntosOperacionCiudadOrigenRel;
 
@@ -427,9 +427,9 @@ class GenCiudades
     /**
      * Remove puntosOperacionCiudadOrigenRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntosOperacionCiudadOrigenRel
+     * @param \Brasa\TransporteBundle\Entity\TtePuntosOperacion $puntosOperacionCiudadOrigenRel
      */
-    public function removePuntosOperacionCiudadOrigenRel(\Brasa\LogisticaBundle\Entity\LogPuntosOperacion $puntosOperacionCiudadOrigenRel)
+    public function removePuntosOperacionCiudadOrigenRel(\Brasa\TransporteBundle\Entity\TtePuntosOperacion $puntosOperacionCiudadOrigenRel)
     {
         $this->puntosOperacionCiudadOrigenRel->removeElement($puntosOperacionCiudadOrigenRel);
     }

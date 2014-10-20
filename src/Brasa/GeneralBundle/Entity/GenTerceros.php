@@ -195,7 +195,7 @@ class GenTerceros
     protected $movimientosRel;    
           
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogGuias", mappedBy="terceroRel")
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteGuias", mappedBy="terceroRel")
      */
     protected $guiasRel;    
 
@@ -1000,10 +1000,10 @@ class GenTerceros
     /**
      * Add guiasRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasRel
      * @return GenTerceros
      */
-    public function addGuiasRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasRel)
+    public function addGuiasRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasRel)
     {
         $this->guiasRel[] = $guiasRel;
 
@@ -1013,9 +1013,9 @@ class GenTerceros
     /**
      * Remove guiasRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogGuias $guiasRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasRel
      */
-    public function removeGuiasRel(\Brasa\LogisticaBundle\Entity\LogGuias $guiasRel)
+    public function removeGuiasRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasRel)
     {
         $this->guiasRel->removeElement($guiasRel);
     }

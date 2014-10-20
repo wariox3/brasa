@@ -50,7 +50,7 @@ class User implements UserInterface, \Serializable
     private $isActive;
 
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion", mappedBy="usuarioRel")
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteUsuariosConfiguracion", mappedBy="usuarioRel")
      */
     protected $usuariosConfiguracionRel;    
     
@@ -229,10 +229,10 @@ class User implements UserInterface, \Serializable
     /**
      * Add usuariosConfiguracionRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion $usuariosConfiguracionRel
+     * @param \Brasa\TransporteBundle\Entity\TteUsuariosConfiguracion $usuariosConfiguracionRel
      * @return User
      */
-    public function addUsuariosConfiguracionRel(\Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion $usuariosConfiguracionRel)
+    public function addUsuariosConfiguracionRel(\Brasa\TransporteBundle\Entity\TteUsuariosConfiguracion $usuariosConfiguracionRel)
     {
         $this->usuariosConfiguracionRel[] = $usuariosConfiguracionRel;
 
@@ -242,9 +242,9 @@ class User implements UserInterface, \Serializable
     /**
      * Remove usuariosConfiguracionRel
      *
-     * @param \Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion $usuariosConfiguracionRel
+     * @param \Brasa\TransporteBundle\Entity\TteUsuariosConfiguracion $usuariosConfiguracionRel
      */
-    public function removeUsuariosConfiguracionRel(\Brasa\LogisticaBundle\Entity\LogUsuariosConfiguracion $usuariosConfiguracionRel)
+    public function removeUsuariosConfiguracionRel(\Brasa\TransporteBundle\Entity\TteUsuariosConfiguracion $usuariosConfiguracionRel)
     {
         $this->usuariosConfiguracionRel->removeElement($usuariosConfiguracionRel);
     }

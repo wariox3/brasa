@@ -22,8 +22,8 @@ class AppKernel extends Kernel
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Brasa\TesoreriaBundle\BrasaTesoreriaBundle(),
             new Brasa\ContabilidadBundle\BrasaContabilidadBundle(),
-            new Brasa\CarteraBundle\BrasaCarteraBundle(),
-            new Brasa\LogisticaBundle\BrasaLogisticaBundle(),
+            new Brasa\CarteraBundle\BrasaCarteraBundle(),            
+            new Brasa\TransporteBundle\BrasaTransporteBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
