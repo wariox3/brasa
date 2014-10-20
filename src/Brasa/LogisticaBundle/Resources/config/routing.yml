@@ -33,6 +33,14 @@ brs_log_despachos_nuevo:
 brs_log_despachos_agregar_guia:
     path:     /logistica/despachos/agregar/guia/{codigoDespacho}
     defaults: { _controller: BrasaLogisticaBundle:DespachosAgregarGuia:lista }
+
+brs_log_facturas_lista:
+    path:     /logistica/facturas/lista
+    defaults: { _controller: BrasaLogisticaBundle:Facturas:lista }    
+
+brs_log_facturas_nuevo:
+    path:     /logistica/facturas/nuevo/{codigoFactura}
+    defaults: { _controller: BrasaLogisticaBundle:Facturas:nuevo }      
     
 #Utilidades    
 brs_log_buscar_conductor:
