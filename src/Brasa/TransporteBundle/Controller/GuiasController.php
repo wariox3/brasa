@@ -60,6 +60,35 @@ class GuiasController extends Controller
     public function nuevoAction($codigoGuia = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $arRutas = new \Brasa\TransporteBundle\Entity\TteRutas();                
+        $form = $this->createFormBuilder($arRutas)
+            ->add('nombre', 'text')                
+            ->add('save', 'submit')
+            ->getForm(); 
+/*        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $form = $this->createFormBuilder($arGuia)
+            ->add('numeroGuia', 'text')
+            ->add('documentoCliente', 'text')                
+            ->add('save', 'submit')
+            ->getForm();*/
+        
+        if ($form->isValid()) {
+            $arRutas = $form->getData();
+            //$arGuia = $form->getData();            
+            $em->persist($arRutas);
+            $em->flush();            
+        }
+        return $this->render('BrasaTransporteBundle:Guias:nuevo.html.twig', array(
+            'form' => $form->createView()));
+    }
+
+    /**
+     * Crear un nuevo movimiento
+     * @return type
+     */
+    public function nuevo2Action($codigoGuia = 0) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');        
         if ($request->getMethod() == 'POST') {
             $booError = false;
@@ -128,8 +157,8 @@ class GuiasController extends Controller
             'arGuia' => $arGuia,
             'arTiposServicio' => $arTiposServicio,
             'arTiposPago' => $arTiposPago));
-    }
-
+    }    
+    
     /**
      * Lista los movimientos detalle (Detalles) segun encabezado - Filtro
      */
