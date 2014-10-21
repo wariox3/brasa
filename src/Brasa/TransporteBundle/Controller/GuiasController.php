@@ -3,6 +3,7 @@
 namespace Brasa\TransporteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Brasa\TransporteBundle\Form\Type\TteGuiasType;
 
 class GuiasController extends Controller
 {
@@ -54,118 +55,45 @@ class GuiasController extends Controller
     }
 
     /**
-     * Crear un nuevo movimiento
+     * Crear un nueva guias
      * @return type
      */
     public function nuevoAction($codigoGuia = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arRutas = new \Brasa\TransporteBundle\Entity\TteRutas();                
-        $form = $this->createFormBuilder($arRutas)
-            ->add('nombre', 'text')                
-            ->add('save', 'submit')
-            ->getForm(); 
-/*        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-        $form = $this->createFormBuilder($arGuia)
-            ->add('numeroGuia', 'text')
-            ->add('documentoCliente', 'text')                
-            ->add('save', 'submit')
-            ->getForm();*/
-        
+        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $form = $this->createForm(new TteGuiasType(), $arGuia);
+        $form->handleRequest($request);
         if ($form->isValid()) {
-            $arRutas = $form->getData();
-            //$arGuia = $form->getData();            
-            $em->persist($arRutas);
-            $em->flush();            
+            $arrControles = $request->request->All();
+            $arGuia = $form->getData();                        
+            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuariosConfiguracion')->find($this->getUser()->getId());            
+            $arCiudadDestino = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($arrControles['form']['ciudadDestinoRel']);
+            $arGuia->setFechaIngreso(date_create(date('Y-m-d H:i:s')));
+            $arGuia->setPuntoOperacionIngresoRel($arUsuarioConfiguracion->getPuntoOperacionRel());
+            $arGuia->setPuntoOperacionActualRel($arUsuarioConfiguracion->getPuntoOperacionRel());
+            $arGuia->setCiudadOrigenRel($arUsuarioConfiguracion->getPuntoOperacionRel()->getCiudadOrigenRel());
+            $arGuia->setRutaRel($arCiudadDestino->getRutaRel());
+            $em->persist($arGuia);
+            $em->flush();
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tte_guias_nuevo', array('codigoGuia' => 0)));
+            } else {
+                return $this->redirect($this->generateUrl('brs_tte_guias_detalle', array('codigoGuia' => $arGuia->getCodigoGuiaPk())));
+            }    
+            
         }
         return $this->render('BrasaTransporteBundle:Guias:nuevo.html.twig', array(
             'form' => $form->createView()));
     }
 
     /**
-     * Crear un nuevo movimiento
-     * @return type
-     */
-    public function nuevo2Action($codigoGuia = 0) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $objMensaje = $this->get('mensajes_brasa');        
-        if ($request->getMethod() == 'POST') {
-            $booError = false;
-            $arCiudadDestino = new \Brasa\GeneralBundle\Entity\GenCiudades();
-            $arCiudadDestino = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
-            if($arCiudadDestino == null) {
-                $objMensaje->Mensaje("error", "La ciudad seleccionada no existe", $this);
-                    $form = $this->createFormBuilder()->getForm();
-                $form->submit($request->request->get($form->getName()));
-                if ($form->isValid()) {
-                    return $this->redirect($this->generateUrl('task_success'));
-                }
-                $booError = true;
-            }
-            $arTercero = new \Brasa\GeneralBundle\Entity\GenTerceros();
-            $arTipoServicio = new \Brasa\TransporteBundle\Entity\TteTiposServicio();
-            $arTipoPago = new \Brasa\TransporteBundle\Entity\TteTiposPago();
-            $arUsuarioConfiguracion = new \Brasa\TransporteBundle\Entity\TteUsuariosConfiguracion();            
-            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuariosConfiguracion')->find($this->getUser()->getId());
-            if($booError == false) {
-                if (($request->request->get('TxtCodigoGuia'))) {
-                    $arGuiaNueva = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($request->request->get('TxtCodigoGuia'));
-                } else {
-                    $arGuiaNueva = new \Brasa\TransporteBundle\Entity\TteGuias();
-                }
-                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTerceros')->find($request->request->get('TxtCodigoTercero'));
-                $arGuiaNueva->setTerceroRel($arTercero);
-                $arGuiaNueva->setFechaIngreso(date_create(date('Y-m-d H:i:s')));
-                $arGuiaNueva->setDocumentoCliente($request->request->get('TxtDocumentoCliente'));
-                $arGuiaNueva->setNombreDestinatario($request->request->get('TxtNombreDestinatario'));
-                $arGuiaNueva->setDireccionDestinatario($request->request->get('TxtDireccionDestinatario'));
-                $arGuiaNueva->setTelefonoDestinatario($request->request->get('TxtTelefonoDestinatario'));            
-                $arGuiaNueva->setCiudadOrigenRel($arUsuarioConfiguracion->getPuntoOperacionRel()->getCiudadOrigenRel());                        
-                $arGuiaNueva->setCiudadDestinoRel($arCiudadDestino);            
-                $arGuiaNueva->setRutaRel($arCiudadDestino->getRutaRel());
-                $arGuiaNueva->setPuntoOperacionIngresoRel($arUsuarioConfiguracion->getPuntoOperacionRel());
-                $arGuiaNueva->setPuntoOperacionActualRel($arUsuarioConfiguracion->getPuntoOperacionRel());
-                $arGuiaNueva->setComentarios($request->request->get('TxtComentarios'));
-                $arGuiaNueva->setCtUnidades($request->request->get('TxtUnidades'));
-                $arGuiaNueva->setCtPesoReal($request->request->get('TxtPesoReal'));
-                $arGuiaNueva->setCtPesoVolumen($request->request->get('TxtPesoVolumen'));
-                $arGuiaNueva->setVrDeclarado($request->request->get('TxtDeclarado'));
-                $arGuiaNueva->setVrFlete($request->request->get('TxtFlete'));
-                $arGuiaNueva->setVrManejo($request->request->get('TxtManejo'));
-                $arGuiaNueva->setVrRecaudo($request->request->get('TxtRecaudo'));
-                $arGuiaNueva->setContenido($request->request->get('TxtContenido'));            
-                $arTipoServicio = $em->getRepository ('BrasaTransporteBundle:TteTiposServicio')->find($request->request->get('CboTiposServicio'));
-                $arGuiaNueva->setTipoServicioRel($arTipoServicio);            
-                $arTipoPago = $em->getRepository ('BrasaTransporteBundle:TteTiposPago')->find($request->request->get('CboTiposPago'));
-                $arGuiaNueva->setTipoPagoRel($arTipoPago);
-                $em->persist($arGuiaNueva);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_tte_guias_detalle', array('codigoGuia' => $arGuiaNueva->getCodigoGuiaPk())));                
-            }
-        }
-
-        $arGuia = null;
-        $arTiposServicio = new \Brasa\TransporteBundle\Entity\TteTiposServicio();
-        $arTiposServicio = $em->getRepository('BrasaTransporteBundle:TteTiposServicio')->findAll();
-        $arTiposPago = new \Brasa\TransporteBundle\Entity\TteTiposPago();
-        $arTiposPago = $em->getRepository('BrasaTransporteBundle:TteTiposPago')->findAll();        
-        if ($codigoGuia != null && $codigoGuia != "" && $codigoGuia != 0) {
-            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
-        }
-        return $this->render('BrasaTransporteBundle:Guias:nuevo.html.twig', array(
-            'arGuia' => $arGuia,
-            'arTiposServicio' => $arTiposServicio,
-            'arTiposPago' => $arTiposPago));
-    }    
-    
-    /**
      * Lista los movimientos detalle (Detalles) segun encabezado - Filtro
      */
     public function detalleAction($codigoGuia) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $objMensaje = $this->get('mensajes_brasa');        
+        $objMensaje = $this->get('mensajes_brasa');
         $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
         $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
         if ($request->getMethod() == 'POST') {
@@ -296,7 +224,7 @@ class GuiasController extends Controller
         //$query = $em->createQuery($dql);
         //$paginator = $this->get('knp_paginator');
         //$arMovimientosDetalle = $paginator->paginate($query, $this->get('request')->query->get('page', 1)/*page number*/,3);
-        
+
         return $this->render('BrasaTransporteBundle:Guias:detalle.html.twig', array('arGuia' => $arGuia));
     }
 

@@ -8,7 +8,7 @@ brs_gen_base_terceros:
     
 #Utilidades    
 brs_gen_buscar_tercero:
-    pattern:  /general/buscar/tercero/
+    pattern:  /general/buscar/tercero/{campoCodigo}/{campoNombre}/
     defaults: { _controller: BrasaGeneralBundle:Busquedas:buscarTercero }     
 
 brs_gen_buscar_ciudad:

@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class BusquedasController extends Controller {
 
-    public function buscarTerceroAction() {
+    public function buscarTerceroAction($campoCodigo, $campoNombre) {
         $em = $this->get('doctrine.orm.entity_manager');
         $request = $this->getRequest();
 
@@ -24,7 +24,10 @@ class BusquedasController extends Controller {
             $arTerceros = $em->getRepository('BrasaGeneralBundle:GenTerceros')->findAll();
         }
 
-        return $this->render('BrasaGeneralBundle:Busquedas:buscarTercero.html.twig', array("arTerceros" => $arTerceros));
+        return $this->render('BrasaGeneralBundle:Busquedas:buscarTercero.html.twig', array(
+            "arTerceros" => $arTerceros,
+            "campoCodigo" => $campoCodigo,
+            "campoNombre" => $campoNombre));
     }
     
     public function buscarCiudadAction($campoCodigo, $campoNombre) {
