@@ -34,6 +34,11 @@ class TteFacturas
     private $fechaVencimiento;    
     
     /**
+     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
+     */    
+    private $codigoTerceroFk;    
+    
+    /**
      * @ORM\Column(name="ct_unidades", type="float")
      */
     private $ctUnidades = 0;    
@@ -54,11 +59,35 @@ class TteFacturas
     private $vrOtros = 0;    
     
     /**
+     * @ORM\Column(name="vr_total", type="float")
+     */
+    private $vrTotal = 0;        
+
+    /**
+     * @ORM\Column(name="estado_impreso", type="boolean")
+     */    
+    private $estadoImpreso = 0;     
+    
+    /**
+     * @ORM\Column(name="estado_anulada", type="boolean")
+     */    
+    private $estadoAnulada = 0;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=500, nullable=true)
      */    
     private $comentarios;     
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="TteGuias", mappedBy="facturaRel")
+     */
+    protected $guiasDetallesRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTerceros", inversedBy="tteFacturasRel")
+     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
+     */
+    protected $terceroRel;
 
     /**
      * Get codigoFacturaPk
@@ -252,5 +281,160 @@ class TteFacturas
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set codigoTerceroFk
+     *
+     * @param integer $codigoTerceroFk
+     * @return TteFacturas
+     */
+    public function setCodigoTerceroFk($codigoTerceroFk)
+    {
+        $this->codigoTerceroFk = $codigoTerceroFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTerceroFk
+     *
+     * @return integer 
+     */
+    public function getCodigoTerceroFk()
+    {
+        return $this->codigoTerceroFk;
+    }
+
+    /**
+     * Set terceroRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTerceros $terceroRel
+     * @return TteFacturas
+     */
+    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTerceros $terceroRel = null)
+    {
+        $this->terceroRel = $terceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTerceros 
+     */
+    public function getTerceroRel()
+    {
+        return $this->terceroRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->guiasDetallesRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add guiasDetallesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasDetallesRel
+     * @return TteFacturas
+     */
+    public function addGuiasDetallesRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasDetallesRel)
+    {
+        $this->guiasDetallesRel[] = $guiasDetallesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove guiasDetallesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasDetallesRel
+     */
+    public function removeGuiasDetallesRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasDetallesRel)
+    {
+        $this->guiasDetallesRel->removeElement($guiasDetallesRel);
+    }
+
+    /**
+     * Get guiasDetallesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGuiasDetallesRel()
+    {
+        return $this->guiasDetallesRel;
+    }
+
+    /**
+     * Set vrTotal
+     *
+     * @param float $vrTotal
+     * @return TteFacturas
+     */
+    public function setVrTotal($vrTotal)
+    {
+        $this->vrTotal = $vrTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotal
+     *
+     * @return float 
+     */
+    public function getVrTotal()
+    {
+        return $this->vrTotal;
+    }
+
+    /**
+     * Set estadoAnulada
+     *
+     * @param boolean $estadoAnulada
+     * @return TteFacturas
+     */
+    public function setEstadoAnulada($estadoAnulada)
+    {
+        $this->estadoAnulada = $estadoAnulada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulada
+     *
+     * @return boolean 
+     */
+    public function getEstadoAnulada()
+    {
+        return $this->estadoAnulada;
+    }
+
+    /**
+     * Set estadoImpreso
+     *
+     * @param boolean $estadoImpreso
+     * @return TteFacturas
+     */
+    public function setEstadoImpreso($estadoImpreso)
+    {
+        $this->estadoImpreso = $estadoImpreso;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoImpreso
+     *
+     * @return boolean 
+     */
+    public function getEstadoImpreso()
+    {
+        return $this->estadoImpreso;
     }
 }

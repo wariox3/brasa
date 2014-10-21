@@ -14,7 +14,6 @@
                 <th>Flete</th>
                 <th>Manejo</th>
                 <th>Otros</th>
-                <th>Total</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -30,8 +29,8 @@
                 <td style="text-align: right">{{ arFacturas.vrFlete | number_format(2, '.', ',')}}</td>
                 <td style="text-align: right">{{ arFacturas.vrManejo | number_format(2, '.', ',')}}</td>
                 <td style="text-align: right">{{ arFacturas.vrOtros | number_format(2, '.', ',')}}</td>
-                <td style="text-align: center"><a href="{{ path('brs_tte_despachos_nuevo', { 'codigoDespacho': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_030_pencil.png') }}" width=22 height=22></a></td>                
-                <td style="text-align: center"><a href="{{ path('brs_tte_despachos_detalle', { 'codigoDespacho': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_tte_facturas_nuevo', { 'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_030_pencil.png') }}" width=22 height=22></a></td>                
+                <td style="text-align: center"><a href="{{ path('brs_tte_facturas_detalle', { 'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturas.codigoFacturaPk }}" /></td>            
             </tr>
 

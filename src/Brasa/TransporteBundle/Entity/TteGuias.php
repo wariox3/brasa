@@ -37,6 +37,11 @@ class TteGuias
      * @ORM\Column(name="codigo_despacho_fk", type="integer", nullable=true)
      */    
     private $codigoDespachoFk;    
+
+    /**
+     * @ORM\Column(name="codigo_factura_fk", type="integer", nullable=true)
+     */    
+    private $codigoFacturaFk; 
     
     /**
      * @ORM\Column(name="documento_cliente", type="string", length=60, nullable=true)
@@ -195,6 +200,12 @@ class TteGuias
      */
     protected $despachoRel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="TteFacturas", inversedBy="guiasDetallesRel")
+     * @ORM\JoinColumn(name="codigo_factura_fk", referencedColumnName="codigo_factura_pk")
+     */
+    protected $facturaRel;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudades", inversedBy="guiasCiudadOrigenRel")
      * @ORM\JoinColumn(name="codigo_ciudad_origen_fk", referencedColumnName="codigo_ciudad_pk")
@@ -1242,5 +1253,51 @@ class TteGuias
     public function getPuntoOperacionActualRel()
     {
         return $this->puntoOperacionActualRel;
+    }
+
+    /**
+     * Set codigoFacturaFk
+     *
+     * @param integer $codigoFacturaFk
+     * @return TteGuias
+     */
+    public function setCodigoFacturaFk($codigoFacturaFk)
+    {
+        $this->codigoFacturaFk = $codigoFacturaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaFk
+     *
+     * @return integer 
+     */
+    public function getCodigoFacturaFk()
+    {
+        return $this->codigoFacturaFk;
+    }
+
+    /**
+     * Set facturaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteFacturas $facturaRel
+     * @return TteGuias
+     */
+    public function setFacturaRel(\Brasa\TransporteBundle\Entity\TteFacturas $facturaRel = null)
+    {
+        $this->facturaRel = $facturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteFacturas 
+     */
+    public function getFacturaRel()
+    {
+        return $this->facturaRel;
     }
 }

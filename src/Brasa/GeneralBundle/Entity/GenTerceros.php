@@ -200,6 +200,11 @@ class GenTerceros
     protected $guiasRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteFacturas", mappedBy="terceroRel")
+     */
+    protected $tteFacturasRel;     
+    
+    /**
      * Get codigoTerceroPk
      *
      * @return integer 
@@ -1051,5 +1056,38 @@ class GenTerceros
     public function getNit()
     {
         return $this->nit;
+    }
+
+    /**
+     * Add tteFacturasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteFacturas $tteFacturasRel
+     * @return GenTerceros
+     */
+    public function addTteFacturasRel(\Brasa\TransporteBundle\Entity\TteFacturas $tteFacturasRel)
+    {
+        $this->tteFacturasRel[] = $tteFacturasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove tteFacturasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteFacturas $tteFacturasRel
+     */
+    public function removeTteFacturasRel(\Brasa\TransporteBundle\Entity\TteFacturas $tteFacturasRel)
+    {
+        $this->tteFacturasRel->removeElement($tteFacturasRel);
+    }
+
+    /**
+     * Get tteFacturasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTteFacturasRel()
+    {
+        return $this->tteFacturasRel;
     }
 }

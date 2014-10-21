@@ -17,4 +17,18 @@ class TteGuiasRepository extends EntityRepository {
         $query = $em->createQuery($dql);        
         return $query;
     }
+    
+    public function GuiasFacturaDetalle($codigoFactura) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT guias FROM BrasaTransporteBundle:TteGuias guias WHERE guias.codigoFacturaFk = " . $codigoFactura;
+        $query = $em->createQuery($dql);        
+        return $query;
+    }    
+    
+    public function GuiasPendientesDespacho() {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT guias FROM BrasaTransporteBundle:TteGuias guias";
+        $query = $em->createQuery($dql);        
+        return $query;
+    }    
 }
