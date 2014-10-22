@@ -51,6 +51,10 @@ brs_tte_rep_pendientes_despacho:
     path:     /transporte/reportes/pendiente/despacho/
     defaults: { _controller: BrasaTransporteBundle:Reportes:guiasPendientesDespacho }    
 
+brs_tte_rep_novedades_pendientes:
+    path:     /transporte/reportes/novedades/pendientes/
+    defaults: { _controller: BrasaTransporteBundle:Reportes:novedadesPendientes }    
+
 #Utilidades    
 brs_tte_buscar_conductor:
     pattern:  /transporte/buscar/conductor/
@@ -63,4 +67,7 @@ brs_tte_buscar_vehiculo:
 brs_tte_buscar_ruta:
     pattern:  /transporte/buscar/ruta/
     defaults: { _controller: BrasaTransporteBundle:Busquedas:buscarRuta }    
-          
+
+brs_tte_novedades_solucionar:
+    pattern:  /transporte/novedades/solucionar/{codigoNovedad}
+    defaults: { _controller: BrasaTransporteBundle:Novedades:solucionarNovedad }              

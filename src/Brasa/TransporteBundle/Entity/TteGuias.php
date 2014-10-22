@@ -195,6 +195,16 @@ class TteGuias
     private $comentarios;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TteNovedades", mappedBy="guiaRel")
+     */
+    protected $novedadesRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="TteNovedades", mappedBy="guiaRel")
+     */
+    protected $recibosCajaRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TteDespachos", inversedBy="guiasDetallesRel")
      * @ORM\JoinColumn(name="codigo_despacho_fk", referencedColumnName="codigo_despacho_pk")
      */
@@ -1299,5 +1309,78 @@ class TteGuias
     public function getFacturaRel()
     {
         return $this->facturaRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->novedadesRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add novedadesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel
+     * @return TteGuias
+     */
+    public function addNovedadesRel(\Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel)
+    {
+        $this->novedadesRel[] = $novedadesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove novedadesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel
+     */
+    public function removeNovedadesRel(\Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel)
+    {
+        $this->novedadesRel->removeElement($novedadesRel);
+    }
+
+    /**
+     * Get novedadesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNovedadesRel()
+    {
+        return $this->novedadesRel;
+    }
+
+    /**
+     * Add recibosCajaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel
+     * @return TteGuias
+     */
+    public function addRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel)
+    {
+        $this->recibosCajaRel[] = $recibosCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recibosCajaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel
+     */
+    public function removeRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel)
+    {
+        $this->recibosCajaRel->removeElement($recibosCajaRel);
+    }
+
+    /**
+     * Get recibosCajaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecibosCajaRel()
+    {
+        return $this->recibosCajaRel;
     }
 }

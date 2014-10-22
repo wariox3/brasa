@@ -26,5 +26,26 @@ class ReportesController extends Controller
             'arGuias' => $arGuias,
             'form' => $form->createView()));
     }   
-        
+    
+    public function novedadesPendientesAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();  
+        $form = $this->createFormBuilder()
+            ->add('TxtCodigoGuia', 'text', array('label'  => 'Codigo'))
+            ->add('TxtNumeroGuia', 'text')
+            ->add('TxtCodigoTercero', 'text')
+            ->add('TxtNombreTercero', 'text')           
+            ->add('TxtFechaDesde', 'date', array('widget' => 'single_text', 'label'  => 'Desde:'))
+            ->add('TxtFechaHasta', 'date', array('widget' => 'single_text', 'label'  => 'Hasta:'))
+            ->add('Buscar', 'submit')
+            ->getForm();        
+        $form->handleRequest($request);
+        $arNovedades = new \Brasa\TransporteBundle\Entity\TteNovedades();
+        $query = $em->getRepository('BrasaTransporteBundle:TteNovedades')->NovedadesPendientes();
+        $paginator = $this->get('knp_paginator');        
+        $arNovedades = $paginator->paginate($query, $this->get('request')->query->get('page', 1),3);
+        return $this->render('BrasaTransporteBundle:Reportes/Guias:novedadesPendientes.html.twig', array(
+            'arNovedades' => $arNovedades,
+            'form' => $form->createView()));
+    }           
 }

@@ -18,5 +18,6 @@ class DefaultController extends Controller
         //$strUsuario = $arUsuario->getNombreCorto();
         $strUsuario = "Mario Andres";
         return $this->render('BrasaGeneralBundle:plantillas:menu.html.twig', array('Usuario' => $strUsuario));
-    }     
+    }                  
+    
 }

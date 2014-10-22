@@ -9,22 +9,23 @@
 <div class="container">
     <div class="page-header">
         <h3>Guia {{ arGuia.codigoGuiaPk }}</h3>
-            {% if arGuia.estadoAnulada == 1 %} <span class="label label-danger">Anulado</span> {% endif %}            
+            {% if arGuia.estadoAnulada == 1 %} <span class="label label-danger">Anulado</span> {% endif %}
     </div>
     <div>
-    <form action="{{ path('brs_tte_guias_detalle', {'codigoGuia': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
-        <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">
-                <a  class="btn btn-default" href="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': 0 }) }}">Nuevo</a>            
-                <button class="btn btn-default " type="submit" name="OpSubmit" value="OpImprimir">Imprimir</button>
-                <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAnular" {% if arGuia.estadoImpreso == 0 or arGuia.estadoAnulado == 1%} disabled {% endif %} onclick="javascript:if (!confirm('Esta seguro que desea anular el documento?')) return false;">Anular</button>                            
+        <form action="{{ path('brs_tte_guias_detalle', {'codigoGuia': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
+            <div class="btn-toolbar" style="float:left">
+                <div class="btn-group">
+                    <a  class="btn btn-default" href="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': 0 }) }}">Nuevo</a>
+                    <button class="btn btn-default " type="submit" name="OpSubmit" value="OpImprimir">Imprimir</button>
+                    <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAnular" {% if arGuia.estadoImpreso == 0 or arGuia.estadoAnulado == 1%} disabled {% endif %} onclick="javascript:if (!confirm('Esta seguro que desea anular el documento?'))
+                                        return false;">Anular</button>
+                </div>
             </div>
-        </div>        
-    </form>
-    </div>  
+        </form>
+    </div>
     <br/><br/>
     <!-- Encabezado Movimiento -->
-    <div class="well">        
+    <div class="well">
         <table width="100%" border="1">
             <tr>
                 <td class="td-label">Numero:</td>
@@ -111,21 +112,180 @@
 
                 <td class="td-label"></td>
                 <td class="td-in-well-numerico" align="right"> </td>
-            </tr>            
+            </tr>
             <tr>
                 <td colspan="8">Comentarios:{{ arGuia.comentarios }}</td>
             </tr>
         </table>
     </div>
     <!-- Fin Encabezado Movimiento -->
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#novedades" data-toggle="tab">Novedades</a></li>
+        <li><a href="#recibos" data-toggle="tab">Recibos</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="novedades">
+            <form action="{{ path('brs_tte_despachos_detalle', {'codigoDespacho': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
+                <!-- Menu Encabezado Movimiento -->
+                <div id="detalles" style="width: 99.5%">
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>{{ knp_pagination_sortable(arNovedades, 'ID', 'arNovedades.codigoNovedadPk') }}</th>
+                            <th>F. registro</th>
+                            <th>F. novedad</th>
+                            <th>F. Reporte</th>
+                            <th>Concepto</th>
+                            <th>Novedad</th>
+                            <th>F. Solucion</th>
+                            <th>Solucion</th>
+                            <th></th>
+                            <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                        </tr>
+                        {% for arNovedades in arNovedades %}
+                        <tr>
+                            <td>
+                                <input type="hidden" name="LblCodigoGuia[]" value="{{ arNovedades.codigoNovedadPk }}">
+                                <span class="badge">{{ arNovedades.codigoNovedadPk }}</span>
+                            </td>
+                            <td>{{ arNovedades.fechaRegistro |date("Y/m/d")  }}</td>
+                            <td>{{ arNovedades.fechaNovedad |date("Y/m/d")  }}</td>
+                            <td>{{ arNovedades.fechaReporte |date("Y/m/d")  }}</td>
+                            <td>{{ arNovedades.novedadConceptoRel.nombre  }}</td>
+                            <td>{{ arNovedades.novedad }}</td>
+                            <td>{{ arNovedades.fechaSolucion |date("Y/m/d")  }}</td>
+                            <td>{{ arNovedades.solucion }}</td>
+                            <td style="text-align: center">{% if arNovedades.estadoSolucionada == 0  %}<a href="javascript:abrirVentana3('{{ path('brs_tte_novedades_solucionar', {'codigoNovedad': arNovedades.codigoNovedadPk}) }}', 'AgregarGuia', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_030_pencil.png') }}" width=22 height=22></a>{% endif %}</td>                                                            
+                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arNovedades.codigoNovedadPk }}" /></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <div class="navigation">
+                        {{ knp_pagination_render(arNovedades) }}
+                    </div>                                        
+                </div>
+                <div class="btn-toolbar" style="float:left">
+                    <div class="btn-group"><a class="btn btn-primary btn-xs" href="#" data-toggle="modal" data-target="#myModal">Agregar novedad</a></div>
+                    <div class="btn-group"><button class="btn btn-danger btn-xs" type="submit" name="OpSubmit" value="OpRetirar">Eliminar seleccionadas</button></div>            
+                </div>  
+                <br/>
+                <hr/>                
+            </form>
+        </div>
+        <div class="tab-pane" id="recibos">
+            <form action="{{ path('brs_tte_despachos_detalle', {'codigoDespacho': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
+                <!-- Menu Encabezado Movimiento -->
+                <div id="detalles" style="width: 99.5%">
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>{{ knp_pagination_sortable(arRecibosCaja, 'ID', 'arReciboCaja.codigoReciboCajaPk') }}</th>
+                            <th>Fecha</th>
+                            <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                        </tr>
+                        {% for arRecibosCaja in arRecibosCaja %}
+                        <tr>
+                            <td>
+                                <input type="hidden" name="LblCodigoReciboCaja[]" value="{{ arRecibosCaja.codigoReciboCajaPk }}">
+                                <span class="badge">{{ arRecibosCaja.codigoReciboCajaPk }}</span>
+                            </td>
+                            <td>{{ arRecibosCaja.fecha |date("Y/m/d")  }}</td>
+                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRecibosCaja.codigoReciboCajaPk }}" /></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <div class="navigation">
+                        {{ knp_pagination_render(arRecibosCaja) }}
+                    </div>                                        
+                </div>
+                <div class="btn-toolbar" style="float:left">
+                    <div class="btn-group"><a class="btn btn-primary btn-xs" href="#" data-toggle="modal" data-target="#myModalReciboCaja">Agregar recibo</a></div>
+                    <div class="btn-group"><button class="btn btn-danger btn-xs" type="submit" name="OpSubmit" value="OpRetirar">Eliminar recibos selecciondos</button></div>            
+                </div>  
+                <br/>
+                <hr/>                
+            </form>
+        </div>
+    </div>
+    <div>
+    <br/>
     <form action="{{ path('brs_tte_guias_detalle', {'codigoGuia': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                 <a class="btn btn-default" href="{{ path('brs_tte_guias_lista') }}" style="float:left">Volver</a>
             </div>
-        </div>        
-
+        </div>
     </form>
-    <br />
-</div>    
+    <br />        
+    </div>
+
+    <!-- Modal novedades-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Agregar novedad</h4>
+                </div>
+                {{ form_start(frmNovedad, { 'attr': {'class': 'form-horizontal'} }) }}
+                <div class="modal-body">                                
+                    <div class="form-group">
+                        <label for="CboNovedadConcepto" class="col-sm-2 control-label">Concepto:</label>
+                        <div class="col-sm-10">
+                        {{ form_widget(frmNovedad.novedadConceptoRel, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="form_contenido" class="col-sm-2 control-label">Novedad:</label>
+                        <div class="col-sm-10">
+                        {{ form_widget(frmNovedad.novedad, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="form_comentarios" class="col-sm-2 control-label">Solucion:</label>
+                        <div class="col-sm-10">
+                        {{ form_widget(frmNovedad.solucion, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>                                
+                </div>
+                <div class="modal-footer">                                        
+                    {{ form_widget(frmNovedad.guardar, { 'attr': {'class': 'btn btn-primary'} }) }}
+                </div>
+                {{ form_end(frmNovedad) }}                      
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal novedades-->
+    <div class="modal fade" id="myModalReciboCaja" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Agregar novedad</h4>
+                </div>
+                {{ form_start(frmReciboCaja, { 'attr': {'class': 'form-horizontal'} }) }}
+                <div class="modal-body">                                
+                    <div class="form-group">
+                        <label for="form_contenido" class="col-sm-2 control-label">Flete:</label>
+                        <div class="col-sm-10">
+                        {{ form_widget(frmReciboCaja.vrFlete, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="form_comentarios" class="col-sm-2 control-label">Manejo:</label>
+                        <div class="col-sm-10">
+                        {{ form_widget(frmReciboCaja.vrManejo, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>                                
+                </div>
+                <div class="modal-footer">                                        
+                    {{ form_widget(frmReciboCaja.guardar, { 'attr': {'class': 'btn btn-primary'} }) }}
+                </div>
+                {{ form_end(frmReciboCaja) }}                      
+            </div>
+        </div>
+    </div>    
+</div>
 {% endblock %}
