@@ -8,7 +8,7 @@
 </script>
 <div class="container">
     <div class="page-header">
-        <h3>Guia {{ arGuia.codigoGuiaPk }}</h3>
+        <h3>Guia {{ arGuia.codigoGuiaPk }} - {{ arGuia.tipoPagoRel.nombre }}</h3>
             {% if arGuia.estadoAnulada == 1 %} <span class="label label-danger">Anulado</span> {% endif %}
     </div>
     <div>
@@ -67,7 +67,7 @@
                 <td class="td-in-well-numerico" align="right">{{ arGuia.ctPesoVolumen | number_format(0, '.', ',') }}</td>
 
                 <td class="td-label">Abonos:</td>
-                <td class="td-in-well-numerico" align="right">$ {{ arGuia.vrAbonos | number_format(2, '.', ',') }}</td>
+                <td class="td-in-well-numerico" align="right">$ {{ (arGuia.vrAbonosFlete + arGuia.vrAbonosManejo) | number_format(2, '.', ',') }}</td>
 
 
             </tr>
@@ -181,6 +181,9 @@
                         <tr>
                             <th>{{ knp_pagination_sortable(arRecibosCaja, 'ID', 'arReciboCaja.codigoReciboCajaPk') }}</th>
                             <th>Fecha</th>
+                            <th>Flete</th>
+                            <th>Manejo</th>
+                            <th>Total</th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arRecibosCaja in arRecibosCaja %}
@@ -190,6 +193,9 @@
                                 <span class="badge">{{ arRecibosCaja.codigoReciboCajaPk }}</span>
                             </td>
                             <td>{{ arRecibosCaja.fecha |date("Y/m/d")  }}</td>
+                            <td style="text-align: right">{{ arRecibosCaja.vrFlete | number_format(2, '.', ',')}}</td>
+                            <td style="text-align: right">{{ arRecibosCaja.vrManejo | number_format(2, '.', ',')}}</td>                            
+                            <td style="text-align: right">{{ arRecibosCaja.vrTotal | number_format(2, '.', ',')}}</td>                            
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRecibosCaja.codigoReciboCajaPk }}" /></td>
                         </tr>
                         {% endfor %}
@@ -257,7 +263,7 @@
         </div>
     </div>
     
-    <!-- Modal novedades-->
+    <!-- Modal recibos-->
     <div class="modal fade" id="myModalReciboCaja" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

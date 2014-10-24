@@ -62,6 +62,11 @@ class GenCiudades
     protected $guiasCiudadDestinoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteListasPreciosDetalles", mappedBy="ciudadDestinoRel")
+     */
+    protected $lpdCiudadDestinoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteDespachos", mappedBy="ciudadOrigenRel")
      */
     protected $despachosCiudadOrigenRel;    
@@ -442,5 +447,38 @@ class GenCiudades
     public function getPuntosOperacionCiudadOrigenRel()
     {
         return $this->puntosOperacionCiudadOrigenRel;
+    }
+
+    /**
+     * Add lpdCiudadDestinoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteListasPreciosDetalles $lpdCiudadDestinoRel
+     * @return GenCiudades
+     */
+    public function addLpdCiudadDestinoRel(\Brasa\TransporteBundle\Entity\TteListasPreciosDetalles $lpdCiudadDestinoRel)
+    {
+        $this->lpdCiudadDestinoRel[] = $lpdCiudadDestinoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove lpdCiudadDestinoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteListasPreciosDetalles $lpdCiudadDestinoRel
+     */
+    public function removeLpdCiudadDestinoRel(\Brasa\TransporteBundle\Entity\TteListasPreciosDetalles $lpdCiudadDestinoRel)
+    {
+        $this->lpdCiudadDestinoRel->removeElement($lpdCiudadDestinoRel);
+    }
+
+    /**
+     * Get lpdCiudadDestinoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLpdCiudadDestinoRel()
+    {
+        return $this->lpdCiudadDestinoRel;
     }
 }

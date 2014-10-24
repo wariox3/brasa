@@ -18,6 +18,7 @@
                 <th>Unidades</th>
                 <th>P. Real</th>
                 <th>P. Volumen</th>
+                <th>Tipo</th>
                 <th>Flete</th>
                 <th>Manejo</th>
                 <th>Despacho</th>
@@ -40,6 +41,7 @@
                 <td style="text-align: right">{{ arGuias.ctUnidades | number_format(0, '.', ',')}}</td>
                 <td style="text-align: right">{{ arGuias.ctPesoReal | number_format(0, '.', ',')}}</td>
                 <td style="text-align: right">{{ arGuias.ctPesoVolumen | number_format(0, '.', ',')}}</td>
+                <td>{{ arGuias.tipoPagoRel.nombre  }}</td>
                 <td style="text-align: right">{{ arGuias.vrFlete | number_format(2, '.', ',')}}</td>
                 <td style="text-align: right">{{ arGuias.vrManejo | number_format(2, '.', ',')}}</td>
                 <td>{{ arGuias.codigoDespachoFk  }}</td>

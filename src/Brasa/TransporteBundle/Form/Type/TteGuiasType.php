@@ -33,6 +33,7 @@ class TteGuiasType extends AbstractType
             ->add('ctUnidades', 'text')
             ->add('ctPesoReal', 'text')
             ->add('ctPesoVolumen', 'text')
+            ->add('ctPesoLiquidar', 'text')
             ->add('vrFlete', 'text')
             ->add('vrManejo', 'text')
             ->add('vrDeclarado', 'text')                

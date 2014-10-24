@@ -9,3 +9,13 @@ Brasa\TransporteBundle\Entity\TteGuias:
             - GreaterThan:
                 value: 0  
                 message: El peso real debe ser superior a cero
+                
+        ctPesoLiquidar:
+            - GreaterThan:
+                value: 0  
+                message: El peso final de la liquidacion debe ser superior a cero                
+                
+        vrDeclarado:
+            - GreaterThan:
+                value: 0  
+                message: El valor declarado de la mercancia no puede ser cero                  

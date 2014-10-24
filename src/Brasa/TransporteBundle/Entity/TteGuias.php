@@ -115,9 +115,9 @@ class TteGuias
     private $ctPesoVolumen = 0;    
     
     /**
-     * @ORM\Column(name="ct_peso_facturar", type="integer")
+     * @ORM\Column(name="ct_peso_liquidar", type="integer")
      */
-    private $ctPesoFacturar = 0;    
+    private $ctPesoLiquidar = 0;    
 
     /**
      * @ORM\Column(name="vr_declarado", type="float")
@@ -140,9 +140,14 @@ class TteGuias
     private $vrRecaudo = 0;    
     
     /**
-     * @ORM\Column(name="vr_abonos", type="float")
+     * @ORM\Column(name="vr_abonos_flete", type="float")
      */
-    private $vrAbonos = 0;    
+    private $vrAbonosFlete = 0;    
+
+    /**
+     * @ORM\Column(name="vr_abonos_manejo", type="float")
+     */
+    private $vrAbonosManejo = 0;        
     
     /**
      * @ORM\Column(name="vr_neto", type="float")
@@ -265,6 +270,14 @@ class TteGuias
     protected $puntoOperacionActualRel;    
     
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->novedadesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->recibosCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoGuiaPk
@@ -366,6 +379,29 @@ class TteGuias
     public function getCodigoDespachoFk()
     {
         return $this->codigoDespachoFk;
+    }
+
+    /**
+     * Set codigoFacturaFk
+     *
+     * @param integer $codigoFacturaFk
+     * @return TteGuias
+     */
+    public function setCodigoFacturaFk($codigoFacturaFk)
+    {
+        $this->codigoFacturaFk = $codigoFacturaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaFk
+     *
+     * @return integer 
+     */
+    public function getCodigoFacturaFk()
+    {
+        return $this->codigoFacturaFk;
     }
 
     /**
@@ -691,26 +727,26 @@ class TteGuias
     }
 
     /**
-     * Set ctPesoFacturar
+     * Set ctPesoLiquidar
      *
-     * @param integer $ctPesoFacturar
+     * @param integer $ctPesoLiquidar
      * @return TteGuias
      */
-    public function setCtPesoFacturar($ctPesoFacturar)
+    public function setCtPesoLiquidar($ctPesoLiquidar)
     {
-        $this->ctPesoFacturar = $ctPesoFacturar;
+        $this->ctPesoLiquidar = $ctPesoLiquidar;
 
         return $this;
     }
 
     /**
-     * Get ctPesoFacturar
+     * Get ctPesoLiquidar
      *
      * @return integer 
      */
-    public function getCtPesoFacturar()
+    public function getCtPesoLiquidar()
     {
-        return $this->ctPesoFacturar;
+        return $this->ctPesoLiquidar;
     }
 
     /**
@@ -806,26 +842,49 @@ class TteGuias
     }
 
     /**
-     * Set vrAbonos
+     * Set vrAbonosFlete
      *
-     * @param float $vrAbonos
+     * @param float $vrAbonosFlete
      * @return TteGuias
      */
-    public function setVrAbonos($vrAbonos)
+    public function setVrAbonosFlete($vrAbonosFlete)
     {
-        $this->vrAbonos = $vrAbonos;
+        $this->vrAbonosFlete = $vrAbonosFlete;
 
         return $this;
     }
 
     /**
-     * Get vrAbonos
+     * Get vrAbonosFlete
      *
      * @return float 
      */
-    public function getVrAbonos()
+    public function getVrAbonosFlete()
     {
-        return $this->vrAbonos;
+        return $this->vrAbonosFlete;
+    }
+
+    /**
+     * Set vrAbonosManejo
+     *
+     * @param float $vrAbonosManejo
+     * @return TteGuias
+     */
+    public function setVrAbonosManejo($vrAbonosManejo)
+    {
+        $this->vrAbonosManejo = $vrAbonosManejo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAbonosManejo
+     *
+     * @return float 
+     */
+    public function getVrAbonosManejo()
+    {
+        return $this->vrAbonosManejo;
     }
 
     /**
@@ -1059,6 +1118,72 @@ class TteGuias
     }
 
     /**
+     * Add novedadesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel
+     * @return TteGuias
+     */
+    public function addNovedadesRel(\Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel)
+    {
+        $this->novedadesRel[] = $novedadesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove novedadesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel
+     */
+    public function removeNovedadesRel(\Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel)
+    {
+        $this->novedadesRel->removeElement($novedadesRel);
+    }
+
+    /**
+     * Get novedadesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNovedadesRel()
+    {
+        return $this->novedadesRel;
+    }
+
+    /**
+     * Add recibosCajaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel
+     * @return TteGuias
+     */
+    public function addRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel)
+    {
+        $this->recibosCajaRel[] = $recibosCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recibosCajaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel
+     */
+    public function removeRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel)
+    {
+        $this->recibosCajaRel->removeElement($recibosCajaRel);
+    }
+
+    /**
+     * Get recibosCajaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecibosCajaRel()
+    {
+        return $this->recibosCajaRel;
+    }
+
+    /**
      * Set despachoRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteDespachos $despachoRel
@@ -1079,6 +1204,29 @@ class TteGuias
     public function getDespachoRel()
     {
         return $this->despachoRel;
+    }
+
+    /**
+     * Set facturaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteFacturas $facturaRel
+     * @return TteGuias
+     */
+    public function setFacturaRel(\Brasa\TransporteBundle\Entity\TteFacturas $facturaRel = null)
+    {
+        $this->facturaRel = $facturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteFacturas 
+     */
+    public function getFacturaRel()
+    {
+        return $this->facturaRel;
     }
 
     /**
@@ -1263,124 +1411,5 @@ class TteGuias
     public function getPuntoOperacionActualRel()
     {
         return $this->puntoOperacionActualRel;
-    }
-
-    /**
-     * Set codigoFacturaFk
-     *
-     * @param integer $codigoFacturaFk
-     * @return TteGuias
-     */
-    public function setCodigoFacturaFk($codigoFacturaFk)
-    {
-        $this->codigoFacturaFk = $codigoFacturaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoFacturaFk
-     *
-     * @return integer 
-     */
-    public function getCodigoFacturaFk()
-    {
-        return $this->codigoFacturaFk;
-    }
-
-    /**
-     * Set facturaRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteFacturas $facturaRel
-     * @return TteGuias
-     */
-    public function setFacturaRel(\Brasa\TransporteBundle\Entity\TteFacturas $facturaRel = null)
-    {
-        $this->facturaRel = $facturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteFacturas 
-     */
-    public function getFacturaRel()
-    {
-        return $this->facturaRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->novedadesRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add novedadesRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel
-     * @return TteGuias
-     */
-    public function addNovedadesRel(\Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel)
-    {
-        $this->novedadesRel[] = $novedadesRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove novedadesRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel
-     */
-    public function removeNovedadesRel(\Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel)
-    {
-        $this->novedadesRel->removeElement($novedadesRel);
-    }
-
-    /**
-     * Get novedadesRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getNovedadesRel()
-    {
-        return $this->novedadesRel;
-    }
-
-    /**
-     * Add recibosCajaRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel
-     * @return TteGuias
-     */
-    public function addRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel)
-    {
-        $this->recibosCajaRel[] = $recibosCajaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove recibosCajaRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel
-     */
-    public function removeRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel)
-    {
-        $this->recibosCajaRel->removeElement($recibosCajaRel);
-    }
-
-    /**
-     * Get recibosCajaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRecibosCajaRel()
-    {
-        return $this->recibosCajaRel;
     }
 }

@@ -76,6 +76,20 @@ class GuiasController extends Controller
             $arGuia->setPuntoOperacionActualRel($arUsuarioConfiguracion->getPuntoOperacionRel());
             $arGuia->setCiudadOrigenRel($arUsuarioConfiguracion->getPuntoOperacionRel()->getCiudadOrigenRel());
             $arGuia->setRutaRel($arCiudadDestino->getRutaRel());
+            $arNegociacion = new \Brasa\TransporteBundle\Entity\TteNegociaciones();
+            $arNegociacion = $em->getRepository('BrasaTransporteBundle:TteNegociaciones')->find(1);
+            
+            if($form->get('vrFlete')->getData() <= 0 && $arNegociacion->getLiquidarAutomaticamenteFlete() == 1) {
+                $arListaPreciosDetalle = new \Brasa\TransporteBundle\Entity\TteListasPreciosDetalles();
+                $arListaPreciosDetalle = $em->getRepository('BrasaTransporteBundle:TteListasPreciosDetalles')->findOneBy(array('codigoListaPreciosFk' => $arNegociacion->getCodigoListaPreciosFk(), 'codigoProductoFk' => '1', 'codigoCiudadDestinoFk' => $arrControles['form']['ciudadDestinoRel']));
+                if(count($arListaPreciosDetalle) > 0) {
+                    $arGuia->setVrFlete($arListaPreciosDetalle->getVrKilo() * $form->get('ctPesoLiquidar')->getData());
+                }
+            }
+            if($form->get('vrManejo')->getData() <= 0 && $arNegociacion->getLiquidarAutomaticamenteManejo() == 1) {
+                $douManejo = ($form->get('vrDeclarado')->getData()*$arNegociacion->getPorcentajeManejo())/100;
+                $arGuia->setVrManejo($douManejo);
+            }
             $em->persist($arGuia);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
@@ -114,10 +128,30 @@ class GuiasController extends Controller
         $frmReciboCaja = $this->createForm(new TteRecibosCajaType, $arReciboCaja);
         $frmReciboCaja->handleRequest($request);
         if ($frmReciboCaja->isValid()) {
-            $arReciboCaja = $frmReciboCaja->getData();             
-            $arReciboCaja->setGuiaRel($arGuia);
-            $em->persist($arReciboCaja);
-            $em->flush();
+            $douAbonoFlete = $frmReciboCaja->get('vrFlete')->getData();
+            $douAbonoManejo = $frmReciboCaja->get('vrManejo')->getData();
+            if($arGuia->getCodigoTipoPagoFk() == 2 || $arGuia->getCodigoTipoPagoFk() == 3) {
+                if(($arGuia->getVrAbonosFlete() + $douAbonoFlete) <= $arGuia->getVrFlete() ) {
+                    if(($arGuia->getVrAbonosManejo() + $douAbonoManejo) <= $arGuia->getVrManejo() ) {
+                        $arReciboCaja = $frmReciboCaja->getData();  
+                        $arReciboCaja->setFecha(date_create(date('Y-m-d H:i:s')));
+                        $arReciboCaja->setGuiaRel($arGuia);
+                        $arReciboCaja->setVrTotal($douAbonoFlete+$douAbonoManejo);
+                        $em->persist($arReciboCaja);
+                        $em->flush();
+                        $arGuia->setVrAbonosFlete($arGuia->getVrAbonosFlete() + $douAbonoFlete);
+                        $arGuia->setVrAbonosManejo($arGuia->getVrAbonosManejo() + $douAbonoManejo);
+                        $em->persist($arGuia);
+                        $em->flush();
+                    } else {
+                        $objMensaje->Mensaje("error", "El valor del abono del manejo no puede superar el valor del manejo", $this);
+                    }
+                } else {
+                    $objMensaje->Mensaje("error", "El valor del abono del flete no puede superar el valor del flete", $this);
+                }                 
+            } else {
+                $objMensaje->Mensaje("error", "Solo se pueden realizar abonos a guias contado o destino", $this);
+            }                           
             return $this->redirect($this->generateUrl('brs_tte_guias_detalle', array('codigoGuia' => $codigoGuia)));            
         }        
         
