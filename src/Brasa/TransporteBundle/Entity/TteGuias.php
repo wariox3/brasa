@@ -205,7 +205,7 @@ class TteGuias
     protected $novedadesRel;     
 
     /**
-     * @ORM\OneToMany(targetEntity="TteNovedades", mappedBy="guiaRel")
+     * @ORM\OneToMany(targetEntity="TteRecibosCaja", mappedBy="guiaRel")
      */
     protected $recibosCajaRel;    
     
