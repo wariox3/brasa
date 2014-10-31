@@ -87,6 +87,11 @@ class TteGuias
      * @ORM\Column(name="codigo_tipo_pago_fk", type="integer", nullable=true)
      */    
     private $codigoTipoPagoFk;     
+
+    /**
+     * @ORM\Column(name="codigo_producto_fk", type="integer", nullable=true)
+     */    
+    private $codigoProductoFk;    
     
     /**
      * @ORM\Column(name="codigo_punto_operacion_ingreso_fk", type="integer", nullable=true)
@@ -256,6 +261,12 @@ class TteGuias
      * @ORM\JoinColumn(name="codigo_tipo_pago_fk", referencedColumnName="codigo_tipo_pago_pk")
      */
     protected $tipoPagoRel;    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TteProductos", inversedBy="guiasRel")
+     * @ORM\JoinColumn(name="codigo_producto_fk", referencedColumnName="codigo_producto_pk")
+     */
+    protected $productoRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TtePuntosOperacion", inversedBy="guiasPuntoOperacionIngresoRel")
@@ -1411,5 +1422,51 @@ class TteGuias
     public function getPuntoOperacionActualRel()
     {
         return $this->puntoOperacionActualRel;
+    }
+
+    /**
+     * Set codigoProductoFk
+     *
+     * @param integer $codigoProductoFk
+     * @return TteGuias
+     */
+    public function setCodigoProductoFk($codigoProductoFk)
+    {
+        $this->codigoProductoFk = $codigoProductoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProductoFk
+     *
+     * @return integer 
+     */
+    public function getCodigoProductoFk()
+    {
+        return $this->codigoProductoFk;
+    }
+
+    /**
+     * Set productoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProductos $productoRel
+     * @return TteGuias
+     */
+    public function setProductoRel(\Brasa\TransporteBundle\Entity\TteProductos $productoRel = null)
+    {
+        $this->productoRel = $productoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get productoRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteProductos 
+     */
+    public function getProductoRel()
+    {
+        return $this->productoRel;
     }
 }

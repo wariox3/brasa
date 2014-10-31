@@ -26,7 +26,13 @@ class TteProductos
     /**
      * @ORM\OneToMany(targetEntity="TteListasPreciosDetalles", mappedBy="productoRel")
      */
-    protected $listasPreciosDetallesRel;    
+    protected $listasPreciosDetallesRel;   
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TteGuias", mappedBy="productoRel")
+     */
+    protected $guiasRel;     
+    
     /**
      * Constructor
      */
@@ -99,5 +105,38 @@ class TteProductos
     public function getListasPreciosDetallesRel()
     {
         return $this->listasPreciosDetallesRel;
+    }
+
+    /**
+     * Add guiasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasRel
+     * @return TteProductos
+     */
+    public function addGuiasRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasRel)
+    {
+        $this->guiasRel[] = $guiasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove guiasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuias $guiasRel
+     */
+    public function removeGuiasRel(\Brasa\TransporteBundle\Entity\TteGuias $guiasRel)
+    {
+        $this->guiasRel->removeElement($guiasRel);
+    }
+
+    /**
+     * Get guiasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGuiasRel()
+    {
+        return $this->guiasRel;
     }
 }

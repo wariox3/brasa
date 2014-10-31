@@ -23,14 +23,12 @@ class GuiasController extends Controller
             switch ($request->request->get('OpSubmit')) {
 
                 case "OpEliminar";
-                    foreach ($arrSeleccionados AS $codigoMovimiento) {
-                        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
-                        if ($arMovimiento->getEstadoAutorizado() == 0) {
-                            if ($em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevNroDetallesMovimiento($codigoMovimiento) <= 0) {
-                                $em->remove($arMovimiento);
-                                $em->flush();
-                            }
+                    foreach ($arrSeleccionados AS $codigoGuia) {
+                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                        if($arGuia->getEstadoImpreso() == 0 && $arGuia->getEstadoDespachada() == 0 && $arGuia->getNumeroGuia() == 0) {
+                            $em->remove($arGuia);
+                            $em->flush();                            
                         }
                     }
                     break;
@@ -48,9 +46,8 @@ class GuiasController extends Controller
                             "");
                     break;
             }
-        } else {
-            $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findAll();
         }
+        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findAll();        
         
         return $this->render('BrasaTransporteBundle:Guias:lista.html.twig', array(
             'arGuias' => $arGuias));
@@ -188,6 +185,12 @@ class GuiasController extends Controller
                     break;
 
                 case "OpImprimir";
+                    if($arGuia->getEstadoImpreso() == 0 && $arGuia->getNumeroGuia() != 0) {
+                        $arGuia->setNumeroGuia($em->getRepository('BrasaTransporteBundle:TteConfiguraciones')->consecutivoGuia());
+                        $arGuia->setEstadoImpreso(1);
+                        $em->persist($arGuia);
+                        $em->flush();
+                    }                    
                     $objFormatoGuia = new \Brasa\TransporteBundle\Formatos\FormatoGuia();
                     $objFormatoGuia->Generar($this, $codigoGuia);
                     break;

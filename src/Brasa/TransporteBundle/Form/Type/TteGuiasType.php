@@ -16,8 +16,7 @@ class TteGuiasType extends AbstractType
             ->add('tipoPagoRel', 'entity', array(
                 'class' => 'BrasaTransporteBundle:TteTiposPago',
                 'property' => 'nombre',
-            ))                                      
-            
+            ))                                                  
             ->add('terceroRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenTerceros',
                 'property' => 'nombreCorto',
@@ -26,6 +25,10 @@ class TteGuiasType extends AbstractType
                 'class' => 'BrasaGeneralBundle:GenCiudades',
                 'property' => 'nombre',
             ))                
+            ->add('productoRel', 'entity', array(
+                'class' => 'BrasaTransporteBundle:TteProductos',
+                'property' => 'nombre',
+            ))                                
             ->add('documentoCliente', 'text', array('required' => false))                        
             ->add('nombreDestinatario', 'text')                        
             ->add('telefonoDestinatario', 'text', array('required' => false))
