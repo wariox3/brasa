@@ -4,6 +4,73 @@
     <div class="page-header">
         <h3>Lista guias</h3>
     </div>
+    <!-- Formulario de busqueda -->
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+    <div class="panel panel-default">
+        <div class="panel-heading">Filtros de busqueda</div>
+        <div class="panel-body">
+            {{ form_errors(form) }}
+            <div class="form-group form-group-sm">
+                <label for="form_comentarios" class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <label class="checkbox-inline">
+                      {{ form_widget(form.ChkMostrarDespachadas) }} Despachadas
+                    </label>
+                    <label class="checkbox-inline">
+                      {{ form_widget(form.ChkMostrarAnuladas) }} Anuladas
+                    </label>
+                </div>                                         
+            </div>         
+            <div class="form-group form-group-sm">  
+                <label for="form_TxtCodigoGuia" class="col-sm-2 control-label">Codigo</label>
+                <div class="col-sm-10">                  
+                    {{ form_widget(form.TxtCodigoGuia, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>   
+            <div class="form-group form-group-sm">  
+                <label for="form_TxtNumeroGuia" class="col-sm-2 control-label">Numero</label>
+                <div class="col-sm-10">                  
+                    {{ form_widget(form.TxtNumeroGuia, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>     
+            <div class="form-group form-group-sm">
+                <label for="TxtNombreTercero" class="col-sm-2 control-label">Tercero</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                {{ form_widget(form.TxtNombreTercero, { 'attr': {'class': 'form-control'} }) }}
+                                <span class="input-group-btn">
+                                    {{ form_widget(form.TxtCodigoTercero, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_gen_buscar_tercero', {'campoCodigo': 'form_TxtCodigoTercero', 'campoNombre': 'form_TxtNombreTercero'}) }}', 'BuscarTercero', 600, 900)">Buscar</a>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </div><!-- /.row -->
+                </div>
+            </div>        
+            <div class="form-group form-group-sm">  
+                <label for="form_TxtFechaDesde" class="col-sm-2 control-label">Desde</label>
+                <div class="col-sm-10">                  
+                    {{ form_widget(form.TxtFechaDesde, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                                                 
+            <div class="form-group form-group-sm">  
+                <label for="form_TxtFechaHasta" class="col-sm-2 control-label">Hasta</label>
+                <div class="col-sm-10">                  
+                    {{ form_widget(form.TxtFechaHasta, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <div class="col-sm-offset-2 col-sm-10">
+                    {{ form_widget(form.Buscar, { 'attr': {'class': 'btn btn-primary'} }) }}
+                </div>
+            </div>                       
+        
+            {{ form_rest(form) }}          
+        </div>
+    </div>                                  
+    {{ form_end(form) }}    
     <form action="{{ path('brs_tte_guias_lista') }}" method="post" novalidate>
         <table  class="table table-striped table-bordered table-condensed">
             <tr>
@@ -32,7 +99,7 @@
             <tr>
                 <td><input type="hidden" name="LblCodigoMovimiento[]" value="{{ arGuias.codigoGuiaPk }}">{{ arGuias.codigoGuiaPk }} </td>
                 <td>{{ arGuias.tipoServicioRel.nombre  }}</td>
-                <td>{{ arGuias.numeroGuia | number_format(0)}}</td>
+                <td>{{ arGuias.numeroGuia }}</td>
                 <td>{{ arGuias.fechaIngreso |date("Y/m/d")  }}</td>
                 <td>{{ arGuias.terceroRel.nit  }}</td>
                 <td>{{ arGuias.terceroRel.nombreCorto  }}</td>
@@ -67,56 +134,5 @@
     <br /><br />
     <hr/>
 
-    <!-- Formulario de busqueda -->
-    <form class="form-horizontal" role="form" id="FrmBusqueda" action="{{ path('brs_tte_guias_lista') }}" method="POST" novalidate>
-        <div class="well">
-            <div class="form-group">
-                <label for="TxtCodigoMovimiento" class="col-sm-2 control-label">Codigo</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="TxtCodigoMovimiento" name="TxtCodigoMovimiento" placeholder="Codigo movimiento"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="TxtNumeroMovimiento" class="col-sm-2 control-label">Numero</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="TxtNumeroMovimiento" name="TxtNumeroMovimiento" placeholder="Numero documento"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="TxtNombreTercero" class="col-sm-2 control-label">Tercero</label>
-                <div class="col-sm-10">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="TxtNombreTercero" name="TxtNombreTercero" placeholder="Codigo tercero"/>
-                                <span class="input-group-btn">
-                                    <input type="text" class="btn btn-default" id="TxtCodigoTercero" name="TxtCodigoTercero" />
-                                    <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_tte_guias_lista') }}', 'BuscarTercero', 600, 900)">Buscar</a>
-                                </span>
-                            </div><!-- /input-group -->
-                        </div><!-- /.col-lg-6 -->
-                    </div><!-- /.row -->
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="TxtFechaDesde" class="col-sm-2 control-label">Desde</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="TxtFechaDesde" name="TxtFechaDesde" placeholder="Fecha desde"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="TxtFechaHasta" class="col-sm-2 control-label">Hasta</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="TxtFechaHasta" name="TxtFechaHasta" placeholder="Fecha desde"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button class="btn btn-primary" type="submit" name="OpSubmit" value="OpBuscar">Buscar</button>
-                </div>
-            </div>
-            <!-- Fin formulario de busqueda -->
-        </div>
-    </form>
 </div>
 {% endblock %}

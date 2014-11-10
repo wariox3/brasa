@@ -44,6 +44,21 @@ class TteListasPreciosDetalles
     private $vrUnidad = 0;        
     
     /**
+     * @ORM\Column(name="ct_kilos_limite", type="float")
+     */
+    private $ctKilosLimite = 0;            
+
+    /**
+     * @ORM\Column(name="vr_kilos_limite", type="float")
+     */
+    private $vrKilosLimite = 0;        
+
+    /**
+     * @ORM\Column(name="vr_kilo_adicional", type="float")
+     */
+    private $vrKiloAdicional = 0;        
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudades", inversedBy="lpdCiudadDestinoRel")
      * @ORM\JoinColumn(name="codigo_ciudad_destino_fk", referencedColumnName="codigo_ciudad_pk")
      */
@@ -253,5 +268,74 @@ class TteListasPreciosDetalles
     public function getVrUnidad()
     {
         return $this->vrUnidad;
+    }
+
+    /**
+     * Set ctKilosLimite
+     *
+     * @param float $ctKilosLimite
+     * @return TteListasPreciosDetalles
+     */
+    public function setCtKilosLimite($ctKilosLimite)
+    {
+        $this->ctKilosLimite = $ctKilosLimite;
+
+        return $this;
+    }
+
+    /**
+     * Get ctKilosLimite
+     *
+     * @return float 
+     */
+    public function getCtKilosLimite()
+    {
+        return $this->ctKilosLimite;
+    }
+
+    /**
+     * Set vrKilosLimite
+     *
+     * @param float $vrKilosLimite
+     * @return TteListasPreciosDetalles
+     */
+    public function setVrKilosLimite($vrKilosLimite)
+    {
+        $this->vrKilosLimite = $vrKilosLimite;
+
+        return $this;
+    }
+
+    /**
+     * Get vrKilosLimite
+     *
+     * @return float 
+     */
+    public function getVrKilosLimite()
+    {
+        return $this->vrKilosLimite;
+    }
+
+    /**
+     * Set vrKiloAdicional
+     *
+     * @param float $vrKiloAdicional
+     * @return TteListasPreciosDetalles
+     */
+    public function setVrKiloAdicional($vrKiloAdicional)
+    {
+        $this->vrKiloAdicional = $vrKiloAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get vrKiloAdicional
+     *
+     * @return float 
+     */
+    public function getVrKiloAdicional()
+    {
+        return $this->vrKiloAdicional;
     }
 }

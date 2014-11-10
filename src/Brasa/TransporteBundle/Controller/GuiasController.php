@@ -13,7 +13,19 @@ class GuiasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();
-
+        $form = $this->createFormBuilder()
+            ->add('TxtCodigoGuia', 'text', array('label'  => 'Codigo'))
+            ->add('TxtNumeroGuia', 'text')
+            ->add('TxtCodigoTercero', 'text')
+            ->add('TxtNombreTercero', 'text') 
+            ->add('ChkMostrarDespachadas', 'checkbox', array('label'=> '', 'required'  => false,)) 
+            ->add('ChkMostrarAnuladas', 'checkbox', array('label'=> '', 'required'  => false,)) 
+            ->add('TxtFechaDesde', 'date', array('widget' => 'single_text', 'label'  => 'Desde:', 'format' => 'yyyy-MM-dd'))
+            ->add('TxtFechaHasta', 'date', array('widget' => 'single_text', 'label'  => 'Hasta:', 'format' => 'yyyy-MM-dd'))
+            ->add('Buscar', 'submit')
+            ->getForm();
+        $form->handleRequest($request);
+        $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->ListaGuias(0, 0, "", "", "", "");
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -47,10 +59,14 @@ class GuiasController extends Controller
                     break;
             }
         }
-        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findAll();        
+        
+        $paginator = $this->get('knp_paginator');        
+        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $arGuias = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);        
         
         return $this->render('BrasaTransporteBundle:Guias:lista.html.twig', array(
-            'arGuias' => $arGuias));
+            'arGuias' => $arGuias,
+            'form' => $form->createView()));
     }
 
     /**
@@ -72,23 +88,10 @@ class GuiasController extends Controller
             $arGuia->setPuntoOperacionIngresoRel($arUsuarioConfiguracion->getPuntoOperacionRel());
             $arGuia->setPuntoOperacionActualRel($arUsuarioConfiguracion->getPuntoOperacionRel());
             $arGuia->setCiudadOrigenRel($arUsuarioConfiguracion->getPuntoOperacionRel()->getCiudadOrigenRel());
-            $arGuia->setRutaRel($arCiudadDestino->getRutaRel());
-            $arNegociacion = new \Brasa\TransporteBundle\Entity\TteNegociaciones();
-            $arNegociacion = $em->getRepository('BrasaTransporteBundle:TteNegociaciones')->find(1);
-            
-            if($form->get('vrFlete')->getData() <= 0 && $arNegociacion->getLiquidarAutomaticamenteFlete() == 1) {
-                $arListaPreciosDetalle = new \Brasa\TransporteBundle\Entity\TteListasPreciosDetalles();
-                $arListaPreciosDetalle = $em->getRepository('BrasaTransporteBundle:TteListasPreciosDetalles')->findOneBy(array('codigoListaPreciosFk' => $arNegociacion->getCodigoListaPreciosFk(), 'codigoProductoFk' => '1', 'codigoCiudadDestinoFk' => $arrControles['form']['ciudadDestinoRel']));
-                if(count($arListaPreciosDetalle) > 0) {
-                    $arGuia->setVrFlete($arListaPreciosDetalle->getVrKilo() * $form->get('ctPesoLiquidar')->getData());
-                }
-            }
-            if($form->get('vrManejo')->getData() <= 0 && $arNegociacion->getLiquidarAutomaticamenteManejo() == 1) {
-                $douManejo = ($form->get('vrDeclarado')->getData()*$arNegociacion->getPorcentajeManejo())/100;
-                $arGuia->setVrManejo($douManejo);
-            }
+            $arGuia->setRutaRel($arCiudadDestino->getRutaRel());                        
             $em->persist($arGuia);
-            $em->flush();
+            $em->flush();            
+            $em->getRepository('BrasaTransporteBundle:TteGuias')->Liquidar($arGuia->getCodigoGuiaPk());            
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_tte_guias_nuevo', array('codigoGuia' => 0)));
             } else {
@@ -161,31 +164,14 @@ class GuiasController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             $arrDescuentosFinancierosSeleccionados = $request->request->get('ChkSeleccionarDescuentoFinanciero');
             switch ($request->request->get('OpSubmit')) {
-                case "OpAutorizar";
-                    $strResultado = $this->GuardarCambios($arrControles);
-                    if ($strResultado != "")
-                        $objMensaje->Mensaje("error", $strResultado, $this);
-                    else {
-                        $strResultado = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Autorizar($codigoMovimiento);
-                        if ($strResultado != "")
-                            $objMensaje->Mensaje("error", "No se autorizo el movimiento: " . $strResultado, $this);
-                    }
-                    break;
-
-                case "OpDesAutorizar";
-                    $varDesautorizar = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->DesAutorizar($codigoMovimiento);
-                    if ($varDesautorizar != "")
-                        $objMensaje->Mensaje("error", "No se desautorizo el movimiento: " . $varDesautorizar, $this);
-                    break;
-
-                case "OpAnular";
-                    $varAnular = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Anular($codigoMovimiento);
-                    if ($varAnular != "")
-                        $objMensaje->Mensaje("error", "No se anulo el movimiento: " . $varAnular, $this);
+                case "OpGenerar";
+                    if($arGuia->getEstadoGenerada() == 0) {  
+                        $em->getRepository('BrasaTransporteBundle:TteGuias')->Generar($codigoGuia);
+                    }                    
                     break;
 
                 case "OpImprimir";
-                    if($arGuia->getEstadoImpreso() == 0 && $arGuia->getNumeroGuia() != 0) {
+                    if($arGuia->getEstadoImpreso() == 0 && $arGuia->getNumeroGuia() != 0 && $arGuia->getEstadoGenerada() == 1) {
                         $arGuia->setNumeroGuia($em->getRepository('BrasaTransporteBundle:TteConfiguraciones')->consecutivoGuia());
                         $arGuia->setEstadoImpreso(1);
                         $em->persist($arGuia);
@@ -193,95 +179,6 @@ class GuiasController extends Controller
                     }                    
                     $objFormatoGuia = new \Brasa\TransporteBundle\Formatos\FormatoGuia();
                     $objFormatoGuia->Generar($this, $codigoGuia);
-                    break;
-
-                case "OpEliminar";
-                    if (count($arrSeleccionados) > 0) {
-                        foreach ($arrSeleccionados AS $codigoMovimientoDetalle) {
-                            $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                            $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($codigoMovimientoDetalle);
-                            if ($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace() != "") {
-                                $arMovimientoDetalleEnlace = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                                $arMovimientoDetalleEnlace = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace());
-                                $arMovimientoDetalleEnlace->setCantidadAfectada($arMovimientoDetalleEnlace->getCantidadAfectada() - $arMovimientoDetalle->getCantidad());
-                                $em->persist($arMovimientoDetalleEnlace);
-                                $em->flush();
-                            }
-                            $em->remove($arMovimientoDetalle);
-                            $em->flush();
-                        }
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
-                    }
-                    break;
-
-                case "OpActualizarDetalles";
-                    $strResultado = $this->GuardarCambios($arrControles);
-                    if ($strResultado != "")
-                        $objMensaje->Mensaje("error", $strResultado, $this);
-                    else
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
-                    break;
-
-                case "OpCerrarDetalles";
-                    if (count($arrSeleccionados) > 0) {
-                        foreach ($arrSeleccionados AS $codigoMovimientoDetalle) {
-                            $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                            $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($codigoMovimientoDetalle);
-                            if ($arMovimientoDetalle->getEstadoCerrado() == 0) {
-                                $arMovimientoDetalle->setEstadoCerrado(1);
-                                $em->persist($arMovimientoDetalle);
-                                $em->flush();
-                            }
-                        }
-                    }
-                    break;
-
-                case "OpAgregarItem";
-                    if(isset($arrControles['TxtCodigoItem'])) {
-                        if ($arrControles['TxtCodigoItem'] != "") {
-                            $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
-                            $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findBy(array('codigoBarras' => $arrControles['TxtCodigoItem']));
-                            //$arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($arItem[0]);
-                            if (count($arItem) > 0) {
-                                $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
-
-                                $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                                $arMovimientoDetalle->setMovimientoRel($arMovimiento);
-                                $arMovimientoDetalle->setCantidad(1);
-
-                                if ($arMovimiento->getDocumentoRel()->getTipoValor() == 2)
-                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arItem[0]->getCodigoItemPk()));
-
-                                if ($arMovimiento->getDocumentoRel()->getTipoValor() == 1)
-                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arItem[0]->getCodigoItemPk()));
-
-                                $arMovimientoDetalle->setLoteFk("SL");
-                                $arMovimientoDetalle->setFechaVencimiento(date_create('2020/12/30'));
-                                $arMovimientoDetalle->setCodigoBodegaFk(1);
-
-                                $arMovimientoDetalle->setItemMD($arItem[0]);
-                                $arMovimientoDetalle->setPorcentajeIva($arItem[0]->getPorcentajeIva());
-                                $em->persist($arMovimientoDetalle);
-                                $em->flush();
-                                if ($arMovimiento->getCodigoDocumentoTipoFk() == 4 && $arMovimiento->getDocumentoRel()->getOperacionInventario() == -1)
-                                    $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->EstableceLoteMovimientoDetalle($arMovimientoDetalle->getCodigoDetalleMovimientoPk());
-                                $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
-                            }
-                        }
-                    }
-                    break;
-
-                case "OpEliminarDescuentoFinanciero";
-                    if(count($arrDescuentosFinancierosSeleccionados) > 0) {
-                        foreach ($arrDescuentosFinancierosSeleccionados AS $codigoMovimientoDescuentoFinanciero) {
-                            $arMovimientoDescuentoFinanciero = new \Brasa\InventarioBundle\Entity\InvDescuentosFinancieros();
-                            $arMovimientoDescuentoFinanciero = $em->getRepository('BrasaInventarioBundle:InvMovimientosDescuentosFinancieros')->find($codigoMovimientoDescuentoFinanciero);
-                            $em->remove($arMovimientoDescuentoFinanciero);
-                            $em->flush();
-                        }
-                    }
-                    $em->getRepository('BrasaInventarioBundle:InvMovimientos')->LiquidarRetenciones($codigoMovimiento);
                     break;
             }
         }

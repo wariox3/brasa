@@ -42,6 +42,31 @@ class TteNegociaciones
      * @ORM\Column(name="porcentaje_manejo", type="float")
      */
     private $porcentajeManejo = 0;     
+
+    /**
+     * @ORM\Column(name="vr_manejo_minimo_unidad", type="float")
+     */
+    private $vrManejoMinimoUnidad = 0;    
+
+    /**
+     * @ORM\Column(name="vr_manejo_minimo_despacho", type="float")
+     */
+    private $vrManejoMinimoDespacho = 0;        
+    
+    /**
+     * @ORM\Column(name="descuento_kilos", type="float")
+     */
+    private $descuentoKilos = 0;     
+
+    /**
+     * @ORM\Column(name="ct_peso_minimo_unidad", type="float")
+     */
+    private $ctPesoMinimoUnidad = 0;        
+
+    /**
+     * @ORM\Column(name="paga_manejo_corriente", type="boolean")
+     */
+    private $pagaManejoCorriente = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TteListasPrecios", inversedBy="negociacionesRel")
@@ -49,7 +74,10 @@ class TteNegociaciones
      */
     protected $listaPreciosRel;     
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\GeneralBundle\Entity\GenTerceros", mappedBy="negociacionRel")
+     */
+    protected $tercerosRel;
 
     /**
      * Get codigoNegociacionPk
@@ -197,5 +225,160 @@ class TteNegociaciones
     public function getLiquidarAutomaticamenteManejo()
     {
         return $this->liquidarAutomaticamenteManejo;
+    }
+
+    /**
+     * Set vrManejoMinimoUnidad
+     *
+     * @param float $vrManejoMinimoUnidad
+     * @return TteNegociaciones
+     */
+    public function setVrManejoMinimoUnidad($vrManejoMinimoUnidad)
+    {
+        $this->vrManejoMinimoUnidad = $vrManejoMinimoUnidad;
+
+        return $this;
+    }
+
+    /**
+     * Get vrManejoMinimoUnidad
+     *
+     * @return float 
+     */
+    public function getVrManejoMinimoUnidad()
+    {
+        return $this->vrManejoMinimoUnidad;
+    }
+
+    /**
+     * Set vrManejoMinimoDespacho
+     *
+     * @param float $vrManejoMinimoDespacho
+     * @return TteNegociaciones
+     */
+    public function setVrManejoMinimoDespacho($vrManejoMinimoDespacho)
+    {
+        $this->vrManejoMinimoDespacho = $vrManejoMinimoDespacho;
+
+        return $this;
+    }
+
+    /**
+     * Get vrManejoMinimoDespacho
+     *
+     * @return float 
+     */
+    public function getVrManejoMinimoDespacho()
+    {
+        return $this->vrManejoMinimoDespacho;
+    }
+
+    /**
+     * Set descuentoKilos
+     *
+     * @param float $descuentoKilos
+     * @return TteNegociaciones
+     */
+    public function setDescuentoKilos($descuentoKilos)
+    {
+        $this->descuentoKilos = $descuentoKilos;
+
+        return $this;
+    }
+
+    /**
+     * Get descuentoKilos
+     *
+     * @return float 
+     */
+    public function getDescuentoKilos()
+    {
+        return $this->descuentoKilos;
+    }
+
+    /**
+     * Set ctPesoMinimoUnidad
+     *
+     * @param float $ctPesoMinimoUnidad
+     * @return TteNegociaciones
+     */
+    public function setCtPesoMinimoUnidad($ctPesoMinimoUnidad)
+    {
+        $this->ctPesoMinimoUnidad = $ctPesoMinimoUnidad;
+
+        return $this;
+    }
+
+    /**
+     * Get ctPesoMinimoUnidad
+     *
+     * @return float 
+     */
+    public function getCtPesoMinimoUnidad()
+    {
+        return $this->ctPesoMinimoUnidad;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tercerosRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add tercerosRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTerceros $tercerosRel
+     * @return TteNegociaciones
+     */
+    public function addTercerosRel(\Brasa\GeneralBundle\Entity\GenTerceros $tercerosRel)
+    {
+        $this->tercerosRel[] = $tercerosRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove tercerosRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTerceros $tercerosRel
+     */
+    public function removeTercerosRel(\Brasa\GeneralBundle\Entity\GenTerceros $tercerosRel)
+    {
+        $this->tercerosRel->removeElement($tercerosRel);
+    }
+
+    /**
+     * Get tercerosRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTercerosRel()
+    {
+        return $this->tercerosRel;
+    }
+
+    /**
+     * Set pagaManejoCorriente
+     *
+     * @param boolean $pagaManejoCorriente
+     * @return TteNegociaciones
+     */
+    public function setPagaManejoCorriente($pagaManejoCorriente)
+    {
+        $this->pagaManejoCorriente = $pagaManejoCorriente;
+
+        return $this;
+    }
+
+    /**
+     * Get pagaManejoCorriente
+     *
+     * @return boolean 
+     */
+    public function getPagaManejoCorriente()
+    {
+        return $this->pagaManejoCorriente;
     }
 }

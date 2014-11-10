@@ -161,6 +161,11 @@ class GenTerceros
     private $porcentajeCREE = 0;    
     
     /**
+     * @ORM\Column(name="codigo_negociacion_transporte_fk", type="integer", nullable=true)
+     */    
+    private $codigoNegociacionTransporteFk;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="GenClasificacionesTributarias", inversedBy="tercerosClasificacionTributariaRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_tributaria_fk", referencedColumnName="codigo_clasificacion_tributaria_pk")
      */
@@ -184,6 +189,12 @@ class GenTerceros
      */
     protected $asesorRel;    
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\TransporteBundle\Entity\TteNegociaciones", inversedBy="tercerosRel")
+     * @ORM\JoinColumn(name="codigo_negociacion_transporte_fk", referencedColumnName="codigo_negociacion_pk")
+     */
+    protected $negociacionRel;     
+    
     /**
      * @ORM\OneToMany(targetEntity="GenTercerosDirecciones", mappedBy="terceroRel")
      */
@@ -1089,5 +1100,51 @@ class GenTerceros
     public function getTteFacturasRel()
     {
         return $this->tteFacturasRel;
+    }
+
+    /**
+     * Set codigoNegociacionTransporteFk
+     *
+     * @param integer $codigoNegociacionTransporteFk
+     * @return GenTerceros
+     */
+    public function setCodigoNegociacionTransporteFk($codigoNegociacionTransporteFk)
+    {
+        $this->codigoNegociacionTransporteFk = $codigoNegociacionTransporteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoNegociacionTransporteFk
+     *
+     * @return integer 
+     */
+    public function getCodigoNegociacionTransporteFk()
+    {
+        return $this->codigoNegociacionTransporteFk;
+    }
+
+    /**
+     * Set negociacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteNegociaciones $negociacionRel
+     * @return GenTerceros
+     */
+    public function setNegociacionRel(\Brasa\TransporteBundle\Entity\TteNegociaciones $negociacionRel = null)
+    {
+        $this->negociacionRel = $negociacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get negociacionRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteNegociaciones 
+     */
+    public function getNegociacionRel()
+    {
+        return $this->negociacionRel;
     }
 }

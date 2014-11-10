@@ -16,8 +16,9 @@
             <div class="btn-toolbar" style="float:left">
                 <div class="btn-group">
                     <a  class="btn btn-default" href="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': 0 }) }}">Nuevo</a>
+                    <button class="btn btn-default " type="submit" name="OpSubmit" value="OpGenerar" {% if arGuia.estadoGenerada == 1%} disabled {% endif %}>Generar</button>
                     <button class="btn btn-default " type="submit" name="OpSubmit" value="OpImprimir">Imprimir</button>
-                    <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAnular" {% if arGuia.estadoImpreso == 0 or arGuia.estadoAnulada == 1%} disabled {% endif %} onclick="javascript:if (!confirm('Esta seguro que desea anular el documento?'))
+                    <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAnular" {% if arGuia.estadoGenerada == 0 or arGuia.estadoAnulada == 1%} disabled {% endif %} onclick="javascript:if (!confirm('Esta seguro que desea anular el documento?'))
                                         return false;">Anular</button>
                 </div>
             </div>
@@ -70,12 +71,9 @@
 
                     <td class="td-label">Abonos:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ (arGuia.vrAbonosFlete + arGuia.vrAbonosManejo) | number_format(2, '.', ',') }}</td>
-
-
                 </tr>
 
                 <tr>
-
                     <td class="td-label">Punto Ingreso:</td>
                     <td class="td-in-well">{{ arGuia.puntoOperacionIngresoRel.nombre }}</td>
 
@@ -259,7 +257,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Agregar novedad</h4>
+                    <h4 class="modal-title" id="myModalLabel">Agregar recibo</h4>
                 </div>
                 {{ form_start(frmReciboCaja, { 'attr': {'class': 'form-horizontal'} }) }}
                 <div class="modal-body">                                

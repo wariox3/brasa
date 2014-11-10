@@ -31,4 +31,122 @@ class TteGuiasRepository extends EntityRepository {
         $query = $em->createQuery($dql);        
         return $query;
     }    
+    
+    public function Liquidar($codigoGuia) {        
+        $em = $this->getEntityManager();
+        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);  
+        $arNegociacion = new \Brasa\TransporteBundle\Entity\TteNegociaciones();
+        $arNegociacion = $em->getRepository('BrasaTransporteBundle:TteNegociaciones')->find($arGuia->getTerceroRel()->getCodigoNegociacionTransporteFk());  
+        $intCodigoListaPrecios = $arNegociacion->getCodigoListaPreciosFk();
+        $intCodigoProducto = $arGuia->getProductoRel()->getCodigoProductoPk();
+        $intCodigoCiudadDestino = $arGuia->getCiudadDestinoRel()->getCodigoCiudadPk();
+        $arListaPreciosDet = new \Brasa\TransporteBundle\Entity\TteListasPreciosDetalles();
+        $arListaPreciosDet = $em->getRepository('BrasaTransporteBundle:TteListasPreciosDetalles')->findOneBy(
+                array('codigoListaPreciosFk' => $intCodigoListaPrecios,
+                      'codigoProductoFk' => $intCodigoProducto,
+                    'codigoCiudadDestinoFk' => $intCodigoCiudadDestino));  
+        //Liquidacion del flete
+        $intFormaLiquidacion = $arGuia->getFormaLiquidacion();
+        $douVrFlete = 0;
+        if(count($arListaPreciosDet) > 0) {            
+            switch ($intFormaLiquidacion) {
+                case 1;
+                    $douVrFlete = $arGuia->getCtPesoLiquidar() * $arListaPreciosDet->getVrKilo(); 
+                    //Si tiene descuento en el kilo
+                    if($arNegociacion->getDescuentoKilos() > 0) {
+                        $douVrFlete = $douVrFlete - (($douVrFlete * $arNegociacion->getDescuentoKilos())/100);
+                    }
+                    break;
+                
+                case 2;
+                    $douVrFlete = $arGuia->getCtUnidades() * $arListaPreciosDet->getVrUnidad();
+                    break;
+                
+                case 3;
+                    if($arGuia->getCtPesoLiquidar() > $arListaPreciosDet->getCtKilosLimite()) {
+                        $douKilosAdicionales = $arGuia->getCtPesoLiquidar() - $arListaPreciosDet->getCtKilosLimite();
+                        $douVrFlete = $arListaPreciosDet->getVrKilosLimite()+($douKilosAdicionales*$arListaPreciosDet->getVrKiloAdicional());
+                    } else {
+                        $douVrFlete = $arListaPreciosDet->getVrKilosLimite();
+                    }
+                    
+            }
+        }
+        //Liquidacion del manejo
+        $douManejo = 0;
+        if($arNegociacion->getPorcentajeManejo() > 0) {
+            $douManejo = ($arGuia->getVrDeclarado() * $arNegociacion->getPorcentajeManejo())/100;
+        }
+        if($douManejo < ($arGuia->getCtUnidades() * $arNegociacion->getVrManejoMinimoUnidad())) {
+            $douManejo = $arGuia->getCtUnidades() * $arNegociacion->getVrManejoMinimoUnidad();
+        }
+        if($douManejo < $arNegociacion->getVrManejoMinimoDespacho()) {
+            $douManejo = $arNegociacion->getVrManejoMinimoDespacho();
+        }        
+        $arGuia->setVrFlete($douVrFlete);
+        $arGuia->setVrManejo($douManejo);
+        $em->persist($arGuia);
+        $em->flush();
+        return true;
+    }             
+    
+    public function Generar($codigoGuia) {        
+        $em = $this->getEntityManager();
+        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);  
+
+        //Analisar si la negociacion paga menejo corriente
+        if($arGuia->getCodigoTipoPagoFk() == 2) {
+            if($arGuia->getTerceroRel()->getNegociacionRel()->getPagaManejoCorriente() == 1) {
+                $arGuiaCobroAdicional = new \Brasa\TransporteBundle\Entity\TteGuiasCobrosAdicionales();
+                $arGuiaCobroAdicional->setGuiaRel($arGuia);
+                $arGuiaCobroAdicional->setVrCobro($arGuia->getVrManejo());
+                $em->persist($arGuiaCobroAdicional);
+                $em->flush();
+                $arGuia->setVrManejo(0);
+            }
+        }
+        $arGuia->setEstadoGenerada(1);
+        $arGuia->setNumeroGuia($em->getRepository('BrasaTransporteBundle:TteGuias')->ConsecutivoGuia());        
+        $em->persist($arGuia);
+        $em->flush();        
+        return true;
+    }                 
+    
+    public function ConsecutivoGuia() {        
+        $em = $this->getEntityManager();
+        $arConfiguracion = new \Brasa\TransporteBundle\Entity\TteConfiguraciones();
+        $arConfiguracion = $em->getRepository('BrasaTransporteBundle:TteConfiguraciones')->find(1);
+        $intConsecutivo = $arConfiguracion->getConsecutivoGuias();
+        $arConfiguracion->setConsecutivoGuias($arConfiguracion->getConsecutivoGuias() + 1);        
+        $em->persist($arConfiguracion);
+        $em->flush();
+        return $intConsecutivo;
+    }     
+    
+    public function ListaGuias($boolDespachada, $boolAnulada, $codigoGuia, $numeroGuia, $fechaDesde, $fechaHasta) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT guias FROM BrasaTransporteBundle:TteGuias guias WHERE guias.codigoPuntoOperacionActualFk = 1";
+        if($boolDespachada != 1 ) {
+            $dql .= " AND guias.estadoDespachada = 0";
+        }
+        if($boolAnulada != 1 ) {
+            $dql .= " AND guias.estadoAnulada = 0";
+        }        
+        if($codigoGuia != "" ) {
+            $dql .= " AND guias.codigoGuiaPk = " . $codigoGuia;
+        }        
+        if($numeroGuia != "" ) {
+            $dql .= " AND guias.numeroGuia = " . $numeroGuia;
+        }  
+        if($fechaDesde != "" ) {
+            $dql .= " AND guias.fechaIngreso >= '" . $fechaDesde->format('Y/m/d') . " 00:00:00'";
+        }        
+        if($fechaHasta != "" ) {
+            $dql .= " AND guias.fechaIngreso >= '" . $fechaHasta->format('Y/m/d') . " 23:59:59'";
+        }        
+        $query = $em->createQuery($dql);        
+        return $query;
+    }        
 }

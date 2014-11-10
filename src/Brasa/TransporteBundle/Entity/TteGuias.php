@@ -102,8 +102,7 @@ class TteGuias
      * @ORM\Column(name="codigo_punto_operacion_actual_fk", type="integer", nullable=true)
      */    
     private $codigoPuntoOperacionActualFk;     
-   
-    
+       
     /**
      * @ORM\Column(name="ct_unidades", type="integer")
      */
@@ -183,6 +182,11 @@ class TteGuias
      * @ORM\Column(name="estado_descargada", type="boolean")
      */    
     private $estadoDescargada = 0;    
+
+    /**
+     * @ORM\Column(name="estado_generada", type="boolean")
+     */    
+    private $estadoGenerada = 0;     
     
     /**
      * @ORM\Column(name="fecha_entrega", type="datetime", nullable=true)
@@ -205,6 +209,11 @@ class TteGuias
     private $comentarios;    
     
     /**
+     * @ORM\Column(name="forma_liquidacion", type="integer", nullable=true)
+     */    
+    private $formaLiquidacion = 1;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TteNovedades", mappedBy="guiaRel")
      */
     protected $novedadesRel;     
@@ -213,6 +222,11 @@ class TteGuias
      * @ORM\OneToMany(targetEntity="TteRecibosCaja", mappedBy="guiaRel")
      */
     protected $recibosCajaRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TteGuiasCobrosAdicionales", mappedBy="guiaRel")
+     */
+    protected $guiasCobrosAdicionalesRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TteDespachos", inversedBy="guiasDetallesRel")
@@ -1468,5 +1482,84 @@ class TteGuias
     public function getProductoRel()
     {
         return $this->productoRel;
+    }
+
+    /**
+     * Set formaLiquidacion
+     *
+     * @param integer $formaLiquidacion
+     * @return TteGuias
+     */
+    public function setFormaLiquidacion($formaLiquidacion)
+    {
+        $this->formaLiquidacion = $formaLiquidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get formaLiquidacion
+     *
+     * @return integer 
+     */
+    public function getFormaLiquidacion()
+    {
+        return $this->formaLiquidacion;
+    }
+
+    /**
+     * Set estadoGenerada
+     *
+     * @param boolean $estadoGenerada
+     * @return TteGuias
+     */
+    public function setEstadoGenerada($estadoGenerada)
+    {
+        $this->estadoGenerada = $estadoGenerada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGenerada
+     *
+     * @return boolean 
+     */
+    public function getEstadoGenerada()
+    {
+        return $this->estadoGenerada;
+    }
+
+    /**
+     * Add guiasCobrosAdicionalesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuiaCobrosAdicionales $guiasCobrosAdicionalesRel
+     * @return TteGuias
+     */
+    public function addGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiaCobrosAdicionales $guiasCobrosAdicionalesRel)
+    {
+        $this->guiasCobrosAdicionalesRel[] = $guiasCobrosAdicionalesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove guiasCobrosAdicionalesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuiaCobrosAdicionales $guiasCobrosAdicionalesRel
+     */
+    public function removeGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiaCobrosAdicionales $guiasCobrosAdicionalesRel)
+    {
+        $this->guiasCobrosAdicionalesRel->removeElement($guiasCobrosAdicionalesRel);
+    }
+
+    /**
+     * Get guiasCobrosAdicionalesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGuiasCobrosAdicionalesRel()
+    {
+        return $this->guiasCobrosAdicionalesRel;
     }
 }

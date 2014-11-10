@@ -11,16 +11,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class TteConfiguracionesRepository extends EntityRepository {
-    public function consecutivoGuia() {        
-        $em = $this->getEntityManager();
-        $arConfiguracion = new \Brasa\TransporteBundle\Entity\TteConfiguraciones();
-        $arConfiguracion = $em->getRepository('BrasaTransporteBundle:TteConfiguraciones')->find(1);
-        $intConsecutivo = $arConfiguracion->getConsecutivoGuias();
-        $arConfiguracion->setConsecutivoGuias($arConfiguracion->getConsecutivoGuias() + 1);        
-        $em->persist($arConfiguracion);
-        $em->flush();
-        return $intConsecutivo;
-    }    
+
     public function consecutivoDespacho() {        
         $em = $this->getEntityManager();
         $arEntidad = new \Brasa\GeneralBundle\Entity\GenEntidades();
