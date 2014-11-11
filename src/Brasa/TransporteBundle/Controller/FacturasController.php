@@ -11,62 +11,47 @@ class FacturasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();                
         $arFacturas = new \Brasa\TransporteBundle\Entity\TteFacturas();            
-        
+        $form = $this->createFormBuilder()
+            ->add('TxtCodigoFactura', 'text', array('label'  => 'Codigo'))
+            ->add('TxtNumeroFactura', 'text')
+            ->add('TxtCodigoTercero', 'text')
+            ->add('TxtNombreTercero', 'text')             
+            ->add('ChkMostrarAnuladas', 'checkbox', array('label'=> '', 'required'  => false,)) 
+            ->add('TxtFechaDesde', 'date', array('widget' => 'single_text', 'label'  => 'Desde:', 'format' => 'yyyy-MM-dd'))
+            ->add('TxtFechaHasta', 'date', array('widget' => 'single_text', 'label'  => 'Hasta:', 'format' => 'yyyy-MM-dd'))
+            ->add('Buscar', 'submit')
+            ->getForm();
+        $form->handleRequest($request);
+        $query = $em->getRepository('BrasaTransporteBundle:TteFacturas')->ListaFacturas(0, "", "", "", "");        
+        if($form->isValid()) {            
+            $query = $em->getRepository('BrasaTransporteBundle:TteFacturas')->ListaFacturas(                    
+                    $form->get('ChkMostrarAnuladas')->getData(),
+                    $form->get('TxtCodigoGuia')->getData(),
+                    $form->get('TxtNumeroGuia')->getData(),
+                    $form->get('TxtFechaDesde')->getData(),
+                    $form->get('TxtFechaHasta')->getData());                        
+        }        
         if ($request->getMethod() == 'POST') {
-            $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            $objChkFecha = NULL;
-            if (isset($arrControles['ChkFecha']))
-                $objChkFecha = $arrControles['ChkFecha'];
             switch ($request->request->get('OpSubmit')) {
-                case "OpAutorizar";
-                    foreach ($arrSeleccionados AS $codigoMovimiento)
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Autorizar($codigoMovimiento);
-                    break;
-
-                case "OpImprimir";                    
-                    foreach ($arrSeleccionados AS $codigoMovimiento)
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
-                    break;
-
                 case "OpEliminar";
-                    foreach ($arrSeleccionados AS $codigoMovimiento) {
-                        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
-                        if ($arMovimiento->getEstadoAutorizado() == 0) {
-                            if ($em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevNroDetallesMovimiento($codigoMovimiento) <= 0) {
-                                $em->remove($arMovimiento);
-                                $em->flush();
-                            }
-                        }
+                    foreach ($arrSeleccionados AS $codigoFactura) {
+                        $arFactura = new \Brasa\TransporteBundle\Entity\TteFacturas();
+                        $arFactura = $em->getRepository('BrasaTransporteBundle:TteFacturas')->find($codigoFactura);
+
                     }
                     break;
-                case "OpBuscar";
-                    $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                    $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->DevMovimientosFiltro(
-                            $codigoDocumento, 
-                            $arrControles['TxtCodigoMovimiento'], 
-                            $arrControles['TxtNumeroMovimiento'], 
-                            $arrControles['TxtCodigoTercero'], 
-                            $objChkFecha, 
-                            $arrControles['TxtFechaDesde'], 
-                            $arrControles['TxtFechaHasta'],
-                            "",
-                            "");
-                    break;
             }
-        } else {
-            $arFacturas = $em->getRepository('BrasaTransporteBundle:TteFacturas')->findAll();
-        }                    
-
+        }                 
+        
+        $paginator = $this->get('knp_paginator');        
+        $arFacturas = new \Brasa\TransporteBundle\Entity\TteFacturas();
+        $arFacturas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100); 
         return $this->render('BrasaTransporteBundle:Facturas:lista.html.twig', array(
-            'arFacturas' => $arFacturas));
+            'arFacturas' => $arFacturas,
+            'form' => $form->createView()));
     }
     
-    /**
-     * Crear un nueva guias
-     * @return type
-     */
     public function nuevoAction($codigoFactura = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -82,9 +67,9 @@ class FacturasController extends Controller
             $em->persist($arFactura);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tte_facturas_nuevo', array('codigoGuia' => 0)));
+                return $this->redirect($this->generateUrl('brs_tte_facturas_nuevo', array('codigoFactura' => 0)));
             } else {
-                return $this->redirect($this->generateUrl('brs_tte_facturas_detalle', array('codigoGuia' => $arFactura->getCodigoFacturaPk())));
+                return $this->redirect($this->generateUrl('brs_tte_facturas_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
             }    
             
         }
@@ -92,9 +77,6 @@ class FacturasController extends Controller
             'form' => $form->createView()));
     }  
     
-    /**
-     * Lista los movimientos detalle (Detalles) segun encabezado - Filtro
-     */
     public function detalleAction($codigoFactura) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    

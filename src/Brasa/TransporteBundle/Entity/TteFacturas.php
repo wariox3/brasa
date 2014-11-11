@@ -64,6 +64,21 @@ class TteFacturas
     private $vrTotal = 0;        
 
     /**
+     * @ORM\Column(name="ct_guias", type="float")
+     */
+    private $ctGuias = 0;    
+    
+    /**
+     * @ORM\Column(name="ct_planillas", type="float")
+     */
+    private $ctPlanillas = 0;    
+    
+    /**
+     * @ORM\Column(name="ct_conceptos", type="float")
+     */
+    private $ctConceptos = 0;    
+    
+    /**
      * @ORM\Column(name="estado_impreso", type="boolean")
      */    
     private $estadoImpreso = 0;     
@@ -436,5 +451,74 @@ class TteFacturas
     public function getEstadoImpreso()
     {
         return $this->estadoImpreso;
+    }
+
+    /**
+     * Set ctGuias
+     *
+     * @param float $ctGuias
+     * @return TteFacturas
+     */
+    public function setCtGuias($ctGuias)
+    {
+        $this->ctGuias = $ctGuias;
+
+        return $this;
+    }
+
+    /**
+     * Get ctGuias
+     *
+     * @return float 
+     */
+    public function getCtGuias()
+    {
+        return $this->ctGuias;
+    }
+
+    /**
+     * Set ctPlanillas
+     *
+     * @param float $ctPlanillas
+     * @return TteFacturas
+     */
+    public function setCtPlanillas($ctPlanillas)
+    {
+        $this->ctPlanillas = $ctPlanillas;
+
+        return $this;
+    }
+
+    /**
+     * Get ctPlanillas
+     *
+     * @return float 
+     */
+    public function getCtPlanillas()
+    {
+        return $this->ctPlanillas;
+    }
+
+    /**
+     * Set ctConceptos
+     *
+     * @param float $ctConceptos
+     * @return TteFacturas
+     */
+    public function setCtConceptos($ctConceptos)
+    {
+        $this->ctConceptos = $ctConceptos;
+
+        return $this;
+    }
+
+    /**
+     * Get ctConceptos
+     *
+     * @return float 
+     */
+    public function getCtConceptos()
+    {
+        return $this->ctConceptos;
     }
 }

@@ -45,6 +45,10 @@ brs_tte_facturas_nuevo:
 brs_tte_facturas_detalle:
     path:     /transporte/facturas/detalle/{codigoFactura}
     defaults: { _controller: BrasaTransporteBundle:Facturas:detalle }    
+    
+brs_tte_facturas_agregar_guia:
+    path:     /transporte/facturas/agregar/guia/{codigoFactura}
+    defaults: { _controller: BrasaTransporteBundle:FacturasAgregarGuia:lista }
 
 #Reportes
 brs_tte_rep_pendientes_despacho:

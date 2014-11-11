@@ -172,6 +172,11 @@ class TteGuias
      * @ORM\Column(name="estado_despachada", type="boolean")
      */    
     private $estadoDespachada = 0;    
+
+    /**
+     * @ORM\Column(name="estado_facturada", type="boolean")
+     */    
+    private $estadoFacturada = 0;     
     
     /**
      * @ORM\Column(name="estado_entregada", type="boolean")
@@ -1562,5 +1567,28 @@ class TteGuias
     public function getPuntoOperacionActualRel()
     {
         return $this->puntoOperacionActualRel;
+    }
+
+    /**
+     * Set estadoFacturada
+     *
+     * @param boolean $estadoFacturada
+     * @return TteGuias
+     */
+    public function setEstadoFacturada($estadoFacturada)
+    {
+        $this->estadoFacturada = $estadoFacturada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturada
+     *
+     * @return boolean 
+     */
+    public function getEstadoFacturada()
+    {
+        return $this->estadoFacturada;
     }
 }

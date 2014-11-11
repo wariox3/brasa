@@ -35,12 +35,8 @@ class GuiasController extends Controller
                     $form->get('TxtFechaDesde')->getData(),
                     $form->get('TxtFechaHasta')->getData());                        
         }        
-        if ($request->getMethod() == 'POST') {
-            $arrControles = $request->request->All();
+        if ($request->getMethod() == 'POST') {            
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            $objChkFecha = NULL;
-            if (isset($arrControles['ChkFecha']))
-                $objChkFecha = $arrControles['ChkFecha'];
             switch ($request->request->get('OpSubmit')) {
                 case "OpEliminar";
                     foreach ($arrSeleccionados AS $codigoGuia) {
@@ -64,14 +60,13 @@ class GuiasController extends Controller
             'form' => $form->createView()));
     }
 
-    /**
-     * Crear un nueva guias
-     * @return type
-     */
     public function nuevoAction($codigoGuia = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+        if($codigoGuia != 0) {
+            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+        }        
         $form = $this->createForm(new TteGuiasType(), $arGuia);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -98,9 +93,6 @@ class GuiasController extends Controller
             'form' => $form->createView()));
     }
 
-    /**
-     * Lista los movimientos detalle (Detalles) segun encabezado - Filtro
-     */
     public function detalleAction($codigoGuia) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa');

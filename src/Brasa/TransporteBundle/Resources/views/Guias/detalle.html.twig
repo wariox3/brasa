@@ -38,7 +38,7 @@
                     <td class="td-in-well">{{ arGuia.fechaIngreso|date("Y/m/d H:i:s") }}</td>
 
                     <td class="td-label">Unidades:</td>
-                    <td class="td-in-well-numerico" align="right">{{ arGuia.ctPesoReal | number_format(0, '.', ',') }}</td>
+                    <td class="td-in-well-numerico" align="right">{{ arGuia.ctUnidades | number_format(0, '.', ',') }}</td>
 
                     <td class="td-label">Flete:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arGuia.vrFlete | number_format(2, '.', ',') }}</td>
@@ -48,8 +48,8 @@
                     <td class="td-label">Origen:</td>
                     <td class="td-in-well">{{ arGuia.ciudadOrigenRel.nombre }}</td>
 
-                    <td class="td-label">Fecha entrega:</td>
-                    <td class="td-in-well">{% if arGuia.estadoEntregada == 1 %}{{ arGuia.fechaEntrega|date("Y/m/d H:i:s") }}{% else %}<span class="label label-warning">Sin entregar</span>{% endif %}</td>
+                    <td class="td-label">Cliente:</td>
+                    <td class="td-in-well">{{ arGuia.terceroRel.nombreCorto }}</td>
 
                     <td class="td-label">Peso Real:</td>
                     <td class="td-in-well-numerico" align="right">{{ arGuia.ctPesoReal | number_format(0, '.', ',') }}</td>
@@ -63,8 +63,8 @@
                     <td class="td-label">Destino:</td>
                     <td class="td-in-well">{{ arGuia.ciudadDestinoRel.nombre }}</td>
 
-                    <td class="td-label">Fecha descarga:</td>
-                    <td>{% if arGuia.estadoDescargada == 1 %}{{ arGuia.fechaDescargada|date("Y/m/d H:i:s") }}{% else %}<span class="label label-warning">Sin descargar</span>{% endif %}</td>
+                    <td class="td-label">Fecha entrega:</td>
+                    <td class="td-in-well">{% if arGuia.estadoEntregada == 1 %}{{ arGuia.fechaEntrega|date("Y/m/d H:i:s") }}{% else %}<span class="label label-warning">Sin entregar</span>{% endif %}</td>
 
                     <td class="td-label">Peso Volumen:</td>
                     <td class="td-in-well-numerico" align="right">{{ arGuia.ctPesoVolumen | number_format(0, '.', ',') }}</td>
@@ -77,11 +77,11 @@
                     <td class="td-label">Punto Ingreso:</td>
                     <td class="td-in-well">{{ arGuia.puntoOperacionIngresoRel.nombre }}</td>
 
-                    <td class="td-label"></td>
-                    <td class="td-in-well-numerico" align="right"></td>
+                    <td class="td-label">Fecha descarga:</td>
+                    <td>{% if arGuia.estadoDescargada == 1 %}{{ arGuia.fechaDescargada|date("Y/m/d H:i:s") }}{% else %}<span class="label label-warning">Sin descargar</span>{% endif %}</td>
 
-                    <td class="td-label"></td>
-                    <td class="td-in-well-numerico" align="right"></td>
+                    <td class="td-label">Peso liquidar:</td>
+                    <td class="td-in-well-numerico" align="right">{{ arGuia.ctPesoLiquidar | number_format(0, '.', ',') }}</td>
 
                     <td class="td-label">Total Neto:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ (arGuia.vrFlete+arGuia.vrManejo-arGuia.vrAbonosFlete-arGuia.vrAbonosManejo)   | number_format(2, '.', ',') }}</td>
