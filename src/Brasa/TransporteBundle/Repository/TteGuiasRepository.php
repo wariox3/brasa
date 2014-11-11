@@ -103,10 +103,10 @@ class TteGuiasRepository extends EntityRepository {
                 $arGuiaCobroAdicional->setGuiaRel($arGuia);
                 $arGuiaCobroAdicional->setVrCobro($arGuia->getVrManejo());
                 $em->persist($arGuiaCobroAdicional);
-                $em->flush();
-                $arGuia->setVrManejo(0);
+                $em->flush();                
             }
         }
+        $arGuia->setVrAbonosManejo($arGuia->getVrManejo());
         $arGuia->setEstadoGenerada(1);
         $arGuia->setNumeroGuia($em->getRepository('BrasaTransporteBundle:TteGuias')->ConsecutivoGuia());        
         $em->persist($arGuia);
@@ -127,7 +127,7 @@ class TteGuiasRepository extends EntityRepository {
     
     public function ListaGuias($boolDespachada, $boolAnulada, $codigoGuia, $numeroGuia, $fechaDesde, $fechaHasta) {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT guias FROM BrasaTransporteBundle:TteGuias guias WHERE guias.codigoPuntoOperacionActualFk = 1";
+        $dql   = "SELECT guias FROM BrasaTransporteBundle:TteGuias guias WHERE guias.codigoGuiaPk <> 0";
         if($boolDespachada != 1 ) {
             $dql .= " AND guias.estadoDespachada = 0";
         }
@@ -144,7 +144,7 @@ class TteGuiasRepository extends EntityRepository {
             $dql .= " AND guias.fechaIngreso >= '" . $fechaDesde->format('Y/m/d') . " 00:00:00'";
         }        
         if($fechaHasta != "" ) {
-            $dql .= " AND guias.fechaIngreso >= '" . $fechaHasta->format('Y/m/d') . " 23:59:59'";
+            $dql .= " AND guias.fechaIngreso <= '" . $fechaHasta->format('Y/m/d') . " 23:59:59'";
         }        
         $query = $em->createQuery($dql);        
         return $query;

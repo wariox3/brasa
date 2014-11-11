@@ -3,8 +3,58 @@
 <div class="container">    
     <div class="page-header">
         <h3>Lista despachos</h3>
-    </div>              
-    <form action="{{ path('brs_tte_guias_lista') }}" method="post" novalidate>
+    </div>       
+    <!-- Formulario de busqueda -->
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+    <div class="panel panel-default">
+        <div class="panel-heading">Filtros de busqueda</div>
+        <div class="panel-body">
+            {{ form_errors(form) }}         
+            <div class="form-group form-group-sm">  
+                <label for="form_TxtCodigoDespacho" class="col-sm-2 control-label">Codigo</label>
+                <div class="col-sm-10">                  
+                    {{ form_widget(form.TxtCodigoDespacho, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>   
+            <div class="form-group form-group-sm">  
+                <label for="form_TxtNumeroDespacho" class="col-sm-2 control-label">Numero</label>
+                <div class="col-sm-10">                  
+                    {{ form_widget(form.TxtNumeroDespacho, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>            
+            <div class="form-group form-group-sm">  
+                <label for="form_TxtFechaDesde" class="col-sm-2 control-label">Desde</label>
+                <div class="col-sm-10">                  
+                    {{ form_widget(form.TxtFechaDesde, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                                                 
+            <div class="form-group form-group-sm">  
+                <label for="form_TxtFechaHasta" class="col-sm-2 control-label">Hasta</label>
+                <div class="col-sm-10">                  
+                    {{ form_widget(form.TxtFechaHasta, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_comentarios" class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <label class="checkbox-inline">
+                      {{ form_widget(form.ChkMostrarDescargados) }} Descargados
+                    </label>
+                    <label class="checkbox-inline">
+                      {{ form_widget(form.ChkMostrarAnulados) }} Anulados
+                    </label>
+                </div>                                         
+            </div>             
+            <div class="form-group form-group-sm">
+                <div class="col-sm-offset-2 col-sm-10">
+                    {{ form_widget(form.Buscar, { 'attr': {'class': 'btn btn-default', 'style':'float:right'} }) }}
+                </div>
+            </div>                               
+            {{ form_rest(form) }}          
+        </div>
+    </div>                                  
+    {{ form_end(form) }}    
+    <form action="{{ path('brs_tte_despachos_lista') }}" method="post" novalidate>
         <table  class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>ID</th>
@@ -56,24 +106,6 @@
         <!-- Fin Botones Menu Items -->         
     </form> 
     <br /><br />
-    <hr/>
-
-    <!-- Formulario de busqueda -->    
-    <form class="form-horizontal" role="form" id="FrmBusqueda" action="{{ path('brs_tte_guias_lista') }}" method="POST" novalidate>
-        <div class="well"> 
-            <div class="form-group">
-                <label for="TxtNumeroMovimiento" class="col-sm-2 control-label">Numero</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="TxtNumeroMovimiento" name="TxtNumeroMovimiento" placeholder="Numero documento"/>
-                </div>
-            </div>            
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button class="btn btn-primary" type="submit" name="OpSubmit" value="OpBuscar">Buscar</button>
-                </div>
-            </div>                
-            <!-- Fin formulario de busqueda -->
-        </div>    
-    </form>   
+    <hr/>  
 </div>
 {% endblock %}

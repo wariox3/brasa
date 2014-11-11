@@ -3,14 +3,33 @@
 namespace Brasa\TransporteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Brasa\TransporteBundle\Form\Type\TteDespachosType;
 class DespachosController extends Controller
 {
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();                
         $arDespachos = new \Brasa\TransporteBundle\Entity\TteDespachos();            
-        
+        $form = $this->createFormBuilder()
+            ->add('TxtCodigoDespacho', 'text', array('label'  => 'Codigo'))
+            ->add('TxtNumeroDespacho', 'text')            
+            ->add('ChkMostrarDescargados', 'checkbox', array('label'=> '', 'required'  => false,)) 
+            ->add('ChkMostrarAnulados', 'checkbox', array('label'=> '', 'required'  => false,))                 
+            ->add('TxtFechaDesde', 'date', array('widget' => 'single_text', 'label'  => 'Desde:', 'format' => 'yyyy-MM-dd'))
+            ->add('TxtFechaHasta', 'date', array('widget' => 'single_text', 'label'  => 'Hasta:', 'format' => 'yyyy-MM-dd'))
+            ->add('Buscar', 'submit')
+            ->getForm();
+        $form->handleRequest($request);
+        $query = $em->getRepository('BrasaTransporteBundle:TteDespachos')->ListaDespachos(0, 0, "", "", "", "");
+        if($form->isValid()) {            
+            $query = $em->getRepository('BrasaTransporteBundle:TteDespachos')->ListaDespachos(
+                    $form->get('ChkMostrarDescargados')->getData(),
+                    $form->get('ChkMostrarAnulados')->getData(),
+                    $form->get('TxtCodigoDespacho')->getData(),
+                    $form->get('TxtNumeroDespacho')->getData(),
+                    $form->get('TxtFechaDesde')->getData(),
+                    $form->get('TxtFechaHasta')->getData());                        
+        }        
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -18,48 +37,26 @@ class DespachosController extends Controller
             if (isset($arrControles['ChkFecha']))
                 $objChkFecha = $arrControles['ChkFecha'];
             switch ($request->request->get('OpSubmit')) {
-                case "OpAutorizar";
-                    foreach ($arrSeleccionados AS $codigoMovimiento)
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Autorizar($codigoMovimiento);
-                    break;
-
-                case "OpImprimir";                    
-                    foreach ($arrSeleccionados AS $codigoMovimiento)
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
-                    break;
-
                 case "OpEliminar";
-                    foreach ($arrSeleccionados AS $codigoMovimiento) {
-                        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
-                        if ($arMovimiento->getEstadoAutorizado() == 0) {
-                            if ($em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevNroDetallesMovimiento($codigoMovimiento) <= 0) {
-                                $em->remove($arMovimiento);
-                                $em->flush();
-                            }
+                    foreach ($arrSeleccionados AS $codigoGuia) {
+                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                        if($arGuia->getEstadoImpreso() == 0 && $arGuia->getEstadoDespachada() == 0 && $arGuia->getNumeroGuia() == 0) {
+                            $em->remove($arGuia);
+                            $em->flush();                            
                         }
                     }
                     break;
-                case "OpBuscar";
-                    $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                    $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->DevMovimientosFiltro(
-                            $codigoDocumento, 
-                            $arrControles['TxtCodigoMovimiento'], 
-                            $arrControles['TxtNumeroMovimiento'], 
-                            $arrControles['TxtCodigoTercero'], 
-                            $objChkFecha, 
-                            $arrControles['TxtFechaDesde'], 
-                            $arrControles['TxtFechaHasta'],
-                            "",
-                            "");
-                    break;
+
             }
-        } else {
-            $arDespachos = $em->getRepository('BrasaTransporteBundle:TteDespachos')->findAll();
-        }                    
+        } 
+        $paginator = $this->get('knp_paginator');        
+        $arDespachos = new \Brasa\TransporteBundle\Entity\TteDespachos();
+        $arDespachos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
 
         return $this->render('BrasaTransporteBundle:Despachos:lista.html.twig', array(
-            'arDespachos' => $arDespachos));
+            'arDespachos' => $arDespachos,
+            'form' => $form->createView()));
     }
     
     /**
@@ -67,50 +64,33 @@ class DespachosController extends Controller
      * @return type
      */
     public function nuevoAction($codigoDespacho = 0) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();                
-        if ($request->getMethod() == 'POST') { 
-            
-            if (($request->request->get('TxtCodigoDespacho'))) {
-                $arDespachoNuevo = $em->getRepository('BrasaTransporteBundle:TteDespachos')->find($request->request->get('TxtCodigoDespacho'));
-            } else {
-                $arDespachoNuevo = new \Brasa\TransporteBundle\Entity\TteDespachos();
-            }  
-            $arDespachoTipo = $em->getRepository ('BrasaTransporteBundle:TteDespachosTipos')->find($request->request->get('CboDespachosTipos'));
-            $arDespachoNuevo->setDespachoTipoRel($arDespachoTipo);
-            $arDespachoNuevo->setFecha(date_create(date('Y-m-d H:i:s')));           
-            $arCiudadOrigen = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadOrigen'));
-            $arDespachoNuevo->setCiudadOrigenRel($arCiudadOrigen);
-            $arCiudadDestino = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($request->request->get('TxtCodigoCiudadDestino'));
-            $arDespachoNuevo->setCiudadDestinoRel($arCiudadDestino);
-            $arConductor = $em->getRepository('BrasaTransporteBundle:TteConductores')->find($request->request->get('TxtCodigoConductor'));
-            $arDespachoNuevo->setConductorRel($arConductor);
-            $arRuta = $em->getRepository('BrasaTransporteBundle:TteRutas')->find($request->request->get('TxtCodigoRuta'));            
-            $arDespachoNuevo->setRutaRel($arRuta);
-            $arVehiculo = $em->getRepository('BrasaTransporteBundle:TteVehiculos')->find($request->request->get('TxtVehiculo'));            
-            $arDespachoNuevo->setVehiculoRel($arVehiculo);
-            $arDespachoNuevo->setVrFlete($request->request->get('TxtFlete'));
-            $arDespachoNuevo->setVrAnticipo($request->request->get('TxtAnticipo'));
-            $arDespachoNuevo->setVrNeto($arDespachoNuevo->getVrFlete() - $arDespachoNuevo->getVrAnticipo());
-            $arDespachoNuevo->setComentarios($request->request->get('TxtComentarios'));
-
-            $em->persist($arDespachoNuevo);
-            $em->flush();                
-            return $this->redirect($this->generateUrl('brs_tte_despachos_lista'));
+        $em = $this->getDoctrine()->getManager();        
+        $request = $this->getRequest();
+        $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespachos();
+        if($codigoDespacho != 0) {
+            $arDespacho = $em->getRepository('BrasaTransporteBundle:TteDespachos')->find($codigoDespacho);
         }
-        
-        $arDespacho = null;  
-        $arDespachosTipos = new \Brasa\TransporteBundle\Entity\TteDespachosTipos();
-        $arDespachosTipos = $em->getRepository('BrasaTransporteBundle:TteDespachosTipos')->findAll();                                
-        
-        if ($codigoDespacho != null && $codigoDespacho != "" && $codigoDespacho != 0) {
-            $arDespacho = $em->getRepository('BrasaTransporteBundle:TteDespachos')->find($codigoDespacho);                                
-        }       
+        $form = $this->createForm(new TteDespachosType(), $arDespacho);
+        $form->handleRequest($request);        
+        if ($form->isValid()) {
+            $arrControles = $request->request->All();
+            $arDespacho = $form->getData();                        
+            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuariosConfiguracion')->find($this->getUser()->getId());                        
+            $arDespacho->setFecha(date_create(date('Y-m-d H:i:s')));
+            $arDespacho->setPuntoOperacionRel($arUsuarioConfiguracion->getPuntoOperacionRel());                                    
+            $em->persist($arDespacho);
+            $em->flush();            
+            //$em->getRepository('BrasaTransporteBundle:TteGuias')->Liquidar($arGuia->getCodigoGuiaPk());            
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tte_despachos_nuevo', array('codigoGuia' => 0)));
+            } else {
+                return $this->redirect($this->generateUrl('brs_tte_despachos_detalle', array('codigoDespacho' => $arDespacho->getCodigoDespachoPk())));
+            }    
             
+        }                        
         
         return $this->render('BrasaTransporteBundle:Despachos:nuevo.html.twig', array(
-            'arDespacho' => $arDespacho,
-            'arDespachosTipos' => $arDespachosTipos));
+            'form' => $form->createView()));
     }    
     
     /**
@@ -151,15 +131,30 @@ class DespachosController extends Controller
 
                 case "OpRetirar";
                     if (count($arrSeleccionados) > 0) {
+                        $intUnidades = $arDespacho->getCtUnidades();
+                        $intPesoReal = $arDespacho->getCtPesoReal();
+                        $intPesoVolumen = $arDespacho->getCtPesoVolumen();
+                        $intGuias = $arDespacho->getCtGuias();
                         foreach ($arrSeleccionados AS $codigoGuia) {
                             $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
                             $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
-                            if($arGuia->getCodigoDespachoFk() == NULL) {
+                            if($arGuia->getCodigoDespachoFk() != NULL) {
                                 $arGuia->setCodigoDespachoFk(NULL);
+                                $arGuia->setEstadoDespachada(0);                                
                                 $em->persist($arGuia);
-                                $em->flush();                                
-                            }
-                        }                        
+                                $em->flush(); 
+                                $intUnidades = $intUnidades - $arGuia->getCtUnidades();
+                                $intPesoReal = $intPesoReal - $arGuia->getCtPesoReal();
+                                $intPesoVolumen = $intPesoVolumen - $arGuia->getCtPesoVolumen();
+                                $intGuias = $intGuias - 1;                                  
+                            }                            
+                        }
+                        $arDespacho->setCtUnidades($intUnidades);
+                        $arDespacho->setCtPesoReal($intPesoReal);
+                        $arDespacho->setCtPesoVolumen($intPesoVolumen);
+                        $arDespacho->setCtGuias($intGuias);
+                        $em->persist($arDespacho);
+                        $em->flush();                        
                     }
                     break;                                                          
             }

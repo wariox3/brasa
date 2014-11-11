@@ -2,136 +2,84 @@
 {% block content %}
 
 <div class="container">          
-    <form class="form-horizontal" role="form" id="FrmNuevo" action="{{ path('brs_tte_despachos_nuevo', { 'codigoDespacho': 0  }) }}" method="post">
-        <h3>{%if arGuia is defined and arGuia is not null%}Editar {%else%}Nuevo {%endif%} despacho</h3>
-        <div class="well">
-            {% if arGuia is defined and arGuia is not null %}
-            <div class="form-group">
-                <label for="TxtCodigoDespacho" class="col-sm-2 control-label">Codigo despacho</label>
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    <h3>Nueva Guia</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion despacho</div>
+        <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label for="CboDespachoTipo" class="col-sm-2 control-label">Tipo servicio:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="TxtCodigoGuia" name="TxtCodigoDespacho" {% if arDespacho is defined and arDespacho is not null %} value="{{arDespacho.codigoDespachoPk}}" readonly="true"{% endif %}/>
+                        {{ form_widget(form.despachoTipoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
-            {% endif %}
-            <div class="form-group">
-                <label for="CboDespachosTipos" class="col-sm-2 control-label">Tipo:</label>
+            <div class="form-group form-group-sm">
+                <label for="CboCiudadOrigen" class="col-sm-2 control-label">Origen:</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="CboDespachosTipos" required>
-                        <option value="">Seleccione</option>
-                        {% for arDespachosTipos in arDespachosTipos %}
-                                <option value="{{arDespachosTipos.codigoDespachoTipoPk}}" {%if arDespachosTipos.codigoDepartamentoFk is defined %} {%if departamento.codigoDepartamentoPk == arCiudad.codigoDepartamentoFk %} selected {%endif%} {%endif%}>{{arDespachosTipos.nombre}}</option>
-                        {%endfor%}
-                    </select>
+                        {{ form_widget(form.ciudadOrigenRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>            
-            <div class="form-group">
-                <label for="TxtNombreCiudadOrigen" class="col-sm-2 control-label">Origen</label>
+            <div class="form-group form-group-sm">
+                <label for="CboCiudadDestino" class="col-sm-2 control-label">Destino:</label>
                 <div class="col-sm-10">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="TxtNombreCiudadOrigen" name="TxtNombreCiudadOrigen" value="{% if arGuia is defined and arGuia is not null %} {{arGuia.ciudadOrigenRel.nombre}} {%endif%}" placeholder="Ciudad origen"/>
-                      <span class="input-group-btn">
-                        <input type="text" class="btn btn-default" id="TxtCodigoCiudadOrigen" name="TxtCodigoCiudadOrigen" value=""/>
-                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_gen_buscar_ciudad', {'campoCodigo': 'TxtCodigoCiudadOrigen', 'campoNombre': 'TxtNombreCiudadOrigen'}) }}', 'BuscarCiudad', 600, 900)">Buscar</a>
-                      </span>
-                    </div><!-- /input-group -->
-                  </div><!-- /.col-lg-6 -->
-                </div><!-- /.row -->
+                        {{ form_widget(form.ciudadDestinoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>             
-            <div class="form-group">
-                <label for="TxtNombreCiudadDestino" class="col-sm-2 control-label">Destino</label>
+            </div>   
+            <div class="form-group form-group-sm">
+                <label for="CboRutas" class="col-sm-2 control-label">Ruta:</label>
                 <div class="col-sm-10">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="TxtNombreCiudadDestino" name="TxtNombreCiudadDestino" value="{% if arGuia is defined and arGuia is not null %} {{arGuia.ciudadDestinoRel.nombre}} {%endif%}" placeholder="Ciudad destino"/>
-                      <span class="input-group-btn">
-                        <input type="text" class="btn btn-default" id="TxtCodigoCiudadDestino" name="TxtCodigoCiudadDestino" value=""/>
-                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_gen_buscar_ciudad', {'campoCodigo': 'TxtCodigoCiudadDestino', 'campoNombre': 'TxtNombreCiudadDestino'}) }}', 'BuscarCiudad', 600, 900)">Buscar</a>
-                      </span>
-                    </div><!-- /input-group -->
-                  </div><!-- /.col-lg-6 -->
-                </div><!-- /.row -->
-                </div>
-            </div>       
-            <div class="form-group">
-                <label for="TxtNombreRuta" class="col-sm-2 control-label">Ruta:</label>
-                <div class="col-sm-10">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="TxtNombreRuta" name="TxtNombreRuta" value="{% if arGuia is defined and arGuia is not null %} {{arGuia.ciudadDestinoRel.nombre}} {%endif%}" placeholder="Ruta"/>
-                      <span class="input-group-btn">
-                        <input type="text" class="btn btn-default" id="TxtCodigoRuta" name="TxtCodigoRuta" value=""/>
-                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_tte_buscar_ruta') }}', 'BuscarRuta', 600, 900)">Buscar</a>
-                      </span>
-                    </div><!-- /input-group -->
-                  </div><!-- /.col-lg-6 -->
-                </div><!-- /.row -->
+                        {{ form_widget(form.rutaRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>            
-            <div class="form-group">
-                <label for="TxtNombreConductor" class="col-sm-2 control-label">Conductor:</label>
+            <div class="form-group form-group-sm">
+                <label for="CboConductor" class="col-sm-2 control-label">Conductor:</label>
                 <div class="col-sm-10">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="TxtNombreConductor" name="TxtNombreConductor" value="{% if arGuia is defined and arGuia is not null %} {{arGuia.ciudadDestinoRel.nombre}} {%endif%}" placeholder="Conductor"/>
-                      <span class="input-group-btn">
-                        <input type="text" class="btn btn-default" id="TxtCodigoConductor" name="TxtCodigoConductor" value=""/>
-                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_tte_buscar_conductor') }}', 'BuscarConductor', 600, 900)">Buscar</a>
-                      </span>
-                    </div><!-- /input-group -->
-                  </div><!-- /.col-lg-6 -->
-                </div><!-- /.row -->
+                        {{ form_widget(form.conductorRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>    
-            <div class="form-group">
-                <label for="TxtVehiculo" class="col-sm-2 control-label">Vehiculo:</label>
+            </div>   
+            <div class="form-group form-group-sm">
+                <label for="CboVehiculo" class="col-sm-2 control-label">Vehiculo:</label>
                 <div class="col-sm-10">
-                <div class="row">
-                  <div class="col-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                        <input type="text" class="form-control" id="TxtVehiculo" name="TxtVehiculo" value="{% if arGuia is defined and arGuia is not null %} {{arGuia.ciudadDestinoRel.nombre}} {%endif%}" placeholder="vehiculo"/>
-                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_tte_buscar_vehiculo') }}', 'BuscarConductor', 600, 900)">Buscar</a>                                                                      
-                      </span>
-                    </div><!-- /input-group -->
-                  </div><!-- /.col-lg-6 -->
-                </div><!-- /.row -->
-                </div>
-            </div>             
-        </div>
-        <div class="well">
-            <div class="form-group">
-                <label for="TxtFlete" class="col-sm-2 control-label">Flete</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="TxtFlete" name="TxtFlete" {% if arGuia is defined and arGuia is not null %} value="{{arDespacho.vrFlete}}" {% endif %} placeholder="flete"/>
-                </div>
-            </div>                                              
-            <div class="form-group">
-                <label for="TxtAnticipo" class="col-sm-2 control-label">Anticipo</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="TxtAnticipo" name="TxtAnticipo" {% if arGuia is defined and arGuia is not null %} value="{{arDespacho.vrAnticipo}}" {% endif %} placeholder="anticipo"/>
+                        {{ form_widget(form.vehiculoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>            
         </div>
-        <div class="well">
-            <div class="form-group">
-                <label for="TxtComentarios" class="col-sm-2 control-label">Comentarios</label>
-                <div class="col-sm-10">
-                    <textarea type="text" class="form-control" id="TxtComentarios" rows=5 name="TxtComentarios" {% if arDespacho is defined and arDespacho is not null %} value="{{arDespacho.comentarios}}" {% endif %} placeholder="Comentarios"> </textarea>
-                </div>
-            </div>            
-        </div>
+    </div>        
+    <div class="panel panel-default">
+        <div class="panel-heading">Liquidacion</div>
+        <div class="panel-body">
 
-        <div class="modal-footer">
-            <a class="btn btn-default" href="{{ path('brs_tte_despachos_lista') }}">Cancelar</a>
-            <button id="link_guardar" class="btn btn-primary" type="submit" name="OpSubmit" value="OpGuardar">Guardar</button>           
+            <div class="form-group form-group-sm">
+                <label for="form_vrFlete" class="col-sm-2 control-label">Flete:</label>
+                <div class="col-sm-10">
+                            {{ form_widget(form.vrFlete, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_vrAnticipo" class="col-sm-2 control-label">Anticipo:</label>
+                <div class="col-sm-10">
+                            {{ form_widget(form.vrAnticipo, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>            
         </div>
-
-    </form>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion adicional</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label for="form_comentarios" class="col-sm-2 control-label">Comentarios:</label>
+                <div class="col-sm-10">
+                            {{ form_widget(form.comentarios, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>            
+        </div>
+    </div>    
+    <div class="modal-footer">
+        <a class="btn btn-default" href="{{ path('brs_tte_despachos_lista') }}">Cancelar</a>
+            {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary'} }) }}
+            {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary'} }) }}
+    </div>    
+        {{ form_end(form) }}
+</div>
 </div>
 {% endblock %}

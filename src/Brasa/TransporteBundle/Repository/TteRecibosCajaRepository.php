@@ -17,4 +17,11 @@ class TteRecibosCajaRepository extends EntityRepository {
         $query = $em->createQuery($dql);        
         return $query;
     }    
+    
+    public function ListaRecibosCaja($fechaDesde, $fechaHasta) {        
+        $em = $this->getEntityManager();        
+        $dql   = "SELECT rc FROM BrasaTransporteBundle:TteRecibosCaja rc WHERE rc.fecha >= '" . $fechaDesde->format('Y/m/d') . " 00:00:00' AND rc.fecha <= '" . $fechaHasta->format('Y/m/d') . " 23:59:59'"; 
+        $query = $em->createQuery($dql);        
+        return $query;
+    }            
 }

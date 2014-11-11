@@ -39,6 +39,11 @@ class TteDespachos
     private $codigoCiudadDestinoFk;    
     
     /**
+     * @ORM\Column(name="codigo_punto_operacion_fk", type="integer", nullable=true)
+     */    
+    private $codigoPuntoOperacionFk;    
+    
+    /**
      * @ORM\Column(name="codigo_ruta_fk", type="integer", nullable=true)
      */    
     private $codigoRutaFk;     
@@ -49,7 +54,7 @@ class TteDespachos
     private $codigoConductorFk;    
     
     /**
-     * @ORM\Column(name="codigo_vehiculo_fk", type="string", nullable=true, length=10)
+     * @ORM\Column(name="codigo_vehiculo_fk", type="integer", nullable=true)
      */    
     private $codigoVehiculoFk;     
     
@@ -99,6 +104,11 @@ class TteDespachos
     private $ctUnidades = 0;    
     
     /**
+     * @ORM\Column(name="ct_guias", type="integer")
+     */
+    private $ctGuias = 0;    
+    
+    /**
      * @ORM\Column(name="estado_anulado", type="boolean")
      */    
     private $estadoAnulado = 0;  
@@ -107,6 +117,11 @@ class TteDespachos
      * @ORM\Column(name="estado_generado", type="boolean")
      */    
     private $estadoGenerado = 0;      
+
+    /**
+     * @ORM\Column(name="estado_descargado", type="boolean")
+     */    
+    private $estadoDescargado = 0;     
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=500, nullable=true)
@@ -155,6 +170,12 @@ class TteDespachos
      * @ORM\JoinColumn(name="codigo_despacho_tipo_fk", referencedColumnName="codigo_despacho_tipo_pk")
      */
     protected $despachoTipoRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TtePuntosOperacion", inversedBy="despachosPuntoOperacionRel")
+     * @ORM\JoinColumn(name="codigo_punto_operacion_fk", referencedColumnName="codigo_punto_operacion_pk")
+     */
+    protected $puntoOperacionRel;    
     
 
     /**
@@ -268,6 +289,29 @@ class TteDespachos
     }
 
     /**
+     * Set codigoPuntoOperacionFk
+     *
+     * @param integer $codigoPuntoOperacionFk
+     * @return TteDespachos
+     */
+    public function setCodigoPuntoOperacionFk($codigoPuntoOperacionFk)
+    {
+        $this->codigoPuntoOperacionFk = $codigoPuntoOperacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuntoOperacionFk
+     *
+     * @return integer 
+     */
+    public function getCodigoPuntoOperacionFk()
+    {
+        return $this->codigoPuntoOperacionFk;
+    }
+
+    /**
      * Set codigoRutaFk
      *
      * @param integer $codigoRutaFk
@@ -316,7 +360,7 @@ class TteDespachos
     /**
      * Set codigoVehiculoFk
      *
-     * @param string $codigoVehiculoFk
+     * @param integer $codigoVehiculoFk
      * @return TteDespachos
      */
     public function setCodigoVehiculoFk($codigoVehiculoFk)
@@ -329,7 +373,7 @@ class TteDespachos
     /**
      * Get codigoVehiculoFk
      *
-     * @return string 
+     * @return integer 
      */
     public function getCodigoVehiculoFk()
     {
@@ -590,6 +634,29 @@ class TteDespachos
     }
 
     /**
+     * Set estadoDescargado
+     *
+     * @param boolean $estadoDescargado
+     * @return TteDespachos
+     */
+    public function setEstadoDescargado($estadoDescargado)
+    {
+        $this->estadoDescargado = $estadoDescargado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoDescargado
+     *
+     * @return boolean 
+     */
+    public function getEstadoDescargado()
+    {
+        return $this->estadoDescargado;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -781,5 +848,51 @@ class TteDespachos
     public function getDespachoTipoRel()
     {
         return $this->despachoTipoRel;
+    }
+
+    /**
+     * Set puntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePuntosOperacion $puntoOperacionRel
+     * @return TteDespachos
+     */
+    public function setPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TtePuntosOperacion $puntoOperacionRel = null)
+    {
+        $this->puntoOperacionRel = $puntoOperacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puntoOperacionRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TtePuntosOperacion 
+     */
+    public function getPuntoOperacionRel()
+    {
+        return $this->puntoOperacionRel;
+    }
+
+    /**
+     * Set ctGuias
+     *
+     * @param integer $ctGuias
+     * @return TteDespachos
+     */
+    public function setCtGuias($ctGuias)
+    {
+        $this->ctGuias = $ctGuias;
+
+        return $this;
+    }
+
+    /**
+     * Get ctGuias
+     *
+     * @return integer 
+     */
+    public function getCtGuias()
+    {
+        return $this->ctGuias;
     }
 }

@@ -55,6 +55,10 @@ brs_tte_rep_novedades_pendientes:
     path:     /transporte/reportes/novedades/pendientes/
     defaults: { _controller: BrasaTransporteBundle:Reportes:novedadesPendientes }    
 
+brs_tte_rep_recibos_caja:
+    path:     /transporte/reportes/recibos/caja/
+    defaults: { _controller: BrasaTransporteBundle:Reportes:recibosCaja }    
+
 #Utilidades    
 brs_tte_buscar_conductor:
     pattern:  /transporte/buscar/conductor/

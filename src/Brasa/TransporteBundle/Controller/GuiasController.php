@@ -26,6 +26,15 @@ class GuiasController extends Controller
             ->getForm();
         $form->handleRequest($request);
         $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->ListaGuias(0, 0, "", "", "", "");
+        if($form->isValid()) {            
+            $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->ListaGuias(
+                    $form->get('ChkMostrarDespachadas')->getData(),
+                    $form->get('ChkMostrarAnuladas')->getData(),
+                    $form->get('TxtCodigoGuia')->getData(),
+                    $form->get('TxtNumeroGuia')->getData(),
+                    $form->get('TxtFechaDesde')->getData(),
+                    $form->get('TxtFechaHasta')->getData());                        
+        }        
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -33,7 +42,6 @@ class GuiasController extends Controller
             if (isset($arrControles['ChkFecha']))
                 $objChkFecha = $arrControles['ChkFecha'];
             switch ($request->request->get('OpSubmit')) {
-
                 case "OpEliminar";
                     foreach ($arrSeleccionados AS $codigoGuia) {
                         $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
@@ -43,19 +51,6 @@ class GuiasController extends Controller
                             $em->flush();                            
                         }
                     }
-                    break;
-                case "OpBuscar";
-                    $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                    $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->DevMovimientosFiltro(
-                            $codigoDocumento,
-                            $arrControles['TxtCodigoMovimiento'],
-                            $arrControles['TxtNumeroMovimiento'],
-                            $arrControles['TxtCodigoTercero'],
-                            $objChkFecha,
-                            $arrControles['TxtFechaDesde'],
-                            $arrControles['TxtFechaHasta'],
-                            "",
-                            "");
                     break;
             }
         }
@@ -171,8 +166,7 @@ class GuiasController extends Controller
                     break;
 
                 case "OpImprimir";
-                    if($arGuia->getEstadoImpreso() == 0 && $arGuia->getNumeroGuia() != 0 && $arGuia->getEstadoGenerada() == 1) {
-                        $arGuia->setNumeroGuia($em->getRepository('BrasaTransporteBundle:TteConfiguraciones')->consecutivoGuia());
+                    if($arGuia->getEstadoImpreso() == 0 && $arGuia->getEstadoGenerada() == 1) {                        
                         $arGuia->setEstadoImpreso(1);
                         $em->persist($arGuia);
                         $em->flush();
@@ -180,6 +174,13 @@ class GuiasController extends Controller
                     $objFormatoGuia = new \Brasa\TransporteBundle\Formatos\FormatoGuia();
                     $objFormatoGuia->Generar($this, $codigoGuia);
                     break;
+                case "OpImprimirRecibo";
+                    
+                break;
+            }
+            if($request->request->get('OpImprimirRecibo')) {                
+                $objFormatoReciboCaja = new \Brasa\TransporteBundle\Formatos\FormatoReciboCaja();
+                $objFormatoReciboCaja->Generar($this, $request->request->get('OpImprimirRecibo'));
             }
         }
 

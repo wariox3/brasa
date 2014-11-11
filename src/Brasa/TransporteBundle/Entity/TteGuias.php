@@ -302,6 +302,7 @@ class TteGuias
     {
         $this->novedadesRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recibosCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->guiasCobrosAdicionalesRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -634,6 +635,29 @@ class TteGuias
     public function getCodigoTipoPagoFk()
     {
         return $this->codigoTipoPagoFk;
+    }
+
+    /**
+     * Set codigoProductoFk
+     *
+     * @param integer $codigoProductoFk
+     * @return TteGuias
+     */
+    public function setCodigoProductoFk($codigoProductoFk)
+    {
+        $this->codigoProductoFk = $codigoProductoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProductoFk
+     *
+     * @return integer 
+     */
+    public function getCodigoProductoFk()
+    {
+        return $this->codigoProductoFk;
     }
 
     /**
@@ -1051,6 +1075,29 @@ class TteGuias
     }
 
     /**
+     * Set estadoGenerada
+     *
+     * @param boolean $estadoGenerada
+     * @return TteGuias
+     */
+    public function setEstadoGenerada($estadoGenerada)
+    {
+        $this->estadoGenerada = $estadoGenerada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGenerada
+     *
+     * @return boolean 
+     */
+    public function getEstadoGenerada()
+    {
+        return $this->estadoGenerada;
+    }
+
+    /**
      * Set fechaEntrega
      *
      * @param \DateTime $fechaEntrega
@@ -1143,6 +1190,29 @@ class TteGuias
     }
 
     /**
+     * Set formaLiquidacion
+     *
+     * @param integer $formaLiquidacion
+     * @return TteGuias
+     */
+    public function setFormaLiquidacion($formaLiquidacion)
+    {
+        $this->formaLiquidacion = $formaLiquidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get formaLiquidacion
+     *
+     * @return integer 
+     */
+    public function getFormaLiquidacion()
+    {
+        return $this->formaLiquidacion;
+    }
+
+    /**
      * Add novedadesRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteNovedades $novedadesRel
@@ -1178,10 +1248,10 @@ class TteGuias
     /**
      * Add recibosCajaRel
      *
-     * @param \Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel
+     * @param \Brasa\TransporteBundle\Entity\TteRecibosCaja $recibosCajaRel
      * @return TteGuias
      */
-    public function addRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel)
+    public function addRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteRecibosCaja $recibosCajaRel)
     {
         $this->recibosCajaRel[] = $recibosCajaRel;
 
@@ -1191,9 +1261,9 @@ class TteGuias
     /**
      * Remove recibosCajaRel
      *
-     * @param \Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel
+     * @param \Brasa\TransporteBundle\Entity\TteRecibosCaja $recibosCajaRel
      */
-    public function removeRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteNovedades $recibosCajaRel)
+    public function removeRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteRecibosCaja $recibosCajaRel)
     {
         $this->recibosCajaRel->removeElement($recibosCajaRel);
     }
@@ -1206,6 +1276,39 @@ class TteGuias
     public function getRecibosCajaRel()
     {
         return $this->recibosCajaRel;
+    }
+
+    /**
+     * Add guiasCobrosAdicionalesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuiasCobrosAdicionales $guiasCobrosAdicionalesRel
+     * @return TteGuias
+     */
+    public function addGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiasCobrosAdicionales $guiasCobrosAdicionalesRel)
+    {
+        $this->guiasCobrosAdicionalesRel[] = $guiasCobrosAdicionalesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove guiasCobrosAdicionalesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuiasCobrosAdicionales $guiasCobrosAdicionalesRel
+     */
+    public function removeGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiasCobrosAdicionales $guiasCobrosAdicionalesRel)
+    {
+        $this->guiasCobrosAdicionalesRel->removeElement($guiasCobrosAdicionalesRel);
+    }
+
+    /**
+     * Get guiasCobrosAdicionalesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGuiasCobrosAdicionalesRel()
+    {
+        return $this->guiasCobrosAdicionalesRel;
     }
 
     /**
@@ -1393,6 +1496,29 @@ class TteGuias
     }
 
     /**
+     * Set productoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProductos $productoRel
+     * @return TteGuias
+     */
+    public function setProductoRel(\Brasa\TransporteBundle\Entity\TteProductos $productoRel = null)
+    {
+        $this->productoRel = $productoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get productoRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteProductos 
+     */
+    public function getProductoRel()
+    {
+        return $this->productoRel;
+    }
+
+    /**
      * Set puntoOperacionIngresoRel
      *
      * @param \Brasa\TransporteBundle\Entity\TtePuntosOperacion $puntoOperacionIngresoRel
@@ -1436,130 +1562,5 @@ class TteGuias
     public function getPuntoOperacionActualRel()
     {
         return $this->puntoOperacionActualRel;
-    }
-
-    /**
-     * Set codigoProductoFk
-     *
-     * @param integer $codigoProductoFk
-     * @return TteGuias
-     */
-    public function setCodigoProductoFk($codigoProductoFk)
-    {
-        $this->codigoProductoFk = $codigoProductoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoProductoFk
-     *
-     * @return integer 
-     */
-    public function getCodigoProductoFk()
-    {
-        return $this->codigoProductoFk;
-    }
-
-    /**
-     * Set productoRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteProductos $productoRel
-     * @return TteGuias
-     */
-    public function setProductoRel(\Brasa\TransporteBundle\Entity\TteProductos $productoRel = null)
-    {
-        $this->productoRel = $productoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get productoRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteProductos 
-     */
-    public function getProductoRel()
-    {
-        return $this->productoRel;
-    }
-
-    /**
-     * Set formaLiquidacion
-     *
-     * @param integer $formaLiquidacion
-     * @return TteGuias
-     */
-    public function setFormaLiquidacion($formaLiquidacion)
-    {
-        $this->formaLiquidacion = $formaLiquidacion;
-
-        return $this;
-    }
-
-    /**
-     * Get formaLiquidacion
-     *
-     * @return integer 
-     */
-    public function getFormaLiquidacion()
-    {
-        return $this->formaLiquidacion;
-    }
-
-    /**
-     * Set estadoGenerada
-     *
-     * @param boolean $estadoGenerada
-     * @return TteGuias
-     */
-    public function setEstadoGenerada($estadoGenerada)
-    {
-        $this->estadoGenerada = $estadoGenerada;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoGenerada
-     *
-     * @return boolean 
-     */
-    public function getEstadoGenerada()
-    {
-        return $this->estadoGenerada;
-    }
-
-    /**
-     * Add guiasCobrosAdicionalesRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteGuiaCobrosAdicionales $guiasCobrosAdicionalesRel
-     * @return TteGuias
-     */
-    public function addGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiaCobrosAdicionales $guiasCobrosAdicionalesRel)
-    {
-        $this->guiasCobrosAdicionalesRel[] = $guiasCobrosAdicionalesRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove guiasCobrosAdicionalesRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteGuiaCobrosAdicionales $guiasCobrosAdicionalesRel
-     */
-    public function removeGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiaCobrosAdicionales $guiasCobrosAdicionalesRel)
-    {
-        $this->guiasCobrosAdicionalesRel->removeElement($guiasCobrosAdicionalesRel);
-    }
-
-    /**
-     * Get guiasCobrosAdicionalesRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGuiasCobrosAdicionalesRel()
-    {
-        return $this->guiasCobrosAdicionalesRel;
     }
 }

@@ -35,6 +35,7 @@ class TteGuiasCobrosAdicionales
     protected $guiaRel;    
     
 
+
     /**
      * Get codigoGuiaCobroAdicionalPk
      *

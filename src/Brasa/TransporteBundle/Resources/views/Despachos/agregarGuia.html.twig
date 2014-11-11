@@ -24,6 +24,7 @@
     <table class="table table-striped table-bordered table-condensed">
         <tr>
             <th>ID</th>
+            <th>Numero</th>
             <th>Fecha</th>
             <th>Soporte</th>
             <th>Destino</th>
@@ -35,6 +36,7 @@
             {% for arGuias in arGuias %}
         <tr> 
             <td><input type="hidden" name="LblCodigoGuia[]" value="{{ arGuias.codigoGuiaPk }}">{{ arGuias.codigoGuiaPk }}</td>  
+            <td>{{ arGuias.numeroGuia}}</td>
             <td>{{ arGuias.fechaIngreso |date("Y/m/d")  }}</td>
             <td>{{ arGuias.documentoCliente }}</td>
             <td>{{ arGuias.ciudadDestinoRel.nombre }}</td>
@@ -46,7 +48,7 @@
     </table>
 
     <div class="divDerecho">
-        <button class="btn btn-primary btn-mini" type="submit" name="OpSubmit" value="OpAgregar" id="register_submit">Agregar Seleccionados</button><br>            
+        <button class="btn btn-primary btn-mini" type="submit" name="OpSubmit" value="OpAgregar" id="register_submit">Agregar marcados</button><br>            
     </div>
     <br />
 </form>        

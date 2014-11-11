@@ -49,6 +49,10 @@ class TtePuntosOperacion
      */
     protected $guiasPuntoOperacionActualRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="TteDespachos", mappedBy="puntoOperacionRel")
+     */
+    protected $despachosPuntoOperacionRel;     
 
     /**
      * Constructor
@@ -236,5 +240,38 @@ class TtePuntosOperacion
     public function getGuiasPuntoOperacionActualRel()
     {
         return $this->guiasPuntoOperacionActualRel;
+    }
+
+    /**
+     * Add despachosPuntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteDespachos $despachosPuntoOperacionRel
+     * @return TtePuntosOperacion
+     */
+    public function addDespachosPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteDespachos $despachosPuntoOperacionRel)
+    {
+        $this->despachosPuntoOperacionRel[] = $despachosPuntoOperacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove despachosPuntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteDespachos $despachosPuntoOperacionRel
+     */
+    public function removeDespachosPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteDespachos $despachosPuntoOperacionRel)
+    {
+        $this->despachosPuntoOperacionRel->removeElement($despachosPuntoOperacionRel);
+    }
+
+    /**
+     * Get despachosPuntoOperacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDespachosPuntoOperacionRel()
+    {
+        return $this->despachosPuntoOperacionRel;
     }
 }

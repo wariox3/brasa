@@ -13,7 +13,7 @@ class TteVehiculos
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_vehiculo_pk", type="string", length=10)
+     * @ORM\Column(name="codigo_vehiculo_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoVehiculoPk;  
@@ -28,7 +28,6 @@ class TteVehiculos
      */
     protected $despachosRel; 
 
-
     /**
      * Constructor
      */
@@ -40,7 +39,7 @@ class TteVehiculos
     /**
      * Get codigoVehiculoPk
      *
-     * @return string 
+     * @return integer 
      */
     public function getCodigoVehiculoPk()
     {

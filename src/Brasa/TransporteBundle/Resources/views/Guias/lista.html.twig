@@ -9,18 +9,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">Filtros de busqueda</div>
         <div class="panel-body">
-            {{ form_errors(form) }}
-            <div class="form-group form-group-sm">
-                <label for="form_comentarios" class="col-sm-2 control-label"></label>
-                <div class="col-sm-10">
-                    <label class="checkbox-inline">
-                      {{ form_widget(form.ChkMostrarDespachadas) }} Despachadas
-                    </label>
-                    <label class="checkbox-inline">
-                      {{ form_widget(form.ChkMostrarAnuladas) }} Anuladas
-                    </label>
-                </div>                                         
-            </div>         
+            {{ form_errors(form) }}         
             <div class="form-group form-group-sm">  
                 <label for="form_TxtCodigoGuia" class="col-sm-2 control-label">Codigo</label>
                 <div class="col-sm-10">                  
@@ -62,11 +51,21 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
+                <label for="form_comentarios" class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <label class="checkbox-inline">
+                      {{ form_widget(form.ChkMostrarDespachadas) }} Despachadas
+                    </label>
+                    <label class="checkbox-inline">
+                      {{ form_widget(form.ChkMostrarAnuladas) }} Anuladas
+                    </label>
+                </div>                                         
+            </div>            
+            <div class="form-group form-group-sm">
                 <div class="col-sm-offset-2 col-sm-10">
-                    {{ form_widget(form.Buscar, { 'attr': {'class': 'btn btn-primary'} }) }}
+                    {{ form_widget(form.Buscar, { 'attr': {'class': 'btn btn-default', 'style':'float:right'} }) }}
                 </div>
-            </div>                       
-        
+            </div>                               
             {{ form_rest(form) }}          
         </div>
     </div>                                  
@@ -125,6 +124,7 @@
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 <a class="btn btn-default" href="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': 0 }) }}" style="float:left">Nuevo</a>                                                
+                <button class="btn btn-default btn-mini" type="submit" name="OpSubmit" value="OpGenerar" >Generar</button>
                 <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpEliminar" >Eliminar</button>
 
             </div>

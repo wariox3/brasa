@@ -9,7 +9,7 @@ class DespachosAgregarGuiaController extends Controller
     public function listaAction($codigoDespacho) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy(array('codigoDespachoFk' => NULL));
+        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy(array('codigoDespachoFk' => NULL, 'estadoGenerada' => 1, 'estadoAnulada' => 0));
         $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespachos();
         $arDespacho = $em->getRepository('BrasaTransporteBundle:TteDespachos')->find($codigoDespacho);
         if ($request->getMethod() == 'POST') {
@@ -28,6 +28,7 @@ class DespachosAgregarGuiaController extends Controller
                         $intUnidades = $arDespacho->getCtUnidades();
                         $intPesoReal = $arDespacho->getCtPesoReal();
                         $intPesoVolumen = $arDespacho->getCtPesoVolumen();
+                        $intGuias = $arDespacho->getCtGuias();
                         foreach ($arrSeleccionados AS $codigoGuia) {
                             $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
                             $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
@@ -38,11 +39,13 @@ class DespachosAgregarGuiaController extends Controller
                             $intUnidades = $intUnidades + $arGuia->getCtUnidades();
                             $intPesoReal = $intPesoReal + $arGuia->getCtPesoReal();
                             $intPesoVolumen = $intPesoVolumen + $arGuia->getCtPesoVolumen();
+                            $intGuias = $intGuias + 1;
                         }
 
                         $arDespacho->setCtUnidades($intUnidades);
                         $arDespacho->setCtPesoReal($intPesoReal);
                         $arDespacho->setCtPesoVolumen($intPesoVolumen);
+                        $arDespacho->setCtGuias($intGuias);
                         $em->persist($arDespacho);
                         $em->flush();
                     }
@@ -50,6 +53,8 @@ class DespachosAgregarGuiaController extends Controller
                     break;
             }
         }
-        return $this->render('BrasaTransporteBundle:Despachos:agregarGuia.html.twig', array('arGuias' => $arGuias, 'arDespacho' => $arDespacho));
+        return $this->render('BrasaTransporteBundle:Despachos:agregarGuia.html.twig', array(
+            'arGuias' => $arGuias, 
+            'arDespacho' => $arDespacho));
     }
 }
