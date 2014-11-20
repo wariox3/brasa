@@ -33,7 +33,8 @@ class GuiasController extends Controller
                     $form->get('TxtCodigoGuia')->getData(),
                     $form->get('TxtNumeroGuia')->getData(),
                     $form->get('TxtFechaDesde')->getData(),
-                    $form->get('TxtFechaHasta')->getData());                        
+                    $form->get('TxtFechaHasta')->getData(),
+                    $form->get('TxtCodigoTercero')->getData());                        
         }        
         if ($request->getMethod() == 'POST') {            
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -179,17 +180,23 @@ class GuiasController extends Controller
         $query = $em->getRepository('BrasaTransporteBundle:TteNovedades')->NovedadesGuiasDetalle($codigoGuia);
         $paginator = $this->get('knp_paginator');        
         $arNovedades = new \Brasa\TransporteBundle\Entity\TteNovedades();
-        $arNovedades = $paginator->paginate($query, $this->get('request')->query->get('page', 1),3);
+        $arNovedades = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
 
         $query = $em->getRepository('BrasaTransporteBundle:TteRecibosCaja')->RecibosCajaGuiasDetalle($codigoGuia);
         $paginator = $this->get('knp_paginator');        
         $arRecibosCaja = new \Brasa\TransporteBundle\Entity\TteRecibosCaja();
-        $arRecibosCaja = $paginator->paginate($query, $this->get('request')->query->get('page', 1),3);        
+        $arRecibosCaja = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);        
+
+        $query = $em->getRepository('BrasaTransporteBundle:TteRedespachos')->RedespachosGuiasDetalle($codigoGuia);
+        $paginator = $this->get('knp_paginator');        
+        $arRedespachos = new \Brasa\TransporteBundle\Entity\TteRedespachos();
+        $arRedespachos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
         
         return $this->render('BrasaTransporteBundle:Guias:detalle.html.twig', array(
             'arGuia' => $arGuia,
             'arNovedades' => $arNovedades,
             'arRecibosCaja' => $arRecibosCaja,
+            'arRedespachos' => $arRedespachos,
             'form' => $form->createView(),
             'frmNovedad' => $frmNovedad->createView(),
             'frmReciboCaja' => $frmReciboCaja->createView()));

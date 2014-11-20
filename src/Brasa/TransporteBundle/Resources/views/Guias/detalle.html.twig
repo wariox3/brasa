@@ -20,6 +20,19 @@
                     <button class="btn btn-default " type="submit" name="OpSubmit" value="OpImprimir">Imprimir</button>
                     <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAnular" {% if arGuia.estadoGenerada == 0 or arGuia.estadoAnulada == 1%} disabled {% endif %} onclick="javascript:if (!confirm('Esta seguro que desea anular el documento?'))
                                         return false;">Anular</button>
+                    <!-- Split button -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default">Procesos</button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Proceso 1</a></li>
+                            <li class="divider"></li>                            
+                            <li><a href="#">Proceso 2</a></li>
+                        </ul>
+                    </div>                    
                 </div>
             </div>
         </form>
@@ -109,8 +122,9 @@
     <!-- Fin Encabezado Movimiento -->
 
     <ul class="nav nav-tabs">        
-        <li class="active"><a href="#recibos" data-toggle="tab">Recibos</a></li>
-        <li><a href="#novedades" data-toggle="tab">Novedades</a></li>
+        <li class="active"><a href="#recibos" data-toggle="tab">Recibos <span class="badge">{{ arRecibosCaja.getTotalItemCount }}</span></a></li>
+        <li><a href="#novedades" data-toggle="tab">Novedades <span class="badge">{{ arNovedades.getTotalItemCount }}</span></a></li>
+        <li><a href="#redespachos" data-toggle="tab">Redespachos <span class="badge">{{ arRedespachos.getTotalItemCount }}</span></a></li>
     </ul>
 
     <div class="tab-content">
@@ -149,8 +163,8 @@
                     </div>                                        
                 </div>
                 <div class="btn-toolbar" style="float:left">
-                    <div class="btn-group"><a class="btn btn-primary btn-xs" href="#" data-toggle="modal" data-target="#myModalReciboCaja">Agregar recibo</a></div>
-                    <div class="btn-group"><button class="btn btn-danger btn-xs" type="submit" name="OpSubmit" value="OpRetirar">Eliminar recibos selecciondos</button></div>            
+                    <div class="btn-group"><a class="btn btn-primary btn-xs" href="#" data-toggle="modal" data-target="#myModalReciboCaja" {% if arGuia.codigoTipoPagoFk != 2 or arGuia.codigoTipoPagoFk != 3%} disabled {% endif %}>Agregar recibo</a></div>
+                    <div class="btn-group"><button class="btn btn-danger btn-xs" type="submit" name="OpSubmit" value="OpRetirar" {% if arGuia.codigoTipoPagoFk != 2 or arGuia.codigoTipoPagoFk != 3%} disabled {% endif %}>Eliminar recibos selecciondos</button></div>            
                 </div>  
                 <br/>
                 <hr/>                
@@ -203,18 +217,46 @@
                 <br/>
                 <hr/>                
             </form>
+        </div>   
+        <div class="tab-pane" id="redespachos">
+            <form action="{{ path('brs_tte_guias_detalle', {'codigoGuia': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
+                <!-- Menu Encabezado -->
+                <div id="recibos" style="width: 99.5%">
+                    <h3>Lista de redespachos</h3>
+                    <table class="table table-striped table-bordered table-condensed">                        
+                        <tr>
+                            <th>{{ knp_pagination_sortable(arRedespachos, 'ID', 'arRedespachos.codigoRedespachoPk') }}</th>
+                            <th>Fecha</th>       
+                        </tr>
+                        {% for arRedespachos in arRedespachos %}
+                        <tr>
+                            <td>
+                                <input type="hidden" name="LblCodigoRedespacho[]" value="{{ arRedespachos.codigoRedespachoPk }}">
+                                <span class="badge">{{ arRedespachos.codigoRedespachoPk }}</span>
+                            </td>
+                            <td>{{ arRedespachos.fecha |date("Y/m/d")  }}</td>                                                       
+                        </tr>
+                        {% endfor %}
+                    </table>                    
+                    <div class="navigation">
+                        {{ knp_pagination_render(arRedespachos) }}
+                    </div>                                        
+                </div>  
+                <br/>
+                <hr/>                
+            </form>
         </div>        
     </div>
     <div>
-    <br/>
-    <form action="{{ path('brs_tte_guias_detalle', {'codigoGuia': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
-        <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">
-                <a class="btn btn-default" href="{{ path('brs_tte_guias_lista') }}" style="float:left">Volver</a>
+        <br/>
+        <form action="{{ path('brs_tte_guias_detalle', {'codigoGuia': arGuia.codigoGuiaPk}) }}" method="post" novalidate>
+            <div class="btn-toolbar" style="float:left">
+                <div class="btn-group">
+                    <a class="btn btn-default" href="{{ path('brs_tte_guias_lista') }}" style="float:left">Volver</a>
+                </div>
             </div>
-        </div>
-    </form>
-    <br />        
+        </form>
+        <br />        
     </div>
 
     <!-- Modal novedades-->
@@ -254,7 +296,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal recibos-->
     <div class="modal fade" id="myModalReciboCaja" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">

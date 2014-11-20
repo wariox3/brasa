@@ -224,6 +224,11 @@ class TteGuias
     protected $novedadesRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="TteRedespachos", mappedBy="guiaRel")
+     */
+    protected $redespachosRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TteRecibosCaja", mappedBy="guiaRel")
      */
     protected $recibosCajaRel;    
@@ -1590,5 +1595,38 @@ class TteGuias
     public function getEstadoFacturada()
     {
         return $this->estadoFacturada;
+    }
+
+    /**
+     * Add redespachosRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRedespachos $redespachosRel
+     * @return TteGuias
+     */
+    public function addRedespachosRel(\Brasa\TransporteBundle\Entity\TteRedespachos $redespachosRel)
+    {
+        $this->redespachosRel[] = $redespachosRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove redespachosRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRedespachos $redespachosRel
+     */
+    public function removeRedespachosRel(\Brasa\TransporteBundle\Entity\TteRedespachos $redespachosRel)
+    {
+        $this->redespachosRel->removeElement($redespachosRel);
+    }
+
+    /**
+     * Get redespachosRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRedespachosRel()
+    {
+        return $this->redespachosRel;
     }
 }

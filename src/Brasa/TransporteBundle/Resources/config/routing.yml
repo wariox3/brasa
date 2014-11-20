@@ -17,6 +17,10 @@ brs_tte_guias_funciones_entregar:
 brs_tte_guias_funciones_descargar:
     path:     /transporte/guias/funciones/descargar
     defaults: { _controller: BrasaTransporteBundle:GuiasFunciones:descargar }    
+
+brs_tte_guias_funciones_redespachar:
+    path:     /transporte/guias/funciones/redespachar
+    defaults: { _controller: BrasaTransporteBundle:GuiasFunciones:redespachar }        
     
 brs_tte_despachos_lista:
     path:     /transporte/despachos/lista
@@ -49,6 +53,22 @@ brs_tte_facturas_detalle:
 brs_tte_facturas_agregar_guia:
     path:     /transporte/facturas/agregar/guia/{codigoFactura}
     defaults: { _controller: BrasaTransporteBundle:FacturasAgregarGuia:lista }
+
+brs_tte_relacionescumplidos_lista:
+    path:     /transporte/relacionescumplidos/lista
+    defaults: { _controller: BrasaTransporteBundle:RelacionesCumplidos:lista }
+
+brs_tte_relacionescumplidos_detalle:
+    path:     /transporte/relacionescumplidos/detalle/{codigoRelacionCumplidos}
+    defaults: { _controller: BrasaTransporteBundle:RelacionesCumplidos:detalle }
+    
+brs_tte_relacionescumplidos_nuevo:
+    path:     /transporte/relacionescumplidos/nuevo/{codigoRelacionCumplidos}
+    defaults: { _controller: BrasaTransporteBundle:RelacionesCumplidos:nuevo }   
+
+brs_tte_relacionescumplidos_agregar_guia:
+    path:     /transporte/relacionescumplidos/agregar/guia/{codigoRelacionCumplidos}
+    defaults: { _controller: BrasaTransporteBundle:RelacionesCumplidos:agregarGuia }
 
 #Reportes
 brs_tte_rep_pendientes_despacho:

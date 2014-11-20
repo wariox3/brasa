@@ -134,8 +134,10 @@
                                             <a tabindex="-1" href="#">Guias</a>
                                             <ul class="dropdown-menu">                                        
                                                 <li><a href="{{ path('brs_tte_guias_lista') }}">Lista</a></li>
+                                                <li class="divider"></li>
                                                 <li><a href="{{ path('brs_tte_guias_funciones_entregar') }}">Fechas de entrega</a></li>
                                                 <li><a href="{{ path('brs_tte_guias_funciones_descargar') }}">Descargar</a></li>
+                                                <li><a href="{{ path('brs_tte_guias_funciones_redespachar') }}">Redespachos</a></li>
                                             </ul>                                    
                                         </li>
                                         <li class="dropdown-submenu">
@@ -144,7 +146,12 @@
                                                 <li><a href="{{ path('brs_tte_despachos_lista') }}">Lista</a></li>
                                             </ul>                                    
                                         </li>
-
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1" href="#">Relaciones cumplidos</a>
+                                            <ul class="dropdown-menu">                                        
+                                                <li><a href="{{ path('brs_tte_relacionescumplidos_lista') }}">Lista</a></li>
+                                            </ul>                                    
+                                        </li>
                                     </ul>                                    
                                 </li>
                                 <li class="dropdown-submenu">                                    
@@ -178,8 +185,6 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reportes <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ path('brasa_general_inicio') }}">Configuracion</a></li>
-                        <li class="divider"></li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Transporte</a>
                             <ul class="dropdown-menu">

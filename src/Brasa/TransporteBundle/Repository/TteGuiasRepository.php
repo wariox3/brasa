@@ -125,7 +125,7 @@ class TteGuiasRepository extends EntityRepository {
         return $intConsecutivo;
     }     
     
-    public function ListaGuias($boolDespachada, $boolAnulada, $codigoGuia, $numeroGuia, $fechaDesde, $fechaHasta) {        
+    public function ListaGuias($boolDespachada, $boolAnulada, $codigoGuia, $numeroGuia, $fechaDesde, $fechaHasta, $codigoTercero = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT guias FROM BrasaTransporteBundle:TteGuias guias WHERE guias.codigoGuiaPk <> 0";
         if($boolDespachada != 1 ) {
@@ -140,6 +140,9 @@ class TteGuiasRepository extends EntityRepository {
         if($numeroGuia != "" ) {
             $dql .= " AND guias.numeroGuia = " . $numeroGuia;
         }  
+        if($codigoTercero != "" ) {
+            $dql .= " AND guias.codigoTerceroFk = " . $codigoTercero;
+        }        
         if($fechaDesde != "" ) {
             $dql .= " AND guias.fechaIngreso >= '" . $fechaDesde->format('Y/m/d') . " 00:00:00'";
         }        

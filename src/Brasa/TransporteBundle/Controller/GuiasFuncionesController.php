@@ -115,4 +115,68 @@ class GuiasFuncionesController extends Controller
             'arGuias' => $arGuias,
             'form' => $form->createView()));
     }
+    
+    public function redespacharAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');
+        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();        
+
+        $form = $this->createFormBuilder()
+            ->add('TxtCodigoGuia', 'text', array('label'  => 'Codigo'))
+            ->add('TxtNumeroGuia', 'text')
+            ->add('TxtDespacho', 'text')
+            ->add('Buscar', 'submit')
+            ->getForm();
+
+        $form->handleRequest($request);
+        $arrCriterioGuias = array('estadoDespachada' => 1, 'estadoAnulada' => 0);
+        if ($form->isValid()) {            
+            $arrDatos = $form->getData();
+            if($arrDatos['TxtCodigoGuia']){
+                $arrCriterioGuias = array('codigoGuiaPk' => $arrDatos['TxtCodigoGuia']);
+            }
+            if($arrDatos['TxtNumeroGuia']){
+                $arrCriterioGuias = array('numeroGuia' => $arrDatos['TxtNumeroGuia']);
+            }
+            if($arrDatos['TxtDespacho']){
+                $arrCriterioGuias = array('codigoDespachoFk' => $arrDatos['TxtDespacho']);
+            }            
+            $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy($arrCriterioGuias);            
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            switch ($request->request->get('OpSubmit')) {
+                case "OpRedespachar";
+                    if (count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoGuia) {
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            if($arGuia->getCodigoDespachoFk() != null) {
+                                if($arGuia->getDespachoRel()->getEstadoGenerado() == 1) {
+                                    $arGuia->setEstadoDespachada(0);
+                                    $arGuia->setDespachoRel(null);                                
+                                    $em->persist($arGuia);
+                                    $em->flush();  
+                                    
+                                    $arRedespacho = new \Brasa\TransporteBundle\Entity\TteRedespachos();
+                                    $arRedespacho->setFecha(date_create(date('Y-m-d H:i:s')));                                    
+                                    $arRedespacho->setGuiaRel($arGuia);
+                                    $em->persist($arRedespacho);
+                                    $em->flush();                                     
+                                }                                
+                            }
+                        }
+                        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy($arrCriterioGuias);            
+                    }
+                    break;
+            }
+            
+        }
+        
+        return $this->render('BrasaTransporteBundle:Guias/Funciones:redespachar.html.twig', array(
+            'arGuias' => $arGuias,
+            'form' => $form->createView()));
+    }    
 }
