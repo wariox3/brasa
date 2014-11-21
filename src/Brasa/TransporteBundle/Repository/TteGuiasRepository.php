@@ -25,9 +25,24 @@ class TteGuiasRepository extends EntityRepository {
         return $query;
     }    
     
-    public function GuiasPendientesDespacho() {        
+    public function GuiasPendientesDespacho($numeroGuia, $fechaDesde, $fechaHasta, $codigoTercero = "", $ruta = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT guias FROM BrasaTransporteBundle:TteGuias guias WHERE guias.estadoDespachada = 0";
+        $dql   = "SELECT guias FROM BrasaTransporteBundle:TteGuias guias WHERE guias.estadoDespachada = 0 AND guias.estadoAnulada = 0";
+        if($numeroGuia != "" ) {
+            $dql .= " AND guias.numeroGuia = " . $numeroGuia;
+        }    
+        if($codigoTercero != "" ) {
+            $dql .= " AND guias.codigoTerceroFk = " . $codigoTercero;
+        }        
+        if($fechaDesde != "" ) {
+            $dql .= " AND guias.fechaIngreso >= '" . $fechaDesde->format('Y/m/d') . " 00:00:00'";
+        }        
+        if($fechaHasta != "" ) {
+            $dql .= " AND guias.fechaIngreso <= '" . $fechaHasta->format('Y/m/d') . " 23:59:59'";
+        }      
+        if($ruta != "" ) {
+            $dql .= " AND guias.codigoRutaFk = " . $ruta->getCodigoRutaPk();
+        }                
         $query = $em->createQuery($dql);        
         return $query;
     }    

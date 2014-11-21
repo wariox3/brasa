@@ -87,7 +87,31 @@
                                     </ul>
                                 </li>                                
                             </ul>
-                        </li>                           
+                        </li>     
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Transporte</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Logistica</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_tte_consultas_pendientes_despacho') }}">Pendientes por despachar</a></li>
+                                        <li><a href="{{ path('brs_tte_consultas_novedades_pendientes') }}">Novedades pendientes</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Control</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_tte_consultas_recibos_caja') }}">Recibos caja</a></li>                                        
+                                    </ul>
+                                </li>   
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Comercial</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_tte_consultas_recibos_caja') }}">Pendientes por facturar</a></li>                                        
+                                    </ul>
+                                </li>                                
+                            </ul>
+                        </li>                        
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -168,49 +192,7 @@
                             </ul>
                         </li>                        
                     </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Herramientas <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ path('brasa_general_inicio') }}">Otras</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">General</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ path('brs_gen_base_terceros') }}">Terceros</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>                
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reportes <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Transporte</a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Logistica</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tte_rep_pendientes_despacho') }}">Pendientes por despachar</a></li>
-                                        <li><a href="{{ path('brs_tte_rep_novedades_pendientes') }}">Novedades pendientes</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Control</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tte_rep_recibos_caja') }}">Recibos caja</a></li>                                        
-                                    </ul>
-                                </li>   
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Comercial</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tte_rep_recibos_caja') }}">Pendientes por facturar</a></li>                                        
-                                    </ul>
-                                </li>                                
-                            </ul>
-                        </li>
-                    </ul>
-                </li>                
+                </li>                                
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

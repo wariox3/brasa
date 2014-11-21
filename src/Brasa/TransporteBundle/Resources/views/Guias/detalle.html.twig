@@ -163,8 +163,8 @@
                     </div>                                        
                 </div>
                 <div class="btn-toolbar" style="float:left">
-                    <div class="btn-group"><a class="btn btn-primary btn-xs" href="#" data-toggle="modal" data-target="#myModalReciboCaja" {% if arGuia.codigoTipoPagoFk != 2 or arGuia.codigoTipoPagoFk != 3%} disabled {% endif %}>Agregar recibo</a></div>
-                    <div class="btn-group"><button class="btn btn-danger btn-xs" type="submit" name="OpSubmit" value="OpRetirar" {% if arGuia.codigoTipoPagoFk != 2 or arGuia.codigoTipoPagoFk != 3%} disabled {% endif %}>Eliminar recibos selecciondos</button></div>            
+                    <div class="btn-group"><a class="btn btn-primary btn-xs" href="#" data-toggle="modal" data-target="#myModalReciboCaja" {% if (arGuia.codigoTipoPagoFk != 2 and arGuia.codigoTipoPagoFk != 3) or arGuia.estadoGenerada == 0%} disabled {% endif %}>Agregar recibo</a></div>
+                    <div class="btn-group"><button class="btn btn-danger btn-xs" type="submit" name="OpSubmit" value="OpRetirar" {% if (arGuia.codigoTipoPagoFk != 2 and arGuia.codigoTipoPagoFk != 3) or arGuia.estadoGenerada == 0%} disabled {% endif %}>Eliminar recibos selecciondos</button></div>            
                 </div>  
                 <br/>
                 <hr/>                

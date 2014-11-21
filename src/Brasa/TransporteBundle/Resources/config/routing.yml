@@ -71,17 +71,17 @@ brs_tte_relacionescumplidos_agregar_guia:
     defaults: { _controller: BrasaTransporteBundle:RelacionesCumplidos:agregarGuia }
 
 #Reportes
-brs_tte_rep_pendientes_despacho:
-    path:     /transporte/reportes/pendiente/despacho/
-    defaults: { _controller: BrasaTransporteBundle:Reportes:guiasPendientesDespacho }    
+brs_tte_consultas_pendientes_despacho:
+    path:     /transporte/consultas/pendiente/despacho/
+    defaults: { _controller: BrasaTransporteBundle:Consultas:guiasPendientesDespacho }    
 
-brs_tte_rep_novedades_pendientes:
-    path:     /transporte/reportes/novedades/pendientes/
-    defaults: { _controller: BrasaTransporteBundle:Reportes:novedadesPendientes }    
+brs_tte_consultas_novedades_pendientes:
+    path:     /transporte/consultas/novedades/pendientes/
+    defaults: { _controller: BrasaTransporteBundle:Consultas:novedadesPendientes }    
 
-brs_tte_rep_recibos_caja:
-    path:     /transporte/reportes/recibos/caja/
-    defaults: { _controller: BrasaTransporteBundle:Reportes:recibosCaja }    
+brs_tte_consultas_recibos_caja:
+    path:     /transporte/consultas/recibos/caja/
+    defaults: { _controller: BrasaTransporteBundle:Consultas:recibosCaja }    
 
 #Utilidades    
 brs_tte_buscar_conductor:
