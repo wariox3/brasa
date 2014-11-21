@@ -90,7 +90,6 @@
                 <th>Despacho</th>
                 <th></th>
                 <th></th>
-                <th></th>
             </tr>
 
             {% for arGuias in arGuias %}
@@ -111,7 +110,6 @@
                 <td style="text-align: right">{{ arGuias.vrFlete | number_format(2, '.', ',')}}</td>
                 <td style="text-align: right">{{ arGuias.vrManejo | number_format(2, '.', ',')}}</td>
                 <td>{{ arGuias.codigoDespachoFk  }}</td>
-                <td style="text-align: center"><a href="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': arGuias.codigoGuiaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_030_pencil.png') }}" width=22 height=22></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_tte_guias_detalle', { 'codigoGuia': arGuias.codigoGuiaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arGuias.codigoGuiaPk }}" /></td>
             </tr>

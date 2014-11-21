@@ -16,6 +16,7 @@
             <div class="btn-toolbar" style="float:left">
                 <div class="btn-group">
                     <a  class="btn btn-default" href="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': 0 }) }}">Nuevo</a>
+                    <a  class="btn btn-default" href="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': arGuia.codigoGuiaPk }) }}" {% if arGuia.estadoGenerada == 1%} disabled {% endif %}>Editar</a>
                     <button class="btn btn-default " type="submit" name="OpSubmit" value="OpGenerar" {% if arGuia.estadoGenerada == 1%} disabled {% endif %}>Generar</button>
                     <button class="btn btn-default " type="submit" name="OpSubmit" value="OpImprimir">Imprimir</button>
                     <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAnular" {% if arGuia.estadoGenerada == 0 or arGuia.estadoAnulada == 1%} disabled {% endif %} onclick="javascript:if (!confirm('Esta seguro que desea anular el documento?'))
@@ -25,10 +26,10 @@
                         <button type="button" class="btn btn-default">Procesos</button>
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
+                            
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Proceso 1</a></li>
+                            <li><a href="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': arGuia.codigoGuiaPk }) }}">Corregir</a></li>
                             <li class="divider"></li>                            
                             <li><a href="#">Proceso 2</a></li>
                         </ul>
@@ -104,8 +105,8 @@
                     <td class="td-label">Punto Actual:</td>
                     <td class="td-in-well" >{{ arGuia.puntoOperacionActualRel.nombre }}</td>
 
-                    <td class="td-label"></td>
-                    <td class="td-in-well-numerico" align="right"> </td>
+                    <td class="td-label">Despacho:</td>
+                    <td> {{ arGuia.codigoDespachoFk }}</td>
 
                     <td class="td-label"></td>
                     <td class="td-in-well-numerico" align="right"> </td>
@@ -113,6 +114,9 @@
                     <td class="td-label"></td>
                     <td class="td-in-well-numerico" align="right"> </td>
                 </tr>
+                <tr>
+                    <td colspan="8">Contenido:{{ arGuia.contenido }}</td>
+                </tr>                
                 <tr>
                     <td colspan="8">Comentarios:{{ arGuia.comentarios }}</td>
                 </tr>

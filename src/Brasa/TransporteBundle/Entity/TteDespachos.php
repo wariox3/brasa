@@ -16,7 +16,7 @@ class TteDespachos
      * @ORM\Column(name="codigo_despacho_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoDespachoPk;
+    private $codigoDespachoPk;         
     
     /**
      * @ORM\Column(name="codigo_despacho_tipo_fk", type="integer", nullable=true)
