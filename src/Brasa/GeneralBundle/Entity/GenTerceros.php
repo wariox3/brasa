@@ -211,6 +211,11 @@ class GenTerceros
     protected $guiasRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteRecogidas", mappedBy="terceroRel")
+     */
+    protected $recogidasRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteFacturas", mappedBy="terceroRel")
      */
     protected $tteFacturasRel;     
@@ -1146,5 +1151,38 @@ class GenTerceros
     public function getNegociacionRel()
     {
         return $this->negociacionRel;
+    }
+
+    /**
+     * Add recogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidas $recogidasRel
+     * @return GenTerceros
+     */
+    public function addRecogidasRel(\Brasa\TransporteBundle\Entity\TteRecogidas $recogidasRel)
+    {
+        $this->recogidasRel[] = $recogidasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidas $recogidasRel
+     */
+    public function removeRecogidasRel(\Brasa\TransporteBundle\Entity\TteRecogidas $recogidasRel)
+    {
+        $this->recogidasRel->removeElement($recogidasRel);
+    }
+
+    /**
+     * Get recogidasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecogidasRel()
+    {
+        return $this->recogidasRel;
     }
 }

@@ -45,6 +45,11 @@ class TtePuntosOperacion
     protected $guiasPuntoOperacionIngresoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TteRecogidas", mappedBy="puntoOperacionRel")
+     */
+    protected $recogidasPuntoOperacionRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TteGuias", mappedBy="puntoOperacionActualRel")
      */
     protected $guiasPuntoOperacionActualRel;    
@@ -273,5 +278,38 @@ class TtePuntosOperacion
     public function getDespachosPuntoOperacionRel()
     {
         return $this->despachosPuntoOperacionRel;
+    }
+
+    /**
+     * Add recogidasPuntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidas $recogidasPuntoOperacionRel
+     * @return TtePuntosOperacion
+     */
+    public function addRecogidasPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteRecogidas $recogidasPuntoOperacionRel)
+    {
+        $this->recogidasPuntoOperacionRel[] = $recogidasPuntoOperacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recogidasPuntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidas $recogidasPuntoOperacionRel
+     */
+    public function removeRecogidasPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteRecogidas $recogidasPuntoOperacionRel)
+    {
+        $this->recogidasPuntoOperacionRel->removeElement($recogidasPuntoOperacionRel);
+    }
+
+    /**
+     * Get recogidasPuntoOperacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecogidasPuntoOperacionRel()
+    {
+        return $this->recogidasPuntoOperacionRel;
     }
 }

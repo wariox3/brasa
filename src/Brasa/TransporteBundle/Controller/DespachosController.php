@@ -123,10 +123,8 @@ class DespachosController extends Controller
                     break;
 
                 case "OpImprimir";   
-                    if($arDespacho->getEstadoGenerado() == 0) {
-                        $reporte = new \Brasa\TransporteBundle\Formatos\FormatoManifiesto();
-                        $reporte->Generar($this);                        
-                    }
+                    $objFormatoManifiesto = new \Brasa\TransporteBundle\Formatos\FormatoManifiesto();
+                    $objFormatoManifiesto->Generar($this, $codigoDespacho);
                     break;
 
                 case "OpRetirar";
