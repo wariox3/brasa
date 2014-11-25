@@ -50,6 +50,11 @@ class TtePuntosOperacion
     protected $recogidasPuntoOperacionRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TteRecogidasProgramadas", mappedBy="puntoOperacionRel")
+     */
+    protected $recogidasProgramadasRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TteGuias", mappedBy="puntoOperacionActualRel")
      */
     protected $guiasPuntoOperacionActualRel;    
@@ -59,6 +64,11 @@ class TtePuntosOperacion
      */
     protected $despachosPuntoOperacionRel;     
 
+    /**
+     * @ORM\OneToMany(targetEntity="TtePlanesRecogidas", mappedBy="puntoOperacionRel")
+     */
+    protected $planesRecogidasRel;     
+    
     /**
      * Constructor
      */
@@ -311,5 +321,71 @@ class TtePuntosOperacion
     public function getRecogidasPuntoOperacionRel()
     {
         return $this->recogidasPuntoOperacionRel;
+    }
+
+    /**
+     * Add recogidasProgramadasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidasProgramadas $recogidasProgramadasRel
+     * @return TtePuntosOperacion
+     */
+    public function addRecogidasProgramadasRel(\Brasa\TransporteBundle\Entity\TteRecogidasProgramadas $recogidasProgramadasRel)
+    {
+        $this->recogidasProgramadasRel[] = $recogidasProgramadasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recogidasProgramadasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidasProgramadas $recogidasProgramadasRel
+     */
+    public function removeRecogidasProgramadasRel(\Brasa\TransporteBundle\Entity\TteRecogidasProgramadas $recogidasProgramadasRel)
+    {
+        $this->recogidasProgramadasRel->removeElement($recogidasProgramadasRel);
+    }
+
+    /**
+     * Get recogidasProgramadasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecogidasProgramadasRel()
+    {
+        return $this->recogidasProgramadasRel;
+    }
+
+    /**
+     * Add planesRecogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel
+     * @return TtePuntosOperacion
+     */
+    public function addPlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel)
+    {
+        $this->planesRecogidasRel[] = $planesRecogidasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove planesRecogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel
+     */
+    public function removePlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel)
+    {
+        $this->planesRecogidasRel->removeElement($planesRecogidasRel);
+    }
+
+    /**
+     * Get planesRecogidasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlanesRecogidasRel()
+    {
+        return $this->planesRecogidasRel;
     }
 }

@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<div class="container">    
+{{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}    
+    <div class="page-header">
+        <h3>Generar recogidas programadas</h3>
+    </div>            
+        <table  class="table table-striped table-bordered table-condensed">
+            <tr>
+                <th>ID</th>
+                <th>Nit</th>
+                <th>Cliente</th>
+                <th>Hora</th>
+                <th>Anunciante</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th></th>
+            </tr>
+
+            {% for arRecogidasProgramadas in arRecogidasProgramadas %}
+
+            <tr>
+                <td><input type="hidden" name="LblCodigoRecogidaProgramada[]" value="{{ arRecogidasProgramadas.codigoRecogidaProgramadaPk }}">{{ arRecogidasProgramadas.codigoRecogidaProgramadaPk }} </td>                
+                <td>{{ arRecogidasProgramadas.terceroRel.nit  }}</td>
+                <td>{{ arRecogidasProgramadas.terceroRel.nombreCorto  }}</td>
+                <td>{{ arRecogidasProgramadas.horaRecogida |date("H:i")  }}</td>
+                <td>{{ arRecogidasProgramadas.anunciante  }}</td>
+                <td>{{ arRecogidasProgramadas.direccion  }}</td>
+                <td>{{ arRecogidasProgramadas.telefono  }}</td>
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRecogidasProgramadas.codigoRecogidaProgramadaPk }}" /></td>                
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        <!-- Botones Menu Items -->
+        <div class="btn-toolbar" style="float: right">            
+            <div class="btn-group">  
+                {{ form_widget(form.Generar, { 'attr': {'class': 'btn btn-success btn-mini'} }) }}                
+            </div>
+        </div>
+        <!-- Fin Botones Menu Items -->
+
+    <br /><br />
+    <hr/>  
+{{ form_end(form) }}    
+</div>
+{% endblock %}

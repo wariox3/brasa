@@ -21,8 +21,13 @@ class TteRecogidas
     /**
      * @ORM\Column(name="fecha_anuncio", type="datetime", nullable=true)
      */    
-    private $fechaAnuncio;        
+    private $fechaAnuncio;            
 
+    /**
+     * @ORM\Column(name="fecha_recogida", type="datetime", nullable=true)
+     */    
+    private $fechaRecogida;     
+    
     /**
      * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
      */    
@@ -66,12 +71,22 @@ class TteRecogidas
     /**
      * @ORM\Column(name="estado_anulada", type="boolean")
      */    
-    private $estadoAnulada = 0;         
+    private $estadoAnulada = 0;                
+
+    /**
+     * @ORM\Column(name="Anunciante", type="string", length=80, nullable=true)
+     */    
+    private $anunciante;     
     
     /**
-     * @ORM\Column(name="fecha_recogida", type="datetime", nullable=true)
+     * @ORM\Column(name="direccion", type="string", length=80, nullable=true)
      */    
-    private $fechaRecogida;    
+    private $direccion;    
+    
+    /**
+     * @ORM\Column(name="telefono", type="string", length=25, nullable=true)
+     */    
+    private $telefono;    
     
     /**
      * @ORM\Column(name="contenido", type="string", length=500, nullable=true)
@@ -449,5 +464,74 @@ class TteRecogidas
     public function getPuntoOperacionRel()
     {
         return $this->puntoOperacionRel;
+    }
+
+    /**
+     * Set anunciante
+     *
+     * @param string $anunciante
+     * @return TteRecogidas
+     */
+    public function setAnunciante($anunciante)
+    {
+        $this->anunciante = $anunciante;
+
+        return $this;
+    }
+
+    /**
+     * Get anunciante
+     *
+     * @return string 
+     */
+    public function getAnunciante()
+    {
+        return $this->anunciante;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     * @return TteRecogidas
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string 
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     * @return TteRecogidas
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string 
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
     }
 }

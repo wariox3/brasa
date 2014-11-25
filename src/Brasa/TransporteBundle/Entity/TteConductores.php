@@ -27,7 +27,11 @@ class TteConductores
      * @ORM\OneToMany(targetEntity="TteDespachos", mappedBy="conductorRel")
      */
     protected $despachosRel;    
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="TtePlanesRecogidas", mappedBy="conductorRel")
+     */
+    protected $planesRecogidasRel;    
 
     /**
      * Constructor
@@ -101,5 +105,38 @@ class TteConductores
     public function getDespachosRel()
     {
         return $this->despachosRel;
+    }
+
+    /**
+     * Add planesRecogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel
+     * @return TteConductores
+     */
+    public function addPlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel)
+    {
+        $this->planesRecogidasRel[] = $planesRecogidasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove planesRecogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel
+     */
+    public function removePlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel)
+    {
+        $this->planesRecogidasRel->removeElement($planesRecogidasRel);
+    }
+
+    /**
+     * Get planesRecogidasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlanesRecogidasRel()
+    {
+        return $this->planesRecogidasRel;
     }
 }

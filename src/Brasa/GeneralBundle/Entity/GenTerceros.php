@@ -214,6 +214,11 @@ class GenTerceros
      * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteRecogidas", mappedBy="terceroRel")
      */
     protected $recogidasRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteRecogidasProgramadas", mappedBy="terceroRel")
+     */
+    protected $recogidasProgramadasRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteFacturas", mappedBy="terceroRel")
@@ -1184,5 +1189,38 @@ class GenTerceros
     public function getRecogidasRel()
     {
         return $this->recogidasRel;
+    }
+
+    /**
+     * Add recogidasProgramadasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidasProgramadas $recogidasProgramadasRel
+     * @return GenTerceros
+     */
+    public function addRecogidasProgramadasRel(\Brasa\TransporteBundle\Entity\TteRecogidasProgramadas $recogidasProgramadasRel)
+    {
+        $this->recogidasProgramadasRel[] = $recogidasProgramadasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recogidasProgramadasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidasProgramadas $recogidasProgramadasRel
+     */
+    public function removeRecogidasProgramadasRel(\Brasa\TransporteBundle\Entity\TteRecogidasProgramadas $recogidasProgramadasRel)
+    {
+        $this->recogidasProgramadasRel->removeElement($recogidasProgramadasRel);
+    }
+
+    /**
+     * Get recogidasProgramadasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecogidasProgramadasRel()
+    {
+        return $this->recogidasProgramadasRel;
     }
 }

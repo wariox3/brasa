@@ -29,6 +29,11 @@ class TteVehiculos
     protected $despachosRel; 
 
     /**
+     * @ORM\OneToMany(targetEntity="TtePlanesRecogidas", mappedBy="vehiculoRel")
+     */
+    protected $planesRecogidasRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -100,5 +105,38 @@ class TteVehiculos
     public function getDespachosRel()
     {
         return $this->despachosRel;
+    }
+
+    /**
+     * Add planesRecogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel
+     * @return TteVehiculos
+     */
+    public function addPlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel)
+    {
+        $this->planesRecogidasRel[] = $planesRecogidasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove planesRecogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel
+     */
+    public function removePlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planesRecogidasRel)
+    {
+        $this->planesRecogidasRel->removeElement($planesRecogidasRel);
+    }
+
+    /**
+     * Get planesRecogidasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlanesRecogidasRel()
+    {
+        return $this->planesRecogidasRel;
     }
 }
