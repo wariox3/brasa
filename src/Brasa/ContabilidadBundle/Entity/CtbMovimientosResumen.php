@@ -79,33 +79,39 @@ class CtbMovimientosResumen
     }
 
     /**
-     * Set codigoCierreMesContabilidadFk
+     * Set codigoCierreMesFk
      *
-     * @param integer $codigoCierreMesContabilidadFk
+     * @param integer $codigoCierreMesFk
+     * @return CtbMovimientosResumen
      */
-    public function setCodigoCierreMesContabilidadFk($codigoCierreMesContabilidadFk)
+    public function setCodigoCierreMesFk($codigoCierreMesFk)
     {
-        $this->codigoCierreMesContabilidadFk = $codigoCierreMesContabilidadFk;
+        $this->codigoCierreMesFk = $codigoCierreMesFk;
+
+        return $this;
     }
 
     /**
-     * Get codigoCierreMesContabilidadFk
+     * Get codigoCierreMesFk
      *
      * @return integer 
      */
-    public function getCodigoCierreMesContabilidadFk()
+    public function getCodigoCierreMesFk()
     {
-        return $this->codigoCierreMesContabilidadFk;
+        return $this->codigoCierreMesFk;
     }
 
     /**
      * Set annio
      *
      * @param integer $annio
+     * @return CtbMovimientosResumen
      */
     public function setAnnio($annio)
     {
         $this->annio = $annio;
+
+        return $this;
     }
 
     /**
@@ -121,17 +127,20 @@ class CtbMovimientosResumen
     /**
      * Set mes
      *
-     * @param smallint $mes
+     * @param integer $mes
+     * @return CtbMovimientosResumen
      */
     public function setMes($mes)
     {
         $this->mes = $mes;
+
+        return $this;
     }
 
     /**
      * Get mes
      *
-     * @return smallint 
+     * @return integer 
      */
     public function getMes()
     {
@@ -142,10 +151,13 @@ class CtbMovimientosResumen
      * Set codigoCuentaFk
      *
      * @param string $codigoCuentaFk
+     * @return CtbMovimientosResumen
      */
     public function setCodigoCuentaFk($codigoCuentaFk)
     {
         $this->codigoCuentaFk = $codigoCuentaFk;
+
+        return $this;
     }
 
     /**
@@ -162,10 +174,13 @@ class CtbMovimientosResumen
      * Set debito
      *
      * @param float $debito
+     * @return CtbMovimientosResumen
      */
     public function setDebito($debito)
     {
         $this->debito = $debito;
+
+        return $this;
     }
 
     /**
@@ -182,10 +197,13 @@ class CtbMovimientosResumen
      * Set credito
      *
      * @param float $credito
+     * @return CtbMovimientosResumen
      */
     public function setCredito($credito)
     {
         $this->credito = $credito;
+
+        return $this;
     }
 
     /**
@@ -202,10 +220,13 @@ class CtbMovimientosResumen
      * Set base
      *
      * @param float $base
+     * @return CtbMovimientosResumen
      */
     public function setBase($base)
     {
         $this->base = $base;
+
+        return $this;
     }
 
     /**
@@ -221,17 +242,20 @@ class CtbMovimientosResumen
     /**
      * Set cuentaRel
      *
-     * @param Brasa\ContabilidadBundle\Entity\CuentasContables $cuentaRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCuentasContables $cuentaRel
+     * @return CtbMovimientosResumen
      */
-    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CuentasContables $cuentaRel)
+    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbCuentasContables $cuentaRel = null)
     {
         $this->cuentaRel = $cuentaRel;
+
+        return $this;
     }
 
     /**
      * Get cuentaRel
      *
-     * @return Brasa\ContabilidadBundle\Entity\CuentasContables 
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCuentasContables 
      */
     public function getCuentaRel()
     {
@@ -241,40 +265,23 @@ class CtbMovimientosResumen
     /**
      * Set ciereMesContabilidadRel
      *
-     * @param Brasa\ContabilidadBundle\Entity\CierresMesContabilidad $ciereMesContabilidadRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCierresMes $ciereMesContabilidadRel
+     * @return CtbMovimientosResumen
      */
-    public function setCiereMesContabilidadRel(\Brasa\ContabilidadBundle\Entity\CierresMesContabilidad $ciereMesContabilidadRel)
+    public function setCiereMesContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCierresMes $ciereMesContabilidadRel = null)
     {
         $this->ciereMesContabilidadRel = $ciereMesContabilidadRel;
+
+        return $this;
     }
 
     /**
      * Get ciereMesContabilidadRel
      *
-     * @return Brasa\ContabilidadBundle\Entity\CierresMesContabilidad 
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCierresMes 
      */
     public function getCiereMesContabilidadRel()
     {
         return $this->ciereMesContabilidadRel;
-    }
-
-    /**
-     * Set codigoCierreMesFk
-     *
-     * @param integer $codigoCierreMesFk
-     */
-    public function setCodigoCierreMesFk($codigoCierreMesFk)
-    {
-        $this->codigoCierreMesFk = $codigoCierreMesFk;
-    }
-
-    /**
-     * Get codigoCierreMesFk
-     *
-     * @return integer 
-     */
-    public function getCodigoCierreMesFk()
-    {
-        return $this->codigoCierreMesFk;
     }
 }
