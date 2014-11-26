@@ -38,7 +38,7 @@ class SeguridadController extends Controller
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {            
             $arrControles = $request->request->All();
-            $arUsuario = new \Soga\SeguridadBundle\Entity\User();            
+            $arUsuario = new \Brasa\SeguridadBundle\Entity\User();            
             $factory = $this->get('security.encoder_factory');                        
             $encoder = $factory->getEncoder($arUsuario);            
             $password = $encoder->encodePassword($arrControles['TxtPassword'], $arUsuario->getSalt());

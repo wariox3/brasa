@@ -14,6 +14,10 @@ brs_tte_recogidas_funciones_programacion:
     path:     /transporte/recogidas/funciones/programacion
     defaults: { _controller: BrasaTransporteBundle:RecogidasFunciones:programacion }
 
+brs_tte_recogidas_planrecogida_nuevo:
+    path:     /transporte/recogidas/planrecogida/nuevo/{codigoPlanRecogida}
+    defaults: { _controller: BrasaTransporteBundle:RecogidasFunciones:planRecogidaNuevo }
+
 brs_tte_recogidas_funciones_programadas:
     path:     /transporte/recogidas/funciones/programadas
     defaults: { _controller: BrasaTransporteBundle:RecogidasFunciones:programadas }    

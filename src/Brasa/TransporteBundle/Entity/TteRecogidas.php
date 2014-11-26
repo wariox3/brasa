@@ -74,6 +74,11 @@ class TteRecogidas
     private $estadoAnulada = 0;                
 
     /**
+     * @ORM\Column(name="estado_asignada", type="boolean")
+     */    
+    private $estadoAsignada = 0;    
+    
+    /**
      * @ORM\Column(name="Anunciante", type="string", length=80, nullable=true)
      */    
     private $anunciante;     
@@ -533,5 +538,28 @@ class TteRecogidas
     public function getTelefono()
     {
         return $this->telefono;
+    }
+
+    /**
+     * Set estadoAsignada
+     *
+     * @param boolean $estadoAsignada
+     * @return TteRecogidas
+     */
+    public function setEstadoAsignada($estadoAsignada)
+    {
+        $this->estadoAsignada = $estadoAsignada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAsignada
+     *
+     * @return boolean 
+     */
+    public function getEstadoAsignada()
+    {
+        return $this->estadoAsignada;
     }
 }

@@ -34,4 +34,12 @@ class TteRecogidasRepository extends EntityRepository {
         $query = $em->createQuery($dql);        
         return $query;
     }        
+    
+    public function ListaPendientes() {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT recogidas FROM BrasaTransporteBundle:TteRecogidas recogidas "
+                . "WHERE recogidas.estadoAsignada = 0";       
+        $query = $em->createQuery($dql);        
+        return $query;
+    }            
 }

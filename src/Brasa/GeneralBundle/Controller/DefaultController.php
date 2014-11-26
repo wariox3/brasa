@@ -13,10 +13,10 @@ class DefaultController extends Controller
     
     public function menuAction()
     {
-        //$arUsuario = new \Soga\SeguridadBundle\Entity\User();
-        //$arUsuario = $this->get('security.context')->getToken()->getUser();
-        //$strUsuario = $arUsuario->getNombreCorto();
-        $strUsuario = "Mario Andres";
+        $arUsuario = new \Brasa\SeguridadBundle\Entity\User();
+        $arUsuario = $this->get('security.context')->getToken()->getUser();
+        $strUsuario = $arUsuario->getNombreCorto();
+        //$strUsuario = "Mario Andres";
         return $this->render('BrasaGeneralBundle:plantillas:menu.html.twig', array('Usuario' => $strUsuario));
     }                  
     

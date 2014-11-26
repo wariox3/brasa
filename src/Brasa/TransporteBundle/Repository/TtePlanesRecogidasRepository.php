@@ -11,5 +11,11 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class TtePlanesRecogidasRepository extends EntityRepository {
-
+    public function Pendientes() {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT planesrecogidas FROM BrasaTransporteBundle:TtePlanesRecogidas planesrecogidas "
+                . "WHERE planesrecogidas.codigoPlanRecogidaPk <> 0";       
+        $query = $em->createQuery($dql);        
+        return $query;
+    }            
 }
