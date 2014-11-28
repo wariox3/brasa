@@ -52,9 +52,7 @@ class RecogidasFuncionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();        
         $form = $this->createFormBuilder()
-            
             ->getForm();
-
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -86,11 +84,17 @@ class RecogidasFuncionesController extends Controller
         $paginator = $this->get('knp_paginator');        
         $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogidas();
         $arRecogidas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100); 
+
+        $query = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->ListaAsignadas();
+        $paginator = $this->get('knp_paginator');        
+        $arRecogidasAsignacion = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+        $arRecogidasAsignacion = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);         
         
         return $this->render('BrasaTransporteBundle:Recogidas/Funciones:programacion.html.twig', array(
             'arPlanesRecogidas' => $arPlanesRecogidas,
             'form' => $form->createView(),
-            'arRecogidas' => $arRecogidas));
+            'arRecogidas' => $arRecogidas,
+            'arRecogidasAsignacion' => $arRecogidasAsignacion));
     } 
     
     public function planRecogidaNuevoAction($codigoPlanRecogida = 0) {
@@ -124,4 +128,100 @@ class RecogidasFuncionesController extends Controller
         return $this->render('BrasaTransporteBundle:Recogidas/Funciones:nuevoPlanRecogida.html.twig', array(
             'form' => $form->createView()));
     }        
+    
+    public function agregarRecogidaAction($codigoPlanRecogida) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createFormBuilder()
+                ->add('Agregar', 'submit')
+                ->getForm();
+
+        $form->handleRequest($request);
+        $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanesRecogidas();
+        $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanesRecogidas')->find($codigoPlanRecogida);
+        
+        if ($form->isValid()) {
+            if($form->get('Agregar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if (count($arrSeleccionados) > 0) {
+                    $intUnidades = $arPlanRecogida->getCtUnidades();
+                    $intPesoReal = $arPlanRecogida->getCtPesoReal();
+                    $intPesoVolumen = $arPlanRecogida->getCtPesoVolumen();
+                    $intRecogidas = $arPlanRecogida->getCtRecogidas();
+                    foreach ($arrSeleccionados AS $codigoRecogida) {
+                        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+                        $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->find($codigoRecogida);
+                        $arRecogida->setEstadoAsignada(1);
+                        $arRecogida->setPlanRecogidaRel($arPlanRecogida);
+                        $em->persist($arRecogida);
+                        $em->flush();
+                        $intUnidades = $intUnidades + $arRecogida->getCtUnidades();
+                        $intPesoReal = $intPesoReal + $arRecogida->getCtPesoReal();
+                        $intPesoVolumen = $intPesoVolumen + $arRecogida->getCtPesoVolumen();
+                        $intRecogidas = $intRecogidas + 1;
+                    }
+
+                    $arPlanRecogida->setCtUnidades($intUnidades);
+                    $arPlanRecogida->setCtPesoReal($intPesoReal);
+                    $arPlanRecogida->setCtPesoVolumen($intPesoVolumen);
+                    $arPlanRecogida->setCtRecogidas($intRecogidas);
+                    $em->persist($arPlanRecogida);
+                    $em->flush();
+                }
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            }               
+        }        
+        
+        if ($request->getMethod() == 'POST') {
+            $arrControles = $request->request->All();
+            switch ($request->request->get('OpSubmit')) {
+                case "OpBuscar";
+                    if($request->request->get('TxtDescripcionItem') != "")
+                        $arItemes = $em->getRepository('BrasaInventarioBundle:InvItem')->BuscarDescripcionItem($request->request->get('TxtDescripcionItem'));
+
+                    if($request->request->get('TxtCodigoItem') != "")
+                        $arItemes = $em->getRepository('BrasaInventarioBundle:InvItem')->find($request->request->get('TxtCodigoItem'));
+                    break;
+                case "OpAgregar";
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if (count($arrSeleccionados) > 0) {
+                        $intUnidades = $arDespacho->getCtUnidades();
+                        $intPesoReal = $arDespacho->getCtPesoReal();
+                        $intPesoVolumen = $arDespacho->getCtPesoVolumen();
+                        $intRecogidas = $arDespacho->getCtGuias();
+                        foreach ($arrSeleccionados AS $codigoGuia) {
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            $arGuia->setEstadoDespachada(1);
+                            $arGuia->setDespachoRel($arDespacho);
+                            $em->persist($arGuia);
+                            $em->flush();
+                            $intUnidades = $intUnidades + $arGuia->getCtUnidades();
+                            $intPesoReal = $intPesoReal + $arGuia->getCtPesoReal();
+                            $intPesoVolumen = $intPesoVolumen + $arGuia->getCtPesoVolumen();
+                            $intRecogidas = $intRecogidas + 1;
+                        }
+
+                        $arDespacho->setCtUnidades($intUnidades);
+                        $arDespacho->setCtPesoReal($intPesoReal);
+                        $arDespacho->setCtPesoVolumen($intPesoVolumen);
+                        $arDespacho->setCtGuias($intRecogidas);
+                        $em->persist($arDespacho);
+                        $em->flush();
+                    }
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                    break;
+            }
+        }
+        
+        $query = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->ListaPendientes();
+        $paginator = $this->get('knp_paginator');        
+        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+        $arRecogidas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
+        
+        return $this->render('BrasaTransporteBundle:Recogidas/Funciones:agregarRecogida.html.twig', array(
+            'arRecogidas' => $arRecogidas, 
+            'arPlanRecogida' => $arPlanRecogida,
+            'form' => $form->createView()));
+    }    
 }

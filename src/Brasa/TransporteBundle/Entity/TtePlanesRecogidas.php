@@ -69,6 +69,16 @@ class TtePlanesRecogidas
     private $comentarios;                             
     
     /**
+     * @ORM\Column(name="estado_descargado", type="boolean")
+     */    
+    private $estadoDescargado = 0;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TteRecogidas", mappedBy="planRecogidaRel")
+     */
+    protected $recogidasRel;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TteConductores", inversedBy="planesRecogidasRel")
      * @ORM\JoinColumn(name="codigo_conductor_fk", referencedColumnName="codigo_conductor_pk")
      */
@@ -396,5 +406,68 @@ class TtePlanesRecogidas
     public function getPuntoOperacionRel()
     {
         return $this->puntoOperacionRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->recogidasRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add recogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidas $recogidasRel
+     * @return TtePlanesRecogidas
+     */
+    public function addRecogidasRel(\Brasa\TransporteBundle\Entity\TteRecogidas $recogidasRel)
+    {
+        $this->recogidasRel[] = $recogidasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recogidasRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogidas $recogidasRel
+     */
+    public function removeRecogidasRel(\Brasa\TransporteBundle\Entity\TteRecogidas $recogidasRel)
+    {
+        $this->recogidasRel->removeElement($recogidasRel);
+    }
+
+    /**
+     * Get recogidasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecogidasRel()
+    {
+        return $this->recogidasRel;
+    }
+
+    /**
+     * Set estadoDescargado
+     *
+     * @param boolean $estadoDescargado
+     * @return TtePlanesRecogidas
+     */
+    public function setEstadoDescargado($estadoDescargado)
+    {
+        $this->estadoDescargado = $estadoDescargado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoDescargado
+     *
+     * @return boolean 
+     */
+    public function getEstadoDescargado()
+    {
+        return $this->estadoDescargado;
     }
 }

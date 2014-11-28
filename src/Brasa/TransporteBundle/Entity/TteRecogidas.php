@@ -37,7 +37,12 @@ class TteRecogidas
      * @ORM\Column(name="codigo_punto_operacion_fk", type="integer", nullable=true)
      */    
     private $codigoPuntoOperacionFk;     
-       
+
+    /**
+     * @ORM\Column(name="codigo_plan_recogida_fk", type="integer", nullable=true)
+     */    
+    private $codigoPlanRecogidaFk;     
+    
     /**
      * @ORM\Column(name="ct_unidades", type="integer")
      */
@@ -115,6 +120,11 @@ class TteRecogidas
      */
     protected $puntoOperacionRel;     
      
+    /**
+     * @ORM\ManyToOne(targetEntity="TtePlanesRecogidas", inversedBy="recogidasRel")
+     * @ORM\JoinColumn(name="codigo_plan_recogida_fk", referencedColumnName="codigo_plan_recogida_pk")
+     */
+    protected $planRecogidaRel;     
 
     /**
      * Get codigoRecogidaPk
@@ -561,5 +571,51 @@ class TteRecogidas
     public function getEstadoAsignada()
     {
         return $this->estadoAsignada;
+    }
+
+    /**
+     * Set codigoPlanRecogidaFk
+     *
+     * @param integer $codigoPlanRecogidaFk
+     * @return TteRecogidas
+     */
+    public function setCodigoPlanRecogidaFk($codigoPlanRecogidaFk)
+    {
+        $this->codigoPlanRecogidaFk = $codigoPlanRecogidaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPlanRecogidaFk
+     *
+     * @return integer 
+     */
+    public function getCodigoPlanRecogidaFk()
+    {
+        return $this->codigoPlanRecogidaFk;
+    }
+
+    /**
+     * Set planRecogidaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planRecogidaRel
+     * @return TteRecogidas
+     */
+    public function setPlanRecogidaRel(\Brasa\TransporteBundle\Entity\TtePlanesRecogidas $planRecogidaRel = null)
+    {
+        $this->planRecogidaRel = $planRecogidaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get planRecogidaRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TtePlanesRecogidas 
+     */
+    public function getPlanRecogidaRel()
+    {
+        return $this->planRecogidaRel;
     }
 }

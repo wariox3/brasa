@@ -5,37 +5,49 @@
     <div class="page-header">
         <h3>Programacion recogidas</h3>
     </div>            
-    <table  class="table table-striped table-bordered table-condensed">
-        <tr>
-            <th>ID</th>
-            <th>Fecha</th>
-            <th>Conductos</th>
-            <th>Vehiculo</th>
-            <th>Unidades</th>
-            <th>P. Real</th>
-            <th>P. Vol</th>
-            <th>Flete pagado</th>
-            <th></th>
-        </tr>
-
-            {% for arPlanesRecogidas in arPlanesRecogidas %}
-
-        <tr>
-            <td><input type="hidden" name="LblCodigoPlanRecogida[]" value="{{ arPlanesRecogidas.codigoPlanRecogidaPk }}">{{ arPlanesRecogidas.codigoPlanRecogidaPk }} </td>                
-            <td>{{ arPlanesRecogidas.fecha |date("Y/m/d")  }}</td>
-            <td>{{ arPlanesRecogidas.conductorRel.nombreCorto}}</td>
-            <td>{{ arPlanesRecogidas.vehiculoRel.Placa}}</td>
-            <td style="text-align: right">{{ arPlanesRecogidas.ctUnidades | number_format(0, '.', ',')}}</td>
-            <td style="text-align: right">{{ arPlanesRecogidas.ctPesoReal | number_format(0, '.', ',')}}</td>
-            <td style="text-align: right">{{ arPlanesRecogidas.ctPesoVolumen | number_format(0, '.', ',')}}</td>
-            <td style="text-align: right">{{ arPlanesRecogidas.vrFletePagado | number_format(2, '.', ',')}}</td>
-            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPlanesRecogidas.codigoPlanRecogidaPk }}" /></td>                
-        </tr>
-
-            {% endfor %}
-
-    </table>
-
+    {% for arPlanesRecogidas in arPlanesRecogidas %}
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ arPlanesRecogidas.codigoPlanRecogidaPk}} {{ arPlanesRecogidas.vehiculoRel.Placa}} - {{arPlanesRecogidas.conductorRel.nombreCorto}} <input type="checkbox" name="ChkSeleccionar[]" value="{{ arPlanesRecogidas.codigoPlanRecogidaPk }}" /></div>
+            <div class="panel-body">
+                <table  class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>ID</th>                                
+                        <th>Fecha</th>
+                        <th>Nit</th>
+                        <th>Cliente</th>               
+                        <th>Unidades</th>
+                        <th>P. Real</th>
+                        <th>P. Volumen</th>
+                        <th>Declarado</th>
+                    </tr>                    
+                        {% for arRecogidasAsignacion in arRecogidasAsignacion %}                          
+                            {% if arPlanesRecogidas.codigoPlanRecogidaPk == arRecogidasAsignacion.codigoPlanRecogidaFk %}
+                                <tr>
+                                    <td><input type="hidden" name="LblCodigoRecogida[]" value="{{ arRecogidasAsignacion.codigoRecogidaPk }}">{{ arRecogidasAsignacion.codigoRecogidaPk }} </td>                                
+                                    <td>{{ arRecogidasAsignacion.fechaAnuncio |date("Y/m/d H:i")  }}</td>
+                                    <td>{{ arRecogidasAsignacion.terceroRel.nit  }}</td>
+                                    <td>{{ arRecogidasAsignacion.terceroRel.nombreCorto  }}</td>                
+                                    <td style="text-align: right">{{ arRecogidasAsignacion.ctUnidades | number_format(0, '.', ',')}}</td>
+                                    <td style="text-align: right">{{ arRecogidasAsignacion.ctPesoReal | number_format(0, '.', ',')}}</td>
+                                    <td style="text-align: right">{{ arRecogidasAsignacion.ctPesoVolumen | number_format(0, '.', ',')}}</td>                                
+                                    <td style="text-align: right">{{ arRecogidasAsignacion.VrDeclarado | number_format(0, '.', ',')}}</td>                                
+                                </tr>
+                            {% endif %}
+                        {% endfor %}                    
+                </table>
+                <div class="btn-toolbar divDerecho">
+                    <div class="btn-group">
+                        <a class="btn btn-primary btn-xs" href="javascript:abrirVentana3('{{ path('brs_tte_recogidas_agregar', {'codigoPlanRecogida': arPlanesRecogidas.codigoPlanRecogidaPk}) }}', 'AgregarRecogida', 600, 900)">Agregar recogida</a>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-danger btn-xs" type="submit" name="OpSubmit" value="OpRetirar">Retirar</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    {% endfor %}
+   
+    
     <!-- Botones Menu Items -->
     <div class="btn-toolbar" style="float: right">            
         <div class="btn-group">  
@@ -60,9 +72,7 @@
             <th>P. Volumen</th>
             <th>Declarado</th>
         </tr>
-
             {% for arRecogidas in arRecogidas %}
-
         <tr>
             <td><input type="hidden" name="LblCodigoRecogida[]" value="{{ arRecogidas.codigoRecogidaPk }}">{{ arRecogidas.codigoRecogidaPk }} </td>                                
             <td>{{ arRecogidas.fechaAnuncio |date("Y/m/d H:i")  }}</td>
@@ -73,9 +83,7 @@
             <td style="text-align: right">{{ arRecogidas.ctPesoVolumen | number_format(0, '.', ',')}}</td>                                
             <td style="text-align: right">{{ arRecogidas.VrDeclarado | number_format(0, '.', ',')}}</td>                                
         </tr>
-
             {% endfor %}
-
     </table>    
 {{ form_end(form) }}    
 </div>

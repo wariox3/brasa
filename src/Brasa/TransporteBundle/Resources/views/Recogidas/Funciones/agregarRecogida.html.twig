@@ -1,0 +1,41 @@
+{% extends '::base_sin_menu.html.twig' %}
+{% block content %}
+<div class="container">  
+{{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}        
+    <p class="description"><h3>Agregar recogidas al plan de ruta</h3></p>      
+
+    <table  class="table table-striped table-bordered table-condensed">
+        <tr>
+            <th>ID</th>                                
+            <th>Fecha</th>
+            <th>Nit</th>
+            <th>Cliente</th>               
+            <th>Unidades</th>
+            <th>P. Real</th>
+            <th>P. Volumen</th>
+            <th>Declarado</th>
+            <th></th>
+        </tr>
+            {% for arRecogidas in arRecogidas %}
+        <tr>
+            <td><input type="hidden" name="LblCodigoRecogida[]" value="{{ arRecogidas.codigoRecogidaPk }}">{{ arRecogidas.codigoRecogidaPk }} </td>                                
+            <td>{{ arRecogidas.fechaAnuncio |date("Y/m/d H:i")  }}</td>
+            <td>{{ arRecogidas.terceroRel.nit  }}</td>
+            <td>{{ arRecogidas.terceroRel.nombreCorto  }}</td>                
+            <td style="text-align: right">{{ arRecogidas.ctUnidades | number_format(0, '.', ',')}}</td>
+            <td style="text-align: right">{{ arRecogidas.ctPesoReal | number_format(0, '.', ',')}}</td>
+            <td style="text-align: right">{{ arRecogidas.ctPesoVolumen | number_format(0, '.', ',')}}</td>                                
+            <td style="text-align: right">{{ arRecogidas.VrDeclarado | number_format(0, '.', ',')}}</td>                                
+            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRecogidas.codigoRecogidaPk }}" /></td>
+        </tr>
+            {% endfor %}
+    </table>
+
+    <div class="divDerecho">
+        {{ form_widget(form.Agregar, { 'attr': {'class': 'btn btn-default', 'style':'float:right'} }) }}
+    </div>
+    <br />
+     
+{{ form_end(form) }}
+</div>
+{% endblock %}
