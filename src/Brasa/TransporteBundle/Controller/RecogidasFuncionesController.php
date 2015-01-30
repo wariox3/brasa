@@ -52,27 +52,50 @@ class RecogidasFuncionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();        
         $form = $this->createFormBuilder()
-            ->getForm();
+                ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if (count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoRecogidaProgramada) {                            
-                    $arRecogidaProgramada = new \Brasa\TransporteBundle\Entity\TteRecogidasProgramadas();
-                    $arRecogidaProgramada = $em->getRepository('BrasaTransporteBundle:TteRecogidasProgramadas')->find($codigoRecogidaProgramada);
-                    $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();
-                    $arRecogida->setFechaAnuncio(date_create(date('Y-m-d H:i:s')));                                    
-                    $arRecogida->setFechaRecogida(date_create(date('Y-m-d'). $arRecogidaProgramada->getHoraRecogida()->format('H:i')));                    
-                    $arRecogida->setTerceroRel($arRecogidaProgramada->getTerceroRel());
-                    $arRecogida->setPuntoOperacionRel($arRecogidaProgramada->getPuntoOperacionRel());
-                    $arRecogida->setAnunciante($arRecogidaProgramada->getAnunciante());
-                    $arRecogida->setDireccion($arRecogidaProgramada->getDireccion());
-                    $arRecogida->setTelefono($arRecogidaProgramada->getTelefono());
-                    $em->persist($arRecogida);
-                    $em->flush();                            
-                    //$arRedespacho->setFecha(date_create(date('Y-m-d H:i:s')));                                                        
-                }                        
-            }           
+            $arrControles = $request->request->All();
+            $arrRecogidasSeleccionadas = $request->request->get('ChkSeleccionarRecogida');
+            $arrPlanesRecogidasSeleccionadas = $request->request->get('ChkSeleccionarPlanesRecogida');
+            switch ($request->request->get('OpSubmit')) {
+                case "OpRetirar";
+                    if (count($arrRecogidasSeleccionadas) > 0) {
+                        foreach ($arrRecogidasSeleccionadas AS $codigoRecogida) {
+                            $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+                            $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->find($codigoRecogida);
+                            $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanesRecogidas();
+                            $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanesRecogidas')->find($arRecogida->getCodigoPlanRecogidaFk());                           
+                            $arPlanRecogida->setCtUnidades($arPlanRecogida->getCtUnidades() - $arRecogida->getCtUnidades());
+                            $arPlanRecogida->setCtPesoReal($arPlanRecogida->getCtPesoReal() - $arRecogida->getCtPesoReal());
+                            $arPlanRecogida->setCtPesoVolumen($arPlanRecogida->getCtPesoVolumen() - $arRecogida->getCtPesoVolumen());
+                            $arPlanRecogida->setCtRecogidas($arPlanRecogida->getCtRecogidas() - 1);
+                            $arRecogida->setEstadoAsignada(0);
+                            $arRecogida->setPlanRecogidaRel(NULL);
+                            $em->persist($arRecogida);
+                            $em->flush();
+                            $em->persist($arPlanRecogida);
+                            $em->flush();                                                        
+                        }                         
+                    }
+                    break;
+                    
+                case "OpEliminar";
+                    if (count($arrPlanesRecogidasSeleccionadas) > 0) {
+                        foreach ($arrPlanesRecogidasSeleccionadas AS $codigoPlanRecogida) {
+                            $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+                            $arRecogidas = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->findBy(array('codigoPlanRecogidaFk' => $codigoPlanRecogida));
+                            if(count($arRecogidas) <= 0) {
+                                $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanesRecogidas();
+                                $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanesRecogidas')->find($codigoPlanRecogida);                                                           
+                                $em->remove($arPlanRecogida);                                
+                                $em->flush();
+                            }                            
+                        }                         
+                    }                    
+                    break;
+            }            
+           
         }
 
         $arPlanesRecogidas = new \Brasa\TransporteBundle\Entity\TtePlanesRecogidas();                
