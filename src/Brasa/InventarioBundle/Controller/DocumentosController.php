@@ -9,47 +9,47 @@ class DocumentosController extends Controller
     public function listaAction($codigoTipoDocumento)
     {
         $em = $this->getDoctrine()->getManager();
-        $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumentos();
-        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->findBy(array('codigoDocumentoTipoFk' => $codigoTipoDocumento));        
+        $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumento();
+        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumento')->findBy(array('codigoDocumentoTipoFk' => $codigoTipoDocumento));        
         return $this->render('BrasaInventarioBundle:Documentos:lista.html.twig', array('arDocumentos'=> $arDocumentos));
     }
     
     public function listaBaseAction() {
         $em = $this->getDoctrine()->getEntityManager();
-        $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumentos();
-        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->findAll();
+        $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumento();
+        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumento')->findAll();
         return $this->render('BrasaInventarioBundle:Base/Documentos:listado.html.twig', array('arDocumentos' => $arDocumentos));
     }     
     
     public function nuevoAction($codigoDocumentoPk = null) {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();          
-        $arDocumentosTipos = new \Brasa\InventarioBundle\Entity\InvDocumentosTipos();
-        $arDocumentosSubTipos = new \Brasa\InventarioBundle\Entity\InvDocumentosSubtipos();
-        $arComprobantesContables = new \Brasa\ContabilidadBundle\Entity\CtbComprobantesContables();
+        $arDocumentosTipos = new \Brasa\InventarioBundle\Entity\InvDocumentoTipo();
+        $arDocumentosSubTipos = new \Brasa\InventarioBundle\Entity\InvDocumentoSubtipo();
+        $arComprobantesContables = new \Brasa\ContabilidadBundle\Entity\CtbComprobanteContable();
         //$objFunciones = new \Brasa\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
         if ($request->getMethod() == 'POST') {
             if (($request->request->get('TxtCodigoDocumento'))) {
-                $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->find($request->request->get('TxtCodigoDocumento'));
-                $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentosConfiguracion')->find($request->request->get('TxtCodigoDocumento'));
+                $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($request->request->get('TxtCodigoDocumento'));
+                $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentoConfiguracion')->find($request->request->get('TxtCodigoDocumento'));
             }
             else {
-                $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumentos();
-                $arDocumentoConfiguracion = new \Brasa\InventarioBundle\Entity\InvDocumentosConfiguracion();
+                $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
+                $arDocumentoConfiguracion = new \Brasa\InventarioBundle\Entity\InvDocumentoConfiguracion();
             }                
             $arDocumento->setNombre($request->request->get('TxtNombreDocumento'));
             $arDocumento->setAbreviatura($request->request->get('TxtAbreviatura'));
             $arDocumento->setConsecutivo($request->request->get('TxtConsecutivo'));
             $arDocumento->setOperacionInventario($request->request->get('TxtOperacionInventario'));
             if ($request->request->get('CboDocumentosTipos') != "") {                
-                $arDocumentosTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentosTipos')->find($request->request->get('CboDocumentosTipos'));   
+                $arDocumentosTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentoTipo')->find($request->request->get('CboDocumentosTipos'));   
                 $arDocumento->setDocumentoTipoRel($arDocumentosTipos);
             }
             if ($request->request->get('CboDocumentosSubTipos') != "") {                
-                $arDocumentosSubTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentosSubTipos')->find($request->request->get('CboDocumentosSubTipos'));   
+                $arDocumentosSubTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentoSubtipo')->find($request->request->get('CboDocumentosSubTipos'));   
                 $arDocumento->setDocumentoSubtipoRel($arDocumentosSubTipos);                
             }            
-            $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuentasContables();            
+            $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuentaContable();            
             
             $arDocumento->setTipoCuentaIngreso($request->request->get('CboTipoRegistroCuentaIngreso'));
             $arDocumento->setTipoCuentaCosto($request->request->get('CboTipoRegistroCuentaCosto'));
@@ -57,7 +57,7 @@ class DocumentosController extends Controller
             if($request->request->get('TxtCuentaIva') != "") {
                 $intCuenta = $objFunciones->DevCodigoCuenta($request->request->get('TxtCuentaIva'));
                 if($intCuenta != "") {                    
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentasContables')->find($intCuenta);                    
+                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->find($intCuenta);                    
                     if(count($arCuenta) > 0) 
                         $arDocumento->setCuentaIvaRel ($arCuenta);                    
                     else
@@ -71,7 +71,7 @@ class DocumentosController extends Controller
             if($request->request->get('TxtCuentaRetencionFuente') != "") {
                 $intCuenta = $objFunciones->DevCodigoCuenta($request->request->get('TxtCuentaRetencionFuente'));
                 if($intCuenta != "") {                    
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentasContables')->find($intCuenta);                    
+                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->find($intCuenta);                    
                     if(count($arCuenta) > 0) 
                         $arDocumento->setCuentaRetencionFuenteRel($arCuenta);                    
                     else
@@ -85,7 +85,7 @@ class DocumentosController extends Controller
             if($request->request->get('TxtCuentaRetencionCREE') != "") {
                 $intCuenta = $objFunciones->DevCodigoCuenta($request->request->get('TxtCuentaRetencionCREE'));
                 if($intCuenta != "") {                    
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentasContables')->find($intCuenta);                    
+                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->find($intCuenta);                    
                     if(count($arCuenta) > 0) 
                         $arDocumento->setCuentaRetencionCREERel($arCuenta);                    
                     else
@@ -99,7 +99,7 @@ class DocumentosController extends Controller
             if($request->request->get('TxtCuentaRetencionIva') != "") {
                 $intCuenta = $objFunciones->DevCodigoCuenta($request->request->get('TxtCuentaRetencionIva'));
                 if($intCuenta != "") {                    
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentasContables')->find($intCuenta);                    
+                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->find($intCuenta);                    
                     if(count($arCuenta) > 0) 
                         $arDocumento->setCuentaRetencionIvaRel($arCuenta);                    
                     else
@@ -113,7 +113,7 @@ class DocumentosController extends Controller
             if($request->request->get('TxtCuentaTesoreria') != "") {
                 $intCuenta = $objFunciones->DevCodigoCuenta($request->request->get('TxtCuentaTesoreria'));
                 if($intCuenta != "") {                    
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentasContables')->find($intCuenta);                    
+                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->find($intCuenta);                    
                     if(count($arCuenta) > 0) 
                         $arDocumento->setCuentaTesoreriaRel($arCuenta);                    
                     else
@@ -127,7 +127,7 @@ class DocumentosController extends Controller
             if($request->request->get('TxtCuentaCartera') != "") {
                 $intCuenta = $objFunciones->DevCodigoCuenta($request->request->get('TxtCuentaCartera'));
                 if($intCuenta != "") {                    
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentasContables')->find($intCuenta);                    
+                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->find($intCuenta);                    
                     if(count($arCuenta) > 0) 
                         $arDocumento->setCuentaCarteraRel($arCuenta);                    
                     else
@@ -139,7 +139,7 @@ class DocumentosController extends Controller
             $arDocumento->setTipoCuentaCartera($request->request->get('CboTipoRegistroCuentaCartera'));            
             
             if ($request->request->get('CboComprobanteContable') != "") {                
-                $arComprobantesContables = $em->getRepository('BrasaContabilidadBundle:CtbComprobantesContables')->find($request->request->get('CboComprobanteContable'));   
+                $arComprobantesContables = $em->getRepository('BrasaContabilidadBundle:CtbComprobanteContable')->find($request->request->get('CboComprobanteContable'));   
                 $arDocumento->setComprobanteContableRel($arComprobantesContables);
             }            
             
@@ -222,12 +222,12 @@ class DocumentosController extends Controller
         $arDocumento = null;
         $arDocumentoConfiguracion = null;
         if ($codigoDocumentoPk != null && $codigoDocumentoPk != "" && $codigoDocumentoPk != 0) {
-            $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->find($codigoDocumentoPk);   
-            $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentosConfiguracion')->find($codigoDocumentoPk);   
+            $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumentoPk);   
+            $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentoConfiguracion')->find($codigoDocumentoPk);   
         }
-        $arDocumentosTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentosTipos')->findAll();   
-        $arDocumentosSubTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentosSubTipos')->findAll();   
-        $arComprobantesContables = $em->getRepository('BrasaContabilidadBundle:CtbComprobantesContables')->findAll();   
+        $arDocumentosTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentoTipo')->findAll();   
+        $arDocumentosSubTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentoSubtipo')->findAll();   
+        $arComprobantesContables = $em->getRepository('BrasaContabilidadBundle:CtbComprobanteContable')->findAll();   
         
         return $this->render('BrasaInventarioBundle:Base/Documentos:nuevo.html.twig', array(
             'arDocumento' => $arDocumento,

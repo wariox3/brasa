@@ -15,12 +15,12 @@ class ConsultasController extends Controller {
         if ($request->getMethod() == 'POST') {
             $intItem = $arrControles['TxtCodigoItem'];
             $intCodigoTercero = $arrControles['terceroconsulta'];            
-            $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetalles($intItem, $arrControles['CboDocumentos'], $intCodigoTercero, $arrControles['TxtLote'], $arrControles['CboBodegas'], $arrControles['TxtFechaDesde'], $arrControles['TxtFechaHasta']);
+            $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetalles($intItem, $arrControles['CboDocumentos'], $intCodigoTercero, $arrControles['TxtLote'], $arrControles['CboBodegas'], $arrControles['TxtFechaDesde'], $arrControles['TxtFechaHasta']);
         }
 
-        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->DevDocumentos();
-        $arBodegas = new \Brasa\InventarioBundle\Entity\InvBodegas();
-        $arBodegas = $em->getRepository('BrasaInventarioBundle:InvBodegas')->findAll();
+        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumento')->DevDocumentos();
+        $arBodegas = new \Brasa\InventarioBundle\Entity\InvBodega();
+        $arBodegas = $em->getRepository('BrasaInventarioBundle:InvBodega')->findAll();
         return $this->render('BrasaInventarioBundle:Consultas/Inventario:kardex.html.twig', array(
                     'arMovimientosDetalle' => $arMovimientosDetalle,
                     'arDocumentos' => $arDocumentos,
@@ -41,12 +41,12 @@ class ConsultasController extends Controller {
         $arPedidos = "";
         $arOrdenes = "";
         $intCodigoProducto = "";
-        $arMovimientosDetalleRemisiones = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
+        $arMovimientosDetalleRemisiones = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
         if ($request->getMethod() == 'POST') {
             $intCodigoProducto = $arrControles['TxtCodigoItem'];
-            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistencia($intCodigoProducto);
-            $arPedidos = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevPedidosPendientes($intCodigoProducto);
-            $arMovimientosDetalleRemisiones = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientes(0, 9);
+            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLote')->DevLotesExistencia($intCodigoProducto);
+            $arPedidos = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevPedidosPendientes($intCodigoProducto);
+            $arMovimientosDetalleRemisiones = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetallesPendientes(0, 9);
         }
 
         return $this->render('BrasaInventarioBundle:Consultas/Inventario:disponibles.html.twig', array(
@@ -62,17 +62,17 @@ class ConsultasController extends Controller {
         $request = $this->getRequest();
         
         $arrControles = $request->request->All();
-        $arLotes = new \Brasa\InventarioBundle\Entity\InvLotes();
+        $arLotes = new \Brasa\InventarioBundle\Entity\InvLote();
         if ($request->getMethod() == 'POST') {
             $intItem = $arrControles['TxtCodigoItem'];
-            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistenciaFiltro($intItem, $arrControles['CboBodegas'], $arrControles['TxtLote']);            
+            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLote')->DevLotesExistenciaFiltro($intItem, $arrControles['CboBodegas'], $arrControles['TxtLote']);            
         }
         else 
-            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistenciaFiltro();            
+            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLote')->DevLotesExistenciaFiltro();            
         
         
-        $arBodegas = new \Brasa\InventarioBundle\Entity\InvBodegas();
-        $arBodegas = $em->getRepository('BrasaInventarioBundle:InvBodegas')->findAll();                
+        $arBodegas = new \Brasa\InventarioBundle\Entity\InvBodega();
+        $arBodegas = $em->getRepository('BrasaInventarioBundle:InvBodega')->findAll();                
         return $this->render('BrasaInventarioBundle:Consultas/Inventario:existencias.html.twig', array(
             'arLotes' => $arLotes,                                                 
             'arBodegas' => $arBodegas,
@@ -107,11 +107,11 @@ class ConsultasController extends Controller {
             foreach ($arItems as $arItem) {
                 $douCostoPromedio = 0;
                 $intExistenciaAnterior = 0;
-                $arMovimientosDetalles = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesGeneranCosto($dateDesde, $dateHasta, $arItem->getCodigoItemPk()); 
+                $arMovimientosDetalles = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetallesGeneranCosto($dateDesde, $dateHasta, $arItem->getCodigoItemPk()); 
                 foreach ($arMovimientosDetalles as $arMovimientoDetalle) {
                     if($arMovimientoDetalle['generaCostoPromedio'] == 1)
-                        $douCostoPromedio = \Brasa\InventarioBundle\Repository\InvMovimientosDetallesRepository::CacularCostoPromedio($intExistenciaAnterior, $arMovimientoDetalle['cantidadOperada'], $douCostoPromedio, $arMovimientoDetalle['costo']);                                                                            
+                        $douCostoPromedio = \Brasa\InventarioBundle\Repository\InvMovimientoDetalleRepository::CacularCostoPromedio($intExistenciaAnterior, $arMovimientoDetalle['cantidadOperada'], $douCostoPromedio, $arMovimientoDetalle['costo']);                                                                            
                     $intExistenciaAnterior = $intExistenciaAnterior + $arMovimientoDetalle['cantidadOperada'];
                 } 
                 if($intExistenciaAnterior > 0) {
@@ -138,15 +138,15 @@ class ConsultasController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
         $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($codigoItem);
-        $arLotes = new \Brasa\InventarioBundle\Entity\InvLotes();        
-        $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistencia($codigoItem);
+        $arLotes = new \Brasa\InventarioBundle\Entity\InvLote();        
+        $arLotes = $em->getRepository('BrasaInventarioBundle:InvLote')->DevLotesExistencia($codigoItem);
         return $this->render('BrasaInventarioBundle:Consultas/Inventario:item.html.twig', array('arLotes' => $arLotes, 'arItem' => $arItem));
     }
     
     public function generalAnalisisGeneralAction() {
         $em = $this->getDoctrine()->getManager();
-        $arCierreMesInventario = new \Brasa\InventarioBundle\Entity\InvCierresMes();
-        $arCierreMesInventario = $em->getRepository('BrasaInventarioBundle:InvCierresMes')->findAll();
+        $arCierreMesInventario = new \Brasa\InventarioBundle\Entity\InvCierreMes();
+        $arCierreMesInventario = $em->getRepository('BrasaInventarioBundle:InvCierreMes')->findAll();
         return $this->render('BrasaGeneralBundle:Consultas/General:analisisGeneral.html.twig', array('arCierreMesInventario' => $arCierreMesInventario));
     }
     
@@ -162,8 +162,8 @@ class ConsultasController extends Controller {
     public function movimientosPendientesAction($codigoDocumentoTipo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-        $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->findBy(array('codigoDocumentoTipoFk' => $codigoDocumentoTipo, 'estadoAutorizado' => 1, 'estadoCerrado' => 0));
+        $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+        $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->findBy(array('codigoDocumentoTipoFk' => $codigoDocumentoTipo, 'estadoAutorizado' => 1, 'estadoCerrado' => 0));
         if ($request->getMethod() == 'POST') {
 
         }
@@ -179,12 +179,12 @@ class ConsultasController extends Controller {
     public function movimientosPendientesDetallesAction($codigoMovimiento, $codigoDocumentoTipo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arDocumentosTipos = new \Brasa\InventarioBundle\Entity\InvDocumentosTipos();        
-        $arDocumentosTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentosTipos')->findAll();
-        $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumentos();
-        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->findAll();
+        $arDocumentosTipos = new \Brasa\InventarioBundle\Entity\InvDocumentoTipo();        
+        $arDocumentosTipos = $em->getRepository('BrasaInventarioBundle:InvDocumentoTipo')->findAll();
+        $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumento();
+        $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumento')->findAll();
 
-        $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientes(0, $codigoDocumentoTipo);
+        $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetallesPendientes(0, $codigoDocumentoTipo);
 
         if ($request->getMethod() == 'POST') {
 

@@ -9,8 +9,8 @@ class MovimientosController extends Controller
     public function listaAction($codigoDocumento) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();                
-        $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimientos();                
-        $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->find($codigoDocumento);
+        $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimiento();                
+        $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumento);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -20,20 +20,20 @@ class MovimientosController extends Controller
             switch ($request->request->get('OpSubmit')) {
                 case "OpAutorizar";
                     foreach ($arrSeleccionados AS $codigoMovimiento)
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Autorizar($codigoMovimiento);
+                        $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Autorizar($codigoMovimiento);
                     break;
 
                 case "OpImprimir";
                     foreach ($arrSeleccionados AS $codigoMovimiento)
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
+                        $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Imprimir($codigoMovimiento);
                     break;
 
                 case "OpEliminar";
                     foreach ($arrSeleccionados AS $codigoMovimiento) {
-                        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
+                        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+                        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
                         if ($arMovimiento->getEstadoAutorizado() == 0) {
-                            if ($em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevNroDetallesMovimiento($codigoMovimiento) <= 0) {
+                            if ($em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevNroDetallesMovimiento($codigoMovimiento) <= 0) {
                                 $em->remove($arMovimiento);
                                 $em->flush();
                             }
@@ -41,8 +41,8 @@ class MovimientosController extends Controller
                     }
                     break;
                 case "OpBuscar";
-                    $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                    $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->DevMovimientosFiltro(
+                    $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+                    $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->DevMovimientosFiltro(
                             $codigoDocumento, 
                             $arrControles['TxtCodigoMovimiento'], 
                             $arrControles['TxtNumeroMovimiento'], 
@@ -55,7 +55,7 @@ class MovimientosController extends Controller
                     break;
             }
         } else {
-            $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->findBy(array('codigoDocumentoFk' => $codigoDocumento, 'estadoImpreso' => '0'));
+            $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->findBy(array('codigoDocumentoFk' => $codigoDocumento, 'estadoImpreso' => '0'));
         }                    
 
         return $this->render('BrasaInventarioBundle:Movimientos:lista.html.twig', array(
@@ -70,9 +70,9 @@ class MovimientosController extends Controller
     public function nuevoAction($codigoDocumento, $codigoMovimiento = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();        
-        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumentos();
-        $arDocumentoConfiguracion = new \Brasa\InventarioBundle\Entity\InvDocumentosConfiguracion();
-        $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentosConfiguracion')->find($codigoDocumento);
+        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
+        $arDocumentoConfiguracion = new \Brasa\InventarioBundle\Entity\InvDocumentoConfiguracion();
+        $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentoConfiguracion')->find($codigoDocumento);
 
 
         if ($request->getMethod() == 'POST') {
@@ -80,16 +80,16 @@ class MovimientosController extends Controller
             //$objMensaje->Mensaje("error", "Hola mundo", $this);
             
             if (($request->request->get('TxtCodigoMovimiento'))) {
-                $arMovimientoNuevo = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($request->request->get('TxtCodigoMovimiento'));
+                $arMovimientoNuevo = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($request->request->get('TxtCodigoMovimiento'));
             }
                 
             if (!($request->request->get('TxtCodigoMovimiento'))) {
-                $arMovimientoNuevo = new \Brasa\InventarioBundle\Entity\InvMovimientos();
+                $arMovimientoNuevo = new \Brasa\InventarioBundle\Entity\InvMovimiento();
             }
                 
-            $arTercero = $this->getDoctrine()->getRepository('BrasaGeneralBundle:GenTerceros')->find($request->request->get('TxtCodigoTercero'));            
+            $arTercero = $this->getDoctrine()->getRepository('BrasaGeneralBundle:GenTercero')->find($request->request->get('TxtCodigoTercero'));            
             
-            $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->find($request->request->get('iddocumento'));
+            $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($request->request->get('iddocumento'));
 
             $arMovimientoNuevo->setDocumentoRel($arDocumento);
             $arMovimientoNuevo->setDocumentoTipoRel($arDocumento->getDocumentoTipoRel());
@@ -114,7 +114,7 @@ class MovimientosController extends Controller
             }
                             
             if($request->request->get('CboDirecciones')) {
-                $arDireccion = $em->getRepository('BrasaGeneralBundle:GenTercerosDirecciones')->find($request->request->get('CboDirecciones'));
+                $arDireccion = $em->getRepository('BrasaGeneralBundle:GenTerceroDireccion')->find($request->request->get('CboDirecciones'));
                 $arMovimientoNuevo->setDireccionRel($arDireccion);
             }
 
@@ -126,8 +126,8 @@ class MovimientosController extends Controller
         $arMovimiento = null;
         $arTercerosDirecciones = null;        
         if ($codigoMovimiento != null && $codigoMovimiento != "" && $codigoMovimiento != 0) {
-            $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);                    
-            //$arTercerosDirecciones = $em->getRepository('BrasaGeneralBundle:GenTercerosDirecciones')->findBy(array('codigoTerceroFk' => $arMovimiento->getCodigoTerceroFk()));        
+            $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);                    
+            //$arTercerosDirecciones = $em->getRepository('BrasaGeneralBundle:GenTerceroDireccion')->findBy(array('codigoTerceroFk' => $arMovimiento->getCodigoTerceroFk()));        
         }       
             
         
@@ -145,9 +145,9 @@ class MovimientosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
         $objMensaje = $this->get('mensajes_brasa');
-        $arMovimientosDetallesFrm = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();       
-        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
+        $arMovimientosDetallesFrm = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();       
+        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -158,26 +158,26 @@ class MovimientosController extends Controller
                     if ($strResultado != "")
                         $objMensaje->Mensaje("error", $strResultado, $this);
                     else {
-                        $strResultado = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Autorizar($codigoMovimiento);
+                        $strResultado = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Autorizar($codigoMovimiento);
                         if ($strResultado != "")
                             $objMensaje->Mensaje("error", "No se autorizo el movimiento: " . $strResultado, $this);
                     }
                     break;
 
                 case "OpDesAutorizar";
-                    $varDesautorizar = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->DesAutorizar($codigoMovimiento);
+                    $varDesautorizar = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->DesAutorizar($codigoMovimiento);
                     if ($varDesautorizar != "")
                         $objMensaje->Mensaje("error", "No se desautorizo el movimiento: " . $varDesautorizar, $this);
                     break;
 
                 case "OpAnular";
-                    $varAnular = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Anular($codigoMovimiento);
+                    $varAnular = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Anular($codigoMovimiento);
                     if ($varAnular != "")
                         $objMensaje->Mensaje("error", "No se anulo el movimiento: " . $varAnular, $this);
                     break;
 
                 case "OpImprimir";
-                    $strResultado = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Imprimir($codigoMovimiento);
+                    $strResultado = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Imprimir($codigoMovimiento);
                     if ($strResultado == "") {
                         //$Impresion = new Control_Impresion_Inventario();
                         //$Impresion->CounstruirImpresion($em, $arMovimiento);
@@ -189,11 +189,11 @@ class MovimientosController extends Controller
                 case "OpEliminar";
                     if (count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoMovimientoDetalle) {
-                            $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                            $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($codigoMovimientoDetalle);
+                            $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                            $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($codigoMovimientoDetalle);
                             if ($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace() != "") {
-                                $arMovimientoDetalleEnlace = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                                $arMovimientoDetalleEnlace = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace());
+                                $arMovimientoDetalleEnlace = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                                $arMovimientoDetalleEnlace = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace());
                                 $arMovimientoDetalleEnlace->setCantidadAfectada($arMovimientoDetalleEnlace->getCantidadAfectada() - $arMovimientoDetalle->getCantidad());
                                 $em->persist($arMovimientoDetalleEnlace);
                                 $em->flush();
@@ -201,7 +201,7 @@ class MovimientosController extends Controller
                             $em->remove($arMovimientoDetalle);
                             $em->flush();
                         }
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
+                        $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Liquidar($codigoMovimiento);
                     }
                     break;
 
@@ -210,14 +210,14 @@ class MovimientosController extends Controller
                     if ($strResultado != "")
                         $objMensaje->Mensaje("error", $strResultado, $this);
                     else
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
+                        $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Liquidar($codigoMovimiento);
                     break;
 
                 case "OpCerrarDetalles";
                     if (count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoMovimientoDetalle) {
-                            $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                            $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($codigoMovimientoDetalle);
+                            $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                            $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($codigoMovimientoDetalle);
                             if ($arMovimientoDetalle->getEstadoCerrado() == 0) {
                                 $arMovimientoDetalle->setEstadoCerrado(1);
                                 $em->persist($arMovimientoDetalle);
@@ -234,18 +234,18 @@ class MovimientosController extends Controller
                             $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findBy(array('codigoBarras' => $arrControles['TxtCodigoItem']));
                             //$arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($arItem[0]);
                             if (count($arItem) > 0) {
-                                $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
+                                $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+                                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
 
-                                $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
+                                $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
                                 $arMovimientoDetalle->setMovimientoRel($arMovimiento);
                                 $arMovimientoDetalle->setCantidad(1);
 
                                 if ($arMovimiento->getDocumentoRel()->getTipoValor() == 2)
-                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arItem[0]->getCodigoItemPk()));
+                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListaPrecioDetalle')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arItem[0]->getCodigoItemPk()));
 
                                 if ($arMovimiento->getDocumentoRel()->getTipoValor() == 1)
-                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arItem[0]->getCodigoItemPk()));
+                                    $arMovimientoDetalle->setPrecio($em->getRepository('BrasaInventarioBundle:InvListaCostoDetalle')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arItem[0]->getCodigoItemPk()));
 
                                 $arMovimientoDetalle->setLoteFk("SL");
                                 $arMovimientoDetalle->setFechaVencimiento(date_create('2020/12/30'));
@@ -256,8 +256,8 @@ class MovimientosController extends Controller
                                 $em->persist($arMovimientoDetalle);
                                 $em->flush();
                                 if ($arMovimiento->getCodigoDocumentoTipoFk() == 4 && $arMovimiento->getDocumentoRel()->getOperacionInventario() == -1)
-                                    $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->EstableceLoteMovimientoDetalle($arMovimientoDetalle->getCodigoDetalleMovimientoPk());
-                                $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
+                                    $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->EstableceLoteMovimientoDetalle($arMovimientoDetalle->getCodigoDetalleMovimientoPk());
+                                $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Liquidar($codigoMovimiento);
                             }
                         }                        
                     }
@@ -266,34 +266,34 @@ class MovimientosController extends Controller
                 case "OpEliminarDescuentoFinanciero";                    
                     if(count($arrDescuentosFinancierosSeleccionados) > 0) {
                         foreach ($arrDescuentosFinancierosSeleccionados AS $codigoMovimientoDescuentoFinanciero) {
-                            $arMovimientoDescuentoFinanciero = new \Brasa\InventarioBundle\Entity\InvDescuentosFinancieros();
-                            $arMovimientoDescuentoFinanciero = $em->getRepository('BrasaInventarioBundle:InvMovimientosDescuentosFinancieros')->find($codigoMovimientoDescuentoFinanciero);
+                            $arMovimientoDescuentoFinanciero = new \Brasa\InventarioBundle\Entity\InvDescuentoFinanciero();
+                            $arMovimientoDescuentoFinanciero = $em->getRepository('BrasaInventarioBundle:InvMovimientoDescuentoFinanciero')->find($codigoMovimientoDescuentoFinanciero);
                             $em->remove($arMovimientoDescuentoFinanciero);
                             $em->flush();
                         }
                     }                    
-                    $em->getRepository('BrasaInventarioBundle:InvMovimientos')->LiquidarRetenciones($codigoMovimiento);
+                    $em->getRepository('BrasaInventarioBundle:InvMovimiento')->LiquidarRetenciones($codigoMovimiento);
                     break;                    
             }
         }
         //No mostrar registros de control traslados
         if($arMovimiento->getCodigoDocumentoTipoFk() == 10) {
-            $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->findBy(array('codigoMovimientoFk' => $codigoMovimiento, 'operacionInventario' => 0));
+            $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->findBy(array('codigoMovimientoFk' => $codigoMovimiento, 'operacionInventario' => 0));
         }
         else {                        
-            $dql   = "SELECT md FROM BrasaInventarioBundle:InvMovimientosDetalles md WHERE md.codigoMovimientoFk = " . $codigoMovimiento;
+            $dql   = "SELECT md FROM BrasaInventarioBundle:InvMovimientoDetalle md WHERE md.codigoMovimientoFk = " . $codigoMovimiento;
             $query = $em->createQuery($dql);
             $paginator = $this->get('knp_paginator');
             $arMovimientosDetalle = $paginator->paginate($query, $this->get('request')->query->get('page', 1)/*page number*/,3);
         }
-        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumentos();
-        $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->find($arMovimiento->getCodigoDocumentoFk());
-        $arDocumentoConfiguracion = new \Brasa\InventarioBundle\Entity\InvDocumentosConfiguracion();
-        $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentosConfiguracion')->find($arMovimiento->getCodigoDocumentoFk());        
-        $arMovimientosRetenciones = new \Brasa\InventarioBundle\Entity\InvMovimientosRetenciones();
-        $arMovimientosRetenciones = $em->getRepository('BrasaInventarioBundle:InvMovimientosRetenciones')->findBy(array('codigoMovimientoFk' => $codigoMovimiento));
-        $arMovimientosDescuentosFinancieros = new \Brasa\InventarioBundle\Entity\InvMovimientosDescuentosFinancieros();
-        $arMovimientosDescuentosFinancieros = $em->getRepository('BrasaInventarioBundle:InvMovimientosDescuentosFinancieros')->findBy(array('codigoMovimientoFk' => $codigoMovimiento));
+        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
+        $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($arMovimiento->getCodigoDocumentoFk());
+        $arDocumentoConfiguracion = new \Brasa\InventarioBundle\Entity\InvDocumentoConfiguracion();
+        $arDocumentoConfiguracion = $em->getRepository('BrasaInventarioBundle:InvDocumentoConfiguracion')->find($arMovimiento->getCodigoDocumentoFk());        
+        $arMovimientosRetenciones = new \Brasa\InventarioBundle\Entity\InvMovimientoRetencion();
+        $arMovimientosRetenciones = $em->getRepository('BrasaInventarioBundle:InvMovimientoRetencion')->findBy(array('codigoMovimientoFk' => $codigoMovimiento));
+        $arMovimientosDescuentosFinancieros = new \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero();
+        $arMovimientosDescuentosFinancieros = $em->getRepository('BrasaInventarioBundle:InvMovimientoDescuentoFinanciero')->findBy(array('codigoMovimientoFk' => $codigoMovimiento));
         return $this->render('BrasaInventarioBundle:Movimientos:detalle.html.twig', array('arMovimiento' => $arMovimiento,
                     'arMovimientosDetalle' => $arMovimientosDetalle,
                     'arDocumento' => $arDocumento,
@@ -317,11 +317,11 @@ class MovimientosController extends Controller
                 foreach ($arrDetalles['LblCodigoDetalle'] as $intCodigoDetalle) {
                     if ($boolValidado == "") {
                         $intNuevaCantidad = $arrDetalles['TxtCantidad'][$intIndice];
-                        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($intCodigoDetalle);
+                        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($intCodigoDetalle);
                         if ($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace() != "") {
-                            $arMovimientoDetalleEnlace = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                            $arMovimientoDetalleEnlace = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace());
+                            $arMovimientoDetalleEnlace = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                            $arMovimientoDetalleEnlace = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace());
                             $intDiferenciaCantidades = $intNuevaCantidad - $arMovimientoDetalle->getCantidad();
                             $intCantidadPendienteEnlace = $arMovimientoDetalleEnlace->getCantidad() - $arMovimientoDetalleEnlace->getCantidadAfectada();
                             if ($intDiferenciaCantidades != 0) {
@@ -338,8 +338,8 @@ class MovimientosController extends Controller
                     $intIndice = 0;
                     foreach ($arrDetalles['LblCodigoDetalle'] as $intCodigoDetalle) {
                         $intNuevaCantidad = $arrDetalles['TxtCantidad'][$intIndice];
-                        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($intCodigoDetalle);
+                        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($intCodigoDetalle);
                         $intDiferenciaCantidades = $intNuevaCantidad - $arMovimientoDetalle->getCantidad();
 
                         if (isset($arrDetalles['TxtLote']))
@@ -362,8 +362,8 @@ class MovimientosController extends Controller
                         $em->flush();
 
                         if ($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace() != "") {
-                            $arMovimientoDetalleEnlace = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                            $arMovimientoDetalleEnlace = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace());
+                            $arMovimientoDetalleEnlace = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                            $arMovimientoDetalleEnlace = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($arMovimientoDetalle->getCodigoDetalleMovimientoEnlace());
                             $arMovimientoDetalleEnlace->setCantidadAfectada($arMovimientoDetalleEnlace->getCantidadAfectada() + $intDiferenciaCantidades);
                             $em->persist($arMovimientoDetalleEnlace);
                             $em->flush();

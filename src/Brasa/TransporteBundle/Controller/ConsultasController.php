@@ -15,16 +15,16 @@ class ConsultasController extends Controller
             ->add('TxtFechaDesde', 'date', array('widget' => 'single_text', 'label'  => 'Desde:'))
             ->add('TxtFechaHasta', 'date', array('widget' => 'single_text', 'label'  => 'Hasta:'))
             ->add('Ruta', 'entity', array(
-                'class' => 'BrasaTransporteBundle:TteRutas',
+                'class' => 'BrasaTransporteBundle:TteRuta',
                 'property' => 'nombre', 'empty_value' => "Seleccionar"
             ))                
             ->add('Buscar', 'submit')
             ->getForm();        
         $form->handleRequest($request);
-        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();
-        $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->GuiasPendientesDespacho("", "", "", "","");
+        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuia();
+        $query = $em->getRepository('BrasaTransporteBundle:TteGuia')->GuiasPendientesDespacho("", "", "", "","");
         if($form->isValid()) {            
-            $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->GuiasPendientesDespacho(
+            $query = $em->getRepository('BrasaTransporteBundle:TteGuia')->GuiasPendientesDespacho(
                     $form->get('TxtNumeroGuia')->getData(),
                     $form->get('TxtFechaDesde')->getData(),
                     $form->get('TxtFechaHasta')->getData(),
@@ -51,8 +51,8 @@ class ConsultasController extends Controller
             ->add('Buscar', 'submit')
             ->getForm();        
         $form->handleRequest($request);
-        $arNovedades = new \Brasa\TransporteBundle\Entity\TteNovedades();
-        $query = $em->getRepository('BrasaTransporteBundle:TteNovedades')->NovedadesPendientes();
+        $arNovedades = new \Brasa\TransporteBundle\Entity\TteNovedad();
+        $query = $em->getRepository('BrasaTransporteBundle:TteNovedad')->NovedadesPendientes();
         $paginator = $this->get('knp_paginator');        
         $arNovedades = $paginator->paginate($query, $this->get('request')->query->get('page', 1),3);
         return $this->render('BrasaTransporteBundle:Consultas/Guias:novedadesPendientes.html.twig', array(
@@ -69,8 +69,8 @@ class ConsultasController extends Controller
             ->add('Buscar', 'submit')
             ->getForm();        
         $form->handleRequest($request);
-        $arRecibosCaja = new \Brasa\TransporteBundle\Entity\TteRecibosCaja();
-        $query = $em->getRepository('BrasaTransporteBundle:TteRecibosCaja')->ListaRecibosCaja(date_create(date('Y-m-d')), date_create(date('Y-m-d')));
+        $arRecibosCaja = new \Brasa\TransporteBundle\Entity\TteReciboCaja();
+        $query = $em->getRepository('BrasaTransporteBundle:TteReciboCaja')->ListaRecibosCaja(date_create(date('Y-m-d')), date_create(date('Y-m-d')));
         $paginator = $this->get('knp_paginator');        
         $arRecibosCaja = $paginator->paginate($query, $this->get('request')->query->get('page', 1),3);
         return $this->render('BrasaTransporteBundle:Consulta/Guias:recibosCaja.html.twig', array(

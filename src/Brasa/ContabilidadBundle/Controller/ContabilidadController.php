@@ -10,7 +10,7 @@ class ContabilidadController extends Controller {
 
     public function resumenAction() {
         $em = $this->getDoctrine()->getEntityManager();
-        $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->DevMovimientosFacturacionResumidoAnnioMes();
+        $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->DevMovimientosFacturacionResumidoAnnioMes();
         return $this->render('BrasaFrontEndBundle:Contabilidad/Consultas:resumen.html.twig', array('arMovimientos' => $arMovimientos));
     }
 
@@ -44,8 +44,8 @@ class ContabilidadController extends Controller {
 
     public function listadoCuentasAction() {
         $em = $this->getDoctrine()->getEntityManager();
-        $arCuentas = new \Brasa\ContabilidadBundle\Entity\CtbCuentasContables();
-        $arCuentas = $em->getRepository('BrasaContabilidadBundle:CtbCuentasContables')->findAll();
+        $arCuentas = new \Brasa\ContabilidadBundle\Entity\CtbCuentaContable();
+        $arCuentas = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->findAll();
 
         $html = " <table  class='table table-striped table-bordered table-condensed'> ";
 
@@ -109,10 +109,10 @@ class ContabilidadController extends Controller {
 
             $strCuenta = $_GET["q"];
 
-            $arCuentas = new \Brasa\ContabilidadBundle\Entity\CtbCuentasContables();
+            $arCuentas = new \Brasa\ContabilidadBundle\Entity\CtbCuentaContable();
 
             if ($this->getRequest()->isXmlHttpRequest())
-                $arCuentas = $em->getRepository('BrasaContabilidadBundle:CtbCuentasContables')->BuscarDescripcionCuenta($strCuenta);
+                $arCuentas = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->BuscarDescripcionCuenta($strCuenta);
             
             if(count($arCuentas) > 0) {
                 foreach ($arCuentas as $key => $value) 
@@ -156,9 +156,9 @@ class ContabilidadController extends Controller {
     public function buscarBancosAction() {
             $em = $this->getDoctrine()->getEntityManager();
             $strBanco = $_GET["q"];
-            $arBancos = new \Brasa\ContabilidadBundle\Entity\CtbBancos();
+            $arBancos = new \Brasa\ContabilidadBundle\Entity\CtbBanco();
             if ($this->getRequest()->isXmlHttpRequest())
-                $arBancos = $em->getRepository('BrasaContabilidadBundle:CtbBancos')->BuscarDescripcionBanco($strBanco);
+                $arBancos = $em->getRepository('BrasaContabilidadBundle:CtbBanco')->BuscarDescripcionBanco($strBanco);
             
             if(count($arBancos) > 0) {
                 foreach ($arBancos as $key => $value) 
@@ -195,10 +195,10 @@ class ContabilidadController extends Controller {
 
             $strImpuesto = $_GET["q"];
 
-            $arImpuestos = new \Brasa\ContabilidadBundle\Entity\CtbImpuestos();
+            $arImpuestos = new \Brasa\ContabilidadBundle\Entity\CtbImpuesto();
 
             if ($this->getRequest()->isXmlHttpRequest())
-                $arImpuestos = $em->getRepository('BrasaContabilidadBundle:CtbImpuestos')->BuscarDescripcionImpuesto($strImpuesto);
+                $arImpuestos = $em->getRepository('BrasaContabilidadBundle:CtbImpuesto')->BuscarDescripcionImpuesto($strImpuesto);
             
             if(count($arImpuestos) > 0) {
                 foreach ($arImpuestos as $key => $value) 

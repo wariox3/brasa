@@ -9,9 +9,9 @@ class FacturasAgregarGuiaController extends Controller
     public function listaAction($codigoFactura) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        
-        $arFactura = new \Brasa\TransporteBundle\Entity\TteFacturas();
-        $arFactura = $em->getRepository('BrasaTransporteBundle:TteFacturas')->find($codigoFactura);
-        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy(array('estadoFacturada' => 0, 'estadoGenerada' => 1, 'estadoAnulada' => 0, 'codigoTipoPagoFk' => 1, 'codigoTerceroFk' => $arFactura->getCodigoTerceroFk()));
+        $arFactura = new \Brasa\TransporteBundle\Entity\TteFactura();
+        $arFactura = $em->getRepository('BrasaTransporteBundle:TteFactura')->find($codigoFactura);
+        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuia')->findBy(array('estadoFacturada' => 0, 'estadoGenerada' => 1, 'estadoAnulada' => 0, 'codigoTipoPagoFk' => 1, 'codigoTerceroFk' => $arFactura->getCodigoTerceroFk()));
         if ($request->getMethod() == 'POST') {            
             switch ($request->request->get('OpSubmit')) {
                 case "OpBuscar";
@@ -27,8 +27,8 @@ class FacturasAgregarGuiaController extends Controller
                         $intUnidades = $arFactura->getCtUnidades();
                         $intGuias = $arFactura->getCtGuias();
                         foreach ($arrSeleccionados AS $codigoGuia) {
-                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                             $arGuia->setEstadoFacturada(1);
                             $arGuia->setFacturaRel($arFactura);
                             $em->persist($arGuia);

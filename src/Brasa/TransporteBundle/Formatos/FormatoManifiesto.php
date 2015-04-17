@@ -18,8 +18,8 @@ class FormatoManifiesto extends \FPDF_FPDF {
         
     } 
     public function Header() {
-        $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespachos();
-        $arDespacho = self::$em->getRepository('BrasaTransporteBundle:TteDespachos')->find(self::$codigoDespacho);
+        $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespacho();
+        $arDespacho = self::$em->getRepository('BrasaTransporteBundle:TteDespacho')->find(self::$codigoDespacho);
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
         $this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
@@ -55,8 +55,8 @@ class FormatoManifiesto extends \FPDF_FPDF {
     }
 
     public function Body($pdf) {
-        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();
-        $arGuias = self::$em->getRepository('BrasaTransporteBundle:TteGuias')->findBy(array('codigoDespachoFk' => self::$codigoDespacho));
+        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuia();
+        $arGuias = self::$em->getRepository('BrasaTransporteBundle:TteGuia')->findBy(array('codigoDespachoFk' => self::$codigoDespacho));
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arGuias as $arGuias) {            

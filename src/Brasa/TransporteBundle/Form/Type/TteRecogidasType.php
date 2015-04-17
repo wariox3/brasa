@@ -4,14 +4,14 @@ namespace Brasa\TransporteBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TteRecogidasType extends AbstractType
+class TteRecogidaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
 
             ->add('terceroRel', 'entity', array(
-                'class' => 'BrasaGeneralBundle:GenTerceros',
+                'class' => 'BrasaGeneralBundle:GenTercero',
                 'property' => 'nombreCorto',
             ))       
             ->add('anunciante', 'text')

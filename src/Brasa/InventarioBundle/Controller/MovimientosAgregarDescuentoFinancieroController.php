@@ -9,9 +9,9 @@ class MovimientosAgregarDescuentoFinancieroController extends Controller
     public function listaAction($codigoMovimiento) {                
         $request = $this->getRequest();                   
         $em = $this->getDoctrine()->getEntityManager();
-        $arDescuentosFinancieros = $em->getRepository('BrasaInventarioBundle:InvDescuentosFinancieros')->findAll();     
-        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
+        $arDescuentosFinancieros = $em->getRepository('BrasaInventarioBundle:InvDescuentoFinanciero')->findAll();     
+        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');            
@@ -19,9 +19,9 @@ class MovimientosAgregarDescuentoFinancieroController extends Controller
                 case "OpAgregar";                    
                     if (count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoDescuentoFinanciero) {
-                            $arDescuentoFinanciero = new \Brasa\InventarioBundle\Entity\InvDescuentosFinancieros();
-                            $arDescuentoFinanciero = $em->getRepository('BrasaInventarioBundle:InvDescuentosFinancieros')->find($codigoDescuentoFinanciero);     
-                            $arMovimientoDescuentoFinanciero = new \Brasa\InventarioBundle\Entity\InvMovimientosDescuentosFinancieros();
+                            $arDescuentoFinanciero = new \Brasa\InventarioBundle\Entity\InvDescuentoFinanciero();
+                            $arDescuentoFinanciero = $em->getRepository('BrasaInventarioBundle:InvDescuentoFinanciero')->find($codigoDescuentoFinanciero);     
+                            $arMovimientoDescuentoFinanciero = new \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero();
                             $arMovimientoDescuentoFinanciero->setMovimientoRel($arMovimiento);
                             $arMovimientoDescuentoFinanciero->setDescuentoFinancieroRel($arDescuentoFinanciero);
                             $arMovimientoDescuentoFinanciero->setPorcentaje($arDescuentoFinanciero->getPorcentaje());
@@ -30,7 +30,7 @@ class MovimientosAgregarDescuentoFinancieroController extends Controller
                             $em->persist($arMovimientoDescuentoFinanciero);
                             $em->flush();
                         }
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->LiquidarRetenciones($codigoMovimiento);
+                        $em->getRepository('BrasaInventarioBundle:InvMovimiento')->LiquidarRetenciones($codigoMovimiento);
                     }
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
                     break;      

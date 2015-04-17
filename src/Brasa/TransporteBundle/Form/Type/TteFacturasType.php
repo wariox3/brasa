@@ -4,13 +4,13 @@ namespace Brasa\TransporteBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TteFacturasType extends AbstractType
+class TteFacturaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                                                  
             ->add('terceroRel', 'entity', array(
-                'class' => 'BrasaGeneralBundle:GenTerceros',
+                'class' => 'BrasaGeneralBundle:GenTercero',
                 'property' => 'nombreCorto',
             ))       
             ->add('comentarios', 'textarea', array('required' => false))

@@ -3,7 +3,7 @@
 namespace Brasa\TransporteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\TransporteBundle\Form\Type\TtePlanesRecogidasType;
+use Brasa\TransporteBundle\Form\Type\TtePlanRecogidaType;
 
 class RecogidasFuncionesController extends Controller
 {    
@@ -20,9 +20,9 @@ class RecogidasFuncionesController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if (count($arrSeleccionados) > 0) {
                 foreach ($arrSeleccionados AS $codigoRecogidaProgramada) {                            
-                    $arRecogidaProgramada = new \Brasa\TransporteBundle\Entity\TteRecogidasProgramadas();
-                    $arRecogidaProgramada = $em->getRepository('BrasaTransporteBundle:TteRecogidasProgramadas')->find($codigoRecogidaProgramada);
-                    $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+                    $arRecogidaProgramada = new \Brasa\TransporteBundle\Entity\TteRecogidaProgramada();
+                    $arRecogidaProgramada = $em->getRepository('BrasaTransporteBundle:TteRecogidaProgramada')->find($codigoRecogidaProgramada);
+                    $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();
                     $arRecogida->setFechaAnuncio(date_create(date('Y-m-d H:i:s')));                                    
                     $arRecogida->setFechaRecogida(date_create(date('Y-m-d'). $arRecogidaProgramada->getHoraRecogida()->format('H:i')));                    
                     $arRecogida->setTerceroRel($arRecogidaProgramada->getTerceroRel());
@@ -38,8 +38,8 @@ class RecogidasFuncionesController extends Controller
         }
 
         
-        $arRecogidasProgramadas = new \Brasa\TransporteBundle\Entity\TteRecogidasProgramadas();
-        $query = $em->getRepository('BrasaTransporteBundle:TteRecogidasProgramadas')->Lista();
+        $arRecogidasProgramadas = new \Brasa\TransporteBundle\Entity\TteRecogidaProgramada();
+        $query = $em->getRepository('BrasaTransporteBundle:TteRecogidaProgramada')->Lista();
         $paginator = $this->get('knp_paginator');                
         $arRecogidasProgramadas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);         
         
@@ -62,10 +62,10 @@ class RecogidasFuncionesController extends Controller
                 case "OpRetirar";
                     if (count($arrRecogidasSeleccionadas) > 0) {
                         foreach ($arrRecogidasSeleccionadas AS $codigoRecogida) {
-                            $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();
-                            $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->find($codigoRecogida);
-                            $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanesRecogidas();
-                            $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanesRecogidas')->find($arRecogida->getCodigoPlanRecogidaFk());                           
+                            $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();
+                            $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogida')->find($codigoRecogida);
+                            $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanRecogida();
+                            $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanRecogida')->find($arRecogida->getCodigoPlanRecogidaFk());                           
                             $arPlanRecogida->setCtUnidades($arPlanRecogida->getCtUnidades() - $arRecogida->getCtUnidades());
                             $arPlanRecogida->setCtPesoReal($arPlanRecogida->getCtPesoReal() - $arRecogida->getCtPesoReal());
                             $arPlanRecogida->setCtPesoVolumen($arPlanRecogida->getCtPesoVolumen() - $arRecogida->getCtPesoVolumen());
@@ -83,11 +83,11 @@ class RecogidasFuncionesController extends Controller
                 case "OpEliminar";
                     if (count($arrPlanesRecogidasSeleccionadas) > 0) {
                         foreach ($arrPlanesRecogidasSeleccionadas AS $codigoPlanRecogida) {
-                            $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogidas();
-                            $arRecogidas = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->findBy(array('codigoPlanRecogidaFk' => $codigoPlanRecogida));
+                            $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogida();
+                            $arRecogidas = $em->getRepository('BrasaTransporteBundle:TteRecogida')->findBy(array('codigoPlanRecogidaFk' => $codigoPlanRecogida));
                             if(count($arRecogidas) <= 0) {
-                                $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanesRecogidas();
-                                $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanesRecogidas')->find($codigoPlanRecogida);                                                           
+                                $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanRecogida();
+                                $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanRecogida')->find($codigoPlanRecogida);                                                           
                                 $em->remove($arPlanRecogida);                                
                                 $em->flush();
                             }                            
@@ -98,19 +98,19 @@ class RecogidasFuncionesController extends Controller
            
         }
 
-        $arPlanesRecogidas = new \Brasa\TransporteBundle\Entity\TtePlanesRecogidas();                
-        $query = $em->getRepository('BrasaTransporteBundle:TtePlanesRecogidas')->Pendientes();
+        $arPlanesRecogidas = new \Brasa\TransporteBundle\Entity\TtePlanRecogida();                
+        $query = $em->getRepository('BrasaTransporteBundle:TtePlanRecogida')->Pendientes();
         $paginator = $this->get('knp_paginator');                
         $arPlanesRecogidas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);         
         
-        $query = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->ListaPendientes();
+        $query = $em->getRepository('BrasaTransporteBundle:TteRecogida')->ListaPendientes();
         $paginator = $this->get('knp_paginator');        
-        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogida();
         $arRecogidas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100); 
 
-        $query = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->ListaAsignadas();
+        $query = $em->getRepository('BrasaTransporteBundle:TteRecogida')->ListaAsignadas();
         $paginator = $this->get('knp_paginator');        
-        $arRecogidasAsignacion = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+        $arRecogidasAsignacion = new \Brasa\TransporteBundle\Entity\TteRecogida();
         $arRecogidasAsignacion = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);         
         
         return $this->render('BrasaTransporteBundle:Recogidas/Funciones:programacion.html.twig', array(
@@ -123,21 +123,21 @@ class RecogidasFuncionesController extends Controller
     public function planRecogidaNuevoAction($codigoPlanRecogida = 0) {
         $em = $this->getDoctrine()->getManager();        
         $request = $this->getRequest();
-        $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanesRecogidas();
+        $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanRecogida();
         if($codigoPlanRecogida != 0) {
-            $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanesRecogidas')->find($codigoPlanRecogida);
+            $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanRecogida')->find($codigoPlanRecogida);
         }
-        $form = $this->createForm(new TtePlanesRecogidasType(), $arPlanRecogida);
+        $form = $this->createForm(new TtePlanRecogidaType(), $arPlanRecogida);
         $form->handleRequest($request);        
         if ($form->isValid()) {            
             $arPlanRecogida = $form->getData();                        
-            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuariosConfiguracion')->find($this->getUser()->getId());                        
+            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuarioConfiguracion')->find($this->getUser()->getId());                        
             $intUsu =$this->getUser()->getId();
             $arPlanRecogida->setFecha(date_create(date('Y-m-d H:i:s')));
             $arPlanRecogida->setPuntoOperacionRel($arUsuarioConfiguracion->getPuntoOperacionRel());                                    
             $em->persist($arPlanRecogida);
             $em->flush();            
-            //$em->getRepository('BrasaTransporteBundle:TteGuias')->Liquidar($arGuia->getCodigoGuiaPk());            
+            //$em->getRepository('BrasaTransporteBundle:TteGuia')->Liquidar($arGuia->getCodigoGuiaPk());            
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_tte_recogidas_planrecogida_nuevo', array('codigoPlanRecogida' => 0)));
             } else {
@@ -160,8 +160,8 @@ class RecogidasFuncionesController extends Controller
                 ->getForm();
 
         $form->handleRequest($request);
-        $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanesRecogidas();
-        $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanesRecogidas')->find($codigoPlanRecogida);
+        $arPlanRecogida = new \Brasa\TransporteBundle\Entity\TtePlanRecogida();
+        $arPlanRecogida = $em->getRepository('BrasaTransporteBundle:TtePlanRecogida')->find($codigoPlanRecogida);
         
         if ($form->isValid()) {
             if($form->get('Agregar')->isClicked()) {
@@ -172,8 +172,8 @@ class RecogidasFuncionesController extends Controller
                     $intPesoVolumen = $arPlanRecogida->getCtPesoVolumen();
                     $intRecogidas = $arPlanRecogida->getCtRecogidas();
                     foreach ($arrSeleccionados AS $codigoRecogida) {
-                        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();
-                        $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->find($codigoRecogida);
+                        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();
+                        $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogida')->find($codigoRecogida);
                         $arRecogida->setEstadoAsignada(1);
                         $arRecogida->setPlanRecogidaRel($arPlanRecogida);
                         $em->persist($arRecogida);
@@ -213,8 +213,8 @@ class RecogidasFuncionesController extends Controller
                         $intPesoVolumen = $arDespacho->getCtPesoVolumen();
                         $intRecogidas = $arDespacho->getCtGuias();
                         foreach ($arrSeleccionados AS $codigoGuia) {
-                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                             $arGuia->setEstadoDespachada(1);
                             $arGuia->setDespachoRel($arDespacho);
                             $em->persist($arGuia);
@@ -237,9 +237,9 @@ class RecogidasFuncionesController extends Controller
             }
         }
         
-        $query = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->ListaPendientes();
+        $query = $em->getRepository('BrasaTransporteBundle:TteRecogida')->ListaPendientes();
         $paginator = $this->get('knp_paginator');        
-        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogida();
         $arRecogidas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
         
         return $this->render('BrasaTransporteBundle:Recogidas/Funciones:agregarRecogida.html.twig', array(

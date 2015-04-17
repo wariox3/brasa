@@ -1,0 +1,3 @@
+brs_rhu_utilidades_pagos_generar_periodo:
+    path:     /rhumano/utilidades/pagos/generar/periodo
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:generarPeriodo } 

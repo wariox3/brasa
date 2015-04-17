@@ -3,13 +3,13 @@
 namespace Brasa\TransporteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\TransporteBundle\Form\Type\TteRelacionesCumplidosType;
+use Brasa\TransporteBundle\Form\Type\TteRelacionCumplidoType;
 class RelacionesCumplidosController extends Controller
 {
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();                
-        $arRelacionesCumplidos = new \Brasa\TransporteBundle\Entity\TteRelacionesCumplidos();            
+        $arRelacionesCumplidos = new \Brasa\TransporteBundle\Entity\TteRelacionCumplido();            
         $form = $this->createFormBuilder()
             ->add('TxtCodigoRelacionCumplidos', 'text', array('label'  => 'Codigo'))
             ->add('ChkMostrarDescargadas', 'checkbox', array('label'=> '', 'required'  => false,)) 
@@ -18,9 +18,9 @@ class RelacionesCumplidosController extends Controller
             ->add('Buscar', 'submit')
             ->getForm();
         $form->handleRequest($request);
-        $query = $em->getRepository('BrasaTransporteBundle:TteRelacionesCumplidos')->ListaRelacionesCumplidos(0, "", "", "");
+        $query = $em->getRepository('BrasaTransporteBundle:TteRelacionCumplido')->ListaRelacionesCumplidos(0, "", "", "");
         if($form->isValid()) {            
-            $query = $em->getRepository('BrasaTransporteBundle:TteRelacionesCumplidos')->ListaDespachos(
+            $query = $em->getRepository('BrasaTransporteBundle:TteRelacionCumplido')->ListaDespachos(
                     $form->get('ChkMostrarDescargados')->getData(),
                     $form->get('ChkMostrarAnulados')->getData(),
                     $form->get('TxtCodigoDespacho')->getData(),
@@ -37,8 +37,8 @@ class RelacionesCumplidosController extends Controller
             switch ($request->request->get('OpSubmit')) {
                 case "OpEliminar";
                     foreach ($arrSeleccionados AS $codigoGuia) {
-                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                         if($arGuia->getEstadoImpreso() == 0 && $arGuia->getEstadoDespachada() == 0 && $arGuia->getNumeroGuia() == 0) {
                             $em->remove($arGuia);
                             $em->flush();                            
@@ -49,7 +49,7 @@ class RelacionesCumplidosController extends Controller
             }
         } 
         $paginator = $this->get('knp_paginator');        
-        $arRelacionesCumplidos = new \Brasa\TransporteBundle\Entity\TteRelacionesCumplidos();
+        $arRelacionesCumplidos = new \Brasa\TransporteBundle\Entity\TteRelacionCumplido();
         $arRelacionesCumplidos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
 
         return $this->render('BrasaTransporteBundle:RelacionesCumplidos:lista.html.twig', array(
@@ -64,21 +64,21 @@ class RelacionesCumplidosController extends Controller
     public function nuevoAction($codigoDespacho = 0) {
         $em = $this->getDoctrine()->getManager();        
         $request = $this->getRequest();
-        $arRelacionCumplidos = new \Brasa\TransporteBundle\Entity\TteRelacionesCumplidos();
+        $arRelacionCumplidos = new \Brasa\TransporteBundle\Entity\TteRelacionCumplido();
         if($codigoDespacho != 0) {
-            $arRelacionCumplidos = $em->getRepository('BrasaTransporteBundle:TteRelacionesCumplidos')->find($codigoDespacho);
+            $arRelacionCumplidos = $em->getRepository('BrasaTransporteBundle:TteRelacionCumplido')->find($codigoDespacho);
         }
-        $form = $this->createForm(new TteDespachosType(), $arRelacionCumplidos);
+        $form = $this->createForm(new TteDespachoType(), $arRelacionCumplidos);
         $form->handleRequest($request);        
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             $arRelacionCumplidos = $form->getData();                        
-            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuariosConfiguracion')->find($this->getUser()->getId());                        
+            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuarioConfiguracion')->find($this->getUser()->getId());                        
             $arRelacionCumplidos->setFecha(date_create(date('Y-m-d H:i:s')));
             $arRelacionCumplidos->setPuntoOperacionRel($arUsuarioConfiguracion->getPuntoOperacionRel());                                    
             $em->persist($arRelacionCumplidos);
             $em->flush();            
-            //$em->getRepository('BrasaTransporteBundle:TteGuias')->Liquidar($arGuia->getCodigoGuiaPk());            
+            //$em->getRepository('BrasaTransporteBundle:TteGuia')->Liquidar($arGuia->getCodigoGuiaPk());            
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_tte_despachos_nuevo', array('codigoGuia' => 0)));
             } else {
@@ -99,22 +99,22 @@ class RelacionesCumplidosController extends Controller
         $request = $this->getRequest();    
         $objMensaje = $this->get('mensajes_brasa');
         
-        $arRelacionCumplidos = new \Brasa\TransporteBundle\Entity\TteRelacionesCumplidos();
-        $arRelacionCumplidos = $em->getRepository('BrasaTransporteBundle:TteRelacionesCumplidos')->find($codigoDespacho);
+        $arRelacionCumplidos = new \Brasa\TransporteBundle\Entity\TteRelacionCumplido();
+        $arRelacionCumplidos = $em->getRepository('BrasaTransporteBundle:TteRelacionCumplido')->find($codigoDespacho);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             $arrDescuentosFinancierosSeleccionados = $request->request->get('ChkSeleccionarDescuentoFinanciero');
             switch ($request->request->get('OpSubmit')) {
                 case "OpGenerar";
-                    $strResultado = $em->getRepository('BrasaTransporteBundle:TteRelacionesCumplidos')->Generar($codigoDespacho);
+                    $strResultado = $em->getRepository('BrasaTransporteBundle:TteRelacionCumplido')->Generar($codigoDespacho);
                     if ($strResultado != "") {
                         $objMensaje->Mensaje("error", "No se genero el despacho: " . $strResultado, $this);
                     }                        
                     break;
 
                 case "OpAnular";
-                    $varAnular = $em->getRepository('BrasaTransporteBundle:TteRelacionesCumplidos')->Anular($codigoDespacho);
+                    $varAnular = $em->getRepository('BrasaTransporteBundle:TteRelacionCumplido')->Anular($codigoDespacho);
                     if ($varAnular != "") {
                         $objMensaje->Mensaje("error", "No se anulo el despacho: " . $varAnular, $this);
                     }                        
@@ -134,8 +134,8 @@ class RelacionesCumplidosController extends Controller
                         $intPesoVolumen = $arRelacionCumplidos->getCtPesoVolumen();
                         $intGuias = $arRelacionCumplidos->getCtGuias();
                         foreach ($arrSeleccionados AS $codigoGuia) {
-                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                             if($arGuia->getCodigoDespachoFk() != NULL) {
                                 $arGuia->setCodigoDespachoFk(NULL);
                                 $arGuia->setEstadoDespachada(0);                                
@@ -158,7 +158,7 @@ class RelacionesCumplidosController extends Controller
             }
         }
         
-        $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->GuiasDespachoDetalle($codigoDespacho);
+        $query = $em->getRepository('BrasaTransporteBundle:TteGuia')->GuiasDespachoDetalle($codigoDespacho);
         $paginator = $this->get('knp_paginator');        
         $arGuias = $paginator->paginate($query, $this->get('request')->query->get('page', 1),3);                
         return $this->render('BrasaTransporteBundle:Despachos:detalle.html.twig', array(

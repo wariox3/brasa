@@ -3,14 +3,14 @@
 namespace Brasa\TransporteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\TransporteBundle\Form\Type\TteFacturasType;
+use Brasa\TransporteBundle\Form\Type\TteFacturaType;
 
 class FacturasController extends Controller
 {
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();                
-        $arFacturas = new \Brasa\TransporteBundle\Entity\TteFacturas();            
+        $arFacturas = new \Brasa\TransporteBundle\Entity\TteFactura();            
         $form = $this->createFormBuilder()
             ->add('TxtCodigoFactura', 'text', array('label'  => 'Codigo'))
             ->add('TxtNumeroFactura', 'text')
@@ -22,9 +22,9 @@ class FacturasController extends Controller
             ->add('Buscar', 'submit')
             ->getForm();
         $form->handleRequest($request);
-        $query = $em->getRepository('BrasaTransporteBundle:TteFacturas')->ListaFacturas(0, "", "", "", "");        
+        $query = $em->getRepository('BrasaTransporteBundle:TteFactura')->ListaFacturas(0, "", "", "", "");        
         if($form->isValid()) {            
-            $query = $em->getRepository('BrasaTransporteBundle:TteFacturas')->ListaFacturas(                    
+            $query = $em->getRepository('BrasaTransporteBundle:TteFactura')->ListaFacturas(                    
                     $form->get('ChkMostrarAnuladas')->getData(),
                     $form->get('TxtCodigoGuia')->getData(),
                     $form->get('TxtNumeroGuia')->getData(),
@@ -36,8 +36,8 @@ class FacturasController extends Controller
             switch ($request->request->get('OpSubmit')) {
                 case "OpEliminar";
                     foreach ($arrSeleccionados AS $codigoFactura) {
-                        $arFactura = new \Brasa\TransporteBundle\Entity\TteFacturas();
-                        $arFactura = $em->getRepository('BrasaTransporteBundle:TteFacturas')->find($codigoFactura);
+                        $arFactura = new \Brasa\TransporteBundle\Entity\TteFactura();
+                        $arFactura = $em->getRepository('BrasaTransporteBundle:TteFactura')->find($codigoFactura);
 
                     }
                     break;
@@ -45,7 +45,7 @@ class FacturasController extends Controller
         }                 
         
         $paginator = $this->get('knp_paginator');        
-        $arFacturas = new \Brasa\TransporteBundle\Entity\TteFacturas();
+        $arFacturas = new \Brasa\TransporteBundle\Entity\TteFactura();
         $arFacturas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100); 
         return $this->render('BrasaTransporteBundle:Facturas:lista.html.twig', array(
             'arFacturas' => $arFacturas,
@@ -55,11 +55,11 @@ class FacturasController extends Controller
     public function nuevoAction($codigoFactura = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arFactura = new \Brasa\TransporteBundle\Entity\TteFacturas();
+        $arFactura = new \Brasa\TransporteBundle\Entity\TteFactura();
         if($codigoFactura != 0) {
-            $arFactura = $em->getRepository('BrasaTransporteBundle:TteFacturas')->find($codigoFactura);
+            $arFactura = $em->getRepository('BrasaTransporteBundle:TteFactura')->find($codigoFactura);
         }
-        $form = $this->createForm(new TteFacturasType(), $arFactura);
+        $form = $this->createForm(new TteFacturaType(), $arFactura);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arFactura = $form->getData();                        
@@ -82,22 +82,22 @@ class FacturasController extends Controller
         $request = $this->getRequest();    
         $objMensaje = $this->get('mensajes_brasa');
         
-        $arFactura = new \Brasa\TransporteBundle\Entity\TteFacturas();
-        $arFactura = $em->getRepository('BrasaTransporteBundle:TteFacturas')->find($codigoFactura);
+        $arFactura = new \Brasa\TransporteBundle\Entity\TteFactura();
+        $arFactura = $em->getRepository('BrasaTransporteBundle:TteFactura')->find($codigoFactura);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             $arrDescuentosFinancierosSeleccionados = $request->request->get('ChkSeleccionarDescuentoFinanciero');
             switch ($request->request->get('OpSubmit')) {
                 case "OpGenerar";
-                    $strResultado = $em->getRepository('BrasaTransporteBundle:TteFacturas')->Generar($codigoDespacho);
+                    $strResultado = $em->getRepository('BrasaTransporteBundle:TteFactura')->Generar($codigoDespacho);
                     if ($strResultado != "") {
                         $objMensaje->Mensaje("error", "No se genero el despacho: " . $strResultado, $this);
                     }                        
                     break;
 
                 case "OpAnular";
-                    $varAnular = $em->getRepository('BrasaTransporteBundle:TteFacturas')->Anular($codigoDespacho);
+                    $varAnular = $em->getRepository('BrasaTransporteBundle:TteFactura')->Anular($codigoDespacho);
                     if ($varAnular != "") {
                         $objMensaje->Mensaje("error", "No se anulo el despacho: " . $varAnular, $this);
                     }                        
@@ -113,8 +113,8 @@ class FacturasController extends Controller
                 case "OpRetirar";
                     if (count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoGuia) {
-                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                             if($arGuia->getCodigoDespachoFk() == NULL) {
                                 $arGuia->setCodigoDespachoFk(NULL);
                                 $em->persist($arGuia);
@@ -126,7 +126,7 @@ class FacturasController extends Controller
             }
         }
         
-        $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->GuiasFacturaDetalle($codigoFactura);
+        $query = $em->getRepository('BrasaTransporteBundle:TteGuia')->GuiasFacturaDetalle($codigoFactura);
         $paginator = $this->get('knp_paginator');        
         $arGuias = $paginator->paginate($query, $this->get('request')->query->get('page', 1),3);                
         return $this->render('BrasaTransporteBundle:Facturas:detalle.html.twig', array(

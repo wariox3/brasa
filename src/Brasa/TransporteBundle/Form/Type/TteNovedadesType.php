@@ -4,13 +4,13 @@ namespace Brasa\TransporteBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TteNovedadesType extends AbstractType
+class TteNovedadType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('novedadConceptoRel', 'entity', array(
-                'class' => 'BrasaTransporteBundle:TteNovedadesConceptos',
+                'class' => 'BrasaTransporteBundle:TteNovedadConcepto',
                 'property' => 'nombre',
             ))            
             ->add('novedad', 'textarea')

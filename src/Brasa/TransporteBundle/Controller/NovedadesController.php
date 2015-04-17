@@ -9,8 +9,8 @@ class NovedadesController extends Controller
     public function solucionarNovedadAction($codigoNovedad) {
         $em = $this->getDoctrine()->getManager();        
         $request = $this->getRequest();
-        $arNovedad = new \Brasa\TransporteBundle\Entity\TteNovedades();
-        $arNovedad = $em->getRepository('BrasaTransporteBundle:TteNovedades')->find($codigoNovedad);
+        $arNovedad = new \Brasa\TransporteBundle\Entity\TteNovedad();
+        $arNovedad = $em->getRepository('BrasaTransporteBundle:TteNovedad')->find($codigoNovedad);
         $arNovedad->setFechaSolucion(new \DateTime('tomorrow'));        
         $form = $this->createFormBuilder($arNovedad)
             ->add('solucion', 'textarea')

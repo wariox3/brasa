@@ -28,11 +28,11 @@ class ProcesosController extends Controller {
             foreach($arItems as $arItem) {
                 $douCostoPromedio = 0;
                 $intExistenciaAnterior = 0;
-                $arMovimientosDetalles = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesOperacion("", "", $arItem->getCodigoItemPk());
+                $arMovimientosDetalles = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetallesOperacion("", "", $arItem->getCodigoItemPk());
                 foreach ($arMovimientosDetalles as $arMovimientosDetalle) {
-                    $arMovimientoDetalleAct = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                    $arMovimientoDetalleAct = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($arMovimientosDetalle['codigoDetalleMovimientoPk']);
+                    $arMovimientoDetalleAct = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                    $arMovimientoDetalleAct = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($arMovimientosDetalle['codigoDetalleMovimientoPk']);
                     //Si el documento de este movimiento es generador de costo se debe recalcular el costo promedio
                     if($arMovimientoDetalleAct->getMovimientoRel()->getDocumentoRel()->getGeneraCostoPromedio() == 1) {
                         $arMovimientoDetalleAct->setCosto($arMovimientoDetalleAct->getPrecio());
@@ -63,18 +63,18 @@ class ProcesosController extends Controller {
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
-            $arCierreMesInventarioProcesar = new \Brasa\InventarioBundle\Entity\InvCierresMes();
-            $arCierreMesInventarioProcesar = $em->getRepository('BrasaInventarioBundle:InvCierresMes')->find($arrControles['BtnCerrar']);
-            $arMovimientoDetalles = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
+            $arCierreMesInventarioProcesar = new \Brasa\InventarioBundle\Entity\InvCierreMes();
+            $arCierreMesInventarioProcesar = $em->getRepository('BrasaInventarioBundle:InvCierreMes')->find($arrControles['BtnCerrar']);
+            $arMovimientoDetalles = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
             $dateFechaDesde = date_format($arCierreMesInventarioProcesar->getFechaInicio(), 'Y-m-d');
             $dateFechaHasta = date_format($arCierreMesInventarioProcesar->getFechaFin(), 'Y-m-d');
             $douTotalVentas = 0;
             $douTotalCompras = 0;
-            $arMovimientoDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesResumen($dateFechaDesde, $dateFechaHasta, "", "", 4);
+            $arMovimientoDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetallesResumen($dateFechaDesde, $dateFechaHasta, "", "", 4);
             if(count($arMovimientoDetalles) > 0)
                 $douTotalVentas = $arMovimientoDetalles[0][1];
 
-            $arMovimientoDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesResumen($dateFechaDesde, $dateFechaHasta, "", "", 1);
+            $arMovimientoDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetallesResumen($dateFechaDesde, $dateFechaHasta, "", "", 1);
             if(count($arMovimientoDetalles) > 0)
                 $douTotalCompras = $arMovimientoDetalles[0][1];
 
@@ -83,10 +83,10 @@ class ProcesosController extends Controller {
             //$arCierreMesInventarioProcesar->setEstadoCerrado(1);
 
             //Guardar los costos de los movimientos de inventario
-            $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumentos();
-            $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumentos')->findAll();
+            $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumento();
+            $arDocumentos = $em->getRepository('BrasaInventarioBundle:InvDocumento')->findAll();
             foreach ($arDocumentos as $arDocumento) {
-                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->DevMovimientosResumenCosto($dateFechaDesde, $dateFechaHasta, $arDocumento->getCodigoDocumentoPk(), "");
+                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->DevMovimientosResumenCosto($dateFechaDesde, $dateFechaHasta, $arDocumento->getCodigoDocumentoPk(), "");
                 if(count($arMovimiento) > 0) {
                     $douTotal = $arMovimiento[0][1];
                     if($douTotal > 0) {
@@ -104,10 +104,10 @@ class ProcesosController extends Controller {
             //Guardar los lotes y cantidades
             //Regenera el kardex para evitar inconsistencias
             $this->regenerarKardexGlobal(date_format($arCierreMesInventarioProcesar->getFechaFin(), 'Y-m-d H:i:s'));
-            $arLotes = new \Brasa\InventarioBundle\Entity\InvLotes();
-            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistenciaTodos();
+            $arLotes = new \Brasa\InventarioBundle\Entity\InvLote();
+            $arLotes = $em->getRepository('BrasaInventarioBundle:InvLote')->DevLotesExistenciaTodos();
             foreach ($arLotes as $arLotes) {
-                $arCierreMesLotes = new \Brasa\InventarioBundle\Entity\InvCierresMesLotes();
+                $arCierreMesLotes = new \Brasa\InventarioBundle\Entity\InvCierreMesLote();
                 $arCierreMesLotes->setCierreMesRel($arCierreMesInventarioProcesar);
                 $arCierreMesLotes->setExistencia($arLotes->getExistencia());
                 $arCierreMesLotes->setItemRel($arLotes->getItemRel());
@@ -123,40 +123,40 @@ class ProcesosController extends Controller {
             $this->regenerarKardexGlobal();
 
         }
-        $arCierreMesInventario = new \Brasa\InventarioBundle\Entity\InvCierresMes();
-        $arCierreMesInventario = $em->getRepository('BrasaInventarioBundle:InvCierresMes')->findBy(array('annio' => 2013));
+        $arCierreMesInventario = new \Brasa\InventarioBundle\Entity\InvCierreMes();
+        $arCierreMesInventario = $em->getRepository('BrasaInventarioBundle:InvCierreMes')->findBy(array('annio' => 2013));
         return $this->render('BrasaInventarioBundle:Procesos/Inventario:cierreMes.html.twig', array('arCierreMesInventario' => $arCierreMesInventario));
     }
 
     public function regenerarKardexGlobal($dateFechaHasta = "") {
             $em = $this->getDoctrine()->getEntityManager();
-            $em->getRepository('BrasaInventarioBundle:InvLotes')->ReiniciarValoresLotes();
+            $em->getRepository('BrasaInventarioBundle:InvLote')->ReiniciarValoresLotes();
             $em->getRepository('BrasaInventarioBundle:InvItem')->ReiniciarExistencias();
             $arItemes = new \Brasa\InventarioBundle\Entity\InvItem();
             $arItemes = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();
-            $arUltimoCierreMes = new \Brasa\InventarioBundle\Entity\InvCierresMes();
-            $arUltimoCierreMes = $em->getRepository('BrasaInventarioBundle:InvCierresMes')->UltimoCierre();
+            $arUltimoCierreMes = new \Brasa\InventarioBundle\Entity\InvCierreMes();
+            $arUltimoCierreMes = $em->getRepository('BrasaInventarioBundle:InvCierreMes')->UltimoCierre();
             $dateUltimoCierreMes = date_format($arUltimoCierreMes[0]->getFechaFin(), 'Y-m-d H:i:s');
             foreach ($arItemes as $arItemes) {
                 //Verifica si hay cierres
                 if(count($dateUltimoCierreMes) > 0) {
                     //Asigna las catidades del corte que es el ultimo cierre
-                    $em->getRepository('BrasaInventarioBundle:InvCierresMesLotes')->AsigarDatosLotesCierreALotes($arUltimoCierreMes[0]->getCodigoCierreMesPk(), $arItemes->getCodigoItemPk());
-                    $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesInventario($arItemes->getCodigoItemPk(), $dateUltimoCierreMes, $dateFechaHasta);
+                    $em->getRepository('BrasaInventarioBundle:InvCierreMesLote')->AsigarDatosLotesCierreALotes($arUltimoCierreMes[0]->getCodigoCierreMesPk(), $arItemes->getCodigoItemPk());
+                    $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetallesInventario($arItemes->getCodigoItemPk(), $dateUltimoCierreMes, $dateFechaHasta);
                 }
                 else
-                    $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesInventario($arItemes->getCodigoItemPk(), "", $dateFechaHasta);
+                    $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetallesInventario($arItemes->getCodigoItemPk(), "", $dateFechaHasta);
 
                 foreach($arMovimientosDetalles as $arMovimientosDetalle) {
-                    $arLoteAct = new \Brasa\InventarioBundle\Entity\InvLotes();
-                    $arLoteAct = $em->getRepository('BrasaInventarioBundle:InvLotes')->find(array('codigoItemFk' => $arMovimientosDetalle['codigoItemFk'], 'codigoBodegaFk' => $arMovimientosDetalle['codigoBodegaFk'], 'loteFk' => $arMovimientosDetalle['loteFk']));
+                    $arLoteAct = new \Brasa\InventarioBundle\Entity\InvLote();
+                    $arLoteAct = $em->getRepository('BrasaInventarioBundle:InvLote')->find(array('codigoItemFk' => $arMovimientosDetalle['codigoItemFk'], 'codigoBodegaFk' => $arMovimientosDetalle['codigoBodegaFk'], 'loteFk' => $arMovimientosDetalle['loteFk']));
                     $arLoteAct->setExistencia($arLoteAct->getExistencia() + $arMovimientosDetalle['cantidadOperada']);
                     //$arLoteAct->setCantidadDisponible($arLoteAct->getCantidadDisponible() + $arMovimientosDetalle['cantidadOperada']);
                     $em->persist($arLoteAct);
                     $em->flush();
                 }
             }
-            $em->getRepository('BrasaInventarioBundle:InvLotes')->EstablecerExistenciaItems();
+            $em->getRepository('BrasaInventarioBundle:InvLote')->EstablecerExistenciaItems();
     }   
     
     public function regenerarDisponiblesAction () {
@@ -164,16 +164,16 @@ class ProcesosController extends Controller {
         $request = $this->getRequest();
         $objMensaje = new GenerarMensajes();
         if ($request->getMethod() == 'POST') {            
-            $em->getRepository('BrasaInventarioBundle:InvLotes')->RestablecerCantidadRemisionada();
-            $arItem = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevRemisionesPendientesItemBodegaLote();
+            $em->getRepository('BrasaInventarioBundle:InvLote')->RestablecerCantidadRemisionada();
+            $arItem = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevRemisionesPendientesItemBodegaLote();
             foreach ($arItem as $arItem) {
-                $arLote = new \Brasa\InventarioBundle\Entity\InvLotes();
-                $arLote = $em->getRepository('BrasaInventarioBundle:InvLotes')->find(array('codigoItemFk' => $arItem['codigoItemFk'], 'codigoBodegaFk' => $arItem['codigoBodegaFk'], 'loteFk' => $arItem['loteFk']));                
+                $arLote = new \Brasa\InventarioBundle\Entity\InvLote();
+                $arLote = $em->getRepository('BrasaInventarioBundle:InvLote')->find(array('codigoItemFk' => $arItem['codigoItemFk'], 'codigoBodegaFk' => $arItem['codigoBodegaFk'], 'loteFk' => $arItem['loteFk']));                
                 $arLote->setCantidadRemisionada($arItem['cantidad']);
                 $em->persist($arLote);
                 $em->flush();
             }
-            $em->getRepository('BrasaInventarioBundle:InvLotes')->EstablecerDisponiblesLotesItems();
+            $em->getRepository('BrasaInventarioBundle:InvLote')->EstablecerDisponiblesLotesItems();
             $objMensaje->Mensaje("completado", "El proceso de regeneracion de disponibles se a ejecutado con exito", $this);
         }
         return $this->render('BrasaInventarioBundle:Procesos/Inventario:regenerarDisponibles.html.twig');
@@ -185,10 +185,10 @@ class ProcesosController extends Controller {
         $objMensaje = new GenerarMensajes();
         if ($request->getMethod() == 'POST') {
             if($request->request->get('TxtCodigoMovimiento') != "") {
-                $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($request->request->get('TxtCodigoMovimiento'));
+                $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($request->request->get('TxtCodigoMovimiento'));
                 if(count($arMovimiento) > 0) {
-                    $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Reliquidar($arMovimiento->getCodigoMovimientoPk());
+                    $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Reliquidar($arMovimiento->getCodigoMovimientoPk());
                     $objMensaje->Mensaje("completado", "Movimiento reliquidado con exito", $this);                                    
                 }
                 else
@@ -204,10 +204,10 @@ class ProcesosController extends Controller {
         $objMensaje = new GenerarMensajes();
         if ($request->getMethod() == 'POST') {
             if($request->request->get('TxtCodigoMovimiento') != "") {
-                $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($request->request->get('TxtCodigoMovimiento'));
+                $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+                $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($request->request->get('TxtCodigoMovimiento'));
                 if(count($arMovimiento) > 0) {
-                    $em->getRepository('BrasaInventarioBundle:InvMovimientos')->GenerarCuenta($arMovimiento->getCodigoMovimientoPk());
+                    $em->getRepository('BrasaInventarioBundle:InvMovimiento')->GenerarCuenta($arMovimiento->getCodigoMovimientoPk());
                     $objMensaje->Mensaje("completado", "Movimiento generado con exito", $this);                                    
                 }
                 else

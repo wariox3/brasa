@@ -18,8 +18,8 @@ class FormatoReciboCaja extends \FPDF_FPDF {
     } 
     
     public function Header() {
-        $arReciboCaja = new \Brasa\TransporteBundle\Entity\TteRecibosCaja();
-        $arReciboCaja = self::$em->getRepository('BrasaTransporteBundle:TteRecibosCaja')->find(self::$codigoReciboCaja);        
+        $arReciboCaja = new \Brasa\TransporteBundle\Entity\TteReciboCaja();
+        $arReciboCaja = self::$em->getRepository('BrasaTransporteBundle:TteReciboCaja')->find(self::$codigoReciboCaja);        
         $this->SetFillColor(255, 255, 255);        
         $this->SetFont('Arial','B',10);
         $this->SetXY(150, 10);

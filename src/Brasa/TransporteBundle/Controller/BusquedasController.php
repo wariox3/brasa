@@ -21,7 +21,7 @@ class BusquedasController extends Controller {
                 $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();
         }
         else {
-            $arConductores = $em->getRepository('BrasaTransporteBundle:TteConductores')->findAll();
+            $arConductores = $em->getRepository('BrasaTransporteBundle:TteConductor')->findAll();
         }
 
         return $this->render('BrasaTransporteBundle:Busquedas:buscarConductor.html.twig', array("arConductores" => $arConductores));
@@ -42,7 +42,7 @@ class BusquedasController extends Controller {
                 $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();
         }
         else {
-            $arVehiculos = $em->getRepository('BrasaTransporteBundle:TteVehiculos')->findAll();
+            $arVehiculos = $em->getRepository('BrasaTransporteBundle:TteVehiculo')->findAll();
         }
 
         return $this->render('BrasaTransporteBundle:Busquedas:buscarVehiculo.html.twig', array("arVehiculos" => $arVehiculos));
@@ -63,7 +63,7 @@ class BusquedasController extends Controller {
                 $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();
         }
         else {
-            $arRutas = $em->getRepository('BrasaTransporteBundle:TteRutas')->findAll();
+            $arRutas = $em->getRepository('BrasaTransporteBundle:TteRuta')->findAll();
         }
 
         return $this->render('BrasaTransporteBundle:Busquedas:buscarRuta.html.twig', array("arRutas" => $arRutas));

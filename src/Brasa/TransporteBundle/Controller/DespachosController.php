@@ -3,13 +3,13 @@
 namespace Brasa\TransporteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\TransporteBundle\Form\Type\TteDespachosType;
+use Brasa\TransporteBundle\Form\Type\TteDespachoType;
 class DespachosController extends Controller
 {
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();                
-        $arDespachos = new \Brasa\TransporteBundle\Entity\TteDespachos();            
+        $arDespachos = new \Brasa\TransporteBundle\Entity\TteDespacho();            
         $form = $this->createFormBuilder()
             ->add('TxtCodigoDespacho', 'text', array('label'  => 'Codigo'))
             ->add('TxtNumeroDespacho', 'text')            
@@ -20,9 +20,9 @@ class DespachosController extends Controller
             ->add('Buscar', 'submit')
             ->getForm();
         $form->handleRequest($request);
-        $query = $em->getRepository('BrasaTransporteBundle:TteDespachos')->ListaDespachos(0, 0, "", "", "", "");
+        $query = $em->getRepository('BrasaTransporteBundle:TteDespacho')->ListaDespachos(0, 0, "", "", "", "");
         if($form->isValid()) {            
-            $query = $em->getRepository('BrasaTransporteBundle:TteDespachos')->ListaDespachos(
+            $query = $em->getRepository('BrasaTransporteBundle:TteDespacho')->ListaDespachos(
                     $form->get('ChkMostrarDescargados')->getData(),
                     $form->get('ChkMostrarAnulados')->getData(),
                     $form->get('TxtCodigoDespacho')->getData(),
@@ -39,8 +39,8 @@ class DespachosController extends Controller
             switch ($request->request->get('OpSubmit')) {
                 case "OpEliminar";
                     foreach ($arrSeleccionados AS $codigoGuia) {
-                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                         if($arGuia->getEstadoImpreso() == 0 && $arGuia->getEstadoDespachada() == 0 && $arGuia->getNumeroGuia() == 0) {
                             $em->remove($arGuia);
                             $em->flush();                            
@@ -51,7 +51,7 @@ class DespachosController extends Controller
             }
         } 
         $paginator = $this->get('knp_paginator');        
-        $arDespachos = new \Brasa\TransporteBundle\Entity\TteDespachos();
+        $arDespachos = new \Brasa\TransporteBundle\Entity\TteDespacho();
         $arDespachos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
 
         return $this->render('BrasaTransporteBundle:Despachos:lista.html.twig', array(
@@ -66,21 +66,21 @@ class DespachosController extends Controller
     public function nuevoAction($codigoDespacho = 0) {
         $em = $this->getDoctrine()->getManager();        
         $request = $this->getRequest();
-        $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespachos();
+        $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespacho();
         if($codigoDespacho != 0) {
-            $arDespacho = $em->getRepository('BrasaTransporteBundle:TteDespachos')->find($codigoDespacho);
+            $arDespacho = $em->getRepository('BrasaTransporteBundle:TteDespacho')->find($codigoDespacho);
         }
-        $form = $this->createForm(new TteDespachosType(), $arDespacho);
+        $form = $this->createForm(new TteDespachoType(), $arDespacho);
         $form->handleRequest($request);        
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             $arDespacho = $form->getData();                        
-            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuariosConfiguracion')->find($this->getUser()->getId());                        
+            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuarioConfiguracion')->find($this->getUser()->getId());                        
             $arDespacho->setFecha(date_create(date('Y-m-d H:i:s')));
             $arDespacho->setPuntoOperacionRel($arUsuarioConfiguracion->getPuntoOperacionRel());                                    
             $em->persist($arDespacho);
             $em->flush();            
-            //$em->getRepository('BrasaTransporteBundle:TteGuias')->Liquidar($arGuia->getCodigoGuiaPk());            
+            //$em->getRepository('BrasaTransporteBundle:TteGuia')->Liquidar($arGuia->getCodigoGuiaPk());            
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_tte_despachos_nuevo', array('codigoGuia' => 0)));
             } else {
@@ -101,22 +101,22 @@ class DespachosController extends Controller
         $request = $this->getRequest();    
         $objMensaje = $this->get('mensajes_brasa');
         
-        $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespachos();
-        $arDespacho = $em->getRepository('BrasaTransporteBundle:TteDespachos')->find($codigoDespacho);
+        $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespacho();
+        $arDespacho = $em->getRepository('BrasaTransporteBundle:TteDespacho')->find($codigoDespacho);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             $arrDescuentosFinancierosSeleccionados = $request->request->get('ChkSeleccionarDescuentoFinanciero');
             switch ($request->request->get('OpSubmit')) {
                 case "OpGenerar";
-                    $strResultado = $em->getRepository('BrasaTransporteBundle:TteDespachos')->Generar($codigoDespacho);
+                    $strResultado = $em->getRepository('BrasaTransporteBundle:TteDespacho')->Generar($codigoDespacho);
                     if ($strResultado != "") {
                         $objMensaje->Mensaje("error", "No se genero el despacho: " . $strResultado, $this);
                     }                        
                     break;
 
                 case "OpAnular";
-                    $varAnular = $em->getRepository('BrasaTransporteBundle:TteDespachos')->Anular($codigoDespacho);
+                    $varAnular = $em->getRepository('BrasaTransporteBundle:TteDespacho')->Anular($codigoDespacho);
                     if ($varAnular != "") {
                         $objMensaje->Mensaje("error", "No se anulo el despacho: " . $varAnular, $this);
                     }                        
@@ -134,8 +134,8 @@ class DespachosController extends Controller
                         $intPesoVolumen = $arDespacho->getCtPesoVolumen();
                         $intGuias = $arDespacho->getCtGuias();
                         foreach ($arrSeleccionados AS $codigoGuia) {
-                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                             if($arGuia->getCodigoDespachoFk() != NULL) {
                                 $arGuia->setCodigoDespachoFk(NULL);
                                 $arGuia->setEstadoDespachada(0);                                
@@ -158,7 +158,7 @@ class DespachosController extends Controller
             }
         }
         
-        $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->GuiasDespachoDetalle($codigoDespacho);
+        $query = $em->getRepository('BrasaTransporteBundle:TteGuia')->GuiasDespachoDetalle($codigoDespacho);
         $paginator = $this->get('knp_paginator');        
         $arGuias = $paginator->paginate($query, $this->get('request')->query->get('page', 1),3);                
         return $this->render('BrasaTransporteBundle:Despachos:detalle.html.twig', array(

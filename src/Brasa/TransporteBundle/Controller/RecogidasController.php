@@ -3,14 +3,14 @@
 namespace Brasa\TransporteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\TransporteBundle\Form\Type\TteRecogidasType;
+use Brasa\TransporteBundle\Form\Type\TteRecogidaType;
 
 class RecogidasController extends Controller
 {
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogida();
         $form = $this->createFormBuilder()
             ->add('TxtCodigoRecogida', 'text', array('label'  => 'Codigo'))            
             ->add('TxtCodigoTercero', 'text')
@@ -21,9 +21,9 @@ class RecogidasController extends Controller
             ->add('Buscar', 'submit')
             ->getForm();
         $form->handleRequest($request);
-        $query = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->ListaRecogidas(0, "", "", "", "");
+        $query = $em->getRepository('BrasaTransporteBundle:TteRecogida')->ListaRecogidas(0, "", "", "", "");
         if($form->isValid()) {            
-            $query = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->ListaRecogidas(
+            $query = $em->getRepository('BrasaTransporteBundle:TteRecogida')->ListaRecogidas(
                     $form->get('ChkMostrarDespachadas')->getData(),
                     $form->get('ChkMostrarAnuladas')->getData(),
                     $form->get('TxtCodigoRecogida')->getData(),
@@ -37,8 +37,8 @@ class RecogidasController extends Controller
             switch ($request->request->get('OpSubmit')) {
                 case "OpEliminar";
                     foreach ($arrSeleccionados AS $codigoRecogida) {
-                        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();
-                        $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->find($codigoRecogida);
+                        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();
+                        $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogida')->find($codigoRecogida);
                         if($arRecogida->getEstadoImpreso() == 0 && $arRecogida->getEstadoDespachada() == 0 && $arRecogida->getNumeroRecogida() == 0) {
                             $em->remove($arRecogida);
                             $em->flush();                            
@@ -49,7 +49,7 @@ class RecogidasController extends Controller
         }
         
         $paginator = $this->get('knp_paginator');        
-        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogidas();
+        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogida();
         $arRecogidas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);        
         
         return $this->render('BrasaTransporteBundle:Recogidas:lista.html.twig', array(
@@ -60,19 +60,19 @@ class RecogidasController extends Controller
     public function nuevoAction($codigoRecogida = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();                
+        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();                
         
         if($codigoRecogida != 0) {
-            $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->find($codigoRecogida);
+            $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogida')->find($codigoRecogida);
         }else {
             $arRecogida->setFechaRecogida(new \DateTime('now'));
         }        
-        $form = $this->createForm(new TteRecogidasType(), $arRecogida);
+        $form = $this->createForm(new TteRecogidaType(), $arRecogida);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             $arRecogida = $form->getData();                        
-            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuariosConfiguracion')->find($this->getUser()->getId());                        
+            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuarioConfiguracion')->find($this->getUser()->getId());                        
             $arRecogida->setFechaAnuncio(date_create(date('Y-m-d H:i:s')));
             $arRecogida->setPuntoOperacionRel($arUsuarioConfiguracion->getPuntoOperacionRel());                        
             $em->persist($arRecogida);
@@ -92,8 +92,8 @@ class RecogidasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa');
         $request = $this->getRequest();
-        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();
-        $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogidas')->find($codigoRecogida);             
+        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();
+        $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogida')->find($codigoRecogida);             
         
         $form = $this->createFormBuilder()
             ->add('BtnAutorizar', 'submit')
@@ -106,7 +106,7 @@ class RecogidasController extends Controller
             switch ($request->request->get('OpSubmit')) {
                 case "OpGenerar";
                     if($arRecogida->getEstadoGenerada() == 0) {  
-                        $em->getRepository('BrasaTransporteBundle:TteRecogidas')->Generar($codigoRecogida);
+                        $em->getRepository('BrasaTransporteBundle:TteRecogida')->Generar($codigoRecogida);
                     }                    
                     break;
 

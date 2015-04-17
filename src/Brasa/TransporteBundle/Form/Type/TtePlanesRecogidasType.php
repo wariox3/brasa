@@ -4,17 +4,17 @@ namespace Brasa\TransporteBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TtePlanesRecogidasType extends AbstractType
+class TtePlanRecogidaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                 
             ->add('conductorRel', 'entity', array(
-                'class' => 'BrasaTransporteBundle:TteConductores',
+                'class' => 'BrasaTransporteBundle:TteConductor',
                 'property' => 'nombreCorto',
             ))
             ->add('vehiculoRel', 'entity', array(
-                'class' => 'BrasaTransporteBundle:TteVehiculos',
+                'class' => 'BrasaTransporteBundle:TteVehiculo',
                 'property' => 'placa',
             ))                                 
             ->add('vrFletePagado', 'text')            

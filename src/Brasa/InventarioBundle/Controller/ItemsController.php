@@ -15,7 +15,7 @@ class ItemsController extends Controller {
     public function listaAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();                
-        $arMarcas = $em->getRepository('BrasaInventarioBundle:InvMarcas')->findAll();
+        $arMarcas = $em->getRepository('BrasaInventarioBundle:InvMarca')->findAll();
         $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
         if ($request->getMethod() == 'POST') {
             switch ($request->request->get('OpSubmit')) {
@@ -96,14 +96,14 @@ class ItemsController extends Controller {
                                     
 
             if ($request->request->get('CboMarcas') != "") {
-                $arMarca = new \Brasa\InventarioBundle\Entity\InvMarcas();
-                $arMarca = $em->getRepository('BrasaInventarioBundle:InvMarcas')->find($request->request->get('CboMarcas'));
+                $arMarca = new \Brasa\InventarioBundle\Entity\InvMarca();
+                $arMarca = $em->getRepository('BrasaInventarioBundle:InvMarca')->find($request->request->get('CboMarcas'));
                 $arItem->setMarcaRel($arMarca);
             }
             
             if ($request->request->get('CboUnidadesMedida') != "") {
-                $arUnidadMedida = new \Brasa\InventarioBundle\Entity\InvUnidadesMedida();
-                $arUnidadMedida = $em->getRepository('BrasaInventarioBundle:InvUnidadesMedida')->find($request->request->get('CboUnidadesMedida'));
+                $arUnidadMedida = new \Brasa\InventarioBundle\Entity\InvUnidadMedida();
+                $arUnidadMedida = $em->getRepository('BrasaInventarioBundle:InvUnidadMedida')->find($request->request->get('CboUnidadesMedida'));
                 $arItem->setUnidadMedidaRel($arUnidadMedida);
             }            
             
@@ -119,8 +119,8 @@ class ItemsController extends Controller {
         $arItem = null;
         if ($codigoItemPk != null && $codigoItemPk != "" && $codigoItemPk != 0)        
             $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($codigoItemPk);        
-        $arMarcas = $em->getRepository('BrasaInventarioBundle:InvMarcas')->findAll();
-        $arUnidadesMedida = $em->getRepository('BrasaInventarioBundle:InvUnidadesMedida')->findAll();
+        $arMarcas = $em->getRepository('BrasaInventarioBundle:InvMarca')->findAll();
+        $arUnidadesMedida = $em->getRepository('BrasaInventarioBundle:InvUnidadMedida')->findAll();
         return $this->render('BrasaInventarioBundle:Base/Items:nuevo.html.twig', array(
             'arItem' => $arItem,
             'arMarcas'=>$arMarcas,
@@ -143,8 +143,8 @@ class ItemsController extends Controller {
                 case "OpEliminar"; 
                     if(count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados as $codigoDocumentoHijoPk) {
-                            $arDocumentoControl = new \Brasa\InventarioBundle\Entity\InvDocumentosControl();
-                            $arDocumentoControl = $em->getRepository('BrasaInventarioBundle:InvDocumentosControl')->find(array('codigoDocumentoPadrePk' => $codigoDocumentoPk, 'codigoDocumentoHijoPk' => $codigoDocumentoHijoPk));
+                            $arDocumentoControl = new \Brasa\InventarioBundle\Entity\InvDocumentoControl();
+                            $arDocumentoControl = $em->getRepository('BrasaInventarioBundle:InvDocumentoControl')->find(array('codigoDocumentoPadrePk' => $codigoDocumentoPk, 'codigoDocumentoHijoPk' => $codigoDocumentoHijoPk));
                             $em->remove($arDocumentoControl);
                             $em->flush();
                         }                         

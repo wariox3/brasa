@@ -134,19 +134,19 @@ class InvItem
     private $materiaPrima = 0;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="InvUnidadesMedida", inversedBy="itemsRel")
+     * @ORM\ManyToOne(targetEntity="InvUnidadMedida", inversedBy="itemsRel")
      * @ORM\JoinColumn(name="codigo_unidad_medida_fk", referencedColumnName="codigo_unidad_medida_pk")
      */
     protected $unidadMedidaRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="InvMarcas", inversedBy="itemsRel")
+     * @ORM\ManyToOne(targetEntity="InvMarca", inversedBy="itemsRel")
      * @ORM\JoinColumn(name="codigo_marca_fk", referencedColumnName="codigo_marca_pk")
      */
     protected $marcaRel;     
     
     /**
-     * @ORM\OneToMany(targetEntity="InvMovimientosDetalles", mappedBy="itemRel")
+     * @ORM\OneToMany(targetEntity="InvMovimientoDetalle", mappedBy="itemRel")
      */
     protected $movimientosDetallesRel;
     
@@ -701,10 +701,10 @@ class InvItem
     /**
      * Set unidadMedidaRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvUnidadesMedida $unidadMedidaRel
+     * @param \Brasa\InventarioBundle\Entity\InvUnidadMedida $unidadMedidaRel
      * @return InvItem
      */
-    public function setUnidadMedidaRel(\Brasa\InventarioBundle\Entity\InvUnidadesMedida $unidadMedidaRel = null)
+    public function setUnidadMedidaRel(\Brasa\InventarioBundle\Entity\InvUnidadMedida $unidadMedidaRel = null)
     {
         $this->unidadMedidaRel = $unidadMedidaRel;
 
@@ -714,7 +714,7 @@ class InvItem
     /**
      * Get unidadMedidaRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvUnidadesMedida 
+     * @return \Brasa\InventarioBundle\Entity\InvUnidadMedida 
      */
     public function getUnidadMedidaRel()
     {
@@ -724,10 +724,10 @@ class InvItem
     /**
      * Set marcaRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMarcas $marcaRel
+     * @param \Brasa\InventarioBundle\Entity\InvMarca $marcaRel
      * @return InvItem
      */
-    public function setMarcaRel(\Brasa\InventarioBundle\Entity\InvMarcas $marcaRel = null)
+    public function setMarcaRel(\Brasa\InventarioBundle\Entity\InvMarca $marcaRel = null)
     {
         $this->marcaRel = $marcaRel;
 
@@ -737,7 +737,7 @@ class InvItem
     /**
      * Get marcaRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvMarcas 
+     * @return \Brasa\InventarioBundle\Entity\InvMarca 
      */
     public function getMarcaRel()
     {
@@ -747,10 +747,10 @@ class InvItem
     /**
      * Add movimientosDetallesRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientosDetalles $movimientosDetallesRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel
      * @return InvItem
      */
-    public function addMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientosDetalles $movimientosDetallesRel)
+    public function addMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel)
     {
         $this->movimientosDetallesRel[] = $movimientosDetallesRel;
 
@@ -760,9 +760,9 @@ class InvItem
     /**
      * Remove movimientosDetallesRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientosDetalles $movimientosDetallesRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel
      */
-    public function removeMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientosDetalles $movimientosDetallesRel)
+    public function removeMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel)
     {
         $this->movimientosDetallesRel->removeElement($movimientosDetallesRel);
     }

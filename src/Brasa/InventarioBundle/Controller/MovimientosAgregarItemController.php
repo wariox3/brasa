@@ -10,8 +10,8 @@ class MovimientosAgregarItemController extends Controller
         $request = $this->getRequest();                   
         $em = $this->getDoctrine()->getManager();
         $arItemes = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();     
-        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);
+        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             switch ($request->request->get('OpSubmit')) {
@@ -31,17 +31,17 @@ class MovimientosAgregarItemController extends Controller
                                 //$arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($intCodigoItem);                    
                                 $intCantidad = $arrControles['TxtCantidad'][$intIndice];
 
-                                $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();                    
+                                $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();                    
                                 $arMovimientoDetalle->setMovimientoRel($arMovimiento);
                                 $arMovimientoDetalle->setCantidad($intCantidad);
 
                                 if($arMovimiento->getDocumentoRel()->getTipoValor() == 2) {
-                                    $arMovimientoDetalle->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $intCodigoItem));                                    
+                                    $arMovimientoDetalle->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListaPrecioDetalle')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $intCodigoItem));                                    
                                 }                       
                                     
 
                                 if($arMovimiento->getDocumentoRel()->getTipoValor() == 1)                        
-                                    $arMovimientoDetalle->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $intCodigoItem));
+                                    $arMovimientoDetalle->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListaCostoDetalle')->DevCosto($arMovimiento->getCodigoTerceroFk(), $intCodigoItem));
 
                                 $arMovimientoDetalle->setItemRel($arItem);
                                 if($arMovimiento->getTerceroRel()->getCodigoClasificacionTributariaFk() == 1)
@@ -57,7 +57,7 @@ class MovimientosAgregarItemController extends Controller
                             }
                             $intIndice++;
                         }
-                        $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
+                        $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Liquidar($codigoMovimiento);
                         echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
                     }                    
                     break;      
@@ -72,9 +72,9 @@ class MovimientosAgregarItemController extends Controller
     public function documentosControlDetalleAction($codigoMovimiento) {                
         $request = $this->getRequest();                   
         $em = $this->getDoctrine()->getManager(); 
-        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimientos();
-        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimientos')->find($codigoMovimiento);        
-        $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->DevMovimientosDetallesPendientesAfectar($arMovimiento->getCodigoDocumentoFk(), $arMovimiento->getCodigoTerceroFk());               
+        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);        
+        $arMovimientosDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->DevMovimientosDetallesPendientesAfectar($arMovimiento->getCodigoDocumentoFk(), $arMovimiento->getCodigoTerceroFk());               
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $intIndice = 0;
@@ -83,10 +83,10 @@ class MovimientosAgregarItemController extends Controller
                     foreach ($arrControles['LblCodigoDetalle'] as $intCodigoDetalle) {
                         if($arrControles['TxtCantidad'][$intIndice] != "" && $arrControles['TxtCantidad'][$intIndice] != 0) {
                             $intCantidad = $arrControles['TxtCantidad'][$intIndice];
-                            $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-                            $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($intCodigoDetalle);                            
+                            $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                            $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($intCodigoDetalle);                            
                             if(($arMovimientoDetalle->getCantidadAfectada() + $intCantidad) <= $arMovimientoDetalle->getCantidad()) {
-                                $arMovimientoDetalleAct = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();                
+                                $arMovimientoDetalleAct = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();                
                                 $arMovimientoDetalleAct->setMovimientoRel($arMovimiento);                                
                                 $arMovimientoDetalleAct->setItemRel($arMovimientoDetalle->getItemRel());
                                 $arMovimientoDetalleAct->setCodigoBodegaFk($arMovimientoDetalle->getCodigoBodegaFk());
@@ -102,18 +102,18 @@ class MovimientosAgregarItemController extends Controller
                                 //$arMovimientoDetalleAct->setOperacionInventario($em->getRepository('BrasaInventarioBundle:InvItem')->DevOperacionInventario($arMovimientoOrigen->getDocumentoRel()->getOperacionInventario(), $arMovimientoDetalle->getItemMD()->getItemServicio()));
                                 
                                 //Para heredar el precio del documento control
-                                $arDocumentoControl = new \Brasa\InventarioBundle\Entity\InvDocumentosControl();
-                                $arDocumentoControl = $em->getRepository('BrasaInventarioBundle:InvDocumentosControl')->find(array('codigoDocumentoPadrePk' => $arMovimiento->getCodigoDocumentoFk(), 'codigoDocumentoHijoPk' => $arMovimientoDetalle->getMovimientoRel()->getCodigoDocumentoFk()));
+                                $arDocumentoControl = new \Brasa\InventarioBundle\Entity\InvDocumentoControl();
+                                $arDocumentoControl = $em->getRepository('BrasaInventarioBundle:InvDocumentoControl')->find(array('codigoDocumentoPadrePk' => $arMovimiento->getCodigoDocumentoFk(), 'codigoDocumentoHijoPk' => $arMovimientoDetalle->getMovimientoRel()->getCodigoDocumentoFk()));
                                 if($arDocumentoControl->getHeredaPrecio() == 1) {
                                     $arMovimientoDetalleAct->setPrecio($arMovimientoDetalle->getPrecio());
                                     $arMovimientoDetalleAct->setPorcentajeDescuento($arMovimientoDetalle->getPorcentajeDescuento());                                                                                                        
                                 }
                                 else {
                                     if($arMovimiento->getDocumentoRel()->getTipoValor() == 2)                        
-                                        $arMovimientoDetalleAct->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListasPreciosDetalles')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));
+                                        $arMovimientoDetalleAct->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListaPrecioDetalle')->DevPrecio($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));
 
                                     if($arMovimiento->getDocumentoRel()->getTipoValor() == 1)                        
-                                        $arMovimientoDetalleAct->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));                                    
+                                        $arMovimientoDetalleAct->setVrPrecio($em->getRepository('BrasaInventarioBundle:InvListaCostoDetalle')->DevCosto($arMovimiento->getCodigoTerceroFk(), $arMovimientoDetalle->getCodigoItemFk()));                                    
                                 }
                                 if($arMovimientoDetalle->getMovimientoRel()->getDocumentoRel()->getCodigoDocumentoTipoFk() == 9) {
                                     $arMovimientoDetalleAct->setAfectarRemision(1);
@@ -128,7 +128,7 @@ class MovimientosAgregarItemController extends Controller
                         $intIndice++;
                     }
                     
-                    $em->getRepository('BrasaInventarioBundle:InvMovimientos')->Liquidar($codigoMovimiento);
+                    $em->getRepository('BrasaInventarioBundle:InvMovimiento')->Liquidar($codigoMovimiento);
                     
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }                

@@ -11,8 +11,8 @@ class ListasCostosController extends Controller {
     public function listarAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
-        $arListasCostos = new \Brasa\InventarioBundle\Entity\InvListasCostos();
-        $arListasCostos = $em->getRepository('BrasaInventarioBundle:InvListasCostos')->findAll();
+        $arListasCostos = new \Brasa\InventarioBundle\Entity\InvListaCosto();
+        $arListasCostos = $em->getRepository('BrasaInventarioBundle:InvListaCosto')->findAll();
         if ($request->getMethod() == 'POST') {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             $arrControles = $request->request->All();
@@ -20,8 +20,8 @@ class ListasCostosController extends Controller {
                 case "OpInactivarListas"; 
                     if(count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoLista) {
-                            $arListaCosto = new \Brasa\InventarioBundle\Entity\InvListasCostos();                            
-                            $arListaCosto = $em->getRepository('BrasaInventarioBundle:InvListasCostos')->find($codigoLista);                            
+                            $arListaCosto = new \Brasa\InventarioBundle\Entity\InvListaCosto();                            
+                            $arListaCosto = $em->getRepository('BrasaInventarioBundle:InvListaCosto')->find($codigoLista);                            
                             if($arListaCosto->getEstadoInactiva() == 1) 
                                 $arListaCosto->setEstadoInactiva (0);
                             else
@@ -42,9 +42,9 @@ class ListasCostosController extends Controller {
         $request = $this->getRequest();                               
         if ($request->getMethod() == 'POST') {
             if (($request->request->get('TxtCodigoListaCostos')))
-                $arListaCostos = $em->getRepository('BrasaInventarioBundle:InvListasCostos')->find($request->request->get('TxtCodigoListaCostos'));
+                $arListaCostos = $em->getRepository('BrasaInventarioBundle:InvListaCosto')->find($request->request->get('TxtCodigoListaCostos'));
             else
-                $arListaCostos = new \Brasa\InventarioBundle\Entity\InvListasCostos();                        
+                $arListaCostos = new \Brasa\InventarioBundle\Entity\InvListaCosto();                        
             $arListaCostos->setNombre($request->request->get('TxtNombre'));
             $em->persist($arListaCostos);
             $em->flush();
@@ -52,7 +52,7 @@ class ListasCostosController extends Controller {
         }        
         $arListaCostos = null;
         if ($codigoListaCostosPk != null && $codigoListaCostosPk != "" && $codigoListaCostosPk != 0)        
-            $arListaCostos = $em->getRepository('BrasaInventarioBundle:InvListasCostos')->find($codigoListaCostosPk);        
+            $arListaCostos = $em->getRepository('BrasaInventarioBundle:InvListaCosto')->find($codigoListaCostosPk);        
         return $this->render('BrasaInventarioBundle:Maestros/ListasCostos:nuevo.html.twig', array('arListaCostos' => $arListaCostos));               
         
     }    
@@ -67,8 +67,8 @@ class ListasCostosController extends Controller {
                 case "OpInactivarDetalle"; 
                     if(count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoLpDetalle) {
-                            $arListaCostoDetalle = new \Brasa\InventarioBundle\Entity\InvListasCostosDetalles();                            
-                            $arListaCostoDetalle = $em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->find($codigoLpDetalle);                            
+                            $arListaCostoDetalle = new \Brasa\InventarioBundle\Entity\InvListaCostoDetalle();                            
+                            $arListaCostoDetalle = $em->getRepository('BrasaInventarioBundle:InvListaCostoDetalle')->find($codigoLpDetalle);                            
                             if($arListaCostoDetalle->getEstadoInactiva() == 1) 
                                 $arListaCostoDetalle->setEstadoInactiva (0);
                             else
@@ -80,10 +80,10 @@ class ListasCostosController extends Controller {
                     break;                        
             }                           
         }                
-        $arListaCostos = new \Brasa\InventarioBundle\Entity\InvListasCostos();
-        $arListaCostos = $em->getRepository('BrasaInventarioBundle:InvListasCostos')->find($codigoListaCostosPk);
-        $arListasCostosDetalles = new \Brasa\InventarioBundle\Entity\InvListasCostosDetalles();
-        $arListasCostosDetalles = $em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->findBy(array('codigoListaCostosFk' => $codigoListaCostosPk));                
+        $arListaCostos = new \Brasa\InventarioBundle\Entity\InvListaCosto();
+        $arListaCostos = $em->getRepository('BrasaInventarioBundle:InvListaCosto')->find($codigoListaCostosPk);
+        $arListasCostosDetalles = new \Brasa\InventarioBundle\Entity\InvListaCostoDetalle();
+        $arListasCostosDetalles = $em->getRepository('BrasaInventarioBundle:InvListaCostoDetalle')->findBy(array('codigoListaCostosFk' => $codigoListaCostosPk));                
         return $this->render('BrasaInventarioBundle:Maestros/ListasCostos:detalle.html.twig', array('arListasCostosDetalles' => $arListasCostosDetalles, 'arListaCostos' => $arListaCostos));
     }  
     
@@ -93,11 +93,11 @@ class ListasCostosController extends Controller {
         $objFunciones = new \Brasa\ExternasBundle\FuncionesZikmont\FuncionesZikmont();
         if ($request->getMethod() == 'POST') {
             if (($request->request->get('TxtCodigoListaCostosDetalle')))
-                $arListaCostosDetalle = $em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->find($request->request->get('TxtCodigoListaCostosDetalle'));
+                $arListaCostosDetalle = $em->getRepository('BrasaInventarioBundle:InvListaCostoDetalle')->find($request->request->get('TxtCodigoListaCostosDetalle'));
             else
-                $arListaCostosDetalle = new \Brasa\InventarioBundle\Entity\InvListasCostosDetalles();                        
-            $arListaCostos = new \Brasa\InventarioBundle\Entity\InvListasCostos();
-            $arListaCostos = $em->getRepository('BrasaInventarioBundle:InvListasCostos')->find($codigoListaCostosPk);
+                $arListaCostosDetalle = new \Brasa\InventarioBundle\Entity\InvListaCostoDetalle();                        
+            $arListaCostos = new \Brasa\InventarioBundle\Entity\InvListaCosto();
+            $arListaCostos = $em->getRepository('BrasaInventarioBundle:InvListaCosto')->find($codigoListaCostosPk);
             $arListaCostosDetalle->setListaCostosRel($arListaCostos);
             $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
             $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($objFunciones->DevCodigoItem($request->request->get('TxtCodigoItem')));
@@ -112,7 +112,7 @@ class ListasCostosController extends Controller {
         }        
         $arListaCostosDetalle = null;
         if ($codigoListaCostosDetallePk != null && $codigoListaCostosDetallePk != "" && $codigoListaCostosDetallePk != 0)        
-            $arListaCostosDetalle = $em->getRepository('BrasaInventarioBundle:InvListasCostosDetalles')->find($codigoListaCostosDetallePk);        
+            $arListaCostosDetalle = $em->getRepository('BrasaInventarioBundle:InvListaCostoDetalle')->find($codigoListaCostosDetallePk);        
         return $this->render('BrasaInventarioBundle:Maestros/ListasCostos:detalleNuevo.html.twig', array(
             'arListaCostosDetalle' => $arListaCostosDetalle,
             'codigoListaCostosPk' => $codigoListaCostosPk));               

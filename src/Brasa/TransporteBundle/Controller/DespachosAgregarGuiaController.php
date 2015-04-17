@@ -9,9 +9,9 @@ class DespachosAgregarGuiaController extends Controller
     public function listaAction($codigoDespacho) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy(array('codigoDespachoFk' => NULL, 'estadoGenerada' => 1, 'estadoAnulada' => 0));
-        $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespachos();
-        $arDespacho = $em->getRepository('BrasaTransporteBundle:TteDespachos')->find($codigoDespacho);
+        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuia')->findBy(array('codigoDespachoFk' => NULL, 'estadoGenerada' => 1, 'estadoAnulada' => 0));
+        $arDespacho = new \Brasa\TransporteBundle\Entity\TteDespacho();
+        $arDespacho = $em->getRepository('BrasaTransporteBundle:TteDespacho')->find($codigoDespacho);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             switch ($request->request->get('OpSubmit')) {
@@ -30,8 +30,8 @@ class DespachosAgregarGuiaController extends Controller
                         $intPesoVolumen = $arDespacho->getCtPesoVolumen();
                         $intGuias = $arDespacho->getCtGuias();
                         foreach ($arrSeleccionados AS $codigoGuia) {
-                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                             $arGuia->setEstadoDespachada(1);
                             $arGuia->setDespachoRel($arDespacho);
                             $em->persist($arGuia);

@@ -4,29 +4,29 @@ namespace Brasa\TransporteBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TteRelacionesCumplidosType extends AbstractType
+class TteRelacionCumplidoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('tipoServicioRel', 'entity', array(
-                'class' => 'BrasaTransporteBundle:TteTiposServicio',
+                'class' => 'BrasaTransporteBundle:TteTipoServicio',
                 'property' => 'nombre',
             ))
             ->add('tipoPagoRel', 'entity', array(
-                'class' => 'BrasaTransporteBundle:TteTiposPago',
+                'class' => 'BrasaTransporteBundle:TteTipoPago',
                 'property' => 'nombre',
             ))                                                  
             ->add('terceroRel', 'entity', array(
-                'class' => 'BrasaGeneralBundle:GenTerceros',
+                'class' => 'BrasaGeneralBundle:GenTercero',
                 'property' => 'nombreCorto',
             ))       
             ->add('ciudadDestinoRel', 'entity', array(
-                'class' => 'BrasaGeneralBundle:GenCiudades',
+                'class' => 'BrasaGeneralBundle:GenCiudad',
                 'property' => 'nombre',
             ))                
             ->add('productoRel', 'entity', array(
-                'class' => 'BrasaTransporteBundle:TteProductos',
+                'class' => 'BrasaTransporteBundle:TteProducto',
                 'property' => 'nombre',
             ))                                
             ->add('documentoCliente', 'text', array('required' => false))                        

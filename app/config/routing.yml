@@ -1,3 +1,7 @@
+brasa_recurso_humano:
+    resource: "@BrasaRecursoHumanoBundle/Resources/config/routing.yml"
+    prefix:   /
+
 brasa_transporte:
     resource: "@BrasaTransporteBundle/Resources/config/routing.yml"
     prefix:   /

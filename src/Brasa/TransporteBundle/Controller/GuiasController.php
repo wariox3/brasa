@@ -3,16 +3,16 @@
 namespace Brasa\TransporteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\TransporteBundle\Form\Type\TteGuiasType;
-use Brasa\TransporteBundle\Form\Type\TteNovedadesType;
-use Brasa\TransporteBundle\Form\Type\TteRecibosCajaType;
+use Brasa\TransporteBundle\Form\Type\TteGuiaType;
+use Brasa\TransporteBundle\Form\Type\TteNovedadType;
+use Brasa\TransporteBundle\Form\Type\TteReciboCajaType;
 
 class GuiasController extends Controller
 {
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuia();
         $form = $this->createFormBuilder()
             ->add('TxtCodigoGuia', 'text', array('label'  => 'Codigo'))
             ->add('TxtNumeroGuia', 'text')
@@ -25,9 +25,9 @@ class GuiasController extends Controller
             ->add('Buscar', 'submit')
             ->getForm();
         $form->handleRequest($request);
-        $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->ListaGuias(0, 0, "", "", "", "");
+        $query = $em->getRepository('BrasaTransporteBundle:TteGuia')->ListaGuias(0, 0, "", "", "", "");
         if($form->isValid()) {            
-            $query = $em->getRepository('BrasaTransporteBundle:TteGuias')->ListaGuias(
+            $query = $em->getRepository('BrasaTransporteBundle:TteGuia')->ListaGuias(
                     $form->get('ChkMostrarDespachadas')->getData(),
                     $form->get('ChkMostrarAnuladas')->getData(),
                     $form->get('TxtCodigoGuia')->getData(),
@@ -41,8 +41,8 @@ class GuiasController extends Controller
             switch ($request->request->get('OpSubmit')) {
                 case "OpEliminar";
                     foreach ($arrSeleccionados AS $codigoGuia) {
-                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                         if($arGuia->getEstadoImpreso() == 0 && $arGuia->getEstadoDespachada() == 0 && $arGuia->getNumeroGuia() == 0) {
                             $em->remove($arGuia);
                             $em->flush();                            
@@ -53,7 +53,7 @@ class GuiasController extends Controller
         }
         
         $paginator = $this->get('knp_paginator');        
-        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuia();
         $arGuias = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);        
         
         return $this->render('BrasaTransporteBundle:Guias:lista.html.twig', array(
@@ -64,17 +64,17 @@ class GuiasController extends Controller
     public function nuevoAction($codigoGuia = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
         if($codigoGuia != 0) {
-            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
         }        
-        $form = $this->createForm(new TteGuiasType(), $arGuia);
+        $form = $this->createForm(new TteGuiaType(), $arGuia);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             $arGuia = $form->getData();                        
-            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuariosConfiguracion')->find($this->getUser()->getId());            
-            $arCiudadDestino = $em->getRepository('BrasaGeneralBundle:GenCiudades')->find($arrControles['form']['ciudadDestinoRel']);
+            $arUsuarioConfiguracion = $em->getRepository('BrasaTransporteBundle:TteUsuarioConfiguracion')->find($this->getUser()->getId());            
+            $arCiudadDestino = $em->getRepository('BrasaGeneralBundle:GenCiudad')->find($arrControles['form']['ciudadDestinoRel']);
             $arGuia->setFechaIngreso(date_create(date('Y-m-d H:i:s')));
             $arGuia->setPuntoOperacionIngresoRel($arUsuarioConfiguracion->getPuntoOperacionRel());
             $arGuia->setPuntoOperacionActualRel($arUsuarioConfiguracion->getPuntoOperacionRel());
@@ -82,7 +82,7 @@ class GuiasController extends Controller
             $arGuia->setRutaRel($arCiudadDestino->getRutaRel());                        
             $em->persist($arGuia);
             $em->flush();            
-            $em->getRepository('BrasaTransporteBundle:TteGuias')->Liquidar($arGuia->getCodigoGuiaPk());            
+            $em->getRepository('BrasaTransporteBundle:TteGuia')->Liquidar($arGuia->getCodigoGuiaPk());            
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_tte_guias_nuevo', array('codigoGuia' => 0)));
             } else {
@@ -98,10 +98,10 @@ class GuiasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa');
         $request = $this->getRequest();
-        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);        
-        $arNovedad = new \Brasa\TransporteBundle\Entity\TteNovedades();
-        $frmNovedad = $this->createForm(new TteNovedadesType(), $arNovedad);
+        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);        
+        $arNovedad = new \Brasa\TransporteBundle\Entity\TteNovedad();
+        $frmNovedad = $this->createForm(new TteNovedadType(), $arNovedad);
         $frmNovedad->handleRequest($request);
         if ($frmNovedad->isValid()) {
             $arNovedad = $frmNovedad->getData(); 
@@ -112,8 +112,8 @@ class GuiasController extends Controller
             return $this->redirect($this->generateUrl('brs_tte_guias_detalle', array('codigoGuia' => $codigoGuia)));            
         }
 
-        $arReciboCaja = new \Brasa\TransporteBundle\Entity\TteRecibosCaja();
-        $frmReciboCaja = $this->createForm(new TteRecibosCajaType, $arReciboCaja);
+        $arReciboCaja = new \Brasa\TransporteBundle\Entity\TteReciboCaja();
+        $frmReciboCaja = $this->createForm(new TteReciboCajaType, $arReciboCaja);
         $frmReciboCaja->handleRequest($request);
         if ($frmReciboCaja->isValid()) {
             $douAbonoFlete = $frmReciboCaja->get('vrFlete')->getData();
@@ -154,7 +154,7 @@ class GuiasController extends Controller
             switch ($request->request->get('OpSubmit')) {
                 case "OpGenerar";
                     if($arGuia->getEstadoGenerada() == 0) {  
-                        $em->getRepository('BrasaTransporteBundle:TteGuias')->Generar($codigoGuia);
+                        $em->getRepository('BrasaTransporteBundle:TteGuia')->Generar($codigoGuia);
                     }                    
                     break;
 
@@ -177,19 +177,19 @@ class GuiasController extends Controller
             }
         }
 
-        $query = $em->getRepository('BrasaTransporteBundle:TteNovedades')->NovedadesGuiasDetalle($codigoGuia);
+        $query = $em->getRepository('BrasaTransporteBundle:TteNovedad')->NovedadesGuiasDetalle($codigoGuia);
         $paginator = $this->get('knp_paginator');        
-        $arNovedades = new \Brasa\TransporteBundle\Entity\TteNovedades();
+        $arNovedades = new \Brasa\TransporteBundle\Entity\TteNovedad();
         $arNovedades = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
 
-        $query = $em->getRepository('BrasaTransporteBundle:TteRecibosCaja')->RecibosCajaGuiasDetalle($codigoGuia);
+        $query = $em->getRepository('BrasaTransporteBundle:TteReciboCaja')->RecibosCajaGuiasDetalle($codigoGuia);
         $paginator = $this->get('knp_paginator');        
-        $arRecibosCaja = new \Brasa\TransporteBundle\Entity\TteRecibosCaja();
+        $arRecibosCaja = new \Brasa\TransporteBundle\Entity\TteReciboCaja();
         $arRecibosCaja = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);        
 
-        $query = $em->getRepository('BrasaTransporteBundle:TteRedespachos')->RedespachosGuiasDetalle($codigoGuia);
+        $query = $em->getRepository('BrasaTransporteBundle:TteRedespacho')->RedespachosGuiasDetalle($codigoGuia);
         $paginator = $this->get('knp_paginator');        
-        $arRedespachos = new \Brasa\TransporteBundle\Entity\TteRedespachos();
+        $arRedespachos = new \Brasa\TransporteBundle\Entity\TteRedespacho();
         $arRedespachos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
         
         return $this->render('BrasaTransporteBundle:Guias:detalle.html.twig', array(

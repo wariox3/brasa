@@ -4,7 +4,7 @@ namespace Brasa\TransporteBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TteRecibosCajaType extends AbstractType
+class TteReciboCajaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

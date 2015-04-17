@@ -21,7 +21,7 @@ class BusquedasController extends Controller {
                 $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();
         }
         else {
-            $arTerceros = $em->getRepository('BrasaGeneralBundle:GenTerceros')->findAll();
+            $arTerceros = $em->getRepository('BrasaGeneralBundle:GenTercero')->findAll();
         }
 
         return $this->render('BrasaGeneralBundle:Busquedas:buscarTercero.html.twig', array(
@@ -45,7 +45,7 @@ class BusquedasController extends Controller {
                 $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();
         }
         else {
-            $arCiudades = $em->getRepository('BrasaGeneralBundle:GenCiudades')->findAll();
+            $arCiudades = $em->getRepository('BrasaGeneralBundle:GenCiudad')->findAll();
         }
 
         return $this->render('BrasaGeneralBundle:Busquedas:buscarCiudad.html.twig', array(

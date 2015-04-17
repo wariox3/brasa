@@ -10,7 +10,7 @@ class GuiasFuncionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuia();
         $arrCriterioGuias = array('estadoEntregada' => 0, 'estadoDespachada' => 1);
 
         $form = $this->createFormBuilder()
@@ -44,8 +44,8 @@ class GuiasFuncionesController extends Controller
                     if (count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoGuia) {
                             if($arrDatos['TxtFechaEntrega']) {
-                                $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                                $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                                $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                                $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                                 $arGuia->setEstadoEntregada(1);
                                 $arGuia->setFechaEntrega($arrDatos['TxtFechaEntrega']);
                                 $em->persist($arGuia);
@@ -57,7 +57,7 @@ class GuiasFuncionesController extends Controller
             }
         }
 
-        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy($arrCriterioGuias);
+        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuia')->findBy($arrCriterioGuias);
         return $this->render('BrasaTransporteBundle:Guias/Funciones:entregar.html.twig', array(
             'arGuias' => $arGuias,
             'form' => $form->createView()));
@@ -67,7 +67,7 @@ class GuiasFuncionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();
+        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuia();
         $arrCriterioGuias = array('estadoEntregada' => 1, 'estadoDescargada' => 0);
 
         $form = $this->createFormBuilder()
@@ -98,8 +98,8 @@ class GuiasFuncionesController extends Controller
                 case "OpDescargar";
                     if (count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoGuia) {
-                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                             $arGuia->setEstadoDescargada(1);
                             $arGuia->setFechaDescargada(date_create(date('Y-m-d H:i:s')));
                             $em->persist($arGuia);
@@ -110,7 +110,7 @@ class GuiasFuncionesController extends Controller
             }
         }
 
-        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy($arrCriterioGuias);
+        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuia')->findBy($arrCriterioGuias);
         return $this->render('BrasaTransporteBundle:Guias/Funciones:descargar.html.twig', array(
             'arGuias' => $arGuias,
             'form' => $form->createView()));
@@ -120,7 +120,7 @@ class GuiasFuncionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuias();        
+        $arGuias = new \Brasa\TransporteBundle\Entity\TteGuia();        
 
         $form = $this->createFormBuilder()
             ->add('TxtCodigoGuia', 'text', array('label'  => 'Codigo'))
@@ -142,7 +142,7 @@ class GuiasFuncionesController extends Controller
             if($arrDatos['TxtDespacho']){
                 $arrCriterioGuias = array('codigoDespachoFk' => $arrDatos['TxtDespacho']);
             }            
-            $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy($arrCriterioGuias);            
+            $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuia')->findBy($arrCriterioGuias);            
         }
 
         if ($request->getMethod() == 'POST') {
@@ -151,8 +151,8 @@ class GuiasFuncionesController extends Controller
                 case "OpRedespachar";
                     if (count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoGuia) {
-                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuias')->find($codigoGuia);
+                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                             if($arGuia->getCodigoDespachoFk() != null) {
                                 if($arGuia->getDespachoRel()->getEstadoGenerado() == 1) {
                                     $arGuia->setEstadoDespachada(0);
@@ -160,7 +160,7 @@ class GuiasFuncionesController extends Controller
                                     $em->persist($arGuia);
                                     $em->flush();  
                                     
-                                    $arRedespacho = new \Brasa\TransporteBundle\Entity\TteRedespachos();
+                                    $arRedespacho = new \Brasa\TransporteBundle\Entity\TteRedespacho();
                                     $arRedespacho->setFecha(date_create(date('Y-m-d H:i:s')));                                    
                                     $arRedespacho->setGuiaRel($arGuia);
                                     $em->persist($arRedespacho);
@@ -168,7 +168,7 @@ class GuiasFuncionesController extends Controller
                                 }                                
                             }
                         }
-                        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuias')->findBy($arrCriterioGuias);            
+                        $arGuias = $em->getRepository('BrasaTransporteBundle:TteGuia')->findBy($arrCriterioGuias);            
                     }
                     break;
             }

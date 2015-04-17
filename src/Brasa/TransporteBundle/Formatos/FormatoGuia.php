@@ -18,8 +18,8 @@ class FormatoGuia extends \FPDF_FPDF {
     } 
     
     public function Header() {
-        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuias();
-        $arGuia = self::$em->getRepository('BrasaTransporteBundle:TteGuias')->find(self::$codigoGuia);        
+        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
+        $arGuia = self::$em->getRepository('BrasaTransporteBundle:TteGuia')->find(self::$codigoGuia);        
         $intY = 10;
         $intXMargen = 5;
         for($i = 0; $i <= 3; $i++) {

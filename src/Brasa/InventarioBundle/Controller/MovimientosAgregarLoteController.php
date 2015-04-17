@@ -13,10 +13,10 @@ class MovimientosAgregarLoteController extends Controller
     public function listaAction($codigoMovimientoDetalle) {                
         $request = $this->getRequest();                   
         $em = $this->getDoctrine()->getEntityManager();
-        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($codigoMovimientoDetalle);        
-        $arLotes = new \Brasa\InventarioBundle\Entity\InvLotes();        
-        $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistencia($arMovimientoDetalle->getCodigoItemFk());   
+        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($codigoMovimientoDetalle);        
+        $arLotes = new \Brasa\InventarioBundle\Entity\InvLote();        
+        $arLotes = $em->getRepository('BrasaInventarioBundle:InvLote')->DevLotesExistencia($arMovimientoDetalle->getCodigoItemFk());   
         if ($request->getMethod() == 'POST') {                        
             
         }                                                       
@@ -26,10 +26,10 @@ class MovimientosAgregarLoteController extends Controller
     public function AsignarLoteAction($codigoMovimientoDetalle) {                
         $request = $this->getRequest();                   
         $em = $this->getDoctrine()->getEntityManager();
-        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientosDetalles();
-        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientosDetalles')->find($codigoMovimientoDetalle);        
-        $arLotes = new \Brasa\InventarioBundle\Entity\InvLotes();        
-        $arLotes = $em->getRepository('BrasaInventarioBundle:InvLotes')->DevLotesExistencia($arMovimientoDetalle->getCodigoItemFk());   
+        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+        $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($codigoMovimientoDetalle);        
+        $arLotes = new \Brasa\InventarioBundle\Entity\InvLote();        
+        $arLotes = $em->getRepository('BrasaInventarioBundle:InvLote')->DevLotesExistencia($arMovimientoDetalle->getCodigoItemFk());   
         if ($request->getMethod() == 'POST') {                        
             
         }                                                       

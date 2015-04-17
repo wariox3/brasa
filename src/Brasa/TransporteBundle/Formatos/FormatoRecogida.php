@@ -19,8 +19,8 @@ class FormatoRecogida extends \FPDF_FPDF {
     } 
     
     public function Header() {
-        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogidas();
-        $arRecogida = self::$em->getRepository('BrasaTransporteBundle:TteRecogidas')->find(self::$codigoRecogida);        
+        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();
+        $arRecogida = self::$em->getRepository('BrasaTransporteBundle:TteRecogida')->find(self::$codigoRecogida);        
         $this->SetFillColor(255, 255, 255);        
         $this->SetFont('Arial','B',10);
         $this->SetXY(150, 10);

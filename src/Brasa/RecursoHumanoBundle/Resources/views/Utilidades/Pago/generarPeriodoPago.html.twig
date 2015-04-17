@@ -1,0 +1,39 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h3>Generar periodo pago</h3>
+    </div>    
+    <form action="{{ path('brs_rhu_utilidades_pagos_generar_periodo') }}" method="post" novalidate>
+        <table  class="table table-striped table-bordered table-condensed">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th></th>
+            </tr>
+
+            {% for arCentroCosto in arCentroCosto %}
+
+            <tr>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arCentroCosto.codigoCentroCostoPk }}">{{ arCentroCosto.codigoCentroCostoPk }} </td>
+                <td>{{ arCentroCosto.nombre  }}</td>                
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCentroCosto.codigoCentroCostoPk }}" /></td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        <!-- Botones Menu Items -->
+        <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">                
+                <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpGenerar" >Generar</button>                
+            </div>
+        </div>
+        <!-- Fin Botones Menu Items -->
+    </form>
+    <br /><br />
+    <hr/>
+
+</div>
+{% endblock %}

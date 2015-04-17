@@ -1,4 +1,4 @@
-Brasa\TransporteBundle\Entity\TteGuias:
+Brasa\TransporteBundle\Entity\TteGuia:
     properties:
         ctUnidades:
             - GreaterThan:
