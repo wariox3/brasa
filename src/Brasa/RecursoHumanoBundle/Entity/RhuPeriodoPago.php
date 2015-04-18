@@ -28,10 +28,27 @@ class RhuPeriodoPago
     private $dias = 0; 
     
     /**
+     * Esta propiedad define si tiene cortes en el mes o no 10 15 30
+     * @ORM\Column(name="continuo", type="boolean")
+     */    
+    private $continuo = 0;    
+    
+    /**
+     * Especifica de cuantos periodos consta el mes, aplica solo para no continuos
+     * @ORM\Column(name="periodos_mes", type="integer")
+     */
+    private $periodosMes = 0;        
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="periodoPagoRel")
      */
     protected $contratosPeriodoPagoRel;    
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCentroCosto", mappedBy="periodoPagoRel")
+     */
+    protected $centrosCostosPeriodoPagoRel;     
+    
     /**
      * Constructor
      */
@@ -130,5 +147,87 @@ class RhuPeriodoPago
     public function getContratosPeriodoPagoRel()
     {
         return $this->contratosPeriodoPagoRel;
+    }
+
+    /**
+     * Add centrosCostosPeriodoPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel
+     *
+     * @return RhuPeriodoPago
+     */
+    public function addCentrosCostosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel)
+    {
+        $this->centrosCostosPeriodoPagoRel[] = $centrosCostosPeriodoPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove centrosCostosPeriodoPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel
+     */
+    public function removeCentrosCostosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel)
+    {
+        $this->centrosCostosPeriodoPagoRel->removeElement($centrosCostosPeriodoPagoRel);
+    }
+
+    /**
+     * Get centrosCostosPeriodoPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCentrosCostosPeriodoPagoRel()
+    {
+        return $this->centrosCostosPeriodoPagoRel;
+    }
+
+    /**
+     * Set continuo
+     *
+     * @param boolean $continuo
+     *
+     * @return RhuPeriodoPago
+     */
+    public function setContinuo($continuo)
+    {
+        $this->continuo = $continuo;
+
+        return $this;
+    }
+
+    /**
+     * Get continuo
+     *
+     * @return boolean
+     */
+    public function getContinuo()
+    {
+        return $this->continuo;
+    }
+
+    /**
+     * Set periodosMes
+     *
+     * @param integer $periodosMes
+     *
+     * @return RhuPeriodoPago
+     */
+    public function setPeriodosMes($periodosMes)
+    {
+        $this->periodosMes = $periodosMes;
+
+        return $this;
+    }
+
+    /**
+     * Get periodosMes
+     *
+     * @return integer
+     */
+    public function getPeriodosMes()
+    {
+        return $this->periodosMes;
     }
 }

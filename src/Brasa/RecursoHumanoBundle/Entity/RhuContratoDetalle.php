@@ -40,6 +40,8 @@ class RhuContratoDetalle
     protected $pagoConceptoRel;    
     
 
+
+
     /**
      * Get codigoContratoDetallePk
      *

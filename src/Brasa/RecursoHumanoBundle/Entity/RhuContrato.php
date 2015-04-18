@@ -67,7 +67,7 @@ class RhuContrato
     /**
      * @ORM\OneToMany(targetEntity="RhuContratoDetalle", mappedBy="contratoRel")
      */
-    protected $contratosPeriodoPagoRel;     
+    protected $contratosDetalleRel;     
     
 
     /**
@@ -75,7 +75,7 @@ class RhuContrato
      */
     public function __construct()
     {
-        $this->contratosPeriodoPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -305,36 +305,36 @@ class RhuContrato
     }
 
     /**
-     * Add contratosPeriodoPagoRel
+     * Add contratosDetalleRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $contratosPeriodoPagoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $contratosDetalleRel
      *
      * @return RhuContrato
      */
-    public function addContratosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $contratosPeriodoPagoRel)
+    public function addContratosDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $contratosDetalleRel)
     {
-        $this->contratosPeriodoPagoRel[] = $contratosPeriodoPagoRel;
+        $this->contratosDetalleRel[] = $contratosDetalleRel;
 
         return $this;
     }
 
     /**
-     * Remove contratosPeriodoPagoRel
+     * Remove contratosDetalleRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $contratosPeriodoPagoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $contratosDetalleRel
      */
-    public function removeContratosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $contratosPeriodoPagoRel)
+    public function removeContratosDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $contratosDetalleRel)
     {
-        $this->contratosPeriodoPagoRel->removeElement($contratosPeriodoPagoRel);
+        $this->contratosDetalleRel->removeElement($contratosDetalleRel);
     }
 
     /**
-     * Get contratosPeriodoPagoRel
+     * Get contratosDetalleRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getContratosPeriodoPagoRel()
+    public function getContratosDetalleRel()
     {
-        return $this->contratosPeriodoPagoRel;
+        return $this->contratosDetalleRel;
     }
 }
