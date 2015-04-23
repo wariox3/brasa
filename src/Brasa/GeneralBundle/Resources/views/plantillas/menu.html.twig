@@ -39,10 +39,18 @@
                             </ul>
                         </li>  
                         <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Logistica</a>
+                            <a tabindex="-1" href="#">Transporte</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ path('brs_gen_base_terceros') }}">Rutas</a></li>
                                 <li><a href="{{ path('brs_gen_base_terceros') }}">Conductores</a></li>
+                            </ul>
+                        </li>  
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Recursos humanos</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Empleados</a></li>
+                                <li><a href="{{ path('brs_rhu_base_centro_costo') }}">Centros de costo</a></li>
+                                <li><a href="{{ path('brs_gen_base_terceros') }}">Periodos</a></li>
                             </ul>
                         </li>                        
                     </ul>
@@ -140,6 +148,7 @@
                                     <a tabindex="-1" href="#">Pago nomina</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_rhu_utilidades_pagos_generar_periodo') }}">Generar periodos de pago</a></li>
+                                        <li><a href="{{ path('brs_rhu_utilidades_pagos_generar_pago') }}">Generar pago</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -227,6 +236,35 @@
                                 </li>                                
                             </ul>
                         </li>                        
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Recurso humano</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">                                    
+                                    <a tabindex="-1" href="#">Pagos</a>
+                                    <ul class="dropdown-menu">    
+                                        <li><a href="{{ path('brs_rhu_pagos_lista') }}">Lista</a></li>                                        
+                                    </ul>                                    
+                                </li>                                
+                                <li class="dropdown-submenu">                                    
+                                    <a tabindex="-1" href="#">Creditos</a>
+                                    <ul class="dropdown-menu">    
+                                        <li><a href="{{ path('brs_rhu_creditos_lista') }}">Lista</a></li>                                        
+                                    </ul>                                    
+                                </li>
+                                <li class="dropdown-submenu">                                    
+                                    <a tabindex="-1" href="#">Pagos adicionales</a>
+                                    <ul class="dropdown-menu">                                        
+                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_lista') }}">Lista</a></li>                                        
+                                    </ul>                                    
+                                </li>                               
+                                <li class="dropdown-submenu">                                    
+                                    <a tabindex="-1" href="#">Incapacidades</a>
+                                    <ul class="dropdown-menu">    
+                                        <li><a href="{{ path('brs_rhu_incapacidades_lista') }}">Lista</a></li>                                        
+                                    </ul>                                    
+                                </li>                                   
+                            </ul>
+                        </li>                                                
                     </ul>
                 </li>                                
             </ul>

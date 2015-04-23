@@ -10,5 +10,28 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuPagoRepository extends EntityRepository {
-
+    
+    public function Liquidar($codigoPago) {        
+        $em = $this->getEntityManager();
+        $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+        $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigoPago)); 
+        $douDeducciones = 0;
+        $douDevengado = 0;
+        foreach ($arPagoDetalles as $arPagoDetalle) {
+            if($arPagoDetalle->getOperacion() == 1) {
+                $douDevengado = $douDevengado + $arPagoDetalle->getVrPago();
+            }
+            if($arPagoDetalle->getOperacion() == -1) {
+                $douDeducciones = $douDeducciones + $arPagoDetalle->getVrPago();
+            }
+        }
+        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
+        $arPago->setVrDevengado($douDevengado);
+        $arPago->setVrDeducciones($douDeducciones);
+        $arPago->setVrTotalNeto($douDevengado - $douDeducciones);
+        $em->persist($arPago);
+        $em->flush();
+        return true;
+    }             
 }

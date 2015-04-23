@@ -1,0 +1,130 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+<div class="container">
+    <div class="page-header">
+        <h3>Programacion pago {{ arPago.codigoPagoPk }}</h3>
+    </div>
+
+    <!-- Encabezado Movimiento -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Informacion programacion pago</div>
+      <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="td-label">Numero:</td>
+                    <td class="td-in-well">{{ arPago.codigoPagoPk }}</td>
+                    <td class="td-label">Fecha:</td>
+                    <td class="td-in-well">{{ arPago.fechaHasta|date("Y/m/d") }}</td>
+                    <td class="td-label">Salario:</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arPago.empleadoRel.VrSalario | number_format(2, '.', ',') }}</td>
+                    <td class="td-label">Total devengado:</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arPago.VrDevengado | number_format(2, '.', ',') }}</td>                   
+                </tr>
+                <tr>
+                    <td class="td-label"></td>
+                    <td class="td-in-well" ></td>
+                    <td class="td-label">Desde:</td>
+                    <td class="td-in-well">{{ arPago.fechaDesde|date("Y/m/d") }}</td>
+                    <td class="td-label">Periodo:</td>
+                    <td class="td-in-well-numerico" align="right">$ 0</td>
+                    <td class="td-label">Total deducciones:</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arPago.VrDeducciones | number_format(2, '.', ',') }}</td>
+                </tr>    
+                <tr>
+                    <td class="td-label"></td>
+                    <td class="td-in-well" ></td>
+                    <td class="td-label">Hasta:</td>
+                    <td class="td-in-well">{{ arPago.fechaHasta|date("Y/m/d") }}</td>
+                    <td class="td-label">Bonificacion:</td>
+                    <td class="td-in-well-numerico" align="right">$ 0</td>
+                    <td class="td-label">Total neto:</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arPago.VrTotalNeto | number_format(2, '.', ',')}}</td>
+                </tr>                 
+                <tr>
+                    <td colspan="8">Comentarios:</td>
+                </tr>
+            </table>
+      </div>
+    </div>
+
+    <!-- Fin Encabezado Movimiento -->
+    <form action="{{ path('brs_tte_despachos_detalle', {'codigoDespacho': arPago.codigoPagoPk}) }}" method="post" novalidate>
+        <div class="btn-group">            
+            <button class="btn btn-default " type="submit" name="OpSubmit" value="OpGenerar">Generar</button>
+            <button class="btn btn-default " type="submit" name="OpSubmit" value="OpImprimir">Imprimir</button>
+            <button class="btn btn-default" type="submit" name="OpSubmit" value="OpAnular" onclick="javascript:if (!confirm('Esta seguro que desea anular el documento?')) return false;">Anular</button>
+        </div>
+    </form>
+    <br />
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#detalles" data-toggle="tab">Detalles</a></li>
+        <li><a href="#conceptos" data-toggle="tab">Conceptos</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="detalles">
+            <form action="{{ path('brs_tte_despachos_detalle', {'codigoDespacho': arPago.codigoPagoPk}) }}" method="post" novalidate>
+                <!-- Menu Encabezado Movimiento -->
+                <div id="detalles" style="width: 100%">
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>ID</th>                            
+                            <th>Concepto</th>
+                            <th>Detalle</th>
+                            <th style="text-align: right">Vr. dia</th>
+                            <th style="text-align: right">Vr. hora</th>
+                            <th style="text-align: right">Vr. pago</th>
+                            <th style="text-align: right">Op</th>
+                            <th style="text-align: right">Vr. neto</th>
+                            <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                        </tr>
+                        {% for arPagoDetalles in arPagoDetalles %}
+                        <tr>
+                            <td>
+                                <input type="hidden" name="LblCodigoGuia[]" value="{{ arPagoDetalles.codigoPagoDetallePk }}">
+                                <span class="badge">{{ arPagoDetalles.codigoPagoDetallePk }}</span>
+                            </td>                            
+                            <td>{{ arPagoDetalles.pagoConceptoRel.nombre }}</td>
+                            <td>{{ arPagoDetalles.detalle }}</td>
+                            <td style="text-align: right">{{ arPagoDetalles.vrDia | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetalles.vrHora | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetalles.vrPago | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetalles.operacion | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetalles.vrPagoOperado | number_format(2, '.', ',') }}</td>
+                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoDetalles.codigoPagoDetallePk }}" /></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+                    <!-- Botones Menu Items -->
+                    <div class="btn-toolbar" style="float:left">
+                        <div class="btn-group">
+                            <a class="btn btn-default" href="{{ path('brs_rhu_pagos_lista') }}" style="float:left">Volver</a>
+                        </div>
+                    </div>
+
+                    <div class="btn-toolbar divDerecho" style="float:right">
+                        <div class="btn-group">
+                            <button class="btn btn-danger" type="submit" name="OpSubmit" value="OpRetirar">Retirar</button>
+                        </div>
+                    </div>
+                    <!-- Fin Botones Menu Items -->
+
+                    <br/><br/>
+                    <hr/>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane" id="conceptos">
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

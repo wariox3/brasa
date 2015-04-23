@@ -18,7 +18,7 @@ class RhuEmpleado
     private $codigoEmpleadoPk;
     
     /**
-     * @ORM\Column(name="numeroIdentificacion", type="string", length=20, nullable=false)
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
      */    
     private $numeroIdentificacion;        
     
@@ -108,21 +108,56 @@ class RhuEmpleado
     private $codigoBancoFk;         
     
     /**
-     * @ORM\Column(name="codigo_centro_costos_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
-    private $codigoCentroCostosFk;    
-        
+    private $codigoCentroCostoFk;    
+    
     /**
-     * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="empleadoRel")
+     * @ORM\Column(name="auxilio_transporte", type="boolean")
+     */    
+    private $auxilioTransporte = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_salario", type="float")
      */
-    protected $contratosEmpleadoRel;    
+    private $VrSalario = 0;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="empleadosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;            
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="empleadoRel")
+     */
+    protected $pagosEmpleadoRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="empleadoRel")
+     */
+    protected $pagosAdicionalesEmpleadoRel;      
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCredito", mappedBy="empleadoRel")
+     */
+    protected $creditosEmpleadoRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="empleadoRel")
+     */
+    protected $incapacidadesEmpleadoRel;    
+    
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosAdicionalesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->creditosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incapacidadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -568,60 +603,234 @@ class RhuEmpleado
     }
 
     /**
-     * Set codigoCentroCostosFk
+     * Set codigoCentroCostoFk
      *
-     * @param integer $codigoCentroCostosFk
+     * @param integer $codigoCentroCostoFk
      *
      * @return RhuEmpleado
      */
-    public function setCodigoCentroCostosFk($codigoCentroCostosFk)
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
-        $this->codigoCentroCostosFk = $codigoCentroCostosFk;
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoCentroCostosFk
+     * Get codigoCentroCostoFk
      *
      * @return integer
      */
-    public function getCodigoCentroCostosFk()
+    public function getCodigoCentroCostoFk()
     {
-        return $this->codigoCentroCostosFk;
+        return $this->codigoCentroCostoFk;
     }
 
     /**
-     * Add contratosEmpleadoRel
+     * Set auxilioTransporte
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel
+     * @param boolean $auxilioTransporte
      *
      * @return RhuEmpleado
      */
-    public function addContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel)
+    public function setAuxilioTransporte($auxilioTransporte)
     {
-        $this->contratosEmpleadoRel[] = $contratosEmpleadoRel;
+        $this->auxilioTransporte = $auxilioTransporte;
 
         return $this;
     }
 
     /**
-     * Remove contratosEmpleadoRel
+     * Get auxilioTransporte
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel
+     * @return boolean
      */
-    public function removeContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel)
+    public function getAuxilioTransporte()
     {
-        $this->contratosEmpleadoRel->removeElement($contratosEmpleadoRel);
+        return $this->auxilioTransporte;
     }
 
     /**
-     * Get contratosEmpleadoRel
+     * Set vrSalario
+     *
+     * @param float $vrSalario
+     *
+     * @return RhuEmpleado
+     */
+    public function setVrSalario($vrSalario)
+    {
+        $this->VrSalario = $vrSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalario
+     *
+     * @return float
+     */
+    public function getVrSalario()
+    {
+        return $this->VrSalario;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
+    }
+
+    /**
+     * Add pagosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addPagosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosEmpleadoRel)
+    {
+        $this->pagosEmpleadoRel[] = $pagosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosEmpleadoRel
+     */
+    public function removePagosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosEmpleadoRel)
+    {
+        $this->pagosEmpleadoRel->removeElement($pagosEmpleadoRel);
+    }
+
+    /**
+     * Get pagosEmpleadoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getContratosEmpleadoRel()
+    public function getPagosEmpleadoRel()
     {
-        return $this->contratosEmpleadoRel;
+        return $this->pagosEmpleadoRel;
+    }
+
+    /**
+     * Add pagosAdicionalesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addPagosAdicionalesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesEmpleadoRel)
+    {
+        $this->pagosAdicionalesEmpleadoRel[] = $pagosAdicionalesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosAdicionalesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesEmpleadoRel
+     */
+    public function removePagosAdicionalesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesEmpleadoRel)
+    {
+        $this->pagosAdicionalesEmpleadoRel->removeElement($pagosAdicionalesEmpleadoRel);
+    }
+
+    /**
+     * Get pagosAdicionalesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosAdicionalesEmpleadoRel()
+    {
+        return $this->pagosAdicionalesEmpleadoRel;
+    }
+
+    /**
+     * Add creditosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addCreditosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditosEmpleadoRel)
+    {
+        $this->creditosEmpleadoRel[] = $creditosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditosEmpleadoRel
+     */
+    public function removeCreditosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditosEmpleadoRel)
+    {
+        $this->creditosEmpleadoRel->removeElement($creditosEmpleadoRel);
+    }
+
+    /**
+     * Get creditosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditosEmpleadoRel()
+    {
+        return $this->creditosEmpleadoRel;
+    }
+
+    /**
+     * Add incapacidadesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addIncapacidadesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesEmpleadoRel)
+    {
+        $this->incapacidadesEmpleadoRel[] = $incapacidadesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove incapacidadesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesEmpleadoRel
+     */
+    public function removeIncapacidadesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesEmpleadoRel)
+    {
+        $this->incapacidadesEmpleadoRel->removeElement($incapacidadesEmpleadoRel);
+    }
+
+    /**
+     * Get incapacidadesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIncapacidadesEmpleadoRel()
+    {
+        return $this->incapacidadesEmpleadoRel;
     }
 }

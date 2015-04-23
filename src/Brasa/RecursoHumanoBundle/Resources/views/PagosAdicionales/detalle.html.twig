@@ -1,0 +1,105 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+<div class="container">
+    <div class="page-header">
+        <h3>Pagos adicionales centro costo {{ arCentroCosto.codigoCentroCostoPk }}</h3>            
+    </div>
+
+    <!-- Encabezado Movimiento -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Informacion centro costo</div>
+      <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="td-label">Numero:</td>
+                    <td class="td-in-well">{{ arCentroCosto.codigoCentroCostoPk }}</td>
+                    <td class="td-label">Fecha:</td>
+                    <td class="td-in-well"></td>
+                </tr>
+                <tr>
+                    <td class="td-label"></td>
+                    <td class="td-in-well" ></td>
+                    <td class="td-label">Hasta:</td>
+                    <td class="td-in-well"></td>
+                </tr>
+                <tr>
+                    <td colspan="8">Comentarios:</td>
+                </tr>
+            </table>
+      </div>
+    </div>    
+
+    <!-- Fin Encabezado Movimiento -->
+
+    <br />
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#detalles" data-toggle="tab">Detalles</a></li>
+        <li><a href="#conceptos" data-toggle="tab">Conceptos</a></li>
+    </ul>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    <div class="tab-content">
+        <div class="tab-pane active" id="detalles">            
+            <!-- Menu Encabezado Movimiento -->
+            <div id="detalles" style="width: 100%">                    
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>ID</th>
+                        <th>Numero</th>
+                        <th>Concepto</th>
+                        <th>Empleado</th>
+                        <th>Cant</th>
+                        <th>Valor</th>
+                        <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                    </tr>
+                    {% for arPagosAdicionales in arPagosAdicionales %}
+                    <tr>
+                        <td>
+                            <input type="hidden" name="LblCodigoGuia[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}">
+                            <span class="badge">{{ arPagosAdicionales.codigoPagoAdicionalPk }}</span>
+                        </td>
+                        <td>{{ arPagosAdicionales.codigoPagoAdicionalPk}}</td>
+                        <td>{{ arPagosAdicionales.pagoConceptoRel.nombre }}</td>
+                        <td>{{ arPagosAdicionales.empleadoRel.nombreCorto }}</td>
+                        <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(2, '.', ',') }}</td>                            
+                        <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
+                        <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}" /></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <!-- Botones Menu Items -->
+                <div class="btn-toolbar" style="float:left">
+                    <div class="btn-group">
+                        <a class="btn btn-default" href="{{ path('brs_rhu_pagos_adicionales_lista') }}" style="float:left">Volver</a>
+                    </div>
+                </div>
+
+                <div class="btn-toolbar divDerecho">
+                    <div class="btn-group">
+                        <a class="btn btn-default" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_concepto', {'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk}) }}', 'AgregarGuia', 600, 900)" >Agregar</a>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-danger" type="submit" name="OpSubmit" value="OpRetirar" >Retirar</button>
+                    </div>
+                </div>
+                <!-- Fin Botones Menu Items -->
+
+                <br/><br/>
+                <hr/>
+            </div>
+            
+        </div>
+        <div class="tab-pane" id="conceptos">
+
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

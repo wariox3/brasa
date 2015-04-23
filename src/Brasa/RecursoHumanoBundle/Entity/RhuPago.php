@@ -23,6 +23,11 @@ class RhuPago
     private $codigoEmpleadoFk;      
     
     /**
+     * @ORM\Column(name="codigo_programacion_pago_fk", type="integer", nullable=true)
+     */    
+    private $codigoProgramacionPagoFk;    
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fechaDesde;    
@@ -48,12 +53,27 @@ class RhuPago
     private $vr_deducciones = 0;    
     
     /**
-     * @ORM\Column(name="vr_total_pagado", type="float")
+     * @ORM\Column(name="vr_total_neto", type="float")
      */
-    private $vr_total_pagado = 0;    
+    private $vr_total_neto = 0;    
     
-
-
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="pagosEmpleadoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
+     */
+    protected $empleadoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="pagosProgramacionPagoRel")
+     * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
+     */
+    protected $programacionPagoRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="pagoRel")
+     */
+    protected $pagosDetallesPagoRel;    
+    
     /**
      * Get codigoPagoPk
      *
@@ -230,5 +250,142 @@ class RhuPago
     public function getVrTotalPagado()
     {
         return $this->vr_total_pagado;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuPago
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosDetallesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add pagosDetallesPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoRel
+     *
+     * @return RhuPago
+     */
+    public function addPagosDetallesPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoRel)
+    {
+        $this->pagosDetallesPagoRel[] = $pagosDetallesPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosDetallesPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoRel
+     */
+    public function removePagosDetallesPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoRel)
+    {
+        $this->pagosDetallesPagoRel->removeElement($pagosDetallesPagoRel);
+    }
+
+    /**
+     * Get pagosDetallesPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosDetallesPagoRel()
+    {
+        return $this->pagosDetallesPagoRel;
+    }
+
+    /**
+     * Set codigoProgramacionPagoFk
+     *
+     * @param integer $codigoProgramacionPagoFk
+     *
+     * @return RhuPago
+     */
+    public function setCodigoProgramacionPagoFk($codigoProgramacionPagoFk)
+    {
+        $this->codigoProgramacionPagoFk = $codigoProgramacionPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProgramacionPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProgramacionPagoFk()
+    {
+        return $this->codigoProgramacionPagoFk;
+    }
+
+    /**
+     * Set programacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
+     *
+     * @return RhuPago
+     */
+    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
+    {
+        $this->programacionPagoRel = $programacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get programacionPagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
+     */
+    public function getProgramacionPagoRel()
+    {
+        return $this->programacionPagoRel;
+    }
+
+    /**
+     * Set vrTotalNeto
+     *
+     * @param float $vrTotalNeto
+     *
+     * @return RhuPago
+     */
+    public function setVrTotalNeto($vrTotalNeto)
+    {
+        $this->vr_total_neto = $vrTotalNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalNeto
+     *
+     * @return float
+     */
+    public function getVrTotalNeto()
+    {
+        return $this->vr_total_neto;
     }
 }

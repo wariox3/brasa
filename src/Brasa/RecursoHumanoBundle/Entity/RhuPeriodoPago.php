@@ -37,24 +37,18 @@ class RhuPeriodoPago
      * Especifica de cuantos periodos consta el mes, aplica solo para no continuos
      * @ORM\Column(name="periodos_mes", type="integer")
      */
-    private $periodosMes = 0;        
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="periodoPagoRel")
-     */
-    protected $contratosPeriodoPagoRel;    
+    private $periodosMes = 0;               
 
     /**
      * @ORM\OneToMany(targetEntity="RhuCentroCosto", mappedBy="periodoPagoRel")
      */
     protected $centrosCostosPeriodoPagoRel;     
-    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->contratosPeriodoPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->centrosCostosPeriodoPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -116,74 +110,6 @@ class RhuPeriodoPago
     }
 
     /**
-     * Add contratosPeriodoPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosPeriodoPagoRel
-     *
-     * @return RhuPeriodoPago
-     */
-    public function addContratosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosPeriodoPagoRel)
-    {
-        $this->contratosPeriodoPagoRel[] = $contratosPeriodoPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove contratosPeriodoPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosPeriodoPagoRel
-     */
-    public function removeContratosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosPeriodoPagoRel)
-    {
-        $this->contratosPeriodoPagoRel->removeElement($contratosPeriodoPagoRel);
-    }
-
-    /**
-     * Get contratosPeriodoPagoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getContratosPeriodoPagoRel()
-    {
-        return $this->contratosPeriodoPagoRel;
-    }
-
-    /**
-     * Add centrosCostosPeriodoPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel
-     *
-     * @return RhuPeriodoPago
-     */
-    public function addCentrosCostosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel)
-    {
-        $this->centrosCostosPeriodoPagoRel[] = $centrosCostosPeriodoPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove centrosCostosPeriodoPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel
-     */
-    public function removeCentrosCostosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel)
-    {
-        $this->centrosCostosPeriodoPagoRel->removeElement($centrosCostosPeriodoPagoRel);
-    }
-
-    /**
-     * Get centrosCostosPeriodoPagoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCentrosCostosPeriodoPagoRel()
-    {
-        return $this->centrosCostosPeriodoPagoRel;
-    }
-
-    /**
      * Set continuo
      *
      * @param boolean $continuo
@@ -229,5 +155,39 @@ class RhuPeriodoPago
     public function getPeriodosMes()
     {
         return $this->periodosMes;
+    }
+
+    /**
+     * Add centrosCostosPeriodoPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel
+     *
+     * @return RhuPeriodoPago
+     */
+    public function addCentrosCostosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel)
+    {
+        $this->centrosCostosPeriodoPagoRel[] = $centrosCostosPeriodoPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove centrosCostosPeriodoPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel
+     */
+    public function removeCentrosCostosPeriodoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosPeriodoPagoRel)
+    {
+        $this->centrosCostosPeriodoPagoRel->removeElement($centrosCostosPeriodoPagoRel);
+    }
+
+    /**
+     * Get centrosCostosPeriodoPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCentrosCostosPeriodoPagoRel()
+    {
+        return $this->centrosCostosPeriodoPagoRel;
     }
 }

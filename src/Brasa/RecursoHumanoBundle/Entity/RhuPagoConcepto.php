@@ -20,24 +20,65 @@ class RhuPagoConcepto
     /**
      * @ORM\Column(name="nombre", type="string", length=80, nullable=true)
      */    
-    private $nombre;    
+    private $nombre;            
     
     /**
-     * @ORM\Column(name="codigo_pago_concepto_tipo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="compone_salario", type="boolean")
      */    
-    private $codigoPagoConceptoTipoFk;    
+    private $componeSalario = 0; 
+
+    /**
+     * @ORM\Column(name="compone_porcentaje", type="boolean")
+     */    
+    private $componePorcentaje = 0;     
+
+    /**
+     * @ORM\Column(name="compone_valor", type="boolean")
+     */    
+    private $componeValor = 0;     
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuContratoDetalle", mappedBy="pagoConceptoRel")
+     * @ORM\Column(name="por_porcentaje", type="float")
      */
-    protected $pagoConceptosContratoDetalleRel;    
+    private $porPorcentaje = 0;     
+    
+    /**
+     * @ORM\Column(name="prestacional", type="boolean")
+     */    
+    private $prestacional = 0;     
+    
+    /**
+     * @ORM\Column(name="operacion", type="integer")
+     */
+    private $operacion = 0;            
+    
+    /**
+     * @ORM\Column(name="concepto_adicion", type="boolean")
+     */    
+    private $conceptoAdicion = 0;     
+    
+    /**
+     * @ORM\Column(name="concepto_incapacidad", type="boolean")
+     */    
+    private $conceptoIncapacidad = 0;     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="pagoConceptoRel")
+     */
+    protected $pagosDetallesPagoConceptoRel;     
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="pagoConceptoRel")
+     */
+    protected $pagosAdicionalesPagoConceptoRel;         
+    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->pagoConceptosContratoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosDetallesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -75,60 +116,262 @@ class RhuPagoConcepto
     }
 
     /**
-     * Set codigoPagoConceptoTipoFk
+     * Set componeSalario
      *
-     * @param integer $codigoPagoConceptoTipoFk
+     * @param boolean $componeSalario
      *
      * @return RhuPagoConcepto
      */
-    public function setCodigoPagoConceptoTipoFk($codigoPagoConceptoTipoFk)
+    public function setComponeSalario($componeSalario)
     {
-        $this->codigoPagoConceptoTipoFk = $codigoPagoConceptoTipoFk;
+        $this->componeSalario = $componeSalario;
 
         return $this;
     }
 
     /**
-     * Get codigoPagoConceptoTipoFk
+     * Get componeSalario
+     *
+     * @return boolean
+     */
+    public function getComponeSalario()
+    {
+        return $this->componeSalario;
+    }
+
+    /**
+     * Set componePorcentaje
+     *
+     * @param boolean $componePorcentaje
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setComponePorcentaje($componePorcentaje)
+    {
+        $this->componePorcentaje = $componePorcentaje;
+
+        return $this;
+    }
+
+    /**
+     * Get componePorcentaje
+     *
+     * @return boolean
+     */
+    public function getComponePorcentaje()
+    {
+        return $this->componePorcentaje;
+    }
+
+    /**
+     * Set componeValor
+     *
+     * @param boolean $componeValor
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setComponeValor($componeValor)
+    {
+        $this->componeValor = $componeValor;
+
+        return $this;
+    }
+
+    /**
+     * Get componeValor
+     *
+     * @return boolean
+     */
+    public function getComponeValor()
+    {
+        return $this->componeValor;
+    }
+
+    /**
+     * Set porPorcentaje
+     *
+     * @param float $porPorcentaje
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setPorPorcentaje($porPorcentaje)
+    {
+        $this->porPorcentaje = $porPorcentaje;
+
+        return $this;
+    }
+
+    /**
+     * Get porPorcentaje
+     *
+     * @return float
+     */
+    public function getPorPorcentaje()
+    {
+        return $this->porPorcentaje;
+    }
+
+    /**
+     * Set prestacional
+     *
+     * @param boolean $prestacional
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setPrestacional($prestacional)
+    {
+        $this->prestacional = $prestacional;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacional
+     *
+     * @return boolean
+     */
+    public function getPrestacional()
+    {
+        return $this->prestacional;
+    }
+
+    /**
+     * Set operacion
+     *
+     * @param integer $operacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setOperacion($operacion)
+    {
+        $this->operacion = $operacion;
+
+        return $this;
+    }
+
+    /**
+     * Get operacion
      *
      * @return integer
      */
-    public function getCodigoPagoConceptoTipoFk()
+    public function getOperacion()
     {
-        return $this->codigoPagoConceptoTipoFk;
+        return $this->operacion;
     }
 
     /**
-     * Add pagoConceptosContratoDetalleRel
+     * Add pagosDetallesPagoConceptoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $pagoConceptosContratoDetalleRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoConceptoRel
      *
      * @return RhuPagoConcepto
      */
-    public function addPagoConceptosContratoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $pagoConceptosContratoDetalleRel)
+    public function addPagosDetallesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoConceptoRel)
     {
-        $this->pagoConceptosContratoDetalleRel[] = $pagoConceptosContratoDetalleRel;
+        $this->pagosDetallesPagoConceptoRel[] = $pagosDetallesPagoConceptoRel;
 
         return $this;
     }
 
     /**
-     * Remove pagoConceptosContratoDetalleRel
+     * Remove pagosDetallesPagoConceptoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $pagoConceptosContratoDetalleRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoConceptoRel
      */
-    public function removePagoConceptosContratoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoDetalle $pagoConceptosContratoDetalleRel)
+    public function removePagosDetallesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoConceptoRel)
     {
-        $this->pagoConceptosContratoDetalleRel->removeElement($pagoConceptosContratoDetalleRel);
+        $this->pagosDetallesPagoConceptoRel->removeElement($pagosDetallesPagoConceptoRel);
     }
 
     /**
-     * Get pagoConceptosContratoDetalleRel
+     * Get pagosDetallesPagoConceptoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPagoConceptosContratoDetalleRel()
+    public function getPagosDetallesPagoConceptoRel()
     {
-        return $this->pagoConceptosContratoDetalleRel;
+        return $this->pagosDetallesPagoConceptoRel;
+    }
+
+    /**
+     * Add pagosAdicionalesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addPagosAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesPagoConceptoRel)
+    {
+        $this->pagosAdicionalesPagoConceptoRel[] = $pagosAdicionalesPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosAdicionalesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesPagoConceptoRel
+     */
+    public function removePagosAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesPagoConceptoRel)
+    {
+        $this->pagosAdicionalesPagoConceptoRel->removeElement($pagosAdicionalesPagoConceptoRel);
+    }
+
+    /**
+     * Get pagosAdicionalesPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosAdicionalesPagoConceptoRel()
+    {
+        return $this->pagosAdicionalesPagoConceptoRel;
+    }
+
+    /**
+     * Set conceptoAdicion
+     *
+     * @param boolean $conceptoAdicion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoAdicion($conceptoAdicion)
+    {
+        $this->conceptoAdicion = $conceptoAdicion;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoAdicion
+     *
+     * @return boolean
+     */
+    public function getConceptoAdicion()
+    {
+        return $this->conceptoAdicion;
+    }
+
+    /**
+     * Set conceptoIncapacidad
+     *
+     * @param boolean $conceptoIncapacidad
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoIncapacidad($conceptoIncapacidad)
+    {
+        $this->conceptoIncapacidad = $conceptoIncapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoIncapacidad
+     *
+     * @return boolean
+     */
+    public function getConceptoIncapacidad()
+    {
+        return $this->conceptoIncapacidad;
     }
 }

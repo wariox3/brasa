@@ -10,5 +10,16 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuProgramacionPagoRepository extends EntityRepository {
-
+    /*
+     * Liquidar todos los pagos de la programacion de pago
+     */
+    public function Liquidar($codigoProgramacionPago) {        
+        $em = $this->getEntityManager();
+        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago)); 
+        foreach ($arPagos as $arPago) {
+            $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->Liquidar($arPago->getCodigoPagoPk()); 
+        }
+        return true;
+    } 
 }

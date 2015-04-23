@@ -38,10 +38,28 @@ class RhuProgramacionPago
     private $codigoCentroCostoFk;     
     
     /**
+     * @ORM\Column(name="estado_generado", type="boolean")
+     */    
+    private $estadoGenerado = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="programacionesPagosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $centroCostoRel; 
+    protected $centroCostoRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="programacionPagoRel")
+     */
+    protected $pagosProgramacionPagoRel;     
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoProgramacionPagoPk
@@ -150,6 +168,30 @@ class RhuProgramacionPago
     }
 
     /**
+     * Set estadoGenerado
+     *
+     * @param boolean $estadoGenerado
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setEstadoGenerado($estadoGenerado)
+    {
+        $this->estadoGenerado = $estadoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoGenerado()
+    {
+        return $this->estadoGenerado;
+    }
+
+    /**
      * Set centroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
@@ -171,5 +213,39 @@ class RhuProgramacionPago
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Add pagosProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosProgramacionPagoRel
+     *
+     * @return RhuProgramacionPago
+     */
+    public function addPagosProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosProgramacionPagoRel)
+    {
+        $this->pagosProgramacionPagoRel[] = $pagosProgramacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosProgramacionPagoRel
+     */
+    public function removePagosProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosProgramacionPagoRel)
+    {
+        $this->pagosProgramacionPagoRel->removeElement($pagosProgramacionPagoRel);
+    }
+
+    /**
+     * Get pagosProgramacionPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosProgramacionPagoRel()
+    {
+        return $this->pagosProgramacionPagoRel;
     }
 }
