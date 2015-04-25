@@ -14,6 +14,7 @@
                 <th>PERIODO</th>
                 <th>ULT. PAGO</th>
                 <th>ABIERTO</th>
+                <th>INACTIVO</th>
                 <th></th>
             </tr>
             {% for arCentroCosto in arCentroCosto %}
@@ -23,6 +24,7 @@
                 <td>{{ arCentroCosto.periodoPagoRel.nombre  }}</td>
                 <td>{{ arCentroCosto.fechaUltimoPagoProgramado |date("Y/m/d")  }}</td>
                 <td>{% if arCentroCosto.pagoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arCentroCosto.estadoInactivo == 1 %} SI {% else %} NO {% endif %}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCentroCosto.codigoCentroCostoPk }}" /></td>
             </tr>
             {% endfor %}

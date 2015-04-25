@@ -38,6 +38,12 @@ class RhuCentroCosto
      */    
     private $pagoAbierto = 0;    
     
+    /**     
+     * @ORM\Column(name="estado_inactivo", type="boolean")
+     */    
+    private $estadoInactivo = 0;     
+       
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
      * @ORM\JoinColumn(name="codigo_periodo_pago_fk", referencedColumnName="codigo_periodo_pago_pk")
@@ -338,5 +344,77 @@ class RhuCentroCosto
     public function getIncapacidadesCentroCostoRel()
     {
         return $this->incapacidadesCentroCostoRel;
+    }
+
+    /**
+     * Set estadoInactivo
+     *
+     * @param boolean $estadoInactivo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setEstadoInactivo($estadoInactivo)
+    {
+        $this->estadoInactivo = $estadoInactivo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoInactivo
+     *
+     * @return boolean
+     */
+    public function getEstadoInactivo()
+    {
+        return $this->estadoInactivo;
+    }
+
+    /**
+     * Set verificarPagosAdicionales
+     *
+     * @param boolean $verificarPagosAdicionales
+     *
+     * @return RhuCentroCosto
+     */
+    public function setVerificarPagosAdicionales($verificarPagosAdicionales)
+    {
+        $this->verificarPagosAdicionales = $verificarPagosAdicionales;
+
+        return $this;
+    }
+
+    /**
+     * Get verificarPagosAdicionales
+     *
+     * @return boolean
+     */
+    public function getVerificarPagosAdicionales()
+    {
+        return $this->verificarPagosAdicionales;
+    }
+
+    /**
+     * Set verificarIncapacidades
+     *
+     * @param boolean $verificarIncapacidades
+     *
+     * @return RhuCentroCosto
+     */
+    public function setVerificarIncapacidades($verificarIncapacidades)
+    {
+        $this->verificarIncapacidades = $verificarIncapacidades;
+
+        return $this;
+    }
+
+    /**
+     * Get verificarIncapacidades
+     *
+     * @return boolean
+     */
+    public function getVerificarIncapacidades()
+    {
+        return $this->verificarIncapacidades;
     }
 }

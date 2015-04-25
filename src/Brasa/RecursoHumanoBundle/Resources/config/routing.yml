@@ -21,18 +21,14 @@ brs_rhu_pagos_adicionales_detalle:
 brs_rhu_pagos_adicionales_agregar_concepto:
     path:     /rhumano/pagos/adicionales/agregar/concepto/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregarConcepto:lista }    
+
+brs_rhu_pagos_adicionales_agregar_incapacidad:
+    path:     /rhumano/pagos/adicionales/agregar/incapacidad/{codigoCentroCosto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregarIncapacidad:nuevo }    
     
 brs_rhu_creditos_lista:
     path:     /rhumano/creditos/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:lista }
-    
-brs_rhu_incapacidades_lista:
-    path:     /rhumano/incapacidades/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:lista }    
-
-brs_rhu_incapacidades_detalle:
-    path:     /rhumano/incapacidades/detalle/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:detalle }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:lista }       
     
 brs_rhu_pagos_lista:
     path:     /rhumano/pagos/lista
@@ -46,4 +42,10 @@ brs_rhu_base_centro_costo:
     path:     /rhumano/base/centrocosto
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:lista } 
     
+brs_rhu_base_empleado:
+    path:     /rhumano/base/empleado
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:lista }     
     
+brs_rhu_base_empleado_detalle:
+    path:     /rhumano/base/detalle/{codigoEmpleado}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:detalle }    

@@ -147,7 +147,11 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="empleadoRel")
      */
     protected $incapacidadesEmpleadoRel;    
-    
+        
+    /**
+     * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="empleadoRel")
+     */
+    protected $contratosEmpleadoRel;     
 
     /**
      * Constructor
@@ -832,5 +836,39 @@ class RhuEmpleado
     public function getIncapacidadesEmpleadoRel()
     {
         return $this->incapacidadesEmpleadoRel;
+    }
+
+    /**
+     * Add contratosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel)
+    {
+        $this->contratosEmpleadoRel[] = $contratosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel
+     */
+    public function removeContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel)
+    {
+        $this->contratosEmpleadoRel->removeElement($contratosEmpleadoRel);
+    }
+
+    /**
+     * Get contratosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosEmpleadoRel()
+    {
+        return $this->contratosEmpleadoRel;
     }
 }

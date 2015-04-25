@@ -42,6 +42,16 @@ class RhuProgramacionPago
      */    
     private $estadoGenerado = 0;    
     
+    /**     
+     * @ORM\Column(name="verificar_pagos_adicionales", type="boolean")
+     */    
+    private $verificarPagosAdicionales = 0;    
+
+    /**     
+     * @ORM\Column(name="verificar_incapacidades", type="boolean")
+     */    
+    private $verificarIncapacidades = 0;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="programacionesPagosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
@@ -247,5 +257,53 @@ class RhuProgramacionPago
     public function getPagosProgramacionPagoRel()
     {
         return $this->pagosProgramacionPagoRel;
+    }
+
+    /**
+     * Set verificarPagosAdicionales
+     *
+     * @param boolean $verificarPagosAdicionales
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setVerificarPagosAdicionales($verificarPagosAdicionales)
+    {
+        $this->verificarPagosAdicionales = $verificarPagosAdicionales;
+
+        return $this;
+    }
+
+    /**
+     * Get verificarPagosAdicionales
+     *
+     * @return boolean
+     */
+    public function getVerificarPagosAdicionales()
+    {
+        return $this->verificarPagosAdicionales;
+    }
+
+    /**
+     * Set verificarIncapacidades
+     *
+     * @param boolean $verificarIncapacidades
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setVerificarIncapacidades($verificarIncapacidades)
+    {
+        $this->verificarIncapacidades = $verificarIncapacidades;
+
+        return $this;
+    }
+
+    /**
+     * Get verificarIncapacidades
+     *
+     * @return boolean
+     */
+    public function getVerificarIncapacidades()
+    {
+        return $this->verificarIncapacidades;
     }
 }
