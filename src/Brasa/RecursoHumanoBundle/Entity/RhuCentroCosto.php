@@ -39,10 +39,24 @@ class RhuCentroCosto
     private $pagoAbierto = 0;    
     
     /**     
-     * @ORM\Column(name="estado_inactivo", type="boolean")
+     * @ORM\Column(name="estado_activo", type="boolean")
      */    
-    private $estadoInactivo = 0;     
-       
+    private $estadoActivo = 0;     
+
+    /**     
+     * @ORM\Column(name="generar_pago_automatico", type="boolean")
+     */    
+    private $generarPagoAutomatico = 0;    
+    
+    /**
+     * @ORM\Column(name="hora_pago_automatico", type="time", nullable=true)
+     */    
+    private $horaPagoAutomatico;    
+    
+    /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
@@ -69,6 +83,11 @@ class RhuCentroCosto
      * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="centroCostoRel")
      */
     protected $incapacidadesCentroCostoRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="centroCostoRel")
+     */
+    protected $pagosCentroCostoRel;    
     
     /**
      * Constructor
@@ -416,5 +435,135 @@ class RhuCentroCosto
     public function getVerificarIncapacidades()
     {
         return $this->verificarIncapacidades;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuCentroCosto
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set estadoActivo
+     *
+     * @param boolean $estadoActivo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setEstadoActivo($estadoActivo)
+    {
+        $this->estadoActivo = $estadoActivo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoActivo
+     *
+     * @return boolean
+     */
+    public function getEstadoActivo()
+    {
+        return $this->estadoActivo;
+    }
+
+    /**
+     * Set generarPagoAutomatico
+     *
+     * @param boolean $generarPagoAutomatico
+     *
+     * @return RhuCentroCosto
+     */
+    public function setGenerarPagoAutomatico($generarPagoAutomatico)
+    {
+        $this->generarPagoAutomatico = $generarPagoAutomatico;
+
+        return $this;
+    }
+
+    /**
+     * Get generarPagoAutomatico
+     *
+     * @return boolean
+     */
+    public function getGenerarPagoAutomatico()
+    {
+        return $this->generarPagoAutomatico;
+    }
+
+    /**
+     * Set horaPagoAutomatico
+     *
+     * @param \DateTime $horaPagoAutomatico
+     *
+     * @return RhuCentroCosto
+     */
+    public function setHoraPagoAutomatico($horaPagoAutomatico)
+    {
+        $this->horaPagoAutomatico = $horaPagoAutomatico;
+
+        return $this;
+    }
+
+    /**
+     * Get horaPagoAutomatico
+     *
+     * @return \DateTime
+     */
+    public function getHoraPagoAutomatico()
+    {
+        return $this->horaPagoAutomatico;
+    }
+
+    /**
+     * Add pagosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addPagosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosCentroCostoRel)
+    {
+        $this->pagosCentroCostoRel[] = $pagosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosCentroCostoRel
+     */
+    public function removePagosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosCentroCostoRel)
+    {
+        $this->pagosCentroCostoRel->removeElement($pagosCentroCostoRel);
+    }
+
+    /**
+     * Get pagosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosCentroCostoRel()
+    {
+        return $this->pagosCentroCostoRel;
     }
 }

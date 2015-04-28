@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoType;
 
 class BaseEmpleadoController extends Controller
 {
@@ -16,12 +17,35 @@ class BaseEmpleadoController extends Controller
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->getForm();
         $form->handleRequest($request);        
-        
-        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findAll();                        
+        if($form->isValid()) {                         
+            if($form->get('BtnExcel')->isClicked()) {
+                   $objPHPExcel = new \PHPExcel();
+                   // Set properties
+                   $objPHPExcel->getProperties()->setCreator("Brasa app");                   
+                   $objPHPExcel->getProperties()->setTitle("Office 2007 XLSX Test Document");
+                   $objPHPExcel->getProperties()->setSubject("Office 2007 XLSX Test Document");
+                   $objPHPExcel->getProperties()->setDescription("Lista centros costo");
+
+                   // Add some data
+                   $objPHPExcel->setActiveSheetIndex(0);
+                   $objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Hello');
+                   $objPHPExcel->getActiveSheet()->SetCellValue('B2', 'world!');
+                   $objPHPExcel->getActiveSheet()->SetCellValue('C1', 'Hello');
+                   $objPHPExcel->getActiveSheet()->SetCellValue('D2', 'world!');
+
+                   // Rename sheet
+                   $objPHPExcel->getActiveSheet()->setTitle('Simple');
+
+                   // Save Excel 2007 file
+                   $strArchivo = "/opt/lampp/htdocs/prueba.xlsx";
+                   $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+                   $objWriter->save($strArchivo);                
+            }
+        }
+        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();        
         $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e";
         $query = $em->createQuery($dql);        
-        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 40);                
+        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 20);                
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:lista.html.twig', array(
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()
@@ -31,9 +55,8 @@ class BaseEmpleadoController extends Controller
     public function detalleAction($codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();            
-        $form = $this->createFormBuilder()
-            ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Retirar',))
-            ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Retirar',))
+        $form = $this->createFormBuilder()            
+            ->add('BtnRetirarContrato', 'submit', array('label'  => 'Retirar',))            
             ->getForm();
         $form->handleRequest($request);        
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
@@ -44,12 +67,58 @@ class BaseEmpleadoController extends Controller
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));        
         $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));                
+        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));                        
+        if($form->isValid()) {                         
+            if($form->get('BtnRetirarContrato')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
+                if(count($arrSeleccionados) > 0) {                        
+                    foreach ($arrSeleccionados AS $codigoContrato) {
+                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+                        $em->remove($arContrato);
+                    }                    
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
+                }
+            }            
+        }        
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
                     'arPagosAdicionales' => $arPagosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
                     'arContratos' => $arContratos,
+                    'arCreditos' => $arCreditos,
                     'form' => $form->createView()
                     ));
     }            
+    
+    public function nuevoAction($codigoEmpleado) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado(); 
+        if($codigoEmpleado != 0) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
+        } else {
+            $arEmpleado->setVrSalario(644350); //Parametrizar con configuracion salario minimo
+        }
+        $form = $this->createForm(new RhuEmpleadoType(), $arEmpleado);       
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arrControles = $request->request->All();
+            $arEmpleado = $form->getData();              
+            $em->persist($arEmpleado);
+            $em->flush();                            
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0)));
+            } else {
+                return $this->redirect($this->generateUrl('brs_rhu_base_empleados_lista'));
+            }    
+            
+        }                
+
+        return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:nuevo.html.twig', array(
+            'arEmpleado' => $arEmpleado,
+            'form' => $form->createView()));
+    }        
 }

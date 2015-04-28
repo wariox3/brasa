@@ -10,6 +10,10 @@ brs_rhu_utilidades_pagos_generar_pago_resumen:
     path:     /rhumano/utilidades/pagos/generar/pago/resumen/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:generarPagoResumen } 
     
+brs_rhu_utilidades_pagos_pagar:
+    path:     /rhumano/utilidades/pagos/pagar
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:pagar }    
+    
 brs_rhu_pagos_adicionales_lista:
     path:     /rhumano/pagos/adicionales/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:lista }     
@@ -29,6 +33,10 @@ brs_rhu_pagos_adicionales_agregar_incapacidad:
 brs_rhu_creditos_lista:
     path:     /rhumano/creditos/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:lista }       
+
+brs_rhu_creditos_nuevo:
+    path:     /rhumano/creditos/nuevo/{codigoCredito}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:nuevo }     
     
 brs_rhu_pagos_lista:
     path:     /rhumano/pagos/lista
@@ -38,14 +46,26 @@ brs_rhu_pagos_detalle:
     path:     /rhumano/pagos/detalle/{codigoPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:Pagos:detalle }    
     
-brs_rhu_base_centro_costo:
-    path:     /rhumano/base/centrocosto
+brs_rhu_base_centros_costos_lista:
+    path:     /rhumano/base/centroscostos/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:lista } 
+
+brs_rhu_base_centros_costos_nuevo:
+    path:     /rhumano/base/centroscostos/nuevo/{codigoCentroCosto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:nuevo }    
     
-brs_rhu_base_empleado:
-    path:     /rhumano/base/empleado
+brs_rhu_base_empleados_lista:
+    path:     /rhumano/base/empleados/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:lista }     
     
-brs_rhu_base_empleado_detalle:
-    path:     /rhumano/base/detalle/{codigoEmpleado}
+brs_rhu_base_empleados_detalles:
+    path:     /rhumano/base/empleados/detalles/{codigoEmpleado}
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:detalle }    
+    
+brs_rhu_base_empleados_nuevo:
+    path:     /rhumano/base/empleados/nuevo/{codigoEmpleado}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:nuevo }     
+    
+brs_rhu_contratos_nuevo:
+    path:     /rhumano/contratos/nuevo/{codigoContrato}{codigoEmpleado}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:nuevo }    

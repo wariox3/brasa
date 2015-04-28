@@ -18,6 +18,11 @@ class RhuEmpleado
     private $codigoEmpleadoPk;
     
     /**
+     * @ORM\Column(name="codigo_tipo_identificacion_fk", type="integer", nullable=true)
+     */    
+    private $codigoTipoIdentificacionFk;     
+    
+    /**
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
      */    
     private $numeroIdentificacion;        
@@ -110,7 +115,7 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
-    private $codigoCentroCostoFk;    
+    private $codigoCentroCostoFk;           
     
     /**
      * @ORM\Column(name="auxilio_transporte", type="boolean")
@@ -128,6 +133,12 @@ class RhuEmpleado
      */
     protected $centroCostoRel;            
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuTipoIdentificacion", inversedBy="empleadosTipoIdentificacionRel")
+     * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
+     */
+    protected $tipoIdentificacionRel;     
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="empleadoRel")
      */
@@ -870,5 +881,53 @@ class RhuEmpleado
     public function getContratosEmpleadoRel()
     {
         return $this->contratosEmpleadoRel;
+    }
+
+    /**
+     * Set codigoTipoIdentificacionFk
+     *
+     * @param integer $codigoTipoIdentificacionFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoTipoIdentificacionFk($codigoTipoIdentificacionFk)
+    {
+        $this->codigoTipoIdentificacionFk = $codigoTipoIdentificacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoIdentificacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoIdentificacionFk()
+    {
+        return $this->codigoTipoIdentificacionFk;
+    }
+
+    /**
+     * Set tipoIdentificacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel = null)
+    {
+        $this->tipoIdentificacionRel = $tipoIdentificacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion
+     */
+    public function getTipoIdentificacionRel()
+    {
+        return $this->tipoIdentificacionRel;
     }
 }

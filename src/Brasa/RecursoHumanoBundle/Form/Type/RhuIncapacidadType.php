@@ -14,8 +14,8 @@ class RhuIncapacidadType extends AbstractType
                 'property' => 'nombre',
             ))                
             ->add('numeroEps', 'text', array('required' => true))   
-            ->add('fechaDesde', 'datetime')                
-            ->add('fechaHasta', 'datetime')  
+            ->add('fechaDesde', 'date')                
+            ->add('fechaHasta', 'date')  
             ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        

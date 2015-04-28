@@ -42,6 +42,16 @@ class RhuProgramacionPago
      */    
     private $estadoGenerado = 0;    
     
+    /**
+     * @ORM\Column(name="estado_pagado", type="boolean")
+     */    
+    private $estadoPagado = 0;    
+    
+    /**
+     * @ORM\Column(name="archivoExportado", type="boolean")
+     */    
+    private $archivoExportado = 0;    
+    
     /**     
      * @ORM\Column(name="verificar_pagos_adicionales", type="boolean")
      */    
@@ -53,6 +63,11 @@ class RhuProgramacionPago
     private $verificarIncapacidades = 0;     
     
     /**
+     * @ORM\Column(name="vr_total_neto", type="float")
+     */
+    private $vr_total_neto = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="programacionesPagosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -61,7 +76,12 @@ class RhuProgramacionPago
     /**
      * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="programacionPagoRel")
      */
-    protected $pagosProgramacionPagoRel;     
+    protected $pagosProgramacionPagoRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="programacionPagoRel")
+     */
+    protected $pagosAdicionalesProgramacionPagoRel;    
 
     /**
      * Constructor
@@ -305,5 +325,111 @@ class RhuProgramacionPago
     public function getVerificarIncapacidades()
     {
         return $this->verificarIncapacidades;
+    }
+
+    /**
+     * Add pagosAdicionalesProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesProgramacionPagoRel
+     *
+     * @return RhuProgramacionPago
+     */
+    public function addPagosAdicionalesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesProgramacionPagoRel)
+    {
+        $this->pagosAdicionalesProgramacionPagoRel[] = $pagosAdicionalesProgramacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosAdicionalesProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesProgramacionPagoRel
+     */
+    public function removePagosAdicionalesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesProgramacionPagoRel)
+    {
+        $this->pagosAdicionalesProgramacionPagoRel->removeElement($pagosAdicionalesProgramacionPagoRel);
+    }
+
+    /**
+     * Get pagosAdicionalesProgramacionPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosAdicionalesProgramacionPagoRel()
+    {
+        return $this->pagosAdicionalesProgramacionPagoRel;
+    }
+
+    /**
+     * Set estadoPagado
+     *
+     * @param boolean $estadoPagado
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setEstadoPagado($estadoPagado)
+    {
+        $this->estadoPagado = $estadoPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagado()
+    {
+        return $this->estadoPagado;
+    }
+
+    /**
+     * Set archivoExportado
+     *
+     * @param boolean $archivoExportado
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setArchivoExportado($archivoExportado)
+    {
+        $this->archivoExportado = $archivoExportado;
+
+        return $this;
+    }
+
+    /**
+     * Get archivoExportado
+     *
+     * @return boolean
+     */
+    public function getArchivoExportado()
+    {
+        return $this->archivoExportado;
+    }
+
+    /**
+     * Set vrTotalNeto
+     *
+     * @param float $vrTotalNeto
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setVrTotalNeto($vrTotalNeto)
+    {
+        $this->vr_total_neto = $vrTotalNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalNeto
+     *
+     * @return float
+     */
+    public function getVrTotalNeto()
+    {
+        return $this->vr_total_neto;
     }
 }

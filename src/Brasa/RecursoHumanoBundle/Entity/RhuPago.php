@@ -58,6 +58,17 @@ class RhuPago
     private $vr_total_neto = 0;    
     
     /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoFk;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="pagosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="pagosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -387,5 +398,53 @@ class RhuPago
     public function getVrTotalNeto()
     {
         return $this->vr_total_neto;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return RhuPago
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuPago
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
     }
 }

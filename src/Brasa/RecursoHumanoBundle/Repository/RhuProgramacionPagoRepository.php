@@ -15,11 +15,17 @@ class RhuProgramacionPagoRepository extends EntityRepository {
      */
     public function Liquidar($codigoProgramacionPago) {        
         $em = $this->getEntityManager();
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                 
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago)); 
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));         
+        $douNeto = 0;
         foreach ($arPagos as $arPago) {
-            $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->Liquidar($arPago->getCodigoPagoPk()); 
+            $douNeto = $douNeto + $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->Liquidar($arPago->getCodigoPagoPk()); 
         }
+        $arProgramacionPago->setVrTotalNeto($douNeto);
+        $em->persist($arProgramacionPago);
+        $em->flush();
         return true;
     } 
 }

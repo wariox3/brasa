@@ -17,6 +17,7 @@ class RhuPagoRepository extends EntityRepository {
         $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigoPago)); 
         $douDeducciones = 0;
         $douDevengado = 0;
+        $douNeto = 0;
         foreach ($arPagoDetalles as $arPagoDetalle) {
             if($arPagoDetalle->getOperacion() == 1) {
                 $douDevengado = $douDevengado + $arPagoDetalle->getVrPago();
@@ -29,9 +30,10 @@ class RhuPagoRepository extends EntityRepository {
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
         $arPago->setVrDevengado($douDevengado);
         $arPago->setVrDeducciones($douDeducciones);
-        $arPago->setVrTotalNeto($douDevengado - $douDeducciones);
+        $douNeto = $douDevengado - $douDeducciones;
+        $arPago->setVrTotalNeto($douNeto);
         $em->persist($arPago);
         $em->flush();
-        return true;
+        return $douNeto;
     }             
 }

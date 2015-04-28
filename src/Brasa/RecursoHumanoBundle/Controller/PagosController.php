@@ -10,33 +10,13 @@ class PagosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
         $form = $this->createFormBuilder()
-            ->add('Generar', 'submit')
+            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
         $form->handleRequest($request);        
         
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findAll();                
-       
-        if ($request->getMethod() == 'POST') {
-            $arrControles = $request->request->All();
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            $objChkFecha = NULL;
-            if (isset($arrControles['ChkFecha']))
-                $objChkFecha = $arrControles['ChkFecha'];
-            switch ($request->request->get('OpSubmit')) {
-                case "OpEliminar";
-                    foreach ($arrSeleccionados AS $codigoGuia) {
-                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
-                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
-                        if($arGuia->getEstadoImpreso() == 0 && $arGuia->getEstadoDespachada() == 0 && $arGuia->getNumeroGuia() == 0) {
-                            $em->remove($arGuia);
-                            $em->flush();                            
-                        }
-                    }
-                    break;
-
-            }
-        } 
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findAll();                       
 
         return $this->render('BrasaRecursoHumanoBundle:Pagos:lista.html.twig', array(
             'arPagos' => $arPagos,
@@ -51,6 +31,19 @@ class PagosController extends Controller
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigoPago));
+        $form = $this->createFormBuilder()
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnImprimir')->isClicked()) {
+                echo "Imprimir";
+                $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPago();
+                $objFormatoPago->Generar($this, $codigoPago);
+                //$objFormatoManifiesto = new \Brasa\TransporteBundle\Formatos\FormatoManifiesto();
+                //$objFormatoManifiesto->Generar($this, $codigoDespacho);
+            }
+        }
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -108,7 +101,8 @@ class PagosController extends Controller
         
         return $this->render('BrasaRecursoHumanoBundle:Pagos:detalle.html.twig', array(
                     'arPago' => $arPago,
-                    'arPagoDetalles' => $arPagoDetalles
+                    'arPagoDetalles' => $arPagoDetalles,
+                    'form' => $form->createView()
                     ));
     }        
 }

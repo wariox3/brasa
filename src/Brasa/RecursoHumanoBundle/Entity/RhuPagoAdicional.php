@@ -25,9 +25,7 @@ class RhuPagoAdicional
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
-    private $codigoEmpleadoFk;    
-    
-
+    private $codigoEmpleadoFk;       
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -42,7 +40,22 @@ class RhuPagoAdicional
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
-    private $codigoCentroCostoFk;         
+    private $codigoCentroCostoFk; 
+    
+    /**
+     * @ORM\Column(name="codigo_programacion_pago_fk", type="integer", nullable=true)
+     */    
+    private $codigoProgramacionPagoFk;    
+    
+    /**     
+     * @ORM\Column(name="permanente", type="boolean")
+     */    
+    private $permanente = 0;     
+    
+    /**     
+     * @ORM\Column(name="pagoAplicado", type="boolean")
+     */    
+    private $pagoAplicado = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="pagosAdicionalesCentroCostoRel")
@@ -61,6 +74,12 @@ class RhuPagoAdicional
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="pagosAdicionalesProgramacionPagoRel")
+     * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
+     */
+    protected $programacionPagoRel;    
     
 
     /**
@@ -263,5 +282,101 @@ class RhuPagoAdicional
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set codigoProgramacionPagoFk
+     *
+     * @param integer $codigoProgramacionPagoFk
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setCodigoProgramacionPagoFk($codigoProgramacionPagoFk)
+    {
+        $this->codigoProgramacionPagoFk = $codigoProgramacionPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProgramacionPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProgramacionPagoFk()
+    {
+        return $this->codigoProgramacionPagoFk;
+    }
+
+    /**
+     * Set permanente
+     *
+     * @param boolean $permanente
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setPermanente($permanente)
+    {
+        $this->permanente = $permanente;
+
+        return $this;
+    }
+
+    /**
+     * Get permanente
+     *
+     * @return boolean
+     */
+    public function getPermanente()
+    {
+        return $this->permanente;
+    }
+
+    /**
+     * Set pagoAplicado
+     *
+     * @param boolean $pagoAplicado
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setPagoAplicado($pagoAplicado)
+    {
+        $this->pagoAplicado = $pagoAplicado;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoAplicado
+     *
+     * @return boolean
+     */
+    public function getPagoAplicado()
+    {
+        return $this->pagoAplicado;
+    }
+
+    /**
+     * Set programacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
+    {
+        $this->programacionPagoRel = $programacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get programacionPagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
+     */
+    public function getProgramacionPagoRel()
+    {
+        return $this->programacionPagoRel;
     }
 }

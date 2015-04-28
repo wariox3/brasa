@@ -53,6 +53,11 @@ class RhuContrato
     private $estadoActivo = 0;     
     
     /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -258,5 +263,29 @@ class RhuContrato
     public function getEstadoActivo()
     {
         return $this->estadoActivo;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuContrato
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 }

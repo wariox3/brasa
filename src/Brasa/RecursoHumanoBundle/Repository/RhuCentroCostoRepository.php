@@ -10,5 +10,70 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuCentroCostoRepository extends EntityRepository {
+    
+    public function Liquidar($codigoPago) {        
 
+        return true;
+    }  
+    
+    public function generarPeriodoPago ($codigoCentroCosto) {
+        $em = $this->getEntityManager();                                                                       
+        $arCentroCostoProceso = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+        $arCentroCostoProceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
+        if($arCentroCostoProceso->getPagoAbierto() == 0 && $arCentroCostoProceso->getEstadoActivo() == 1) {
+            $intDias = $arCentroCostoProceso->getPeriodoPagoRel()->getDias();
+            $dateDesde = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y-m-d');
+            if($arCentroCostoProceso->getPeriodoPagoRel()->getContinuo() == 1) {
+                $dateDesde = date("Y/m/d", strtotime("$dateDesde +1 day"));
+                $dateHasta = date("Y/m/d", strtotime("$dateDesde +$intDias day"));
+            } else {
+                //Para procesar el mes de febrero
+                $intDiasInhabilesFebrero = 0;
+                //Si el mes es febrero o el mes es enero 30 de periodos mensuales
+                if($arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('m') == '02' || ($arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('m/d') == '01/30' && $intDias == 30)) {
+                    $year = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y');
+                    //Verificar si el año es bisiesto
+                    if(date('L',mktime(1,1,1,1,1,$year)) == 1) {
+                        $intDiasInhabilesFebrero = 1;
+                    } else {
+                        $intDiasInhabilesFebrero = 2;
+                    }
+                    $intDias = $intDias - $intDiasInhabilesFebrero;
+                    $intDiasMes = $intDias+$intDiasInhabilesFebrero;
+
+                    $strMesDesde = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y/m');
+                    $strMesHasta = date("Y/m", strtotime("$dateDesde +$intDiasMes day"));
+                    if($strMesDesde == $strMesHasta) {
+                        $intDias = $intDias + $intDiasInhabilesFebrero;
+                    }
+                    if(date("m", strtotime("$dateDesde +$intDias day")) == '03') {
+                        $intDias = $intDiasMes;
+                    }
+                }
+                $strMesDesde = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y/m');
+                $strMesHasta = date("Y/m", strtotime("$dateDesde +$intDias day"));
+                if($strMesDesde != $strMesHasta) {
+                    $dateDesde = $strMesHasta . "/01";
+                    $intDias = $intDias - 1;
+                    $dateHasta = date("Y/m/d", strtotime("$dateDesde +$intDias day"));
+                } else {
+                    $intDias = $intDias - 1;
+                    $dateDesde = date("Y/m/d", strtotime("$dateDesde +1 day"));
+                    $dateHasta = date("Y/m/d", strtotime("$dateDesde +$intDias day"));
+                }
+            }
+            $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+            $arProgramacionPago->setFechaDesde(date_create($dateDesde));
+            $arProgramacionPago->setFechaHasta(date_create($dateHasta));
+            $arProgramacionPago->setDias($arCentroCostoProceso->getPeriodoPagoRel()->getDias());
+            $arProgramacionPago->setCentroCostoRel($arCentroCostoProceso);
+            $em->persist($arProgramacionPago);
+            $arCentroCostoProceso->setPagoAbierto(1);
+            $arCentroCostoProceso->setFechaUltimoPagoProgramado(date_create($dateHasta));
+            $em->persist($arCentroCostoProceso);
+            $em->flush();
+        }
+        return true;
+    }    
+    
 }

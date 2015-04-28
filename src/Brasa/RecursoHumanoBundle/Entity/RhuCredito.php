@@ -18,6 +18,11 @@ class RhuCredito
     private $codigoCreditoPk;
     
     /**
+     * @ORM\Column(name="codigo_credito_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCreditoTipoFk;
+    
+    /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
     private $codigoEmpleadoFk;        
@@ -48,10 +53,21 @@ class RhuCredito
     private $numeroCuotaActual = 0;        
     
     /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="creditosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel; 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCreditoTipo", inversedBy="creditosCreditoTipoRel")
+     * @ORM\JoinColumn(name="codigo_credito_tipo_fk", referencedColumnName="codigo_credito_tipo_pk")
+     */
+    protected $creditoTipoRel;    
 
 
 
@@ -63,6 +79,30 @@ class RhuCredito
     public function getCodigoCreditoPk()
     {
         return $this->codigoCreditoPk;
+    }
+
+    /**
+     * Set codigoCreditoTipoFk
+     *
+     * @param integer $codigoCreditoTipoFk
+     *
+     * @return RhuCredito
+     */
+    public function setCodigoCreditoTipoFk($codigoCreditoTipoFk)
+    {
+        $this->codigoCreditoTipoFk = $codigoCreditoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCreditoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCreditoTipoFk()
+    {
+        return $this->codigoCreditoTipoFk;
     }
 
     /**
@@ -87,30 +127,6 @@ class RhuCredito
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuCredito
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
     }
 
     /**
@@ -164,11 +180,11 @@ class RhuCredito
     /**
      * Set vrCuota
      *
-     * @param \double $vrCuota
+     * @param float $vrCuota
      *
      * @return RhuCredito
      */
-    public function setVrCuota(\double $vrCuota)
+    public function setVrCuota($vrCuota)
     {
         $this->vrCuota = $vrCuota;
 
@@ -178,59 +194,11 @@ class RhuCredito
     /**
      * Get vrCuota
      *
-     * @return \double
+     * @return float
      */
     public function getVrCuota()
     {
         return $this->vrCuota;
-    }
-
-    /**
-     * Set numeroCuota
-     *
-     * @param \double $numeroCuota
-     *
-     * @return RhuCredito
-     */
-    public function setNumeroCuota(\double $numeroCuota)
-    {
-        $this->numeroCuota = $numeroCuota;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroCuota
-     *
-     * @return \double
-     */
-    public function getNumeroCuota()
-    {
-        return $this->numeroCuota;
-    }
-
-    /**
-     * Set numeroCuotaActual
-     *
-     * @param \double $numeroCuotaActual
-     *
-     * @return RhuCredito
-     */
-    public function setNumeroCuotaActual(\double $numeroCuotaActual)
-    {
-        $this->numeroCuotaActual = $numeroCuotaActual;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroCuotaActual
-     *
-     * @return \double
-     */
-    public function getNumeroCuotaActual()
-    {
-        return $this->numeroCuotaActual;
     }
 
     /**
@@ -255,5 +223,101 @@ class RhuCredito
     public function getNumeroCuotas()
     {
         return $this->numeroCuotas;
+    }
+
+    /**
+     * Set numeroCuotaActual
+     *
+     * @param integer $numeroCuotaActual
+     *
+     * @return RhuCredito
+     */
+    public function setNumeroCuotaActual($numeroCuotaActual)
+    {
+        $this->numeroCuotaActual = $numeroCuotaActual;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCuotaActual
+     *
+     * @return integer
+     */
+    public function getNumeroCuotaActual()
+    {
+        return $this->numeroCuotaActual;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuCredito
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuCredito
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set creditoTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo $creditoTipoRel
+     *
+     * @return RhuCredito
+     */
+    public function setCreditoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo $creditoTipoRel = null)
+    {
+        $this->creditoTipoRel = $creditoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get creditoTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo
+     */
+    public function getCreditoTipoRel()
+    {
+        return $this->creditoTipoRel;
     }
 }
