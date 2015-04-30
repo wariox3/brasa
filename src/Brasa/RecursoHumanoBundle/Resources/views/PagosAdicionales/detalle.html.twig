@@ -85,6 +85,7 @@
                 <div class="btn-toolbar" style="float:right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_concepto', {'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk}) }}', 'AgregarGuia', 600, 900)" >Agregar</a>
+                        {{ form_widget(form.BtnConceptoPermanente, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                                                
                         {{ form_widget(form.BtnRetirarConcepto, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                        
                     </div>
                 </div>

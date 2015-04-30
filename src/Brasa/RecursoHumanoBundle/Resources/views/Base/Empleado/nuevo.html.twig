@@ -5,44 +5,132 @@
     <h3>Nuevo empleado</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
-        <div class="panel-body">   
+        <div class="panel-body">
             <div class="form-group form-group-sm">
                 <label for="form_tipoIdentificacionRel" class="col-sm-2 control-label">Tipo:</label>
                 <div class="col-sm-10">
                         {{ form_widget(form.tipoIdentificacionRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>             
+            </div>
             <div class="form-group form-group-sm">
                 <label for="form_numeroIdentificacion" class="col-sm-2 control-label">Identificacion:</label>
                 <div class="col-sm-10">
                         {{ form_widget(form.numeroIdentificacion, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                
+            </div>
             <div class="form-group form-group-sm">
-                <label for="form_nombreCorto" class="col-sm-2 control-label">Nombre:</label>
+                <label for="form_nombreCorto" class="col-sm-2 control-label">Nombre completo:</label>
                 <div class="col-sm-10">
                         {{ form_widget(form.nombreCorto, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                                 
+            </div>
             <div class="form-group form-group-sm">
-                <label for="form_centroCostoRel" class="col-sm-2 control-label">Tipo:</label>
+                <label for="form_nombre1" class="col-sm-2 control-label">Nombre 1:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.nombre1, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_nombre2" class="col-sm-2 control-label">Nombre 2:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.nombre2, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_apellido1" class="col-sm-2 control-label">Apellido 1:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.apellido1, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_apellido2" class="col-sm-2 control-label">Apellido 2:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.apellido2, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_telefono" class="col-sm-2 control-label">Telefono:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.telefono, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_celular" class="col-sm-2 control-label">Celular:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.celular, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_direccion" class="col-sm-2 control-label">Direccion:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.direccion, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion liquidacion</div>
+        <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
                 <div class="col-sm-10">
                         {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                             
+            </div>                
             <div class="form-group form-group-sm">
                 <label for="form_vrSalario" class="col-sm-2 control-label">Salario:</label>
                 <div class="col-sm-10">
                         {{ form_widget(form.vrSalario, { 'attr': {'class': 'form-control'} }) }}
                 </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_cuenta" class="col-sm-2 control-label">Cuenta:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.cuenta, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label for="form_bancoRel" class="col-sm-2 control-label">Banco:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.bancoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div> 
+            <div class="form-group form-group-sm">
+                <label for="form_auxilioTransporte" class="col-sm-2 control-label">Auxilio transporte:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.auxilioTransporte, { 'attr': {'class': 'form-control'} }) }}
+                </div>
             </div>                
         </div>
-    </div>                   
-    <div class="modal-footer">      
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_lista') }}">Cancelar</a>        
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion seguridad social</div>
+        <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label for="form_entidadSaludRel" class="col-sm-2 control-label">Salud:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.entidadSaludRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                               
+            <div class="form-group form-group-sm">
+                <label for="form_entidadPensionRel" class="col-sm-2 control-label">Pesion:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.entidadPensionRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_clasificacionRiesgoRel" class="col-sm-2 control-label">Pesion:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.clasificacionRiesgoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+        </div>
+    </div>                
+    <div class="modal-footer">
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_lista') }}">Cancelar</a>
             {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
             {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
-    </div>    
+    </div>
     {{ form_end(form) }}
 </div>
 {% endblock %}

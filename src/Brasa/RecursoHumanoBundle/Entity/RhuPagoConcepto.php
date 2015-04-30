@@ -58,6 +58,11 @@ class RhuPagoConcepto
     private $conceptoAdicion = 0;     
     
     /**
+     * @ORM\Column(name="concepto_auxilio_transporte", type="boolean")
+     */    
+    private $conceptoAuxilioTransporte = 0;     
+    
+    /**
      * @ORM\Column(name="concepto_incapacidad", type="boolean")
      */    
     private $conceptoIncapacidad = 0;     
@@ -373,5 +378,29 @@ class RhuPagoConcepto
     public function getConceptoIncapacidad()
     {
         return $this->conceptoIncapacidad;
+    }
+
+    /**
+     * Set conceptoAuxilioTransporte
+     *
+     * @param boolean $conceptoAuxilioTransporte
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoAuxilioTransporte($conceptoAuxilioTransporte)
+    {
+        $this->conceptoAuxilioTransporte = $conceptoAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoAuxilioTransporte
+     *
+     * @return boolean
+     */
+    public function getConceptoAuxilioTransporte()
+    {
+        return $this->conceptoAuxilioTransporte;
     }
 }

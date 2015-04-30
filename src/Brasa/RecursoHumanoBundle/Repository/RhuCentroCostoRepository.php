@@ -76,4 +76,14 @@ class RhuCentroCostoRepository extends EntityRepository {
         return true;
     }    
     
+    public function Lista($strNombre) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT cc FROM BrasaRecursoHumanoBundle:RhuCentroCosto cc WHERE cc.codigoCentroCostoPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND cc.nombre LIKE '%" . $strNombre . "%'";
+        }               
+        $query = $em->createQuery($dql);        
+        return $query;
+    }                
+    
 }

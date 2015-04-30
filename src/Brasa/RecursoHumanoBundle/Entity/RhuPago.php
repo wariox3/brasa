@@ -40,27 +40,102 @@ class RhuPago
     /**
      * @ORM\Column(name="vr_salario", type="float")
      */
-    private $vr_salario = 0;     
+    private $vrSalario = 0;     
     
     /**
      * @ORM\Column(name="vr_devengado", type="float")
      */
-    private $vr_devengado = 0;    
+    private $vrDevengado = 0;    
 
     /**
      * @ORM\Column(name="vr_deducciones", type="float")
      */
-    private $vr_deducciones = 0;    
+    private $vrDeducciones = 0;    
+
+    /**
+     * @ORM\Column(name="vr_adicional_tiempo", type="float")
+     */
+    private $vrAdicionalTiempo = 0;     
+
+    /**
+     * @ORM\Column(name="vr_adicional_valor", type="float")
+     */
+    private $vrAdicionalValor = 0;    
     
     /**
-     * @ORM\Column(name="vr_total_neto", type="float")
+     * @ORM\Column(name="vr_auxilio_transporte", type="float")
      */
-    private $vr_total_neto = 0;    
+    private $vrAuxilioTransporte = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_arp", type="float")
+     */
+    private $vrArp = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_eps", type="float")
+     */
+    private $vrEps = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_pension", type="float")
+     */
+    private $vrPension = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_caja", type="float")
+     */
+    private $vrCaja = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_sena", type="float")
+     */
+    private $vrSena = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_icbf", type="float")
+     */
+    private $vrIcbf = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_cesantias", type="float")
+     */
+    private $vrCesantias = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_vacaciones", type="float")
+     */
+    private $vrVacaciones = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_administracion", type="float")
+     */
+    private $vrAdministracion = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_neto", type="float")
+     */
+    private $vrNeto = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_bruto", type="float")
+     */
+    private $vrBruto = 0;        
+    
+    /**
+     * @ORM\Column(name="vr_total_ejercicio", type="float")
+     */
+    private $vrTotalEjercicio = 0;    
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
     private $codigoCentroCostoFk;
+    
+    /**
+     * @ORM\Column(name="estado_cobrado", type="boolean")
+     */    
+    private $estadoCobrado = 0;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="pagosCentroCostoRel")
@@ -85,6 +160,14 @@ class RhuPago
      */
     protected $pagosDetallesPagoRel;    
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosDetallesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoPagoPk
      *
@@ -117,6 +200,30 @@ class RhuPago
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoProgramacionPagoFk
+     *
+     * @param integer $codigoProgramacionPagoFk
+     *
+     * @return RhuPago
+     */
+    public function setCodigoProgramacionPagoFk($codigoProgramacionPagoFk)
+    {
+        $this->codigoProgramacionPagoFk = $codigoProgramacionPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProgramacionPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProgramacionPagoFk()
+    {
+        return $this->codigoProgramacionPagoFk;
     }
 
     /**
@@ -176,7 +283,7 @@ class RhuPago
      */
     public function setVrSalario($vrSalario)
     {
-        $this->vr_salario = $vrSalario;
+        $this->vrSalario = $vrSalario;
 
         return $this;
     }
@@ -188,7 +295,7 @@ class RhuPago
      */
     public function getVrSalario()
     {
-        return $this->vr_salario;
+        return $this->vrSalario;
     }
 
     /**
@@ -200,7 +307,7 @@ class RhuPago
      */
     public function setVrDevengado($vrDevengado)
     {
-        $this->vr_devengado = $vrDevengado;
+        $this->vrDevengado = $vrDevengado;
 
         return $this;
     }
@@ -212,7 +319,7 @@ class RhuPago
      */
     public function getVrDevengado()
     {
-        return $this->vr_devengado;
+        return $this->vrDevengado;
     }
 
     /**
@@ -224,7 +331,7 @@ class RhuPago
      */
     public function setVrDeducciones($vrDeducciones)
     {
-        $this->vr_deducciones = $vrDeducciones;
+        $this->vrDeducciones = $vrDeducciones;
 
         return $this;
     }
@@ -236,31 +343,415 @@ class RhuPago
      */
     public function getVrDeducciones()
     {
-        return $this->vr_deducciones;
+        return $this->vrDeducciones;
     }
 
     /**
-     * Set vrTotalPagado
+     * Set vrAdicionalTiempo
      *
-     * @param float $vrTotalPagado
+     * @param float $vrAdicionalTiempo
      *
      * @return RhuPago
      */
-    public function setVrTotalPagado($vrTotalPagado)
+    public function setVrAdicionalTiempo($vrAdicionalTiempo)
     {
-        $this->vr_total_pagado = $vrTotalPagado;
+        $this->vrAdicionalTiempo = $vrAdicionalTiempo;
 
         return $this;
     }
 
     /**
-     * Get vrTotalPagado
+     * Get vrAdicionalTiempo
      *
      * @return float
      */
-    public function getVrTotalPagado()
+    public function getVrAdicionalTiempo()
     {
-        return $this->vr_total_pagado;
+        return $this->vrAdicionalTiempo;
+    }
+
+    /**
+     * Set vrAdicionalValor
+     *
+     * @param float $vrAdicionalValor
+     *
+     * @return RhuPago
+     */
+    public function setVrAdicionalValor($vrAdicionalValor)
+    {
+        $this->vrAdicionalValor = $vrAdicionalValor;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAdicionalValor
+     *
+     * @return float
+     */
+    public function getVrAdicionalValor()
+    {
+        return $this->vrAdicionalValor;
+    }
+
+    /**
+     * Set vrAuxilioTransporte
+     *
+     * @param float $vrAuxilioTransporte
+     *
+     * @return RhuPago
+     */
+    public function setVrAuxilioTransporte($vrAuxilioTransporte)
+    {
+        $this->vrAuxilioTransporte = $vrAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAuxilioTransporte
+     *
+     * @return float
+     */
+    public function getVrAuxilioTransporte()
+    {
+        return $this->vrAuxilioTransporte;
+    }
+
+    /**
+     * Set vrArp
+     *
+     * @param float $vrArp
+     *
+     * @return RhuPago
+     */
+    public function setVrArp($vrArp)
+    {
+        $this->vrArp = $vrArp;
+
+        return $this;
+    }
+
+    /**
+     * Get vrArp
+     *
+     * @return float
+     */
+    public function getVrArp()
+    {
+        return $this->vrArp;
+    }
+
+    /**
+     * Set vrEps
+     *
+     * @param float $vrEps
+     *
+     * @return RhuPago
+     */
+    public function setVrEps($vrEps)
+    {
+        $this->vrEps = $vrEps;
+
+        return $this;
+    }
+
+    /**
+     * Get vrEps
+     *
+     * @return float
+     */
+    public function getVrEps()
+    {
+        return $this->vrEps;
+    }
+
+    /**
+     * Set vrPension
+     *
+     * @param float $vrPension
+     *
+     * @return RhuPago
+     */
+    public function setVrPension($vrPension)
+    {
+        $this->vrPension = $vrPension;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPension
+     *
+     * @return float
+     */
+    public function getVrPension()
+    {
+        return $this->vrPension;
+    }
+
+    /**
+     * Set vrCaja
+     *
+     * @param float $vrCaja
+     *
+     * @return RhuPago
+     */
+    public function setVrCaja($vrCaja)
+    {
+        $this->vrCaja = $vrCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCaja
+     *
+     * @return float
+     */
+    public function getVrCaja()
+    {
+        return $this->vrCaja;
+    }
+
+    /**
+     * Set vrSena
+     *
+     * @param float $vrSena
+     *
+     * @return RhuPago
+     */
+    public function setVrSena($vrSena)
+    {
+        $this->vrSena = $vrSena;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSena
+     *
+     * @return float
+     */
+    public function getVrSena()
+    {
+        return $this->vrSena;
+    }
+
+    /**
+     * Set vrIcbf
+     *
+     * @param float $vrIcbf
+     *
+     * @return RhuPago
+     */
+    public function setVrIcbf($vrIcbf)
+    {
+        $this->vrIcbf = $vrIcbf;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIcbf
+     *
+     * @return float
+     */
+    public function getVrIcbf()
+    {
+        return $this->vrIcbf;
+    }
+
+    /**
+     * Set vrCesantias
+     *
+     * @param float $vrCesantias
+     *
+     * @return RhuPago
+     */
+    public function setVrCesantias($vrCesantias)
+    {
+        $this->vrCesantias = $vrCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCesantias
+     *
+     * @return float
+     */
+    public function getVrCesantias()
+    {
+        return $this->vrCesantias;
+    }
+
+    /**
+     * Set vrVacaciones
+     *
+     * @param float $vrVacaciones
+     *
+     * @return RhuPago
+     */
+    public function setVrVacaciones($vrVacaciones)
+    {
+        $this->vrVacaciones = $vrVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrVacaciones
+     *
+     * @return float
+     */
+    public function getVrVacaciones()
+    {
+        return $this->vrVacaciones;
+    }
+
+    /**
+     * Set vrAdministracion
+     *
+     * @param float $vrAdministracion
+     *
+     * @return RhuPago
+     */
+    public function setVrAdministracion($vrAdministracion)
+    {
+        $this->vrAdministracion = $vrAdministracion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAdministracion
+     *
+     * @return float
+     */
+    public function getVrAdministracion()
+    {
+        return $this->vrAdministracion;
+    }
+
+    /**
+     * Set vrNeto
+     *
+     * @param float $vrNeto
+     *
+     * @return RhuPago
+     */
+    public function setVrNeto($vrNeto)
+    {
+        $this->vrNeto = $vrNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrNeto
+     *
+     * @return float
+     */
+    public function getVrNeto()
+    {
+        return $this->vrNeto;
+    }
+
+    /**
+     * Set vrBruto
+     *
+     * @param float $vrBruto
+     *
+     * @return RhuPago
+     */
+    public function setVrBruto($vrBruto)
+    {
+        $this->vrBruto = $vrBruto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBruto
+     *
+     * @return float
+     */
+    public function getVrBruto()
+    {
+        return $this->vrBruto;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return RhuPago
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set estadoCobrado
+     *
+     * @param boolean $estadoCobrado
+     *
+     * @return RhuPago
+     */
+    public function setEstadoCobrado($estadoCobrado)
+    {
+        $this->estadoCobrado = $estadoCobrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCobrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCobrado()
+    {
+        return $this->estadoCobrado;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuPago
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
     }
 
     /**
@@ -286,12 +777,29 @@ class RhuPago
     {
         return $this->empleadoRel;
     }
+
     /**
-     * Constructor
+     * Set programacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
+     *
+     * @return RhuPago
      */
-    public function __construct()
+    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
     {
-        $this->pagosDetallesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->programacionPagoRel = $programacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get programacionPagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
+     */
+    public function getProgramacionPagoRel()
+    {
+        return $this->programacionPagoRel;
     }
 
     /**
@@ -329,122 +837,26 @@ class RhuPago
     }
 
     /**
-     * Set codigoProgramacionPagoFk
+     * Set vrTotalEjercicio
      *
-     * @param integer $codigoProgramacionPagoFk
+     * @param float $vrTotalEjercicio
      *
      * @return RhuPago
      */
-    public function setCodigoProgramacionPagoFk($codigoProgramacionPagoFk)
+    public function setVrTotalEjercicio($vrTotalEjercicio)
     {
-        $this->codigoProgramacionPagoFk = $codigoProgramacionPagoFk;
+        $this->vrTotalEjercicio = $vrTotalEjercicio;
 
         return $this;
     }
 
     /**
-     * Get codigoProgramacionPagoFk
-     *
-     * @return integer
-     */
-    public function getCodigoProgramacionPagoFk()
-    {
-        return $this->codigoProgramacionPagoFk;
-    }
-
-    /**
-     * Set programacionPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
-     *
-     * @return RhuPago
-     */
-    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
-    {
-        $this->programacionPagoRel = $programacionPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get programacionPagoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
-     */
-    public function getProgramacionPagoRel()
-    {
-        return $this->programacionPagoRel;
-    }
-
-    /**
-     * Set vrTotalNeto
-     *
-     * @param float $vrTotalNeto
-     *
-     * @return RhuPago
-     */
-    public function setVrTotalNeto($vrTotalNeto)
-    {
-        $this->vr_total_neto = $vrTotalNeto;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalNeto
+     * Get vrTotalEjercicio
      *
      * @return float
      */
-    public function getVrTotalNeto()
+    public function getVrTotalEjercicio()
     {
-        return $this->vr_total_neto;
-    }
-
-    /**
-     * Set codigoCentroCostoFk
-     *
-     * @param integer $codigoCentroCostoFk
-     *
-     * @return RhuPago
-     */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
-    {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoFk()
-    {
-        return $this->codigoCentroCostoFk;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuPago
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
+        return $this->vrTotalEjercicio;
     }
 }

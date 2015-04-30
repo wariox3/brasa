@@ -15,3 +15,7 @@ p { line-height: 1.2;
 pagination { 
     margin: 0 0 0px
 }
+
+.form-group { 
+    margin-bottom: 5px
+}

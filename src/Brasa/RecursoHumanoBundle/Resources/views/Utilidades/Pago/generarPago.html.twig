@@ -21,7 +21,7 @@ $(function () {
                 <th>PERIDOO</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
-                <th>DIAS</th> 
+                <th>DIAS</th>
                 <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Pagos adicionales verificados">V. A.</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Incapacidades verificados">V. A.</p></th>
                 <th style="text-align: center">P. ADIC</th>
@@ -30,38 +30,38 @@ $(function () {
             </tr>
             {% for arProgramacionPago in arProgramacionPago %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">{{ arProgramacionPago.codigoProgramacionPagoPk }} </td>                
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">{{ arProgramacionPago.codigoProgramacionPagoPk }} </td>
                 <td>{{ arProgramacionPago.codigoCentroCostoFk  }}</td>
-                <td>{{ arProgramacionPago.centroCostoRel.nombre  }}</td>                
-                <td>{{ arProgramacionPago.centroCostoRel.periodoPagoRel.nombre  }}</td>                
+                <td>{{ arProgramacionPago.centroCostoRel.nombre  }}</td>
+                <td>{{ arProgramacionPago.centroCostoRel.periodoPagoRel.nombre  }}</td>
                 <td>{{ arProgramacionPago.fechaDesde |date("Y/m/d")  }}</td>
-                <td {% if date(arProgramacionPago.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPago.fechaHasta |date("Y/m/d")  }}</td>                
-                <td>{{ arProgramacionPago.dias  }}</td>    
-                <td>{% if arProgramacionPago.verificarPagosAdicionales == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{% if arProgramacionPago.verificarIncapacidades == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Ver</a></td>                                
-                <td style="text-align: center"><a href="{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
+                <td {% if date(arProgramacionPago.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPago.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{{ arProgramacionPago.dias  }}</td>
+                <td {% if arProgramacionPago.verificarPagosAdicionales == 1 %}class="success"{% endif %}>{% if arProgramacionPago.verificarPagosAdicionales == 1 %} SI {% else %} NO {% endif %}</td>
+                <td {% if arProgramacionPago.verificarIncapacidades == 1 %}class="success"{% endif %}>{% if arProgramacionPago.verificarIncapacidades == 1 %} SI {% else %} NO {% endif %}</td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Ver</a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}" /></td>
             </tr>
             {% endfor %}
         </table>
-            
-        <div class="btn-toolbar" style="float: right">            
+
+        <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                {{ form_widget(form.BtnVerificarPagosAdicionales, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
-                {{ form_widget(form.BtnVerificarIncapacidades, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                
-                {{ form_widget(form.BtnNoGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
-                {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
+                {{ form_widget(form.BtnVerificarPagosAdicionales, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnVerificarIncapacidades, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnNoGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}
-    {{ form_end(form) }}        
+    {{ form_end(form) }}
     <br />
     <br />
     <div class="page-header">
         <h3>Por pagar</h3>
-    </div>    
+    </div>
     {{ form_start(frmPagar, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(frmPagar) }}
 
@@ -79,35 +79,37 @@ $(function () {
             </tr>
             {% for arProgramacionPagoPendientes in arProgramacionPagoPendientes %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPagoPendientes.codigoProgramacionPagoPk }}">{{ arProgramacionPagoPendientes.codigoProgramacionPagoPk }} </td>                
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPagoPendientes.codigoProgramacionPagoPk }}">{{ arProgramacionPagoPendientes.codigoProgramacionPagoPk }} </td>
                 <td>{{ arProgramacionPagoPendientes.codigoCentroCostoFk  }}</td>
-                <td>{{ arProgramacionPagoPendientes.centroCostoRel.nombre  }}</td>                
-                <td>{{ arProgramacionPagoPendientes.centroCostoRel.periodoPagoRel.nombre  }}</td>                
+                <td>{{ arProgramacionPagoPendientes.centroCostoRel.nombre  }}</td>
+                <td>{{ arProgramacionPagoPendientes.centroCostoRel.periodoPagoRel.nombre  }}</td>
                 <td>{{ arProgramacionPagoPendientes.fechaDesde |date("Y/m/d")  }}</td>
-                <td {% if date(arProgramacionPagoPendientes.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPagoPendientes.fechaHasta |date("Y/m/d")  }}</td>                
-                <td>{{ arProgramacionPagoPendientes.dias  }}</td>    
-                <td style="text-align: right">{{ arProgramacionPagoPendientes.VrTotalNeto | number_format(2, '.', ',') }}</td>                            
+                <td {% if date(arProgramacionPagoPendientes.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPagoPendientes.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{{ arProgramacionPagoPendientes.dias  }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoPendientes.VrTotalNeto | number_format(2, '.', ',') }}</td>
                 <td><input type="checkbox" name="ChkSeleccionarPagar[]" value="{{ arProgramacionPagoPendientes.codigoProgramacionPagoPk }}" /></td>
             </tr>
             {% endfor %}
         </table>
-            
+
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                     Generar archivo <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                  <li>{{ form_widget(frmPagar.BtnGenerarArchivoBancolombia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                </li>              
+                  <li>{{ form_widget(frmPagar.BtnGenerarArchivoBancolombia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                </li>
                 </ul>
-            </div>            
+            </div>
             <div class="btn-group">
-                {{ form_widget(frmPagar.BtnPagar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
+                {{ form_widget(frmPagar.BtnLiquidar, { 'attr': {'class': 'btn btn-defoult btn-sm'} }) }}
+                {{ form_widget(frmPagar.BtnPagar, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
+                {{ form_widget(frmPagar.BtnAnular, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>
         <!-- Fin Botones Menu Items -->
         {{ form_rest(frmPagar) }}
-    {{ form_end(frmPagar) }}    
-    
+    {{ form_end(frmPagar) }}
+
 </div>
 {% endblock %}

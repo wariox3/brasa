@@ -1,0 +1,134 @@
+<?php
+
+namespace Brasa\RecursoHumanoBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Table(name="rhu_clasificacion_riesgo")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuClasificacionRiesgoRepository")
+ */
+class RhuClasificacionRiesgo
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(name="codigo_clasificacion_riesgo_pk", type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $codigoClasificacionRiesgoPk;
+    
+    /**
+     * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
+     */    
+    private $nombre;    
+    
+    /**
+     * @ORM\Column(name="porcentaje", type="float")
+     */
+    private $porcentaje = 0;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="clasificacionRiesgoRel")
+     */
+    protected $empleadosClasificacionRiesgoRel;    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->empleadosClasificacionRiesgoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get codigoClasificacionRiesgoPk
+     *
+     * @return integer
+     */
+    public function getCodigoClasificacionRiesgoPk()
+    {
+        return $this->codigoClasificacionRiesgoPk;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return RhuClasificacionRiesgo
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Add empleadosClasificacionRiesgoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosClasificacionRiesgoRel
+     *
+     * @return RhuClasificacionRiesgo
+     */
+    public function addEmpleadosClasificacionRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosClasificacionRiesgoRel)
+    {
+        $this->empleadosClasificacionRiesgoRel[] = $empleadosClasificacionRiesgoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosClasificacionRiesgoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosClasificacionRiesgoRel
+     */
+    public function removeEmpleadosClasificacionRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosClasificacionRiesgoRel)
+    {
+        $this->empleadosClasificacionRiesgoRel->removeElement($empleadosClasificacionRiesgoRel);
+    }
+
+    /**
+     * Get empleadosClasificacionRiesgoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosClasificacionRiesgoRel()
+    {
+        return $this->empleadosClasificacionRiesgoRel;
+    }
+
+    /**
+     * Set porcentaje
+     *
+     * @param float $porcentaje
+     *
+     * @return RhuClasificacionRiesgo
+     */
+    public function setPorcentaje($porcentaje)
+    {
+        $this->porcentaje = $porcentaje;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentaje
+     *
+     * @return float
+     */
+    public function getPorcentaje()
+    {
+        return $this->porcentaje;
+    }
+}

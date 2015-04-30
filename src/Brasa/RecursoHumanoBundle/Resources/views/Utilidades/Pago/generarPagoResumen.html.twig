@@ -45,6 +45,7 @@
                 <th>EMPLEADO</th>
                 <th>CANT</th>
                 <th>VALOR</th>
+                <th>PERMANENTE</th>
             </tr>
             {% for arPagosAdicionales in arPagosAdicionales %}
             <tr>
@@ -57,6 +58,7 @@
                 <td>{{ arPagosAdicionales.empleadoRel.nombreCorto }}</td>
                 <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(2, '.', ',') }}</td>                            
                 <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                                        
+                <td>{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>                                        
             </tr>
             {% endfor %}
         </table>
@@ -98,7 +100,7 @@
                 <th>SALARIO</th>                
             </tr>
             {% for arEmpleados in arEmpleados %}
-            <tr>
+            <tr {% if arEmpleados.estadoActivo == 0 %}class="danger"{% endif %}>
                 <td>
                     <input type="hidden" name="LblCodigoGuia[]" value="{{ arEmpleados.codigoEmpleadoPk }}">
                     <span class="badge">{{ arEmpleados.codigoEmpleadoPk }}</span>

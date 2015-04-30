@@ -26,6 +26,11 @@ class RhuCentroCosto
      * @ORM\Column(name="codigo_periodo_pago_fk", type="integer", nullable=true)
      */    
     private $codigoPeriodoPagoFk;    
+
+    /**
+     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
+     */    
+    private $codigoTerceroFk;    
     
     /**
      * @ORM\Column(name="fecha_ultimo_pago_programado", type="date", nullable=true)
@@ -59,11 +64,27 @@ class RhuCentroCosto
     private $comentarios;     
     
     /**
+     * @ORM\Column(name="porcentaje_administracion", type="float")
+     */
+    private $porcentajeAdministracion = 0;    
+    
+    /**
+     * @ORM\Column(name="valor_administracion", type="float")
+     */
+    private $valorAdministracion = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
      * @ORM\JoinColumn(name="codigo_periodo_pago_fk", referencedColumnName="codigo_periodo_pago_pk")
      */
     protected $periodoPagoRel;    
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="centrosCostosTerceroRel")
+     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
+     */
+    protected $terceroRel;     
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuProgramacionPago", mappedBy="centroCostoRel")
      */
@@ -90,6 +111,12 @@ class RhuCentroCosto
     protected $pagosCentroCostoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuFactura", mappedBy="centroCostoRel")
+     */
+    protected $facturasCentroCostoRel;    
+    
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -97,6 +124,9 @@ class RhuCentroCosto
         $this->programacionesPagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incapacidadesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -158,6 +188,30 @@ class RhuCentroCosto
     }
 
     /**
+     * Set codigoTerceroFk
+     *
+     * @param integer $codigoTerceroFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoTerceroFk($codigoTerceroFk)
+    {
+        $this->codigoTerceroFk = $codigoTerceroFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTerceroFk
+     *
+     * @return integer
+     */
+    public function getCodigoTerceroFk()
+    {
+        return $this->codigoTerceroFk;
+    }
+
+    /**
      * Set fechaUltimoPagoProgramado
      *
      * @param \DateTime $fechaUltimoPagoProgramado
@@ -206,6 +260,102 @@ class RhuCentroCosto
     }
 
     /**
+     * Set estadoActivo
+     *
+     * @param boolean $estadoActivo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setEstadoActivo($estadoActivo)
+    {
+        $this->estadoActivo = $estadoActivo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoActivo
+     *
+     * @return boolean
+     */
+    public function getEstadoActivo()
+    {
+        return $this->estadoActivo;
+    }
+
+    /**
+     * Set generarPagoAutomatico
+     *
+     * @param boolean $generarPagoAutomatico
+     *
+     * @return RhuCentroCosto
+     */
+    public function setGenerarPagoAutomatico($generarPagoAutomatico)
+    {
+        $this->generarPagoAutomatico = $generarPagoAutomatico;
+
+        return $this;
+    }
+
+    /**
+     * Get generarPagoAutomatico
+     *
+     * @return boolean
+     */
+    public function getGenerarPagoAutomatico()
+    {
+        return $this->generarPagoAutomatico;
+    }
+
+    /**
+     * Set horaPagoAutomatico
+     *
+     * @param \DateTime $horaPagoAutomatico
+     *
+     * @return RhuCentroCosto
+     */
+    public function setHoraPagoAutomatico($horaPagoAutomatico)
+    {
+        $this->horaPagoAutomatico = $horaPagoAutomatico;
+
+        return $this;
+    }
+
+    /**
+     * Get horaPagoAutomatico
+     *
+     * @return \DateTime
+     */
+    public function getHoraPagoAutomatico()
+    {
+        return $this->horaPagoAutomatico;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuCentroCosto
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
      * Set periodoPagoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPeriodoPago $periodoPagoRel
@@ -227,6 +377,30 @@ class RhuCentroCosto
     public function getPeriodoPagoRel()
     {
         return $this->periodoPagoRel;
+    }
+
+    /**
+     * Set terceroRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    {
+        $this->terceroRel = $terceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     */
+    public function getTerceroRel()
+    {
+        return $this->terceroRel;
     }
 
     /**
@@ -366,174 +540,6 @@ class RhuCentroCosto
     }
 
     /**
-     * Set estadoInactivo
-     *
-     * @param boolean $estadoInactivo
-     *
-     * @return RhuCentroCosto
-     */
-    public function setEstadoInactivo($estadoInactivo)
-    {
-        $this->estadoInactivo = $estadoInactivo;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoInactivo
-     *
-     * @return boolean
-     */
-    public function getEstadoInactivo()
-    {
-        return $this->estadoInactivo;
-    }
-
-    /**
-     * Set verificarPagosAdicionales
-     *
-     * @param boolean $verificarPagosAdicionales
-     *
-     * @return RhuCentroCosto
-     */
-    public function setVerificarPagosAdicionales($verificarPagosAdicionales)
-    {
-        $this->verificarPagosAdicionales = $verificarPagosAdicionales;
-
-        return $this;
-    }
-
-    /**
-     * Get verificarPagosAdicionales
-     *
-     * @return boolean
-     */
-    public function getVerificarPagosAdicionales()
-    {
-        return $this->verificarPagosAdicionales;
-    }
-
-    /**
-     * Set verificarIncapacidades
-     *
-     * @param boolean $verificarIncapacidades
-     *
-     * @return RhuCentroCosto
-     */
-    public function setVerificarIncapacidades($verificarIncapacidades)
-    {
-        $this->verificarIncapacidades = $verificarIncapacidades;
-
-        return $this;
-    }
-
-    /**
-     * Get verificarIncapacidades
-     *
-     * @return boolean
-     */
-    public function getVerificarIncapacidades()
-    {
-        return $this->verificarIncapacidades;
-    }
-
-    /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     *
-     * @return RhuCentroCosto
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
-    }
-
-    /**
-     * Set estadoActivo
-     *
-     * @param boolean $estadoActivo
-     *
-     * @return RhuCentroCosto
-     */
-    public function setEstadoActivo($estadoActivo)
-    {
-        $this->estadoActivo = $estadoActivo;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoActivo
-     *
-     * @return boolean
-     */
-    public function getEstadoActivo()
-    {
-        return $this->estadoActivo;
-    }
-
-    /**
-     * Set generarPagoAutomatico
-     *
-     * @param boolean $generarPagoAutomatico
-     *
-     * @return RhuCentroCosto
-     */
-    public function setGenerarPagoAutomatico($generarPagoAutomatico)
-    {
-        $this->generarPagoAutomatico = $generarPagoAutomatico;
-
-        return $this;
-    }
-
-    /**
-     * Get generarPagoAutomatico
-     *
-     * @return boolean
-     */
-    public function getGenerarPagoAutomatico()
-    {
-        return $this->generarPagoAutomatico;
-    }
-
-    /**
-     * Set horaPagoAutomatico
-     *
-     * @param \DateTime $horaPagoAutomatico
-     *
-     * @return RhuCentroCosto
-     */
-    public function setHoraPagoAutomatico($horaPagoAutomatico)
-    {
-        $this->horaPagoAutomatico = $horaPagoAutomatico;
-
-        return $this;
-    }
-
-    /**
-     * Get horaPagoAutomatico
-     *
-     * @return \DateTime
-     */
-    public function getHoraPagoAutomatico()
-    {
-        return $this->horaPagoAutomatico;
-    }
-
-    /**
      * Add pagosCentroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosCentroCostoRel
@@ -565,5 +571,87 @@ class RhuCentroCosto
     public function getPagosCentroCostoRel()
     {
         return $this->pagosCentroCostoRel;
+    }
+
+    /**
+     * Add facturasCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturasCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addFacturasCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturasCentroCostoRel)
+    {
+        $this->facturasCentroCostoRel[] = $facturasCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturasCentroCostoRel
+     */
+    public function removeFacturasCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturasCentroCostoRel)
+    {
+        $this->facturasCentroCostoRel->removeElement($facturasCentroCostoRel);
+    }
+
+    /**
+     * Get facturasCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasCentroCostoRel()
+    {
+        return $this->facturasCentroCostoRel;
+    }
+
+    /**
+     * Set porcentajeAdministracion
+     *
+     * @param float $porcentajeAdministracion
+     *
+     * @return RhuCentroCosto
+     */
+    public function setPorcentajeAdministracion($porcentajeAdministracion)
+    {
+        $this->porcentajeAdministracion = $porcentajeAdministracion;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeAdministracion
+     *
+     * @return float
+     */
+    public function getPorcentajeAdministracion()
+    {
+        return $this->porcentajeAdministracion;
+    }
+
+    /**
+     * Set valorAdministracion
+     *
+     * @param float $valorAdministracion
+     *
+     * @return RhuCentroCosto
+     */
+    public function setValorAdministracion($valorAdministracion)
+    {
+        $this->valorAdministracion = $valorAdministracion;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAdministracion
+     *
+     * @return float
+     */
+    public function getValorAdministracion()
+    {
+        return $this->valorAdministracion;
     }
 }

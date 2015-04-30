@@ -14,7 +14,7 @@ class BaseEmpleadoController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnInactivar', 'submit', array('label'  => 'Activar / Inactivar',))
             ->getForm();
         $form->handleRequest($request);        
         if($form->isValid()) {                         
@@ -41,7 +41,24 @@ class BaseEmpleadoController extends Controller
                    $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
                    $objWriter->save($strArchivo);                
             }
-        }
+            
+            if($form->get('BtnInactivar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) { 
+                    foreach ($arrSeleccionados AS $codigoEmpleado) {
+                        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
+                        if($arEmpleado->getEstadoActivo() == 1) {
+                            $arEmpleado->setEstadoActivo(0);
+                        } else {
+                            $arEmpleado->setEstadoActivo(1);
+                        }
+                        $em->persist($arEmpleado);
+                    }                    
+                    $em->flush();
+                }
+            }                                                    
+        }        
         $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();        
         $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e";
         $query = $em->createQuery($dql);        

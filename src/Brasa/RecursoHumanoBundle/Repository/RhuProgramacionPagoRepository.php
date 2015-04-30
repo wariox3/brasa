@@ -28,4 +28,24 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em->flush();
         return true;
     } 
+    
+    public function Anular($codigoProgramacionPago) {        
+        $em = $this->getEntityManager();
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                 
+        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));         
+        foreach ($arPagos as $arPago) {            
+            $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+            $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));                                             
+            foreach ($arPagosDetalles as $arPagoDetalle) {
+                $em->remove($arPagoDetalle);
+            }
+            $em->remove($arPago);
+        }
+        $arProgramacionPago->setEstadoAnulado(1);
+        $em->persist($arProgramacionPago);
+        $em->flush();
+        return true;
+    }    
 }

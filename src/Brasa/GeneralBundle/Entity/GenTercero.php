@@ -225,7 +225,16 @@ class GenTercero
      */
     protected $TteFacturaRel;     
     
-   
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto", mappedBy="terceroRel")
+     */
+    protected $centrosCostosTerceroRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuFactura", mappedBy="terceroRel")
+     */
+    protected $rhuFacturasTerceroRel;    
+
     /**
      * Constructor
      */
@@ -237,6 +246,7 @@ class GenTercero
         $this->recogidasRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recogidasProgramadasRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->TteFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->centrosCostosTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1267,5 +1277,73 @@ class GenTercero
     public function getTteFacturaRel()
     {
         return $this->TteFacturaRel;
+    }
+
+    /**
+     * Add centrosCostosTerceroRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosTerceroRel
+     *
+     * @return GenTercero
+     */
+    public function addCentrosCostosTerceroRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosTerceroRel)
+    {
+        $this->centrosCostosTerceroRel[] = $centrosCostosTerceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove centrosCostosTerceroRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosTerceroRel
+     */
+    public function removeCentrosCostosTerceroRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosTerceroRel)
+    {
+        $this->centrosCostosTerceroRel->removeElement($centrosCostosTerceroRel);
+    }
+
+    /**
+     * Get centrosCostosTerceroRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCentrosCostosTerceroRel()
+    {
+        return $this->centrosCostosTerceroRel;
+    }
+
+    /**
+     * Add rhuFacturasTerceroRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $rhuFacturasTerceroRel
+     *
+     * @return GenTercero
+     */
+    public function addRhuFacturasTerceroRel(\Brasa\RecursoHumanoBundle\Entity\RhuFactura $rhuFacturasTerceroRel)
+    {
+        $this->rhuFacturasTerceroRel[] = $rhuFacturasTerceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuFacturasTerceroRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $rhuFacturasTerceroRel
+     */
+    public function removeRhuFacturasTerceroRel(\Brasa\RecursoHumanoBundle\Entity\RhuFactura $rhuFacturasTerceroRel)
+    {
+        $this->rhuFacturasTerceroRel->removeElement($rhuFacturasTerceroRel);
+    }
+
+    /**
+     * Get rhuFacturasTerceroRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuFacturasTerceroRel()
+    {
+        return $this->rhuFacturasTerceroRel;
     }
 }

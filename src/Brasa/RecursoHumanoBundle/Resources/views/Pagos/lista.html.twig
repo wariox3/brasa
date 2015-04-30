@@ -31,13 +31,13 @@
                 <td style="text-align: right">{{ arPagos.vrSalario | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrDevengado | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrDeducciones | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrTotalNeto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrNeto | number_format(2, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_detalle', { 'codigoPago': arPagos.codigoPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagos.codigoPagoPk }}" /></td>
             </tr>
             {% endfor %}
         </table>
-
+        {{ knp_pagination_render(arPagos) }}
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float: right"> 
                 

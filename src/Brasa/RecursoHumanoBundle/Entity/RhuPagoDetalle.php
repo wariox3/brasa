@@ -25,7 +25,7 @@ class RhuPagoDetalle
     /**
      * @ORM\Column(name="vr_pago", type="float")
      */
-    private $vr_pago = 0;     
+    private $vrPago = 0;     
 
     /**
      * @ORM\Column(name="operacion", type="integer")
@@ -35,22 +35,32 @@ class RhuPagoDetalle
     /**
      * @ORM\Column(name="vr_pago_operado", type="float")
      */
-    private $vr_pago_operado = 0;    
+    private $vrPagoOperado = 0;    
+    
+    /**
+     * @ORM\Column(name="numero_horas", type="integer")
+     */
+    private $numeroHoras = 0;    
     
     /**
      * @ORM\Column(name="vr_hora", type="float")
      */
-    private $vr_hora = 0;     
+    private $vrHora = 0;     
+    
+    /**
+     * @ORM\Column(name="porcentaje_aplicado", type="float")
+     */
+    private $porcentajeAplicado = 0;    
     
     /**
      * @ORM\Column(name="vr_dia", type="float")
      */
-    private $vr_dia = 0;    
+    private $vrDia = 0;    
     
     /**
      * @ORM\Column(name="vr_total", type="float")
      */
-    private $vr_total = 0;     
+    private $vrTotal = 0;     
     
     /**
      * @ORM\Column(name="detalle", type="string", length=60, nullable=true)
@@ -73,6 +83,7 @@ class RhuPagoDetalle
      * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
      */
     protected $pagoConceptoRel;     
+
 
     /**
      * Get codigoPagoDetallePk
@@ -109,126 +120,6 @@ class RhuPagoDetalle
     }
 
     /**
-     * Set vrHora
-     *
-     * @param float $vrHora
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setVrHora($vrHora)
-    {
-        $this->vr_hora = $vrHora;
-
-        return $this;
-    }
-
-    /**
-     * Get vrHora
-     *
-     * @return float
-     */
-    public function getVrHora()
-    {
-        return $this->vr_hora;
-    }
-
-    /**
-     * Set vrTotal
-     *
-     * @param float $vrTotal
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setVrTotal($vrTotal)
-    {
-        $this->vr_total = $vrTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotal
-     *
-     * @return float
-     */
-    public function getVrTotal()
-    {
-        return $this->vr_total;
-    }
-
-    /**
-     * Set pagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
-    {
-        $this->pagoRel = $pagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
-     */
-    public function getPagoRel()
-    {
-        return $this->pagoRel;
-    }
-
-    /**
-     * Set codigoPagoConceptoFk
-     *
-     * @param integer $codigoPagoConceptoFk
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
-    {
-        $this->codigoPagoConceptoFk = $codigoPagoConceptoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPagoConceptoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPagoConceptoFk()
-    {
-        return $this->codigoPagoConceptoFk;
-    }
-
-    /**
-     * Set pagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
-    {
-        $this->pagoConceptoRel = $pagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoConceptoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
-     */
-    public function getPagoConceptoRel()
-    {
-        return $this->pagoConceptoRel;
-    }
-
-    /**
      * Set vrPago
      *
      * @param float $vrPago
@@ -237,7 +128,7 @@ class RhuPagoDetalle
      */
     public function setVrPago($vrPago)
     {
-        $this->vr_pago = $vrPago;
+        $this->vrPago = $vrPago;
 
         return $this;
     }
@@ -249,7 +140,7 @@ class RhuPagoDetalle
      */
     public function getVrPago()
     {
-        return $this->vr_pago;
+        return $this->vrPago;
     }
 
     /**
@@ -285,7 +176,7 @@ class RhuPagoDetalle
      */
     public function setVrPagoOperado($vrPagoOperado)
     {
-        $this->vr_pago_operado = $vrPagoOperado;
+        $this->vrPagoOperado = $vrPagoOperado;
 
         return $this;
     }
@@ -297,7 +188,55 @@ class RhuPagoDetalle
      */
     public function getVrPagoOperado()
     {
-        return $this->vr_pago_operado;
+        return $this->vrPagoOperado;
+    }
+
+    /**
+     * Set numeroHoras
+     *
+     * @param integer $numeroHoras
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setNumeroHoras($numeroHoras)
+    {
+        $this->numeroHoras = $numeroHoras;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroHoras
+     *
+     * @return integer
+     */
+    public function getNumeroHoras()
+    {
+        return $this->numeroHoras;
+    }
+
+    /**
+     * Set vrHora
+     *
+     * @param float $vrHora
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setVrHora($vrHora)
+    {
+        $this->vrHora = $vrHora;
+
+        return $this;
+    }
+
+    /**
+     * Get vrHora
+     *
+     * @return float
+     */
+    public function getVrHora()
+    {
+        return $this->vrHora;
     }
 
     /**
@@ -309,7 +248,7 @@ class RhuPagoDetalle
      */
     public function setVrDia($vrDia)
     {
-        $this->vr_dia = $vrDia;
+        $this->vrDia = $vrDia;
 
         return $this;
     }
@@ -321,7 +260,31 @@ class RhuPagoDetalle
      */
     public function getVrDia()
     {
-        return $this->vr_dia;
+        return $this->vrDia;
+    }
+
+    /**
+     * Set vrTotal
+     *
+     * @param float $vrTotal
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setVrTotal($vrTotal)
+    {
+        $this->vrTotal = $vrTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotal
+     *
+     * @return float
+     */
+    public function getVrTotal()
+    {
+        return $this->vrTotal;
     }
 
     /**
@@ -346,5 +309,101 @@ class RhuPagoDetalle
     public function getDetalle()
     {
         return $this->detalle;
+    }
+
+    /**
+     * Set codigoPagoConceptoFk
+     *
+     * @param integer $codigoPagoConceptoFk
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
+    {
+        $this->codigoPagoConceptoFk = $codigoPagoConceptoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoConceptoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoConceptoFk()
+    {
+        return $this->codigoPagoConceptoFk;
+    }
+
+    /**
+     * Set pagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
+    {
+        $this->pagoRel = $pagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
+     */
+    public function getPagoRel()
+    {
+        return $this->pagoRel;
+    }
+
+    /**
+     * Set pagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
+    {
+        $this->pagoConceptoRel = $pagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoConceptoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
+     */
+    public function getPagoConceptoRel()
+    {
+        return $this->pagoConceptoRel;
+    }
+
+    /**
+     * Set porcentajeAplicado
+     *
+     * @param float $porcentajeAplicado
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setPorcentajeAplicado($porcentajeAplicado)
+    {
+        $this->porcentajeAplicado = $porcentajeAplicado;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeAplicado
+     *
+     * @return float
+     */
+    public function getPorcentajeAplicado()
+    {
+        return $this->porcentajeAplicado;
     }
 }

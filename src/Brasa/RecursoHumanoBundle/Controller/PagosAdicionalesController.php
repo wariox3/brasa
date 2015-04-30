@@ -51,6 +51,7 @@ class PagosAdicionalesController extends Controller
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         $form = $this->createFormBuilder()
             ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Retirar',))
+            ->add('BtnConceptoPermanente', 'submit', array('label'  => 'Permanente',))                
             ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Retirar',))
             ->getForm();
         $form->handleRequest($request);
@@ -62,6 +63,23 @@ class PagosAdicionalesController extends Controller
                         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
                         $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
                         $em->remove($arPagoAdicional);                        
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
+                }
+            }
+            if($form->get('BtnConceptoPermanente')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        if($arPagoAdicional->getPermanente() == 1) {
+                            $arPagoAdicional->setPermanente(0);
+                        } else {
+                            $arPagoAdicional->setPermanente(1);
+                        }
+                        $em->persist($arPagoAdicional);
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
@@ -81,7 +99,7 @@ class PagosAdicionalesController extends Controller
             }            
         }
         $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));        
+        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto, 'pagoAplicado' => 0));        
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));        
         return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:detalle.html.twig', array(
