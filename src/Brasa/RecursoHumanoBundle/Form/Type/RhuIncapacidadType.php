@@ -3,16 +3,27 @@ namespace Brasa\RecursoHumanoBundle\Form\Type;
  
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Doctrine\ORM\EntityRepository;
 
 class RhuIncapacidadType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {        
         $builder           
             ->add('incapacidadTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuIncapacidadTipo',
                 'property' => 'nombre',
-            ))                
+            ))   
+            ->add('empleadoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('e')
+                    ->where('e.codigoCentroCostoFk = :centroCosto')
+                    ->setParameter('centroCosto', $options['data']->getCentroCostoRel()->getCodigoCentroCostoPk())
+                    ->orderBy('e.nombreCorto', 'ASC');},
+                'property' => 'nombreCorto',
+                'required' => true))                
+                
             ->add('numeroEps', 'text', array('required' => true))   
             ->add('fechaDesde', 'date')                
             ->add('fechaHasta', 'date')  

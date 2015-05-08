@@ -14,22 +14,14 @@ class PagosAdicionalesAgregarIncapacidadController extends Controller
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();       
         $arIncapacidad->setFechaDesde(new \DateTime('now'));
-        $arIncapacidad->setFechaHasta(new \DateTime('now'));        
-        $form = $this->createForm(new RhuIncapacidadType(), $arIncapacidad)
-                ->add('empleadoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
-                'query_builder' => function (EntityRepository $er) use($codigoCentroCosto) {
-                    return $er->createQueryBuilder('e')
-                    ->where('e.codigoCentroCostoFk = :centroCosto')
-                    ->setParameter('centroCosto', $codigoCentroCosto)
-                    ->orderBy('e.nombreCorto', 'ASC');},
-                'property' => 'nombreCorto',
-                'required' => true));       
+        $arIncapacidad->setFechaHasta(new \DateTime('now'));    
+        $arIncapacidad->setCentroCostoRel($arCentroCosto);
+        $form = $this->createForm(new RhuIncapacidadType(), $arIncapacidad); 
+                    
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arrControles = $request->request->All();
-            $arIncapacidad = $form->getData();              
-            $arIncapacidad->setCentroCostoRel($arCentroCosto);
+            $arIncapacidad = $form->getData();                          
             $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
             $intDias = $intDias->format('%a');
             $arIncapacidad->setCantidad($intDias);

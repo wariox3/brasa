@@ -18,7 +18,7 @@ class RhuEmpleado
     private $codigoEmpleadoPk;
     
     /**
-     * @ORM\Column(name="codigo_tipo_identificacion_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_tipo_identificacion_fk", type="string", length=1, nullable=true)
      */    
     private $codigoTipoIdentificacionFk;     
     
@@ -78,12 +78,12 @@ class RhuEmpleado
     private $barrio;    
     
     /**
-     * @ORM\Column(name="codigo_rh_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_rh_fk", type="string", length=2, nullable=true)
      */    
     private $codigoRhFk;     
     
     /**
-     * @ORM\Column(name="codigo_sexo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
      */    
     private $codigoSexoFk;     
     
@@ -98,7 +98,7 @@ class RhuEmpleado
     private $fecha_nacimiento;     
     
     /**
-     * @ORM\Column(name="codigo_estado_civil_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_estado_civil_fk", type="string", length=1, nullable=true)
      */    
     private $codigoEstadoCivilFk;
     
@@ -153,22 +153,38 @@ class RhuEmpleado
     private $codigoClasificacionRiesgoFk;     
     
     /**
+     * @ORM\Column(name="fecha_contrato", type="date", nullable=true)
+     */    
+    private $fecha_contrato;   
+    
+    /**
+     * @ORM\Column(name="fecha_finaliza_contrato", type="date", nullable=true)
+     */    
+    private $fecha_finaliza_contrato;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
     protected $clasificacionRiesgoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="empleadosCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoRel;            
-
-    /**
      * @ORM\ManyToOne(targetEntity="RhuTipoIdentificacion", inversedBy="empleadosTipoIdentificacionRel")
      * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
      */
     protected $tipoIdentificacionRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEstadoCivil", inversedBy="empleadosEstadoCivilRel")
+     * @ORM\JoinColumn(name="codigo_estado_civil_fk", referencedColumnName="codigo_estado_civil_pk")
+     */
+    protected $estadoCivilRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="empleadosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;                 
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuBanco", inversedBy="empleadosBancoRel")
@@ -213,6 +229,7 @@ class RhuEmpleado
      */
     protected $contratosEmpleadoRel;     
 
+
     /**
      * Constructor
      */
@@ -222,6 +239,7 @@ class RhuEmpleado
         $this->pagosAdicionalesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -232,6 +250,30 @@ class RhuEmpleado
     public function getCodigoEmpleadoPk()
     {
         return $this->codigoEmpleadoPk;
+    }
+
+    /**
+     * Set codigoTipoIdentificacionFk
+     *
+     * @param string $codigoTipoIdentificacionFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoTipoIdentificacionFk($codigoTipoIdentificacionFk)
+    {
+        $this->codigoTipoIdentificacionFk = $codigoTipoIdentificacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoIdentificacionFk
+     *
+     * @return string
+     */
+    public function getCodigoTipoIdentificacionFk()
+    {
+        return $this->codigoTipoIdentificacionFk;
     }
 
     /**
@@ -501,7 +543,7 @@ class RhuEmpleado
     /**
      * Set codigoRhFk
      *
-     * @param integer $codigoRhFk
+     * @param string $codigoRhFk
      *
      * @return RhuEmpleado
      */
@@ -515,7 +557,7 @@ class RhuEmpleado
     /**
      * Get codigoRhFk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoRhFk()
     {
@@ -525,7 +567,7 @@ class RhuEmpleado
     /**
      * Set codigoSexoFk
      *
-     * @param integer $codigoSexoFk
+     * @param string $codigoSexoFk
      *
      * @return RhuEmpleado
      */
@@ -539,7 +581,7 @@ class RhuEmpleado
     /**
      * Get codigoSexoFk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoSexoFk()
     {
@@ -597,7 +639,7 @@ class RhuEmpleado
     /**
      * Set codigoEstadoCivilFk
      *
-     * @param integer $codigoEstadoCivilFk
+     * @param string $codigoEstadoCivilFk
      *
      * @return RhuEmpleado
      */
@@ -611,7 +653,7 @@ class RhuEmpleado
     /**
      * Get codigoEstadoCivilFk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoEstadoCivilFk()
     {
@@ -739,6 +781,198 @@ class RhuEmpleado
     }
 
     /**
+     * Set rh
+     *
+     * @param string $rh
+     *
+     * @return RhuEmpleado
+     */
+    public function setRh($rh)
+    {
+        $this->rh = $rh;
+
+        return $this;
+    }
+
+    /**
+     * Get rh
+     *
+     * @return string
+     */
+    public function getRh()
+    {
+        return $this->rh;
+    }
+
+    /**
+     * Set codigoEntidadSaludFk
+     *
+     * @param integer $codigoEntidadSaludFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoEntidadSaludFk($codigoEntidadSaludFk)
+    {
+        $this->codigoEntidadSaludFk = $codigoEntidadSaludFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadSaludFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadSaludFk()
+    {
+        return $this->codigoEntidadSaludFk;
+    }
+
+    /**
+     * Set codigoEntidadPensionFk
+     *
+     * @param integer $codigoEntidadPensionFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoEntidadPensionFk($codigoEntidadPensionFk)
+    {
+        $this->codigoEntidadPensionFk = $codigoEntidadPensionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadPensionFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadPensionFk()
+    {
+        return $this->codigoEntidadPensionFk;
+    }
+
+    /**
+     * Set estadoActivo
+     *
+     * @param boolean $estadoActivo
+     *
+     * @return RhuEmpleado
+     */
+    public function setEstadoActivo($estadoActivo)
+    {
+        $this->estadoActivo = $estadoActivo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoActivo
+     *
+     * @return boolean
+     */
+    public function getEstadoActivo()
+    {
+        return $this->estadoActivo;
+    }
+
+    /**
+     * Set codigoClasificacionRiesgoFk
+     *
+     * @param integer $codigoClasificacionRiesgoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoClasificacionRiesgoFk($codigoClasificacionRiesgoFk)
+    {
+        $this->codigoClasificacionRiesgoFk = $codigoClasificacionRiesgoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClasificacionRiesgoFk
+     *
+     * @return integer
+     */
+    public function getCodigoClasificacionRiesgoFk()
+    {
+        return $this->codigoClasificacionRiesgoFk;
+    }
+
+    /**
+     * Set clasificacionRiesgoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setClasificacionRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel = null)
+    {
+        $this->clasificacionRiesgoRel = $clasificacionRiesgoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clasificacionRiesgoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo
+     */
+    public function getClasificacionRiesgoRel()
+    {
+        return $this->clasificacionRiesgoRel;
+    }
+
+    /**
+     * Set tipoIdentificacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel = null)
+    {
+        $this->tipoIdentificacionRel = $tipoIdentificacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion
+     */
+    public function getTipoIdentificacionRel()
+    {
+        return $this->tipoIdentificacionRel;
+    }
+
+    /**
+     * Set estadoCivilRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel = null)
+    {
+        $this->estadoCivilRel = $estadoCivilRel;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCivilRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil
+     */
+    public function getEstadoCivilRel()
+    {
+        return $this->estadoCivilRel;
+    }
+
+    /**
      * Set centroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
@@ -760,6 +994,78 @@ class RhuEmpleado
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Set bancoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuBanco $bancoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuBanco $bancoRel = null)
+    {
+        $this->bancoRel = $bancoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get bancoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuBanco
+     */
+    public function getBancoRel()
+    {
+        return $this->bancoRel;
+    }
+
+    /**
+     * Set entidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel = null)
+    {
+        $this->entidadSaludRel = $entidadSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadSaludRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud
+     */
+    public function getEntidadSaludRel()
+    {
+        return $this->entidadSaludRel;
+    }
+
+    /**
+     * Set entidadPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension $entidadPensionRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension $entidadPensionRel = null)
+    {
+        $this->entidadPensionRel = $entidadPensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadPensionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension
+     */
+    public function getEntidadPensionRel()
+    {
+        return $this->entidadPensionRel;
     }
 
     /**
@@ -933,266 +1239,50 @@ class RhuEmpleado
     }
 
     /**
-     * Set codigoTipoIdentificacionFk
+     * Set fechaContrato
      *
-     * @param integer $codigoTipoIdentificacionFk
+     * @param \DateTime $fechaContrato
      *
      * @return RhuEmpleado
      */
-    public function setCodigoTipoIdentificacionFk($codigoTipoIdentificacionFk)
+    public function setFechaContrato($fechaContrato)
     {
-        $this->codigoTipoIdentificacionFk = $codigoTipoIdentificacionFk;
+        $this->fecha_contrato = $fechaContrato;
 
         return $this;
     }
 
     /**
-     * Get codigoTipoIdentificacionFk
+     * Get fechaContrato
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getCodigoTipoIdentificacionFk()
+    public function getFechaContrato()
     {
-        return $this->codigoTipoIdentificacionFk;
+        return $this->fecha_contrato;
     }
 
     /**
-     * Set tipoIdentificacionRel
+     * Set fechaFinalizaContrato
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel
+     * @param \DateTime $fechaFinalizaContrato
      *
      * @return RhuEmpleado
      */
-    public function setTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel = null)
+    public function setFechaFinalizaContrato($fechaFinalizaContrato)
     {
-        $this->tipoIdentificacionRel = $tipoIdentificacionRel;
+        $this->fecha_finaliza_contrato = $fechaFinalizaContrato;
 
         return $this;
     }
 
     /**
-     * Get tipoIdentificacionRel
+     * Get fechaFinalizaContrato
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion
+     * @return \DateTime
      */
-    public function getTipoIdentificacionRel()
+    public function getFechaFinalizaContrato()
     {
-        return $this->tipoIdentificacionRel;
-    }
-
-    /**
-     * Set bancoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuBanco $bancoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuBanco $bancoRel = null)
-    {
-        $this->bancoRel = $bancoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get bancoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuBanco
-     */
-    public function getBancoRel()
-    {
-        return $this->bancoRel;
-    }
-
-    /**
-     * Set rh
-     *
-     * @param string $rh
-     *
-     * @return RhuEmpleado
-     */
-    public function setRh($rh)
-    {
-        $this->rh = $rh;
-
-        return $this;
-    }
-
-    /**
-     * Get rh
-     *
-     * @return string
-     */
-    public function getRh()
-    {
-        return $this->rh;
-    }
-
-    /**
-     * Set codigoEntidadSaludFk
-     *
-     * @param integer $codigoEntidadSaludFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoEntidadSaludFk($codigoEntidadSaludFk)
-    {
-        $this->codigoEntidadSaludFk = $codigoEntidadSaludFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoEntidadSaludFk
-     *
-     * @return integer
-     */
-    public function getCodigoEntidadSaludFk()
-    {
-        return $this->codigoEntidadSaludFk;
-    }
-
-    /**
-     * Set codigoEntidadPensionFk
-     *
-     * @param integer $codigoEntidadPensionFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoEntidadPensionFk($codigoEntidadPensionFk)
-    {
-        $this->codigoEntidadPensionFk = $codigoEntidadPensionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoEntidadPensionFk
-     *
-     * @return integer
-     */
-    public function getCodigoEntidadPensionFk()
-    {
-        return $this->codigoEntidadPensionFk;
-    }
-
-    /**
-     * Set entidadSaludRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel = null)
-    {
-        $this->entidadSaludRel = $entidadSaludRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadSaludRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud
-     */
-    public function getEntidadSaludRel()
-    {
-        return $this->entidadSaludRel;
-    }
-
-    /**
-     * Set entidadPensionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension $entidadPensionRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension $entidadPensionRel = null)
-    {
-        $this->entidadPensionRel = $entidadPensionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadPensionRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension
-     */
-    public function getEntidadPensionRel()
-    {
-        return $this->entidadPensionRel;
-    }
-
-    /**
-     * Set estadoActivo
-     *
-     * @param boolean $estadoActivo
-     *
-     * @return RhuEmpleado
-     */
-    public function setEstadoActivo($estadoActivo)
-    {
-        $this->estadoActivo = $estadoActivo;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoActivo
-     *
-     * @return boolean
-     */
-    public function getEstadoActivo()
-    {
-        return $this->estadoActivo;
-    }
-
-    /**
-     * Set codigoClasificacionRiesgoFk
-     *
-     * @param integer $codigoClasificacionRiesgoFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoClasificacionRiesgoFk($codigoClasificacionRiesgoFk)
-    {
-        $this->codigoClasificacionRiesgoFk = $codigoClasificacionRiesgoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoClasificacionRiesgoFk
-     *
-     * @return integer
-     */
-    public function getCodigoClasificacionRiesgoFk()
-    {
-        return $this->codigoClasificacionRiesgoFk;
-    }
-
-    /**
-     * Set clasificacionRiesgoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setClasificacionRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel = null)
-    {
-        $this->clasificacionRiesgoRel = $clasificacionRiesgoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get clasificacionRiesgoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo
-     */
-    public function getClasificacionRiesgoRel()
-    {
-        return $this->clasificacionRiesgoRel;
+        return $this->fecha_finaliza_contrato;
     }
 }

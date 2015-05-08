@@ -38,6 +38,16 @@ class RhuCentroCosto
     private $fechaUltimoPagoProgramado;    
     
     /**
+     * @ORM\Column(name="correo", type="string", length=60, nullable=true)
+     */    
+    private $correo;    
+    
+    /**
+     * @ORM\Column(name="codigo_interface", type="string", length=10, nullable=true)
+     */    
+    private $codigoInterface;    
+    
+    /**
      * Si existen programaciones de pago pendientes
      * @ORM\Column(name="pago_abierto", type="boolean")
      */    
@@ -653,5 +663,53 @@ class RhuCentroCosto
     public function getValorAdministracion()
     {
         return $this->valorAdministracion;
+    }
+
+    /**
+     * Set correo
+     *
+     * @param string $correo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCorreo($correo)
+    {
+        $this->correo = $correo;
+
+        return $this;
+    }
+
+    /**
+     * Get correo
+     *
+     * @return string
+     */
+    public function getCorreo()
+    {
+        return $this->correo;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 }

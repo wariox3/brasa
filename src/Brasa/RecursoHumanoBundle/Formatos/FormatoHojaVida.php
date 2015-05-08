@@ -1,30 +1,30 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoPago extends \FPDF_FPDF {
+class FormatoHojaVida extends \FPDF_FPDF {
     public static $em;
-    public static $codigoPago;
-    public function Generar($miThis, $codigoPago) {        
+    public static $codigoEmpleado;
+    public function Generar($miThis, $codigoEmpleado) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
-        self::$codigoPago = $codigoPago;
-        $pdf = new FormatoPago();
+        self::$codigoEmpleado = $codigoEmpleado;
+        $pdf = new FormatoHojaVida();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("Pago$codigoPago.pdf", 'D');        
+        $pdf->Output("Empleado$codigoEmpleado.pdf", 'D');        
         
     } 
     public function Header() {
-        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPago = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find(self::$codigoPago);
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleado = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find(self::$codigoEmpleado);
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(150, 20);
-        $this->Cell(50, 6, "Pago " . $arPago->getCodigoPagoPk(), 1, 0, 'L', 1);
+        $this->Cell(50, 6, "Empleado " . $arEmpleado->getCodigoEmpleadoPk(), 1, 0, 'L', 1);
         
         $this->EncabezadoDetalles();
         
@@ -55,17 +55,8 @@ class FormatoPago extends \FPDF_FPDF {
     }
 
     public function Body($pdf) {
-        $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-        $arPagoDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => self::$codigoPago));
         $pdf->SetX(10);
-        $pdf->SetFont('Arial', '', 7);
-        foreach ($arPagoDetalle as $arPagoDetalle) {            
-            $pdf->Cell(14, 4, $arPagoDetalle->getCodigoPagoDetallePk(), 1, 0, 'L');
-            $pdf->Cell(14, 4, $arPagoDetalle->getCodigoPagoDetallePk(), 1, 0, 'L');
-            $pdf->Cell(14, 4, $arPagoDetalle->getCodigoPagoDetallePk(), 1, 0, 'L');
-            $pdf->Ln();
-            $pdf->SetAutoPageBreak(true, 33);
-        }        
+        $pdf->SetFont('Arial', '', 7);        
     }
 
     public function Footer() {

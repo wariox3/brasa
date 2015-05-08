@@ -9,24 +9,24 @@ class BaseCentroCostoController extends Controller
 {
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();    
+        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        
+
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre'))                       
-            ->add('BtnBuscar', 'submit', array('label'  => 'Buscar'))                
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre'))
+            ->add('BtnBuscar', 'submit', array('label'  => 'Buscar'))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))                
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnInactivar', 'submit', array('label'  => 'Activa / Inactiva',))
             ->getForm();
-        $form->handleRequest($request);                        
-        $arCentrosCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();                        
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->Lista("");                
+        $form->handleRequest($request);
+        $arCentrosCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->Lista("");
         if($form->isValid()) {
             if($form->get('BtnBuscar')->isClicked() || $form->get('BtnExcel')->isClicked()) {
                 $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->Lista($form->get('TxtNombre')->getData());
-                $arCentrosCostos = $paginator->paginate($query, $this->get('request')->query->get('page', 1), 3);        
-            }            
+                $arCentrosCostos = $paginator->paginate($query, $this->get('request')->query->get('page', 1), 3);
+            }
             if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
@@ -37,25 +37,25 @@ class BaseCentroCostoController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-                
+
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'Codigo')
                             ->setCellValue('B1', 'Nombre')
                             ->setCellValue('C1', 'Periodo')
                             ->setCellValue('D1', 'Abierto');
-                
+
                 $i = 2;
-                $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();                
+                $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
                 foreach ($arCentrosCostos as $arCentroCosto) {
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCentroCosto->getCodigoCentroCostoPk())
                             ->setCellValue('B' . $i, $arCentroCosto->getNombre())
                             ->setCellValue('C' . $i, $arCentroCosto->getPeriodoPagoRel()->getNombre())
-                            ->setCellValue('D' . $i, $arCentroCosto->getPagoAbierto());                    
-                    $i++;                    
+                            ->setCellValue('D' . $i, $arCentroCosto->getPagoAbierto());
+                    $i++;
                 }
-                
-                $objPHPExcel->getActiveSheet()->setTitle('ccostos');                
+
+                $objPHPExcel->getActiveSheet()->setTitle('ccostos');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
@@ -68,14 +68,14 @@ class BaseCentroCostoController extends Controller
                 header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
                 header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
                 header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header ('Pragma: public'); // HTTP/1.0                                                          
+                header ('Pragma: public'); // HTTP/1.0
                 $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-                $objWriter->save('php://output');                                      
-                exit;                                   
-            }                        
+                $objWriter->save('php://output');
+                exit;
+            }
             if($form->get('BtnInactivar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) { 
+                if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCentroCosto) {
                         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
                         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
@@ -85,51 +85,51 @@ class BaseCentroCostoController extends Controller
                             $arCentroCosto->setEstadoActivo(1);
                         }
                         $em->persist($arCentroCosto);
-                    }                    
+                    }
                     $em->flush();
                 }
-            }                    
-        } 
-        $arCentrosCostos = $paginator->paginate($query, $this->get('request')->query->get('page', 1), 3);        
+            }
+        }
+        $arCentrosCostos = $paginator->paginate($query, $this->get('request')->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/CentroCosto:lista.html.twig', array(
             'arCentrosCostos' => $arCentrosCostos,
             'form' => $form->createView()));
-    }       
-    
+    }
+
     public function nuevoAction($codigoCentroCosto) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();                
-        $arCentroCosto->setFechaUltimoPagoProgramado(new \DateTime('now')); 
+        $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+        $arCentroCosto->setFechaUltimoPagoProgramado(new \DateTime('now'));
         if($codigoCentroCosto != 0) {
             $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
-        }      
-        $form = $this->createForm(new RhuCentroCostoType(), $arCentroCosto);       
+        }
+        $form = $this->createForm(new RhuCentroCostoType(), $arCentroCosto);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arCentroCosto = $form->getData();              
+            $arCentroCosto = $form->getData();
             $em->persist($arCentroCosto);
-            $em->flush(); 
+            $em->flush();
             if($codigoCentroCosto == 0) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());                
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
             }
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_nuevo', array('codigoCentroCosto' => 0)));
             } else {
                 return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_lista'));
-            }    
-            
-        }                
+            }
+
+        }
 
         return $this->render('BrasaRecursoHumanoBundle:Base/CentroCosto:nuevo.html.twig', array(
             'arCentroCosto' => $arCentroCosto,
             'form' => $form->createView()));
-    }    
-    
+    }
+
     public function detalleAction($codigoPago) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();    
-        $objMensaje = $this->get('mensajes_brasa');        
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
@@ -143,17 +143,17 @@ class BaseCentroCostoController extends Controller
                     $strResultado = $em->getRepository('BrasaTransporteBundle:TteDespacho')->Generar($codigoDespacho);
                     if ($strResultado != "") {
                         $objMensaje->Mensaje("error", "No se genero el despacho: " . $strResultado, $this);
-                    }                        
+                    }
                     break;
 
                 case "OpAnular";
                     $varAnular = $em->getRepository('BrasaTransporteBundle:TteDespacho')->Anular($codigoDespacho);
                     if ($varAnular != "") {
                         $objMensaje->Mensaje("error", "No se anulo el despacho: " . $varAnular, $this);
-                    }                        
+                    }
                     break;
 
-                case "OpImprimir";   
+                case "OpImprimir";
                     $objFormatoManifiesto = new \Brasa\TransporteBundle\Formatos\FormatoManifiesto();
                     $objFormatoManifiesto->Generar($this, $codigoDespacho);
                     break;
@@ -169,29 +169,29 @@ class BaseCentroCostoController extends Controller
                             $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
                             if($arGuia->getCodigoDespachoFk() != NULL) {
                                 $arGuia->setCodigoDespachoFk(NULL);
-                                $arGuia->setEstadoDespachada(0);                                
+                                $arGuia->setEstadoDespachada(0);
                                 $em->persist($arGuia);
-                                $em->flush(); 
+                                $em->flush();
                                 $intUnidades = $intUnidades - $arGuia->getCtUnidades();
                                 $intPesoReal = $intPesoReal - $arGuia->getCtPesoReal();
                                 $intPesoVolumen = $intPesoVolumen - $arGuia->getCtPesoVolumen();
-                                $intGuias = $intGuias - 1;                                  
-                            }                            
+                                $intGuias = $intGuias - 1;
+                            }
                         }
                         $arDespacho->setCtUnidades($intUnidades);
                         $arDespacho->setCtPesoReal($intPesoReal);
                         $arDespacho->setCtPesoVolumen($intPesoVolumen);
                         $arDespacho->setCtGuias($intGuias);
                         $em->persist($arDespacho);
-                        $em->flush();                        
+                        $em->flush();
                     }
-                    break;                                                          
+                    break;
             }
         }
-        
+
         return $this->render('BrasaRecursoHumanoBundle:Pagos:detalle.html.twig', array(
                     'arPago' => $arPago,
                     'arPagoDetalles' => $arPagoDetalles
                     ));
-    }        
+    }
 }

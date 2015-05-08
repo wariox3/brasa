@@ -12,7 +12,7 @@ class RhuTipoIdentificacion
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_tipo_identificacion_pk", type="integer")
+     * @ORM\Column(name="codigo_tipo_identificacion_pk", type="string", length=1)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoTipoIdentificacionPk;
@@ -25,8 +25,8 @@ class RhuTipoIdentificacion
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="tipoIdentificacionRel")
      */
-    protected $empleadosTipoIdentificacionRel;     
-
+    protected $empleadosTipoIdentificacionRel;    
+  
     /**
      * Constructor
      */
@@ -38,7 +38,7 @@ class RhuTipoIdentificacion
     /**
      * Get codigoTipoIdentificacionPk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoTipoIdentificacionPk()
     {

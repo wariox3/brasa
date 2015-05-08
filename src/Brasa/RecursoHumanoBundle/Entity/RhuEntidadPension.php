@@ -23,6 +23,21 @@ class RhuEntidadPension
     private $nombre;    
     
     /**
+     * @ORM\Column(name="nit", type="string", length=10, nullable=true)
+     */    
+    private $nit;    
+    
+    /**
+     * @ORM\Column(name="direccion", type="string", length=80, nullable=true)
+     */    
+    private $direccion;    
+    
+    /**
+     * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
+     */    
+    private $telefono;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="entidadPensionRel")
      */
     protected $empleadosEntidadPensionRel;    
@@ -101,5 +116,77 @@ class RhuEntidadPension
     public function getEmpleadosEntidadPensionRel()
     {
         return $this->empleadosEntidadPensionRel;
+    }
+
+    /**
+     * Set nit
+     *
+     * @param string $nit
+     *
+     * @return RhuEntidadPension
+     */
+    public function setNit($nit)
+    {
+        $this->nit = $nit;
+
+        return $this;
+    }
+
+    /**
+     * Get nit
+     *
+     * @return string
+     */
+    public function getNit()
+    {
+        return $this->nit;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return RhuEntidadPension
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return RhuEntidadPension
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
     }
 }

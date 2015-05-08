@@ -18,8 +18,7 @@ class UtilidadesPagosController extends Controller
             if($form->get('Generar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoCentroCosto) {
-                        $this->generarPeriodoPago($codigoCentroCosto);
+                    foreach ($arrSeleccionados AS $codigoCentroCosto) {                                                
                         $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($codigoCentroCosto);
                     }
                 }
@@ -36,7 +35,7 @@ class UtilidadesPagosController extends Controller
     public function generarPagoAction () {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $objMensaje = $this->get('mensajes_brasa');
+        $objMensaje = $this->get('mensajes_brasa');       
         $form = $this->createFormBuilder()
             ->add('BtnVerificarPagosAdicionales', 'submit', array('label'  => 'Pagos adicionales verificados',))
             ->add('BtnVerificarIncapacidades', 'submit', array('label'  => 'Incapacidades verificadas',))
