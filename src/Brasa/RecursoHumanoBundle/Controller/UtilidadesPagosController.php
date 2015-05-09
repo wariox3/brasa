@@ -382,35 +382,38 @@ class UtilidadesPagosController extends Controller
         $arEmpleado = $arEmpleadoProcesar;
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $arProgramacionPagoProcesar;
-        $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoActivo' => 1));
-        foreach ($arContratos as $arContrato) {
-            $dateFechaDesde =  "";
-            $dateFechaHasta =  "";
-            if($arContrato->getFechaDesde() <  $arProgramacionPago->getFechaDesde() == true) {
-                $dateFechaDesde = $arProgramacionPago->getFechaDesde();
+        $dateFechaDesde =  "";
+        $dateFechaHasta =  "";
+        $fechaFinalizaContrato = $arEmpleado->getFechaFinalizaContrato();
+        if($arEmpleado->getContratoIndefinido() == 1) {            
+            $fecha = date_create(date('Y-m-d'));
+            date_modify($fecha, '+365 day');
+            $fechaFinalizaContrato = $fecha;
+        }
+        if($arEmpleado->getFechaContrato() <  $arProgramacionPago->getFechaDesde() == true) {
+            $dateFechaDesde = $arProgramacionPago->getFechaDesde();
+        } else {
+            if($arEmpleado->getFechaContrato() > $arProgramacionPago->getFechaHasta() == true) {
+                $intDiasDevolver = 0;
             } else {
-                if($arContrato->getFechaDesde() > $arProgramacionPago->getFechaHasta() == true) {
-                    $intDiasDevolver = 0;
-                } else {
-                    $dateFechaDesde = $arContrato->getFechaDesde();
-                }
-            }
-            if($arContrato->getFechaHasta() >  $arProgramacionPago->getFechaHasta() == true) {
-                $dateFechaHasta = $arProgramacionPago->getFechaHasta();
-            } else {
-                if($arContrato->getFechaHasta() < $arProgramacionPago->getFechaDesde() == true) {
-                    $intDiasDevolver = 0;
-                } else {
-                    $dateFechaHasta = $arContrato->getFechaHasta();
-                }
-            }
-            if($dateFechaDesde != "" && $dateFechaHasta != "") {
-                $intDias = $dateFechaDesde->diff($dateFechaHasta);
-                $intDias = $intDias->format('%a');
-                $intDiasDevolver = $intDias + 1;
+                $dateFechaDesde = $arEmpleado->getFechaContrato();
             }
         }
+        if($fechaFinalizaContrato >  $arProgramacionPago->getFechaHasta() == true) {
+            $dateFechaHasta = $arProgramacionPago->getFechaHasta();
+        } else {
+            if($fechaFinalizaContrato < $arProgramacionPago->getFechaDesde() == true) {
+                $intDiasDevolver = 0;
+            } else {
+                $dateFechaHasta = $fechaFinalizaContrato;
+            }
+        }
+        if($dateFechaDesde != "" && $dateFechaHasta != "") {
+            $intDias = $dateFechaDesde->diff($dateFechaHasta);
+            $intDias = $intDias->format('%a');
+            $intDiasDevolver = $intDias;
+        }
+        
         return $intDiasDevolver;
     }
 }

@@ -22,6 +22,14 @@ brs_rhu_pagos_adicionales_detalle:
     path:     /rhumano/pagos/adicionales/detalle/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:detalle }         
 
+brs_rhu_pagos_adicionales_generarmasivo_lista:
+    path:     /rhumano/pagos/adicionales/generarmasivo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoLista }
+
+brs_rhu_pagos_adicionales_generarmasivo_detalle:
+    path:     /rhumano/pagos/adicionales/generarmasivo/detalle/{codigoCentroCosto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoDetalle }
+
 brs_rhu_pagos_adicionales_agregar_concepto:
     path:     /rhumano/pagos/adicionales/agregar/concepto/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregarConcepto:lista }    

@@ -63,7 +63,7 @@
                 <td>{{ arEmpleados.fechaNacimiento |date("Y/m/d")  }}</td>
                 <td>{{ arEmpleados.telefono }}</td>                
                 <td>{{ arEmpleados.fechaContrato |date("Y/m/d")  }}</td>                
-                <td>{{ arEmpleados.fechaFinalizaContrato |date("Y/m/d")  }}</td>                
+                <td>{% if arEmpleados.contratoIndefinido == 1 %} INDEFINIDO {% else %} {{ arEmpleados.fechaFinalizaContrato |date("Y/m/d")  }} {% endif %}</td>                
                 <td style="text-align: right">{{ arEmpleados.VrSalario | number_format(0, '.', ',') }}</td>                            
                 <td>{% if arEmpleados.auxilioTransporte == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>{% if arEmpleados.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                                

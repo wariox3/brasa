@@ -8,7 +8,7 @@
             <a class="navbar-brand" href="{{ path('brasa_general_inicio') }}">JG Efectivos V1.0.0</a>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">                
+            <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Base <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -28,30 +28,30 @@
                                     <a tabindex="-1" href="#">Productos</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_inv_base_items_lista') }}">Lista</a></li>
-                                        <li><a href="{{ path('brs_gen_base_terceros') }}">Marcas</a></li>                                        
+                                        <li><a href="{{ path('brs_gen_base_terceros') }}">Marcas</a></li>
                                         <li><a href="{{ path('brs_gen_base_terceros') }}">Unidades medida</a></li>
                                         <li><a href="{{ path('brs_gen_base_terceros') }}">Lineas</a></li>
                                         <li><a href="{{ path('brs_gen_base_terceros') }}">Grupos</a></li>
                                         <li><a href="{{ path('brs_gen_base_terceros') }}">Subgrupos</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li><a href="{{ path('brs_gen_base_terceros') }}">Bodegas</a></li>
                             </ul>
-                        </li>  
+                        </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Transporte</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ path('brs_gen_base_terceros') }}">Rutas</a></li>
                                 <li><a href="{{ path('brs_gen_base_terceros') }}">Conductores</a></li>
                             </ul>
-                        </li>  
+                        </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recursos humanos</a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ path('brs_rhu_base_centros_costos_lista') }}">Centros de costo</a></li>                                                                
-                                <li><a href="{{ path('brs_rhu_base_empleados_lista') }}">Empleados</a></li>                                
+                                <li><a href="{{ path('brs_rhu_base_centros_costos_lista') }}">Centros de costo</a></li>
+                                <li><a href="{{ path('brs_rhu_base_empleados_lista') }}">Empleados</a></li>
                             </ul>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -59,7 +59,7 @@
                     <ul class="dropdown-menu">
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Inventario</a>
-                            <ul class="dropdown-menu"> 
+                            <ul class="dropdown-menu">
                                 <li><a href="{{ path('brs_inv_consultas_kardex') }}">Kardex</a></li>
                                 <li><a href="{{ path('brs_inv_consultas_disponibles') }}">Disponibles</a></li>
                                 <li><a href="{{ path('brs_inv_consultas_existencias') }}">Existencias</a></li>
@@ -78,23 +78,23 @@
                                             <ul class="dropdown-menu">
                                                 <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 5 }) }}">Detalles (Pendientes)</a></li>
                                             </ul>
-                                        </li>                                        
+                                        </li>
                                         <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#">Pedidos</a>
                                             <ul class="dropdown-menu">
                                                 <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 3 }) }}">Detalles (Pendientes)</a></li>
                                             </ul>
-                                        </li>                                                                                
+                                        </li>
                                         <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#">Remision</a>
                                             <ul class="dropdown-menu">
                                                 <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 9 }) }}">Detalles (Pendientes)</a></li>
                                             </ul>
-                                        </li>                                                                                                                        
+                                        </li>
                                     </ul>
-                                </li>                                
+                                </li>
                             </ul>
-                        </li>     
+                        </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Transporte</a>
                             <ul class="dropdown-menu">
@@ -108,17 +108,17 @@
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Control</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tte_consultas_recibos_caja') }}">Recibos caja</a></li>                                        
+                                        <li><a href="{{ path('brs_tte_consultas_recibos_caja') }}">Recibos caja</a></li>
                                     </ul>
-                                </li>   
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Comercial</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tte_consultas_recibos_caja') }}">Pendientes por facturar</a></li>                                        
+                                        <li><a href="{{ path('brs_tte_consultas_recibos_caja') }}">Pendientes por facturar</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                             </ul>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -136,7 +136,7 @@
                             </ul>
                         </li>
                     </ul>
-                </li>    
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Utilidades <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -147,13 +147,13 @@
                                     <a tabindex="-1" href="#">Pago nomina</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_rhu_utilidades_pagos_generar_periodo') }}">Generar periodos de pago</a></li>
-                                        <li><a href="{{ path('brs_rhu_utilidades_pagos_generar_pago') }}">Generar pago</a></li>                                        
+                                        <li><a href="{{ path('brs_rhu_utilidades_pagos_generar_pago') }}">Generar pago</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </li>
                     </ul>
-                </li>                 
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Movimientos <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -175,97 +175,98 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Transporte</a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">                                    
+                                <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Logistica</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#">Recogidas</a>
-                                            <ul class="dropdown-menu">                                        
+                                            <ul class="dropdown-menu">
                                                 <li><a href="{{ path('brs_tte_recogidas_lista') }}">Lista</a></li>
                                                 <li class="divider"></li>
                                                 <li><a href="{{ path('brs_tte_recogidas_funciones_programacion') }}">Programacion</a></li>
                                                 <li><a href="{{ path('brs_tte_recogidas_funciones_programadas') }}">Generar recogidas programadas</a></li>
-                                            </ul>                                    
+                                            </ul>
                                         </li>
-                                        <li class="dropdown-submenu">                                    
+                                        <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#">Guias</a>
-                                            <ul class="dropdown-menu">                                        
+                                            <ul class="dropdown-menu">
                                                 <li><a href="{{ path('brs_tte_guias_lista') }}">Lista</a></li>
                                                 <li class="divider"></li>
                                                 <li><a href="{{ path('brs_tte_guias_funciones_entregar') }}">Fechas de entrega</a></li>
                                                 <li><a href="{{ path('brs_tte_guias_funciones_descargar') }}">Descargar</a></li>
                                                 <li><a href="{{ path('brs_tte_guias_funciones_redespachar') }}">Redespachos</a></li>
-                                            </ul>                                    
+                                            </ul>
                                         </li>
                                         <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#">Despachos</a>
-                                            <ul class="dropdown-menu">                                        
+                                            <ul class="dropdown-menu">
                                                 <li><a href="{{ path('brs_tte_despachos_lista') }}">Lista</a></li>
-                                            </ul>                                    
+                                            </ul>
                                         </li>
                                         <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#">Relaciones cumplidos</a>
-                                            <ul class="dropdown-menu">                                        
+                                            <ul class="dropdown-menu">
                                                 <li><a href="{{ path('brs_tte_relacionescumplidos_lista') }}">Lista</a></li>
-                                            </ul>                                    
+                                            </ul>
                                         </li>
-                                    </ul>                                    
+                                    </ul>
                                 </li>
-                                <li class="dropdown-submenu">                                    
+                                <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Monitoreo</a>
-                                    <ul class="dropdown-menu">                                        
-                                        <li class="dropdown-submenu">                                    
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#">Vehiculos</a>
-                                            <ul class="dropdown-menu">                                        
+                                            <ul class="dropdown-menu">
                                                 <li><a href="{{ path('brs_tte_facturas_lista') }}">Ver</a></li>
-                                            </ul>                                    
+                                            </ul>
                                         </li>
-                                    </ul>                                    
-                                </li>                                 
-                                <li class="dropdown-submenu">                                    
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Comercial</a>
-                                    <ul class="dropdown-menu">                                        
-                                        <li class="dropdown-submenu">                                    
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#">Facturas</a>
-                                            <ul class="dropdown-menu">                                        
+                                            <ul class="dropdown-menu">
                                                 <li><a href="{{ path('brs_tte_facturas_lista') }}">Lista</a></li>
-                                            </ul>                                    
+                                            </ul>
                                         </li>
-                                    </ul>                                    
-                                </li>                                
+                                    </ul>
+                                </li>
                             </ul>
-                        </li>                        
+                        </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recurso humano</a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">                                    
+                                <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Pagos</a>
-                                    <ul class="dropdown-menu">    
-                                        <li><a href="{{ path('brs_rhu_pagos_lista') }}">Lista</a></li>                                        
-                                    </ul>                                    
-                                </li>                                
-                                <li class="dropdown-submenu">                                    
-                                    <a tabindex="-1" href="#">Creditos</a>
-                                    <ul class="dropdown-menu">    
-                                        <li><a href="{{ path('brs_rhu_creditos_lista') }}">Lista</a></li>                                        
-                                    </ul>                                    
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_rhu_pagos_lista') }}">Lista</a></li>
+                                    </ul>
                                 </li>
-                                <li class="dropdown-submenu">                                    
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Creditos</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_rhu_creditos_lista') }}">Lista</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Pagos adicionales</a>
-                                    <ul class="dropdown-menu">                                        
-                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_lista') }}">Lista</a></li>                                        
-                                    </ul>                                    
-                                </li>                                                                 
-                                <li class="dropdown-submenu">                                    
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_lista') }}">Generar masivo</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Facturas</a>
-                                    <ul class="dropdown-menu">    
-                                        <li><a href="{{ path('brs_rhu_facturas_lista') }}">Lista</a></li>                                        
-                                    </ul>                                    
-                                </li>                                
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_rhu_facturas_lista') }}">Lista</a></li>
+                                    </ul>
+                                </li>
                             </ul>
-                        </li>                                                
+                        </li>
                     </ul>
-                </li>                                
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

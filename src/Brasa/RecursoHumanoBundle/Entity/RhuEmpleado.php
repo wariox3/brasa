@@ -162,6 +162,11 @@ class RhuEmpleado
      */    
     private $fecha_finaliza_contrato;    
     
+    /**     
+     * @ORM\Column(name="contrato_indefinido", type="boolean")
+     */    
+    private $contratoIndefinido = 0;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
@@ -1284,5 +1289,29 @@ class RhuEmpleado
     public function getFechaFinalizaContrato()
     {
         return $this->fecha_finaliza_contrato;
+    }
+
+    /**
+     * Set contratoIndefinido
+     *
+     * @param boolean $contratoIndefinido
+     *
+     * @return RhuEmpleado
+     */
+    public function setContratoIndefinido($contratoIndefinido)
+    {
+        $this->contratoIndefinido = $contratoIndefinido;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoIndefinido
+     *
+     * @return boolean
+     */
+    public function getContratoIndefinido()
+    {
+        return $this->contratoIndefinido;
     }
 }

@@ -57,6 +57,11 @@ class RhuContrato
      */    
     private $comentarios;    
     
+    /**     
+     * @ORM\Column(name="indefinido", type="boolean")
+     */    
+    private $indefinido = 0;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -287,5 +292,29 @@ class RhuContrato
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set indefinido
+     *
+     * @param boolean $indefinido
+     *
+     * @return RhuContrato
+     */
+    public function setIndefinido($indefinido)
+    {
+        $this->indefinido = $indefinido;
+
+        return $this;
+    }
+
+    /**
+     * Get indefinido
+     *
+     * @return boolean
+     */
+    public function getIndefinido()
+    {
+        return $this->indefinido;
     }
 }
