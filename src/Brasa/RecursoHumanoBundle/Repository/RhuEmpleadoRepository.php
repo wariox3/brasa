@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuEmpleadoRepository extends EntityRepository {                   
+    
     public function ListaDQL($strNombre, $strCodigoCentroCosto = "", $boolMostrarActivos) {        
         $em = $this->getEntityManager();
         $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
@@ -21,7 +22,8 @@ class RhuEmpleadoRepository extends EntityRepository {
         }      
         if($boolMostrarActivos == 1 ) {
             $dql .= " AND e.estadoActivo = 1";
-        }        
+        }
+        $dql .= " ORDER BY e.nombreCorto";
         return $dql;
     }                    
 }

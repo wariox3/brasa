@@ -5,15 +5,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
 
-class RhuIncapacidadType extends AbstractType
+class RhuLicenciaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {        
-        $builder           
-            ->add('incapacidadTipoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuIncapacidadTipo',
-                'property' => 'nombre',
-            ))   
+        $builder              
             ->add('empleadoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
                 'query_builder' => function (EntityRepository $er) use ($options) {
@@ -22,9 +18,7 @@ class RhuIncapacidadType extends AbstractType
                     ->setParameter('centroCosto', $options['data']->getCentroCostoRel()->getCodigoCentroCostoPk())
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
-                'required' => true))                
-                
-            ->add('numeroEps', 'text', array('required' => true))   
+                'required' => true))                                   
             ->add('fechaDesde', 'date')                
             ->add('fechaHasta', 'date')  
             ->add('comentarios', 'textarea', array('required' => false))                

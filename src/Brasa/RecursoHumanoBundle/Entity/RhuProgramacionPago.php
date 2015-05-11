@@ -89,6 +89,12 @@ class RhuProgramacionPago
     protected $pagosAdicionalesProgramacionPagoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuDescuentoAdicional", mappedBy="programacionPagoRel")
+     */
+    protected $descuentosAdicionalesProgramacionPagoRel;    
+    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -460,5 +466,39 @@ class RhuProgramacionPago
     public function getEstadoAnulado()
     {
         return $this->estadoAnulado;
+    }
+
+    /**
+     * Add descuentosAdicionalesProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesProgramacionPagoRel
+     *
+     * @return RhuProgramacionPago
+     */
+    public function addDescuentosAdicionalesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesProgramacionPagoRel)
+    {
+        $this->descuentosAdicionalesProgramacionPagoRel[] = $descuentosAdicionalesProgramacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove descuentosAdicionalesProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesProgramacionPagoRel
+     */
+    public function removeDescuentosAdicionalesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesProgramacionPagoRel)
+    {
+        $this->descuentosAdicionalesProgramacionPagoRel->removeElement($descuentosAdicionalesProgramacionPagoRel);
+    }
+
+    /**
+     * Get descuentosAdicionalesProgramacionPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDescuentosAdicionalesProgramacionPagoRel()
+    {
+        return $this->descuentosAdicionalesProgramacionPagoRel;
     }
 }

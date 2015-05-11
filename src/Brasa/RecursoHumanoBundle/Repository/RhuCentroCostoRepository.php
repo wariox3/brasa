@@ -24,6 +24,7 @@ class RhuCentroCostoRepository extends EntityRepository {
             $intDias = $arCentroCostoProceso->getPeriodoPagoRel()->getDias();
             $dateDesde = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y-m-d');
             if($arCentroCostoProceso->getPeriodoPagoRel()->getContinuo() == 1) {
+                $intDias = $intDias - 1;
                 $dateDesde = date("Y/m/d", strtotime("$dateDesde +1 day"));
                 $dateHasta = date("Y/m/d", strtotime("$dateDesde +$intDias day"));
             } else {
@@ -84,6 +85,19 @@ class RhuCentroCostoRepository extends EntityRepository {
         }               
         $query = $em->createQuery($dql);        
         return $query;
-    }                
+    }    
+    
+    public function ListaDQL($strNombre, $boolMostrarInactivos = 0) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT cc FROM BrasaRecursoHumanoBundle:RhuCentroCosto cc WHERE cc.codigoCentroCostoPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND cc.nombre LIKE '%" . $strNombre . "%'";
+        }             
+        if($boolMostrarInactivos == 0) {
+            $dql .= " AND cc.estadoActivo = 1";
+        } 
+        $dql .= " ORDER BY cc.nombre";
+        return $dql;
+    }                        
     
 }

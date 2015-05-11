@@ -80,5 +80,15 @@ class RhuPagoRepository extends EntityRepository {
         $em->persist($arPago);
         $em->flush();
         return $douNeto;
-    }             
+    }    
+    
+    public function ListaDQL($strCodigoCentroCosto = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.codigoPagoPk <> 0";
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }      
+        //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
+        return $dql;
+    }                        
 }

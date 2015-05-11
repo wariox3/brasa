@@ -43,6 +43,16 @@ class RhuCredito
     private $vrCuota = 0;    
 
     /**
+     * @ORM\Column(name="saldo", type="float")
+     */
+    private $saldo = 0;    
+    
+    /**     
+     * @ORM\Column(name="estado_pagado", type="boolean")
+     */    
+    private $estadoPagado = 0;     
+    
+    /**
      * @ORM\Column(name="numero_cuotas", type="integer")
      */
     private $numeroCuotas = 0;        
@@ -319,5 +329,53 @@ class RhuCredito
     public function getCreditoTipoRel()
     {
         return $this->creditoTipoRel;
+    }
+
+    /**
+     * Set saldo
+     *
+     * @param float $saldo
+     *
+     * @return RhuCredito
+     */
+    public function setSaldo($saldo)
+    {
+        $this->saldo = $saldo;
+
+        return $this;
+    }
+
+    /**
+     * Get saldo
+     *
+     * @return float
+     */
+    public function getSaldo()
+    {
+        return $this->saldo;
+    }
+
+    /**
+     * Set estadoPagado
+     *
+     * @param boolean $estadoPagado
+     *
+     * @return RhuCredito
+     */
+    public function setEstadoPagado($estadoPagado)
+    {
+        $this->estadoPagado = $estadoPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagado()
+    {
+        return $this->estadoPagado;
     }
 }

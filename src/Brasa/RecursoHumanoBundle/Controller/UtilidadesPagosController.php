@@ -9,12 +9,17 @@ class UtilidadesPagosController extends Controller
     public function generarPeriodoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()
+            ->add('ChkMostrarInactivos', 'checkbox', array('label'=> '', 'required'  => false,))                 
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => ''))                       
+            ->add('BtnBuscar', 'submit', array('label'  => 'Filtrar'))                                
             ->add('Actualizar', 'submit')
             ->add('Generar', 'submit')
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
+            $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL('',0));
             if($form->get('Generar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
@@ -23,9 +28,13 @@ class UtilidadesPagosController extends Controller
                     }
                 }
             }
-        }
-        $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
+            if($form->get('BtnBuscar')->isClicked()) {
+                $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL('', $form->get('ChkMostrarInactivos')->getData()));
+            }            
+        } else {
+            $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL($form->get('TxtNombre')->getData(),0));
+        }        
+        $arCentroCosto = $paginator->paginate($query, $request->query->get('page', 1), 100);                                
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/Pago:generarPeriodoPago.html.twig', array(
             'arCentroCosto' => $arCentroCosto,
             'form' => $form->createView()
@@ -128,6 +137,28 @@ class UtilidadesPagosController extends Controller
                                     }
                                 }
 
+                                //Procesar Licencias
+                                $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+                                $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
+                                foreach ($arLicencias as $arLicencia) {
+                                    $intConceptoLicencia = 20;
+                                    $arPagoConceptoLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                    $arPagoConceptoLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intConceptoLicencia);
+                                    $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                    $arPagoDetalle->setPagoRel($arPago);
+                                    $arPagoDetalle->setPagoConceptoRel($arPagoConceptoLicencia);
+                                    $douPagoDetalle = 0;
+                                    $intDiasProcesarLicencia = 0;
+                                    if($arLicencia->getCantidad() <= $intDiasLaborados) {
+                                        $intDiasLaborados = $intDiasLaborados - $arLicencia->getCantidad();
+                                        $intDiasProcesarLicencia = $arLicencia->getCantidad();
+                                    }
+                                    $douPagoDetalle = $intDiasProcesarLicencia * $douVrDia;
+                                    $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;                                    
+                                    $arPagoDetalle->setNumeroHoras($intDiasProcesarLicencia * 8);                                                                                                                                                
+                                    $em->persist($arPagoDetalle);
+                                }                                
+                                
                                 //Procesar los conceptos de pagos adicionales
                                 $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
                                 $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 'pagoAplicado' => 0, 'codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
@@ -166,7 +197,7 @@ class UtilidadesPagosController extends Controller
                                 $arPagoConceptoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                                 $arPagoConceptoCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intConceptoCreditos);
                                 $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                                $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
+                                $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoPagado' => 0));
                                 foreach ($arCreditos as $arCredito) {
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
@@ -353,15 +384,18 @@ class UtilidadesPagosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-
+        $paginator  = $this->get('knp_paginator');
+        
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto, 'pagoAplicado' => 0));
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));
-        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));
+        $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+        $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));        
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1));
+        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);                        
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -371,6 +405,7 @@ class UtilidadesPagosController extends Controller
                     'arCentroCosto' => $arCentroCosto,
                     'arPagosAdicionales' => $arPagosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
+                    'arLicencias' => $arLicencias,
                     'arEmpleados' => $arEmpleados
                     ));
     }
@@ -411,7 +446,7 @@ class UtilidadesPagosController extends Controller
         if($dateFechaDesde != "" && $dateFechaHasta != "") {
             $intDias = $dateFechaDesde->diff($dateFechaHasta);
             $intDias = $intDias->format('%a');
-            $intDiasDevolver = $intDias;
+            $intDiasDevolver = $intDias + 1;
         }
         
         return $intDiasDevolver;

@@ -220,6 +220,11 @@ class RhuEmpleado
     protected $pagosAdicionalesEmpleadoRel;      
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuDescuentoAdicional", mappedBy="empleadoRel")
+     */
+    protected $descuentosAdicionalesEmpleadoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuCredito", mappedBy="empleadoRel")
      */
     protected $creditosEmpleadoRel;     
@@ -228,7 +233,12 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="empleadoRel")
      */
     protected $incapacidadesEmpleadoRel;    
-        
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuLicencia", mappedBy="empleadoRel")
+     */
+    protected $licenciasEmpleadoRel;     
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="empleadoRel")
      */
@@ -1313,5 +1323,73 @@ class RhuEmpleado
     public function getContratoIndefinido()
     {
         return $this->contratoIndefinido;
+    }
+
+    /**
+     * Add descuentosAdicionalesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addDescuentosAdicionalesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesEmpleadoRel)
+    {
+        $this->descuentosAdicionalesEmpleadoRel[] = $descuentosAdicionalesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove descuentosAdicionalesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesEmpleadoRel
+     */
+    public function removeDescuentosAdicionalesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesEmpleadoRel)
+    {
+        $this->descuentosAdicionalesEmpleadoRel->removeElement($descuentosAdicionalesEmpleadoRel);
+    }
+
+    /**
+     * Get descuentosAdicionalesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDescuentosAdicionalesEmpleadoRel()
+    {
+        return $this->descuentosAdicionalesEmpleadoRel;
+    }
+
+    /**
+     * Add licenciasEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addLicenciasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasEmpleadoRel)
+    {
+        $this->licenciasEmpleadoRel[] = $licenciasEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove licenciasEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasEmpleadoRel
+     */
+    public function removeLicenciasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasEmpleadoRel)
+    {
+        $this->licenciasEmpleadoRel->removeElement($licenciasEmpleadoRel);
+    }
+
+    /**
+     * Get licenciasEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLicenciasEmpleadoRel()
+    {
+        return $this->licenciasEmpleadoRel;
     }
 }

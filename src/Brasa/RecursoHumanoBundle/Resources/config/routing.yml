@@ -37,6 +37,22 @@ brs_rhu_pagos_adicionales_agregar_concepto:
 brs_rhu_pagos_adicionales_agregar_incapacidad:
     path:     /rhumano/pagos/adicionales/agregar/incapacidad/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregarIncapacidad:nuevo }    
+
+brs_rhu_descuentos_adicionales_lista:
+    path:     /rhumano/descuentos/adicionales/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:DescuentosAdicionales:lista }     
+    
+brs_rhu_descuentos_adicionales_detalle:
+    path:     /rhumano/descuentos/adicionales/detalle/{codigoCentroCosto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:DescuentosAdicionales:detalle }     
+    
+brs_rhu_descuentos_adicionales_agregar_concepto:
+    path:     /rhumano/descuentos/adicionales/agregar/concepto/{codigoCentroCosto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:DescuentosAdicionalesAgregarConcepto:lista }    
+
+brs_rhu_descuentos_adicionales_agregar_licencia:
+    path:     /rhumano/descuentos/adicionales/agregar/licencia/{codigoCentroCosto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:DescuentosAdicionalesAgregarLicencia:nuevo }        
     
 brs_rhu_creditos_lista:
     path:     /rhumano/creditos/lista

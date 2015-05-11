@@ -78,6 +78,11 @@ class RhuPagoConcepto
     protected $pagosAdicionalesPagoConceptoRel;         
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuDescuentoAdicional", mappedBy="pagoConceptoRel")
+     */
+    protected $descuentosAdicionalesPagoConceptoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -402,5 +407,39 @@ class RhuPagoConcepto
     public function getConceptoAuxilioTransporte()
     {
         return $this->conceptoAuxilioTransporte;
+    }
+
+    /**
+     * Add descuentosAdicionalesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addDescuentosAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesPagoConceptoRel)
+    {
+        $this->descuentosAdicionalesPagoConceptoRel[] = $descuentosAdicionalesPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove descuentosAdicionalesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesPagoConceptoRel
+     */
+    public function removeDescuentosAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesPagoConceptoRel)
+    {
+        $this->descuentosAdicionalesPagoConceptoRel->removeElement($descuentosAdicionalesPagoConceptoRel);
+    }
+
+    /**
+     * Get descuentosAdicionalesPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDescuentosAdicionalesPagoConceptoRel()
+    {
+        return $this->descuentosAdicionalesPagoConceptoRel;
     }
 }

@@ -4,7 +4,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 
-class PagosAdicionalesAgregarConceptoController extends Controller
+class DescuentosAdicionalesAgregarConceptoController extends Controller
 {
 
     public function listaAction($codigoCentroCosto) {
@@ -18,7 +18,7 @@ class PagosAdicionalesAgregarConceptoController extends Controller
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
                 'query_builder' => function (EntityRepository $er) use($codigoCentroCosto) {
                     return $er->createQueryBuilder('e')
-                    ->where('e.codigoCentroCostoFk = :centroCosto AND e.estadoActivo = 1')
+                    ->where('e.codigoCentroCostoFk = :centroCosto')
                     ->setParameter('centroCosto', $codigoCentroCosto)
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',

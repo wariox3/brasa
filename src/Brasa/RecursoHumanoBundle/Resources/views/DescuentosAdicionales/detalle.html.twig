@@ -1,0 +1,149 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+<div class="container">
+    <div class="page-header">
+        <h3>Descuentos adicionales centro costo </h3>            
+    </div>
+
+    <!-- Encabezado Movimiento -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Informacion centro costo</div>
+      <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="td-label">Numero:</td>
+                    <td class="td-in-well">{{ arCentroCosto.codigoCentroCostoPk }}</td>
+                    <td class="td-label">Ultimo periodo:</td>
+                    <td class="td-in-well">{{ arCentroCosto.fechaUltimoPagoProgramado |date("Y/m/d") }}</td>
+                </tr>
+                <tr>
+                    <td class="td-label">Nombre:</td>
+                    <td class="td-in-well">{{ arCentroCosto.nombre }}</td>
+                    <td class="td-label"></td>
+                    <td class="td-in-well"></td>
+                </tr>
+                <tr>
+                    <td colspan="8">Comentarios:</td>
+                </tr>
+            </table>
+      </div>
+    </div>    
+
+    <!-- Fin Encabezado Movimiento -->
+
+    <br />
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#descuentos" data-toggle="tab">Descuentos</a></li>
+        <li><a href="#licencias" data-toggle="tab">Licencias</a></li>
+    </ul>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    <div class="tab-content">
+        <div class="tab-pane active" id="descuentos">                        
+            <br />
+            <div id="suplementario" style="width: 100%">                    
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>ID</th>
+                        <th>NUMERO</th>
+                        <th>CONCEPTO</th>
+                        <th>EMPLEADO</th>
+                        <th>CANT</th>
+                        <th>VALOR</th>
+                        <th>PERMANENTE</th>
+                        <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                    </tr>
+                    {% for arDescuentosAdicionales in arDescuentosAdicionales %}
+                    <tr>
+                        <td>
+                            <input type="hidden" name="LblCodigoGuia[]" value="{{ arDescuentosAdicionales.codigoPagoAdicionalPk }}">
+                            <span class="badge">{{ arDescuentosAdicionales.codigoPagoAdicionalPk }}</span>
+                        </td>
+                        <td>{{ arDescuentosAdicionales.codigoPagoAdicionalPk}}</td>
+                        <td>{{ arDescuentosAdicionales.pagoConceptoRel.nombre }}</td>
+                        <td>{{ arDescuentosAdicionales.empleadoRel.nombreCorto }}</td>
+                        <td style="text-align: right">{{ arDescuentosAdicionales.cantidad | number_format(0, '.', ',') }}</td>                            
+                        <td style="text-align: right">{{ arDescuentosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
+                        <td>{% if arDescuentosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>                        
+                        <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDescuentosAdicionales.codigoPagoAdicionalPk }}" /></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <!-- Botones Menu Items -->
+                <div class="btn-toolbar" style="float:left">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_descuentos_adicionales_lista') }}" style="float:left">Volver</a>
+                    </div>
+                </div>
+
+                <div class="btn-toolbar" style="float:right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_descuentos_adicionales_agregar_concepto', {'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk}) }}', 'AgregarGuia', 600, 900)" >Agregar</a>
+                        {{ form_widget(form.BtnConceptoPermanente, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                                                
+                        {{ form_widget(form.BtnRetirarConcepto, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                        
+                    </div>
+                </div>
+                <!-- Fin Botones Menu Items -->
+
+                <br/><br/>
+                <hr/>
+            </div>            
+        </div>
+        <div class="tab-pane" id="licencias">
+            <br />
+            <div id="licencias" style="width: 100%">                    
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>ID</th>
+                        <th>FECHA</th>
+                        <th>DESDE</th>
+                        <th>HASTA</th>
+                        <th>EMPLEADO</th>
+                        <th>DIAS</th>
+                        <th>D. PENDIENTES</th>
+                        <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                    </tr>
+                    {% for arLicencias in arLicencias %}
+                    <tr>
+                        <td><input type="hidden" name="LblCodigo[]" value="{{ arLicencias.codigoLicenciaPk }}">{{ arLicencias.codigoLicenciaPk }} </td>
+                        
+                        <td>{{ arLicencias.fecha |date("Y/m/d")  }}</td>
+                        <td>{{ arLicencias.fechaDesde |date("Y/m/d")  }}</td>
+                        <td>{{ arLicencias.fechaHasta |date("Y/m/d")  }}</td>                        
+                        <td>{{ arLicencias.empleadoRel.nombreCorto  }}</td>
+                        <td style="text-align: right">{{ arLicencias.cantidad | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(0, '.', ',') }}</td>
+                        <td><input type="checkbox" name="ChkSeleccionarLicencia[]" value="{{ arLicencias.codigoLicenciaPk }}" /></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <!-- Botones Menu Items -->
+                <div class="btn-toolbar" style="float:left">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_descuentos_adicionales_lista') }}" style="float:left">Volver</a>
+                    </div>
+                </div>
+
+                <div class="btn-toolbar" style="float:right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_descuentos_adicionales_agregar_licencia', {'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk}) }}', 'AgregarGuia', 600, 900)" >Agregar</a>
+                        {{ form_widget(form.BtnRetirarLicencia, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                        
+                    </div>
+                </div>
+                <!-- Fin Botones Menu Items -->
+
+                <br/><br/>
+                <hr/>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

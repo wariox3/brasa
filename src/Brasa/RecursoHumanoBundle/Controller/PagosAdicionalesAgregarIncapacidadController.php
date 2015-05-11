@@ -24,6 +24,7 @@ class PagosAdicionalesAgregarIncapacidadController extends Controller
             $arIncapacidad = $form->getData();                          
             $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
             $intDias = $intDias->format('%a');
+            $intDias = $intDias + 1; 
             $arIncapacidad->setCantidad($intDias);
             $arIncapacidad->setCantidadPendiente($intDias);
             $em->persist($arIncapacidad);

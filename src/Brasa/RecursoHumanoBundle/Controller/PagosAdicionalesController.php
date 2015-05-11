@@ -133,10 +133,12 @@ class PagosAdicionalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
+        $paginator  = $this->get('knp_paginator');
+        
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);        
-        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto, 'estadoActivo' => 1));       
+        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);               
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1));
+        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);        
         $form = $this->createFormBuilder()
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
             ->getForm();
