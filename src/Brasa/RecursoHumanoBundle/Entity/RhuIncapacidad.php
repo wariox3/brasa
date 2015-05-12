@@ -51,11 +51,7 @@ class RhuIncapacidad
      * @ORM\Column(name="cantidadPendiente", type="integer")
      */
     private $cantidadPendiente = 0;    
-    
-    /**
-     * @ORM\Column(name="incapacidad_general", type="boolean")
-     */    
-    private $incapacidadGeneral = 0;     
+      
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -91,6 +87,8 @@ class RhuIncapacidad
     protected $empleadoRel;    
     
 
+
+
     /**
      * Get codigoIncapacidadPk
      *
@@ -99,6 +97,102 @@ class RhuIncapacidad
     public function getCodigoIncapacidadPk()
     {
         return $this->codigoIncapacidadPk;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return RhuIncapacidad
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * Set fechaDesde
+     *
+     * @param \DateTime $fechaDesde
+     *
+     * @return RhuIncapacidad
+     */
+    public function setFechaDesde($fechaDesde)
+    {
+        $this->fechaDesde = $fechaDesde;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesde
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesde()
+    {
+        return $this->fechaDesde;
+    }
+
+    /**
+     * Set fechaHasta
+     *
+     * @param \DateTime $fechaHasta
+     *
+     * @return RhuIncapacidad
+     */
+    public function setFechaHasta($fechaHasta)
+    {
+        $this->fechaHasta = $fechaHasta;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHasta
+     *
+     * @return \DateTime
+     */
+    public function getFechaHasta()
+    {
+        return $this->fechaHasta;
+    }
+
+    /**
+     * Set numeroEps
+     *
+     * @param string $numeroEps
+     *
+     * @return RhuIncapacidad
+     */
+    public function setNumeroEps($numeroEps)
+    {
+        $this->numeroEps = $numeroEps;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroEps
+     *
+     * @return string
+     */
+    public function getNumeroEps()
+    {
+        return $this->numeroEps;
     }
 
     /**
@@ -174,78 +268,6 @@ class RhuIncapacidad
     }
 
     /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuIncapacidad
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return RhuIncapacidad
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
-    }
-
-    /**
-     * Set incapacidadGeneral
-     *
-     * @param boolean $incapacidadGeneral
-     *
-     * @return RhuIncapacidad
-     */
-    public function setIncapacidadGeneral($incapacidadGeneral)
-    {
-        $this->incapacidadGeneral = $incapacidadGeneral;
-
-        return $this;
-    }
-
-    /**
-     * Get incapacidadGeneral
-     *
-     * @return boolean
-     */
-    public function getIncapacidadGeneral()
-    {
-        return $this->incapacidadGeneral;
-    }
-
-    /**
      * Set codigoCentroCostoFk
      *
      * @param integer $codigoCentroCostoFk
@@ -267,150 +289,6 @@ class RhuIncapacidad
     public function getCodigoCentroCostoFk()
     {
         return $this->codigoCentroCostoFk;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuIncapacidad
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
-     * Set fechaDesde
-     *
-     * @param \DateTime $fechaDesde
-     *
-     * @return RhuIncapacidad
-     */
-    public function setFechaDesde($fechaDesde)
-    {
-        $this->fechaDesde = $fechaDesde;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDesde
-     *
-     * @return \DateTime
-     */
-    public function getFechaDesde()
-    {
-        return $this->fechaDesde;
-    }
-
-    /**
-     * Set fechaHasta
-     *
-     * @param \DateTime $fechaHasta
-     *
-     * @return RhuIncapacidad
-     */
-    public function setFechaHasta($fechaHasta)
-    {
-        $this->fechaHasta = $fechaHasta;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaHasta
-     *
-     * @return \DateTime
-     */
-    public function getFechaHasta()
-    {
-        return $this->fechaHasta;
-    }
-
-    /**
-     * Set numeroIncapacidadEps
-     *
-     * @param string $numeroIncapacidadEps
-     *
-     * @return RhuIncapacidad
-     */
-    public function setNumeroIncapacidadEps($numeroIncapacidadEps)
-    {
-        $this->numeroIncapacidadEps = $numeroIncapacidadEps;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroIncapacidadEps
-     *
-     * @return string
-     */
-    public function getNumeroIncapacidadEps()
-    {
-        return $this->numeroIncapacidadEps;
-    }
-
-    /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     *
-     * @return RhuIncapacidad
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
-    }
-
-    /**
-     * Set numeroEps
-     *
-     * @param string $numeroEps
-     *
-     * @return RhuIncapacidad
-     */
-    public function setNumeroEps($numeroEps)
-    {
-        $this->numeroEps = $numeroEps;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroEps
-     *
-     * @return string
-     */
-    public function getNumeroEps()
-    {
-        return $this->numeroEps;
     }
 
     /**
@@ -438,6 +316,54 @@ class RhuIncapacidad
     }
 
     /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuIncapacidad
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
+    }
+
+    /**
      * Set incapacidadTipoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadTipoRel
@@ -459,5 +385,29 @@ class RhuIncapacidad
     public function getIncapacidadTipoRel()
     {
         return $this->incapacidadTipoRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
     }
 }

@@ -23,9 +23,22 @@ class RhuIncapacidadTipo
     private $nombre;     
     
     /**
+     * @ORM\Column(name="incapacidad_general", type="boolean")
+     */    
+    private $incapacidadGeneral = 0;      
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="incapacidadTipoRel")
      */
     protected $incapacidadesIncapacidadTipoRel;
+   
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->incapacidadesIncapacidadTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoIncapacidadTipoPk
@@ -60,12 +73,29 @@ class RhuIncapacidadTipo
     {
         return $this->nombre;
     }
+
     /**
-     * Constructor
+     * Set incapacidadGeneral
+     *
+     * @param boolean $incapacidadGeneral
+     *
+     * @return RhuIncapacidadTipo
      */
-    public function __construct()
+    public function setIncapacidadGeneral($incapacidadGeneral)
     {
-        $this->incapacidadesIncapacidadTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incapacidadGeneral = $incapacidadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidadGeneral
+     *
+     * @return boolean
+     */
+    public function getIncapacidadGeneral()
+    {
+        return $this->incapacidadGeneral;
     }
 
     /**

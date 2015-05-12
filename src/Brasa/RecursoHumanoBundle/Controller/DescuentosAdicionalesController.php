@@ -44,7 +44,7 @@ class DescuentosAdicionalesController extends Controller
                         $em->remove($arDescuentoAdicional);                        
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
+                    return $this->redirect($this->generateUrl('brs_rhu_descuentos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
                 }
             }
             if($form->get('BtnConceptoPermanente')->isClicked()) {
@@ -64,7 +64,7 @@ class DescuentosAdicionalesController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_descuentos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
                 }
             }
-            if($form->get('BtnRetirarIncapacidad')->isClicked()) {
+            if($form->get('BtnRetirarLicencia')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarIncapacidad');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados as $codigoIncapacidad) {
@@ -73,7 +73,7 @@ class DescuentosAdicionalesController extends Controller
                         $em->remove($arIncapacidad);                        
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
+                    return $this->redirect($this->generateUrl('brs_rhu_descuentos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
                 }
             }            
         }
@@ -118,8 +118,7 @@ class DescuentosAdicionalesController extends Controller
                             $arDescuentoAdicional->setPagoConceptoRel($arPagoConcepto);
                             $arDescuentoAdicional->setEmpleadoRel($arEmpleado);
                             $arDescuentoAdicional->setCentroCostoRel($arCentroCosto);                                    
-                            $intHoras = $arrControles['TxtRNFC'][$intIndice];
-                            $arDescuentoAdicional->setValor($intHoras);
+                            $arDescuentoAdicional->setValor($arrControles['TxtValor'][$intIndice]);
                             $em->persist($arDescuentoAdicional);                                
                         }                                                      
                     }

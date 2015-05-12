@@ -67,7 +67,7 @@
                         <td>{{ arPagosAdicionales.codigoPagoAdicionalPk}}</td>
                         <td>{{ arPagosAdicionales.pagoConceptoRel.nombre }}</td>
                         <td>{{ arPagosAdicionales.empleadoRel.nombreCorto }}</td>
-                        <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(0, '.', ',') }}</td>                            
+                        <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>                            
                         <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
                         <td>{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>                        
                         <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}" /></td>

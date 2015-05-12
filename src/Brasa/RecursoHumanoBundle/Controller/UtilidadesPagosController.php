@@ -32,7 +32,7 @@ class UtilidadesPagosController extends Controller
                 $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL('', $form->get('ChkMostrarInactivos')->getData()));
             }            
         } else {
-            $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL($form->get('TxtNombre')->getData(),0));
+            $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL($form->get('TxtNombre')->getData(), 0));
         }        
         $arCentroCosto = $paginator->paginate($query, $request->query->get('page', 1), 100);                                
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/Pago:generarPeriodoPago.html.twig', array(
@@ -81,6 +81,12 @@ class UtilidadesPagosController extends Controller
                                 $arPago->setVrSalario($arEmpleado->getVrSalario());
                                 $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
                                 $em->persist($arPago);
+                                /*if($arEmpleado->getNumeroIdentificacion() =='1038406105') {
+                                    echo "Entro";
+                                }*/
+                                  
+                                 
+                                
                                 //Parametros generales
                                 //$intDiasLaborados = $arProgramacionPagoProcesar->getDias();
                                 $intDiasLaborados = $this->devolverDiasLaborados($arEmpleado, $arProgramacionPagoProcesar, $arProgramacionPagoProcesar->getDias());
@@ -94,7 +100,7 @@ class UtilidadesPagosController extends Controller
                                 $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
                                 foreach ($arIncapacidades as $arIncapacidad) {
                                     $intConceptoIncapacidad = 0;
-                                    if($arIncapacidad->getIncapacidadGeneral() == 1) {
+                                    if($arIncapacidad->getIncapacidadTipoRel()->getIncapacidadGeneral() == 1) {
                                         $intConceptoIncapacidad = 16; //Configurar desde configuraciones
                                     } else {
                                         $intConceptoIncapacidad = 17; //Configurar desde configuraciones
@@ -106,11 +112,14 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setPagoConceptoRel($arPagoConceptoIncapacidad);
                                     $douPagoDetalle = 0;
                                     $intDiasProcesarIncapacidad = 0;
-                                    if($arIncapacidad->getCantidad() <= $intDiasLaborados) {
+                                    if($arIncapacidad->getCantidadPendiente() <= $intDiasLaborados) {
                                         $intDiasLaborados = $intDiasLaborados - $arIncapacidad->getCantidad();
                                         $intDiasProcesarIncapacidad = $arIncapacidad->getCantidad();
+                                    } else {
+                                       $intDiasProcesarIncapacidad = $intDiasLaborados;
+                                       $intDiasLaborados = 0; 
                                     }
-                                    if($arIncapacidad->getIncapacidadGeneral() == 1) {
+                                    if($arIncapacidad->getIncapacidadTipoRel()->getIncapacidadGeneral() == 1) {
                                         if($arEmpleado->getVrSalario() <= $douVrSalarioMinimo) {
                                             $douPagoDetalle = $intDiasProcesarIncapacidad * $douVrDia;
                                         }
@@ -126,8 +135,9 @@ class UtilidadesPagosController extends Controller
                                         $douPagoDetalle = $intDiasProcesarIncapacidad * $douVrDia;
                                         $douPagoDetalle = ($douPagoDetalle * $arPagoConceptoIncapacidad->getPorPorcentaje())/100;
                                     }
+                                    $arPagoDetalle->setNumeroHoras($intDiasProcesarIncapacidad*8);
                                     $arPagoDetalle->setVrHora($douVrHora);
-                                    $arPagoDetalle->setVrDia($douVrDia);
+                                    $arPagoDetalle->setVrDia($douVrDia);                                    
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arPagoConceptoIncapacidad->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoIncapacidad->getOperacion());
@@ -192,6 +202,29 @@ class UtilidadesPagosController extends Controller
                                     }
                                 }
 
+                                //Descuentos adicionales
+                                $arDescuentosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
+                                $arDescuentosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 'descuentoAplicado' => 0, 'codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
+                                foreach ($arDescuentosAdicionales as $arDescuentoAdicional) {
+                                    $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                    $arPagoDetalle->setPagoRel($arPago);
+                                    $arPagoDetalle->setPagoConceptoRel($arDescuentoAdicional->getPagoConceptoRel());                                    
+                                    $douPagoDetalle = $arDescuentoAdicional->getValor();
+                                    $arPagoDetalle->setVrDia($douVrDia);
+                                    
+                                    $arPagoDetalle->setVrPago($douPagoDetalle);
+                                    $arPagoDetalle->setOperacion($arDescuentoAdicional->getPagoConceptoRel()->getOperacion());
+                                    $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arDescuentoAdicional->getPagoConceptoRel()->getOperacion());
+                                    $em->persist($arPagoDetalle);              
+                                    if($arDescuentoAdicional->getPermanente() == 0) {
+                                        $arDescuentoAdicionalActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
+                                        $arDescuentoAdicionalActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->find($arDescuentoAdicional->getCodigoDescuentoAdicionalPk());
+                                        $arDescuentoAdicionalActualizar->setDescuentoAplicado(1);
+                                        $arDescuentoAdicionalActualizar->setProgramacionPagoRel($arProgramacionPagoProcesar);
+                                        $em->persist($arDescuentoAdicionalActualizar);
+                                    }
+                                }                                
+                                
                                 //Procesar creditos
                                 $intConceptoCreditos = 14; //Configurar desde configuraciones
                                 $arPagoConceptoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
@@ -390,6 +423,8 @@ class UtilidadesPagosController extends Controller
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto, 'pagoAplicado' => 0));
+        $arDescuentosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
+        $arDescuentosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto, 'descuentoAplicado' => 0));        
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
@@ -404,6 +439,7 @@ class UtilidadesPagosController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/Pago:generarPagoResumen.html.twig', array(
                     'arCentroCosto' => $arCentroCosto,
                     'arPagosAdicionales' => $arPagosAdicionales,
+                    'arDescuentosAdicionales' => $arDescuentosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
                     'arLicencias' => $arLicencias,
                     'arEmpleados' => $arEmpleados

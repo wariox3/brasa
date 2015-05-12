@@ -146,7 +146,6 @@ class PagosAdicionalesController extends Controller
         if($form->isValid()) {
             $arrControles = $request->request->All();
             if($form->get('BtnGenerar')->isClicked()) {
-
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {                        
                         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
@@ -249,6 +248,17 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);                                    
                                 $intHoras = $arrControles['TxtRN'][$intIndice];
                                 $arPagoAdicional->setCantidad($intHoras);
+                                $em->persist($arPagoAdicional);                                
+                            }  
+                            if($arrControles['TxtValor'][$intIndice] != "" && $arrControles['TxtValor'][$intIndice] != 0) {
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(15);
+                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
+                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
+                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);                                    
+                                $intValor = $arrControles['TxtValor'][$intIndice];
+                                $arPagoAdicional->setValor($intValor);
                                 $em->persist($arPagoAdicional);                                
                             }                            
                         }

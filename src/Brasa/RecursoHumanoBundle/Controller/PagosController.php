@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\ORM\EntityRepository;
 
 class PagosController extends Controller
 {
@@ -10,7 +11,22 @@ class PagosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
         $paginator  = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')                                        
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,                            
+                'empty_value' => "Todos",
+                'mapped' => false,
+                'data' => '182',
+                
+            ))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                            
+            ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroPagoNumero')))                                                   
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
@@ -63,8 +79,26 @@ class PagosController extends Controller
                 $objWriter->save('php://output');
                 exit;
             }            
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $objCentroCosto = $form->get('centroCostoRel')->getData();
+                if($objCentroCosto != null) {
+                    $codigoCentroCosto = $form->get('centroCostoRel')->getData()->getCodigoCentroCostoPk();
+                } else {
+                    $codigoCentroCosto = "";
+                }
+                $session->set('dqlPago', $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->ListaDQL(
+                        $form->get('TxtNumero')->getData(),
+                        $codigoCentroCosto));
+                $session->set('filtroPagoNumero', $form->get('TxtNumero')->getData());
+                $session->set('filtroCentroCosto', $codigoCentroCosto);                
+            }            
+        } else {
+           $session->set('dqlPago', $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->ListaDQL(
+                   $session->get('filtroPagoNumero'),
+                   $session->get('filtroCentroCosto')
+                   ));            
         }
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->ListaDQL(""));        
+        $query = $em->createQuery($session->get('dqlPago'));        
         $arPagos = $paginator->paginate($query, $request->query->get('page', 1), 50);                               
         return $this->render('BrasaRecursoHumanoBundle:Pagos:lista.html.twig', array(
             'arPagos' => $arPagos,

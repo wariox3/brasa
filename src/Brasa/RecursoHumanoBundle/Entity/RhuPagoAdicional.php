@@ -28,7 +28,7 @@ class RhuPagoAdicional
     private $codigoEmpleadoFk;       
     
     /**
-     * @ORM\Column(name="cantidad", type="integer")
+     * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad = 0; 
     
