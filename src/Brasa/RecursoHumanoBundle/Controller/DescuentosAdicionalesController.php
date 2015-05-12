@@ -61,7 +61,7 @@ class DescuentosAdicionalesController extends Controller
                         $em->persist($arDescuentoAdicional);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
+                    return $this->redirect($this->generateUrl('brs_rhu_descuentos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
                 }
             }
             if($form->get('BtnRetirarIncapacidad')->isClicked()) {
@@ -88,5 +88,50 @@ class DescuentosAdicionalesController extends Controller
                     'form' => $form->createView()
                     ));
     }        
-                  
+ 
+    public function generarMasivoDetalleAction($codigoCentroCosto) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');
+        $paginator  = $this->get('knp_paginator');
+        
+        $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);               
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1));
+        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);        
+        $form = $this->createFormBuilder()
+            ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            $arrControles = $request->request->All();
+            if($form->get('BtnGenerar')->isClicked()) {
+                $intIndice = 0;
+                foreach ($arrControles['LblCodigo'] as $intCodigo) {                        
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($intCodigo);
+                    if(count($arEmpleado) > 0) {                                                                                        
+                        if($arrControles['TxtValor'][$intIndice] != "" && $arrControles['TxtValor'][$intIndice] != 0) {
+                            $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(21);
+                            $arDescuentoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
+                            $arDescuentoAdicional->setPagoConceptoRel($arPagoConcepto);
+                            $arDescuentoAdicional->setEmpleadoRel($arEmpleado);
+                            $arDescuentoAdicional->setCentroCostoRel($arCentroCosto);                                    
+                            $intHoras = $arrControles['TxtRNFC'][$intIndice];
+                            $arDescuentoAdicional->setValor($intHoras);
+                            $em->persist($arDescuentoAdicional);                                
+                        }                                                      
+                    }
+                    $intIndice++;
+                }
+                $em->flush();                                    
+            }
+        }        
+        
+        return $this->render('BrasaRecursoHumanoBundle:DescuentosAdicionales:generarMasivoDetalle.html.twig', array(
+            'arEmpleados' => $arEmpleados,
+            'form' => $form->createView()
+            ));
+    }    
 }

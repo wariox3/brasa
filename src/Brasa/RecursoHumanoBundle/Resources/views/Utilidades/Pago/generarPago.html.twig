@@ -26,6 +26,7 @@
                 <th><p data-toggle="tooltip" data-placement="top" title="Ingresar pagos adicionales">P. AD</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Pagos adicionales masivos">P. AD. MASIVO</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Ingresar descuentos adicionales">D. AD</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Descuentos adicionales masivos">D. AD. MASIVO</p></th>
                 <th style="text-align: center">RESUMEN</th>
                 <th></th>
             </tr>
@@ -43,6 +44,7 @@
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Ver</a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Generar</a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_descuentos_adicionales_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Ver</a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_descuentos_adicionales_generarmasivo_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Generar</a></td>                
                 <td style="text-align: center"><a href="{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}" /></td>
             </tr>

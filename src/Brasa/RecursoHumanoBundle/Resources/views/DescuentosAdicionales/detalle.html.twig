@@ -61,16 +61,16 @@
                     {% for arDescuentosAdicionales in arDescuentosAdicionales %}
                     <tr>
                         <td>
-                            <input type="hidden" name="LblCodigoGuia[]" value="{{ arDescuentosAdicionales.codigoPagoAdicionalPk }}">
-                            <span class="badge">{{ arDescuentosAdicionales.codigoPagoAdicionalPk }}</span>
+                            <input type="hidden" name="LblCodigo[]" value="{{ arDescuentosAdicionales.codigoDescuentoAdicionalPk }}">
+                            <span class="badge">{{ arDescuentosAdicionales.codigoDescuentoAdicionalPk }}</span>
                         </td>
-                        <td>{{ arDescuentosAdicionales.codigoPagoAdicionalPk}}</td>
+                        <td>{{ arDescuentosAdicionales.codigoDescuentoAdicionalPk}}</td>
                         <td>{{ arDescuentosAdicionales.pagoConceptoRel.nombre }}</td>
                         <td>{{ arDescuentosAdicionales.empleadoRel.nombreCorto }}</td>
                         <td style="text-align: right">{{ arDescuentosAdicionales.cantidad | number_format(0, '.', ',') }}</td>                            
                         <td style="text-align: right">{{ arDescuentosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
                         <td>{% if arDescuentosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>                        
-                        <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDescuentosAdicionales.codigoPagoAdicionalPk }}" /></td>
+                        <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDescuentosAdicionales.codigoDescuentoAdicionalPk }}" /></td>
                     </tr>
                     {% endfor %}
                 </table>
