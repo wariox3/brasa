@@ -50,8 +50,8 @@ class PagosController extends Controller
                             ->setCellValue('D1', 'Neto');
 
                 $i = 2;
-                $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findAll();
+                $query = $em->createQuery($session->get('dqlPago'));
+                $arPagos = $query->getResult();
                 foreach ($arPagos as $arPago) {
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())

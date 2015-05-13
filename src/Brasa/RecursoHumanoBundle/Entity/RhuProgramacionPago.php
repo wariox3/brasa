@@ -77,6 +77,13 @@ class RhuProgramacionPago
      */
     private $vr_total_neto = 0;    
     
+
+    /**     
+     * Cuando se deshace un periodo esta propiedad ayuda a que no vuelva a generar periodo nuevo
+     * @ORM\Column(name="no_generar_periodo", type="boolean")
+     */    
+    private $noGeneraPeriodo = 0;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="programacionesPagosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
@@ -98,6 +105,10 @@ class RhuProgramacionPago
      */
     protected $descuentosAdicionalesProgramacionPagoRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuLicenciaRegistroPago", mappedBy="programacionPagoRel")
+     */
+    protected $licenciasRegistrosPagosProgramacionPagoRel;     
     
     /**
      * Constructor
@@ -529,5 +540,63 @@ class RhuProgramacionPago
     public function getNovedadesVerificadas()
     {
         return $this->novedadesVerificadas;
+    }
+
+    /**
+     * Add licenciasRegistrosPagosProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosProgramacionPagoRel
+     *
+     * @return RhuProgramacionPago
+     */
+    public function addLicenciasRegistrosPagosProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosProgramacionPagoRel)
+    {
+        $this->licenciasRegistrosPagosProgramacionPagoRel[] = $licenciasRegistrosPagosProgramacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove licenciasRegistrosPagosProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosProgramacionPagoRel
+     */
+    public function removeLicenciasRegistrosPagosProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosProgramacionPagoRel)
+    {
+        $this->licenciasRegistrosPagosProgramacionPagoRel->removeElement($licenciasRegistrosPagosProgramacionPagoRel);
+    }
+
+    /**
+     * Get licenciasRegistrosPagosProgramacionPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLicenciasRegistrosPagosProgramacionPagoRel()
+    {
+        return $this->licenciasRegistrosPagosProgramacionPagoRel;
+    }
+
+    /**
+     * Set noGeneraPeriodo
+     *
+     * @param boolean $noGeneraPeriodo
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setNoGeneraPeriodo($noGeneraPeriodo)
+    {
+        $this->noGeneraPeriodo = $noGeneraPeriodo;
+
+        return $this;
+    }
+
+    /**
+     * Get noGeneraPeriodo
+     *
+     * @return boolean
+     */
+    public function getNoGeneraPeriodo()
+    {
+        return $this->noGeneraPeriodo;
     }
 }

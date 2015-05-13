@@ -56,6 +56,7 @@ class UtilidadesPagosController extends Controller
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
             ->add('BtnPagar', 'submit', array('label'  => 'Pagar',))
             ->add('BtnAnular', 'submit', array('label'  => 'Anular',))
+            ->add('BtnDeshacer', 'submit', array('label'  => 'Des-hacer',))    
             ->getForm();
         $frmPagar->handleRequest($request);
         if($form->isValid()) {
@@ -68,9 +69,9 @@ class UtilidadesPagosController extends Controller
                         $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
                         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
                         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
-                        if($arProgramacionPagoProcesar->getVerificarIncapacidades() == 1 && $arProgramacionPagoProcesar->getVerificarPagosAdicionales() == 1) {
+                        if($arProgramacionPagoProcesar->getNovedadesVerificadas() == 1) {
                             $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                            $arEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('codigoCentroCostoFk' => $arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 'estadoActivo' => 1));
+                            $arEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('codigoCentroCostoFk' => $arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 'estadoActivo' => 1, 'pagadoEntidadSalud' => 0));
                             foreach ($arEmpleados as $arEmpleado) {
                                 $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                                 $arPago->setEmpleadoRel($arEmpleado);
@@ -166,6 +167,8 @@ class UtilidadesPagosController extends Controller
                                     $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;                                    
                                     $arPagoDetalle->setNumeroHoras($intDiasProcesarLicencia * 8);                                                                                                                                                
                                     $em->persist($arPagoDetalle);
+                                    //Actualizar cantidades licencia
+                                    
                                 }                                
                                 
                                 //Procesar los conceptos de pagos adicionales
@@ -314,14 +317,17 @@ class UtilidadesPagosController extends Controller
                             $em->persist($arProgramacionPagoProcesar);
                             $em->flush();
                             $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Liquidar($codigoProgramacionPago);
-                            $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
+                            if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
+                                $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk());                                
+                            }
+                            
 
                         } else {
                             $boolErrores = 1;
                         }
                     }
                     if($boolErrores == 1) {
-                        $objMensaje->Mensaje("error", "Algunas programaciones no tienen la verificacion de incapacidades y pagos adicionales", $this);
+                        $objMensaje->Mensaje("error", "Algunas programaciones no tienen la verificacion de novedades", $this);
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }
@@ -388,6 +394,15 @@ class UtilidadesPagosController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }
             }
+            if($frmPagar->get('BtnDeshacer')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Deshacer($codigoProgramacionPago);
+                    }
+                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
+                }
+            }            
         }
 
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -418,7 +433,7 @@ class UtilidadesPagosController extends Controller
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));        
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1));
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1, "", 0));
         $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);                        
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();

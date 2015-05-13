@@ -21,8 +21,8 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>DIAS</th>
-                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Pagos adicionales verificados">V. A.</p></th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Novedades verificadas">VERIFICAR</p></th>                
+                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Novedades verificadas">VERIFICAR</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Ingresar pagos adicionales">P. AD</p></th>                
                 <th><p data-toggle="tooltip" data-placement="top" title="Pagos adicionales masivos">P. AD. MASIVO</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Ingresar descuentos adicionales">D. AD</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Descuentos adicionales masivos">D. AD. MASIVO</p></th>
@@ -106,6 +106,7 @@
             <div class="btn-group">
                 {{ form_widget(frmPagar.BtnLiquidar, { 'attr': {'class': 'btn btn-defoult btn-sm'} }) }}
                 {{ form_widget(frmPagar.BtnPagar, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
+                {{ form_widget(frmPagar.BtnDeshacer, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                 {{ form_widget(frmPagar.BtnAnular, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>

@@ -69,6 +69,10 @@ class RhuLicencia
      */
     protected $empleadoRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuLicenciaRegistroPago", mappedBy="licenciaRel")
+     */
+    protected $licenciasRegistrosPagosLicenciaRel;    
 
     /**
      * Get codigoLicenciaPk
@@ -318,5 +322,46 @@ class RhuLicencia
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->licenciasRegistrosPagosLicenciaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add licenciasRegistrosPagosLicenciaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosLicenciaRel
+     *
+     * @return RhuLicencia
+     */
+    public function addLicenciasRegistrosPagosLicenciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosLicenciaRel)
+    {
+        $this->licenciasRegistrosPagosLicenciaRel[] = $licenciasRegistrosPagosLicenciaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove licenciasRegistrosPagosLicenciaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosLicenciaRel
+     */
+    public function removeLicenciasRegistrosPagosLicenciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosLicenciaRel)
+    {
+        $this->licenciasRegistrosPagosLicenciaRel->removeElement($licenciasRegistrosPagosLicenciaRel);
+    }
+
+    /**
+     * Get licenciasRegistrosPagosLicenciaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLicenciasRegistrosPagosLicenciaRel()
+    {
+        return $this->licenciasRegistrosPagosLicenciaRel;
     }
 }

@@ -44,7 +44,9 @@ class RhuEmpleadoType extends AbstractType
             ->add('cuenta', 'text', array('required' => true))
             ->add('numeroIdentificacion', 'text', array('required' => true))
             ->add('vrSalario', 'number', array('required' => true))
-            ->add('auxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                                
+            ->add('auxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('pagadoEntidadSalud', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

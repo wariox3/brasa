@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuEmpleadoRepository extends EntityRepository {                   
     
-    public function ListaDQL($strNombre, $strCodigoCentroCosto = "", $boolMostrarActivos) {        
+    public function ListaDQL($strNombre = "", $strCodigoCentroCosto = "", $boolMostrarActivos = "", $strIdentificacion = "", $boolMostrarPagadosEntidadSalud = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
         if($strNombre != "" ) {
@@ -22,7 +22,17 @@ class RhuEmpleadoRepository extends EntityRepository {
         }      
         if($boolMostrarActivos == 1 ) {
             $dql .= " AND e.estadoActivo = 1";
+        } elseif($boolMostrarActivos == 0) {
+            $dql .= " AND e.estadoActivo = 0";
         }
+        if($boolMostrarPagadosEntidadSalud == 1 ) {
+            $dql .= " AND e.pagadoEntidadSalud = 1";
+        } elseif ($boolMostrarPagadosEntidadSalud == 0) {
+            $dql .= " AND e.pagadoEntidadSalud = 0";
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }         
         $dql .= " ORDER BY e.nombreCorto";
         return $dql;
     }                    

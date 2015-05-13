@@ -97,7 +97,7 @@ class DescuentosAdicionalesController extends Controller
         
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);               
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1));
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1, "", 0));
         $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);        
         $form = $this->createFormBuilder()
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))

@@ -165,8 +165,19 @@ class RhuEmpleado
     /**     
      * @ORM\Column(name="contrato_indefinido", type="boolean")
      */    
-    private $contratoIndefinido = 0;     
+    private $contratoIndefinido = 0;
     
+    /**     
+     * Empleado pagado por la entidad de salud, exonerado de los pagos
+     * @ORM\Column(name="pagado_entidad_salud", type="boolean")
+     */    
+    private $pagadoEntidadSalud = 0;    
+    
+    /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;     
+            
     /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
@@ -1391,5 +1402,53 @@ class RhuEmpleado
     public function getLicenciasEmpleadoRel()
     {
         return $this->licenciasEmpleadoRel;
+    }
+
+    /**
+     * Set pagadoEntidadSalud
+     *
+     * @param boolean $pagadoEntidadSalud
+     *
+     * @return RhuEmpleado
+     */
+    public function setPagadoEntidadSalud($pagadoEntidadSalud)
+    {
+        $this->pagadoEntidadSalud = $pagadoEntidadSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get pagadoEntidadSalud
+     *
+     * @return boolean
+     */
+    public function getPagadoEntidadSalud()
+    {
+        return $this->pagadoEntidadSalud;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuEmpleado
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 }

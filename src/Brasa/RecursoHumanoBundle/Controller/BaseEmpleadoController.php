@@ -25,9 +25,10 @@ class BaseEmpleadoController extends Controller
                 'mapped' => false,
                 'data' => '',
 
-            ))
-            ->add('ChkActivo', 'checkbox', array('label'=> '', 'required'  => false,))
+            ))            
+            ->add('estadoActivo', 'choice', array('choices'   => array('1' => 'Activos', '0' => 'Inactivos', '2' => 'Todos')))                            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
             ->add('BtnBuscar', 'submit', array('label'  => 'Buscar'))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
@@ -48,35 +49,61 @@ class BaseEmpleadoController extends Controller
                 $session->set('dqlEmpleado', $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL(
                         $form->get('TxtNombre')->getData(),
                         $codigoCentroCosto,
-                        $form->get('ChkActivo')->getData()));
+                        $form->get('estadoActivo')->getData(),
+                        $form->get('TxtIdentificacion')->getData(),
+                        ""
+                        ));
                 $session->set('filtroNombre', $form->get('TxtNombre')->getData());
+                $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
                 $session->set('filtroCentroCosto', $codigoCentroCosto);
-                $session->set('filtroActivo', $form->get('ChkActivo')->getData());
+                $session->set('filtroActivos', $form->get('estadoActivo')->getData());
 
             }
 
             if($form->get('BtnExcel')->isClicked()) {
-                   $objPHPExcel = new \PHPExcel();
-                   // Set properties
-                   $objPHPExcel->getProperties()->setCreator("Brasa app");
-                   $objPHPExcel->getProperties()->setTitle("Office 2007 XLSX Test Document");
-                   $objPHPExcel->getProperties()->setSubject("Office 2007 XLSX Test Document");
-                   $objPHPExcel->getProperties()->setDescription("Lista centros costo");
+                $objPHPExcel = new \PHPExcel();
+                // Set document properties
+                $objPHPExcel->getProperties()->setCreator("JG Efectivos")
+                    ->setLastModifiedBy("JG Efectivos")
+                    ->setTitle("Office 2007 XLSX Test Document")
+                    ->setSubject("Office 2007 XLSX Test Document")
+                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("Test result file");
 
-                   // Add some data
-                   $objPHPExcel->setActiveSheetIndex(0);
-                   $objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Hello');
-                   $objPHPExcel->getActiveSheet()->SetCellValue('B2', 'world!');
-                   $objPHPExcel->getActiveSheet()->SetCellValue('C1', 'Hello');
-                   $objPHPExcel->getActiveSheet()->SetCellValue('D2', 'world!');
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A1', 'Codigo')
+                            ->setCellValue('B1', 'Identificacion')
+                            ->setCellValue('C1', 'Nombre');
 
-                   // Rename sheet
-                   $objPHPExcel->getActiveSheet()->setTitle('Simple');
+                $i = 2;
+                $query = $em->createQuery($session->get('dqlEmpleado'));
+                $arEmpleados = $query->getResult();
+                foreach ($arEmpleados as $arEmpleado) {
+                    $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
+                            ->setCellValue('B' . $i, $arEmpleado->getNumeroIdentificacion())
+                            ->setCellValue('C' . $i, $arEmpleado->getNombreCorto());
+                    $i++;
+                }
 
-                   // Save Excel 2007 file
-                   $strArchivo = "/opt/lampp/htdocs/prueba.xlsx";
-                   $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-                   $objWriter->save($strArchivo);
+                $objPHPExcel->getActiveSheet()->setTitle('Empleados');
+                $objPHPExcel->setActiveSheetIndex(0);
+
+                // Redirect output to a client’s web browser (Excel2007)
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="Empleados.xlsx"');
+                header('Cache-Control: max-age=0');
+                // If you're serving to IE 9, then the following may be needed
+                header('Cache-Control: max-age=1');
+                // If you're serving to IE over SSL, then the following may be needed
+                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header ('Pragma: public'); // HTTP/1.0
+                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+                $objWriter->save('php://output');
+                exit;
             }
 
             if($form->get('BtnInactivar')->isClicked()) {
@@ -99,7 +126,9 @@ class BaseEmpleadoController extends Controller
            $session->set('dqlEmpleado', $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL(
                    $session->get('filtroNombre'),
                    $session->get('filtroCentroCosto'),
-                   $session->get('filtroActivo')
+                   $session->get('filtroActivos'),
+                   $session->get('filtroIdentificacion'),
+                   ""
                    ));
         }
 

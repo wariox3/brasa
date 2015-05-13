@@ -48,4 +48,52 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em->flush();
         return true;
     }    
+    
+    public function Deshacer($codigoProgramacionPago) {        
+        $em = $this->getEntityManager();
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                 
+        //Devolver incapacidades
+        //Devolver Licencias
+        //Devolver pagos adicionales
+        /*$arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 'pagoAplicado' => 0, 'codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));        
+        foreach ($arPagosAdicionales as $arPagoAdicional) {
+            $arPagoAdicionalActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+            $arPagoAdicionalActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($arPagoAdicional->getCodigoPagoAdicionalPk());
+            $arPagoAdicionalActualizar->setPagoAplicado(0);
+            $arPagoAdicionalActualizar->setProgramacionPagoRel($arProgramacionPagoProcesar);
+            $em->persist($arPagoAdicionalActualizar);            
+        }*/
+        
+        //Devolver descuentos adicionales
+        $arDescuentosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
+        $arDescuentosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));        
+        foreach ($arDescuentosAdicionales as $arDescuentoAdicional) {
+            $arDescuentoAdicionalActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
+            $arDescuentoAdicionalActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->find($arDescuentoAdicional->getCodigoDescuentoAdicionalPk());
+            $arDescuentoAdicionalActualizar->setDescuentoAplicado(0);
+            $arDescuentoAdicionalActualizar->setProgramacionPagoRel(NULL);
+            $em->persist($arDescuentoAdicionalActualizar);            
+        }
+        
+        //Devolver creditos
+        //Eliminar pagos
+        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));         
+        foreach ($arPagos as $arPago) {            
+            $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+            $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));                                             
+            foreach ($arPagosDetalles as $arPagoDetalle) {
+                $em->remove($arPagoDetalle);
+            }
+            $em->remove($arPago);             
+        }
+        $arProgramacionPago->setNoGeneraPeriodo(1);
+        $arProgramacionPago->setVrTotalNeto(0);
+        $arProgramacionPago->setEstadoGenerado(0);
+        $em->persist($arProgramacionPago);
+        $em->flush();
+        return true;
+    }    
 }
