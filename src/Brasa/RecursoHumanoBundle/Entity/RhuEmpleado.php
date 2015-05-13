@@ -177,7 +177,12 @@ class RhuEmpleado
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;     
-            
+    
+    /**
+     * @ORM\Column(name="codigo_tipo_tiempo_fk", type="integer", nullable=true)
+     */    
+    private $codigoTipoTiempoFk;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
@@ -219,6 +224,12 @@ class RhuEmpleado
      * @ORM\JoinColumn(name="codigo_entidad_pension_fk", referencedColumnName="codigo_entidad_pension_pk")
      */
     protected $entidadPensionRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuTipoTiempo", inversedBy="empleadosTipoTiempoRel")
+     * @ORM\JoinColumn(name="codigo_tipo_tiempo_fk", referencedColumnName="codigo_tipo_tiempo_pk")
+     */
+    protected $tipoTiempoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="empleadoRel")
@@ -1450,5 +1461,53 @@ class RhuEmpleado
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set codigoTipoTiempoFk
+     *
+     * @param integer $codigoTipoTiempoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoTipoTiempoFk($codigoTipoTiempoFk)
+    {
+        $this->codigoTipoTiempoFk = $codigoTipoTiempoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoTiempoFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoTiempoFk()
+    {
+        return $this->codigoTipoTiempoFk;
+    }
+
+    /**
+     * Set tipoTiempoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo $tipoTiempoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setTipoTiempoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo $tipoTiempoRel = null)
+    {
+        $this->tipoTiempoRel = $tipoTiempoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoTiempoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo
+     */
+    public function getTipoTiempoRel()
+    {
+        return $this->tipoTiempoRel;
     }
 }

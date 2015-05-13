@@ -32,6 +32,10 @@ class RhuEmpleadoType extends AbstractType
             ->add('clasificacionRiesgoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
                 'property' => 'nombre',
+            ))  
+            ->add('tipoTiempoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuTipoTiempo',
+                'property' => 'nombre',
             ))                
             ->add('nombreCorto', 'text', array('required' => true))
             ->add('nombre1', 'text', array('required' => true))

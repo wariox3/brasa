@@ -488,7 +488,9 @@ class UtilidadesPagosController extends Controller
             $intDias = $intDias->format('%a');
             $intDiasDevolver = $intDias + 1;
         }
-        
+        if($intDiasDevolver > 0 && $arEmpleado->getTipoTiempoRel()->getFactor() != 0) {
+            $intDiasDevolver = $intDiasDevolver / $arEmpleado->getTipoTiempoRel()->getFactor();
+        }
         return $intDiasDevolver;
     }
 }

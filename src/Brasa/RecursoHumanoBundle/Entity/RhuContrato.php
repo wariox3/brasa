@@ -15,12 +15,17 @@ class RhuContrato
      * @ORM\Column(name="codigo_contrato_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoContratoPk;
+    private $codigoContratoPk;        
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;     
+    
+    /**
+     * @ORM\Column(name="codigo_tipo_tiempo_fk", type="integer", nullable=true)
+     */    
+    private $codigoTipoTiempoFk;    
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -69,6 +74,15 @@ class RhuContrato
     protected $empleadoRel;    
 
     /**
+     * @ORM\ManyToOne(targetEntity="RhuTipoTiempo", inversedBy="contratosTipoTiempoRel")
+     * @ORM\JoinColumn(name="codigo_tipo_tiempo_fk", referencedColumnName="codigo_tipo_tiempo_pk")
+     */
+    protected $tipoTiempoRel;     
+    
+
+
+
+    /**
      * Get codigoContratoPk
      *
      * @return integer
@@ -100,6 +114,30 @@ class RhuContrato
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set codigoTipoTiempoFk
+     *
+     * @param integer $codigoTipoTiempoFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoTipoTiempoFk($codigoTipoTiempoFk)
+    {
+        $this->codigoTipoTiempoFk = $codigoTipoTiempoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoTiempoFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoTiempoFk()
+    {
+        return $this->codigoTipoTiempoFk;
     }
 
     /**
@@ -223,30 +261,6 @@ class RhuContrato
     }
 
     /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuContrato
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
      * Set estadoActivo
      *
      * @param boolean $estadoActivo
@@ -316,5 +330,53 @@ class RhuContrato
     public function getIndefinido()
     {
         return $this->indefinido;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuContrato
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set tipoTiempoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo $tipoTiempoRel
+     *
+     * @return RhuContrato
+     */
+    public function setTipoTiempoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo $tipoTiempoRel = null)
+    {
+        $this->tipoTiempoRel = $tipoTiempoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoTiempoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo
+     */
+    public function getTipoTiempoRel()
+    {
+        return $this->tipoTiempoRel;
     }
 }
