@@ -68,6 +68,11 @@ class RhuProgramacionPago
     private $verificarIncapacidades = 0;     
     
     /**
+     * @ORM\Column(name="novedades_verificadas", type="boolean")
+     */    
+    private $novedadesVerificadas = 0;     
+    
+    /**
      * @ORM\Column(name="vr_total_neto", type="float")
      */
     private $vr_total_neto = 0;    
@@ -500,5 +505,29 @@ class RhuProgramacionPago
     public function getDescuentosAdicionalesProgramacionPagoRel()
     {
         return $this->descuentosAdicionalesProgramacionPagoRel;
+    }
+
+    /**
+     * Set novedadesVerificadas
+     *
+     * @param boolean $novedadesVerificadas
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setNovedadesVerificadas($novedadesVerificadas)
+    {
+        $this->novedadesVerificadas = $novedadesVerificadas;
+
+        return $this;
+    }
+
+    /**
+     * Get novedadesVerificadas
+     *
+     * @return boolean
+     */
+    public function getNovedadesVerificadas()
+    {
+        return $this->novedadesVerificadas;
     }
 }

@@ -46,8 +46,7 @@ class UtilidadesPagosController extends Controller
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');       
         $form = $this->createFormBuilder()
-            ->add('BtnVerificarPagosAdicionales', 'submit', array('label'  => 'Pagos adicionales verificados',))
-            ->add('BtnVerificarIncapacidades', 'submit', array('label'  => 'Incapacidades verificadas',))
+            ->add('BtnNovedadesVerificadas', 'submit', array('label'  => 'Novedades verificadas',))            
             ->add('BtnNoGenerar', 'submit', array('label'  => 'No generar pago',))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
             ->getForm();
@@ -341,21 +340,11 @@ class UtilidadesPagosController extends Controller
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }
-                if($form->get('BtnVerificarPagosAdicionales')->isClicked()) {
+                if($form->get('BtnNovedadesVerificadas')->isClicked()) {
                     foreach ($arrSeleccionados AS $codigoProgramacionPago) {
                         $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                         $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                        $arProgramacionPagoProcesar->setVerificarPagosAdicionales(1);
-                        $em->persist($arProgramacionPagoProcesar);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
-                }
-                if($form->get('BtnVerificarIncapacidades')->isClicked()) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                        $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                        $arProgramacionPagoProcesar->setVerificarIncapacidades(1);
+                        $arProgramacionPagoProcesar->setNovedadesVerificadas(1);
                         $em->persist($arProgramacionPagoProcesar);
                     }
                     $em->flush();
