@@ -165,7 +165,8 @@
                 <th>ID</th>
                 <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>
-                <th>SALARIO</th>                
+                <th>SALARIO</th>   
+                <th></th> 
             </tr>
             {% for arEmpleados in arEmpleados %}
             <tr {% if arEmpleados.estadoActivo == 0 %}class="danger"{% endif %}>
@@ -176,6 +177,7 @@
                 <td>{{ arEmpleados.numeroIdentificacion}}</td>
                 <td>{{ arEmpleados.nombreCorto }}</td>                
                 <td style="text-align: right">{{ arEmpleados.vrSalario | number_format(2, '.', ',') }}</td>                                            
+                <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arEmpleados.codigoEmpleadoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
             </tr>
             {% endfor %}
         </table>
