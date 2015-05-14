@@ -147,6 +147,7 @@ class UtilidadesPagosController extends Controller
                                     }
                                 }
                                 $intHorasLaboradas = $intDiasLaborados * 8;
+                                $intDiasTransporte = $intDiasLaborados;
                                 //Procesar Licencias
                                 $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
                                 $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
