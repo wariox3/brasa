@@ -32,7 +32,7 @@ class FormatoPago extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'CONCEPTO', 'VALOR');
+        $header = array('CONCEPTO', 'DETALLE', 'HORAS', 'VR. HORA', '%', 'DEDUCCION', 'DEVENGADO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -40,7 +40,7 @@ class FormatoPago extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(14, 14, 42);
+        $w = array(72, 40, 12, 14, 12, 20, 20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -60,9 +60,21 @@ class FormatoPago extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arPagoDetalle as $arPagoDetalle) {            
-            $pdf->Cell(14, 4, $arPagoDetalle->getCodigoPagoDetallePk(), 1, 0, 'L');
-            $pdf->Cell(14, 4, $arPagoDetalle->getCodigoPagoDetallePk(), 1, 0, 'L');
-            $pdf->Cell(14, 4, $arPagoDetalle->getCodigoPagoDetallePk(), 1, 0, 'L');
+            $pdf->Cell(72, 4, $arPagoDetalle->getPagoConceptoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(40, 4, $arPagoDetalle->getDetalle(), 1, 0, 'L');
+            $pdf->Cell(12, 4, number_format($arPagoDetalle->getNumeroHoras(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(14, 4, number_format($arPagoDetalle->getVrHora(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, number_format($arPagoDetalle->getPorcentajeAplicado(), 2, '.', ','), 1, 0, 'R');
+            if($arPagoDetalle->getOperacion() == -1) {
+                $pdf->Cell(20, 4, number_format($arPagoDetalle->getVrPago(), 2, '.', ','), 1, 0, 'R');    
+            } else {
+                $pdf->Cell(20, 4, number_format(0, 2, '.', ','), 1, 0, 'R');    
+            }            
+            if($arPagoDetalle->getOperacion() == 1) {
+                $pdf->Cell(20, 4, number_format($arPagoDetalle->getVrPago(), 2, '.', ','), 1, 0, 'R');    
+            } else {
+                $pdf->Cell(20, 4, number_format(0, 2, '.', ','), 1, 0, 'R');    
+            }            
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 33);
         }        
