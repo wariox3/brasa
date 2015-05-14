@@ -65,12 +65,12 @@ class DescuentosAdicionalesController extends Controller
                 }
             }
             if($form->get('BtnRetirarLicencia')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarIncapacidad');
+                $arrSeleccionados = $request->request->get('ChkSeleccionarLicencia');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoIncapacidad) {
-                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-                        $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
-                        $em->remove($arIncapacidad);                        
+                    foreach ($arrSeleccionados as $codigoLicencia) {
+                        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+                        $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->find($codigoLicencia);
+                        $em->remove($arLicencia);                        
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_descuentos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));

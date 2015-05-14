@@ -38,7 +38,7 @@ class RhuPagoDetalle
     private $vrPagoOperado = 0;    
     
     /**
-     * @ORM\Column(name="numero_horas", type="integer")
+     * @ORM\Column(name="numero_horas", type="float")
      */
     private $numeroHoras = 0;    
     

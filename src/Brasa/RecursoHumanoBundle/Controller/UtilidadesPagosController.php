@@ -89,8 +89,8 @@ class UtilidadesPagosController extends Controller
                                 
                                 //Parametros generales
                                 //$intDiasLaborados = $arProgramacionPagoProcesar->getDias();
-                                $intDiasLaborados = $this->devolverDiasLaborados($arEmpleado, $arProgramacionPagoProcesar, $arProgramacionPagoProcesar->getDias());
-
+                                $intDiasLaborados = $this->devolverDiasLaborados($arEmpleado, $arProgramacionPagoProcesar, $arProgramacionPagoProcesar->getDias());                                
+                                $intDiasTransporte = $intDiasLaborados;                                
                                 $douVrDia = $arEmpleado->getVrSalario() / 30;
                                 $douVrHora = $douVrDia / 8;
                                 $douVrSalarioMinimo = 644350; //Configurar desde configuraciones
@@ -146,7 +146,7 @@ class UtilidadesPagosController extends Controller
                                         $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;
                                     }
                                 }
-
+                                $intHorasLaboradas = $intDiasLaborados * 8;
                                 //Procesar Licencias
                                 $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
                                 $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
@@ -157,16 +157,20 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
                                     $arPagoDetalle->setPagoConceptoRel($arPagoConceptoLicencia);
-                                    $douPagoDetalle = 0;
-                                    $intDiasProcesarLicencia = 0;
-                                    if($arLicencia->getCantidad() <= $intDiasLaborados) {
-                                        $intDiasLaborados = $intDiasLaborados - $arLicencia->getCantidad();
-                                        $intDiasProcesarLicencia = $arLicencia->getCantidad();
+                                    $douPagoDetalle = 0;                                    
+                                    $intHorasProcesarLicencia = 0;
+                                    if($arLicencia->getCantidad() <= $intHorasLaboradas) {
+                                        $intHorasLaboradas = $intHorasLaboradas - $arLicencia->getCantidad();
+                                        $intHorasProcesarLicencia = $arLicencia->getCantidad();
                                     }
-                                    $douPagoDetalle = $intDiasProcesarLicencia * $douVrDia;
+                                    $douPagoDetalle = $intHorasProcesarLicencia * $douVrHora;
                                     $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;                                    
-                                    $arPagoDetalle->setNumeroHoras($intDiasProcesarLicencia * 8);                                                                                                                                                
+                                    $arPagoDetalle->setNumeroHoras($intHorasProcesarLicencia);                                                                                                                                                
                                     $em->persist($arPagoDetalle);
+                                    if($arLicencia->getAfectaTransporte() == 1){
+                                        $intDiasLicenciaProcesar = intval($intHorasProcesarLicencia / 8);
+                                        $intDiasTransporte = $intDiasTransporte - $intDiasLicenciaProcesar;
+                                    }
                                     //Actualizar cantidades licencia
                                     
                                 }                                
@@ -254,13 +258,13 @@ class UtilidadesPagosController extends Controller
 
                                 //Liquidar salario
                                 $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoSalario);
-                                $douPagoDetalle = $intDiasLaborados * $douVrDia;
+                                $douPagoDetalle = $intHorasLaboradas * $douVrHora;
                                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                 $arPagoDetalle->setPagoRel($arPago);
                                 $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
                                 $arPagoDetalle->setVrHora($douVrHora);
                                 $arPagoDetalle->setVrDia($douVrDia);
-                                $arPagoDetalle->setNumeroHoras($intDiasLaborados * 8);
+                                $arPagoDetalle->setNumeroHoras($intHorasLaboradas);
                                 $arPagoDetalle->setVrPago($douPagoDetalle);
                                 $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
@@ -299,15 +303,15 @@ class UtilidadesPagosController extends Controller
                                     $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoTransporte);
                                     $douVrDiaTransporte = 74000 / 30;
                                     $douFactorDiasLaborados = 1;
-                                    if($intDiasLaborados > 0 && $arEmpleado->getTipoTiempoRel()->getFactor() != 0) {
+                                    if($intDiasTransporte > 0 && $arEmpleado->getTipoTiempoRel()->getFactor() != 0) {
                                         $douFactorDiasLaborados = $arEmpleado->getTipoTiempoRel()->getFactor();
                                     }
-                                    $douPagoDetalle = $douVrDiaTransporte * ($intDiasLaborados*$douFactorDiasLaborados);
+                                    $douPagoDetalle = $douVrDiaTransporte * ($intDiasTransporte*$douFactorDiasLaborados);
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
                                     $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);                                    
-                                    $arPagoDetalle->setNumeroHoras($intDiasLaborados * $douFactorDiasLaborados);
-                                    $arPagoDetalle->setVrHora($douVrDiaTransporte/8);
+                                    $arPagoDetalle->setNumeroHoras($intDiasTransporte * $douFactorDiasLaborados);
+                                    $arPagoDetalle->setVrHora($douVrDiaTransporte / 8);
                                     $arPagoDetalle->setVrDia($douVrDiaTransporte);
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());

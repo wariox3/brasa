@@ -111,7 +111,7 @@
                     </tr>
                     {% for arLicencias in arLicencias %}
                     <tr>
-                        <td><input type="hidden" name="LblCodigo[]" value="{{ arLicencias.codigoLicenciaPk }}">{{ arLicencias.codigoLicenciaPk }} </td>
+                        <td><input type="hidden" name="LblCodigoLicencia[]" value="{{ arLicencias.codigoLicenciaPk }}">{{ arLicencias.codigoLicenciaPk }} </td>
                         
                         <td>{{ arLicencias.fecha |date("Y/m/d")  }}</td>
                         <td>{{ arLicencias.fechaDesde |date("Y/m/d")  }}</td>

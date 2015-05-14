@@ -22,8 +22,7 @@ class RhuIncapacidadType extends AbstractType
                     ->setParameter('centroCosto', $options['data']->getCentroCostoRel()->getCodigoCentroCostoPk())
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
-                'required' => true))                
-                
+                'required' => true))                            
             ->add('numeroEps', 'text', array('required' => true))   
             ->add('fechaDesde', 'date')                
             ->add('fechaHasta', 'date')  

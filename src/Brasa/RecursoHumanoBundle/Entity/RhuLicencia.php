@@ -62,6 +62,11 @@ class RhuLicencia
      */    
     private $comentarios;     
     
+    /**     
+     * @ORM\Column(name="afecta_trasporte", type="boolean")
+     */    
+    private $afectaTransporte = 0;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="licenciasCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
@@ -394,5 +399,29 @@ class RhuLicencia
     public function getLicenciasRegistrosPagosLicenciaRel()
     {
         return $this->licenciasRegistrosPagosLicenciaRel;
+    }
+
+    /**
+     * Set afectaTransporte
+     *
+     * @param boolean $afectaTransporte
+     *
+     * @return RhuLicencia
+     */
+    public function setAfectaTransporte($afectaTransporte)
+    {
+        $this->afectaTransporte = $afectaTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get afectaTransporte
+     *
+     * @return boolean
+     */
+    public function getAfectaTransporte()
+    {
+        return $this->afectaTransporte;
     }
 }
