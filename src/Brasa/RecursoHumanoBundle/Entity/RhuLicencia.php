@@ -38,12 +38,17 @@ class RhuLicencia
     private $codigoEmpleadoFk;            
     
     /**
-     * @ORM\Column(name="cantidad", type="integer")
+     * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad = 0;                
 
     /**
-     * @ORM\Column(name="cantidadPendiente", type="integer")
+     * @ORM\Column(name="cantidadAfectada", type="float")
+     */
+    private $cantidadAfectada = 0;    
+    
+    /**
+     * @ORM\Column(name="cantidadPendiente", type="float")
      */
     private $cantidadPendiente = 0;    
         
@@ -73,6 +78,15 @@ class RhuLicencia
      * @ORM\OneToMany(targetEntity="RhuLicenciaRegistroPago", mappedBy="licenciaRel")
      */
     protected $licenciasRegistrosPagosLicenciaRel;    
+
+  
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->licenciasRegistrosPagosLicenciaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoLicenciaPk
@@ -183,7 +197,7 @@ class RhuLicencia
     /**
      * Set cantidad
      *
-     * @param integer $cantidad
+     * @param float $cantidad
      *
      * @return RhuLicencia
      */
@@ -197,7 +211,7 @@ class RhuLicencia
     /**
      * Get cantidad
      *
-     * @return integer
+     * @return float
      */
     public function getCantidad()
     {
@@ -205,9 +219,33 @@ class RhuLicencia
     }
 
     /**
+     * Set cantidadAfectada
+     *
+     * @param float $cantidadAfectada
+     *
+     * @return RhuLicencia
+     */
+    public function setCantidadAfectada($cantidadAfectada)
+    {
+        $this->cantidadAfectada = $cantidadAfectada;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadAfectada
+     *
+     * @return float
+     */
+    public function getCantidadAfectada()
+    {
+        return $this->cantidadAfectada;
+    }
+
+    /**
      * Set cantidadPendiente
      *
-     * @param integer $cantidadPendiente
+     * @param float $cantidadPendiente
      *
      * @return RhuLicencia
      */
@@ -221,7 +259,7 @@ class RhuLicencia
     /**
      * Get cantidadPendiente
      *
-     * @return integer
+     * @return float
      */
     public function getCantidadPendiente()
     {
@@ -322,13 +360,6 @@ class RhuLicencia
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->licenciasRegistrosPagosLicenciaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

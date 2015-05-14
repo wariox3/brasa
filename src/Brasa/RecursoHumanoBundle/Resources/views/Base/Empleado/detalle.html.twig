@@ -95,6 +95,7 @@
                             <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditos.numeroCuotas | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditos.numeroCuotaActual | number_format(0, '.', ',') }}</td>
+                            <td {% if arCreditos.estadoPagado == 1 %}class="success"{% endif %}>{% if arCreditos.estadoPagado == 1 %} SI {% else %} NO {% endif %}</td>                
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCreditos.codigoCreditoPk }}" /></td>
                         </tr>
                     {% endfor %}

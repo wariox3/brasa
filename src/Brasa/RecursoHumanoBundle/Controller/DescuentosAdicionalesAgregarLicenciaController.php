@@ -22,11 +22,11 @@ class DescuentosAdicionalesAgregarLicenciaController extends Controller
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             $arLicencia = $form->getData();                          
-            $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
-            $intDias = $intDias->format('%a');
-            $intDias = $intDias + 1; 
-            $arLicencia->setCantidad($intDias);
-            $arLicencia->setCantidadPendiente($intDias);
+            //$intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
+            //$intDias = $intDias->format('%a');
+            //$intDias = $intDias + 1; 
+            //$arLicencia->setCantidad($intDias);
+            $arLicencia->setCantidadPendiente($form->get('cantidad')->getData());
             $em->persist($arLicencia);
             $em->flush();                        
             if($form->get('guardarnuevo')->isClicked()) {

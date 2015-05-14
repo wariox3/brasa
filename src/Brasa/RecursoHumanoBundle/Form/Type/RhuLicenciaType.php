@@ -21,6 +21,7 @@ class RhuLicenciaType extends AbstractType
                 'required' => true))                                   
             ->add('fechaDesde', 'date')                
             ->add('fechaHasta', 'date')  
+            ->add('cantidad', 'number', array('required' => true))
             ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        

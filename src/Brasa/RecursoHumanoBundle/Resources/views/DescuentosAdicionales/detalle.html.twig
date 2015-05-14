@@ -117,8 +117,8 @@
                         <td>{{ arLicencias.fechaDesde |date("Y/m/d")  }}</td>
                         <td>{{ arLicencias.fechaHasta |date("Y/m/d")  }}</td>                        
                         <td>{{ arLicencias.empleadoRel.nombreCorto  }}</td>
-                        <td style="text-align: right">{{ arLicencias.cantidad | number_format(0, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arLicencias.cantidad | number_format(1, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(1, '.', ',') }}</td>
                         <td><input type="checkbox" name="ChkSeleccionarLicencia[]" value="{{ arLicencias.codigoLicenciaPk }}" /></td>
                     </tr>
                     {% endfor %}

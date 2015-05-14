@@ -4,6 +4,28 @@
     <div class="page-header">
         <h3>Resumen programacion pago</h3>            
     </div>  
+    <div class="btn-toolbar" style="float:left">
+        <div class="btn-group">
+            <a  class="btn btn-default" href="{{ path('brs_rhu_utilidades_pagos_generar_pago') }}">Volver</a>
+            <a  class="btn btn-default" href="{{ path('brs_tte_guias_nuevo', { 'codigoGuia': 1 }) }}" {% if 1 == 1%} disabled {% endif %}>Editar</a>
+            <!-- Split button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default">Procesos</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }} " target="_blank">Agregar pagos, incapacidades</a></li>
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Generar pagos adicionales (Masivo)</a></li>
+                    <li class="divider"></li>    
+                    <li><a href="{{ path('brs_rhu_descuentos_adicionales_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Agregar descuentos, licencias</a></li>
+                    <li><li><a href="{{ path('brs_rhu_descuentos_adicionales_generarmasivo_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Generar descuentos adicionales (Masivo)</a></li></li>                    
+                </ul>
+            </div>                    
+        </div>
+    </div>
+    <br /><br /><br />     
     <div class="panel panel-default">
       <div class="panel-heading">Informacion centro costo</div>
       <div class="panel-body">
@@ -127,8 +149,8 @@
                     <td><input type="hidden" name="LblCodigo[]" value="{{ arLicencias.codigoLicenciaPk }}">{{ arLicencias.codigoLicenciaPk }} </td>
                     <td>{{ arLicencias.fecha |date("Y/m/d")  }}</td>
                     <td>{{ arLicencias.empleadoRel.nombreCorto  }}</td>
-                    <td style="text-align: right">{{ arLicencias.cantidad | number_format(0, '.', ',') }}</td>
-                    <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(0, '.', ',') }}</td>                    
+                    <td style="text-align: right">{{ arLicencias.cantidad | number_format(1, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(1, '.', ',') }}</td>                    
                 </tr>
                 {% endfor %}
             </table>
