@@ -298,11 +298,15 @@ class UtilidadesPagosController extends Controller
                                     $intPagoConceptoTransporte = 18; //Se debe traer de la base de datos
                                     $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoTransporte);
                                     $douVrDiaTransporte = 74000 / 30;
-                                    $douPagoDetalle = $douVrDiaTransporte * $intDiasLaborados;
+                                    $douFactorDiasLaborados = 1;
+                                    if($intDiasLaborados > 0 && $arEmpleado->getTipoTiempoRel()->getFactor() != 0) {
+                                        $douFactorDiasLaborados = $arEmpleado->getTipoTiempoRel()->getFactor();
+                                    }
+                                    $douPagoDetalle = $douVrDiaTransporte * ($intDiasLaborados*$douFactorDiasLaborados);
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
                                     $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);                                    
-                                    $arPagoDetalle->setNumeroHoras($intDiasLaborados);
+                                    $arPagoDetalle->setNumeroHoras($intDiasLaborados * $douFactorDiasLaborados);
                                     $arPagoDetalle->setVrHora($douVrDiaTransporte/8);
                                     $arPagoDetalle->setVrDia($douVrDiaTransporte);
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
