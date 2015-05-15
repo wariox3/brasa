@@ -42,6 +42,9 @@ class PagosAdicionalesAgregarConceptoController extends Controller
                                     $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                     $arPagoAdicional->setEmpleadoRel($form->get('empleadoRel')->getData());
                                     $arPagoAdicional->setCentroCostoRel($arCentroCosto);                                    
+                                    if($arrControles['TxtDetalle'][$intIndice] != "") {
+                                        $arPagoAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
+                                    }
                                     $intHoras = $arrControles['TxtHoras'][$intIndice];
                                     $arPagoAdicional->setCantidad($intHoras);
                                     $em->persist($arPagoAdicional);                                
@@ -53,6 +56,9 @@ class PagosAdicionalesAgregarConceptoController extends Controller
                                     $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                     $arPagoAdicional->setEmpleadoRel($form->get('empleadoRel')->getData());
                                     $arPagoAdicional->setCentroCostoRel($arCentroCosto);                                    
+                                    if($arrControles['TxtDetalle'][$intIndice] != "") {
+                                        $arPagoAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
+                                    }                                    
                                     $intValor = $arrControles['TxtValor'][$intIndice];
                                     $arPagoAdicional->setValor($intValor);
                                     $em->persist($arPagoAdicional);                                
@@ -61,9 +67,28 @@ class PagosAdicionalesAgregarConceptoController extends Controller
                         }
                         $intIndice++;
                     }
-                    $em->flush();
-                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }
+                if (isset($arrControles['TxtHorasAdicionales'])) {
+                    if($arrControles['TxtHorasAdicionales'] != "" && $arrControles['TxtHorasAdicionales'] != 0) {
+                        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(1);                        
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
+                        $arPagoAdicional->setEmpleadoRel($form->get('empleadoRel')->getData());
+                        $arPagoAdicional->setCentroCostoRel($arCentroCosto);                                    
+                        if (isset($arrControles['TxtDetalleHorasAdicionales'])) {
+                            if($arrControles['TxtDetalleHorasAdicionales'] != "") {
+                                $arPagoAdicional->setDetalle($arrControles['TxtDetalleHorasAdicionales']);
+                            }                            
+                        }
+                                                
+                        $intHoras = $arrControles['TxtHorasAdicionales'];
+                        $arPagoAdicional->setCantidad($intHoras);
+                        $em->persist($arPagoAdicional);                           
+                    }
+                }    
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:agregarConcepto.html.twig', array(

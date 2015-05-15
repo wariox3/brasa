@@ -20,6 +20,7 @@
                     <th>NOMBRE</th>
                     <th style="text-align: right">HORAS</th>
                     <th style="text-align: right">VALOR</th>
+                    <th>DETALLE</th>
                 </tr>
 
                 {% for arPagosConceptos in arPagosConceptos %}
@@ -27,9 +28,17 @@
                         <td><input type="hidden" name="LblCodigo[]" value="{{ arPagosConceptos.codigoPagoConceptoPk }}">{{ arPagosConceptos.codigoPagoConceptoPk }}</td>  
                         <td>{{ arPagosConceptos.nombre}}</td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtHoras[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()" {% if arPagosConceptos.componePorcentaje == 0 %} readonly="true" {% endif %}/></td>                               
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValor[]" value="0" size="15" style="text-align: right; width:150px" onkeypress="return validarNumeros(event)" onclick="this.select()" {% if arPagosConceptos.componeValor == 0 %} readonly="true" {% endif %}/></td>                                                       
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValor[]" value="0" size="15" style="text-align: right; width:100px" onkeypress="return validarNumeros(event)" onclick="this.select()" {% if arPagosConceptos.componeValor == 0 %} readonly="true" {% endif %}/></td>                                                       
+                        <td><input class="input-grid" type="text" name="TxtDetalle[]" size="60" style="width:200px" onclick="this.select()"/></td>                                                       
                     </tr>
-                {% endfor %}                                
+                {% endfor %}                   
+                <tr>
+                    <td></td>
+                    <th>HORAS ORDINARIAS DIURNAS ADICIONALES</th>                    
+                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtHorasAdicionales" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                   
+                    <td></td>                    
+                    <td><input class="input-grid" type="text" name="TxtDetalleHorasAdicionales" size="100" style="width:200px" onclick="this.select()"/></td>                                                                       
+                </tr>                
             </table>
 
             <div class="modal-footer">

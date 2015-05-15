@@ -58,6 +58,11 @@ class RhuPagoAdicional
     private $pagoAplicado = 0;    
     
     /**
+     * @ORM\Column(name="detalle", type="string", length=250, nullable=true)
+     */    
+    private $detalle;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="pagosAdicionalesCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -378,5 +383,29 @@ class RhuPagoAdicional
     public function getProgramacionPagoRel()
     {
         return $this->programacionPagoRel;
+    }
+
+    /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
     }
 }

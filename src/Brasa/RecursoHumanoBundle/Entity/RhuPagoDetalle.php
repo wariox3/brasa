@@ -63,7 +63,7 @@ class RhuPagoDetalle
     private $vrTotal = 0;     
     
     /**
-     * @ORM\Column(name="detalle", type="string", length=60, nullable=true)
+     * @ORM\Column(name="detalle", type="string", length=250, nullable=true)
      */    
     private $detalle;     
     

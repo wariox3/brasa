@@ -52,6 +52,7 @@
                         <th>ID</th>
                         <th>NUMERO</th>
                         <th>CONCEPTO</th>
+                        <th>DETALLE</th>
                         <th>EMPLEADO</th>
                         <th>CANT</th>
                         <th>VALOR</th>
@@ -66,6 +67,7 @@
                         </td>
                         <td>{{ arPagosAdicionales.codigoPagoAdicionalPk}}</td>
                         <td>{{ arPagosAdicionales.pagoConceptoRel.nombre }}</td>
+                        <td>{{ arPagosAdicionales.detalle }}</td>
                         <td>{{ arPagosAdicionales.empleadoRel.nombreCorto }}</td>
                         <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>                            
                         <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
