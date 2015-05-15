@@ -259,6 +259,9 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);                                    
                                 $intValor = $arrControles['TxtValor'][$intIndice];
                                 $arPagoAdicional->setValor($intValor);
+                                if($arrControles['TxtDetalle'][$intIndice] != "") {
+                                    $arPagoAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
+                                }
                                 $em->persist($arPagoAdicional);                                
                             }                            
                         }

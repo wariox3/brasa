@@ -79,6 +79,7 @@
                         <th>NOMBRE</th>
                         <th>SALARIO</th>
                         <th><p data-toggle="tooltip" data-placement="top" title="Valor">VALOR</p></th>
+                        <th>DETALLE</th>
                     </tr>
                     {% for arEmpleados in arEmpleados %}
                     <tr {% if arEmpleados.estadoActivo == 0 %}class="danger"{% endif %}>
@@ -90,6 +91,7 @@
                         <td>{{ arEmpleados.nombreCorto }}</td>
                         <td style="text-align: right">{{ arEmpleados.vrSalario | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtValor[]" value="0" size="20" style="text-align: right; width:100px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td><input class="input-grid" type="text" name="TxtDetalle[]" size="60" style="width:200px" onclick="this.select()"/></td>                                                                               
                     </tr>
                     {% endfor %}
                 </table>
