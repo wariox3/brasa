@@ -87,15 +87,23 @@ class RhuCentroCostoRepository extends EntityRepository {
         return $query;
     }    
     
-    public function ListaDQL($strNombre, $boolMostrarInactivos = 0) {        
+    public function ListaDQL($strNombre, $boolMostrarActivos = "", $boolMostrarPagoAbierto = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT cc FROM BrasaRecursoHumanoBundle:RhuCentroCosto cc WHERE cc.codigoCentroCostoPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND cc.nombre LIKE '%" . $strNombre . "%'";
         }             
-        if($boolMostrarInactivos == 0) {
+        if($boolMostrarActivos == 1) {
             $dql .= " AND cc.estadoActivo = 1";
-        } 
+        } elseif($boolMostrarActivos == 0) {
+            $dql .= " AND cc.estadoActivo = 0";
+        }
+        if($boolMostrarPagoAbierto == 1) {
+            $dql .= " AND cc.pagoAbierto = 1";
+        } elseif($boolMostrarPagoAbierto == 0) {
+            $dql .= " AND cc.pagoAbierto = 0";
+        }        
+        
         $dql .= " ORDER BY cc.nombre";
         return $dql;
     }                        
