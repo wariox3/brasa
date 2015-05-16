@@ -98,24 +98,22 @@ class RhuProgramacionPago
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="programacionPagoRel")
      */
-    protected $pagosAdicionalesProgramacionPagoRel;    
-
-    /**
-     * @ORM\OneToMany(targetEntity="RhuDescuentoAdicional", mappedBy="programacionPagoRel")
-     */
-    protected $descuentosAdicionalesProgramacionPagoRel;    
+    protected $pagosAdicionalesProgramacionPagoRel;       
     
     /**
      * @ORM\OneToMany(targetEntity="RhuLicenciaRegistroPago", mappedBy="programacionPagoRel")
      */
     protected $licenciasRegistrosPagosProgramacionPagoRel;     
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->pagosProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosAdicionalesProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->licenciasRegistrosPagosProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -249,6 +247,198 @@ class RhuProgramacionPago
     }
 
     /**
+     * Set estadoPagado
+     *
+     * @param boolean $estadoPagado
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setEstadoPagado($estadoPagado)
+    {
+        $this->estadoPagado = $estadoPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagado()
+    {
+        return $this->estadoPagado;
+    }
+
+    /**
+     * Set estadoAnulado
+     *
+     * @param boolean $estadoAnulado
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setEstadoAnulado($estadoAnulado)
+    {
+        $this->estadoAnulado = $estadoAnulado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulado
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulado()
+    {
+        return $this->estadoAnulado;
+    }
+
+    /**
+     * Set archivoExportado
+     *
+     * @param boolean $archivoExportado
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setArchivoExportado($archivoExportado)
+    {
+        $this->archivoExportado = $archivoExportado;
+
+        return $this;
+    }
+
+    /**
+     * Get archivoExportado
+     *
+     * @return boolean
+     */
+    public function getArchivoExportado()
+    {
+        return $this->archivoExportado;
+    }
+
+    /**
+     * Set verificarPagosAdicionales
+     *
+     * @param boolean $verificarPagosAdicionales
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setVerificarPagosAdicionales($verificarPagosAdicionales)
+    {
+        $this->verificarPagosAdicionales = $verificarPagosAdicionales;
+
+        return $this;
+    }
+
+    /**
+     * Get verificarPagosAdicionales
+     *
+     * @return boolean
+     */
+    public function getVerificarPagosAdicionales()
+    {
+        return $this->verificarPagosAdicionales;
+    }
+
+    /**
+     * Set verificarIncapacidades
+     *
+     * @param boolean $verificarIncapacidades
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setVerificarIncapacidades($verificarIncapacidades)
+    {
+        $this->verificarIncapacidades = $verificarIncapacidades;
+
+        return $this;
+    }
+
+    /**
+     * Get verificarIncapacidades
+     *
+     * @return boolean
+     */
+    public function getVerificarIncapacidades()
+    {
+        return $this->verificarIncapacidades;
+    }
+
+    /**
+     * Set novedadesVerificadas
+     *
+     * @param boolean $novedadesVerificadas
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setNovedadesVerificadas($novedadesVerificadas)
+    {
+        $this->novedadesVerificadas = $novedadesVerificadas;
+
+        return $this;
+    }
+
+    /**
+     * Get novedadesVerificadas
+     *
+     * @return boolean
+     */
+    public function getNovedadesVerificadas()
+    {
+        return $this->novedadesVerificadas;
+    }
+
+    /**
+     * Set vrTotalNeto
+     *
+     * @param float $vrTotalNeto
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setVrTotalNeto($vrTotalNeto)
+    {
+        $this->vr_total_neto = $vrTotalNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalNeto
+     *
+     * @return float
+     */
+    public function getVrTotalNeto()
+    {
+        return $this->vr_total_neto;
+    }
+
+    /**
+     * Set noGeneraPeriodo
+     *
+     * @param boolean $noGeneraPeriodo
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setNoGeneraPeriodo($noGeneraPeriodo)
+    {
+        $this->noGeneraPeriodo = $noGeneraPeriodo;
+
+        return $this;
+    }
+
+    /**
+     * Get noGeneraPeriodo
+     *
+     * @return boolean
+     */
+    public function getNoGeneraPeriodo()
+    {
+        return $this->noGeneraPeriodo;
+    }
+
+    /**
      * Set centroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
@@ -307,54 +497,6 @@ class RhuProgramacionPago
     }
 
     /**
-     * Set verificarPagosAdicionales
-     *
-     * @param boolean $verificarPagosAdicionales
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setVerificarPagosAdicionales($verificarPagosAdicionales)
-    {
-        $this->verificarPagosAdicionales = $verificarPagosAdicionales;
-
-        return $this;
-    }
-
-    /**
-     * Get verificarPagosAdicionales
-     *
-     * @return boolean
-     */
-    public function getVerificarPagosAdicionales()
-    {
-        return $this->verificarPagosAdicionales;
-    }
-
-    /**
-     * Set verificarIncapacidades
-     *
-     * @param boolean $verificarIncapacidades
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setVerificarIncapacidades($verificarIncapacidades)
-    {
-        $this->verificarIncapacidades = $verificarIncapacidades;
-
-        return $this;
-    }
-
-    /**
-     * Get verificarIncapacidades
-     *
-     * @return boolean
-     */
-    public function getVerificarIncapacidades()
-    {
-        return $this->verificarIncapacidades;
-    }
-
-    /**
      * Add pagosAdicionalesProgramacionPagoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesProgramacionPagoRel
@@ -389,160 +531,6 @@ class RhuProgramacionPago
     }
 
     /**
-     * Set estadoPagado
-     *
-     * @param boolean $estadoPagado
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setEstadoPagado($estadoPagado)
-    {
-        $this->estadoPagado = $estadoPagado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoPagado
-     *
-     * @return boolean
-     */
-    public function getEstadoPagado()
-    {
-        return $this->estadoPagado;
-    }
-
-    /**
-     * Set archivoExportado
-     *
-     * @param boolean $archivoExportado
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setArchivoExportado($archivoExportado)
-    {
-        $this->archivoExportado = $archivoExportado;
-
-        return $this;
-    }
-
-    /**
-     * Get archivoExportado
-     *
-     * @return boolean
-     */
-    public function getArchivoExportado()
-    {
-        return $this->archivoExportado;
-    }
-
-    /**
-     * Set vrTotalNeto
-     *
-     * @param float $vrTotalNeto
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setVrTotalNeto($vrTotalNeto)
-    {
-        $this->vr_total_neto = $vrTotalNeto;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalNeto
-     *
-     * @return float
-     */
-    public function getVrTotalNeto()
-    {
-        return $this->vr_total_neto;
-    }
-
-    /**
-     * Set estadoAnulado
-     *
-     * @param boolean $estadoAnulado
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setEstadoAnulado($estadoAnulado)
-    {
-        $this->estadoAnulado = $estadoAnulado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAnulado
-     *
-     * @return boolean
-     */
-    public function getEstadoAnulado()
-    {
-        return $this->estadoAnulado;
-    }
-
-    /**
-     * Add descuentosAdicionalesProgramacionPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesProgramacionPagoRel
-     *
-     * @return RhuProgramacionPago
-     */
-    public function addDescuentosAdicionalesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesProgramacionPagoRel)
-    {
-        $this->descuentosAdicionalesProgramacionPagoRel[] = $descuentosAdicionalesProgramacionPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove descuentosAdicionalesProgramacionPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesProgramacionPagoRel
-     */
-    public function removeDescuentosAdicionalesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesProgramacionPagoRel)
-    {
-        $this->descuentosAdicionalesProgramacionPagoRel->removeElement($descuentosAdicionalesProgramacionPagoRel);
-    }
-
-    /**
-     * Get descuentosAdicionalesProgramacionPagoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDescuentosAdicionalesProgramacionPagoRel()
-    {
-        return $this->descuentosAdicionalesProgramacionPagoRel;
-    }
-
-    /**
-     * Set novedadesVerificadas
-     *
-     * @param boolean $novedadesVerificadas
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setNovedadesVerificadas($novedadesVerificadas)
-    {
-        $this->novedadesVerificadas = $novedadesVerificadas;
-
-        return $this;
-    }
-
-    /**
-     * Get novedadesVerificadas
-     *
-     * @return boolean
-     */
-    public function getNovedadesVerificadas()
-    {
-        return $this->novedadesVerificadas;
-    }
-
-    /**
      * Add licenciasRegistrosPagosProgramacionPagoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosProgramacionPagoRel
@@ -574,29 +562,5 @@ class RhuProgramacionPago
     public function getLicenciasRegistrosPagosProgramacionPagoRel()
     {
         return $this->licenciasRegistrosPagosProgramacionPagoRel;
-    }
-
-    /**
-     * Set noGeneraPeriodo
-     *
-     * @param boolean $noGeneraPeriodo
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setNoGeneraPeriodo($noGeneraPeriodo)
-    {
-        $this->noGeneraPeriodo = $noGeneraPeriodo;
-
-        return $this;
-    }
-
-    /**
-     * Get noGeneraPeriodo
-     *
-     * @return boolean
-     */
-    public function getNoGeneraPeriodo()
-    {
-        return $this->noGeneraPeriodo;
     }
 }

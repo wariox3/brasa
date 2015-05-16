@@ -83,9 +83,7 @@ class UtilidadesPagosController extends Controller
                                 $em->persist($arPago);
                                 /*if($arEmpleado->getNumeroIdentificacion() =='1038406105') {
                                     echo "Entro";
-                                }*/
-                                  
-                                 
+                                }*/ 
                                 
                                 //Parametros generales
                                 //$intDiasLaborados = $arProgramacionPagoProcesar->getDias();
@@ -148,6 +146,7 @@ class UtilidadesPagosController extends Controller
                                 }
                                 $intHorasLaboradas = $intDiasLaborados * 8;
                                 $intDiasTransporte = $intDiasLaborados;
+                                
                                 //Procesar Licencias
                                 $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
                                 $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
@@ -193,10 +192,20 @@ class UtilidadesPagosController extends Controller
                                         $douPagoDetalle = $arPagoAdicional->getValor();
                                         $arPagoDetalle->setVrDia($douVrDia);
                                     }
+                                    $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arPagoAdicional->getPagoConceptoRel()->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoAdicional->getPagoConceptoRel()->getOperacion());
+                                    $arPagoDetalle->setDetalle($arPagoAdicional->getPagoAdicionalSubtipoRel()->getDetalle());
                                     $em->persist($arPagoDetalle);
+                                    
+                                    //Aumentar los dias y las horas ordinarias
+                                    if($arPagoAdicional->getPagoConceptoRel()->getComponeSalario() == 1) {
+                                        $intHorasProcesarAdicionales = $arPagoAdicional->getCantidad();
+                                        $intHorasLaboradas = $intHorasLaboradas + $intHorasProcesarAdicionales;                                        
+                                        $intDiasAdicionales = intval($intHorasProcesarAdicionales / 8);
+                                        $intDiasTransporte = $intDiasTransporte - $intDiasAdicionales;                                        
+                                    }
                                     if($arPagoAdicional->getPagoConceptoRel()->getPrestacional() == 1) {
                                         $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;
                                     }
@@ -206,29 +215,6 @@ class UtilidadesPagosController extends Controller
                                         $arPagoAdicionalActualizar->setPagoAplicado(1);
                                         $arPagoAdicionalActualizar->setProgramacionPagoRel($arProgramacionPagoProcesar);
                                         $em->persist($arPagoAdicionalActualizar);
-                                    }
-                                }
-
-                                //Descuentos adicionales
-                                $arDescuentosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
-                                $arDescuentosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 'descuentoAplicado' => 0, 'codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
-                                foreach ($arDescuentosAdicionales as $arDescuentoAdicional) {
-                                    $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                                    $arPagoDetalle->setPagoRel($arPago);
-                                    $arPagoDetalle->setPagoConceptoRel($arDescuentoAdicional->getPagoConceptoRel());                                    
-                                    $douPagoDetalle = $arDescuentoAdicional->getValor();
-                                    $arPagoDetalle->setVrDia($douVrDia);
-                                    
-                                    $arPagoDetalle->setVrPago($douPagoDetalle);
-                                    $arPagoDetalle->setOperacion($arDescuentoAdicional->getPagoConceptoRel()->getOperacion());
-                                    $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arDescuentoAdicional->getPagoConceptoRel()->getOperacion());
-                                    $em->persist($arPagoDetalle);              
-                                    if($arDescuentoAdicional->getPermanente() == 0) {
-                                        $arDescuentoAdicionalActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
-                                        $arDescuentoAdicionalActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->find($arDescuentoAdicional->getCodigoDescuentoAdicionalPk());
-                                        $arDescuentoAdicionalActualizar->setDescuentoAplicado(1);
-                                        $arDescuentoAdicionalActualizar->setProgramacionPagoRel($arProgramacionPagoProcesar);
-                                        $em->persist($arDescuentoAdicionalActualizar);
                                     }
                                 }                                
                                 
@@ -321,16 +307,19 @@ class UtilidadesPagosController extends Controller
                                 }
                             }
                             $arProgramacionPagoProcesar->setEstadoGenerado(1);
-                            $arCentroCosto->setPagoAbierto(0);
+                            if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
+                                $arCentroCosto->setPagoAbierto(1);    
+                            } else {
+                                $arCentroCosto->setPagoAbierto(0);    
+                            }                            
+                            
                             $em->persist($arCentroCosto);
                             $em->persist($arProgramacionPagoProcesar);
                             $em->flush();
                             $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Liquidar($codigoProgramacionPago);
                             if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
-                                $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk());                                
-                            }
-                            
-
+                                $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk());                                                                
+                            }                            
                         } else {
                             $boolErrores = 1;
                         }
@@ -436,8 +425,6 @@ class UtilidadesPagosController extends Controller
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto, 'pagoAplicado' => 0));
-        $arDescuentosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
-        $arDescuentosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto, 'descuentoAplicado' => 0));        
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
@@ -452,7 +439,6 @@ class UtilidadesPagosController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/Pago:generarPagoResumen.html.twig', array(
                     'arCentroCosto' => $arCentroCosto,
                     'arPagosAdicionales' => $arPagosAdicionales,
-                    'arDescuentosAdicionales' => $arDescuentosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
                     'arLicencias' => $arLicencias,
                     'arEmpleados' => $arEmpleados

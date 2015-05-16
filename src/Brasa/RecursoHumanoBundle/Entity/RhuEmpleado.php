@@ -240,11 +240,6 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="empleadoRel")
      */
     protected $pagosAdicionalesEmpleadoRel;      
-
-    /**
-     * @ORM\OneToMany(targetEntity="RhuDescuentoAdicional", mappedBy="empleadoRel")
-     */
-    protected $descuentosAdicionalesEmpleadoRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="RhuCredito", mappedBy="empleadoRel")
@@ -266,7 +261,6 @@ class RhuEmpleado
      */
     protected $contratosEmpleadoRel;     
 
-
     /**
      * Constructor
      */
@@ -276,6 +270,7 @@ class RhuEmpleado
         $this->pagosAdicionalesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->licenciasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -938,6 +933,150 @@ class RhuEmpleado
     }
 
     /**
+     * Set fechaContrato
+     *
+     * @param \DateTime $fechaContrato
+     *
+     * @return RhuEmpleado
+     */
+    public function setFechaContrato($fechaContrato)
+    {
+        $this->fecha_contrato = $fechaContrato;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaContrato
+     *
+     * @return \DateTime
+     */
+    public function getFechaContrato()
+    {
+        return $this->fecha_contrato;
+    }
+
+    /**
+     * Set fechaFinalizaContrato
+     *
+     * @param \DateTime $fechaFinalizaContrato
+     *
+     * @return RhuEmpleado
+     */
+    public function setFechaFinalizaContrato($fechaFinalizaContrato)
+    {
+        $this->fecha_finaliza_contrato = $fechaFinalizaContrato;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinalizaContrato
+     *
+     * @return \DateTime
+     */
+    public function getFechaFinalizaContrato()
+    {
+        return $this->fecha_finaliza_contrato;
+    }
+
+    /**
+     * Set contratoIndefinido
+     *
+     * @param boolean $contratoIndefinido
+     *
+     * @return RhuEmpleado
+     */
+    public function setContratoIndefinido($contratoIndefinido)
+    {
+        $this->contratoIndefinido = $contratoIndefinido;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoIndefinido
+     *
+     * @return boolean
+     */
+    public function getContratoIndefinido()
+    {
+        return $this->contratoIndefinido;
+    }
+
+    /**
+     * Set pagadoEntidadSalud
+     *
+     * @param boolean $pagadoEntidadSalud
+     *
+     * @return RhuEmpleado
+     */
+    public function setPagadoEntidadSalud($pagadoEntidadSalud)
+    {
+        $this->pagadoEntidadSalud = $pagadoEntidadSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get pagadoEntidadSalud
+     *
+     * @return boolean
+     */
+    public function getPagadoEntidadSalud()
+    {
+        return $this->pagadoEntidadSalud;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuEmpleado
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set codigoTipoTiempoFk
+     *
+     * @param integer $codigoTipoTiempoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoTipoTiempoFk($codigoTipoTiempoFk)
+    {
+        $this->codigoTipoTiempoFk = $codigoTipoTiempoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoTiempoFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoTiempoFk()
+    {
+        return $this->codigoTipoTiempoFk;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -1106,6 +1245,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set tipoTiempoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo $tipoTiempoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setTipoTiempoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo $tipoTiempoRel = null)
+    {
+        $this->tipoTiempoRel = $tipoTiempoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoTiempoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo
+     */
+    public function getTipoTiempoRel()
+    {
+        return $this->tipoTiempoRel;
+    }
+
+    /**
      * Add pagosEmpleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosEmpleadoRel
@@ -1242,146 +1405,6 @@ class RhuEmpleado
     }
 
     /**
-     * Add contratosEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel)
-    {
-        $this->contratosEmpleadoRel[] = $contratosEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove contratosEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel
-     */
-    public function removeContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel)
-    {
-        $this->contratosEmpleadoRel->removeElement($contratosEmpleadoRel);
-    }
-
-    /**
-     * Get contratosEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getContratosEmpleadoRel()
-    {
-        return $this->contratosEmpleadoRel;
-    }
-
-    /**
-     * Set fechaContrato
-     *
-     * @param \DateTime $fechaContrato
-     *
-     * @return RhuEmpleado
-     */
-    public function setFechaContrato($fechaContrato)
-    {
-        $this->fecha_contrato = $fechaContrato;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaContrato
-     *
-     * @return \DateTime
-     */
-    public function getFechaContrato()
-    {
-        return $this->fecha_contrato;
-    }
-
-    /**
-     * Set fechaFinalizaContrato
-     *
-     * @param \DateTime $fechaFinalizaContrato
-     *
-     * @return RhuEmpleado
-     */
-    public function setFechaFinalizaContrato($fechaFinalizaContrato)
-    {
-        $this->fecha_finaliza_contrato = $fechaFinalizaContrato;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaFinalizaContrato
-     *
-     * @return \DateTime
-     */
-    public function getFechaFinalizaContrato()
-    {
-        return $this->fecha_finaliza_contrato;
-    }
-
-    /**
-     * Set contratoIndefinido
-     *
-     * @param boolean $contratoIndefinido
-     *
-     * @return RhuEmpleado
-     */
-    public function setContratoIndefinido($contratoIndefinido)
-    {
-        $this->contratoIndefinido = $contratoIndefinido;
-
-        return $this;
-    }
-
-    /**
-     * Get contratoIndefinido
-     *
-     * @return boolean
-     */
-    public function getContratoIndefinido()
-    {
-        return $this->contratoIndefinido;
-    }
-
-    /**
-     * Add descuentosAdicionalesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addDescuentosAdicionalesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesEmpleadoRel)
-    {
-        $this->descuentosAdicionalesEmpleadoRel[] = $descuentosAdicionalesEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove descuentosAdicionalesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesEmpleadoRel
-     */
-    public function removeDescuentosAdicionalesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesEmpleadoRel)
-    {
-        $this->descuentosAdicionalesEmpleadoRel->removeElement($descuentosAdicionalesEmpleadoRel);
-    }
-
-    /**
-     * Get descuentosAdicionalesEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDescuentosAdicionalesEmpleadoRel()
-    {
-        return $this->descuentosAdicionalesEmpleadoRel;
-    }
-
-    /**
      * Add licenciasEmpleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasEmpleadoRel
@@ -1416,98 +1439,36 @@ class RhuEmpleado
     }
 
     /**
-     * Set pagadoEntidadSalud
+     * Add contratosEmpleadoRel
      *
-     * @param boolean $pagadoEntidadSalud
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function setPagadoEntidadSalud($pagadoEntidadSalud)
+    public function addContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel)
     {
-        $this->pagadoEntidadSalud = $pagadoEntidadSalud;
+        $this->contratosEmpleadoRel[] = $contratosEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Get pagadoEntidadSalud
+     * Remove contratosEmpleadoRel
      *
-     * @return boolean
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel
      */
-    public function getPagadoEntidadSalud()
+    public function removeContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEmpleadoRel)
     {
-        return $this->pagadoEntidadSalud;
+        $this->contratosEmpleadoRel->removeElement($contratosEmpleadoRel);
     }
 
     /**
-     * Set comentarios
+     * Get contratosEmpleadoRel
      *
-     * @param string $comentarios
-     *
-     * @return RhuEmpleado
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setComentarios($comentarios)
+    public function getContratosEmpleadoRel()
     {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
-    }
-
-    /**
-     * Set codigoTipoTiempoFk
-     *
-     * @param integer $codigoTipoTiempoFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoTipoTiempoFk($codigoTipoTiempoFk)
-    {
-        $this->codigoTipoTiempoFk = $codigoTipoTiempoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTipoTiempoFk
-     *
-     * @return integer
-     */
-    public function getCodigoTipoTiempoFk()
-    {
-        return $this->codigoTipoTiempoFk;
-    }
-
-    /**
-     * Set tipoTiempoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo $tipoTiempoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setTipoTiempoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo $tipoTiempoRel = null)
-    {
-        $this->tipoTiempoRel = $tipoTiempoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoTiempoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo
-     */
-    public function getTipoTiempoRel()
-    {
-        return $this->tipoTiempoRel;
+        return $this->contratosEmpleadoRel;
     }
 }

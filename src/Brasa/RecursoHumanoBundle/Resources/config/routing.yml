@@ -30,33 +30,17 @@ brs_rhu_pagos_adicionales_generarmasivo_detalle:
     path:     /rhumano/pagos/adicionales/generarmasivo/detalle/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoDetalle }
 
-brs_rhu_pagos_adicionales_agregar_concepto:
-    path:     /rhumano/pagos/adicionales/agregar/concepto/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregarConcepto:lista }    
+brs_rhu_pagos_adicionales_agregar_tiempo:
+    path:     /rhumano/pagos/adicionales/agregar/tiempo/{codigoCentroCosto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempo }    
+
+brs_rhu_pagos_adicionales_agregar_valor:
+    path:     /rhumano/pagos/adicionales/agregar/valor/{codigoCentroCosto}/{tipo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valor }    
 
 brs_rhu_pagos_adicionales_agregar_incapacidad:
     path:     /rhumano/pagos/adicionales/agregar/incapacidad/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregarIncapacidad:nuevo }    
-
-brs_rhu_descuentos_adicionales_lista:
-    path:     /rhumano/descuentos/adicionales/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:DescuentosAdicionales:lista }     
-    
-brs_rhu_descuentos_adicionales_detalle:
-    path:     /rhumano/descuentos/adicionales/detalle/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:DescuentosAdicionales:detalle }     
-    
-brs_rhu_descuentos_adicionales_agregar_concepto:
-    path:     /rhumano/descuentos/adicionales/agregar/concepto/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:DescuentosAdicionalesAgregarConcepto:nuevo }    
-
-brs_rhu_descuentos_adicionales_agregar_licencia:
-    path:     /rhumano/descuentos/adicionales/agregar/licencia/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:DescuentosAdicionalesAgregarLicencia:nuevo }        
-
-brs_rhu_descuentos_adicionales_generarmasivo_detalle:
-    path:     /rhumano/descuentos/adicionales/generarmasivo/detalle/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:DescuentosAdicionales:generarMasivoDetalle }    
     
 brs_rhu_creditos_lista:
     path:     /rhumano/creditos/lista

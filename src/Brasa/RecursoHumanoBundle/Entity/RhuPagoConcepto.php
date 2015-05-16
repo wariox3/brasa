@@ -75,13 +75,14 @@ class RhuPagoConcepto
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="pagoConceptoRel")
      */
-    protected $pagosAdicionalesPagoConceptoRel;         
+    protected $pagosAdicionalesPagoConceptoRel;                
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuDescuentoAdicional", mappedBy="pagoConceptoRel")
+     * @ORM\OneToMany(targetEntity="RhuPagoAdicionalSubtipo", mappedBy="pagoConceptoRel")
      */
-    protected $descuentosAdicionalesPagoConceptoRel;    
+    protected $pagosAdicionalesSubtiposPagoConceptoRel;     
     
+
     /**
      * Constructor
      */
@@ -89,6 +90,7 @@ class RhuPagoConcepto
     {
         $this->pagosDetallesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosAdicionalesSubtiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -270,6 +272,78 @@ class RhuPagoConcepto
     }
 
     /**
+     * Set conceptoAdicion
+     *
+     * @param boolean $conceptoAdicion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoAdicion($conceptoAdicion)
+    {
+        $this->conceptoAdicion = $conceptoAdicion;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoAdicion
+     *
+     * @return boolean
+     */
+    public function getConceptoAdicion()
+    {
+        return $this->conceptoAdicion;
+    }
+
+    /**
+     * Set conceptoAuxilioTransporte
+     *
+     * @param boolean $conceptoAuxilioTransporte
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoAuxilioTransporte($conceptoAuxilioTransporte)
+    {
+        $this->conceptoAuxilioTransporte = $conceptoAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoAuxilioTransporte
+     *
+     * @return boolean
+     */
+    public function getConceptoAuxilioTransporte()
+    {
+        return $this->conceptoAuxilioTransporte;
+    }
+
+    /**
+     * Set conceptoIncapacidad
+     *
+     * @param boolean $conceptoIncapacidad
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoIncapacidad($conceptoIncapacidad)
+    {
+        $this->conceptoIncapacidad = $conceptoIncapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoIncapacidad
+     *
+     * @return boolean
+     */
+    public function getConceptoIncapacidad()
+    {
+        return $this->conceptoIncapacidad;
+    }
+
+    /**
      * Add pagosDetallesPagoConceptoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoConceptoRel
@@ -338,108 +412,36 @@ class RhuPagoConcepto
     }
 
     /**
-     * Set conceptoAdicion
+     * Add pagosAdicionalesSubtiposPagoConceptoRel
      *
-     * @param boolean $conceptoAdicion
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagosAdicionalesSubtiposPagoConceptoRel
      *
      * @return RhuPagoConcepto
      */
-    public function setConceptoAdicion($conceptoAdicion)
+    public function addPagosAdicionalesSubtiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagosAdicionalesSubtiposPagoConceptoRel)
     {
-        $this->conceptoAdicion = $conceptoAdicion;
+        $this->pagosAdicionalesSubtiposPagoConceptoRel[] = $pagosAdicionalesSubtiposPagoConceptoRel;
 
         return $this;
     }
 
     /**
-     * Get conceptoAdicion
+     * Remove pagosAdicionalesSubtiposPagoConceptoRel
      *
-     * @return boolean
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagosAdicionalesSubtiposPagoConceptoRel
      */
-    public function getConceptoAdicion()
+    public function removePagosAdicionalesSubtiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagosAdicionalesSubtiposPagoConceptoRel)
     {
-        return $this->conceptoAdicion;
+        $this->pagosAdicionalesSubtiposPagoConceptoRel->removeElement($pagosAdicionalesSubtiposPagoConceptoRel);
     }
 
     /**
-     * Set conceptoIncapacidad
-     *
-     * @param boolean $conceptoIncapacidad
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setConceptoIncapacidad($conceptoIncapacidad)
-    {
-        $this->conceptoIncapacidad = $conceptoIncapacidad;
-
-        return $this;
-    }
-
-    /**
-     * Get conceptoIncapacidad
-     *
-     * @return boolean
-     */
-    public function getConceptoIncapacidad()
-    {
-        return $this->conceptoIncapacidad;
-    }
-
-    /**
-     * Set conceptoAuxilioTransporte
-     *
-     * @param boolean $conceptoAuxilioTransporte
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setConceptoAuxilioTransporte($conceptoAuxilioTransporte)
-    {
-        $this->conceptoAuxilioTransporte = $conceptoAuxilioTransporte;
-
-        return $this;
-    }
-
-    /**
-     * Get conceptoAuxilioTransporte
-     *
-     * @return boolean
-     */
-    public function getConceptoAuxilioTransporte()
-    {
-        return $this->conceptoAuxilioTransporte;
-    }
-
-    /**
-     * Add descuentosAdicionalesPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesPagoConceptoRel
-     *
-     * @return RhuPagoConcepto
-     */
-    public function addDescuentosAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesPagoConceptoRel)
-    {
-        $this->descuentosAdicionalesPagoConceptoRel[] = $descuentosAdicionalesPagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove descuentosAdicionalesPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesPagoConceptoRel
-     */
-    public function removeDescuentosAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesPagoConceptoRel)
-    {
-        $this->descuentosAdicionalesPagoConceptoRel->removeElement($descuentosAdicionalesPagoConceptoRel);
-    }
-
-    /**
-     * Get descuentosAdicionalesPagoConceptoRel
+     * Get pagosAdicionalesSubtiposPagoConceptoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDescuentosAdicionalesPagoConceptoRel()
+    public function getPagosAdicionalesSubtiposPagoConceptoRel()
     {
-        return $this->descuentosAdicionalesPagoConceptoRel;
+        return $this->pagosAdicionalesSubtiposPagoConceptoRel;
     }
 }

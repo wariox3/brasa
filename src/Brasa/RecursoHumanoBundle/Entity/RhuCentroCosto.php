@@ -108,12 +108,7 @@ class RhuCentroCosto
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="centroCostoRel")
      */
-    protected $pagosAdicionalesCentroCostoRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuDescuentoAdicional", mappedBy="centroCostoRel")
-     */
-    protected $descuentosAdicionalesCentroCostoRel;    
+    protected $pagosAdicionalesCentroCostoRel;       
     
     /**
      * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="centroCostoRel")
@@ -145,6 +140,7 @@ class RhuCentroCosto
         $this->empleadosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->licenciasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -253,6 +249,54 @@ class RhuCentroCosto
     public function getFechaUltimoPagoProgramado()
     {
         return $this->fechaUltimoPagoProgramado;
+    }
+
+    /**
+     * Set correo
+     *
+     * @param string $correo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCorreo($correo)
+    {
+        $this->correo = $correo;
+
+        return $this;
+    }
+
+    /**
+     * Get correo
+     *
+     * @return string
+     */
+    public function getCorreo()
+    {
+        return $this->correo;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 
     /**
@@ -373,6 +417,54 @@ class RhuCentroCosto
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set porcentajeAdministracion
+     *
+     * @param float $porcentajeAdministracion
+     *
+     * @return RhuCentroCosto
+     */
+    public function setPorcentajeAdministracion($porcentajeAdministracion)
+    {
+        $this->porcentajeAdministracion = $porcentajeAdministracion;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeAdministracion
+     *
+     * @return float
+     */
+    public function getPorcentajeAdministracion()
+    {
+        return $this->porcentajeAdministracion;
+    }
+
+    /**
+     * Set valorAdministracion
+     *
+     * @param float $valorAdministracion
+     *
+     * @return RhuCentroCosto
+     */
+    public function setValorAdministracion($valorAdministracion)
+    {
+        $this->valorAdministracion = $valorAdministracion;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAdministracion
+     *
+     * @return float
+     */
+    public function getValorAdministracion()
+    {
+        return $this->valorAdministracion;
     }
 
     /**
@@ -560,6 +652,40 @@ class RhuCentroCosto
     }
 
     /**
+     * Add licenciasCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addLicenciasCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasCentroCostoRel)
+    {
+        $this->licenciasCentroCostoRel[] = $licenciasCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove licenciasCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasCentroCostoRel
+     */
+    public function removeLicenciasCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasCentroCostoRel)
+    {
+        $this->licenciasCentroCostoRel->removeElement($licenciasCentroCostoRel);
+    }
+
+    /**
+     * Get licenciasCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLicenciasCentroCostoRel()
+    {
+        return $this->licenciasCentroCostoRel;
+    }
+
+    /**
      * Add pagosCentroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosCentroCostoRel
@@ -625,169 +751,5 @@ class RhuCentroCosto
     public function getFacturasCentroCostoRel()
     {
         return $this->facturasCentroCostoRel;
-    }
-
-    /**
-     * Set porcentajeAdministracion
-     *
-     * @param float $porcentajeAdministracion
-     *
-     * @return RhuCentroCosto
-     */
-    public function setPorcentajeAdministracion($porcentajeAdministracion)
-    {
-        $this->porcentajeAdministracion = $porcentajeAdministracion;
-
-        return $this;
-    }
-
-    /**
-     * Get porcentajeAdministracion
-     *
-     * @return float
-     */
-    public function getPorcentajeAdministracion()
-    {
-        return $this->porcentajeAdministracion;
-    }
-
-    /**
-     * Set valorAdministracion
-     *
-     * @param float $valorAdministracion
-     *
-     * @return RhuCentroCosto
-     */
-    public function setValorAdministracion($valorAdministracion)
-    {
-        $this->valorAdministracion = $valorAdministracion;
-
-        return $this;
-    }
-
-    /**
-     * Get valorAdministracion
-     *
-     * @return float
-     */
-    public function getValorAdministracion()
-    {
-        return $this->valorAdministracion;
-    }
-
-    /**
-     * Set correo
-     *
-     * @param string $correo
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCorreo($correo)
-    {
-        $this->correo = $correo;
-
-        return $this;
-    }
-
-    /**
-     * Get correo
-     *
-     * @return string
-     */
-    public function getCorreo()
-    {
-        return $this->correo;
-    }
-
-    /**
-     * Set codigoInterface
-     *
-     * @param string $codigoInterface
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCodigoInterface($codigoInterface)
-    {
-        $this->codigoInterface = $codigoInterface;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoInterface
-     *
-     * @return string
-     */
-    public function getCodigoInterface()
-    {
-        return $this->codigoInterface;
-    }
-
-    /**
-     * Add descuentosAdicionalesCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesCentroCostoRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function addDescuentosAdicionalesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesCentroCostoRel)
-    {
-        $this->descuentosAdicionalesCentroCostoRel[] = $descuentosAdicionalesCentroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove descuentosAdicionalesCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesCentroCostoRel
-     */
-    public function removeDescuentosAdicionalesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional $descuentosAdicionalesCentroCostoRel)
-    {
-        $this->descuentosAdicionalesCentroCostoRel->removeElement($descuentosAdicionalesCentroCostoRel);
-    }
-
-    /**
-     * Get descuentosAdicionalesCentroCostoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDescuentosAdicionalesCentroCostoRel()
-    {
-        return $this->descuentosAdicionalesCentroCostoRel;
-    }
-
-    /**
-     * Add licenciasCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasCentroCostoRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function addLicenciasCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasCentroCostoRel)
-    {
-        $this->licenciasCentroCostoRel[] = $licenciasCentroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove licenciasCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasCentroCostoRel
-     */
-    public function removeLicenciasCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasCentroCostoRel)
-    {
-        $this->licenciasCentroCostoRel->removeElement($licenciasCentroCostoRel);
-    }
-
-    /**
-     * Get licenciasCentroCostoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLicenciasCentroCostoRel()
-    {
-        return $this->licenciasCentroCostoRel;
     }
 }

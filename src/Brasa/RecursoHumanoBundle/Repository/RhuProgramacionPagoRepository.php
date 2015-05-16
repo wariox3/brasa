@@ -56,26 +56,15 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         //Devolver incapacidades
         //Devolver Licencias
         //Devolver pagos adicionales
-        /*$arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 'pagoAplicado' => 0, 'codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));        
+        $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));        
         foreach ($arPagosAdicionales as $arPagoAdicional) {
             $arPagoAdicionalActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
             $arPagoAdicionalActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($arPagoAdicional->getCodigoPagoAdicionalPk());
             $arPagoAdicionalActualizar->setPagoAplicado(0);
-            $arPagoAdicionalActualizar->setProgramacionPagoRel($arProgramacionPagoProcesar);
+            $arPagoAdicionalActualizar->setProgramacionPagoRel(null);
             $em->persist($arPagoAdicionalActualizar);            
-        }*/
-        
-        //Devolver descuentos adicionales
-        $arDescuentosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
-        $arDescuentosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));        
-        foreach ($arDescuentosAdicionales as $arDescuentoAdicional) {
-            $arDescuentoAdicionalActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuDescuentoAdicional();
-            $arDescuentoAdicionalActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuDescuentoAdicional')->find($arDescuentoAdicional->getCodigoDescuentoAdicionalPk());
-            $arDescuentoAdicionalActualizar->setDescuentoAplicado(0);
-            $arDescuentoAdicionalActualizar->setProgramacionPagoRel(NULL);
-            $em->persist($arDescuentoAdicionalActualizar);            
-        }
+        }        
         
         //Devolver creditos
         //Eliminar pagos
