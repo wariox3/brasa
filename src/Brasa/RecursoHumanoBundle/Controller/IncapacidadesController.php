@@ -5,12 +5,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuIncapacidadType;
 
-class PagosAdicionalesAgregarIncapacidadController extends Controller
+class IncapacidadesController extends Controller
 {
 
-    public function nuevoAction($codigoCentroCosto) {
+    public function nuevoAction($codigoCentroCosto, $codigoEmpleado) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        if($codigoEmpleado != 0) {            
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
+        }
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();       
         $arIncapacidad->setFechaDesde(new \DateTime('now'));
@@ -27,6 +31,9 @@ class PagosAdicionalesAgregarIncapacidadController extends Controller
             $intDias = $intDias + 1; 
             $arIncapacidad->setCantidad($intDias);
             $arIncapacidad->setCantidadPendiente($intDias);
+            if($codigoEmpleado != 0) { 
+                $arIncapacidad->setEmpleadoRel($arEmpleado);                
+            }
             $em->persist($arIncapacidad);
             $em->flush();                        
             if($form->get('guardarnuevo')->isClicked()) {
@@ -37,8 +44,9 @@ class PagosAdicionalesAgregarIncapacidadController extends Controller
             
         }                
 
-        return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:agregarIncapacidad.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Incapacidades:nuevo.html.twig', array(
             'arCentroCosto' => $arCentroCosto,
+            'arEmpleado' => $arEmpleado,
             'form' => $form->createView()));
     }
 }

@@ -38,9 +38,13 @@ brs_rhu_pagos_adicionales_agregar_valor:
     path:     /rhumano/pagos/adicionales/agregar/valor/{codigoCentroCosto}/{tipo}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valor }    
 
-brs_rhu_pagos_adicionales_agregar_incapacidad:
-    path:     /rhumano/pagos/adicionales/agregar/incapacidad/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregarIncapacidad:nuevo }    
+brs_rhu_incapacidades_nuevo:
+    path:     /rhumano/incapacidades/nuevo/{codigoCentroCosto}/{codigoEmpleado}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:nuevo }    
+
+brs_rhu_licencias_nuevo:
+    path:     /rhumano/licencias/nuevo/{codigoCentroCosto}/{codigoEmpleado}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:nuevo }     
     
 brs_rhu_creditos_lista:
     path:     /rhumano/creditos/lista

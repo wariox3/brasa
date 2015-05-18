@@ -145,6 +145,8 @@ class BaseEmpleadoController extends Controller
         $request = $this->getRequest();
         $form = $this->createFormBuilder()
             ->add('BtnRetirarContrato', 'submit', array('label'  => 'Retirar',))
+            ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Retirar',))
+            ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Retirar',))
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
@@ -154,6 +156,8 @@ class BaseEmpleadoController extends Controller
         $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+        $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
@@ -171,6 +175,30 @@ class BaseEmpleadoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
             }
+            if($form->get('BtnRetirarIncapacidad')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarIncapacidad');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoIncapacidad) {
+                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+                        $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
+                        $em->remove($arIncapacidad);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
+                }
+            }  
+            if($form->get('BtnRetirarLicencia')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarLicencia');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoLicencia) {
+                        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+                        $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->find($codigoLicencia);
+                        $em->remove($arLicencia);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
+                }
+            }            
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoHojaVida = new \Brasa\RecursoHumanoBundle\Formatos\FormatoHojaVida();
                 $objFormatoHojaVida->Generar($this, $codigoEmpleado);
@@ -180,6 +208,7 @@ class BaseEmpleadoController extends Controller
                     'arEmpleado' => $arEmpleado,
                     'arPagosAdicionales' => $arPagosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
+                    'arLicencias' => $arLicencias,
                     'arContratos' => $arContratos,
                     'arCreditos' => $arCreditos,
                     'form' => $form->createView()
