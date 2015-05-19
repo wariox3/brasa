@@ -85,7 +85,6 @@
                             <th>ID</th>
                             <th>CONCEPTO</th>
                             <th>DETALLE</th>
-                            <th style="text-align: right">VR. DIA</th>
                             <th style="text-align: right">PORCENTAJE</th>
                             <th style="text-align: right">HORAS</th>
                             <th style="text-align: right">VR. HORA</th>
@@ -101,8 +100,7 @@
                                 <span class="badge">{{ arPagoDetalles.codigoPagoDetallePk }}</span>
                             </td>
                             <td>{{ arPagoDetalles.pagoConceptoRel.nombre }}</td>
-                            <td>{{ arPagoDetalles.detalle }}</td>
-                            <td style="text-align: right">{{ arPagoDetalles.vrDia | number_format(2, '.', ',') }}</td>
+                            <td>{{ arPagoDetalles.detalle }}</td>                            
                             <td style="text-align: right">{{ arPagoDetalles.porcentajeAplicado | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.numeroHoras | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.vrHora | number_format(2, '.', ',') }}</td>

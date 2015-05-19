@@ -38,6 +38,11 @@ class RhuPagoAdicionalSubtipo
     private $codigoPagoConceptoFk;
     
     /**
+     * @ORM\Column(name="porcentaje", type="float")
+     */
+    private $porcentaje = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="pagosAdicionalesSubtiposPagoConceptoRel")
      * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
      */
@@ -54,6 +59,10 @@ class RhuPagoAdicionalSubtipo
      */
     protected $pagosAdicionalesPagoAdicionalSubtipoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuLicencia", mappedBy="pagoAdicionalSubtipoRel")
+     */
+    protected $licenciasPagoAdicionalSubtipoRel;
 
     /**
      * Constructor
@@ -98,6 +107,30 @@ class RhuPagoAdicionalSubtipo
     }
 
     /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return RhuPagoAdicionalSubtipo
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
+    }
+
+    /**
      * Set codigoPagoAdicionalTipoFk
      *
      * @param integer $codigoPagoAdicionalTipoFk
@@ -119,6 +152,78 @@ class RhuPagoAdicionalSubtipo
     public function getCodigoPagoAdicionalTipoFk()
     {
         return $this->codigoPagoAdicionalTipoFk;
+    }
+
+    /**
+     * Set codigoPagoConceptoFk
+     *
+     * @param integer $codigoPagoConceptoFk
+     *
+     * @return RhuPagoAdicionalSubtipo
+     */
+    public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
+    {
+        $this->codigoPagoConceptoFk = $codigoPagoConceptoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoConceptoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoConceptoFk()
+    {
+        return $this->codigoPagoConceptoFk;
+    }
+
+    /**
+     * Set porcentaje
+     *
+     * @param float $porcentaje
+     *
+     * @return RhuPagoAdicionalSubtipo
+     */
+    public function setPorcentaje($porcentaje)
+    {
+        $this->porcentaje = $porcentaje;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentaje
+     *
+     * @return float
+     */
+    public function getPorcentaje()
+    {
+        return $this->porcentaje;
+    }
+
+    /**
+     * Set pagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
+     *
+     * @return RhuPagoAdicionalSubtipo
+     */
+    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
+    {
+        $this->pagoConceptoRel = $pagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoConceptoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
+     */
+    public function getPagoConceptoRel()
+    {
+        return $this->pagoConceptoRel;
     }
 
     /**
@@ -180,74 +285,36 @@ class RhuPagoAdicionalSubtipo
     }
 
     /**
-     * Set codigoPagoConceptoFk
+     * Add licenciasPagoAdicionalSubtipoRel
      *
-     * @param integer $codigoPagoConceptoFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasPagoAdicionalSubtipoRel
      *
      * @return RhuPagoAdicionalSubtipo
      */
-    public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
+    public function addLicenciasPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasPagoAdicionalSubtipoRel)
     {
-        $this->codigoPagoConceptoFk = $codigoPagoConceptoFk;
+        $this->licenciasPagoAdicionalSubtipoRel[] = $licenciasPagoAdicionalSubtipoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoPagoConceptoFk
+     * Remove licenciasPagoAdicionalSubtipoRel
      *
-     * @return integer
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasPagoAdicionalSubtipoRel
      */
-    public function getCodigoPagoConceptoFk()
+    public function removeLicenciasPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasPagoAdicionalSubtipoRel)
     {
-        return $this->codigoPagoConceptoFk;
+        $this->licenciasPagoAdicionalSubtipoRel->removeElement($licenciasPagoAdicionalSubtipoRel);
     }
 
     /**
-     * Set pagoConceptoRel
+     * Get licenciasPagoAdicionalSubtipoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
-     *
-     * @return RhuPagoAdicionalSubtipo
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
+    public function getLicenciasPagoAdicionalSubtipoRel()
     {
-        $this->pagoConceptoRel = $pagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoConceptoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
-     */
-    public function getPagoConceptoRel()
-    {
-        return $this->pagoConceptoRel;
-    }
-
-    /**
-     * Set detalle
-     *
-     * @param string $detalle
-     *
-     * @return RhuPagoAdicionalSubtipo
-     */
-    public function setDetalle($detalle)
-    {
-        $this->detalle = $detalle;
-
-        return $this;
-    }
-
-    /**
-     * Get detalle
-     *
-     * @return string
-     */
-    public function getDetalle()
-    {
-        return $this->detalle;
+        return $this->licenciasPagoAdicionalSubtipoRel;
     }
 }

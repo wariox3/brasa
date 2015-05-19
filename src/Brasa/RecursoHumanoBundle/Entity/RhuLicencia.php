@@ -67,6 +67,18 @@ class RhuLicencia
      */    
     private $afectaTransporte = 0;     
     
+    
+    /**
+     * @ORM\Column(name="codigo_pago_adicional_subtipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoPagoAdicionalSubtipoFk;        
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuPagoAdicionalSubtipo", inversedBy="licenciasPagoAdicionalSubtipoRel")
+     * @ORM\JoinColumn(name="codigo_pago_adicional_subtipo_fk", referencedColumnName="codigo_pago_adicional_subtipo_pk")
+     */
+    protected $pagoAdicionalSubtipoRel;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="licenciasCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
@@ -423,5 +435,53 @@ class RhuLicencia
     public function getAfectaTransporte()
     {
         return $this->afectaTransporte;
+    }
+
+    /**
+     * Set codigoPagoAdicionalSubtipoFk
+     *
+     * @param integer $codigoPagoAdicionalSubtipoFk
+     *
+     * @return RhuLicencia
+     */
+    public function setCodigoPagoAdicionalSubtipoFk($codigoPagoAdicionalSubtipoFk)
+    {
+        $this->codigoPagoAdicionalSubtipoFk = $codigoPagoAdicionalSubtipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoAdicionalSubtipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoAdicionalSubtipoFk()
+    {
+        return $this->codigoPagoAdicionalSubtipoFk;
+    }
+
+    /**
+     * Set pagoAdicionalSubtipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel
+     *
+     * @return RhuLicencia
+     */
+    public function setPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel = null)
+    {
+        $this->pagoAdicionalSubtipoRel = $pagoAdicionalSubtipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoAdicionalSubtipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo
+     */
+    public function getPagoAdicionalSubtipoRel()
+    {
+        return $this->pagoAdicionalSubtipoRel;
     }
 }

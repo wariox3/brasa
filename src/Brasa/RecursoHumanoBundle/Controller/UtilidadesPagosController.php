@@ -151,20 +151,22 @@ class UtilidadesPagosController extends Controller
                                 $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
                                 $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
                                 foreach ($arLicencias as $arLicencia) {
-                                    $intConceptoLicencia = 20;
-                                    $arPagoConceptoLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                    $arPagoConceptoLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intConceptoLicencia);
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
-                                    $arPagoDetalle->setPagoConceptoRel($arPagoConceptoLicencia);
+                                    $arPagoDetalle->setPagoConceptoRel($arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel());
+                                    $arPagoDetalle->setDetalle($arLicencia->getPagoAdicionalSubtipoRel()->getDetalle());
+                                    
                                     $douPagoDetalle = 0;                                    
                                     $intHorasProcesarLicencia = 0;
                                     if($arLicencia->getCantidad() <= $intHorasLaboradas) {
                                         $intHorasLaboradas = $intHorasLaboradas - $arLicencia->getCantidad();
                                         $intHorasProcesarLicencia = $arLicencia->getCantidad();
                                     }
-                                    $douPagoDetalle = $intHorasProcesarLicencia * $douVrHora;
-                                    $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;                                    
+                                    
+                                    if($arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getPrestacional() == 1) {
+                                        $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;                                                                            
+                                        $douPagoDetalle = $intHorasProcesarLicencia * $douVrHora;                                                                                                                    
+                                    }                                    
                                     $arPagoDetalle->setNumeroHoras($intHorasProcesarLicencia);                                                                                                                                                
                                     $em->persist($arPagoDetalle);
                                     if($arLicencia->getAfectaTransporte() == 1){
@@ -183,7 +185,7 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setPagoRel($arPago);
                                     $arPagoDetalle->setPagoConceptoRel($arPagoAdicional->getPagoConceptoRel());
                                     if($arPagoAdicional->getPagoConceptoRel()->getComponePorcentaje() == 1) {
-                                        $douVrHoraAdicional = ($douVrHora * $arPagoAdicional->getPagoConceptoRel()->getPorPorcentaje())/100;
+                                        $douVrHoraAdicional = ($douVrHora * $arPagoAdicional->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;
                                         $douPagoDetalle = $douVrHoraAdicional * $arPagoAdicional->getCantidad();
                                         $arPagoDetalle->setVrHora($douVrHoraAdicional);
                                         $arPagoDetalle->setVrDia($douVrDia);
@@ -285,25 +287,27 @@ class UtilidadesPagosController extends Controller
                                 $em->persist($arPagoDetalle);
 
                                 //Subsidio transporte
-                                if($arEmpleado->getAuxilioTransporte() == 1) {
-                                    $intPagoConceptoTransporte = 18; //Se debe traer de la base de datos
-                                    $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoTransporte);
-                                    $douVrDiaTransporte = 74000 / 30;
-                                    $douFactorDiasLaborados = 1;
-                                    if($intDiasTransporte > 0 && $arEmpleado->getTipoTiempoRel()->getFactor() != 0) {
-                                        $douFactorDiasLaborados = $arEmpleado->getTipoTiempoRel()->getFactor();
-                                    }
-                                    $douPagoDetalle = $douVrDiaTransporte * ($intDiasTransporte*$douFactorDiasLaborados);
-                                    $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                                    $arPagoDetalle->setPagoRel($arPago);
-                                    $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);                                    
-                                    $arPagoDetalle->setNumeroHoras($intDiasTransporte * $douFactorDiasLaborados);
-                                    $arPagoDetalle->setVrHora($douVrDiaTransporte / 8);
-                                    $arPagoDetalle->setVrDia($douVrDiaTransporte);
-                                    $arPagoDetalle->setVrPago($douPagoDetalle);
-                                    $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
-                                    $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
-                                    $em->persist($arPagoDetalle);
+                                if($intDiasTransporte > 0) {
+                                    if($arEmpleado->getAuxilioTransporte() == 1) {
+                                        $intPagoConceptoTransporte = 18; //Se debe traer de la base de datos
+                                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoTransporte);
+                                        $douVrDiaTransporte = 74000 / 30;
+                                        $douFactorDiasLaborados = 1;
+                                        if($intDiasTransporte > 0 && $arEmpleado->getTipoTiempoRel()->getFactor() != 0) {
+                                            $douFactorDiasLaborados = $arEmpleado->getTipoTiempoRel()->getFactor();
+                                        }
+                                        $douPagoDetalle = $douVrDiaTransporte * ($intDiasTransporte*$douFactorDiasLaborados);
+                                        $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                        $arPagoDetalle->setPagoRel($arPago);
+                                        $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);                                    
+                                        $arPagoDetalle->setNumeroHoras($intDiasTransporte * $douFactorDiasLaborados);
+                                        $arPagoDetalle->setVrHora($douVrDiaTransporte / 8);
+                                        $arPagoDetalle->setVrDia($douVrDiaTransporte);
+                                        $arPagoDetalle->setVrPago($douPagoDetalle);
+                                        $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
+                                        $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
+                                        $em->persist($arPagoDetalle);
+                                    }                                    
                                 }
                             }
                             $arProgramacionPagoProcesar->setEstadoGenerado(1);

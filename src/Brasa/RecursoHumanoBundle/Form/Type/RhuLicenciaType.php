@@ -18,7 +18,16 @@ class RhuLicenciaType extends AbstractType
                     ->setParameter('centroCosto', $options['data']->getCentroCostoRel()->getCodigoCentroCostoPk())
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
-                'required' => true))                                   
+                'required' => true))    
+            ->add('pagoAdicionalSubtipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('st')
+                    ->where('st.codigoPagoAdicionalTipoFk = :codigoPagoTipo')
+                    ->setParameter('codigoPagoTipo', 5)
+                    ->orderBy('st.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                            
             ->add('fechaDesde', 'date')                
             ->add('fechaHasta', 'date')  
             ->add('cantidad', 'number', array('required' => true))
