@@ -9,11 +9,7 @@ class RhuIncapacidadType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {        
-        $builder           
-            ->add('incapacidadTipoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuIncapacidadTipo',
-                'property' => 'nombre',
-            ))   
+        $builder             
             ->add('empleadoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
                 'query_builder' => function (EntityRepository $er) use ($options) {
@@ -22,7 +18,16 @@ class RhuIncapacidadType extends AbstractType
                     ->setParameter('centroCosto', $options['data']->getCentroCostoRel()->getCodigoCentroCostoPk())
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
-                'required' => true))                            
+                'required' => true))   
+            ->add('pagoAdicionalSubtipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('st')
+                    ->where('st.codigoPagoAdicionalTipoFk = :codigoPagoTipo')
+                    ->setParameter('codigoPagoTipo', 6)
+                    ->orderBy('st.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('numeroEps', 'text', array('required' => true))   
             ->add('fechaDesde', 'date')                
             ->add('fechaHasta', 'date')  

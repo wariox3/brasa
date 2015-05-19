@@ -29,8 +29,8 @@ class IncapacidadesController extends Controller
             $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
             $intDias = $intDias->format('%a');
             $intDias = $intDias + 1; 
-            $arIncapacidad->setCantidad($intDias);
-            $arIncapacidad->setCantidadPendiente($intDias);
+            $arIncapacidad->setCantidad($intDias * 8);
+            $arIncapacidad->setCantidadPendiente($intDias * 8);
             if($codigoEmpleado != 0) { 
                 $arIncapacidad->setEmpleadoRel($arEmpleado);                
             }

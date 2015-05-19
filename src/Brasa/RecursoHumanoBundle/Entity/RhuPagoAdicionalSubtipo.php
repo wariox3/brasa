@@ -65,6 +65,11 @@ class RhuPagoAdicionalSubtipo
     protected $licenciasPagoAdicionalSubtipoRel;
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="pagoAdicionalSubtipoRel")
+     */
+    protected $incapacidadesPagoAdicionalSubtipoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -316,5 +321,39 @@ class RhuPagoAdicionalSubtipo
     public function getLicenciasPagoAdicionalSubtipoRel()
     {
         return $this->licenciasPagoAdicionalSubtipoRel;
+    }
+
+    /**
+     * Add incapacidadesPagoAdicionalSubtipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesPagoAdicionalSubtipoRel
+     *
+     * @return RhuPagoAdicionalSubtipo
+     */
+    public function addIncapacidadesPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesPagoAdicionalSubtipoRel)
+    {
+        $this->incapacidadesPagoAdicionalSubtipoRel[] = $incapacidadesPagoAdicionalSubtipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove incapacidadesPagoAdicionalSubtipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesPagoAdicionalSubtipoRel
+     */
+    public function removeIncapacidadesPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesPagoAdicionalSubtipoRel)
+    {
+        $this->incapacidadesPagoAdicionalSubtipoRel->removeElement($incapacidadesPagoAdicionalSubtipoRel);
+    }
+
+    /**
+     * Get incapacidadesPagoAdicionalSubtipoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIncapacidadesPagoAdicionalSubtipoRel()
+    {
+        return $this->incapacidadesPagoAdicionalSubtipoRel;
     }
 }

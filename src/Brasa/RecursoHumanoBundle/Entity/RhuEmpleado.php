@@ -184,6 +184,11 @@ class RhuEmpleado
     private $codigoTipoTiempoFk;     
     
     /**
+     * @ORM\Column(name="horas_laboradas_periodo", type="float")
+     */
+    private $horasLaboradasPeriodo = 0;      
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
@@ -260,6 +265,7 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="empleadoRel")
      */
     protected $contratosEmpleadoRel;     
+
 
     /**
      * Constructor
@@ -1074,6 +1080,30 @@ class RhuEmpleado
     public function getCodigoTipoTiempoFk()
     {
         return $this->codigoTipoTiempoFk;
+    }
+
+    /**
+     * Set horasLaboradasPeriodo
+     *
+     * @param float $horasLaboradasPeriodo
+     *
+     * @return RhuEmpleado
+     */
+    public function setHorasLaboradasPeriodo($horasLaboradasPeriodo)
+    {
+        $this->horasLaboradasPeriodo = $horasLaboradasPeriodo;
+
+        return $this;
+    }
+
+    /**
+     * Get horasLaboradasPeriodo
+     *
+     * @return float
+     */
+    public function getHorasLaboradasPeriodo()
+    {
+        return $this->horasLaboradasPeriodo;
     }
 
     /**

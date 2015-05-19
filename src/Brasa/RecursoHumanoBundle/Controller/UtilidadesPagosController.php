@@ -93,59 +93,57 @@ class UtilidadesPagosController extends Controller
                                 $douVrHora = $douVrDia / 8;
                                 $douVrSalarioMinimo = 644350; //Configurar desde configuraciones
                                 $douSalarioPrestacional = 0;
+                                $intHorasLaboradas = $intDiasLaborados * 8;
+                                if($arEmpleado->getHorasLaboradasPeriodo() > 0) {
+                                    $intHorasLaboradas = $arEmpleado->getHorasLaboradasPeriodo();
+                                }
+                                
                                 //Procesar Incapacidades
                                 $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
                                 $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
                                 foreach ($arIncapacidades as $arIncapacidad) {
-                                    $intConceptoIncapacidad = 0;
-                                    if($arIncapacidad->getIncapacidadTipoRel()->getIncapacidadGeneral() == 1) {
-                                        $intConceptoIncapacidad = 16; //Configurar desde configuraciones
-                                    } else {
-                                        $intConceptoIncapacidad = 17; //Configurar desde configuraciones
-                                    }
-                                    $arPagoConceptoIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                    $arPagoConceptoIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intConceptoIncapacidad);
+                                    
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
-                                    $arPagoDetalle->setPagoConceptoRel($arPagoConceptoIncapacidad);
+                                    $arPagoDetalle->setPagoConceptoRel($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel());
                                     $douPagoDetalle = 0;
-                                    $intDiasProcesarIncapacidad = 0;
-                                    if($arIncapacidad->getCantidadPendiente() <= $intDiasLaborados) {
-                                        $intDiasLaborados = $intDiasLaborados - $arIncapacidad->getCantidad();
-                                        $intDiasProcesarIncapacidad = $arIncapacidad->getCantidad();
+                                    $intHorasProcesarIncapacidad = 0;
+                                    if($arIncapacidad->getCantidadPendiente() <= $intHorasLaboradas) {
+                                        $intHorasLaboradas = $intHorasLaboradas - $arIncapacidad->getCantidad();
+                                        $intHorasProcesarIncapacidad = $arIncapacidad->getCantidad();
                                     } else {
-                                       $intDiasProcesarIncapacidad = $intDiasLaborados;
-                                       $intDiasLaborados = 0; 
+                                       $intHorasProcesarIncapacidad = $intHorasLaboradas;
+                                       $intHorasLaboradas = 0; 
                                     }
-                                    if($arIncapacidad->getIncapacidadTipoRel()->getIncapacidadGeneral() == 1) {
+                                    if($arIncapacidad->getCodigoPagoAdicionalSubtipoFk() == 28) {
                                         if($arEmpleado->getVrSalario() <= $douVrSalarioMinimo) {
-                                            $douPagoDetalle = $intDiasProcesarIncapacidad * $douVrDia;
+                                            $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
                                         }
                                         if($arEmpleado->getVrSalario() > $douVrSalarioMinimo && $arEmpleado->getVrSalario() <= $douVrSalarioMinimo * 1.5) {
-                                            $douVrDiaSalarioMinimo = $douVrSalarioMinimo / 30;
-                                            $douPagoDetalle = $intDiasProcesarIncapacidad * $douVrDiaSalarioMinimo;
+                                            $douVrHoraSalarioMinimo = ($douVrSalarioMinimo / 30) / 8;
+                                            $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHoraSalarioMinimo;
                                         }
                                         if($arEmpleado->getVrSalario() > ($douVrSalarioMinimo * 1.5)) {
-                                            $douPagoDetalle = $intDiasProcesarIncapacidad * $douVrDia;
-                                            $douPagoDetalle = ($douPagoDetalle * $arPagoConceptoIncapacidad->getPorPorcentaje())/100;
+                                            $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
+                                            $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;
                                         }
                                     } else {
-                                        $douPagoDetalle = $intDiasProcesarIncapacidad * $douVrDia;
-                                        $douPagoDetalle = ($douPagoDetalle * $arPagoConceptoIncapacidad->getPorPorcentaje())/100;
+                                        $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
+                                        $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;
                                     }
-                                    $arPagoDetalle->setNumeroHoras($intDiasProcesarIncapacidad*8);
+                                    $arPagoDetalle->setNumeroHoras($intHorasProcesarIncapacidad);
                                     $arPagoDetalle->setVrHora($douVrHora);
                                     $arPagoDetalle->setVrDia($douVrDia);                                    
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
-                                    $arPagoDetalle->setOperacion($arPagoConceptoIncapacidad->getOperacion());
-                                    $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoIncapacidad->getOperacion());
+                                    $arPagoDetalle->setOperacion($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
+                                    $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
                                     $em->persist($arPagoDetalle);
-                                    if($arPagoConceptoIncapacidad->getPrestacional() == 1) {
+                                    if($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getPrestacional() == 1) {
                                         $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;
                                     }
-                                }
-                                $intHorasLaboradas = $intDiasLaborados * 8;
-                                $intDiasTransporte = $intDiasLaborados;
+                                }                                
+                                $intDiasTransporte = intval($intHorasLaboradas / 8);
+                                
                                 
                                 //Procesar Licencias
                                 $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
@@ -165,7 +163,10 @@ class UtilidadesPagosController extends Controller
                                     
                                     if($arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getPrestacional() == 1) {                                        
                                         $douPagoDetalle = $intHorasProcesarLicencia * $douVrHora; 
-                                        $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;                                                                                                                    
+                                        $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;                                                                                                                                                            
+                                        if($arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion() == 0) {
+                                            $douPagoDetalle = 0;
+                                        }
                                         $arPagoDetalle->setVrPago($douPagoDetalle);
                                         $arPagoDetalle->setOperacion($arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
                                         $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());

@@ -56,12 +56,7 @@ class RhuIncapacidad
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
-    private $codigoCentroCostoFk;   
-    
-    /**
-     * @ORM\Column(name="codigo_incapacidad_tipo_fk", type="integer", nullable=true)
-     */    
-    private $codigoIncapacidadTipoFk;    
+    private $codigoCentroCostoFk;         
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -69,16 +64,21 @@ class RhuIncapacidad
     private $comentarios;     
     
     /**
+     * @ORM\Column(name="codigo_pago_adicional_subtipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoPagoAdicionalSubtipoFk;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuPagoAdicionalSubtipo", inversedBy="incapacidadesPagoAdicionalSubtipoRel")
+     * @ORM\JoinColumn(name="codigo_pago_adicional_subtipo_fk", referencedColumnName="codigo_pago_adicional_subtipo_pk")
+     */
+    protected $pagoAdicionalSubtipoRel;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="incapacidadesCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $centroCostoRel;     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuIncapacidadTipo", inversedBy="incapacidadesIncapacidadTipoRel")
-     * @ORM\JoinColumn(name="codigo_incapacidad_tipo_fk", referencedColumnName="codigo_incapacidad_tipo_pk")
-     */
-    protected $incapacidadTipoRel;    
+    protected $centroCostoRel;        
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="incapacidadesEmpleadoRel")
@@ -409,5 +409,53 @@ class RhuIncapacidad
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set codigoPagoAdicionalSubtipoFk
+     *
+     * @param integer $codigoPagoAdicionalSubtipoFk
+     *
+     * @return RhuIncapacidad
+     */
+    public function setCodigoPagoAdicionalSubtipoFk($codigoPagoAdicionalSubtipoFk)
+    {
+        $this->codigoPagoAdicionalSubtipoFk = $codigoPagoAdicionalSubtipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoAdicionalSubtipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoAdicionalSubtipoFk()
+    {
+        return $this->codigoPagoAdicionalSubtipoFk;
+    }
+
+    /**
+     * Set pagoAdicionalSubtipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function setPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel = null)
+    {
+        $this->pagoAdicionalSubtipoRel = $pagoAdicionalSubtipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoAdicionalSubtipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo
+     */
+    public function getPagoAdicionalSubtipoRel()
+    {
+        return $this->pagoAdicionalSubtipoRel;
     }
 }
