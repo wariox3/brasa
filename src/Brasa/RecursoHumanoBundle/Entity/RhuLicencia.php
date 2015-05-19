@@ -63,7 +63,7 @@ class RhuLicencia
     private $comentarios;     
     
     /**     
-     * @ORM\Column(name="afecta_trasporte", type="boolean")
+     * @ORM\Column(name="afecta_transporte", type="boolean")
      */    
     private $afectaTransporte = 0;     
     
@@ -332,6 +332,78 @@ class RhuLicencia
     }
 
     /**
+     * Set afectaTransporte
+     *
+     * @param boolean $afectaTransporte
+     *
+     * @return RhuLicencia
+     */
+    public function setAfectaTransporte($afectaTransporte)
+    {
+        $this->afectaTransporte = $afectaTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get afectaTransporte
+     *
+     * @return boolean
+     */
+    public function getAfectaTransporte()
+    {
+        return $this->afectaTransporte;
+    }
+
+    /**
+     * Set codigoPagoAdicionalSubtipoFk
+     *
+     * @param integer $codigoPagoAdicionalSubtipoFk
+     *
+     * @return RhuLicencia
+     */
+    public function setCodigoPagoAdicionalSubtipoFk($codigoPagoAdicionalSubtipoFk)
+    {
+        $this->codigoPagoAdicionalSubtipoFk = $codigoPagoAdicionalSubtipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoAdicionalSubtipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoAdicionalSubtipoFk()
+    {
+        return $this->codigoPagoAdicionalSubtipoFk;
+    }
+
+    /**
+     * Set pagoAdicionalSubtipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel
+     *
+     * @return RhuLicencia
+     */
+    public function setPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel = null)
+    {
+        $this->pagoAdicionalSubtipoRel = $pagoAdicionalSubtipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoAdicionalSubtipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo
+     */
+    public function getPagoAdicionalSubtipoRel()
+    {
+        return $this->pagoAdicionalSubtipoRel;
+    }
+
+    /**
      * Set centroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
@@ -411,77 +483,5 @@ class RhuLicencia
     public function getLicenciasRegistrosPagosLicenciaRel()
     {
         return $this->licenciasRegistrosPagosLicenciaRel;
-    }
-
-    /**
-     * Set afectaTransporte
-     *
-     * @param boolean $afectaTransporte
-     *
-     * @return RhuLicencia
-     */
-    public function setAfectaTransporte($afectaTransporte)
-    {
-        $this->afectaTransporte = $afectaTransporte;
-
-        return $this;
-    }
-
-    /**
-     * Get afectaTransporte
-     *
-     * @return boolean
-     */
-    public function getAfectaTransporte()
-    {
-        return $this->afectaTransporte;
-    }
-
-    /**
-     * Set codigoPagoAdicionalSubtipoFk
-     *
-     * @param integer $codigoPagoAdicionalSubtipoFk
-     *
-     * @return RhuLicencia
-     */
-    public function setCodigoPagoAdicionalSubtipoFk($codigoPagoAdicionalSubtipoFk)
-    {
-        $this->codigoPagoAdicionalSubtipoFk = $codigoPagoAdicionalSubtipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPagoAdicionalSubtipoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPagoAdicionalSubtipoFk()
-    {
-        return $this->codigoPagoAdicionalSubtipoFk;
-    }
-
-    /**
-     * Set pagoAdicionalSubtipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel
-     *
-     * @return RhuLicencia
-     */
-    public function setPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel = null)
-    {
-        $this->pagoAdicionalSubtipoRel = $pagoAdicionalSubtipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoAdicionalSubtipoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo
-     */
-    public function getPagoAdicionalSubtipoRel()
-    {
-        return $this->pagoAdicionalSubtipoRel;
     }
 }

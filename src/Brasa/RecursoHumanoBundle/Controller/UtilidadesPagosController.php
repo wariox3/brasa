@@ -315,9 +315,9 @@ class UtilidadesPagosController extends Controller
                             }
                             $arProgramacionPagoProcesar->setEstadoGenerado(1);
                             if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
-                                $arCentroCosto->setPagoAbierto(1);    
-                            } else {
                                 $arCentroCosto->setPagoAbierto(0);    
+                            } else {
+                                $arCentroCosto->setPagoAbierto(1);    
                             }                            
                             
                             $em->persist($arCentroCosto);
