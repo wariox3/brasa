@@ -163,9 +163,12 @@ class UtilidadesPagosController extends Controller
                                         $intHorasProcesarLicencia = $arLicencia->getCantidad();
                                     }
                                     
-                                    if($arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getPrestacional() == 1) {
-                                        $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;                                                                            
-                                        $douPagoDetalle = $intHorasProcesarLicencia * $douVrHora;                                                                                                                    
+                                    if($arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getPrestacional() == 1) {                                        
+                                        $douPagoDetalle = $intHorasProcesarLicencia * $douVrHora; 
+                                        $douSalarioPrestacional = $douSalarioPrestacional + $douPagoDetalle;                                                                                                                    
+                                        $arPagoDetalle->setVrPago($douPagoDetalle);
+                                        $arPagoDetalle->setOperacion($arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
+                                        $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
                                     }                                    
                                     $arPagoDetalle->setNumeroHoras($intHorasProcesarLicencia);                                                                                                                                                
                                     $em->persist($arPagoDetalle);
