@@ -120,12 +120,17 @@ class RhuPago
     /**
      * @ORM\Column(name="vr_bruto", type="float")
      */
-    private $vrBruto = 0;        
+    private $vrBruto = 0;                
     
     /**
      * @ORM\Column(name="vr_total_ejercicio", type="float")
      */
     private $vrTotalEjercicio = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_ingreso_base_cotizacion", type="float")
+     */
+    private $vrIngresoBaseCotizacion = 0;    
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -683,6 +688,54 @@ class RhuPago
     }
 
     /**
+     * Set vrTotalEjercicio
+     *
+     * @param float $vrTotalEjercicio
+     *
+     * @return RhuPago
+     */
+    public function setVrTotalEjercicio($vrTotalEjercicio)
+    {
+        $this->vrTotalEjercicio = $vrTotalEjercicio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalEjercicio
+     *
+     * @return float
+     */
+    public function getVrTotalEjercicio()
+    {
+        return $this->vrTotalEjercicio;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacion
+     *
+     * @param float $vrIngresoBaseCotizacion
+     *
+     * @return RhuPago
+     */
+    public function setVrIngresoBaseCotizacion($vrIngresoBaseCotizacion)
+    {
+        $this->vrIngresoBaseCotizacion = $vrIngresoBaseCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacion
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacion()
+    {
+        return $this->vrIngresoBaseCotizacion;
+    }
+
+    /**
      * Set codigoCentroCostoFk
      *
      * @param integer $codigoCentroCostoFk
@@ -834,29 +887,5 @@ class RhuPago
     public function getPagosDetallesPagoRel()
     {
         return $this->pagosDetallesPagoRel;
-    }
-
-    /**
-     * Set vrTotalEjercicio
-     *
-     * @param float $vrTotalEjercicio
-     *
-     * @return RhuPago
-     */
-    public function setVrTotalEjercicio($vrTotalEjercicio)
-    {
-        $this->vrTotalEjercicio = $vrTotalEjercicio;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalEjercicio
-     *
-     * @return float
-     */
-    public function getVrTotalEjercicio()
-    {
-        return $this->vrTotalEjercicio;
     }
 }

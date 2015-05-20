@@ -73,6 +73,11 @@ class RhuPagoDetalle
     private $codigoPagoConceptoFk;    
     
     /**
+     * @ORM\Column(name="vr_ingreso_base_cotizacion", type="float")
+     */
+    private $vrIngresoBaseCotizacion = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPago", inversedBy="pagosDetallesPagoRel")
      * @ORM\JoinColumn(name="codigo_pago_fk", referencedColumnName="codigo_pago_pk")
      */
@@ -405,5 +410,29 @@ class RhuPagoDetalle
     public function getPorcentajeAplicado()
     {
         return $this->porcentajeAplicado;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacion
+     *
+     * @param float $vrIngresoBaseCotizacion
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setVrIngresoBaseCotizacion($vrIngresoBaseCotizacion)
+    {
+        $this->vrIngresoBaseCotizacion = $vrIngresoBaseCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacion
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacion()
+    {
+        return $this->vrIngresoBaseCotizacion;
     }
 }
