@@ -48,7 +48,7 @@ class RhuIncapacidad
     private $cantidad = 0;                
 
     /**
-     * @ORM\Column(name="cantidadPendiente", type="integer")
+     * @ORM\Column(name="cantidad_pendiente", type="integer")
      */
     private $cantidadPendiente = 0;    
       
@@ -86,6 +86,7 @@ class RhuIncapacidad
      */
     protected $empleadoRel;    
     
+
 
 
 
@@ -292,30 +293,6 @@ class RhuIncapacidad
     }
 
     /**
-     * Set codigoIncapacidadTipoFk
-     *
-     * @param integer $codigoIncapacidadTipoFk
-     *
-     * @return RhuIncapacidad
-     */
-    public function setCodigoIncapacidadTipoFk($codigoIncapacidadTipoFk)
-    {
-        $this->codigoIncapacidadTipoFk = $codigoIncapacidadTipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoIncapacidadTipoFk
-     *
-     * @return integer
-     */
-    public function getCodigoIncapacidadTipoFk()
-    {
-        return $this->codigoIncapacidadTipoFk;
-    }
-
-    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -337,78 +314,6 @@ class RhuIncapacidad
     public function getComentarios()
     {
         return $this->comentarios;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuIncapacidad
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
-     * Set incapacidadTipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadTipoRel
-     *
-     * @return RhuIncapacidad
-     */
-    public function setIncapacidadTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadTipoRel = null)
-    {
-        $this->incapacidadTipoRel = $incapacidadTipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get incapacidadTipoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo
-     */
-    public function getIncapacidadTipoRel()
-    {
-        return $this->incapacidadTipoRel;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuIncapacidad
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
     }
 
     /**
@@ -457,5 +362,53 @@ class RhuIncapacidad
     public function getPagoAdicionalSubtipoRel()
     {
         return $this->pagoAdicionalSubtipoRel;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
     }
 }

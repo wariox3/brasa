@@ -81,7 +81,7 @@ class UtilidadesPagosController extends Controller
                                 $arPago->setVrSalario($arEmpleado->getVrSalario());
                                 $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
                                 $em->persist($arPago);
-                                /*if($arEmpleado->getNumeroIdentificacion() =='1038406105') {
+                                /*if($arEmpleado->getNumeroIdentificacion() =='71319850') {
                                     echo "Entro";
                                 }*/
 
@@ -92,6 +92,7 @@ class UtilidadesPagosController extends Controller
                                 $douVrDia = $arEmpleado->getVrSalario() / 30;
                                 $douVrHora = $douVrDia / 8;
                                 $douVrSalarioMinimo = 644350; //Configurar desde configuraciones
+                                $douVrHoraSalarioMinimo = ($douVrSalarioMinimo / 30) / 8;
                                 $douDevengado = 0;
                                 $douIngresoBaseCotizacion = 0;
                                 $intHorasLaboradas = $intDiasLaborados * 8;
@@ -122,10 +123,9 @@ class UtilidadesPagosController extends Controller
                                             $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
                                             $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
                                         }
-                                        if($arEmpleado->getVrSalario() > $douVrSalarioMinimo && $arEmpleado->getVrSalario() <= $douVrSalarioMinimo * 1.5) {
-                                            $douVrHoraSalarioMinimo = ($douVrSalarioMinimo / 30) / 8;
+                                        if($arEmpleado->getVrSalario() > $douVrSalarioMinimo && $arEmpleado->getVrSalario() <= $douVrSalarioMinimo * 1.5) {                                            
                                             $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHoraSalarioMinimo;
-                                            $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHoraSalarioMinimo;
+                                            $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
                                         }
                                         if($arEmpleado->getVrSalario() > ($douVrSalarioMinimo * 1.5)) {
                                             $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
@@ -293,11 +293,15 @@ class UtilidadesPagosController extends Controller
 
                                 //Liquidar pension
                                 $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoPension);
-                                $douPagoDetalle = ($douIngresoBaseCotizacion * $arPagoConcepto->getPorPorcentaje())/100;
+                                $douPorcentaje = $arPagoConcepto->getPorPorcentaje();                                
+                                if($douDevengado > ($douVrHoraSalarioMinimo * $intHorasLaboradas * 4)) {
+                                    $douPorcentaje = 5; //Traer de la configuracion
+                                }
+                                $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;
                                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                 $arPagoDetalle->setPagoRel($arPago);
                                 $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoDetalle->setPorcentajeAplicado($arPagoConcepto->getPorPorcentaje());
+                                $arPagoDetalle->setPorcentajeAplicado($douPorcentaje);
                                 $arPagoDetalle->setVrDia($douVrDia);
                                 $arPagoDetalle->setVrPago($douPagoDetalle);
                                 $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
@@ -452,7 +456,7 @@ class UtilidadesPagosController extends Controller
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1, "", 0));
-        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);
+        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 100);
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');

@@ -43,12 +43,12 @@ class RhuLicencia
     private $cantidad = 0;                
 
     /**
-     * @ORM\Column(name="cantidadAfectada", type="float")
+     * @ORM\Column(name="cantidad_afectada", type="float")
      */
     private $cantidadAfectada = 0;    
     
     /**
-     * @ORM\Column(name="cantidadPendiente", type="float")
+     * @ORM\Column(name="cantidad_pendiente", type="float")
      */
     private $cantidadPendiente = 0;    
         
