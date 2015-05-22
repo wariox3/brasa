@@ -10,5 +10,29 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuIncapacidadRepository extends EntityRepository {
-
+    
+    public function ListaDQL($intNumero = "",$strCodigoCentroCosto = "", $boolEstadoTranscripcion = "", $strIdentificacion = "", $strNumeroEps = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT i, e FROM BrasaRecursoHumanoBundle:RhuIncapacidad i JOIN i.empleadoRel e WHERE i.codigoIncapacidadPk <> 0";      
+        if($intNumero != "") {
+            $dql .= " AND i.numero = " . $intNumero;
+        } 
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND i.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }              
+        if($boolEstadoTranscripcion == 1 ) {
+            $dql .= " AND i.estadoTranscripcion = 1";
+        } elseif($boolEstadoTranscripcion == 0) {
+            $dql .= " AND i.estadoTranscripcion = 0";
+        }
+        if($strNumeroEps != "") {
+            $dql .= " AND i.numeroEps = " . $strNumeroEps;
+        }         
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        } 
+        
+        //$dql .= " ORDER BY e.nombreCorto";
+        return $dql;
+    }                    
 }

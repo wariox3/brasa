@@ -18,6 +18,11 @@ class RhuIncapacidad
     private $codigoIncapacidadPk;                    
     
     /**
+     * @ORM\Column(name="numero", type="integer")
+     */    
+    private $numero = 0;     
+    
+    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;    
@@ -67,6 +72,11 @@ class RhuIncapacidad
      * @ORM\Column(name="codigo_pago_adicional_subtipo_fk", type="integer", nullable=true)
      */    
     private $codigoPagoAdicionalSubtipoFk;
+    
+    /**     
+     * @ORM\Column(name="estado_transcripcion", type="boolean")
+     */    
+    private $estadoTranscripcion = 0;      
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoAdicionalSubtipo", inversedBy="incapacidadesPagoAdicionalSubtipoRel")
@@ -410,5 +420,53 @@ class RhuIncapacidad
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set estadoTranscripcion
+     *
+     * @param boolean $estadoTranscripcion
+     *
+     * @return RhuIncapacidad
+     */
+    public function setEstadoTranscripcion($estadoTranscripcion)
+    {
+        $this->estadoTranscripcion = $estadoTranscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoTranscripcion
+     *
+     * @return boolean
+     */
+    public function getEstadoTranscripcion()
+    {
+        return $this->estadoTranscripcion;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return RhuIncapacidad
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 }
