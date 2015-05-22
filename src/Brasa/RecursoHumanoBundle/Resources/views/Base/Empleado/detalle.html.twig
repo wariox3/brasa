@@ -40,6 +40,7 @@
                         <th>ID</th>
                         <th>FECHA</th>
                         <th>NUMERO</th>
+                        <th>Centro costo</th>
                         <th>DESDE</th>
                         <th>HASTA</th>                    
                         <th>SALARIO</th> 
@@ -52,6 +53,7 @@
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arContratos.codigoContratoPk }}">{{ arContratos.codigoContratoPk }} </td>
                             <td>{{ arContratos.fecha |date("Y/m/d")  }}</td>
                             <td>{{ arContratos.numero  }}</td>
+                            <td>{{ arContratos.centroCostoRel.nombre  }}</td>
                             <td>{{ arContratos.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arContratos.fechaHasta |date("Y/m/d")  }}</td>
                             <td style="text-align: right">{{ arContratos.vrSalario | number_format(0, '.', ',') }}</td>
