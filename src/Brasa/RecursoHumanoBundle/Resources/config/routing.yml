@@ -7,7 +7,7 @@ brs_rhu_utilidades_pagos_generar_pago:
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:generarPago } 
 
 brs_rhu_utilidades_pagos_generar_pago_resumen:
-    path:     /rhumano/utilidades/pagos/generar/pago/resumen/{codigoCentroCosto}
+    path:     /rhumano/utilidades/pagos/generar/pago/resumen/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:generarPagoResumen } 
     
 brs_rhu_utilidades_pagos_pagar:

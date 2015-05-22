@@ -266,6 +266,11 @@ class RhuEmpleado
      */
     protected $contratosEmpleadoRel;     
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuProgramacionPagoDetalle", mappedBy="empleadoRel")
+     */
+    protected $programacionesPagosDetallesEmpleadoRel;     
+    
 
     /**
      * Constructor
@@ -1500,5 +1505,39 @@ class RhuEmpleado
     public function getContratosEmpleadoRel()
     {
         return $this->contratosEmpleadoRel;
+    }
+
+    /**
+     * Add programacionesPagosDetallesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addProgramacionesPagosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesEmpleadoRel)
+    {
+        $this->programacionesPagosDetallesEmpleadoRel[] = $programacionesPagosDetallesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesPagosDetallesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesEmpleadoRel
+     */
+    public function removeProgramacionesPagosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesEmpleadoRel)
+    {
+        $this->programacionesPagosDetallesEmpleadoRel->removeElement($programacionesPagosDetallesEmpleadoRel);
+    }
+
+    /**
+     * Get programacionesPagosDetallesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesPagosDetallesEmpleadoRel()
+    {
+        return $this->programacionesPagosDetallesEmpleadoRel;
     }
 }

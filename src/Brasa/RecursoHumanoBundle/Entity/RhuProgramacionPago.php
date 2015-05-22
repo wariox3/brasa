@@ -77,7 +77,11 @@ class RhuProgramacionPago
      */
     private $vr_total_neto = 0;    
     
-
+    /**
+     * @ORM\Column(name="empleados_generados", type="boolean")
+     */    
+    private $empleados_generados = 0;
+    
     /**     
      * Cuando se deshace un periodo esta propiedad ayuda a que no vuelva a generar periodo nuevo
      * @ORM\Column(name="no_generar_periodo", type="boolean")
@@ -89,6 +93,11 @@ class RhuProgramacionPago
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     protected $centroCostoRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuProgramacionPagoDetalle", mappedBy="programacionPagoRel")
+     */
+    protected $programacionesPagosDetallesProgramacionPagoRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="programacionPagoRel")
@@ -104,13 +113,13 @@ class RhuProgramacionPago
      * @ORM\OneToMany(targetEntity="RhuLicenciaRegistroPago", mappedBy="programacionPagoRel")
      */
     protected $licenciasRegistrosPagosProgramacionPagoRel;     
-    
 
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->programacionesPagosDetallesProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasRegistrosPagosProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -415,6 +424,30 @@ class RhuProgramacionPago
     }
 
     /**
+     * Set empleadosGenerados
+     *
+     * @param boolean $empleadosGenerados
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setEmpleadosGenerados($empleadosGenerados)
+    {
+        $this->empleados_generados = $empleadosGenerados;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadosGenerados
+     *
+     * @return boolean
+     */
+    public function getEmpleadosGenerados()
+    {
+        return $this->empleados_generados;
+    }
+
+    /**
      * Set noGeneraPeriodo
      *
      * @param boolean $noGeneraPeriodo
@@ -460,6 +493,40 @@ class RhuProgramacionPago
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Add programacionesPagosDetallesProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesProgramacionPagoRel
+     *
+     * @return RhuProgramacionPago
+     */
+    public function addProgramacionesPagosDetallesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesProgramacionPagoRel)
+    {
+        $this->programacionesPagosDetallesProgramacionPagoRel[] = $programacionesPagosDetallesProgramacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesPagosDetallesProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesProgramacionPagoRel
+     */
+    public function removeProgramacionesPagosDetallesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesProgramacionPagoRel)
+    {
+        $this->programacionesPagosDetallesProgramacionPagoRel->removeElement($programacionesPagosDetallesProgramacionPagoRel);
+    }
+
+    /**
+     * Get programacionesPagosDetallesProgramacionPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesPagosDetallesProgramacionPagoRel()
+    {
+        return $this->programacionesPagosDetallesProgramacionPagoRel;
     }
 
     /**

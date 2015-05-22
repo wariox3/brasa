@@ -4,16 +4,18 @@
     <div class="page-header">
         <h3>Resumen programacion pago</h3>            
     </div>  
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+    {{ form_errors(form) }}
     <div class="btn-toolbar" style="float:left">
         <div class="btn-group">
             <a  class="btn btn-default" href="{{ path('brs_rhu_utilidades_pagos_generar_pago') }}">Volver</a>
-            <a  class="btn btn-default" href="{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}">Actualizar</a>
+            <a  class="btn btn-default" href="{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}">Actualizar</a>
+            {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default'} }) }}            
             <!-- Split button -->
             <div class="btn-group">
-                <button type="button" class="btn btn-default">Procesos</button>
+                <button type="button" class="btn btn-default">Utilidades</button>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                     <span class="caret"></span>
-
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }} " target="_blank">Adicionales</a></li>                    
@@ -142,28 +144,40 @@
                 <th>NOMBRE</th>
                 <th>SALARIO</th>
                 <th>HORAS</th>
+                <th>H. REAL</th>
                 <th></th> 
             </tr>
-            {% for arEmpleados in arEmpleados %}
-            <tr {% if arEmpleados.estadoActivo == 0 %}class="danger"{% endif %}>
+            {% for arProgramacionPagoDetalles in arProgramacionPagoDetalles %}
+            <tr>
                 <td>
-                    <input type="hidden" name="LblCodigoGuia[]" value="{{ arEmpleados.codigoEmpleadoPk }}">
-                    <span class="badge">{{ arEmpleados.codigoEmpleadoPk }}</span>
+                    <input type="hidden" name="LblCodigoDetalle[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}">
+                    <span class="badge">{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}</span>
                 </td>
-                <td>{{ arEmpleados.numeroIdentificacion}}</td>
-                <td>{{ arEmpleados.nombreCorto }}</td>                
-                <td style="text-align: right">{{ arEmpleados.vrSalario | number_format(2, '.', ',') }}</td>                                            
-                {% if arEmpleados.horasLaboradasPeriodo == 0 %}  
-                    <td style="text-align: right">PERIODO</td>                                                                                
-                {% else %}  
-                    <td style="text-align: right">{{ arEmpleados.horasLaboradasPeriodo | number_format(2, '.', ',') }}</td>                                                            
-                {% endif %}                
-                <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arEmpleados.codigoEmpleadoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
+                <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion}}</td>
+                <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td>                
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>                                            
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(2, '.', ',') }}</td>                                                                           
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtHorasPeriodoReales[]" value="{{ arProgramacionPagoDetalles.horasPeriodoReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
+                <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arProgramacionPagoDetalles.codigoEmpleadoFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
             </tr>
             {% endfor %}
         </table>
-        <a href="#" class="btn btn-default">Empleados <span class="badge">{{ arEmpleados.getTotalItemCount }}</span></a>
-        
+        <!-- Botones Menu Items -->
+        <div class="btn-toolbar" style="float: left">                
+            <div class="btn-group">
+                {{ knp_pagination_render(arProgramacionPagoDetalles) }}                
+            </div>            
+            <div class="btn-group">
+                <a href="#" class="btn btn-default btn-sm">Empleados <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></a>
+                
+            </div>
+        </div>        
+        <div class="btn-toolbar" style="float: right">                
+            <div class="btn-group">                
+                {{ form_widget(form.BtnActualizarEmpleados, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                                    
+            </div>           
+        </div> 
+            
       </div>
     </div>
     <div class="btn-toolbar" style="float:left">
@@ -172,6 +186,7 @@
         </div>
     </div>
     <br /><br />
-
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
 </div>
 {% endblock %}
