@@ -135,7 +135,7 @@ class PagosAdicionalesController extends Controller
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1));
-        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 200);
+        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);
         $intCodigoPagoAdicionalTipo = 1;
         $form = $this->createFormBuilder()
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))

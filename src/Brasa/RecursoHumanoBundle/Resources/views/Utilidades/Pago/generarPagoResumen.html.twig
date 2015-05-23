@@ -20,7 +20,7 @@
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }} " target="_blank">Adicionales</a></li>                    
                     <li class="divider"></li>    
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Generar adicionales (Masivo)</a></li>                    
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Generar adicionales (Masivo)</a></li>                    
                 </ul>
             </div>                    
         </div>
@@ -142,6 +142,8 @@
                 <th>ID</th>
                 <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>
+                <th>INICIO</th>
+                <th>TERMINA</th>
                 <th>SALARIO</th>
                 <th>HORAS</th>
                 <th>H. REAL</th>
@@ -157,7 +159,9 @@
                     <span class="badge">{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}</span>
                 </td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion}}</td>
-                <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td>                
+                <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td> 
+                <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
+                <td>{{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>                                            
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(2, '.', ',') }}</td>                                                                           
                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtHorasPeriodoReales[]" value="{{ arProgramacionPagoDetalles.horasPeriodoReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>

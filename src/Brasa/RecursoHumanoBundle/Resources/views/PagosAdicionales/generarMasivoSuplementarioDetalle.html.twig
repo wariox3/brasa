@@ -26,8 +26,9 @@
                     <tr>
                         <th>ID</th>
                         <th>IDENTIFICACION</th>
-                        <th>{{ knp_pagination_sortable(arEmpleados, 'NOMBRE COMPLETO', 'e.nombreCorto') }}</th>                                                                        
-                        <th>{{ knp_pagination_sortable(arEmpleados, 'APELLIDO1', 'e.apellido1') }}</th>                                                
+                        <th>{{ knp_pagination_sortable(arEmpleados, 'NOMBRE', 'e.nombreCorto') }}</th>                                                                        
+                        <th>{{ knp_pagination_sortable(arEmpleados, 'APELLIDO1', 'e.apellido1') }}</th>  
+                        <th>{{ knp_pagination_sortable(arEmpleados, 'APELLIDO2', 'e.apellido2') }}</th> 
                         <th>SALARIO</th>
                         <th><p data-toggle="tooltip" data-placement="top" title="Recargo nocturno festivo compensado">R.N.F.C</p></th>
                         <th><p data-toggle="tooltip" data-placement="top" title="Recargo nocturno festivo NO compensado">R.N.F.N.C</p></th>
@@ -47,8 +48,9 @@
                             <span class="badge">{{ arEmpleados.codigoEmpleadoPk }}</span>
                         </td>
                         <td>{{ arEmpleados.numeroIdentificacion}}</td>
-                        <td>{{ arEmpleados.nombreCorto }}</td>
+                        <td>{{ arEmpleados.nombre1}}</td>
                         <td>{{ arEmpleados.apellido1 }}</td>
+                        <td>{{ arEmpleados.apellido2 }}</td>
                         <td style="text-align: right">{{ arEmpleados.vrSalario | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtRNFC[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtRNFNC[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
