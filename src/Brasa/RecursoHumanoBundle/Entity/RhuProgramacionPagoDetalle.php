@@ -33,6 +33,18 @@ class RhuProgramacionPagoDetalle
     private $horasPeriodo = 0;     
     
     /**
+     * Para el auxilio de transporte
+     * @ORM\Column(name="dias", type="integer")
+     */
+    private $dias = 0; 
+
+    /**
+     * Para el auxilio de transporte
+     * @ORM\Column(name="factor_dia", type="integer")
+     */
+    private $factor_dia = 0;    
+    
+    /**
      * @ORM\Column(name="horas_periodo_reales", type="integer")
      */
     private $horasPeriodoReales = 0;    
@@ -232,5 +244,53 @@ class RhuProgramacionPagoDetalle
     public function getHorasPeriodoReales()
     {
         return $this->horasPeriodoReales;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
+    }
+
+    /**
+     * Set factorDia
+     *
+     * @param integer $factorDia
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setFactorDia($factorDia)
+    {
+        $this->factor_dia = $factorDia;
+
+        return $this;
+    }
+
+    /**
+     * Get factorDia
+     *
+     * @return integer
+     */
+    public function getFactorDia()
+    {
+        return $this->factor_dia;
     }
 }

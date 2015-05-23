@@ -145,7 +145,10 @@
                 <th>SALARIO</th>
                 <th>HORAS</th>
                 <th>H. REAL</th>
+                <th>DIAS</th>
+                <th>FAC</th>
                 <th></th> 
+                <th></th>
             </tr>
             {% for arProgramacionPagoDetalles in arProgramacionPagoDetalles %}
             <tr>
@@ -157,8 +160,11 @@
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td>                
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>                                            
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(2, '.', ',') }}</td>                                                                           
-                <td style="text-align: right"><input class="input-grid" type="text" name="TxtHorasPeriodoReales[]" value="{{ arProgramacionPagoDetalles.horasPeriodoReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtHorasPeriodoReales[]" value="{{ arProgramacionPagoDetalles.horasPeriodoReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtDias[]" value="{{ arProgramacionPagoDetalles.dias }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.factorDia | number_format(0, '.', ',') }}</td>                                                                           
                 <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arProgramacionPagoDetalles.codigoEmpleadoFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
+                <td><input type="checkbox" name="ChkSeleccionarEmpleado[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}" /></td>                
             </tr>
             {% endfor %}
         </table>
@@ -175,6 +181,7 @@
         <div class="btn-toolbar" style="float: right">                
             <div class="btn-group">                
                 {{ form_widget(form.BtnActualizarEmpleados, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                                    
+                {{ form_widget(form.BtnEliminarEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
             </div>           
         </div> 
             

@@ -153,9 +153,15 @@ class IncapacidadesController extends Controller
             $arIncapacidad = $form->getData();                          
             $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
             $intDias = $intDias->format('%a');
-            $intDias = $intDias + 1; 
-            $arIncapacidad->setCantidad($intDias * 8);
-            $arIncapacidad->setCantidadPendiente($intDias * 8);
+            $intDias = $intDias + 1;
+            if($arEmpleado->getCodigoTipoTiempoFk() == 2) {
+                $arIncapacidad->setCantidad($intDias * 4);
+                $arIncapacidad->setCantidadPendiente($intDias * 4);                
+            } else {
+                $arIncapacidad->setCantidad($intDias * 8);
+                $arIncapacidad->setCantidadPendiente($intDias * 8);
+            }
+
             if($codigoEmpleado != 0) { 
                 $arIncapacidad->setEmpleadoRel($arEmpleado);                
             }

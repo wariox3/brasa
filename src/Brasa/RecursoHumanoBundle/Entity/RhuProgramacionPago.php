@@ -80,7 +80,7 @@ class RhuProgramacionPago
     /**
      * @ORM\Column(name="empleados_generados", type="boolean")
      */    
-    private $empleados_generados = 0;
+    private $empleadosGenerados = 0;
     
     /**     
      * Cuando se deshace un periodo esta propiedad ayuda a que no vuelva a generar periodo nuevo
@@ -432,7 +432,7 @@ class RhuProgramacionPago
      */
     public function setEmpleadosGenerados($empleadosGenerados)
     {
-        $this->empleados_generados = $empleadosGenerados;
+        $this->empleadosGenerados = $empleadosGenerados;
 
         return $this;
     }
@@ -444,7 +444,7 @@ class RhuProgramacionPago
      */
     public function getEmpleadosGenerados()
     {
-        return $this->empleados_generados;
+        return $this->empleadosGenerados;
     }
 
     /**

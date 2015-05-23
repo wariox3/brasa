@@ -145,12 +145,15 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $intDias = $intDias->format('%a');
                 $intDiasDevolver = $intDias + 1;
             }            
-            if($arContrato->getEmpleadoRel()->getCodigoTipoTiempoFk() == 2) {
+            $arProgramacionPagoDetalle->setDias($intDiasDevolver);
+            if($arContrato->getCodigoTipoTiempoFk() == 2) {                
                 $arProgramacionPagoDetalle->setHorasPeriodo($intDiasDevolver * 4);
                 $arProgramacionPagoDetalle->setHorasPeriodoReales($intDiasDevolver * 4);
+                $arProgramacionPagoDetalle->setFactorDia(4);
             } else {
                 $arProgramacionPagoDetalle->setHorasPeriodo($intDiasDevolver * 8);
                 $arProgramacionPagoDetalle->setHorasPeriodoReales($intDiasDevolver * 8);
+                $arProgramacionPagoDetalle->setFactorDia(8);
             }            
             $em->persist($arProgramacionPagoDetalle);
         }
