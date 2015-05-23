@@ -112,6 +112,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
             $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());                
             $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
+            $arProgramacionPagoDetalle->setFechaDesde($arContrato->getFechaDesde());
+            $arProgramacionPagoDetalle->setFechaHasta($arContrato->getFechaHasta());
             $dateFechaDesde =  "";
             $dateFechaHasta =  "";
             $intDiasDevolver = 0;

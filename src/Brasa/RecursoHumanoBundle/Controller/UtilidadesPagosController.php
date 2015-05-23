@@ -497,7 +497,7 @@ class UtilidadesPagosController extends Controller
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoCentroCostoFk' => $arProgramacionPago->getCodigoCentroCostoFk()));
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));
-        $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 200);        
+        $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 500);        
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
