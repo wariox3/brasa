@@ -40,7 +40,7 @@
                 <td {% if arProgramacionPago.novedadesVerificadas == 1 %}class="success"{% endif %}>{% if arProgramacionPago.novedadesVerificadas == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td {% if arProgramacionPago.empleadosGenerados == 1 %}class="success"{% endif %}>{% if arProgramacionPago.empleadosGenerados == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Ver</a></td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Generar</a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Generar</a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}" /></td>
             </tr>
