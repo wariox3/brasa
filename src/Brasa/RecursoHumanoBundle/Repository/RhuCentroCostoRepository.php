@@ -107,5 +107,19 @@ class RhuCentroCostoRepository extends EntityRepository {
         $dql .= " ORDER BY cc.nombre";
         return $dql;
     }                        
-    
+
+    public function ListaFechaPagoDQL($strFechaDesde = "", $strFechaHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT cc FROM BrasaRecursoHumanoBundle:RhuCentroCosto cc WHERE cc.estadoActivo = 1";
+        if($strFechaDesde != "" ) {
+            $dql .= " AND cc.fechaUltimoPagoProgramado >='" . $strFechaDesde . "'";
+        }
+        
+        if($strFechaHasta != "") {
+            $dql .= " AND cc.fechaUltimoPagoProgramado <='" . $strFechaHasta . "'";
+        }
+        
+        $dql .= " ORDER BY cc.nombre";
+        return $dql;
+    }                            
 }

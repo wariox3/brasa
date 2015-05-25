@@ -12,7 +12,11 @@ brs_rhu_utilidades_pagos_generar_pago_resumen:
     
 brs_rhu_utilidades_pagos_pagar:
     path:     /rhumano/utilidades/pagos/pagar
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:pagar }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:pagar }  
+    
+brs_rhu_utilidades_notificaciones_cierreprogramacionpago:
+    path:     /rhumano/utilidades/notificaciones/cierreprogramacionpago
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesNotificaciones:cierreProgramacionPago }    
     
 brs_rhu_pagos_adicionales_lista:
     path:     /rhumano/pagos/adicionales/lista
