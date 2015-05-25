@@ -149,7 +149,7 @@ class PagosAdicionalesController extends Controller
                         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($intCodigo);
                         if(count($arEmpleado) > 0) {
-                            if($arrControles['TxtRNFC'][$intIndice] != "" && $arrControles['TxtRNFC'][$intIndice] != 0) {
+                            if($arrControles['TxtRNFC'.$intCodigo] != "" && $arrControles['TxtRNFC'.$intCodigo] != 0) {
                                 $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                                 $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(3);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -158,11 +158,11 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtRNFC'][$intIndice];
+                                $intHoras = $arrControles['TxtRNFC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
-                            if($arrControles['TxtRNFNC'][$intIndice] != "" && $arrControles['TxtRNFNC'][$intIndice] != 0) {
+                            if($arrControles['TxtRNFNC'.$intCodigo] != "" && $arrControles['TxtRNFNC'.$intCodigo] != 0) {
                                 $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                                 $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(4);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -171,11 +171,11 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtRNFNC'][$intIndice];
+                                $intHoras = $arrControles['TxtRNFNC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
-                            if($arrControles['TxtHEFD'][$intIndice] != "" && $arrControles['TxtHEFD'][$intIndice] != 0) {
+                            if($arrControles['TxtHEFD'.$intCodigo] != "" && $arrControles['TxtHEFD'.$intCodigo] != 0) {
                                 $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                                 $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(5);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -184,11 +184,11 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtHEFD'][$intIndice];
+                                $intHoras = $arrControles['TxtHEFD'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
-                            if($arrControles['TxtHEFN'][$intIndice] != "" && $arrControles['TxtHEFN'][$intIndice] != 0) {
+                            if($arrControles['TxtHEFN'.$intCodigo] != "" && $arrControles['TxtHEFN'.$intCodigo] != 0) {
                                 $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                                 $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(6);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -197,11 +197,11 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtHEFN'][$intIndice];
+                                $intHoras = $arrControles['TxtHEFN'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
-                            if($arrControles['TxtHEOD'][$intIndice] != "" && $arrControles['TxtHEOD'][$intIndice] != 0) {
+                            if($arrControles['TxtHEOD'.$intCodigo] != "" && $arrControles['TxtHEOD'.$intCodigo] != 0) {
                                 $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                                 $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(7);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -210,11 +210,11 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtHEOD'][$intIndice];
+                                $intHoras = $arrControles['TxtHEOD'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
-                            if($arrControles['TxtHEON'][$intIndice] != "" && $arrControles['TxtHEON'][$intIndice] != 0) {
+                            if($arrControles['TxtHEON'.$intCodigo] != "" && $arrControles['TxtHEON'.$intCodigo] != 0) {
                                 $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                                 $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(8);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -223,11 +223,11 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtHEON'][$intIndice];
+                                $intHoras = $arrControles['TxtHEON'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
-                            if($arrControles['TxtDC'][$intIndice] != "" && $arrControles['TxtDC'][$intIndice] != 0) {
+                            if($arrControles['TxtDC'.$intCodigo] != "" && $arrControles['TxtDC'.$intCodigo] != 0) {
                                 $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                                 $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(9);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -236,11 +236,11 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtDC'][$intIndice];
+                                $intHoras = $arrControles['TxtDC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
-                            if($arrControles['TxtDNC'][$intIndice] != "" && $arrControles['TxtDNC'][$intIndice] != 0) {
+                            if($arrControles['TxtDNC'.$intCodigo] != "" && $arrControles['TxtDNC'.$intCodigo] != 0) {
                                 $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                                 $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(10);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -249,11 +249,11 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtDNC'][$intIndice];
+                                $intHoras = $arrControles['TxtDNC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
-                            if($arrControles['TxtRN'][$intIndice] != "" && $arrControles['TxtRN'][$intIndice] != 0) {
+                            if($arrControles['TxtRN'.$intCodigo] != "" && $arrControles['TxtRN'.$intCodigo] != 0) {
                                 $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                                 $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(11);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -262,7 +262,7 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtRN'][$intIndice];
+                                $intHoras = $arrControles['TxtRN'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }

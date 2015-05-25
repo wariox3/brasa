@@ -52,15 +52,15 @@
                         <td>{{ arEmpleados.apellido1 }}</td>
                         <td>{{ arEmpleados.apellido2 }}</td>
                         <td style="text-align: right">{{ arEmpleados.vrSalario | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRNFC[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRNFNC[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEFD[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEFN[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEOD[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEON[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDC[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDNC[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRN[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRNFC{{ arEmpleados.codigoEmpleadoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRNFNC{{ arEmpleados.codigoEmpleadoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEFD{{ arEmpleados.codigoEmpleadoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEFN{{ arEmpleados.codigoEmpleadoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEOD{{ arEmpleados.codigoEmpleadoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEON{{ arEmpleados.codigoEmpleadoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDC{{ arEmpleados.codigoEmpleadoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDNC{{ arEmpleados.codigoEmpleadoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRN{{ arEmpleados.codigoEmpleadoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                     </tr>
                     {% endfor %}
                 </table>      
