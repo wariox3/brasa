@@ -12,11 +12,7 @@ class RhuCreditoType extends AbstractType
             ->add('creditoTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCreditoTipo',
                 'property' => 'nombre',
-            )) 
-            ->add('empleadoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
-                'property' => 'nombreCorto',
-            ))                 
+            ))                
             ->add('vrPagar', 'number', array('required' => true))                                                                           
             ->add('numeroCuotas', 'number', array('required' => true))                                                                           
             ->add('comentarios', 'textarea', array('required' => false))                                

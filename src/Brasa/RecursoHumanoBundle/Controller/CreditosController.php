@@ -29,31 +29,29 @@ class CreditosController extends Controller
             ));
     }     
     
-    public function nuevoAction($codigoCredito) {
+    public function nuevoAction($codigoCredito, $codigoEmpleado) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito(); 
         if($codigoCredito != 0) {
             $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+        } else {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         }
         $form = $this->createForm(new RhuCreditoType(), $arCredito);       
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arrControles = $request->request->All();
+        if ($form->isValid()) {            
             $arCredito = $form->getData();
             $douVrPagar = $form->get('vrPagar')->getData();
             $intCuotas = $form->get('numeroCuotas')->getData();
             $douVrCuota = $douVrPagar / $intCuotas;
             $arCredito->setVrCuota($douVrCuota);
             $arCredito->setNumeroCuotaActual(0);
+            $arCredito->setEmpleadoRel($arEmpleado);
             $em->persist($arCredito);
             $em->flush();                            
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_creditos_nuevo', array('codigoCredito' => 0)));
-            } else {
-                return $this->redirect($this->generateUrl('brs_rhu_creditos_lista'));
-            }    
-            
+            echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";                
         }                
 
         return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevo.html.twig', array(
