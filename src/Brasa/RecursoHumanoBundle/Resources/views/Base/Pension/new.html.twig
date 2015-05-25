@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+<div class="container">    
+    {{ form_start(formPension, { 'attr': {'class': 'form-horizontal'} }) }}
+    {{ form_errors(formPension) }}
+    <h3>Nuevo empleado</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion general</div>
+        <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Nombre:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(formPension.nombre, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+        <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Nit:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(formPension.nit, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+        <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Dirección:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(formPension.direccion, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+        <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Teléfono:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(formPension.telefono, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>        
+             <div class="modal-footer">
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_pension_listar') }}">Cancelar</a>
+            {{ form_widget(formPension.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+    </div>
+    {{ form_end(formPension) }}
+</div>
+</div>      
+{% endblock %}
