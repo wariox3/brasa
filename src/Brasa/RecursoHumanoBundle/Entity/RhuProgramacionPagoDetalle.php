@@ -64,6 +64,11 @@ class RhuProgramacionPagoDetalle
      */    
     private $fechaHasta;    
     
+    /**     
+     * @ORM\Column(name="indefinido", type="boolean")
+     */    
+    private $indefinido = 0;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
@@ -350,5 +355,29 @@ class RhuProgramacionPagoDetalle
     public function getFechaHasta()
     {
         return $this->fechaHasta;
+    }
+
+    /**
+     * Set indefinido
+     *
+     * @param boolean $indefinido
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setIndefinido($indefinido)
+    {
+        $this->indefinido = $indefinido;
+
+        return $this;
+    }
+
+    /**
+     * Get indefinido
+     *
+     * @return boolean
+     */
+    public function getIndefinido()
+    {
+        return $this->indefinido;
     }
 }

@@ -161,7 +161,7 @@
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td> 
                 <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
-                <td>{{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{% if arProgramacionPagoDetalles.indefinido == 1 %} INDEFINIDO {% else %} {{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>                                            
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(2, '.', ',') }}</td>                                                                           
                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtHorasPeriodoReales[]" value="{{ arProgramacionPagoDetalles.horasPeriodoReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
