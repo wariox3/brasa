@@ -292,7 +292,7 @@ class UtilidadesPagosController extends Controller
                                 //Liquidar pension
                                 $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoPension);
                                 $douPorcentaje = $arPagoConcepto->getPorPorcentaje();                                
-                                if($douDevengado > ($douVrHoraSalarioMinimo * $intHorasLaboradas * 4)) {
+                                if($douDevengado * $arCentroCosto->getPeriodoPagoRel()->getPeriodosMes() > $douVrSalarioMinimo * 4) {
                                     $douPorcentaje = 5; //Traer de la configuracion
                                 }
                                 $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;

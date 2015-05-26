@@ -35,7 +35,7 @@ class RhuPeriodoPago
     
     /**
      * Especifica de cuantos periodos consta el mes, aplica solo para no continuos
-     * @ORM\Column(name="periodos_mes", type="integer")
+     * @ORM\Column(name="periodos_mes", type="float")
      */
     private $periodosMes = 0;               
 
