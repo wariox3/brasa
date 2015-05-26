@@ -18,6 +18,8 @@ class BaseSaludController extends Controller
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder() //
+            ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
@@ -32,12 +34,12 @@ class BaseSaludController extends Controller
                 }
             }
         }
-        $arSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
+        $arEntidadesSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->findAll();
-        $arSalud = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
+        $arEntidadesSalud = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Salud:listar.html.twig', array(
-                    'arSalud' => $arSalud,
+                    'arEntidadesSalud' => $arEntidadesSalud,
                     'form'=> $form->createView()
            
         ));
@@ -76,7 +78,7 @@ class BaseSaludController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_salud_listar'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/Salud:new.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/Salud:nuevo.html.twig', array(
             'formSalud' => $formSalud->createView(),
         ));
     }

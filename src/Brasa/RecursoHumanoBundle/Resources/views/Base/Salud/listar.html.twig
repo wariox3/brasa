@@ -1,9 +1,9 @@
 {% extends '::base.html.twig' %}
  
-{% block body %}
+{% block content %}
     <div class="container">
     <div class="page-header">    
-        <h3>Listado Entidades de Salud</h3>
+        <h3>Listado entidades de salud</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
     {{ form_errors(form) }} 
@@ -11,7 +11,7 @@
         <tr>
             
             <th>Id</th>
-            <th>{{ knp_pagination_sortable(arSalud, 'Nombre', 'nit') }}</th> 
+            <th>{{ knp_pagination_sortable(arEntidadesSalud, 'Nombre', 'nit') }}</th> 
             <th>Nit</th>
             <th>Dirección</th>
             <th>Teléfono</th>
@@ -19,24 +19,29 @@
             <th></th>
         </tr>
         
-            {%for arSalud in arSalud %}
+            {%for arEntidadesSalud in arEntidadesSalud %}
                <tr>
-                <td>{{arSalud.codigoEntidadSaludPk}}</td>
-                <td>{{arSalud.nombre}}</td>
-                <td>{{arSalud.nit}}</td>
-                <td>{{arSalud.direccion}}</td>
-                <td>{{arSalud.telefono}}</td>
-                <td><a href="{{ path('brs_rhu_base_salud_editar',{'codigoEntidadSaludPk': arSalud.codigoEntidadSaludPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSalud.codigoEntidadSaludPk }}" /></td>
+                <td>{{arEntidadesSalud.codigoEntidadSaludPk}}</td>
+                <td>{{arEntidadesSalud.nombre}}</td>
+                <td>{{arEntidadesSalud.nit}}</td>
+                <td>{{arEntidadesSalud.direccion}}</td>
+                <td>{{arEntidadesSalud.telefono}}</td>
+                <td><a href="{{ path('brs_rhu_base_salud_editar',{'codigoEntidadSaludPk': arEntidadesSalud.codigoEntidadSaludPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEntidadesSalud.codigoEntidadSaludPk }}" /></td>
             {%endfor%}
-            </tr>
-            <tr>          
-                <td colspan="7" align="right" ><a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_salud_nuevo') }}">Nuevo</a>
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}</td> 
-            </tr>    
-        
+            </tr>            
     </table>
-    {{ knp_pagination_render(arSalud) }}
+    {{ knp_pagination_render(arEntidadesSalud) }}
+    <div class="btn-toolbar" style="float: right">              
+        <div class="btn-group">
+            {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_salud_nuevo') }}">Nuevo</a>
+            {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}</td>                   
+        </div>
+    </div>     
     {{ form_rest(form) }}
     {{ form_end(form) }}
     </div>
