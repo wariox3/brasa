@@ -93,6 +93,10 @@ brs_rhu_base_empleados_nuevo:
 brs_rhu_contratos_nuevo:
     path:     /rhumano/contratos/nuevo/{codigoContrato}{codigoEmpleado}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:nuevo }    
+
+brs_rhu_contratos_terminar:
+    path:     /rhumano/contratos/terminar/{codigoContrato}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:terminar }        
     
 brs_rhu_facturas_lista:
     path:     /rhumano/facturas/lista
