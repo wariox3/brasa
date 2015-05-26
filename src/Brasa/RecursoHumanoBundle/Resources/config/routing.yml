@@ -114,12 +114,8 @@ brs_rhu_base_salud_listar:
    path:     /rhumano/base/salud/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:listar }
    
-brs_rhu_base_salud_editar:
-   path:     /rhumano/base/salud/editar/{codigoEntidadSaludPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:editar }
-   
 brs_rhu_base_salud_nuevo:
-   path:     /rhumano/base/salud/nuevo/
+   path:     /rhumano/base/salud/nuevo/{codigoEntidadSaludPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:nuevo }   
 
 brs_rhu_base_pension_listar:
