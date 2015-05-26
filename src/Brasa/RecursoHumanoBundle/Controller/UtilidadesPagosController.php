@@ -44,8 +44,13 @@ class UtilidadesPagosController extends Controller
     public function generarPagoAction () {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
+        $session = $this->getRequest()->getSession();
+        
         $form = $this->createFormBuilder()
+            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))                                            
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))                
             ->add('BtnNovedadesVerificadas', 'submit', array('label'  => 'Novedades verificadas',))
             ->add('BtnGenerarEmpleados', 'submit', array('label'  => 'Generar empleados',))
             ->add('BtnNoGenerar', 'submit', array('label'  => 'No generar pago',))
@@ -60,6 +65,7 @@ class UtilidadesPagosController extends Controller
             ->add('BtnDeshacer', 'submit', array('label'  => 'Des-hacer',))
             ->getForm();
         $frmPagar->handleRequest($request);
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaGenerarPagoDQL());
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
@@ -380,6 +386,9 @@ class UtilidadesPagosController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }
             }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaGenerarPagoDQL("", $form->get('fechaHasta')->getData()->format('Y-m-d')));                    
+            }
         }
         if($frmPagar->isValid()) {
             if($frmPagar->get('BtnPagar')->isClicked()) {
@@ -426,17 +435,16 @@ class UtilidadesPagosController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }
             }
-        }
+        }        
 
-        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->findBy(array('estadoGenerado' => 0));
+        $arProgramacionPago = $paginator->paginate($query, $request->query->get('page', 1), 50);                                        
         $arProgramacionPagoPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPagoPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->findBy(array('estadoGenerado' => 1, 'estadoPagado' => 0, 'estadoAnulado' => 0));
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/Pago:generarPago.html.twig', array(
             'arProgramacionPago' => $arProgramacionPago,
             'arProgramacionPagoPendientes' => $arProgramacionPagoPendientes,
             'form' => $form->createView(),
-            'frmPagar' => $frmPagar->createView()
+            'frmPagar' => $frmPagar->createView()            
             ));
     }
 
