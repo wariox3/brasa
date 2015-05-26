@@ -126,10 +126,6 @@ brs_rhu_base_pension_listar:
    path:     /rhumano/base/pension/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BasePension:listar }
    
-brs_rhu_base_pension_editar:
-   path:     /rhumano/base/pension/editar/{codigoEntidadPensionPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BasePension:editar }
-   
 brs_rhu_base_pension_nuevo:
-   path:     /rhumano/base/pension/nuevo/
+   path:     /rhumano/base/pension/nuevo/{codigoEntidadPensionPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BasePension:nuevo }    

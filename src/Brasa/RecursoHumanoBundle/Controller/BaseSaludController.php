@@ -45,29 +45,14 @@ class BaseSaludController extends Controller
         ));
     }
     
-    public function editarAction($codigoEntidadSaludPk) {
+    public function nuevoAction($codigoEntidadSaludPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $arSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
-        $arSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($codigoEntidadSaludPk);
-        $formSalud = $this->createForm(new RhuSaludType(), $arSalud);
-        $formSalud->handleRequest($request);
-        if ($formSalud->isValid()) {
-            // guardar la tarea en la base de datos
-            $em->persist($arSalud);
-            $arSalud = $formSalud->getData();
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_salud_listar'));
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Base/Salud:new.html.twig', array(
-            'formSalud' => $formSalud->createView(),
-        ));
-    }
-    
-    public function nuevoAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $arSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
+        if ($codigoEntidadSaludPk != 0)
+        {
+            $arSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($codigoEntidadSaludPk);
+        }    
         $formSalud = $this->createForm(new RhuSaludType(), $arSalud);
         $formSalud->handleRequest($request);
         if ($formSalud->isValid())

@@ -26,7 +26,7 @@
                 <td>{{arEntidadesSalud.nit}}</td>
                 <td>{{arEntidadesSalud.direccion}}</td>
                 <td>{{arEntidadesSalud.telefono}}</td>
-                <td><a href="{{ path('brs_rhu_base_salud_editar',{'codigoEntidadSaludPk': arEntidadesSalud.codigoEntidadSaludPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                <td><a href="{{ path('brs_rhu_base_salud_nuevo',{'codigoEntidadSaludPk': arEntidadesSalud.codigoEntidadSaludPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEntidadesSalud.codigoEntidadSaludPk }}" /></td>
             {%endfor%}
             </tr>            
@@ -38,7 +38,7 @@
             {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
         </div>
         <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_salud_nuevo') }}">Nuevo</a>
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_salud_nuevo', {'codigoEntidadSaludPk': 0}) }}">Nuevo</a>
             {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}</td>                   
         </div>
     </div>     
