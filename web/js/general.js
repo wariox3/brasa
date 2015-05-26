@@ -20,3 +20,12 @@ function ChequearTodos(chkbox) {
         }
     }
 }
+//Hola
+$(document).ready(function(){        
+        $('a').click(
+            function(){
+                var value = $(this).attr('id');                
+                $('#ventanamodal').load(value);
+            }
+        );        
+});
