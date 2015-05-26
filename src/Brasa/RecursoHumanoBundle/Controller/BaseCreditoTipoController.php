@@ -4,13 +4,13 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuSaludType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoTipoType;
 
 /**
  * RhuEntidadSalud controller.
  *
  */
-class BaseSaludController extends Controller
+class BaseCreditoTipoController extends Controller
 {
 
     public function listarAction() {
@@ -24,15 +24,15 @@ class BaseSaludController extends Controller
             ->getForm(); 
         $form->handleRequest($request);
         
-        $arSaluds = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
+        $arCreditoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
         
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoEntidadSaludPk) {
-                    $arSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
-                    $arSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($codigoEntidadSaludPk);
-                    $em->remove($arSalud);
+                foreach ($arrSeleccionados AS $codigoCreditoTipoPk) {
+                    $arCreditoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
+                    $arCreditoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->find($codigoCreditoTipoPk);
+                    $em->remove($arCreditoTipo);
                     $em->flush();
                 }
             }
@@ -50,30 +50,24 @@ class BaseSaludController extends Controller
 
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Nombre')
-                            ->setCellValue('C1', 'Nit')
-                            ->setCellValue('D1', 'Direccion')
-                            ->setCellValue('E1', 'Telefono');
+                            ->setCellValue('B1', 'Nombre');
 
                 $i = 2;
-                $arSaluds = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->findAll();
+                $arCreditoTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->findAll();
                 
-                foreach ($arSaluds as $arSalud) {
+                foreach ($arCreditoTipos as $arCreditoTipo) {
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arSalud->getcodigoEntidadSaludPk())
-                            ->setCellValue('B' . $i, $arSalud->getnombre())
-                            ->setCellValue('C' . $i, $arSalud->getnit())
-                            ->setCellValue('D' . $i, $arSalud->getdireccion())
-                            ->setCellValue('E' . $i, $arSalud->gettelefono());
+                            ->setCellValue('A' . $i, $arCreditoTipo->getcodigoCreditoTipoPk())
+                            ->setCellValue('B' . $i, $arCreditoTipo->getnombre());
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('Entidades_Salud');
+                $objPHPExcel->getActiveSheet()->setTitle('Creditos_Tipos');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Salud.xlsx"');
+                header('Content-Disposition: attachment;filename="CreditosTipos.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
@@ -88,37 +82,37 @@ class BaseSaludController extends Controller
             }
             
         }
-        $arEntidadesSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->findAll();
-        $arEntidadesSalud = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
+        $arCreditoTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->findAll();
+        $arCreditoTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/Salud:listar.html.twig', array(
-                    'arEntidadesSalud' => $arEntidadesSalud,
+        return $this->render('BrasaRecursoHumanoBundle:Base/CreditoTipo:listar.html.twig', array(
+                    'arCreditoTipos' => $arCreditoTipos,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoEntidadSaludPk) {
+    public function nuevoAction($codigoCreditoTipoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
-        if ($codigoEntidadSaludPk != 0)
+        $arCreditoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
+        if ($codigoCreditoTipoPk != 0)
         {
-            $arSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($codigoEntidadSaludPk);
+            $arCreditoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->find($codigoCreditoTipoPk);
         }    
-        $formSalud = $this->createForm(new RhuSaludType(), $arSalud);
-        $formSalud->handleRequest($request);
-        if ($formSalud->isValid())
+        $formCreditoTipo = $this->createForm(new RhuCreditoTipoType(), $arCreditoTipo);
+        $formCreditoTipo->handleRequest($request);
+        if ($formCreditoTipo->isValid())
         {
             // guardar la tarea en la base de datos
-            $em->persist($arSalud);
-            $arSalud = $formSalud->getData();
+            $em->persist($arCreditoTipo);
+            $arCreditoTipo = $formCreditoTipo->getData();
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_salud_listar'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_creditotipo_listar'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/Salud:nuevo.html.twig', array(
-            'formSalud' => $formSalud->createView(),
+        return $this->render('BrasaRecursoHumanoBundle:Base/CreditoTipo:nuevo.html.twig', array(
+            'formCreditoTipo' => $formCreditoTipo->createView(),
         ));
     }
     

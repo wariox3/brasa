@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+ 
+{% block content %}
+    <div class="container">
+    <div class="page-header">    
+        <h3>Listado tipos de créditos</h3>
+    </div>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    {{ form_errors(form) }} 
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <tr>
+            
+            <th>Id</th>
+            <th>{{ knp_pagination_sortable(arCreditoTipos, 'Nombre', 'nombre') }}</th> 
+            <th></th>
+            <th></th>
+        </tr>
+        
+            {%for arCreditoTipos in arCreditoTipos %}
+               <tr>
+                <td>{{arCreditoTipos.codigoCreditoTipoPk}}</td>
+                <td>{{arCreditoTipos.nombre}}</td>
+                <td><a href="{{ path('brs_rhu_base_creditotipo_nuevo',{'codigoCreditoTipoPk': arCreditoTipos.codigoCreditoTipoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCreditoTipos.codigoCreditoTipoPk }}" /></td>
+            {%endfor%}
+            </tr>            
+    </table>
+    {{ knp_pagination_render(arCreditoTipos) }}
+    <div class="btn-toolbar" style="float: right">              
+        <div class="btn-group">
+            {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_creditotipo_nuevo', {'codigoCreditoTipoPk': 0}) }}">Nuevo</a>
+            {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}</td>                   
+        </div>
+    </div>     
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -1,3 +1,11 @@
+brs_rhu_base_creditotipo_listar:
+   path:     /rhumano/base/creditotipo/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:listar }
+   
+brs_rhu_base_creditotipo_nuevo:
+   path:     /rhumano/base/creditotipo/nuevo/{codigoCreditoTipoPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:nuevo }
+
 brs_rhu_utilidades_pagos_generar_periodo:
     path:     /rhumano/utilidades/pagos/generar/periodo
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:generarPeriodo } 

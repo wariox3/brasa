@@ -17,8 +17,6 @@ class RhuPensionType extends AbstractType
             ->add('nit', 'text', array('required' => true))
             ->add('direccion', 'text', array('required' => true))
             ->add('telefono', 'text', array('required' => true))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))    
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }
 

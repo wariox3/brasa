@@ -37,7 +37,7 @@ class BasePensionController extends Controller
                     $em->flush();
                 }
             }
-        }
+        
         
         if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
@@ -58,8 +58,9 @@ class BasePensionController extends Controller
                             ->setCellValue('E1', 'Telefono');
 
                 $i = 2;
-                $query = $em->createQuery($session->get('dqlPension'));
-                $arPensiones = $query->getResult();
+                $arPensiones = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->findAll();
+                
+                
                 foreach ($arPensiones as $arPension) {
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arPension->getcodigoEntidadPensionPk())
@@ -70,12 +71,12 @@ class BasePensionController extends Controller
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('Salud');
+                $objPHPExcel->getActiveSheet()->setTitle('Entidades_Pension');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Salud.xlsx"');
+                header('Content-Disposition: attachment;filename="Pension.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
@@ -88,41 +89,27 @@ class BasePensionController extends Controller
                 $objWriter->save('php://output');
                 exit;
             }
+        }
         
-        $arPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
+        $arEntidadesPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->findAll();
-        $arPension = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
+        $arEntidadesPension = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Pension:listar.html.twig', array(
-                    'arPension' => $arPension,
+                    'arEntidadesPension' => $arEntidadesPension,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function editarAction($codigoEntidadPensionPk) {
+    public function nuevoAction($codigoEntidadPensionPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $arPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
-        $arPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->find($codigoEntidadPensionPk);
-        $formPension = $this->createForm(new RhuPensionType(), $arPension);
-        $formPension->handleRequest($request);
-        if ($formPension->isValid()) {
-            // guardar la tarea en la base de datos
-            $em->persist($arPension);
-            $arPension = $formPension->getData();
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_pension_listar'));
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Base/Pension:new.html.twig', array(
-            'formPension' => $formPension->createView(),
-        ));
-    }
-    
-    public function nuevoAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $arPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
+        if ($codigoEntidadPensionPk != 0)
+        {
+            $arPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->find($codigoEntidadPensionPk);
+        }    
         $formPension = $this->createForm(new RhuPensionType(), $arPension);
         $formPension->handleRequest($request);
         if ($formPension->isValid())
@@ -133,8 +120,7 @@ class BasePensionController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_pension_listar'));
         }
-        
-        return $this->render('BrasaRecursoHumanoBundle:Base/Pension:new.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/Pension:nuevo.html.twig', array(
             'formPension' => $formPension->createView(),
         ));
     }

@@ -10,7 +10,7 @@
         <tr>
             
             <th>Id</th>
-            <th>{{ knp_pagination_sortable(arPension, 'Nombre', 'nit') }}</th> 
+            <th>{{ knp_pagination_sortable(arEntidadesPension, 'Nombre', 'nit') }}</th> 
             <th>Nit</th>
             <th>Dirección</th>
             <th>Teléfono</th>
@@ -18,28 +18,28 @@
             <th></th>
         </tr>
         
-            {%for arPension in arPension %}
+            {%for arEntidadesPension in arEntidadesPension %}
                <tr>
-                <td>{{arPension.codigoEntidadPensionPk}}</td>
-                <td>{{arPension.nombre}}</td>
-                <td>{{arPension.nit}}</td>
-                <td>{{arPension.direccion}}</td>
-                <td>{{arPension.telefono}}</td>
-                <td><a href="{{ path('brs_rhu_base_pension_editar',{'codigoEntidadPensionPk': arPension.codigoEntidadPensionPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPension.codigoEntidadPensionPk }}" /></td>
+                <td>{{arEntidadesPension.codigoEntidadPensionPk}}</td>
+                <td>{{arEntidadesPension.nombre}}</td>
+                <td>{{arEntidadesPension.nit}}</td>
+                <td>{{arEntidadesPension.direccion}}</td>
+                <td>{{arEntidadesPension.telefono}}</td>
+                <td><a href="{{ path('brs_rhu_base_pension_nuevo',{'codigoEntidadPensionPk': arEntidadesPension.codigoEntidadPensionPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEntidadesPension.codigoEntidadPensionPk }}" /></td>
             {%endfor%}
             </tr>
             <tr>          
                 <td colspan="7" align="right" >
                     {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                     {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                    <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_pension_nuevo') }}">Nuevo</a>
+                    <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_pension_nuevo', {'codigoEntidadPensionPk': 0}) }}">Nuevo</a>
                     {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                 </td> 
             </tr>    
         
     </table>
-    {{ knp_pagination_render(arPension) }}
+    {{ knp_pagination_render(arEntidadesPension) }}
     {{ form_rest(form) }}
     {{ form_end(form) }}
     </div>
