@@ -105,6 +105,12 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': 0, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarCredito', 600, 900)" >Nuevo</a>
+                        
+                    </div>
+                </div>
             </div>
         </div>
         <div class="panel panel-default">

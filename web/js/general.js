@@ -20,7 +20,7 @@ function ChequearTodos(chkbox) {
         }
     }
 }
-//Hola
+
 $(document).ready(function(){        
         $('a').click(
             function(){

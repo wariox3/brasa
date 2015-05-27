@@ -47,6 +47,7 @@ class CreditosController extends Controller
             $intCuotas = $form->get('numeroCuotas')->getData();
             $douVrCuota = $douVrPagar / $intCuotas;
             $arCredito->setVrCuota($douVrCuota);
+            $arCredito->setSaldo($douVrPagar);
             $arCredito->setNumeroCuotaActual(0);
             $arCredito->setEmpleadoRel($arEmpleado);
             $em->persist($arCredito);

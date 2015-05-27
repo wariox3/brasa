@@ -246,12 +246,26 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCredito);
                                     $douPagoDetalle = $arCredito->getVrCuota(); //Falta afectar credito
                                     $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre());
-                                    $arPagoDetalle->setVrHora($douVrHora);
-                                    $arPagoDetalle->setVrDia($douVrDia);
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
                                     $em->persist($arPagoDetalle);
+                                    $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoCredito();
+                                    //se guarda el pago en la tabla rhu_pago_credito
+                                    $arPagoCredito->setcodigoCreditoFk($arCredito->getCodigoCreditoPk());
+                                    $arPagoCredito->setvrCuota($douPagoDetalle);
+                                    $arPagoCredito->setfechaPago(new \ DateTime("now"));
+                                    $em->persist($arPagoCredito);
+                                    //Actualizar el saldo del credito
+                                    $nroACuotas = $arCredito->getNumeroCuotaActual();
+                                    $arCredito->setNumeroCuotaActual($nroACuotas + 1);
+                                    $credito =  $arCredito->getVrPagar();
+                                    $arCredito->setSaldo($credito - $douPagoDetalle);
+                                    if ($arCredito->getsaldo() <= 0)
+                                    {
+                                       $arCredito->setEstadoPagado(1); 
+                                    }        
+                                    $em->persist($arCredito);
                                 }
 
                                 $intPagoConceptoSalario = 1; //Se debe traer de la base de datos
