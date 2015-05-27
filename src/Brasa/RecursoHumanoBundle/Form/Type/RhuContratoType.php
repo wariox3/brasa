@@ -8,7 +8,11 @@ class RhuContratoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                           
+        $builder      
+            ->add('centroCostoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'property' => 'nombre',
+            ))                
             ->add('vrSalario', 'number', array('required' => true))  
             ->add('numero', 'text', array('required' => true))                                           
             ->add('comentarios', 'textarea', array('required' => false))

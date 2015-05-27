@@ -133,7 +133,7 @@ class IncapacidadesController extends Controller
             ));
     }    
     
-    public function nuevoAction($codigoCentroCosto, $codigoEmpleado) {
+    public function nuevoAction($codigoCentroCosto, $codigoEmpleado, $codigoIncapacidad = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
@@ -142,9 +142,15 @@ class IncapacidadesController extends Controller
         }
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();       
-        $arIncapacidad->setFechaDesde(new \DateTime('now'));
-        $arIncapacidad->setFechaHasta(new \DateTime('now'));    
-        $arIncapacidad->setCentroCostoRel($arCentroCosto);
+        if($codigoIncapacidad != 0) {
+            $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
+        } else {
+            $arIncapacidad->setFechaDesde(new \DateTime('now'));
+            $arIncapacidad->setFechaHasta(new \DateTime('now'));    
+            $arIncapacidad->setCentroCostoRel($arCentroCosto);            
+        }
+        
+
         $form = $this->createForm(new RhuIncapacidadType(), $arIncapacidad); 
                     
         $form->handleRequest($request);
@@ -167,7 +173,7 @@ class IncapacidadesController extends Controller
             }
             $em->persist($arIncapacidad);
             $em->flush();                        
-            if($form->get('guardarnuevo')->isClicked()) {
+            if($form->get('guardarnuevo')->isClicked()) {                
                 return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_incapacidad', array('codigoCentroCosto' => $codigoCentroCosto)));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";

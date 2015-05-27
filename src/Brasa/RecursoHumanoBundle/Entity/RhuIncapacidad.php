@@ -56,12 +56,16 @@ class RhuIncapacidad
      * @ORM\Column(name="cantidad_pendiente", type="integer")
      */
     private $cantidadPendiente = 0;    
-      
-    
+          
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
     private $codigoCentroCostoFk;         
+    
+    /**
+     * @ORM\Column(name="codigo_incapacidad_diagnostico_fk", type="integer", nullable=true)
+     */    
+    private $codigoIncapacidadDiagnosticoFk;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -96,7 +100,11 @@ class RhuIncapacidad
      */
     protected $empleadoRel;    
     
-
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuIncapacidadDiagnostico", inversedBy="incapacidadesIncapacidadDiagnosticoRel")
+     * @ORM\JoinColumn(name="codigo_incapacidad_diagnostico_fk", referencedColumnName="codigo_incapacidad_diagnostico_pk")
+     */
+    protected $incapacidadDiagnosticoRel; 
 
 
 
@@ -468,5 +476,53 @@ class RhuIncapacidad
     public function getNumero()
     {
         return $this->numero;
+    }
+
+    /**
+     * Set codigoIncapacidadDiagnosticoFk
+     *
+     * @param integer $codigoIncapacidadDiagnosticoFk
+     *
+     * @return RhuIncapacidad
+     */
+    public function setCodigoIncapacidadDiagnosticoFk($codigoIncapacidadDiagnosticoFk)
+    {
+        $this->codigoIncapacidadDiagnosticoFk = $codigoIncapacidadDiagnosticoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoIncapacidadDiagnosticoFk
+     *
+     * @return integer
+     */
+    public function getCodigoIncapacidadDiagnosticoFk()
+    {
+        return $this->codigoIncapacidadDiagnosticoFk;
+    }
+
+    /**
+     * Set incapacidadDiagnosticoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadDiagnostico $incapacidadDiagnosticoRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function setIncapacidadDiagnosticoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadDiagnostico $incapacidadDiagnosticoRel = null)
+    {
+        $this->incapacidadDiagnosticoRel = $incapacidadDiagnosticoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidadDiagnosticoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadDiagnostico
+     */
+    public function getIncapacidadDiagnosticoRel()
+    {
+        return $this->incapacidadDiagnosticoRel;
     }
 }

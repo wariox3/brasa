@@ -147,27 +147,31 @@
                     <tr>
                         <th>ID</th>
                         <th>TIPO</th>
+                        <th>DIAGNOSTICO</th>
                         <th>DESDE</th>
                         <th>HASTA</th>
                         <th>DIAS</th>
                         <th>PENDIENTES</th>
+                        <th></th>
                         <th></th>
                     </tr>
                     {% for arIncapacidades in arIncapacidades %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arIncapacidades.codigoIncapacidadPk }}">{{ arIncapacidades.codigoIncapacidadPk }} </td>
                             <td>{{ arIncapacidades.pagoAdicionalSubtipoRel.nombre  }}</td>
+                            <td>{{ arIncapacidades.incapacidadDiagnosticoRel.nombre  }}</td>
                             <td>{{ arIncapacidades.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arIncapacidades.fechaHasta |date("Y/m/d")  }}</td>
                             <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arIncapacidades.cantidadPendiente | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
                             <td><input type="checkbox" name="ChkSeleccionarIncapacidad[]" value="{{ arIncapacidades.codigoIncapacidadPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarIncapacidad', 600, 900)" >Agregar</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Agregar</a>
                         {{ form_widget(form.BtnRetirarIncapacidad, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
                 </div>

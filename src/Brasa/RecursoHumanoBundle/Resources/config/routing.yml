@@ -55,7 +55,7 @@ brs_rhu_incapacidades_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:lista }    
 
 brs_rhu_incapacidades_nuevo:
-    path:     /rhumano/incapacidades/nuevo/{codigoCentroCosto}/{codigoEmpleado}
+    path:     /rhumano/incapacidades/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoIncapacidad}
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:nuevo }    
 
 brs_rhu_licencias_nuevo:
@@ -99,7 +99,7 @@ brs_rhu_base_empleados_nuevo:
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:nuevo }     
     
 brs_rhu_contratos_nuevo:
-    path:     /rhumano/contratos/nuevo/{codigoContrato}{codigoEmpleado}
+    path:     /rhumano/contratos/nuevo/{codigoContrato}/{codigoEmpleado}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:nuevo }    
 
 brs_rhu_contratos_terminar:
