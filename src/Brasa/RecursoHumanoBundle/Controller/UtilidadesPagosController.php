@@ -375,7 +375,7 @@ class UtilidadesPagosController extends Controller
                         $em->persist($arProgramacionPagoProcesar);
                         $em->persist($arCentroCosto);
                         $em->flush();
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
+                        //$em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }
@@ -452,7 +452,7 @@ class UtilidadesPagosController extends Controller
             }
         }        
 
-        $arProgramacionPago = $paginator->paginate($query, $request->query->get('page', 1), 50);                                        
+        $arProgramacionPago = $paginator->paginate($query, $request->query->get('page', 1), 100);                                        
         $arProgramacionPagoPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPagoPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->findBy(array('estadoGenerado' => 1, 'estadoPagado' => 0, 'estadoAnulado' => 0));
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/Pago:generarPago.html.twig', array(
