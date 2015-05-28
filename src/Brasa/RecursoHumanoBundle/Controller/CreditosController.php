@@ -66,6 +66,7 @@ class CreditosController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))    
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
