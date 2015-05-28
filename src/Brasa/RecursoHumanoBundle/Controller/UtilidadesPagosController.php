@@ -493,6 +493,7 @@ class UtilidadesPagosController extends Controller
                        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
                        $arProgramacionPagoDetalle->setHorasPeriodoReales($arrControles['TxtHorasPeriodoReales'][$intIndice]);
+                       $arProgramacionPagoDetalle->setDias($arrControles['TxtDias'][$intIndice]);
                        $em->persist($arProgramacionPagoDetalle);
                    }
                    $intIndice++;
