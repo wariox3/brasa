@@ -108,13 +108,11 @@ class CreditosController extends Controller
             }
             else
             {    
-                $saldoA = $saldoA - $Abono;
                 $arCredito->setSaldo($saldoA - $Abono);
-                                    if ($arCredito->getSaldo() <= 0)
-                                    {
-                                       $arCredito->setEstadoPagado(1); 
-                                    }        
-                                    
+                if ($arCredito->getSaldo() <= 0)
+                {
+                   $arCredito->setEstadoPagado(1); 
+                }                  
                 $arPagoCredito->setcodigoCreditoFk($form->get('codigoCreditoFk')->getData());
                 $arPagoCredito->setvrCuota($form->get('vrCuota')->getData());
                 $arPagoCredito->setfechaPago(new \ DateTime("now"));
