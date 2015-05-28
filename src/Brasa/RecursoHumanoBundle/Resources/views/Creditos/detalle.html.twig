@@ -16,25 +16,38 @@
             <div class="panel-body">
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
-                        <td class="td-label">Codigo:</td>
+                        <th class="td-label">Codigo Credito:</th>
                         <td class="td-in-well">{{ arCreditos.codigoCreditoPk }}</td>
-                        <td class="td-label">Fecha:</td>
+                        <th class="td-label">Fecha:</th>
                         <td class="td-in-well">{{ arCreditos.fecha |date("Y/m/d") }}</td>
                     </tr>
                     <tr>
-                        <td class="td-label">Identificacion:</td>
-                        <td class="td-in-well">{{ arCreditos.codigoCreditoPk }}</td>
-                        <td class="td-label"></td>
-                        <td class="td-in-well"></td>
+                        <th class="td-label">Empleado:</th>
+                        <td class="td-in-well">{{ arCreditos.empleadoRel.nombreCorto }}</td>
+                        <th class="td-label">Credito</th>
+                        <td class="td-in-well">{{ arCreditos.creditoTipoRel.nombre }}</td>
                     </tr>                    
                     <tr>
-                        <td class="td-label">Nombre:</td>
-                        <td class="td-in-well">{{ arCreditos.codigoCreditoPk }}</td>
-                        <td class="td-label"></td>
-                        <td class="td-in-well"></td>
+                        <th class="td-label">Valor Credito:</th>
+                        <td class="td-in-well">{{ arCreditos.vrPagar | number_format(2, '.', ',')}}</td>
+                        <th class="td-label">Valor Cuota</th>
+                        <td class="td-in-well">{{ arCreditos.vrCuota | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td colspan="8">Comentarios:</td>
+                        <th class="td-label">Nro Cuotas:</th>
+                        <td class="td-in-well">{{ arCreditos.numeroCuotas }}</td>
+                        <th class="td-label">Nro Cuota Actual</th>
+                        <td class="td-in-well">{{ arCreditos.numeroCuotaActual }}</td>
+                    </tr>
+                    <tr>
+                        <th class="td-label">Saldo:</th>
+                        <td class="td-in-well">{{ arCreditos.saldo | number_format(2, '.', ',')}}</td>
+                        <th class="td-label">Estado</th>
+                        <td class="td-in-well">{{ arCreditos.estadoPagado }}</td>
+                    </tr>
+                    <tr>
+                        <th>Comentarios:</th>
+                        <td colspan="8" class="td-label"></td>
                     </tr>
                 </table>
             </div>
@@ -65,7 +78,7 @@
         <div class="btn-toolbar" style="float: right">
             <div class="btn-toolbar" style="float: right">
                 <div class="btn-group">
-                    <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_creditos_lista', { 'codigoPagoCreditoPk': 0}) }}" style="float:left">Nuevo</a>                        
+                    <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_credito_nuevo_detalle', { 'codigoCreditoPk': arCreditos.codigoCreditoPk}) }}" style="float:left">Nuevo</a>                        
                 </div>
             </div>
         </div>

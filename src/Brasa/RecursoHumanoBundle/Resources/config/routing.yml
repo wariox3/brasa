@@ -1,6 +1,10 @@
 brs_rhu_credito_detalle:
     path:     /rhumano/creditos/detalle/{codigoCreditoPk}
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:detalle }
+    
+brs_rhu_credito_nuevo_detalle:
+    path:     /rhumano/creditos/detalle/nuevo/{codigoCreditoPk}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:nuevoDetalle }    
 
 brs_rhu_base_creditotipo_listar:
    path:     /rhumano/base/creditotipo/listar

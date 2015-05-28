@@ -85,4 +85,50 @@ class CreditosController extends Controller
                     'form' => $form->createView()
                     ));
     }
+    
+    public function nuevoDetalleAction($codigoCreditoPk) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
+        $form = $this->createFormBuilder()
+            ->add('codigoCreditoFk', 'text', array('data' => $codigoCreditoPk, 'attr' => array('readonly' => 'readonly')))
+            ->add('vrCuota','text')
+            ->add('tipoPago','hidden', array('data' => 'ABONO'))    
+            ->add('save', 'submit', array('label' => 'Guardar'))    
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {            
+            $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+            $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
+            $saldoA = $arCredito->getSaldo();
+            $Abono = $form->get('vrCuota')->getData();
+            if ($Abono > $saldoA)
+            {
+                echo "El Abono no puede ser superior al Saldo del Credito";
+            }
+            else
+            {    
+                $saldoA = $saldoA - $Abono;
+                $arCredito->setSaldo($saldoA - $Abono);
+                                    if ($arCredito->getSaldo() <= 0)
+                                    {
+                                       $arCredito->setEstadoPagado(1); 
+                                    }        
+                                    
+                $arPagoCredito->setcodigoCreditoFk($form->get('codigoCreditoFk')->getData());
+                $arPagoCredito->setvrCuota($form->get('vrCuota')->getData());
+                $arPagoCredito->setfechaPago(new \ DateTime("now"));
+                $arPagoCredito->settipoPago('ABONO');
+                $em->persist($arPagoCredito);
+                $em->persist($arCredito);
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";
+            }    
+                
+        }                
+        return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevoDetalle.html.twig', array(
+            'arPagoCredito' => $arPagoCredito,
+            'form' => $form->createView()));
+    }
+    
 }
