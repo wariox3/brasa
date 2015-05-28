@@ -260,7 +260,7 @@ class UtilidadesPagosController extends Controller
                                     //Actualizar el saldo del credito
                                     $nroACuotas = $arCredito->getNumeroCuotaActual();
                                     $arCredito->setNumeroCuotaActual($nroACuotas + 1);
-                                    $credito =  $arCredito->getVrPagar();
+                                    $credito =  $arCredito->getSaldo();
                                     $arCredito->setSaldo($credito - $douPagoDetalle);
                                     if ($arCredito->getsaldo() <= 0)
                                     {
@@ -307,7 +307,7 @@ class UtilidadesPagosController extends Controller
                                 //Liquidar pension
                                 $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoPension);
                                 $douPorcentaje = $arPagoConcepto->getPorPorcentaje();                                
-                                if($douDevengado * $arCentroCosto->getPeriodoPagoRel()->getPeriodosMes() > $douVrSalarioMinimo * 4) {
+                                if($douIngresoBaseCotizacion * $arCentroCosto->getPeriodoPagoRel()->getPeriodosMes() > $douVrSalarioMinimo * 4) {
                                     $douPorcentaje = 5; //Traer de la configuracion
                                 }
                                 $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;
