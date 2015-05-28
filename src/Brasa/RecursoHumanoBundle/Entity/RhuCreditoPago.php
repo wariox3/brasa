@@ -5,14 +5,14 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_pago_credito")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuPagoCreditoRepository")
+ * @ORM\Table(name="rhu_credito_pago")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuCreditoPagoRepository")
  */
-class RhuPagoCredito
+class RhuCreditoPago
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_pago_credito_pk", type="integer")
+     * @ORM\Column(name="codigo_credito_pago_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoPagoCreditoPk;
@@ -32,7 +32,11 @@ class RhuPagoCredito
      */    
     private $fechaPago;
     
-    
+    /**
+     * @ORM\Column(name="tipo_pago", type="string")
+     */    
+    private $tipoPago;
+
 
     /**
      * Get codigoPagoCreditoPk
@@ -49,7 +53,7 @@ class RhuPagoCredito
      *
      * @param integer $codigoCreditoFk
      *
-     * @return RhuPagoCredito
+     * @return RhuCreditoPago
      */
     public function setCodigoCreditoFk($codigoCreditoFk)
     {
@@ -73,7 +77,7 @@ class RhuPagoCredito
      *
      * @param float $vrCuota
      *
-     * @return RhuPagoCredito
+     * @return RhuCreditoPago
      */
     public function setVrCuota($vrCuota)
     {
@@ -97,7 +101,7 @@ class RhuPagoCredito
      *
      * @param \DateTime $fechaPago
      *
-     * @return RhuPagoCredito
+     * @return RhuCreditoPago
      */
     public function setFechaPago($fechaPago)
     {
@@ -114,5 +118,29 @@ class RhuPagoCredito
     public function getFechaPago()
     {
         return $this->fechaPago;
+    }
+
+    /**
+     * Set tipoPago
+     *
+     * @param string $tipoPago
+     *
+     * @return RhuCreditoPago
+     */
+    public function setTipoPago($tipoPago)
+    {
+        $this->tipoPago = $tipoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPago
+     *
+     * @return string
+     */
+    public function getTipoPago()
+    {
+        return $this->tipoPago;
     }
 }

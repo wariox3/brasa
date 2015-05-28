@@ -16,7 +16,8 @@
                 <th style="text-align: right">VR. CUOTA</th>
                 <th style="text-align: right">CUOTAS</th>
                 <th style="text-align: right">C. ACTUAL</th>
-                <th style="text-align: center"></th>               
+                <th style="text-align: center"></th>
+                <th style="text-align: center"></th>
             </tr>
             {% for arCreditos in arCreditos %}
             <tr>
@@ -28,6 +29,7 @@
                 <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCreditos.numeroCuotas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCreditos.numeroCuotaActual | number_format(0, '.', ',') }}</td>
+                <td><a href="{{ path('brs_rhu_credito_detalle', { 'codigoCreditoPk': arCreditos.codigoCreditoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCreditos.codigoCreditoPk }}" /></td>
             </tr>
             {% endfor %}

@@ -58,5 +58,30 @@ class CreditosController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevo.html.twig', array(
             'arCredito' => $arCredito,
             'form' => $form->createView()));
-    }            
+    }
+    
+    public function detalleAction($codigoCreditoPk) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $form = $this->createFormBuilder()
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->getForm();
+        $form->handleRequest($request);
+        $codigoCreditoFk = $codigoCreditoPk;
+        $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
+        $arCreditoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => $codigoCreditoFk));
+        if($form->isValid()) {
+                      
+            if($form->get('BtnImprimir')->isClicked()) {
+                $objFormatoHojaVida = new \Brasa\RecursoHumanoBundle\Formatos\FormatoHojaVida();
+                $objFormatoHojaVida->Generar($this, $codigoCreditoFk);
+            }
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Creditos:detalle.html.twig', array(
+                    'arCreditoPago' => $arCreditoPago,
+                    'form' => $form->createView()
+                    ));
+    }
 }
