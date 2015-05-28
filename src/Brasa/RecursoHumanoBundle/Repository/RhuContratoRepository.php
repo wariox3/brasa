@@ -10,5 +10,17 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuContratoRepository extends EntityRepository {
-
+    public function ultimoContrato($codigoCentroCosto = "", $codigoEmpleado = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
+                ." WHERE c.codigoEmpleadoFk = " . $codigoEmpleado . " AND c.codigoCentroCostoFk = " . $codigoCentroCosto. " "
+                . "ORDER BY c.fechaHasta DESC";
+        $query = $em->createQuery($dql);        
+        $arContrato = $query->getResult();        
+        if(count($arContrato) > 0) {
+            return $arContrato[0]->getCodigoContratoPk();
+        } else {
+            return 0;
+        }        
+    }                    
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace Brasa\RecursoHumanoBundle\Controller;
-
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class UtilidadesPagosController extends Controller
@@ -537,5 +537,50 @@ class UtilidadesPagosController extends Controller
                     'form' => $form->createView() 
                     ));
     }
+    
+    public function agregarEmpleadoAction($codigoProgramacionPago) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $form = $this->createFormBuilder()
+            ->add('numeroIdentificacion', 'text', array('required' => true))           
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+            $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $form->getData('numeroIdentificacion')));            
+            if(count($arEmpleado) > 0) {
+                $intCodigoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->ultimoContrato($arProgramacionPago->getCodigoCentroCostoFk(), $arEmpleado[0]->getCodigoEmpleadoPk());
+                $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($intCodigoContrato);
+                if(count($arContrato) > 0) {
+                    $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                    $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado);
+                    $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
+                    $arProgramacionPagoDetalle->setFechaDesde($arContrato->getFechaDesde());
+                    $arProgramacionPagoDetalle->setFechaHasta($arContrato->getFechaHasta());
+                    $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
+                    $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());                    
+                    if($arContrato->getCodigoTipoTiempoFk() == 2) {
+                        $arProgramacionPagoDetalle->setFactorDia(4);
+                    } else {
+                        $arProgramacionPagoDetalle->setFactorDia(8);
+                    }
+                        
+                    $em->persist($arProgramacionPagoDetalle);
+                    $em->flush();
+                }                                       
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                
+            
+        }                
+
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/Pago:agregarEmpleado.html.twig', array(
+            'form' => $form->createView()));
+    }    
     
 }
