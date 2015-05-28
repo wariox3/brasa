@@ -558,7 +558,7 @@ class UtilidadesPagosController extends Controller
                 $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($intCodigoContrato);
                 if(count($arContrato) > 0) {
                     $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-                    $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado);
+                    $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado[0]);
                     $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
                     $arProgramacionPagoDetalle->setFechaDesde($arContrato->getFechaDesde());
                     $arProgramacionPagoDetalle->setFechaHasta($arContrato->getFechaHasta());
