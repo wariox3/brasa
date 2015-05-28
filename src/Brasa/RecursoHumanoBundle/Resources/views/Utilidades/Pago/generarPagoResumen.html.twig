@@ -183,7 +183,8 @@
             </div>
         </div>        
         <div class="btn-toolbar" style="float: right">                
-            <div class="btn-group">                
+            <div class="btn-group">      
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen_agregarempleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>                
                 {{ form_widget(form.BtnActualizarEmpleados, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                                    
                 {{ form_widget(form.BtnEliminarEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
             </div>           
