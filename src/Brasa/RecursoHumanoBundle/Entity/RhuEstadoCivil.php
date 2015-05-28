@@ -27,6 +27,10 @@ class RhuEstadoCivil
      */
     protected $empleadosEstadoCivilRel;    
   
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="estadoCivilRel")
+     */
+    protected $seleccionesEstadoCivilRel;    
 
     /**
      * Constructor
@@ -102,5 +106,39 @@ class RhuEstadoCivil
     public function getEmpleadosEstadoCivilRel()
     {
         return $this->empleadosEstadoCivilRel;
+    }
+
+    /**
+     * Add seleccionesEstadoCivilRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesEstadoCivilRel
+     *
+     * @return RhuEstadoCivil
+     */
+    public function addSeleccionesEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesEstadoCivilRel)
+    {
+        $this->seleccionesEstadoCivilRel[] = $seleccionesEstadoCivilRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesEstadoCivilRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesEstadoCivilRel
+     */
+    public function removeSeleccionesEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesEstadoCivilRel)
+    {
+        $this->seleccionesEstadoCivilRel->removeElement($seleccionesEstadoCivilRel);
+    }
+
+    /**
+     * Get seleccionesEstadoCivilRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesEstadoCivilRel()
+    {
+        return $this->seleccionesEstadoCivilRel;
     }
 }

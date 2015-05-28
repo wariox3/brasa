@@ -137,3 +137,11 @@ brs_rhu_base_pension_listar:
 brs_rhu_base_pension_nuevo:
    path:     /rhumano/base/pension/nuevo/{codigoEntidadPensionPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BasePension:nuevo }    
+
+brs_rhu_seleccion_lista:
+    path:     /rhumano/seleccion/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:lista }         
+    
+brs_rhu_seleccion_nuevo:
+    path:     /rhumano/seleccion/nuevo/{codigoSeleccion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:nuevo } 

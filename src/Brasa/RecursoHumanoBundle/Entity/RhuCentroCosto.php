@@ -106,6 +106,11 @@ class RhuCentroCosto
     protected $empleadosCentroCostoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="centroCostoRel")
+     */
+    protected $seleccionesCentroCostoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="centroCostoRel")
      */
     protected $pagosAdicionalesCentroCostoRel;       
@@ -751,5 +756,39 @@ class RhuCentroCosto
     public function getFacturasCentroCostoRel()
     {
         return $this->facturasCentroCostoRel;
+    }
+
+    /**
+     * Add seleccionesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $seleccionesCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addSeleccionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $seleccionesCentroCostoRel)
+    {
+        $this->seleccionesCentroCostoRel[] = $seleccionesCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $seleccionesCentroCostoRel
+     */
+    public function removeSeleccionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $seleccionesCentroCostoRel)
+    {
+        $this->seleccionesCentroCostoRel->removeElement($seleccionesCentroCostoRel);
+    }
+
+    /**
+     * Get seleccionesCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesCentroCostoRel()
+    {
+        return $this->seleccionesCentroCostoRel;
     }
 }

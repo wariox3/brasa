@@ -26,7 +26,12 @@ class RhuTipoIdentificacion
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="tipoIdentificacionRel")
      */
     protected $empleadosTipoIdentificacionRel;    
-  
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="tipoIdentificacionRel")
+     */
+    protected $seleccionesTipoIdentificacionRel;     
+    
     /**
      * Constructor
      */
@@ -101,5 +106,39 @@ class RhuTipoIdentificacion
     public function getEmpleadosTipoIdentificacionRel()
     {
         return $this->empleadosTipoIdentificacionRel;
+    }
+
+    /**
+     * Add seleccionesTipoIdentificacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesTipoIdentificacionRel
+     *
+     * @return RhuTipoIdentificacion
+     */
+    public function addSeleccionesTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesTipoIdentificacionRel)
+    {
+        $this->seleccionesTipoIdentificacionRel[] = $seleccionesTipoIdentificacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesTipoIdentificacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesTipoIdentificacionRel
+     */
+    public function removeSeleccionesTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesTipoIdentificacionRel)
+    {
+        $this->seleccionesTipoIdentificacionRel->removeElement($seleccionesTipoIdentificacionRel);
+    }
+
+    /**
+     * Get seleccionesTipoIdentificacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesTipoIdentificacionRel()
+    {
+        return $this->seleccionesTipoIdentificacionRel;
     }
 }
