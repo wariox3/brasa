@@ -97,7 +97,7 @@ class UtilidadesPagosController extends Controller
                                 $intHorasLaboradas = $arProgramacionPagoDetalle->getHorasPeriodoReales();
                                 $intDiasTransporte = $arProgramacionPagoDetalle->getDias();
                                 $douVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;
-                                $douVrHora = $douVrDia / $arProgramacionPagoDetalle->getFactorDia();
+                                $douVrHora = $douVrDia / 8;
                                 $douVrSalarioMinimo = 644350; //Configurar desde configuraciones
                                 $douVrHoraSalarioMinimo = ($douVrSalarioMinimo / 30) / 8;
                                 $douDevengado = 0;
@@ -262,7 +262,7 @@ class UtilidadesPagosController extends Controller
                                     $arCredito->setNumeroCuotaActual($nroACuotas + 1);
                                     $credito =  $arCredito->getSaldo();
                                     $arCredito->setSaldo($credito - $douPagoDetalle);
-                                    if ($arCredito->getsaldo() <= 0)
+                                    if ($arCredito->getSaldo() <= 0)
                                     {
                                        $arCredito->setEstadoPagado(1); 
                                     }        
