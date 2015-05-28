@@ -12,7 +12,12 @@ class RhuContratoType extends AbstractType
             ->add('centroCostoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'property' => 'nombre',
-            ))                
+            ))     
+            ->add('tipoTiempoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuTipoTiempo',
+                'property' => 'nombre',
+            )) 
+            ->add('fechaDesde', 'date', array('required' => true)) 
             ->add('vrSalario', 'number', array('required' => true))  
             ->add('numero', 'text', array('required' => true))                                           
             ->add('comentarios', 'textarea', array('required' => false))
