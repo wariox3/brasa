@@ -63,14 +63,13 @@ class CreditosController extends Controller
     public function detalleAction($codigoCreditoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $form = $this->createFormBuilder()
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))    
+        $form = $this->createFormBuilder()    
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
         $codigoCreditoFk = $codigoCreditoPk;
+        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
         $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
         $arCreditoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => $codigoCreditoFk));
         if($form->isValid()) {
@@ -82,6 +81,7 @@ class CreditosController extends Controller
         }
         return $this->render('BrasaRecursoHumanoBundle:Creditos:detalle.html.twig', array(
                     'arCreditoPago' => $arCreditoPago,
+                    'arCreditos' => $arCreditos,
                     'form' => $form->createView()
                     ));
     }
