@@ -201,6 +201,7 @@ class UtilidadesPagosController extends Controller
                                         $douPagoDetalle = $douVrHoraAdicional * $arPagoAdicional->getCantidad();
                                         $arPagoDetalle->setVrHora($douVrHoraAdicional);
                                         $arPagoDetalle->setVrDia($douVrDia);
+                                        $arPagoDetalle->setNumeroHoras($arPagoAdicional->getCantidad());
                                     }
                                     if($arPagoAdicional->getPagoConceptoRel()->getComponeValor() == 1) {
                                         $douPagoDetalle = $arPagoAdicional->getValor();
