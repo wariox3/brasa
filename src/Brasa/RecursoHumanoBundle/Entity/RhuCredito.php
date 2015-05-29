@@ -65,7 +65,12 @@ class RhuCredito
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;     
+    private $comentarios; 
+    
+    /**
+     * @ORM\Column(name="aprobado", type="integer")
+     */
+    private $aprobado = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="creditosEmpleadoRel")
@@ -377,5 +382,29 @@ class RhuCredito
     public function getEstadoPagado()
     {
         return $this->estadoPagado;
+    }
+
+    /**
+     * Set aprobado
+     *
+     * @param integer $aprobado
+     *
+     * @return RhuCredito
+     */
+    public function setAprobado($aprobado)
+    {
+        $this->aprobado = $aprobado;
+
+        return $this;
+    }
+
+    /**
+     * Get aprobado
+     *
+     * @return integer
+     */
+    public function getAprobado()
+    {
+        return $this->aprobado;
     }
 }

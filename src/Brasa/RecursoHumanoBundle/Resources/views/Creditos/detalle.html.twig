@@ -41,13 +41,15 @@
                     </tr>
                     <tr>
                         <th class="td-label">Saldo:</th>
-                        <td class="td-in-well">{{ arCreditos.saldo | number_format(2, '.', ',')}}</td>
+                        <td class="td-in-well">{{ arCreditos.saldo | number_format(0, '.', ',')}}</td>
                         <th class="td-label">Estado</th>
-                        <td class="td-in-well">{{ arCreditos.estadoPagado }}</td>
+                        <td class="td-in-well">{% if arCreditos.estadoPagado == 1 %} <div class="alert alert-success" role="alert">CANCELADO</div> {% else %} {{ arCreditos.estadoPagado }}PENDIENTE {% endif %}</td>
                     </tr>
                     <tr>
                         <th>Comentarios:</th>
-                        <td colspan="8" class="td-label"></td>
+                        <td class="td-label">{{ arCreditos.comentarios }}</td>
+                        <th class="td-label">Aprobado</th>
+                        <td class="td-in-well">{% if arCreditos.aprobado == 0 %}<div class="alert alert-danger" role="alert">NO</div> {% else %} SI {% endif %}</td>
                     </tr>
                 </table>
             </div>
@@ -78,7 +80,10 @@
         <div class="btn-toolbar" style="float: right">
             <div class="btn-toolbar" style="float: right">
                 <div class="btn-group">
-                    <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_credito_nuevo_detalle', { 'codigoCreditoPk': arCreditos.codigoCreditoPk}) }}" style="float:left">Nuevo</a>                        
+                    {% if arCreditos.aprobado == 0 or arCreditos.estadoPagado == 1 %} <a class="btn btn-default btn-sm" href="#">Nuevo</a> {% else %}
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_credito_nuevo_detalle', { 'codigoCreditoPk': arCreditos.codigoCreditoPk}) }}', 'AgregarCredito', 600, 900)" style="float:left">Nuevo</a>
+                    {% endif%}
+                                            
                 </div>
             </div>
         </div>

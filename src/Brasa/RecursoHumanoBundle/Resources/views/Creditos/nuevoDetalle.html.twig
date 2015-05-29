@@ -23,7 +23,7 @@
         </div>
     </div>                   
     <div class="modal-footer">      
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_creditos_lista') }}">Cancelar</a>        
+            <a class="btn btn-default btn-sm" onclick="window.close()">Cancelar</a>        
             {{ form_widget(form.save, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>    
     {{ form_end(form) }}
