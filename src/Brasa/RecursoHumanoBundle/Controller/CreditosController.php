@@ -30,9 +30,9 @@ class CreditosController extends Controller
                 foreach ($arrSeleccionados AS $id) {
                     $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                     $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($id);
-                    if ($arCreditos->getaprobado() == 0 or $arCreditos->getEstadoPagado() == 1)
+                    if ($arCreditos->getaprobado() == 1 or $arCreditos->getEstadoPagado() == 1)
                     {
-                        $mensaje = "No se puede Eliminar el registro, por que el credito no esta aprobado o cancelado!";
+                        $mensaje = "No se puede Eliminar el registro, por que el credito ya esta aprobado o cancelado!";
                     }
                     else
                     {    

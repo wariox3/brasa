@@ -60,7 +60,12 @@ class RhuCredito
     /**
      * @ORM\Column(name="numero_cuota_actual", type="integer")
      */
-    private $numeroCuotaActual = 0;        
+    private $numeroCuotaActual = 0; 
+    
+    /**
+     * @ORM\Column(name="tipo_pago", type="string")
+     */
+    private $tipoPago;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -406,5 +411,29 @@ class RhuCredito
     public function getAprobado()
     {
         return $this->aprobado;
+    }
+
+    /**
+     * Set tipoPago
+     *
+     * @param string $tipoPago
+     *
+     * @return RhuCredito
+     */
+    public function setTipoPago($tipoPago)
+    {
+        $this->tipoPago = $tipoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPago
+     *
+     * @return string
+     */
+    public function getTipoPago()
+    {
+        return $this->tipoPago;
     }
 }

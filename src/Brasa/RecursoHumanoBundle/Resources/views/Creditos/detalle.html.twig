@@ -43,13 +43,17 @@
                         <th class="td-label">Saldo:</th>
                         <td class="td-in-well">{{ arCreditos.saldo | number_format(0, '.', ',')}}</td>
                         <th class="td-label">Estado</th>
-                        <td class="td-in-well">{% if arCreditos.estadoPagado == 1 %} <div class="alert alert-success" role="alert">CANCELADO</div> {% else %} {{ arCreditos.estadoPagado }}PENDIENTE {% endif %}</td>
+                        <td >{% if arCreditos.estadoPagado == 1 %} <div class="alert alert-success" role="alert">CANCELADO</div> {% else %} {{ arCreditos.estadoPagado }}PENDIENTE {% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th class="td-label">Tipo Pago:</th>
+                        <td class="td-label">{{ arCreditos.tipoPago }}</td>
+                        <th class="td-label">Aprobado</th>
+                        <td >{% if arCreditos.aprobado == 0 %} <div class="alert alert-danger" role="alert">NO</div> {% else %} <div class="alert alert-success" role="alert">SI</div> {% endif %}</td>
                     </tr>
                     <tr>
                         <th>Comentarios:</th>
-                        <td class="td-label">{{ arCreditos.comentarios }}</td>
-                        <th class="td-label">Aprobado</th>
-                        <td class="td-in-well">{% if arCreditos.aprobado == 0 %}<div class="alert alert-danger" role="alert">NO</div> {% else %} SI {% endif %}</td>
+                        <td colspan="4" class="td-label">{{ arCreditos.comentarios }}</td>
                     </tr>
                 </table>
             </div>

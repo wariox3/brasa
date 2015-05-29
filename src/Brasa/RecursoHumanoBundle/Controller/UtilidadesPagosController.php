@@ -61,7 +61,7 @@ class UtilidadesPagosController extends Controller
                 'data' => ""
             );            
         if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", '532');                                    
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
         }
         
         $form = $this->createFormBuilder()
@@ -265,23 +265,37 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
-                                    $em->persist($arPagoDetalle);
-                                    $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoCredito();
+                                    
+                                    $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
                                     //se guarda el pago en la tabla rhu_pago_credito
                                     $arPagoCredito->setcodigoCreditoFk($arCredito->getCodigoCreditoPk());
-                                    $arPagoCredito->setvrCuota($douPagoDetalle);
+                                    
                                     $arPagoCredito->setfechaPago(new \ DateTime("now"));
-                                    $em->persist($arPagoCredito);
-                                    //Actualizar el saldo del credito
-                                    $nroACuotas = $arCredito->getNumeroCuotaActual();
-                                    $arCredito->setNumeroCuotaActual($nroACuotas + 1);
-                                    $credito =  $arCredito->getSaldo();
-                                    $arCredito->setSaldo($credito - $douPagoDetalle);
-                                    if ($arCredito->getSaldo() <= 0)
-                                    {
-                                       $arCredito->setEstadoPagado(1); 
-                                    }        
-                                    $em->persist($arCredito);
+                                    $arPagoCredito->setTipoPago("NOMINA");
+                                    if ($arCredito->getTipoPago() == "Nomina")
+                                    {    
+                                        if ($arCredito->getEstadoPagado() == 0 and $arCredito->getAprobado() == 1)
+                                        {    
+                                            $em->persist($arPagoCredito);
+                                            //Actualizar el saldo del credito
+                                            $nroACuotas = $arCredito->getNumeroCuotaActual();
+                                            $arCredito->setNumeroCuotaActual($nroACuotas + 1);
+                                            $credito =  $arCredito->getSaldo();
+                                            if ($douPagoDetalle > $credito)
+                                            {
+                                                $douPagoDetalle = $credito;
+                                            }
+                                            $arPagoCredito->setvrCuota($douPagoDetalle);
+                                            $arCredito->setSaldo($credito - $douPagoDetalle);
+                                            if ($arCredito->getSaldo() <= 0)
+                                            {
+                                               $arCredito->setEstadoPagado(1); 
+                                            }        
+                                            $em->persist($arPagoDetalle);
+                                            $em->persist($arCredito);
+                                        }    
+                                    }
+                                    
                                 }
 
                                 $intPagoConceptoSalario = 1; //Se debe traer de la base de datos
