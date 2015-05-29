@@ -15,9 +15,15 @@
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
                 <div class="form-group form-group-sm">  
+                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>                 
+                <div class="form-group form-group-sm">  
                     <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
                     <div class="col-sm-10">                  
-                        {{ form_widget(form.fechaHasta, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.fechaHasta) }}
                     </div>
                 </div>                                           
                 <div class="form-group form-group-sm">
@@ -39,7 +45,6 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>DIAS</th>
-                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Novedades verificadas">NOV</p></th>
                 <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">G.E</p></th>                                
                 <th><p data-toggle="tooltip" data-placement="top" title="Ingresar pagos adicionales">P. AD</p></th>                
                 <th><p data-toggle="tooltip" data-placement="top" title="Pagos adicionales masivos">P. AD. MASIVO</p></th>
@@ -54,8 +59,7 @@
                 <td>{{ arProgramacionPago.centroCostoRel.periodoPagoRel.nombre  }}</td>
                 <td>{{ arProgramacionPago.fechaDesde |date("Y/m/d")  }}</td>
                 <td {% if date(arProgramacionPago.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPago.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arProgramacionPago.dias  }}</td>
-                <td {% if arProgramacionPago.novedadesVerificadas == 1 %}class="success"{% endif %}>{% if arProgramacionPago.novedadesVerificadas == 1 %} SI {% else %} NO {% endif %}</td>                
+                <td>{{ arProgramacionPago.dias  }}</td>                
                 <td {% if arProgramacionPago.empleadosGenerados == 1 %}class="success"{% endif %}>{% if arProgramacionPago.empleadosGenerados == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Ver</a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Generar</a></td>
@@ -68,22 +72,17 @@
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                
-                {{ form_widget(form.BtnNovedadesVerificadas, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                 {{ form_widget(form.BtnNoGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>
         <!-- Fin Botones Menu Items -->
-        {{ form_rest(form) }}
-    {{ form_end(form) }}
+
     <br />
     <br />
     <div class="page-header">
         <h3>Por pagar</h3>
     </div>
-    {{ form_start(frmPagar, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
-            {{ form_errors(frmPagar) }}
-
         <table  class="table table-striped table-bordered  table-condensed table-hover">
             <tr>
                 <th>ID</th>
@@ -117,19 +116,19 @@
                     Generar archivo <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                  <li>{{ form_widget(frmPagar.BtnGenerarArchivoBancolombia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                </li>
+                  <li>{{ form_widget(form.BtnGenerarArchivoBancolombia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                </li>
                 </ul>
             </div>
             <div class="btn-group">
-                {{ form_widget(frmPagar.BtnLiquidar, { 'attr': {'class': 'btn btn-defoult btn-sm'} }) }}
-                {{ form_widget(frmPagar.BtnPagar, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
-                {{ form_widget(frmPagar.BtnDeshacer, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
-                {{ form_widget(frmPagar.BtnAnular, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-defoult btn-sm'} }) }}
+                {{ form_widget(form.BtnPagar, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
+                {{ form_widget(form.BtnDeshacer, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>
         <!-- Fin Botones Menu Items -->
-        {{ form_rest(frmPagar) }}
-    {{ form_end(frmPagar) }}
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
     <br /><br /><br /><br />
 </div>
 {% endblock %}
