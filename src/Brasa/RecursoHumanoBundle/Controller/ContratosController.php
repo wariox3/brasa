@@ -16,16 +16,31 @@ class ContratosController extends Controller
         if($codigoContrato != 0) {
             $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         } else {
+            $arContrato->setFechaDesde(new \DateTime('now'));
+            $arContrato->setFechaHasta(new \DateTime('now'));
+            $arContrato->setIndefinido(1);
+            $arContrato->setEstadoActivo(1);
             $arContrato->setVrSalario(644350); //Parametrizar con configuracion salario minimo
         }
         $form = $this->createForm(new RhuContratoType(), $arContrato);
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arContrato = $form->getData();
-            $arContrato->setEmpleadoRel($arEmpleado);
+            $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
+            $arContrato->setEmpleadoRel($arEmpleado);      
             $em->persist($arContrato);
+            $douSalarioMinimo = 644350;
+            if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
+                $arEmpleado->setAuxilioTransporte(1);
+            }
+            $arEmpleado->setCentroCostoRel($arContrato->getCentroCostoRel());
+            $arEmpleado->setTipoTiempoRel($arContrato->getTipoTiempoRel());
+            $arEmpleado->setVrSalario($arContrato->getVrSalario());
+            $arEmpleado->setFechaContrato($arContrato->getFechaDesde());
+            $arEmpleado->setFechaFinalizaContrato($arContrato->getFechaHasta());
+            $em->persist($arEmpleado);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Contratos:nuevo.html.twig', array(

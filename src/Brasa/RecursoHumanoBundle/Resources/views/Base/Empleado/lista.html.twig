@@ -49,12 +49,10 @@
                 <th>CENTRO COSTO</th>
                 <th>F. NACIMIENTO</th>
                 <th>TELEFONO</th>                
-                <th>INICIA</th>
-                <th>TERMINA</th>
                 <th style="text-align: right">SALARIO</th>
                 <th>AUX.T</th>
                 <th>ACT</th>
-                <th>ACCESO/CREACION</th>
+                <th>ACCIONES NUEVO</th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center"></th>                
                 <th></th>
@@ -64,23 +62,21 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleados.codigoEmpleadoPk }}">{{ arEmpleados.codigoEmpleadoPk }} </td>
                 <td>{{ arEmpleados.numeroIdentificacion  }}</td>
                 <td>{{ arEmpleados.nombreCorto  }}</td>
-                <td>{{ arEmpleados.centroCostoRel.nombre  }}</td>
+                <td>{% if arEmpleados.centroCostoRel.nombre is defined %} {{ arEmpleados.centroCostoRel.nombre  }} {% endif %}</td>
                 <td>{{ arEmpleados.fechaNacimiento |date("Y/m/d")  }}</td>
                 <td>{{ arEmpleados.telefono }}</td>                
-                <td>{{ arEmpleados.fechaContrato |date("Y/m/d")  }}</td>                
-                <td>{% if arEmpleados.contratoIndefinido == 1 %} INDEFINIDO {% else %} {{ arEmpleados.fechaFinalizaContrato |date("Y/m/d")  }} {% endif %}</td>                
                 <td style="text-align: right">{{ arEmpleados.VrSalario | number_format(0, '.', ',') }}</td>                            
                 <td>{% if arEmpleados.auxilioTransporte == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>{% if arEmpleados.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm">Nuevo</button>
-                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-default btn-xs">Nuevo</button>
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">                            
                             <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': 0, 'codigoEmpleado': arEmpleados.codigoEmpleadoPk }) }}', 'AgregarCredito', 600, 900)" >Credito</a></li>                                                
-                            <li class="divider"></li>                                
+                            <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleados.codigoEmpleadoPk}) }}', 'AgregarContrato', 600, 900)" >Contrato</a></li>                                                                 
                         </ul>
                     </div>                                        
                 </td>
@@ -90,11 +86,14 @@
             </tr>
             {% endfor %}                        
         </table>                       
-        {{ knp_pagination_render(arEmpleados) }}    
-
+           
+        <div class="btn-toolbar" style="float: left">
+            {{ knp_pagination_render(arEmpleados) }} 
+        </div>
 
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float: right">
+            
             <div class="btn-group">
                 <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                     Enlaces <span class="caret"></span>

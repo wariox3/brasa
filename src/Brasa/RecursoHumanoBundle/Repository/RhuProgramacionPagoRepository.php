@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuProgramacionPagoRepository extends EntityRepository {
-    public function listaGenerarPagoDQL($strFechaDesde = "", $strFechaHasta = "") {        
+    public function listaGenerarPagoDQL($strFechaDesde = "", $strFechaHasta = "", $codigoCentroCosto) {        
         $em = $this->getEntityManager();
         $dql   = "SELECT pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPago pp WHERE pp.estadoGenerado = 0 ";
         if($strFechaDesde != "" ) {
@@ -20,8 +20,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         if($strFechaHasta != "") {
             $dql .= " AND pp.fechaHasta <='" . $strFechaHasta . "'";
         }
-        
-        //$dql .= " ORDER BY cc.nombre";
+        if($codigoCentroCosto != "" && $codigoCentroCosto != 0) {            
+            $dql .= " AND pp.codigoCentroCostoFk =" . $codigoCentroCosto;          
+        }
         return $dql;
     }                            
     

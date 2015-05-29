@@ -26,7 +26,7 @@ class BaseEmpleadoController extends Controller
                 'data' => '',
 
             ))            
-            ->add('estadoActivo', 'choice', array('choices'   => array('1' => 'Activos', '0' => 'Inactivos', '2' => 'Todos')))                            
+            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'Todos', '1' => 'Activos', '0' => 'Inactivos')))                            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
             ->add('BtnBuscar', 'submit', array('label'  => 'Buscar'))

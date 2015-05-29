@@ -11,21 +11,22 @@ class BaseCentroCostoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-
+        $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre'))
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreCentroCosto')))
             ->add('BtnBuscar', 'submit', array('label'  => 'Buscar'))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnInactivar', 'submit', array('label'  => 'Activa / Inactiva',))
             ->getForm();
         $form->handleRequest($request);
-        $arCentrosCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->Lista("");
+        $arCentrosCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();        
         if($form->isValid()) {
             if($form->get('BtnBuscar')->isClicked() || $form->get('BtnExcel')->isClicked()) {
-                $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->Lista($form->get('TxtNombre')->getData());
-                $arCentrosCostos = $paginator->paginate($query, $this->get('request')->query->get('page', 1), 3);
+                $session->set('dqlCentroCosto', $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL(
+                    $form->get('TxtNombre')->getData()
+                    ));                
+                $session->set('filtroNombreCentroCosto', $form->get('TxtNombre')->getData());                
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
@@ -89,8 +90,12 @@ class BaseCentroCostoController extends Controller
                     $em->flush();
                 }
             }
-        }
-        $arCentrosCostos = $paginator->paginate($query, $this->get('request')->query->get('page', 1), 20);
+        } else {
+            $session->set('dqlCentroCosto', $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL(
+                    $session->get('filtroNombreCentroCosto')
+                    ));                          
+        }        
+        $arCentrosCostos = $paginator->paginate($em->createQuery($session->get('dqlCentroCosto')), $this->get('request')->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/CentroCosto:lista.html.twig', array(
             'arCentrosCostos' => $arCentrosCostos,
             'form' => $form->createView()));
@@ -103,6 +108,8 @@ class BaseCentroCostoController extends Controller
         $arCentroCosto->setFechaUltimoPagoProgramado(new \DateTime('now'));
         if($codigoCentroCosto != 0) {
             $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
+        } else {
+            $arCentroCosto->setEstadoActivo(1);
         }
         $form = $this->createForm(new RhuCentroCostoType(), $arCentroCosto);
         $form->handleRequest($request);
@@ -110,6 +117,10 @@ class BaseCentroCostoController extends Controller
             $arCentroCosto = $form->getData();
             $em->persist($arCentroCosto);
             $em->flush();
+            if($request->request->get('ChkGenerarPeriodo')) {
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
+            }
+            
             if($codigoCentroCosto == 0) {
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
             }

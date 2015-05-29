@@ -25,6 +25,7 @@ class RhuContratoType extends AbstractType
                 'property' => 'nombre',
             )) 
             ->add('fechaDesde', 'date', array('required' => true)) 
+            ->add('fechaHasta', 'date', array('required' => true)) 
             ->add('vrSalario', 'number', array('required' => true))  
             ->add('numero', 'text', array('required' => true))                                           
             ->add('comentarios', 'textarea', array('required' => false))

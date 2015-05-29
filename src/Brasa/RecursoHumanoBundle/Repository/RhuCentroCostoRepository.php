@@ -75,34 +75,29 @@ class RhuCentroCostoRepository extends EntityRepository {
             $em->flush();
         }
         return true;
-    }    
+    }           
     
-    public function Lista($strNombre) {        
+    public function listaDQL($strNombre = "", $boolMostrarActivos = "", $boolMostrarPagoAbierto = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT cc FROM BrasaRecursoHumanoBundle:RhuCentroCosto cc WHERE cc.codigoCentroCostoPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND cc.nombre LIKE '%" . $strNombre . "%'";
-        }               
-        $query = $em->createQuery($dql);        
-        return $query;
-    }    
-    
-    public function ListaDQL($strNombre, $boolMostrarActivos = "", $boolMostrarPagoAbierto = "") {        
-        $em = $this->getEntityManager();
-        $dql   = "SELECT cc FROM BrasaRecursoHumanoBundle:RhuCentroCosto cc WHERE cc.codigoCentroCostoPk <> 0";
-        if($strNombre != "" ) {
-            $dql .= " AND cc.nombre LIKE '%" . $strNombre . "%'";
-        }             
-        if($boolMostrarActivos == 1) {
-            $dql .= " AND cc.estadoActivo = 1";
-        } elseif($boolMostrarActivos == 0) {
-            $dql .= " AND cc.estadoActivo = 0";
+        } 
+        if($boolMostrarActivos) {
+            if($boolMostrarActivos == 1) {
+                $dql .= " AND cc.estadoActivo = 1";
+            } elseif($boolMostrarActivos == 0) {
+                $dql .= " AND cc.estadoActivo = 0";
+            }            
         }
-        if($boolMostrarPagoAbierto == 1) {
-            $dql .= " AND cc.pagoAbierto = 1";
-        } elseif($boolMostrarPagoAbierto == 0) {
-            $dql .= " AND cc.pagoAbierto = 0";
-        }        
+        if($boolMostrarPagoAbierto) {
+            if($boolMostrarPagoAbierto == 1) {
+                $dql .= " AND cc.pagoAbierto = 1";
+            } elseif($boolMostrarPagoAbierto == 0) {
+                $dql .= " AND cc.pagoAbierto = 0";
+            }            
+        }
+        
         
         $dql .= " ORDER BY cc.nombre";
         return $dql;

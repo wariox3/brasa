@@ -13,10 +13,6 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuTipoIdentificacion',
                 'property' => 'nombre',
             ))
-            ->add('centroCostoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'property' => 'nombre',
-            ))
             ->add('bancoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuBanco',
                 'property' => 'nombre',
@@ -32,11 +28,7 @@ class RhuEmpleadoType extends AbstractType
             ->add('clasificacionRiesgoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
                 'property' => 'nombre',
-            ))  
-            ->add('tipoTiempoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuTipoTiempo',
-                'property' => 'nombre',
-            ))                
+            ))                 
             ->add('nombreCorto', 'text', array('required' => true))
             ->add('nombre1', 'text', array('required' => true))
             ->add('nombre2', 'text', array('required' => false))
@@ -46,8 +38,7 @@ class RhuEmpleadoType extends AbstractType
             ->add('celular', 'text', array('required' => false))
             ->add('direccion', 'text', array('required' => false))
             ->add('cuenta', 'text', array('required' => true))
-            ->add('numeroIdentificacion', 'text', array('required' => true))
-            ->add('vrSalario', 'number', array('required' => true))
+            ->add('numeroIdentificacion', 'text', array('required' => true))            
             ->add('auxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('pagadoEntidadSalud', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('comentarios', 'textarea', array('required' => false))
