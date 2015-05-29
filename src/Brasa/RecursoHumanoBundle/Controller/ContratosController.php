@@ -30,7 +30,7 @@ class ContratosController extends Controller
             $arContrato->setEmpleadoRel($arEmpleado);      
             $em->persist($arContrato);
             $douSalarioMinimo = 644350;
-            if($arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
+            if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
                 $arEmpleado->setAuxilioTransporte(1);
             }
             $arEmpleado->setCentroCostoRel($arContrato->getCentroCostoRel());

@@ -12,14 +12,17 @@ class LicenciasController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();       
         if($codigoEmpleado != 0) {            
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        }
+        } 
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
-        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();       
+        $arLicencia->setAfectaTransporte(1);
         $arLicencia->setFechaDesde(new \DateTime('now'));
-        $arLicencia->setFechaHasta(new \DateTime('now'));    
-        $arLicencia->setCentroCostoRel($arCentroCosto);
+        $arLicencia->setFechaHasta(new \DateTime('now'));                
+        $arLicencia->setCentroCostoRel($arCentroCosto);            
+                
+        
         $form = $this->createForm(new RhuLicenciaType(), $arLicencia); 
                     
         $form->handleRequest($request);

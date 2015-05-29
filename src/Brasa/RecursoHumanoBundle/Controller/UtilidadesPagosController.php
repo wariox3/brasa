@@ -198,7 +198,10 @@ class UtilidadesPagosController extends Controller
                                         $intDiasTransporte = $intDiasTransporte - $intDiasLicenciaProcesar;
                                     }
                                     //Actualizar cantidades licencia
-
+                                    $arLicenciaRegistroPago = new \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago();
+                                    $arLicenciaRegistroPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
+                                    $arLicenciaRegistroPago->setLicenciaRel($arLicencia);
+                                    $arLicenciaRegistroPago->setCantidad($intDiasLicenciaProcesar);
                                 }
 
                                 //Procesar los conceptos de pagos adicionales
