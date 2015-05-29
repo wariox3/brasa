@@ -79,11 +79,16 @@ class CreditosController extends Controller
                     ->setCategory("Test result file");
 
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Nombre')
-                            ->setCellValue('C1', 'Nit')
-                            ->setCellValue('D1', 'Direccion')
-                            ->setCellValue('E1', 'Telefono');
+                            ->setCellValue('A1', 'Codigo_Credito')
+                            ->setCellValue('B1', 'Tipo_Credito')
+                            ->setCellValue('C1', 'Fecha_Credito')
+                            ->setCellValue('D1', 'Empleado')
+                            ->setCellValue('E1', 'Valor_Credito')
+                            ->setCellValue('F1', 'Valor_Cuota')
+                            ->setCellValue('G1', 'Cuotas')
+                            ->setCellValue('H1', 'Cuota_Actual')
+                            ->setCellValue('I1', 'Estado_Credito')
+                            ->setCellValue('J1', 'Aprobado');
 
                 $i = 2;
                 $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findAll();
@@ -93,9 +98,15 @@ class CreditosController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
                             ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
-                            ->setCellValue('C' . $i, $arCredito->getfecha())
+                            ->setCellValue('C' . $i, $arCredito->getFecha())
+                            //->setCellValue('C' . $i, PHPExcel_Shared_Date::PHPToExcel( $arCredito->getFecha() ))
                             ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('E' . $i, $arCredito->getVrPagar());
+                            ->setCellValue('E' . $i, $arCredito->getVrPagar())
+                            ->setCellValue('F' . $i, $arCredito->getVrCuota())
+                            ->setCellValue('G' . $i, $arCredito->getNumeroCuotas())
+                            ->setCellValue('H' . $i, $arCredito->getNumeroCuotaActual())
+                            ->setCellValue('I' . $i, $arCredito->getEstadoPagado())
+                            ->setCellValue('J' . $i, $arCredito->getAprobado());
                     $i++;
                 }
 
@@ -150,6 +161,7 @@ class CreditosController extends Controller
             $intCuotas = $form->get('numeroCuotas')->getData();
             $douVrCuota = $douVrPagar / $intCuotas;
             $arCredito->setVrCuota($douVrCuota);
+            $arCredito->setFecha(new \DateTime('now'));
             $arCredito->setSaldo($douVrPagar);
             $arCredito->setNumeroCuotaActual(0);
             $arCredito->setEmpleadoRel($arEmpleado);

@@ -28,7 +28,7 @@ class RhuCredito
     private $codigoEmpleadoFk;        
     
     /**
-     * @ORM\Column(name="fecha", type="date", nullable=true)
+     * @ORM\Column(name="fecha", type="date")
      */    
     private $fecha;     
     
