@@ -43,7 +43,7 @@
                         <th class="td-label">Saldo:</th>
                         <td class="td-in-well">{{ arCreditos.saldo | number_format(0, '.', ',')}}</td>
                         <th class="td-label">Estado</th>
-                        <td >{% if arCreditos.estadoPagado == 1 %} <div class="alert alert-success" role="alert">CANCELADO</div> {% else %} {{ arCreditos.estadoPagado }}PENDIENTE {% endif %}</td>
+                        <td {% if arCreditos.estadoPagado == 1 %} class="success">CANCELADO{% else %} <td class="danger"> PENDIENTE {% endif %}</td>
                     </tr>
                     <tr>
                         <th class="td-label">Tipo Pago:</th>

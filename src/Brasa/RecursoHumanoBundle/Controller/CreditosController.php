@@ -205,6 +205,7 @@ class CreditosController extends Controller
     public function nuevoDetalleAction($codigoCreditoPk) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $mensaje = 0;
         $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
         $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
@@ -222,7 +223,7 @@ class CreditosController extends Controller
             $Abono = $form->get('vrCuota')->getData();
             if ($Abono > $saldoA)
             {
-                echo "El Abono no puede ser superior al Saldo del Credito";
+                $mensaje = "El abono no puede ser superior al saldo!";
             }
             else
             {    
@@ -230,7 +231,9 @@ class CreditosController extends Controller
                 if ($arCredito->getSaldo() <= 0)
                 {
                    $arCredito->setEstadoPagado(1); 
-                }                  
+                }
+                $nroACuotas = $arCredito->getNumeroCuotaActual();
+                $arCredito->setNumeroCuotaActual($nroACuotas + 1);
                 $arPagoCredito->setcodigoCreditoFk($form->get('codigoCreditoFk')->getData());
                 $arPagoCredito->setvrCuota($form->get('vrCuota')->getData());
                 $arPagoCredito->setfechaPago(new \ DateTime("now"));
@@ -246,6 +249,7 @@ class CreditosController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevoDetalle.html.twig', array(
             'arPagoCredito' => $arPagoCredito,
             'arCredito' => $arCredito,
+            'mensaje' => $mensaje,
             'form' => $form->createView()));
     }
     
