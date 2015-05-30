@@ -157,3 +157,7 @@ brs_rhu_seleccion_lista:
 brs_rhu_seleccion_nuevo:
     path:     /rhumano/seleccion/nuevo/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:nuevo } 
+    
+brs_rhu_ss_periodo_lista:
+    path:     /rhumano/seguridadsocial/periodo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:lista }     

@@ -135,6 +135,10 @@ class RhuCentroCosto
      */
     protected $facturasCentroCostoRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSede", mappedBy="centroCostoRel")
+     */
+    protected $sedesCentroCostoRel;    
 
     /**
      * Constructor
@@ -790,5 +794,39 @@ class RhuCentroCosto
     public function getSeleccionesCentroCostoRel()
     {
         return $this->seleccionesCentroCostoRel;
+    }
+
+    /**
+     * Add sedesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSede $sedesCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addSedesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSede $sedesCentroCostoRel)
+    {
+        $this->sedesCentroCostoRel[] = $sedesCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove sedesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSede $sedesCentroCostoRel
+     */
+    public function removeSedesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSede $sedesCentroCostoRel)
+    {
+        $this->sedesCentroCostoRel->removeElement($sedesCentroCostoRel);
+    }
+
+    /**
+     * Get sedesCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSedesCentroCostoRel()
+    {
+        return $this->sedesCentroCostoRel;
     }
 }
