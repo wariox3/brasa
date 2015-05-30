@@ -170,6 +170,24 @@
                 <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arProgramacionPagoDetalles.codigoEmpleadoFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionarEmpleado[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}" /></td>                
             </tr>
+                {% for arProgramacionPagoDetalleSedes in arProgramacionPagoDetalleSedes %}
+                    {% if arProgramacionPagoDetalleSedes.codigoProgramacionPagoDetalleFk == arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td> 
+                            <td></td>
+                            <td></td>
+                            <td></td>                                            
+                            <td></td>                                                                           
+                            <td>{{ arProgramacionPagoDetalleSedes.horasPeriodo }}</td>
+                            <td></td>
+                            <td></td>                                                                           
+                            <td></td>                
+                            <td></td>                
+                        </tr>                        
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         </table>
         <!-- Botones Menu Items -->

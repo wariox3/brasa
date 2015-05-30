@@ -81,7 +81,10 @@ class RhuProgramacionPagoDetalle
      */
     protected $empleadoRel;        
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuProgramacionPagoDetalleSede", mappedBy="programacionPagoDetalleRel")
+     */
+    protected $programacionesPagosDetallesSedesProgramacionPagoDetalleRel; 
 
     /**
      * Get codigoProgramacionPagoDetallePk
@@ -379,5 +382,46 @@ class RhuProgramacionPagoDetalle
     public function getIndefinido()
     {
         return $this->indefinido;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add programacionesPagosDetallesSedesProgramacionPagoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function addProgramacionesPagosDetallesSedesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel)
+    {
+        $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel[] = $programacionesPagosDetallesSedesProgramacionPagoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesPagosDetallesSedesProgramacionPagoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel
+     */
+    public function removeProgramacionesPagosDetallesSedesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel)
+    {
+        $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel->removeElement($programacionesPagosDetallesSedesProgramacionPagoDetalleRel);
+    }
+
+    /**
+     * Get programacionesPagosDetallesSedesProgramacionPagoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesPagosDetallesSedesProgramacionPagoDetalleRel()
+    {
+        return $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel;
     }
 }
