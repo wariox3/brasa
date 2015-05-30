@@ -11,13 +11,13 @@
             <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Nombre:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formSalud.nombre, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(formSalud.nombre, { 'attr': {'onkeypress': 'txNombres();', 'class': 'form-control'} }) }}
                 </div>
             </div>
         <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Nit:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formSalud.nit, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(formSalud.nit, { 'attr': {'onkeypress': 'ValidaSoloNumeros();', 'class': 'form-control'} }) }}
                 </div>
             </div>
         <div class="form-group form-group-sm">
@@ -29,7 +29,7 @@
         <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Teléfono:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formSalud.telefono, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(formSalud.telefono, { 'attr': {'onkeypress': 'ValidaSoloNumeros();', 'class': 'form-control'} }) }}
                 </div>
             </div>        
              <div class="modal-footer">

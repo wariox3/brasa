@@ -49,7 +49,7 @@
                         <th class="td-label">Tipo Pago:</th>
                         <td class="td-label">{{ arCreditos.tipoPago }}</td>
                         <th class="td-label">Aprobado</th>
-                        <td >{% if arCreditos.aprobado == 0 %} <div class="alert alert-danger" role="alert">NO</div> {% else %} <div class="alert alert-success" role="alert">SI</div> {% endif %}</td>
+                        <td {% if arCreditos.aprobado == 0 %} class="danger"> NO {% else %} <td class="success"> SI {% endif %} </td>
                     </tr>
                     <tr>
                         <th>Comentarios:</th>
