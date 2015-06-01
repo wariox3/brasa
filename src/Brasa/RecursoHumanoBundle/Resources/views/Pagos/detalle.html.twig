@@ -73,6 +73,7 @@
     <br /><br />
     <ul class="nav nav-tabs">
         <li class="active"><a href="#detalles" data-toggle="tab">Detalles</a></li>
+        <li><a href="#detallessede" data-toggle="tab">Detalles sede</a></li>
         <li><a href="#conceptos" data-toggle="tab">Conceptos</a></li>
     </ul>
 
@@ -127,6 +128,58 @@
                 </div>
 
         </div>
+        <div class="tab-pane" id="detallessede">
+                <!-- Menu Encabezado Movimiento -->
+                <div id="detallessede" style="width: 100%"><br>
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>ID</th>
+                            <th>SEDE</th>
+                            <th>CONCEPTO</th>
+                            <th>DETALLE</th>
+                            <th style="text-align: right">PORCENTAJE</th>
+                            <th style="text-align: right">HORAS</th>
+                            <th style="text-align: right">VR. HORA</th>
+                            <th style="text-align: right">VR. PAGO</th>
+                            <th style="text-align: right">OP</th>
+                            <th style="text-align: right">VR. NETO</th>
+                            <th style="text-align: right">IBC</th>
+                            <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                        </tr>
+                        {% for arPagoDetallesSede in arPagoDetallesSede %}
+                        <tr>
+                            <td>
+                                <input type="hidden" name="LblCodigoGuia[]" value="{{ arPagoDetallesSede.codigoPagoDetalleSedePk }}">
+                                <span class="badge">{{ arPagoDetallesSede.codigoPagoDetalleSedePk }}</span>
+                            </td>
+                            <td>{{ arPagoDetallesSede.sedeRel.nombre }}</td>
+                            <td>{{ arPagoDetallesSede.pagoConceptoRel.nombre }}</td>
+                            <td>{{ arPagoDetallesSede.detalle }}</td>                            
+                            <td style="text-align: right">{{ arPagoDetallesSede.porcentajeAplicado | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetallesSede.numeroHoras | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetallesSede.vrHora | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetallesSede.vrPago | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetallesSede.operacion | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetallesSede.vrPagoOperado | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetallesSede.vrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
+                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoDetallesSede.codigoPagoDetalleSedePk }}" /></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+                    <!-- Botones Menu Items -->
+                    <div class="btn-toolbar" style="float:left">
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_lista') }}" style="float:left">Volver</a>
+                        </div>
+                    </div>
+                    <!-- Fin Botones Menu Items -->
+
+                    <br/><br/>
+                    <hr/>
+                </div>
+
+        </div>                        
         <div class="tab-pane" id="conceptos">
 
         </div>

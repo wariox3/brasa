@@ -18,5 +18,30 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         }             
 
         return $dql;
-    }                        
+    }      
+    
+    public function generarProgramacionPagoDetallePorSede($codigoProgramacionPago) {
+        $em = $this->getEntityManager();
+        $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+        foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {
+            $intHoras = 0;
+            $arProgramacionPagoDetalleProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+            $arProgramacionPagoDetalleProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($arProgramacionPagoDetalle->getCodigoProgramacionPagoDetallePk());            
+            $arProgramacionPagoDetallesSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
+            $arProgramacionPagoDetallesSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->findBy(array('codigoProgramacionPagoDetalleFk' => $arProgramacionPagoDetalle->getCodigoProgramacionPagoDetallePk(), 'codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk()));                        
+            foreach ($arProgramacionPagoDetallesSedes as $arProgramacionPagoDetalleSede) {
+                $intHoras = $intHoras + $arProgramacionPagoDetalleSede->getHorasPeriodo();
+            }
+            foreach ($arProgramacionPagoDetallesSedes as $arProgramacionPagoDetalleSede) {
+                $arProgramacionPagoDetalleSedeProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
+                $arProgramacionPagoDetalleSedeProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->find($arProgramacionPagoDetalleSede->getCodigoProgramacionPagoDetalleSedePk());                                                        
+                $arProgramacionPagoDetalleSedeProcesar->setPorcentajeParticipacion(($arProgramacionPagoDetalleSedeProcesar->getHorasPeriodo() / $intHoras) * 100);
+                $em->persist($arProgramacionPagoDetalleSedeProcesar);
+            }            
+            $arProgramacionPagoDetalleProcesar->setHorasPeriodoReales($intHoras);
+            $em->persist($arProgramacionPagoDetalleProcesar);
+        }
+        $em->flush();
+    }    
 }

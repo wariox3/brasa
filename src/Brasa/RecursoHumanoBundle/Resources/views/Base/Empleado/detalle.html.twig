@@ -68,7 +68,11 @@
                             <td>{% if arContratos.indefinido == 1 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                             <td style="text-align: right">{{ arContratos.vrSalario | number_format(0, '.', ',') }}</td>
                             <td>{% if arContratos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
-                            <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_contratos_terminar', { 'codigoContrato': arContratos.codigoContratoPk}) }}" style="float:left">Terminar</a></td>
+                            {% if arContratos.indefinido == 1 %}
+                                <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_contratos_terminar', { 'codigoContrato': arContratos.codigoContratoPk}) }}" style="float:left">Terminar</a></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
                             <td><input type="checkbox" name="ChkSeleccionarContrato[]" value="{{ arContratos.codigoContratoPk }}" /></td>
                         </tr>
@@ -76,7 +80,7 @@
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleado.codigoEmpleadoPk}) }}" style="float:left">Nuevo</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleado.codigoEmpleadoPk}) }}', 'NuevoContrato', 600, 900)" >Nuevo</a>                        
                         {{ form_widget(form.BtnRetirarContrato, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
                 </div>
@@ -177,7 +181,7 @@
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Agregar</a>
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Agregar</a> {% endif %}                        
                         {{ form_widget(form.BtnRetirarIncapacidad, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
                 </div>
@@ -214,7 +218,7 @@
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarLicencia', 600, 900)" >Agregar</a>
+                        {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarLicencia', 600, 900)" >Agregar</a>{% endif %}
                         {{ form_widget(form.BtnRetirarLicencia, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
                 </div>

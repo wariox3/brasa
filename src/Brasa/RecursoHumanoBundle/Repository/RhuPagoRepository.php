@@ -97,4 +97,29 @@ class RhuPagoRepository extends EntityRepository {
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
     }                        
+
+    public function generarPagoDetalleSede ($codigoPago) {
+        $em = $this->getEntityManager();
+        $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+        $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigoPago));
+        foreach ($arPagoDetalles as $arPagoDetalle) {
+            $arProgramacionPagoDetalleSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
+            $arProgramacionPagoDetalleSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->findBy(array('codigoProgramacionPagoDetalleFk' => $arPagoDetalle->getCodigoProgramacionPagoDetalleFk()));
+            foreach ($arProgramacionPagoDetalleSedes as $arProgramacionPagoDetalleSede) {                
+                $arPagoDetalleSede = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede();
+                $arPagoDetalleSede->setPagoRel($arPagoDetalle->getPagoRel());
+                $arPagoDetalleSede->setPagoConceptoRel($arPagoDetalle->getPagoConceptoRel());                                                        
+                $arPagoDetalleSede->setSedeRel($arProgramacionPagoDetalleSede->getSedeRel());                                                        
+                $arPagoDetalleSede->setVrPago(($arPagoDetalle->getVrPago() * $arProgramacionPagoDetalleSede->getPorcentajeParticipacion()) / 100);
+                $arPagoDetalleSede->setOperacion($arPagoDetalle->getOperacion());
+                $arPagoDetalleSede->setPorcentajeAplicado($arPagoDetalle->getPorcentajeAplicado());
+                $arPagoDetalleSede->setNumeroHoras(($arPagoDetalle->getNumeroHoras() * $arProgramacionPagoDetalleSede->getPorcentajeParticipacion()) / 100);
+                $arPagoDetalleSede->setVrPagoOperado(($arPagoDetalle->getVrPagoOperado() * $arProgramacionPagoDetalleSede->getPorcentajeParticipacion()) / 100);                
+                $arPagoDetalleSede->setVrTotal(($arPagoDetalle->getVrTotal() * $arProgramacionPagoDetalleSede->getPorcentajeParticipacion()) / 100);                                
+                $arPagoDetalleSede->setVrIngresoBaseCotizacion(($arPagoDetalle->getVrIngresoBaseCotizacion() * $arProgramacionPagoDetalleSede->getPorcentajeParticipacion()) / 100);                                
+                $em->persist($arPagoDetalleSede);
+            }
+        }
+        $em->flush();
+    }
 }

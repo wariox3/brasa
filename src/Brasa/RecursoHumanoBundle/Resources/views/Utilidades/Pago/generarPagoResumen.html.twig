@@ -140,6 +140,7 @@
         <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>ID</th>
+                <th>CODIGO</th>
                 <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>
                 <th>INICIO</th>
@@ -158,6 +159,7 @@
                     <input type="hidden" name="LblCodigoDetalle[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}">
                     <span class="badge">{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}</span>
                 </td>
+                <td>{{ arProgramacionPagoDetalles.codigoEmpleadoFk}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td> 
                 <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
@@ -173,18 +175,13 @@
                 {% for arProgramacionPagoDetalleSedes in arProgramacionPagoDetalleSedes %}
                     {% if arProgramacionPagoDetalleSedes.codigoProgramacionPagoDetalleFk == arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk %}
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td> 
-                            <td></td>
-                            <td></td>
-                            <td></td>                                            
-                            <td></td>                                                                           
-                            <td>{{ arProgramacionPagoDetalleSedes.horasPeriodo }}</td>
+                            <td colspan="3"></td>
+                            <td colspan="4">{{ arProgramacionPagoDetalleSedes.sedeRel.nombre }}</td>                                                                           
+                            <td style="text-align: right">{{ arProgramacionPagoDetalleSedes.horasPeriodo }}</td>
                             <td></td>
                             <td></td>                                                                           
-                            <td></td>                
-                            <td></td>                
+                            <td style="text-align: right">{{ arProgramacionPagoDetalleSedes.porcentajeParticipacion | number_format(2, '.', ',') }}</td>
+                            <td><input type="checkbox" name="ChkSeleccionarSede[]" value="{{ arProgramacionPagoDetalleSedes.codigoProgramacionPagoDetalleSedePk }}" /></td>                
                         </tr>                        
                     {% endif %}
                 {% endfor %}
@@ -202,6 +199,7 @@
         </div>        
         <div class="btn-toolbar" style="float: right">                
             <div class="btn-group">      
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>                
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen_agregarempleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>                
                 {{ form_widget(form.BtnActualizarEmpleados, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                                    
                 {{ form_widget(form.BtnEliminarEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                

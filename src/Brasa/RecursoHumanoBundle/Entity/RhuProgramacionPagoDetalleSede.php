@@ -38,6 +38,11 @@ class RhuProgramacionPagoDetalleSede
     private $horasPeriodo = 0;     
     
     /**
+     * @ORM\Column(name="porcentaje_participacion", type="float")
+     */
+    private $porcentajeParticipacion = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPagoDetalle", inversedBy="programacionesPagosDetallesSedesProgramacionPagoDetalleRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_detalle_fk", referencedColumnName="codigo_programacion_pago_detalle_pk")
      */
@@ -233,5 +238,29 @@ class RhuProgramacionPagoDetalleSede
     public function getSedeRel()
     {
         return $this->sedeRel;
+    }
+
+    /**
+     * Set porcentajeParticipacion
+     *
+     * @param float $porcentajeParticipacion
+     *
+     * @return RhuProgramacionPagoDetalleSede
+     */
+    public function setPorcentajeParticipacion($porcentajeParticipacion)
+    {
+        $this->porcentajeParticipacion = $porcentajeParticipacion;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeParticipacion
+     *
+     * @return float
+     */
+    public function getPorcentajeParticipacion()
+    {
+        return $this->porcentajeParticipacion;
     }
 }

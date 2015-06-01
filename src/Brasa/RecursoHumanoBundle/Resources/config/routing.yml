@@ -29,6 +29,10 @@ brs_rhu_utilidades_pagos_generar_pago_resumen:
 brs_rhu_utilidades_pagos_generar_pago_resumen_agregarempleado:
     path:     /rhumano/utilidades/pagos/generar/pago/resumen/agregarempleado/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:agregarEmpleado }     
+
+brs_rhu_utilidades_pagos_cargar_tiempo_sede:
+    path:     /rhumano/utilidades/pagos/cargar/tiempo/sede/{codigoProgramacionPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarTiempoSedes:cargar }         
     
 brs_rhu_utilidades_pagos_pagar:
     path:     /rhumano/utilidades/pagos/pagar

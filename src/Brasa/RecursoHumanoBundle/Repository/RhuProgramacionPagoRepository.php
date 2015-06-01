@@ -45,6 +45,19 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         return true;
     }
 
+    /*
+     * Liquidar todos los pagos de la programacion de pago
+     */
+    public function generarPagoDetalleSede($codigoProgramacionPago) {
+        $em = $this->getEntityManager();
+        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+        foreach ($arPagos as $arPago) {
+            $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->generarPagoDetalleSede($arPago->getCodigoPagoPk());
+        }                
+        return true;
+    }    
+    
     public function Anular($codigoProgramacionPago) {
         $em = $this->getEntityManager();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();

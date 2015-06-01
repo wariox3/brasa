@@ -5,17 +5,17 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_pago_detalle")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuPagoDetalleRepository")
+ * @ORM\Table(name="rhu_pago_detalle_sede")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuPagoDetalleSedeRepository")
  */
-class RhuPagoDetalle
+class RhuPagoDetalleSede
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_pago_detalle_pk", type="integer")
+     * @ORM\Column(name="codigo_pago_detalle_sede_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoPagoDetallePk;
+    private $codigoPagoDetalleSedePk;
     
     /**
      * @ORM\Column(name="codigo_pago_fk", type="integer", nullable=true)
@@ -78,37 +78,37 @@ class RhuPagoDetalle
     private $vrIngresoBaseCotizacion = 0;     
     
     /**
-     * @ORM\Column(name="codigo_programacion_pago_detalle_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_sede_fk", type="integer", nullable=true)
      */    
-    private $codigoProgramacionPagoDetalleFk;     
+    private $codigoSedeFk;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuPago", inversedBy="pagosDetallesPagoRel")
+     * @ORM\ManyToOne(targetEntity="RhuPago", inversedBy="pagosDetallesSedesPagoRel")
      * @ORM\JoinColumn(name="codigo_pago_fk", referencedColumnName="codigo_pago_pk")
      */
     protected $pagoRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="pagosDetallesPagoConceptoRel")
+     * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="pagosDetallesSedesPagoConceptoRel")
      * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
      */
     protected $pagoConceptoRel;     
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuSede", inversedBy="PagosDetallesSedeRel")
+     * @ORM\JoinColumn(name="codigo_sede_fk", referencedColumnName="codigo_sede_pk")
+     */
+    protected $sedeRel;     
+
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuProgramacionPagoDetalle", inversedBy="pagosDetallesProgramacionPagoDetalleRel")
-     * @ORM\JoinColumn(name="codigo_programacion_pago_detalle_fk", referencedColumnName="codigo_programacion_pago_detalle_pk")
-     */
-    protected $programacionPagoDetalleRel;    
-    
-    /**
-     * Get codigoPagoDetallePk
+     * Get codigoPagoDetalleSedePk
      *
      * @return integer
      */
-    public function getCodigoPagoDetallePk()
+    public function getCodigoPagoDetalleSedePk()
     {
-        return $this->codigoPagoDetallePk;
+        return $this->codigoPagoDetalleSedePk;
     }
 
     /**
@@ -116,7 +116,7 @@ class RhuPagoDetalle
      *
      * @param integer $codigoPagoFk
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setCodigoPagoFk($codigoPagoFk)
     {
@@ -140,7 +140,7 @@ class RhuPagoDetalle
      *
      * @param float $vrPago
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setVrPago($vrPago)
     {
@@ -164,7 +164,7 @@ class RhuPagoDetalle
      *
      * @param integer $operacion
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setOperacion($operacion)
     {
@@ -188,7 +188,7 @@ class RhuPagoDetalle
      *
      * @param float $vrPagoOperado
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setVrPagoOperado($vrPagoOperado)
     {
@@ -210,9 +210,9 @@ class RhuPagoDetalle
     /**
      * Set numeroHoras
      *
-     * @param integer $numeroHoras
+     * @param float $numeroHoras
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setNumeroHoras($numeroHoras)
     {
@@ -224,7 +224,7 @@ class RhuPagoDetalle
     /**
      * Get numeroHoras
      *
-     * @return integer
+     * @return float
      */
     public function getNumeroHoras()
     {
@@ -236,7 +236,7 @@ class RhuPagoDetalle
      *
      * @param float $vrHora
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setVrHora($vrHora)
     {
@@ -256,11 +256,35 @@ class RhuPagoDetalle
     }
 
     /**
+     * Set porcentajeAplicado
+     *
+     * @param float $porcentajeAplicado
+     *
+     * @return RhuPagoDetalleSede
+     */
+    public function setPorcentajeAplicado($porcentajeAplicado)
+    {
+        $this->porcentajeAplicado = $porcentajeAplicado;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeAplicado
+     *
+     * @return float
+     */
+    public function getPorcentajeAplicado()
+    {
+        return $this->porcentajeAplicado;
+    }
+
+    /**
      * Set vrDia
      *
      * @param float $vrDia
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setVrDia($vrDia)
     {
@@ -284,7 +308,7 @@ class RhuPagoDetalle
      *
      * @param float $vrTotal
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setVrTotal($vrTotal)
     {
@@ -308,7 +332,7 @@ class RhuPagoDetalle
      *
      * @param string $detalle
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setDetalle($detalle)
     {
@@ -332,7 +356,7 @@ class RhuPagoDetalle
      *
      * @param integer $codigoPagoConceptoFk
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
     {
@@ -352,11 +376,35 @@ class RhuPagoDetalle
     }
 
     /**
+     * Set vrIngresoBaseCotizacion
+     *
+     * @param float $vrIngresoBaseCotizacion
+     *
+     * @return RhuPagoDetalleSede
+     */
+    public function setVrIngresoBaseCotizacion($vrIngresoBaseCotizacion)
+    {
+        $this->vrIngresoBaseCotizacion = $vrIngresoBaseCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacion
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacion()
+    {
+        return $this->vrIngresoBaseCotizacion;
+    }
+
+    /**
      * Set pagoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
     {
@@ -380,7 +428,7 @@ class RhuPagoDetalle
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
     public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
     {
@@ -400,98 +448,50 @@ class RhuPagoDetalle
     }
 
     /**
-     * Set porcentajeAplicado
+     * Set codigoSedeFk
      *
-     * @param float $porcentajeAplicado
+     * @param integer $codigoSedeFk
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
-    public function setPorcentajeAplicado($porcentajeAplicado)
+    public function setCodigoSedeFk($codigoSedeFk)
     {
-        $this->porcentajeAplicado = $porcentajeAplicado;
+        $this->codigoSedeFk = $codigoSedeFk;
 
         return $this;
     }
 
     /**
-     * Get porcentajeAplicado
-     *
-     * @return float
-     */
-    public function getPorcentajeAplicado()
-    {
-        return $this->porcentajeAplicado;
-    }
-
-    /**
-     * Set vrIngresoBaseCotizacion
-     *
-     * @param float $vrIngresoBaseCotizacion
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setVrIngresoBaseCotizacion($vrIngresoBaseCotizacion)
-    {
-        $this->vrIngresoBaseCotizacion = $vrIngresoBaseCotizacion;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIngresoBaseCotizacion
-     *
-     * @return float
-     */
-    public function getVrIngresoBaseCotizacion()
-    {
-        return $this->vrIngresoBaseCotizacion;
-    }
-
-    /**
-     * Set codigoProgramacionPagoDetalleFk
-     *
-     * @param integer $codigoProgramacionPagoDetalleFk
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setCodigoProgramacionPagoDetalleFk($codigoProgramacionPagoDetalleFk)
-    {
-        $this->codigoProgramacionPagoDetalleFk = $codigoProgramacionPagoDetalleFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoProgramacionPagoDetalleFk
+     * Get codigoSedeFk
      *
      * @return integer
      */
-    public function getCodigoProgramacionPagoDetalleFk()
+    public function getCodigoSedeFk()
     {
-        return $this->codigoProgramacionPagoDetalleFk;
+        return $this->codigoSedeFk;
     }
 
     /**
-     * Set programacionPagoDetalleRel
+     * Set sedeRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionPagoDetalleRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSede $sedeRel
      *
-     * @return RhuPagoDetalle
+     * @return RhuPagoDetalleSede
      */
-    public function setProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionPagoDetalleRel = null)
+    public function setSedeRel(\Brasa\RecursoHumanoBundle\Entity\RhuSede $sedeRel = null)
     {
-        $this->programacionPagoDetalleRel = $programacionPagoDetalleRel;
+        $this->sedeRel = $sedeRel;
 
         return $this;
     }
 
     /**
-     * Get programacionPagoDetalleRel
+     * Get sedeRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSede
      */
-    public function getProgramacionPagoDetalleRel()
+    public function getSedeRel()
     {
-        return $this->programacionPagoDetalleRel;
+        return $this->sedeRel;
     }
 }

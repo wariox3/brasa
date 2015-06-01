@@ -73,6 +73,11 @@ class RhuPagoConcepto
     protected $pagosDetallesPagoConceptoRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuPagoDetalleSede", mappedBy="pagoConceptoRel")
+     */
+    protected $pagosDetallesSedesPagoConceptoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="pagoConceptoRel")
      */
     protected $pagosAdicionalesPagoConceptoRel;                
@@ -89,6 +94,7 @@ class RhuPagoConcepto
     public function __construct()
     {
         $this->pagosDetallesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosDetallesSedesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesSubtiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -375,6 +381,40 @@ class RhuPagoConcepto
     public function getPagosDetallesPagoConceptoRel()
     {
         return $this->pagosDetallesPagoConceptoRel;
+    }
+
+    /**
+     * Add pagosDetallesSedesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addPagosDetallesSedesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesPagoConceptoRel)
+    {
+        $this->pagosDetallesSedesPagoConceptoRel[] = $pagosDetallesSedesPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosDetallesSedesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesPagoConceptoRel
+     */
+    public function removePagosDetallesSedesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesPagoConceptoRel)
+    {
+        $this->pagosDetallesSedesPagoConceptoRel->removeElement($pagosDetallesSedesPagoConceptoRel);
+    }
+
+    /**
+     * Get pagosDetallesSedesPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosDetallesSedesPagoConceptoRel()
+    {
+        return $this->pagosDetallesSedesPagoConceptoRel;
     }
 
     /**

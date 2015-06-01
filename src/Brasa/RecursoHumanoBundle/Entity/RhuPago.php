@@ -164,6 +164,11 @@ class RhuPago
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="pagoRel")
      */
     protected $pagosDetallesPagoRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoDetalleSede", mappedBy="pagoRel")
+     */
+    protected $pagosDetallesSedesPagoRel;    
     
     /**
      * Constructor
@@ -171,6 +176,7 @@ class RhuPago
     public function __construct()
     {
         $this->pagosDetallesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosDetallesSedesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -887,5 +893,39 @@ class RhuPago
     public function getPagosDetallesPagoRel()
     {
         return $this->pagosDetallesPagoRel;
+    }
+
+    /**
+     * Add pagosDetallesSedesPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesPagoRel
+     *
+     * @return RhuPago
+     */
+    public function addPagosDetallesSedesPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesPagoRel)
+    {
+        $this->pagosDetallesSedesPagoRel[] = $pagosDetallesSedesPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosDetallesSedesPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesPagoRel
+     */
+    public function removePagosDetallesSedesPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesPagoRel)
+    {
+        $this->pagosDetallesSedesPagoRel->removeElement($pagosDetallesSedesPagoRel);
+    }
+
+    /**
+     * Get pagosDetallesSedesPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosDetallesSedesPagoRel()
+    {
+        return $this->pagosDetallesSedesPagoRel;
     }
 }

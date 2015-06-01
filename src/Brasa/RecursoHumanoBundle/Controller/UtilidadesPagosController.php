@@ -72,7 +72,7 @@ class UtilidadesPagosController extends Controller
             ->add('BtnNoGenerar', 'submit', array('label'  => 'No generar pago',))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
             ->add('BtnGenerarArchivoBancolombia', 'submit', array('label'  => 'Generar archivo bancolombia',))
-            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
+            ->add('BtnLiquidar', 'submit', array('label'  => 'Generar por sede',))
             ->add('BtnPagar', 'submit', array('label'  => 'Pagar',))
             ->add('BtnAnular', 'submit', array('label'  => 'Anular',))
             ->add('BtnDeshacer', 'submit', array('label'  => 'Des-hacer',))                
@@ -154,6 +154,7 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
+                                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                     $em->persist($arPagoDetalle);
                                     if($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getPrestacional() == 1) {
                                         $douDevengado = $douDevengado + $douPagoDetalle;
@@ -192,6 +193,7 @@ class UtilidadesPagosController extends Controller
                                         $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arLicencia->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
                                     }
                                     $arPagoDetalle->setNumeroHoras($intHorasProcesarLicencia);
+                                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                     $em->persist($arPagoDetalle);
                                     if($arLicencia->getAfectaTransporte() == 1){
                                         $intDiasLicenciaProcesar = intval($intHorasProcesarLicencia / $arProgramacionPagoDetalle->getFactorDia());
@@ -227,6 +229,7 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setOperacion($arPagoAdicional->getPagoConceptoRel()->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoAdicional->getPagoConceptoRel()->getOperacion());
                                     $arPagoDetalle->setDetalle($arPagoAdicional->getPagoAdicionalSubtipoRel()->getDetalle());
+                                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                     $em->persist($arPagoDetalle);
 
                                     //Aumentar los dias y las horas ordinarias
@@ -265,7 +268,7 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
-                                    
+                                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                     $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
                                     //se guarda el pago en la tabla rhu_pago_credito
                                     $arPagoCredito->setcodigoCreditoFk($arCredito->getCodigoCreditoPk());
@@ -315,6 +318,7 @@ class UtilidadesPagosController extends Controller
                                 $arPagoDetalle->setVrPago($douPagoDetalle);
                                 $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
+                                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                 $em->persist($arPagoDetalle);
                                 $douDevengado = $douDevengado + $douPagoDetalle;
                                 $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $douPagoDetalle;
@@ -331,6 +335,7 @@ class UtilidadesPagosController extends Controller
                                 $arPagoDetalle->setVrPago($douPagoDetalle);
                                 $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
+                                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                 $em->persist($arPagoDetalle);
 
                                 //Liquidar pension
@@ -348,6 +353,7 @@ class UtilidadesPagosController extends Controller
                                 $arPagoDetalle->setVrPago($douPagoDetalle);
                                 $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
+                                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                 $em->persist($arPagoDetalle);
 
                                 //Subsidio transporte
@@ -366,6 +372,7 @@ class UtilidadesPagosController extends Controller
                                         $arPagoDetalle->setVrPago($douPagoDetalle);
                                         $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                                         $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
+                                        $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                         $em->persist($arPagoDetalle);
                                     }
                                 }
@@ -380,7 +387,9 @@ class UtilidadesPagosController extends Controller
                             $em->persist($arCentroCosto);
                             $em->persist($arProgramacionPagoProcesar);
                             $em->flush();
+                            
                             $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Liquidar($codigoProgramacionPago);
+                            //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarPagoDetalleSede($codigoProgramacionPago);
                             if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
                                 $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
                             }
@@ -444,11 +453,12 @@ class UtilidadesPagosController extends Controller
                 $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarPagoDetalleSede($codigoProgramacionPago);
+                        /*$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                         $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
                         foreach($arPagos as $arPago) {
                             $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->liquidar($arPago->getCodigoPagoPk());
-                        }
+                        }*/
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }
@@ -526,12 +536,25 @@ class UtilidadesPagosController extends Controller
                 return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago_resumen', array('codigoProgramacionPago' => $codigoProgramacionPago)));
             }
             if($form->get('BtnEliminarEmpleados')->isClicked()) {            
-                $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleado');
-                foreach ($arrSeleccionados AS $codigo) {
-                    $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-                    $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigo);
-                    $em->remove($arProgramacionPagoDetalle);                                                        
+                $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoProgramacionPagoSede) {
+                        $arProgramacionPagoDetalleSede = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
+                        $arProgramacionPagoDetalleSede = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->find($codigoProgramacionPagoSede);
+                        $em->remove($arProgramacionPagoDetalleSede);                                                        
+                    }                    
                 }                
+                
+                $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleado');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigo);
+                        $em->remove($arProgramacionPagoDetalle);                                                        
+                    }                    
+                }                
+
+                
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago_resumen', array('codigoProgramacionPago' => $codigoProgramacionPago)));
             }            

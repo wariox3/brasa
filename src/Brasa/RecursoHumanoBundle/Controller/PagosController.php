@@ -113,6 +113,8 @@ class PagosController extends Controller
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigoPago));
+        $arPagoDetallesSede = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede();
+        $arPagoDetallesSede = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalleSede')->findBy(array('codigoPagoFk' => $codigoPago));        
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->add('BtnReliquidar', 'submit', array('label'  => 'Reliquidar',))
@@ -131,7 +133,8 @@ class PagosController extends Controller
         
         return $this->render('BrasaRecursoHumanoBundle:Pagos:detalle.html.twig', array(
                     'arPago' => $arPago,
-                    'arPagoDetalles' => $arPagoDetalles,
+                    'arPagoDetalles' => $arPagoDetalles,                    
+                    'arPagoDetallesSede' => $arPagoDetallesSede,                    
                     'form' => $form->createView()
                     ));
     }        
