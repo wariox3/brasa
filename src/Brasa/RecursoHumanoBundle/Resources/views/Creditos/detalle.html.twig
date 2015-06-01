@@ -53,7 +53,9 @@
                     </tr>
                     <tr>
                         <th>Comentarios:</th>
-                        <td colspan="4" class="td-label">{{ arCreditos.comentarios }}</td>
+                        <td class="td-label">{{ arCreditos.comentarios }}</td>
+                        <th class="td-label">Seguro:</th>
+                        <td class="td-label">{{ arCreditos.seguro }}</td>
                     </tr>
                 </table>
             </div>
@@ -65,7 +67,9 @@
                     <tr>
                         <th>CODIGO PAGO</th>
                         <th>CODIGO CREDITO</th>
-                        <th style="text-align: right">VR. CREDITO</th>
+                        <th style="text-align: right">VR. CUOTA</th>
+                        <th style="text-align: right">VR. SEGURO</th>
+                        <th style="text-align: right">VR. PAGO</th>
                         <th>FECHA PAGO</th>
                         <th>TIPO PAGO</th>
                     </tr>
@@ -73,6 +77,8 @@
                         <tr>
                             <td>{{ arCreditoPago.codigoPagoCreditoPk  }}</td>
                             <td>{{ arCreditoPago.codigoCreditoFk  }}</td>
+                            <td style="text-align: right">{{ ((arCreditoPago.VrCuota - arCreditoPago.Seguro) | number_format(2, '.', ',')) }}</td>
+                            <td style="text-align: right">{{ arCreditoPago.Seguro | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditoPago.VrCuota | number_format(2, '.', ',') }}</td>
                             <td>{{ arCreditoPago.fechaPago |date("Y/m/d")  }}</td>
                             <td>{{ arCreditoPago.tipoPago  }}</td>

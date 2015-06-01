@@ -78,6 +78,11 @@ class RhuCredito
     private $aprobado = 0;
     
     /**
+     * @ORM\Column(name="seguro", type="integer")
+     */
+    private $seguro = 0;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="creditosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -435,5 +440,29 @@ class RhuCredito
     public function getTipoPago()
     {
         return $this->tipoPago;
+    }
+
+    /**
+     * Set seguro
+     *
+     * @param integer $seguro
+     *
+     * @return RhuCredito
+     */
+    public function setSeguro($seguro)
+    {
+        $this->seguro = $seguro;
+
+        return $this;
+    }
+
+    /**
+     * Get seguro
+     *
+     * @return integer
+     */
+    public function getSeguro()
+    {
+        return $this->seguro;
     }
 }

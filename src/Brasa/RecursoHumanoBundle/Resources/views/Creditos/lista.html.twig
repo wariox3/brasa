@@ -19,6 +19,8 @@
                 <th>EMPLEADO</th>
                 <th style="text-align: right">VR. CREDITO</th>
                 <th style="text-align: right">VR. CUOTA</th>
+                <th style="text-align: right">VR. SEGURO</th>
+                <th style="text-align: right">VR. PAGAR</th>
                 <th style="text-align: right">CUOTAS</th>
                 <th style="text-align: right">C. ACTUAL</th>
                 <th style="text-align: right">ESTADO</th>
@@ -33,11 +35,13 @@
                 <td>{{ arCreditos.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arCreditos.empleadoRel.nombreCorto  }}</td>
                 <td style="text-align: right">{{ arCreditos.VrPagar | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ ((arCreditos.VrCuota - arCreditos.Seguro) | number_format(2, '.', ',')) }}</td>
+                <td style="text-align: right">{{ arCreditos.Seguro | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCreditos.numeroCuotas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCreditos.numeroCuotaActual | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{% if arCreditos.estadoPagado == 1 %} CANCELADO {% else %} {{ arCreditos.estadoPagado }}PENDIENTE {% endif %}</td>
-                <td style="text-align: right">{% if arCreditos.aprobado == 0 %} NO {% else %} SI {% endif %}</td>
+                <td style="text-align: right" {% if arCreditos.estadoPagado == 1 %} class="success"> PAGADO {% else %} <td {{ arCreditos.estadoPagado }} class="danger">PENDIENTE {% endif %}</td>
+                <td style="text-align: right" {% if arCreditos.aprobado == 0 %} class="danger"> NO {% else %} <td class="success">SI {% endif %}</td>
                 <td><a href="{{ path('brs_rhu_credito_detalle', { 'codigoCreditoPk': arCreditos.codigoCreditoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCreditos.codigoCreditoPk }}" /></td>
             </tr>

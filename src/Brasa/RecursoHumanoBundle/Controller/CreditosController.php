@@ -159,10 +159,12 @@ class CreditosController extends Controller
             $arCredito = $form->getData();
             $douVrPagar = $form->get('vrPagar')->getData();
             $intCuotas = $form->get('numeroCuotas')->getData();
-            $douVrCuota = $douVrPagar / $intCuotas;
+            $seguro = $form->get('seguro')->getData();
+            $saldot = $douVrPagar + $seguro;
+            $douVrCuota = $douVrPagar / $intCuotas + $seguro;
             $arCredito->setVrCuota($douVrCuota);
             $arCredito->setFecha(new \DateTime('now'));
-            $arCredito->setSaldo($douVrPagar);
+            $arCredito->setSaldo($saldot);
             $arCredito->setNumeroCuotaActual(0);
             $arCredito->setEmpleadoRel($arEmpleado);
             $em->persist($arCredito);
@@ -233,13 +235,23 @@ class CreditosController extends Controller
                    $arCredito->setEstadoPagado(1); 
                 }
                 $nroACuotas = $arCredito->getNumeroCuotaActual();
+                $seguro = $arCredito->getSeguro();
                 $arCredito->setNumeroCuotaActual($nroACuotas + 1);
                 $arPagoCredito->setcodigoCreditoFk($form->get('codigoCreditoFk')->getData());
                 $arPagoCredito->setvrCuota($form->get('vrCuota')->getData());
-                $arPagoCredito->setfechaPago(new \ DateTime("now"));
+                $arPagoCredito->setfechaPago(new \ DateTime("now"));    
                 $arPagoCredito->settipoPago('ABONO');
                 $em->persist($arPagoCredito);
                 $em->persist($arCredito);
+                $em->flush();
+                $arCredito2 = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                $arCredito2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
+                if ($arCredito2->getSaldo() < $arCredito2->getVrCuota())
+                {
+                    $nVrcuota = $arCredito2->getSaldo();
+                    $arCredito2->setVrCuota($nVrcuota);
+                }
+                $em->persist($arCredito2);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>opener.location.reload();</script>";
                 echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";

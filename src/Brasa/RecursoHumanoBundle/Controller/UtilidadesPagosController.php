@@ -264,7 +264,8 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setPagoRel($arPago);
                                     $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCredito);
                                     $douPagoDetalle = $arCredito->getVrCuota(); //Falta afectar credito
-                                    $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre());
+                                    $cuotaR = $arCredito->getVrCuota() - $arCredito->getSeguro();
+                                    $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre()." (Cuota: ".$cuotaR." + Seguro: ".$arCredito->getSeguro().")");
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
@@ -272,7 +273,6 @@ class UtilidadesPagosController extends Controller
                                     $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
                                     //se guarda el pago en la tabla rhu_pago_credito
                                     $arPagoCredito->setcodigoCreditoFk($arCredito->getCodigoCreditoPk());
-                                    
                                     $arPagoCredito->setfechaPago(new \ DateTime("now"));
                                     $arPagoCredito->setTipoPago("NOMINA");
                                     if ($arCredito->getTipoPago() == "Nomina")
@@ -281,26 +281,51 @@ class UtilidadesPagosController extends Controller
                                         {    
                                             $em->persist($arPagoCredito);
                                             //Actualizar el saldo del credito
+                                            $seguro = $arCredito->getSeguro();
                                             $nroACuotas = $arCredito->getNumeroCuotaActual();
                                             $arCredito->setNumeroCuotaActual($nroACuotas + 1);
                                             $credito =  $arCredito->getSaldo();
-                                            if ($douPagoDetalle > $credito)
+                                            if ($douPagoDetalle < $credito)
                                             {
-                                                $douPagoDetalle = $credito;
+                                                $arPagoCredito->setvrCuota($douPagoDetalle);
+                                                $tsaldo = $credito - $douPagoDetalle + $seguro;
+                                                $arCredito->setSaldo($credito - $douPagoDetalle + $seguro);
+                                                if ($tsaldo < $douPagoDetalle)
+                                                {    
+                                                    $arCredito->setVrCuota($credito - $douPagoDetalle + $seguro);
+                                                }
+                                                else
+                                                {
+                                                   $arCredito->setVrCuota($douPagoDetalle); 
+                                                }    
                                             }
-                                            $arPagoCredito->setvrCuota($douPagoDetalle);
-                                            $arCredito->setSaldo($credito - $douPagoDetalle);
+                                            else
+                                            {    
+                                                if ($douPagoDetalle = $credito)
+                                                {
+                                                    $arPagoCredito->setvrCuota($credito);
+                                                    $arCredito->setSaldo($douPagoDetalle - $credito);
+                                                    $arCredito->setVrCuota($arCredito->getVrPagar() / $arCredito->getNumeroCuotas() + $seguro);
+                                                }
+                                                else
+                                                {
+                                                    if ($douPagoDetalle > $credito)
+                                                    {
+                                                        $arPagoCredito->setvrCuota($credito);
+                                                        $arCredito->setSaldo($credito - $credito);
+                                                    }    
+                                                }    
+                                            }    
                                             if ($arCredito->getSaldo() <= 0)
                                             {
                                                $arCredito->setEstadoPagado(1); 
-                                            }        
+                                            }
+                                            $arPagoCredito->setSeguro($seguro);
                                             $em->persist($arPagoDetalle);
                                             $em->persist($arCredito);
                                         }    
                                     }
-                                    
                                 }
-
                                 $intPagoConceptoSalario = 1; //Se debe traer de la base de datos
                                 $intPagoConceptoSalud = 3; //Se debe traer de la base de datos
                                 $intPagoConceptoPension = 4; //Se debe traer de la base de datos

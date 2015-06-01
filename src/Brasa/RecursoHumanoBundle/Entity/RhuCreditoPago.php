@@ -28,6 +28,11 @@ class RhuCreditoPago
     private $vrCuota = 0;
     
     /**
+     * @ORM\Column(name="seguro", type="float")
+     */
+    private $seguro = 0;
+    
+    /**
      * @ORM\Column(name="fecha_pago", type="date")
      */    
     private $fechaPago;
@@ -142,5 +147,29 @@ class RhuCreditoPago
     public function getTipoPago()
     {
         return $this->tipoPago;
+    }
+
+    /**
+     * Set seguro
+     *
+     * @param float $seguro
+     *
+     * @return RhuCreditoPago
+     */
+    public function setSeguro($seguro)
+    {
+        $this->seguro = $seguro;
+
+        return $this;
+    }
+
+    /**
+     * Get seguro
+     *
+     * @return float
+     */
+    public function getSeguro()
+    {
+        return $this->seguro;
     }
 }
