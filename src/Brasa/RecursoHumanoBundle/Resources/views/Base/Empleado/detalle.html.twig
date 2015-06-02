@@ -37,7 +37,7 @@
                     <td class="td-label">Telefono:</td>
                     <td class="td-in-well">{{ arEmpleado.telefono }}</td>
                     <td class="td-label">Ciudad:</td>
-                    <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre|default('SIN CIUDAD') }}</td>                    
+                    <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre|default('ERROR') }}</td>                    
                 </tr>                
                 <tr>
                     <td class="td-label">Estado civil:</td>
@@ -56,13 +56,37 @@
                     <td class="td-in-well">{{ arEmpleado.correo }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label"></td>
-                    <td class="td-in-well"></td>                    
+                    <td class="td-label">Tipo pension:</td>
+                    <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('ERROR') }}</td>                    
                     <td class="td-label">Cargo:</td>
                     <td class="td-in-well">{{ arEmpleado.cargoRel.nombre|default('ERROR') }}</td>
                     <td class="td-label">Descripcion cargo:</td>
                     <td class="td-in-well">{{ arEmpleado.cargoDescripcion }}</td>
                 </tr>                
+                <tr>
+                    <td class="td-label">Entidad pension:</td>
+                    <td class="td-in-well">{{ arEmpleado.entidadPensionRel.nombre|default('ERROR') }}</td>                    
+                    <td class="td-label"></td>
+                    <td class="td-in-well"></td>
+                    <td class="td-label"></td>
+                    <td class="td-in-well"></td>
+                </tr>                
+                <tr>
+                    <td class="td-label">Entidad salud:</td>
+                    <td class="td-in-well">{{ arEmpleado.entidadSaludRel.nombre|default('ERROR') }}</td>                    
+                    <td class="td-label"></td>
+                    <td class="td-in-well"></td>
+                    <td class="td-label"></td>
+                    <td class="td-in-well"></td>
+                </tr>                
+                <tr>
+                    <td class="td-label">Caja compensacion:</td>
+                    <td class="td-in-well">{{ arEmpleado.entidadCajaRel.nombre|default('ERROR') }}</td>                    
+                    <td class="td-label"></td>
+                    <td class="td-in-well"></td>
+                    <td class="td-label"></td>
+                    <td class="td-in-well"></td>
+                </tr>                 
                 <tr>
                     <td colspan="8">Comentarios: {{ arEmpleado.comentarios }}</td>
                 </tr>
@@ -265,7 +289,7 @@
 
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a class="btn btn-default" href="{{ path('brs_rhu_base_empleados_lista') }}" style="float:left">Volver</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_lista') }}" style="float:left">Volver</a>
             </div>
         </div>
         <br /><br />

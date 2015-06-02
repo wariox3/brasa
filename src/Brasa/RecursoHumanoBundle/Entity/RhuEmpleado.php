@@ -152,6 +152,16 @@ class RhuEmpleado
      */    
     private $codigoEntidadPensionFk;    
     
+    /**
+     * @ORM\Column(name="codigo_tipo_pension_fk", type="integer", nullable=true)
+     */    
+    private $codigoTipoPensionFk;     
+
+    /**
+     * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadCajaFk;     
+    
     /**     
      * @ORM\Column(name="estado_activo", type="boolean")
      */    
@@ -239,6 +249,12 @@ class RhuEmpleado
      * @ORM\JoinColumn(name="codigo_entidad_pension_fk", referencedColumnName="codigo_entidad_pension_pk")
      */
     protected $entidadPensionRel;     
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadCaja", inversedBy="empleadosEntidadCajaRel")
+     * @ORM\JoinColumn(name="codigo_entidad_caja_fk", referencedColumnName="codigo_entidad_caja_pk")
+     */
+    protected $entidadCajaRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuTipoTiempo", inversedBy="empleadosTipoTiempoRel")
@@ -257,6 +273,12 @@ class RhuEmpleado
      * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
      */
     protected $cargoRel;        
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuTipoPension", inversedBy="empleadosTipoPensionRel")
+     * @ORM\JoinColumn(name="codigo_tipo_pension_fk", referencedColumnName="codigo_tipo_pension_pk")
+     */
+    protected $tipoPensionRel;         
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="empleadoRel")
@@ -1657,5 +1679,101 @@ class RhuEmpleado
     public function getProgramacionesPagosDetallesEmpleadoRel()
     {
         return $this->programacionesPagosDetallesEmpleadoRel;
+    }
+
+    /**
+     * Set codigoTipoPensionFk
+     *
+     * @param integer $codigoTipoPensionFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoTipoPensionFk($codigoTipoPensionFk)
+    {
+        $this->codigoTipoPensionFk = $codigoTipoPensionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoPensionFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoPensionFk()
+    {
+        return $this->codigoTipoPensionFk;
+    }
+
+    /**
+     * Set tipoPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tipoPensionRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setTipoPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tipoPensionRel = null)
+    {
+        $this->tipoPensionRel = $tipoPensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPensionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension
+     */
+    public function getTipoPensionRel()
+    {
+        return $this->tipoPensionRel;
+    }
+
+    /**
+     * Set codigoEntidadCajaFk
+     *
+     * @param integer $codigoEntidadCajaFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoEntidadCajaFk($codigoEntidadCajaFk)
+    {
+        $this->codigoEntidadCajaFk = $codigoEntidadCajaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadCajaFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadCajaFk()
+    {
+        return $this->codigoEntidadCajaFk;
+    }
+
+    /**
+     * Set entidadCajaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel = null)
+    {
+        $this->entidadCajaRel = $entidadCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCajaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja
+     */
+    public function getEntidadCajaRel()
+    {
+        return $this->entidadCajaRel;
     }
 }

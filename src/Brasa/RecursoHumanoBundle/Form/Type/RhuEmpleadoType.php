@@ -26,6 +26,10 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
                 'property' => 'nombre',
             ))  
+            ->add('entidadCajaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadCaja',
+                'property' => 'nombre',
+            ))                 
             ->add('estadoCivilRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEstadoCivil',
                 'property' => 'nombre',

@@ -54,9 +54,9 @@ class RhuPagoRepository extends EntityRepository {
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
         $douArp = ($douIngresoBaseCotizacion * $arPago->getEmpleadoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
-        $douPension = ($douIngresoBaseCotizacion * 12) / 100; // este porcentaje debe parametrizarse en configuracion
-        $douCaja = ($douSalario * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
-        $douCesantias = (($douSalario + $douAuxilioTransporte) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
+        $douPension = ($douIngresoBaseCotizacion * $arPago->getEmpleadoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
+        $douCaja = ($douIngresoBaseCotizacion * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
+        $douCesantias = (($douIngresoBaseCotizacion + $douAuxilioTransporte) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
         $douVacaciones = ($douSalario * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
         $douTotalEjercicio = $douSalario+$douAdicionTiempo+$douAdicionValor+$douAuxilioTransporte+$douArp+$douPension+$douCaja+$douCesantias+$douVacaciones;
         if($arPago->getCentroCostoRel()->getPorcentajeAdministracion() != 0 ) {

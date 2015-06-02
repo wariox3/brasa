@@ -41,7 +41,7 @@ class ContratosController extends Controller
             $arEmpleado->setClasificacionRiesgoRel($arContrato->getClasificacionRiesgoRel());
             $arEmpleado->setCargoRel($arContrato->getCargoRel());
             $arEmpleado->setCargoDescripcion($arContrato->getCargoDescripcion());
-            
+            $arEmpleado->setTipoPensionRel($arContrato->getTipoPensionRel());
             $em->persist($arEmpleado);
             $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";

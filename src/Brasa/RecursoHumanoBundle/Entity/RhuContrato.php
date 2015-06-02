@@ -36,6 +36,11 @@ class RhuContrato
      * @ORM\Column(name="codigo_tipo_tiempo_fk", type="integer", nullable=true)
      */    
     private $codigoTipoTiempoFk;    
+
+    /**
+     * @ORM\Column(name="codigo_tipo_pension_fk", type="integer", nullable=true)
+     */    
+    private $codigoTipoPensionFk;    
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -128,6 +133,11 @@ class RhuContrato
      */
     protected $cargoRel;    
     
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuTipoPension", inversedBy="contratosTipoPensionRel")
+     * @ORM\JoinColumn(name="codigo_tipo_pension_fk", referencedColumnName="codigo_tipo_pension_pk")
+     */
+    protected $tipoPensionRel;     
 
 
     /**
@@ -642,5 +652,53 @@ class RhuContrato
     public function getCargoRel()
     {
         return $this->cargoRel;
+    }
+
+    /**
+     * Set codigoTipoPensionFk
+     *
+     * @param integer $codigoTipoPensionFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoTipoPensionFk($codigoTipoPensionFk)
+    {
+        $this->codigoTipoPensionFk = $codigoTipoPensionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoPensionFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoPensionFk()
+    {
+        return $this->codigoTipoPensionFk;
+    }
+
+    /**
+     * Set tipoPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tipoPensionRel
+     *
+     * @return RhuContrato
+     */
+    public function setTipoPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tipoPensionRel = null)
+    {
+        $this->tipoPensionRel = $tipoPensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPensionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension
+     */
+    public function getTipoPensionRel()
+    {
+        return $this->tipoPensionRel;
     }
 }
