@@ -85,28 +85,46 @@ class CreditosController extends Controller
                             ->setCellValue('D1', 'Empleado')
                             ->setCellValue('E1', 'Valor_Credito')
                             ->setCellValue('F1', 'Valor_Cuota')
-                            ->setCellValue('G1', 'Cuotas')
-                            ->setCellValue('H1', 'Cuota_Actual')
-                            ->setCellValue('I1', 'Estado_Credito')
-                            ->setCellValue('J1', 'Aprobado');
+                            ->setCellValue('G1', 'Valor_Seguro')
+                            ->setCellValue('H1', 'Valor_Pagar')
+                            ->setCellValue('I1', 'Cuotas')
+                            ->setCellValue('J1', 'Cuota_Actual')
+                            ->setCellValue('K1', 'Estado_Credito')
+                            ->setCellValue('L1', 'Aprobado');
 
                 $i = 2;
                 $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findAll();
                 
-                
                 foreach ($arCreditos as $arCredito) {
+                    if ($arCredito->getEstadoPagado() == 1)
+                    {
+                        $Estado = "PAGADO";
+                    }
+                    else
+                    {
+                        $Estado = "PENDIENTE"; 
+                    }
+                    if ($arCredito->getAprobado() == 1)
+                    {
+                        $Aprobado = "SI";
+                    }
+                    else
+                    {
+                        $Aprobado = "NO"; 
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
                             ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
                             ->setCellValue('C' . $i, $arCredito->getFecha())
-                            //->setCellValue('C' . $i, PHPExcel_Shared_Date::PHPToExcel( $arCredito->getFecha() ))
                             ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('E' . $i, $arCredito->getVrPagar())
-                            ->setCellValue('F' . $i, $arCredito->getVrCuota())
-                            ->setCellValue('G' . $i, $arCredito->getNumeroCuotas())
-                            ->setCellValue('H' . $i, $arCredito->getNumeroCuotaActual())
-                            ->setCellValue('I' . $i, $arCredito->getEstadoPagado())
-                            ->setCellValue('J' . $i, $arCredito->getAprobado());
+                            ->setCellValue('F' . $i, $arCredito->getVrCuota() - $arCredito->getSeguro())
+                            ->setCellValue('G' . $i, $arCredito->getSeguro())
+                            ->setCellValue('H' . $i, $arCredito->getVrCuota())
+                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotas())
+                            ->setCellValue('J' . $i, $arCredito->getNumeroCuotaActual())
+                            ->setCellValue('K' . $i, $Estado)
+                            ->setCellValue('L' . $i, $Aprobado);
                     $i++;
                 }
 
@@ -127,6 +145,11 @@ class CreditosController extends Controller
                 $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
                 $objWriter->save('php://output');
                 exit;
+            }
+            
+            if($form->get('BtnPdf')->isClicked()) {
+                $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCredito();
+                $objFormatoPago->Generar($this);
             }
             
         }
@@ -193,8 +216,8 @@ class CreditosController extends Controller
         if($form->isValid()) {
                       
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoHojaVida = new \Brasa\RecursoHumanoBundle\Formatos\FormatoHojaVida();
-                $objFormatoHojaVida->Generar($this, $codigoCreditoFk);
+                $objFormatoDetalleCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleCredito();
+                $objFormatoDetalleCredito->Generar($this, $codigoCreditoFk);
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Creditos:detalle.html.twig', array(
