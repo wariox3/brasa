@@ -118,6 +118,16 @@ class RhuEmpleado
     private $codigoCentroCostoFk;           
     
     /**
+     * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCargoFk;    
+    
+    /**
+     * @ORM\Column(name="cargo_descripcion", type="string", length=60, nullable=true)
+     */    
+    private $cargoDescripcion;      
+    
+    /**
      * @ORM\Column(name="auxilio_transporte", type="boolean")
      */    
     private $auxilioTransporte = 0;     
@@ -237,6 +247,18 @@ class RhuEmpleado
     protected $tipoTiempoRel;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuEmpleadosCiudadRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="empleadosCargoRel")
+     * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
+     */
+    protected $cargoRel;        
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="empleadoRel")
      */
     protected $pagosEmpleadoRel;    
@@ -271,7 +293,6 @@ class RhuEmpleado
      */
     protected $programacionesPagosDetallesEmpleadoRel;     
     
-
     /**
      * Constructor
      */
@@ -283,6 +304,7 @@ class RhuEmpleado
         $this->incapacidadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->programacionesPagosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -773,6 +795,54 @@ class RhuEmpleado
     public function getCodigoCentroCostoFk()
     {
         return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set codigoCargoFk
+     *
+     * @param integer $codigoCargoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoCargoFk($codigoCargoFk)
+    {
+        $this->codigoCargoFk = $codigoCargoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCargoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCargoFk()
+    {
+        return $this->codigoCargoFk;
+    }
+
+    /**
+     * Set cargoDescripcion
+     *
+     * @param string $cargoDescripcion
+     *
+     * @return RhuEmpleado
+     */
+    public function setCargoDescripcion($cargoDescripcion)
+    {
+        $this->cargoDescripcion = $cargoDescripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoDescripcion
+     *
+     * @return string
+     */
+    public function getCargoDescripcion()
+    {
+        return $this->cargoDescripcion;
     }
 
     /**
@@ -1301,6 +1371,54 @@ class RhuEmpleado
     public function getTipoTiempoRel()
     {
         return $this->tipoTiempoRel;
+    }
+
+    /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
+    }
+
+    /**
+     * Set cargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
+    {
+        $this->cargoRel = $cargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargo
+     */
+    public function getCargoRel()
+    {
+        return $this->cargoRel;
     }
 
     /**

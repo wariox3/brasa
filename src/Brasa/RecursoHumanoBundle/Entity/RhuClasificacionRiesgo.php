@@ -33,6 +33,11 @@ class RhuClasificacionRiesgo
     protected $empleadosClasificacionRiesgoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="clasificacionRiesgoRel")
+     */
+    protected $contratosClasificacionRiesgoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -130,5 +135,39 @@ class RhuClasificacionRiesgo
     public function getPorcentaje()
     {
         return $this->porcentaje;
+    }
+
+    /**
+     * Add contratosClasificacionRiesgoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosClasificacionRiesgoRel
+     *
+     * @return RhuClasificacionRiesgo
+     */
+    public function addContratosClasificacionRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosClasificacionRiesgoRel)
+    {
+        $this->contratosClasificacionRiesgoRel[] = $contratosClasificacionRiesgoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosClasificacionRiesgoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosClasificacionRiesgoRel
+     */
+    public function removeContratosClasificacionRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosClasificacionRiesgoRel)
+    {
+        $this->contratosClasificacionRiesgoRel->removeElement($contratosClasificacionRiesgoRel);
+    }
+
+    /**
+     * Get contratosClasificacionRiesgoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosClasificacionRiesgoRel()
+    {
+        return $this->contratosClasificacionRiesgoRel;
     }
 }

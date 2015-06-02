@@ -53,8 +53,8 @@ class RhuPagoRepository extends EntityRepository {
         }
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
-        $douArp = ($douSalario * $arPago->getEmpleadoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
-        $douPension = ($douSalario * 12) / 100; // este porcentaje debe parametrizarse en configuracion
+        $douArp = ($douIngresoBaseCotizacion * $arPago->getEmpleadoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
+        $douPension = ($douIngresoBaseCotizacion * 12) / 100; // este porcentaje debe parametrizarse en configuracion
         $douCaja = ($douSalario * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
         $douCesantias = (($douSalario + $douAuxilioTransporte) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
         $douVacaciones = ($douSalario * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
@@ -122,4 +122,12 @@ class RhuPagoRepository extends EntityRepository {
         }
         $em->flush();
     }
+    
+    public function pendienteCobrar($codigoCentroCosto) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.estadoCobrado = 0 "
+                . " AND p.codigoCentroCostoFk = " . $codigoCentroCosto;
+        return $dql;
+    }                        
+    
 }

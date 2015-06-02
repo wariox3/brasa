@@ -86,6 +86,11 @@ class GenCiudad
     protected $rhuSeleccionesCiudadRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="ciudadRel")
+     */
+    protected $rhuEmpleadosCiudadRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -514,5 +519,39 @@ class GenCiudad
     public function getRhuSeleccionesCiudadRel()
     {
         return $this->rhuSeleccionesCiudadRel;
+    }
+
+    /**
+     * Add rhuEmpleadosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuEmpleadosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel)
+    {
+        $this->rhuEmpleadosCiudadRel[] = $rhuEmpleadosCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuEmpleadosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel
+     */
+    public function removeRhuEmpleadosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel)
+    {
+        $this->rhuEmpleadosCiudadRel->removeElement($rhuEmpleadosCiudadRel);
+    }
+
+    /**
+     * Get rhuEmpleadosCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuEmpleadosCiudadRel()
+    {
+        return $this->rhuEmpleadosCiudadRel;
     }
 }

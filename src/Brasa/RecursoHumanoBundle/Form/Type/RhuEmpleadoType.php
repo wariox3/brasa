@@ -3,6 +3,7 @@ namespace Brasa\RecursoHumanoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Doctrine\ORM\EntityRepository;
 
 class RhuEmpleadoType extends AbstractType
 {
@@ -25,11 +26,21 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
                 'property' => 'nombre',
             ))  
-            ->add('clasificacionRiesgoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
+            ->add('estadoCivilRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEstadoCivil',
                 'property' => 'nombre',
-            ))                 
-            ->add('nombreCorto', 'text', array('required' => true))
+            ))                
+            ->add('ciudadRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCiudad',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->where('c.codigoDepartamentoFk = :codigoDepartamento')
+                    ->setParameter('codigoDepartamento', 5)
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true)) 
+            ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))                                                        
+            ->add('fechaNacimiento', 'date', array('required' => true, 'widget' => 'single_text'))            
             ->add('nombre1', 'text', array('required' => true))
             ->add('nombre2', 'text', array('required' => false))
             ->add('apellido1', 'text', array('required' => true))
@@ -37,6 +48,8 @@ class RhuEmpleadoType extends AbstractType
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
             ->add('direccion', 'text', array('required' => false))
+            ->add('barrio', 'text', array('required' => false))
+            ->add('correo', 'text', array('required' => false))
             ->add('cuenta', 'text', array('required' => true))
             ->add('numeroIdentificacion', 'text', array('required' => true))            
             ->add('auxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))

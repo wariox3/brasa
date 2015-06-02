@@ -43,6 +43,26 @@ class RhuFactura
     private $VrNeto = 0;    
 
     /**
+     * @ORM\Column(name="vr_retencion_fuente", type="float")
+     */
+    private $VrRetencionFuente = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_retencion_cree", type="float")
+     */
+    private $VrRetencionCree = 0;    
+
+    /**
+     * @ORM\Column(name="vr_retencion_iva", type="float")
+     */
+    private $VrRetencionIva = 0;        
+    
+    /**
+     * @ORM\Column(name="vr_iva", type="float")
+     */
+    private $VrIva = 0;    
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;    
@@ -363,5 +383,101 @@ class RhuFactura
     public function getFacturasDetallesFacturaRel()
     {
         return $this->facturasDetallesFacturaRel;
+    }
+
+    /**
+     * Set vrRetencionFuente
+     *
+     * @param float $vrRetencionFuente
+     *
+     * @return RhuFactura
+     */
+    public function setVrRetencionFuente($vrRetencionFuente)
+    {
+        $this->VrRetencionFuente = $vrRetencionFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get vrRetencionFuente
+     *
+     * @return float
+     */
+    public function getVrRetencionFuente()
+    {
+        return $this->VrRetencionFuente;
+    }
+
+    /**
+     * Set vrRetencionCree
+     *
+     * @param float $vrRetencionCree
+     *
+     * @return RhuFactura
+     */
+    public function setVrRetencionCree($vrRetencionCree)
+    {
+        $this->VrRetencionCree = $vrRetencionCree;
+
+        return $this;
+    }
+
+    /**
+     * Get vrRetencionCree
+     *
+     * @return float
+     */
+    public function getVrRetencionCree()
+    {
+        return $this->VrRetencionCree;
+    }
+
+    /**
+     * Set vrRetencionIva
+     *
+     * @param float $vrRetencionIva
+     *
+     * @return RhuFactura
+     */
+    public function setVrRetencionIva($vrRetencionIva)
+    {
+        $this->VrRetencionIva = $vrRetencionIva;
+
+        return $this;
+    }
+
+    /**
+     * Get vrRetencionIva
+     *
+     * @return float
+     */
+    public function getVrRetencionIva()
+    {
+        return $this->VrRetencionIva;
+    }
+
+    /**
+     * Set vrIva
+     *
+     * @param float $vrIva
+     *
+     * @return RhuFactura
+     */
+    public function setVrIva($vrIva)
+    {
+        $this->VrIva = $vrIva;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIva
+     *
+     * @return float
+     */
+    public function getVrIva()
+    {
+        return $this->VrIva;
     }
 }

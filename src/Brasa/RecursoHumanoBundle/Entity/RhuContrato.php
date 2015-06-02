@@ -18,6 +18,16 @@ class RhuContrato
     private $codigoContratoPk;        
     
     /**
+     * @ORM\Column(name="codigo_contrato_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoTipoFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_clasificacion_riesgo_fk", type="integer", nullable=true)
+     */    
+    private $codigoClasificacionRiesgoFk;    
+    
+    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;     
@@ -46,6 +56,16 @@ class RhuContrato
      * @ORM\Column(name="numero", type="string", length=30, nullable=true)
      */    
     private $numero;     
+    
+    /**
+     * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCargoFk;    
+    
+    /**
+     * @ORM\Column(name="cargo_descripcion", type="string", length=60, nullable=true)
+     */    
+    private $cargoDescripcion;    
     
     /**
      * @ORM\Column(name="vr_salario", type="float")
@@ -90,6 +110,24 @@ class RhuContrato
      */
     protected $centroCostoRel;     
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContratoTipo", inversedBy="contratosContratoTipoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_tipo_fk", referencedColumnName="codigo_contrato_tipo_pk")
+     */
+    protected $contratoTipoRel;     
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="contratosClasificacionRiesgoRel")
+     * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
+     */
+    protected $clasificacionRiesgoRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="contratosCargoRel")
+     * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
+     */
+    protected $cargoRel;    
+    
 
 
     /**
@@ -100,6 +138,54 @@ class RhuContrato
     public function getCodigoContratoPk()
     {
         return $this->codigoContratoPk;
+    }
+
+    /**
+     * Set codigoContratoTipoFk
+     *
+     * @param integer $codigoContratoTipoFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoContratoTipoFk($codigoContratoTipoFk)
+    {
+        $this->codigoContratoTipoFk = $codigoContratoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoTipoFk()
+    {
+        return $this->codigoContratoTipoFk;
+    }
+
+    /**
+     * Set codigoClasificacionRiesgoFk
+     *
+     * @param integer $codigoClasificacionRiesgoFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoClasificacionRiesgoFk($codigoClasificacionRiesgoFk)
+    {
+        $this->codigoClasificacionRiesgoFk = $codigoClasificacionRiesgoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClasificacionRiesgoFk
+     *
+     * @return integer
+     */
+    public function getCodigoClasificacionRiesgoFk()
+    {
+        return $this->codigoClasificacionRiesgoFk;
     }
 
     /**
@@ -247,6 +333,54 @@ class RhuContrato
     }
 
     /**
+     * Set codigoCargoFk
+     *
+     * @param integer $codigoCargoFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoCargoFk($codigoCargoFk)
+    {
+        $this->codigoCargoFk = $codigoCargoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCargoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCargoFk()
+    {
+        return $this->codigoCargoFk;
+    }
+
+    /**
+     * Set cargoDescripcion
+     *
+     * @param string $cargoDescripcion
+     *
+     * @return RhuContrato
+     */
+    public function setCargoDescripcion($cargoDescripcion)
+    {
+        $this->cargoDescripcion = $cargoDescripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoDescripcion
+     *
+     * @return string
+     */
+    public function getCargoDescripcion()
+    {
+        return $this->cargoDescripcion;
+    }
+
+    /**
      * Set vrSalario
      *
      * @param float $vrSalario
@@ -343,6 +477,30 @@ class RhuContrato
     }
 
     /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -391,30 +549,6 @@ class RhuContrato
     }
 
     /**
-     * Set codigoCentroCostoFk
-     *
-     * @param integer $codigoCentroCostoFk
-     *
-     * @return RhuContrato
-     */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
-    {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoFk()
-    {
-        return $this->codigoCentroCostoFk;
-    }
-
-    /**
      * Set centroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
@@ -436,5 +570,77 @@ class RhuContrato
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Set contratoTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoTipo $contratoTipoRel
+     *
+     * @return RhuContrato
+     */
+    public function setContratoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoTipo $contratoTipoRel = null)
+    {
+        $this->contratoTipoRel = $contratoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContratoTipo
+     */
+    public function getContratoTipoRel()
+    {
+        return $this->contratoTipoRel;
+    }
+
+    /**
+     * Set clasificacionRiesgoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
+     *
+     * @return RhuContrato
+     */
+    public function setClasificacionRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel = null)
+    {
+        $this->clasificacionRiesgoRel = $clasificacionRiesgoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clasificacionRiesgoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo
+     */
+    public function getClasificacionRiesgoRel()
+    {
+        return $this->clasificacionRiesgoRel;
+    }
+
+    /**
+     * Set cargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
+     *
+     * @return RhuContrato
+     */
+    public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
+    {
+        $this->cargoRel = $cargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargo
+     */
+    public function getCargoRel()
+    {
+        return $this->cargoRel;
     }
 }

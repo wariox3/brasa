@@ -38,6 +38,10 @@ class ContratosController extends Controller
             $arEmpleado->setVrSalario($arContrato->getVrSalario());
             $arEmpleado->setFechaContrato($arContrato->getFechaDesde());
             $arEmpleado->setFechaFinalizaContrato($arContrato->getFechaHasta());
+            $arEmpleado->setClasificacionRiesgoRel($arContrato->getClasificacionRiesgoRel());
+            $arEmpleado->setCargoRel($arContrato->getCargoRel());
+            $arEmpleado->setCargoDescripcion($arContrato->getCargoDescripcion());
+            
             $em->persist($arEmpleado);
             $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";

@@ -87,6 +87,11 @@
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>ID</th>
+                            <th>NOMBRE</th>
+                            <th>CELULAR</th>
+                            <th>TELEFONO</th>
+                            <th>DIRECCION</th>
+                            <th>VERIFICADA</th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arSeleccionReferencias in arSeleccionReferencias %}
@@ -95,6 +100,11 @@
                                 <input type="hidden" name="LblCodigo[]" value="{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}">
                                 <span class="badge">{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}</span>
                             </td>
+                            <td>{{ arSeleccionReferencias.nombreCorto }}</td>
+                            <td>{{ arSeleccionReferencias.celular }}</td>
+                            <td>{{ arSeleccionReferencias.telefono }}</td>
+                            <td>{{ arSeleccionReferencias.direccion }}</td>
+                            <td {% if arSeleccionReferencias.estadoVerificada == 1 %}class="success"{% endif %}>{% if arSeleccionReferencias.estadoVerificada == 1 %} SI {% else %} NO {% endif %}</td>
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}" /></td>
                         </tr>
                         {% endfor %}
@@ -102,8 +112,8 @@
 
                     <!-- Botones Menu Items -->
                     <div class="btn-toolbar" style="float:right">
-                        <div class="btn-group">
-                            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_lista') }}" style="float:left">Volver</a>
+                        <div class="btn-group">                            
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionReferencia', 600, 900)" >Agregar</a>
                         </div>
                     </div>
                     <!-- Fin Botones Menu Items -->

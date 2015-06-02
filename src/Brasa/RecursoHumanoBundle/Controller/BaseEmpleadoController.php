@@ -229,6 +229,7 @@ class BaseEmpleadoController extends Controller
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             $arEmpleado = $form->getData();
+            $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());            
             $em->persist($arEmpleado);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {

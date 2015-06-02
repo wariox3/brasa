@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionReferenciaType;
 
 class SeleccionController extends Controller
 {
@@ -170,4 +171,30 @@ class SeleccionController extends Controller
                     'form' => $form->createView()
                     ));
     }            
+    
+    public function agregarReferenciaAction($codigoSeleccion) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+        $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+        $arSeleccionReferencia = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia();
+        $form = $this->createForm(new RhuSeleccionReferenciaType(), $arSeleccionReferencia);
+        $form->handleRequest($request);
+        if ($form->isValid()) {           
+            $arSeleccionReferencia = $form->getData();      
+            $arSeleccionReferencia->setSeleccionRel($arSeleccion);
+            $em->persist($arSeleccionReferencia);
+            $em->flush();
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_referencia', array('codigoSeleccion' => $codigoSeleccion)));
+            } else {
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            }
+
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:Seleccion:agregarReferencia.html.twig', array(
+            'form' => $form->createView()
+            ));
+    }       
 }

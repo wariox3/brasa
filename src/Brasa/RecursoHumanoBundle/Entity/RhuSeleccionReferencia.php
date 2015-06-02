@@ -23,6 +23,11 @@ class RhuSeleccionReferencia
     private $codigoSeleccionFk; 
     
     /**
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=true)
+     */    
+    private $numeroIdentificacion;     
+    
+    /**
      * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
      */    
     private $nombreCorto;    
@@ -41,6 +46,16 @@ class RhuSeleccionReferencia
      * @ORM\Column(name="direccion", type="string", length=30, nullable=true)
      */    
     private $direccion;         
+    
+    /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;    
+    
+    /**
+     * @ORM\Column(name="estado_verificada", type="boolean")
+     */    
+    private $estadoVerificada = 0;      
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccion", inversedBy="seleccionesReferenciasSeleccionRel")
@@ -200,5 +215,77 @@ class RhuSeleccionReferencia
     public function getSeleccionRel()
     {
         return $this->seleccionRel;
+    }
+
+    /**
+     * Set estadoVerificada
+     *
+     * @param boolean $estadoVerificada
+     *
+     * @return RhuSeleccionReferencia
+     */
+    public function setEstadoVerificada($estadoVerificada)
+    {
+        $this->estadoVerificada = $estadoVerificada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoVerificada
+     *
+     * @return boolean
+     */
+    public function getEstadoVerificada()
+    {
+        return $this->estadoVerificada;
+    }
+
+    /**
+     * Set numeroIdentificacion
+     *
+     * @param string $numeroIdentificacion
+     *
+     * @return RhuSeleccionReferencia
+     */
+    public function setNumeroIdentificacion($numeroIdentificacion)
+    {
+        $this->numeroIdentificacion = $numeroIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacion
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacion()
+    {
+        return $this->numeroIdentificacion;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuSeleccionReferencia
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 }

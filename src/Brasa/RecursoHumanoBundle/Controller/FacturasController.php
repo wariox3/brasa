@@ -125,63 +125,21 @@ class FacturasController extends Controller
         $form->handleRequest($request);        
         $arFactura = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
         $arFactura = $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->find($codigoFactura);
-        $arFacturaDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
-        $arFacturaDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));
-        if ($request->getMethod() == 'POST') {
+        if($form->isValid()) {
             $arrControles = $request->request->All();
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            $arrDescuentosFinancierosSeleccionados = $request->request->get('ChkSeleccionarDescuentoFinanciero');
-            switch ($request->request->get('OpSubmit')) {
-                case "OpGenerar";
-                    $strResultado = $em->getRepository('BrasaTransporteBundle:TteDespacho')->Generar($codigoDespacho);
-                    if ($strResultado != "") {
-                        $objMensaje->Mensaje("error", "No se genero el despacho: " . $strResultado, $this);
-                    }                        
-                    break;
-
-                case "OpAnular";
-                    $varAnular = $em->getRepository('BrasaTransporteBundle:TteDespacho')->Anular($codigoDespacho);
-                    if ($varAnular != "") {
-                        $objMensaje->Mensaje("error", "No se anulo el despacho: " . $varAnular, $this);
-                    }                        
-                    break;
-
-                case "OpImprimir";   
-                    $objFormatoManifiesto = new \Brasa\TransporteBundle\Formatos\FormatoManifiesto();
-                    $objFormatoManifiesto->Generar($this, $codigoDespacho);
-                    break;
-
-                case "OpRetirar";
-                    if (count($arrSeleccionados) > 0) {
-                        $intUnidades = $arDespacho->getCtUnidades();
-                        $intPesoReal = $arDespacho->getCtPesoReal();
-                        $intPesoVolumen = $arDespacho->getCtPesoVolumen();
-                        $intGuias = $arDespacho->getCtGuias();
-                        foreach ($arrSeleccionados AS $codigoGuia) {
-                            $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
-                            $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
-                            if($arGuia->getCodigoDespachoFk() != NULL) {
-                                $arGuia->setCodigoDespachoFk(NULL);
-                                $arGuia->setEstadoDespachada(0);                                
-                                $em->persist($arGuia);
-                                $em->flush(); 
-                                $intUnidades = $intUnidades - $arGuia->getCtUnidades();
-                                $intPesoReal = $intPesoReal - $arGuia->getCtPesoReal();
-                                $intPesoVolumen = $intPesoVolumen - $arGuia->getCtPesoVolumen();
-                                $intGuias = $intGuias - 1;                                  
-                            }                            
-                        }
-                        $arDespacho->setCtUnidades($intUnidades);
-                        $arDespacho->setCtPesoReal($intPesoReal);
-                        $arDespacho->setCtPesoVolumen($intPesoVolumen);
-                        $arDespacho->setCtGuias($intGuias);
-                        $em->persist($arDespacho);
-                        $em->flush();                        
+            if($form->get('BtnRetirarDetalle')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPago');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoFacturaDetalle) {
+                        $arFacturaDetalleEliminar = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetalle')->find($codigoFacturaDetalle);
+                        $em->remove($arFacturaDetalleEliminar);
                     }
-                    break;                                                          
+                    $em->flush();                    
+                }
             }
         }
-        
+        $arFacturaDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
+        $arFacturaDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));        
         return $this->render('BrasaRecursoHumanoBundle:Facturas:detalle.html.twig', array(
                     'arFactura' => $arFactura,
                     'arFacturaDetalles' => $arFacturaDetalles,

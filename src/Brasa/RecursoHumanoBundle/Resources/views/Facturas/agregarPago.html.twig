@@ -7,7 +7,7 @@
                 <tr>
                     <th>ID</th>
                     <th>EMPLEADO</th>                    
-                    <th style="text-align: right">SALARIO</th>
+                    <th style="text-align: right">IBC</th>
                     <th style="text-align: right">T. A</th>
                     <th style="text-align: right">V. A</th>
                     <th style="text-align: right">AUX. TRANS</th>
@@ -15,8 +15,6 @@
                     <th style="text-align: right">EPS</th>
                     <th style="text-align: right">PENSION</th>
                     <th style="text-align: right">CAJA</th>
-                    <th style="text-align: right">SENA</th>
-                    <th style="text-align: right">ICBF</th>
                     <th style="text-align: right">CESANTIAS</th>
                     <th style="text-align: right">VACACIONES</th>
                     <th style="text-align: right">ADMON</th>
@@ -27,7 +25,7 @@
                     <tr> 
                         <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }}</td>  
                         <td>{{ arPagos.empleadoRel.nombreCorto }}</td>                    
-                        <td style="text-align: right">{{ arPagos.VrSalario | number_format(2, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arPagos.VrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAdicionalTiempo | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAdicionalValor | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAuxilioTransporte | number_format(2, '.', ',') }}</td>
@@ -35,8 +33,6 @@
                         <td style="text-align: right">{{ arPagos.VrEps | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrPension | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrCaja | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arPagos.VrSena | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arPagos.VrIcbf | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrCesantias | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrVacaciones | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAdministracion | number_format(2, '.', ',') }}</td>

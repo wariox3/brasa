@@ -9,6 +9,14 @@ class RhuContratoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder      
+            ->add('contratoTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
+                'property' => 'nombre',
+            ))                 
+            ->add('clasificacionRiesgoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
+                'property' => 'nombre',
+            ))                 
             ->add('centroCostoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'property' => 'nombre',
@@ -24,10 +32,15 @@ class RhuContratoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuTipoTiempo',
                 'property' => 'nombre',
             )) 
+            ->add('cargoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
+                'property' => 'nombre',
+            ))                            
             ->add('fechaDesde', 'date', array('required' => true)) 
             ->add('fechaHasta', 'date', array('required' => true)) 
             ->add('vrSalario', 'number', array('required' => true))  
             ->add('numero', 'text', array('required' => true))                                           
+            ->add('cargoDescripcion', 'text', array('required' => true))                                                                       
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('estadoActivo', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                
             ->add('guardar', 'submit');        
