@@ -44,25 +44,31 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">            
             <tr>
                 <th>{{ knp_pagination_sortable(arSelecciones, 'ID', 'e.codigoSeleccionPk') }}</th>
+                <th>TIPO</th>
                 <th>IDENTIFICACION</th>
                 <th>{{ knp_pagination_sortable(arSelecciones, 'NOMBRE', 'e.nombreCorto') }}</th>                                                
                 <th>CENTRO COSTO</th>
                 <th>PRUEBAS</th>
-                <th>TELEFONO</th>                
+                <th>TELEFONO</th>
+                <th>CELULAR</th>
                 <th>AP</th>                
                 <th style="text-align: center"></th>                
+                <th></th>
                 <th></th>
             </tr>
             {% for arSelecciones in arSelecciones %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arSelecciones.codigoSeleccionPk }}">{{ arSelecciones.codigoSeleccionPk }} </td>
+                <td>{{ arSelecciones.seleccionTipoRel.nombre  }}</td>
                 <td>{{ arSelecciones.numeroIdentificacion  }}</td>
                 <td>{{ arSelecciones.nombreCorto  }}</td>
                 <td>{{ arSelecciones.centroCostoRel.nombre  }}</td>
                 <td>{{ arSelecciones.fechaPruebas |date("Y/m/d H:i")  }}</td>
                 <td>{{ arSelecciones.telefono }}</td>                                               
+                <td>{{ arSelecciones.celular }}</td>                                               
                 <td>{% if arSelecciones.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td style="text-align: center"><a href="{{ path('brs_rhu_seleccion_nuevo', { 'codigoSeleccion':  arSelecciones.codigoSeleccionPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                                
+                <td style="text-align: center"><a href="{{ path('brs_rhu_seleccion_detalle', { 'codigoSeleccion': arSelecciones.codigoSeleccionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSelecciones.codigoSeleccionPk }}" /></td>
             </tr>
             {% endfor %}                        

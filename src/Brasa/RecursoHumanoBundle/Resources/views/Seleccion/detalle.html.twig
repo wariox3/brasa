@@ -1,0 +1,127 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+<div class="container">
+    <div class="page-header">
+        <h3>Proceso seleccion {{ arSeleccion.codigoSeleccionPk }}</h3>
+    </div>
+
+    <!-- Encabezado Movimiento -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Informacion seleccion</div>
+      <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="td-label">Codigo:</td>
+                    <td class="td-in-well">{{ arSeleccion.codigoSeleccionPk }}</td>
+                    <td class="td-label">Tipo:</td>
+                    <td class="td-in-well">{{ arSeleccion.seleccionTipoRel.nombre }}</td>
+                    <td class="td-label">Direccion:</td>
+                    <td class="td-in-well">{{ arSeleccion.direccion }}</td>
+                </tr>
+                <tr>
+                    <td class="td-label">Nombre:</td>
+                    <td class="td-in-well">{{ arSeleccion.nombreCorto }}</td>
+                    <td class="td-label">Celular:</td>
+                    <td class="td-in-well">{{ arSeleccion.celular }}</td>
+                    <td class="td-label">Barrio</td>
+                    <td class="td-in-well">{{ arSeleccion.Barrio }}</td>
+                </tr>
+                <tr>
+                    <td class="td-label">Identificacion:</td>
+                    <td class="td-in-well">{{ arSeleccion.numeroIdentificacion }}</td>
+                    <td class="td-label">Telefono:</td>
+                    <td class="td-in-well">{{ arSeleccion.telefono }}</td>
+                    <td class="td-label">Ciudad:</td>
+                    <td class="td-in-well">{{ arSeleccion.ciudadRel.nombre }}</td>                    
+                </tr>                
+                <tr>
+                    <td class="td-label">Estado civil:</td>
+                    <td class="td-in-well">{{ arSeleccion.estadoCivilRel.nombre }}</td>                    
+                    <td class="td-label">Sexo:</td>
+                    <td class="td-in-well">{{ arSeleccion.codigoSexoFk }}</td>
+                    <td class="td-label">Barrio:</td>
+                    <td class="td-in-well">{{ arSeleccion.Barrio }}</td>
+                </tr>                
+                <tr>
+                    <td class="td-label">Fecha nacimiento:</td>
+                    <td class="td-in-well">{{ arSeleccion.fechaNacimiento|date("Y/m/d") }}</td>                    
+                    <td class="td-label">Fecha pruebas:</td>
+                    <td class="td-in-well">{{ arSeleccion.fechaPruebas|date("Y/m/d H:i") }}</td>
+                    <td class="td-label">Correo:</td>
+                    <td class="td-in-well">{{ arSeleccion.correo }}</td>
+                </tr>                
+                <tr>
+                    <td colspan="8">Comentarios: {{ arSeleccion.comentarios }}</td>
+                </tr>
+            </table>
+      </div>
+    </div>
+
+    <!-- Fin Encabezado Movimiento -->
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">                
+                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoArchivoTipo': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Documentos</a>                        
+            </div>
+        </div>
+            
+    <br /><br />
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#referencias" data-toggle="tab">Referencias</a></li>
+        <li><a href="#pruebas" data-toggle="tab">Pruebas</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="referencias">
+                <!-- Menu Encabezado Movimiento -->
+                <div id="detalles" style="width: 100%"><br>
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>ID</th>
+                            <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                        </tr>
+                        {% for arSeleccionReferencias in arSeleccionReferencias %}
+                        <tr>
+                            <td>
+                                <input type="hidden" name="LblCodigo[]" value="{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}">
+                                <span class="badge">{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}</span>
+                            </td>
+                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}" /></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+                    <!-- Botones Menu Items -->
+                    <div class="btn-toolbar" style="float:right">
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_lista') }}" style="float:left">Volver</a>
+                        </div>
+                    </div>
+                    <!-- Fin Botones Menu Items -->
+
+                    <br/><br/>
+                    <hr/>
+                </div>
+
+        </div>
+        <div class="tab-pane" id="pruebas">
+
+        </div>
+    </div>            
+            
+            
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+    <br /><br /><br />
+    <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_seleccion_lista') }}">Volver</a>
+</div>
+{% endblock %}

@@ -14,7 +14,6 @@ class GenCiudad
     /**
      * @ORM\Id
      * @ORM\Column(name="codigo_ciudad_pk", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoCiudadPk;
 
@@ -30,7 +29,7 @@ class GenCiudad
     private $codigoDepartamentoFk;     
 
     /**
-     * @ORM\Column(name="codigo_ruta_predeterminada_fk", type="integer")
+     * @ORM\Column(name="codigo_ruta_predeterminada_fk", type="integer", nullable=true)
      */
     private $codigoRutaPredeterminadaFk;    
     
@@ -81,6 +80,10 @@ class GenCiudad
      */
     protected $puntosOperacionCiudadOrigenRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuSeleccion", mappedBy="ciudadRel")
+     */
+    protected $rhuSeleccionesCiudadRel;     
     
     /**
      * Constructor
@@ -88,12 +91,28 @@ class GenCiudad
     public function __construct()
     {
         $this->tercerosDireccionesRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->guiasRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->guiasCiudadOrigenRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->guiasCiudadDestinoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lpdCiudadDestinoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->despachosCiudadOrigenRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->despachosCiudadDestinoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->puntosOperacionCiudadOrigenRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuSeleccionesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Set codigoCiudadPk
+     *
+     * @param integer $codigoCiudadPk
+     *
+     * @return GenCiudad
+     */
+    public function setCodigoCiudadPk($codigoCiudadPk)
+    {
+        $this->codigoCiudadPk = $codigoCiudadPk;
 
+        return $this;
+    }
 
     /**
      * Get codigoCiudadPk
@@ -461,5 +480,39 @@ class GenCiudad
     public function getPuntosOperacionCiudadOrigenRel()
     {
         return $this->puntosOperacionCiudadOrigenRel;
+    }
+
+    /**
+     * Add rhuSeleccionesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuSeleccionesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadRel)
+    {
+        $this->rhuSeleccionesCiudadRel[] = $rhuSeleccionesCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuSeleccionesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadRel
+     */
+    public function removeRhuSeleccionesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadRel)
+    {
+        $this->rhuSeleccionesCiudadRel->removeElement($rhuSeleccionesCiudadRel);
+    }
+
+    /**
+     * Get rhuSeleccionesCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuSeleccionesCiudadRel()
+    {
+        return $this->rhuSeleccionesCiudadRel;
     }
 }

@@ -15,12 +15,17 @@ class RhuSeleccion
      * @ORM\Column(name="codigo_seleccion_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoSeleccionPk;
+    private $codigoSeleccionPk;        
+    
+    /**
+     * @ORM\Column(name="codigo_seleccion_tipo_fk", type="integer")
+     */    
+    private $codigoSeleccionTipoFk;     
     
     /**
      * @ORM\Column(name="codigo_tipo_identificacion_fk", type="string", length=1, nullable=true)
      */    
-    private $codigoTipoIdentificacionFk;     
+    private $codigoTipoIdentificacionFk;         
     
     /**
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
@@ -65,7 +70,7 @@ class RhuSeleccion
     /**
      * @ORM\Column(name="direccion", type="string", length=30, nullable=true)
      */    
-    private $direccion; 
+    private $direccion;         
     
     /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
@@ -118,6 +123,12 @@ class RhuSeleccion
     private $fecha_pruebas;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionTipo", inversedBy="seleccionesSeleccionTipoRel")
+     * @ORM\JoinColumn(name="codigo_seleccion_tipo_fk", referencedColumnName="codigo_seleccion_tipo_pk")
+     */
+    protected $seleccionTipoRel; 
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuTipoIdentificacion", inversedBy="seleccionesTipoIdentificacionRel")
      * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
      */
@@ -135,6 +146,16 @@ class RhuSeleccion
      */
     protected $centroCostoRel;                              
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuSeleccionesCiudadRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadRel;     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionReferencia", mappedBy="seleccionRel")
+     */
+    protected $seleccionesReferenciasSeleccionRel;     
 
     /**
      * Get codigoSeleccionPk
@@ -696,5 +717,118 @@ class RhuSeleccion
     public function getFechaPruebas()
     {
         return $this->fecha_pruebas;
+    }
+
+    /**
+     * Set codigoSeleccionTipoFk
+     *
+     * @param integer $codigoSeleccionTipoFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoSeleccionTipoFk($codigoSeleccionTipoFk)
+    {
+        $this->codigoSeleccionTipoFk = $codigoSeleccionTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSeleccionTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSeleccionTipoFk()
+    {
+        return $this->codigoSeleccionTipoFk;
+    }
+
+    /**
+     * Set seleccionTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setSeleccionTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel = null)
+    {
+        $this->seleccionTipoRel = $seleccionTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get seleccionTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo
+     */
+    public function getSeleccionTipoRel()
+    {
+        return $this->seleccionTipoRel;
+    }
+
+    /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->seleccionesReferenciasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add seleccionesReferenciasSeleccionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
+     *
+     * @return RhuSeleccion
+     */
+    public function addSeleccionesReferenciasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel)
+    {
+        $this->seleccionesReferenciasSeleccionRel[] = $seleccionesReferenciasSeleccionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesReferenciasSeleccionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
+     */
+    public function removeSeleccionesReferenciasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel)
+    {
+        $this->seleccionesReferenciasSeleccionRel->removeElement($seleccionesReferenciasSeleccionRel);
+    }
+
+    /**
+     * Get seleccionesReferenciasSeleccionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesReferenciasSeleccionRel()
+    {
+        return $this->seleccionesReferenciasSeleccionRel;
     }
 }

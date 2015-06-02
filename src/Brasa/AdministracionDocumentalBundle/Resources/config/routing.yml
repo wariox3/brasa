@@ -1,0 +1,11 @@
+brs_ad_archivos_lista:
+   path:     /ad/archivos/lista/{codigoArchivoTipo}/{numero}
+   defaults: { _controller: BrasaAdministracionDocumentalBundle:Archivos:lista }
+   
+brs_ad_archivos_cargar:
+   path:     /ad/archivos/cargar/{codigoArchivoTipo}/{numero}
+   defaults: { _controller: BrasaAdministracionDocumentalBundle:Archivos:cargar }   
+
+brs_ad_archivos_descargar:
+   path:     /ad/archivos/descargar/{codigoArchivo}
+   defaults: { _controller: BrasaAdministracionDocumentalBundle:Archivos:descargar } 

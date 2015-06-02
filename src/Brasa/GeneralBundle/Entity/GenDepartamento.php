@@ -14,7 +14,6 @@ class GenDepartamento
     /**
      * @ORM\Id
      * @ORM\Column(name="codigo_departamento_pk", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoDepartamentoPk;
 
@@ -29,13 +28,28 @@ class GenDepartamento
      */
     protected $ciudadesRel;
 
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->ciudadesRel = new ArrayCollection();
+        $this->ciudadesRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Set codigoDepartamentoPk
+     *
+     * @param integer $codigoDepartamentoPk
+     *
+     * @return GenDepartamento
+     */
+    public function setCodigoDepartamentoPk($codigoDepartamentoPk)
+    {
+        $this->codigoDepartamentoPk = $codigoDepartamentoPk;
 
-
+        return $this;
+    }
 
     /**
      * Get codigoDepartamentoPk

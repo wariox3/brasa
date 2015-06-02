@@ -38,24 +38,18 @@ class SeleccionController extends Controller
         $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
 
         if($form->isValid()) {
-            if($form->get('BtnBuscar')->isClicked()) {
+            if($form->get('BtnFiltrar')->isClicked()) {
                 $objCentroCosto = $form->get('centroCostoRel')->getData();
                 if($objCentroCosto != null) {
                     $codigoCentroCosto = $form->get('centroCostoRel')->getData()->getCodigoCentroCostoPk();
                 } else {
                     $codigoCentroCosto = "";
                 }
-                $session->set('dqlEmpleado', $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->ListaDQL(
-                        $form->get('TxtNombre')->getData(),
-                        $codigoCentroCosto,
-                        $form->get('estadoActivo')->getData(),
-                        $form->get('TxtIdentificacion')->getData(),
-                        ""
+                $session->set('dqlSeleccion', $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->ListaDQL(
                         ));
                 $session->set('filtroNombre', $form->get('TxtNombre')->getData());
                 $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-                $session->set('filtroCentroCosto', $codigoCentroCosto);
-                $session->set('filtroActivos', $form->get('estadoActivo')->getData());
+                $session->set('filtroCentroCosto', $codigoCentroCosto);                
 
             }
 
@@ -106,10 +100,6 @@ class SeleccionController extends Controller
             }
         } else {
            $session->set('dqlSeleccion', $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->ListaDQL(
-                   $session->get('filtroNombre'),
-                   $session->get('filtroCentroCosto'),
-                   $session->get('filtroAprobados'),
-                   $session->get('filtroIdentificacion')
                    ));
         }
 
@@ -134,6 +124,7 @@ class SeleccionController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {           
             $arSeleccion = $form->getData();
+            $arSeleccion->setNombreCorto($arSeleccion->getNombre1() . " " . $arSeleccion->getNombre2() . " " .$arSeleccion->getApellido1() . " " . $arSeleccion->getApellido2());
             $em->persist($arSeleccion);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
@@ -148,4 +139,35 @@ class SeleccionController extends Controller
             'arSeleccion' => $arSeleccion,
             'form' => $form->createView()));
     }
+    
+    public function detalleAction($codigoSeleccion) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();    
+        $objMensaje = $this->get('mensajes_brasa');             
+        
+        $form = $this->createFormBuilder()
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnImprimir')->isClicked()) {
+                $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPago();
+                $objFormatoPago->Generar($this, $codigoPago);
+            }
+            if($form->get('BtnReliquidar')->isClicked()) {
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->liquidar($codigoPago);
+                return $this->redirect($this->generateUrl('brs_rhu_pagos_detalle', array('codigoPago' => $codigoPago)));
+            }
+        }        
+        $arSeleccionReferencias = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia();
+        $arSeleccionReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->findBy(array('codigoSeleccionFk' => $codigoSeleccion));
+        $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+        $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);        
+        return $this->render('BrasaRecursoHumanoBundle:Seleccion:detalle.html.twig', array(
+                    'arSeleccion' => $arSeleccion,
+                    'arSeleccionReferencias' => $arSeleccionReferencias,
+                    'form' => $form->createView()
+                    ));
+    }            
 }

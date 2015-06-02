@@ -1,3 +1,7 @@
+brasa_administracion_documental:
+    resource: "@BrasaAdministracionDocumentalBundle/Resources/config/routing.yml"
+    prefix:   /
+
 brasa_recurso_humano:
     resource: "@BrasaRecursoHumanoBundle/Resources/config/routing.yml"
     prefix:   /

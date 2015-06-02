@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new Brasa\CarteraBundle\BrasaCarteraBundle(),            
             new Brasa\TransporteBundle\BrasaTransporteBundle(),
             new Brasa\RecursoHumanoBundle\BrasaRecursoHumanoBundle(),
+            new Brasa\AdministracionDocumentalBundle\BrasaAdministracionDocumentalBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
