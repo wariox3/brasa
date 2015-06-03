@@ -31,7 +31,7 @@
                         <th class="td-label">Valor Credito:</th>
                         <td class="td-in-well">{{ arCreditos.vrPagar | number_format(2, '.', ',')}}</td>
                         <th class="td-label">Valor Cuota</th>
-                        <td class="td-in-well">{{ arCreditos.vrCuota | number_format(2, '.', ',')}}</td>
+                        <td class="td-in-well">{{ (arCreditos.vrCuota - arCreditos.Seguro) | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <th class="td-label">Nro Cuotas:</th>
