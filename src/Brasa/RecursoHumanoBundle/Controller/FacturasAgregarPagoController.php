@@ -24,21 +24,21 @@ class FacturasAgregarPagoController extends Controller
                     foreach ($arrSeleccionados AS $codigoPago) {
                         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
-                        $arFacturaDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
-                        $arFacturaDetalle->setFacturaRel($arFactura);
-                        $arFacturaDetalle->setVrSalario($arPago->getVrSalario());
-                        $arFacturaDetalle->setVrIngresoBaseCotizacion($arPago->getVrIngresoBaseCotizacion());
-                        $arFacturaDetalle->setVrAdicionalTiempo($arPago->getVrAdicionalTiempo());
-                        $arFacturaDetalle->setVrAdicionalValor($arPago->getVrAdicionalValor());
-                        $arFacturaDetalle->setVrAuxilioTransporte($arPago->getVrAuxilioTransporte());
-                        $arFacturaDetalle->setVrArp($arPago->getVrArp());
-                        $arFacturaDetalle->setVrEps($arPago->getVrEps());
-                        $arFacturaDetalle->setVrPension($arPago->getVrPension());
-                        $arFacturaDetalle->setVrCaja($arPago->getVrCaja());
-                        $arFacturaDetalle->setVrCesantias($arPago->getVrCesantias());
-                        $arFacturaDetalle->setVrVacaciones($arPago->getVrVacaciones());
-                        $arFacturaDetalle->setVrAdministracion($arPago->getVrAdministracion());
-                        $em->persist($arFacturaDetalle);                        
+                        $arFacturaDetallePago = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago();
+                        $arFacturaDetallePago->setFacturaRel($arFactura);
+                        $arFacturaDetallePago->setVrSalario($arPago->getVrSalario());
+                        $arFacturaDetallePago->setVrIngresoBaseCotizacion($arPago->getVrIngresoBaseCotizacion());
+                        $arFacturaDetallePago->setVrAdicionalTiempo($arPago->getVrAdicionalTiempo());
+                        $arFacturaDetallePago->setVrAdicionalValor($arPago->getVrAdicionalValor());
+                        $arFacturaDetallePago->setVrAuxilioTransporte($arPago->getVrAuxilioTransporte());
+                        $arFacturaDetallePago->setVrArp($arPago->getVrArp());
+                        $arFacturaDetallePago->setVrEps($arPago->getVrEps());
+                        $arFacturaDetallePago->setVrPension($arPago->getVrPension());
+                        $arFacturaDetallePago->setVrCaja($arPago->getVrCaja());
+                        $arFacturaDetallePago->setVrCesantias($arPago->getVrCesantias());
+                        $arFacturaDetallePago->setVrVacaciones($arPago->getVrVacaciones());
+                        $arFacturaDetallePago->setVrAdministracion($arPago->getVrAdministracion());
+                        $em->persist($arFacturaDetallePago);                        
                     }                    
                     $em->flush();                    
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";

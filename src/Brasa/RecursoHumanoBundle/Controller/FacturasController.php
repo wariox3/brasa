@@ -138,11 +138,11 @@ class FacturasController extends Controller
                 }
             }
         }
-        $arFacturaDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
-        $arFacturaDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));        
+        $arFacturaDetallesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
+        $arFacturaDetallesPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetallePago')->findBy(array('codigoFacturaFk' => $codigoFactura));        
         return $this->render('BrasaRecursoHumanoBundle:Facturas:detalle.html.twig', array(
                     'arFactura' => $arFactura,
-                    'arFacturaDetalles' => $arFacturaDetalles,
+                    'arFacturaDetallesPagos' => $arFacturaDetallesPagos,
                     'form' => $form->createView(),
                     ));
     }        
