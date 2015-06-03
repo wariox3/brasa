@@ -54,14 +54,16 @@ class RhuPagoRepository extends EntityRepository {
         
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
+        $douSalarioPeriodo = $arPago->getVrSalarioPeriodo();
+        $douSalarioSeguridadSocial = $douSalarioPeriodo + $douAdicionTiempo + $douAdicionValor;
         $douDiaAuxilioTransporte = 74000 / 30;
         $douAuxilioTransporteCotizacion = $arPago->getDiasPeriodo() * $douDiaAuxilioTransporte;
-        $douArp = ($douIngresoBaseCotizacion * $arPago->getEmpleadoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
-        $douPension = ($douIngresoBaseCotizacion * $arPago->getEmpleadoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
-        $douCaja = ($douIngresoBaseCotizacion * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
-        $douCesantias = (($douIngresoBaseCotizacion + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
-        $douVacaciones = ($douIngresoBaseCotizacion * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
-        $douTotalEjercicio = $douIngresoBaseCotizacion+$douAdicionTiempo+$douAdicionValor+$douAuxilioTransporte+$douArp+$douPension+$douCaja+$douCesantias+$douVacaciones;
+        $douArp = ($douSalarioSeguridadSocial * $arPago->getEmpleadoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
+        $douPension = ($douSalarioSeguridadSocial * $arPago->getEmpleadoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
+        $douCaja = ($douSalarioSeguridadSocial * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
+        $douCesantias = (($douSalarioSeguridadSocial + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
+        $douVacaciones = ($douSalarioPeriodo * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
+        $douTotalEjercicio = $douSalario+$douAdicionTiempo+$douAdicionValor+$douAuxilioTransporte+$douArp+$douPension+$douCaja+$douCesantias+$douVacaciones;
         if($arPago->getCentroCostoRel()->getPorcentajeAdministracion() != 0 ) {
             $douAdministracion = ($douTotalEjercicio * $arPago->getCentroCostoRel()->getPorcentajeAdministracion()) / 100;            
         } else {

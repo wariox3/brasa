@@ -41,6 +41,18 @@ class RhuPago
      * @ORM\Column(name="vr_salario", type="float")
      */
     private $vrSalario = 0;     
+
+    /**
+     * Es el salario corerspondiente a los dias * VrDia
+     * @ORM\Column(name="vr_salario_periodo", type="float")
+     */
+    private $vrSalarioPeriodo = 0;    
+
+    /**
+     * Es el salario que tenia el empleado cuando se genero el pago
+     * @ORM\Column(name="vr_salario_empleado", type="float")
+     */
+    private $vrSalarioEmpleado = 0;        
     
     /**
      * @ORM\Column(name="vr_devengado", type="float")
@@ -1014,5 +1026,53 @@ class RhuPago
     public function getPagosDetallesSedesPagoRel()
     {
         return $this->pagosDetallesSedesPagoRel;
+    }
+
+    /**
+     * Set vrSalarioPeriodo
+     *
+     * @param float $vrSalarioPeriodo
+     *
+     * @return RhuPago
+     */
+    public function setVrSalarioPeriodo($vrSalarioPeriodo)
+    {
+        $this->vrSalarioPeriodo = $vrSalarioPeriodo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPeriodo
+     *
+     * @return float
+     */
+    public function getVrSalarioPeriodo()
+    {
+        return $this->vrSalarioPeriodo;
+    }
+
+    /**
+     * Set vrSalarioEmpleado
+     *
+     * @param float $vrSalarioEmpleado
+     *
+     * @return RhuPago
+     */
+    public function setVrSalarioEmpleado($vrSalarioEmpleado)
+    {
+        $this->vrSalarioEmpleado = $vrSalarioEmpleado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioEmpleado
+     *
+     * @return float
+     */
+    public function getVrSalarioEmpleado()
+    {
+        return $this->vrSalarioEmpleado;
     }
 }

@@ -7,7 +7,7 @@
                 <tr>
                     <th>ID</th>
                     <th>EMPLEADO</th>                    
-                    <th style="text-align: right">IBC</th>
+                    <th style="text-align: right">BASICO</th>
                     <th style="text-align: right">T. A</th>
                     <th style="text-align: right">V. A</th>
                     <th style="text-align: right">AUX. TRANS</th>
@@ -27,7 +27,7 @@
                     <tr> 
                         <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }}</td>  
                         <td>{{ arPagos.empleadoRel.nombreCorto }}</td>                    
-                        <td style="text-align: right">{{ arPagos.VrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arPagos.VrSalario | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAdicionalTiempo | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAdicionalValor | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAuxilioTransporte | number_format(2, '.', ',') }}</td>

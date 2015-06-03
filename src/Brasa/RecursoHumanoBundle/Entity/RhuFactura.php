@@ -58,6 +58,21 @@ class RhuFactura
     private $VrRetencionIva = 0;        
     
     /**
+     * @ORM\Column(name="vr_base_aiu", type="float")
+     */
+    private $VrBaseAIU = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_total_administracion", type="float")
+     */
+    private $VrTotalAdministracion = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_ingreso_mision", type="float")
+     */
+    private $VrIngresoMision = 0;    
+    
+    /**
      * @ORM\Column(name="vr_iva", type="float")
      */
     private $VrIva = 0;    
@@ -93,7 +108,21 @@ class RhuFactura
      * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="facturaRel")
      */
     protected $facturasDetallesFacturaRel;      
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuFacturaDetallePago", mappedBy="facturaRel")
+     */
+    protected $facturasDetallesPagosFacturaRel;          
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->facturasDetallesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesPagosFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoFacturaPk
      *
@@ -102,6 +131,30 @@ class RhuFactura
     public function getCodigoFacturaPk()
     {
         return $this->codigoFacturaPk;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return RhuFactura
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 
     /**
@@ -201,191 +254,6 @@ class RhuFactura
     }
 
     /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     *
-     * @return RhuFactura
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
-    }
-
-    /**
-     * Set numero
-     *
-     * @param integer $numero
-     *
-     * @return RhuFactura
-     */
-    public function setNumero($numero)
-    {
-        $this->numero = $numero;
-
-        return $this;
-    }
-
-    /**
-     * Get numero
-     *
-     * @return integer
-     */
-    public function getNumero()
-    {
-        return $this->numero;
-    }
-
-    /**
-     * Set codigoCentroCostoFk
-     *
-     * @param integer $codigoCentroCostoFk
-     *
-     * @return RhuFactura
-     */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
-    {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoFk()
-    {
-        return $this->codigoCentroCostoFk;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuFactura
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
-     * Set codigoTerceroFk
-     *
-     * @param integer $codigoTerceroFk
-     *
-     * @return RhuFactura
-     */
-    public function setCodigoTerceroFk($codigoTerceroFk)
-    {
-        $this->codigoTerceroFk = $codigoTerceroFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTerceroFk
-     *
-     * @return integer
-     */
-    public function getCodigoTerceroFk()
-    {
-        return $this->codigoTerceroFk;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return RhuFactura
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->facturasDetallesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add facturasDetallesFacturaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesFacturaRel
-     *
-     * @return RhuFactura
-     */
-    public function addFacturasDetallesFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesFacturaRel)
-    {
-        $this->facturasDetallesFacturaRel[] = $facturasDetallesFacturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasDetallesFacturaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesFacturaRel
-     */
-    public function removeFacturasDetallesFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesFacturaRel)
-    {
-        $this->facturasDetallesFacturaRel->removeElement($facturasDetallesFacturaRel);
-    }
-
-    /**
-     * Get facturasDetallesFacturaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasDetallesFacturaRel()
-    {
-        return $this->facturasDetallesFacturaRel;
-    }
-
-    /**
      * Set vrRetencionFuente
      *
      * @param float $vrRetencionFuente
@@ -479,5 +347,265 @@ class RhuFactura
     public function getVrIva()
     {
         return $this->VrIva;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuFactura
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return RhuFactura
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set codigoTerceroFk
+     *
+     * @param integer $codigoTerceroFk
+     *
+     * @return RhuFactura
+     */
+    public function setCodigoTerceroFk($codigoTerceroFk)
+    {
+        $this->codigoTerceroFk = $codigoTerceroFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTerceroFk
+     *
+     * @return integer
+     */
+    public function getCodigoTerceroFk()
+    {
+        return $this->codigoTerceroFk;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuFactura
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
+    }
+
+    /**
+     * Set terceroRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     *
+     * @return RhuFactura
+     */
+    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    {
+        $this->terceroRel = $terceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     */
+    public function getTerceroRel()
+    {
+        return $this->terceroRel;
+    }
+
+    /**
+     * Add facturasDetallesFacturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesFacturaRel
+     *
+     * @return RhuFactura
+     */
+    public function addFacturasDetallesFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesFacturaRel)
+    {
+        $this->facturasDetallesFacturaRel[] = $facturasDetallesFacturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesFacturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesFacturaRel
+     */
+    public function removeFacturasDetallesFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesFacturaRel)
+    {
+        $this->facturasDetallesFacturaRel->removeElement($facturasDetallesFacturaRel);
+    }
+
+    /**
+     * Get facturasDetallesFacturaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesFacturaRel()
+    {
+        return $this->facturasDetallesFacturaRel;
+    }
+
+    /**
+     * Add facturasDetallesPagosFacturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosFacturaRel
+     *
+     * @return RhuFactura
+     */
+    public function addFacturasDetallesPagosFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosFacturaRel)
+    {
+        $this->facturasDetallesPagosFacturaRel[] = $facturasDetallesPagosFacturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesPagosFacturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosFacturaRel
+     */
+    public function removeFacturasDetallesPagosFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosFacturaRel)
+    {
+        $this->facturasDetallesPagosFacturaRel->removeElement($facturasDetallesPagosFacturaRel);
+    }
+
+    /**
+     * Get facturasDetallesPagosFacturaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesPagosFacturaRel()
+    {
+        return $this->facturasDetallesPagosFacturaRel;
+    }
+
+    /**
+     * Set vrBaseAIU
+     *
+     * @param float $vrBaseAIU
+     *
+     * @return RhuFactura
+     */
+    public function setVrBaseAIU($vrBaseAIU)
+    {
+        $this->VrBaseAIU = $vrBaseAIU;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBaseAIU
+     *
+     * @return float
+     */
+    public function getVrBaseAIU()
+    {
+        return $this->VrBaseAIU;
+    }
+
+    /**
+     * Set vrTotalAdministracion
+     *
+     * @param float $vrTotalAdministracion
+     *
+     * @return RhuFactura
+     */
+    public function setVrTotalAdministracion($vrTotalAdministracion)
+    {
+        $this->VrTotalAdministracion = $vrTotalAdministracion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalAdministracion
+     *
+     * @return float
+     */
+    public function getVrTotalAdministracion()
+    {
+        return $this->VrTotalAdministracion;
+    }
+
+    /**
+     * Set vrIngresoMision
+     *
+     * @param float $vrIngresoMision
+     *
+     * @return RhuFactura
+     */
+    public function setVrIngresoMision($vrIngresoMision)
+    {
+        $this->VrIngresoMision = $vrIngresoMision;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoMision
+     *
+     * @return float
+     */
+    public function getVrIngresoMision()
+    {
+        return $this->VrIngresoMision;
     }
 }
