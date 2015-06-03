@@ -18,6 +18,8 @@
                     <th style="text-align: right">CESANTIAS</th>
                     <th style="text-align: right">VACACIONES</th>
                     <th style="text-align: right">ADMON</th>
+                    <th style="text-align: right">COSTO</th>
+                    <th style="text-align: right">TOTAL</th>
                     <th></th>
                 </tr>
 
@@ -36,6 +38,8 @@
                         <td style="text-align: right">{{ arPagos.VrCesantias | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrVacaciones | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAdministracion | number_format(2, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arPagos.VrCosto | number_format(2, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arPagos.VrTotalCobrar | number_format(2, '.', ',') }}</td>
                         <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagos.codigoPagoPk }}" /></td>
                     </tr>
                 {% endfor %}                                

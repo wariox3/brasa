@@ -91,8 +91,7 @@ class UtilidadesPagosController extends Controller
                         if($arProgramacionPagoProcesar->getEmpleadosGenerados() == 1) {
                             $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                             $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));                            
-                            foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {
-                                
+                            foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {                                
                                 $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                                 $arPago->setEmpleadoRel($arProgramacionPagoDetalle->getEmpleadoRel());
                                 $arPago->setCentroCostoRel($arCentroCosto);
@@ -100,6 +99,7 @@ class UtilidadesPagosController extends Controller
                                 $arPago->setFechaHasta($arProgramacionPagoProcesar->getFechaHasta());
                                 $arPago->setVrSalario($arProgramacionPagoDetalle->getVrSalario());
                                 $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
+                                $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
                                 $em->persist($arPago);
                                 /*if($arEmpleado->getNumeroIdentificacion() =='1056122069') {
                                     echo "Entro";
@@ -107,7 +107,7 @@ class UtilidadesPagosController extends Controller
 
                                 //Parametros generales                                                                
                                 $intHorasLaboradas = $arProgramacionPagoDetalle->getHorasPeriodoReales();
-                                $intDiasTransporte = $arProgramacionPagoDetalle->getDias();
+                                $intDiasTransporte = $arProgramacionPagoDetalle->getDiasReales();
                                 $douVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;
                                 $douVrHora = $douVrDia / 8;
                                 $douVrSalarioMinimo = 644350; //Configurar desde configuraciones
@@ -552,7 +552,7 @@ class UtilidadesPagosController extends Controller
                        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
                        $arProgramacionPagoDetalle->setHorasPeriodoReales($arrControles['TxtHorasPeriodoReales'][$intIndice]);
-                       $arProgramacionPagoDetalle->setDias($arrControles['TxtDias'][$intIndice]);
+                       $arProgramacionPagoDetalle->setDiasReales($arrControles['TxtDiasReales'][$intIndice]);
                        $em->persist($arProgramacionPagoDetalle);
                    }
                    $intIndice++;

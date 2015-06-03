@@ -2,15 +2,15 @@
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h3>Resumen programacion pago</h3>            
-    </div>  
+        <h3>Resumen programacion pago</h3>
+    </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
     {{ form_errors(form) }}
     <div class="btn-toolbar" style="float:left">
         <div class="btn-group">
             <a  class="btn btn-default" href="{{ path('brs_rhu_utilidades_pagos_generar_pago') }}">Volver</a>
             <a  class="btn btn-default" href="{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}">Actualizar</a>
-            {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default'} }) }}            
+            {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default'} }) }}
             <!-- Split button -->
             <div class="btn-group">
                 <button type="button" class="btn btn-default">Utilidades</button>
@@ -18,14 +18,14 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }} " target="_blank">Adicionales</a></li>                    
-                    <li class="divider"></li>    
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Generar adicionales (Masivo)</a></li>                    
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }} " target="_blank">Adicionales</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Generar adicionales (Masivo)</a></li>
                 </ul>
-            </div>                    
+            </div>
         </div>
     </div>
-    <br /><br /><br />     
+    <br /><br /><br />
     <div class="panel panel-default">
       <div class="panel-heading">Informacion centro costo</div>
       <div class="panel-body">
@@ -48,7 +48,7 @@
             </table>
       </div>
     </div>
-                    
+
     <div class="panel panel-default">
       <div class="panel-heading">Pagos adicionales</div>
       <div class="panel-body">
@@ -61,7 +61,7 @@
                 <th>EMPLEADO</th>
                 <th>CANT</th>
                 <th>VALOR</th>
-                <th>PERMANENTE</th>                
+                <th>PERMANENTE</th>
             </tr>
             {% for arPagosAdicionales in arPagosAdicionales %}
             <tr>
@@ -73,14 +73,14 @@
                 <td>{{ arPagosAdicionales.pagoAdicionalSubtipoRel.nombre }}</td>
                 <td>{{ arPagosAdicionales.detalle }}</td>
                 <td>{{ arPagosAdicionales.empleadoRel.nombreCorto }}</td>
-                <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>                            
-                <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
-                <td>{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>                                        
+                <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>
+                <td>{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>
             </tr>
             {% endfor %}
         </table>
       </div>
-    </div>  
+    </div>
 
     <div class="panel panel-default">
         <div class="panel-heading">Incapacidades</div>
@@ -92,7 +92,7 @@
                     <th>FECHA</th>
                     <th>EMPLEADO</th>
                     <th>HORAS</th>
-                    <th>PENDIENTES</th>                    
+                    <th>PENDIENTES</th>
                 </tr>
                 {% for arIncapacidades in arIncapacidades %}
                 <tr>
@@ -101,13 +101,13 @@
                     <td>{{ arIncapacidades.fecha |date("Y/m/d")  }}</td>
                     <td>{{ arIncapacidades.empleadoRel.nombreCorto  }}</td>
                     <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(0, '.', ',') }}</td>
-                    <td style="text-align: right">{{ arIncapacidades.cantidadPendiente | number_format(0, '.', ',') }}</td>                    
+                    <td style="text-align: right">{{ arIncapacidades.cantidadPendiente | number_format(0, '.', ',') }}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-    </div>        
-            
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-heading">Licencias</div>
         <div class="panel-body">
@@ -118,7 +118,7 @@
                     <th>FECHA</th>
                     <th>EMPLEADO</th>
                     <th>HORAS</th>
-                    <th>PENDIENTES</th>                    
+                    <th>PENDIENTES</th>
                 </tr>
                 {% for arLicencias in arLicencias %}
                 <tr>
@@ -127,13 +127,13 @@
                     <td>{{ arLicencias.fecha |date("Y/m/d")  }}</td>
                     <td>{{ arLicencias.empleadoRel.nombreCorto  }}</td>
                     <td style="text-align: right">{{ arLicencias.cantidad | number_format(1, '.', ',') }}</td>
-                    <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(1, '.', ',') }}</td>                    
+                    <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(1, '.', ',') }}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-    </div>            
-            
+    </div>
+
     <div class="panel panel-default">
       <div class="panel-heading">Empleados</div>
       <div class="panel-body">
@@ -149,8 +149,9 @@
                 <th>HORAS</th>
                 <th>H. REAL</th>
                 <th>DIAS</th>
+                <th>D. REAL</th>
                 <th>FAC</th>
-                <th></th> 
+                <th></th>
                 <th></th>
             </tr>
             {% for arProgramacionPagoDetalles in arProgramacionPagoDetalles %}
@@ -161,51 +162,52 @@
                 </td>
                 <td>{{ arProgramacionPagoDetalles.codigoEmpleadoFk}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion}}</td>
-                <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td> 
+                <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td>
                 <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{% if arProgramacionPagoDetalles.indefinido == 1 %} INDEFINIDO {% else %} {{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>                                            
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(2, '.', ',') }}</td>                                                                           
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtHorasPeriodoReales[]" value="{{ arProgramacionPagoDetalles.horasPeriodoReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                <td style="text-align: right"><input class="input-grid" type="text" name="TxtDias[]" value="{{ arProgramacionPagoDetalles.dias }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.factorDia | number_format(0, '.', ',') }}</td>                                                                           
-                <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arProgramacionPagoDetalles.codigoEmpleadoFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
-                <td><input type="checkbox" name="ChkSeleccionarEmpleado[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}" /></td>                
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.dias | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiasReales[]" value="{{ arProgramacionPagoDetalles.diasReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.factorDia | number_format(0, '.', ',') }}</td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arProgramacionPagoDetalles.codigoEmpleadoFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td><input type="checkbox" name="ChkSeleccionarEmpleado[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}" /></td>
             </tr>
                 {% for arProgramacionPagoDetalleSedes in arProgramacionPagoDetalleSedes %}
                     {% if arProgramacionPagoDetalleSedes.codigoProgramacionPagoDetalleFk == arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk %}
                         <tr>
                             <td colspan="3"></td>
-                            <td colspan="4">{{ arProgramacionPagoDetalleSedes.sedeRel.nombre }}</td>                                                                           
+                            <td colspan="4">{{ arProgramacionPagoDetalleSedes.sedeRel.nombre }}</td>
                             <td style="text-align: right">{{ arProgramacionPagoDetalleSedes.horasPeriodo }}</td>
                             <td></td>
-                            <td></td>                                                                           
+                            <td></td>
                             <td style="text-align: right">{{ arProgramacionPagoDetalleSedes.porcentajeParticipacion | number_format(2, '.', ',') }}</td>
-                            <td><input type="checkbox" name="ChkSeleccionarSede[]" value="{{ arProgramacionPagoDetalleSedes.codigoProgramacionPagoDetalleSedePk }}" /></td>                
-                        </tr>                        
+                            <td><input type="checkbox" name="ChkSeleccionarSede[]" value="{{ arProgramacionPagoDetalleSedes.codigoProgramacionPagoDetalleSedePk }}" /></td>
+                        </tr>
                     {% endif %}
                 {% endfor %}
             {% endfor %}
         </table>
         <!-- Botones Menu Items -->
-        <div class="btn-toolbar" style="float: left">                
+        <div class="btn-toolbar" style="float: left">
             <div class="btn-group">
-                {{ knp_pagination_render(arProgramacionPagoDetalles) }}                
-            </div>            
+                {{ knp_pagination_render(arProgramacionPagoDetalles) }}
+            </div>
             <div class="btn-group">
                 <a href="#" class="btn btn-default btn-sm">Empleados <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></a>
-                
+
             </div>
-        </div>        
-        <div class="btn-toolbar" style="float: right">                
-            <div class="btn-group">      
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>                
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen_agregarempleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>                
-                {{ form_widget(form.BtnActualizarEmpleados, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                                    
-                {{ form_widget(form.BtnEliminarEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
-            </div>           
-        </div> 
-            
+        </div>
+        <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen_agregarempleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>
+                {{ form_widget(form.BtnActualizarEmpleados, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
+                {{ form_widget(form.BtnEliminarEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+            </div>
+        </div>
+
       </div>
     </div>
     <div class="btn-toolbar" style="float:left">

@@ -31,6 +31,12 @@ class RhuProgramacionPagoDetalle
      * @ORM\Column(name="horas_periodo", type="integer")
      */
     private $horasPeriodo = 0;     
+
+    /**
+     * Para el auxilio de transporte
+     * @ORM\Column(name="dias_reales", type="integer")
+     */
+    private $diasReales = 0;    
     
     /**
      * Para el auxilio de transporte
@@ -91,6 +97,16 @@ class RhuProgramacionPagoDetalle
      */
     protected $pagosDetallesProgramacionPagoDetalleRel;    
     
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosDetallesProgramacionPagoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoProgramacionPagoDetallePk
      *
@@ -174,99 +190,27 @@ class RhuProgramacionPagoDetalle
     }
 
     /**
-     * Set vrSalario
+     * Set diasReales
      *
-     * @param float $vrSalario
+     * @param integer $diasReales
      *
      * @return RhuProgramacionPagoDetalle
      */
-    public function setVrSalario($vrSalario)
+    public function setDiasReales($diasReales)
     {
-        $this->vrSalario = $vrSalario;
+        $this->diasReales = $diasReales;
 
         return $this;
     }
 
     /**
-     * Get vrSalario
-     *
-     * @return float
-     */
-    public function getVrSalario()
-    {
-        return $this->vrSalario;
-    }
-
-    /**
-     * Set programacionPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
-    {
-        $this->programacionPagoRel = $programacionPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get programacionPagoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
-     */
-    public function getProgramacionPagoRel()
-    {
-        return $this->programacionPagoRel;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
-     * Set horasPeriodoReales
-     *
-     * @param integer $horasPeriodoReales
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setHorasPeriodoReales($horasPeriodoReales)
-    {
-        $this->horasPeriodoReales = $horasPeriodoReales;
-
-        return $this;
-    }
-
-    /**
-     * Get horasPeriodoReales
+     * Get diasReales
      *
      * @return integer
      */
-    public function getHorasPeriodoReales()
+    public function getDiasReales()
     {
-        return $this->horasPeriodoReales;
+        return $this->diasReales;
     }
 
     /**
@@ -315,6 +259,54 @@ class RhuProgramacionPagoDetalle
     public function getFactorDia()
     {
         return $this->factor_dia;
+    }
+
+    /**
+     * Set horasPeriodoReales
+     *
+     * @param integer $horasPeriodoReales
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasPeriodoReales($horasPeriodoReales)
+    {
+        $this->horasPeriodoReales = $horasPeriodoReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasPeriodoReales
+     *
+     * @return integer
+     */
+    public function getHorasPeriodoReales()
+    {
+        return $this->horasPeriodoReales;
+    }
+
+    /**
+     * Set vrSalario
+     *
+     * @param float $vrSalario
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrSalario($vrSalario)
+    {
+        $this->vrSalario = $vrSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalario
+     *
+     * @return float
+     */
+    public function getVrSalario()
+    {
+        return $this->vrSalario;
     }
 
     /**
@@ -388,12 +380,53 @@ class RhuProgramacionPagoDetalle
     {
         return $this->indefinido;
     }
+
     /**
-     * Constructor
+     * Set programacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
+     *
+     * @return RhuProgramacionPagoDetalle
      */
-    public function __construct()
+    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
     {
-        $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->programacionPagoRel = $programacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get programacionPagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
+     */
+    public function getProgramacionPagoRel()
+    {
+        return $this->programacionPagoRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
     }
 
     /**

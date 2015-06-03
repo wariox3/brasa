@@ -178,6 +178,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $intDiasDevolver = $intDias + 1;
             }            
             $arProgramacionPagoDetalle->setDias($intDiasDevolver);
+            $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
             if($arContrato->getCodigoTipoTiempoFk() == 2) {                
                 $arProgramacionPagoDetalle->setHorasPeriodo($intDiasDevolver * 4);
                 $arProgramacionPagoDetalle->setHorasPeriodoReales($intDiasDevolver * 4);

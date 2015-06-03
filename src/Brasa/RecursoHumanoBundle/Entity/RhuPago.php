@@ -68,6 +68,11 @@ class RhuPago
     private $vrAuxilioTransporte = 0;    
     
     /**
+     * @ORM\Column(name="vr_auxilio_transporte_cotizacion", type="float")
+     */
+    private $vrAuxilioTransporteCotizacion = 0;    
+    
+    /**
      * @ORM\Column(name="vr_arp", type="float")
      */
     private $vrArp = 0;    
@@ -123,9 +128,14 @@ class RhuPago
     private $vrBruto = 0;                
     
     /**
-     * @ORM\Column(name="vr_total_ejercicio", type="float")
+     * @ORM\Column(name="vr_total_cobrar", type="float")
      */
-    private $vrTotalEjercicio = 0;    
+    private $vrTotalCobrar = 0;    
+
+    /**
+     * @ORM\Column(name="vr_costo", type="float")
+     */
+    private $vrCosto = 0;     
     
     /**
      * @ORM\Column(name="vr_ingreso_base_cotizacion", type="float")
@@ -141,6 +151,11 @@ class RhuPago
      * @ORM\Column(name="estado_cobrado", type="boolean")
      */    
     private $estadoCobrado = 0;     
+    
+    /**
+     * @ORM\Column(name="dias_periodo", type="integer")
+     */
+    private $diasPeriodo = 0;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="pagosCentroCostoRel")
@@ -430,6 +445,30 @@ class RhuPago
     }
 
     /**
+     * Set vrAuxilioTransporteCotizacion
+     *
+     * @param float $vrAuxilioTransporteCotizacion
+     *
+     * @return RhuPago
+     */
+    public function setVrAuxilioTransporteCotizacion($vrAuxilioTransporteCotizacion)
+    {
+        $this->vrAuxilioTransporteCotizacion = $vrAuxilioTransporteCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAuxilioTransporteCotizacion
+     *
+     * @return float
+     */
+    public function getVrAuxilioTransporteCotizacion()
+    {
+        return $this->vrAuxilioTransporteCotizacion;
+    }
+
+    /**
      * Set vrArp
      *
      * @param float $vrArp
@@ -694,27 +733,51 @@ class RhuPago
     }
 
     /**
-     * Set vrTotalEjercicio
+     * Set vrTotalCobrar
      *
-     * @param float $vrTotalEjercicio
+     * @param float $vrTotalCobrar
      *
      * @return RhuPago
      */
-    public function setVrTotalEjercicio($vrTotalEjercicio)
+    public function setVrTotalCobrar($vrTotalCobrar)
     {
-        $this->vrTotalEjercicio = $vrTotalEjercicio;
+        $this->vrTotalCobrar = $vrTotalCobrar;
 
         return $this;
     }
 
     /**
-     * Get vrTotalEjercicio
+     * Get vrTotalCobrar
      *
      * @return float
      */
-    public function getVrTotalEjercicio()
+    public function getVrTotalCobrar()
     {
-        return $this->vrTotalEjercicio;
+        return $this->vrTotalCobrar;
+    }
+
+    /**
+     * Set vrCosto
+     *
+     * @param float $vrCosto
+     *
+     * @return RhuPago
+     */
+    public function setVrCosto($vrCosto)
+    {
+        $this->vrCosto = $vrCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCosto
+     *
+     * @return float
+     */
+    public function getVrCosto()
+    {
+        return $this->vrCosto;
     }
 
     /**
@@ -787,6 +850,30 @@ class RhuPago
     public function getEstadoCobrado()
     {
         return $this->estadoCobrado;
+    }
+
+    /**
+     * Set diasPeriodo
+     *
+     * @param integer $diasPeriodo
+     *
+     * @return RhuPago
+     */
+    public function setDiasPeriodo($diasPeriodo)
+    {
+        $this->diasPeriodo = $diasPeriodo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPeriodo
+     *
+     * @return integer
+     */
+    public function getDiasPeriodo()
+    {
+        return $this->diasPeriodo;
     }
 
     /**
