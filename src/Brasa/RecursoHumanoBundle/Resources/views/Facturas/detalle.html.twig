@@ -15,57 +15,57 @@
     <div class="panel panel-default">
       <div class="panel-heading">Informacion programacion pago</div>
       <div class="panel-body">
-            <table width="100%" class="table table-condensed table-bordered">
+            <table width="100%" class="table table-condensed table-bordered ">
                 <tr>
-                    <td class="td-label">Codigo:</td>
-                    <td class="td-in-well">{{ arFactura.codigoFacturaPk }}</td>
-                    <td class="td-label">Fecha:</td>
+                    <td class="titulo">CODIGO:</td>
+                    <td>{{ arFactura.codigoFacturaPk }}</td>
+                    <td class="titulo">FECHA:</td>
                     <td class="td-in-well">{{ arFactura.fecha|date("Y/m/d") }}</td>
-                    <td class="td-label">Bruto:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.codigoFacturaPk }}</td>                   
+                    <td class="titulo">BRUTO:</td>
+                    <td class="td-in-well-numerico" align="right">$ 0</td>                   
                 </tr>
                 <tr>
-                    <td class="td-label">Numero:</td>
+                    <td class="titulo">NUMERO:</td>
                     <td class="td-in-well">{{ arFactura.numero }}</td>
-                    <td class="td-label">Vence:</td>
+                    <td class="titulo">VENCE:</td>
                     <td class="td-in-well">{{ arFactura.fechaVence|date("Y/m/d") }}</td>
-                    <td class="td-label">Retencion fuente:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.codigoFacturaPk }}</td>                   
+                    <td class="titulo">RETENCION FUENTE:</td>
+                    <td class="td-in-well-numerico" align="right">$ 0</td>                   
                 </tr>
                 <tr>
-                    <td class="td-label">Tercero:</td>
+                    <td class="titulo">TERCERO:</td>
                     <td class="td-in-well">{{ arFactura.terceroRel.nombreCorto }}</td>
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="td-label">Retencion CREE:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.codigoFacturaPk }}</td>
+                    <td class="titulo">RETENCION CREE:</td>
+                    <td class="td-in-well-numerico" align="right">$ 0</td>
                 </tr>    
                 <tr>
-                    <td class="td-label">Centro costo:</td>
+                    <td class="titulo">CENTRO COSTO:</td>
                     <td class="td-in-well">{{ arFactura.centroCostoRel.nombre }}</td>
-                    <td class="td-label"></td>
-                    <td class="td-in-well"></td>
-                    <td class="td-label">Iva:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.codigoFacturaPk }}</td>
+                    <td class="titulo">BASE AIU:</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrBaseAIU | number_format(2, '.', ',') }}</td>
+                    <td class="titulo">IVA:</td>
+                    <td class="td-in-well-numerico" align="right">$ 0</td>
                 </tr>                 
                 <tr>
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="td-label"></td>
-                    <td class="td-in-well"></td>
-                    <td class="td-label">Retencion iva:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.codigoFacturaPk }}</td>
+                    <td class="titulo">ADMINISTRACION:</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrTotalAdministracion | number_format(2, '.', ',') }}</td>
+                    <td class="titulo">RETENCION IVA:</td>
+                    <td class="td-in-well-numerico" align="right">$ 0</td>
                 </tr> 
                 <tr>
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="td-label"></td>
-                    <td class="td-in-well"></td>
-                    <td class="td-label">Total neto:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.codigoFacturaPk }}</td>
+                    <td class="titulo">INGRESO MISION:</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrIngresoMision | number_format(2, '.', ',')}}</td>
+                    <td class="titulo">TOTAL NETO:</td>
+                    <td class="td-in-well-numerico" align="right">$ 0</td>
                 </tr>                 
                 <tr>
-                    <td colspan="8">Comentarios:</td>
+                    <td colspan="8">COMENTARIOS:</td>
                 </tr>
             </table>
       </div>

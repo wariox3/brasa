@@ -58,6 +58,21 @@ class RhuFactura
     private $VrRetencionIva = 0;        
     
     /**
+     * @ORM\Column(name="vr_base_aiu", type="float")
+     */
+    private $VrBaseAIU = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_total_administracion", type="float")
+     */
+    private $VrTotalAdministracion = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_ingreso_mision", type="float")
+     */
+    private $VrIngresoMision = 0;    
+    
+    /**
      * @ORM\Column(name="vr_iva", type="float")
      */
     private $VrIva = 0;    
@@ -520,5 +535,77 @@ class RhuFactura
     public function getFacturasDetallesPagosFacturaRel()
     {
         return $this->facturasDetallesPagosFacturaRel;
+    }
+
+    /**
+     * Set vrBaseAIU
+     *
+     * @param float $vrBaseAIU
+     *
+     * @return RhuFactura
+     */
+    public function setVrBaseAIU($vrBaseAIU)
+    {
+        $this->VrBaseAIU = $vrBaseAIU;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBaseAIU
+     *
+     * @return float
+     */
+    public function getVrBaseAIU()
+    {
+        return $this->VrBaseAIU;
+    }
+
+    /**
+     * Set vrTotalAdministracion
+     *
+     * @param float $vrTotalAdministracion
+     *
+     * @return RhuFactura
+     */
+    public function setVrTotalAdministracion($vrTotalAdministracion)
+    {
+        $this->VrTotalAdministracion = $vrTotalAdministracion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalAdministracion
+     *
+     * @return float
+     */
+    public function getVrTotalAdministracion()
+    {
+        return $this->VrTotalAdministracion;
+    }
+
+    /**
+     * Set vrIngresoMision
+     *
+     * @param float $vrIngresoMision
+     *
+     * @return RhuFactura
+     */
+    public function setVrIngresoMision($vrIngresoMision)
+    {
+        $this->VrIngresoMision = $vrIngresoMision;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoMision
+     *
+     * @return float
+     */
+    public function getVrIngresoMision()
+    {
+        return $this->VrIngresoMision;
     }
 }

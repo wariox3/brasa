@@ -97,7 +97,8 @@ class UtilidadesPagosController extends Controller
                                 $arPago->setCentroCostoRel($arCentroCosto);
                                 $arPago->setFechaDesde($arProgramacionPagoProcesar->getFechaDesde());
                                 $arPago->setFechaHasta($arProgramacionPagoProcesar->getFechaHasta());
-                                $arPago->setVrSalario($arProgramacionPagoDetalle->getVrSalario());
+                                $arPago->setVrSalarioEmpleado($arProgramacionPagoDetalle->getVrSalario());
+                                $arPago->setVrSalarioPeriodo(($arProgramacionPagoDetalle->getVrSalario() / 30) * $arProgramacionPagoDetalle->getDias());
                                 $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
                                 $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
                                 $em->persist($arPago);

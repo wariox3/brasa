@@ -130,13 +130,17 @@ class FacturasController extends Controller
             if($form->get('BtnRetirarDetalle')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarPago');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoFacturaDetalle) {
-                        $arFacturaDetalleEliminar = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetalle')->find($codigoFacturaDetalle);
-                        $em->remove($arFacturaDetalleEliminar);
+                    foreach ($arrSeleccionados AS $codigoFacturaDetallePago) {
+                        $arFacturaDetallePagoEliminar = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetallePago')->find($codigoFacturaDetallePago);
+                        $em->remove($arFacturaDetallePagoEliminar);
                     }
                     $em->flush();                    
                 }
             }
+            if($form->get('BtnImprimir')->isClicked()) {
+                $objFormatoFactura = new \Brasa\RecursoHumanoBundle\Formatos\FormatoFactura();
+                $objFormatoFactura->Generar($this, $codigoFactura);
+            }            
         }
         $arFacturaDetallesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
         $arFacturaDetallesPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetallePago')->findBy(array('codigoFacturaFk' => $codigoFactura));        

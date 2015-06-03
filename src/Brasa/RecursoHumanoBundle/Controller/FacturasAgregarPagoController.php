@@ -21,6 +21,9 @@ class FacturasAgregarPagoController extends Controller
             if($form->get('BtnAgregar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
+                    $douBaseAIU = 0;
+                    $douAdministracion = 0;
+                    $douIngresoMision = 0;
                     foreach ($arrSeleccionados AS $codigoPago) {
                         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
@@ -38,9 +41,15 @@ class FacturasAgregarPagoController extends Controller
                         $arFacturaDetallePago->setVrCesantias($arPago->getVrCesantias());
                         $arFacturaDetallePago->setVrVacaciones($arPago->getVrVacaciones());
                         $arFacturaDetallePago->setVrAdministracion($arPago->getVrAdministracion());
-                        $em->persist($arFacturaDetallePago);                        
+                        $em->persist($arFacturaDetallePago); 
+                        $douAdministracion = $douAdministracion + $arPago->getVrAdministracion();
+                        $douIngresoMision = $douIngresoMision + $arPago->getVrCosto();
+                        
                     }                    
+                    $arFactura->setVrTotalAdministracion($douAdministracion);
+                    $arFactura->setVrIngresoMision($douIngresoMision);                    
                     $em->flush();                    
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->liquidar($codigoFactura);
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }
             }
