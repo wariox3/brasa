@@ -176,6 +176,7 @@ class CreditosController extends Controller
         } else {
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         }
+        $PeriodoPago = $arEmpleado->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
         $form = $this->createForm(new RhuCreditoType(), $arCredito);       
         $form->handleRequest($request);
         if ($form->isValid()) {            
@@ -186,6 +187,15 @@ class CreditosController extends Controller
             $saldot = $douVrPagar + $seguro;
             $douVrCuota = $douVrPagar / $intCuotas + $seguro;
             $arCredito->setVrCuota($douVrCuota);
+            $arSeleccion = $request->request->get('ChkSeleccionar');
+            if ($arSeleccion == "")
+            {
+                $arCredito->setTipoPago('OTRO');
+            }
+            else
+            {
+                $arCredito->setTipoPago('NOMINA');
+            }    
             $arCredito->setFecha(new \DateTime('now'));
             $arCredito->setSaldo($saldot);
             $arCredito->setNumeroCuotaActual(0);
@@ -198,6 +208,7 @@ class CreditosController extends Controller
 
         return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevo.html.twig', array(
             'arCredito' => $arCredito,
+            'PeriodoPago' => $PeriodoPago,
             'form' => $form->createView()));
     }
     

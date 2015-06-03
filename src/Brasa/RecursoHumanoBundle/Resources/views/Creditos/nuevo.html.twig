@@ -5,7 +5,8 @@
     <h3>Nuevo credito</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
-        <div class="panel-body">   
+        <div class="panel-body">
+            <div class="alert alert-success" role="alert">El periodo de pago del empleado es {{PeriodoPago}}</div>
             <div class="form-group form-group-sm">
                 <label for="form_creditoTipoRel" class="col-sm-2 control-label">Credito:</label>
                 <div class="col-sm-10">
@@ -25,13 +26,13 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_numeroCuotas" class="col-sm-2 control-label">Tipo Pago:</label>
+                <label for="form_tipoPago" class="col-sm-2 control-label">Tipo pago:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(form.tipoPago, { 'attr': {'class': 'form-control'} }) }}
+                    <input type="checkbox" name="ChkSeleccionar[]" value="NOMINA" checked="true"/> Nomina
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_numeroCuotas" class="col-sm-2 control-label">Seguro: </label>
+                <label for="form_seguro" class="col-sm-2 control-label">Seguro: </label>
                 <div class="col-sm-10">
                         {{ form_widget(form.seguro, { 'attr': {'onkeypress': 'ValidaSoloNumeros();', 'class': 'form-control'} }) }}
                 </div>

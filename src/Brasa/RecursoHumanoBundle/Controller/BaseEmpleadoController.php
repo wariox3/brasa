@@ -143,10 +143,12 @@ class BaseEmpleadoController extends Controller
     public function detalleAction($codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $mensaje = 0;
         $form = $this->createFormBuilder()
             ->add('BtnRetirarContrato', 'submit', array('label'  => 'Retirar',))
             ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Retirar',))
             ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Retirar',))
+            ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))    
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
@@ -186,6 +188,25 @@ class BaseEmpleadoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
+            }
+            if($form->get('BtnEliminarCredito')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarCredito');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoCredito) {
+                        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+                        if ($arCredito->getAprobado() == 1 or $arCredito->getEstadoPagado() == 1)
+                        {
+                            $mensaje = "No se puede Eliminar el registro, por que el credito ya esta aprobado o cancelado!";
+                        }
+                        else
+                        {
+                            $em->remove($arCredito);
+                            $em->flush();
+                        }
+                    }
+                    //return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
+                }
             }  
             if($form->get('BtnRetirarLicencia')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarLicencia');
@@ -211,6 +232,7 @@ class BaseEmpleadoController extends Controller
                     'arLicencias' => $arLicencias,
                     'arContratos' => $arContratos,
                     'arCreditos' => $arCreditos,
+                    'mensaje' => $mensaje,
                     'form' => $form->createView()
                     ));
     }
