@@ -23,6 +23,11 @@ class RhuFacturaDetallePago
     private $codigoFacturaFk;
     
     /**
+     * @ORM\Column(name="codigo_pago_fk", type="integer", nullable=true)
+     */    
+    private $codigoPagoFk;    
+    
+    /**
      * @ORM\Column(name="vr_salario", type="float")
      */
     private $vrSalario = 0;     
@@ -118,11 +123,21 @@ class RhuFacturaDetallePago
     private $vrIngresoBaseCotizacion = 0;     
     
     /**
+     * @ORM\Column(name="vr_ingreso_mision", type="float")
+     */
+    private $vrIngresoMision = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuFactura", inversedBy="facturasDetallesPagosFacturaRel")
      * @ORM\JoinColumn(name="codigo_factura_fk", referencedColumnName="codigo_factura_pk")
      */
     protected $facturaRel;    
-    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuPago", inversedBy="facturasDetallesPagosPagoRel")
+     * @ORM\JoinColumn(name="codigo_pago_fk", referencedColumnName="codigo_pago_pk")
+     */
+    protected $pagoRel;    
 
     /**
      * Get codigoFacturaDetallePagoPk
@@ -636,5 +651,77 @@ class RhuFacturaDetallePago
     public function getFacturaRel()
     {
         return $this->facturaRel;
+    }
+
+    /**
+     * Set vrIngresoMision
+     *
+     * @param float $vrIngresoMision
+     *
+     * @return RhuFacturaDetallePago
+     */
+    public function setVrIngresoMision($vrIngresoMision)
+    {
+        $this->vrIngresoMision = $vrIngresoMision;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoMision
+     *
+     * @return float
+     */
+    public function getVrIngresoMision()
+    {
+        return $this->vrIngresoMision;
+    }
+
+    /**
+     * Set codigoPagoFk
+     *
+     * @param integer $codigoPagoFk
+     *
+     * @return RhuFacturaDetallePago
+     */
+    public function setCodigoPagoFk($codigoPagoFk)
+    {
+        $this->codigoPagoFk = $codigoPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoFk()
+    {
+        return $this->codigoPagoFk;
+    }
+
+    /**
+     * Set pagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
+     *
+     * @return RhuFacturaDetallePago
+     */
+    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
+    {
+        $this->pagoRel = $pagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
+     */
+    public function getPagoRel()
+    {
+        return $this->pagoRel;
     }
 }

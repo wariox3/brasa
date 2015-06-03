@@ -120,26 +120,36 @@ class FacturasController extends Controller
         $objMensaje = $this->get('mensajes_brasa');        
         $form = $this->createFormBuilder()                        
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))            
-            ->add('BtnRetirarDetalle', 'submit', array('label'  => 'Retirar',))            
+            ->add('BtnReliquidar', 'submit', array('label'  => 'Reliquidar',))
+            ->add('BtnRetirarDetallePago', 'submit', array('label'  => 'Retirar',))            
             ->getForm();
         $form->handleRequest($request);        
         $arFactura = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
         $arFactura = $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->find($codigoFactura);
         if($form->isValid()) {
             $arrControles = $request->request->All();
-            if($form->get('BtnRetirarDetalle')->isClicked()) {
+            if($form->get('BtnRetirarDetallePago')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarPago');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoFacturaDetallePago) {
-                        $arFacturaDetallePagoEliminar = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetallePago')->find($codigoFacturaDetallePago);
-                        $em->remove($arFacturaDetallePagoEliminar);
+                        $arFacturaDetallePagoEliminar = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetallePago')->find($codigoFacturaDetallePago);                        
+                        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arFacturaDetallePagoEliminar->getCodigoPagoFk());                        
+                        $arPago->setEstadoCobrado(0);
+                        $em->persist($arPago);
+                        $em->remove($arFacturaDetallePagoEliminar);                        
                     }
-                    $em->flush();                    
+                    $em->flush();  
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->liquidar($codigoFactura);
+                    return $this->redirect($this->generateUrl('brs_rhu_facturas_detalle', array('codigoFactura' => $codigoFactura)));
                 }
             }
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoFactura = new \Brasa\RecursoHumanoBundle\Formatos\FormatoFactura();
                 $objFormatoFactura->Generar($this, $codigoFactura);
+            }       
+            if($form->get('BtnReliquidar')->isClicked()) {
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->liquidar($codigoFactura);
+                return $this->redirect($this->generateUrl('brs_rhu_facturas_detalle', array('codigoFactura' => $codigoFactura)));
             }            
         }
         $arFacturaDetallesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();

@@ -110,7 +110,22 @@ class RhuSeleccion
     /**     
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
-    private $estadoAprobado = 0;    
+    private $estadoAprobado = 0;        
+    
+    /**     
+     * @ORM\Column(name="estado_abierto", type="boolean")
+     */    
+    private $estadoAbierto = 0;    
+    
+    /**     
+     * @ORM\Column(name="presenta_pruebas", type="boolean")
+     */    
+    private $presentaPruebas = 0;
+    
+    /**     
+     * @ORM\Column(name="referencias_verificadas", type="boolean")
+     */    
+    private $referenciasVerificadas = 0;    
     
     /**
      * @ORM\Column(name="fecha_entrevista", type="datetime", nullable=true)
@@ -830,5 +845,77 @@ class RhuSeleccion
     public function getSeleccionesReferenciasSeleccionRel()
     {
         return $this->seleccionesReferenciasSeleccionRel;
+    }
+
+    /**
+     * Set estadoAbierto
+     *
+     * @param boolean $estadoAbierto
+     *
+     * @return RhuSeleccion
+     */
+    public function setEstadoAbierto($estadoAbierto)
+    {
+        $this->estadoAbierto = $estadoAbierto;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAbierto
+     *
+     * @return boolean
+     */
+    public function getEstadoAbierto()
+    {
+        return $this->estadoAbierto;
+    }
+
+    /**
+     * Set presentaPruebas
+     *
+     * @param boolean $presentaPruebas
+     *
+     * @return RhuSeleccion
+     */
+    public function setPresentaPruebas($presentaPruebas)
+    {
+        $this->presentaPruebas = $presentaPruebas;
+
+        return $this;
+    }
+
+    /**
+     * Get presentaPruebas
+     *
+     * @return boolean
+     */
+    public function getPresentaPruebas()
+    {
+        return $this->presentaPruebas;
+    }
+
+    /**
+     * Set referenciasVerificadas
+     *
+     * @param boolean $referenciasVerificadas
+     *
+     * @return RhuSeleccion
+     */
+    public function setReferenciasVerificadas($referenciasVerificadas)
+    {
+        $this->referenciasVerificadas = $referenciasVerificadas;
+
+        return $this;
+    }
+
+    /**
+     * Get referenciasVerificadas
+     *
+     * @return boolean
+     */
+    public function getReferenciasVerificadas()
+    {
+        return $this->referenciasVerificadas;
     }
 }

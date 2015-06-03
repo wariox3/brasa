@@ -12,9 +12,39 @@ use Doctrine\ORM\EntityRepository;
 class RhuFacturaRepository extends EntityRepository {
     public function liquidar($codigoFactura) {        
         $em = $this->getEntityManager();
+        $arConfiguraciones = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguraciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arFactura = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
-        $arFactura = $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->find($codigoFactura); 
-        $arFactura->setVrBaseAIU((($arFactura->getVrIngresoMision()+$arFactura->getVrTotalAdministracion())*10)/100);
+        $arFactura = $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->find($codigoFactura);         
+        $arFacturaDetallesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago();
+        $arFacturaDetallesPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetallePago')->findBy(array('codigoFacturaFk' => $codigoFactura));
+        $douAdministracion = 0;
+        $douIngresoMision = 0;
+        foreach ($arFacturaDetallesPagos as $arFacturaDetallePago) {
+            $douAdministracion += $arFacturaDetallePago->getVrAdministracion();
+            $douIngresoMision += $arFacturaDetallePago->getVrIngresoMision();
+        }
+        $douBaseAIU = (($douAdministracion+$douIngresoMision)*10)/100;
+        $douTotalBruto = $douIngresoMision + $douAdministracion;
+        $douRetencionFuente = 0;
+        $douRetencionCREE = ($douBaseAIU * $arConfiguraciones->getPorcentajeRetencionCREE()) / 100;
+        $douIva = ($douBaseAIU * $arConfiguraciones->getPorcentajeIvaVentas()) / 100;
+        $douRetencionIva = ($douIva * $arConfiguraciones->getPorcentajeRetencionIva()) / 100;        
+        if($arFactura->getTerceroRel()->getRetencionFuenteVentas() == 1) {
+            if ($douBaseAIU >= $arConfiguraciones->getBaseRetencionFuenteServicios()) {
+                $douRetencionFuente = ($douBaseAIU * $arConfiguraciones->getPorcentajeRetencionFuenteServicios()) / 100;
+            }            
+        }
+        $arFactura->setVrBaseAIU($douBaseAIU);
+        $arFactura->setVrIngresoMision($douIngresoMision);
+        $arFactura->setVrTotalAdministracion($douAdministracion);
+        $arFactura->setVrBruto($douTotalBruto);        
+        $arFactura->setVrRetencionFuente($douRetencionFuente);
+        $arFactura->setVrRetencionCree($douRetencionCREE);
+        $arFactura->setVrIva($douIva);
+        $arFactura->setVrRetencionIva($douRetencionIva);    
+        $douRetenciones = $douRetencionIva + $douRetencionFuente;
+        $arFactura->setVrNeto($douTotalBruto+$douIva-$douRetenciones);
         $em->persist($arFactura);
         $em->flush();
         return true;

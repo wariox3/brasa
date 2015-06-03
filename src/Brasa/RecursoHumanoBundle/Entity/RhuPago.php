@@ -167,7 +167,7 @@ class RhuPago
     /**
      * @ORM\Column(name="dias_periodo", type="integer")
      */
-    private $diasPeriodo = 0;     
+    private $diasPeriodo = 0;             
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="pagosCentroCostoRel")
@@ -196,6 +196,11 @@ class RhuPago
      * @ORM\OneToMany(targetEntity="RhuPagoDetalleSede", mappedBy="pagoRel")
      */
     protected $pagosDetallesSedesPagoRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuFacturaDetallePago", mappedBy="pagoRel")
+     */
+    protected $facturasDetallesPagosPagoRel;    
     
     /**
      * Constructor
@@ -1074,5 +1079,39 @@ class RhuPago
     public function getVrSalarioEmpleado()
     {
         return $this->vrSalarioEmpleado;
+    }
+
+    /**
+     * Add facturasDetallesPagosPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosPagoRel
+     *
+     * @return RhuPago
+     */
+    public function addFacturasDetallesPagosPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosPagoRel)
+    {
+        $this->facturasDetallesPagosPagoRel[] = $facturasDetallesPagosPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesPagosPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosPagoRel
+     */
+    public function removeFacturasDetallesPagosPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosPagoRel)
+    {
+        $this->facturasDetallesPagosPagoRel->removeElement($facturasDetallesPagosPagoRel);
+    }
+
+    /**
+     * Get facturasDetallesPagosPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesPagosPagoRel()
+    {
+        return $this->facturasDetallesPagosPagoRel;
     }
 }
