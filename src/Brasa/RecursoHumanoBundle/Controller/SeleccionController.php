@@ -22,12 +22,13 @@ class SeleccionController extends Controller
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => false,
-                'empty_value' => "Todos",
+                'empty_value' => "TODOS",
                 'mapped' => false,
                 'data' => '',
 
             ))            
-            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'Todos', '1' => 'Aprobados', '0' => 'No aprobados')))                            
+            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'APROBADO', '0' => 'NO APROBADO')))                            
+            ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO')))                                                        
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
