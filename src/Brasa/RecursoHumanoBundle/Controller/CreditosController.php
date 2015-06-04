@@ -169,13 +169,15 @@ class CreditosController extends Controller
     public function nuevoAction($codigoCredito, $codigoEmpleado) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $mensaje = 0;
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito(); 
         if($codigoCredito != 0) {
-            $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+            $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);    
         } else {
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         }
+        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $PeriodoPago = $arEmpleado->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
         $form = $this->createForm(new RhuCreditoType(), $arCredito);       
         $form->handleRequest($request);

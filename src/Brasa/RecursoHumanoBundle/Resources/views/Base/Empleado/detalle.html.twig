@@ -97,6 +97,7 @@
             </table>
             </div>
         </div>
+        <a name="marcador"></a>
         <div class="panel panel-default">
             <div class="panel-heading">Contratos</div>
             <div class="panel-body">
@@ -154,7 +155,6 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">Creditos</div>
-            
             <div class="panel-body">
                 <table  class="table table-striped table-bordered table-condensed table-hover">
                     <tr>
@@ -168,6 +168,8 @@
                         <th style="text-align: right">CUOTAS</th>
                         <th style="text-align: right">C. ACTUAL</th>
                         <th style="text-align: center">PAGADO</th>
+                        <th style="text-align: center">APROBADO</th>
+                        <th></th>
                         <th></th>
                     </tr>
                     {% for arCreditos in arCreditos %}
@@ -181,8 +183,13 @@
                             <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditos.numeroCuotas | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditos.numeroCuotaActual | number_format(0, '.', ',') }}</td>
-                            <td {% if arCreditos.estadoPagado == 1 %}class="success"{% endif %}>{% if arCreditos.estadoPagado == 1 %} SI {% else %} NO {% endif %}</td>
-                            
+                            <td {% if arCreditos.estadopagado == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
+                            <td {% if arCreditos.Aprobado == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
+                            {% if arCreditos.Aprobado == 1 %}
+                                <td style="text-align: center"><a href="#marcador" onclick="javascript:alert('No se puede modificar el credito, se encuenta aprobado o cancelado!');"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                            {% else %}
+                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk,  'codigoEmpleado': arCreditos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                            {% endif %}
                             <td><input type="checkbox" name="ChkSeleccionarCredito[]" value="{{ arCreditos.codigoCreditoPk }}" /></td>
                         </tr>
                     {% endfor %}
