@@ -18,6 +18,11 @@ class RhuSeleccion
     private $codigoSeleccionPk;        
     
     /**
+     * @ORM\Column(name="codigo_seleccion_grupo_fk", type="integer")
+     */    
+    private $codigoSeleccionGrupoFk;
+    
+    /**
      * @ORM\Column(name="codigo_seleccion_tipo_fk", type="integer")
      */    
     private $codigoSeleccionTipoFk;     
@@ -165,12 +170,27 @@ class RhuSeleccion
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuSeleccionesCiudadRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
-    protected $ciudadRel;     
+    protected $ciudadRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionGrupo", inversedBy="seleccionSeleccionGrupoRel")
+     * @ORM\JoinColumn(name="codigo_seleccion_grupo_fk", referencedColumnName="codigo_seleccion_grupo_pk")
+     */
+    protected $selecccionGrupoRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionReferencia", mappedBy="seleccionRel")
      */
     protected $seleccionesReferenciasSeleccionRel;     
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->seleccionesReferenciasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoSeleccionPk
@@ -180,6 +200,30 @@ class RhuSeleccion
     public function getCodigoSeleccionPk()
     {
         return $this->codigoSeleccionPk;
+    }
+
+    /**
+     * Set codigoSeleccionTipoFk
+     *
+     * @param integer $codigoSeleccionTipoFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoSeleccionTipoFk($codigoSeleccionTipoFk)
+    {
+        $this->codigoSeleccionTipoFk = $codigoSeleccionTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSeleccionTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSeleccionTipoFk()
+    {
+        return $this->codigoSeleccionTipoFk;
     }
 
     /**
@@ -591,78 +635,6 @@ class RhuSeleccion
     }
 
     /**
-     * Set tipoIdentificacionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel = null)
-    {
-        $this->tipoIdentificacionRel = $tipoIdentificacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoIdentificacionRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion
-     */
-    public function getTipoIdentificacionRel()
-    {
-        return $this->tipoIdentificacionRel;
-    }
-
-    /**
-     * Set estadoCivilRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel = null)
-    {
-        $this->estadoCivilRel = $estadoCivilRel;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCivilRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil
-     */
-    public function getEstadoCivilRel()
-    {
-        return $this->estadoCivilRel;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
      * Set estadoAprobado
      *
      * @param boolean $estadoAprobado
@@ -684,167 +656,6 @@ class RhuSeleccion
     public function getEstadoAprobado()
     {
         return $this->estadoAprobado;
-    }
-
-    /**
-     * Set fechaEntrevista
-     *
-     * @param \DateTime $fechaEntrevista
-     *
-     * @return RhuSeleccion
-     */
-    public function setFechaEntrevista($fechaEntrevista)
-    {
-        $this->fecha_entrevista = $fechaEntrevista;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaEntrevista
-     *
-     * @return \DateTime
-     */
-    public function getFechaEntrevista()
-    {
-        return $this->fecha_entrevista;
-    }
-
-    /**
-     * Set fechaPruebas
-     *
-     * @param \DateTime $fechaPruebas
-     *
-     * @return RhuSeleccion
-     */
-    public function setFechaPruebas($fechaPruebas)
-    {
-        $this->fecha_pruebas = $fechaPruebas;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaPruebas
-     *
-     * @return \DateTime
-     */
-    public function getFechaPruebas()
-    {
-        return $this->fecha_pruebas;
-    }
-
-    /**
-     * Set codigoSeleccionTipoFk
-     *
-     * @param integer $codigoSeleccionTipoFk
-     *
-     * @return RhuSeleccion
-     */
-    public function setCodigoSeleccionTipoFk($codigoSeleccionTipoFk)
-    {
-        $this->codigoSeleccionTipoFk = $codigoSeleccionTipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSeleccionTipoFk
-     *
-     * @return integer
-     */
-    public function getCodigoSeleccionTipoFk()
-    {
-        return $this->codigoSeleccionTipoFk;
-    }
-
-    /**
-     * Set seleccionTipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setSeleccionTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel = null)
-    {
-        $this->seleccionTipoRel = $seleccionTipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get seleccionTipoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo
-     */
-    public function getSeleccionTipoRel()
-    {
-        return $this->seleccionTipoRel;
-    }
-
-    /**
-     * Set ciudadRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
-    {
-        $this->ciudadRel = $ciudadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadRel()
-    {
-        return $this->ciudadRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->seleccionesReferenciasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add seleccionesReferenciasSeleccionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
-     *
-     * @return RhuSeleccion
-     */
-    public function addSeleccionesReferenciasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel)
-    {
-        $this->seleccionesReferenciasSeleccionRel[] = $seleccionesReferenciasSeleccionRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove seleccionesReferenciasSeleccionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
-     */
-    public function removeSeleccionesReferenciasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel)
-    {
-        $this->seleccionesReferenciasSeleccionRel->removeElement($seleccionesReferenciasSeleccionRel);
-    }
-
-    /**
-     * Get seleccionesReferenciasSeleccionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSeleccionesReferenciasSeleccionRel()
-    {
-        return $this->seleccionesReferenciasSeleccionRel;
     }
 
     /**
@@ -917,5 +728,279 @@ class RhuSeleccion
     public function getReferenciasVerificadas()
     {
         return $this->referenciasVerificadas;
+    }
+
+    /**
+     * Set fechaEntrevista
+     *
+     * @param \DateTime $fechaEntrevista
+     *
+     * @return RhuSeleccion
+     */
+    public function setFechaEntrevista($fechaEntrevista)
+    {
+        $this->fecha_entrevista = $fechaEntrevista;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEntrevista
+     *
+     * @return \DateTime
+     */
+    public function getFechaEntrevista()
+    {
+        return $this->fecha_entrevista;
+    }
+
+    /**
+     * Set fechaPruebas
+     *
+     * @param \DateTime $fechaPruebas
+     *
+     * @return RhuSeleccion
+     */
+    public function setFechaPruebas($fechaPruebas)
+    {
+        $this->fecha_pruebas = $fechaPruebas;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPruebas
+     *
+     * @return \DateTime
+     */
+    public function getFechaPruebas()
+    {
+        return $this->fecha_pruebas;
+    }
+
+    /**
+     * Set seleccionTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setSeleccionTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel = null)
+    {
+        $this->seleccionTipoRel = $seleccionTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get seleccionTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo
+     */
+    public function getSeleccionTipoRel()
+    {
+        return $this->seleccionTipoRel;
+    }
+
+    /**
+     * Set tipoIdentificacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel = null)
+    {
+        $this->tipoIdentificacionRel = $tipoIdentificacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion
+     */
+    public function getTipoIdentificacionRel()
+    {
+        return $this->tipoIdentificacionRel;
+    }
+
+    /**
+     * Set estadoCivilRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel = null)
+    {
+        $this->estadoCivilRel = $estadoCivilRel;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCivilRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil
+     */
+    public function getEstadoCivilRel()
+    {
+        return $this->estadoCivilRel;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
+    }
+
+    /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
+    }
+
+    /**
+     * Set seleccionGrupoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\RhuSeleccionGrupo $seleccionGrupoRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setSeleccionGrupoRel(\Brasa\GeneralBundle\Entity\RhuSeleccionGrupo $seleccionGrupoRel = null)
+    {
+        $this->seleccionGrupoRel = $seleccionGrupoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get seleccionGrupoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\RhuSeleccionGrupo
+     */
+    public function getSeleccionGrupoRel()
+    {
+        return $this->seleccionGrupoRel;
+    }
+
+    /**
+     * Add seleccionesReferenciasSeleccionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
+     *
+     * @return RhuSeleccion
+     */
+    public function addSeleccionesReferenciasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel)
+    {
+        $this->seleccionesReferenciasSeleccionRel[] = $seleccionesReferenciasSeleccionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesReferenciasSeleccionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
+     */
+    public function removeSeleccionesReferenciasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel)
+    {
+        $this->seleccionesReferenciasSeleccionRel->removeElement($seleccionesReferenciasSeleccionRel);
+    }
+
+    /**
+     * Get seleccionesReferenciasSeleccionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesReferenciasSeleccionRel()
+    {
+        return $this->seleccionesReferenciasSeleccionRel;
+    }
+
+    /**
+     * Set codigoSeleccionGrupoFk
+     *
+     * @param integer $codigoSeleccionGrupoFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoSeleccionGrupoFk($codigoSeleccionGrupoFk)
+    {
+        $this->codigoSeleccionGrupoFk = $codigoSeleccionGrupoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSeleccionGrupoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSeleccionGrupoFk()
+    {
+        return $this->codigoSeleccionGrupoFk;
+    }
+
+    /**
+     * Set selecccionGrupoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $selecccionGrupoRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setSelecccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $selecccionGrupoRel = null)
+    {
+        $this->selecccionGrupoRel = $selecccionGrupoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get selecccionGrupoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo
+     */
+    public function getSelecccionGrupoRel()
+    {
+        return $this->selecccionGrupoRel;
     }
 }

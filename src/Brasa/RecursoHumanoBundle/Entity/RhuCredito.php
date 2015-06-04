@@ -92,7 +92,9 @@ class RhuCredito
      * @ORM\ManyToOne(targetEntity="RhuCreditoTipo", inversedBy="creditosCreditoTipoRel")
      * @ORM\JoinColumn(name="codigo_credito_tipo_fk", referencedColumnName="codigo_credito_tipo_pk")
      */
-    protected $creditoTipoRel;    
+    protected $creditoTipoRel;
+    
+
 
 
 
@@ -465,4 +467,6 @@ class RhuCredito
     {
         return $this->seguro;
     }
+
+   
 }

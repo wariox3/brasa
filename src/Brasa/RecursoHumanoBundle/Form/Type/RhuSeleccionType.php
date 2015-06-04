@@ -13,7 +13,11 @@ class RhuSeleccionType extends AbstractType
             ->add('seleccionTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionTipo',
                 'property' => 'nombre',
-            ))                
+            ))
+            ->add('seleccionGrupoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionGrupo',
+                'property' => 'nombre',
+            ))    
             ->add('tipoIdentificacionRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuTipoIdentificacion',
                 'property' => 'nombre',
