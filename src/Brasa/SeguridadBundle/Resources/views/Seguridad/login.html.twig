@@ -18,9 +18,10 @@
         <div class="container">
             <form class="form-signin" role="form" action="{{ path('login_check') }}" method="post">
                 <h2 class="form-signin-heading">Inicio sesion</h2>
+                
                 <input type="email" class="form-control" placeholder="Email address" id="username" name="_username" required autofocus>
                 <input type="password" class="form-control" placeholder="Password" id="password" name="_password" required>
-
+                <input type="text" class="form-control" id="empresa" name="_empresa" required>
                 <label class="checkbox">
                     <input type="checkbox" value="remember-me"> Recordarme
                 </label>

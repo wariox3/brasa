@@ -50,6 +50,11 @@ class User implements UserInterface, \Serializable
     private $isActive;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $empresa;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteUsuarioConfiguracion", mappedBy="usuarioRel")
      */
     protected $usuariosConfiguracionRel;    
@@ -257,5 +262,31 @@ class User implements UserInterface, \Serializable
     public function getUsuariosConfiguracionRel()
     {
         return $this->usuariosConfiguracionRel;
+    }
+
+
+
+    /**
+     * Set empresa
+     *
+     * @param string $empresa
+     *
+     * @return User
+     */
+    public function setEmpresa($empresa)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return string
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }
