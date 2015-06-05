@@ -170,6 +170,18 @@ brs_rhu_seleccion_detalle:
     path:     /rhumano/seleccion/detalle/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:detalle }     
     
+brs_rhu_selecciongrupo_lista:
+    path:     /rhumano/selecciongrupo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionGrupo:lista }
+    
+brs_rhu_selecciongrupo_nuevo:
+    path:     /rhumano/selecciongrupo/nuevo/{codigoSeleccionGrupo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionGrupo:nuevo }     
+    
+brs_rhu_selecciongrupo_detalle:
+    path:     /rhumano/selecciongrupo/detalle/{codigoSeleccionGrupo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionGrupo:detalle }    
+
 brs_rhu_ss_periodo_lista:
     path:     /rhumano/seguridadsocial/periodo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:lista }     
