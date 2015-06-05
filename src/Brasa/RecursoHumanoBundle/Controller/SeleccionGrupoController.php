@@ -71,9 +71,9 @@ class SeleccionGrupoController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
-            if($form->get('BtnImprimir')->isClicked()) {
-                //$objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPago();
-                //$objFormatoPago->Generar($this, $codigoPago);
+            if($form->get('BtnImprimir')->isClicked()) {                
+                $objSeleccionGrupo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoSeleccionGrupo();
+                $objSeleccionGrupo->Generar($this, $codigoSeleccionGrupo);
             }
             if ($form->get('BtnEliminarSeleccion')->isClicked()) {    
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->eliminarSelecciones($arrSeleccionados);                 
