@@ -54,7 +54,7 @@ class RhuSeleccionGrupo
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="selecccionGrupoRel")
      */
-    protected $seleccionSeleccionGrupoRel;
+    protected $seleccionesSeleccionGrupoRel;
     
     
 
@@ -252,5 +252,39 @@ class RhuSeleccionGrupo
     public function getSeleccionSeleccionGrupoRel()
     {
         return $this->seleccionSeleccionGrupoRel;
+    }
+
+    /**
+     * Add seleccionesSeleccionGrupoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionGrupoRel
+     *
+     * @return RhuSeleccionGrupo
+     */
+    public function addSeleccionesSeleccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionGrupoRel)
+    {
+        $this->seleccionesSeleccionGrupoRel[] = $seleccionesSeleccionGrupoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesSeleccionGrupoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionGrupoRel
+     */
+    public function removeSeleccionesSeleccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionGrupoRel)
+    {
+        $this->seleccionesSeleccionGrupoRel->removeElement($seleccionesSeleccionGrupoRel);
+    }
+
+    /**
+     * Get seleccionesSeleccionGrupoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesSeleccionGrupoRel()
+    {
+        return $this->seleccionesSeleccionGrupoRel;
     }
 }

@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 class RhuSeleccionGrupoRepository extends EntityRepository {                   
+    
     public function eliminarSeleccionGrupos($arrSeleccionados) {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
@@ -17,6 +18,18 @@ class RhuSeleccionGrupoRepository extends EntityRepository {
             $em->flush();       
         }     
     } 
+    
+    public function eliminarSelecciones($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigoSeleccion) {                
+                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);                     
+                $arSeleccion->setSeleccionGrupoRel(NULL);
+                $em->persist($arSeleccion);                            
+            }
+            $em->flush();       
+        }     
+    }     
     
     public function listaDQL($strNombre = "", $boolAbierto = "") {        
         $em = $this->getEntityManager();

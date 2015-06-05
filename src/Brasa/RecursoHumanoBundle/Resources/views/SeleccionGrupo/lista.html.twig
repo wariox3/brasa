@@ -40,8 +40,7 @@
                 <th>FECHA</th>
                 <th>NOMBRE</th>
                 <th>CENTRO COSTO</th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Pruebas presentadas">P.P</p></th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Abierto">AB</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Abierto">ABIERTO</p></th>
                 <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
@@ -52,8 +51,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arGrupos.codigoSeleccionGrupoPk }}">{{ arGrupos.codigoSeleccionGrupoPk }} </td>
                 <td>{{ arGrupos.fecha | date("Y/m/d")  }}</td>
                 <td>{{ arGrupos.nombre  }}</td>                                
-                <td>{{ arGrupos.centroCostoRel.nombre|default('SIN CENTRO COSTO')  }}</td>                
-                <td>{% if arGrupos.presentaPruebas == 1 %} SI {% else %} NO {% endif %}</td>                                
+                <td>{{ arGrupos.centroCostoRel.nombre|default('SIN CENTRO COSTO')  }}</td>                                
                 <td>{% if arGrupos.estadoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_selecciongrupo_nuevo', { 'codigoSeleccionGrupo':  arGrupos.codigoSeleccionGrupoPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_selecciongrupo_detalle', { 'codigoSeleccionGrupo': arGrupos.codigoSeleccionGrupoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>

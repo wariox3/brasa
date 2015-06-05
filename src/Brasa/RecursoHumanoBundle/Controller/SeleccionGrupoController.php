@@ -66,22 +66,19 @@ class SeleccionGrupoController extends Controller
     public function detalleAction($codigoSeleccionGrupo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
-        $objMensaje = $this->get('mensajes_brasa');             
-        
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
-            ->getForm();
+        $objMensaje = $this->get('mensajes_brasa');                     
+        $form = $this->formularioDetalle();
         $form->handleRequest($request);
         if($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPago();
-                $objFormatoPago->Generar($this, $codigoPago);
+                //$objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPago();
+                //$objFormatoPago->Generar($this, $codigoPago);
             }
-            if($form->get('BtnReliquidar')->isClicked()) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->liquidar($codigoPago);
-                return $this->redirect($this->generateUrl('brs_rhu_pagos_detalle', array('codigoPago' => $codigoPago)));
-            }
+            if ($form->get('BtnEliminarSeleccion')->isClicked()) {    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->eliminarSelecciones($arrSeleccionados);                 
+                return $this->redirect($this->generateUrl('brs_rhu_selecciongrupo_detalle', array('codigoSeleccionGrupo' => $codigoSeleccionGrupo)));
+            }            
         }        
         
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuSeleccion c where c.codigoSeleccionGrupoFk = $codigoSeleccionGrupo";
@@ -171,4 +168,12 @@ class SeleccionGrupoController extends Controller
             ->getForm();        
         return $form;
     }
+    
+    private function formularioDetalle() {        
+        $form = $this->createFormBuilder()
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->add('BtnEliminarSeleccion', 'submit', array('label'  => 'Eliminar',))
+            ->getForm();        
+        return $form;
+    }    
 }
