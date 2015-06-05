@@ -18,22 +18,22 @@ class RhuSeleccionGrupo
     private $codigoSeleccionGrupoPk;        
     
     /**
-     * @ORM\Column(name="fecha", type="datetime")
+     * @ORM\Column(name="fecha", type="date")
      */ 
     
     private $fecha;                   
-             
+    
     /**     
      * @ORM\Column(name="nombre", type="string")
      */    
     
-    private $nombre;
+    private $nombre;           
+                
+    /**
+     * @ORM\Column(name="fecha_pruebas", type="datetime")
+     */ 
     
-    /**     
-     * @ORM\Column(name="estado_aprobado", type="boolean")
-     */    
-    
-    private $estadoAprobado = 0;        
+    private $fechaPruebas;         
     
     /**     
      * @ORM\Column(name="estado_abierto", type="boolean")
@@ -43,17 +43,24 @@ class RhuSeleccionGrupo
     /**     
      * @ORM\Column(name="presenta_pruebas", type="boolean")
      */    
-    private $presentaPruebas = 0;
+    private $presentaPruebas = 0;    
     
-    /**     
-     * @ORM\Column(name="referencias_verificadas", type="boolean")
+    /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
-    private $referenciasVerificadas = 0;    
+    private $codigoCentroCostoFk; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="seleccionesGruposCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="selecccionGrupoRel")
      */
     protected $seleccionSeleccionGrupoRel;
+    
     
     /**
      * Constructor
@@ -122,27 +129,27 @@ class RhuSeleccionGrupo
     }
 
     /**
-     * Set estadoAprobado
+     * Set fechaPruebas
      *
-     * @param boolean $estadoAprobado
+     * @param \DateTime $fechaPruebas
      *
      * @return RhuSeleccionGrupo
      */
-    public function setEstadoAprobado($estadoAprobado)
+    public function setFechaPruebas($fechaPruebas)
     {
-        $this->estadoAprobado = $estadoAprobado;
+        $this->fechaPruebas = $fechaPruebas;
 
         return $this;
     }
 
     /**
-     * Get estadoAprobado
+     * Get fechaPruebas
      *
-     * @return boolean
+     * @return \DateTime
      */
-    public function getEstadoAprobado()
+    public function getFechaPruebas()
     {
-        return $this->estadoAprobado;
+        return $this->fechaPruebas;
     }
 
     /**
@@ -194,27 +201,51 @@ class RhuSeleccionGrupo
     }
 
     /**
-     * Set referenciasVerificadas
+     * Set codigoCentroCostoFk
      *
-     * @param boolean $referenciasVerificadas
+     * @param integer $codigoCentroCostoFk
      *
      * @return RhuSeleccionGrupo
      */
-    public function setReferenciasVerificadas($referenciasVerificadas)
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
-        $this->referenciasVerificadas = $referenciasVerificadas;
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
 
         return $this;
     }
 
     /**
-     * Get referenciasVerificadas
+     * Get codigoCentroCostoFk
      *
-     * @return boolean
+     * @return integer
      */
-    public function getReferenciasVerificadas()
+    public function getCodigoCentroCostoFk()
     {
-        return $this->referenciasVerificadas;
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuSeleccionGrupo
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
     }
 
     /**

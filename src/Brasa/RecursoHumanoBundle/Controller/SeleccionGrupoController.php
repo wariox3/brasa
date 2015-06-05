@@ -10,36 +10,32 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionGrupoType;
 class SeleccionGrupoController extends Controller
 {
     public function listaAction() {
-         $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
         $paginator  = $this->get('knp_paginator');
-        $mensaje=0;
         $form = $this->createFormBuilder()
             ->add('TxtNombre', 'text', array('label'  => 'Nombre',))
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Nombre',))
-            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'APROBADO', '0' => 'NO APROBADO')))                            
             ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'))) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->getForm();
         $form->handleRequest($request); 
         
-        if ($form->isValid())
-        {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if ($form->get('BtnEliminar')->isClicked())
-            {    
-            if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $id) {
-                    $arGrupos = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
-                    $arGrupos = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($id);
-                     
-                        $em->remove($arGrupos);
-                        $em->flush();
+        if ($form->isValid()) {            
+            if ($form->get('BtnEliminar')->isClicked()) {    
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoSeleccionGrupo) {
+                        if($em->getRepository('')->devuelveNumeroSelecciones()) {
+                            
+                        }
+                        $arSeleccionGrupo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($codigoSeleccionGrupo);                     
+                        $em->remove($arSeleccionGrupo);
+                    }
+                    $em->flush();
                 }
-            }
             }
         }
         $arGrupos = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
@@ -58,13 +54,12 @@ class SeleccionGrupoController extends Controller
         $arGrupo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
         if($codigoSeleccionGrupo != 0) {
             $arGrupo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($codigoSeleccionGrupo);
-        } else {
-            $arGrupo->setFecha(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuSeleccionGrupoType, $arGrupo);
         $form->handleRequest($request);
         if ($form->isValid()) {           
             $arGrupo = $form->getData();
+            $arGrupo->setFecha(new \DateTime('now'));
             $em->persist($arGrupo);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {

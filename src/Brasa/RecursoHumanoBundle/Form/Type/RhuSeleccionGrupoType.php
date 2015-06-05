@@ -10,7 +10,7 @@ class RhuSeleccionGrupoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fecha', 'date', array('data' => new \ DateTime('now')))
+            ->add('fechaPruebas', 'date', array('data' => new \ DateTime('now')))
             ->add('nombre', 'text', array('required' => true))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

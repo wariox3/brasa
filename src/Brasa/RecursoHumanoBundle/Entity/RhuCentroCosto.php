@@ -106,9 +106,14 @@ class RhuCentroCosto
     protected $empleadosCentroCostoRel;    
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="centroCostoRel")
+     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="centroCostoRel")
      */
     protected $seleccionesCentroCostoRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionGrupo", mappedBy="centroCostoRel")
+     */
+    protected $seleccionesGruposCentroCostoRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="centroCostoRel")
@@ -140,6 +145,7 @@ class RhuCentroCosto
      */
     protected $sedesCentroCostoRel;    
 
+
     /**
      * Constructor
      */
@@ -147,11 +153,14 @@ class RhuCentroCosto
     {
         $this->programacionesPagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesGruposCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sedesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -593,6 +602,74 @@ class RhuCentroCosto
     }
 
     /**
+     * Add seleccionesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addSeleccionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesCentroCostoRel)
+    {
+        $this->seleccionesCentroCostoRel[] = $seleccionesCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesCentroCostoRel
+     */
+    public function removeSeleccionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesCentroCostoRel)
+    {
+        $this->seleccionesCentroCostoRel->removeElement($seleccionesCentroCostoRel);
+    }
+
+    /**
+     * Get seleccionesCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesCentroCostoRel()
+    {
+        return $this->seleccionesCentroCostoRel;
+    }
+
+    /**
+     * Add seleccionesGruposCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionesGruposCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addSeleccionesGruposCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionesGruposCentroCostoRel)
+    {
+        $this->seleccionesGruposCentroCostoRel[] = $seleccionesGruposCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesGruposCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionesGruposCentroCostoRel
+     */
+    public function removeSeleccionesGruposCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionesGruposCentroCostoRel)
+    {
+        $this->seleccionesGruposCentroCostoRel->removeElement($seleccionesGruposCentroCostoRel);
+    }
+
+    /**
+     * Get seleccionesGruposCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesGruposCentroCostoRel()
+    {
+        return $this->seleccionesGruposCentroCostoRel;
+    }
+
+    /**
      * Add pagosAdicionalesCentroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional $pagosAdicionalesCentroCostoRel
@@ -760,40 +837,6 @@ class RhuCentroCosto
     public function getFacturasCentroCostoRel()
     {
         return $this->facturasCentroCostoRel;
-    }
-
-    /**
-     * Add seleccionesCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $seleccionesCentroCostoRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function addSeleccionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $seleccionesCentroCostoRel)
-    {
-        $this->seleccionesCentroCostoRel[] = $seleccionesCentroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove seleccionesCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $seleccionesCentroCostoRel
-     */
-    public function removeSeleccionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $seleccionesCentroCostoRel)
-    {
-        $this->seleccionesCentroCostoRel->removeElement($seleccionesCentroCostoRel);
-    }
-
-    /**
-     * Get seleccionesCentroCostoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSeleccionesCentroCostoRel()
-    {
-        return $this->seleccionesCentroCostoRel;
     }
 
     /**
