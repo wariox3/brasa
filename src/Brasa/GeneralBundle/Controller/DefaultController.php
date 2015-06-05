@@ -3,7 +3,7 @@
 namespace Brasa\GeneralBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Bundle\DoctrineBundle\ConnectionFactory;
 class DefaultController extends Controller
 {
     public function indexAction()
@@ -16,7 +16,12 @@ class DefaultController extends Controller
         $arUsuario = new \Brasa\SeguridadBundle\Entity\User();
         $arUsuario = $this->get('security.context')->getToken()->getUser();
         $strUsuario = $arUsuario->getNombreCorto();
-        //$strUsuario = "Mario Andres";
+        
+        //$destinatario = $this->contenedor->getParameter('contact_email');
+        //$obj = new \Brasa\GeneralBundle\MisClases\CambiarBD();
+        //$obj->setUpAppConnection($this);
+        //\Brasa\GeneralBundle\MisClases\CambiarBD::setUpAppConnection();
+        
         return $this->render('BrasaGeneralBundle:plantillas:menu.html.twig', array('Usuario' => $strUsuario));
     }                  
     

@@ -44,26 +44,7 @@ assetic:
 
 # Doctrine Configuration
 doctrine:
-    dbal:
-        #default_connection: default
-        #connections:
-        #    default:
-        #        driver:   "%database_driver%"
-        #        host:     "%database_host%"
-        #        port:     "%database_port%"
-        #        dbname:   "%database_name%"
-        #        user:     "%database_user%"
-        #        password: "%database_password%"
-        #        charset:  UTF8
-        #    emp1:
-        #        driver:   "%database_driver%"
-        #        host:     "%database_host%"
-        #        port:     "%database_port%"
-        #        dbname:   "bdbrasa_emp1"
-        #        user:     "%database_user2%"
-        #        password: "%database_password2%"
-        #        charset:  UTF8
-                
+    dbal:                
         driver:   "%database_driver%"
         host:     "%database_host%"
         port:     "%database_port%"
@@ -71,25 +52,37 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  UTF8
-        
+        #default_connection:   default
+        #connections:
+        #    # A collection of different named connections (e.g. default, conn2, etc)
+        #    default:
+        #        driver:   "%database_driver%"
+        #        host:     "%database_host%"
+        #        port:     "%database_port%"
+        #        dbname:   "%database_name%"
+        #        user:     "%database_user%"
+        #        password: "%database_password%"
+        #        charset:  UTF8    
+        #    dynamic:
+        #        driver:   %database_driver%
+        #        host:     %database_host%
+        #        port:     %database_port%
+        #        dbname:   'empty_database'
+        #        charset:  UTF8
+        #        wrapper_class: 'Brasa\GeneralBundle\MisClases\Connection\ConnectionWrapper'                
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: "%kernel.root_dir%/data/data.db3"
         # path:     "%database_path%"
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        auto_mapping: true
+        auto_mapping: true               
         #default_entity_manager: default
         #entity_managers:
         #    default:
         #        connection: default
         #        mappings:
-        #            AppBundle:  ~
-        #            AcmeStoreBundle: ~
-        #    customer:
-        #        connection: customer
-        #        mappings:
-        #            AcmeCustomerBundle: ~        
+        #            BrasaSeguridadBundle: ~
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -101,8 +94,9 @@ swiftmailer:
 
 services:
     mensajes_brasa:
-        class:        Brasa\GeneralBundle\MisClases\Mensajes        
-        
+        class:        Brasa\GeneralBundle\MisClases\Mensajes   
+    
+       
         
 knp_paginator:
     page_range: 5                      # default page range used in pagination control

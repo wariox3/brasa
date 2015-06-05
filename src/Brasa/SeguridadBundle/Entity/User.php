@@ -52,12 +52,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $empresa;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteUsuarioConfiguracion", mappedBy="usuarioRel")
-     */
-    protected $usuariosConfiguracionRel;    
+    private $empresa;       
     
     public function __construct()
     {
