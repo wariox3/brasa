@@ -184,6 +184,7 @@ class RhuSeleccion
     protected $seleccionesReferenciasSeleccionRel;     
 
     
+   
     /**
      * Constructor
      */
@@ -200,6 +201,30 @@ class RhuSeleccion
     public function getCodigoSeleccionPk()
     {
         return $this->codigoSeleccionPk;
+    }
+
+    /**
+     * Set codigoSeleccionGrupoFk
+     *
+     * @param integer $codigoSeleccionGrupoFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoSeleccionGrupoFk($codigoSeleccionGrupoFk)
+    {
+        $this->codigoSeleccionGrupoFk = $codigoSeleccionGrupoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSeleccionGrupoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSeleccionGrupoFk()
+    {
+        return $this->codigoSeleccionGrupoFk;
     }
 
     /**
@@ -899,27 +924,27 @@ class RhuSeleccion
     }
 
     /**
-     * Set seleccionGrupoRel
+     * Set selecccionGrupoRel
      *
-     * @param \Brasa\GeneralBundle\Entity\RhuSeleccionGrupo $seleccionGrupoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $selecccionGrupoRel
      *
      * @return RhuSeleccion
      */
-    public function setSeleccionGrupoRel(\Brasa\GeneralBundle\Entity\RhuSeleccionGrupo $seleccionGrupoRel = null)
+    public function setSelecccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $selecccionGrupoRel = null)
     {
-        $this->seleccionGrupoRel = $seleccionGrupoRel;
+        $this->selecccionGrupoRel = $selecccionGrupoRel;
 
         return $this;
     }
 
     /**
-     * Get seleccionGrupoRel
+     * Get selecccionGrupoRel
      *
-     * @return \Brasa\GeneralBundle\Entity\RhuSeleccionGrupo
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo
      */
-    public function getSeleccionGrupoRel()
+    public function getSelecccionGrupoRel()
     {
-        return $this->seleccionGrupoRel;
+        return $this->selecccionGrupoRel;
     }
 
     /**
@@ -954,53 +979,5 @@ class RhuSeleccion
     public function getSeleccionesReferenciasSeleccionRel()
     {
         return $this->seleccionesReferenciasSeleccionRel;
-    }
-
-    /**
-     * Set codigoSeleccionGrupoFk
-     *
-     * @param integer $codigoSeleccionGrupoFk
-     *
-     * @return RhuSeleccion
-     */
-    public function setCodigoSeleccionGrupoFk($codigoSeleccionGrupoFk)
-    {
-        $this->codigoSeleccionGrupoFk = $codigoSeleccionGrupoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSeleccionGrupoFk
-     *
-     * @return integer
-     */
-    public function getCodigoSeleccionGrupoFk()
-    {
-        return $this->codigoSeleccionGrupoFk;
-    }
-
-    /**
-     * Set selecccionGrupoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $selecccionGrupoRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setSelecccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $selecccionGrupoRel = null)
-    {
-        $this->selecccionGrupoRel = $selecccionGrupoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get selecccionGrupoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo
-     */
-    public function getSelecccionGrupoRel()
-    {
-        return $this->selecccionGrupoRel;
     }
 }
