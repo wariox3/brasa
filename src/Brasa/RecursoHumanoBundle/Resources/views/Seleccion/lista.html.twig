@@ -8,6 +8,8 @@
 <div class="container">
     <div class="page-header">
         <h3>Lista selecciones</h3>
+        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_selecciongrupo_lista' ) }}" style="float:left">Grupos</a>
+        <br>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -99,11 +101,15 @@
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_selecciongrupo_lista' ) }}" style="float:left">Grupos</a>
                 {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">
+                {{ form_widget(form.BtnPruebasP, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
+                {{ form_widget(form.BtnAprobado, { 'attr': {'class': 'btn btn-warning btn-sm'} }) }}
+                {{ form_widget(form.BtnReferenciasV, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
+                {{ form_widget(form.BtnAbierto, { 'attr': {'class': 'btn btn-warning btn-sm'} }) }}
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_seleccion_nuevo', { 'codigoSeleccion': 0 }) }}" style="float:left">Nuevo</a>
             </div>
         </div>

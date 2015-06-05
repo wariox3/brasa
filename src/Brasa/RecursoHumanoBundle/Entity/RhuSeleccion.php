@@ -173,10 +173,10 @@ class RhuSeleccion
     protected $ciudadRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSeleccionGrupo", inversedBy="seleccionSeleccionGrupoRel")
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionGrupo", inversedBy="seleccionesSeleccionGrupoRel")
      * @ORM\JoinColumn(name="codigo_seleccion_grupo_fk", referencedColumnName="codigo_seleccion_grupo_pk")
      */
-    protected $selecccionGrupoRel;
+    protected $seleccionGrupoRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionReferencia", mappedBy="seleccionRel")
@@ -185,6 +185,7 @@ class RhuSeleccion
 
     
    
+    
     /**
      * Constructor
      */
@@ -924,27 +925,27 @@ class RhuSeleccion
     }
 
     /**
-     * Set selecccionGrupoRel
+     * Set seleccionGrupoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $selecccionGrupoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionGrupoRel
      *
      * @return RhuSeleccion
      */
-    public function setSelecccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $selecccionGrupoRel = null)
+    public function setSeleccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionGrupoRel = null)
     {
-        $this->selecccionGrupoRel = $selecccionGrupoRel;
+        $this->seleccionGrupoRel = $seleccionGrupoRel;
 
         return $this;
     }
 
     /**
-     * Get selecccionGrupoRel
+     * Get seleccionGrupoRel
      *
      * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo
      */
-    public function getSelecccionGrupoRel()
+    public function getSeleccionGrupoRel()
     {
-        return $this->selecccionGrupoRel;
+        return $this->seleccionGrupoRel;
     }
 
     /**
