@@ -25,4 +25,12 @@ class RhuSeleccionRepository extends EntityRepository {
         $dql .= " ORDER BY s.nombreCorto";
         return $dql;
     }                            
+    
+    public function devuelveNumeroSelecciones($codigoSeleccionGrupo) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT COUNT(s.codigoSeleccionPk) FROM BrasaRecursoHumanoBundle:RhuSeleccion s WHERE s.codigoSeleccionGrupoFk = " . $codigoSeleccionGrupo;
+        $query = $em->createQuery($dql);
+        $douNumeroSelecciones = $query->getSingleScalarResult();
+        return $douNumeroSelecciones;
+    }      
 }

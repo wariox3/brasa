@@ -38,12 +38,7 @@ class RhuSeleccionGrupo
     /**     
      * @ORM\Column(name="estado_abierto", type="boolean")
      */    
-    private $estadoAbierto = 0;    
-    
-    /**     
-     * @ORM\Column(name="presenta_pruebas", type="boolean")
-     */    
-    private $presentaPruebas = 0;    
+    private $estadoAbierto = 0;            
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -62,6 +57,7 @@ class RhuSeleccionGrupo
     protected $seleccionSeleccionGrupoRel;
     
     
+
     /**
      * Constructor
      */
@@ -174,30 +170,6 @@ class RhuSeleccionGrupo
     public function getEstadoAbierto()
     {
         return $this->estadoAbierto;
-    }
-
-    /**
-     * Set presentaPruebas
-     *
-     * @param boolean $presentaPruebas
-     *
-     * @return RhuSeleccionGrupo
-     */
-    public function setPresentaPruebas($presentaPruebas)
-    {
-        $this->presentaPruebas = $presentaPruebas;
-
-        return $this;
-    }
-
-    /**
-     * Get presentaPruebas
-     *
-     * @return boolean
-     */
-    public function getPresentaPruebas()
-    {
-        return $this->presentaPruebas;
     }
 
     /**
