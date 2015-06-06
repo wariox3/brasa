@@ -66,20 +66,11 @@
     <!-- Fin Encabezado Movimiento -->
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
-        <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">                
-                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoArchivoTipo': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Documentos</a>                        
-            </div>
-        </div>
-            
-    <br /><br />
+        
+    <br />
     <ul class="nav nav-tabs">
         <li class="active"><a href="#referencias" data-toggle="tab">Referencias</a></li>
-        <li><a href="#pruebas" data-toggle="tab">Pruebas</a></li>
     </ul>
-
     <div class="tab-content">
         <div class="tab-pane active" id="referencias">
                 <!-- Menu Encabezado Movimiento -->
@@ -126,9 +117,7 @@
                     <!-- Fin Botones Menu Items -->
                 </div>
         </div>
-        <div class="tab-pane" id="pruebas">
-
-        </div>
+        
     </div>            
             
             

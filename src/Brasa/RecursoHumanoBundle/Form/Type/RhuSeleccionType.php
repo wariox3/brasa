@@ -14,7 +14,7 @@ class RhuSeleccionType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionTipo',
                 'property' => 'nombre',
             ))
-            ->add('selecccionGrupoRel', 'entity', array(
+            ->add('seleccionGrupoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionGrupo',
                 'property' => 'nombre',
             ))    
