@@ -27,7 +27,13 @@
                     <td class="td-in-well">{{ arGrupo.nombre }}</td>
                     <td class="titulo">FECHA PRUEBAS:</td>
                     <td class="td-in-well">{{ arGrupo.fechaPruebas | date('Y/m/d') }}</td>
-                </tr>                
+                </tr>
+                <tr>
+                    <td class="titulo">CANTIDAD SOLICITADA:</td>
+                    <td class="td-in-well">{{ arGrupo.cantidadSolicitida }}</td>
+                    <td class="titulo">ESTADO ABIERTO:</td>
+                    <td class="td-in-well" {% if arGrupo.estadoAbierto == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
+                </tr>
             </table>
       </div>
     </div>
