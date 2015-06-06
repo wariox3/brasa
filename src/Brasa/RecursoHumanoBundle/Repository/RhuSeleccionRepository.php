@@ -46,13 +46,81 @@ class RhuSeleccionRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $douNumeroReferencias = $query->getSingleScalarResult();
         return $douNumeroReferencias;
+    }        
+    
+    public function devuelveNumeroReferenciasSinVerificar($codigoSeleccion) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT COUNT(s.codigoSeleccionReferenciaPk) FROM BrasaRecursoHumanoBundle:RhuSeleccionReferencia s WHERE s.estadoVerificada = 0  and s.codigoSeleccionFk = " . $codigoSeleccion;
+        $query = $em->createQuery($dql);        
+        return $query->getSingleScalarResult();
     }
     
-    public function devuelveNumeroReferenciasVerificadas($id) {
+    public function presentaPruebasSelecciones($arrSeleccionados) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT COUNT(s.codigoSeleccionReferenciaPk) FROM BrasaRecursoHumanoBundle:RhuSeleccionReferencia s WHERE s.estadoVerificada = 1  and s.codigoSeleccionFk = " . $id;
-        $query = $em->createQuery($dql);
-        $douNumeroSeleccionesVerificadas = $query->getSingleScalarResult();
-        return $douNumeroSeleccionesVerificadas;
-    }
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigoSeleccion) {
+                $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+                if ($arSelecciones->getPresentaPruebas() == 0){
+                    $arSelecciones->setPresentaPruebas(1);
+                } else {
+                    $arSelecciones->setPresentaPruebas(0);
+                }
+                $em->persist($arSelecciones);                
+            }
+            $em->flush();              
+        }        
+    }     
+    
+    public function referenciasVerificadsSelecciones($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigoSeleccion) {                
+                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+                if($arSeleccion->getReferenciasVerificadas() == 1) {
+                    $arSeleccion->setReferenciasVerificadas(0);
+                } else {                    
+                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->devuelveNumeroReferenciasSinVerificar($codigoSeleccion) <= 0) {                        
+                        $arSeleccion->setReferenciasVerificadas(1);                                           
+                    }                    
+                }
+                $em->persist($arSeleccion);
+            }
+            $em->flush();
+            
+        }        
+        return false;
+    }         
+
+    public function estadoAprobadoSelecciones($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigoSeleccion) {
+                $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+                if ($arSelecciones->getEstadoAprobado() == 0){
+                    $arSelecciones->setEstadoAprobado(1);
+                } else {
+                    $arSelecciones->setEstadoAprobado(0);
+                }
+                $em->persist($arSelecciones);                
+            }
+            $em->flush();              
+        }        
+    }         
+
+    public function estadoAbiertoSelecciones($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigoSeleccion) {
+                $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+                if ($arSelecciones->getEstadoAbierto() == 0){
+                    $arSelecciones->setEstadoAbierto(1);
+                } else {
+                    $arSelecciones->setEstadoAbierto(0);
+                }
+                $em->persist($arSelecciones);                
+            }
+            $em->flush();              
+        }        
+    }             
+    
 }

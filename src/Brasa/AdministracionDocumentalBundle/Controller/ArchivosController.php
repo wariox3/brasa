@@ -46,6 +46,7 @@ class ArchivosController extends Controller
                     $strDestino = $arDirectorio->getRutaPrincipal() . $arDirectorio->getNumero() . "/";
                     $strArchivo = $arArchivo->getCodigoArchivoPk() . "_" . $objArchivo->getClientOriginalName();
                     $form['attachment']->getData()->move($strDestino, $strArchivo);                    
+                    return $this->redirect($this->generateUrl('brs_ad_archivos_lista', array('codigoArchivoTipo' => $codigoArchivoTipo, 'numero' => $numero)));
                 } else {
                     $objMensaje->Mensaje("error", "Solo se pueden cargar arhivos pdf", $this);
                 }

@@ -4,7 +4,7 @@
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
     })
-</script>    
+</script>
 <div class="container">
     <div class="page-header">
         <h3>Lista selecciones</h3>
@@ -38,13 +38,15 @@
                     <div class="col-sm-5">
                         {{ form_widget(form.estadoAprobado, { 'attr': {'class': 'form-control'} }) }}
                     </div>
+                </div>
+                <div class="form-group form-group-sm">
                     <label for="form_estadoAbierto" class="col-sm-2 control-label">Abierto:</label>
                     <div class="col-sm-5">
                         {{ form_widget(form.estadoAbierto, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
-                    
+
 
                 </div>
                 <div class="form-group form-group-sm">
@@ -65,9 +67,9 @@
                 <th>PRUEBAS</th>
                 <th>TELEFONO</th>
                 <th>CELULAR</th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Pruebas presentadas">P.P</p></th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Aprobado">AP</p></th>                
+                <th><p data-toggle="tooltip" data-placement="top" title="Pruebas presentadas">P.P</p></th>                
                 <th><p data-toggle="tooltip" data-placement="top" title="Referencias verificadas">R.V</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Aprobado">AP</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Abierto">AB</p></th>
                 <th style="text-align: center"></th>
                 <th></th>
@@ -84,9 +86,9 @@
                 <td>{{ arSelecciones.fechaPruebas |date("Y/m/d H:i")  }}</td>
                 <td>{{ arSelecciones.telefono }}</td>
                 <td>{{ arSelecciones.celular }}</td>
-                <td>{% if arSelecciones.presentaPruebas == 1 %} SI {% else %} NO {% endif %}</td>                
-                <td>{% if arSelecciones.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arSelecciones.presentaPruebas == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arSelecciones.referenciasVerificadas == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arSelecciones.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arSelecciones.estadoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_seleccion_nuevo', { 'codigoSeleccion':  arSelecciones.codigoSeleccionPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_seleccion_detalle', { 'codigoSeleccion': arSelecciones.codigoSeleccionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
@@ -103,9 +105,9 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">
-                {{ form_widget(form.BtnPruebasP, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnReferenciasV, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnPruebasPresentadas, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                {{ form_widget(form.BtnReferenciasVerificadas, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                 {{ form_widget(form.BtnAbierto, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_seleccion_nuevo', { 'codigoSeleccion': 0 }) }}" style="float:left">Nuevo</a>
