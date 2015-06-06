@@ -119,8 +119,9 @@ class RhuSeleccion
     
     /**     
      * @ORM\Column(name="estado_abierto", type="boolean")
+     * @ORM\Column(type="integer", name="estado_abierto", options={"unsigned":true, "default":"1"})
      */    
-    private $estadoAbierto = 0;    
+    private $estadoAbierto;    
     
     /**     
      * @ORM\Column(name="presenta_pruebas", type="boolean")

@@ -6,26 +6,16 @@ use Doctrine\ORM\EntityRepository;
 
 class RhuSeleccionGrupoRepository extends EntityRepository {                   
     
+     
+    
     public function eliminarSeleccionGrupos($arrSeleccionados) {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
-            foreach ($arrSeleccionados AS $codigoSeleccionGrupo) {
-                if($em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->devuelveNumeroSelecciones($codigoSeleccionGrupo) <= 0) {
-                    $arSeleccionGrupo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($codigoSeleccionGrupo);                     
-                    $em->remove($arSeleccionGrupo);                            
-                }        
-            }
-            $em->flush();       
-        }     
-    } 
-    
-    public function eliminarSelecciones($arrSeleccionados) {
-        $em = $this->getEntityManager();
-        if(count($arrSeleccionados) > 0) {
-            foreach ($arrSeleccionados AS $codigoSeleccion) {                
-                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);                     
-                $arSeleccion->setSeleccionGrupoRel(NULL);
-                $em->persist($arSeleccion);                            
+            foreach ($arrSeleccionados AS $codigoSeleccionGrupo) {                
+                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($codigoSeleccionGrupo);                     
+                if($em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->devuelveNumeroDetalleGrupo($codigoSeleccionGrupo) <= 0){
+                   $em->remove($arSeleccion);  
+                }                                            
             }
             $em->flush();       
         }     
@@ -44,5 +34,30 @@ class RhuSeleccionGrupoRepository extends EntityRepository {
         }         
         $dql .= " ORDER BY sg.nombre";
         return $dql;
-    }     
+    }   
+    // Esta funcion cambiar el estado abierto del grupo (Abierto / Cerrado)
+    public function estadoAbiertoSeleccionGrupos($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigoSeleccion) {                
+                $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
+                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($codigoSeleccion);
+                if ($arSeleccion->getEstadoAbierto() == 1){
+                    $arSeleccion->setEstadoAbierto(0);
+                } else{
+                    $arSeleccion->setEstadoAbierto(1);
+                }
+                $em->persist($arSeleccion);                         
+            }
+            $em->flush();       
+        }     
+    }
+    
+    public function devuelveNumeroDetalleGrupo($codigoSeleccionGrupo) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT COUNT(s.codigoSeleccionPk) FROM BrasaRecursoHumanoBundle:RhuSeleccion s WHERE s.codigoSeleccionGrupoFk = " . $codigoSeleccionGrupo;
+        $query = $em->createQuery($dql);
+        $douNumeroDetalleGrupo = $query->getSingleScalarResult();
+        return $douNumeroDetalleGrupo;
+    }
 }

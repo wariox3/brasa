@@ -20,7 +20,11 @@ class SeleccionGrupoController extends Controller
         if ($form->isValid()) {            
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
             if ($form->get('BtnEliminar')->isClicked()) {    
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->eliminarSeleccionGrupos($arrSeleccionados); 
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->eliminarSeleccionGrupos($arrSeleccionados);
+                //$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->devuelveNumeroDetalleGrupo($arrSeleccionados); 
+            }
+            if ($form->get('BtnEstadoAbierto')->isClicked()) {    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->estadoAbiertoSeleccionGrupos($arrSeleccionados); 
             }
             if ($form->get('BtnFiltrar')->isClicked()) {    
                 $this->filtrar($form);
@@ -75,10 +79,7 @@ class SeleccionGrupoController extends Controller
                 $objSeleccionGrupo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoSeleccionGrupo();
                 $objSeleccionGrupo->Generar($this, $codigoSeleccionGrupo);
             }
-            if ($form->get('BtnEliminarSeleccion')->isClicked()) {    
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->eliminarSelecciones($arrSeleccionados);                 
-                return $this->redirect($this->generateUrl('brs_rhu_selecciongrupo_detalle', array('codigoSeleccionGrupo' => $codigoSeleccionGrupo)));
-            }            
+                      
         }        
         
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuSeleccion c where c.codigoSeleccionGrupoFk = $codigoSeleccionGrupo";
@@ -163,6 +164,7 @@ class SeleccionGrupoController extends Controller
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionGrupo')))
             ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccionGrupo'))) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnEstadoAbierto', 'submit', array('label'  => 'Abrir / Cerrar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
@@ -172,7 +174,6 @@ class SeleccionGrupoController extends Controller
     private function formularioDetalle() {        
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnEliminarSeleccion', 'submit', array('label'  => 'Eliminar',))
             ->getForm();        
         return $form;
     }    

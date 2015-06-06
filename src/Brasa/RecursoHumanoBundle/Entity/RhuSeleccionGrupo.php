@@ -29,6 +29,11 @@ class RhuSeleccionGrupo
     
     private $nombre;           
                 
+    /**     
+     * @ORM\Column(name="cantidad_solicitada", type="integer")
+     */    
+    private $cantidadSolicitida;
+    
     /**
      * @ORM\Column(name="fecha_pruebas", type="datetime")
      */ 
@@ -36,9 +41,9 @@ class RhuSeleccionGrupo
     private $fechaPruebas;         
     
     /**     
-     * @ORM\Column(name="estado_abierto", type="boolean")
+     * @ORM\Column(type="integer", name="estado_abierto", options={"unsigned":true, "default":"1"})
      */    
-    private $estadoAbierto = 0;            
+    private $estadoAbierto= 1;            
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -286,5 +291,53 @@ class RhuSeleccionGrupo
     public function getSeleccionesSeleccionGrupoRel()
     {
         return $this->seleccionesSeleccionGrupoRel;
+    }
+
+    /**
+     * Set cantidadSolicitidad
+     *
+     * @param integer $cantidadSolicitidad
+     *
+     * @return RhuSeleccionGrupo
+     */
+    public function setCantidadSolicitidad($cantidadSolicitidad)
+    {
+        $this->cantidadSolicitidad = $cantidadSolicitidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadSolicitidad
+     *
+     * @return integer
+     */
+    public function getCantidadSolicitidad()
+    {
+        return $this->cantidadSolicitidad;
+    }
+
+    /**
+     * Set cantidadSolicitida
+     *
+     * @param integer $cantidadSolicitida
+     *
+     * @return RhuSeleccionGrupo
+     */
+    public function setCantidadSolicitida($cantidadSolicitida)
+    {
+        $this->cantidadSolicitida = $cantidadSolicitida;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadSolicitida
+     *
+     * @return integer
+     */
+    public function getCantidadSolicitida()
+    {
+        return $this->cantidadSolicitida;
     }
 }

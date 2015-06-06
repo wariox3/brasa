@@ -18,6 +18,7 @@ class RhuSeleccionGrupoType extends AbstractType
                 'required' => true))                 
             ->add('fechaPruebas', 'date', array('data' => new \ DateTime('now')))
             ->add('nombre', 'text', array('required' => true))
+            ->add('cantidadSolicitida', 'number', array('label' => 'Cantidad Solicitada', 'required' => true))                            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
