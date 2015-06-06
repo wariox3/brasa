@@ -9,7 +9,7 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionGrupoFiltroType;
 
 class SeleccionGrupoController extends Controller
 {
-    public function listaAction() {
+    public function listaAction() {        
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
         $paginator  = $this->get('knp_paginator');
