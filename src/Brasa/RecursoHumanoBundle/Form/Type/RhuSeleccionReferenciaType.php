@@ -13,8 +13,7 @@ class RhuSeleccionReferenciaType extends AbstractType
             ->add('nombreCorto', 'text', array('required' => true))                            
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
-            ->add('direccion', 'text', array('required' => false))                            
-            ->add('numeroIdentificacion', 'text', array('required' => true))
+            ->add('direccion', 'text', array('required' => false))                                        
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

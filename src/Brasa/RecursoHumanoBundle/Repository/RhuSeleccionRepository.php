@@ -5,7 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 class RhuSeleccionRepository extends EntityRepository {                   
-    public function listaDQL($strNombre = "", $strIdentificacion = "", $boolAbierto = 2, $boolAprobado = 2) {        
+    public function listaDQL($strNombre = "", $strIdentificacion = "", $boolAbierto = 2, $boolAprobado = 2, $codigoCentroCosto = "") {        
         $dql   = "SELECT s FROM BrasaRecursoHumanoBundle:RhuSeleccion s WHERE s.codigoSeleccionPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND s.nombreCorto LIKE '%" . $strNombre . "%'";
@@ -13,18 +13,24 @@ class RhuSeleccionRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND s.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
-        if($boolAbierto == 1 ) {
-            $dql .= " AND s.estadoAbierto = 1";
-        } elseif($boolAbierto == 0) {
-            $dql .= " AND s.estadoAbierto = 0";
-        }                    
-        if($boolAprobado == 1 ) {
-            $dql .= " AND s.estadoAprobado = 1";
-        } elseif($boolAprobado == 0) {
-            $dql .= " AND s.estadoAprobado = 0";
+        if($boolAbierto != null) {
+            if($boolAbierto == 1 ) {
+                $dql .= " AND s.estadoAbierto = 1";
+            } elseif($boolAbierto == 0) {
+                $dql .= " AND s.estadoAbierto = 0";
+            }            
+        }
+        if($boolAprobado != null) {
+            if($boolAprobado == 1 ) {
+                $dql .= " AND s.estadoAprobado = 1";
+            } elseif($boolAprobado == 0) {
+                $dql .= " AND s.estadoAprobado = 0";
+            }            
         }                     
-     
-        $dql .= " ORDER BY s.nombreCorto";
+        if($codigoCentroCosto != "" ) {
+            $dql .= " AND s.codigoCentroCostoFk = " . $codigoCentroCosto;
+        }
+        $dql .= " ORDER BY s.fecha";
         return $dql;
     }                            
     
@@ -102,8 +108,8 @@ class RhuSeleccionRepository extends EntityRepository {
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoSeleccion) {
                 $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
-                if ($arSelecciones->getEstadoAbierto() == 0){
-                    $arSelecciones->setEstadoAbierto(1);
+                if ($arSelecciones->getEstadoAbierto() == 1){
+                    $arSelecciones->setEstadoAbierto(0);
                 }
                 $em->persist($arSelecciones);                
             }

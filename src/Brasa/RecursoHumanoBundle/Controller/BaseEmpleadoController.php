@@ -237,13 +237,30 @@ class BaseEmpleadoController extends Controller
                     ));
     }
 
-    public function nuevoAction($codigoEmpleado) {
+    public function nuevoAction($codigoEmpleado, $codigoSeleccion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         if($codigoEmpleado != 0) {
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         } else {
+            if($codigoSeleccion != 0) {
+                $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+                $arEmpleado->setNumeroIdentificacion($arSeleccion->getNumeroIdentificacion());
+                $arEmpleado->setNombre1($arSeleccion->getNombre1());
+                $arEmpleado->setNombre2($arSeleccion->getNombre2());
+                $arEmpleado->setApellido1($arSeleccion->getApellido1());
+                $arEmpleado->setApellido2($arSeleccion->getApellido2());
+                $arEmpleado->setEstadoCivilRel($arSeleccion->getEstadoCivilRel());
+                $arEmpleado->setFechaNacimiento($arSeleccion->getFechaNacimiento());
+                $arEmpleado->setTelefono($arSeleccion->getTelefono());
+                $arEmpleado->setCelular($arSeleccion->getCelular());
+                $arEmpleado->setCorreo($arSeleccion->getCorreo());
+                $arEmpleado->setDireccion($arSeleccion->getDireccion());
+                $arEmpleado->setBarrio($arSeleccion->getBarrio());
+                $arEmpleado->setCiudadRel($arSeleccion->getCiudadRel());                
+            }
             $arEmpleado->setVrSalario(644350); //Parametrizar con configuracion salario minimo
         }
         $form = $this->createForm(new RhuEmpleadoType(), $arEmpleado);
@@ -255,7 +272,7 @@ class BaseEmpleadoController extends Controller
             $em->persist($arEmpleado);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0)));
+                return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0, 'codigoSeleccion' => 0)));
             } else {
                 return $this->redirect($this->generateUrl('brs_rhu_base_empleados_lista'));
             }
@@ -266,4 +283,33 @@ class BaseEmpleadoController extends Controller
             'arEmpleado' => $arEmpleado,
             'form' => $form->createView()));
     }
+  
+    public function enlazarAction() {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->formularioEnlazar();
+        $form->handleRequest($request);
+        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+        if($form->isValid()) {                        
+            if($form->get('BtnFiltrar')->isClicked()) {
+                if($form->get('TxtIdentificacion')->getData() != "") {
+                    $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('numeroIdentificacion' => $form->get('TxtIdentificacion')->getData()));
+                }
+            }
+        }                  
+        return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:enlazar.html.twig', array(
+            'arSelecciones' => $arSelecciones,
+            'form' => $form->createView()));
+    }    
+    
+    private function formularioEnlazar() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();        
+        $form = $this->createFormBuilder()                        
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))                            
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->getForm();        
+        return $form;
+    }        
+    
 }

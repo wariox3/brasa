@@ -14,7 +14,7 @@ class SeleccionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();
+        $session = $this->getRequest()->getSession();        
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->listar();
@@ -51,11 +51,9 @@ class SeleccionController extends Controller
                                 $em->remove($arSelecciones);
                                 $em->flush();
                             } 
-                        }
-                        
-                        return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));    
+                        }                                                
                     }
-                    
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));    
                 }
             }
             
@@ -205,23 +203,36 @@ class SeleccionController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $session->set('dqlSeleccionLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->listaDQL($session->get('filtroNombreSeleccion'), $session->get('filtroIdentificacionSeleccion'), $session->get('filtroAbiertoSeleccion'), $session->get('filtroAprobadoSeleccion')));  
+        $session->set('dqlSeleccionLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->listaDQL(
+                $session->get('filtroNombreSeleccion'), 
+                $session->get('filtroIdentificacionSeleccion'), 
+                $session->get('filtroAbiertoSeleccion'), 
+                $session->get('filtroAprobadoSeleccion'),
+                $session->get('filtroCodigoCentroCosto')
+                ));  
     }   
 
     private function formularioFiltro() {
-        $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', array(
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();        
+        $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
+                    return $er->createQueryBuilder('cc')                                        
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false,
-                'empty_value' => "TODOS",
-                'mapped' => false,
-                'data' => '',
-            ))            
+                'required' => false,  
+                'empty_data' => "",
+                'empty_value' => "TODOS",    
+                'data' => ""
+            );  
+        $arCentrosCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+        $arCentrosCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
+        }
+        $form = $this->createFormBuilder()                        
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
             ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoSeleccion')))                           
             ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccion')))                                                        
             ->add('TxtNombre', 'text', array('label'  => 'Nombre', 'data' => $session->get('filtroNombreSeleccion')))
@@ -239,6 +250,9 @@ class SeleccionController extends Controller
     
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);        
         $session->set('filtroNombreSeleccion', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacionSeleccion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroAbiertoSeleccion', $form->get('estadoAbierto')->getData());

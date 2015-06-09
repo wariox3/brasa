@@ -20,12 +20,7 @@ class RhuSeleccionReferencia
     /**
      * @ORM\Column(name="codigo_seleccion_fk", type="integer")
      */    
-    private $codigoSeleccionFk; 
-    
-    /**
-     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=true)
-     */    
-    private $numeroIdentificacion;     
+    private $codigoSeleccionFk;         
     
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
@@ -62,6 +57,8 @@ class RhuSeleccionReferencia
      * @ORM\JoinColumn(name="codigo_seleccion_fk", referencedColumnName="codigo_seleccion_pk")
      */
     protected $seleccionRel; 
+
+
 
     /**
      * Get codigoSeleccionReferenciaPk
@@ -194,27 +191,27 @@ class RhuSeleccionReferencia
     }
 
     /**
-     * Set seleccionRel
+     * Set comentarios
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionRel
+     * @param string $comentarios
      *
      * @return RhuSeleccionReferencia
      */
-    public function setSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionRel = null)
+    public function setComentarios($comentarios)
     {
-        $this->seleccionRel = $seleccionRel;
+        $this->comentarios = $comentarios;
 
         return $this;
     }
 
     /**
-     * Get seleccionRel
+     * Get comentarios
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion
+     * @return string
      */
-    public function getSeleccionRel()
+    public function getComentarios()
     {
-        return $this->seleccionRel;
+        return $this->comentarios;
     }
 
     /**
@@ -242,50 +239,26 @@ class RhuSeleccionReferencia
     }
 
     /**
-     * Set numeroIdentificacion
+     * Set seleccionRel
      *
-     * @param string $numeroIdentificacion
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionRel
      *
      * @return RhuSeleccionReferencia
      */
-    public function setNumeroIdentificacion($numeroIdentificacion)
+    public function setSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionRel = null)
     {
-        $this->numeroIdentificacion = $numeroIdentificacion;
+        $this->seleccionRel = $seleccionRel;
 
         return $this;
     }
 
     /**
-     * Get numeroIdentificacion
+     * Get seleccionRel
      *
-     * @return string
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion
      */
-    public function getNumeroIdentificacion()
+    public function getSeleccionRel()
     {
-        return $this->numeroIdentificacion;
-    }
-
-    /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     *
-     * @return RhuSeleccionReferencia
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
+        return $this->seleccionRel;
     }
 }
