@@ -6,20 +6,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 class ArchivosController extends Controller
 {
-    public function listaAction($codigoArchivoTipo, $numero) {
+    public function listaAction($codigoDocumento, $numero) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
         $paginator  = $this->get('knp_paginator');
-        $query = $em->createQuery($em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivo')->listaDQL($codigoArchivoTipo, $numero));        
+        $query = $em->createQuery($em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivo')->listaDQL($codigoDocumento, $numero));        
         $arArchivos = $paginator->paginate($query, $request->query->get('page', 1), 50);                               
         return $this->render('BrasaAdministracionDocumentalBundle:Archivos:lista.html.twig', array(
             'arArchivos' => $arArchivos,
-            'codigoArchivoTipo' => $codigoArchivoTipo,
+            'codigoDocumento' => $codigoDocumento,
             'numero' => $numero,
             ));
     }  
     
-    public function cargarAction($codigoArchivoTipo, $numero) {
+    public function cargarAction($codigoDocumento, $numero) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa'); 
@@ -37,7 +37,7 @@ class ArchivosController extends Controller
                     $arArchivo->setExtensionOriginal($objArchivo->getClientOriginalExtension());                
                     $arArchivo->setTamano($objArchivo->getClientSize());
                     $arArchivo->setTipo($objArchivo->getClientMimeType());
-                    $arArchivo->setArchivoTipoRel($em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivoTipo')->find($codigoArchivoTipo));               
+                    $arArchivo->setDocumentoRel($em->getRepository('BrasaAdministracionDocumentalBundle:AdDocumento')->find($codigoDocumento));               
                     $arArchivo->setNumero($numero);
                     $arDirectorio = $em->getRepository('BrasaAdministracionDocumentalBundle:AdDirectorio')->devolverDirectorio();
                     $arArchivo->setDirectorioRel($arDirectorio);                    
@@ -46,7 +46,7 @@ class ArchivosController extends Controller
                     $strDestino = $arDirectorio->getRutaPrincipal() . $arDirectorio->getNumero() . "/";
                     $strArchivo = $arArchivo->getCodigoArchivoPk() . "_" . $objArchivo->getClientOriginalName();
                     $form['attachment']->getData()->move($strDestino, $strArchivo);                    
-                    return $this->redirect($this->generateUrl('brs_ad_archivos_lista', array('codigoArchivoTipo' => $codigoArchivoTipo, 'numero' => $numero)));
+                    return $this->redirect($this->generateUrl('brs_ad_archivos_lista', array('codigoDocumento' => $codigoDocumento, 'numero' => $numero)));
                 } else {
                     $objMensaje->Mensaje("error", "Solo se pueden cargar arhivos pdf", $this);
                 }

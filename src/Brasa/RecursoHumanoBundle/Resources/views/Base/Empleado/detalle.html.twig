@@ -13,6 +13,7 @@
         {{ form_errors(form) }}
         <div class="btn-group">
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoArchivoTipo': 3,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Documentos</a>                        
         </div>
         <br /> <br />
         <div class="panel panel-default">
@@ -148,6 +149,8 @@
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleado.codigoEmpleadoPk}) }}', 'NuevoContrato', 600, 900)" >Nuevo</a>                        
+                    </div>
+                    <div class="btn-group">                        
                         {{ form_widget(form.BtnRetirarContrato, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
                 </div>
@@ -197,6 +200,9 @@
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': 0, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarCredito', 600, 900)" >Nuevo</a>
+                    </div>
+                        
+                    <div class="btn-group">                        
                         {{ form_widget(form.BtnEliminarCredito, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
                 </div>
@@ -260,7 +266,9 @@
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Agregar</a> {% endif %}                        
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Nuevo</a> {% endif %}                        
+                    </div>
+                    <div class="btn-group">                        
                         {{ form_widget(form.BtnRetirarIncapacidad, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
                 </div>
@@ -297,7 +305,9 @@
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarLicencia', 600, 900)" >Agregar</a>{% endif %}
+                        {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarLicencia', 600, 900)" >Nuevo</a>{% endif %}                        
+                    </div>
+                    <div class="btn-group">                        
                         {{ form_widget(form.BtnRetirarLicencia, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
                 </div>

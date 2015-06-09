@@ -145,9 +145,9 @@ class BaseEmpleadoController extends Controller
         $request = $this->getRequest();
         $mensaje = 0;
         $form = $this->createFormBuilder()
-            ->add('BtnRetirarContrato', 'submit', array('label'  => 'Retirar',))
-            ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Retirar',))
-            ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Retirar',))
+            ->add('BtnRetirarContrato', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))    
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();

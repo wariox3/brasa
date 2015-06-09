@@ -15,13 +15,13 @@ class AdArchivo
      * @ORM\Column(name="codigo_archivo_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoArchivoPk;    
+    private $codigoArchivoPk;         
 
     /**
-     * @ORM\Column(name="codigo_archivo_tipo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_documento_fk", type="integer", nullable=true)
      */    
-    private $codigoArchivoTipoFk;     
-
+    private $codigoDocumentoFk;    
+    
     /**
      * @ORM\Column(name="codigo_directorio_fk", type="integer", nullable=true)
      */    
@@ -50,20 +50,21 @@ class AdArchivo
     /**
      * @ORM\Column(name="tamano", type="float", nullable=true)
      */    
-    private $tamano = 0;         
+    private $tamano = 0;               
     
     /**
-     * @ORM\ManyToOne(targetEntity="AdArchivoTipo", inversedBy="archivosArchivoTipoRel")
-     * @ORM\JoinColumn(name="codigo_archivo_tipo_fk", referencedColumnName="codigo_archivo_tipo_pk")
+     * @ORM\ManyToOne(targetEntity="AdDocumento", inversedBy="archivosDocumentoRel")
+     * @ORM\JoinColumn(name="codigo_documento_fk", referencedColumnName="codigo_documento_pk")
      */
-    protected $archivoTipoRel;    
+    protected $documentoRel;     
     
     /**
      * @ORM\ManyToOne(targetEntity="AdDirectorio", inversedBy="archivosDirectorioRel")
      * @ORM\JoinColumn(name="codigo_directorio_fk", referencedColumnName="codigo_directorio_pk")
      */
     protected $directorioRel;     
-    
+       
+
     /**
      * Get codigoArchivoPk
      *
@@ -75,51 +76,75 @@ class AdArchivo
     }
 
     /**
-     * Set codigoArchivoTipoFk
+     * Set codigoDocumentoFk
      *
-     * @param integer $codigoArchivoTipoFk
+     * @param integer $codigoDocumentoFk
      *
      * @return AdArchivo
      */
-    public function setCodigoArchivoTipoFk($codigoArchivoTipoFk)
+    public function setCodigoDocumentoFk($codigoDocumentoFk)
     {
-        $this->codigoArchivoTipoFk = $codigoArchivoTipoFk;
+        $this->codigoDocumentoFk = $codigoDocumentoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoArchivoTipoFk
+     * Get codigoDocumentoFk
      *
      * @return integer
      */
-    public function getCodigoArchivoTipoFk()
+    public function getCodigoDocumentoFk()
     {
-        return $this->codigoArchivoTipoFk;
+        return $this->codigoDocumentoFk;
     }
 
     /**
-     * Set archivoTipoRel
+     * Set codigoDirectorioFk
      *
-     * @param \Brasa\AdministracionDocumentalBundle\Entity\AdArchivoTipo $archivoTipoRel
+     * @param integer $codigoDirectorioFk
      *
      * @return AdArchivo
      */
-    public function setArchivoTipoRel(\Brasa\AdministracionDocumentalBundle\Entity\AdArchivoTipo $archivoTipoRel = null)
+    public function setCodigoDirectorioFk($codigoDirectorioFk)
     {
-        $this->archivoTipoRel = $archivoTipoRel;
+        $this->codigoDirectorioFk = $codigoDirectorioFk;
 
         return $this;
     }
 
     /**
-     * Get archivoTipoRel
+     * Get codigoDirectorioFk
      *
-     * @return \Brasa\AdministracionDocumentalBundle\Entity\AdArchivoTipo
+     * @return integer
      */
-    public function getArchivoTipoRel()
+    public function getCodigoDirectorioFk()
     {
-        return $this->archivoTipoRel;
+        return $this->codigoDirectorioFk;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return AdArchivo
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 
     /**
@@ -195,30 +220,6 @@ class AdArchivo
     }
 
     /**
-     * Set extension
-     *
-     * @param string $extension
-     *
-     * @return AdArchivo
-     */
-    public function setExtension($extension)
-    {
-        $this->extension = $extension;
-
-        return $this;
-    }
-
-    /**
-     * Get extension
-     *
-     * @return string
-     */
-    public function getExtension()
-    {
-        return $this->extension;
-    }
-
-    /**
      * Set tamano
      *
      * @param float $tamano
@@ -243,51 +244,27 @@ class AdArchivo
     }
 
     /**
-     * Set numero
+     * Set documentoRel
      *
-     * @param integer $numero
+     * @param \Brasa\AdministracionDocumentalBundle\Entity\AdDocumento $documentoRel
      *
      * @return AdArchivo
      */
-    public function setNumero($numero)
+    public function setDocumentoRel(\Brasa\AdministracionDocumentalBundle\Entity\AdDocumento $documentoRel = null)
     {
-        $this->numero = $numero;
+        $this->documentoRel = $documentoRel;
 
         return $this;
     }
 
     /**
-     * Get numero
+     * Get documentoRel
      *
-     * @return integer
+     * @return \Brasa\AdministracionDocumentalBundle\Entity\AdDocumento
      */
-    public function getNumero()
+    public function getDocumentoRel()
     {
-        return $this->numero;
-    }
-
-    /**
-     * Set codigoDirectorioFk
-     *
-     * @param integer $codigoDirectorioFk
-     *
-     * @return AdArchivo
-     */
-    public function setCodigoDirectorioFk($codigoDirectorioFk)
-    {
-        $this->codigoDirectorioFk = $codigoDirectorioFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoDirectorioFk
-     *
-     * @return integer
-     */
-    public function getCodigoDirectorioFk()
-    {
-        return $this->codigoDirectorioFk;
+        return $this->documentoRel;
     }
 
     /**
