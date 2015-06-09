@@ -166,6 +166,10 @@ brs_rhu_seleccion_agregar_referencia:
     path:     /rhumano/seleccion/agregar/referencia/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarReferencia } 
 
+brs_rhu_seleccion_agregar_prueba:
+    path:     /rhumano/seleccion/agregar/prueba/{codigoSeleccion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarPrueba }
+
 brs_rhu_seleccion_detalle:
     path:     /rhumano/seleccion/detalle/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:detalle }     

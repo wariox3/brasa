@@ -184,7 +184,10 @@ class RhuSeleccion
      */
     protected $seleccionesReferenciasSeleccionRel;     
 
-    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionPrueba", mappedBy="seleccionRel")
+     */
+    protected $seleccionesPruebasSeleccionRel;    
    
     
     /**
@@ -981,5 +984,39 @@ class RhuSeleccion
     public function getSeleccionesReferenciasSeleccionRel()
     {
         return $this->seleccionesReferenciasSeleccionRel;
+    }
+
+    /**
+     * Add seleccionesPruebasSeleccionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba $seleccionesPruebasSeleccionRel
+     *
+     * @return RhuSeleccion
+     */
+    public function addSeleccionesPruebasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba $seleccionesPruebasSeleccionRel)
+    {
+        $this->seleccionesPruebasSeleccionRel[] = $seleccionesPruebasSeleccionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesPruebasSeleccionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba $seleccionesPruebasSeleccionRel
+     */
+    public function removeSeleccionesPruebasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba $seleccionesPruebasSeleccionRel)
+    {
+        $this->seleccionesPruebasSeleccionRel->removeElement($seleccionesPruebasSeleccionRel);
+    }
+
+    /**
+     * Get seleccionesPruebasSeleccionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesPruebasSeleccionRel()
+    {
+        return $this->seleccionesPruebasSeleccionRel;
     }
 }

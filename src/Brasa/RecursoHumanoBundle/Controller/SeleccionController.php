@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionReferenciaType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionPruebaType;
 
 class SeleccionController extends Controller
 {
@@ -19,86 +20,27 @@ class SeleccionController extends Controller
         $this->listar();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if ($form->get('BtnAprobar')->isClicked()){    
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $id) {
-                        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
-                        $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($id);
-                                if ($arSelecciones->getEstadoAprobado() == 0){
-                                    $arSelecciones->setEstadoAprobado(1);
-                                }
-                                else{
-                                    $arSelecciones->setEstadoAprobado(0);
-                                }
-                                $em->persist($arSelecciones);
-                                $em->flush();  
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
-                }
+            if($form->get('BtnPruebasPresentadas')->isClicked()){    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->presentaPruebasSelecciones($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
+            }            
+            
+            if($form->get('BtnReferenciasVerificadas')->isClicked()){    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->referenciasVerificadsSelecciones($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
             }
             
-            if ($form->get('BtnAbierto')->isClicked()){    
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $id) {
-                        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
-                        $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($id);
-                            
-                                if ($arSelecciones->getEstadoAbierto() == 0){
-                                    $arSelecciones->setEstadoAbierto(1);
-                                }
-                                else{
-                                    $arSelecciones->setEstadoAbierto(0);
-                                }
-                                $em->persist($arSelecciones);
-                                $em->flush();  
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
-                }
-            }
-
-            if ($form->get('BtnPruebasP')->isClicked()){    
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $id) {
-                        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
-                        $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($id);
-                            
-                                if ($arSelecciones->getPresentaPruebas() == 0){
-                                    $arSelecciones->setPresentaPruebas(1);
-                                }
-                                else{
-                                    $arSelecciones->setPresentaPruebas(0);
-                                }
-                                $em->persist($arSelecciones);
-                                $em->flush();  
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
-                }
+            if($form->get('BtnAprobar')->isClicked()){    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->estadoAprobadoSelecciones($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
             }
             
-            if ($form->get('BtnReferenciasV')->isClicked()){    
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $id) {
-                        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
-                        $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($id);
-                        $arSeleccionRef = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
-                        $arSeleccionRef = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($id);
-                        $totalReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->devuelveNumeroReferencias($id);
-                        $totalRefVerificadas = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->devuelveNumeroReferenciasVerificadas($id);
-                        if ($totalReferencias == $totalRefVerificadas){
-                            
-                                $arSelecciones->setReferenciasVerificadas(1);
-                        }   
-                        else {    
-                                $arSelecciones->setReferenciasVerificadas(0);
-                        }
-                        $em->persist($arSelecciones);
-                        $em->flush();
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
-                }
-            }
+            if($form->get('BtnAbierto')->isClicked()){    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->estadoAbiertoSelecciones($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
+            }            
             
-            if ($form->get('BtnEliminar')->isClicked()){    
+            if($form->get('BtnEliminar')->isClicked()){    
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $id) {
                         $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
@@ -168,43 +110,44 @@ class SeleccionController extends Controller
         
         $form = $this->createFormBuilder()
             ->add('BtnVerificar', 'submit', array('label'  => 'Verificar',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnEliminarReferencia', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnEliminarPrueba', 'submit', array('label'  => 'Eliminar',))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if ($form->get('BtnEliminar')->isClicked())
-            {    
-            if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $id) {
-                    $arSeleccionReferencias = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia();
-                    $arSeleccionReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->find($id);
-                    $em->remove($arSeleccionReferencias);
-                    $em->flush();        
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
-            }
-            }
-            
-            if($form->get('BtnVerificar')->isClicked()) {
+            if ($form->get('BtnEliminarReferencia')->isClicked()){    
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $id) {
                         $arSeleccionReferencias = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia();
                         $arSeleccionReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->find($id);
-                        $arSeleccionReferencias->setEstadoVerificada(1);
-                        $em->persist($arSeleccionReferencias);
-                        $em->flush();   
+                        $em->remove($arSeleccionReferencias);
+                        $em->flush();        
                     }
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
+                }
+            }
+            
+            if($form->get('BtnVerificar')->isClicked()) {
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoSeleccionReferencia) {
+                        $arSeleccionReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->find($codigoSeleccionReferencia);
+                        $arSeleccionReferencias->setEstadoVerificada(1);
+                        $em->persist($arSeleccionReferencias);                        
+                    }
+                    $em->flush();   
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
                 }  
             } 
         }        
-        $arSeleccionReferencias = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia();
-        $arSeleccionReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->findBy(array('codigoSeleccionFk' => $codigoSeleccion));
-        $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+        
+        $arSeleccionReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->findBy(array('codigoSeleccionFk' => $codigoSeleccion));        
+        $arSeleccionPruebas = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionPrueba')->findBy(array('codigoSeleccionFk' => $codigoSeleccion));                
         $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);        
         return $this->render('BrasaRecursoHumanoBundle:Seleccion:detalle.html.twig', array(
                     'arSeleccion' => $arSeleccion,
                     'arSeleccionReferencias' => $arSeleccionReferencias,
+                    'arSeleccionPruebas' => $arSeleccionPruebas,
                     'form' => $form->createView()
                     ));
     }            
@@ -235,6 +178,29 @@ class SeleccionController extends Controller
             ));
     }     
     
+    public function agregarPruebaAction($codigoSeleccion) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+        $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+        $arSeleccionPrueba = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba();
+        $form = $this->createForm(new RhuSeleccionPruebaType(), $arSeleccionPrueba);
+        $form->handleRequest($request);
+        if ($form->isValid()) {           
+            $arSeleccionPrueba = $form->getData();      
+            $arSeleccionPrueba->setSeleccionRel($arSeleccion);
+            $em->persist($arSeleccionPrueba);
+            $em->flush();
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_prueba', array('codigoSeleccion' => $codigoSeleccion)));
+            } else {
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            }
+
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Seleccion:agregarPrueba.html.twig', array('form' => $form->createView()));
+    }         
+    
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -262,8 +228,8 @@ class SeleccionController extends Controller
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
             ->add('BtnAbierto', 'submit', array('label'  => 'Abrir/Cerrar',))
-            ->add('BtnPruebasP', 'submit', array('label'  => 'Aprobar Pruebas',))
-            ->add('BtnReferenciasV', 'submit', array('label'  => 'Aprobar Referencias',))
+            ->add('BtnPruebasPresentadas', 'submit', array('label'  => 'Pruebas presentadas',))
+            ->add('BtnReferenciasVerificadas', 'submit', array('label'  => 'Referencias verificadas',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',)) 
             ->getForm();        
