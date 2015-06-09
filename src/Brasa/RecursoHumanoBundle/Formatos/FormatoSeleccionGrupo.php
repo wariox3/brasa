@@ -23,8 +23,10 @@ class FormatoSeleccionGrupo extends \FPDF_FPDF {
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
-        $this->SetXY(150, 20);
-        $this->Cell(50, 6, "Grupo seleccion " . $arSeleccionGrupo->getCodigoSeleccionGrupoPk(), 1, 0, 'L', 1);
+        $this->SetXY(10, 20);
+        $this->Cell(40, 6, "Grupo seleccion " . $arSeleccionGrupo->getCodigoSeleccionGrupoPk(), 1, 0, 'L', 1);
+        $this->SetXY(52, 20);
+        $this->Cell(148, 6, $arSeleccionGrupo->getNombre(), 1, 0, 'L', 1);
         
         $this->EncabezadoDetalles();
         
