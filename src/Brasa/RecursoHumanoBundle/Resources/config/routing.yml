@@ -144,7 +144,15 @@ brs_rhu_base_salud_listar:
    
 brs_rhu_base_salud_nuevo:
    path:     /rhumano/base/salud/nuevo/{codigoEntidadSaludPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:nuevo }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:nuevo }
+   
+brs_rhu_base_entidadexamen_listar:
+   path:     /rhumano/base/entidadexamen/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:listar }
+   
+brs_rhu_base_entidadexamen_nuevo:
+   path:     /rhumano/base/entidadexamen/nuevo/{codigoEntidadExamenPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:nuevo }   
 
 brs_rhu_base_pension_listar:
    path:     /rhumano/base/pension/listar

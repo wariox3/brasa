@@ -40,17 +40,24 @@ class RhuSeleccionGrupoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoSeleccion) {                
-                $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
-                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($codigoSeleccion);
-                if ($arSeleccion->getEstadoAbierto() == 1){
-                    $arSeleccion->setEstadoAbierto(0);
+                $arSeleccionGrupo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
+                $arSeleccionGrupo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($codigoSeleccion);
+                $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('codigoSeleccionGrupoFk' => $codigoSeleccion));
+                if ($arSeleccionGrupo->getEstadoAbierto() == 1){
+                    $arSeleccionGrupo->setEstadoAbierto(0);
+                    if (count($arSeleccion) > 0){
+                        foreach ($arSeleccion AS $arSeleccion) {
+                            $arSeleccion->setEstadoAbierto(0);
+                        }
+                        $em->persist($arSeleccion);
+                    }
                 } 
-                $em->persist($arSeleccion);                         
+                $em->persist($arSeleccionGrupo);
             }
             $em->flush();       
         }     
     }
-    
     public function devuelveNumeroDetalleGrupo($codigoSeleccionGrupo) {
         $em = $this->getEntityManager();
         $dql   = "SELECT COUNT(s.codigoSeleccionPk) FROM BrasaRecursoHumanoBundle:RhuSeleccion s WHERE s.codigoSeleccionGrupoFk = " . $codigoSeleccionGrupo;
