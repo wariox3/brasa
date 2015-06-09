@@ -152,7 +152,15 @@ brs_rhu_base_entidadexamen_listar:
    
 brs_rhu_base_entidadexamen_nuevo:
    path:     /rhumano/base/entidadexamen/nuevo/{codigoEntidadExamenPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:nuevo }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:nuevo }
+   
+brs_rhu_base_tipoexamen_listar:
+   path:     /rhumano/base/tipoexamen/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:TipoExamen:listar }
+   
+brs_rhu_base_tipoexamen_nuevo:
+   path:     /rhumano/base/tipoexamen/nuevo/{codigoTipoExamenPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:TipoExamen:nuevo }   
 
 brs_rhu_base_pension_listar:
    path:     /rhumano/base/pension/listar
