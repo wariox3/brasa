@@ -89,6 +89,7 @@ class SeleccionController extends Controller
         if ($form->isValid()) {           
             $arSeleccion = $form->getData();
             $arSeleccion->setNombreCorto($arSeleccion->getNombre1() . " " . $arSeleccion->getNombre2() . " " .$arSeleccion->getApellido1() . " " . $arSeleccion->getApellido2());
+            $arSeleccion->setFecha(new \DateTime('now'));
             $em->persist($arSeleccion);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
@@ -227,7 +228,7 @@ class SeleccionController extends Controller
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
-            ->add('BtnAbierto', 'submit', array('label'  => 'Abrir/Cerrar',))
+            ->add('BtnAbierto', 'submit', array('label'  => 'Cerrar',))
             ->add('BtnPruebasPresentadas', 'submit', array('label'  => 'Pruebas presentadas',))
             ->add('BtnReferenciasVerificadas', 'submit', array('label'  => 'Referencias verificadas',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))

@@ -28,6 +28,11 @@ class RhuSeleccion
     private $codigoSeleccionTipoFk;     
     
     /**
+     * @ORM\Column(name="fecha", type="datetime", nullable=true)
+     */    
+    private $fecha;     
+    
+    /**
      * @ORM\Column(name="codigo_tipo_identificacion_fk", type="string", length=1, nullable=true)
      */    
     private $codigoTipoIdentificacionFk;         
@@ -121,7 +126,7 @@ class RhuSeleccion
      * @ORM\Column(name="estado_abierto", type="boolean")
      * @ORM\Column(type="integer", name="estado_abierto", options={"unsigned":true, "default":"1"})
      */    
-    private $estadoAbierto;    
+    private $estadoAbierto = 1;    
     
     /**     
      * @ORM\Column(name="presenta_pruebas", type="boolean")
@@ -196,6 +201,7 @@ class RhuSeleccion
     public function __construct()
     {
         $this->seleccionesReferenciasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesPruebasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1018,5 +1024,29 @@ class RhuSeleccion
     public function getSeleccionesPruebasSeleccionRel()
     {
         return $this->seleccionesPruebasSeleccionRel;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return RhuSeleccion
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
     }
 }
