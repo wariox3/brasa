@@ -32,7 +32,7 @@ class RhuSeleccionGrupoRepository extends EntityRepository {
         } elseif($boolAbierto == 0) {
             $dql .= " AND sg.estadoAbierto = 0";
         }         
-        $dql .= " ORDER BY sg.nombre";
+        $dql .= " ORDER BY sg.codigoSeleccionGrupoPk";
         return $dql;
     }   
     // Esta funcion cambiar el estado abierto del grupo (Abierto / Cerrado)
@@ -44,9 +44,7 @@ class RhuSeleccionGrupoRepository extends EntityRepository {
                 $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($codigoSeleccion);
                 if ($arSeleccion->getEstadoAbierto() == 1){
                     $arSeleccion->setEstadoAbierto(0);
-                } else{
-                    $arSeleccion->setEstadoAbierto(1);
-                }
+                } 
                 $em->persist($arSeleccion);                         
             }
             $em->flush();       

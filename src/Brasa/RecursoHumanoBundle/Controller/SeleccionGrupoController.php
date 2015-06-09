@@ -121,8 +121,12 @@ class SeleccionGrupoController extends Controller
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'Codigo')
-                    ->setCellValue('B1', 'Nombre')
-                    ->setCellValue('C1', 'Centro costo');
+                    ->setCellValue('B1', 'Fecha')
+                    ->setCellValue('C1', 'Nombre')
+                    ->setCellValue('D1', 'Centro costo')
+                    ->setCellValue('E1', 'Cantidad_solicitada')
+                    ->setCellValue('F1', 'Abierto');
+                    
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlSeleccionGrupoLista'));
@@ -132,10 +136,20 @@ class SeleccionGrupoController extends Controller
             if($arSeleccionGrupo->getCentroCostoRel()) {
                 $strNombreCentroCosto = $arSeleccionGrupo->getCentroCostoRel()->getNombre();
             }
+            if ($arSeleccionGrupo->getEstadoAbierto() == 1){
+                $abierto = "SI";
+            } else {
+                $abierto = "NO";
+            }
+            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arSeleccionGrupo->getCodigoSeleccionGrupoPk())
-                    ->setCellValue('B' . $i, $arSeleccionGrupo->getNombre())
-                    ->setCellValue('C' . $i, $strNombreCentroCosto);
+                    ->setCellValue('B' . $i, $arSeleccionGrupo->getFecha())
+                    ->setCellValue('C' . $i, $arSeleccionGrupo->getNombre())
+                    ->setCellValue('D' . $i, $strNombreCentroCosto)
+                    ->setCellValue('E' . $i, $arSeleccionGrupo->getCantidadSolicitida())
+                    ->setCellValue('F' . $i, $abierto);
+                    
             $i++;
         }
 
@@ -164,7 +178,7 @@ class SeleccionGrupoController extends Controller
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionGrupo')))
             ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccionGrupo'))) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnEstadoAbierto', 'submit', array('label'  => 'Abrir / Cerrar',))
+            ->add('BtnEstadoAbierto', 'submit', array('label'  => 'Cerrar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
