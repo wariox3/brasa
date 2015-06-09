@@ -43,65 +43,10 @@ class ContratosController extends Controller
         $form->handleRequest($request);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-        if($form->isValid()) {
-            if($form->get('BtnRetirarContrato')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoContrato) {
-                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-                        $em->remove($arContrato);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }
-            if($form->get('BtnRetirarIncapacidad')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarIncapacidad');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoIncapacidad) {
-                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-                        $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
-                        $em->remove($arIncapacidad);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }
-            if($form->get('BtnEliminarCredito')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarCredito');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoCredito) {
-                        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
-                        if ($arCredito->getAprobado() == 1 or $arCredito->getEstadoPagado() == 1)
-                        {
-                            $mensaje = "No se puede Eliminar el registro, por que el credito ya esta aprobado o cancelado!";
-                        }
-                        else
-                        {
-                            $em->remove($arCredito);
-                            $em->flush();
-                        }
-                    }
-                    //return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }  
-            if($form->get('BtnRetirarLicencia')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarLicencia');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoLicencia) {
-                        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
-                        $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->find($codigoLicencia);
-                        $em->remove($arLicencia);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }            
+        if($form->isValid()) {           
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoHojaVida = new \Brasa\RecursoHumanoBundle\Formatos\FormatoHojaVida();
-                $objFormatoHojaVida->Generar($this, $codigoEmpleado);
+                $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContrato();
+                $objFormatoContrato->Generar($this, $codigoContrato);
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:detalle.html.twig', array(
