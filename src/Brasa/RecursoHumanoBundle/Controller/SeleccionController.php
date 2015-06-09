@@ -226,8 +226,6 @@ class SeleccionController extends Controller
                 'empty_value' => "TODOS",    
                 'data' => ""
             );  
-        $arCentrosCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-        $arCentrosCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
         }

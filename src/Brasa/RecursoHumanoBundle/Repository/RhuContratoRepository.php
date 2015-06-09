@@ -10,6 +10,16 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuContratoRepository extends EntityRepository {
+    public function listaDQL($strIdentificacion = "") {        
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+
+        $dql .= " ORDER BY c.codigoContratoPk";
+        return $dql;
+    }  
+    
     public function ultimoContrato($codigoCentroCosto = "", $codigoEmpleado = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "

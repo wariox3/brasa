@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuPagoRepository extends EntityRepository {
     
-    public function Liquidar($codigoPago) {        
+    public function liquidar($codigoPago) {        
         $em = $this->getEntityManager();
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigoPago)); 
@@ -94,7 +94,7 @@ class RhuPagoRepository extends EntityRepository {
         return $douNeto;
     }    
     
-    public function ListaDQL($intNumero = 0, $strCodigoCentroCosto = "") {        
+    public function listaDQL($intNumero = 0, $strCodigoCentroCosto = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.codigoPagoPk <> 0";
         if($intNumero != "" && $intNumero != 0) {

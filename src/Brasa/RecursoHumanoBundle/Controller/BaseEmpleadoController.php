@@ -13,51 +13,13 @@ class BaseEmpleadoController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_value' => "Todos",
-                'mapped' => false,
-                'data' => '',
-
-            ))            
-            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'Todos', '1' => 'Activos', '0' => 'Inactivos')))                            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
-            ->add('BtnBuscar', 'submit', array('label'  => 'Buscar'))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnInactivar', 'submit', array('label'  => 'Activar / Inactivar',))
-            ->getForm();
+        $form = $this->formularioLista();
         $form->handleRequest($request);
-
-        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-
+        $this->listar();
         if($form->isValid()) {
-            if($form->get('BtnBuscar')->isClicked()) {
-                $objCentroCosto = $form->get('centroCostoRel')->getData();
-                if($objCentroCosto != null) {
-                    $codigoCentroCosto = $form->get('centroCostoRel')->getData()->getCodigoCentroCostoPk();
-                } else {
-                    $codigoCentroCosto = "";
-                }
-                $session->set('dqlEmpleado', $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL(
-                        $form->get('TxtNombre')->getData(),
-                        $codigoCentroCosto,
-                        $form->get('estadoActivo')->getData(),
-                        $form->get('TxtIdentificacion')->getData(),
-                        ""
-                        ));
-                $session->set('filtroNombre', $form->get('TxtNombre')->getData());
-                $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-                $session->set('filtroCentroCosto', $codigoCentroCosto);
-                $session->set('filtroActivos', $form->get('estadoActivo')->getData());
-
+            if($form->get('BtnFiltrar')->isClicked()) {                
+                $this->filtrarLista($form);
+                $this->listar();
             }
 
             if($form->get('BtnExcel')->isClicked()) {
@@ -122,18 +84,8 @@ class BaseEmpleadoController extends Controller
                     $em->flush();
                 }
             }
-        } else {
-           $session->set('dqlEmpleado', $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL(
-                   $session->get('filtroNombre'),
-                   $session->get('filtroCentroCosto'),
-                   $session->get('filtroActivos'),
-                   $session->get('filtroIdentificacion'),
-                   ""
-                   ));
-        }
-
-        $query = $em->createQuery($session->get('dqlEmpleado'));
-        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 20);
+        }         
+        $arEmpleados = $paginator->paginate($em->createQuery($session->get('dqlEmpleadoLista')), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:lista.html.twig', array(
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()
@@ -247,6 +199,7 @@ class BaseEmpleadoController extends Controller
             if($codigoSeleccion != 0) {
                 $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
                 $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+                $arEmpleado->setTipoIdentificacionRel($arSeleccion->getTipoIdentificacionRel());
                 $arEmpleado->setNumeroIdentificacion($arSeleccion->getNumeroIdentificacion());
                 $arEmpleado->setNombre1($arSeleccion->getNombre1());
                 $arEmpleado->setNombre2($arSeleccion->getNombre2());
@@ -311,5 +264,57 @@ class BaseEmpleadoController extends Controller
             ->getForm();        
         return $form;
     }        
+    
+    private function formularioLista() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();        
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')                                        
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,  
+                'empty_data' => "",
+                'empty_value' => "TODOS",    
+                'data' => ""
+            );  
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
+        }
+        $form = $this->createFormBuilder()                        
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
+            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))                            
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnInactivar', 'submit', array('label'  => 'Activar / Inactivar',))
+            ->getForm();        
+        return $form;
+    }  
+    
+    private function filtrarLista($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);        
+        $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroEmpleadoIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroEmpleadoActivo', $form->get('estadoActivo')->getData());
+    }    
+    
+    private function listar() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $session->set('dqlEmpleadoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL(
+                $session->get('filtroEmpleadoNombre'), 
+                $session->get('filtroCodigoCentroCosto'),
+                $session->get('filtroEmpleadoActivo'),                
+                $session->get('filtroEmpleadoIdentificacion'),
+                ""                
+                ));         
+    }       
     
 }

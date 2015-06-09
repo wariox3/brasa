@@ -1,0 +1,51 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h3>Detalles del empleado</h3>
+        </div>
+    <div class="container">
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="btn-group">
+            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 3,  'numero': arContrato.codigoContratoPk }) }}', 'Archivos', 500, 700)" >Documentos</a>                        
+        </div>
+        <br /> <br />
+        <div class="panel panel-default">
+            <div class="panel-heading">Informacion empleado</div>
+            <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="td-label">Codigo:</td>
+                    <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
+                    <td class="td-label"></td>
+                    <td class="td-in-well"></td>
+                    <td class="td-label">Tipo:</td>
+                    <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
+                </tr>
+                <tr>
+                    <td class="td-label">Fecha:</td>
+                    <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
+                    <td class="td-label">Celular:</td>
+                    <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
+                    <td class="td-label">Barrio</td>
+                    <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
+                </tr>                               
+                <tr>
+                    <td colspan="8">Comentarios: {{ arContrato.comentarios }}</td>
+                </tr>
+            </table>
+            </div>
+        </div>
+
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_contratos_lista') }}" style="float:left">Volver</a>
+            </div>
+        </div>
+        <br /><br />
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
