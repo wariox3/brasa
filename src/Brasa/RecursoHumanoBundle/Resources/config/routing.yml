@@ -68,7 +68,7 @@ brs_rhu_pagos_adicionales_agregar_valor:
 
 brs_rhu_liquidaciones_lista:
     path:     /rhumano/liquidaciones/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:liquidaciones:lista }
+    defaults: { _controller: BrasaRecursoHumanoBundle:Liquidaciones:lista }
 
 brs_rhu_liquidaciones_detalle:
     path:     /rhumano/liquidaciones/detalle/{codigoLiquidacion}
