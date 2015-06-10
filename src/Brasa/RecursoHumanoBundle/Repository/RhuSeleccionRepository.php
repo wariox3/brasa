@@ -95,14 +95,11 @@ class RhuSeleccionRepository extends EntityRepository {
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoSeleccion) {
                 $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
-                
                 if ($arSelecciones->getEstadoAprobado() == 0){
                     $arSelecciones->setEstadoAprobado(1);
                     //Se inserta la seleccion aprobada en la entidad examen
                     $arExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
                     $arExamenes->setFecha(new \ DateTime("now"));
-                    $arExamenes->setCodigoEntidadExamenFk(0);
-                    $arExamenes->setCodigoExamenTipoFk(0);
                     $arExamenes->setCodigoCentroCostoFk($arSelecciones->getCodigoCentroCostoFk());
                     $arExamenes->setIdentificacion($arSelecciones->getNumeroIdentificacion());
                     $arExamenes->setNombreCorto($arSelecciones->getNombreCorto());
