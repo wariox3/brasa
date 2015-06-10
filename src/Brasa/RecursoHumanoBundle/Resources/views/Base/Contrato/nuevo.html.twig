@@ -1,99 +1,82 @@
-{% extends '::base.html.twig' %}
+{% extends '::base_sin_menu.html.twig' %}
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
-    <h3>Nuevo empleado</h3>
+    <h3>Nuevo contrato</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
-        <div class="panel-body">
+        <div class="panel-body">   
             <div class="form-group form-group-sm">
-                <label for="form_tipoIdentificacionRel" class="col-sm-2 control-label">Tipo:</label>
+                <label for="form_contratoTipoRel" class="col-sm-2 control-label">Tipo:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(form.tipoIdentificacionRel, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.contratoTipoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>
+            </div>            
             <div class="form-group form-group-sm">
-                <label for="form_numeroIdentificacion" class="col-sm-2 control-label">Identificacion:</label>
+                <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(form.numeroIdentificacion, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_nombre1" class="col-sm-2 control-label">Nombre 1:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.nombre1, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_nombre2" class="col-sm-2 control-label">Nombre 2:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.nombre2, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_apellido1" class="col-sm-2 control-label">Apellido 1:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.apellido1, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_apellido2" class="col-sm-2 control-label">Apellido 2:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.apellido2, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_codigoSexoFk" class="col-sm-2 control-label">Sexo:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.codigoSexoFk, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_estadoCivilRel" class="col-sm-2 control-label">Estado civil:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.estadoCivilRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                 
-            <div class="form-group form-group-sm">
-                <label for="form_fechaNacimiento" class="col-sm-2 control-label">Fecha nacimiento:</label>
-                <div class="col-sm-10">
-                    {{ form_widget(form.fechaNacimiento) }}                        
-                </div>                
-            </div>                
-            <div class="form-group form-group-sm">
-                <label for="form_telefono" class="col-sm-2 control-label">Telefono:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.telefono, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_celular" class="col-sm-2 control-label">Celular:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.celular, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_correo" class="col-sm-2 control-label">Correo:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.correo, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                
-            <div class="form-group form-group-sm">
-                <label for="form_direccion" class="col-sm-2 control-label">Direccion:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.direccion, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_barrio" class="col-sm-2 control-label">Barrio:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.barrio, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div> 
             <div class="form-group form-group-sm">
-                <label for="form_ciudadRel" class="col-sm-2 control-label">Ciudad:</label>
+                <label for="form_tipoTiempoRel" class="col-sm-2 control-label">Centro costo:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(form.ciudadRel, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.tipoTiempoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>      
+            <div class="form-group form-group-sm">
+                <label for="form_clasificacionRiesgoRel" class="col-sm-2 control-label">Clasificacion riesgo:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.clasificacionRiesgoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_tipoPensionRel" class="col-sm-2 control-label">Tipo pension:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.tipoPensionRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label for="form_numero" class="col-sm-2 control-label">Numero:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.numero, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div> 
+            <div class="form-group form-group-sm">
+                <label for="form_cargoRel" class="col-sm-2 control-label">Cargo:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.cargoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label for="form_cargoDescripcion" class="col-sm-2 control-label">Descripcion cargo:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.cargoDescripcion, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label for="form_fechaDesde" class="col-sm-2 control-label">Fecha inicio:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.fechaDesde) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_fechaHasta" class="col-sm-2 control-label">Fecha terminacion:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.fechaHasta) }} * si la fecha terminacion es igual se asume indefinido
+                </div>
+            </div>                
+                
+            <div class="form-group form-group-sm">
+                <label for="form_vrSalario" class="col-sm-2 control-label">Salario:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.vrSalario, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>   
+            <div class="form-group form-group-sm">
+                <label for="form_estadoActivo" class="col-sm-2 control-label">Vigente:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.estadoActivo, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>                 
             <div class="form-group">
@@ -101,67 +84,12 @@
                 <div class="col-sm-10">
                             {{ form_widget(form.comentarios, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">Informacion liquidacion</div>
-        <div class="panel-body">                              
-            <div class="form-group form-group-sm">
-                <label for="form_cuenta" class="col-sm-2 control-label">Cuenta:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.cuenta, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                
-            <div class="form-group form-group-sm">
-                <label for="form_bancoRel" class="col-sm-2 control-label">Banco:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.bancoRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div> 
-            <div class="form-group form-group-sm">
-                <label for="form_auxilioTransporte" class="col-sm-2 control-label">Auxilio transporte:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.auxilioTransporte, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>    
-            <div class="form-group form-group-sm">
-                <label for="form_pagadoEntidadSalud" class="col-sm-2 control-label">Pagado por entidad salud:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.pagadoEntidadSalud, { 'attr': {'class': 'form-control'} }) }}
-                </div>
             </div>                 
         </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">Informacion seguridad social</div>
-        <div class="panel-body">
-            <div class="form-group form-group-sm">
-                <label for="form_entidadSaludRel" class="col-sm-2 control-label">Salud:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.entidadSaludRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                               
-            <div class="form-group form-group-sm">
-                <label for="form_entidadPensionRel" class="col-sm-2 control-label">Pesion:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.entidadPensionRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>               
-            <div class="form-group form-group-sm">
-                <label for="form_entidadCajaRel" class="col-sm-2 control-label">Caja compensacion:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.entidadCajaRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                
-        </div>
-    </div>                
-    <div class="modal-footer">
-        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_lista') }}">Cancelar</a>
-        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_nuevo_enlazar') }}">Enlazar de registro de seleccion</a>            
-        {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
-        {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
-    </div>
+    </div>                   
+    <div class="modal-footer">              
+        {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}            
+    </div>    
     {{ form_end(form) }}
 </div>
 {% endblock %}

@@ -150,7 +150,11 @@ class RhuCentroCosto
      */
     protected $examenesCentroCostoRel;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="centroCostoRel")
+     */
+    protected $liquidacionesCentroCostoRel;    
+    
     /**
      * Constructor
      */
@@ -166,6 +170,8 @@ class RhuCentroCosto
         $this->pagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sedesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->examenesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -910,5 +916,39 @@ class RhuCentroCosto
     public function getExamenesCentroCostoRel()
     {
         return $this->examenesCentroCostoRel;
+    }
+
+    /**
+     * Add liquidacionesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addLiquidacionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesCentroCostoRel)
+    {
+        $this->liquidacionesCentroCostoRel[] = $liquidacionesCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove liquidacionesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesCentroCostoRel
+     */
+    public function removeLiquidacionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesCentroCostoRel)
+    {
+        $this->liquidacionesCentroCostoRel->removeElement($liquidacionesCentroCostoRel);
+    }
+
+    /**
+     * Get liquidacionesCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLiquidacionesCentroCostoRel()
+    {
+        return $this->liquidacionesCentroCostoRel;
     }
 }

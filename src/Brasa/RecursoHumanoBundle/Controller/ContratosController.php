@@ -7,6 +7,9 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuContratoType;
 
 class ContratosController extends Controller
 {
+    var $fechaDesdeInicia;
+    var $fechaHastaInicia;
+    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -132,14 +135,18 @@ class ContratosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $session->set('dqlContratoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(                
-                $session->get('filtroIdentificacion')
+                $session->get('filtroIdentificacion'),
+                $this->fechaDesdeInicia,
+                $this->fechaHastaInicia
                 ));  
     }     
     
     private function formularioLista() {
         $session = $this->getRequest()->getSession();        
         $form = $this->createFormBuilder()                        
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))                            
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+            ->add('fechaDesdeInicia', 'date', array('required' => true, 'widget' => 'single_text'))                            
+            ->add('fechaHastaInicia', 'date', array('required' => true, 'widget' => 'single_text'))                                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',)) 
             ->getForm();        
@@ -148,6 +155,83 @@ class ContratosController extends Controller
     
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        if($controles['fechaDesdeInicia']) {            
+            $this->fechaDesdeInicia = $controles['fechaDesdeInicia'];            
+        }
+        if($controles['fechaHastaInicia']) {            
+            $this->fechaHastaInicia = $controles['fechaHastaInicia'];            
+        }        
+        //$session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-    }      
+    }    
+    
+    private function generarExcel() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("JG Efectivos")
+            ->setLastModifiedBy("JG Efectivos")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'TIPO')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'NUMERO')
+                    ->setCellValue('E1', 'CENTRO COSTOS')
+                    ->setCellValue('F1', 'TIEMPO')
+                    ->setCellValue('G1', 'DESDE')
+                    ->setCellValue('H1', 'HASTA')                    
+                    ->setCellValue('I1', 'SALARIO')
+                    ->setCellValue('J1', 'CARGO')
+                    ->setCellValue('K1', 'CARGO DESCRIPCION')
+                    ->setCellValue('L1', 'CLASIFICACION RIESGO');
+
+        $i = 2;
+        $query = $em->createQuery($session->get('dqlContratoLista'));
+        //$arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContratos = $query->getResult();
+        foreach ($arContratos as $arContrato) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arContrato->getCodigoContratoPk())
+                    ->setCellValue('B' . $i, $arContrato->getContratoTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arContrato->getFecha()->Format('Y-m-d'))
+                    ->setCellValue('D' . $i, $arContrato->getNumero())
+                    ->setCellValue('E' . $i, $arContrato->getCentroCostoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arContrato->getTipoTiempoRel()->getNombre())
+                    ->setCellValue('G' . $i, $arContrato->getFechaDesde()->Format('Y-m-d'))
+                    ->setCellValue('H' . $i, $arContrato->getFechaHasta()->Format('Y-m-d'))
+                    ->setCellValue('I' . $i, $arContrato->getVrSalario())
+                    ->setCellValue('J' . $i, $arContrato->getCargoRel()->getNombre())
+                    ->setCellValue('K' . $i, $arContrato->getCargoDescripcion())
+                    ->setCellValue('L' . $i, $arContrato->getClasificacionRiesgoRel()->getNombre());
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('contratos');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Contratos.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }        
 }

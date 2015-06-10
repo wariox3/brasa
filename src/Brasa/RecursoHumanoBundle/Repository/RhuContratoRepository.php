@@ -10,11 +10,17 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuContratoRepository extends EntityRepository {
-    public function listaDQL($strIdentificacion = "") {        
+    public function listaDQL($strIdentificacion = "", $fechaDesdeInicia = "", $fechaHastaInicia = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
+        if($fechaDesdeInicia != "" ) {
+            $dql .= " AND c.fechaDesde >= '" . $fechaDesdeInicia . "'";
+        }        
+        if($fechaHastaInicia != "" ) {
+            $dql .= " AND c.fechaDesde <= '" . $fechaHastaInicia . "'";
+        }        
 
         $dql .= " ORDER BY c.codigoContratoPk";
         return $dql;

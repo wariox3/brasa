@@ -18,12 +18,12 @@ class RhuContrato
     private $codigoContratoPk;        
     
     /**
-     * @ORM\Column(name="codigo_contrato_tipo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_contrato_tipo_fk", type="integer")
      */    
     private $codigoContratoTipoFk;     
     
     /**
-     * @ORM\Column(name="codigo_clasificacion_riesgo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_clasificacion_riesgo_fk", type="integer")
      */    
     private $codigoClasificacionRiesgoFk;    
     
@@ -33,17 +33,17 @@ class RhuContrato
     private $fecha;     
     
     /**
-     * @ORM\Column(name="codigo_tipo_tiempo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_tipo_tiempo_fk", type="integer")
      */    
     private $codigoTipoTiempoFk;    
 
     /**
-     * @ORM\Column(name="codigo_tipo_pension_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_tipo_pension_fk", type="integer")
      */    
     private $codigoTipoPensionFk;    
     
     /**
-     * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_empleado_fk", type="integer")
      */    
     private $codigoEmpleadoFk;
     
@@ -63,7 +63,7 @@ class RhuContrato
     private $numero;     
     
     /**
-     * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_cargo_fk", type="integer")
      */    
     private $codigoCargoFk;    
     
@@ -93,7 +93,7 @@ class RhuContrato
     private $indefinido = 0;     
     
     /**
-     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
      */    
     private $codigoCentroCostoFk;     
     
@@ -138,6 +138,8 @@ class RhuContrato
      * @ORM\JoinColumn(name="codigo_tipo_pension_fk", referencedColumnName="codigo_tipo_pension_pk")
      */
     protected $tipoPensionRel;     
+
+
 
 
     /**
@@ -244,6 +246,30 @@ class RhuContrato
     public function getCodigoTipoTiempoFk()
     {
         return $this->codigoTipoTiempoFk;
+    }
+
+    /**
+     * Set codigoTipoPensionFk
+     *
+     * @param integer $codigoTipoPensionFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoTipoPensionFk($codigoTipoPensionFk)
+    {
+        $this->codigoTipoPensionFk = $codigoTipoPensionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoPensionFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoPensionFk()
+    {
+        return $this->codigoTipoPensionFk;
     }
 
     /**
@@ -652,30 +678,6 @@ class RhuContrato
     public function getCargoRel()
     {
         return $this->cargoRel;
-    }
-
-    /**
-     * Set codigoTipoPensionFk
-     *
-     * @param integer $codigoTipoPensionFk
-     *
-     * @return RhuContrato
-     */
-    public function setCodigoTipoPensionFk($codigoTipoPensionFk)
-    {
-        $this->codigoTipoPensionFk = $codigoTipoPensionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTipoPensionFk
-     *
-     * @return integer
-     */
-    public function getCodigoTipoPensionFk()
-    {
-        return $this->codigoTipoPensionFk;
     }
 
     /**

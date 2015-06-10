@@ -2,38 +2,54 @@
 {% block content %}
     <div class="container">
         <div class="page-header">
-            <h3>Detalles del empleado</h3>
+            <h3>Detalles del contrato</h3>
         </div>
     <div class="container">
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="btn-group">
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 3,  'numero': arContrato.codigoContratoPk }) }}', 'Archivos', 500, 700)" >Documentos</a>                        
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 4,  'numero': arContrato.codigoContratoPk }) }}', 'Archivos', 500, 700)" >Documentos</a>                        
         </div>
         <br /> <br />
         <div class="panel panel-default">
-            <div class="panel-heading">Informacion empleado</div>
+            <div class="panel-heading">Informacion contrato</div>
             <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
-                    <td class="td-label">Codigo:</td>
+                    <td class="titulo">CODIGO:</td>
                     <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
-                    <td class="td-label"></td>
-                    <td class="td-in-well"></td>
-                    <td class="td-label">Tipo:</td>
-                    <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
+                    <td class="titulo">TIPO:</td>
+                    <td class="td-in-well">{{ arContrato.contratoTipoRel.nombre|default('SIN TIPO') }}</td>
+                    <td class="titulo">TIEMPO:</td>
+                    <td class="td-in-well">{{ arContrato.tipoTiempoRel.nombre|default('SIN TIEMPO') }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Fecha:</td>
-                    <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
-                    <td class="td-label">Celular:</td>
-                    <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
-                    <td class="td-label">Barrio</td>
-                    <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
-                </tr>                               
+                    <td class="titulo">FECHA INICIO:</td>
+                    <td class="td-in-well">{{ arContrato.fechaDesde|date("Y/m/d") }}</td>
+                    <td class="titulo">NUMERO:</td>
+                    <td class="td-in-well">{{ arContrato.numero }}</td>
+                    <td class="titulo">SALARIO:</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arContrato.vrSalario | number_format(2, '.', ',') }}</td>                   
+                </tr>    
                 <tr>
-                    <td colspan="8">Comentarios: {{ arContrato.comentarios }}</td>
+                    <td class="titulo">FECHA TERMINA:</td>
+                    <td class="td-in-well">{% if arContrato.indefinido == 1 %} INDEFINIDO {% else %} {{ arContrato.fechaHasta |date("Y/m/d") }} {%endif%}</td>
+                    <td class="titulo">CENTRO COSTO:</td>
+                    <td class="td-in-well">{{ arContrato.centroCostoRel.nombre|default('SIN CENTRO COSTO') }}</td>
+                    <td class="titulo">CARGO:</td>
+                    <td class="td-in-well">{{ arContrato.cargoRel.nombre|default('SIN CARGO') }}</td>
+                </tr>                 
+                <tr>
+                    <td class="titulo">CLASIFICACION RIESGO:</td>
+                    <td class="td-in-well">{{ arContrato.clasificacionRiesgoRel.nombre|default('SIN CENTRO COSTO') }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo">DESCRIPCION CARGO:</td>
+                    <td class="td-in-well">{{ arContrato.cargoDescripcion }}</td>
+                </tr>                                 
+                <tr>
+                    <td colspan="8">COMENTARIOS: {{ arContrato.comentarios }}</td>
                 </tr>
             </table>
             </div>

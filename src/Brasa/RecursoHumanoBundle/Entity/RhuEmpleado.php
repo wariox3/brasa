@@ -314,6 +314,11 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuProgramacionPagoDetalle", mappedBy="empleadoRel")
      */
     protected $programacionesPagosDetallesEmpleadoRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="empleadoRel")
+     */
+    protected $liquidacionesEmpleadoRel;    
     
     /**
      * Constructor
@@ -1775,5 +1780,39 @@ class RhuEmpleado
     public function getEntidadCajaRel()
     {
         return $this->entidadCajaRel;
+    }
+
+    /**
+     * Add liquidacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addLiquidacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesEmpleadoRel)
+    {
+        $this->liquidacionesEmpleadoRel[] = $liquidacionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove liquidacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesEmpleadoRel
+     */
+    public function removeLiquidacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesEmpleadoRel)
+    {
+        $this->liquidacionesEmpleadoRel->removeElement($liquidacionesEmpleadoRel);
+    }
+
+    /**
+     * Get liquidacionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLiquidacionesEmpleadoRel()
+    {
+        return $this->liquidacionesEmpleadoRel;
     }
 }
