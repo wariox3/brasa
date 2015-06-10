@@ -3,12 +3,9 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuContratoType;
 
-class ContratosController extends Controller
+class LiquidacionesController extends Controller
 {
-    var $fechaDesdeInicia;
-    var $fechaHastaInicia;
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -34,109 +31,7 @@ class ContratosController extends Controller
         
         $arContratos = $paginator->paginate($em->createQuery($session->get('dqlContratoLista')), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:lista.html.twig', array('arContratos' => $arContratos, 'form' => $form->createView()));
-    }    
-    
-    public function detalleAction($codigoContrato) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $mensaje = 0;
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->getForm();
-        $form->handleRequest($request);
-        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-        if($form->isValid()) {           
-            if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContrato();
-                $objFormatoContrato->Generar($this, $codigoContrato);
-            }
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:detalle.html.twig', array(
-                    'arContrato' => $arContrato,
-                    'form' => $form->createView()
-                    ));
-    }    
-    
-    public function nuevoAction($codigoContrato, $codigoEmpleado) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        if($codigoContrato != 0) {
-            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-        } else {
-            $arContrato->setFechaDesde(new \DateTime('now'));
-            $arContrato->setFechaHasta(new \DateTime('now'));
-            $arContrato->setIndefinido(1);
-            $arContrato->setEstadoActivo(1);
-            $arContrato->setVrSalario(644350); //Parametrizar con configuracion salario minimo
-        }
-        $form = $this->createForm(new RhuContratoType(), $arContrato);
-        $form->handleRequest($request);
-        if ($form->isValid()) {            
-            $arContrato = $form->getData();
-            $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
-            $arContrato->setEmpleadoRel($arEmpleado);      
-            $em->persist($arContrato);
-            $douSalarioMinimo = 644350;
-            if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
-                $arEmpleado->setAuxilioTransporte(1);
-            }
-            $arEmpleado->setCentroCostoRel($arContrato->getCentroCostoRel());
-            $arEmpleado->setTipoTiempoRel($arContrato->getTipoTiempoRel());
-            $arEmpleado->setVrSalario($arContrato->getVrSalario());
-            $arEmpleado->setFechaContrato($arContrato->getFechaDesde());
-            $arEmpleado->setFechaFinalizaContrato($arContrato->getFechaHasta());
-            $arEmpleado->setClasificacionRiesgoRel($arContrato->getClasificacionRiesgoRel());
-            $arEmpleado->setCargoRel($arContrato->getCargoRel());
-            $arEmpleado->setCargoDescripcion($arContrato->getCargoDescripcion());
-            $arEmpleado->setTipoPensionRel($arContrato->getTipoPensionRel());
-            $em->persist($arEmpleado);
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-        }
-
-        return $this->render('BrasaRecursoHumanoBundle:Contratos:nuevo.html.twig', array(
-            'arContrato' => $arContrato,
-            'arEmpleado' => $arEmpleado,
-            'form' => $form->createView()));
-    }
-
-    public function terminarAction($codigoContrato) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $formContrato = $this->createFormBuilder()
-            ->setAction($this->generateUrl('brs_rhu_contratos_terminar', array('codigoContrato' => $codigoContrato)))
-            ->add('fechaTerminacion', 'date', array('label'  => 'Terminacion', 'data' => new \DateTime('now')))                            
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
-            ->getForm();
-        $formContrato->handleRequest($request);        
-        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);        
-        //$arContrato->setFechaHasta(new \DateTime('now'));        
-        if ($formContrato->isValid()) {
-            $fechaHasta = $formContrato->get('fechaTerminacion')->getData()->format('Y-m-d');                        
-            $arContrato->setFechaHasta(date_create($fechaHasta));            
-            $arContrato->setIndefinido(0);
-            $em->persist($arContrato);
-            //Generar liquidacion
-            $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
-            $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
-            $arLiquidacion->setEmpleadoRel($arContrato->getEmpleadoRel());
-            $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
-            $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
-            $em->persist($arLiquidacion);
-            $em->flush();
-            //return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $arContrato->getCodigoEmpleadoFk())));
-        }
-
-        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:terminar.html.twig', array(
-            'arContrato' => $arContrato,
-            'formContrato' => $formContrato->createView()
-        ));
-    }   
+    }               
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();
