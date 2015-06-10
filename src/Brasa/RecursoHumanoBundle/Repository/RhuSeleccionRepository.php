@@ -94,18 +94,18 @@ class RhuSeleccionRepository extends EntityRepository {
         
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoSeleccion) {
-                $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
-                if ($arSelecciones->getEstadoAprobado() == 0){
-                    $arSelecciones->setEstadoAprobado(1);
+                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+                if ($arSeleccion->getEstadoAprobado() == 0){
+                    $arSeleccion->setEstadoAprobado(1);
                     //Se inserta la seleccion aprobada en la entidad examen
-                    $arExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
-                    $arExamenes->setFecha(new \ DateTime("now"));
-                    $arExamenes->setCodigoCentroCostoFk($arSelecciones->getCodigoCentroCostoFk());
-                    $arExamenes->setIdentificacion($arSelecciones->getNumeroIdentificacion());
-                    $arExamenes->setNombreCorto($arSelecciones->getNombreCorto());
-                    $em->persist($arExamenes);     
+                    $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+                    $arExamen->setFecha(new \ DateTime("now"));
+                    $arExamen->setCentroCostoRel($arSeleccion->getCentroCostoRel());
+                    $arExamen->setIdentificacion($arSeleccion->getNumeroIdentificacion());
+                    $arExamen->setNombreCorto($arSeleccion->getNombreCorto());
+                    $em->persist($arExamen);     
                 }
-                $em->persist($arSelecciones);                
+                $em->persist($arSeleccion);                
             }
             $em->flush();              
         }        
