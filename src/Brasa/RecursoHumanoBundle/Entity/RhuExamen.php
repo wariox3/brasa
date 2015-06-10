@@ -54,16 +54,11 @@ class RhuExamen
     protected $entidadExamenRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuExamenTipo", inversedBy="examenesExamenTipoRel")
-     * @ORM\JoinColumn(name="codigo_examen_tipo_fk", referencedColumnName="codigo_examen_tipo_pk")
-     */
-    protected $examenTipoRel;
-
-    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="examenesCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     protected $centroCostoRel;
+
     
 
     /**
@@ -242,30 +237,6 @@ class RhuExamen
     public function getEntidadExamenRel()
     {
         return $this->entidadExamenRel;
-    }
-
-    /**
-     * Set examenTipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo $examenTipoRel
-     *
-     * @return RhuExamen
-     */
-    public function setExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo $examenTipoRel = null)
-    {
-        $this->examenTipoRel = $examenTipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get examenTipoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo
-     */
-    public function getExamenTipoRel()
-    {
-        return $this->examenTipoRel;
     }
 
     /**

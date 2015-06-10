@@ -17,9 +17,10 @@ class RhuExamenType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'property' => 'nombre',
             ))   
-            ->add('fecha', 'date', array('data' => new \ DateTime('now')))                                                                           
+            ->add('fecha', 'date')                                                                           
             ->add('identificacion', 'number', array('required' => true))
-            ->add('nombre', 'text', array('required' => true))
+            ->add('nombreCorto', 'text', array('required' => true))
+            ->add('estadoAprobado', 'choice', array('choices' => array('0' =>'NO', '1' => 'SI')))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
     }

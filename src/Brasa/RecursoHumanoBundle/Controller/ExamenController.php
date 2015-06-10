@@ -141,15 +141,15 @@ class ExamenController extends Controller
             $em->persist($arExamen);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_selecciongrupo_nuevo', array('codigoSeleccionGrupo' => 0)));
+                return $this->redirect($this->generateUrl('brs_rhu_examen_nuevo', array('codigoExamen' => 0)));
             } else {
-                return $this->redirect($this->generateUrl('brs_rhu_selecciongrupo_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_examen_listar'));
             }
 
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:SeleccionGrupo:nuevo.html.twig', array(
-            'arGrupo' => $arGrupo,
+        return $this->render('BrasaRecursoHumanoBundle:Examen:nuevo.html.twig', array(
+            'arExamen' => $arExamen,
             'form' => $form->createView()));
     }
         

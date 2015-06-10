@@ -22,18 +22,7 @@ class RhuExamenTipo
      */    
     private $nombre;            
     
-    /**
-     * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="examenTipoRel")
-     */
-    protected $examenesExamenTipoRel;
     
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->examenesExamenTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get codigoExamenTipoPk
@@ -67,39 +56,5 @@ class RhuExamenTipo
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add examenesExamenTipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesExamenTipoRel
-     *
-     * @return RhuExamenTipo
-     */
-    public function addExamenesExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesExamenTipoRel)
-    {
-        $this->examenesExamenTipoRel[] = $examenesExamenTipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove examenesExamenTipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesExamenTipoRel
-     */
-    public function removeExamenesExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesExamenTipoRel)
-    {
-        $this->examenesExamenTipoRel->removeElement($examenesExamenTipoRel);
-    }
-
-    /**
-     * Get examenesExamenTipoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getExamenesExamenTipoRel()
-    {
-        return $this->examenesExamenTipoRel;
     }
 }

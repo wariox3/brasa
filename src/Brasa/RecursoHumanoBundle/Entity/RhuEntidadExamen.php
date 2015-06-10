@@ -42,6 +42,7 @@ class RhuEntidadExamen
      */
     protected $examenesEntidadExamenRel;     
 
+    
     /**
      * Constructor
      */
@@ -159,11 +160,11 @@ class RhuEntidadExamen
     /**
      * Add examenesEntidadExamenRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenes $examenesEntidadExamenRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesEntidadExamenRel
      *
      * @return RhuEntidadExamen
      */
-    public function addExamenesEntidadExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenes $examenesEntidadExamenRel)
+    public function addExamenesEntidadExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesEntidadExamenRel)
     {
         $this->examenesEntidadExamenRel[] = $examenesEntidadExamenRel;
 
@@ -173,9 +174,9 @@ class RhuEntidadExamen
     /**
      * Remove examenesEntidadExamenRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenes $examenesEntidadExamenRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesEntidadExamenRel
      */
-    public function removeExamenesEntidadExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenes $examenesEntidadExamenRel)
+    public function removeExamenesEntidadExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesEntidadExamenRel)
     {
         $this->examenesEntidadExamenRel->removeElement($examenesEntidadExamenRel);
     }
