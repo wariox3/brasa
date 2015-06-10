@@ -5,10 +5,10 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_examenes")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuExamenesRepository")
+ * @ORM\Table(name="rhu_examen")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuExamenRepository")
  */
-class RhuExamenes
+class RhuExamen
 {
     /**
      * @ORM\Id
@@ -52,6 +52,14 @@ class RhuExamenes
      * @ORM\JoinColumn(name="codigo_entidad_examen_fk", referencedColumnName="codigo_entidad_examen_pk")
      */
     protected $entidadExamenRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuExamenTipo", inversedBy="examenesExamenTipoRel")
+     * @ORM\JoinColumn(name="codigo_examen_tipo_fk", referencedColumnName="codigo_examen_tipo_pk")
+     */
+    protected $examenTipoRel;
+
+    
 
     /**
      * Get codigoExamenPk
@@ -68,7 +76,7 @@ class RhuExamenes
      *
      * @param integer $codigoCentroCostoFk
      *
-     * @return RhuExamenes
+     * @return RhuExamen
      */
     public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
@@ -92,7 +100,7 @@ class RhuExamenes
      *
      * @param integer $codigoEntidadExamenFk
      *
-     * @return RhuExamenes
+     * @return RhuExamen
      */
     public function setCodigoEntidadExamenFk($codigoEntidadExamenFk)
     {
@@ -116,7 +124,7 @@ class RhuExamenes
      *
      * @param \DateTime $fecha
      *
-     * @return RhuExamenes
+     * @return RhuExamen
      */
     public function setFecha($fecha)
     {
@@ -140,7 +148,7 @@ class RhuExamenes
      *
      * @param boolean $estadoAprobado
      *
-     * @return RhuExamenes
+     * @return RhuExamen
      */
     public function setEstadoAprobado($estadoAprobado)
     {
@@ -164,7 +172,7 @@ class RhuExamenes
      *
      * @param string $nombreCorto
      *
-     * @return RhuExamenes
+     * @return RhuExamen
      */
     public function setNombreCorto($nombreCorto)
     {
@@ -188,7 +196,7 @@ class RhuExamenes
      *
      * @param integer $identificacion
      *
-     * @return RhuExamenes
+     * @return RhuExamen
      */
     public function setIdentificacion($identificacion)
     {
@@ -212,7 +220,7 @@ class RhuExamenes
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen $entidadExamenRel
      *
-     * @return RhuExamenes
+     * @return RhuExamen
      */
     public function setEntidadExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen $entidadExamenRel = null)
     {
@@ -229,5 +237,29 @@ class RhuExamenes
     public function getEntidadExamenRel()
     {
         return $this->entidadExamenRel;
+    }
+
+    /**
+     * Set examenTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo $examenTipoRel
+     *
+     * @return RhuExamen
+     */
+    public function setExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo $examenTipoRel = null)
+    {
+        $this->examenTipoRel = $examenTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get examenTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo
+     */
+    public function getExamenTipoRel()
+    {
+        return $this->examenTipoRel;
     }
 }

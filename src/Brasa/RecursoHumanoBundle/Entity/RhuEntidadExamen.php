@@ -38,7 +38,7 @@ class RhuEntidadExamen
     private $telefono;    
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuExamenes", mappedBy="entidadExamenRel")
+     * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="entidadExamenRel")
      */
     protected $examenesEntidadExamenRel;     
 
