@@ -25,7 +25,12 @@ class RhuExamen
     /**
      * @ORM\Column(name="codigo_entidad_examen_fk", type="integer", nullable=true)
      */    
-    private $codigoEntidadExamenFk;           
+    private $codigoEntidadExamenFk;
+    
+    /**
+     * @ORM\Column(name="codigo_examen_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoExamenTipoFk;
     
     /**
      * @ORM\Column(name="fecha", type="date")
@@ -59,6 +64,11 @@ class RhuExamen
      */
     protected $examenTipoRel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="examenesCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;
     
 
     /**
@@ -261,5 +271,53 @@ class RhuExamen
     public function getExamenTipoRel()
     {
         return $this->examenTipoRel;
+    }
+
+    /**
+     * Set codigoExamenTipoFk
+     *
+     * @param integer $codigoExamenTipoFk
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoExamenTipoFk($codigoExamenTipoFk)
+    {
+        $this->codigoExamenTipoFk = $codigoExamenTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoExamenTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoExamenTipoFk()
+    {
+        return $this->codigoExamenTipoFk;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuExamen
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
     }
 }

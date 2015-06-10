@@ -143,7 +143,12 @@ class RhuCentroCosto
     /**
      * @ORM\OneToMany(targetEntity="RhuSede", mappedBy="centroCostoRel")
      */
-    protected $sedesCentroCostoRel;    
+    protected $sedesCentroCostoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="centroCostoRel")
+     */
+    protected $examenesCentroCostoRel;
 
 
     /**
@@ -871,5 +876,39 @@ class RhuCentroCosto
     public function getSedesCentroCostoRel()
     {
         return $this->sedesCentroCostoRel;
+    }
+
+    /**
+     * Add examenesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addExamenesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCentroCostoRel)
+    {
+        $this->examenesCentroCostoRel[] = $examenesCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove examenesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCentroCostoRel
+     */
+    public function removeExamenesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCentroCostoRel)
+    {
+        $this->examenesCentroCostoRel->removeElement($examenesCentroCostoRel);
+    }
+
+    /**
+     * Get examenesCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExamenesCentroCostoRel()
+    {
+        return $this->examenesCentroCostoRel;
     }
 }
