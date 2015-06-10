@@ -127,5 +127,30 @@ class ExamenController extends Controller
         return $form;
     }
     
+     public function nuevoAction($codigoExamen) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        if($codigoExamen != 0) {
+            $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+        }
+        $form = $this->createForm(new RhuExamenType, $arExamen);
+        $form->handleRequest($request);
+        if ($form->isValid()) {           
+            $arExamen = $form->getData();
+            $em->persist($arExamen);
+            $em->flush();
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_rhu_selecciongrupo_nuevo', array('codigoSeleccionGrupo' => 0)));
+            } else {
+                return $this->redirect($this->generateUrl('brs_rhu_selecciongrupo_lista'));
+            }
+
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:SeleccionGrupo:nuevo.html.twig', array(
+            'arGrupo' => $arGrupo,
+            'form' => $form->createView()));
+    }
         
 }
