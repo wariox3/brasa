@@ -5,7 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenType;
-//use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionGrupoFiltroType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenDetalleType;
 
 class ExamenController extends Controller
 {
@@ -35,6 +35,100 @@ class ExamenController extends Controller
         $arExamenes = $paginator->paginate($em->createQuery($session->get('dqlExamenLista')), $request->query->get('page', 1), 20);                
         return $this->render('BrasaRecursoHumanoBundle:Examen:lista.html.twig', array('arExamenes' => $arExamenes, 'form' => $form->createView()));     
     } 
+
+    public function nuevoAction($codigoExamen) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        if($codigoExamen != 0) {
+            $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+        }
+        $form = $this->createForm(new RhuExamenType, $arExamen);
+        $form->handleRequest($request);
+        if ($form->isValid()) {           
+            $arExamen = $form->getData();
+            $em->persist($arExamen);
+            $em->flush();
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_rhu_examen_nuevo', array('codigoExamen' => 0)));
+            } else {
+                return $this->redirect($this->generateUrl('brs_rhu_examen_listar'));
+            }
+
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:Examen:nuevo.html.twig', array(
+            'arExamen' => $arExamen,
+            'form' => $form->createView()));
+    }
+    
+    public function detalleAction($codigoExamen) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();    
+        $objMensaje = $this->get('mensajes_brasa');                     
+        $form = $this->formularioDetalle();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
+            if($form->get('BtnImprimir')->isClicked()) {                
+                $objSeleccionGrupo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoExamenDetalle();
+                $objSeleccionGrupo->Generar($this, $codigoExamen);
+            }
+            if($form->get('BtnEliminar')->isClicked()) {                
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados();
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));           
+            }                      
+        }        
+        
+        //$dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuExamen c where c.codigoExamenPk = $codigoExamen";
+        //$query = $em->createQuery($dql);        
+        //$arExamen = $query->getResult();
+        $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+        $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+        $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array ('codigoExamenFk' => $codigoExamen));
+        return $this->render('BrasaRecursoHumanoBundle:Examen:detalle.html.twig', array(
+                    'arExamen' => $arExamen,
+                    'arExamenDetalle' => $arExamenDetalle,
+                    'form' => $form->createView()
+                    ));
+    }
+    
+    public function detallenuevoAction($codigoExamen) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+        $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findAll();
+        $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) { 
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoExamenTipo) {                    
+                        $arExamenTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($codigoExamenTipo);
+                        $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+                        $arExamenDetalle->setExamenTipoRel($arExamenTipo); 
+                        $arExamenDetalle->setExamenRel($arExamen);
+                        //$douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
+                        $em->persist($arExamenDetalle);                    
+                    }
+                    $em->flush();
+                }                
+            }            
+            return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));           
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:Examen:detallenuevo.html.twig', array(
+            'arExamenDetalle' => $arExamenDetalle,
+            'arExamenTipos' => $arExamenTipos,
+            'arExamen' => $arExamen,
+            'form' => $form->createView()));
+    }    
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();
@@ -125,32 +219,14 @@ class ExamenController extends Controller
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
         return $form;
-    }
+    }   
     
-     public function nuevoAction($codigoExamen) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
-        if($codigoExamen != 0) {
-            $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
-        }
-        $form = $this->createForm(new RhuExamenType, $arExamen);
-        $form->handleRequest($request);
-        if ($form->isValid()) {           
-            $arExamen = $form->getData();
-            $em->persist($arExamen);
-            $em->flush();
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_examen_nuevo', array('codigoExamen' => 0)));
-            } else {
-                return $this->redirect($this->generateUrl('brs_rhu_examen_listar'));
-            }
-
-        }
-
-        return $this->render('BrasaRecursoHumanoBundle:Examen:nuevo.html.twig', array(
-            'arExamen' => $arExamen,
-            'form' => $form->createView()));
-    }
+    private function formularioDetalle() {        
+        $form = $this->createFormBuilder()
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->getForm();        
+        return $form;
+    }    
         
 }

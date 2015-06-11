@@ -58,8 +58,20 @@ class RhuExamen
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     protected $centroCostoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuExamenDetalle", mappedBy="examenRel")
+     */
+    protected $examenesExamenDetalleRel;
 
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->examenesExamenDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoExamenPk
@@ -261,5 +273,39 @@ class RhuExamen
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Add examenesExamenDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesExamenDetalleRel
+     *
+     * @return RhuExamen
+     */
+    public function addExamenesExamenDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesExamenDetalleRel)
+    {
+        $this->examenesExamenDetalleRel[] = $examenesExamenDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove examenesExamenDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesExamenDetalleRel
+     */
+    public function removeExamenesExamenDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesExamenDetalleRel)
+    {
+        $this->examenesExamenDetalleRel->removeElement($examenesExamenDetalleRel);
+    }
+
+    /**
+     * Get examenesExamenDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExamenesExamenDetalleRel()
+    {
+        return $this->examenesExamenDetalleRel;
     }
 }

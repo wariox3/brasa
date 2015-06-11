@@ -172,7 +172,15 @@ brs_rhu_examen_listar:
    
 brs_rhu_examen_nuevo:
    path:     /rhumano/examen/nuevo/{codigoExamen}
-   defaults: { _controller: BrasaRecursoHumanoBundle:Examen:nuevo }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:Examen:nuevo }
+   
+brs_rhu_examen_detalle:
+   path:     /rhumano/examen/detalle/{codigoExamen}
+   defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalle }
+   
+brs_rhu_examen_detalle_nuevo:
+   path:     /rhumano/examen/detalle/nuevo/{codigoExamen}
+   defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detallenuevo }   
    
 brs_rhu_base_entidadexamen_listar:
    path:     /rhumano/base/entidadexamen/listar
