@@ -49,7 +49,7 @@
             
     <br /><br />
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tipos" data-toggle="tab">Tipos Examenes</a></li>
+        <li class="active"><a href="#tipos" data-toggle="tab">Tipos examenes</a></li>
     </ul>
 
     <div class="tab-content">
@@ -70,10 +70,9 @@
                 <td>{{ arExamenDetalle.codigoExamenDetallePk  }}</td>
                 <td>{{ arExamenDetalle.codigoExamenTipoFk  }}</td>
                 <td>{{ arExamenDetalle.examenTipoRel.nombre|default('ERROR')}}</td>
-                <td>{{ arExamenDetalle.precio  }}</td>
+                <td class="td-in-well">{{ arExamenDetalle.precio | number_format(2, '.', ',') }}</td>
                 <td>{% if arExamenDetalle.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}" /></td>
-                
             </tr>
             {% endfor %}
         </table>

@@ -22,6 +22,9 @@ class ExamenController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {    
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->eliminarExamen($arrSeleccionados);
             }
+            if ($form->get('BtnAprobar')->isClicked()) {    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->aprobarExamen($arrSeleccionados);
+            }
             if ($form->get('BtnFiltrar')->isClicked()) {    
                 $this->filtrar($form);
                 $this->listar();
@@ -216,7 +219,7 @@ class ExamenController extends Controller
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionGrupo')))
             ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoSeleccionGrupo'))) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnEstadoAprobar', 'submit', array('label'  => 'Aprobar',))
+            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        

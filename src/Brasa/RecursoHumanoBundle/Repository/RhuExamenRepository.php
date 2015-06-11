@@ -13,7 +13,9 @@ class RhuExamenRepository extends EntityRepository {
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoExamen) {                
                 $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);                     
-                   $em->remove($arSeleccion);                                              
+                if($em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->devuelveNumeroDetalleExamen($codigoExamen) <= 0){   
+                    $em->remove($arSeleccion);
+                }
             }
             $em->flush();       
         }     
@@ -32,6 +34,37 @@ class RhuExamenRepository extends EntityRepository {
         }         
         $dql .= " ORDER BY sg.codigoExamenPk";
         return $dql;
-    }   
+    } 
+    
+    public function aprobarExamen($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        $var = 0;
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigoExamen) {                
+                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);                     
+                $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+                $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $codigoExamen));
+                foreach ($arExamenDetalle as $arExamenDetalle){
+                    if ($arExamenDetalle->getEstadoAprobado()== 1){
+                        $var = $var + 1;
+                    }
+                }
+                $var2 = count($arExamenDetalle);
+                if ($var2 == $var){
+                    $arSeleccion->setEstadoAbierto(1);
+                    $em->persist($arSeleccion);
+                }
+            }
+            $em->flush();       
+        }     
+    } 
+    
+    public function devuelveNumeroDetalleExamen($codigoSeleccionGrupo) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT COUNT(s.codigoExamenDetallePk) FROM BrasaRecursoHumanoBundle:RhuExamenDetalle s WHERE s.codigoExamenFk = " . $codigoSeleccionGrupo;
+        $query = $em->createQuery($dql);
+        $douNumeroDetalleExamen = $query->getSingleScalarResult();
+        return $douNumeroDetalleExamen;
+    }
     
 }
