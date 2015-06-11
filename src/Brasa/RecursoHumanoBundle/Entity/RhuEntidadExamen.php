@@ -40,8 +40,11 @@ class RhuEntidadExamen
     /**
      * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="entidadExamenRel")
      */
-    protected $examenesEntidadExamenRel;     
-
+    protected $examenesEntidadExamenRel;
+    
+   
+    
+    
     
     /**
      * Constructor

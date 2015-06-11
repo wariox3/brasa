@@ -75,14 +75,15 @@ class ExamenController extends Controller
                 $objSeleccionGrupo->Generar($this, $codigoExamen);
             }
             if($form->get('BtnEliminar')->isClicked()) {                
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados();
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));           
-            }                      
+            }
+            if($form->get('BtnAprobar')->isClicked()) {                
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));           
+            }
         }        
         
-        //$dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuExamen c where c.codigoExamenPk = $codigoExamen";
-        //$query = $em->createQuery($dql);        
-        //$arExamen = $query->getResult();
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
         $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
         $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
@@ -114,7 +115,8 @@ class ExamenController extends Controller
                         $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
                         $arExamenDetalle->setExamenTipoRel($arExamenTipo); 
                         $arExamenDetalle->setExamenRel($arExamen);
-                        //$douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
+                        $douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
+                        $arExamenDetalle->setPrecio($douPrecio);
                         $em->persist($arExamenDetalle);                    
                     }
                     $em->flush();
@@ -225,6 +227,7 @@ class ExamenController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
             ->getForm();        
         return $form;
     }    

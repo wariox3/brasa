@@ -32,6 +32,11 @@ class RhuExamenDetalle
      */    
     private $estadoAprobado = 0;
     
+    /**     
+     * @ORM\Column(name="precio", type="float")
+     */    
+    private $precio;
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuExamenTipo", inversedBy="examenesExamenTipoRel")
      * @ORM\JoinColumn(name="codigo_examen_tipo_fk", referencedColumnName="codigo_examen_tipo_pk")
@@ -175,5 +180,29 @@ class RhuExamenDetalle
     public function getExamenRel()
     {
         return $this->examenRel;
+    }
+
+    /**
+     * Set precio
+     *
+     * @param float $precio
+     *
+     * @return RhuExamenDetalle
+     */
+    public function setPrecio($precio)
+    {
+        $this->precio = $precio;
+
+        return $this;
+    }
+
+    /**
+     * Get precio
+     *
+     * @return float
+     */
+    public function getPrecio()
+    {
+        return $this->precio;
     }
 }

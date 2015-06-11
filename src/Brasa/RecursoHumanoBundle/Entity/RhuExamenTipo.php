@@ -26,6 +26,17 @@ class RhuExamenTipo
      * @ORM\OneToMany(targetEntity="RhuExamenTipo", mappedBy="examenTipoRel")
      */
     protected $examenesExamenTipoRel;
+    
+   
+
+   
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->examenesExamenTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoExamenTipoPk
@@ -59,13 +70,6 @@ class RhuExamenTipo
     public function getNombre()
     {
         return $this->nombre;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->examenesExamenTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

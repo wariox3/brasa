@@ -49,7 +49,7 @@
             
     <br /><br />
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tipos" data-toggle="tab">TIPOS EXAMENES</a></li>
+        <li class="active"><a href="#tipos" data-toggle="tab">Tipos Examenes</a></li>
     </ul>
 
     <div class="tab-content">
@@ -61,6 +61,7 @@
                 <th>CODIGO</th>
                 <th>TIPO</th>
                 <th>TIPO EXAMEN</th>
+                <th>PRECIO</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Aprobado">APROBADO</p></th>                
                 <th></th>
             </tr>
@@ -69,6 +70,7 @@
                 <td>{{ arExamenDetalle.codigoExamenDetallePk  }}</td>
                 <td>{{ arExamenDetalle.codigoExamenTipoFk  }}</td>
                 <td>{{ arExamenDetalle.examenTipoRel.nombre|default('ERROR')}}</td>
+                <td>{{ arExamenDetalle.precio  }}</td>
                 <td>{% if arExamenDetalle.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}" /></td>
                 
@@ -79,10 +81,11 @@
         </div>
         <div class="btn-toolbar" style="float: right">              
         <div class="btn-group">
-                            
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_examen_detalle_nuevo', {'codigoExamen': arExamen.codigoExamenPk}) }}">Nuevo</a>
         </div>
         <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_examen_detalle_nuevo', {'codigoExamen': arExamen.codigoExamenPk}) }}">Nuevo</a>
+            {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}               
         </div>
     </div> 
     </div>            
