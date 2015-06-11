@@ -27,23 +27,36 @@
     </div>
     <br /><br /><br />
     <div class="panel panel-default">
-      <div class="panel-heading">Informacion centro costo</div>
+      <div class="panel-heading">Informacion programacion de pago</div>
       <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
-                    <td class="td-label">Numero:</td>
-                    <td class="td-in-well">{{ arCentroCosto.codigoCentroCostoPk }}</td>
-                    <td class="td-label">Ultimo periodo:</td>
-                    <td class="td-in-well">{{ arCentroCosto.fechaUltimoPagoProgramado |date("Y/m/d") }}</td>
+                    <td class="titulo">CODIGO:</td>
+                    <td class="td-in-well">{{ arProgramacionPago.codigoProgramacionPagoPk }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>                   
                 </tr>
                 <tr>
-                    <td class="td-label">Nombre:</td>
-                    <td class="td-in-well">{{ arCentroCosto.nombre }}</td>
-                    <td class="td-label"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">CENTRO COSTOS:</td>
+                    <td class="td-in-well">{{ arProgramacionPago.codigoCentroCostoFk }} - {{ arCentroCosto.nombre }}</td>
+                    <td class="titulo">ULTIMO PERIODO:</td>
+                    <td class="td-in-well">{{ arCentroCosto.fechaUltimoPagoProgramado |date("Y/m/d") }}</td>                    
                 </tr>
                 <tr>
-                    <td colspan="8">Comentarios:</td>
+                    <td class="titulo">PERIODO DESDE:</td>
+                    <td class="td-in-well">{{ arProgramacionPago.fechaDesde |date("Y/m/d") }}</td>                    
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>                   
+                </tr>                
+                <tr>
+
+                    <td class="titulo">PERIODO HASTA:</td>
+                    <td class="td-in-well">{{ arProgramacionPago.fechaHasta |date("Y/m/d") }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>                   
+                </tr>                
+                <tr>
+                    <td colspan="8" class="titulo">COMENTARIOS:</td>
                 </tr>
             </table>
       </div>

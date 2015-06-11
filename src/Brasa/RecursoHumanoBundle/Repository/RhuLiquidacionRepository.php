@@ -10,4 +10,21 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuLiquidacionRepository extends EntityRepository {
+    public function listaDQL($strIdentificacion = "") {        
+        $dql   = "SELECT l, e FROM BrasaRecursoHumanoBundle:RhuLiquidacion l JOIN l.empleadoRel e WHERE l.codigoLiquidacionPk <> 0";
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+
+        $dql .= " ORDER BY l.codigoLiquidacionPk";
+        return $dql;
+    }  
+    
+    public function liquidar($codigoLiquidacion) {        
+        $em = $this->getEntityManager();
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
+        //$em->flush();
+        return true;
+    }        
 }

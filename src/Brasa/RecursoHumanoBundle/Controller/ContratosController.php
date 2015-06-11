@@ -98,7 +98,7 @@ class ContratosController extends Controller
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:Contratos:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevo.html.twig', array(
             'arContrato' => $arContrato,
             'arEmpleado' => $arEmpleado,
             'form' => $form->createView()));

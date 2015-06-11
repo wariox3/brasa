@@ -21,79 +21,79 @@
             <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
-                    <td class="td-label">Codigo:</td>
+                    <td class="titulo">CODIGO:</td>
                     <td class="td-in-well">{{ arEmpleado.codigoEmpleadoPk }}</td>
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="td-label">Direccion:</td>
+                    <td class="titulo">DIRECCION:</td>
                     <td class="td-in-well">{{ arEmpleado.direccion }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Nombre:</td>
+                    <td class="titulo">NOMBRE:</td>
                     <td class="td-in-well">{{ arEmpleado.nombreCorto }}</td>
-                    <td class="td-label">Celular:</td>
+                    <td class="titulo">CELULAR:</td>
                     <td class="td-in-well">{{ arEmpleado.celular }}</td>
-                    <td class="td-label">Barrio</td>
+                    <td class="titulo">BARRIO:</td>
                     <td class="td-in-well">{{ arEmpleado.barrio }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Identificacion:</td>
+                    <td class="titulo">IDENTIFICACION:</td>
                     <td class="td-in-well">{{ arEmpleado.numeroIdentificacion }}</td>
-                    <td class="td-label">Telefono:</td>
+                    <td class="titulo">TELEFONO:</td>
                     <td class="td-in-well">{{ arEmpleado.telefono }}</td>
-                    <td class="td-label">Ciudad:</td>
+                    <td class="titulo">CIUDAD:</td>
                     <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre|default('ERROR') }}</td>                    
                 </tr>                
                 <tr>
-                    <td class="td-label">Estado civil:</td>
+                    <td class="titulo">ESTADO CIVIL:</td>
                     <td class="td-in-well">{{ arEmpleado.estadoCivilRel.nombre }}</td>                    
-                    <td class="td-label">Sexo:</td>
+                    <td class="titulo">SEXO:</td>
                     <td class="td-in-well">{{ arEmpleado.codigoSexoFk }}</td>
-                    <td class="td-label">Barrio:</td>
-                    <td class="td-in-well">{{ arEmpleado.barrio }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
                 </tr>                
                 <tr>
-                    <td class="td-label">Fecha nacimiento:</td>
+                    <td class="titulo">FECHA NACIMIENTO:</td>
                     <td class="td-in-well">{{ arEmpleado.fechaNacimiento|date("Y/m/d") }}</td>                    
-                    <td class="td-label">Clasificacion riesgo:</td>
+                    <td class="titulo">CLASIFICACION RIESGO:</td>
                     <td class="td-in-well">{{ arEmpleado.clasificacionRiesgoRel.nombre|default('ERROR') }}</td>
-                    <td class="td-label">Correo:</td>
+                    <td class="titulo">CORREO:</td>
                     <td class="td-in-well">{{ arEmpleado.correo }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Tipo pension:</td>
+                    <td class="titulo">TIPO PENSION:</td>
                     <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('ERROR') }}</td>                    
-                    <td class="td-label">Cargo:</td>
+                    <td class="titulo">CARGO:</td>
                     <td class="td-in-well">{{ arEmpleado.cargoRel.nombre|default('ERROR') }}</td>
-                    <td class="td-label">Descripcion cargo:</td>
+                    <td class="titulo">DESCRIPCION CARGO:</td>
                     <td class="td-in-well">{{ arEmpleado.cargoDescripcion }}</td>
                 </tr>                
                 <tr>
-                    <td class="td-label">Entidad pension:</td>
+                    <td class="titulo">ENTIDAD PENSION:</td>
                     <td class="td-in-well">{{ arEmpleado.entidadPensionRel.nombre|default('ERROR') }}</td>                    
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
                 </tr>                
                 <tr>
-                    <td class="td-label">Entidad salud:</td>
+                    <td class="titulo">ENTIDAD SALUD:</td>
                     <td class="td-in-well">{{ arEmpleado.entidadSaludRel.nombre|default('ERROR') }}</td>                    
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
                 </tr>                
                 <tr>
-                    <td class="td-label">Caja compensacion:</td>
+                    <td class="titulo">CAJA COMPENSACION:</td>
                     <td class="td-in-well">{{ arEmpleado.entidadCajaRel.nombre|default('ERROR') }}</td>                    
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well"></td>
                 </tr>                 
                 <tr>
-                    <td colspan="8">Comentarios: {{ arEmpleado.comentarios }}</td>
+                    <td colspan="8">COMENTARIOS: {{ arEmpleado.comentarios }}</td>
                 </tr>
             </table>
             </div>
@@ -120,6 +120,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                     {% for arContratos in arContratos %}
                         <tr>
@@ -141,7 +142,8 @@
                             {% else %}
                                 <td></td>
                             {% endif %}
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                            <td style="text-align: center"><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arContratos.codigoContratoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                            
                             <td><input type="checkbox" name="ChkSeleccionarContrato[]" value="{{ arContratos.codigoContratoPk }}" /></td>
                         </tr>
                     {% endfor %}

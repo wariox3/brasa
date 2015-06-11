@@ -5,8 +5,8 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class LiquidacionesController extends Controller
-{
-    
+{    
+    var $strSqlLista = "";
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -29,26 +29,47 @@ class LiquidacionesController extends Controller
             }
         }          
         
-        $arContratos = $paginator->paginate($em->createQuery($session->get('dqlContratoLista')), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:lista.html.twig', array('arContratos' => $arContratos, 'form' => $form->createView()));
+        $arLiquidaciones = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:lista.html.twig', array('arLiquidaciones' => $arLiquidaciones, 'form' => $form->createView()));
     }               
     
-    private function listar() {
+    public function detalleAction($codigoLiquidacion) {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $session->set('dqlContratoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(                
-                $session->get('filtroIdentificacion'),
-                $this->fechaDesdeInicia,
-                $this->fechaHastaInicia
-                ));  
+        $request = $this->getRequest();
+        $mensaje = 0;
+        $form = $this->createFormBuilder()
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
+            ->getForm();
+        $form->handleRequest($request);
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
+        if($form->isValid()) {           
+            if($form->get('BtnImprimir')->isClicked()) {
+                $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContrato();
+                $objFormatoContrato->Generar($this, $codigoContrato);
+            }
+            if($form->get('BtnLiquidar')->isClicked()) {
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
+                return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
+            }            
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:detalle.html.twig', array(
+                    'arLiquidacion' => $arLiquidacion,
+                    'form' => $form->createView()
+                    ));
+    }        
+    
+    private function listar() {
+        $em = $this->getDoctrine()->getManager();                
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->listaDQL(                
+                "");  
     }     
     
     private function formularioLista() {
         $session = $this->getRequest()->getSession();        
         $form = $this->createFormBuilder()                        
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
-            ->add('fechaDesdeInicia', 'date', array('required' => true, 'widget' => 'single_text'))                            
-            ->add('fechaHastaInicia', 'date', array('required' => true, 'widget' => 'single_text'))                                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',)) 
             ->getForm();        
