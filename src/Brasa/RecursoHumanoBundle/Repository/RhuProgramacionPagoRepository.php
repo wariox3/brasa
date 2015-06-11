@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuProgramacionPagoRepository extends EntityRepository {
+    
     public function listaGenerarPagoDQL($strFechaDesde = "", $strFechaHasta = "", $codigoCentroCosto) {        
         $em = $this->getEntityManager();
         $dql   = "SELECT pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPago pp WHERE pp.estadoGenerado = 0 ";
@@ -77,6 +78,31 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em->flush();
         return true;
     }
+    
+    public function Eliminar($codigoProgramacionPago) {
+        $em = $this->getEntityManager();
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+        foreach ($arPagos as $arPago) {
+            $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+            $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));
+            foreach ($arPagosDetalles as $arPagoDetalle) {
+                $em->remove($arPagoDetalle);
+            }
+            $em->remove($arPago);
+        }
+        //Eliminar detalles de programacion pago
+        $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+        foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {
+            $em->remove($arProgramacionPagoDetalle);
+        }   
+        $em->remove($arProgramacionPago);
+        $em->flush();
+        return true;
+    }    
 
     public function Deshacer($codigoProgramacionPago) {
         $em = $this->getEntityManager();
@@ -176,6 +202,20 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $intDias = $dateFechaDesde->diff($dateFechaHasta);
                 $intDias = $intDias->format('%a');
                 $intDiasDevolver = $intDias + 1;
+                //Mes de febrero para periodos NO continuos                
+                $intDiasInhabilesFebrero = 0;                                           
+                if($arProgramacionPago->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo() == 0) {
+                    if($dateFechaHasta->format('md') == '0228' || $dateFechaHasta->format('md') == '0229') {
+                        //Verificar si el año es bisiesto
+                        
+                        if(date('L',mktime(1,1,1,1,1,$dateFechaHasta->format('Y'))) == 1) {
+                            $intDiasInhabilesFebrero = 1;
+                        } else {
+                            $intDiasInhabilesFebrero = 2;
+                        }                                                                    
+                    }                    
+                }
+                $intDiasDevolver += $intDiasInhabilesFebrero;                
             }            
             $arProgramacionPagoDetalle->setDias($intDiasDevolver);
             $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);

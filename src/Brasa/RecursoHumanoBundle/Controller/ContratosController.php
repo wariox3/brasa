@@ -129,7 +129,8 @@ class ContratosController extends Controller
             $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
             $em->persist($arLiquidacion);
             $em->flush();
-            //return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $arContrato->getCodigoEmpleadoFk())));
+            //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:terminar.html.twig', array(

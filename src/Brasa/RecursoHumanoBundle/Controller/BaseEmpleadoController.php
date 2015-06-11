@@ -301,7 +301,7 @@ class BaseEmpleadoController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);        
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
-        $session->set('filtroEmpleadoIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroEmpleadoActivo', $form->get('estadoActivo')->getData());
     }    
     
@@ -312,7 +312,7 @@ class BaseEmpleadoController extends Controller
                 $session->get('filtroEmpleadoNombre'), 
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroEmpleadoActivo'),                
-                $session->get('filtroEmpleadoIdentificacion'),
+                $session->get('filtroIdentificacion'),
                 ""                
                 ));         
     }       

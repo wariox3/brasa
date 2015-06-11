@@ -34,7 +34,7 @@
                     {% for arLiquidaciones in arLiquidaciones %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arLiquidaciones.codigoLiquidacionPk }}">{{ arLiquidaciones.codigoLiquidacionPk }} </td>
-                            <td>{{ arLiquidaciones.empleadoRel.nombre|default('SIN EMPLEADO')  }}</td>                            
+                            <td>{{ arLiquidaciones.empleadoRel.nombreCorto|default('SIN EMPLEADO')  }}</td>                            
                             <td>{{ arLiquidaciones.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arLiquidaciones.fechaHasta |date("Y/m/d")  }}</td>
                             <td style="text-align: center"><a href="{{ path('brs_rhu_liquidaciones_detalle', { 'codigoLiquidacion': arLiquidaciones.codigoLiquidacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                

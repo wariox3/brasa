@@ -20,7 +20,7 @@ class FacturasController extends Controller
         $arFacturas = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
         $dql   = "SELECT f FROM BrasaRecursoHumanoBundle:RhuFactura f";
         $query = $em->createQuery($dql);        
-        $arFacturas = $paginator->paginate($query, $request->query->get('page', 1), 3);                       
+        $arFacturas = $paginator->paginate($query, $request->query->get('page', 1), 20);                       
         if($form->isValid()) {
             if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();

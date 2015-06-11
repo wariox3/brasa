@@ -94,15 +94,18 @@ class RhuPagoRepository extends EntityRepository {
         return $douNeto;
     }    
     
-    public function listaDQL($intNumero = 0, $strCodigoCentroCosto = "") {        
+    public function listaDQL($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.codigoPagoPk <> 0";
+        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoPk <> 0";
         if($intNumero != "" && $intNumero != 0) {
             $dql .= " AND p.numero = " . $intNumero;
         }
         if($strCodigoCentroCosto != "") {
             $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
-        }      
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }        
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
     }                        

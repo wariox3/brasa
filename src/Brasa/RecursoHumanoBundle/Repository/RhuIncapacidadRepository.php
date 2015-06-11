@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuIncapacidadRepository extends EntityRepository {
     
-    public function ListaDQL($intNumero = "",$strCodigoCentroCosto = "", $boolEstadoTranscripcion = "", $strIdentificacion = "", $strNumeroEps = "") {        
+    public function listaDQL($intNumero = "", $strCodigoCentroCosto = "", $boolEstadoTranscripcion = "", $strIdentificacion = "", $strNumeroEps = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT i, e FROM BrasaRecursoHumanoBundle:RhuIncapacidad i JOIN i.empleadoRel e WHERE i.codigoIncapacidadPk <> 0";      
         if($intNumero != "") {

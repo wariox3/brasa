@@ -21,6 +21,12 @@
                         {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>                                         
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtIdentificacion" class="col-sm-2 control-label">Identificacion:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>                     
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -48,7 +54,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }} </td>
                 <td>{{ arPagos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arPagos.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arPagos.centroCostoRel.nombre  }}</td>
+                <td>{{ arPagos.centroCostoRel.nombre  }}</td>                
                 <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arPagos.vrSalario | number_format(2, '.', ',') }}</td>
@@ -60,16 +66,21 @@
             </tr>
             {% endfor %}
         </table>
-        {{ knp_pagination_render(arPagos) }}
-        <!-- Botones Menu Items -->
-        <div class="btn btn-default btn-sm">Pagos <span class="badge">{{ arPagos.getTotalItemCount }}</span></div>
+        <div class="btn-toolbar" style="float: left">
+            <div class="btn-group">
+                {{ knp_pagination_render(arPagos) }} 
+            </div>
+            <div class="btn-group">
+                <div class="btn btn-default btn-sm">Pagos <span class="badge">{{ arPagos.getTotalItemCount }}</span></div>        
+            </div>
+        </div>                
         <div class="btn-toolbar" style="float: right">                 
             <div class="btn-group">
                 {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
         </div>
-        <!-- Fin Botones Menu Items -->
+        
         {{ form_rest(form) }}
     {{ form_end(form) }}
 

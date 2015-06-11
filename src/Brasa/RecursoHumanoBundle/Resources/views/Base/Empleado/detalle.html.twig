@@ -137,11 +137,6 @@
                             <td>{{ arContratos.cargoDescripcion  }}</td>
                             <td>{{ arContratos.clasificacionRiesgoRel.nombre|default('ERROR') }}</td>                            
                             <td>{% if arContratos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
-                            {% if arContratos.indefinido == 1 %}
-                                <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_contratos_terminar', { 'codigoContrato': arContratos.codigoContratoPk}) }}" style="float:left">Terminar</a></td>
-                            {% else %}
-                                <td></td>
-                            {% endif %}
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
                             <td style="text-align: center"><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arContratos.codigoContratoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                            
                             <td><input type="checkbox" name="ChkSeleccionarContrato[]" value="{{ arContratos.codigoContratoPk }}" /></td>

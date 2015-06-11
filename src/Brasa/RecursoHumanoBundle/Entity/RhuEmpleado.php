@@ -319,6 +319,11 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="empleadoRel")
      */
     protected $liquidacionesEmpleadoRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="empleadoRel")
+     */
+    protected $disciplinariosEmpleadoRel;     
     
     /**
      * Constructor
@@ -1814,5 +1819,39 @@ class RhuEmpleado
     public function getLiquidacionesEmpleadoRel()
     {
         return $this->liquidacionesEmpleadoRel;
+    }
+
+    /**
+     * Add disciplinariosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addDisciplinariosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosEmpleadoRel)
+    {
+        $this->disciplinariosEmpleadoRel[] = $disciplinariosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove disciplinariosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosEmpleadoRel
+     */
+    public function removeDisciplinariosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosEmpleadoRel)
+    {
+        $this->disciplinariosEmpleadoRel->removeElement($disciplinariosEmpleadoRel);
+    }
+
+    /**
+     * Get disciplinariosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisciplinariosEmpleadoRel()
+    {
+        return $this->disciplinariosEmpleadoRel;
     }
 }

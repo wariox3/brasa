@@ -75,6 +75,8 @@ class UtilidadesPagosController extends Controller
             ->add('BtnLiquidar', 'submit', array('label'  => 'Generar por sede',))
             ->add('BtnPagar', 'submit', array('label'  => 'Pagar',))
             ->add('BtnAnular', 'submit', array('label'  => 'Anular',))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnEliminarPago', 'submit', array('label'  => 'Eliminar',))                
             ->add('BtnDeshacer', 'submit', array('label'  => 'Des-hacer',))                
             ->getForm();
         $form->handleRequest($request);                
@@ -498,6 +500,24 @@ class UtilidadesPagosController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }
             }
+            if($form->get('BtnEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Eliminar($codigoProgramacionPago);
+                    }
+                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
+                }
+            }            
+            if($form->get('BtnEliminarPago')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Eliminar($codigoProgramacionPago);
+                    }
+                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
+                }
+            }            
             if($form->get('BtnDeshacer')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');
                 if(count($arrSeleccionados) > 0) {

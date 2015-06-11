@@ -23,17 +23,17 @@ class RhuIncapacidad
     private $numero = 0;     
     
     /**
-     * @ORM\Column(name="fecha", type="date", nullable=true)
+     * @ORM\Column(name="fecha", type="date")
      */    
     private $fecha;    
     
     /**
-     * @ORM\Column(name="fecha_desde", type="date", nullable=true)
+     * @ORM\Column(name="fecha_desde", type="date")
      */    
     private $fechaDesde;    
     
     /**
-     * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
+     * @ORM\Column(name="fecha_hasta", type="date")
      */    
     private $fechaHasta;    
     
@@ -108,6 +108,7 @@ class RhuIncapacidad
 
 
 
+
     /**
      * Get codigoIncapacidadPk
      *
@@ -116,6 +117,30 @@ class RhuIncapacidad
     public function getCodigoIncapacidadPk()
     {
         return $this->codigoIncapacidadPk;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return RhuIncapacidad
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 
     /**
@@ -311,6 +336,30 @@ class RhuIncapacidad
     }
 
     /**
+     * Set codigoIncapacidadDiagnosticoFk
+     *
+     * @param integer $codigoIncapacidadDiagnosticoFk
+     *
+     * @return RhuIncapacidad
+     */
+    public function setCodigoIncapacidadDiagnosticoFk($codigoIncapacidadDiagnosticoFk)
+    {
+        $this->codigoIncapacidadDiagnosticoFk = $codigoIncapacidadDiagnosticoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoIncapacidadDiagnosticoFk
+     *
+     * @return integer
+     */
+    public function getCodigoIncapacidadDiagnosticoFk()
+    {
+        return $this->codigoIncapacidadDiagnosticoFk;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -356,6 +405,30 @@ class RhuIncapacidad
     public function getCodigoPagoAdicionalSubtipoFk()
     {
         return $this->codigoPagoAdicionalSubtipoFk;
+    }
+
+    /**
+     * Set estadoTranscripcion
+     *
+     * @param boolean $estadoTranscripcion
+     *
+     * @return RhuIncapacidad
+     */
+    public function setEstadoTranscripcion($estadoTranscripcion)
+    {
+        $this->estadoTranscripcion = $estadoTranscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoTranscripcion
+     *
+     * @return boolean
+     */
+    public function getEstadoTranscripcion()
+    {
+        return $this->estadoTranscripcion;
     }
 
     /**
@@ -428,78 +501,6 @@ class RhuIncapacidad
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
-    }
-
-    /**
-     * Set estadoTranscripcion
-     *
-     * @param boolean $estadoTranscripcion
-     *
-     * @return RhuIncapacidad
-     */
-    public function setEstadoTranscripcion($estadoTranscripcion)
-    {
-        $this->estadoTranscripcion = $estadoTranscripcion;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoTranscripcion
-     *
-     * @return boolean
-     */
-    public function getEstadoTranscripcion()
-    {
-        return $this->estadoTranscripcion;
-    }
-
-    /**
-     * Set numero
-     *
-     * @param integer $numero
-     *
-     * @return RhuIncapacidad
-     */
-    public function setNumero($numero)
-    {
-        $this->numero = $numero;
-
-        return $this;
-    }
-
-    /**
-     * Get numero
-     *
-     * @return integer
-     */
-    public function getNumero()
-    {
-        return $this->numero;
-    }
-
-    /**
-     * Set codigoIncapacidadDiagnosticoFk
-     *
-     * @param integer $codigoIncapacidadDiagnosticoFk
-     *
-     * @return RhuIncapacidad
-     */
-    public function setCodigoIncapacidadDiagnosticoFk($codigoIncapacidadDiagnosticoFk)
-    {
-        $this->codigoIncapacidadDiagnosticoFk = $codigoIncapacidadDiagnosticoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoIncapacidadDiagnosticoFk
-     *
-     * @return integer
-     */
-    public function getCodigoIncapacidadDiagnosticoFk()
-    {
-        return $this->codigoIncapacidadDiagnosticoFk;
     }
 
     /**

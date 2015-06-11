@@ -6,6 +6,7 @@
             <table class="table table-striped table-bordered table-condensed">
                 <tr>
                     <th>ID</th>
+                    <th>PERIODO</th>                    
                     <th>EMPLEADO</th>                    
                     <th style="text-align: right">BASICO</th>
                     <th style="text-align: right">T. A</th>
@@ -26,7 +27,8 @@
                 {% for arPagos in arPagos %}
                     <tr> 
                         <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }}</td>  
-                        <td>{{ arPagos.empleadoRel.nombreCorto }}</td>                    
+                        <td>{{ arPagos.programacionPagoRel.fechaDesde |date("Y/m/d")  }}-{{ arPagos.programacionPagoRel.fechaHasta |date("Y/m/d")  }}</td>
+                        <td>{{ arPagos.empleadoRel.nombreCorto }}</td>                        
                         <td style="text-align: right">{{ arPagos.VrSalario | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAdicionalTiempo | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right">{{ arPagos.VrAdicionalValor | number_format(2, '.', ',') }}</td>
