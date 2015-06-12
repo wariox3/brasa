@@ -63,6 +63,11 @@ class RhuExamen
      * @ORM\OneToMany(targetEntity="RhuExamenDetalle", mappedBy="examenRel")
      */
     protected $examenesExamenDetalleRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoExamenDetalle", mappedBy="examenRel")
+     */
+    protected $examenespagoDetalleRel;
 
     
     /**
@@ -307,5 +312,39 @@ class RhuExamen
     public function getExamenesExamenDetalleRel()
     {
         return $this->examenesExamenDetalleRel;
+    }
+
+    /**
+     * Add examenespagoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $examenespagoDetalleRel
+     *
+     * @return RhuExamen
+     */
+    public function addExamenespagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $examenespagoDetalleRel)
+    {
+        $this->examenespagoDetalleRel[] = $examenespagoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove examenespagoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $examenespagoDetalleRel
+     */
+    public function removeExamenespagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $examenespagoDetalleRel)
+    {
+        $this->examenespagoDetalleRel->removeElement($examenespagoDetalleRel);
+    }
+
+    /**
+     * Get examenespagoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExamenespagoDetalleRel()
+    {
+        return $this->examenespagoDetalleRel;
     }
 }

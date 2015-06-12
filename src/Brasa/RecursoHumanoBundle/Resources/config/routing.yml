@@ -244,4 +244,16 @@ brs_rhu_ss_periodo_lista:
     
 brs_rhu_consultas_costos_general:    
     path:     /rhumano/consultas/costos/general
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:costosGeneral }         
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:costosGeneral }
+    
+brs_rhu_pagoentidadexamen_listar:
+    path:     /rhumano/pagoentidadexamen/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:EncabezadoPagoExamen:lista}
+
+brs_rhu_pagoentidadexamen_nuevo:
+    path:     /rhumano/pagoentidadexamen/nuevo/{codigoEncabezadoPagoExamen}
+    defaults: { _controller: BrasaRecursoHumanoBundle:EncabezadoPagoExamen:nuevo}
+
+brs_rhu_pagoentidadexamen_detalle:
+    path:     /rhumano/pagoentidadexamen/detalle/{codigoEncabezadoPagoExamen}
+    defaults: { _controller: BrasaRecursoHumanoBundle:EncabezadoPagoExamen:detalle}
