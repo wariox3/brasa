@@ -58,9 +58,9 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $this->Cell(100, 6, $arExamen->getCentroCostoRel()->getNombre() , 1, 0, 'L', 1);
         $this->SetXY(10, 40);
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 6, "VALOR EXAMEN:" , 1, 0, 'L', 1);
+        $this->Cell(30, 6, "TOTAL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(30, 6, number_format($var2, 2, '.', ',') , 1, 0, 'L', 1);
+        $this->Cell(30, 6, number_format($var2, 2, '.', ',') , 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "ENTIDAD EXAMEN:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -111,7 +111,7 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
             $pdf->Cell(10, 4, $arExamenDetalle->getCodigoExamenDetallePk(), 1, 0, 'L');
             $pdf->Cell(10, 4, $arExamenDetalle->getExamenTipoRel()->getCodigoExamenTipoPk(), 1, 0, 'L');
             $pdf->Cell(130, 4, $arExamenDetalle->getExamenTipoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(20, 4, number_format($arExamenDetalle->getPrecio(), 2, '.', ','), 1, 0, 'L');
+            $pdf->Cell(20, 4, number_format($arExamenDetalle->getPrecio(), 2, '.', ','), 1, 0, 'R');
             if ($arExamenDetalle->getEstadoAprobado() == 1)
             {    
                 $pdf->Cell(20, 4, "SI", 1, 0, 'L');
