@@ -41,19 +41,25 @@ class RhuExamenRepository extends EntityRepository {
         $var = 0;
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoExamen) {                
-                $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);                     
-                $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
-                $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $codigoExamen));
-                foreach ($arExamenDetalle as $arExamenDetalle){
+                $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);                     
+                $arExamenDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+                $arExamenDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $codigoExamen));
+                foreach ($arExamenDetalles as $arExamenDetalle){
                     if ($arExamenDetalle->getEstadoAprobado()== 1){
-                        $var = $var + 1;
+                        $var += 1;
                     }
                 }
-                $var2 = count($arExamenDetalle);
-                if ($var2 == $var){
-                    $arSeleccion->setEstadoAbierto(1);
-                    $em->persist($arSeleccion);
-                }
+                $var2 = count($arExamenDetalles);
+                if ($var != 0 or $var2 != 0){
+                    if ($var2 == $var){
+                        $arExamen->setEstadoAprobado(1);
+
+                    }
+                    else{
+                        $arExamen->setEstadoAprobado(0);
+                    }
+                     $em->persist($arExamen);
+                }     
             }
             $em->flush();       
         }     

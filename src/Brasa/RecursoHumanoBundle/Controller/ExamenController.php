@@ -24,6 +24,8 @@ class ExamenController extends Controller
             }
             if ($form->get('BtnAprobar')->isClicked()) {    
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->aprobarExamen($arrSeleccionados);
+                $this->filtrar($form);
+                $this->listar();
             }
             if ($form->get('BtnFiltrar')->isClicked()) {    
                 $this->filtrar($form);
@@ -74,8 +76,8 @@ class ExamenController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
             if($form->get('BtnImprimir')->isClicked()) {                
-                $objSeleccionGrupo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoExamenDetalle();
-                $objSeleccionGrupo->Generar($this, $codigoExamen);
+                $objExamen = new \Brasa\RecursoHumanoBundle\Formatos\FormatoExamenDetalle();
+                $objExamen->Generar($this, $codigoExamen);
             }
             if($form->get('BtnEliminar')->isClicked()) {                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
@@ -161,45 +163,50 @@ class ExamenController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Codigo')
-                    ->setCellValue('B1', 'Fecha')
-                    ->setCellValue('C1', 'Nombre')
-                    ->setCellValue('D1', 'Centro costo')
-                    ->setCellValue('E1', 'Cantidad_solicitada')
-                    ->setCellValue('F1', 'Abierto');
+                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('B1', 'ENTIDAD')
+                    ->setCellValue('C1', 'CENTRO_COSTOS')
+                    ->setCellValue('D1', 'FECHA')
+                    ->setCellValue('E1', 'IDENTIFICACION')
+                    ->setCellValue('F1', 'NOMBRE')
+                    ->setCellValue('G1', 'APROBADO');
                     
-
         $i = 2;
-        $query = $em->createQuery($session->get('dqlSeleccionGrupoLista'));
-        $arSeleccionGrupos = $query->getResult();
-        foreach ($arSeleccionGrupos as $arSeleccionGrupo) {
+        $query = $em->createQuery($session->get('dqlExamenLista'));
+        $arExamenes = $query->getResult();
+        foreach ($arExamenes as $arExamen) {
             $strNombreCentroCosto = "";
-            if($arSeleccionGrupo->getCentroCostoRel()) {
-                $strNombreCentroCosto = $arSeleccionGrupo->getCentroCostoRel()->getNombre();
+            if($arExamen->getCentroCostoRel()) {
+                $strNombreCentroCosto = $arExamen->getCentroCostoRel()->getNombre();
             }
-            if ($arSeleccionGrupo->getEstadoAbierto() == 1){
-                $abierto = "SI";
+            $strNombreEntidad = "SIN ENTIDAD";
+            if($arExamen->getEntidadExamenRel()) {
+                $strNombreEntidad = $arExamen->getEntidadExamenRel()->getNombre();
+            }
+            if ($arExamen->getEstadoAprobado() == 1){
+                $aprobado = "SI";
             } else {
-                $abierto = "NO";
+                $aprobado = "NO";
             }
             
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arSeleccionGrupo->getCodigoSeleccionGrupoPk())
-                    ->setCellValue('B' . $i, $arSeleccionGrupo->getFecha())
-                    ->setCellValue('C' . $i, $arSeleccionGrupo->getNombre())
-                    ->setCellValue('D' . $i, $strNombreCentroCosto)
-                    ->setCellValue('E' . $i, $arSeleccionGrupo->getCantidadSolicitida())
-                    ->setCellValue('F' . $i, $abierto);
+                    ->setCellValue('A' . $i, $arExamen->getCodigoExamenPk())
+                    ->setCellValue('B' . $i, $strNombreEntidad)
+                    ->setCellValue('C' . $i, $strNombreCentroCosto)
+                    ->setCellValue('D' . $i, $arExamen->getFecha())
+                    ->setCellValue('E' . $i, $arExamen->getIdentificacion())
+                    ->setCellValue('F' . $i, $arExamen->getNombreCorto())
+                    ->setCellValue('G' . $i, $aprobado);
                     
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('GruposSeleccion');
+        $objPHPExcel->getActiveSheet()->setTitle('Examen');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="GruposSeleccion.xlsx"');
+        header('Content-Disposition: attachment;filename="Examenes.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
