@@ -56,7 +56,7 @@
                 <td>{{ arExamenes.identificacion }}</td>
                 <td>{{ arExamenes.nombreCorto }}</td>
                 <td>{% if arExamenes.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_examen_nuevo', { 'codigoExamen': arExamenes.codigoExamenPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_nuevo', { 'codigoExamen': arExamenes.codigoExamenPk }) }}', 'AgregarExamen', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                 {% if  arExamenes.codigoEntidadExamenFk == "" %}
                 <td style="text-align: center"><a href="" onClick="alert('Por favor asigne la entidad del examen para ingresar al detalle!')"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 {% else %}

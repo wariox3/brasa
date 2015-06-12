@@ -24,6 +24,8 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $this->SetFont('Arial','B',10);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
+        $this->Cell(40, 6, "Datos de la empresa", 1, 0, 'L', 1);
+        $this->SetXY(10, 30);
         $this->Cell(40, 6, "Examen " . $arExamen->getCodigoExamenPk(), 1, 0, 'L', 1);
         $this->SetXY(52, 20);
         $this->Cell(148, 6, $arExamen->getNombreCorto(), 1, 0, 'L', 1);
@@ -65,7 +67,14 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
             $pdf->Cell(10, 4, $arExamenDetalle->getExamenTipoRel()->getCodigoExamenTipoPk(), 1, 0, 'L');
             $pdf->Cell(130, 4, $arExamenDetalle->getExamenTipoRel()->getNombre(), 1, 0, 'L');
             $pdf->Cell(20, 4, number_format($arExamenDetalle->getPrecio(), 2, '.', ','), 1, 0, 'L');
-            $pdf->Cell(20, 4, $arExamenDetalle->getEstadoAprobado(), 1, 0, 'L');            
+            if ($arExamenDetalle->getEstadoAprobado() == 1)
+            {    
+                $pdf->Cell(20, 4, "SI", 1, 0, 'L');
+            }
+            else{
+                $pdf->Cell(20, 4, "NO", 1, 0, 'L');
+            }
+                
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 33);
         }        
