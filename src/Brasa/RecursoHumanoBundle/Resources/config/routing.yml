@@ -242,6 +242,6 @@ brs_rhu_ss_periodo_lista:
     path:     /rhumano/seguridadsocial/periodo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:lista }     
     
-brs_rhu_consulta_costos_general:    
-    path:     /rhumano/consulta/costos/general
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consulta:costosGeneral }         
+brs_rhu_consultas_costos_general:    
+    path:     /rhumano/consultas/costos/general
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:costosGeneral }         
