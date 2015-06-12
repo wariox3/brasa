@@ -20,21 +20,66 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
     public function Header() {
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
         $arExamen = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find(self::$codigoExamen);
+        $codigoEntidadExamen = $arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk();
+        $direccionEntidad = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
+        $direccionEntidad = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->find($codigoEntidadExamen);
+        $direccion = $direccionEntidad->getDireccion();
+        $telefono = $direccionEntidad->getTelefono();
+        $arExamenDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+        $arExamenDetalles = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => self::$codigoExamen));
+        $var = 0;
+        $var2 = 0;
+        foreach ($arExamenDetalles as $arExamenDetalle) {
+           $var = $arExamenDetalle->getPrecio();
+           $var2 += $var;
+        }
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
-        $this->Cell(40, 6, "Datos de la empresa", 1, 0, 'L', 1);
+        $this->Cell(190, 10, "DATOS EMPLEADO " , 1, 0, 'L', 1);
         $this->SetXY(10, 30);
-        $this->Cell(40, 6, "Examen " . $arExamen->getCodigoExamenPk(), 1, 0, 'L', 1);
-        $this->SetXY(52, 20);
-        $this->Cell(148, 6, $arExamen->getNombreCorto(), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, "DOCUMENTO:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 6, $arExamen->getIdentificacion(), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, "NOMBRE:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(100, 6, $arExamen->getNombreCorto(), 1, 0, 'L', 1);
+        $this->SetXY(10, 35);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, "FECHA:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 6, $arExamen->getFecha()->format('Y/m/d') , 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, "CENTRO COSTOS:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        $this->Cell(100, 6, $arExamen->getCentroCostoRel()->getNombre() , 1, 0, 'L', 1);
+        $this->SetXY(10, 40);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, "VALOR EXAMEN:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 6, number_format($var2, 2, '.', ',') , 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, "ENTIDAD EXAMEN:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        $this->Cell(100, 6, $arExamen->getEntidadExamenRel()->getNombre() , 1, 0, 'L', 1);
+        $this->SetXY(10, 45);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 5, "DIRECCION:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(100, 5, $direccion , 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 5, "TELEFONO:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 5, $telefono , 1, 0, 'L', 1);
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
-        $this->Ln(30);
+        $this->Ln(14);
         $header = array('COD', 'TIPO', 'TIPO EXAMEN', 'PRECIO', 'APROBADO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
