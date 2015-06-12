@@ -57,7 +57,7 @@ class ExamenController extends Controller
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_rhu_examen_nuevo', array('codigoExamen' => 0)));
             } else {
-                return $this->redirect($this->generateUrl('brs_rhu_examen_listar'));
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }
 
         }
@@ -127,7 +127,7 @@ class ExamenController extends Controller
                     $em->flush();
                 }                
             }            
-            return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));           
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Examen:detallenuevo.html.twig', array(

@@ -20,7 +20,6 @@ class RhuExamenType extends AbstractType
             ->add('fecha', 'date')                                                                           
             ->add('identificacion', 'number', array('required' => true))
             ->add('nombreCorto', 'text', array('required' => true))
-            ->add('estadoAprobado', 'choice', array('choices' => array('0' =>'NO', '1' => 'SI')))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
     }

@@ -7,7 +7,7 @@
 </script>    
 <div class="container">
     <div class="page-header">
-        <h3>Lista Examenes</h3>
+        <h3>Lista examenes</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -76,7 +76,7 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">                                
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_examen_nuevo', { 'codigoExamen': 0}) }}" style="float:left">Nuevo</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_examen_nuevo', { 'codigoExamen': 0}) }}', 'AgregarExamen', 600, 900)"  style="float:left">Nuevo</a>
             </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
