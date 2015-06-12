@@ -27,11 +27,11 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $telefono = $direccionEntidad->getTelefono();
         $arExamenDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
         $arExamenDetalles = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => self::$codigoExamen));
-        $var = 0;
-        $var2 = 0;
+        $precioTipoExamen = 0;
+        $totalExamen = 0;
         foreach ($arExamenDetalles as $arExamenDetalle) {
-           $var = $arExamenDetalle->getPrecio();
-           $var2 += $var;
+           $precioTipoExamen = $arExamenDetalle->getPrecio();
+           $totalExamen += $precioTipoExamen;
         }
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
@@ -60,7 +60,7 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "TOTAL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(30, 6, number_format($var2, 2, '.', ',') , 1, 0, 'R', 1);
+        $this->Cell(30, 6, number_format($totalExamen, 2, '.', ',') , 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "ENTIDAD EXAMEN:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);

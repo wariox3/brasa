@@ -25,7 +25,7 @@ class RhuExamenRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $dql   = "SELECT sg FROM BrasaRecursoHumanoBundle:RhuExamen sg WHERE sg.codigoExamenPk <> 0";
         if($strNombre != "" ) {
-            $dql .= " AND sg.nombre LIKE '%" . $strNombre . "%'";
+            $dql .= " AND sg.nombreCorto LIKE '%" . $strNombre . "%'";
         }      
         if($boolAprobado == 1 ) {
             $dql .= " AND sg.estadoAprobado = 1";
