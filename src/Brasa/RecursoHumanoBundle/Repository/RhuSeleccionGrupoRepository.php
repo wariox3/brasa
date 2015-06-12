@@ -21,17 +21,19 @@ class RhuSeleccionGrupoRepository extends EntityRepository {
         }     
     }     
     
-    public function listaDQL($strNombre = "", $boolAbierto = "") {        
-        $em = $this->getEntityManager();
+    public function listaDQL($strNombre = "", $boolAbierto = "") {                
         $dql   = "SELECT sg FROM BrasaRecursoHumanoBundle:RhuSeleccionGrupo sg WHERE sg.codigoSeleccionGrupoPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND sg.nombre LIKE '%" . $strNombre . "%'";
-        }      
-        if($boolAbierto == 1 ) {
-            $dql .= " AND sg.estadoAbierto = 1";
-        } elseif($boolAbierto == 0) {
-            $dql .= " AND sg.estadoAbierto = 0";
-        }         
+        }   
+        if($boolAbierto != "") {
+            if($boolAbierto == 1 ) {
+                $dql .= " AND sg.estadoAbierto = 1";
+            } elseif($boolAbierto == 0) {
+                $dql .= " AND sg.estadoAbierto = 0";
+            }            
+        }
+         
         $dql .= " ORDER BY sg.codigoSeleccionGrupoPk";
         return $dql;
     }   

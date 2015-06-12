@@ -25,6 +25,7 @@
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th>CODIGO</th>
+                        <th>IDENTIFICACION</th>
                         <th>EMPLEADO</th>
                         <th>DESDE</th>
                         <th>HASTA</th>                                                                        
@@ -34,6 +35,7 @@
                     {% for arLiquidaciones in arLiquidaciones %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arLiquidaciones.codigoLiquidacionPk }}">{{ arLiquidaciones.codigoLiquidacionPk }} </td>
+                            <td>{{ arLiquidaciones.empleadoRel.numeroIdentificacion|default('SIN EMPLEADO')  }}</td>                            
                             <td>{{ arLiquidaciones.empleadoRel.nombreCorto|default('SIN EMPLEADO')  }}</td>                            
                             <td>{{ arLiquidaciones.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arLiquidaciones.fechaHasta |date("Y/m/d")  }}</td>

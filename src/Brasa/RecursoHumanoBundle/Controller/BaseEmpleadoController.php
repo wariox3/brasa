@@ -212,7 +212,8 @@ class BaseEmpleadoController extends Controller
                 $arEmpleado->setCorreo($arSeleccion->getCorreo());
                 $arEmpleado->setDireccion($arSeleccion->getDireccion());
                 $arEmpleado->setBarrio($arSeleccion->getBarrio());
-                $arEmpleado->setCiudadRel($arSeleccion->getCiudadRel());                
+                $arEmpleado->setCiudadRel($arSeleccion->getCiudadRel()); 
+                $arEmpleado->setCodigoSexoFk($arSeleccion->getCodigoSexoFk());
             }
             $arEmpleado->setVrSalario(644350); //Parametrizar con configuracion salario minimo
         }

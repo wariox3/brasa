@@ -5,23 +5,21 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionGrupoType;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionGrupoFiltroType;
 
 class SeleccionGrupoController extends Controller
 {
+    var $strSqlLista = "";
     public function listaAction() {        
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
-        $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();        
+        $paginator  = $this->get('knp_paginator');        
         $form = $this->formularioFiltro();
         $form->handleRequest($request);        
         $this->listar();          
         if ($form->isValid()) {            
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
             if ($form->get('BtnEliminar')->isClicked()) {    
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->eliminarSeleccionGrupos($arrSeleccionados);
-                //$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->devuelveNumeroDetalleGrupo($arrSeleccionados); 
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->eliminarSeleccionGrupos($arrSeleccionados);                
             }
             if ($form->get('BtnEstadoAbierto')->isClicked()) {    
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->estadoAbiertoSeleccionGrupos($arrSeleccionados); 
@@ -36,7 +34,7 @@ class SeleccionGrupoController extends Controller
                 $this->generarExcel();
             }            
         }                      
-        $arGrupos = $paginator->paginate($em->createQuery($session->get('dqlSeleccionGrupoLista')), $request->query->get('page', 1), 20);                
+        $arGrupos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                
         return $this->render('BrasaRecursoHumanoBundle:SeleccionGrupo:lista.html.twig', array('arGrupos' => $arGrupos, 'form' => $form->createView()));     
     } 
     
@@ -97,7 +95,7 @@ class SeleccionGrupoController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $session->set('dqlSeleccionGrupoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->listaDQL($session->get('filtroNombreSeleccionGrupo'), $session->get('filtroAbiertoSeleccionGrupo')));  
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->listaDQL($session->get('filtroNombreSeleccionGrupo'), $session->get('filtroAbiertoSeleccionGrupo'));  
     }
     
     private function filtrar ($form) {
