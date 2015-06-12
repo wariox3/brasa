@@ -33,7 +33,12 @@
                     <td class="td-in-well">{{ arExamen.fecha | date('Y/m/d') }}</td>
                     <td class="titulo">APROBADO:</td>
                     <td class="td-in-well" {% if arExamen.estadoAprobado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
-                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="titulo" >VALOR EXAMEN:</td>
+                    <td>{{ var2 | number_format(2, '.', ',')}}</td>
                 </tr>
             </table>
       </div>
@@ -76,6 +81,14 @@
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}" /></td>
             </tr>
             {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="titulo">{{ var2 | number_format(2, '.', ',')}}</td>
+                <td></td>
+                <td></td>
+            </tr>
         </table>
             </div>
         </div>

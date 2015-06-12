@@ -93,9 +93,16 @@ class ExamenController extends Controller
         $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
         $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
         $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array ('codigoExamenFk' => $codigoExamen));
+        $var = 0;
+        $var2 = 0;
+        foreach ($arExamenDetalle as $arExamenDetalles) {
+           $var = $arExamenDetalles->getPrecio();
+           $var2 += $var;
+        }
         return $this->render('BrasaRecursoHumanoBundle:Examen:detalle.html.twig', array(
                     'arExamen' => $arExamen,
                     'arExamenDetalle' => $arExamenDetalle,
+                    'var2' => $var2,
                     'form' => $form->createView()
                     ));
     }
