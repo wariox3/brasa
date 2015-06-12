@@ -31,7 +31,7 @@ class SeguridadSocialPeriodosController extends Controller
         
         $query = $em->createQuery($session->get('dqlSeguridadSocialPeriodo'));        
         $arSeguridadSocialPeriodos = $paginator->paginate($query, $request->query->get('page', 1), 50);                               
-        return $this->render('BrasaRecursoHumanoBundle:SeguridadSocial/Periodos:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:lista.html.twig', array(
             'arSeguridadSocialPeriodos' => $arSeguridadSocialPeriodos,
             'form' => $form->createView()));
     }       

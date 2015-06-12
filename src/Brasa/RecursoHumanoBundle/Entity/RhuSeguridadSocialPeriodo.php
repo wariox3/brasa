@@ -27,6 +27,10 @@ class RhuSeguridadSocialPeriodo
      */
     private $mes = 0; 
     
+    /**     
+     * @ORM\Column(name="estado_generado", type="boolean")
+     */    
+    private $estadoGenerado = 0;     
 
     /**
      * Get codigoSeguridadSocialPeriodoPk
@@ -84,5 +88,29 @@ class RhuSeguridadSocialPeriodo
     public function getAnio()
     {
         return $this->anio;
+    }
+
+    /**
+     * Set estadoGenerado
+     *
+     * @param boolean $estadoGenerado
+     *
+     * @return RhuSeguridadSocialPeriodo
+     */
+    public function setEstadoGenerado($estadoGenerado)
+    {
+        $this->estadoGenerado = $estadoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoGenerado()
+    {
+        return $this->estadoGenerado;
     }
 }
