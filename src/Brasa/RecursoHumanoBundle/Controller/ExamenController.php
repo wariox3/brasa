@@ -37,6 +37,7 @@ class ExamenController extends Controller
         $arExamenes = $paginator->paginate($em->createQuery($session->get('dqlExamenLista')), $request->query->get('page', 1), 20);                
         return $this->render('BrasaRecursoHumanoBundle:Examen:lista.html.twig', array('arExamenes' => $arExamenes, 'form' => $form->createView()));     
     } 
+    
     public function nuevoAction($codigoExamen) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -75,6 +76,7 @@ class ExamenController extends Controller
             }
             if($form->get('BtnEliminar')->isClicked()) {                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
                 return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));           
             }
             if($form->get('BtnAprobar')->isClicked()) {                
@@ -87,24 +89,16 @@ class ExamenController extends Controller
         $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
         $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
         $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array ('codigoExamenFk' => $codigoExamen));
-        $precioTipoExamen = 0;
-        $totalExamen = 0;
-        foreach ($arExamenDetalle as $arExamenDetalles) {
-           $precioTipoExamen = $arExamenDetalles->getPrecio();
-           $totalExamen += $precioTipoExamen;
-        }
         return $this->render('BrasaRecursoHumanoBundle:Examen:detalle.html.twig', array(
                     'arExamen' => $arExamen,
                     'arExamenDetalle' => $arExamenDetalle,
-                    'totalExamen' => $totalExamen,
                     'form' => $form->createView()
                     ));
     }
     
-    public function detallenuevoAction($codigoExamen) {
+    public function detalleNuevoAction($codigoExamen) {
         $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+        $em = $this->getDoctrine()->getManager();        
         $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findAll();
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
         $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
@@ -122,16 +116,16 @@ class ExamenController extends Controller
                         $arExamenDetalle->setExamenTipoRel($arExamenTipo); 
                         $arExamenDetalle->setExamenRel($arExamen);
                         $douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
-                        $arExamenDetalle->setPrecio($douPrecio);
-                        $em->persist($arExamenDetalle);                    
+                        $arExamenDetalle->setVrPrecio($douPrecio);
+                        $em->persist($arExamenDetalle);                                                
                     }
                     $em->flush();
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);                    
                 }                
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
         return $this->render('BrasaRecursoHumanoBundle:Examen:detallenuevo.html.twig', array(
-            'arExamenDetalle' => $arExamenDetalle,
             'arExamenTipos' => $arExamenTipos,
             'arExamen' => $arExamen,
             'form' => $form->createView()));

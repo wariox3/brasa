@@ -18,37 +18,32 @@ class RhuPagoExamenDetalle
     private $codigoPagoExamenDetallePk;
     
     /**
-     * @ORM\Column(name="codigo_encabezado_pago_examen_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_pago_examen_fk", type="integer", nullable=true)
      */    
-    private $codigoEncabezadoPagoExamenFk;
+    private $codigoPagoExamenFk;
     
     /**
      * @ORM\Column(name="codigo_examen_fk", type="integer", nullable=true)
      */    
-    private $codigoExamenFk;
+    private $codigoExamenFk;    
     
     /**
-     * @ORM\Column(name="codigo_examen_tipo_fk", type="integer", nullable=true)
-     */    
-    private $codigoExamenTipoFk;
-    
-    /**
-     * @ORM\Column(name="precio", type="integer")
+     * @ORM\Column(name="vr_precio", type="float")
      */
-    private $precio;  
+    private $vrPrecio;  
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuExamen", inversedBy="examenespagoDetalleRel")
+     * @ORM\ManyToOne(targetEntity="RhuExamen", inversedBy="pagosExamenesDetallesExamenRel")
      * @ORM\JoinColumn(name="codigo_examen_fk", referencedColumnName="codigo_examen_pk")
      */
-    protected $detalleExamenRel;
+    protected $examenRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuEncabezadoPagoExamen", inversedBy="pagosExamenDetalleRel")
-     * @ORM\JoinColumn(name="codigo_encabezado_pago_examen_fk", referencedColumnName="codigo_encabezado_pago_examen_pk")
+     * @ORM\ManyToOne(targetEntity="RhuPagoExamen", inversedBy="pagosExamenesDetallesPagoExamenRel")
+     * @ORM\JoinColumn(name="codigo_pago_examen_fk", referencedColumnName="codigo_pago_examen_pk")
      */
-    protected $detalleEncabezadoPagoRel;
-   
+    protected $pagoExamenRel;         
+       
 
     /**
      * Get codigoPagoExamenDetallePk
@@ -61,27 +56,27 @@ class RhuPagoExamenDetalle
     }
 
     /**
-     * Set codigoEncabezadoPagoExamenFk
+     * Set codigoPagoExamenFk
      *
-     * @param integer $codigoEncabezadoPagoExamenFk
+     * @param integer $codigoPagoExamenFk
      *
      * @return RhuPagoExamenDetalle
      */
-    public function setCodigoEncabezadoPagoExamenFk($codigoEncabezadoPagoExamenFk)
+    public function setCodigoPagoExamenFk($codigoPagoExamenFk)
     {
-        $this->codigoEncabezadoPagoExamenFk = $codigoEncabezadoPagoExamenFk;
+        $this->codigoPagoExamenFk = $codigoPagoExamenFk;
 
         return $this;
     }
 
     /**
-     * Get codigoEncabezadoPagoExamenFk
+     * Get codigoPagoExamenFk
      *
      * @return integer
      */
-    public function getCodigoEncabezadoPagoExamenFk()
+    public function getCodigoPagoExamenFk()
     {
-        return $this->codigoEncabezadoPagoExamenFk;
+        return $this->codigoPagoExamenFk;
     }
 
     /**
@@ -109,98 +104,74 @@ class RhuPagoExamenDetalle
     }
 
     /**
-     * Set codigoExamenTipoFk
+     * Set vrPrecio
      *
-     * @param integer $codigoExamenTipoFk
+     * @param float $vrPrecio
      *
      * @return RhuPagoExamenDetalle
      */
-    public function setCodigoExamenTipoFk($codigoExamenTipoFk)
+    public function setVrPrecio($vrPrecio)
     {
-        $this->codigoExamenTipoFk = $codigoExamenTipoFk;
+        $this->vrPrecio = $vrPrecio;
 
         return $this;
     }
 
     /**
-     * Get codigoExamenTipoFk
+     * Get vrPrecio
      *
-     * @return integer
+     * @return float
      */
-    public function getCodigoExamenTipoFk()
+    public function getVrPrecio()
     {
-        return $this->codigoExamenTipoFk;
+        return $this->vrPrecio;
     }
 
     /**
-     * Set precio
+     * Set examenRel
      *
-     * @param integer $precio
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenRel
      *
      * @return RhuPagoExamenDetalle
      */
-    public function setPrecio($precio)
+    public function setExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenRel = null)
     {
-        $this->precio = $precio;
+        $this->examenRel = $examenRel;
 
         return $this;
     }
 
     /**
-     * Get precio
-     *
-     * @return integer
-     */
-    public function getPrecio()
-    {
-        return $this->precio;
-    }
-
-    /**
-     * Set detalleExamenRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $detalleExamenRel
-     *
-     * @return RhuPagoExamenDetalle
-     */
-    public function setDetalleExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $detalleExamenRel = null)
-    {
-        $this->detalleExamenRel = $detalleExamenRel;
-
-        return $this;
-    }
-
-    /**
-     * Get detalleExamenRel
+     * Get examenRel
      *
      * @return \Brasa\RecursoHumanoBundle\Entity\RhuExamen
      */
-    public function getDetalleExamenRel()
+    public function getExamenRel()
     {
-        return $this->detalleExamenRel;
+        return $this->examenRel;
     }
 
     /**
-     * Set detalleEncabezadoPagoRel
+     * Set pagoExamenRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEncabezadoPagoExamen $detalleEncabezadoPagoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagoExamenRel
      *
      * @return RhuPagoExamenDetalle
      */
-    public function setDetalleEncabezadoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEncabezadoPagoExamen $detalleEncabezadoPagoRel = null)
+    public function setPagoExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagoExamenRel = null)
     {
-        $this->detalleEncabezadoPagoRel = $detalleEncabezadoPagoRel;
+        $this->pagoExamenRel = $pagoExamenRel;
 
         return $this;
     }
 
     /**
-     * Get detalleEncabezadoPagoRel
+     * Get pagoExamenRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEncabezadoPagoExamen
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen
      */
-    public function getDetalleEncabezadoPagoRel()
+    public function getPagoExamenRel()
     {
-        return $this->detalleEncabezadoPagoRel;
+        return $this->pagoExamenRel;
     }
 }

@@ -38,7 +38,7 @@
                     <td></td>
                     <td></td>
                     <td class="titulo" >TOTAL:</td>
-                    <td align="right">{{ totalExamen | number_format(2, '.', ',')}}</td>
+                    <td align="right">{{ arExamen.vrTotal | number_format(2, '.', ',')}}</td>
                 </tr>
             </table>
       </div>
@@ -55,7 +55,7 @@
             
     <br /><br />
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tipos" data-toggle="tab">Tipos examenes</a></li>
+        <li class="active"><a href="#tipos" data-toggle="tab">Examenes</a></li>
     </ul>
 
     <div class="tab-content">
@@ -76,19 +76,11 @@
                 <td>{{ arExamenDetalle.codigoExamenDetallePk  }}</td>
                 <td>{{ arExamenDetalle.codigoExamenTipoFk  }}</td>
                 <td>{{ arExamenDetalle.examenTipoRel.nombre|default('ERROR')}}</td>
-                <td class="td-in-well" align="right">{{ arExamenDetalle.precio | number_format(2, '.', ',') }}</td>
+                <td class="td-in-well" align="right">{{ arExamenDetalle.vrPrecio | number_format(2, '.', ',') }}</td>
                 <td>{% if arExamenDetalle.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}" /></td>
             </tr>
             {% endfor %}
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="titulo" align="right">{{ totalExamen | number_format(2, '.', ',')}}</td>
-                <td></td>
-                <td></td>
-            </tr>
         </table>
             </div>
         </div>

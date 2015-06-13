@@ -33,9 +33,9 @@ class RhuExamenDetalle
     private $estadoAprobado = 0;
     
     /**     
-     * @ORM\Column(name="precio", type="float")
+     * @ORM\Column(name="vr_precio", type="float")
      */    
-    private $precio;
+    private $vrPrecio;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuExamenTipo", inversedBy="examenesExamenTipoRel")
@@ -48,8 +48,6 @@ class RhuExamenDetalle
      * @ORM\JoinColumn(name="codigo_examen_fk", referencedColumnName="codigo_examen_pk")
      */
     protected $examenRel;
-
-
 
 
     /**
@@ -135,6 +133,30 @@ class RhuExamenDetalle
     }
 
     /**
+     * Set vrPrecio
+     *
+     * @param float $vrPrecio
+     *
+     * @return RhuExamenDetalle
+     */
+    public function setVrPrecio($vrPrecio)
+    {
+        $this->vrPrecio = $vrPrecio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrecio
+     *
+     * @return float
+     */
+    public function getVrPrecio()
+    {
+        return $this->vrPrecio;
+    }
+
+    /**
      * Set examenTipoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo $examenTipoRel
@@ -180,29 +202,5 @@ class RhuExamenDetalle
     public function getExamenRel()
     {
         return $this->examenRel;
-    }
-
-    /**
-     * Set precio
-     *
-     * @param float $precio
-     *
-     * @return RhuExamenDetalle
-     */
-    public function setPrecio($precio)
-    {
-        $this->precio = $precio;
-
-        return $this;
-    }
-
-    /**
-     * Get precio
-     *
-     * @return float
-     */
-    public function getPrecio()
-    {
-        return $this->precio;
     }
 }

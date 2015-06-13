@@ -15,11 +15,11 @@ class RhuExamenDetalleRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoExamenDetalle) {                
-                $arExamenDetale = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->find($codigoExamenDetalle);
-                $em->remove($arExamenDetale);  
-            }                                            
+                $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->find($codigoExamenDetalle);
+                $em->remove($arExamenDetalle);  
+            }                                         
         }
-            $em->flush();       
+        $em->flush();       
     }
     
     public function aprobarDetallesSeleccionados($arrSeleccionados) {

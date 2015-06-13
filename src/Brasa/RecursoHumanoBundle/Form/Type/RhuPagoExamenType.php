@@ -4,7 +4,7 @@ namespace Brasa\RecursoHumanoBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class RhuEncabezadoPagoExamenType extends AbstractType
+class RhuPagoExamenType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

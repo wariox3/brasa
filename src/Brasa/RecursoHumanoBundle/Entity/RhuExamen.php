@@ -48,6 +48,16 @@ class RhuExamen
     private $identificacion;  
 
     /**
+     * @ORM\Column(name="vr_total", type="float")
+     */
+    private $vrTotal = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_pagado", type="boolean")
+     */    
+    private $estadoPagado = 0;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadExamen", inversedBy="examenesEntidadExamenRel")
      * @ORM\JoinColumn(name="codigo_entidad_examen_fk", referencedColumnName="codigo_entidad_examen_pk")
      */
@@ -67,7 +77,7 @@ class RhuExamen
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoExamenDetalle", mappedBy="examenRel")
      */
-    protected $examenespagoDetalleRel;
+    protected $pagosExamanesDetallesExamenRel;
 
     
     /**
@@ -76,6 +86,7 @@ class RhuExamen
     public function __construct()
     {
         $this->examenesExamenDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosExamanesDetallesExamenRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -315,36 +326,84 @@ class RhuExamen
     }
 
     /**
-     * Add examenespagoDetalleRel
+     * Add pagosExamanesDetallesExamenRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $examenespagoDetalleRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamanesDetallesExamenRel
      *
      * @return RhuExamen
      */
-    public function addExamenespagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $examenespagoDetalleRel)
+    public function addPagosExamanesDetallesExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamanesDetallesExamenRel)
     {
-        $this->examenespagoDetalleRel[] = $examenespagoDetalleRel;
+        $this->pagosExamanesDetallesExamenRel[] = $pagosExamanesDetallesExamenRel;
 
         return $this;
     }
 
     /**
-     * Remove examenespagoDetalleRel
+     * Remove pagosExamanesDetallesExamenRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $examenespagoDetalleRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamanesDetallesExamenRel
      */
-    public function removeExamenespagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $examenespagoDetalleRel)
+    public function removePagosExamanesDetallesExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamanesDetallesExamenRel)
     {
-        $this->examenespagoDetalleRel->removeElement($examenespagoDetalleRel);
+        $this->pagosExamanesDetallesExamenRel->removeElement($pagosExamanesDetallesExamenRel);
     }
 
     /**
-     * Get examenespagoDetalleRel
+     * Get pagosExamanesDetallesExamenRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getExamenespagoDetalleRel()
+    public function getPagosExamanesDetallesExamenRel()
     {
-        return $this->examenespagoDetalleRel;
+        return $this->pagosExamanesDetallesExamenRel;
+    }
+
+    /**
+     * Set vrTotal
+     *
+     * @param float $vrTotal
+     *
+     * @return RhuExamen
+     */
+    public function setVrTotal($vrTotal)
+    {
+        $this->vrTotal = $vrTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotal
+     *
+     * @return float
+     */
+    public function getVrTotal()
+    {
+        return $this->vrTotal;
+    }
+
+    /**
+     * Set estadoPagado
+     *
+     * @param boolean $estadoPagado
+     *
+     * @return RhuExamen
+     */
+    public function setEstadoPagado($estadoPagado)
+    {
+        $this->estadoPagado = $estadoPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagado()
+    {
+        return $this->estadoPagado;
     }
 }
