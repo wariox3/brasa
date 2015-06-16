@@ -79,6 +79,9 @@ class ContratosController extends Controller
             $arContrato = $form->getData();
             $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
             $arContrato->setEmpleadoRel($arEmpleado);      
+            $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
+            $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
+            $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
             $em->persist($arContrato);
             $douSalarioMinimo = 644350;
             if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
@@ -125,6 +128,7 @@ class ContratosController extends Controller
             $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
             $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
             $arLiquidacion->setEmpleadoRel($arContrato->getEmpleadoRel());
+            $arLiquidacion->setContratoRel($arContrato);
             $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
             $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
             $em->persist($arLiquidacion);

@@ -98,6 +98,21 @@ class RhuContrato
     private $codigoCentroCostoFk;     
     
     /**
+     * @ORM\Column(name="fecha_ultimo_pago_cesantias", type="date", nullable=true)
+     */    
+    private $fechaUltimoPagoCesantias;    
+
+    /**
+     * @ORM\Column(name="fecha_ultimo_pago_vacaciones", type="date", nullable=true)
+     */    
+    private $fechaUltimoPagoVacaciones;    
+    
+    /**
+     * @ORM\Column(name="fecha_ultimo_pago_primas", type="date", nullable=true)
+     */    
+    private $fechaUltimoPagoPrimas;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -139,8 +154,19 @@ class RhuContrato
      */
     protected $tipoPensionRel;     
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="contratoRel")
+     */
+    protected $liquidacionesContratoRel; 
 
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->liquidacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoContratoPk
@@ -537,6 +563,78 @@ class RhuContrato
     }
 
     /**
+     * Set fechaUltimoPagoCesantias
+     *
+     * @param \DateTime $fechaUltimoPagoCesantias
+     *
+     * @return RhuContrato
+     */
+    public function setFechaUltimoPagoCesantias($fechaUltimoPagoCesantias)
+    {
+        $this->fechaUltimoPagoCesantias = $fechaUltimoPagoCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPagoCesantias
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPagoCesantias()
+    {
+        return $this->fechaUltimoPagoCesantias;
+    }
+
+    /**
+     * Set fechaUltimoPagoVacaciones
+     *
+     * @param \DateTime $fechaUltimoPagoVacaciones
+     *
+     * @return RhuContrato
+     */
+    public function setFechaUltimoPagoVacaciones($fechaUltimoPagoVacaciones)
+    {
+        $this->fechaUltimoPagoVacaciones = $fechaUltimoPagoVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPagoVacaciones
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPagoVacaciones()
+    {
+        return $this->fechaUltimoPagoVacaciones;
+    }
+
+    /**
+     * Set fechaUltimoPagoPrimas
+     *
+     * @param \DateTime $fechaUltimoPagoPrimas
+     *
+     * @return RhuContrato
+     */
+    public function setFechaUltimoPagoPrimas($fechaUltimoPagoPrimas)
+    {
+        $this->fechaUltimoPagoPrimas = $fechaUltimoPagoPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPagoPrimas
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPagoPrimas()
+    {
+        return $this->fechaUltimoPagoPrimas;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -702,5 +800,39 @@ class RhuContrato
     public function getTipoPensionRel()
     {
         return $this->tipoPensionRel;
+    }
+
+    /**
+     * Add liquidacionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addLiquidacionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesContratoRel)
+    {
+        $this->liquidacionesContratoRel[] = $liquidacionesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove liquidacionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesContratoRel
+     */
+    public function removeLiquidacionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesContratoRel)
+    {
+        $this->liquidacionesContratoRel->removeElement($liquidacionesContratoRel);
+    }
+
+    /**
+     * Get liquidacionesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLiquidacionesContratoRel()
+    {
+        return $this->liquidacionesContratoRel;
     }
 }

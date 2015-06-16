@@ -26,6 +26,11 @@ class RhuLiquidacion
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
      */    
     private $codigoEmpleadoFk;
+
+    /**
+     * @ORM\Column(name="codigo_contrato_fk", type="integer")
+     */    
+    private $codigoContratoFk;    
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
@@ -73,6 +78,21 @@ class RhuLiquidacion
     private $comentarios;        
     
     /**
+     * @ORM\Column(name="dias_cesantias", type="integer")
+     */    
+    private $diasCesantias = 0;    
+
+    /**
+     * @ORM\Column(name="dias_vacaciones", type="integer")
+     */    
+    private $diasVacaciones = 0;        
+    
+    /**
+     * @ORM\Column(name="dias_primas", type="integer")
+     */    
+    private $diasPrimas = 0;        
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -83,6 +103,13 @@ class RhuLiquidacion
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     protected $centroCostoRel;     
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="liquidacionesContratoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
+     */
+    protected $contratoRel;    
+
 
 
 
@@ -142,6 +169,30 @@ class RhuLiquidacion
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuLiquidacion
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
     }
 
     /**
@@ -406,5 +457,101 @@ class RhuLiquidacion
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuLiquidacion
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
+    }
+
+    /**
+     * Set diasCesantias
+     *
+     * @param integer $diasCesantias
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasCesantias($diasCesantias)
+    {
+        $this->diasCesantias = $diasCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCesantias
+     *
+     * @return integer
+     */
+    public function getDiasCesantias()
+    {
+        return $this->diasCesantias;
+    }
+
+    /**
+     * Set diasVacaciones
+     *
+     * @param integer $diasVacaciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasVacaciones($diasVacaciones)
+    {
+        $this->diasVacaciones = $diasVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacaciones
+     *
+     * @return integer
+     */
+    public function getDiasVacaciones()
+    {
+        return $this->diasVacaciones;
+    }
+
+    /**
+     * Set diasPrimas
+     *
+     * @param integer $diasPrimas
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasPrimas($diasPrimas)
+    {
+        $this->diasPrimas = $diasPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPrimas
+     *
+     * @return integer
+     */
+    public function getDiasPrimas()
+    {
+        return $this->diasPrimas;
     }
 }

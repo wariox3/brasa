@@ -24,6 +24,9 @@ class RhuLiquidacionRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
+        if($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias() <= 0) {
+            
+        }
         //$em->flush();
         return true;
     }        
