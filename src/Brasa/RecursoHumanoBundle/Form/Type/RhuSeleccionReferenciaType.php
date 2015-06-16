@@ -10,6 +10,10 @@ class RhuSeleccionReferenciaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                
+            ->add('seleccionTipoReferenciaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionTipoReferencia',
+                'property' => 'nombre',
+            ))
             ->add('nombreCorto', 'text', array('required' => true))                            
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))

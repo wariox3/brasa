@@ -23,7 +23,7 @@ class RhuSeleccionReferencia
     private $codigoSeleccionFk; 
     
     /**
-     * @ORM\Column(name="codigo_seleccion_tipo_referencia_pk", type="integer")
+     * @ORM\Column(name="codigo_seleccion_tipo_referencia_fk", type="integer")
      */    
     private $codigoSeleccionTipoReferenciaFk;
     
@@ -64,12 +64,12 @@ class RhuSeleccionReferencia
     protected $seleccionRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSeleccionTipoReferencia", inversedBy="seleccionTiposReferenciasRel")
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionTipoReferencia", inversedBy="seleccionesReferenciasSelecionTipoReferenciaRel")
      * @ORM\JoinColumn(name="codigo_seleccion_tipo_referencia_fk", referencedColumnName="codigo_seleccion_tipo_referencia_pk")
      */
-    protected $seleccionReferenciaTipoRel;
+    protected $seleccionTipoReferenciaRel;
 
-
+    
 
     /**
      * Get codigoSeleccionReferenciaPk
@@ -103,6 +103,30 @@ class RhuSeleccionReferencia
     public function getCodigoSeleccionFk()
     {
         return $this->codigoSeleccionFk;
+    }
+
+    /**
+     * Set codigoSeleccionTipoReferenciaFk
+     *
+     * @param integer $codigoSeleccionTipoReferenciaFk
+     *
+     * @return RhuSeleccionReferencia
+     */
+    public function setCodigoSeleccionTipoReferenciaFk($codigoSeleccionTipoReferenciaFk)
+    {
+        $this->codigoSeleccionTipoReferenciaFk = $codigoSeleccionTipoReferenciaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSeleccionTipoReferenciaFk
+     *
+     * @return integer
+     */
+    public function getCodigoSeleccionTipoReferenciaFk()
+    {
+        return $this->codigoSeleccionTipoReferenciaFk;
     }
 
     /**
@@ -271,5 +295,29 @@ class RhuSeleccionReferencia
     public function getSeleccionRel()
     {
         return $this->seleccionRel;
+    }
+
+    /**
+     * Set seleccionTipoReferenciaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipoReferencia $seleccionTipoReferenciaRel
+     *
+     * @return RhuSeleccionReferencia
+     */
+    public function setSeleccionTipoReferenciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipoReferencia $seleccionTipoReferenciaRel = null)
+    {
+        $this->seleccionTipoReferenciaRel = $seleccionTipoReferenciaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get seleccionTipoReferenciaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipoReferencia
+     */
+    public function getSeleccionTipoReferenciaRel()
+    {
+        return $this->seleccionTipoReferenciaRel;
     }
 }

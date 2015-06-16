@@ -37,6 +37,12 @@ class RhuSeleccionPrueba
      * @ORM\JoinColumn(name="codigo_seleccion_fk", referencedColumnName="codigo_seleccion_pk")
      */
     protected $seleccionRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionTipoPrueba", inversedBy="seleccionesPruebasSelecionTipoPruebaRel")
+     * @ORM\JoinColumn(name="codigo_seleccion_tipo_referencia_fk", referencedColumnName="codigo_seleccion_tipo_referencia_pk")
+     */
+    protected $seleccionTipoReferenciaRel;
 
 
     /**

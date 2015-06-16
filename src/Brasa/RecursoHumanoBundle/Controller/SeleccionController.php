@@ -161,7 +161,7 @@ class SeleccionController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {           
             $arSeleccionReferencia = $form->getData();      
-            $arSeleccionReferencia->setSeleccionRel($arSeleccion);
+            $arSeleccionReferencia->setSeleccionRel($arSeleccion);           
             $em->persist($arSeleccionReferencia);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
