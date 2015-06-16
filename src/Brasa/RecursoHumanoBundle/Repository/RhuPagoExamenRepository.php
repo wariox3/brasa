@@ -23,7 +23,8 @@ class RhuPagoExamenRepository extends EntityRepository {
         $dql   = "SELECT pe FROM BrasaRecursoHumanoBundle:RhuPagoExamen pe WHERE pe.codigoPagoExamenPk <> 0";
         if($strCodigoEntidadExamen != "") {
             $dql .= " AND pe.codigoEntidadExamenFk = " . $strCodigoEntidadExamen;
-        }                      
+        }     
+        
         $dql .= " ORDER BY pe.codigoPagoExamenPk";
         return $dql;
     } 

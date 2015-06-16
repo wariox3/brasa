@@ -126,21 +126,22 @@ class PagoExamenController extends Controller
     }    
     
     private function listar() {
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->listaDQL(
-                ""
+                $session->get('filtroCodigoEntidadExamen')
                 );        
     }
     
     private function filtrar ($form) {
-        $strSqlLista = $this->getRequest()->getSession();
-        $strSqlLista->set('filtroNombreExamen', $form->get('TxtNombre')->getData());                
-        $strSqlLista->set('filtroEntidadExamen', $form->get('EntidadExamen')->getData());                
+        $request = $this->getRequest();
+        $session = $this->getRequest()->getSession();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoEntidadExamen', $controles['entidadExamenRel']);                               
     }
     
     private function generarExcel() {
-        $em = $this->getDoctrine()->getManager();
-        $strSqlLista = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("JG Efectivos")
@@ -156,24 +157,23 @@ class PagoExamenController extends Controller
                     ->setCellValue('C1', 'TOTAL');
                     
         $i = 2;
-        $query = $em->createQuery($strSqlLista->get('strSqlLista'));
-        $arExamenes = $query->getResult();
-        foreach ($arExamenes as $arExamen) {
+        $query = $em->createQuery($this->strSqlLista);
+        $arPagoExamenes = $query->getResult();
+        foreach ($arPagoExamenes as $arPagoExamen) {
             $strNombreEntidad = "";
-            if($arExamen->getEntidadExamenRel()) {
-                $strNombreEntidad = $arExamen->getEntidadExamenRel()->getNombre();
+            if($arPagoExamen->getEntidadExamenRel()) {
+                $strNombreEntidad = $arPagoExamen->getEntidadExamenRel()->getNombre();
             }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arExamen->getCodigoExamenPk())
+                    ->setCellValue('A' . $i, $arPagoExamen->getCodigoPagoExamenPk())
                     ->setCellValue('B' . $i, $strNombreEntidad)
-                    ->setCellValue('C' . $i, $arExamen->getVrTotal());
-                    
+                    ->setCellValue('C' . $i, $arPagoExamen->getVrTotal());
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('PagoExamen');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="pagoExamanes.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
@@ -189,9 +189,24 @@ class PagoExamenController extends Controller
     }
     
     private function formularioFiltro() {
-        $strSqlLista = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();        
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('ee')                                        
+                    ->orderBy('ee.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,  
+                'empty_data' => "",
+                'empty_value' => "TODOS",    
+                'data' => ""
+            );  
+        if($session->get('filtroCodigoEntidadExamen')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadExamen", $session->get('filtroCodigoEntidadExamen'));                                    
+        }        
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $strSqlLista->get('filtroNombreSeleccionGrupo')))
+            ->add('entidadExamenRel', 'entity', $arrayPropiedades)                  
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

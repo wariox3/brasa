@@ -9,7 +9,11 @@ class RhuSeleccionPruebaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                
+        $builder
+            ->add('seleccionPruebaTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionPruebaTipo',
+                'property' => 'nombre',
+            ))    
             ->add('resultado', 'text', array('required' => true))                                                   
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')

@@ -127,7 +127,7 @@ class SeleccionGrupoController extends Controller
                     
 
         $i = 2;
-        $query = $em->createQuery($strSqlLista->get('dqlSeleccionGrupoLista'));
+        $query = $em->createQuery($this->strSqlLista);
         $arSeleccionGrupos = $query->getResult();
         foreach ($arSeleccionGrupos as $arSeleccionGrupo) {
             $strNombreCentroCosto = "";
