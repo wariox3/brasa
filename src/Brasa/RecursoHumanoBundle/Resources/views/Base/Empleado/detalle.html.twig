@@ -4,11 +4,6 @@
         <div class="page-header">
             <h3>Detalles del empleado</h3>
         </div>
-<div class="container">
-        {% if mensaje != "0" %}        
-            <div class="alert alert-warning" role="alert">{{mensaje}}</div>
-        {% endif %}   
-            </div>
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="btn-group">
@@ -19,83 +14,83 @@
         <div class="panel panel-default">
             <div class="panel-heading">Informacion empleado</div>
             <div class="panel-body">
-            <table width="100%" class="table table-condensed table-bordered">
-                <tr>
-                    <td class="titulo">CODIGO:</td>
-                    <td class="td-in-well">{{ arEmpleado.codigoEmpleadoPk }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo">DIRECCION:</td>
-                    <td class="td-in-well">{{ arEmpleado.direccion }}</td>
-                </tr>
-                <tr>
-                    <td class="titulo">NOMBRE:</td>
-                    <td class="td-in-well">{{ arEmpleado.nombreCorto }}</td>
-                    <td class="titulo">CELULAR:</td>
-                    <td class="td-in-well">{{ arEmpleado.celular }}</td>
-                    <td class="titulo">BARRIO:</td>
-                    <td class="td-in-well">{{ arEmpleado.barrio }}</td>
-                </tr>
-                <tr>
-                    <td class="titulo">IDENTIFICACION:</td>
-                    <td class="td-in-well">{{ arEmpleado.numeroIdentificacion }}</td>
-                    <td class="titulo">TELEFONO:</td>
-                    <td class="td-in-well">{{ arEmpleado.telefono }}</td>
-                    <td class="titulo">CIUDAD:</td>
-                    <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre|default('ERROR') }}</td>                    
-                </tr>                
-                <tr>
-                    <td class="titulo">ESTADO CIVIL:</td>
-                    <td class="td-in-well">{{ arEmpleado.estadoCivilRel.nombre }}</td>                    
-                    <td class="titulo">SEXO:</td>
-                    <td class="td-in-well">{{ arEmpleado.codigoSexoFk }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                </tr>                
-                <tr>
-                    <td class="titulo">FECHA NACIMIENTO:</td>
-                    <td class="td-in-well">{{ arEmpleado.fechaNacimiento|date("Y/m/d") }}</td>                    
-                    <td class="titulo">CLASIFICACION RIESGO:</td>
-                    <td class="td-in-well">{{ arEmpleado.clasificacionRiesgoRel.nombre|default('ERROR') }}</td>
-                    <td class="titulo">CORREO:</td>
-                    <td class="td-in-well">{{ arEmpleado.correo }}</td>
-                </tr>
-                <tr>
-                    <td class="titulo">TIPO PENSION:</td>
-                    <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('ERROR') }}</td>                    
-                    <td class="titulo">CARGO:</td>
-                    <td class="td-in-well">{{ arEmpleado.cargoRel.nombre|default('ERROR') }}</td>
-                    <td class="titulo">DESCRIPCION CARGO:</td>
-                    <td class="td-in-well">{{ arEmpleado.cargoDescripcion }}</td>
-                </tr>                
-                <tr>
-                    <td class="titulo">ENTIDAD PENSION:</td>
-                    <td class="td-in-well">{{ arEmpleado.entidadPensionRel.nombre|default('ERROR') }}</td>                    
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                </tr>                
-                <tr>
-                    <td class="titulo">ENTIDAD SALUD:</td>
-                    <td class="td-in-well">{{ arEmpleado.entidadSaludRel.nombre|default('ERROR') }}</td>                    
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                </tr>                
-                <tr>
-                    <td class="titulo">CAJA COMPENSACION:</td>
-                    <td class="td-in-well">{{ arEmpleado.entidadCajaRel.nombre|default('ERROR') }}</td>                    
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                </tr>                 
-                <tr>
-                    <td colspan="8">COMENTARIOS: {{ arEmpleado.comentarios }}</td>
-                </tr>
-            </table>
+                <table width="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">CODIGO:</td>
+                        <td class="td-in-well">{{ arEmpleado.codigoEmpleadoPk }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo">DIRECCION:</td>
+                        <td class="td-in-well">{{ arEmpleado.direccion }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">NOMBRE:</td>
+                        <td class="td-in-well">{{ arEmpleado.nombreCorto }}</td>
+                        <td class="titulo">CELULAR:</td>
+                        <td class="td-in-well">{{ arEmpleado.celular }}</td>
+                        <td class="titulo">BARRIO:</td>
+                        <td class="td-in-well">{{ arEmpleado.barrio }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">IDENTIFICACION:</td>
+                        <td class="td-in-well">{{ arEmpleado.numeroIdentificacion }}</td>
+                        <td class="titulo">TELEFONO:</td>
+                        <td class="td-in-well">{{ arEmpleado.telefono }}</td>
+                        <td class="titulo">CIUDAD:</td>
+                        <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre|default('ERROR') }}</td>                    
+                    </tr>                
+                    <tr>
+                        <td class="titulo">ESTADO CIVIL:</td>
+                        <td class="td-in-well">{{ arEmpleado.estadoCivilRel.nombre }}</td>                    
+                        <td class="titulo">SEXO:</td>
+                        <td class="td-in-well">{{ arEmpleado.codigoSexoFk }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo">FECHA NACIMIENTO:</td>
+                        <td class="td-in-well">{{ arEmpleado.fechaNacimiento|date("Y/m/d") }}</td>                    
+                        <td class="titulo">CLASIFICACION RIESGO:</td>
+                        <td class="td-in-well">{{ arEmpleado.clasificacionRiesgoRel.nombre|default('ERROR') }}</td>
+                        <td class="titulo">CORREO:</td>
+                        <td class="td-in-well">{{ arEmpleado.correo }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">TIPO PENSION:</td>
+                        <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('ERROR') }}</td>                    
+                        <td class="titulo">CARGO:</td>
+                        <td class="td-in-well">{{ arEmpleado.cargoRel.nombre|default('ERROR') }}</td>
+                        <td class="titulo">DESCRIPCION CARGO:</td>
+                        <td class="td-in-well">{{ arEmpleado.cargoDescripcion }}</td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo">ENTIDAD PENSION:</td>
+                        <td class="td-in-well">{{ arEmpleado.entidadPensionRel.nombre|default('ERROR') }}</td>                    
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo">ENTIDAD SALUD:</td>
+                        <td class="td-in-well">{{ arEmpleado.entidadSaludRel.nombre|default('ERROR') }}</td>                    
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo">CAJA COMPENSACION:</td>
+                        <td class="td-in-well">{{ arEmpleado.entidadCajaRel.nombre|default('ERROR') }}</td>                    
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>                 
+                    <tr>
+                        <td colspan="8">COMENTARIOS: {{ arEmpleado.comentarios }}</td>
+                    </tr>
+                </table>
             </div>
         </div>
         <a name="marcador"></a>
@@ -187,9 +182,9 @@
                             <td {% if arCreditos.Aprobado == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
                             {% if arCreditos.Aprobado == 1 %}
                                 <td style="text-align: center"><a href="#marcador" onclick="javascript:alert('No se puede modificar el credito, se encuenta aprobado o cancelado!');"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
-                            {% else %}
+                                    {% else %}
                                 <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk,  'codigoEmpleado': arCreditos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
-                            {% endif %}
+                                    {% endif %}
                             <td><input type="checkbox" name="ChkSeleccionarCredito[]" value="{{ arCreditos.codigoCreditoPk }}" /></td>
                         </tr>
                     {% endfor %}
@@ -198,7 +193,7 @@
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': 0, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarCredito', 600, 900)" >Nuevo</a>
                     </div>
-                        
+
                     <div class="btn-group">                        
                         {{ form_widget(form.BtnEliminarCredito, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
@@ -310,7 +305,39 @@
                 </div>
             </div>
         </div>
-
+        <div class="panel panel-default">
+            <div class="panel-heading">Procesos disciplinario</div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>CODIGO</th>
+                        <th>FECHA</th>
+                        <th>TIPO</th>                        
+                        <th>ASUNTO</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for arDisciplinarios in arDisciplinarios %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}">{{ arDisciplinarios.codigoDisciplinarioPk }} </td>
+                            <td>{{ arDisciplinarios.fecha |date("Y/m/d")  }}</td>
+                            <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
+                            <td>{{ arDisciplinarios.asunto  }}</td>                                                                                                                
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                            <td><input type="checkbox" name="ChkSeleccionarDisciplinario[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}" /></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': 0 }) }}', 'AgregarProcesoDisciplinario', 600, 900)" >Nuevo</a> {% endif %}                        
+                    </div>
+                    <div class="btn-group">                        
+                        {{ form_widget(form.BtnEliminarDisciplinario, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_lista') }}" style="float:left">Volver</a>

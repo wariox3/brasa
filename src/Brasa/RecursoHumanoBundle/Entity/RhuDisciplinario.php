@@ -33,6 +33,11 @@ class RhuDisciplinario
     private $codigoEmpleadoFk;             
     
     /**
+     * @ORM\Column(name="asunto", type="string", length=150, nullable=true)
+     */    
+    private $asunto;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;            
@@ -203,5 +208,29 @@ class RhuDisciplinario
     public function getDisciplinarioTipoRel()
     {
         return $this->disciplinarioTipoRel;
+    }
+
+    /**
+     * Set asunto
+     *
+     * @param string $asunto
+     *
+     * @return RhuDisciplinario
+     */
+    public function setAsunto($asunto)
+    {
+        $this->asunto = $asunto;
+
+        return $this;
+    }
+
+    /**
+     * Get asunto
+     *
+     * @return string
+     */
+    public function getAsunto()
+    {
+        return $this->asunto;
     }
 }

@@ -95,12 +95,12 @@ class BaseEmpleadoController extends Controller
     public function detalleAction($codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $mensaje = 0;
         $form = $this->createFormBuilder()
             ->add('BtnRetirarContrato', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))    
+            ->add('BtnEliminarDisciplinario', 'submit', array('label'  => 'Eliminar',))                
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
@@ -112,6 +112,8 @@ class BaseEmpleadoController extends Controller
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+        $arDisciplinarios = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
@@ -184,7 +186,7 @@ class BaseEmpleadoController extends Controller
                     'arLicencias' => $arLicencias,
                     'arContratos' => $arContratos,
                     'arCreditos' => $arCreditos,
-                    'mensaje' => $mensaje,
+                    'arDisciplinarios' => $arDisciplinarios,            
                     'form' => $form->createView()
                     ));
     }

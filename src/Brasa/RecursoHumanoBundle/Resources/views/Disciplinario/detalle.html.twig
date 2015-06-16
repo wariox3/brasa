@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+<div class="container">
+    <div class="page-header">
+        <h3>Proceso disciplinario</h3>
+    </div>
+
+    <!-- Encabezado Movimiento -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Informacion disciplinario</div>
+      <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="titulo">CODIGO:</td>
+                    <td>{{ arDisciplinario.codigoDisciplinarioPk }}</td>
+                    <td class="titulo">TIPO:</td>
+                    <td>{{ arDisciplinario.disciplinarioTipoRel.nombre }}</td>
+                    <td class="titulo"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="8" class="titulo">Comentarios: {{ arDisciplinario.comentarios }}</td>
+                </tr>
+            </table>
+      </div>
+    </div>
+
+    <!-- Fin Encabezado Movimiento -->
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 5,  'numero': arDisciplinario.codigoDisciplinarioPk }) }}', 'Archivos', 500, 700)" >Documentos</a>
+            </div>
+        </div>
+        <br /><br />
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+    <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_disciplinario_lista') }}">Volver</a>
+</div>
+{% endblock %}
