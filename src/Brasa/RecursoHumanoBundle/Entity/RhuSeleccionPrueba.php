@@ -20,7 +20,12 @@ class RhuSeleccionPrueba
     /**
      * @ORM\Column(name="codigo_seleccion_fk", type="integer")
      */    
-    private $codigoSeleccionFk;     
+    private $codigoSeleccionFk; 
+    
+    /**
+     * @ORM\Column(name="codigo_seleccion_prueba_tipo_fk", type="integer")
+     */    
+    private $codigoSeleccionPruebaTipoFk;
 
     /**
      * @ORM\Column(name="resultado", type="string", length=50, nullable=true)
@@ -39,10 +44,12 @@ class RhuSeleccionPrueba
     protected $seleccionRel; 
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSeleccionTipoPrueba", inversedBy="seleccionesPruebasSelecionTipoPruebaRel")
-     * @ORM\JoinColumn(name="codigo_seleccion_tipo_referencia_fk", referencedColumnName="codigo_seleccion_tipo_referencia_pk")
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionPruebaTipo", inversedBy="seleccionesPruebasSelecionPruebaTipoRel")
+     * @ORM\JoinColumn(name="codigo_seleccion_prueba_tipo_fk", referencedColumnName="codigo_seleccion_prueba_tipo_pk")
      */
-    protected $seleccionTipoReferenciaRel;
+    protected $seleccionPruebaTipoRel;
+
+
 
 
     /**
@@ -77,6 +84,30 @@ class RhuSeleccionPrueba
     public function getCodigoSeleccionFk()
     {
         return $this->codigoSeleccionFk;
+    }
+
+    /**
+     * Set codigoSeleccionPruebaTipoFk
+     *
+     * @param integer $codigoSeleccionPruebaTipoFk
+     *
+     * @return RhuSeleccionPrueba
+     */
+    public function setCodigoSeleccionPruebaTipoFk($codigoSeleccionPruebaTipoFk)
+    {
+        $this->codigoSeleccionPruebaTipoFk = $codigoSeleccionPruebaTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSeleccionPruebaTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSeleccionPruebaTipoFk()
+    {
+        return $this->codigoSeleccionPruebaTipoFk;
     }
 
     /**
@@ -149,5 +180,29 @@ class RhuSeleccionPrueba
     public function getSeleccionRel()
     {
         return $this->seleccionRel;
+    }
+
+    /**
+     * Set seleccionPruebaTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPruebaTipo $seleccionPruebaTipoRel
+     *
+     * @return RhuSeleccionPrueba
+     */
+    public function setSeleccionPruebaTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPruebaTipo $seleccionPruebaTipoRel = null)
+    {
+        $this->seleccionPruebaTipoRel = $seleccionPruebaTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get seleccionPruebaTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPruebaTipo
+     */
+    public function getSeleccionPruebaTipoRel()
+    {
+        return $this->seleccionPruebaTipoRel;
     }
 }
