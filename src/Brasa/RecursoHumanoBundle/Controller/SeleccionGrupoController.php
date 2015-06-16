@@ -94,19 +94,19 @@ class SeleccionGrupoController extends Controller
  
     private function listar() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->listaDQL($session->get('filtroNombreSeleccionGrupo'), $session->get('filtroAbiertoSeleccionGrupo'));  
+        $strSqlLista = $this->getRequest()->getSession();
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->listaDQL($strSqlLista->get('filtroNombreSeleccionGrupo'), $strSqlLista->get('filtroAbiertoSeleccionGrupo'));  
     }
     
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
-        $session->set('filtroNombreSeleccionGrupo', $form->get('TxtNombre')->getData());                
-        $session->set('filtroAbiertoSeleccionGrupo', $form->get('estadoAbierto')->getData());                
+        $strSqlLista = $this->getRequest()->getSession();
+        $strSqlLista->set('filtroNombreSeleccionGrupo', $form->get('TxtNombre')->getData());                
+        $strSqlLista->set('filtroAbiertoSeleccionGrupo', $form->get('estadoAbierto')->getData());                
     }
     
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $strSqlLista = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("JG Efectivos")
@@ -127,7 +127,7 @@ class SeleccionGrupoController extends Controller
                     
 
         $i = 2;
-        $query = $em->createQuery($session->get('dqlSeleccionGrupoLista'));
+        $query = $em->createQuery($strSqlLista->get('dqlSeleccionGrupoLista'));
         $arSeleccionGrupos = $query->getResult();
         foreach ($arSeleccionGrupos as $arSeleccionGrupo) {
             $strNombreCentroCosto = "";
@@ -171,10 +171,10 @@ class SeleccionGrupoController extends Controller
     }
     
     private function formularioFiltro() {
-        $session = $this->getRequest()->getSession();
+        $strSqlLista = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionGrupo')))
-            ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccionGrupo'))) 
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $strSqlLista->get('filtroNombreSeleccionGrupo')))
+            ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $strSqlLista->get('filtroAbiertoSeleccionGrupo'))) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEstadoAbierto', 'submit', array('label'  => 'Cerrar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            

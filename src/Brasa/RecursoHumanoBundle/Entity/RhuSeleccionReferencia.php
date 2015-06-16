@@ -20,7 +20,12 @@ class RhuSeleccionReferencia
     /**
      * @ORM\Column(name="codigo_seleccion_fk", type="integer")
      */    
-    private $codigoSeleccionFk;         
+    private $codigoSeleccionFk; 
+    
+    /**
+     * @ORM\Column(name="codigo_seleccion_tipo_referencia_pk", type="integer")
+     */    
+    private $codigoSeleccionTipoReferenciaFk;
     
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
@@ -56,7 +61,13 @@ class RhuSeleccionReferencia
      * @ORM\ManyToOne(targetEntity="RhuSeleccion", inversedBy="seleccionesReferenciasSeleccionRel")
      * @ORM\JoinColumn(name="codigo_seleccion_fk", referencedColumnName="codigo_seleccion_pk")
      */
-    protected $seleccionRel; 
+    protected $seleccionRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionTipoReferencia", inversedBy="seleccionTiposReferenciasRel")
+     * @ORM\JoinColumn(name="codigo_seleccion_tipo_referencia_fk", referencedColumnName="codigo_seleccion_tipo_referencia_pk")
+     */
+    protected $seleccionReferenciaTipoRel;
 
 
 

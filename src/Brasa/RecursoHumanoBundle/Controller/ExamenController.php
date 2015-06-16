@@ -162,7 +162,8 @@ class ExamenController extends Controller
                     ->setCellValue('D1', 'FECHA')
                     ->setCellValue('E1', 'IDENTIFICACION')
                     ->setCellValue('F1', 'NOMBRE')
-                    ->setCellValue('G1', 'APROBADO');
+                    ->setCellValue('G1', 'TOTAL')
+                    ->setCellValue('H1', 'APROBADO');
                     
         $i = 2;
         $query = $em->createQuery($session->get('dqlExamenLista'));
@@ -189,7 +190,8 @@ class ExamenController extends Controller
                     ->setCellValue('D' . $i, $arExamen->getFecha())
                     ->setCellValue('E' . $i, $arExamen->getIdentificacion())
                     ->setCellValue('F' . $i, $arExamen->getNombreCorto())
-                    ->setCellValue('G' . $i, $aprobado);
+                    ->setCellValue('H' . $i, $aprobado)
+                    ->setCellValue('G' . $i, $arExamen->getVrTotal());
                     
             $i++;
         }

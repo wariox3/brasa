@@ -30,7 +30,7 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $precioTipoExamen = 0;
         $totalExamen = 0;
         foreach ($arExamenDetalles as $arExamenDetalle) {
-           $precioTipoExamen = $arExamenDetalle->getPrecio();
+           $precioTipoExamen = $arExamenDetalle->getVrPrecio();
            $totalExamen += $precioTipoExamen;
         }
         $this->SetFillColor(236, 236, 236);        
@@ -111,7 +111,7 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
             $pdf->Cell(10, 4, $arExamenDetalle->getCodigoExamenDetallePk(), 1, 0, 'L');
             $pdf->Cell(10, 4, $arExamenDetalle->getExamenTipoRel()->getCodigoExamenTipoPk(), 1, 0, 'L');
             $pdf->Cell(130, 4, $arExamenDetalle->getExamenTipoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(20, 4, number_format($arExamenDetalle->getPrecio(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(20, 4, number_format($arExamenDetalle->getVrPrecio(), 2, '.', ','), 1, 0, 'R');
             if ($arExamenDetalle->getEstadoAprobado() == 1)
             {    
                 $pdf->Cell(20, 4, "SI", 1, 0, 'L');

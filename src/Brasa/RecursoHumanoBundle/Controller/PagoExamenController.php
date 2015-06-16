@@ -11,7 +11,7 @@ class PagoExamenController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();        
+        $strSqlLista = $this->getRequest()->getSession();        
         $form = $this->formularioFiltro();
         $form->handleRequest($request);        
         $this->listar();          
@@ -21,7 +21,6 @@ class PagoExamenController extends Controller
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->eliminarPagoExamenSeleccionados($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_rhu_pago_examen_lista'));
             }
-
             if ($form->get('BtnFiltrar')->isClicked()) {    
                 $this->filtrar($form);
                 $this->listar();
@@ -68,9 +67,9 @@ class PagoExamenController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
-            if($form->get('BtnImprimir')->isClicked()) {                
-                //$objExamen = new \Brasa\RecursoHumanoBundle\Formatos\FormatoExamenDetalle();
-                //$objExamen->Generar($this, $codigoEntidadPagoExamen);
+            if($form->get('BtnImprimir')->isClicked()) {
+                $objFormatoPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoExamenDetalle();
+                $objFormatoPagoExamenDetalle->Generar($this, $codigoPagoExamen);
             }
             if($form->get('BtnEliminar')->isClicked()) {                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
@@ -134,14 +133,14 @@ class PagoExamenController extends Controller
     }
     
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
-        $session->set('filtroNombreExamen', $form->get('TxtNombre')->getData());                
-        $session->set('filtroEntidadExamen', $form->get('EntidadExamen')->getData());                
+        $strSqlLista = $this->getRequest()->getSession();
+        $strSqlLista->set('filtroNombreExamen', $form->get('TxtNombre')->getData());                
+        $strSqlLista->set('filtroEntidadExamen', $form->get('EntidadExamen')->getData());                
     }
     
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $strSqlLista = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("JG Efectivos")
@@ -154,46 +153,28 @@ class PagoExamenController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'ID')
                     ->setCellValue('B1', 'ENTIDAD')
-                    ->setCellValue('C1', 'CENTRO_COSTOS')
-                    ->setCellValue('D1', 'FECHA')
-                    ->setCellValue('E1', 'IDENTIFICACION')
-                    ->setCellValue('F1', 'NOMBRE')
-                    ->setCellValue('G1', 'APROBADO');
+                    ->setCellValue('C1', 'TOTAL');
                     
         $i = 2;
-        $query = $em->createQuery($session->get('dqlExamenLista'));
+        $query = $em->createQuery($strSqlLista->get('strSqlLista'));
         $arExamenes = $query->getResult();
         foreach ($arExamenes as $arExamen) {
-            $strNombreCentroCosto = "";
-            if($arExamen->getCentroCostoRel()) {
-                $strNombreCentroCosto = $arExamen->getCentroCostoRel()->getNombre();
-            }
-            $strNombreEntidad = "SIN ENTIDAD";
+            $strNombreEntidad = "";
             if($arExamen->getEntidadExamenRel()) {
                 $strNombreEntidad = $arExamen->getEntidadExamenRel()->getNombre();
             }
-            if ($arExamen->getEstadoAprobado() == 1){
-                $aprobado = "SI";
-            } else {
-                $aprobado = "NO";
-            }
-            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arExamen->getCodigoExamenPk())
                     ->setCellValue('B' . $i, $strNombreEntidad)
-                    ->setCellValue('C' . $i, $strNombreCentroCosto)
-                    ->setCellValue('D' . $i, $arExamen->getFecha())
-                    ->setCellValue('E' . $i, $arExamen->getIdentificacion())
-                    ->setCellValue('F' . $i, $arExamen->getNombreCorto())
-                    ->setCellValue('G' . $i, $aprobado);
+                    ->setCellValue('C' . $i, $arExamen->getVrTotal());
                     
             $i++;
         }
-        $objPHPExcel->getActiveSheet()->setTitle('Examen');
+        $objPHPExcel->getActiveSheet()->setTitle('PagoExamen');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Examenes.xlsx"');
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="pagoExamanes.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -208,9 +189,9 @@ class PagoExamenController extends Controller
     }
     
     private function formularioFiltro() {
-        $session = $this->getRequest()->getSession();
+        $strSqlLista = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionGrupo')))
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $strSqlLista->get('filtroNombreSeleccionGrupo')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
