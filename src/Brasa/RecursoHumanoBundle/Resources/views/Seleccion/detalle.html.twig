@@ -29,8 +29,8 @@
                     <td class="td-in-well">{{ arSeleccion.nombreCorto }}</td>
                     <td class="td-label">Celular:</td>
                     <td class="td-in-well">{{ arSeleccion.celular }}</td>
-                    <td class="td-label">Barrio</td>
-                    <td class="td-in-well">{{ arSeleccion.Barrio }}</td>
+                    <td class="td-label"></td>
+                    <td class="td-in-well"></td>
                 </tr>
                 <tr>
                     <td class="td-label">Identificacion:</td>
@@ -44,9 +44,9 @@
                     <td class="td-label">Estado civil:</td>
                     <td class="td-in-well">{{ arSeleccion.estadoCivilRel.nombre }}</td>
                     <td class="td-label">Sexo:</td>
-                    <td class="td-in-well">{{ arSeleccion.codigoSexoFk }}</td>
+                    <td class="td-in-well"{% if arSeleccion.codigoSexoFk == "M" %}> MASCULINO {% else %} FEMENINO {% endif%}</td>
                     <td class="td-label">Barrio:</td>
-                    <td class="td-in-well">{{ arSeleccion.Barrio }}</td>
+                    <td class="td-in-well">{{ arSeleccion.barrioRel.nombre }}</td>
                 </tr>
                 <tr>
                     <td class="td-label">Fecha nacimiento:</td>

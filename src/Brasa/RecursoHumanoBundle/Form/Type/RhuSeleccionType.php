@@ -57,7 +57,10 @@ class RhuSeleccionType extends AbstractType
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
             ->add('direccion', 'text', array('required' => false))                            
-            ->add('barrio', 'text', array('required' => false))
+            ->add('barrioRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenBarrio',
+                'property' => 'nombre',
+            ))
             ->add('numeroIdentificacion', 'text', array('required' => true))
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))                            
             ->add('comentarios', 'textarea', array('required' => false))

@@ -88,9 +88,9 @@ class RhuSeleccion
     private $codigoCiudadFk;    
     
     /**
-     * @ORM\Column(name="barrio", type="string", length=80, nullable=true)
+     * @ORM\Column(name="barrio", type="integer", length=80, nullable=true)
      */    
-    private $barrio;            
+    private $codigoBarrioFk;            
     
     /**
      * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
@@ -179,6 +179,12 @@ class RhuSeleccion
     protected $ciudadRel;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenBarrio", inversedBy="rhuSeleccionesBarrioRel")
+     * @ORM\JoinColumn(name="codigo_barrio_fk", referencedColumnName="codigo_barrio_pk")
+     */
+    protected $barrioRel;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionGrupo", inversedBy="seleccionesSeleccionGrupoRel")
      * @ORM\JoinColumn(name="codigo_seleccion_grupo_fk", referencedColumnName="codigo_seleccion_grupo_pk")
      */
@@ -194,7 +200,7 @@ class RhuSeleccion
      */
     protected $seleccionesPruebasSeleccionRel;    
    
-    
+  
     /**
      * Constructor
      */
@@ -260,6 +266,30 @@ class RhuSeleccion
     public function getCodigoSeleccionTipoFk()
     {
         return $this->codigoSeleccionTipoFk;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return RhuSeleccion
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
     }
 
     /**
@@ -527,27 +557,27 @@ class RhuSeleccion
     }
 
     /**
-     * Set barrio
+     * Set codigoBarrioFk
      *
-     * @param string $barrio
+     * @param integer $codigoBarrioFk
      *
      * @return RhuSeleccion
      */
-    public function setBarrio($barrio)
+    public function setCodigoBarrioFk($codigoBarrioFk)
     {
-        $this->barrio = $barrio;
+        $this->codigoBarrioFk = $codigoBarrioFk;
 
         return $this;
     }
 
     /**
-     * Get barrio
+     * Get codigoBarrioFk
      *
-     * @return string
+     * @return integer
      */
-    public function getBarrio()
+    public function getCodigoBarrioFk()
     {
-        return $this->barrio;
+        return $this->codigoBarrioFk;
     }
 
     /**
@@ -935,6 +965,30 @@ class RhuSeleccion
     }
 
     /**
+     * Set barrioRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barrioRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setBarrioRel(\Brasa\GeneralBundle\Entity\GenBarrio $barrioRel = null)
+    {
+        $this->barrioRel = $barrioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get barrioRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenBarrio
+     */
+    public function getBarrioRel()
+    {
+        return $this->barrioRel;
+    }
+
+    /**
      * Set seleccionGrupoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionGrupoRel
@@ -1024,29 +1078,5 @@ class RhuSeleccion
     public function getSeleccionesPruebasSeleccionRel()
     {
         return $this->seleccionesPruebasSeleccionRel;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return RhuSeleccion
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
     }
 }
