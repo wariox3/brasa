@@ -34,26 +34,26 @@
                     <tr>
                         <td class="titulo">FECHA FIN:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaHasta|date("Y/m/d") }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">DIAS CESANTIAS:</td>
+                        <td align="right">{{ arLiquidacion.diasCesantias }}</td>
                         <td class="titulo">INTERESES:</td>
-                        <td class="td-in-well-numerico" align="right">$ {{ arLiquidacion.vrInteresesCesantias | number_format(2, '.', ',') }}</td>                   
+                        <td align="right" align="right">$ {{ arLiquidacion.vrInteresesCesantias | number_format(2, '.', ',') }}</td>                   
                     </tr>                                 
                     <tr>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">DIAS VACACIONES:</td>
+                        <td align="right">{{ arLiquidacion.diasVacaciones }}</td>
                         <td class="titulo">PRIMA:</td>
-                        <td class="td-in-well-numerico" align="right">$ {{ arLiquidacion.vrPrima | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrPrima | number_format(2, '.', ',') }}</td>                   
                     </tr>                                 
                     <tr>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">DIAS PRIMAS:</td>
+                        <td align="right">{{ arLiquidacion.diasPrimas }}</td>
                         <td class="titulo">VACACIONES:</td>
-                        <td class="td-in-well-numerico" align="right">$ {{ arLiquidacion.vrVacaciones | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrVacaciones | number_format(2, '.', ',') }}</td>                   
                     </tr>                                                 
                     <tr>
                         <td colspan="8">COMENTARIOS: {{ arLiquidacion.comentarios }}</td>

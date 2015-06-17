@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuLiquidacionRepository extends EntityRepository {
+    
     public function listaDQL($strIdentificacion = "") {        
         $dql   = "SELECT l, e FROM BrasaRecursoHumanoBundle:RhuLiquidacion l JOIN l.empleadoRel e WHERE l.codigoLiquidacionPk <> 0";
         if($strIdentificacion != "" ) {
@@ -24,10 +25,23 @@ class RhuLiquidacionRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
-        if($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias() <= 0) {
-            
+        if($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias() <= $arLiquidacion->getContratoRel()->getFechaDesde()) {
+            $intDiasCesantias = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
+            $intDiasCesantias = $intDiasCesantias->format('%a');
         }
-        //$em->flush();
+        if($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas() <= $arLiquidacion->getContratoRel()->getFechaDesde()) {
+            $intDiasPrimas = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
+            $intDiasPrimas = $intDiasPrimas->format('%a');
+        }
+        if($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones() <= $arLiquidacion->getContratoRel()->getFechaDesde()) {
+            $intDiasVacaciones = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
+            $intDiasVacaciones = $intDiasVacaciones->format('%a');
+        }        
+        $arLiquidacion->setDiasCesantias($intDiasCesantias);
+        $arLiquidacion->setDiasPrimas($intDiasPrimas);
+        $arLiquidacion->setDiasVacaciones($intDiasVacaciones);
+        
+        $em->flush();
         return true;
     }        
 }
