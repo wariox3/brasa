@@ -82,6 +82,11 @@ class RhuCredito
      */
     private $seguro = 0;
     
+    /**     
+     * @ORM\Column(name="estado_suspendido", type="boolean")
+     */    
+    private $estadoSuspendido = 0;
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="creditosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -469,4 +474,28 @@ class RhuCredito
     }
 
    
+
+    /**
+     * Set estadoSuspendido
+     *
+     * @param boolean $estadoSuspendido
+     *
+     * @return RhuCredito
+     */
+    public function setEstadoSuspendido($estadoSuspendido)
+    {
+        $this->estadoSuspendido = $estadoSuspendido;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoSuspendido
+     *
+     * @return boolean
+     */
+    public function getEstadoSuspendido()
+    {
+        return $this->estadoSuspendido;
+    }
 }

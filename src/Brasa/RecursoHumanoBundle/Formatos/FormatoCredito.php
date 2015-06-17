@@ -24,14 +24,14 @@ class FormatoCredito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',12);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
-        $this->Cell(283, 8, "Listado de Creditos " , 1, 0, 'C', 1);
+        $this->Cell(283, 8, "LISTADO DE CREDITOS " , 1, 0, 'C', 1);
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'TIPO', 'FECHA', 'EMPLEADO', 'VR. CREDITO', 'VR. CUOTA', 'VR. SEGURO', 'VR. PAGAR', 'CUOTAS', 'C. ACTUAL', 'ESTADO', 'APROBADO');
+        $header = array('ID', 'TIPO', 'FECHA', 'EMPLEADO', 'VR. CREDITO', 'VR. CUOTA', 'VR. SEGURO', 'VR. PAGAR', 'CUOTAS', 'C. ACTUAL', 'PAGADO', 'APROBADO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -46,7 +46,7 @@ class FormatoCredito extends \FPDF_FPDF {
             else
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
 
-        //Restauración de colores y fuentes
+        //Restauraciï¿½n de colores y fuentes
         $this->SetFillColor(224, 235, 255);
         $this->SetTextColor(0);
         $this->SetFont('');
@@ -71,11 +71,11 @@ class FormatoCredito extends \FPDF_FPDF {
             $pdf->Cell(15, 4, $arCredito->getNumeroCuotaActual(), 1, 0, 'R');
             if ($arCredito->getEstadoPagado() == 1)
             {    
-                $pdf->Cell(16, 4, "PAGADO", 1, 0, 'L');
+                $pdf->Cell(16, 4, "SI", 1, 0, 'L');
             }
             else
             {
-                $pdf->Cell(16, 4, "PENDIENTE", 1, 0, 'L');
+                $pdf->Cell(16, 4, "NO", 1, 0, 'L');
             }
             if ($arCredito->getAprobado() == 1)
             {    

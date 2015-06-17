@@ -159,7 +159,7 @@ class BaseEmpleadoController extends Controller
                             $em->flush();
                         }
                     }
-                    //return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
             }  
             if($form->get('BtnRetirarLicencia')->isClicked()) {

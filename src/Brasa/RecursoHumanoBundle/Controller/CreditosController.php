@@ -4,7 +4,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoType;
-
+use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoListaType;
 class CreditosController extends Controller
 {    
     
@@ -17,7 +17,8 @@ class CreditosController extends Controller
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
-            ->add('BtnDesaprobar', 'submit', array('label'  => 'Desaprobar',))                
+            ->add('BtnDesaprobar', 'submit', array('label'  => 'Desaprobar',))
+            ->add('BtnSuspender', 'submit', array('label'  => 'Suspender / No Suspender',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->getForm();
         $form->handleRequest($request);        
@@ -67,6 +68,24 @@ class CreditosController extends Controller
                 }  
             }
             
+            if($form->get('BtnSuspender')->isClicked()) {
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $id) {
+                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($id);
+                        if ($arCreditos->getEstadoSuspendido() == 0){
+                            $arCreditos->setEstadoSuspendido(1);
+                        } else {
+                            $arCreditos->setEstadoSuspendido(0);
+                        }
+                        
+                        $em->persist($arCreditos);
+                        $em->flush();
+                        
+                    }
+                }  
+            }
+            
             if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
@@ -89,7 +108,7 @@ class CreditosController extends Controller
                             ->setCellValue('H1', 'Valor_Pagar')
                             ->setCellValue('I1', 'Cuotas')
                             ->setCellValue('J1', 'Cuota_Actual')
-                            ->setCellValue('K1', 'Estado_Credito')
+                            ->setCellValue('K1', 'Pagado')
                             ->setCellValue('L1', 'Aprobado');
 
                 $i = 2;
@@ -98,11 +117,11 @@ class CreditosController extends Controller
                 foreach ($arCreditos as $arCredito) {
                     if ($arCredito->getEstadoPagado() == 1)
                     {
-                        $Estado = "PAGADO";
+                        $Estado = "SI";
                     }
                     else
                     {
-                        $Estado = "PENDIENTE"; 
+                        $Estado = "NO"; 
                     }
                     if ($arCredito->getAprobado() == 1)
                     {
@@ -186,6 +205,12 @@ class CreditosController extends Controller
             $douVrPagar = $form->get('vrPagar')->getData();
             $intCuotas = $form->get('numeroCuotas')->getData();
             $seguro = $form->get('seguro')->getData();
+            if ($PeriodoPago == "MENSUAL"){
+                $seguro = $seguro * 2;
+            }
+            if ($PeriodoPago == "SEMANAL"){
+                $seguro = $seguro / 2;
+            }
             $saldot = $douVrPagar + $seguro;
             $douVrCuota = $douVrPagar / $intCuotas + $seguro;
             $arCredito->setVrCuota($douVrCuota);
@@ -209,6 +234,59 @@ class CreditosController extends Controller
         }                
 
         return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevo.html.twig', array(
+            'arCredito' => $arCredito,
+            'PeriodoPago' => $PeriodoPago,
+            'form' => $form->createView()));
+    }
+    
+    public function listaNuevoAction($codigoCredito) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $mensaje = 0;
+        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito(); 
+        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);    
+        $arEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findAll();
+        //$PeriodoPago = $arEmpleados->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
+        
+        $form = $this->createForm(new RhuCreditoListaType(), $arCredito);       
+        $form->handleRequest($request);
+        $PeriodoPago = 0;
+        if ($form->isValid()) {            
+            
+            $arCredito = $form->getData();
+            $douVrPagar = $form->get('vrPagar')->getData();
+            $intCuotas = $form->get('numeroCuotas')->getData();
+            $seguro = $form->get('seguro')->getData();
+            if ($PeriodoPago == "MENSUAL"){
+                $seguro = $seguro * 2;
+            }
+            if ($PeriodoPago == "SEMANAL"){
+                $seguro = $seguro / 2;
+            }
+            $saldot = $douVrPagar + $seguro;
+            $douVrCuota = $douVrPagar / $intCuotas + $seguro;
+            $arCredito->setVrCuota($douVrCuota);
+            $arSeleccion = $request->request->get('ChkSeleccionar');
+            if ($arSeleccion == "")
+            {
+                $arCredito->setTipoPago('OTRO');
+            }
+            else
+            {
+                $arCredito->setTipoPago('NOMINA');
+            }    
+            $arCredito->setFecha(new \DateTime('now'));
+            $arCredito->setSaldo($saldot);
+            $arCredito->setNumeroCuotaActual(0);
+            //$arCredito->setEmpleadoRel($arEmpleado);
+            $em->persist($arCredito);
+            $em->flush();                            
+            echo "<script languaje='javascript' type='text/javascript'>opener.location.reload();</script>";
+            echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";                
+        }                
+
+        return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevo2.html.twig', array(
             'arCredito' => $arCredito,
             'PeriodoPago' => $PeriodoPago,
             'form' => $form->createView()));

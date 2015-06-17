@@ -280,7 +280,7 @@ class UtilidadesPagosController extends Controller
                                     $arPagoCredito->setTipoPago("NOMINA");
                                     if ($arCredito->getTipoPago() == "Nomina")
                                     {    
-                                        if ($arCredito->getEstadoPagado() == 0 and $arCredito->getAprobado() == 1)
+                                        if ($arCredito->getEstadoPagado() == 0 and $arCredito->getAprobado() == 1 and $arCredito->getEstadoSuspendido() == 0)
                                         {    
                                             $em->persist($arPagoCredito);
                                             //Actualizar el saldo del credito
