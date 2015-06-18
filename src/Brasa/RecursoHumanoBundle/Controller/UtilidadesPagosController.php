@@ -278,7 +278,7 @@ class UtilidadesPagosController extends Controller
                                     $arPagoCredito->setcodigoCreditoFk($arCredito->getCodigoCreditoPk());
                                     $arPagoCredito->setfechaPago(new \ DateTime("now"));
                                     $arPagoCredito->setTipoPago("NOMINA");
-                                    if ($arCredito->getTipoPago() == "Nomina")
+                                    if ($arCredito->getTipoPago() == "NOMINA")
                                     {    
                                         if ($arCredito->getEstadoPagado() == 0 and $arCredito->getAprobado() == 1 and $arCredito->getEstadoSuspendido() == 0)
                                         {    

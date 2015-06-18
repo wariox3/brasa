@@ -49,10 +49,14 @@
                         <td {% if arCreditos.aprobado == 0 %} class="danger"> NO {% else %} <td class="success"> SI {% endif %} </td>
                     </tr>
                     <tr>
-                        <th>COMENTARIOS:</th>
-                        <td class="td-label">{{ arCreditos.comentarios }}</td>
                         <th class="td-label">SEGURO:</th>
                         <td class="td-label" align="right">{{ arCreditos.seguro | number_format(2, '.', ',')}}</td>
+                        <th class="td-label">SUSPENDIDO:</th>
+                        <td {% if arCreditos.estadoSuspendido == 0 %} class="danger"> NO {% else %} <td class="success"> SI {% endif %} </td>
+                    </tr>
+                    <tr>
+                        <th>COMENTARIOS:</th>
+                        <td class="td-label" colspan="3">{{ arCreditos.comentarios }}</td>
                     </tr>
                 </table>
             </div>
