@@ -23,7 +23,7 @@ class RhuCreditoPago
     private $codigoCreditoFk;
     
     /**
-     * @ORM\Column(name="codigo_pago_fk", type="integer" nullable=true)
+     * @ORM\Column(name="codigo_pago_fk", type="integer", nullable=true)
      */    
     private $codigoPagoFk;
     
@@ -212,5 +212,53 @@ class RhuCreditoPago
     public function getCreditoRel()
     {
         return $this->creditoRel;
+    }
+
+    /**
+     * Set codigoPagoFk
+     *
+     * @param integer $codigoPagoFk
+     *
+     * @return RhuCreditoPago
+     */
+    public function setCodigoPagoFk($codigoPagoFk)
+    {
+        $this->codigoPagoFk = $codigoPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoFk()
+    {
+        return $this->codigoPagoFk;
+    }
+
+    /**
+     * Set pagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
+     *
+     * @return RhuCreditoPago
+     */
+    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
+    {
+        $this->pagoRel = $pagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
+     */
+    public function getPagoRel()
+    {
+        return $this->pagoRel;
     }
 }

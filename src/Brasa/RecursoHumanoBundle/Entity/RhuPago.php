@@ -1119,4 +1119,38 @@ class RhuPago
     {
         return $this->facturasDetallesPagosPagoRel;
     }
+
+    /**
+     * Add creditosPagosPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosPagoRel
+     *
+     * @return RhuPago
+     */
+    public function addCreditosPagosPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosPagoRel)
+    {
+        $this->creditosPagosPagoRel[] = $creditosPagosPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditosPagosPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosPagoRel
+     */
+    public function removeCreditosPagosPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosPagoRel)
+    {
+        $this->creditosPagosPagoRel->removeElement($creditosPagosPagoRel);
+    }
+
+    /**
+     * Get creditosPagosPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditosPagosPagoRel()
+    {
+        return $this->creditosPagosPagoRel;
+    }
 }

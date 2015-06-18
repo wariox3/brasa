@@ -74,6 +74,8 @@
                         <th style="text-align: right">VR. CUOTA</th>
                         <th style="text-align: right">VR. SEGURO</th>
                         <th style="text-align: right">VR. PAGO</th>
+                        <th>PERIODO DESDE</th>
+                        <th>PERIODO HASTA</th>
                         <th>FECHA PAGO</th>
                     </tr>
                     {% for arCreditoPago in arCreditoPago %}
@@ -83,6 +85,8 @@
                             <td style="text-align: right">{{ ((arCreditoPago.VrCuota - arCreditoPago.Seguro) | number_format(2, '.', ',')) }}</td>
                             <td style="text-align: right">{{ arCreditoPago.Seguro | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditoPago.VrCuota | number_format(2, '.', ',') }}</td>
+                            <td>{{ arCreditoPago.pagoRel.fechaDesde | default('') |date("Y/m/d")  }}</td>
+                            <td>{{ arCreditoPago.pagoRel.fechaHasta | default('') |date("Y/m/d") }}</td>
                             <td>{{ arCreditoPago.fechaPago |date("Y/m/d")  }}</td>
                         </tr>
                     {% endfor %}

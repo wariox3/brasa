@@ -274,7 +274,6 @@ class CreditosController extends Controller
         $form = $this->createFormBuilder()
             ->add('creditoRel', 'text', array('data' => $codigoCreditoPk, 'attr' => array('readonly' => 'readonly')))
             ->add('vrCuota', 'text', array('data' => round($arCredito->getVrCuota() - $arCredito->getSeguro(),2), 'attr' => array('readonly' => 'readonly')))
-            ->add('seguro', 'text', array('data' => round($arCredito->getSeguro(),2), 'attr' => array('readonly' => 'readonly')))
             ->add('saldo', 'text', array('data' => round($arCredito->getSaldo(),2), 'attr' => array('readonly' => 'readonly')))    
             ->add('vrAbono','text')
             ->add('tipoPago','hidden', array('data' => 'ABONO'))    
