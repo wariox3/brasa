@@ -14,13 +14,31 @@
             <div class="form-group form-group-sm">
                 <label for="form_creditoTipoRel" class="col-sm-2 control-label">Credito:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(form.codigoCreditoFk, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.creditoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>            
+            </div>
             <div class="form-group form-group-sm">
-                <label for="form_vrPagar" class="col-sm-2 control-label">Valor Abono:</label>
+                <label for="form_creditoTipoRel" class="col-sm-2 control-label">Valor cuota:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(form.vrCuota, { 'attr': {'onkeypress': 'ValidaSoloNumeros();','class': 'form-control'} }) }}
+                        {{ form_widget(form.vrCuota, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_creditoTipoRel" class="col-sm-2 control-label">Valor seguro:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.seguro, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_creditoTipoRel" class="col-sm-2 control-label">Saldo:</label>
+                <div class="col-sm-10">
+                    {{ form_widget(form.saldo, { 'attr': {'class': 'form-control' } }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_vrPagar" class="col-sm-2 control-label">Valor abono:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.vrAbono, { 'attr': {'onkeypress': 'ValidaSoloNumeros();','class': 'form-control'} }) }}
                 </div>
             </div>
             

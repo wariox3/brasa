@@ -499,4 +499,45 @@ class RhuCredito
     {
         return $this->estadoSuspendido;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->creditosPagosCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add creditosPagosCreditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosCreditoRel
+     *
+     * @return RhuCredito
+     */
+    public function addCreditosPagosCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosCreditoRel)
+    {
+        $this->creditosPagosCreditoRel[] = $creditosPagosCreditoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditosPagosCreditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosCreditoRel
+     */
+    public function removeCreditosPagosCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosCreditoRel)
+    {
+        $this->creditosPagosCreditoRel->removeElement($creditosPagosCreditoRel);
+    }
+
+    /**
+     * Get creditosPagosCreditoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditosPagosCreditoRel()
+    {
+        return $this->creditosPagosCreditoRel;
+    }
 }

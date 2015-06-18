@@ -203,6 +203,11 @@ class RhuPago
     protected $facturasDetallesPagosPagoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuCreditoPago", mappedBy="pagoRel")
+     */
+    protected $creditosPagosPagoRel;
+    
+    /**
      * Constructor
      */
     public function __construct()

@@ -272,8 +272,11 @@ class CreditosController extends Controller
         $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
         $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
         $form = $this->createFormBuilder()
-            ->add('codigoCreditoFk', 'text', array('data' => $codigoCreditoPk, 'attr' => array('readonly' => 'readonly')))
-            ->add('vrCuota','text')
+            ->add('creditoRel', 'text', array('data' => $codigoCreditoPk, 'attr' => array('readonly' => 'readonly')))
+            ->add('vrCuota', 'text', array('data' => round($arCredito->getVrCuota() - $arCredito->getSeguro(),2), 'attr' => array('readonly' => 'readonly')))
+            ->add('seguro', 'text', array('data' => round($arCredito->getSeguro(),2), 'attr' => array('readonly' => 'readonly')))
+            ->add('saldo', 'text', array('data' => round($arCredito->getSaldo(),2), 'attr' => array('readonly' => 'readonly')))    
+            ->add('vrAbono','text')
             ->add('tipoPago','hidden', array('data' => 'ABONO'))    
             ->add('save', 'submit', array('label' => 'Guardar'))    
             ->getForm();
@@ -282,7 +285,7 @@ class CreditosController extends Controller
             $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
             $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
             $saldoA = $arCredito->getSaldo();
-            $Abono = $form->get('vrCuota')->getData();
+            $Abono = $form->get('vrAbono')->getData();
             if ($Abono > $saldoA)
             {
                 $mensaje = "El abono no puede ser superior al saldo!";
@@ -297,8 +300,8 @@ class CreditosController extends Controller
                 $nroACuotas = $arCredito->getNumeroCuotaActual();
                 $seguro = $arCredito->getSeguro();
                 $arCredito->setNumeroCuotaActual($nroACuotas + 1);
-                $arPagoCredito->setcodigoCreditoFk($form->get('codigoCreditoFk')->getData());
-                $arPagoCredito->setvrCuota($form->get('vrCuota')->getData());
+                $arPagoCredito->setCreditoRel($arCredito);
+                $arPagoCredito->setvrCuota($form->get('vrAbono')->getData());
                 $arPagoCredito->setfechaPago(new \ DateTime("now"));    
                 $arPagoCredito->settipoPago('ABONO');
                 $em->persist($arPagoCredito);

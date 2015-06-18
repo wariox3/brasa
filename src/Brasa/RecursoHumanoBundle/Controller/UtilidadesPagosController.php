@@ -275,7 +275,7 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                     $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
                                     //se guarda el pago en la tabla rhu_pago_credito
-                                    $arPagoCredito->setcodigoCreditoFk($arCredito->getCodigoCreditoPk());
+                                    $arPagoCredito->setCreditoRel($arCredito); //($arCredito->getCodigoCreditoPk());
                                     $arPagoCredito->setfechaPago(new \ DateTime("now"));
                                     $arPagoCredito->setTipoPago("NOMINA");
                                     if ($arCredito->getTipoPago() == "NOMINA")

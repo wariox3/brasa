@@ -23,6 +23,11 @@ class RhuCreditoPago
     private $codigoCreditoFk;
     
     /**
+     * @ORM\Column(name="codigo_pago_fk", type="integer" nullable=true)
+     */    
+    private $codigoPagoFk;
+    
+    /**
      * @ORM\Column(name="vr_cuota", type="float")
      */
     private $vrCuota = 0;
@@ -47,6 +52,12 @@ class RhuCreditoPago
      * @ORM\JoinColumn(name="codigo_credito_fk", referencedColumnName="codigo_credito_pk")
      */
     protected $creditoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuPago", inversedBy="creditosPagosPagoRel")
+     * @ORM\JoinColumn(name="codigo_pago_fk", referencedColumnName="codigo_pago_pk")
+     */
+    protected $pagoRel;
 
 
     /**
@@ -177,5 +188,29 @@ class RhuCreditoPago
     public function getSeguro()
     {
         return $this->seguro;
+    }
+
+    /**
+     * Set creditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditoRel
+     *
+     * @return RhuCreditoPago
+     */
+    public function setCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditoRel = null)
+    {
+        $this->creditoRel = $creditoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get creditoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCredito
+     */
+    public function getCreditoRel()
+    {
+        return $this->creditoRel;
     }
 }
