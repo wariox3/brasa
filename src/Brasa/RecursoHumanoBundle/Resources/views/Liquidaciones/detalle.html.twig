@@ -48,8 +48,8 @@
                         <td align="right">$ {{ arLiquidacion.vrPrima | number_format(2, '.', ',') }}</td>                   
                     </tr>                                 
                     <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">FECHA ULTIMO PAGO:</td>
+                        <td class="td-in-well">{{ arLiquidacion.fechaUltimoPago|date("Y/m/d") }}</td>
                         <td class="titulo">DIAS PRIMAS:</td>
                         <td align="right">{{ arLiquidacion.diasPrimas }}</td>
                         <td class="titulo">VACACIONES:</td>

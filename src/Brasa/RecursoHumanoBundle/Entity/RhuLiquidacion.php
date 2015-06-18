@@ -93,6 +93,21 @@ class RhuLiquidacion
     private $diasPrimas = 0;        
     
     /**
+     * @ORM\Column(name="fecha_ultimo_pago", type="date", nullable=true)
+     */    
+    private $fechaUltimoPago;    
+    
+    /**
+     * @ORM\Column(name="vr_ingreso_base_cotizacion_adicional", type="float")
+     */
+    private $VrIngresoBaseCotizacionAdicional = 0;    
+
+    /**
+     * @ORM\Column(name="dias_adicionales_ibc", type="integer")
+     */    
+    private $diasAdicionalesIBC = 0;            
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -553,5 +568,77 @@ class RhuLiquidacion
     public function getDiasPrimas()
     {
         return $this->diasPrimas;
+    }
+
+    /**
+     * Set fechaUltimoPago
+     *
+     * @param \DateTime $fechaUltimoPago
+     *
+     * @return RhuLiquidacion
+     */
+    public function setFechaUltimoPago($fechaUltimoPago)
+    {
+        $this->fechaUltimoPago = $fechaUltimoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPago()
+    {
+        return $this->fechaUltimoPago;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacionAdicional
+     *
+     * @param float $vrIngresoBaseCotizacionAdicional
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIngresoBaseCotizacionAdicional($vrIngresoBaseCotizacionAdicional)
+    {
+        $this->VrIngresoBaseCotizacionAdicional = $vrIngresoBaseCotizacionAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacionAdicional
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacionAdicional()
+    {
+        return $this->VrIngresoBaseCotizacionAdicional;
+    }
+
+    /**
+     * Set diasAdicionalesIBC
+     *
+     * @param integer $diasAdicionalesIBC
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasAdicionalesIBC($diasAdicionalesIBC)
+    {
+        $this->diasAdicionalesIBC = $diasAdicionalesIBC;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAdicionalesIBC
+     *
+     * @return integer
+     */
+    public function getDiasAdicionalesIBC()
+    {
+        return $this->diasAdicionalesIBC;
     }
 }

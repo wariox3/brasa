@@ -31,15 +31,15 @@ class ReporteCostos extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         
-        $header = array('IDENTIFICACION', 'EMPLEADO', 'IBC', 'AUX. TRANS', 'CESANTIAS');
+        $header = array('IDENTIF', 'EMPLEADO', 'PERIODO','IBC', 'AUX. TRANS', 'CESANTIAS');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('', 'B', 7);
+        $this->SetFont('', 'B', 5);
 
         //creamos la cabecera de la tabla.
-        $w = array(30, 70, 20, 20, 20);
+        $w = array(11, 40, 20, 13, 13, 13);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -62,24 +62,26 @@ class ReporteCostos extends \FPDF_FPDF {
         $douTotalAuxilioTransporte = 0;
         $douTotalCesantias = 0;
         $pdf->SetX(10);
-        $pdf->SetFont('Arial', '', 7);
+        $pdf->SetFont('Arial', '', 5);
         foreach ($arPagos as $arPago) {            
-            $pdf->Cell(30, 4, $arPago->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(70, 4, $arPago->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');            
-            $pdf->Cell(20, 4, number_format($arPago->getVrIngresoBaseCotizacion(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(20, 4, number_format($arPago->getVrAuxilioTransporte(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(20, 4, number_format($arPago->getVrCesantias(), 2, '.', ','), 1, 0, 'R');                
+            $pdf->Cell(11, 4, $arPago->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(40, 4, $arPago->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');            
+            $pdf->Cell(20, 4, $arPago->getFechaDesde()->format('y-m-d') . "_" . $arPago->getFechaHasta()->format('y-m-d'), 1, 0, 'L');            
+            $pdf->Cell(13, 4, number_format($arPago->getVrIngresoBaseCotizacion(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arPago->getVrAuxilioTransporte(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arPago->getVrCesantias(), 0, '.', ','), 1, 0, 'R');                
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 33);
             $douTotalIBC += $arPago->getVrIngresoBaseCotizacion();
             $douTotalAuxilioTransporte += $arPago->getVrAuxilioTransporte();
             $douTotalCesantias += $arPago->getVrCesantias();
         }    
-        $pdf->Cell(30, 4, "", 1, 0, 'L');
-        $pdf->Cell(70, 4, "", 1, 0, 'L');            
-        $pdf->Cell(20, 4, number_format($douTotalIBC, 2, '.', ','), 1, 0, 'R');
-        $pdf->Cell(20, 4, number_format($douTotalAuxilioTransporte, 2, '.', ','), 1, 0, 'R');
-        $pdf->Cell(20, 4, number_format($douTotalCesantias, 2, '.', ','), 1, 0, 'R');                
+        $pdf->Cell(11, 4, "", 1, 0, 'L');
+        $pdf->Cell(40, 4, "", 1, 0, 'L');            
+        $pdf->Cell(20, 4, "", 1, 0, 'L');            
+        $pdf->Cell(13, 4, number_format($douTotalIBC, 2, '.', ','), 1, 0, 'R');
+        $pdf->Cell(13, 4, number_format($douTotalAuxilioTransporte, 2, '.', ','), 1, 0, 'R');
+        $pdf->Cell(13, 4, number_format($douTotalCesantias, 2, '.', ','), 1, 0, 'R');                
         $pdf->Ln();        
     }
 
