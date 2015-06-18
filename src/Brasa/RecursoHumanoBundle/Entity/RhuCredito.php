@@ -99,9 +99,10 @@ class RhuCredito
      */
     protected $creditoTipoRel;
     
-
-
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCreditoPago", mappedBy="creditoRel")
+     */
+    protected $creditosPagosCreditoRel;
 
     /**
      * Get codigoCreditoPk

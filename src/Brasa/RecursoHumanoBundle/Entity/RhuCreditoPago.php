@@ -41,6 +41,12 @@ class RhuCreditoPago
      * @ORM\Column(name="tipo_pago", type="string")
      */    
     private $tipoPago;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCredito", inversedBy="creditosPagosCreditoRel")
+     * @ORM\JoinColumn(name="codigo_credito_fk", referencedColumnName="codigo_credito_pk")
+     */
+    protected $creditoRel;
 
 
     /**

@@ -302,23 +302,22 @@ class UtilidadesPagosController extends Controller
                                                    $arCredito->setVrCuota($douPagoDetalle); 
                                                 }    
                                             }
-                                            else
-                                            {    
-                                                if ($douPagoDetalle = $credito)
-                                                {
-                                                    $arPagoCredito->setvrCuota($credito);
-                                                    $arCredito->setSaldo($douPagoDetalle - $credito);
-                                                    $arCredito->setVrCuota($arCredito->getVrPagar() / $arCredito->getNumeroCuotas() + $seguro);
-                                                }
-                                                else
-                                                {
-                                                    if ($douPagoDetalle > $credito)
-                                                    {
-                                                        $arPagoCredito->setvrCuota($credito);
-                                                        $arCredito->setSaldo($credito - $credito);
-                                                    }    
-                                                }    
+                                                
+                                            if ($douPagoDetalle == $credito)
+                                            {
+                                                $arPagoCredito->setvrCuota($credito);
+                                                $arCredito->setSaldo($douPagoDetalle - $credito);
+                                                $arCredito->setVrCuota($arCredito->getVrPagar() / $arCredito->getNumeroCuotas() + $seguro);
+                                            }
+
+                                            if ($douPagoDetalle > $credito)
+                                            {
+                                                $arPagoCredito->setvrCuota($douPagoDetalle);
+                                                $arCredito->setSaldo($douPagoDetalle - $douPagoDetalle);
+                                                $arCredito->setVrCuota($arCredito->getVrPagar() / $arCredito->getNumeroCuotas() + $seguro);
                                             }    
+                                                    
+                                               
                                             if ($arCredito->getSaldo() <= 0)
                                             {
                                                $arCredito->setEstadoPagado(1); 

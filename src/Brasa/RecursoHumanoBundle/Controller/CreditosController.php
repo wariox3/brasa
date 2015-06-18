@@ -308,7 +308,7 @@ class CreditosController extends Controller
                 $arCredito2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
                 if ($arCredito2->getSaldo() < $arCredito2->getVrCuota())
                 {
-                    $nVrcuota = $arCredito2->getSaldo();
+                    $nVrcuota = $arCredito2->getSaldo() + $seguro;
                     $arCredito2->setVrCuota($nVrcuota);
                 }
                 $em->persist($arCredito2);
