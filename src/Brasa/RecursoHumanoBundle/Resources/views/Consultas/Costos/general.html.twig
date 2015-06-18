@@ -48,8 +48,14 @@
                 <th>C. COSTO</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
+                <th style="text-align: right">IBC</th>
+                <th style="text-align: right">AUX. TRANS</th>
+                <th style="text-align: right">CESANTIAS</th>
                 <th style="text-align: right">COSTO</th>
             </tr>
+            {% set douTotalIBC = 0  %}
+            {% set douTotalAuxTransporte = 0  %}
+            {% set douTotalCesantias = 0  %}
             {% for arPagos in arPagos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }} </td>
@@ -58,9 +64,25 @@
                 <td>{{ arPagos.centroCostoRel.nombre  }}</td>                
                 <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
+                <td style="text-align: right">{{ arPagos.vrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrAuxilioTransporte | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrCesantias | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrCosto | number_format(2, '.', ',') }}</td>
+                {% set douTotalIBC = douTotalIBC + arPagos.vrIngresoBaseCotizacion %}
+                {% set douTotalAuxTransporte = douTotalAuxTransporte + arPagos.vrAuxilioTransporte %}
+                {% set douTotalCesantias = douTotalCesantias + arPagos.vrCesantias %}
             </tr>
             {% endfor %}
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>                
+                <td></td>
+                <td></td>
+                <td style="text-align: right">{{ douTotalIBC | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalAuxTransporte | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalCesantias | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right"></td>            
         </table>
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">
@@ -72,6 +94,7 @@
         </div>                
         <div class="btn-toolbar" style="float: right">                 
             <div class="btn-group">                
+                {{ form_widget(form.BtnPDF, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
         </div>

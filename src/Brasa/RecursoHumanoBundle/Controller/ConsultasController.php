@@ -23,6 +23,12 @@ class ConsultasController extends Controller
                 $this->listar();
                 $this->generarExcel();
             }
+            if($form->get('BtnPDF')->isClicked()) {
+                $this->filtrarLista($form);
+                $this->listar();
+                $objReporteCostos = new \Brasa\RecursoHumanoBundle\Reportes\ReporteCostos();
+                $objReporteCostos->Generar($this, $this->strSqlLista);
+            }            
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
@@ -35,6 +41,7 @@ class ConsultasController extends Controller
             'form' => $form->createView()
             ));
     }
+    
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
@@ -69,6 +76,7 @@ class ConsultasController extends Controller
             ->add('fechaHasta', 'date', array('required' => true, 'widget' => 'single_text'))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnPDF', 'submit', array('label'  => 'PDF',))
             ->getForm();
         return $form;
     }

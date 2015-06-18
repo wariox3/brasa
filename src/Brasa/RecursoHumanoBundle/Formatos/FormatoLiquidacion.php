@@ -19,15 +19,15 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         
     } 
     
-    public function Header() {
-        $this->SetFillColor(236, 236, 236);        
-        $this->SetFont('Arial','B',10);                        
+    public function Header() {                        
         $this->EncabezadoDetalles();        
     }
 
     public function EncabezadoDetalles() {
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find(self::$codigoLiquidacion);        
+        $this->SetFillColor(236, 236, 236);        
+        $this->SetFont('Arial','B',10);
         $this->SetXY(10, 10);
         $this->Cell(185, 7, 'LIQUIDACION DE PRESTACIONES SOCIALES', 0, 0, 'C', 1);        
         $this->SetFont('Arial', 'B', 8);

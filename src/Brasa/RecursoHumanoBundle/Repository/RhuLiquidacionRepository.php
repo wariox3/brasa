@@ -37,6 +37,8 @@ class RhuLiquidacionRepository extends EntityRepository {
             $intDiasVacaciones = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
             $intDiasVacaciones = $intDiasVacaciones->format('%a');
         }        
+        $douIBC = 
+        
         $arLiquidacion->setDiasCesantias($intDiasCesantias);
         $arLiquidacion->setDiasPrimas($intDiasPrimas);
         $arLiquidacion->setDiasVacaciones($intDiasVacaciones);
