@@ -40,12 +40,22 @@ class RhuCredito
     /**
      * @ORM\Column(name="vr_cuota", type="float")
      */
-    private $vrCuota = 0;    
+    private $vrCuota = 0;
+    
+    /**
+     * @ORM\Column(name="vr_cuota_temporal", type="float")
+     */
+    private $vrCuotaTemporal = 0;
 
     /**
      * @ORM\Column(name="saldo", type="float")
      */
     private $saldo = 0;    
+    
+    /**
+     * @ORM\Column(name="saldo_total", type="float")
+     */
+    private $saldoTotal = 0;
     
     /**     
      * @ORM\Column(name="estado_pagado", type="boolean")
@@ -103,6 +113,22 @@ class RhuCredito
      * @ORM\OneToMany(targetEntity="RhuCreditoPago", mappedBy="creditoRel")
      */
     protected $creditosPagosCreditoRel;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="creditoRel")
+     */
+    protected $pagosDetallesCreditoRel;
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->creditosPagosCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosDetallesCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoCreditoPk
@@ -235,6 +261,102 @@ class RhuCredito
     }
 
     /**
+     * Set vrCuotaTemporal
+     *
+     * @param float $vrCuotaTemporal
+     *
+     * @return RhuCredito
+     */
+    public function setVrCuotaTemporal($vrCuotaTemporal)
+    {
+        $this->vrCuotaTemporal = $vrCuotaTemporal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCuotaTemporal
+     *
+     * @return float
+     */
+    public function getVrCuotaTemporal()
+    {
+        return $this->vrCuotaTemporal;
+    }
+
+    /**
+     * Set saldo
+     *
+     * @param float $saldo
+     *
+     * @return RhuCredito
+     */
+    public function setSaldo($saldo)
+    {
+        $this->saldo = $saldo;
+
+        return $this;
+    }
+
+    /**
+     * Get saldo
+     *
+     * @return float
+     */
+    public function getSaldo()
+    {
+        return $this->saldo;
+    }
+
+    /**
+     * Set saldoTotal
+     *
+     * @param float $saldoTotal
+     *
+     * @return RhuCredito
+     */
+    public function setSaldoTotal($saldoTotal)
+    {
+        $this->saldoTotal = $saldoTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get saldoTotal
+     *
+     * @return float
+     */
+    public function getSaldoTotal()
+    {
+        return $this->saldoTotal;
+    }
+
+    /**
+     * Set estadoPagado
+     *
+     * @param boolean $estadoPagado
+     *
+     * @return RhuCredito
+     */
+    public function setEstadoPagado($estadoPagado)
+    {
+        $this->estadoPagado = $estadoPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagado()
+    {
+        return $this->estadoPagado;
+    }
+
+    /**
      * Set numeroCuotas
      *
      * @param integer $numeroCuotas
@@ -283,6 +405,30 @@ class RhuCredito
     }
 
     /**
+     * Set tipoPago
+     *
+     * @param string $tipoPago
+     *
+     * @return RhuCredito
+     */
+    public function setTipoPago($tipoPago)
+    {
+        $this->tipoPago = $tipoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPago
+     *
+     * @return string
+     */
+    public function getTipoPago()
+    {
+        return $this->tipoPago;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -304,6 +450,78 @@ class RhuCredito
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set aprobado
+     *
+     * @param integer $aprobado
+     *
+     * @return RhuCredito
+     */
+    public function setAprobado($aprobado)
+    {
+        $this->aprobado = $aprobado;
+
+        return $this;
+    }
+
+    /**
+     * Get aprobado
+     *
+     * @return integer
+     */
+    public function getAprobado()
+    {
+        return $this->aprobado;
+    }
+
+    /**
+     * Set seguro
+     *
+     * @param integer $seguro
+     *
+     * @return RhuCredito
+     */
+    public function setSeguro($seguro)
+    {
+        $this->seguro = $seguro;
+
+        return $this;
+    }
+
+    /**
+     * Get seguro
+     *
+     * @return integer
+     */
+    public function getSeguro()
+    {
+        return $this->seguro;
+    }
+
+    /**
+     * Set estadoSuspendido
+     *
+     * @param boolean $estadoSuspendido
+     *
+     * @return RhuCredito
+     */
+    public function setEstadoSuspendido($estadoSuspendido)
+    {
+        $this->estadoSuspendido = $estadoSuspendido;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoSuspendido
+     *
+     * @return boolean
+     */
+    public function getEstadoSuspendido()
+    {
+        return $this->estadoSuspendido;
     }
 
     /**
@@ -355,159 +573,6 @@ class RhuCredito
     }
 
     /**
-     * Set saldo
-     *
-     * @param float $saldo
-     *
-     * @return RhuCredito
-     */
-    public function setSaldo($saldo)
-    {
-        $this->saldo = $saldo;
-
-        return $this;
-    }
-
-    /**
-     * Get saldo
-     *
-     * @return float
-     */
-    public function getSaldo()
-    {
-        return $this->saldo;
-    }
-
-    /**
-     * Set estadoPagado
-     *
-     * @param boolean $estadoPagado
-     *
-     * @return RhuCredito
-     */
-    public function setEstadoPagado($estadoPagado)
-    {
-        $this->estadoPagado = $estadoPagado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoPagado
-     *
-     * @return boolean
-     */
-    public function getEstadoPagado()
-    {
-        return $this->estadoPagado;
-    }
-
-    /**
-     * Set aprobado
-     *
-     * @param integer $aprobado
-     *
-     * @return RhuCredito
-     */
-    public function setAprobado($aprobado)
-    {
-        $this->aprobado = $aprobado;
-
-        return $this;
-    }
-
-    /**
-     * Get aprobado
-     *
-     * @return integer
-     */
-    public function getAprobado()
-    {
-        return $this->aprobado;
-    }
-
-    /**
-     * Set tipoPago
-     *
-     * @param string $tipoPago
-     *
-     * @return RhuCredito
-     */
-    public function setTipoPago($tipoPago)
-    {
-        $this->tipoPago = $tipoPago;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoPago
-     *
-     * @return string
-     */
-    public function getTipoPago()
-    {
-        return $this->tipoPago;
-    }
-
-    /**
-     * Set seguro
-     *
-     * @param integer $seguro
-     *
-     * @return RhuCredito
-     */
-    public function setSeguro($seguro)
-    {
-        $this->seguro = $seguro;
-
-        return $this;
-    }
-
-    /**
-     * Get seguro
-     *
-     * @return integer
-     */
-    public function getSeguro()
-    {
-        return $this->seguro;
-    }
-
-   
-
-    /**
-     * Set estadoSuspendido
-     *
-     * @param boolean $estadoSuspendido
-     *
-     * @return RhuCredito
-     */
-    public function setEstadoSuspendido($estadoSuspendido)
-    {
-        $this->estadoSuspendido = $estadoSuspendido;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoSuspendido
-     *
-     * @return boolean
-     */
-    public function getEstadoSuspendido()
-    {
-        return $this->estadoSuspendido;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->creditosPagosCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Add creditosPagosCreditoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosCreditoRel
@@ -539,5 +604,39 @@ class RhuCredito
     public function getCreditosPagosCreditoRel()
     {
         return $this->creditosPagosCreditoRel;
+    }
+
+    /**
+     * Add pagosDetallesCreditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesCreditoRel
+     *
+     * @return RhuCredito
+     */
+    public function addPagosDetallesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesCreditoRel)
+    {
+        $this->pagosDetallesCreditoRel[] = $pagosDetallesCreditoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosDetallesCreditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesCreditoRel
+     */
+    public function removePagosDetallesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesCreditoRel)
+    {
+        $this->pagosDetallesCreditoRel->removeElement($pagosDetallesCreditoRel);
+    }
+
+    /**
+     * Get pagosDetallesCreditoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosDetallesCreditoRel()
+    {
+        return $this->pagosDetallesCreditoRel;
     }
 }

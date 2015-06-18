@@ -263,72 +263,19 @@ class UtilidadesPagosController extends Controller
                                 $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                                 $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'estadoPagado' => 0));
                                 foreach ($arCreditos as $arCredito) {
+                                    
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
                                     $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCredito);
                                     $douPagoDetalle = $arCredito->getVrCuota(); //Falta afectar credito
-                                    $cuotaR = $arCredito->getVrCuota() - $arCredito->getSeguro();
-                                    $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre()." (Cuota: ".$cuotaR." + Seguro: ".$arCredito->getSeguro().")");
+                                    $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre()." (Cuota: ". $arCredito->getVrCuota() - $arCredito->getSeguro() ." + Seguro: ".$arCredito->getSeguro().")");
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
-                                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                                    $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
-                                    //se guarda el pago en la tabla rhu_pago_credito
-                                    $arPagoCredito->setCreditoRel($arCredito);
-                                    $arPagoCredito->setPagoRel($arPago);
-                                    $arPagoCredito->setfechaPago(new \ DateTime("now"));
-                                    $arPagoCredito->setTipoPago("NOMINA");
-                                    if ($arCredito->getTipoPago() == "NOMINA")
-                                    {    
-                                        if ($arCredito->getEstadoPagado() == 0 and $arCredito->getAprobado() == 1 and $arCredito->getEstadoSuspendido() == 0)
-                                        {    
-                                            $em->persist($arPagoCredito);
-                                            //Actualizar el saldo del credito
-                                            $seguro = $arCredito->getSeguro();
-                                            $nroACuotas = $arCredito->getNumeroCuotaActual();
-                                            $arCredito->setNumeroCuotaActual($nroACuotas + 1);
-                                            $credito =  $arCredito->getSaldo();
-                                            if ($douPagoDetalle < $credito)
-                                            {
-                                                $arPagoCredito->setvrCuota($douPagoDetalle);
-                                                $tsaldo = $credito - $douPagoDetalle + $seguro;
-                                                $arCredito->setSaldo($credito - $douPagoDetalle + $seguro);
-                                                if ($tsaldo < $douPagoDetalle)
-                                                {    
-                                                    $arCredito->setVrCuota($credito - $douPagoDetalle + $seguro);
-                                                }
-                                                else
-                                                {
-                                                   $arCredito->setVrCuota($douPagoDetalle); 
-                                                }    
-                                            }
-                                                
-                                            if ($douPagoDetalle == $credito)
-                                            {
-                                                $arPagoCredito->setvrCuota($credito);
-                                                $arCredito->setSaldo($douPagoDetalle - $credito);
-                                                $arCredito->setVrCuota($arCredito->getVrPagar() / $arCredito->getNumeroCuotas() + $seguro);
-                                            }
-
-                                            if ($douPagoDetalle > $credito)
-                                            {
-                                                $arPagoCredito->setvrCuota($douPagoDetalle);
-                                                $arCredito->setSaldo($douPagoDetalle - $douPagoDetalle);
-                                                $arCredito->setVrCuota($arCredito->getVrPagar() / $arCredito->getNumeroCuotas() + $seguro);
-                                            }    
-                                                    
-                                               
-                                            if ($arCredito->getSaldo() <= 0)
-                                            {
-                                               $arCredito->setEstadoPagado(1); 
-                                            }
-                                            $arPagoCredito->setSeguro($seguro);
-                                            $em->persist($arPagoDetalle);
-                                            $em->persist($arCredito);
-                                        }    
-                                    }
+                                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                                    
                                 }
+                                
+                                
                                 $intPagoConceptoSalario = 1; //Se debe traer de la base de datos
                                 $intPagoConceptoSalud = 3; //Se debe traer de la base de datos
                                 $intPagoConceptoPension = 4; //Se debe traer de la base de datos
@@ -465,17 +412,9 @@ class UtilidadesPagosController extends Controller
                     ));                 
             }
             if($form->get('BtnPagar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                        $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                        $arProgramacionPagoProcesar->setEstadoPagado(1);
-                        $em->persist($arProgramacionPagoProcesar);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
-                }
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');                
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagarSeleccionados($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));                
             }
             if($form->get('BtnLiquidar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');

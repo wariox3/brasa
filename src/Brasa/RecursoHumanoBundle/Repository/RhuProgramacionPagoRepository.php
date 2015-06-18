@@ -233,4 +233,75 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em->flush();
         return true;
     }
+    
+    public function pagarSeleccionados($arrSeleccionados) {        
+        if(count($arrSeleccionados) > 0) {
+            $em = $this->getEntityManager();
+            foreach ($arrSeleccionados AS $codigoProgramacionPago) {
+                $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+                $arProgramacionPagoProcesar->setEstadoPagado(1);
+                $em->persist($arProgramacionPagoProcesar);
+                $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->pagosDetallesProgramacionPago($codigoProgramacionPago);                              
+                /*
+                foreach ($arPagosDetalles AS $arPagoDetalle) {                    
+                    $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                    $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalle->getCodigoCreditoFk());
+                    $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
+                    //se guarda el pago en la tabla rhu_pago_credito
+                    $arPagoCredito->setCreditoRel($arCredito);
+                    $arPagoCredito->setPagoRel($arPagoDetalle->getPagoRel());
+                    $arPagoCredito->setfechaPago(new \ DateTime("now"));
+                    $arPagoCredito->setTipoPago("NOMINA");                       
+                    if ($arCredito->getEstadoPagado() == 0 && $arCredito->getAprobado() == 1 && $arCredito->getEstadoSuspendido() == 0) {                            
+                        //Actualizar el saldo del credito
+                        $douSeguro = $arCredito->getSeguro();                        
+                        $arCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
+                        $douSaldo =  $arCredito->getSaldo();
+                        if ($arPagoDetalle < $douSaldo) {
+                            $arPagoCredito->setvrCuota($douPagoDetalle);
+                            $tsaldo = $douSaldo - $douPagoDetalle + $douSeguro;
+                            $arCredito->setSaldo($douSaldo - $douPagoDetalle + $douSeguro);
+                            if ($tsaldo < $douPagoDetalle)
+                            {    
+                                $arCredito->setVrCuota($douSaldo - $douPagoDetalle + $douSeguro);
+                            }
+                            else
+                            {
+                               $arCredito->setVrCuota($douPagoDetalle); 
+                            }    
+                        }
+
+                        if ($douPagoDetalle == $douSaldo)
+                        {
+                            $arPagoCredito->setvrCuota($douSaldo);
+                            $arCredito->setSaldo($douPagoDetalle - $douSaldo);
+                            $arCredito->setVrCuota($arCredito->getVrPagar() / $arCredito->getNumeroCuotas() + $douSeguro);
+                        }
+
+                        if ($douPagoDetalle > $douSaldo)
+                        {
+                            $arPagoCredito->setvrCuota($douPagoDetalle);
+                            $arCredito->setSaldo($douPagoDetalle - $douPagoDetalle);
+                            $arCredito->setVrCuota($arCredito->getVrPagar() / $arCredito->getNumeroCuotas() + $douSeguro);
+                        }    
+
+
+                        if ($arCredito->getSaldo() <= 0)
+                        {
+                           $arCredito->setEstadoPagado(1); 
+                        }
+                        $arPagoCredito->setSeguro($douSeguro);
+                        $em->persist($arPagoDetalle);
+                        $em->persist($arCredito);
+                    }    
+                                       
+                }
+                 * 
+                 */
+            }
+            $em->flush();                            
+        }
+    }
 }

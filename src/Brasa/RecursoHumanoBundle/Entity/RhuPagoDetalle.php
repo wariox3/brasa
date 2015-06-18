@@ -20,7 +20,12 @@ class RhuPagoDetalle
     /**
      * @ORM\Column(name="codigo_pago_fk", type="integer", nullable=true)
      */    
-    private $codigoPagoFk;      
+    private $codigoPagoFk;
+    
+    /**
+     * @ORM\Column(name="codigo_credito_fk", type="integer", nullable=true)
+     */    
+    private $codigoCreditoFk;
     
     /**
      * @ORM\Column(name="vr_pago", type="float")
@@ -100,6 +105,13 @@ class RhuPagoDetalle
      * @ORM\JoinColumn(name="codigo_programacion_pago_detalle_fk", referencedColumnName="codigo_programacion_pago_detalle_pk")
      */
     protected $programacionPagoDetalleRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCredito", inversedBy="pagosDetallesCreditoRel")
+     * @ORM\JoinColumn(name="codigo_credito_fk", referencedColumnName="codigo_credito_pk")
+     */
+    protected $creditoRel;
+    
     
     /**
      * Get codigoPagoDetallePk
@@ -493,5 +505,53 @@ class RhuPagoDetalle
     public function getProgramacionPagoDetalleRel()
     {
         return $this->programacionPagoDetalleRel;
+    }
+
+    /**
+     * Set codigoCreditoFk
+     *
+     * @param integer $codigoCreditoFk
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setCodigoCreditoFk($codigoCreditoFk)
+    {
+        $this->codigoCreditoFk = $codigoCreditoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCreditoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCreditoFk()
+    {
+        return $this->codigoCreditoFk;
+    }
+
+    /**
+     * Set creditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditoRel
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditoRel = null)
+    {
+        $this->creditoRel = $creditoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get creditoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCredito
+     */
+    public function getCreditoRel()
+    {
+        return $this->creditoRel;
     }
 }

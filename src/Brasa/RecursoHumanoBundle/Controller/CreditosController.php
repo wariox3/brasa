@@ -203,16 +203,17 @@ class CreditosController extends Controller
             $arCredito = $form->getData();
             $douVrPagar = $form->get('vrPagar')->getData();
             $intCuotas = $form->get('numeroCuotas')->getData();
-            $seguro = $form->get('seguro')->getData();
+            $vrSeguro = $form->get('seguro')->getData();
             if ($PeriodoPago == "MENSUAL"){
-                $seguro = $seguro * 2;
+                $vrSeguro = $vrSeguro * 2;
             }
             if ($PeriodoPago == "SEMANAL"){
-                $seguro = $seguro / 2;
+                $vrSeguro = $vrSeguro / 2;
             }
-            $saldot = $douVrPagar + $seguro;
-            $douVrCuota = $douVrPagar / $intCuotas + $seguro;
+            $vrSaltoTotal = $douVrPagar + $vrSeguro;
+            $douVrCuota = $douVrPagar / $intCuotas + $vrSeguro;
             $arCredito->setVrCuota($douVrCuota);
+            $arCredito->setVrCuotaTemporal($douVrCuota);
             $arSeleccion = $request->request->get('ChkSeleccionar');
             if ($arSeleccion == "")
             {
@@ -223,7 +224,8 @@ class CreditosController extends Controller
                 $arCredito->setTipoPago('NOMINA');
             }    
             $arCredito->setFecha(new \DateTime('now'));
-            $arCredito->setSaldo($saldot);
+            $arCredito->setSaldo($vrSaltoTotal);
+            $arCredito->setSaldoTemporal($vrSaltoTotal);
             $arCredito->setNumeroCuotaActual(0);
             $arCredito->setEmpleadoRel($arEmpleado);
             $em->persist($arCredito);
