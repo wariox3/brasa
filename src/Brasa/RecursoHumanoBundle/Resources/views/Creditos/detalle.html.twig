@@ -95,7 +95,7 @@
         <div class="btn-toolbar" style="float: right">
             <div class="btn-toolbar" style="float: right">
                 <div class="btn-group">
-                    {% if arCreditos.aprobado == 0 or arCreditos.estadoPagado == 1 %} <a class="btn btn-default btn-sm" href="#">Nuevo</a> {% else %}
+                    {% if arCreditos.aprobado == 0 or arCreditos.estadoPagado == 1 %} <a class="btn btn-default btn-sm" href="">Nuevo</a> {% else %}
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_credito_nuevo_detalle', { 'codigoCreditoPk': arCreditos.codigoCreditoPk}) }}', 'AgregarCredito', 600, 900)" style="float:left">Nuevo</a>
                     {% endif%}
                                             

@@ -265,11 +265,17 @@ class UtilidadesPagosController extends Controller
                                 foreach ($arCreditos as $arCredito) {
                                     $arCreditoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                                     $arCreditoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCredito->getCodigoCreditoPk());
-                                    if ($arCreditoProcesar->getSaltoTotal() > $arCreditoProcesar->getVrCuota()){
-                                        $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $arCreditoProcesar->getVrCuota());
+                                    $douCuota = 0;
+                                    if ($arCreditoProcesar->getSaldoTotal() >= $arCreditoProcesar->getVrCuota()){
+                                        $douCuota = $arCreditoProcesar->getVrCuota();                                        
                                     }
-                                    $arCreditoProcesar->setVrSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());
-                                    
+                                    else {
+                                        $douCuota = $arCreditoProcesar->getvrCuota() - $arCreditoProcesar->getSaldoTotal();                                         
+                                    }
+                                    $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $douCuota);
+                                    $arCreditoProcesar->setSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());
+                                    $em->persist($arCreditoProcesar);
+
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
                                     $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCredito);
@@ -278,7 +284,8 @@ class UtilidadesPagosController extends Controller
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
-                                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                                    
+                                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                                    $arPagoDetalle->setCreditoRel($arCredito);
                                 }
                                 
                                 
