@@ -225,7 +225,7 @@ class CreditosController extends Controller
             }    
             $arCredito->setFecha(new \DateTime('now'));
             $arCredito->setSaldo($vrSaltoTotal);
-            $arCredito->setSaldoTemporal($vrSaltoTotal);
+            $arCredito->setSaldoTotal($vrSaltoTotal);
             $arCredito->setNumeroCuotaActual(0);
             $arCredito->setEmpleadoRel($arEmpleado);
             $em->persist($arCredito);

@@ -263,6 +263,12 @@ class UtilidadesPagosController extends Controller
                                 $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                                 $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'estadoPagado' => 0));
                                 foreach ($arCreditos as $arCredito) {
+                                    $arCreditoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                                    $arCreditoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCredito->getCodigoCreditoPk());
+                                    if ($arCreditoProcesar->getSaltoTotal() > $arCreditoProcesar->getVrCuota()){
+                                        $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $arCreditoProcesar->getVrCuota());
+                                    }
+                                    $arCreditoProcesar->setVrSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());
                                     
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
