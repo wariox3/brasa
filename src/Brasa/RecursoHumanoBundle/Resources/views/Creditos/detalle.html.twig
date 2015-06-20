@@ -28,7 +28,7 @@
                         <th class="td-label">VALOR CREDITO:</th>
                         <td class="td-in-well" align="right">{{ arCreditos.vrPagar | number_format(2, '.', ',')}}</td>
                         <th class="td-label">VALOR CUOTA:</th>
-                        <td class="td-in-well" align="right">{{ (arCreditos.vrCuota - arCreditos.Seguro) | number_format(2, '.', ',')}}</td>
+                        <td class="td-in-well" align="right">{{ arCreditos.vrCuota | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <th class="td-label">NUMERO CUOTAS:</th>
@@ -71,8 +71,6 @@
                     <tr>
                         <th>CODIGO PAGO</th>
                         <th>TIPO PAGO</th>
-                        <th style="text-align: right">VR. CUOTA</th>
-                        <th style="text-align: right">VR. SEGURO</th>
                         <th style="text-align: right">VR. PAGO</th>
                         <th>PERIODO DESDE</th>
                         <th>PERIODO HASTA</th>
@@ -82,8 +80,6 @@
                         <tr>
                             <td>{{ arCreditoPago.codigoPagoCreditoPk  }}</td>
                             <td>{{ arCreditoPago.tipoPago  }}</td>
-                            <td style="text-align: right">{{ ((arCreditoPago.VrCuota - arCreditoPago.Seguro) | number_format(2, '.', ',')) }}</td>
-                            <td style="text-align: right">{{ arCreditoPago.Seguro | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditoPago.VrCuota | number_format(2, '.', ',') }}</td>
                             <td>{{ arCreditoPago.pagoRel.fechaDesde | default('') |date("Y/m/d")  }}</td>
                             <td>{{ arCreditoPago.pagoRel.fechaHasta | default('') |date("Y/m/d") }}</td>

@@ -120,8 +120,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $arPagoAdicionalActualizar->setProgramacionPagoRel(null);
             $em->persist($arPagoAdicionalActualizar);
         }
-
-        //Devolver creditos
         
         //Eliminar pagos
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -129,18 +127,15 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         foreach ($arPagos as $arPago) {
             $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
             $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));
-            foreach ($arPagosDetalles as $arPagoDetalle) {                
+            foreach ($arPagosDetalles as $arPagoDetalle) {  
                 //Desahacer creditos
-                /*$arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arPagoDetalle->getCodigoEmpleadoFk(), 'estadoPagado' => 0));
-                foreach ($arCreditos as $arCredito) {
+                if($arPagoDetalle->getCodigoCreditoFk() != "" && $arPagoDetalle->getCodigoPagoConceptoFk() == 14) {
                     $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                    $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCreditos->getCodigoCreditoPk());
-                    $arCredito->setVrSaldoTotal($arCredito->getSaldoTotal() + $arCredito->getVrCuotaTemporal());
-                    $arCredito->setVrCuotaTemporal($arCredito->getVrCuotaTemporal() - $arCredito->getVrCuota());
-                    $em->persist($arCredito);
-                }*/
-                //fin Deshacer creditos
+                    $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalle->getCodigoCreditoFk());
+                    $arCredito->setVrCuotaTemporal($arCredito->getVrCuotaTemporal() - $arPagoDetalle->getVrPago());
+                    $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());
+                    $em->persist($arCredito);                                        
+                }   
                 $em->remove($arPagoDetalle);
             }
             $em->remove($arPago);
@@ -252,42 +247,34 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             foreach ($arrSeleccionados AS $codigoProgramacionPago) {
                 $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                 $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                $arProgramacionPagoProcesar->setEstadoPagado(1);
-                $em->persist($arProgramacionPagoProcesar);
                 $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->pagosDetallesProgramacionPago($codigoProgramacionPago);                              
-                
-                foreach ($arPagosDetalles AS $arPagoDetalle) {                    
-                    $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                    $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalle->getCodigoCreditoFk());
-                    $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
-                    //se guarda el pago en la tabla rhu_pago_credito
-                    $arPagoCredito->setCreditoRel($arCredito);
-                    $arPagoCredito->setPagoRel($arPagoDetalle->getPagoRel());
-                    $arPagoCredito->setfechaPago(new \ DateTime("now"));
-                    $arPagoCredito->setSeguro($douSeguro);    
-                    $arPagoCredito->setTipoPago("NOMINA");                       
-                    if ($arCredito->getEstadoPagado() == 0 && $arCredito->getAprobado() == 1 && $arCredito->getEstadoSuspendido() == 0) {                            
-                        //Actualizar el saldo del credito    
-                        $douSeguro = $arCredito->getSeguro();                        
-                        $arCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
-                        if ($arCredito->getSaltoTotal() >= $arCreditoProcesar->getVrCuota()){
-                            $arCredito->setSaldo($arCredito->getSaltoTotal());
-                            $arPagoCredito->setVrCuota($arCredito->getVrCuota());
-                            $arCredito->setVrCuotaTemporal(0);        
-                        } else {
-                            $arCredito->setSaldo($arCredito->getSaldoTotal());         
-                            $arCredito->setVrCuota($arCredito->getVrPagar() / $arCredito->getNumeroCuotas() + $douSeguro);
-                            $arPagoCredito->setvrCuota($arCredito->getVrCuotaTemporal());    
-                          }
-                        if ($arCredito->getSaldo() <= 0)
-                        {
+                $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->pagosDetallesProgramacionPago($codigoProgramacionPago);                                              
+                foreach ($arPagosDetalles AS $arPagoDetalle) { 
+                    if($arPagoDetalle->getCodigoCreditoFk() != "" && $arPagoDetalle->getCodigoPagoConceptoFk() == 14) {
+                        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalle->getCodigoCreditoFk());                                                
+                        
+                        //Crear credito pago se guarda el pago en la tabla rhu_pago_credito
+                        $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();                        
+                        $arPagoCredito->setCreditoRel($arCredito);
+                        $arPagoCredito->setPagoRel($arPagoDetalle->getPagoRel());
+                        $arPagoCredito->setfechaPago(new \ DateTime("now"));    
+                        $arPagoCredito->setTipoPago("NOMINA");                                               
+                        $arPagoCredito->setVrCuota($arPagoDetalle->getVrPago());
+                        $em->persist($arPagoCredito);
+                        //Actualizar el saldo del credito                            
+                        $arCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);                                                
+                        $arCredito->setSaldo($arCredito->getSaldo() - $arPagoDetalle->getVrPago());                        
+                        $arCredito->setVrCuotaTemporal($arCredito->getVrCuotaTemporal() - $arPagoDetalle->getVrPago());
+                        $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());                                                                                                
+                        if($arCredito->getSaldo() <= 0) {
                            $arCredito->setEstadoPagado(1); 
                         }  
-                        $em->persist($arCredito);
-                    }                  
+                        $em->persist($arCredito);                                                                 
+                    }                                        
                 }
-                 
+                $arProgramacionPagoProcesar->setEstadoPagado(1);
+                $em->persist($arProgramacionPagoProcesar);
             }
             $em->flush();                            
         }
