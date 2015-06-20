@@ -51,7 +51,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "VALOR CUOTA:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 6, number_format($arDetallePago->getVrCuota() - $arDetallePago->getSeguro(), 2, '.', ',') , 1, 0, 'R', 1);
+        $this->Cell(65, 6, number_format($arDetallePago->getVrCuota(), 2, '.', ',') , 1, 0, 'R', 1);
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "NUMERO CUOTAS:" , 1, 0, 'L', 1);
@@ -79,9 +79,9 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         }    
         $this->SetXY(10, 55);
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 6, "TIPO PAGO:" , 1, 0, 'L', 1);
+        $this->Cell(30, 6, "SALDO TEMPORAL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 6, $arDetallePago->getTipoPago() , 1, 0, 'L', 1);
+        $this->Cell(65, 6, $arDetallePago->getSaldoTotal() , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "APROBADO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -95,20 +95,37 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         }
         $this->SetXY(10, 60);
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 6, "COMENTARIOS:" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(65, 6, $arDetallePago->getComentarios() , 1, 0, 'L', 1);
+        $this->Cell(30, 6, "TIPO PAGO:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(65, 6, $arDetallePago->getTipoPago(), 1, 0, 'R', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, "SUSPENDIDO:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        if ($arDetallePago->getEstadoSuspendido()== 1)
+        {    
+            $this->Cell(65, 6, "SI" , 1, 0, 'L', 1);
+        }
+        else
+        {
+            $this->Cell(65, 6, "NO" , 1, 0, 'L', 1);
+        }
+        $this->SetXY(10, 65);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "SEGURO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(65, 6, number_format($arDetallePago->getSeguro(), 2, '.', ','),1, 0, 'R', 1);
-        
+        $this->Cell(95, 6, "" , 1, 0, 'L', 1);
+        $this->SetXY(10, 70);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 5, "COMENTARIOS:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        $this->Cell(160, 5, $arDetallePago->getComentarios() , 1, 0, 'L', 1);
         $this->EncabezadoDetalles();
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(12);
-        $header = array('CODIGO PAGO', 'TIPO PAGO', 'VR. CUOTA', 'VR. SEGURO', 'VR. PAGO', 'FECHA PAGO');
+        $header = array('CODIGO PAGO', 'TIPO PAGO', 'VR. PAGO', 'PERIODO DESDE', 'PERIODO HASTA','FECHA PAGO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -137,10 +154,10 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 8);
         foreach ($arCreditoPagos as $arCreditoPago) {            
             $pdf->Cell(25, 4, $arCreditoPago->getCodigoPagoCreditoPk(), 1, 0, 'L');
-            $pdf->Cell(45, 4, $arCreditoPago->getTipoPago(), 1, 0, 'C');
-            $pdf->Cell(30, 4, number_format($arCreditoPago->getVrCuota() - $arCreditoPago->getSeguro(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(30, 4, number_format($arCreditoPago->getSeguro(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(45, 4, $arCreditoPago->getTipoPago(), 1, 0, 'L');
             $pdf->Cell(30, 4, number_format($arCreditoPago->getVrCuota(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaDesde()->setDate('Y/m/d'), 1, 0, 'R');
+            //$pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaHasta()->format('Y/m/d'), 1, 0, 'R');
             $pdf->Cell(30, 4, $arCreditoPago->getFechaPago()->format('Y/m/d'), 1, 0, 'C');
             
             $pdf->Ln();

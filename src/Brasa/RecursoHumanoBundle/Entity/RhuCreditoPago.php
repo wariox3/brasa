@@ -32,10 +32,6 @@ class RhuCreditoPago
      */
     private $vrCuota = 0;
     
-    /**
-     * @ORM\Column(name="seguro", type="float")
-     */
-    private $seguro = 0;
     
     /**
      * @ORM\Column(name="fecha_pago", type="date")
@@ -58,6 +54,7 @@ class RhuCreditoPago
      * @ORM\JoinColumn(name="codigo_pago_fk", referencedColumnName="codigo_pago_pk")
      */
     protected $pagoRel;
+
 
 
     /**
@@ -92,6 +89,30 @@ class RhuCreditoPago
     public function getCodigoCreditoFk()
     {
         return $this->codigoCreditoFk;
+    }
+
+    /**
+     * Set codigoPagoFk
+     *
+     * @param integer $codigoPagoFk
+     *
+     * @return RhuCreditoPago
+     */
+    public function setCodigoPagoFk($codigoPagoFk)
+    {
+        $this->codigoPagoFk = $codigoPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoFk()
+    {
+        return $this->codigoPagoFk;
     }
 
     /**
@@ -167,30 +188,6 @@ class RhuCreditoPago
     }
 
     /**
-     * Set seguro
-     *
-     * @param float $seguro
-     *
-     * @return RhuCreditoPago
-     */
-    public function setSeguro($seguro)
-    {
-        $this->seguro = $seguro;
-
-        return $this;
-    }
-
-    /**
-     * Get seguro
-     *
-     * @return float
-     */
-    public function getSeguro()
-    {
-        return $this->seguro;
-    }
-
-    /**
      * Set creditoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditoRel
@@ -212,30 +209,6 @@ class RhuCreditoPago
     public function getCreditoRel()
     {
         return $this->creditoRel;
-    }
-
-    /**
-     * Set codigoPagoFk
-     *
-     * @param integer $codigoPagoFk
-     *
-     * @return RhuCreditoPago
-     */
-    public function setCodigoPagoFk($codigoPagoFk)
-    {
-        $this->codigoPagoFk = $codigoPagoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPagoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPagoFk()
-    {
-        return $this->codigoPagoFk;
     }
 
     /**

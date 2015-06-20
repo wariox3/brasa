@@ -210,8 +210,8 @@ class CreditosController extends Controller
             if ($PeriodoPago == "SEMANAL"){
                 $vrSeguro = $vrSeguro / 2;
             }
-            $vrSaltoTotal = $douVrPagar + $vrSeguro;
-            $douVrCuota = $douVrPagar / $intCuotas + $vrSeguro;
+            $vrSaltoTotal = $douVrPagar;
+            $douVrCuota = $douVrPagar / $intCuotas;
             $arCredito->setVrCuota($douVrCuota);
             $arCredito->setVrCuotaTemporal($douVrCuota);
             $arSeleccion = $request->request->get('ChkSeleccionar');
@@ -287,15 +287,13 @@ class CreditosController extends Controller
             $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
             $saldoA = $arCredito->getSaldo();
             $Abono = $form->get('vrAbono')->getData();
-            if ($Abono > $saldoA)
-            {
+            
+            if ($Abono > $arCredito->getSaldoTotal()){
                 $mensaje = "El abono no puede ser superior al saldo!";
-            }
-            else
-            {    
+            } else {    
                 $arCredito->setSaldo($saldoA - $Abono);
-                if ($arCredito->getSaldo() <= 0)
-                {
+                $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());
+                if ($arCredito->getSaldo() <= 0){
                    $arCredito->setEstadoPagado(1); 
                 }
                 $nroACuotas = $arCredito->getNumeroCuotaActual();
@@ -305,17 +303,9 @@ class CreditosController extends Controller
                 $arPagoCredito->setvrCuota($form->get('vrAbono')->getData());
                 $arPagoCredito->setfechaPago(new \ DateTime("now"));    
                 $arPagoCredito->settipoPago('ABONO');
+                $arPagoCredito->setCreditoRel($arCredito);
                 $em->persist($arPagoCredito);
                 $em->persist($arCredito);
-                $em->flush();
-                $arCredito2 = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                $arCredito2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
-                if ($arCredito2->getSaldo() < $arCredito2->getVrCuota())
-                {
-                    $nVrcuota = $arCredito2->getSaldo() + $seguro;
-                    $arCredito2->setVrCuota($nVrcuota);
-                }
-                $em->persist($arCredito2);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>opener.location.reload();</script>";
                 echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";

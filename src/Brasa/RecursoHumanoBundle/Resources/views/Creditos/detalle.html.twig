@@ -43,20 +43,22 @@
                         <td {% if arCreditos.estadoPagado == 1 %} class="success">SI{% else %} <td class="danger"> NO {% endif %}</td>
                     </tr>
                     <tr>
-                        <th class="td-label">TIPO PAGO:</th>
-                        <td class="td-label">{{ arCreditos.tipoPago }}</td>
+                        <th class="td-label">SALDO TEMPORAL:</th>
+                        <td class="td-label" align="right">{{ arCreditos.saldoTotal | number_format(2, '.', ',')}}</td>
                         <th class="td-label">APROBADO:</th>
                         <td {% if arCreditos.aprobado == 0 %} class="danger"> NO {% else %} <td class="success"> SI {% endif %} </td>
                     </tr>
                     <tr>
-                        <th class="td-label">SEGURO:</th>
-                        <td class="td-label" align="right">{{ arCreditos.seguro | number_format(2, '.', ',')}}</td>
+                        <th class="td-label">TIPO PAGO:</th>
+                        <td class="td-label">{{ arCreditos.tipoPago }}</td>
                         <th class="td-label">SUSPENDIDO:</th>
                         <td {% if arCreditos.estadoSuspendido == 0 %} class="danger"> NO {% else %} <td class="success"> SI {% endif %} </td>
                     </tr>
                     <tr>
                         <th>COMENTARIOS:</th>
-                        <td class="td-label" colspan="3">{{ arCreditos.comentarios }}</td>
+                        <td class="td-label">{{ arCreditos.comentarios }}</td>
+                        <th class="td-label">SEGURO:</th>
+                        <td class="td-label" align="right">{{ arCreditos.seguro | number_format(2, '.', ',')}}</td>
                     </tr>
                 </table>
             </div>
