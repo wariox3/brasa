@@ -131,6 +131,9 @@ class ContratosController extends Controller
             $arLiquidacion->setContratoRel($arContrato);
             $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
             $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
+            $arLiquidacion->setLiquidarCesantias(1);
+            $arLiquidacion->setLiquidarPrima(1);
+            $arLiquidacion->setLiquidarVacaciones(1);
             $em->persist($arLiquidacion);
             $em->flush();
             //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";

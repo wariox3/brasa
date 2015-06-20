@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 
 class SeguridadSocialPeriodosController extends Controller
 {
+    var $strDqlLista = "";
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
@@ -16,24 +17,26 @@ class SeguridadSocialPeriodosController extends Controller
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
             ->getForm();
         $form->handleRequest($request);        
+        $this->listar();
         if($form->isValid()) {            
             if($form->get('BtnGenerar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoPeriodo) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuSeguridadSocialPeriodo')->generar($codigoPeriodo);
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuSSPeriodo')->generar($codigoPeriodo);
                     }
                 }                
             }            
-        }
-        $session->set('dqlSeguridadSocialPeriodo', $em->getRepository('BrasaRecursoHumanoBundle:RhuSeguridadSocialPeriodo')->listaDQL(
-                ));            
-        
-        $query = $em->createQuery($session->get('dqlSeguridadSocialPeriodo'));        
-        $arSeguridadSocialPeriodos = $paginator->paginate($query, $request->query->get('page', 1), 50);                               
+        }                            
+        $arSSPeriodos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:lista.html.twig', array(
-            'arSeguridadSocialPeriodos' => $arSeguridadSocialPeriodos,
+            'arSSPeriodos' => $arSSPeriodos,
             'form' => $form->createView()));
-    }       
+    } 
+    
+    private function listar() {
+        $em = $this->getDoctrine()->getManager();
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSSPeriodo')->listaDQL();  
+    }         
 
 }

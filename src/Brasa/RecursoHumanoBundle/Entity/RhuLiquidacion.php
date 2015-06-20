@@ -107,6 +107,21 @@ class RhuLiquidacion
      */    
     private $diasAdicionalesIBC = 0;            
     
+    /**     
+     * @ORM\Column(name="liquidar_cesantias", type="boolean")
+     */    
+    private $liquidarCesantias = 0;
+
+    /**     
+     * @ORM\Column(name="liquidar_vacaciones", type="boolean")
+     */    
+    private $liquidarVacaciones = 0;    
+
+    /**     
+     * @ORM\Column(name="liquidar_prima", type="boolean")
+     */    
+    private $liquidarPrima = 0;        
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -640,5 +655,77 @@ class RhuLiquidacion
     public function getDiasAdicionalesIBC()
     {
         return $this->diasAdicionalesIBC;
+    }
+
+    /**
+     * Set liquidarCesantias
+     *
+     * @param boolean $liquidarCesantias
+     *
+     * @return RhuLiquidacion
+     */
+    public function setLiquidarCesantias($liquidarCesantias)
+    {
+        $this->liquidarCesantias = $liquidarCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarCesantias
+     *
+     * @return boolean
+     */
+    public function getLiquidarCesantias()
+    {
+        return $this->liquidarCesantias;
+    }
+
+    /**
+     * Set liquidarVacaciones
+     *
+     * @param boolean $liquidarVacaciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setLiquidarVacaciones($liquidarVacaciones)
+    {
+        $this->liquidarVacaciones = $liquidarVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarVacaciones
+     *
+     * @return boolean
+     */
+    public function getLiquidarVacaciones()
+    {
+        return $this->liquidarVacaciones;
+    }
+
+    /**
+     * Set liquidarPrima
+     *
+     * @param boolean $liquidarPrima
+     *
+     * @return RhuLiquidacion
+     */
+    public function setLiquidarPrima($liquidarPrima)
+    {
+        $this->liquidarPrima = $liquidarPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarPrima
+     *
+     * @return boolean
+     */
+    public function getLiquidarPrima()
+    {
+        return $this->liquidarPrima;
     }
 }

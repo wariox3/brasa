@@ -56,6 +56,14 @@
                         <td align="right">$ {{ arLiquidacion.vrVacaciones | number_format(2, '.', ',') }}</td>                   
                     </tr>                                                 
                     <tr>
+                        <td class="titulo">IBC DIAS ADICIONALES:</td>
+                        <td align="right">{{ arLiquidacion.VrIngresoBaseCotizacionAdicional | number_format(2, '.', ',') }}</td>
+                        <td class="titulo">DIAS ADICIONALES:</td>
+                        <td align="right">{{ arLiquidacion.diasAdicionalesIBC }}</td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>                   
+                    </tr>                    
+                    <tr>
                         <td colspan="8">COMENTARIOS: {{ arLiquidacion.comentarios }}</td>
                     </tr>
                 </table>

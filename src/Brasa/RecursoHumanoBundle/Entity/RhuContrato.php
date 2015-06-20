@@ -110,7 +110,7 @@ class RhuContrato
     /**
      * @ORM\Column(name="fecha_ultimo_pago_primas", type="date", nullable=true)
      */    
-    private $fechaUltimoPagoPrimas;    
+    private $fechaUltimoPagoPrimas;        
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
@@ -159,13 +159,19 @@ class RhuContrato
      */
     protected $liquidacionesContratoRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSSPeriodoDetalle", mappedBy="contratoRel")
+     */
+    protected $SSPeriodosDetallesContratoRel;      
 
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->liquidacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->SSPeriodosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -834,5 +840,39 @@ class RhuContrato
     public function getLiquidacionesContratoRel()
     {
         return $this->liquidacionesContratoRel;
+    }
+
+    /**
+     * Add sSPeriodosDetallesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addSSPeriodosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesContratoRel)
+    {
+        $this->SSPeriodosDetallesContratoRel[] = $sSPeriodosDetallesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove sSPeriodosDetallesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesContratoRel
+     */
+    public function removeSSPeriodosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesContratoRel)
+    {
+        $this->SSPeriodosDetallesContratoRel->removeElement($sSPeriodosDetallesContratoRel);
+    }
+
+    /**
+     * Get sSPeriodosDetallesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSSPeriodosDetallesContratoRel()
+    {
+        return $this->SSPeriodosDetallesContratoRel;
     }
 }

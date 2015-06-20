@@ -323,7 +323,13 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="empleadoRel")
      */
-    protected $disciplinariosEmpleadoRel;     
+    protected $disciplinariosEmpleadoRel;         
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSSPeriodoDetalle", mappedBy="empleadoRel")
+     */
+    protected $SSPeriodosDetallesEmpleadoRel;    
+    
     
     /**
      * Constructor
@@ -337,6 +343,9 @@ class RhuEmpleado
         $this->licenciasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesPagosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->disciplinariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->SSPeriodosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -998,6 +1007,54 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoTipoPensionFk
+     *
+     * @param integer $codigoTipoPensionFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoTipoPensionFk($codigoTipoPensionFk)
+    {
+        $this->codigoTipoPensionFk = $codigoTipoPensionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoPensionFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoPensionFk()
+    {
+        return $this->codigoTipoPensionFk;
+    }
+
+    /**
+     * Set codigoEntidadCajaFk
+     *
+     * @param integer $codigoEntidadCajaFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoEntidadCajaFk($codigoEntidadCajaFk)
+    {
+        $this->codigoEntidadCajaFk = $codigoEntidadCajaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadCajaFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadCajaFk()
+    {
+        return $this->codigoEntidadCajaFk;
+    }
+
+    /**
      * Set estadoActivo
      *
      * @param boolean $estadoActivo
@@ -1382,6 +1439,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set entidadCajaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel = null)
+    {
+        $this->entidadCajaRel = $entidadCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCajaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja
+     */
+    public function getEntidadCajaRel()
+    {
+        return $this->entidadCajaRel;
+    }
+
+    /**
      * Set tipoTiempoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoTiempo $tipoTiempoRel
@@ -1451,6 +1532,30 @@ class RhuEmpleado
     public function getCargoRel()
     {
         return $this->cargoRel;
+    }
+
+    /**
+     * Set tipoPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tipoPensionRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setTipoPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tipoPensionRel = null)
+    {
+        $this->tipoPensionRel = $tipoPensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPensionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension
+     */
+    public function getTipoPensionRel()
+    {
+        return $this->tipoPensionRel;
     }
 
     /**
@@ -1692,102 +1797,6 @@ class RhuEmpleado
     }
 
     /**
-     * Set codigoTipoPensionFk
-     *
-     * @param integer $codigoTipoPensionFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoTipoPensionFk($codigoTipoPensionFk)
-    {
-        $this->codigoTipoPensionFk = $codigoTipoPensionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTipoPensionFk
-     *
-     * @return integer
-     */
-    public function getCodigoTipoPensionFk()
-    {
-        return $this->codigoTipoPensionFk;
-    }
-
-    /**
-     * Set tipoPensionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tipoPensionRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setTipoPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tipoPensionRel = null)
-    {
-        $this->tipoPensionRel = $tipoPensionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoPensionRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension
-     */
-    public function getTipoPensionRel()
-    {
-        return $this->tipoPensionRel;
-    }
-
-    /**
-     * Set codigoEntidadCajaFk
-     *
-     * @param integer $codigoEntidadCajaFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoEntidadCajaFk($codigoEntidadCajaFk)
-    {
-        $this->codigoEntidadCajaFk = $codigoEntidadCajaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoEntidadCajaFk
-     *
-     * @return integer
-     */
-    public function getCodigoEntidadCajaFk()
-    {
-        return $this->codigoEntidadCajaFk;
-    }
-
-    /**
-     * Set entidadCajaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel = null)
-    {
-        $this->entidadCajaRel = $entidadCajaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadCajaRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja
-     */
-    public function getEntidadCajaRel()
-    {
-        return $this->entidadCajaRel;
-    }
-
-    /**
      * Add liquidacionesEmpleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesEmpleadoRel
@@ -1853,5 +1862,39 @@ class RhuEmpleado
     public function getDisciplinariosEmpleadoRel()
     {
         return $this->disciplinariosEmpleadoRel;
+    }
+
+    /**
+     * Add sSPeriodosDetallesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addSSPeriodosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesEmpleadoRel)
+    {
+        $this->SSPeriodosDetallesEmpleadoRel[] = $sSPeriodosDetallesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove sSPeriodosDetallesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesEmpleadoRel
+     */
+    public function removeSSPeriodosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesEmpleadoRel)
+    {
+        $this->SSPeriodosDetallesEmpleadoRel->removeElement($sSPeriodosDetallesEmpleadoRel);
+    }
+
+    /**
+     * Get sSPeriodosDetallesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSSPeriodosDetallesEmpleadoRel()
+    {
+        return $this->SSPeriodosDetallesEmpleadoRel;
     }
 }
