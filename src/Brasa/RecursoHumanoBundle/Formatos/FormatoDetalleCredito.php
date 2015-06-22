@@ -81,7 +81,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "SALDO TEMPORAL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 6, $arDetallePago->getSaldoTotal() , 1, 0, 'L', 1);
+        $this->Cell(65, 6, number_format($arDetallePago->getSaldoTotal() , 2, '.', ','),1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "APROBADO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -125,7 +125,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(12);
-        $header = array('CODIGO PAGO', 'TIPO PAGO', 'VR. PAGO', 'PERIODO DESDE', 'PERIODO HASTA','FECHA PAGO');
+        $header = array('CODIGO PAGO', 'TIPO PAGO', 'PERIODO DESDE', 'PERIODO HASTA','FECHA PAGO', 'VR CUOTA');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -152,18 +152,29 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $arCreditoPagos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => self::$codigoCredito));
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 8);
-        foreach ($arCreditoPagos as $arCreditoPago) {            
+        $douTotal = 0;
+        foreach ($arCreditoPagos as $arCreditoPago) { 
             $pdf->Cell(25, 4, $arCreditoPago->getCodigoPagoCreditoPk(), 1, 0, 'L');
             $pdf->Cell(45, 4, $arCreditoPago->getTipoPago(), 1, 0, 'L');
-            $pdf->Cell(30, 4, number_format($arCreditoPago->getVrCuota(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaDesde()->setDate('Y/m/d'), 1, 0, 'R');
-            //$pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaHasta()->format('Y/m/d'), 1, 0, 'R');
+            if ($arCreditoPago->getCodigoPagoFk() != "") {
+                $pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaDesde()->format('Y/m/d'), 1, 0, 'R');
+                $pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaHasta()->format('Y/m/d'), 1, 0, 'R');
+            }
+            else {
+                $pdf->Cell(30, 4, $arCreditoPago->getFechaPago()->format('Y/m/d'), 1, 0, 'R');
+                $pdf->Cell(30, 4, $arCreditoPago->getFechaPago()->format('Y/m/d'), 1, 0, 'R');
+            }
             $pdf->Cell(30, 4, $arCreditoPago->getFechaPago()->format('Y/m/d'), 1, 0, 'C');
-            
+            $pdf->Cell(30, 4, number_format($arCreditoPago->getVrCuota(), 2, '.', ','), 1, 0, 'R');
+            $douTotal += $arCreditoPago->getVrCuota();
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 33);
-        }        
-    }
+        }
+        $pdf->SetX(10);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->Cell(160, 4, "TOTAL", 1, 0, 'R');
+        $pdf->Cell(30, 4, number_format($douTotal, 2, '.', ','), 1, 0, 'R');
+    }   
 
     public function Footer() {
                 

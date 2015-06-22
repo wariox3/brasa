@@ -159,7 +159,6 @@
                         <th style="text-align: right">VR. CREDITO</th>
                         <th style="text-align: right">VR. CUOTA</th>
                         <th style="text-align: right">VR. SEGURO</th>
-                        <th style="text-align: right">VR. PAGAR</th>
                         <th style="text-align: right">CUOTAS</th>
                         <th style="text-align: right">C. ACTUAL</th>
                         <th style="text-align: center">PAGADO</th>
@@ -174,9 +173,8 @@
                             <td>{{ arCreditos.creditoTipoRel.nombre  }}</td>
                             <td>{{ arCreditos.fecha |date("Y/m/d")  }}</td>
                             <td style="text-align: right">{{ arCreditos.VrPagar | number_format(2, '.', ',') }}</td>
-                            <td style="text-align: right">{{ (arCreditos.VrCuota - arCreditos.Seguro) | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ (arCreditos.VrCuota) | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditos.Seguro | number_format(2, '.', ',') }}</td>
-                            <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditos.numeroCuotas | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditos.numeroCuotaActual | number_format(0, '.', ',') }}</td>
                             <td {% if arCreditos.estadopagado == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>

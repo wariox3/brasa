@@ -271,7 +271,7 @@ class UtilidadesPagosController extends Controller
                                             $douCuota = $arCreditoProcesar->getVrCuota();                                        
                                         }
                                         else {
-                                            $douCuota = $arCreditoProcesar->getvrCuota() - $arCreditoProcesar->getSaldoTotal();                                         
+                                            $douCuota = $arCreditoProcesar->getSaldoTotal();                                         
                                         }
                                         $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $douCuota);
                                         $arCreditoProcesar->setSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());

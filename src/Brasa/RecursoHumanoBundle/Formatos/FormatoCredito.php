@@ -31,7 +31,7 @@ class FormatoCredito extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'TIPO', 'FECHA', 'EMPLEADO', 'VR. CREDITO', 'VR. CUOTA', 'VR. SEGURO', 'VR. PAGAR', 'CUOTAS', 'C. ACTUAL', 'PAGADO', 'APROBADO');
+        $header = array('ID', 'TIPO', 'FECHA', 'EMPLEADO', 'VR. CREDITO', 'VR. CUOTA', 'VR. SEGURO', 'CUOTAS', 'C. ACTUAL', 'PAGADO', 'APROBADO', 'SUSPENDIDO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -39,7 +39,7 @@ class FormatoCredito extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(14, 53, 17, 70, 19, 16, 17, 16, 14, 15, 16,16);
+        $w = array(14, 53, 17, 70, 19, 16, 17, 14, 15, 16,16,16);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -64,9 +64,8 @@ class FormatoCredito extends \FPDF_FPDF {
             $pdf->Cell(17, 4, $arCredito->getFecha()->format('Y/m/d'), 1, 0, 'C');
             $pdf->Cell(70, 4, $arCredito->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');
             $pdf->Cell(19, 4, number_format($arCredito->getVrPagar(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(16, 4, number_format($arCredito->getVrCuota() - $arCredito->getSeguro(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(17, 4, number_format($arCredito->getSeguro(), 2, '.', ','), 1, 0, 'R');
             $pdf->Cell(16, 4, number_format($arCredito->getVrCuota(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(17, 4, number_format($arCredito->getSeguro(), 2, '.', ','), 1, 0, 'R');
             $pdf->Cell(14, 4, $arCredito->getNumeroCuotas(), 1, 0, 'R');
             $pdf->Cell(15, 4, $arCredito->getNumeroCuotaActual(), 1, 0, 'R');
             if ($arCredito->getEstadoPagado() == 1)
@@ -84,7 +83,15 @@ class FormatoCredito extends \FPDF_FPDF {
             else
             {
                 $pdf->Cell(16, 4, "NO", 1, 0, 'L');
-            }    
+            }
+            if ($arCredito->getEstadoSuspendido() == 1)
+            {    
+                $pdf->Cell(16, 4, "SI", 1, 0, 'L');
+            }
+            else
+            {
+                $pdf->Cell(16, 4, "NO", 1, 0, 'L');
+            }
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 33);
         }        

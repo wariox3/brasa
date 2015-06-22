@@ -104,11 +104,11 @@ class CreditosController extends Controller
                             ->setCellValue('E1', 'Valor_Credito')
                             ->setCellValue('F1', 'Valor_Cuota')
                             ->setCellValue('G1', 'Valor_Seguro')
-                            ->setCellValue('H1', 'Valor_Pagar')
-                            ->setCellValue('I1', 'Cuotas')
-                            ->setCellValue('J1', 'Cuota_Actual')
-                            ->setCellValue('K1', 'Pagado')
-                            ->setCellValue('L1', 'Aprobado');
+                            ->setCellValue('H1', 'Cuotas')
+                            ->setCellValue('I1', 'Cuota_Actual')
+                            ->setCellValue('J1', 'Pagado')
+                            ->setCellValue('K1', 'Aprobado')
+                            ->setCellValue('L1', 'Suspendido');
 
                 $i = 2;
                 $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findAll();
@@ -130,19 +130,27 @@ class CreditosController extends Controller
                     {
                         $Aprobado = "NO"; 
                     }
+                    if ($arCredito->getEstadoSuspendido() == 1)
+                    {
+                        $Suspendido = "SI";
+                    }
+                    else
+                    {
+                        $Suspendido = "NO"; 
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
                             ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
                             ->setCellValue('C' . $i, $arCredito->getFecha())
                             ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('E' . $i, $arCredito->getVrPagar())
-                            ->setCellValue('F' . $i, $arCredito->getVrCuota() - $arCredito->getSeguro())
+                            ->setCellValue('F' . $i, $arCredito->getVrCuota())
                             ->setCellValue('G' . $i, $arCredito->getSeguro())
-                            ->setCellValue('H' . $i, $arCredito->getVrCuota())
-                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotas())
-                            ->setCellValue('J' . $i, $arCredito->getNumeroCuotaActual())
-                            ->setCellValue('K' . $i, $Estado)
-                            ->setCellValue('L' . $i, $Aprobado);
+                            ->setCellValue('H' . $i, $arCredito->getNumeroCuotas())
+                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotaActual())
+                            ->setCellValue('J' . $i, $Estado)
+                            ->setCellValue('K' . $i, $Aprobado)
+                            ->setCellValue('L' . $i, $Suspendido);
                     $i++;
                 }
 
@@ -204,12 +212,6 @@ class CreditosController extends Controller
             $douVrPagar = $form->get('vrPagar')->getData();
             $intCuotas = $form->get('numeroCuotas')->getData();
             $vrSeguro = $form->get('seguro')->getData();
-            if ($PeriodoPago == "MENSUAL"){
-                $vrSeguro = $vrSeguro * 2;
-            }
-            if ($PeriodoPago == "SEMANAL"){
-                $vrSeguro = $vrSeguro / 2;
-            }
             $vrSaltoTotal = $douVrPagar;
             $douVrCuota = $douVrPagar / $intCuotas;
             $arCredito->setVrCuota($douVrCuota);

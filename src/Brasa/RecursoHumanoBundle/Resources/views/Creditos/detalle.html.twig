@@ -73,19 +73,19 @@
                     <tr>
                         <th>CODIGO PAGO</th>
                         <th>TIPO PAGO</th>
-                        <th style="text-align: right">VR. PAGO</th>
                         <th>PERIODO DESDE</th>
                         <th>PERIODO HASTA</th>
                         <th>FECHA PAGO</th>
+                        <th style="text-align: right">VR. CUOTA</th>
                     </tr>
                     {% for arCreditoPago in arCreditoPago %}
                         <tr>
                             <td>{{ arCreditoPago.codigoPagoCreditoPk  }}</td>
                             <td>{{ arCreditoPago.tipoPago  }}</td>
-                            <td style="text-align: right">{{ arCreditoPago.VrCuota | number_format(2, '.', ',') }}</td>
                             <td>{{ arCreditoPago.pagoRel.fechaDesde | default('') |date("Y/m/d")  }}</td>
                             <td>{{ arCreditoPago.pagoRel.fechaHasta | default('') |date("Y/m/d") }}</td>
                             <td>{{ arCreditoPago.fechaPago |date("Y/m/d")  }}</td>
+                            <td style="text-align: right">{{ arCreditoPago.VrCuota | number_format(2, '.', ',') }}</td>
                         </tr>
                     {% endfor %}
                 </table>
