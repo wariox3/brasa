@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuCreditoRepository extends EntityRepository {
     
-    public function listaDQL($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "") {        
+    public function listaDQL($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuCredito c JOIN c.empleadoRel e WHERE c.codigoCreditoPk <> 0 AND c.estadoPagado <> 1 AND c.aprobado <> 0";
         if($intNumero != "" && $intNumero != 0) {
@@ -22,9 +22,24 @@ class RhuCreditoRepository extends EntityRepository {
         }   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
-        }        
+        }
+        if ($strDesde != ""){
+            $dql .= " AND c.fecha >='" . $strDesde . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND c.fecha <='" . $strHasta . "'";
+        }
+        
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
+    }
+    
+    public function fechaAntigua() {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT min(c.fecha) FROM BrasaRecursoHumanoBundle:RhuCredito c WHERE c.estadoPagado <> 1 AND c.aprobado <> 0";
+        $query = $em->createQuery($dql);
+        $fechaAntigua = $query->getSingleScalarResult(); 
+        return $fechaAntigua;
     }
 
 }

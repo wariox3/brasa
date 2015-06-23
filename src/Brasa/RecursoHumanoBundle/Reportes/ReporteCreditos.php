@@ -28,18 +28,17 @@ class ReporteCreditos extends \FPDF_FPDF {
         $this->EncabezadoDetalles();
         
     }
-
     public function EncabezadoDetalles() {
         
-        $header = array('IDENTIFICACION', 'EMPLEADO', 'FECHA','VR. CREDITO', 'VR. CUOTA', 'VR. SALDO');
+        $header = array('IDENTIFICACION', 'EMPLEADO', 'FECHA','VR. CREDITO', 'VR. CUOTA', 'VR. SALDO', 'CUOTA', 'C. ACTUAL');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('', 'B', 7);
+        $this->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(25, 80, 20, 20, 20, 20);
+        $w = array(20, 70, 15, 20, 15, 20, 12, 13);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -59,25 +58,28 @@ class ReporteCreditos extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arCreditos as $arCredito) {            
-            $pdf->Cell(25, 4, $arCredito->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(80, 4, $arCredito->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');            
-            $pdf->Cell(20, 4, $arCredito->getFecha()->format('y-m-d'), 1, 0, 'L');            
-            $pdf->Cell(20, 4, number_format($arCredito->getVrPagar(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(20, 4, number_format($arCredito->getVrCuota(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(20, 4, number_format($arCredito->getSaldo(), 0, '.', ','), 1, 0, 'R');                
+            $pdf->Cell(20, 4, $arCredito->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(70, 4, $arCredito->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');            
+            $pdf->Cell(15, 4, $arCredito->getFecha()->format('Y/m/d'), 1, 0, 'L');            
+            $pdf->Cell(20, 4, number_format($arCredito->getVrPagar(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(15, 4, number_format($arCredito->getVrCuota(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(20, 4, number_format($arCredito->getSaldo(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, $arCredito->getNumeroCuotas(), 1, 0, 'L');
+            $pdf->Cell(13, 4, $arCredito->getNumeroCuotaActual(), 1, 0, 'L');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 33);
             $douTotalSaldo += $arCredito->getSaldo();
         }    
-        $pdf->Cell(25, 4, "", 1, 0, 'L');
-        $pdf->Cell(80, 4, "", 1, 0, 'L');            
-        $pdf->Cell(20, 4, "", 1, 0, 'L');            
+        $pdf->Cell(20, 4, "", 1, 0, 'L');
+        $pdf->Cell(70, 4, "", 1, 0, 'L');            
+        $pdf->Cell(15, 4, "", 1, 0, 'L');            
+        $pdf->Cell(20, 4, "", 1, 0, 'L');
+        $pdf->Cell(15, 4, "", 1, 0, 'L');
         $pdf->Cell(20, 4, number_format($douTotalSaldo, 2, '.', ','), 1, 0, 'R');
-        $pdf->Cell(20, 4, "", 1, 0, 'L');                
-        $pdf->Cell(20, 4, "", 1, 0, 'L');                
+        $pdf->Cell(12, 4, "", 1, 0, 'L');
+        $pdf->Cell(13, 4, "", 1, 0, 'L');
         $pdf->Ln();        
     }
-
     public function Footer() {
         $this->SetFont('Arial','B', 9);    
         $this->Line(30, 271, 100, 271);        
