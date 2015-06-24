@@ -91,11 +91,21 @@ class RhuLiquidacion
      * @ORM\Column(name="dias_primas", type="integer")
      */    
     private $diasPrimas = 0;        
+
+    /**
+     * @ORM\Column(name="dias_laborados", type="integer")
+     */    
+    private $diasLaborados = 0;    
     
     /**
      * @ORM\Column(name="fecha_ultimo_pago", type="date", nullable=true)
      */    
     private $fechaUltimoPago;    
+
+    /**
+     * @ORM\Column(name="vr_ingreso_base_cotizacion", type="float")
+     */
+    private $VrIngresoBaseCotizacion = 0;     
     
     /**
      * @ORM\Column(name="vr_ingreso_base_cotizacion_adicional", type="float")
@@ -103,9 +113,39 @@ class RhuLiquidacion
     private $VrIngresoBaseCotizacionAdicional = 0;    
 
     /**
+     * @ORM\Column(name="vr_ingreso_base_cotizacion_total", type="float")
+     */
+    private $VrIngresoBaseCotizacionTotal = 0;     
+    
+    /**
      * @ORM\Column(name="dias_adicionales_ibc", type="integer")
      */    
     private $diasAdicionalesIBC = 0;            
+    
+    /**
+     * @ORM\Column(name="vr_base_prestaciones", type="float")
+     */
+    private $VrBasePrestaciones = 0;    
+
+    /**
+     * @ORM\Column(name="vr_base_prestaciones_total", type="float")
+     */
+    private $VrBasePrestacionesTotal = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_auxilio_transporte", type="float")
+     */
+    private $VrAuxilioTransporte = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_salario", type="float")
+     */
+    private $VrSalario = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_total", type="float")
+     */
+    private $VrTotal = 0;    
     
     /**     
      * @ORM\Column(name="liquidar_cesantias", type="boolean")
@@ -727,5 +767,197 @@ class RhuLiquidacion
     public function getLiquidarPrima()
     {
         return $this->liquidarPrima;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacion
+     *
+     * @param float $vrIngresoBaseCotizacion
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIngresoBaseCotizacion($vrIngresoBaseCotizacion)
+    {
+        $this->VrIngresoBaseCotizacion = $vrIngresoBaseCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacion
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacion()
+    {
+        return $this->VrIngresoBaseCotizacion;
+    }
+
+    /**
+     * Set vrBasePrestaciones
+     *
+     * @param float $vrBasePrestaciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrBasePrestaciones($vrBasePrestaciones)
+    {
+        $this->VrBasePrestaciones = $vrBasePrestaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBasePrestaciones
+     *
+     * @return float
+     */
+    public function getVrBasePrestaciones()
+    {
+        return $this->VrBasePrestaciones;
+    }
+
+    /**
+     * Set vrBasePrestacionesTotal
+     *
+     * @param float $vrBasePrestacionesTotal
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrBasePrestacionesTotal($vrBasePrestacionesTotal)
+    {
+        $this->VrBasePrestacionesTotal = $vrBasePrestacionesTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBasePrestacionesTotal
+     *
+     * @return float
+     */
+    public function getVrBasePrestacionesTotal()
+    {
+        return $this->VrBasePrestacionesTotal;
+    }
+
+    /**
+     * Set vrAuxilioTransporte
+     *
+     * @param float $vrAuxilioTransporte
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrAuxilioTransporte($vrAuxilioTransporte)
+    {
+        $this->VrAuxilioTransporte = $vrAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAuxilioTransporte
+     *
+     * @return float
+     */
+    public function getVrAuxilioTransporte()
+    {
+        return $this->VrAuxilioTransporte;
+    }
+
+    /**
+     * Set diasLaborados
+     *
+     * @param integer $diasLaborados
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasLaborados($diasLaborados)
+    {
+        $this->diasLaborados = $diasLaborados;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLaborados
+     *
+     * @return integer
+     */
+    public function getDiasLaborados()
+    {
+        return $this->diasLaborados;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacionTotal
+     *
+     * @param float $vrIngresoBaseCotizacionTotal
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIngresoBaseCotizacionTotal($vrIngresoBaseCotizacionTotal)
+    {
+        $this->VrIngresoBaseCotizacionTotal = $vrIngresoBaseCotizacionTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacionTotal
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacionTotal()
+    {
+        return $this->VrIngresoBaseCotizacionTotal;
+    }
+
+    /**
+     * Set vrSalario
+     *
+     * @param float $vrSalario
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalario($vrSalario)
+    {
+        $this->VrSalario = $vrSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalario
+     *
+     * @return float
+     */
+    public function getVrSalario()
+    {
+        return $this->VrSalario;
+    }
+
+    /**
+     * Set vrTotal
+     *
+     * @param float $vrTotal
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrTotal($vrTotal)
+    {
+        $this->VrTotal = $vrTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotal
+     *
+     * @return float
+     */
+    public function getVrTotal()
+    {
+        return $this->VrTotal;
     }
 }

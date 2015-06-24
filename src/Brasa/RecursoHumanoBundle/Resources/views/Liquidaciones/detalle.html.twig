@@ -18,50 +18,90 @@
                     <tr>
                         <td class="titulo">CODIGO:</td>
                         <td class="td-in-well">{{ arLiquidacion.codigoLiquidacionPk }}</td>
-                        <td class="titulo">EMPLEADO:</td>
-                        <td class="td-in-well">{{ arLiquidacion.empleadoRel.nombreCorto|default('SIN EMPLEADO') }}</td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
+                        <td class="titulo">IBC:</td>
+                        <td align="right">$ {{ arLiquidacion.vrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">FECHA INICIO:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaDesde|date("Y/m/d") }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
-                        <td class="titulo">CESANTIAS:</td>
-                        <td class="td-in-well-numerico" align="right">$ {{ arLiquidacion.vrCesantias | number_format(2, '.', ',') }}</td>                   
+                        <td class="titulo">DIAS ADICIONALES:</td>
+                        <td align="right">{{ arLiquidacion.diasAdicionalesIBC }}</td>
+                        <td class="titulo">IBC DIAS ADICIONALES:</td>
+                        <td align="right">{{ arLiquidacion.VrIngresoBaseCotizacionAdicional | number_format(2, '.', ',') }}</td>                   
                     </tr>    
                     <tr>
                         <td class="titulo">FECHA FIN:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaHasta|date("Y/m/d") }}</td>
-                        <td class="titulo">DIAS CESANTIAS:</td>
-                        <td align="right">{{ arLiquidacion.diasCesantias }}</td>
-                        <td class="titulo">INTERESES:</td>
-                        <td align="right" align="right">$ {{ arLiquidacion.vrInteresesCesantias | number_format(2, '.', ',') }}</td>                   
-                    </tr>                                 
-                    <tr>
                         <td class="titulo"></td>
-                        <td class="td-in-well"></td>
-                        <td class="titulo">DIAS VACACIONES:</td>
-                        <td align="right">{{ arLiquidacion.diasVacaciones }}</td>
-                        <td class="titulo">PRIMA:</td>
-                        <td align="right">$ {{ arLiquidacion.vrPrima | number_format(2, '.', ',') }}</td>                   
+                        <td align="right"></td>
+                        <td class="titulo">IBC TOTAL:</td>
+                        <td align="right">$ {{ arLiquidacion.vrIngresoBaseCotizacionTotal | number_format(2, '.', ',') }}</td>                   
                     </tr>                                 
                     <tr>
                         <td class="titulo">FECHA ULTIMO PAGO:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaUltimoPago|date("Y/m/d") }}</td>
-                        <td class="titulo">DIAS PRIMAS:</td>
-                        <td align="right">{{ arLiquidacion.diasPrimas }}</td>
-                        <td class="titulo">VACACIONES:</td>
-                        <td align="right">$ {{ arLiquidacion.vrVacaciones | number_format(2, '.', ',') }}</td>                   
+                        <td class="titulo"></td>
+                        <td align="right"></td>
+                        <td class="titulo">BASE PRESTACIONES:</td>
+                        <td align="right">$ {{ arLiquidacion.vrBasePrestaciones | number_format(2, '.', ',') }}</td>                   
+                    </tr>                                 
+                    <tr>
+                        <td class="titulo">EMPLEADO:</td>
+                        <td class="td-in-well">{{ arLiquidacion.empleadoRel.nombreCorto|default('SIN EMPLEADO') }}</td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>
+                        <td class="titulo">AUXILIO TRANSPORTE:</td>
+                        <td align="right">$ {{ arLiquidacion.vrAuxilioTransporte | number_format(2, '.', ',') }}</td>                   
                     </tr>                                                 
                     <tr>
-                        <td class="titulo">IBC DIAS ADICIONALES:</td>
-                        <td align="right">{{ arLiquidacion.VrIngresoBaseCotizacionAdicional | number_format(2, '.', ',') }}</td>
-                        <td class="titulo">DIAS ADICIONALES:</td>
-                        <td align="right">{{ arLiquidacion.diasAdicionalesIBC }}</td>
+                        <td class="titulo">IDENTIFICACION:</td>
+                        <td>{{ arLiquidacion.empleadoRel.numeroIdentificacion}}</td>
                         <td class="titulo"></td>
-                        <td align="right"></td>                   
+                        <td align="right"></td>
+                        <td class="titulo">BASE PRESTACIONES TOTAL:</td>
+                        <td align="right">$ {{ arLiquidacion.vrBasePrestacionesTotal | number_format(2, '.', ',') }}</td>                   
+                    </tr>                    
+                    <tr>
+                        <td class="titulo">SALARIO:</td>
+                        <td align="right">$ {{ arLiquidacion.vrSalario | number_format(2, '.', ',') }}</td>
+                        <td class="titulo">DIAS CESANTIAS:</td>
+                        <td align="right">{{ arLiquidacion.diasCesantias }}</td>
+                        <td class="titulo">CESANTIAS:</td>
+                        <td align="right">$ {{ arLiquidacion.vrCesantias | number_format(2, '.', ',') }}</td>                   
+                    </tr>                    
+                    <tr>
+                        <td class="titulo">CONTRATO:</td>
+                        <td>{{ arLiquidacion.contratoRel.numero}}</td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>
+                        <td class="titulo">INTERESES:</td>
+                        <td align="right">$ {{ arLiquidacion.vrInteresesCesantias | number_format(2, '.', ',') }}</td>                   
+                    </tr>
+                    <tr>
+                        <td class="titulo">CENTRO COSTOS:</td>
+                        <td>{{ arLiquidacion.contratoRel.centroCostoRel.nombre}}</td>
+                        <td class="titulo">DIAS PRIMAS:</td>
+                        <td align="right">{{ arLiquidacion.diasPrimas }}</td>
+                        <td class="titulo">PRIMA:</td>
+                        <td align="right">$ {{ arLiquidacion.vrPrima | number_format(2, '.', ',') }}</td>                   
+                    </tr>
+                    <tr>
+                        <td class="titulo"></td>
+                        <td align="right"></td>
+                        <td class="titulo">DIAS VACACIONES:</td>
+                        <td align="right">{{ arLiquidacion.diasVacaciones }}</td>
+                        <td class="titulo">VACACIONES:</td>
+                        <td align="right">$ {{ arLiquidacion.vrVacaciones | number_format(2, '.', ',') }}</td>                   
+                    </tr>                    
+                    <tr>
+                        <td class="titulo"></td>
+                        <td align="right"></td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>
+                        <td class="titulo">TOTAL:</td>
+                        <td align="right">$ {{ arLiquidacion.vrTotal | number_format(2, '.', ',') }}</td>                   
                     </tr>                    
                     <tr>
                         <td colspan="8">COMENTARIOS: {{ arLiquidacion.comentarios }}</td>

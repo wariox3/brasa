@@ -25,7 +25,8 @@ class RhuLiquidacionRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
-        $dateFechaUltimoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveFechaUltimoPago($arLiquidacion->getCodigoEmpleadoFk());                
+        $douIBCAdicional = 0;
+        $dateFechaUltimoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveFechaUltimoPago($arLiquidacion->getCodigoEmpleadoFk());                        
         if($dateFechaUltimoPago != null) {
             $arLiquidacion->setFechaUltimoPago(date_create($dateFechaUltimoPago));
             if($arLiquidacion->getFechaUltimoPago() < $arLiquidacion->getFechaHasta()) {
@@ -35,28 +36,60 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setVrIngresoBaseCotizacionAdicional($douIBCAdicional);                
                 $arLiquidacion->setDiasAdicionalesIBC($diasAdicionales);
             }
-        }
+        }        
+        $douIBC = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveIBCFecha($arLiquidacion->getCodigoEmpleadoFk(), $arLiquidacion->getContratoRel()->getFechaDesde()->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'));        
+        $douIBCTotal = $douIBC + $douIBCAdicional;
+        $intDiasLaborados = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
+        $intDiasLaborados = $intDiasLaborados->format('%a');
+        $douSalario = $arLiquidacion->getContratoRel()->getVrSalario();
+        $douBasePrestacionesTotal = 0;        
+        $douCesantias = 0;
+        $douInteresesCesantias = 0;
+        $douPrima = 0;
+        $douVacaciones = 0;
+        if($intDiasLaborados > 0) {
+            $douBasePrestaciones = ($douIBCTotal / $intDiasLaborados) * 30;            
+            $douAuxilioTransporte = 74000; // Traer de la base de datos
+            $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
+            $arLiquidacion->setVrBasePrestaciones($douBasePrestaciones);
+            $arLiquidacion->setVrAuxilioTransporte($douAuxilioTransporte);
+            $arLiquidacion->setVrBasePrestacionesTotal($douBasePrestacionesTotal);            
+        }  
+
         if($arLiquidacion->getLiquidarCesantias() == 1) {
             if($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias() <= $arLiquidacion->getContratoRel()->getFechaDesde()) {
-                $intDiasCesantias = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
-                $intDiasCesantias = $intDiasCesantias->format('%a');
+                $intDiasCesantias = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
+                $intDiasCesantias = $intDiasCesantias->format('%a');                
+                $douCesantias = ($douBasePrestacionesTotal * $intDiasCesantias) / 360;
+                $douInteresesCesantias = ($douCesantias * 0.12 * $intDiasCesantias) / 360;
                 $arLiquidacion->setDiasCesantias($intDiasCesantias);
-                $douIBC = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveIBCFecha($arLiquidacion->getCodigoEmpleadoFk(), $arLiquidacion->getContratoRel()->getFechaDesde()->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'));
+                $arLiquidacion->setVrCesantias($douCesantias);
+                $arLiquidacion->setVrInteresesCesantias($douInteresesCesantias);
+            }            
+        }
+        if($arLiquidacion->getLiquidarPrima() == 1) {
+            if($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas() <= $arLiquidacion->getContratoRel()->getFechaDesde()) {
+                $intDiasPrima = $arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
+                $intDiasPrima = $intDiasPrima->format('%a');
+                $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
+                $arLiquidacion->setDiasPrimas($intDiasPrima);
+                $arLiquidacion->setVrPrima($douPrima);                
             }            
         }
 
-        if($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas() <= $arLiquidacion->getContratoRel()->getFechaDesde()) {
-            $intDiasPrimas = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
-            $intDiasPrimas = $intDiasPrimas->format('%a');
-        }
         if($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones() <= $arLiquidacion->getContratoRel()->getFechaDesde()) {
-            $intDiasVacaciones = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
-            $intDiasVacaciones = $intDiasVacaciones->format('%a');
-        }        
-                
-        $arLiquidacion->setDiasPrimas($intDiasPrimas);
-        $arLiquidacion->setDiasVacaciones($intDiasVacaciones);
-        
+            if($arLiquidacion->getLiquidarVacaciones() == 1) {
+                $intDiasVacaciones = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
+                $intDiasVacaciones = $intDiasVacaciones->format('%a');                
+                $douVacaciones = ($douSalario * $intDiasVacaciones) / 720;
+                $arLiquidacion->setVrVacaciones($douVacaciones);
+            }
+        }       
+        $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones;
+        $arLiquidacion->setVrTotal($douTotal);
+        $arLiquidacion->setVrSalario($douSalario);
+        $arLiquidacion->setVrIngresoBaseCotizacion($douIBC);
+        $arLiquidacion->setVrIngresoBaseCotizacionTotal($douIBCTotal);                
         $em->flush();
         return true;
     }        
