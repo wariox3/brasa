@@ -127,6 +127,11 @@ class RhuCredito
      */
     protected $creditoTipoPagoRel;
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuLiquidacionDeduccion", mappedBy="creditoRel")
+     */
+    protected $liquidacionesDeduccionesCreditoRel;    
+    
     
     /**
      * Constructor
@@ -669,5 +674,39 @@ class RhuCredito
     public function getCreditoTipoPagoRel()
     {
         return $this->creditoTipoPagoRel;
+    }
+
+    /**
+     * Add liquidacionesDeduccionesCreditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesCreditoRel
+     *
+     * @return RhuCredito
+     */
+    public function addLiquidacionesDeduccionesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesCreditoRel)
+    {
+        $this->liquidacionesDeduccionesCreditoRel[] = $liquidacionesDeduccionesCreditoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove liquidacionesDeduccionesCreditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesCreditoRel
+     */
+    public function removeLiquidacionesDeduccionesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesCreditoRel)
+    {
+        $this->liquidacionesDeduccionesCreditoRel->removeElement($liquidacionesDeduccionesCreditoRel);
+    }
+
+    /**
+     * Get liquidacionesDeduccionesCreditoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLiquidacionesDeduccionesCreditoRel()
+    {
+        return $this->liquidacionesDeduccionesCreditoRel;
     }
 }

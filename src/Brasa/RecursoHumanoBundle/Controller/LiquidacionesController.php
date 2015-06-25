@@ -54,8 +54,11 @@ class LiquidacionesController extends Controller
                 return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
             }            
         }
+        $arLiquidacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
+        $arLiquidacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));
         return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:detalle.html.twig', array(
                     'arLiquidacion' => $arLiquidacion,
+                    'arLiquidacionDeducciones' => $arLiquidacionDeducciones,
                     'form' => $form->createView()
                     ));
     }        

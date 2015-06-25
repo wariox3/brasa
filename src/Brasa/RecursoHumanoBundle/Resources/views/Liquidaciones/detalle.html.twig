@@ -1,5 +1,11 @@
 {% extends '::base.html.twig' %}
 {% block content %}
+    <script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+    </script>
     <div class="container">
         <div class="page-header">
             <h3>Detalles de liquidacion</h3>
@@ -12,7 +18,7 @@
         </div>
         <br /> <br />
         <div class="panel panel-default">
-            <div class="panel-heading">Informacion contrato</div>
+            <div class="panel-heading">Informacion liquidacion</div>
             <div class="panel-body">
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
@@ -109,13 +115,50 @@
                 </table>
             </div>
         </div>
+        <br /><br />
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#deducciones" data-toggle="tab">Deducciones creditos</a></li>                        
+        </ul> 
+        <div class="tab-content">
+        <div class="tab-pane active" id="deducciones">
+            <!-- Menu Encabezado Movimiento -->
+            <div id="deducciones" style="width: 100%"><br>
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>CODIGO</th>
+                        <th>TIPO</th>
+                        <th>DETALLE</th>
+                        <th style="text-align: right">VALOR</th>
+                        <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                    </tr>
+                    {% for arLiquidacionDeducciones in arLiquidacionDeducciones %}
+                    <tr>
+                        <td>
+                            <input type="hidden" name="LblCodigoGuia[]" value="{{ arLiquidacionDeducciones.codigoLiquidacionDeduccionPk }}">
+                            <span class="badge">{{ arLiquidacionDeducciones.codigoLiquidacionDeduccionPk }}</span>
+                        </td>
+                        <td>{{ arLiquidacionDeducciones.detalle }}</td>
+                        <td>{{ arLiquidacionDeducciones.detalle }}</td>                            
+                        <td style="text-align: right">{{ arLiquidacionDeducciones.vrDeduccion | number_format(2, '.', ',') }}</td>
+                        <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arLiquidacionDeducciones.codigoLiquidacionDeduccionPk }}" /></td>
+                    </tr>
+                    {% endfor %}
+                </table>
 
-        <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_liquidaciones_lista') }}" style="float:left">Volver</a>
+                <!-- Botones Menu Items -->
+                <div class="btn-toolbar" style="float:left">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_liquidaciones_lista') }}" style="float:left">Volver</a>
+                    </div>
+                </div>
+                <!-- Fin Botones Menu Items -->
+
+                <br/><br/>
+                <hr/>
             </div>
         </div>
-        <br /><br />
+    </div>        
+        
         {{ form_rest(form) }}
         {{ form_end(form) }}
     </div>

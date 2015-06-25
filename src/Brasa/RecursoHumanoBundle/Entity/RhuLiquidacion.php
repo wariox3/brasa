@@ -180,7 +180,10 @@ class RhuLiquidacion
      */
     protected $contratoRel;    
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuLiquidacionDeduccion", mappedBy="liquidacionRel")
+     */
+    protected $liquidacionesDeduccionesLiquidacionRel;  
 
 
     /**
@@ -959,5 +962,46 @@ class RhuLiquidacion
     public function getVrTotal()
     {
         return $this->VrTotal;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->liquidacionesDeduccionesLiquidacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add liquidacionesDeduccionesLiquidacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesLiquidacionRel
+     *
+     * @return RhuLiquidacion
+     */
+    public function addLiquidacionesDeduccionesLiquidacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesLiquidacionRel)
+    {
+        $this->liquidacionesDeduccionesLiquidacionRel[] = $liquidacionesDeduccionesLiquidacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove liquidacionesDeduccionesLiquidacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesLiquidacionRel
+     */
+    public function removeLiquidacionesDeduccionesLiquidacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesLiquidacionRel)
+    {
+        $this->liquidacionesDeduccionesLiquidacionRel->removeElement($liquidacionesDeduccionesLiquidacionRel);
+    }
+
+    /**
+     * Get liquidacionesDeduccionesLiquidacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLiquidacionesDeduccionesLiquidacionRel()
+    {
+        return $this->liquidacionesDeduccionesLiquidacionRel;
     }
 }
