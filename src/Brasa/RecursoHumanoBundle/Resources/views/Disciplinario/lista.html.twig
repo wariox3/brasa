@@ -14,17 +14,28 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-
+                <div class="form-group form-group-sm">
+                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
                 <div class="form-group form-group-sm">
                     <label for="form_TxtIdentificacion" class="col-sm-2 control-label">Identificacion:</label>
                     <div class="col-sm-10">
                         {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>
-                <div class="form-group form-group-sm">
-                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
-                    <div class="col-sm-10">
-                        {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
+                    <div class="form-group form-group-sm">  
+                    <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.fechaDesde, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>                     
+                <div class="form-group form-group-sm">  
+                    <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.fechaHasta, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
@@ -38,10 +49,12 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arDisciplinarios, 'CODIGO', 'd.codigoDisciplinarioPk') }}</th>
                 <th>FECHA</th>
-                <th>TIPO</th>                
+                <th>C. CENTRO</th>                
                 <th>IDENTIFICACION</th>
                 <th>{{ knp_pagination_sortable(arDisciplinarios, 'NOMBRE', 'e.nombreCorto') }}</th>                
-                <th>ASUNTO</th>
+                <th>CARGO</th>
+                <th>PROCESO</th>
+                <th>CAUSAL</th>
                 <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
@@ -50,9 +63,11 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}">{{ arDisciplinarios.codigoDisciplinarioPk }} </td>
                 <td>{{ arDisciplinarios.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
+                <td>{{ arDisciplinarios.empleadoRel.centroCostoRel.nombre  }}</td>
                 <td>{{ arDisciplinarios.empleadoRel.numeroIdentificacion  }}</td>
-                <td>{{ arDisciplinarios.empleadoRel.nombreCorto  }}</td>                                
+                <td>{{ arDisciplinarios.empleadoRel.nombreCorto  }}</td>
+                <td>{{ arDisciplinarios.empleadoRel.cargoDescripcion  }}</td>
+                <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>                                
                 <td>{{ arDisciplinarios.asunto  }}</td>                
                 <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  0, 'codigoEmpleado':  0, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
                 <td style="text-align: center"><a href="{{ path('brs_rhu_disciplinario_detalle', { 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
@@ -66,6 +81,7 @@
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
+                {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">

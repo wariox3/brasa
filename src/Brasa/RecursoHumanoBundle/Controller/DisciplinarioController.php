@@ -87,7 +87,11 @@ class DisciplinarioController extends Controller
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
-        if($form->isValid()) {            
+        if($form->isValid()) { 
+            if($form->get('BtnImprimir')->isClicked()) {
+                $objFormatoDisciplinario = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinario();
+                $objFormatoDisciplinario->Generar($this, $codigoDisciplinario);
+            }
  
         }                
         $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);        
@@ -123,12 +127,17 @@ class DisciplinarioController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
         }
+        $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->fechaAntigua();
+        
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedades)                                                       
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+            ->add('fechaDesde', 'date', array('label'  => 'Desde', 'data' => new \DateTime($fechaAntigua))) 
+            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',)) 
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->getForm();        
         return $form;
     }    

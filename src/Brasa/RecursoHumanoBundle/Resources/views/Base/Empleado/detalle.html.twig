@@ -312,8 +312,13 @@
                     <tr>
                         <th>CODIGO</th>
                         <th>FECHA</th>
-                        <th>TIPO</th>                        
-                        <th>ASUNTO</th>
+                        <th>C. CENTRO</th>                
+                        <th>IDENTIFICACION</th>
+                        <th>NOMBRE</th>                
+                        <th>CARGO</th>
+                        <th>PROCESO</th>
+                        <th>CAUSAL</th>
+                        <th style="text-align: center"></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -321,7 +326,11 @@
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}">{{ arDisciplinarios.codigoDisciplinarioPk }} </td>
                             <td>{{ arDisciplinarios.fecha |date("Y/m/d")  }}</td>
-                            <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
+                            <td>{{ arDisciplinarios.empleadoRel.centroCostoRel.nombre  }}</td>
+                            <td>{{ arDisciplinarios.empleadoRel.numeroIdentificacion  }}</td>
+                            <td>{{ arDisciplinarios.empleadoRel.nombreCorto  }}</td>
+                            <td>{{ arDisciplinarios.empleadoRel.cargoDescripcion  }}</td>
+                            <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>                                
                             <td>{{ arDisciplinarios.asunto  }}</td>                                                                                                                
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
                             <td><input type="checkbox" name="ChkSeleccionarDisciplinario[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}" /></td>

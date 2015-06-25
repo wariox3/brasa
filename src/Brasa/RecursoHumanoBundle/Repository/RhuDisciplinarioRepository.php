@@ -20,5 +20,13 @@ class RhuDisciplinarioRepository extends EntityRepository {
         }
         $dql .= " ORDER BY d.fecha";
         return $dql;
-    }                            
+    }       
+    
+    public function fechaAntigua() {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT min(d.fecha) FROM BrasaRecursoHumanoBundle:RhuDisciplinario d";
+        $query = $em->createQuery($dql);
+        $fechaAntigua = $query->getSingleScalarResult(); 
+        return $fechaAntigua;
+    }
 }

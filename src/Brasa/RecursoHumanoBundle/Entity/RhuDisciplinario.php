@@ -20,7 +20,8 @@ class RhuDisciplinario
     /**
      * @ORM\Column(name="codigo_disciplinario_tipo_fk", type="integer")
      */    
-    private $codigoDisciplinarioTipoFk;            
+    private $codigoDisciplinarioTipoFk; 
+    
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -52,7 +53,7 @@ class RhuDisciplinario
      * @ORM\ManyToOne(targetEntity="RhuDisciplinarioTipo", inversedBy="disciplinariosDisciplinarioTipoRel")
      * @ORM\JoinColumn(name="codigo_disciplinario_tipo_fk", referencedColumnName="codigo_disciplinario_tipo_pk")
      */
-    protected $disciplinarioTipoRel;     
+    protected $disciplinarioTipoRel;
 
 
 
@@ -139,6 +140,30 @@ class RhuDisciplinario
     }
 
     /**
+     * Set asunto
+     *
+     * @param string $asunto
+     *
+     * @return RhuDisciplinario
+     */
+    public function setAsunto($asunto)
+    {
+        $this->asunto = $asunto;
+
+        return $this;
+    }
+
+    /**
+     * Get asunto
+     *
+     * @return string
+     */
+    public function getAsunto()
+    {
+        return $this->asunto;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -208,29 +233,5 @@ class RhuDisciplinario
     public function getDisciplinarioTipoRel()
     {
         return $this->disciplinarioTipoRel;
-    }
-
-    /**
-     * Set asunto
-     *
-     * @param string $asunto
-     *
-     * @return RhuDisciplinario
-     */
-    public function setAsunto($asunto)
-    {
-        $this->asunto = $asunto;
-
-        return $this;
-    }
-
-    /**
-     * Get asunto
-     *
-     * @return string
-     */
-    public function getAsunto()
-    {
-        return $this->asunto;
     }
 }

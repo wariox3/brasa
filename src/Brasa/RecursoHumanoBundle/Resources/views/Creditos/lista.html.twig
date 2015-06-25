@@ -51,6 +51,7 @@
                 <th>{{ knp_pagination_sortable(arCreditos, 'ID', 'c.codigoCreditoPk') }}</th>
                 <th>TIPO</th>
                 <th>FECHA</th>
+                <th>C. COSTO</th>
                 <th>EMPLEADO</th>
                 <th style="text-align: right">VR. CREDITO</th>
                 <th style="text-align: right">VR. CUOTA</th>
@@ -69,6 +70,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCreditos.codigoCreditoPk }}">{{ arCreditos.codigoCreditoPk }} </td>
                 <td>{{ arCreditos.creditoTipoRel.nombre  }}</td>
                 <td>{{ arCreditos.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arCreditos.empleadoRel.centroCostoRel.nombre  }}</td>
                 <td>{{ arCreditos.empleadoRel.nombreCorto  }}</td>
                 <td style="text-align: right">{{ arCreditos.VrPagar | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>

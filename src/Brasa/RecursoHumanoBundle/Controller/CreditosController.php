@@ -303,15 +303,16 @@ class CreditosController extends Controller
                             ->setCellValue('A1', 'Codigo_Credito')
                             ->setCellValue('B1', 'Tipo_Credito')
                             ->setCellValue('C1', 'Fecha_Credito')
-                            ->setCellValue('D1', 'Empleado')
-                            ->setCellValue('E1', 'Valor_Credito')
-                            ->setCellValue('F1', 'Valor_Cuota')
-                            ->setCellValue('G1', 'Valor_Seguro')
-                            ->setCellValue('H1', 'Cuotas')
-                            ->setCellValue('I1', 'Cuota_Actual')
-                            ->setCellValue('J1', 'Pagado')
-                            ->setCellValue('K1', 'Aprobado')
-                            ->setCellValue('L1', 'Suspendido');
+                            ->setCellValue('D1', 'Centro_Costo')
+                            ->setCellValue('E1', 'Empleado')
+                            ->setCellValue('F1', 'Valor_Credito')
+                            ->setCellValue('G1', 'Valor_Cuota')
+                            ->setCellValue('H1', 'Valor_Seguro')
+                            ->setCellValue('I1', 'Cuotas')
+                            ->setCellValue('J1', 'Cuota_Actual')
+                            ->setCellValue('K1', 'Pagado')
+                            ->setCellValue('L1', 'Aprobado')
+                            ->setCellValue('M1', 'Suspendido');
 
                 $i = 2;
                 $query = $em->createQuery($this->strSqlLista);
@@ -347,15 +348,16 @@ class CreditosController extends Controller
                             ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
                             ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
                             ->setCellValue('C' . $i, $arCredito->getFecha())
-                            ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('E' . $i, $arCredito->getVrPagar())
-                            ->setCellValue('F' . $i, $arCredito->getVrCuota())
-                            ->setCellValue('G' . $i, $arCredito->getSeguro())
-                            ->setCellValue('H' . $i, $arCredito->getNumeroCuotas())
-                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotaActual())
-                            ->setCellValue('J' . $i, $Estado)
-                            ->setCellValue('K' . $i, $Aprobado)
-                            ->setCellValue('L' . $i, $Suspendido);
+                            ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                            ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('F' . $i, $arCredito->getVrPagar())
+                            ->setCellValue('G' . $i, $arCredito->getVrCuota())
+                            ->setCellValue('H' . $i, $arCredito->getSeguro())
+                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotas())
+                            ->setCellValue('J' . $i, $arCredito->getNumeroCuotaActual())
+                            ->setCellValue('K' . $i, $Estado)
+                            ->setCellValue('L' . $i, $Aprobado)
+                            ->setCellValue('M' . $i, $Suspendido);
                     $i++;
                 }
 

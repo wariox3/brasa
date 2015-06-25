@@ -162,9 +162,9 @@ class RhuContrato
     /**
      * @ORM\OneToMany(targetEntity="RhuSSPeriodoDetalle", mappedBy="contratoRel")
      */
-    protected $SSPeriodosDetallesContratoRel;      
+    protected $SSPeriodosDetallesContratoRel; 
 
-    
+
     /**
      * Constructor
      */

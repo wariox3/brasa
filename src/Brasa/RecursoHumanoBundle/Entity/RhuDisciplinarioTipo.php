@@ -20,7 +20,12 @@ class RhuDisciplinarioTipo
     /**
      * @ORM\Column(name="nombre", type="string", length=50, nullable=true)
      */    
-    private $nombre;  
+    private $nombre; 
+    
+    /**
+     * @ORM\Column(name="contenido", type="text", nullable=true)
+     */    
+    private $contenido;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="disciplinarioTipoRel")
@@ -68,6 +73,30 @@ class RhuDisciplinarioTipo
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set contenido
+     *
+     * @param string $contenido
+     *
+     * @return RhuDisciplinarioTipo
+     */
+    public function setContenido($contenido)
+    {
+        $this->contenido = $contenido;
+
+        return $this;
+    }
+
+    /**
+     * Get contenido
+     *
+     * @return string
+     */
+    public function getContenido()
+    {
+        return $this->contenido;
     }
 
     /**
