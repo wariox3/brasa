@@ -6,24 +6,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoType;
 class CreditosController extends Controller
 {    
-    
+    var $strSqlLista = "";
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();    
+        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        $mensaje=0;
-        $form = $this->createFormBuilder()
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
-            ->add('BtnDesaprobar', 'submit', array('label'  => 'Desaprobar',))
-            ->add('BtnSuspender', 'submit', array('label'  => 'Suspender / No Suspender',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->getForm();
-        $form->handleRequest($request);        
+        $form = $this->formularioLista();
+        $form->handleRequest($request);
+        $this->listar();        
         if ($form->isValid())
         {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            /*$arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked())
             {    
             if(count($arrSeleccionados) > 0) {
@@ -41,8 +34,11 @@ class CreditosController extends Controller
                     }
                 }
             }
+            }*/
+            if ($form->get('BtnEliminar')->isClicked()) {    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditos')->eliminarCredito($arrSeleccionados);
             }
-            if($form->get('BtnAprobar')->isClicked()) {
+            /*if($form->get('BtnAprobar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $id) {
                         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
@@ -53,8 +49,13 @@ class CreditosController extends Controller
                         
                     }
                 }  
+            }*/
+            if ($form->get('BtnAprobar')->isClicked()) {    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->aprobarCredito($arrSeleccionados);
+                $this->filtrar($form);
+                $this->listar();
             }
-            if($form->get('BtnDesaprobar')->isClicked()) {
+            /*if($form->get('BtnDesaprobar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $id) {
                         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
@@ -65,9 +66,13 @@ class CreditosController extends Controller
                         
                     }
                 }  
+            }*/
+            if ($form->get('BtnDesAprobar')->isClicked()) {    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->aprobarCredito($arrSeleccionados);
+                $this->filtrar($form);
+                $this->listar();
             }
-            
-            if($form->get('BtnSuspender')->isClicked()) {
+            /*if($form->get('BtnSuspender')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $id) {
                         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
@@ -83,9 +88,13 @@ class CreditosController extends Controller
                         
                     }
                 }  
+            }*/
+            if ($form->get('BtnSuspender')->isClicked()) {    
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->aprobarCredito($arrSeleccionados);
+                $this->filtrar($form);
+                $this->listar();
             }
-            
-            if($form->get('BtnExcel')->isClicked()) {
+            /*if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
                 $objPHPExcel->getProperties()->setCreator("JG Efectivos")
@@ -171,26 +180,36 @@ class CreditosController extends Controller
                 $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
                 $objWriter->save('php://output');
                 exit;
+            }*/
+            if ($form->get('BtnExcel')->isClicked()) {
+                $this->filtrar($form);
+                $this->listar();
+                $this->generarExcel();
             }
-            
             if($form->get('BtnPdf')->isClicked()) {
                 $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCredito();
                 $objFormatoPago->Generar($this);
             }
             
         }
-        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCredito c";
-        $query = $em->createQuery($dql);        
-        $arCreditos = $paginator->paginate($query, $request->query->get('page', 1), 20);                
+        $arCreditos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);        
+        //$arCreditos = $paginator->paginate($query, $request->query->get('page', 1), 20);                
         return $this->render('BrasaRecursoHumanoBundle:Creditos:lista.html.twig', array(
             'arCreditos' => $arCreditos,
-            'arEmpleado' => $arEmpleado,
             'mensaje' => $mensaje,
             'form' => $form->createView()
             ));
-    }     
+    } 
+    
+    private function listar() {
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDQL(
+                    "",
+                    $session->get('filtroCodigoCentroCosto'),
+                    $session->get('filtroIdentificacion')
+                    );
+    }
     
     public function nuevoAction($codigoCredito, $codigoEmpleado) {
         $request = $this->getRequest();
@@ -217,14 +236,7 @@ class CreditosController extends Controller
             $arCredito->setVrCuota($douVrCuota);
             $arCredito->setVrCuotaTemporal($douVrCuota);
             $arSeleccion = $request->request->get('ChkSeleccionar');
-            if ($arSeleccion == "")
-            {
-                $arCredito->setTipoPago('OTRO');
-            }
-            else
-            {
-                $arCredito->setTipoPago('NOMINA');
-            }    
+            //$arCredito->setCreditoTipoPagoRel($arCredito);   
             $arCredito->setFecha(new \DateTime('now'));
             $arCredito->setSaldo($vrSaltoTotal);
             $arCredito->setSaldoTotal($vrSaltoTotal);

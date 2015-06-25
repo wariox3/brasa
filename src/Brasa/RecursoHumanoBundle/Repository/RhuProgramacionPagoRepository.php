@@ -259,7 +259,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoCredito->setCreditoRel($arCredito);
                         $arPagoCredito->setPagoRel($arPagoDetalle->getPagoRel());
                         $arPagoCredito->setfechaPago(new \ DateTime("now"));    
-                        $arPagoCredito->setTipoPago("NOMINA");                                               
+                        $arPagoCredito->setCreditoTipoPagoRel($arCredito->getCreditoTipoPagoRel());                                               
                         $arPagoCredito->setVrCuota($arPagoDetalle->getVrPago());
                         $em->persist($arPagoCredito);
                         //Actualizar el saldo del credito                            

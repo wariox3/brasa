@@ -263,47 +263,49 @@ class UtilidadesPagosController extends Controller
                                 $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                                 $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'estadoPagado' => 0));
                                 foreach ($arCreditos as $arCredito) {
-                                    if($arCredito->getSaldoTotal() > 0) {
-                                        $arCreditoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                                        $arCreditoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCredito->getCodigoCreditoPk());
-                                        $douCuota = 0;
-                                        if ($arCreditoProcesar->getSaldoTotal() >= $arCreditoProcesar->getVrCuota()){
-                                            $douCuota = $arCreditoProcesar->getVrCuota();                                        
-                                        }
-                                        else {
-                                            $douCuota = $arCreditoProcesar->getSaldoTotal();                                         
-                                        }
-                                        $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $douCuota);
-                                        $arCreditoProcesar->setSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());
-                                        $em->persist($arCreditoProcesar);
+                                    if ($arCredito->getCodigoCreditoTipoPagoFk() == 1){ //1= NOMINA
+                                        if($arCredito->getSaldoTotal() > 0) {
+                                            $arCreditoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                                            $arCreditoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCredito->getCodigoCreditoPk());
+                                            $douCuota = 0;
+                                            if ($arCreditoProcesar->getSaldoTotal() >= $arCreditoProcesar->getVrCuota()){
+                                                $douCuota = $arCreditoProcesar->getVrCuota();                                        
+                                            }
+                                            else {
+                                                $douCuota = $arCreditoProcesar->getSaldoTotal();                                         
+                                            }
+                                            $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $douCuota);
+                                            $arCreditoProcesar->setSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());
+                                            $em->persist($arCreditoProcesar);
 
-                                        $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                                        $arPagoDetalle->setPagoRel($arPago);
-                                        $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCredito);
-                                        $douPagoDetalle = $douCuota; //Falta afectar credito
-                                        $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre());
-                                        $arPagoDetalle->setVrPago($douPagoDetalle);
-                                        $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
-                                        $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
-                                        $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                                        $arPagoDetalle->setCreditoRel($arCredito);
-                                        $em->persist($arPagoDetalle);
-                                        if($arCredito->getSeguro() > 0) {
-                                            $intConceptoCreditos = 27; //Configurar desde configuraciones
-                                            $arPagoConceptoCreditoSeguro = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                            $arPagoConceptoCreditoSeguro = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intConceptoCreditos);                                        
                                             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                             $arPagoDetalle->setPagoRel($arPago);
-                                            $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCreditoSeguro);
-                                            $douPagoDetalle = $arCredito->getSeguro(); //Falta afectar credito
-                                            $arPagoDetalle->setDetalle("SEGURO DE CREDITO " . $arCredito->getCreditoTipoRel()->getNombre());
+                                            $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCredito);
+                                            $douPagoDetalle = $douCuota; //Falta afectar credito
+                                            $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre());
                                             $arPagoDetalle->setVrPago($douPagoDetalle);
                                             $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
                                             $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
                                             $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                             $arPagoDetalle->setCreditoRel($arCredito);
-                                            $em->persist($arPagoDetalle);                                        
-                                        }                                        
+                                            $em->persist($arPagoDetalle);
+                                            if($arCredito->getSeguro() > 0) {
+                                                $intConceptoCreditos = 27; //Configurar desde configuraciones
+                                                $arPagoConceptoCreditoSeguro = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                                $arPagoConceptoCreditoSeguro = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intConceptoCreditos);                                        
+                                                $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                                $arPagoDetalle->setPagoRel($arPago);
+                                                $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCreditoSeguro);
+                                                $douPagoDetalle = $arCredito->getSeguro(); //Falta afectar credito
+                                                $arPagoDetalle->setDetalle("SEGURO DE CREDITO " . $arCredito->getCreditoTipoRel()->getNombre());
+                                                $arPagoDetalle->setVrPago($douPagoDetalle);
+                                                $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
+                                                $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
+                                                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                                                $arPagoDetalle->setCreditoRel($arCredito);
+                                                $em->persist($arPagoDetalle);                                        
+                                            }                                        
+                                        }
                                     }
                                 }
                                 

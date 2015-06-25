@@ -97,7 +97,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "TIPO PAGO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 6, $arDetallePago->getTipoPago(), 1, 0, 'R', 1);
+        $this->Cell(65, 6, $arDetallePago->getCreditoTipoPagoRel()->getNombre(), 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "SUSPENDIDO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -155,7 +155,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $douTotal = 0;
         foreach ($arCreditoPagos as $arCreditoPago) { 
             $pdf->Cell(25, 4, $arCreditoPago->getCodigoPagoCreditoPk(), 1, 0, 'L');
-            $pdf->Cell(45, 4, $arCreditoPago->getTipoPago(), 1, 0, 'L');
+            $pdf->Cell(45, 4, $arCreditoPago->getCreditoTipoPagoRel()->getNombre(), 1, 0, 'L');
             if ($arCreditoPago->getCodigoPagoFk() != "") {
                 $pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaDesde()->format('Y/m/d'), 1, 0, 'R');
                 $pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaHasta()->format('Y/m/d'), 1, 0, 'R');

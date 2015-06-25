@@ -23,6 +23,11 @@ class RhuCredito
     private $codigoCreditoTipoFk;
     
     /**
+     * @ORM\Column(name="codigo_credito_tipo_pago_fk", type="integer", nullable=true)
+     */    
+    private $codigoCreditoTipoPagoFk;
+    
+    /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
     private $codigoEmpleadoFk;        
@@ -72,10 +77,6 @@ class RhuCredito
      */
     private $numeroCuotaActual = 0; 
     
-    /**
-     * @ORM\Column(name="tipo_pago", type="string")
-     */
-    private $tipoPago;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -119,6 +120,12 @@ class RhuCredito
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="creditoRel")
      */
     protected $pagosDetallesCreditoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCreditoTipoPago", inversedBy="creditosCreditoTipoPagoRel")
+     * @ORM\JoinColumn(name="codigo_credito_tipo_pago_fk", referencedColumnName="codigo_credito_tipo_pago_pk")
+     */
+    protected $creditoTipoPagoRel;
 
     
     /**
@@ -162,6 +169,30 @@ class RhuCredito
     public function getCodigoCreditoTipoFk()
     {
         return $this->codigoCreditoTipoFk;
+    }
+
+    /**
+     * Set codigoCreditoTipoPagoFk
+     *
+     * @param integer $codigoCreditoTipoPagoFk
+     *
+     * @return RhuCredito
+     */
+    public function setCodigoCreditoTipoPagoFk($codigoCreditoTipoPagoFk)
+    {
+        $this->codigoCreditoTipoPagoFk = $codigoCreditoTipoPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCreditoTipoPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCreditoTipoPagoFk()
+    {
+        return $this->codigoCreditoTipoPagoFk;
     }
 
     /**
@@ -405,30 +436,6 @@ class RhuCredito
     }
 
     /**
-     * Set tipoPago
-     *
-     * @param string $tipoPago
-     *
-     * @return RhuCredito
-     */
-    public function setTipoPago($tipoPago)
-    {
-        $this->tipoPago = $tipoPago;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoPago
-     *
-     * @return string
-     */
-    public function getTipoPago()
-    {
-        return $this->tipoPago;
-    }
-
-    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -638,5 +645,29 @@ class RhuCredito
     public function getPagosDetallesCreditoRel()
     {
         return $this->pagosDetallesCreditoRel;
+    }
+
+    /**
+     * Set creditoTipoPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago $creditoTipoPagoRel
+     *
+     * @return RhuCredito
+     */
+    public function setCreditoTipoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago $creditoTipoPagoRel = null)
+    {
+        $this->creditoTipoPagoRel = $creditoTipoPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get creditoTipoPagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago
+     */
+    public function getCreditoTipoPagoRel()
+    {
+        return $this->creditoTipoPagoRel;
     }
 }

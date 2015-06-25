@@ -50,7 +50,7 @@
                     </tr>
                     <tr>
                         <th class="td-label">TIPO PAGO:</th>
-                        <td class="td-label">{{ arCreditos.tipoPago }}</td>
+                        <td class="td-label">{{ arCreditos.creditoTipopagoRel.nombre }}</td>
                         <th class="td-label">SUSPENDIDO:</th>
                         <td {% if arCreditos.estadoSuspendido == 0 %} class="danger"> NO {% else %} <td class="success"> SI {% endif %} </td>
                     </tr>
@@ -81,7 +81,7 @@
                     {% for arCreditoPago in arCreditoPago %}
                         <tr>
                             <td>{{ arCreditoPago.codigoPagoCreditoPk  }}</td>
-                            <td>{{ arCreditoPago.tipoPago  }}</td>
+                            <td>{{ arCreditoPago.creditoTipopagoRel.nombre  }}</td>
                             <td>{{ arCreditoPago.pagoRel.fechaDesde | default('') |date("Y/m/d")  }}</td>
                             <td>{{ arCreditoPago.pagoRel.fechaHasta | default('') |date("Y/m/d") }}</td>
                             <td>{{ arCreditoPago.fechaPago |date("Y/m/d")  }}</td>
