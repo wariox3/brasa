@@ -2,17 +2,18 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoCredito extends \FPDF_FPDF {
     public static $em;
-    //public static $codigoPago;
-    public function Generar($miThis) {        
+    public static $strDql;
+   
+    public function Generar($miThis, $dql) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
-        //self::$codigoPago = $codigoPago;
+        self::$strDql = $dql;
         $pdf = new FormatoCredito('L');
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 11);
-        //$pdf->FPDF('l');
+        
         $this->Body($pdf);
         $pdf->Output("Lista_Creditos.pdf", 'D');        
         
@@ -54,8 +55,10 @@ class FormatoCredito extends \FPDF_FPDF {
     }
 
     public function Body($pdf) {
+        $query = self::$em->createQuery(self::$strDql);
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arCreditos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findAll();
+        $arCreditos = $query->getResult();
+        //$arCreditos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findAll();
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arCreditos as $arCredito) {            

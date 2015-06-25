@@ -61,8 +61,8 @@ class ConsultasController extends Controller
             if($form->get('BtnPDFCredito')->isClicked()) {
                 $this->filtrarCreditoLista($form);
                 $this->CreditosListar();
-                $objReporteCostos = new \Brasa\RecursoHumanoBundle\Reportes\ReporteCreditos();
-                $objReporteCostos->Generar($this, $this->strSqlCreditoLista);
+                $objReporteCreditos = new \Brasa\RecursoHumanoBundle\Reportes\ReporteCreditos();
+                $objReporteCreditos->Generar($this, $this->strSqlCreditoLista);
             }            
             if($form->get('BtnFiltrarCredito')->isClicked()) {
                 $this->filtrarCreditoLista($form);

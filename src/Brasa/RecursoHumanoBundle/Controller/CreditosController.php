@@ -4,6 +4,8 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoType;
+use Doctrine\ORM\EntityRepository;
+
 class CreditosController extends Controller
 {    
     var $strSqlLista = "";
@@ -13,187 +15,92 @@ class CreditosController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
-        $this->listar();        
+        $this->listar();
+        $mensaje = 0;
         if ($form->isValid())
         {
-            /*$arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if ($form->get('BtnEliminar')->isClicked())
-            {    
-            if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $id) {
-                    $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                    $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($id);
-                    if ($arCreditos->getaprobado() == 1 or $arCreditos->getEstadoPagado() == 1)
-                    {
-                        $mensaje = "No se puede Eliminar el registro, por que el credito ya esta aprobado o cancelado!";
-                    }
-                    else
-                    {    
-                        $em->remove($arCreditos);
-                        $em->flush();
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if ($form->get('BtnEliminar')->isClicked()) {    
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoCredito) {
+                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+                        if ($arCreditos->getaprobado() == 1 or $arCreditos->getEstadoPagado() == 1) {
+                            $mensaje = "No se puede Eliminar el registro, por que el credito ya esta aprobado o cancelado!";
+                        }
+                        else {    
+                            $em->remove($arCreditos);
+                            $em->flush();
+                        }
                     }
                 }
+                $this->filtrarLista($form);
+                $this->listar();
             }
-            }*/
-            if ($form->get('BtnEliminar')->isClicked()) {    
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditos')->eliminarCredito($arrSeleccionados);
-            }
-            /*if($form->get('BtnAprobar')->isClicked()) {
+            
+            if($form->get('BtnAprobar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $id) {
+                    foreach ($arrSeleccionados AS $codigoCredito) {
                         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($id);
+                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
                         $arCreditos->setAprobado(1);
                         $em->persist($arCreditos);
                         $em->flush();
-                        
                     }
-                }  
-            }*/
-            if ($form->get('BtnAprobar')->isClicked()) {    
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->aprobarCredito($arrSeleccionados);
-                $this->filtrar($form);
-                $this->listar();
+                }
+                $this->filtrarLista($form);
+                $this->listar();  
             }
-            /*if($form->get('BtnDesaprobar')->isClicked()) {
+            
+            if($form->get('BtnDesaprobar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $id) {
+                    foreach ($arrSeleccionados AS $codigoCredito) {
                         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($id);
+                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
                         $arCreditos->setAprobado(0);
                         $em->persist($arCreditos);
                         $em->flush();
-                        
                     }
-                }  
-            }*/
-            if ($form->get('BtnDesAprobar')->isClicked()) {    
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->aprobarCredito($arrSeleccionados);
-                $this->filtrar($form);
-                $this->listar();
+                }
+                $this->filtrarLista($form);
+                $this->listar();  
             }
-            /*if($form->get('BtnSuspender')->isClicked()) {
+            
+            if($form->get('BtnSuspender')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $id) {
+                    foreach ($arrSeleccionados AS $codigoCredito) {
                         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($id);
+                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
                         if ($arCreditos->getEstadoSuspendido() == 0){
                             $arCreditos->setEstadoSuspendido(1);
                         } else {
                             $arCreditos->setEstadoSuspendido(0);
                         }
-                        
                         $em->persist($arCreditos);
                         $em->flush();
-                        
                     }
-                }  
-            }*/
-            if ($form->get('BtnSuspender')->isClicked()) {    
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->aprobarCredito($arrSeleccionados);
-                $this->filtrar($form);
-                $this->listar();
-            }
-            /*if($form->get('BtnExcel')->isClicked()) {
-                $objPHPExcel = new \PHPExcel();
-                // Set document properties
-                $objPHPExcel->getProperties()->setCreator("JG Efectivos")
-                    ->setLastModifiedBy("JG Efectivos")
-                    ->setTitle("Office 2007 XLSX Test Document")
-                    ->setSubject("Office 2007 XLSX Test Document")
-                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-                    ->setKeywords("office 2007 openxml php")
-                    ->setCategory("Test result file");
-
-                $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo_Credito')
-                            ->setCellValue('B1', 'Tipo_Credito')
-                            ->setCellValue('C1', 'Fecha_Credito')
-                            ->setCellValue('D1', 'Empleado')
-                            ->setCellValue('E1', 'Valor_Credito')
-                            ->setCellValue('F1', 'Valor_Cuota')
-                            ->setCellValue('G1', 'Valor_Seguro')
-                            ->setCellValue('H1', 'Cuotas')
-                            ->setCellValue('I1', 'Cuota_Actual')
-                            ->setCellValue('J1', 'Pagado')
-                            ->setCellValue('K1', 'Aprobado')
-                            ->setCellValue('L1', 'Suspendido');
-
-                $i = 2;
-                $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findAll();
-                
-                foreach ($arCreditos as $arCredito) {
-                    if ($arCredito->getEstadoPagado() == 1)
-                    {
-                        $Estado = "SI";
-                    }
-                    else
-                    {
-                        $Estado = "NO"; 
-                    }
-                    if ($arCredito->getAprobado() == 1)
-                    {
-                        $Aprobado = "SI";
-                    }
-                    else
-                    {
-                        $Aprobado = "NO"; 
-                    }
-                    if ($arCredito->getEstadoSuspendido() == 1)
-                    {
-                        $Suspendido = "SI";
-                    }
-                    else
-                    {
-                        $Suspendido = "NO"; 
-                    }
-                    $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
-                            ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
-                            ->setCellValue('C' . $i, $arCredito->getFecha())
-                            ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('E' . $i, $arCredito->getVrPagar())
-                            ->setCellValue('F' . $i, $arCredito->getVrCuota())
-                            ->setCellValue('G' . $i, $arCredito->getSeguro())
-                            ->setCellValue('H' . $i, $arCredito->getNumeroCuotas())
-                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotaActual())
-                            ->setCellValue('J' . $i, $Estado)
-                            ->setCellValue('K' . $i, $Aprobado)
-                            ->setCellValue('L' . $i, $Suspendido);
-                    $i++;
                 }
-
-                $objPHPExcel->getActiveSheet()->setTitle('Creditos');
-                $objPHPExcel->setActiveSheetIndex(0);
-
-                // Redirect output to a client’s web browser (Excel2007)
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Creditos.xlsx"');
-                header('Cache-Control: max-age=0');
-                // If you're serving to IE 9, then the following may be needed
-                header('Cache-Control: max-age=1');
-                // If you're serving to IE over SSL, then the following may be needed
-                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header ('Pragma: public'); // HTTP/1.0
-                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-                $objWriter->save('php://output');
-                exit;
-            }*/
+                $this->filtrarLista($form);
+                $this->listar();   
+            }
+            
             if ($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
+                $this->filtrarLista($form);
                 $this->listar();
                 $this->generarExcel();
             }
             if($form->get('BtnPdf')->isClicked()) {
-                $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCredito();
-                $objFormatoPago->Generar($this);
+                $this->filtrarLista($form);
+                $this->listar();
+                $objFormatoCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCredito();
+                $objFormatoCredito->Generar($this, $this->strSqlLista);
             }
-            
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarLista($form);
+                $this->listar();
+            }
         }
-        $arCreditos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);        
-        //$arCreditos = $paginator->paginate($query, $request->query->get('page', 1), 20);                
+        $arCreditos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                        
         return $this->render('BrasaRecursoHumanoBundle:Creditos:lista.html.twig', array(
             'arCreditos' => $arCreditos,
             'mensaje' => $mensaje,
@@ -204,11 +111,57 @@ class CreditosController extends Controller
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDQL(
-                    "",
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaCreditoDQL(
                     $session->get('filtroCodigoCentroCosto'),
-                    $session->get('filtroIdentificacion')
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
                     );
+    }
+    
+    private function formularioLista() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
+        $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->fechaAntiguaCredito();
+        
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('fechaDesde', 'date', array('label'  => 'Desde', 'data' => new \DateTime($fechaAntigua))) 
+            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
+            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
+            ->add('BtnDesaprobar', 'submit', array('label'  => 'Desaprobar',))
+            ->add('BtnSuspender', 'submit', array('label'  => 'Suspender / No Suspender',))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))    
+            ->getForm();
+        return $form;
+    } 
+    
+    private function filtrarLista($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData()->format('Y-m-d'));
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData()->format('Y-m-d'));
     }
     
     public function nuevoAction($codigoCredito, $codigoEmpleado) {
@@ -332,5 +285,97 @@ class CreditosController extends Controller
             'mensaje' => $mensaje,
             'form' => $form->createView()));
     }
+    
+    private function generarExcel() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("JG Efectivos")
+                    ->setLastModifiedBy("JG Efectivos")
+                    ->setTitle("Office 2007 XLSX Test Document")
+                    ->setSubject("Office 2007 XLSX Test Document")
+                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("Test result file");
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A1', 'Codigo_Credito')
+                            ->setCellValue('B1', 'Tipo_Credito')
+                            ->setCellValue('C1', 'Fecha_Credito')
+                            ->setCellValue('D1', 'Empleado')
+                            ->setCellValue('E1', 'Valor_Credito')
+                            ->setCellValue('F1', 'Valor_Cuota')
+                            ->setCellValue('G1', 'Valor_Seguro')
+                            ->setCellValue('H1', 'Cuotas')
+                            ->setCellValue('I1', 'Cuota_Actual')
+                            ->setCellValue('J1', 'Pagado')
+                            ->setCellValue('K1', 'Aprobado')
+                            ->setCellValue('L1', 'Suspendido');
+
+                $i = 2;
+                $query = $em->createQuery($this->strSqlLista);
+                $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                $arCreditos = $query->getResult();
+                
+                foreach ($arCreditos as $arCredito) {
+                    if ($arCredito->getEstadoPagado() == 1)
+                    {
+                        $Estado = "SI";
+                    }
+                    else
+                    {
+                        $Estado = "NO"; 
+                    }
+                    if ($arCredito->getAprobado() == 1)
+                    {
+                        $Aprobado = "SI";
+                    }
+                    else
+                    {
+                        $Aprobado = "NO"; 
+                    }
+                    if ($arCredito->getEstadoSuspendido() == 1)
+                    {
+                        $Suspendido = "SI";
+                    }
+                    else
+                    {
+                        $Suspendido = "NO"; 
+                    }
+                    $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
+                            ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
+                            ->setCellValue('C' . $i, $arCredito->getFecha())
+                            ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('E' . $i, $arCredito->getVrPagar())
+                            ->setCellValue('F' . $i, $arCredito->getVrCuota())
+                            ->setCellValue('G' . $i, $arCredito->getSeguro())
+                            ->setCellValue('H' . $i, $arCredito->getNumeroCuotas())
+                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotaActual())
+                            ->setCellValue('J' . $i, $Estado)
+                            ->setCellValue('K' . $i, $Aprobado)
+                            ->setCellValue('L' . $i, $Suspendido);
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->setTitle('Creditos');
+                $objPHPExcel->setActiveSheetIndex(0);
+
+                // Redirect output to a client’s web browser (Excel2007)
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="Creditos.xlsx"');
+                header('Cache-Control: max-age=0');
+                // If you're serving to IE 9, then the following may be needed
+                header('Cache-Control: max-age=1');
+                // If you're serving to IE over SSL, then the following may be needed
+                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header ('Pragma: public'); // HTTP/1.0
+                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+                $objWriter->save('php://output');
+                exit;
+            }
     
 }
