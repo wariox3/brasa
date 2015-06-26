@@ -19,13 +19,22 @@
                 <tr>
                     <td class="titulo">CODIGO:</td>
                     <td>{{ arDisciplinario.codigoDisciplinarioPk }}</td>
-                    <td class="titulo">TIPO:</td>
+                    <td class="titulo">PROCESO:</td>
                     <td>{{ arDisciplinario.disciplinarioTipoRel.nombre }}</td>
-                    <td class="titulo"></td>
-                    <td></td>
+                    <td class="titulo">CAUSAL</td>
+                    <td>{{ arDisciplinario.asunto }}</td>
                 </tr>
                 <tr>
-                    <td colspan="8" class="titulo">Comentarios: {{ arDisciplinario.comentarios }}</td>
+                    <td class="titulo">EMPLEADO:</td>
+                    <td>{{ arDisciplinario.empleadoRel.nombreCorto }}</td>
+                    <td class="titulo">IDENTIFICACION:</td>
+                    <td>{{ arDisciplinario.empleadoRel.numeroIdentificacion }}</td>
+                    <td class="titulo">FECHA</td>
+                    <td>{{ arDisciplinario.fecha | date('Y/m/d') }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">COMENTARIOS:</td>
+                    <td colspan="5" >{{ arDisciplinario.comentarios }}</td>
                 </tr>
             </table>
       </div>

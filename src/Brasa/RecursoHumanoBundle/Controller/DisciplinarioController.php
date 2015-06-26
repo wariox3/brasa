@@ -67,7 +67,7 @@ class DisciplinarioController extends Controller
             $em->persist($arDisciplinario);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_disciplinario_nuevo', array('codigoDisciplinario' => 0)));
+                return $this->redirect($this->generateUrl('brs_rhu_disciplinario_nuevo', array('codigoCentroCosto' =>  $codigoCentroCosto, 'codigoEmpleado' => $codigoEmpleado, 'codigoDisciplinario' => 0 )));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
@@ -82,15 +82,26 @@ class DisciplinarioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
         $objMensaje = $this->get('mensajes_brasa');             
-        
+        $arCodigoTipoProceso = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+        $arCodigoTipoProceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) { 
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoDisciplinario = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinario();
-                $objFormatoDisciplinario->Generar($this, $codigoDisciplinario);
+                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 1){
+                   $objFormatoDisciplinarioSuspencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioSuspension();
+                   $objFormatoDisciplinarioSuspencion->Generar($this, $codigoDisciplinario); 
+                }   
+                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 2) {
+                    $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioLlamadoAtencion();
+                    $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
+                }   
+                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 3) {
+                    $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioLlamadoAtencion();
+                    $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
+                }
             }
  
         }                
@@ -106,7 +117,9 @@ class DisciplinarioController extends Controller
         $session = $this->getRequest()->getSession();
         $this->strListaDql = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->listaDQL(                
                 $session->get('filtroIdentificacion'),                                 
-                $session->get('filtroCodigoCentroCosto')
+                $session->get('filtroCodigoCentroCosto'),
+                $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
                 );  
     }   
 
@@ -127,7 +140,7 @@ class DisciplinarioController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
         }
-        $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->fechaAntigua();
+        $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->fechaAntigua();
         
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedades)                                                       
@@ -147,7 +160,9 @@ class DisciplinarioController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);                
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());                
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData()->format('Y-m-d'));
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData()->format('Y-m-d'));
     }  
     
     private function generarExcel() {
@@ -156,51 +171,58 @@ class DisciplinarioController extends Controller
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("JG Efectivos")
-            ->setLastModifiedBy("JG Efectivos")
-            ->setTitle("Office 2007 XLSX Test Document")
-            ->setSubject("Office 2007 XLSX Test Document")
-            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-            ->setKeywords("office 2007 openxml php")
-            ->setCategory("Test result file");
+                    ->setLastModifiedBy("JG Efectivos")
+                    ->setTitle("Office 2007 XLSX Test Document")
+                    ->setSubject("Office 2007 XLSX Test Document")
+                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("Test result file");
 
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'IDENTIFICACION')
-                    ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'ASUNTO');
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A1', 'Codigo_Credito')
+                            ->setCellValue('B1', 'Fecha')
+                            ->setCellValue('C1', 'C. Centro')
+                            ->setCellValue('D1', 'Identificacion')
+                            ->setCellValue('E1', 'Empleado')
+                            ->setCellValue('F1', 'Cargo')
+                            ->setCellValue('G1', 'Proceso')
+                            ->setCellValue('H1', 'Causal');
 
-        $i = 2;
-        $query = $em->createQuery($this->strListaDql);
-        $arDisciplinarios = $query->getResult();
-        foreach ($arDisciplinarios as $arDisciplinario) {            
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arDisciplinario->getCodigoDisciplinarioPk())
-                    ->setCellValue('B' . $i, $arDisciplinario->getDisciplinarioTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arDisciplinario->getFecha()->format('Y-m-d'))
-                    ->setCellValue('D' . $i, $arDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arDisciplinario->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arDisciplinario->getAsunto());
-            $i++;
-        }
+                $i = 2;
+                $query = $em->createQuery($this->strSqlLista);
+                $arDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+                $arDisciplinarios = $query->getResult();
+                
+                foreach ($arDisciplinarios as $arDisciplinario) {
+                    
+                    $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A' . $i, $arDisciplinarios->getCodigoDisciplinarioPk())
+                            ->setCellValue('B' . $i, $arDisciplinarios->getFecha()->format('Y/m/d'))
+                            ->setCellValue('C' . $i, $arDisciplinarios->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                            ->setCellValue('D' . $i, $arDisciplinarios->getEmpleadoRel()->getNumeroIdentificacion())
+                            ->setCellValue('E' . $i, $arDisciplinarios->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('F' . $i, $arDisciplinarios->getEmpleadoRel()->getCargoDescripcion())
+                            ->setCellValue('G' . $i, $arDisciplinarios->getDisciplinarioTipoRel()->getNombre())
+                            ->setCellValue('H' . $i, $arDisciplinarios->getAsunto());
+                    $i++;
+                }
 
-        $objPHPExcel->getActiveSheet()->setTitle('ProcesosDisciplinarios');
-        $objPHPExcel->setActiveSheetIndex(0);
+                $objPHPExcel->getActiveSheet()->setTitle('ProcesosDisciplinarios');
+                $objPHPExcel->setActiveSheetIndex(0);
 
-        // Redirect output to a client’s web browser (Excel2007)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ProcesosDisciplinario.xlsx"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-        // If you're serving to IE over SSL, then the following may be needed
-        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header ('Pragma: public'); // HTTP/1.0
-        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-        $objWriter->save('php://output');
-        exit;
-    }    
+                // Redirect output to a client’s web browser (Excel2007)
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="ProcesosDisciplinarios.xlsx"');
+                header('Cache-Control: max-age=0');
+                // If you're serving to IE 9, then the following may be needed
+                header('Cache-Control: max-age=1');
+                // If you're serving to IE over SSL, then the following may be needed
+                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header ('Pragma: public'); // HTTP/1.0
+                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+                $objWriter->save('php://output');
+                exit;
+            }    
 }

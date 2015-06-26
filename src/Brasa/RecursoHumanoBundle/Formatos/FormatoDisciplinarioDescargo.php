@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoDisciplinario extends \FPDF_FPDF {
+class FormatoDisciplinarioDescargo extends \FPDF_FPDF {
     public static $em;
     public static $codigoDisciplinario;
     
@@ -9,12 +9,12 @@ class FormatoDisciplinario extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoDisciplinario = $codigoDisciplinario;
-        $pdf = new FormatoDisciplinario();
+        $pdf = new FormatoDisciplinarioDescargo();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
-        $pdf->Output("Proceso$codigoDisciplinario.pdf", 'D');        
+        $pdf->Output("ProcesoDescargo$codigoDisciplinario.pdf", 'D');        
         
     } 
     
