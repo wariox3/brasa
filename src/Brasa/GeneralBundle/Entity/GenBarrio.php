@@ -39,14 +39,20 @@ class GenBarrio
      */
     protected $rhuSeleccionesBarrioRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="barrioRel")
+     */
+    protected $rhuEmpleadosBarrioRel;
+    
  
-
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->rhuSeleccionesBarrioRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuEmpleadosBarrioRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -177,5 +183,39 @@ class GenBarrio
     public function getRhuSeleccionesBarrioRel()
     {
         return $this->rhuSeleccionesBarrioRel;
+    }
+
+    /**
+     * Add rhuEmpleadosBarrioRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosBarrioRel
+     *
+     * @return GenBarrio
+     */
+    public function addRhuEmpleadosBarrioRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosBarrioRel)
+    {
+        $this->rhuEmpleadosBarrioRel[] = $rhuEmpleadosBarrioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuEmpleadosBarrioRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosBarrioRel
+     */
+    public function removeRhuEmpleadosBarrioRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosBarrioRel)
+    {
+        $this->rhuEmpleadosBarrioRel->removeElement($rhuEmpleadosBarrioRel);
+    }
+
+    /**
+     * Get rhuEmpleadosBarrioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuEmpleadosBarrioRel()
+    {
+        return $this->rhuEmpleadosBarrioRel;
     }
 }

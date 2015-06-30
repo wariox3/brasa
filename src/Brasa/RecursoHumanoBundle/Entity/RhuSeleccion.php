@@ -88,9 +88,19 @@ class RhuSeleccion
     private $codigoCiudadFk;    
     
     /**
-     * @ORM\Column(name="barrio", type="integer", length=80, nullable=true)
+     * @ORM\Column(name="codigo_barrio_fk", type="integer", length=80, nullable=true)
      */    
-    private $codigoBarrioFk;            
+    private $codigoBarrioFk;
+    
+    /**
+     * @ORM\Column(name="codigo_rh_fk", type="integer", nullable=true)
+     */    
+    private $codigoRhPk;
+    
+     /**
+     * @ORM\Column(name="codigo_estado_civil_fk", type="string", length=1, nullable=true)
+     */    
+    private $codigoEstadoCivilFk;
     
     /**
      * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
@@ -185,6 +195,12 @@ class RhuSeleccion
     protected $barrioRel;
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuRh", inversedBy="seleccionesRhRel")
+     * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
+     */
+    protected $rhRel;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionGrupo", inversedBy="seleccionesSeleccionGrupoRel")
      * @ORM\JoinColumn(name="codigo_seleccion_grupo_fk", referencedColumnName="codigo_seleccion_grupo_pk")
      */
@@ -200,7 +216,8 @@ class RhuSeleccion
      */
     protected $seleccionesPruebasSeleccionRel;    
    
-  
+
+
     /**
      * Constructor
      */
@@ -578,6 +595,54 @@ class RhuSeleccion
     public function getCodigoBarrioFk()
     {
         return $this->codigoBarrioFk;
+    }
+
+    /**
+     * Set codigoRhPk
+     *
+     * @param integer $codigoRhPk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoRhPk($codigoRhPk)
+    {
+        $this->codigoRhPk = $codigoRhPk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRhPk
+     *
+     * @return integer
+     */
+    public function getCodigoRhPk()
+    {
+        return $this->codigoRhPk;
+    }
+
+    /**
+     * Set codigoEstadoCivilFk
+     *
+     * @param string $codigoEstadoCivilFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoEstadoCivilFk($codigoEstadoCivilFk)
+    {
+        $this->codigoEstadoCivilFk = $codigoEstadoCivilFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEstadoCivilFk
+     *
+     * @return string
+     */
+    public function getCodigoEstadoCivilFk()
+    {
+        return $this->codigoEstadoCivilFk;
     }
 
     /**
@@ -986,6 +1051,30 @@ class RhuSeleccion
     public function getBarrioRel()
     {
         return $this->barrioRel;
+    }
+
+    /**
+     * Set rhRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRh $rhRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setRhRel(\Brasa\RecursoHumanoBundle\Entity\RhuRh $rhRel = null)
+    {
+        $this->rhRel = $rhRel;
+
+        return $this;
+    }
+
+    /**
+     * Get rhRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuRh
+     */
+    public function getRhRel()
+    {
+        return $this->rhRel;
     }
 
     /**

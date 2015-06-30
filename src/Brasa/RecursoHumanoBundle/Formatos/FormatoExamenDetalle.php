@@ -27,17 +27,12 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $telefono = $direccionEntidad->getTelefono();
         $arExamenDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
         $arExamenDetalles = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => self::$codigoExamen));
-        $precioTipoExamen = 0;
-        $totalExamen = 0;
-        foreach ($arExamenDetalles as $arExamenDetalle) {
-           $precioTipoExamen = $arExamenDetalle->getVrPrecio();
-           $totalExamen += $precioTipoExamen;
-        }
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
         $this->Cell(190, 10, "DATOS EMPLEADO " , 1, 0, 'L', 1);
+        $this->SetFillColor(272, 272, 272); 
         $this->SetXY(10, 30);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "DOCUMENTO:" , 1, 0, 'L', 1);
@@ -45,7 +40,7 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $this->Cell(30, 6, $arExamen->getIdentificacion(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "NOMBRE:" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',8);
+        $this->SetFont('Arial','',7);
         $this->Cell(100, 6, $arExamen->getNombreCorto(), 1, 0, 'L', 1);
         $this->SetXY(10, 35);
         $this->SetFont('Arial','B',8);
@@ -60,7 +55,7 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "TOTAL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(30, 6, number_format($totalExamen, 2, '.', ',') , 1, 0, 'R', 1);
+        $this->Cell(30, 6, number_format($arExamen->getVrTotal(), 2, '.', ',') , 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "ENTIDAD EXAMEN:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -122,7 +117,14 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
                 
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 33);
-        }        
+        }
+        $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arExamen = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find(self::$codigoExamen);
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->Cell(150, 4, "TOTAL", 1, 0, 'R');
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->Cell(20, 4, number_format($arExamen->getVrTotal(), 2, '.', ','), 1, 0, 'R');
+        $pdf->Cell(20, 4, "", 1, 0, 'R');
     }
 
     public function Footer() {

@@ -187,7 +187,6 @@ class CreditosController extends Controller
             $vrSaltoTotal = $douVrPagar;
             $douVrCuota = $douVrPagar / $intCuotas;
             $arCredito->setVrCuota($douVrCuota);
-            $arCredito->setVrCuotaTemporal($douVrCuota);
             $arSeleccion = $request->request->get('ChkSeleccionar');
             //$arCredito->setCreditoTipoPagoRel($arCredito);   
             $arCredito->setFecha(new \DateTime('now'));
@@ -242,7 +241,7 @@ class CreditosController extends Controller
         $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
         $form = $this->createFormBuilder()
             ->add('creditoRel', 'text', array('data' => $codigoCreditoPk, 'attr' => array('readonly' => 'readonly')))
-            ->add('vrCuota', 'text', array('data' => round($arCredito->getVrCuota() - $arCredito->getSeguro(),2), 'attr' => array('readonly' => 'readonly')))
+            ->add('vrCuota', 'text', array('data' => round($arCredito->getVrCuota(),2), 'attr' => array('readonly' => 'readonly')))
             ->add('saldo', 'text', array('data' => round($arCredito->getSaldo(),2), 'attr' => array('readonly' => 'readonly')))    
             ->add('vrAbono','text')
             ->add('tipoPago','hidden', array('data' => 'ABONO'))    
@@ -269,7 +268,7 @@ class CreditosController extends Controller
                 $arPagoCredito->setCreditoRel($arCredito);
                 $arPagoCredito->setvrCuota($form->get('vrAbono')->getData());
                 $arPagoCredito->setfechaPago(new \ DateTime("now"));    
-                $arPagoCredito->settipoPago('ABONO');
+                $arPagoCredito->setCodigoCreditoTipoPagoFk(2);
                 $arPagoCredito->setCreditoRel($arCredito);
                 $em->persist($arPagoCredito);
                 $em->persist($arCredito);

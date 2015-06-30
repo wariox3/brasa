@@ -17,47 +17,47 @@
       <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
-                    <td class="td-label">Codigo:</td>
+                    <td class="titulo">CODIGO:</td>
                     <td class="td-in-well">{{ arSeleccion.codigoSeleccionPk }}</td>
-                    <td class="td-label">Tipo:</td>
+                    <td class="titulo">TIPO:</td>
                     <td class="td-in-well">{{ arSeleccion.seleccionTipoRel.nombre }}</td>
-                    <td class="td-label">Direccion:</td>
+                    <td class="titulo">DIRECCION:</td>
                     <td class="td-in-well">{{ arSeleccion.direccion }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Nombre:</td>
+                    <td class="titulo">NOMBRE:</td>
                     <td class="td-in-well">{{ arSeleccion.nombreCorto }}</td>
-                    <td class="td-label">Celular:</td>
+                    <td class="titulo">CELULAR:</td>
                     <td class="td-in-well">{{ arSeleccion.celular }}</td>
-                    <td class="td-label"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">RH</td>
+                    <td class="td-in-well">{{ arSeleccion.rhRel.tipo }} </td>
                 </tr>
                 <tr>
-                    <td class="td-label">Identificacion:</td>
+                    <td class="titulo">IDENTIFICACION:</td>
                     <td class="td-in-well">{{ arSeleccion.numeroIdentificacion }}</td>
-                    <td class="td-label">Telefono:</td>
+                    <td class="titulo">TELEFONO:</td>
                     <td class="td-in-well">{{ arSeleccion.telefono }}</td>
-                    <td class="td-label">Ciudad:</td>
+                    <td class="titulo">CIUDAD:</td>
                     <td class="td-in-well">{{ arSeleccion.ciudadRel.nombre }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Estado civil:</td>
+                    <td class="titulo">ESTADO CIVIL:</td>
                     <td class="td-in-well">{{ arSeleccion.estadoCivilRel.nombre }}</td>
-                    <td class="td-label">Sexo:</td>
+                    <td class="titulo">SEXO:</td>
                     <td class="td-in-well"{% if arSeleccion.codigoSexoFk == "M" %}> MASCULINO {% else %} FEMENINO {% endif%}</td>
-                    <td class="td-label">Barrio:</td>
+                    <td class="titulo">BARRIO:</td>
                     <td class="td-in-well">{{ arSeleccion.barrioRel.nombre }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Fecha nacimiento:</td>
+                    <td class="titulo">FECHA NACIMIENTO:</td>
                     <td class="td-in-well">{{ arSeleccion.fechaNacimiento|date("Y/m/d") }}</td>
-                    <td class="td-label">Fecha pruebas:</td>
+                    <td class="titulo">FECHA PRUEBAS:</td>
                     <td class="td-in-well">{{ arSeleccion.fechaPruebas|date("Y/m/d H:i") }}</td>
-                    <td class="td-label">Correo:</td>
+                    <td class="titulo">CORREO:</td>
                     <td class="td-in-well">{{ arSeleccion.correo }}</td>
                 </tr>
                 <tr>
-                    <td colspan="8">Comentarios: {{ arSeleccion.comentarios }}</td>
+                    <td class="titulo" colspan="8">COMENTARIOS: {{ arSeleccion.comentarios }}</td>
                 </tr>
             </table>
       </div>
@@ -68,7 +68,7 @@
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Documentos</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
             </div>
         </div>
     <br /><br />

@@ -36,7 +36,7 @@ class ConsultasController extends Controller
             }
 
         }
-        $arPagos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
+        $arPagos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 40);
         return $this->render('BrasaRecursoHumanoBundle:Consultas/Costos:general.html.twig', array(
             'arPagos' => $arPagos,
             'form' => $form->createView()
@@ -70,7 +70,7 @@ class ConsultasController extends Controller
             }
 
         }
-        $arCreditos = $paginator->paginate($em->createQuery($this->strSqlCreditoLista), $request->query->get('page', 1), 20);
+        $arCreditos = $paginator->paginate($em->createQuery($this->strSqlCreditoLista), $request->query->get('page', 1), 40);
         return $this->render('BrasaRecursoHumanoBundle:Consultas/Creditos:general.html.twig', array(
             'arCreditos' => $arCreditos,
             'form' => $form->createView()

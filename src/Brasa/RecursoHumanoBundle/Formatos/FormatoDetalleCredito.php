@@ -25,6 +25,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
         $this->Cell(190, 10, "INFORMACION DEL CREDITO " , 1, 0, 'L', 1);
+        $this->SetFillColor(272, 272, 272);
         $this->SetXY(10, 30);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "CODIGO CREDITO:" , 1, 0, 'L', 1);
@@ -97,7 +98,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "TIPO PAGO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 6, $arDetallePago->getCreditoTipoPagoRel()->getNombre(), 1, 0, 'R', 1);
+        $this->Cell(65, 6, $arDetallePago->getCreditoTipoPagoRel()->getNombre(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "SUSPENDIDO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -130,7 +131,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('', 'B', 7);
+        $this->SetFont('', 'B', 8);
 
         //creamos la cabecera de la tabla.
         $w = array(25, 45, 30, 30, 30, 30);
@@ -170,7 +171,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 33);
         }
-        $pdf->SetX(10);
+        
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->Cell(160, 4, "TOTAL", 1, 0, 'R');
         $pdf->Cell(30, 4, number_format($douTotal, 2, '.', ','), 1, 0, 'R');

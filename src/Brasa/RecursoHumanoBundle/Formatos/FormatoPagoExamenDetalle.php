@@ -24,8 +24,9 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         $this->SetFont('Arial','B',10);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
-        $this->Cell(190, 10, "DATOS PAGO EXAMEN " , 1, 0, 'L', 1);
+        $this->Cell(190, 10, "DATOS PAGO ENTIDAD EXAMEN " , 1, 0, 'L', 1);
         $this->SetXY(10, 30);
+        $this->SetFillColor(272, 272, 272); 
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "CODIGO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -45,7 +46,7 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
     }
 
     public function EncabezadoDetalles() {
-        $this->Ln(14);
+        $this->Ln(12);
         $header = array('CODIGO', 'IDENTIFICACION', 'NOMBRE', 'PRECIO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);

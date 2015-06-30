@@ -8,7 +8,7 @@
         {{ form_errors(form) }}
         <div class="btn-group">
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 3,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Documentos</a>                        
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 3,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                        
         </div>
         <br /> <br />
         <div class="panel panel-default">
@@ -29,7 +29,7 @@
                         <td class="titulo">CELULAR:</td>
                         <td class="td-in-well">{{ arEmpleado.celular }}</td>
                         <td class="titulo">BARRIO:</td>
-                        <td class="td-in-well">{{ arEmpleado.barrio }}</td>
+                        <td class="td-in-well">{{ arEmpleado.barrioRel.nombre }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">IDENTIFICACION:</td>
@@ -43,9 +43,9 @@
                         <td class="titulo">ESTADO CIVIL:</td>
                         <td class="td-in-well">{{ arEmpleado.estadoCivilRel.nombre }}</td>                    
                         <td class="titulo">SEXO:</td>
-                        <td class="td-in-well">{{ arEmpleado.codigoSexoFk }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="td-in-well">{% if arEmpleado.codigoSexoFk == "M" %} MASCULINO {% else %} FEMENINO{% endif %}</td>
+                        <td class="titulo">RH</td>
+                        <td class="td-in-well">{{ arEmpleado.rhRel.tipo }}</td>
                     </tr>                
                     <tr>
                         <td class="titulo">FECHA NACIMIENTO:</td>
@@ -88,7 +88,7 @@
                         <td class="td-in-well"></td>
                     </tr>                 
                     <tr>
-                        <td colspan="8">COMENTARIOS: {{ arEmpleado.comentarios }}</td>
+                        <td class="titulo" colspan="8">COMENTARIOS: {{ arEmpleado.comentarios }}</td>
                     </tr>
                 </table>
             </div>
@@ -99,7 +99,7 @@
             <div class="panel-body">
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>ID</th>
+                        <th>{{ knp_pagination_sortable(arContratos, 'ID', 'e.codigoContratoPk') }}</th>
                         <th>TIPO</th>
                         <th>FECHA</th>
                         <th>NUMERO</th>
@@ -138,6 +138,9 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arContratos) }} 
+                </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleado.codigoEmpleadoPk}) }}', 'NuevoContrato', 600, 900)" >Nuevo</a>                        
@@ -153,7 +156,7 @@
             <div class="panel-body">
                 <table  class="table table-striped table-bordered table-condensed table-hover">
                     <tr>
-                        <th>ID</th>
+                        <th>{{ knp_pagination_sortable(arCreditos, 'ID', 'e.codigoCreditoPk') }}</th>
                         <th>TIPO</th>
                         <th>FECHA</th>
                         <th style="text-align: right">VR. CREDITO</th>
@@ -189,6 +192,9 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arCreditos) }} 
+                </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': 0, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarCredito', 600, 900)" >Nuevo</a>
@@ -205,7 +211,7 @@
             <div class="panel-body">
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>ID</th>
+                        <th>{{ knp_pagination_sortable(arPagosAdicionales, 'ID', 'e.codigoPagoAdicionalPk') }}</th>
                         <th>NUMERO</th>
                         <th>CONCEPTO</th>
                         <th>CANT</th>
@@ -224,6 +230,9 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arPagosAdicionales) }} 
+                </div>
             </div>
         </div>
 
@@ -232,7 +241,7 @@
             <div class="panel-body">
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>ID</th>
+                        <th>{{ knp_pagination_sortable(arIncapacidades, 'ID', 'e.codigoIncapacidadPk') }}</th>
                         <th>TIPO</th>
                         <th>DIAGNOSTICO</th>
                         <th>DESDE</th>
@@ -256,6 +265,9 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arIncapacidades) }} 
+                </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Nuevo</a> {% endif %}                        
@@ -271,7 +283,7 @@
             <div class="panel-body">
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>ID</th>
+                        <th>{{ knp_pagination_sortable(arLicencias, 'ID', 'e.codigoLicenciaPk') }}</th>
                         <th>TIPO</th>
                         <th>DESDE</th>
                         <th>HASTA</th>
@@ -295,6 +307,9 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arLicencias) }} 
+                </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarLicencia', 600, 900)" >Nuevo</a>{% endif %}                        
@@ -310,7 +325,7 @@
             <div class="panel-body">
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>CODIGO</th>
+                        <th>{{ knp_pagination_sortable(arDisciplinarios, 'CODIGO', 'e.codigoDisciplinarioPk') }}</th>
                         <th>FECHA</th>
                         <th>C. CENTRO</th>                
                         <th>IDENTIFICACION</th>
@@ -337,6 +352,9 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arDisciplinarios) }} 
+                </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': 0 }) }}', 'AgregarProcesoDisciplinario', 600, 900)" >Nuevo</a> {% endif %}                        

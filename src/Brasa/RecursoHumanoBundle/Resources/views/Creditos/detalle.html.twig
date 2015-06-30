@@ -43,7 +43,7 @@
                         <td {% if arCreditos.estadoPagado == 1 %} class="success">SI{% else %} <td class="danger"> NO {% endif %}</td>
                     </tr>
                     <tr>
-                        <th class="td-label">SALDO TEMPORAL:</th>
+                        <th class="td-label">SALDO REAL:</th>
                         <td class="td-label" align="right">{{ arCreditos.saldoTotal | number_format(2, '.', ',')}}</td>
                         <th class="td-label">APROBADO:</th>
                         <td {% if arCreditos.aprobado == 0 %} class="danger"> NO {% else %} <td class="success"> SI {% endif %} </td>
@@ -81,7 +81,7 @@
                     {% for arCreditoPago in arCreditoPago %}
                         <tr>
                             <td>{{ arCreditoPago.codigoPagoCreditoPk  }}</td>
-                            <td>{{ arCreditoPago.creditoTipopagoRel.nombre  }}</td>
+                            <td>{{ arCreditoPago.creditoTipopagoRel.nombre | default('ABONO EXTERNO') }}</td>
                             <td>{{ arCreditoPago.pagoRel.fechaDesde | default('') |date("Y/m/d")  }}</td>
                             <td>{{ arCreditoPago.pagoRel.fechaHasta | default('') |date("Y/m/d") }}</td>
                             <td>{{ arCreditoPago.fechaPago |date("Y/m/d")  }}</td>

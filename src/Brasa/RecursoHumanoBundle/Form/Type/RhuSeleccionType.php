@@ -37,7 +37,11 @@ class RhuSeleccionType extends AbstractType
             ->add('estadoCivilRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEstadoCivil',
                 'property' => 'nombre',
-            ))                 
+            ))
+            ->add('rhRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuRh',
+                'property' => 'tipo',
+            ))                
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {

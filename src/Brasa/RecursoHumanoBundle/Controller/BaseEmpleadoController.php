@@ -95,6 +95,7 @@ class BaseEmpleadoController extends Controller
     public function detalleAction($codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()
             ->add('BtnRetirarContrato', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Eliminar',))
@@ -173,12 +174,32 @@ class BaseEmpleadoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
-            }            
+            }
+            
+            if($form->get('BtnEliminarDisciplinario')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarDisciplinario');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoDisciplinario) {
+                        $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+                        $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
+                        $em->remove($arDisciplinario);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
+                }
+            }
+            
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoHojaVida = new \Brasa\RecursoHumanoBundle\Formatos\FormatoHojaVida();
                 $objFormatoHojaVida->Generar($this, $codigoEmpleado);
             }
         }
+        $arPagosAdicionales = $paginator->paginate($arPagosAdicionales, $this->get('request')->query->get('page', 1),5);
+        $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('request')->query->get('page', 1),5);
+        $arLicencias = $paginator->paginate($arLicencias, $this->get('request')->query->get('page', 1),5);
+        $arContratos = $paginator->paginate($arContratos, $this->get('request')->query->get('page', 1),5);
+        $arCreditos = $paginator->paginate($arCreditos, $this->get('request')->query->get('page', 1),5);
+        $arDisciplinarios = $paginator->paginate($arDisciplinarios, $this->get('request')->query->get('page', 1),5);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
                     'arPagosAdicionales' => $arPagosAdicionales,

@@ -73,14 +73,14 @@ class RhuEmpleado
     private $codigoCiudadFk;    
     
     /**
-     * @ORM\Column(name="barrio", type="string", length=80, nullable=true)
+     * @ORM\Column(name="codigo_barrio_fk", type="integer", length=80, nullable=true)
      */    
-    private $barrio;    
+    private $codigoBarrioFk;    
     
     /**
-     * @ORM\Column(name="codigo_rh_fk", type="string", length=2, nullable=true)
+     * @ORM\Column(name="codigo_rh_fk", type="integer", nullable=true)
      */    
-    private $codigoRhFk;     
+    private $codigoRhPk;     
     
     /**
      * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
@@ -94,12 +94,14 @@ class RhuEmpleado
         
     /**
      * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
-     */    
+     */ 
+    
     private $fecha_nacimiento;     
     
-    /**
+     /**
      * @ORM\Column(name="codigo_estado_civil_fk", type="string", length=1, nullable=true)
-     */    
+     */
+    
     private $codigoEstadoCivilFk;
     
     /**
@@ -135,12 +137,7 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="vr_salario", type="float")
      */
-    private $VrSalario = 0;     
-    
-    /**
-     * @ORM\Column(name="rh", type="string", length=2, nullable=true)
-     */    
-    private $rh;    
+    private $VrSalario = 0;         
     
     /**
      * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
@@ -328,9 +325,22 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="RhuSSPeriodoDetalle", mappedBy="empleadoRel")
      */
-    protected $SSPeriodosDetallesEmpleadoRel;    
+    protected $SSPeriodosDetallesEmpleadoRel;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenBarrio", inversedBy="rhuEmpleadosBarrioRel")
+     * @ORM\JoinColumn(name="codigo_barrio_fk", referencedColumnName="codigo_barrio_pk")
+     */
+    protected $barrioRel;
     
+        /**
+     * @ORM\ManyToOne(targetEntity="RhuRh", inversedBy="empleadosRhRel")
+     * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
+     */
+    protected $rhRel; 
+    
+
+
     /**
      * Constructor
      */
@@ -623,51 +633,51 @@ class RhuEmpleado
     }
 
     /**
-     * Set barrio
+     * Set codigoBarrioFk
      *
-     * @param string $barrio
+     * @param integer $codigoBarrioFk
      *
      * @return RhuEmpleado
      */
-    public function setBarrio($barrio)
+    public function setCodigoBarrioFk($codigoBarrioFk)
     {
-        $this->barrio = $barrio;
+        $this->codigoBarrioFk = $codigoBarrioFk;
 
         return $this;
     }
 
     /**
-     * Get barrio
+     * Get codigoBarrioFk
      *
-     * @return string
+     * @return integer
      */
-    public function getBarrio()
+    public function getCodigoBarrioFk()
     {
-        return $this->barrio;
+        return $this->codigoBarrioFk;
     }
 
     /**
-     * Set codigoRhFk
+     * Set codigoRhPk
      *
-     * @param string $codigoRhFk
+     * @param integer $codigoRhPk
      *
      * @return RhuEmpleado
      */
-    public function setCodigoRhFk($codigoRhFk)
+    public function setCodigoRhPk($codigoRhPk)
     {
-        $this->codigoRhFk = $codigoRhFk;
+        $this->codigoRhPk = $codigoRhPk;
 
         return $this;
     }
 
     /**
-     * Get codigoRhFk
+     * Get codigoRhPk
      *
-     * @return string
+     * @return integer
      */
-    public function getCodigoRhFk()
+    public function getCodigoRhPk()
     {
-        return $this->codigoRhFk;
+        return $this->codigoRhPk;
     }
 
     /**
@@ -932,30 +942,6 @@ class RhuEmpleado
     public function getVrSalario()
     {
         return $this->VrSalario;
-    }
-
-    /**
-     * Set rh
-     *
-     * @param string $rh
-     *
-     * @return RhuEmpleado
-     */
-    public function setRh($rh)
-    {
-        $this->rh = $rh;
-
-        return $this;
-    }
-
-    /**
-     * Get rh
-     *
-     * @return string
-     */
-    public function getRh()
-    {
-        return $this->rh;
     }
 
     /**
@@ -1896,5 +1882,53 @@ class RhuEmpleado
     public function getSSPeriodosDetallesEmpleadoRel()
     {
         return $this->SSPeriodosDetallesEmpleadoRel;
+    }
+
+    /**
+     * Set barrioRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barrioRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setBarrioRel(\Brasa\GeneralBundle\Entity\GenBarrio $barrioRel = null)
+    {
+        $this->barrioRel = $barrioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get barrioRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenBarrio
+     */
+    public function getBarrioRel()
+    {
+        return $this->barrioRel;
+    }
+
+    /**
+     * Set rhRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRh $rhRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setRhRel(\Brasa\RecursoHumanoBundle\Entity\RhuRh $rhRel = null)
+    {
+        $this->rhRel = $rhRel;
+
+        return $this;
+    }
+
+    /**
+     * Get rhRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuRh
+     */
+    public function getRhRel()
+    {
+        return $this->rhRel;
     }
 }

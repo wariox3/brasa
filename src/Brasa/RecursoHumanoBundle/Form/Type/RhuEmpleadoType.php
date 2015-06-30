@@ -52,7 +52,14 @@ class RhuEmpleadoType extends AbstractType
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
             ->add('direccion', 'text', array('required' => false))
-            ->add('barrio', 'text', array('required' => false))
+            ->add('barrioRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenBarrio',
+                'property' => 'nombre',
+            ))
+            ->add('rhRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuRh',
+                'property' => 'tipo',
+            ))                
             ->add('correo', 'text', array('required' => false))
             ->add('cuenta', 'text', array('required' => true))
             ->add('numeroIdentificacion', 'text', array('required' => true))            
