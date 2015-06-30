@@ -41,7 +41,17 @@ class RhuDisciplinario
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;            
+    private $comentarios;
+    
+    /**
+     * @ORM\Column(name="suspension", type="string", length=200, nullable=true)
+     */    
+    private $suspension;
+    
+    /**
+     * @ORM\Column(name="descargos", type="string", length=200, nullable=true)
+     */    
+    private $descargos;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="disciplinariosEmpleadoRel")
@@ -233,5 +243,53 @@ class RhuDisciplinario
     public function getDisciplinarioTipoRel()
     {
         return $this->disciplinarioTipoRel;
+    }
+
+    /**
+     * Set suspension
+     *
+     * @param string $suspension
+     *
+     * @return RhuDisciplinario
+     */
+    public function setSuspension($suspension)
+    {
+        $this->suspension = $suspension;
+
+        return $this;
+    }
+
+    /**
+     * Get suspension
+     *
+     * @return string
+     */
+    public function getSuspension()
+    {
+        return $this->suspension;
+    }
+
+    /**
+     * Set descargos
+     *
+     * @param string $descargos
+     *
+     * @return RhuDisciplinario
+     */
+    public function setDescargos($descargos)
+    {
+        $this->descargos = $descargos;
+
+        return $this;
+    }
+
+    /**
+     * Get descargos
+     *
+     * @return string
+     */
+    public function getDescargos()
+    {
+        return $this->descargos;
     }
 }

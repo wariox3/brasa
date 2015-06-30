@@ -14,7 +14,9 @@ class RhuDisciplinarioType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuDisciplinarioTipo',
                 'property' => 'nombre',
             ))               
-            ->add('asunto', 'text', array('required' => true))
+            ->add('asunto', 'textarea', array('required' => false))
+            ->add('descargos', 'textarea', array('required' => false))
+            ->add('suspension', 'text', array('required' => false))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

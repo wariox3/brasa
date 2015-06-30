@@ -15,9 +15,21 @@
             <div class="form-group form-group-sm">
                 <label for="form_causal" class="col-sm-2 control-label">Causal:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(form.asunto, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.asunto, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica para los procesos de suspensión y llamado de atención'} }) }}
                 </div>
-            </div>               
+            </div>
+                <div class="form-group">
+                <label for="form_descargos" class="col-sm-2 control-label">Descargos:</label>
+                <div class="col-sm-10">
+                            {{ form_widget(form.descargos, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica solo para el proceso de Descargos'} }) }}
+                </div>
+            </div>
+                <div class="form-group">
+                <label for="form_comentarios" class="col-sm-2 control-label">Fecha Suspensión:</label>
+                <div class="col-sm-10">
+                            {{ form_widget(form.suspension, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica solo para la suspensión ejemplo: sabado 3 de marzo de 2015'} }) }}
+                </div>
+            </div>
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-2 control-label">Comentarios:</label>
                 <div class="col-sm-10">

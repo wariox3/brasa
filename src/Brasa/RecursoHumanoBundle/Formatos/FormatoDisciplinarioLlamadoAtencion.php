@@ -22,7 +22,7 @@ class FormatoDisciplinarioLlamadoAtencion extends \FPDF_FPDF {
         $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','B',10);
         $this->SetXY(10, 10);
-        $this->Cell(50, 40, $this->Image('imagenes/logos/LogoCotrascal.jpg' , 50 ,40, 35 , 38,'JPG'), 1, 0, 'C', 1); //cuadro para el logo
+        $this->Cell(0, 0, $this->Image('imagenes/logos/imagen2.jpg' , 15 ,20, 40 , 20,'JPG'), 0, 0, 'C', 0); //cuadro para el logo
         $this->SetXY(60, 10);
         $this->Cell(90, 10, utf8_decode("PROCESO GESTIÓN HUMANA"), 1, 0, 'C', 1); //cuardo mitad arriba
         $this->SetXY(60, 20);
