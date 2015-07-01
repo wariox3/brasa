@@ -28,6 +28,12 @@ class BaseCentroCostoController extends Controller
                     ));                
                 $session->set('filtroNombreCentroCosto', $form->get('TxtNombre')->getData());                
             }
+            
+            if($form->get('BtnPdf')->isClicked()) {
+                $objFormatoCentroCostos = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCentroCostos();
+                $objFormatoCentroCostos->Generar($this);
+            }
+            
             if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties

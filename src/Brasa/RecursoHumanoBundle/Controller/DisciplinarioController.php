@@ -99,7 +99,7 @@ class DisciplinarioController extends Controller
                     $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
                 }   
                 if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 3) {
-                    $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioLlamadoAtencion();
+                    $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioDescargo();
                     $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
                 }
             }
@@ -150,7 +150,6 @@ class DisciplinarioController extends Controller
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->getForm();        
         return $form;
     }    
@@ -186,24 +185,28 @@ class DisciplinarioController extends Controller
                             ->setCellValue('E1', 'Empleado')
                             ->setCellValue('F1', 'Cargo')
                             ->setCellValue('G1', 'Proceso')
-                            ->setCellValue('H1', 'Causal');
+                            ->setCellValue('H1', 'Causal')
+                            ->setCellValue('I1', 'Descargos')
+                            ->setCellValue('J1', 'Fecha Suspension');
 
                 $i = 2;
-                $query = $em->createQuery($this->strSqlLista);
+                $query = $em->createQuery($this->strListaDql);
                 $arDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
                 $arDisciplinarios = $query->getResult();
                 
                 foreach ($arDisciplinarios as $arDisciplinario) {
                     
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arDisciplinarios->getCodigoDisciplinarioPk())
-                            ->setCellValue('B' . $i, $arDisciplinarios->getFecha()->format('Y/m/d'))
-                            ->setCellValue('C' . $i, $arDisciplinarios->getEmpleadoRel()->getCentroCostoRel()->getNombre())
-                            ->setCellValue('D' . $i, $arDisciplinarios->getEmpleadoRel()->getNumeroIdentificacion())
-                            ->setCellValue('E' . $i, $arDisciplinarios->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('F' . $i, $arDisciplinarios->getEmpleadoRel()->getCargoDescripcion())
-                            ->setCellValue('G' . $i, $arDisciplinarios->getDisciplinarioTipoRel()->getNombre())
-                            ->setCellValue('H' . $i, $arDisciplinarios->getAsunto());
+                            ->setCellValue('A' . $i, $arDisciplinario->getCodigoDisciplinarioPk())
+                            ->setCellValue('B' . $i, $arDisciplinario->getFecha()->format('Y/m/d'))
+                            ->setCellValue('C' . $i, $arDisciplinario->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                            ->setCellValue('D' . $i, $arDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
+                            ->setCellValue('E' . $i, $arDisciplinario->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('F' . $i, $arDisciplinario->getEmpleadoRel()->getCargoDescripcion())
+                            ->setCellValue('G' . $i, $arDisciplinario->getDisciplinarioTipoRel()->getNombre())
+                            ->setCellValue('H' . $i, $arDisciplinario->getAsunto())
+                            ->setCellValue('I' . $i, $arDisciplinario->getDescargos())
+                            ->setCellValue('J' . $i, $arDisciplinario->getSuspension());
                     $i++;
                 }
 

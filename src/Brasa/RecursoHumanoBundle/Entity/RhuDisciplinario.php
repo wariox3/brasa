@@ -34,12 +34,12 @@ class RhuDisciplinario
     private $codigoEmpleadoFk;             
     
     /**
-     * @ORM\Column(name="asunto", type="string", length=150, nullable=true)
+     * @ORM\Column(name="asunto", type="string", length=500, nullable=true)
      */    
     private $asunto;     
     
     /**
-     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     * @ORM\Column(name="comentarios", type="text", nullable=true)
      */    
     private $comentarios;
     
@@ -49,7 +49,7 @@ class RhuDisciplinario
     private $suspension;
     
     /**
-     * @ORM\Column(name="descargos", type="string", length=200, nullable=true)
+     * @ORM\Column(name="descargos", type="text", nullable=true)
      */    
     private $descargos;
     

@@ -22,7 +22,10 @@ class FormatoDisciplinarioLlamadoAtencion extends \FPDF_FPDF {
         $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','B',10);
         $this->SetXY(10, 10);
-        $this->Cell(0, 0, $this->Image('imagenes/logos/imagen2.jpg' , 15 ,20, 40 , 20,'JPG'), 0, 0, 'C', 0); //cuadro para el logo
+        $this->Line(10, 10, 60, 10);
+        $this->Line(10, 10, 10, 50);
+        $this->Line(10, 50, 60, 50);
+        $this->Cell(0, 0, $this->Image('imagenes/logos/logo.jpg' , 15 ,20, 40 , 20,'JPG'), 0, 0, 'C', 0); //cuadro para el logo
         $this->SetXY(60, 10);
         $this->Cell(90, 10, utf8_decode("PROCESO GESTIÓN HUMANA"), 1, 0, 'C', 1); //cuardo mitad arriba
         $this->SetXY(60, 20);
@@ -32,7 +35,7 @@ class FormatoDisciplinarioLlamadoAtencion extends \FPDF_FPDF {
         $this->SetXY(60, 40);
         $this->Cell(90, 10, utf8_decode("Régimen Organizacional Interno "), 1, 0, 'C', 1); //cuardo mitad abajo
         $this->SetXY(150, 10);
-        $this->Cell(50, 10, 'Pagina ' . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
+        $this->Cell(50, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
         $this->SetXY(150, 20);
         $this->Cell(50, 20, utf8_decode("Código FOR-GH-16.02"), 1, 0, 'C', 1); //cuadro derecho mitad 1
         $this->SetXY(150, 40);
@@ -61,7 +64,19 @@ class FormatoDisciplinarioLlamadoAtencion extends \FPDF_FPDF {
         $arDisciplinario = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find(self::$codigoDisciplinario);        
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($arDisciplinario->getCodigoDisciplinarioTipoFk());        
-        $pdf->MultiCell(0,5, $arContenidoFormato->getContenido());        
+        //se reemplaza el contenido de la tabla tipo de proceso disciplinario
+        $sustitucion1 = $arDisciplinario->getEmpleadoRel()->getNombreCorto();
+        $sustitucion2 = $arDisciplinario->getEmpleadoRel()->getNumeroIdentificacion();
+        $sustitucion3 = $arDisciplinario->getAsunto();
+        
+        $cadena = $arContenidoFormato->getContenido();
+        $patron1 = '/#1/';
+        $patron2 = '/#2/';
+        $patron3 = '/#3/';
+        $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
+        $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
+        $pdf->MultiCell(0,5, $cadenaCambiada);        
    
     }
 
@@ -73,7 +88,7 @@ class FormatoDisciplinarioLlamadoAtencion extends \FPDF_FPDF {
         $this->Text(10, 280, 'Documento de confidencialidad alta ' );
         $this->Text(130, 280, 'JGEFECTIVOS S.A.S por el cuidado del Medio Ambiente  ');
         $this->Text(10, 285, 'COPIA CONTROLADA. Uso exclusiva de GH  ' );
-        $this->Text(170, 290, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 
