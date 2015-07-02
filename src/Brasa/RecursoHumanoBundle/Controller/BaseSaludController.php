@@ -36,6 +36,11 @@ class BaseSaludController extends Controller
                     $em->flush();
                 }
             }
+            
+        if($form->get('BtnPdf')->isClicked()) {
+                $objFormatoSalud = new \Brasa\RecursoHumanoBundle\Formatos\FormatoSalud();
+                $objFormatoSalud->Generar($this);
+        }    
         
         if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
@@ -90,7 +95,7 @@ class BaseSaludController extends Controller
         }
         $arEntidadesSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->findAll();
-        $arEntidadesSalud = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
+        $arEntidadesSalud = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Salud:listar.html.twig', array(
                     'arEntidadesSalud' => $arEntidadesSalud,

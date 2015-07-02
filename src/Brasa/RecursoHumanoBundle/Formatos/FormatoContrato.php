@@ -37,11 +37,70 @@ class FormatoContrato extends \FPDF_FPDF {
     }
 
     public function Body($pdf) {
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);        
+        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
+        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(1);        
         $pdf->SetXY(10, 30);
         $pdf->SetFont('Arial', '', 10);  
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(1);
-        $pdf->MultiCell(0,5, $arContenidoFormato->getContenido());        
+        //se reemplaza el contenido de la tabla tipo de proceso disciplinario
+        $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
+        $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
+        $sustitucion3 = $arContrato->getEmpleadoRel()->getDireccion();
+        $sustitucion4 = $arContrato->getEmpleadoRel()->getBarrioRel()->getNombre();
+        $sustitucion5 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
+        $sustitucion6 = $arContrato->getEmpleadoRel()->getCiudadRel()->getNombre()." - ".$arContrato->getEmpleadoRel()->getCiudadRel()->getDepartamentoRel()->getNombre();
+        $sustitucion7 = $arContrato->getCargoRel()->getNombre();
+        $sustitucion8 = number_format($arContrato->getVrSalario(), 2,'.',',');
+        $sustitucion9 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
+        $sustitucion10 = $arContrato->getFechaDesde()->format('Y/m/d');
+        $sustitucion11 = "por definir";
+        $sustitucion13 = $arContrato->getFechaHasta()->format('Y/m/d');
+        //calculo meses
+        $aniodesde = substr($sustitucion10, 0,-6);
+        $mesdesde = substr($sustitucion10, -5,-3);
+        $aniohasta = substr($sustitucion13, 0,-6);
+        $meshasta = substr($sustitucion13, -5,-3);
+        $anioresta = $aniohasta - $aniodesde;
+        $mesresta = $meshasta - $mesdesde + ($anioresta * 12);
+        $sustitucion12 = $mesresta;
+        $sustitucion14 = $arContrato->getEmpleadoRel()->getNombreCorto();
+        $sustitucion15 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion().", por definir";
+        //contenido de la cadena
+        $cadena = $arContenidoFormato->getContenido();
+        $patron1 = '/#1/';
+        $patron2 = '/#2/';
+        $patron3 = '/#3/';
+        $patron4 = '/#4/';
+        $patron5 = '/#5/';
+        $patron6 = '/#6/';
+        $patron7 = '/#7/';
+        $patron8 = '/#8/';
+        $patron9 = '/#9/';
+        $patron10 = '/#a/';
+        $patron11 = '/#b/';
+        $patron12 = '/#c/';
+        $patron13 = '/#d/';
+        $patron14 = '/#e/';
+        $patron15 = '/#f/';
+        $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
+        $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron4, $sustitucion4, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron5, $sustitucion5, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron6, $sustitucion6, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron7, $sustitucion7, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron8, $sustitucion8, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron9, $sustitucion9, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron10, $sustitucion10, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron11, $sustitucion11, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron12, $sustitucion12, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron13, $sustitucion13, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron14, $sustitucion14, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
+        $pdf->MultiCell(0,5, $cadenaCambiada);        
    
     }
 

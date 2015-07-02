@@ -37,6 +37,10 @@ class BaseCreditoTipoController extends Controller
                 }
             }
         
+        if($form->get('BtnPdf')->isClicked()) {
+                $objFormatoTipoCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoTipoCredito();
+                $objFormatoTipoCredito->Generar($this);
+        }    
         if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
@@ -84,7 +88,7 @@ class BaseCreditoTipoController extends Controller
         }
         $arCreditoTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->findAll();
-        $arCreditoTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
+        $arCreditoTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/CreditoTipo:listar.html.twig', array(
                     'arCreditoTipos' => $arCreditoTipos,

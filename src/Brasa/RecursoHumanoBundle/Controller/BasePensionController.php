@@ -38,7 +38,10 @@ class BasePensionController extends Controller
                 }
             }
         
-        
+        if($form->get('BtnPdf')->isClicked()) {
+                $objFormatoPension = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPension();
+                $objFormatoPension->Generar($this);
+        }
         if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
@@ -93,7 +96,7 @@ class BasePensionController extends Controller
         
         $arEntidadesPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->findAll();
-        $arEntidadesPension = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
+        $arEntidadesPension = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Pension:listar.html.twig', array(
                     'arEntidadesPension' => $arEntidadesPension,

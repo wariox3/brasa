@@ -35,6 +35,10 @@ class BaseEntidadExamenController extends Controller
                 }
             }
         
+        if($form->get('BtnPdf')->isClicked()) {
+                $objFormatoEntidadExamen = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEntidadExamen();
+                $objFormatoEntidadExamen->Generar($this);
+        }    
         if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
@@ -88,7 +92,7 @@ class BaseEntidadExamenController extends Controller
         }
         $arEntidadesExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->findAll();
-        $arEntidadesExamen = $paginator->paginate($query, $this->get('request')->query->get('page', 1),10);
+        $arEntidadesExamen = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/EntidadExamen:listar.html.twig', array(
                     'arEntidadesExamen' => $arEntidadesExamen,

@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 
 class BaseEmpleadoController extends Controller
 {
+    var $strSqlLista = "";
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -20,6 +21,14 @@ class BaseEmpleadoController extends Controller
             if($form->get('BtnFiltrar')->isClicked()) {                
                 $this->filtrarLista($form);
                 $this->listar();
+            }
+            
+            if($form->get('BtnPdf')->isClicked()) {
+                $this->filtrarLista($form);
+                $this->listar();
+                $objFormatoEmpleado = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEmpleado();
+                $objFormatoEmpleado->Generar($this, $this->strSqlLista);
+                
             }
 
             if($form->get('BtnExcel')->isClicked()) {
@@ -39,7 +48,8 @@ class BaseEmpleadoController extends Controller
                             ->setCellValue('C1', 'Nombre');
 
                 $i = 2;
-                $query = $em->createQuery($session->get('dqlEmpleado'));
+                $query = $em->createQuery($this->strSqlLista);
+                $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleados = $query->getResult();
                 foreach ($arEmpleados as $arEmpleado) {
                     $objPHPExcel->setActiveSheetIndex(0)
@@ -85,7 +95,7 @@ class BaseEmpleadoController extends Controller
                 }
             }
         }         
-        $arEmpleados = $paginator->paginate($em->createQuery($session->get('dqlEmpleadoLista')), $request->query->get('page', 1), 20);
+        $arEmpleados = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:lista.html.twig', array(
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()
@@ -332,13 +342,13 @@ class BaseEmpleadoController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $session->set('dqlEmpleadoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL(
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL(
                 $session->get('filtroEmpleadoNombre'), 
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroEmpleadoActivo'),                
                 $session->get('filtroIdentificacion'),
                 ""                
-                ));         
+                );         
     }       
     
 }

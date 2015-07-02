@@ -34,7 +34,11 @@ class BaseExamenTipoController extends Controller
                     $em->flush();
                 }
             }
-        
+            
+            if($form->get('BtnPdf')->isClicked()) {
+                $objFormatoTipoExamen = new \Brasa\RecursoHumanoBundle\Formatos\FormatoTipoExamen();
+                $objFormatoTipoExamen->Generar($this);
+            }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->generarExcel();
             }
