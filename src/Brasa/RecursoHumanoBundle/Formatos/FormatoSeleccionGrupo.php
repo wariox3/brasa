@@ -24,8 +24,8 @@ class FormatoSeleccionGrupo extends \FPDF_FPDF {
         $this->SetFont('Arial','B',10);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
-        $this->Cell(40, 6, "Grupo seleccion " . $arSeleccionGrupo->getCodigoSeleccionGrupoPk(), 1, 0, 'L', 1);
-        $this->SetXY(52, 20);
+        $this->Cell(44, 6, "GRUPO SELECCION " . $arSeleccionGrupo->getCodigoSeleccionGrupoPk(), 1, 0, 'L', 1);
+        $this->SetXY(56, 20);
         $this->Cell(148, 6, $arSeleccionGrupo->getNombre(), 1, 0, 'L', 1);
         
         $this->EncabezadoDetalles();
@@ -34,7 +34,7 @@ class FormatoSeleccionGrupo extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('COD', 'TIPO', 'IDENTIFICACION', 'NOMBRE', 'TELEFONO', 'CELULAR');
+        $header = array('ID', 'TIPO', 'FECHA PRUEBA','IDENTIFICACION', 'NOMBRE', 'TELEFONO', 'CELULAR');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -42,7 +42,7 @@ class FormatoSeleccionGrupo extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(10, 45, 22, 73, 20, 20);
+        $w = array(10, 40, 22, 22, 65, 15, 20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -63,23 +63,19 @@ class FormatoSeleccionGrupo extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         foreach ($arSelecciones as $arSeleccion) {            
             $pdf->Cell(10, 4, $arSeleccion->getCodigoSeleccionPk(), 1, 0, 'L');
-            $pdf->Cell(45, 4, $arSeleccion->getSeleccionTipoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(40, 4, $arSeleccion->getSeleccionTipoRel()->getNombre(), 1, 0, 'L');
             $pdf->Cell(22, 4, $arSeleccion->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(73, 4, $arSeleccion->getNombreCorto(), 1, 0, 'L');
-            $pdf->Cell(20, 4, $arSeleccion->getTelefono(), 1, 0, 'L');
+            $pdf->Cell(22, 4, $arSeleccion->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(65, 4, $arSeleccion->getNombreCorto(), 1, 0, 'L');
+            $pdf->Cell(15, 4, $arSeleccion->getTelefono(), 1, 0, 'L');
             $pdf->Cell(20, 4, $arSeleccion->getCelular(), 1, 0, 'L');            
             $pdf->Ln();
-            $pdf->SetAutoPageBreak(true, 33);
+            $pdf->SetAutoPageBreak(true, 15);
         }        
     }
 
     public function Footer() {
-        $this->SetFont('Arial','B', 9);    
-        $this->Line(30, 271, 100, 271);        
-        $this->Line(120, 271, 180, 271);        
-        $this->Text(50, 275, "FIRMA"); 
-        $this->Text(140, 275, "FIRMA");
-        $this->SetFont('Arial','', 10);  
+        $this->SetFont('Arial','', 8);  
         $this->Text(170, 290, 'Pagina ' . $this->PageNo() . ' de {nb}');
     }    
 }

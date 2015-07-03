@@ -9,7 +9,7 @@ class ReporteCreditos extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$strDql = $dql;
-        $pdf = new ReporteCreditos();
+        $pdf = new ReporteCreditos('L');
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
@@ -23,14 +23,14 @@ class ReporteCreditos extends \FPDF_FPDF {
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
         $this->SetXY(10, 10);
-        $this->Cell(185, 7, 'REPORTE DE CREDITOS', 0, 0, 'C', 1);                                                
+        $this->Cell(286, 8, 'REPORTE DE CREDITOS', 1, 0, 'C', 1);                                                
         $this->Ln(12);
         $this->EncabezadoDetalles();
         
     }
     public function EncabezadoDetalles() {
         
-        $header = array('IDENTIFICACION', 'EMPLEADO', 'FECHA','VR. CREDITO', 'VR. CUOTA', 'VR. SALDO', 'CUOTA', 'C. ACTUAL');
+        $header = array('ID','TIPO', 'FECHA', 'CENTRO COSTOS', 'IDENTIFICACION', 'EMPLEADO', 'VR. CREDITO', 'VR. CUOTA', 'VR. SALDO', 'CUOTAS', 'C. ACTUAL');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -38,7 +38,7 @@ class ReporteCreditos extends \FPDF_FPDF {
         $this->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 70, 15, 20, 15, 20, 12, 13);
+        $w = array(10, 48, 12, 79, 18, 53, 15, 13,15,10,13);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -56,38 +56,41 @@ class ReporteCreditos extends \FPDF_FPDF {
         $arCreditos = $query->getResult();     
         $douTotalSaldo = 0;
         $pdf->SetX(10);
-        $pdf->SetFont('Arial', '', 7);
+        $pdf->SetFont('Arial', '', 6);
         foreach ($arCreditos as $arCredito) {            
-            $pdf->Cell(20, 4, $arCredito->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(70, 4, $arCredito->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');            
-            $pdf->Cell(15, 4, $arCredito->getFecha()->format('Y/m/d'), 1, 0, 'L');            
-            $pdf->Cell(20, 4, number_format($arCredito->getVrPagar(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(15, 4, number_format($arCredito->getVrCuota(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(20, 4, number_format($arCredito->getSaldo(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(12, 4, $arCredito->getNumeroCuotas(), 1, 0, 'L');
+            $pdf->Cell(10, 4, $arCredito->getCodigoCreditoPk(), 1, 0, 'L');
+            $pdf->Cell(48, 4, utf8_decode($arCredito->getCreditoTipoRel()->getNombre()), 1, 0, 'L');            
+            $pdf->Cell(12, 4, $arCredito->getFecha()->format('Y/m/d'), 1, 0, 'L');            
+            $pdf->Cell(79, 4, "FUNDACION CANES CENTRO DE REHABILIDACION ECUESTRE DE RISARAL", 1, 0, 'L');
+            $pdf->Cell(18, 4, $arCredito->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(53, 4, "FERNANDO ANTONIO MONTEALEGRE CIFUENTES", 1, 0, 'L');
+            $pdf->Cell(15, 4, number_format($arCredito->getVrPagar(), 2,'.',','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arCredito->getVrCuota(), 2,'.',','), 1, 0, 'R');
+            $pdf->Cell(15, 4, number_format($arCredito->getSaldo(), 2,'.',','), 1, 0, 'R');
+            $pdf->Cell(10, 4, $arCredito->getNumeroCuotas(), 1, 0, 'L');
             $pdf->Cell(13, 4, $arCredito->getNumeroCuotaActual(), 1, 0, 'L');
+            
             $pdf->Ln();
-            $pdf->SetAutoPageBreak(true, 33);
+            $pdf->SetAutoPageBreak(true, 15);
             $douTotalSaldo += $arCredito->getSaldo();
         }    
-        $pdf->Cell(20, 4, "", 1, 0, 'L');
-        $pdf->Cell(70, 4, "", 1, 0, 'L');            
-        $pdf->Cell(15, 4, "", 1, 0, 'L');            
-        $pdf->Cell(20, 4, "", 1, 0, 'L');
+        $pdf->Cell(10, 4, "", 1, 0, 'L');
+        $pdf->Cell(48, 4, "", 1, 0, 'L');            
+        $pdf->Cell(12, 4, "", 1, 0, 'L');            
+        $pdf->Cell(79, 4, "", 1, 0, 'L');
+        $pdf->Cell(18, 4, "", 1, 0, 'L');
+        $pdf->Cell(53, 4, "", 1, 0, 'L');
         $pdf->Cell(15, 4, "", 1, 0, 'L');
-        $pdf->Cell(20, 4, number_format($douTotalSaldo, 2, '.', ','), 1, 0, 'R');
-        $pdf->Cell(12, 4, "", 1, 0, 'L');
         $pdf->Cell(13, 4, "", 1, 0, 'L');
+        $pdf->Cell(15, 4, number_format($douTotalSaldo, 2, '.', ','), 1, 0, 'R');
+        $pdf->Cell(10, 4, "", 1, 0, 'L');
+        $pdf->Cell(13, 4, "", 1, 0, 'L');
+        
         $pdf->Ln();        
     }
     public function Footer() {
-        $this->SetFont('Arial','B', 9);    
-        $this->Line(30, 271, 100, 271);        
-        $this->Line(120, 271, 180, 271);        
-        $this->Text(50, 275, "FIRMA"); 
-        $this->Text(140, 275, "FIRMA");
-        $this->SetFont('Arial','', 10);  
-        $this->Text(170, 290, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        $this->SetFont('Arial','', 8);  
+        $this->Text(265, 205, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 

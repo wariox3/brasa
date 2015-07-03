@@ -26,7 +26,14 @@ class PagosController extends Controller
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
-            }            
+            } 
+            
+            if($form->get('BtnPdf')->isClicked()) {
+                $this->filtrarLista($form);
+                $this->listar();
+                $objFormatoPagos = new \Brasa\RecursoHumanoBundle\Formatos\FormatoListaPagos();
+                $objFormatoPagos->Generar($this, $this->strSqlLista);
+            }
         }       
                 
         $arPagos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 50);                               

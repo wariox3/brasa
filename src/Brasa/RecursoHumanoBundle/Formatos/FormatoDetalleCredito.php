@@ -179,8 +179,8 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
 
     public function Footer() {
                 
-        $this->SetFont('Arial','', 10);  
-        $this->Text(170, 290, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        $this->SetFont('Arial','', 8);  
+        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 

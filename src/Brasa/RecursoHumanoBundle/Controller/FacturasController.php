@@ -22,6 +22,11 @@ class FacturasController extends Controller
         $query = $em->createQuery($dql);        
         $arFacturas = $paginator->paginate($query, $request->query->get('page', 1), 20);                       
         if($form->isValid()) {
+            
+            if($form->get('BtnPdf')->isClicked()) {
+                $objFormatoFacturas = new \Brasa\RecursoHumanoBundle\Formatos\FormatoFacturaLista();
+                $objFormatoFacturas->Generar($this);
+            }
             if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
@@ -66,23 +71,7 @@ class FacturasController extends Controller
                 $objWriter->save('php://output');                                      
                 exit;                                   
             }            
-            
-            if($form->get('BtnInactivar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) { 
-                    foreach ($arrSeleccionados AS $codigoCentroCosto) {
-                        $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-                        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
-                        if($arCentroCosto->getEstadoActivo() == 1) {
-                            $arCentroCosto->setEstadoActivo(0);
-                        } else {
-                            $arCentroCosto->setEstadoActivo(1);
-                        }
-                        $em->persist($arCentroCosto);
-                    }                    
-                    $em->flush();
-                }
-            }                                        
+                                                    
         } 
 
         return $this->render('BrasaRecursoHumanoBundle:Facturas:lista.html.twig', array(

@@ -26,6 +26,13 @@ class IncapacidadesController extends Controller
                 $this->listar();
                 $this->generarExcel();
             }
+            
+            if($form->get('BtnPdf')->isClicked()) {
+                $this->filtrarLista($form);
+                $this->listar();
+                $objFormatoIncapacidades = new \Brasa\RecursoHumanoBundle\Formatos\FormatoIncapacidad();
+                $objFormatoIncapacidades->Generar($this, $this->strSqlLista);
+            }
 
             if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -44,7 +51,7 @@ class IncapacidadesController extends Controller
                 }
             }
         }
-        $arIncapacidades = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 10);
+        $arIncapacidades = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Incapacidades:lista.html.twig', array(
             'arIncapacidades' => $arIncapacidades,
             'form' => $form->createView()

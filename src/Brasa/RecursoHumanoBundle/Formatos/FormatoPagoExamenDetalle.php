@@ -34,7 +34,7 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "ENTIDAD:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(100, 6, $arPagoExamen->getEntidadExamenRel()->getNombre(), 1, 0, 'L', 1);
+        $this->Cell(100, 6, utf8_decode($arPagoExamen->getEntidadExamenRel()->getNombre()), 1, 0, 'L', 1);
         $this->SetXY(10, 35);
         $this->SetFont('Arial','B',8);
         $this->Cell(60, 5, "TOTAL:" , 1, 0, 'R', 1);
@@ -79,11 +79,11 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         foreach ($arPagoExamenDetalles as $arPagoExamenDetalle) {            
             $pdf->Cell(20, 4, $arPagoExamenDetalle->getCodigoPagoExamenDetallePk(), 1, 0, 'L');
             $pdf->Cell(25, 4, $arPagoExamenDetalle->getExamenRel()->getIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(130, 4, $arPagoExamenDetalle->getExamenRel()->getNombreCorto(), 1, 0, 'L');
+            $pdf->Cell(130, 4, utf8_decode($arPagoExamenDetalle->getExamenRel()->getNombreCorto()), 1, 0, 'L');
             $pdf->Cell(15, 4, number_format($arPagoExamenDetalle->getVrPrecio(), 2, '.', ','), 1, 0, 'R');
             $var += $arPagoExamenDetalle->getVrPrecio();
             $pdf->Ln();
-            $pdf->SetAutoPageBreak(true, 33);
+            $pdf->SetAutoPageBreak(true, 15);
             
         }
             $pdf->SetFont('Arial', 'B', 7);
@@ -94,13 +94,8 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
     }
 
     public function Footer() {
-        $this->SetFont('Arial','B', 9);    
-        $this->Line(30, 271, 100, 271);        
-        $this->Line(120, 271, 180, 271);        
-        $this->Text(50, 275, "FIRMA"); 
-        $this->Text(140, 275, "FIRMA");
-        $this->SetFont('Arial','', 10);  
-        $this->Text(170, 290, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        $this->SetFont('Arial','', 8);  
+        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 

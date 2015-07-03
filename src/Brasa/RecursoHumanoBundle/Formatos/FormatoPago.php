@@ -146,7 +146,7 @@ class FormatoPago extends \FPDF_FPDF {
                 $pdf->Cell(20, 4, number_format(0, 2, '.', ','), 1, 0, 'R');    
             }            
             $pdf->Ln();
-            $pdf->SetAutoPageBreak(true, 33);
+            $pdf->SetAutoPageBreak(true, 15);
         }
             //TOTALES
             $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -206,12 +206,8 @@ class FormatoPago extends \FPDF_FPDF {
     }
 
     public function Footer() {
-        /*$this->SetFont('Arial','B', 9);    
-        $this->Line(30, 271, 100, 271);        
-        $this->Line(120, 271, 180, 271);        
-        $this->Text(50, 275, "FIRMA RECIBIDO"); 
-        $this->Text(140, 275, "FIRMA BODEGA");*/
-        $this->SetFont('Arial','', 10);  
+        
+        $this->SetFont('Arial','', 8);  
         $this->Text(170, 290, 'Pagina ' . $this->PageNo() . ' de {nb}');
     }    
 }

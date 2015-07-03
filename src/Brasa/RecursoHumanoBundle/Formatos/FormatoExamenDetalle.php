@@ -2,7 +2,9 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoExamenDetalle extends \FPDF_FPDF {
     public static $em;
+    
     public static $codigoExamen;
+    
     public function Generar($miThis, $codigoExamen) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
@@ -17,6 +19,7 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $pdf->Output("ExamenDetalle$codigoExamen.pdf", 'D');        
         
     } 
+    
     public function Header() {
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
         $arExamen = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find(self::$codigoExamen);
@@ -116,7 +119,7 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
             }
                 
             $pdf->Ln();
-            $pdf->SetAutoPageBreak(true, 33);
+            $pdf->SetAutoPageBreak(true, 15);
         }
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
         $arExamen = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find(self::$codigoExamen);
@@ -128,13 +131,9 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
     }
 
     public function Footer() {
-        $this->SetFont('Arial','B', 9);    
-        $this->Line(30, 271, 100, 271);        
-        $this->Line(120, 271, 180, 271);        
-        $this->Text(50, 275, "FIRMA"); 
-        $this->Text(140, 275, "FIRMA");
-        $this->SetFont('Arial','', 10);  
-        $this->Text(170, 290, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        
+        $this->SetFont('Arial','', 8);  
+        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 
