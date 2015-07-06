@@ -44,7 +44,8 @@ class RhuEmpleadoType extends AbstractType
                 'property' => 'nombre',
                 'required' => true)) 
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))                                                        
-            ->add('fechaNacimiento', 'date', array('required' => true, 'widget' => 'single_text'))            
+            ->add('fechaNacimiento', 'date', array('required' => true, 'widget' => 'single_text'))
+            ->add('edad', 'text', array('required' => false))
             ->add('nombre1', 'text', array('required' => true))
             ->add('nombre2', 'text', array('required' => false))
             ->add('apellido1', 'text', array('required' => true))
@@ -64,8 +65,12 @@ class RhuEmpleadoType extends AbstractType
             ->add('cuenta', 'text', array('required' => true))
             ->add('numeroIdentificacion', 'text', array('required' => true))            
             ->add('auxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('padreFamilia', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                
             ->add('pagadoEntidadSalud', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('comentarios', 'textarea', array('required' => false))
+            ->add('camisa', 'text', array('required' => false))                            
+            ->add('jeans', 'text', array('required' => false))                            
+            ->add('calzado', 'text', array('required' => false))                                            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

@@ -256,6 +256,11 @@ class BaseEmpleadoController extends Controller
             $arrControles = $request->request->All();
             $arEmpleado = $form->getData();
             $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());            
+            //edad
+            //$arSolucion->setfechaSolucion($form->get('fechaSolucion')->getData());
+            $varFecha = $form->get('fechaNacimiento')->getData()->format('Y');
+            $varEdad = date('Y') - $varFecha;
+            $arEmpleado->setEdad($varEdad);
             $em->persist($arEmpleado);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {

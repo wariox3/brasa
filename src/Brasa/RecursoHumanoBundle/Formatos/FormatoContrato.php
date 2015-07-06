@@ -68,6 +68,9 @@ class FormatoContrato extends \FPDF_FPDF {
         $sustitucion12 = $mesresta;
         $sustitucion14 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion15 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion().", por definir";
+        $sustitucion16 = $arContrato->getFechaDesde()->format('Y/m/d');
+        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
+        $sustitucion16 = strftime("%d de %B de %Y", strtotime($sustitucion16));
         //contenido de la cadena
         $cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
@@ -85,6 +88,8 @@ class FormatoContrato extends \FPDF_FPDF {
         $patron13 = '/#d/';
         $patron14 = '/#e/';
         $patron15 = '/#f/';
+        $patron16 = '/#g/';
+        //reemplazar en la cadena
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
@@ -100,6 +105,7 @@ class FormatoContrato extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron13, $sustitucion13, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron14, $sustitucion14, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);        
    
     }
