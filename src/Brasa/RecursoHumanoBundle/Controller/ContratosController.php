@@ -48,8 +48,27 @@ class ContratosController extends Controller
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         if($form->isValid()) {           
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContrato();
-                $objFormatoContrato->Generar($this, $codigoContrato);
+                if ($arContrato->getCodigoContratoTipoFk() == 1){
+                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoObraLabor();
+                    $objFormatoContrato->Generar($this, $codigoContrato);
+                }
+                if ($arContrato->getCodigoContratoTipoFk() == 2){
+                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoFijo();
+                    $objFormatoContrato->Generar($this, $codigoContrato);
+                }
+                if ($arContrato->getCodigoContratoTipoFk() == 3){
+                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoIndefinido();
+                    $objFormatoContrato->Generar($this, $codigoContrato);
+                }
+                if ($arContrato->getCodigoContratoTipoFk() == 4){
+                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoAprendiz();
+                    $objFormatoContrato->Generar($this, $codigoContrato);
+                }
+                if ($arContrato->getCodigoContratoTipoFk() == 5){
+                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoPracticante();
+                    $objFormatoContrato->Generar($this, $codigoContrato);
+                }
+                
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:detalle.html.twig', array(

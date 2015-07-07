@@ -83,12 +83,32 @@ class GenCiudad
     /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuSeleccion", mappedBy="ciudadRel")
      */
-    protected $rhuSeleccionesCiudadRel;     
+    protected $rhuSeleccionesCiudadRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto", mappedBy="ciudadRel")
+     */
+    protected $rhuCentroCostosCiudadRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuSeleccion", mappedBy="ciudadNacimientoRel")
+     */
+    protected $rhuSeleccionesCiudadNacimientoRel;
     
     /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="ciudadRel")
      */
     protected $rhuEmpleadosCiudadRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="ciudadNacimientoRel")
+     */
+    protected $rhuEmpleadosCiudadNacimientoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="ciudadExpedicionRel")
+     */
+    protected $rhuEmpleadosCiudadExpedicionRel;
     
     /**
      * @ORM\OneToMany(targetEntity="GenBarrio", mappedBy="ciudadRel")
@@ -595,5 +615,141 @@ class GenCiudad
     public function getBarriosRel()
     {
         return $this->barriosRel;
+    }
+
+    /**
+     * Add rhuCentroCostosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $rhuCentroCostosCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuCentroCostosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $rhuCentroCostosCiudadRel)
+    {
+        $this->rhuCentroCostosCiudadRel[] = $rhuCentroCostosCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuCentroCostosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $rhuCentroCostosCiudadRel
+     */
+    public function removeRhuCentroCostosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $rhuCentroCostosCiudadRel)
+    {
+        $this->rhuCentroCostosCiudadRel->removeElement($rhuCentroCostosCiudadRel);
+    }
+
+    /**
+     * Get rhuCentroCostosCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuCentroCostosCiudadRel()
+    {
+        return $this->rhuCentroCostosCiudadRel;
+    }
+
+    /**
+     * Add rhuSeleccionesCiudadNacimientoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadNacimientoRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuSeleccionesCiudadNacimientoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadNacimientoRel)
+    {
+        $this->rhuSeleccionesCiudadNacimientoRel[] = $rhuSeleccionesCiudadNacimientoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuSeleccionesCiudadNacimientoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadNacimientoRel
+     */
+    public function removeRhuSeleccionesCiudadNacimientoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadNacimientoRel)
+    {
+        $this->rhuSeleccionesCiudadNacimientoRel->removeElement($rhuSeleccionesCiudadNacimientoRel);
+    }
+
+    /**
+     * Get rhuSeleccionesCiudadNacimientoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuSeleccionesCiudadNacimientoRel()
+    {
+        return $this->rhuSeleccionesCiudadNacimientoRel;
+    }
+
+    /**
+     * Add rhuEmpleadosCiudadNacimientoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadNacimientoRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuEmpleadosCiudadNacimientoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadNacimientoRel)
+    {
+        $this->rhuEmpleadosCiudadNacimientoRel[] = $rhuEmpleadosCiudadNacimientoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuEmpleadosCiudadNacimientoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadNacimientoRel
+     */
+    public function removeRhuEmpleadosCiudadNacimientoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadNacimientoRel)
+    {
+        $this->rhuEmpleadosCiudadNacimientoRel->removeElement($rhuEmpleadosCiudadNacimientoRel);
+    }
+
+    /**
+     * Get rhuEmpleadosCiudadNacimientoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuEmpleadosCiudadNacimientoRel()
+    {
+        return $this->rhuEmpleadosCiudadNacimientoRel;
+    }
+
+    /**
+     * Add rhuEmpleadosCiudadExpedicionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadExpedicionRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuEmpleadosCiudadExpedicionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadExpedicionRel)
+    {
+        $this->rhuEmpleadosCiudadExpedicionRel[] = $rhuEmpleadosCiudadExpedicionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuEmpleadosCiudadExpedicionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadExpedicionRel
+     */
+    public function removeRhuEmpleadosCiudadExpedicionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadExpedicionRel)
+    {
+        $this->rhuEmpleadosCiudadExpedicionRel->removeElement($rhuEmpleadosCiudadExpedicionRel);
+    }
+
+    /**
+     * Get rhuEmpleadosCiudadExpedicionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuEmpleadosCiudadExpedicionRel()
+    {
+        return $this->rhuEmpleadosCiudadExpedicionRel;
     }
 }

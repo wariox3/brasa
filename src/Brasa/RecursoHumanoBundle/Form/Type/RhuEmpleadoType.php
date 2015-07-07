@@ -42,7 +42,16 @@ class RhuEmpleadoType extends AbstractType
                     ->setParameter('codigoDepartamento', 5)
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true)) 
+                'required' => true))
+            ->add('ciudadNacimientoRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCiudad',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->where('c.codigoDepartamentoFk = :codigoDepartamento')
+                    ->setParameter('codigoDepartamento', 5)
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))                                                        
             ->add('fechaNacimiento', 'date', array('required' => true, 'widget' => 'single_text'))
             ->add('edad', 'text', array('required' => false))

@@ -20,7 +20,12 @@ class RhuCentroCosto
     /**
      * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
      */    
-    private $nombre;    
+    private $nombre;
+    
+    /**
+     * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
+     */    
+    private $codigoCiudadFk;
 
     /**
      * @ORM\Column(name="codigo_periodo_pago_fk", type="integer", nullable=true)
@@ -93,7 +98,13 @@ class RhuCentroCosto
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="centrosCostosTerceroRel")
      * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
      */
-    protected $terceroRel;     
+    protected $terceroRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuCentroCostosCiudadRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuProgramacionPago", mappedBy="centroCostoRel")
@@ -950,5 +961,53 @@ class RhuCentroCosto
     public function getLiquidacionesCentroCostoRel()
     {
         return $this->liquidacionesCentroCostoRel;
+    }
+
+    /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
+    }
+
+    /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
     }
 }

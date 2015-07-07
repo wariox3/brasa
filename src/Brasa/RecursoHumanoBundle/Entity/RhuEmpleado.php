@@ -70,7 +70,12 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
      */    
-    private $codigoCiudadFk;    
+    private $codigoCiudadFk;
+    
+    /**
+     * @ORM\Column(name="codigo_ciudad_expedicion_fk", type="integer", nullable=true)
+     */    
+    private $codigoCiudadExpedicionFk;
     
     /**
      * @ORM\Column(name="codigo_barrio_fk", type="integer", length=80, nullable=true)
@@ -96,7 +101,12 @@ class RhuEmpleado
      * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
      */ 
     
-    private $fecha_nacimiento;     
+    private $fecha_nacimiento; 
+    
+    /**
+     * @ORM\Column(name="codigo_ciudad_nacimiento_fk", type="integer", nullable=true)
+     */    
+    private $codigoCiudadNacimientoFk;
     
      /**
      * @ORM\Column(name="codigo_estado_civil_fk", type="string", length=1, nullable=true)
@@ -288,7 +298,19 @@ class RhuEmpleado
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuEmpleadosCiudadRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
-    protected $ciudadRel;     
+    protected $ciudadRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuEmpleadosCiudadNacimientoRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_nacimiento_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadNacimientoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuEmpleadosCiudadExpedicionRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_expedicion_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadExpedicionRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="empleadosCargoRel")
@@ -2075,5 +2097,101 @@ class RhuEmpleado
     public function getEdad()
     {
         return $this->edad;
+    }
+
+    /**
+     * Set codigoCiudadNacimientoFk
+     *
+     * @param integer $codigoCiudadNacimientoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoCiudadNacimientoFk($codigoCiudadNacimientoFk)
+    {
+        $this->codigoCiudadNacimientoFk = $codigoCiudadNacimientoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadNacimientoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadNacimientoFk()
+    {
+        return $this->codigoCiudadNacimientoFk;
+    }
+
+    /**
+     * Set ciudadNacimientoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setCiudadNacimientoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel = null)
+    {
+        $this->ciudadNacimientoRel = $ciudadNacimientoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadNacimientoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadNacimientoRel()
+    {
+        return $this->ciudadNacimientoRel;
+    }
+
+    /**
+     * Set codigoCiudadExpedicionFk
+     *
+     * @param integer $codigoCiudadExpedicionFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoCiudadExpedicionFk($codigoCiudadExpedicionFk)
+    {
+        $this->codigoCiudadExpedicionFk = $codigoCiudadExpedicionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadExpedicionFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadExpedicionFk()
+    {
+        return $this->codigoCiudadExpedicionFk;
+    }
+
+    /**
+     * Set ciudadExpedicionRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setCiudadExpedicionRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel = null)
+    {
+        $this->ciudadExpedicionRel = $ciudadExpedicionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadExpedicionRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadExpedicionRel()
+    {
+        return $this->ciudadExpedicionRel;
     }
 }

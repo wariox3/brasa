@@ -50,7 +50,16 @@ class RhuSeleccionType extends AbstractType
                     ->setParameter('codigoDepartamento', 5)
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                 
+                'required' => true))
+            ->add('ciudadNacimientoRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCiudad',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->where('c.codigoDepartamentoFk = :codigoDepartamento')
+                    ->setParameter('codigoDepartamento', 5)
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('fechaNacimiento', 'date', array('required' => true, 'widget' => 'single_text'))                                 
             ->add('fechaPruebas', 'datetime', array('required' => false))                 
             ->add('nombre1', 'text', array('required' => true))

@@ -126,7 +126,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->SetXY($intX, $intY + 18);
         $this->SetFont('Arial','',8);
         $this->Cell(39, 8, $arEmpleado->getFechaNacimiento()->format('Y/m/d'), 1, 0, 'C', 1);
-        $this->Cell(41, 8, "por implementar", 1, 0, 'C', 1);
+        $this->Cell(41, 8, $arEmpleado->getCiudadNacimientoRel()->getNombre(), 1, 0, 'C', 1);
         if ($arEmpleado->getCodigoSexoFk() == "F") { 
             $this->Cell(24, 8, "FEMENINO", 1, 0, 'C', 1);
         }
@@ -134,7 +134,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
             $this->Cell(24, 8, "MASCULINO", 1, 0, 'C', 1);
         }
         $this->Cell(33, 8, "por implementar", 1, 0, 'C', 1);
-        $this->Cell(42, 8, "por implementar", 1, 0, 'C', 1);
+        $this->Cell(42, 8, $arEmpleado->getCiudadExpedicionRel()->getNombre()." - ".$arEmpleado->getCiudadExpedicionRel()->getDepartamentoRel()->getNombre(), 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 26);
         $this->SetFont('Arial','B',8);
         $this->Cell(39, 5, "DIRECCION DE RESIDENCIA", 1, 0, 'C', 1);

@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoContrato extends \FPDF_FPDF {
+class FormatoContratoFijo extends \FPDF_FPDF {
     public static $em;
     public static $codigoContrato;
     
@@ -9,13 +9,13 @@ class FormatoContrato extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoContrato = $codigoContrato;
-        $pdf = new FormatoContrato();
+        $pdf = new FormatoContratoFijo();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("Contrato$codigoContrato.pdf", 'D');        
+        $pdf->Output("ContratoFijo$codigoContrato.pdf", 'D');        
         
     } 
     
@@ -29,7 +29,7 @@ class FormatoContrato extends \FPDF_FPDF {
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);        
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(1);        
+        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
         $this->SetXY(10, 10);
         $this->Cell(185, 7, utf8_decode($arContenidoFormato->getTitulo()), 0, 0, 'C', 1);
         $this->Text(10, 25, "Contrato numero: " . $arContrato->getCodigoContratoPk());
@@ -40,23 +40,21 @@ class FormatoContrato extends \FPDF_FPDF {
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);        
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(1);        
+        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
         $pdf->SetXY(10, 30);
         $pdf->SetFont('Arial', '', 10);  
-        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(1);
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion3 = $arContrato->getEmpleadoRel()->getDireccion();
         $sustitucion4 = $arContrato->getEmpleadoRel()->getBarrioRel()->getNombre();
         $sustitucion5 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
-        $sustitucion6 = $arContrato->getEmpleadoRel()->getCiudadRel()->getNombre()." - ".$arContrato->getEmpleadoRel()->getCiudadRel()->getDepartamentoRel()->getNombre();
+        $sustitucion6 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getNombre()." - ".$arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getDepartamentoRel()->getNombre();
         $sustitucion7 = $arContrato->getCargoRel()->getNombre();
         $sustitucion8 = number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion9 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
         $sustitucion10 = $arContrato->getFechaDesde()->format('Y/m/d');
-        $sustitucion11 = "por definir";
+        $sustitucion11 = $arContrato->getCentroCostoRel()->getCiudadRel()->getNombre();
         $sustitucion13 = $arContrato->getFechaHasta()->format('Y/m/d');
         //calculo meses
         $aniodesde = substr($sustitucion10, 0,-6);
@@ -66,11 +64,11 @@ class FormatoContrato extends \FPDF_FPDF {
         $anioresta = $aniohasta - $aniodesde;
         $mesresta = $meshasta - $mesdesde + ($anioresta * 12);
         $sustitucion12 = $mesresta;
-        $sustitucion14 = $arContrato->getEmpleadoRel()->getNombreCorto();
-        $sustitucion15 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion().", por definir";
-        $sustitucion16 = $arContrato->getFechaDesde()->format('Y/m/d');
+        $sustitucion14 = $arContrato->getFechaDesde()->format('Y/m/d');
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
-        $sustitucion16 = strftime("%d de %B de %Y", strtotime($sustitucion16));
+        $sustitucion14 = strftime("%d de %B de %Y", strtotime($sustitucion14));
+        $sustitucion15 = $arContrato->getEmpleadoRel()->getNombreCorto();
+        $sustitucion16 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion()." de ".$arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre()." - ".$arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getDepartamentoRel()->getNombre();
         //contenido de la cadena
         $cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
@@ -106,13 +104,15 @@ class FormatoContrato extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron14, $sustitucion14, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
-        $pdf->MultiCell(0,5, $cadenaCambiada);        
+        $pdf->MultiCell(0,5, $cadenaCambiada);
+        
+        $pdf->SetAutoPageBreak(true, 15);
    
     }
 
     public function Footer() {
         //$this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C'); 
-        $this->Text(170, 290, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 

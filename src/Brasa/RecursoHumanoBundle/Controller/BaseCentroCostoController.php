@@ -48,8 +48,9 @@ class BaseCentroCostoController extends Controller
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'Codigo')
                             ->setCellValue('B1', 'Nombre')
-                            ->setCellValue('C1', 'Periodo')
-                            ->setCellValue('D1', 'Abierto');
+                            ->setCellValue('C1', 'Ciudad')
+                            ->setCellValue('D1', 'Periodo')
+                            ->setCellValue('E1', 'Abierto');
 
                 $i = 2;
                 $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
@@ -57,8 +58,9 @@ class BaseCentroCostoController extends Controller
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCentroCosto->getCodigoCentroCostoPk())
                             ->setCellValue('B' . $i, $arCentroCosto->getNombre())
-                            ->setCellValue('C' . $i, $arCentroCosto->getPeriodoPagoRel()->getNombre())
-                            ->setCellValue('D' . $i, $arCentroCosto->getPagoAbierto());
+                            ->setCellValue('C' . $i, $arCentroCosto->getCiudadRel()->getNombre())
+                            ->setCellValue('D' . $i, $arCentroCosto->getPeriodoPagoRel()->getNombre())
+                            ->setCellValue('E' . $i, $arCentroCosto->getPagoAbierto());
                     $i++;
                 }
 

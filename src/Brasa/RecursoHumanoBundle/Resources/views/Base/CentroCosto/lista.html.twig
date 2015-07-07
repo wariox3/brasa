@@ -16,7 +16,7 @@
                     <div class="col-sm-10">                  
                         {{ form_widget(form.TxtNombre, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                </div>                
+                </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnBuscar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -29,6 +29,7 @@
                 <th>ID</th>
                 <th>{{ knp_pagination_sortable(arCentrosCostos, 'NOMBRE', 'cc.nombre') }}</th>                                                
                 <th>TERCERO</th>
+                <th>CIUDAD</th>
                 <th>PERIODO</th>
                 <th>HASTA</th>
                 <th>PAGO AUTOMATICO</th>
@@ -43,6 +44,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCentrosCostos.codigoCentroCostoPk }}">{{ arCentrosCostos.codigoCentroCostoPk }} </td>
                 <td>{{ arCentrosCostos.nombre  }}</td>
                 <td>{{ arCentrosCostos.terceroRel.nombreCorto  }}</td>
+                <td>{{ arCentrosCostos.ciudadRel.nombre  }}</td>
                 <td>{{ arCentrosCostos.periodoPagoRel.nombre  }}</td>
                 <td>{{ arCentrosCostos.fechaUltimoPagoProgramado |date("Y/m/d")  }}</td>                
                 <td>{% if arCentrosCostos.generarPagoAutomatico == 1 %} SI {% else %} NO {% endif %}</td>
