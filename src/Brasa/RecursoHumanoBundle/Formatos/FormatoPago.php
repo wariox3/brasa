@@ -151,13 +151,18 @@ class FormatoPago extends \FPDF_FPDF {
             //TOTALES
             $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
             $arPago = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find(self::$codigoPago);
-            $pdf->Cell(153, 4, "", 1, 0, 'R');
+            $pdf->Ln(4);
+            $pdf->Cell(143, 4, "", 0, 0, 'R');
+            $pdf->SetFont('Arial', 'B', 7);
+            $pdf->Cell(30, 4, "TOTAL DEDUCCIONES:", 1, 0, 'R');
             $pdf->Cell(20, 4, "-".number_format($arPago->getVrDeducciones(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Ln();
+            $pdf->Cell(143, 4, "", 0, 0, 'R');
+            $pdf->Cell(30, 4, "TOTAL DEVENGADO:", 1, 0, 'R');
             $pdf->Cell(20, 4, number_format($arPago->getVrDevengado(), 2, '.', ','), 1, 0, 'R');
             $pdf->Ln();
-            $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(153, 4, "", 1, 0, 'R');
-            $pdf->Cell(20, 4, "NETO PAGAR", 1, 0, 'R');
+            $pdf->Cell(143, 4, "", 0, 0, 'R');
+            $pdf->Cell(30, 4, "NETO PAGAR", 1, 0, 'R');
             $pdf->Cell(20, 4, number_format($arPago->getVrNeto(), 2, '.', ','), 1, 0, 'R');
             $pdf->Ln(8);
             // INFORMACION DE CREDITOS
