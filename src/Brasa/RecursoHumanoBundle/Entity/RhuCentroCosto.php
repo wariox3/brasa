@@ -30,12 +30,7 @@ class RhuCentroCosto
     /**
      * @ORM\Column(name="codigo_periodo_pago_fk", type="integer", nullable=true)
      */    
-    private $codigoPeriodoPagoFk;    
-
-    /**
-     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
-     */    
-    private $codigoTerceroFk;    
+    private $codigoPeriodoPagoFk;       
     
     /**
      * @ORM\Column(name="fecha_ultimo_pago_programado", type="date", nullable=true)
@@ -92,13 +87,7 @@ class RhuCentroCosto
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
      * @ORM\JoinColumn(name="codigo_periodo_pago_fk", referencedColumnName="codigo_periodo_pago_pk")
      */
-    protected $periodoPagoRel;    
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="centrosCostosTerceroRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel; 
+    protected $periodoPagoRel;     
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuCentroCostosCiudadRel")
@@ -166,6 +155,7 @@ class RhuCentroCosto
      */
     protected $liquidacionesCentroCostoRel;    
     
+   
     /**
      * Constructor
      */
@@ -220,6 +210,30 @@ class RhuCentroCosto
     }
 
     /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
+    }
+
+    /**
      * Set codigoPeriodoPagoFk
      *
      * @param integer $codigoPeriodoPagoFk
@@ -241,30 +255,6 @@ class RhuCentroCosto
     public function getCodigoPeriodoPagoFk()
     {
         return $this->codigoPeriodoPagoFk;
-    }
-
-    /**
-     * Set codigoTerceroFk
-     *
-     * @param integer $codigoTerceroFk
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCodigoTerceroFk($codigoTerceroFk)
-    {
-        $this->codigoTerceroFk = $codigoTerceroFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTerceroFk
-     *
-     * @return integer
-     */
-    public function getCodigoTerceroFk()
-    {
-        return $this->codigoTerceroFk;
     }
 
     /**
@@ -532,27 +522,27 @@ class RhuCentroCosto
     }
 
     /**
-     * Set terceroRel
+     * Set ciudadRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
      *
      * @return RhuCentroCosto
      */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
     {
-        $this->terceroRel = $terceroRel;
+        $this->ciudadRel = $ciudadRel;
 
         return $this;
     }
 
     /**
-     * Get terceroRel
+     * Get ciudadRel
      *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
      */
-    public function getTerceroRel()
+    public function getCiudadRel()
     {
-        return $this->terceroRel;
+        return $this->ciudadRel;
     }
 
     /**
@@ -961,53 +951,5 @@ class RhuCentroCosto
     public function getLiquidacionesCentroCostoRel()
     {
         return $this->liquidacionesCentroCostoRel;
-    }
-
-    /**
-     * Set codigoCiudadFk
-     *
-     * @param integer $codigoCiudadFk
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCodigoCiudadFk($codigoCiudadFk)
-    {
-        $this->codigoCiudadFk = $codigoCiudadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadFk
-     *
-     * @return integer
-     */
-    public function getCodigoCiudadFk()
-    {
-        return $this->codigoCiudadFk;
-    }
-
-    /**
-     * Set ciudadRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
-    {
-        $this->ciudadRel = $ciudadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadRel()
-    {
-        return $this->ciudadRel;
     }
 }

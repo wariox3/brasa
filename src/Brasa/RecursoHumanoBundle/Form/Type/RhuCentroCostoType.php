@@ -13,15 +13,7 @@ class RhuCentroCostoType extends AbstractType
             ->add('periodoPagoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuPeriodoPago',
                 'property' => 'nombre',
-            ))                
-    
-            ->add('terceroRel', 'entity', array(
-            'class' => 'BrasaGeneralBundle:GenTercero',
-            'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('t')                    
-                ->orderBy('t.nombreCorto', 'ASC');},
-            'property' => 'nombreCorto',
-            'required' => true))             
+            ))                            
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {

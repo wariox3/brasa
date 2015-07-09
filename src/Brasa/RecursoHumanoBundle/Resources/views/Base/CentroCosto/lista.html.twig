@@ -28,7 +28,6 @@
             <tr>
                 <th>ID</th>
                 <th>{{ knp_pagination_sortable(arCentrosCostos, 'NOMBRE', 'cc.nombre') }}</th>                                                
-                <th>TERCERO</th>
                 <th>CIUDAD</th>
                 <th>PERIODO</th>
                 <th>HASTA</th>
@@ -43,7 +42,6 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCentrosCostos.codigoCentroCostoPk }}">{{ arCentrosCostos.codigoCentroCostoPk }} </td>
                 <td>{{ arCentrosCostos.nombre  }}</td>
-                <td>{{ arCentrosCostos.terceroRel.nombreCorto  }}</td>
                 <td>{{ arCentrosCostos.ciudadRel.nombre  }}</td>
                 <td>{{ arCentrosCostos.periodoPagoRel.nombre  }}</td>
                 <td>{{ arCentrosCostos.fechaUltimoPagoProgramado |date("Y/m/d")  }}</td>                
@@ -56,11 +54,17 @@
             </tr>
             {% endfor %}
         </table>
-        {{ knp_pagination_render(arCentrosCostos) }}
+        <div class="pagination-sm" style="float: left">
+{{ knp_pagination_render(arCentrosCostos) }}
+        </div>    
                
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float: right">
         <div class="btn-group">
+            <div class="btn-group">
+                {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            </div>
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                 Enlaces <span class="caret"></span>
             </button>
@@ -76,6 +80,8 @@
             </div>            
             <div class="btn-group">                
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_centros_costos_nuevo', { 'codigoCentroCosto': 0 }) }}" style="float:left">Nuevo</a>                                                                
+            </div>
+            <div class="btn-group">                
                 {{ form_widget(form.BtnInactivar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
             </div>
         </div>

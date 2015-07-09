@@ -223,18 +223,14 @@ class GenTercero
     /**
      * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteFactura", mappedBy="terceroRel")
      */
-    protected $TteFacturaRel;     
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto", mappedBy="terceroRel")
-     */
-    protected $centrosCostosTerceroRel;     
+    protected $TteFacturaRel;          
 
     /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuFactura", mappedBy="terceroRel")
      */
     protected $rhuFacturasTerceroRel;    
 
+   
     /**
      * Constructor
      */
@@ -246,7 +242,7 @@ class GenTercero
         $this->recogidasRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recogidasProgramadasRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->TteFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->centrosCostosTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuFacturasTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1277,40 +1273,6 @@ class GenTercero
     public function getTteFacturaRel()
     {
         return $this->TteFacturaRel;
-    }
-
-    /**
-     * Add centrosCostosTerceroRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosTerceroRel
-     *
-     * @return GenTercero
-     */
-    public function addCentrosCostosTerceroRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosTerceroRel)
-    {
-        $this->centrosCostosTerceroRel[] = $centrosCostosTerceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove centrosCostosTerceroRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosTerceroRel
-     */
-    public function removeCentrosCostosTerceroRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosTerceroRel)
-    {
-        $this->centrosCostosTerceroRel->removeElement($centrosCostosTerceroRel);
-    }
-
-    /**
-     * Get centrosCostosTerceroRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCentrosCostosTerceroRel()
-    {
-        return $this->centrosCostosTerceroRel;
     }
 
     /**

@@ -22,22 +22,22 @@ class FormatoCentroCostos extends \FPDF_FPDF {
         $this->SetFont('Arial','B',12);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 15);
-        $this->Cell(283, 8, "LISTADO DE CENTROS DE COSTOS " , 1, 0, 'C', 1);
+        $this->Cell(275, 8, "LISTADO DE CENTROS DE COSTOS " , 1, 0, 'C', 1);
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'NOMBRE', 'TERCERO', 'PERIODO', 'HASTA', 'PAGO AUTOMATICO', 'HORA', 'ABIERTO', 'ACTIVO');
+        $header = array('ID', 'NOMBRE', 'PERIODO', 'HASTA', 'PAGO AUTOMATICO', 'HORA', 'ABIERTO', 'ACTIVO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('Arial', 'B', 7);
+        $this->SetFont('Arial', 'B', 8);
 
         //creamos la cabecera de la tabla.
-        $w = array(8, 95, 82, 20, 15, 28, 10, 13, 12);
+        $w = array(8, 120, 30, 25, 32, 20, 20, 20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -55,37 +55,36 @@ class FormatoCentroCostos extends \FPDF_FPDF {
         $arCentroCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCostos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
         $pdf->SetX(10);
-        $pdf->SetFont('Arial', '', 7);
+        $pdf->SetFont('Arial', '', 8);
         foreach ($arCentroCostos as $arCentroCostos) {            
             $pdf->Cell(8, 4, $arCentroCostos->getCodigoCentroCostoPk(), 1, 0, 'L');
-            $pdf->Cell(95, 4, utf8_decode($arCentroCostos->getNombre()), 1, 0, 'L');
-            $pdf->Cell(82, 4, utf8_decode($arCentroCostos->getTerceroRel()->getNombreCorto()), 1, 0, 'L');
-            $pdf->Cell(20, 4, $arCentroCostos->getPeriodoPagoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(15, 4, $arCentroCostos->getFechaUltimoPagoProgramado()->format('Y/m/d'), 1, 0, 'L');
+            $pdf->Cell(120, 4, utf8_decode($arCentroCostos->getNombre()), 1, 0, 'L');
+            $pdf->Cell(30, 4, $arCentroCostos->getPeriodoPagoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(25, 4, $arCentroCostos->getFechaUltimoPagoProgramado()->format('Y/m/d'), 1, 0, 'L');
             if ($arCentroCostos->getGenerarPagoAutomatico() == 1) {    
-                $pdf->Cell(28, 4, "SI", 1, 0, 'L');
+                $pdf->Cell(32, 4, "SI", 1, 0, 'L');
             }
             else {
-                $pdf->Cell(28, 4, "NO", 1, 0, 'L');
+                $pdf->Cell(32, 4, "NO", 1, 0, 'L');
             }
             
             if ($arCentroCostos->getHoraPagoAutomatico() <> ""){
-                $pdf->Cell(10, 4, $arCentroCostos->getHoraPagoAutomatico()->format('H:i'), 1, 0, 'L');
+                $pdf->Cell(20, 4, $arCentroCostos->getHoraPagoAutomatico()->format('H:i'), 1, 0, 'L');
             }
             else {
-                $pdf->Cell(10, 4, "00:00", 1, 0, 'L');
+                $pdf->Cell(20, 4, "00:00", 1, 0, 'L');
             }
             if ($arCentroCostos->getPagoAbierto() == 1) {    
-                $pdf->Cell(13, 4, "SI", 1, 0, 'L');
+                $pdf->Cell(20, 4, "SI", 1, 0, 'L');
             }
             else {
-                $pdf->Cell(13, 4, "NO", 1, 0, 'L');
+                $pdf->Cell(20, 4, "NO", 1, 0, 'L');
             }
             if ($arCentroCostos->getEstadoActivo() == 1) {    
-                $pdf->Cell(12, 4, "SI", 1, 0, 'L');
+                $pdf->Cell(20, 4, "SI", 1, 0, 'L');
             }
             else {
-                $pdf->Cell(12, 4, "NO", 1, 0, 'L');
+                $pdf->Cell(20, 4, "NO", 1, 0, 'L');
             }
             
             $pdf->Ln();
