@@ -60,7 +60,7 @@ class RhuSeleccionType extends AbstractType
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                
-            ->add('fechaNacimiento', 'date', array('required' => true, 'widget' => 'single_text'))                                 
+            ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))                
             ->add('fechaPruebas', 'datetime', array('required' => false))                 
             ->add('nombre1', 'text', array('required' => true))
             ->add('nombre2', 'text', array('required' => false))

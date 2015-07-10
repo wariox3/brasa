@@ -53,8 +53,7 @@ class RhuEmpleadoType extends AbstractType
                 'property' => 'nombre',
                 'required' => true))                
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))                                                        
-            //->add('fechaNacimiento', 'date', array('data' => new \DateTime('now')))
-             ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))                
+            ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))                
             ->add('edad', 'text', array('required' => false))
             ->add('nombre1', 'text', array('required' => true))
             ->add('nombre2', 'text', array('required' => false))
