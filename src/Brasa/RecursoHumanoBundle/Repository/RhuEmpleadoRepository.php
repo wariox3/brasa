@@ -16,7 +16,7 @@ class RhuEmpleadoRepository extends EntityRepository {
         $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
-        }      
+        }     
         if($strCodigoCentroCosto != "") {
             $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }      
@@ -25,14 +25,14 @@ class RhuEmpleadoRepository extends EntityRepository {
         } elseif($boolMostrarActivos == 0) {
             $dql .= " AND e.estadoActivo = 0";
         }
-        if($boolMostrarPagadosEntidadSalud == 1 ) {
+        /*if($boolMostrarPagadosEntidadSalud == 1 ) {
             $dql .= " AND e.pagadoEntidadSalud = 1";
         } elseif ($boolMostrarPagadosEntidadSalud == 0) {
             $dql .= " AND e.pagadoEntidadSalud = 0";
-        }
+        }*/
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
-        }         
+        }        
         $dql .= " ORDER BY e.nombreCorto";
         return $dql;
     }                    

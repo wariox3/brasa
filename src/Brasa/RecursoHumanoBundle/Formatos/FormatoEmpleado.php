@@ -62,7 +62,11 @@ class FormatoEmpleado extends \FPDF_FPDF {
             $pdf->Cell(12, 4, $arEmpleado->getCodigoEmpleadoPk(), 1, 0, 'L');
             $pdf->Cell(22, 4, $arEmpleado->getNumeroIdentificacion(), 1, 0, 'L');
             $pdf->Cell(73, 4, utf8_decode($arEmpleado->getNombreCorto()), 1, 0, 'L');
-            $pdf->Cell(95, 4, utf8_decode($arEmpleado->getCentroCostoRel()->getNombre()), 1, 0, 'L');
+            if ($arEmpleado->getCodigoCentroCostoFk() <> ""){
+                $pdf->Cell(95, 4, utf8_decode($arEmpleado->getCentroCostoRel()->getNombre()), 1, 0, 'L');
+            } else {
+                $pdf->Cell(95, 4, "", 1, 0, 'L');
+            }
             $pdf->Cell(20, 4, $arEmpleado->getFechaNacimiento()->format('Y/m/d'), 1, 0, 'L');
             $pdf->Cell(16, 4, $arEmpleado->getTelefono(), 1, 0, 'L');
             $pdf->Cell(17, 4, number_format($arEmpleado->getVrSalario(), 2, '.', ','), 1, 0, 'R');
