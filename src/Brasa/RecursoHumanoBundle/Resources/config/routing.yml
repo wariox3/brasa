@@ -166,6 +166,22 @@ brs_rhu_base_salud_nuevo:
    path:     /rhumano/base/salud/nuevo/{codigoEntidadSaludPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:nuevo }
    
+brs_rhu_base_banco_listar:
+   path:     /rhumano/base/banco/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:listar }
+   
+brs_rhu_base_banco_nuevo:
+   path:     /rhumano/base/banco/nuevo/{codigoBancoPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:nuevo }
+   
+brs_rhu_base_sede_listar:
+   path:     /rhumano/base/sede/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSede:lista }
+   
+brs_rhu_base_sede_nuevo:
+   path:     /rhumano/base/sede/nuevo/{codigoSedePk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSede:nuevo }
+   
 brs_rhu_examen_listar:
    path:     /rhumano/examen/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:lista } 
