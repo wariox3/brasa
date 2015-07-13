@@ -2,8 +2,8 @@
 
 {% block content %}
 <div class="container">    
-    {{ form_start(formEntidadExamen, { 'attr': {'class': 'form-horizontal'} }) }}
-    {{ form_errors(formEntidadExamen) }}
+    {{ form_start(formCajaCompensacion, { 'attr': {'class': 'form-horizontal'} }) }}
+    {{ form_errors(formCajaCompensacion) }}
     <h3>Nuevo registro</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
@@ -11,32 +11,32 @@
             <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Nombre:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formEntidadExamen.nombre, { 'attr': {'onkeypress': 'txNombres();', 'class': 'form-control'} }) }}
+                        {{ form_widget(formCajaCompensacion.nombre, { 'attr': {'onkeypress': 'txNombres();', 'class': 'form-control'} }) }}
                 </div>
             </div>
         <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Nit:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formEntidadExamen.nit, { 'attr': {'onkeypress': 'ValidaSoloNumeros();', 'class': 'form-control'} }) }}
+                        {{ form_widget(formCajaCompensacion.nit, { 'attr': {'onkeypress': 'ValidaSoloNumeros();', 'class': 'form-control'} }) }}
                 </div>
             </div>
         <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Dirección:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formEntidadExamen.direccion, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(formCajaCompensacion.direccion, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
         <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Teléfono:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formEntidadExamen.telefono, { 'attr': {'onkeypress': 'ValidaSoloNumeros();', 'class': 'form-control'} }) }}
+                        {{ form_widget(formCajaCompensacion.telefono, { 'attr': {'onkeypress': 'ValidaSoloNumeros();', 'class': 'form-control'} }) }}
                 </div>
             </div>        
              <div class="modal-footer">
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_entidadexamen_listar') }}">Cancelar</a>
-            {{ form_widget(formEntidadExamen.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_caja_listar') }}">Cancelar</a>
+            {{ form_widget(formCajaCompensacion.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>
-    {{ form_end(formEntidadExamen) }}
+    {{ form_end(formCajaCompensacion) }}
 </div>
 </div>      
 {% endblock %}

@@ -174,6 +174,22 @@ brs_rhu_base_banco_nuevo:
    path:     /rhumano/base/banco/nuevo/{codigoBancoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:nuevo }
    
+brs_rhu_base_caja_listar:
+   path:     /rhumano/base/caja/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCaja:listar }
+   
+brs_rhu_base_caja_nuevo:
+   path:     /rhumano/base/caja/nuevo/{codigoEntidadCajaPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCaja:nuevo }
+   
+brs_rhu_base_cargo_listar:
+   path:     /rhumano/base/cargo/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCargo:listar }
+   
+brs_rhu_base_cargo_nuevo:
+   path:     /rhumano/base/cargo/nuevo/{codigoCargoPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCargo:nuevo }
+   
 brs_rhu_base_sede_listar:
    path:     /rhumano/base/sede/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSede:lista }
