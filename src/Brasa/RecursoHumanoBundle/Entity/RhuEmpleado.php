@@ -179,10 +179,6 @@ class RhuEmpleado
      */    
     private $padreFamilia=0;
     
-    /**     
-     * @ORM\Column(name="edad", type="integer", nullable=true)
-     */    
-    private $edad;
     
     /**     
      * @ORM\Column(name="camisa", type="string", length=10, nullable=true)
@@ -385,9 +381,7 @@ class RhuEmpleado
      * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
      */
     protected $rhRel; 
-    
-
-
+   
     /**
      * Constructor
      */
@@ -496,7 +490,7 @@ class RhuEmpleado
      */
     public function setNombre1($nombre1)
     {
-        $this->nombre1 = $nombre1;
+        $this->nombre1 = strtoupper($nombre1);
 
         return $this;
     }
@@ -680,6 +674,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoCiudadExpedicionFk
+     *
+     * @param integer $codigoCiudadExpedicionFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoCiudadExpedicionFk($codigoCiudadExpedicionFk)
+    {
+        $this->codigoCiudadExpedicionFk = $codigoCiudadExpedicionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadExpedicionFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadExpedicionFk()
+    {
+        return $this->codigoCiudadExpedicionFk;
+    }
+
+    /**
      * Set codigoBarrioFk
      *
      * @param integer $codigoBarrioFk
@@ -797,6 +815,30 @@ class RhuEmpleado
     public function getFechaNacimiento()
     {
         return $this->fecha_nacimiento;
+    }
+
+    /**
+     * Set codigoCiudadNacimientoFk
+     *
+     * @param integer $codigoCiudadNacimientoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoCiudadNacimientoFk($codigoCiudadNacimientoFk)
+    {
+        $this->codigoCiudadNacimientoFk = $codigoCiudadNacimientoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadNacimientoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadNacimientoFk()
+    {
+        return $this->codigoCiudadNacimientoFk;
     }
 
     /**
@@ -1109,6 +1151,102 @@ class RhuEmpleado
     public function getEstadoActivo()
     {
         return $this->estadoActivo;
+    }
+
+    /**
+     * Set padreFamilia
+     *
+     * @param boolean $padreFamilia
+     *
+     * @return RhuEmpleado
+     */
+    public function setPadreFamilia($padreFamilia)
+    {
+        $this->padreFamilia = $padreFamilia;
+
+        return $this;
+    }
+
+    /**
+     * Get padreFamilia
+     *
+     * @return boolean
+     */
+    public function getPadreFamilia()
+    {
+        return $this->padreFamilia;
+    }
+
+    /**
+     * Set camisa
+     *
+     * @param string $camisa
+     *
+     * @return RhuEmpleado
+     */
+    public function setCamisa($camisa)
+    {
+        $this->camisa = $camisa;
+
+        return $this;
+    }
+
+    /**
+     * Get camisa
+     *
+     * @return string
+     */
+    public function getCamisa()
+    {
+        return $this->camisa;
+    }
+
+    /**
+     * Set jeans
+     *
+     * @param string $jeans
+     *
+     * @return RhuEmpleado
+     */
+    public function setJeans($jeans)
+    {
+        $this->jeans = $jeans;
+
+        return $this;
+    }
+
+    /**
+     * Get jeans
+     *
+     * @return string
+     */
+    public function getJeans()
+    {
+        return $this->jeans;
+    }
+
+    /**
+     * Set calzado
+     *
+     * @param string $calzado
+     *
+     * @return RhuEmpleado
+     */
+    public function setCalzado($calzado)
+    {
+        $this->calzado = $calzado;
+
+        return $this;
+    }
+
+    /**
+     * Get calzado
+     *
+     * @return string
+     */
+    public function getCalzado()
+    {
+        return $this->calzado;
     }
 
     /**
@@ -1541,6 +1679,54 @@ class RhuEmpleado
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Set ciudadNacimientoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setCiudadNacimientoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel = null)
+    {
+        $this->ciudadNacimientoRel = $ciudadNacimientoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadNacimientoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadNacimientoRel()
+    {
+        return $this->ciudadNacimientoRel;
+    }
+
+    /**
+     * Set ciudadExpedicionRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setCiudadExpedicionRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel = null)
+    {
+        $this->ciudadExpedicionRel = $ciudadExpedicionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadExpedicionRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadExpedicionRel()
+    {
+        return $this->ciudadExpedicionRel;
     }
 
     /**
@@ -1977,221 +2163,5 @@ class RhuEmpleado
     public function getRhRel()
     {
         return $this->rhRel;
-    }
-
-    /**
-     * Set padreFamilia
-     *
-     * @param boolean $padreFamilia
-     *
-     * @return RhuEmpleado
-     */
-    public function setPadreFamilia($padreFamilia)
-    {
-        $this->padreFamilia = $padreFamilia;
-
-        return $this;
-    }
-
-    /**
-     * Get padreFamilia
-     *
-     * @return boolean
-     */
-    public function getPadreFamilia()
-    {
-        return $this->padreFamilia;
-    }
-
-    /**
-     * Set camisa
-     *
-     * @param string $camisa
-     *
-     * @return RhuEmpleado
-     */
-    public function setCamisa($camisa)
-    {
-        $this->camisa = $camisa;
-
-        return $this;
-    }
-
-    /**
-     * Get camisa
-     *
-     * @return string
-     */
-    public function getCamisa()
-    {
-        return $this->camisa;
-    }
-
-    /**
-     * Set jeans
-     *
-     * @param string $jeans
-     *
-     * @return RhuEmpleado
-     */
-    public function setJeans($jeans)
-    {
-        $this->jeans = $jeans;
-
-        return $this;
-    }
-
-    /**
-     * Get jeans
-     *
-     * @return string
-     */
-    public function getJeans()
-    {
-        return $this->jeans;
-    }
-
-    /**
-     * Set calzado
-     *
-     * @param string $calzado
-     *
-     * @return RhuEmpleado
-     */
-    public function setCalzado($calzado)
-    {
-        $this->calzado = $calzado;
-
-        return $this;
-    }
-
-    /**
-     * Get calzado
-     *
-     * @return string
-     */
-    public function getCalzado()
-    {
-        return $this->calzado;
-    }
-
-    /**
-     * Set edad
-     *
-     * @param integer $edad
-     *
-     * @return RhuEmpleado
-     */
-    public function setEdad($edad)
-    {
-        $this->edad = $edad;
-
-        return $this;
-    }
-
-    /**
-     * Get edad
-     *
-     * @return integer
-     */
-    public function getEdad()
-    {
-        return $this->edad;
-    }
-
-    /**
-     * Set codigoCiudadNacimientoFk
-     *
-     * @param integer $codigoCiudadNacimientoFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoCiudadNacimientoFk($codigoCiudadNacimientoFk)
-    {
-        $this->codigoCiudadNacimientoFk = $codigoCiudadNacimientoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadNacimientoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCiudadNacimientoFk()
-    {
-        return $this->codigoCiudadNacimientoFk;
-    }
-
-    /**
-     * Set ciudadNacimientoRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setCiudadNacimientoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel = null)
-    {
-        $this->ciudadNacimientoRel = $ciudadNacimientoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadNacimientoRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadNacimientoRel()
-    {
-        return $this->ciudadNacimientoRel;
-    }
-
-    /**
-     * Set codigoCiudadExpedicionFk
-     *
-     * @param integer $codigoCiudadExpedicionFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoCiudadExpedicionFk($codigoCiudadExpedicionFk)
-    {
-        $this->codigoCiudadExpedicionFk = $codigoCiudadExpedicionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadExpedicionFk
-     *
-     * @return integer
-     */
-    public function getCodigoCiudadExpedicionFk()
-    {
-        return $this->codigoCiudadExpedicionFk;
-    }
-
-    /**
-     * Set ciudadExpedicionRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setCiudadExpedicionRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel = null)
-    {
-        $this->ciudadExpedicionRel = $ciudadExpedicionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadExpedicionRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadExpedicionRel()
-    {
-        return $this->ciudadExpedicionRel;
     }
 }

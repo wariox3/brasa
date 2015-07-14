@@ -1,10 +1,8 @@
 <?php
 
 namespace Brasa\RecursoHumanoBundle\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuContratoType;
-
 class ContratosController extends Controller
 {
     var $fechaDesdeInicia;
@@ -24,7 +22,6 @@ class ContratosController extends Controller
                 $this->filtrar($form);
                 $this->listar();              
             }
-
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
                 $this->listar();
@@ -119,13 +116,11 @@ class ContratosController extends Controller
             $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevo.html.twig', array(
             'arContrato' => $arContrato,
             'arEmpleado' => $arEmpleado,
             'form' => $form->createView()));
     }
-
     public function terminarAction($codigoContrato) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -158,7 +153,6 @@ class ContratosController extends Controller
             //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
         }
-
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:terminar.html.twig', array(
             'arContrato' => $arContrato,
             'formContrato' => $formContrato->createView()
@@ -179,8 +173,8 @@ class ContratosController extends Controller
         $session = $this->getRequest()->getSession();        
         $form = $this->createFormBuilder()                        
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
-            ->add('fechaDesdeInicia', 'date', array('required' => true, 'widget' => 'single_text'))                            
-            ->add('fechaHastaInicia', 'date', array('required' => true, 'widget' => 'single_text'))                                            
+            ->add('fechaDesdeInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                            
+            ->add('fechaHastaInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',)) 
             ->getForm();        
@@ -214,7 +208,6 @@ class ContratosController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'TIPO')
@@ -228,7 +221,6 @@ class ContratosController extends Controller
                     ->setCellValue('J1', 'CARGO')
                     ->setCellValue('K1', 'CARGO DESCRIPCION')
                     ->setCellValue('L1', 'CLASIFICACION RIESGO');
-
         $i = 2;
         $query = $em->createQuery($session->get('dqlContratoLista'));
         //$arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -249,10 +241,8 @@ class ContratosController extends Controller
                     ->setCellValue('L' . $i, $arContrato->getClasificacionRiesgoRel()->getNombre());
             $i++;
         }
-
         $objPHPExcel->getActiveSheet()->setTitle('contratos');
         $objPHPExcel->setActiveSheetIndex(0);
-
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Contratos.xlsx"');

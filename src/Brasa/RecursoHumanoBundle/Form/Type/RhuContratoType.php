@@ -11,7 +11,7 @@ class RhuContratoType extends AbstractType
         $builder      
             ->add('contratoTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
-                'property' => 'nombre',
+                        'property' => 'nombre',
             ))                 
             ->add('clasificacionRiesgoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
@@ -41,12 +41,11 @@ class RhuContratoType extends AbstractType
                 'property' => 'nombre',
             ))                            
             ->add('fechaDesde', 'date', array('required' => true)) 
-            ->add('fechaHasta', 'date', array('required' => true)) 
+            //->add('fechaHasta', 'date', array('required' => true)) 
             ->add('vrSalario', 'number', array('required' => true))  
             ->add('numero', 'text', array('required' => true))                                           
             ->add('cargoDescripcion', 'text', array('required' => true))                                                                       
             ->add('comentarios', 'textarea', array('required' => false))
-            ->add('estadoActivo', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                
             ->add('guardar', 'submit');        
     }
  

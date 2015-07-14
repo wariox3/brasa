@@ -37,7 +37,7 @@
                 </div>
             </div>                
             <div class="form-group form-group-sm">
-                <label for="form_numero" class="col-sm-2 control-label">Numero:</label>
+                <label for="form_numero" class="col-sm-2 control-label">Numero Soporte:</label>
                 <div class="col-sm-10">
                         {{ form_widget(form.numero, { 'attr': {'class': 'form-control'} }) }}
                 </div>
@@ -59,26 +59,13 @@
                 <div class="col-sm-10">
                         {{ form_widget(form.fechaDesde) }}
                 </div>
-            </div>    
-            <div class="form-group form-group-sm">
-                <label for="form_fechaHasta" class="col-sm-2 control-label">Fecha terminacion:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.fechaHasta) }} * si la fecha terminación es igual se asume como indefinido o por obra o labor 
-                </div>
-            </div>                
-                
+            </div>        
             <div class="form-group form-group-sm">
                 <label for="form_vrSalario" class="col-sm-2 control-label">Salario:</label>
                 <div class="col-sm-10">
                         {{ form_widget(form.vrSalario, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>   
-            <div class="form-group form-group-sm">
-                <label for="form_estadoActivo" class="col-sm-2 control-label">Vigente:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.estadoActivo, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                 
+            </div>                   
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-2 control-label">Comentarios:</label>
                 <div class="col-sm-10">

@@ -26,7 +26,7 @@
                 <td>{{arEntidadesExamen.nit}}</td>
                 <td>{{arEntidadesExamen.direccion}}</td>
                 <td>{{arEntidadesExamen.telefono}}</td>
-                <td><a href="{{ path('brs_rhu_base_entidadexamen_nuevo',{'codigoEntidadExamenPk': arEntidadesExamen.codigoEntidadExamenPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                <td><a href="{{ path('brs_rhu_base_entidadexamen_nuevo',{'codigoEntidadExamenPk': arEntidadesExamen.codigoEntidadExamenPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEntidadesExamen.codigoEntidadExamenPk }}" /></td>
             {%endfor%}
             </tr>            

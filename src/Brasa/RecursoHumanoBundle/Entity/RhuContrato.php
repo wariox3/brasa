@@ -80,7 +80,7 @@ class RhuContrato
     /**     
      * @ORM\Column(name="estado_activo", type="boolean")
      */    
-    private $estadoActivo = 0;     
+    private $estadoActivo = 1;     
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)

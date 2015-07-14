@@ -256,9 +256,6 @@ class BaseEmpleadoController extends Controller
             $arrControles = $request->request->All();
             $arEmpleado = $form->getData();
             $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());            
-            $varFecha = $form->get('fechaNacimiento')->getData()->format('Y');
-            $varEdad = date('Y') - $varFecha;
-            $arEmpleado->setEdad($varEdad);
             $em->persist($arEmpleado);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
@@ -266,7 +263,6 @@ class BaseEmpleadoController extends Controller
             } else {
                 return $this->redirect($this->generateUrl('brs_rhu_base_empleados_lista'));
             }
-
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:nuevo.html.twig', array(

@@ -20,7 +20,7 @@
                <tr>
                 <td>{{arExamenTipos.codigoExamenTipoPk}}</td>
                 <td>{{arExamenTipos.nombre}}</td>
-                <td><a href="{{ path('brs_rhu_base_examentipo_nuevo',{'codigoExamenTipoPk': arExamenTipos.codigoExamenTipoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                <td><a href="{{ path('brs_rhu_base_examentipo_nuevo',{'codigoExamenTipoPk': arExamenTipos.codigoExamenTipoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenTipos.codigoExamenTipoPk }}" /></td>
             {%endfor%}
             </tr>            

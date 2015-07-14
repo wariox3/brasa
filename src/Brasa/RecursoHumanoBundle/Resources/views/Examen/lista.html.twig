@@ -62,7 +62,7 @@
                 {% if  arExamenes.codigoEntidadExamenFk == "" %}
                 <td style="text-align: center"><a href="" onClick="alert('Por favor asigne la entidad del examen para ingresar al detalle!')"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 {% else %}
-                <td style="text-align: center"><a href="{{ path('brs_rhu_examen_detalle', { 'codigoExamen':  arExamenes.codigoExamenPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_examen_detalle', { 'codigoExamen':  arExamenes.codigoExamenPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 {% endif %}
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenes.codigoExamenPk }}" /></td>
             </tr>

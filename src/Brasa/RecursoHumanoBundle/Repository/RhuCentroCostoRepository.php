@@ -20,7 +20,7 @@ class RhuCentroCostoRepository extends EntityRepository {
         $em = $this->getEntityManager();                                                                       
         $arCentroCostoProceso = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCostoProceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
-        if($arCentroCostoProceso->getPagoAbierto() == 0 && $arCentroCostoProceso->getEstadoActivo() == 1) {
+        if($arCentroCostoProceso->getEstadoActivo() == 1) {
             $intDias = $arCentroCostoProceso->getPeriodoPagoRel()->getDias();
             $dateDesde = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y-m-d');
             if($arCentroCostoProceso->getPeriodoPagoRel()->getContinuo() == 1) {
@@ -77,7 +77,7 @@ class RhuCentroCostoRepository extends EntityRepository {
         return true;
     }           
     
-    public function listaDQL($strNombre = "", $boolMostrarActivos = "", $boolMostrarPagoAbierto = "") {        
+    public function listaDQL($strNombre = "", $boolMostrarActivos = "" , $boolMostrarPagoAbierto = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT cc FROM BrasaRecursoHumanoBundle:RhuCentroCosto cc WHERE cc.codigoCentroCostoPk <> 0";
         if($strNombre != "" ) {
@@ -90,13 +90,13 @@ class RhuCentroCostoRepository extends EntityRepository {
                 $dql .= " AND cc.estadoActivo = 0";
             }            
         }
-        if($boolMostrarPagoAbierto) {
+        /*if($boolMostrarPagoAbierto) {
             if($boolMostrarPagoAbierto == 1) {
                 $dql .= " AND cc.pagoAbierto = 1";
             } elseif($boolMostrarPagoAbierto == 0) {
                 $dql .= " AND cc.pagoAbierto = 0";
             }            
-        }
+        }*/
         
         
         $dql .= " ORDER BY cc.nombre";

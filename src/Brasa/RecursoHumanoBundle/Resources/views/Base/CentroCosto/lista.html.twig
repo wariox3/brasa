@@ -49,7 +49,7 @@
                 <td>{{ arCentrosCostos.horaPagoAutomatico |date("H:i")  }}</td>                
                 <td>{% if arCentrosCostos.pagoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCentrosCostos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_base_centros_costos_nuevo', { 'codigoCentroCosto':  arCentrosCostos.codigoCentroCostoPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                                
+                <td style="text-align: center"><a href="{{ path('brs_rhu_base_centros_costos_nuevo', { 'codigoCentroCosto':  arCentrosCostos.codigoCentroCostoPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCentrosCostos.codigoCentroCostoPk }}" /></td>
             </tr>
             {% endfor %}

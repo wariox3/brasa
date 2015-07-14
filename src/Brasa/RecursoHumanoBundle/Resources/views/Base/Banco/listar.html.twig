@@ -20,7 +20,7 @@
                <tr>
                 <td>{{arBancos.codigoBancoPk}}</td>
                 <td>{{arBancos.nombre}}</td>
-                <td><a href="{{ path('brs_rhu_base_banco_nuevo',{'codigoBancoPk': arBancos.codigoBancoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                <td><a href="{{ path('brs_rhu_base_banco_nuevo',{'codigoBancoPk': arBancos.codigoBancoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arBancos.codigoBancoPk }}" /></td>
             {%endfor%}
             </tr>            

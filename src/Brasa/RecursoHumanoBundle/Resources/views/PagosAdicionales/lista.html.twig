@@ -18,7 +18,7 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCentrosCostos.codigoCentroCostoPk }}">{{ arCentrosCostos.codigoCentroCostoPk }} </td>
                 <td>{{ arCentrosCostos.nombre  }}</td>                
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arCentrosCostos.codigoCentroCostoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoCentroCosto': arCentrosCostos.codigoCentroCostoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Editar registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCentrosCostos.codigoCentroCostoPk }}" /></td>
             </tr>
             {% endfor %}

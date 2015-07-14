@@ -73,7 +73,7 @@
                 <td>{{ arDisciplinarios.asunto  }}</td>
                 <td>{{ arDisciplinarios.descargos  }}</td>
                 <td>{{ arDisciplinarios.suspension  }}</td>
-                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arDisciplinarios.empleadoRel.centroCostoRel.codigoCentroCostoPk, 'codigoEmpleado':  arDisciplinarios.codigoEmpleadoFk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arDisciplinarios.empleadoRel.centroCostoRel.codigoCentroCostoPk, 'codigoEmpleado':  arDisciplinarios.codigoEmpleadoFk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
                 <td style="text-align: center"><a href="{{ path('brs_rhu_disciplinario_detalle', { 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}" /></td>
             </tr>

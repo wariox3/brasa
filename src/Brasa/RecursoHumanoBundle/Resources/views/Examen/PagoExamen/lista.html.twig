@@ -41,7 +41,7 @@
                 <td>{{ arPagoExamenes.codigoPagoExamenPk  }}</td>
                 <td>{{ arPagoExamenes.entidadExamenRel.nombre  }}</td>                
                 <td style="text-align: right">{{ arPagoExamenes.vrTotal | number_format(2, '.', ',') }}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pago_examen_detalle', { 'codigoPagoExamen':  arPagoExamenes.codigoPagoExamenPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_pago_examen_detalle', { 'codigoPagoExamen':  arPagoExamenes.codigoPagoExamenPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoExamenes.codigoPagoExamenPk }}" /></td>
             </tr>
             

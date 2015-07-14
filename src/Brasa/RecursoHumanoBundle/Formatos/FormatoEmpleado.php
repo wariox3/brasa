@@ -3,7 +3,6 @@ namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoEmpleado extends \FPDF_FPDF {
     public static $em;
     public static $strDql;
-   
     public function Generar($miThis, $dql) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
@@ -27,7 +26,6 @@ class FormatoEmpleado extends \FPDF_FPDF {
         $this->EncabezadoDetalles();
         
     }
-
     public function EncabezadoDetalles() {
         $this->Ln(8);
         $header = array('ID', 'IDENTIFICACION', 'NOMBRE', 'CENTRO COSTOS', 'F. NACIMIENTO', 'TELEFONO', 'SALARIO', 'AUX.T', 'ACTIVO');
@@ -84,7 +82,6 @@ class FormatoEmpleado extends \FPDF_FPDF {
             $pdf->SetAutoPageBreak(true, 15);
         }        
     }
-
     public function Footer() {
         $this->SetXY(245, 190);
         $this->Cell(30, 35, utf8_decode('JG Efectivos S.A.S.   Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          

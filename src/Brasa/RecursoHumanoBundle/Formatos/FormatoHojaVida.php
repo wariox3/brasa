@@ -192,7 +192,17 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->SetXY($intX, $intY + 72);
         $this->SetFont('Arial','',8);
         $this->Cell(39, 8, "por implementar", 1, 0, 'C', 1);
-        $this->Cell(11, 8, $arEmpleado->getEdad(), 1, 0, 'C', 1);
+        //Calculo edad
+        $varFechaNacimientoAnio = $arEmpleado->getFechaNacimiento()->format('Y');
+        $varFechaNacimientoMes = $arEmpleado->getFechaNacimiento()->format('m');
+        $varMesActual = date('m');
+        if ($varMesActual >= $varFechaNacimientoMes){
+            $varEdad = date('Y') - $varFechaNacimientoAnio;
+        } else {
+            $varEdad = date('Y') - $varFechaNacimientoAnio -1;
+        }
+        //Fin calculo edad
+        $this->Cell(11, 8, $varEdad, 1, 0, 'C', 1);
         $this->Cell(60, 8, $arEmpleado->getCorreo(), 1, 0, 'C', 1);
         $this->Cell(20, 8, $arEmpleado->getCamisa(), 1, 0, 'C', 1); 
         $this->Cell(20, 8, $arEmpleado->getJeans(), 1, 0, 'C', 1);

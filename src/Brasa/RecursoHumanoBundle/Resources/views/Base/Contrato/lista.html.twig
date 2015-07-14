@@ -1,6 +1,10 @@
 {% extends '::base.html.twig' %}
 {% block content %}
 <div class="container">
+    <script type="text/javascript">
+    $(document).ready(function() {
+            $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
+    </script>
     <div class="page-header">
         <h3>Lista contratos</h3>
     </div>
@@ -18,13 +22,13 @@
                 <div class="form-group form-group-sm">  
                     <label for="form_fechaDesdeInicia" class="col-sm-2 control-label">Inicia desde:</label>
                     <div class="col-sm-10">                  
-                        {{ form_widget(form.fechaDesdeInicia, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.fechaDesdeInicia, {'attr': {'maxlength': 10} }) }}
                     </div>
                 </div>                     
                 <div class="form-group form-group-sm">  
                     <label for="form_fechaHastaInicia" class="col-sm-2 control-label">Inicia hasta:</label>
                     <div class="col-sm-10">                  
-                        {{ form_widget(form.fechaHastaInicia, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.fechaHastaInicia, {'attr': {'maxlength': 10} }) }}
                     </div>
                 </div>                     
                 <div class="form-group form-group-sm">
@@ -73,12 +77,12 @@
                             <td>{% if arContratos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
                             {% if arContratos.indefinido == 1 %}
                                 <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_contratos_terminar', { 'codigoContrato': arContratos.codigoContratoPk}) }}" style="float:left">Terminar</a></td>                                
-                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                                                            
+                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                                            
                             {% else %}
                                 <td></td>
                                 <td></td>
                             {% endif %}   
-                            <td style="text-align: center"><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arContratos.codigoContratoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
+                            <td style="text-align: center"><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arContratos.codigoContratoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>                
                             <td><input type="checkbox" name="ChkSeleccionarContrato[]" value="{{ arContratos.codigoContratoPk }}" /></td>
                         </tr>
                     {% endfor %}

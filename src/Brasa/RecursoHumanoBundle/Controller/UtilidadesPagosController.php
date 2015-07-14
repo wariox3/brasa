@@ -15,7 +15,7 @@ class UtilidadesPagosController extends Controller
             ->add('ChkMostrarInactivos', 'checkbox', array('label'=> '', 'required'  => false,))
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => ''))
             ->add('BtnBuscar', 'submit', array('label'  => 'Filtrar'))
-            ->add('Actualizar', 'submit')
+            //->add('Actualizar', 'submit')
             ->add('Generar', 'submit')
             ->getForm();
         $form->handleRequest($request);
@@ -30,7 +30,7 @@ class UtilidadesPagosController extends Controller
                 }
             }
             if($form->get('BtnBuscar')->isClicked()) {
-                $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL('', $form->get('ChkMostrarInactivos')->getData(), ""));
+                $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL($form->get('TxtNombre')->getData(), $form->get('ChkMostrarInactivos')->getData(), ""));
             }
         } else {
             $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL($form->get('TxtNombre')->getData(), 1, 0));

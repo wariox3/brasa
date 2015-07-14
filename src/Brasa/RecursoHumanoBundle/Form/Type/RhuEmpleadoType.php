@@ -10,6 +10,7 @@ class RhuEmpleadoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+               
             ->add('tipoIdentificacionRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuTipoIdentificacion',
                 'property' => 'nombre',
@@ -34,7 +35,7 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuEstadoCivil',
                 'property' => 'nombre',
             ))                
-            ->add('ciudadRel', 'entity', array(
+            ->add('ciudadExpedicionRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
@@ -43,6 +44,15 @@ class RhuEmpleadoType extends AbstractType
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
+            ->add('ciudadRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCiudad',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->where('c.codigoDepartamentoFk = :codigoDepartamento')
+                    ->setParameter('codigoDepartamento', 5)
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('ciudadNacimientoRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
@@ -53,8 +63,7 @@ class RhuEmpleadoType extends AbstractType
                 'property' => 'nombre',
                 'required' => true))                
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))                                                        
-            ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))                
-            ->add('edad', 'text', array('required' => false))
+            ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
             ->add('nombre1', 'text', array('required' => true))
             ->add('nombre2', 'text', array('required' => false))
             ->add('apellido1', 'text', array('required' => true))
