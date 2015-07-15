@@ -1,0 +1,35 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+<div class="container">    
+    {{ form_start(formConfiguracion, { 'attr': {'class': 'form-horizontal'} }) }}
+    {{ form_errors(formConfiguracion) }}
+    <h3>Editar Registro</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion general</div>
+        <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Codigo:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(formConfiguracion.codigoConfiguracionPk, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <label class="col-sm-2 control-label">Concepto:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(formConfiguracion.concepto, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <label class="col-sm-2 control-label">Valor:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(formConfiguracion.valor, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+        
+        
+                
+             <div class="modal-footer">
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_configuracion_nomina_lista') }}">Cancelar</a>
+            {{ form_widget(formConfiguracion.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+    </div>
+    {{ form_end(formConfiguracion) }}
+</div>
+</div>      
+{% endblock %}

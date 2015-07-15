@@ -13,35 +13,35 @@ class RhuConfiguracion
      /**
      * @ORM\Id
      * @ORM\Column(name="codigo_configuracion_pk", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoConfiguracionPk;
     
     /**
-     * @ORM\Column(name="porcentaje_retencion_fuente_servicios", type="float")
+     * @ORM\Column(name="concepto", type="string", length=100)
      */    
-    private $porcentajeRetencionFuenteServicios;          
+    private $concepto;  
     
     /**
-     * @ORM\Column(name="porcentaje_retencion_cree", type="float")
+     * @ORM\Column(name="valor", type="integer")
      */    
-    private $porcentajeRetencionCREE;     
+    private $valor;     
     
-    /**
-     * @ORM\Column(name="base_retencion_fuente_servicios", type="float")
-     */    
-    private $baseRetencionFuenteServicios;
+    
 
     /**
-     * @ORM\Column(name="porcentaje_iva_ventas", type="float")
-     */    
-    private $porcentajeIvaVentas;    
+     * Set codigoConfiguracionPk
+     *
+     * @param integer $codigoConfiguracionPk
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoConfiguracionPk($codigoConfiguracionPk)
+    {
+        $this->codigoConfiguracionPk = $codigoConfiguracionPk;
 
-    /**
-     * @ORM\Column(name="porcentaje_retencion_iva", type="float")
-     */    
-    private $porcentajeRetencionIva;    
-    
+        return $this;
+    }
+
     /**
      * Get codigoConfiguracionPk
      *
@@ -53,122 +53,50 @@ class RhuConfiguracion
     }
 
     /**
-     * Set porcentajeRetencionFuenteServicios
+     * Set concepto
      *
-     * @param float $porcentajeRetencionFuenteServicios
+     * @param string $concepto
      *
      * @return RhuConfiguracion
      */
-    public function setPorcentajeRetencionFuenteServicios($porcentajeRetencionFuenteServicios)
+    public function setConcepto($concepto)
     {
-        $this->porcentajeRetencionFuenteServicios = $porcentajeRetencionFuenteServicios;
+        $this->concepto = $concepto;
 
         return $this;
     }
 
     /**
-     * Get porcentajeRetencionFuenteServicios
+     * Get concepto
      *
-     * @return float
+     * @return string
      */
-    public function getPorcentajeRetencionFuenteServicios()
+    public function getConcepto()
     {
-        return $this->porcentajeRetencionFuenteServicios;
+        return $this->concepto;
     }
 
     /**
-     * Set baseRetencionFuenteServicios
+     * Set valor
      *
-     * @param float $baseRetencionFuenteServicios
+     * @param integer $valor
      *
      * @return RhuConfiguracion
      */
-    public function setBaseRetencionFuenteServicios($baseRetencionFuenteServicios)
+    public function setValor($valor)
     {
-        $this->baseRetencionFuenteServicios = $baseRetencionFuenteServicios;
+        $this->valor = $valor;
 
         return $this;
     }
 
     /**
-     * Get baseRetencionFuenteServicios
+     * Get valor
      *
-     * @return float
+     * @return integer
      */
-    public function getBaseRetencionFuenteServicios()
+    public function getValor()
     {
-        return $this->baseRetencionFuenteServicios;
-    }
-
-    /**
-     * Set porcentajeRetencionCREE
-     *
-     * @param float $porcentajeRetencionCREE
-     *
-     * @return RhuConfiguracion
-     */
-    public function setPorcentajeRetencionCREE($porcentajeRetencionCREE)
-    {
-        $this->porcentajeRetencionCREE = $porcentajeRetencionCREE;
-
-        return $this;
-    }
-
-    /**
-     * Get porcentajeRetencionCREE
-     *
-     * @return float
-     */
-    public function getPorcentajeRetencionCREE()
-    {
-        return $this->porcentajeRetencionCREE;
-    }
-
-    /**
-     * Set porcentajeIvaVentas
-     *
-     * @param float $porcentajeIvaVentas
-     *
-     * @return RhuConfiguracion
-     */
-    public function setPorcentajeIvaVentas($porcentajeIvaVentas)
-    {
-        $this->porcentajeIvaVentas = $porcentajeIvaVentas;
-
-        return $this;
-    }
-
-    /**
-     * Get porcentajeIvaVentas
-     *
-     * @return float
-     */
-    public function getPorcentajeIvaVentas()
-    {
-        return $this->porcentajeIvaVentas;
-    }
-
-    /**
-     * Set porcentajeRetencionIva
-     *
-     * @param float $porcentajeRetencionIva
-     *
-     * @return RhuConfiguracion
-     */
-    public function setPorcentajeRetencionIva($porcentajeRetencionIva)
-    {
-        $this->porcentajeRetencionIva = $porcentajeRetencionIva;
-
-        return $this;
-    }
-
-    /**
-     * Get porcentajeRetencionIva
-     *
-     * @return float
-     */
-    public function getPorcentajeRetencionIva()
-    {
-        return $this->porcentajeRetencionIva;
+        return $this->valor;
     }
 }
