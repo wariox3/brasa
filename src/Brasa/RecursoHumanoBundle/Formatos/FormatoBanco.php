@@ -63,6 +63,6 @@ class FormatoBanco extends \FPDF_FPDF {
 
     public function Footer() {
         $this->SetXY(160, 270);
-        $this->Cell(30, 35, utf8_decode('JG Efectivos S.A.S.   Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          
+        $this->Cell(30, 35, utf8_decode('   Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          
     }    
 }

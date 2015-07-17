@@ -103,7 +103,7 @@ class FormatoCredito extends \FPDF_FPDF {
     public function Footer() {
         $this->SetXY(235, 190);
         $this->SetFont('Arial', '', 8);
-        $this->Cell(30, 35, utf8_decode('JG Efectivos S.A.S.   Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          
+        $this->Cell(30, 35, utf8_decode('   Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          
     }    
 }
 

@@ -10,12 +10,11 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuConfiguracionRepository extends EntityRepository {
-    public function configuracionDatoCodigo($codigo) {
+    public function configuracionDatoCodigo($codigoConfiguracion) {
         $em = $this->getEntityManager();
-        $douVrSalarioMinimo = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-        $douVrSalarioMinimo = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find($codigo);
-        $douVrSalarioMinimo = $douVrSalarioMinimo->getValor();
-        return $douVrSalarioMinimo;
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find($codigoConfiguracion);
+        return $arConfiguracion;
     }
     
 }

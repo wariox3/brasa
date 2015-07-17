@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuBancoType;
 
 /**
- * RhuEntidadSalud controller.
+ * RhuBanco controller.
  *
  */
 class BaseBancoController extends Controller

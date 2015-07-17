@@ -12,7 +12,7 @@ class RhuCentroCostoType extends AbstractType
         $builder           
             ->add('periodoPagoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuPeriodoPago',
-                'property' => 'nombre',
+                'property' => 'nombre', 'data' => 'QUINCENAL' 
             ))
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',

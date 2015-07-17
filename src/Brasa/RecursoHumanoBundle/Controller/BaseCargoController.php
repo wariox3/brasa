@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCargoType;
 
 /**
- * RhuEntidadSalud controller.
+ * RhuCargo controller.
  *
  */
 class BaseCargoController extends Controller

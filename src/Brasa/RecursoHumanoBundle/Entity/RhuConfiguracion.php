@@ -17,16 +17,51 @@ class RhuConfiguracion
     private $codigoConfiguracionPk;
     
     /**
-     * @ORM\Column(name="concepto", type="string", length=100)
+     * @ORM\Column(name="vr_salario", type="float")
      */    
-    private $concepto;  
+    private $vrSalario;  
     
     /**
-     * @ORM\Column(name="valor", type="integer")
+     * @ORM\Column(name="codigo_auxilio_transporte", type="integer")
      */    
-    private $valor;     
+    private $codigoAuxilioTransporte;
     
+    /**
+     * @ORM\Column(name="codigo_credito", type="integer")
+     */    
+    private $codigoCredito;
     
+    /**
+     * @ORM\Column(name="codigo_seguro", type="integer")
+     */    
+    private $codigoSeguro;
+    
+    /**
+     * @ORM\Column(name="codigo_tiempo_suplementario", type="integer")
+     */    
+    private $codigoTiempoSuplementario;
+    
+    /**
+     * @ORM\Column(name="codigo_hora_diurna_trabajada", type="integer")
+     */    
+    private $codigoHoraDiurnaTrabajada;
+    
+    /**
+     * @ORM\Column(name="codigo_aporte_salud", type="integer")
+     */    
+    private $codigoAporteSalud;
+    
+    /**
+     * @ORM\Column(name="codigo_aporte_pension", type="integer")
+     */    
+    private $codigoAportePension;
+    
+    /**
+     * @ORM\Column(name="codigo_fondo_solidaridad_pension_4", type="integer")
+     */    
+    private $codigoFondoSolidaridadPension4;
+    
+
 
     /**
      * Set codigoConfiguracionPk
@@ -53,50 +88,218 @@ class RhuConfiguracion
     }
 
     /**
-     * Set concepto
+     * Set vrSalario
      *
-     * @param string $concepto
+     * @param float $vrSalario
      *
      * @return RhuConfiguracion
      */
-    public function setConcepto($concepto)
+    public function setVrSalario($vrSalario)
     {
-        $this->concepto = $concepto;
+        $this->vrSalario = $vrSalario;
 
         return $this;
     }
 
     /**
-     * Get concepto
+     * Get vrSalario
      *
-     * @return string
+     * @return float
      */
-    public function getConcepto()
+    public function getVrSalario()
     {
-        return $this->concepto;
+        return $this->vrSalario;
     }
 
     /**
-     * Set valor
+     * Set codigoAuxilioTransporte
      *
-     * @param integer $valor
+     * @param integer $codigoAuxilioTransporte
      *
      * @return RhuConfiguracion
      */
-    public function setValor($valor)
+    public function setCodigoAuxilioTransporte($codigoAuxilioTransporte)
     {
-        $this->valor = $valor;
+        $this->codigoAuxilioTransporte = $codigoAuxilioTransporte;
 
         return $this;
     }
 
     /**
-     * Get valor
+     * Get codigoAuxilioTransporte
      *
      * @return integer
      */
-    public function getValor()
+    public function getCodigoAuxilioTransporte()
     {
-        return $this->valor;
+        return $this->codigoAuxilioTransporte;
+    }
+
+    /**
+     * Set codigoCredito
+     *
+     * @param integer $codigoCredito
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoCredito($codigoCredito)
+    {
+        $this->codigoCredito = $codigoCredito;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCredito
+     *
+     * @return integer
+     */
+    public function getCodigoCredito()
+    {
+        return $this->codigoCredito;
+    }
+
+    /**
+     * Set codigoSeguro
+     *
+     * @param integer $codigoSeguro
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoSeguro($codigoSeguro)
+    {
+        $this->codigoSeguro = $codigoSeguro;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSeguro
+     *
+     * @return integer
+     */
+    public function getCodigoSeguro()
+    {
+        return $this->codigoSeguro;
+    }
+
+    /**
+     * Set codigoTiempoSuplementario
+     *
+     * @param integer $codigoTiempoSuplementario
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoTiempoSuplementario($codigoTiempoSuplementario)
+    {
+        $this->codigoTiempoSuplementario = $codigoTiempoSuplementario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTiempoSuplementario
+     *
+     * @return integer
+     */
+    public function getCodigoTiempoSuplementario()
+    {
+        return $this->codigoTiempoSuplementario;
+    }
+
+    /**
+     * Set codigoHoraDiurnaTrabajada
+     *
+     * @param integer $codigoHoraDiurnaTrabajada
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraDiurnaTrabajada($codigoHoraDiurnaTrabajada)
+    {
+        $this->codigoHoraDiurnaTrabajada = $codigoHoraDiurnaTrabajada;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraDiurnaTrabajada
+     *
+     * @return integer
+     */
+    public function getCodigoHoraDiurnaTrabajada()
+    {
+        return $this->codigoHoraDiurnaTrabajada;
+    }
+
+    /**
+     * Set codigoAporteSalud
+     *
+     * @param integer $codigoAporteSalud
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoAporteSalud($codigoAporteSalud)
+    {
+        $this->codigoAporteSalud = $codigoAporteSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAporteSalud
+     *
+     * @return integer
+     */
+    public function getCodigoAporteSalud()
+    {
+        return $this->codigoAporteSalud;
+    }
+
+    /**
+     * Set codigoAportePension
+     *
+     * @param integer $codigoAportePension
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoAportePension($codigoAportePension)
+    {
+        $this->codigoAportePension = $codigoAportePension;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAportePension
+     *
+     * @return integer
+     */
+    public function getCodigoAportePension()
+    {
+        return $this->codigoAportePension;
+    }
+
+    /**
+     * Set codigoFondoSolidaridadPension4
+     *
+     * @param integer $codigoFondoSolidaridadPension4
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoFondoSolidaridadPension4($codigoFondoSolidaridadPension4)
+    {
+        $this->codigoFondoSolidaridadPension4 = $codigoFondoSolidaridadPension4;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFondoSolidaridadPension4
+     *
+     * @return integer
+     */
+    public function getCodigoFondoSolidaridadPension4()
+    {
+        return $this->codigoFondoSolidaridadPension4;
     }
 }

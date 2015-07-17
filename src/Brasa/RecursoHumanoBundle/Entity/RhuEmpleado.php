@@ -36,7 +36,7 @@ class RhuEmpleado
      * @ORM\Column(name="nombre1", type="string", length=30, nullable=true)
      */    
     private $nombre1;        
-
+    
     /**
      * @ORM\Column(name="nombre2", type="string", length=30, nullable=true)
      */    

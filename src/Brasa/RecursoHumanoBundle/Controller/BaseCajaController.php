@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCajaType;
 
 /**
- * RhuEntidadSalud controller.
+ * RhuCaja controller.
  *
  */
 class BaseCajaController extends Controller

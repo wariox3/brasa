@@ -80,7 +80,7 @@ class FormatoListaPagos extends \FPDF_FPDF {
 
     public function Footer() {
         $this->SetXY(245, 185);
-        $this->Cell(30, 35, 'JG Efectivos S.A.S.   Pagina ' . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          
+        $this->Cell(30, 35, utf8_decode('Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          
     }    
 }
 
