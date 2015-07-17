@@ -9,11 +9,18 @@ class RhuCentroCostoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder           
-            ->add('periodoPagoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuPeriodoPago',
-                'property' => 'nombre', 'data' => 'QUINCENAL' 
-            ))
+                    
+        $builder
+                
+            ->add('periodoPagoRel', 'entity', 
+                array('class' => 'BrasaRecursoHumanoBundle:RhuPeriodoPago',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')                                        
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,  
+                'empty_data' => 4,
+                'empty_value' => 'QUINCENAL')) 
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {

@@ -67,12 +67,14 @@ class BaseCentroCostoController extends Controller
     public function nuevoAction($codigoCentroCosto) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto->setFechaUltimoPagoProgramado(new \DateTime('now'));
         if($codigoCentroCosto != 0) {
             $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         } else {
             $arCentroCosto->setEstadoActivo(1);
+            
         }
         $form = $this->createForm(new RhuCentroCostoType(), $arCentroCosto);
         $form->handleRequest($request);

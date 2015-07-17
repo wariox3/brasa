@@ -190,6 +190,14 @@ brs_rhu_base_cargo_nuevo:
    path:     /rhumano/base/cargo/nuevo/{codigoCargoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCargo:nuevo }
    
+brs_rhu_base_clasificacion_listar:
+   path:     /rhumano/base/clasificacion/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseClasificacionRiesgos:listar }
+   
+brs_rhu_base_clasificacion_nuevo:
+   path:     /rhumano/base/clasificacion/nuevo/{codigoClasificacionPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseClasificacionRiesgos:nuevo }   
+   
 brs_rhu_base_sede_listar:
    path:     /rhumano/base/sede/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSede:lista }
