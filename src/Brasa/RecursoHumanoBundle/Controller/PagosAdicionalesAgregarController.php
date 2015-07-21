@@ -6,10 +6,11 @@ use Doctrine\ORM\EntityRepository;
 
 class PagosAdicionalesAgregarController extends Controller
 {
-    public function tiempoAction($codigoCentroCosto) {
+    public function tiempoAction($codigoProgramacionPago) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
+        $arProgramacionCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+        $codigoCentroCosto = $arProgramacionCentroCosto->getCodigoCentroCostoFk();
         $arPagosAdicionalesSubtipos = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
         $arPagosAdicionalesSubtipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->findBy(array('codigoPagoAdicionalTipoFk' => 3));                
         $form = $this->createFormBuilder()
@@ -32,11 +33,13 @@ class PagosAdicionalesAgregarController extends Controller
                 if (isset($arrControles['TxtHoras'])) {
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
                         $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
                         $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find($intCodigo);                                                                
                         if($arrControles['TxtHoras'][$intIndice] != "" && $arrControles['TxtHoras'][$intIndice] != 0) {
                             $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
                             //$arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
+                            $arPagoAdicional->setProgramacionPagoRel($arProgramacionCentroCosto);
                             $arPagoAdicional->setEmpleadoRel($form->get('empleadoRel')->getData());
                             $arPagoAdicional->setCentroCostoRel($arCentroCosto);                                    
                             $intHoras = $arrControles['TxtHoras'][$intIndice];
@@ -55,14 +58,15 @@ class PagosAdicionalesAgregarController extends Controller
         }
         return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:agregarTiempo.html.twig', array(            
             'arPagosAdicionalesSubtipos' => $arPagosAdicionalesSubtipos,
-            'arCentroCosto' => $arCentroCosto,
+            'arProgramacionCentroCosto' => $arProgramacionCentroCosto,
             'form' => $form->createView()));
     }
 
-    public function valorAction($codigoCentroCosto, $tipo) {
+    public function valorAction($codigoProgramacionPago, $tipo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);        
+        $arProgramacionCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
+        $codigoCentroCosto = $arProgramacionCentroCosto->getCodigoCentroCostoFk();
         $arPagoAdicionalTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalTipo();
         $arPagoAdicionalTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalTipo')->find($tipo);        
         $intCodigoPagoAdicionalTipo = $tipo;
@@ -95,8 +99,10 @@ class PagosAdicionalesAgregarController extends Controller
                 if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
                     $arPagoAdicionalSubtipo = $form->get('subtipoRel')->getData();
                     $arPagoConcepto = $arPagoAdicionalSubtipo->getPagoConceptoRel();
-                    $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();                        
+                    $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional(); 
+                    $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
                     $arPagoAdicional->setEmpleadoRel($form->get('empleadoRel')->getData());
+                    $arPagoAdicional->setProgramacionPagoRel($arProgramacionCentroCosto);
                     $arPagoAdicional->setCentroCostoRel($arCentroCosto);                                                            
                     $arPagoAdicional->setValor($form->get('TxtValor')->getData());
                     $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalTipo);                                    
@@ -109,7 +115,7 @@ class PagosAdicionalesAgregarController extends Controller
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:agregarValor.html.twig', array(            
-            'arCentroCosto' => $arCentroCosto,
+            'arProgramacionCentroCosto' => $arProgramacionCentroCosto,
             'arPagoAdicionalTipo' => $arPagoAdicionalTipo,
             'form' => $form->createView()));
     }    

@@ -20,7 +20,8 @@ class RhuCentroCostoType extends AbstractType
                 'property' => 'nombre',
                 'required' => false,  
                 'empty_data' => 4,
-                'empty_value' => 'QUINCENAL')) 
+                'empty_value' => 'QUINCENAL',
+                )) 
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
@@ -33,8 +34,7 @@ class RhuCentroCostoType extends AbstractType
             ->add('nombre', 'text', array('required' => true))   
             ->add('fechaUltimoPagoProgramado', 'date')
             ->add('horaPagoAutomatico', 'time')                
-            ->add('estadoActivo', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
-            ->add('pagoAbierto', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                        
+            ->add('estadoActivo', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                      
             ->add('generarPagoAutomatico', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('comentarios', 'textarea', array('required' => false))                                
             ->add('porcentajeAdministracion', 'number', array('required' => false))

@@ -47,7 +47,7 @@ brs_rhu_pagos_adicionales_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:lista }     
     
 brs_rhu_pagos_adicionales_detalle:
-    path:     /rhumano/pagos/adicionales/detalle/{codigoCentroCosto}
+    path:     /rhumano/pagos/adicionales/detalle/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:detalle }         
 
 brs_rhu_pagos_adicionales_generarmasivo_lista:
@@ -59,11 +59,11 @@ brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle:
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoSuplementarioDetalle }
 
 brs_rhu_pagos_adicionales_agregar_tiempo:
-    path:     /rhumano/pagos/adicionales/agregar/tiempo/{codigoCentroCosto}
+    path:     /rhumano/pagos/adicionales/agregar/tiempo/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempo }    
 
 brs_rhu_pagos_adicionales_agregar_valor:
-    path:     /rhumano/pagos/adicionales/agregar/valor/{codigoCentroCosto}/{tipo}
+    path:     /rhumano/pagos/adicionales/agregar/valor/{codigoProgramacionPago}/{tipo}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valor }    
 
 brs_rhu_liquidaciones_lista:

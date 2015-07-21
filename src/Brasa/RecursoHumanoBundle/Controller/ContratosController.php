@@ -87,7 +87,9 @@ class ContratosController extends Controller
             $arContrato->setFechaHasta(new \DateTime('now'));
             $arContrato->setIndefinido(1);
             $arContrato->setEstadoActivo(1);
-            $arContrato->setVrSalario(644350); //Parametrizar con configuracion salario minimo
+            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+            $douSalarioMinimo = $arConfiguracion->getVrSalario();
+            $arContrato->setVrSalario($douSalarioMinimo); //Parametrizar con configuracion salario minimo
         }
         $form = $this->createForm(new RhuContratoType(), $arContrato);
         $form->handleRequest($request);
@@ -99,7 +101,9 @@ class ContratosController extends Controller
             $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
             $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
             $em->persist($arContrato);
-            $douSalarioMinimo = 644350;
+            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+            $douSalarioMinimo = $arConfiguracion->getVrSalario();
+            //$douSalarioMinimo = 644350;
             if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
                 $arEmpleado->setAuxilioTransporte(1);
             }

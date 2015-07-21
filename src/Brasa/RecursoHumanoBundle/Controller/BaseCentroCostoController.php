@@ -67,7 +67,7 @@ class BaseCentroCostoController extends Controller
     public function nuevoAction($codigoCentroCosto) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        
+        $mensaje = 0;
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto->setFechaUltimoPagoProgramado(new \DateTime('now'));
         if($codigoCentroCosto != 0) {
@@ -78,27 +78,83 @@ class BaseCentroCostoController extends Controller
         }
         $form = $this->createForm(new RhuCentroCostoType(), $arCentroCosto);
         $form->handleRequest($request);
+        
         if ($form->isValid()) {
             $arCentroCosto = $form->getData();
-            $em->persist($arCentroCosto);
-            $em->flush();
-            if($request->request->get('ChkGenerarPeriodo')) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
+            //PERIODO PAGO SEMANAL Y CATORCENAL
+            if ($arCentroCosto->getPeriodoPagoRel()->getCodigoPeriodoPagoPk() == 1 || $arCentroCosto->getPeriodoPagoRel()->getCodigoPeriodoPagoPk() == 3) {
+                $em->persist($arCentroCosto);
+                $em->flush();
+                if($request->request->get('ChkGenerarPeriodo')) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
+                }
+                if($form->get('guardarnuevo')->isClicked()) {
+                    return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_nuevo', array('codigoCentroCosto' => 0)));
+                } else {
+                    return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_lista'));
+                }  
             }
-            
-            /*if($codigoCentroCosto == 0) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
-            }*/
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_nuevo', array('codigoCentroCosto' => 0)));
-            } else {
-                return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_lista'));
+            //PERIODO PAGO DECADAL
+            $varFechaperiodoPago = $arCentroCosto->getFechaUltimoPagoProgramado()->format('d');
+            //$duoPeriodoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
+            if ($arCentroCosto->getPeriodoPagoRel()->getCodigoPeriodoPagoPk() == 2) {
+                if ($varFechaperiodoPago == "10" || $varFechaperiodoPago == "20" || $varFechaperiodoPago == "30"){
+                    $em->persist($arCentroCosto);
+                    $em->flush();
+                    if($request->request->get('ChkGenerarPeriodo')) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
+                    }
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_nuevo', array('codigoCentroCosto' => 0)));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_lista'));
+                    }
+                } else {
+                            $mensaje = "la fecha de periodo pagado debe ser los 10, 20 o 30 de cada mes!";
+                       }
+            }
+            //PERIODO PAGO QUINCENAL
+            $varFechaperiodoPago = $arCentroCosto->getFechaUltimoPagoProgramado()->format('d');
+            if ($arCentroCosto->getPeriodoPagoRel()->getCodigoPeriodoPagoPk() == 4) {
+                if ($varFechaperiodoPago == "15" || $varFechaperiodoPago == "30"){
+                    $em->persist($arCentroCosto);
+                    $em->flush();
+                    if($request->request->get('ChkGenerarPeriodo')) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
+                    }
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_nuevo', array('codigoCentroCosto' => 0)));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_lista'));
+                    }
+                } else {
+                            $mensaje = "la fecha de periodo pagado debe ser los 15 o 30 de cada mes!";
+                       }
+            }
+            //PERIODO PAGO MENSUAL
+            $varFechaperiodoPago = $arCentroCosto->getFechaUltimoPagoProgramado()->format('d');
+            if ($arCentroCosto->getPeriodoPagoRel()->getCodigoPeriodoPagoPk() == 5) {
+                if ($varFechaperiodoPago == "30"){
+                    $em->persist($arCentroCosto);
+                    $em->flush();
+                    if($request->request->get('ChkGenerarPeriodo')) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arCentroCosto->getCodigoCentroCostoPk());
+                    }
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_nuevo', array('codigoCentroCosto' => 0)));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_lista'));
+                    }
+                } else {
+                            $mensaje = "la fecha de periodo pagado debe ser los 30 de cada mes!";
+                       }
             }
 
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Base/CentroCosto:nuevo.html.twig', array(
             'arCentroCosto' => $arCentroCosto,
+            'mensaje' => $mensaje,
             'form' => $form->createView()));
     }
 

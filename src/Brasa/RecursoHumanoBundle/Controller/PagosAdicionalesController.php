@@ -11,13 +11,13 @@ class PagosAdicionalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $form = $this->createFormBuilder()
-            ->add('Generar', 'submit')
+            //->add('Generar', 'submit')
             ->getForm();
         $form->handleRequest($request);
 
-        $arCentrosCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-        $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
-
+        $arProgramacionPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaGeneralPagoActivosDQL(0);
+        
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -40,16 +40,16 @@ class PagosAdicionalesController extends Controller
         }
 
         return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:lista.html.twig', array(
-            'arCentrosCostos' => $arCentrosCostos,
+            'arProgramacionPagos' => $arProgramacionPagos,
             'form' => $form->createView()));
     }
 
-    public function detalleAction($codigoCentroCosto) {
+    public function detalleAction($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $form = $this->createFormBuilder()
             ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Retirar',))
             ->add('BtnConceptoPermanente', 'submit', array('label'  => 'Permanente',))
@@ -65,7 +65,7 @@ class PagosAdicionalesController extends Controller
                         $em->remove($arPagoAdicional);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 }
             }
             if($form->get('BtnConceptoPermanente')->isClicked()) {
@@ -82,7 +82,7 @@ class PagosAdicionalesController extends Controller
                         $em->persist($arPagoAdicional);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoProgramacionCentroCosto' => $codigoProgramacionPago)));
                 }
             }
             if($form->get('BtnRetirarIncapacidad')->isClicked()) {
@@ -94,14 +94,15 @@ class PagosAdicionalesController extends Controller
                         $em->remove($arIncapacidad);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoCentroCosto' => $codigoCentroCosto)));
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoProgramacionCentroCosto' => $codigoProgramacionPago)));
                 }
             }
         }
-        $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto, 'pagoAplicado' => 0));
+        //$arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        //$arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago, 'pagoAplicado' => 0));
+        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaPagosAdicionalesyPermanentes($codigoProgramacionPago);
         return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:detalle.html.twig', array(
-                    'arCentroCosto' => $arCentroCosto,
+                    'arProgramacionPago' => $arProgramacionPago,
                     'arPagosAdicionales' => $arPagosAdicionales,
                     'form' => $form->createView()
                     ));

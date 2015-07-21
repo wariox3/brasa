@@ -26,7 +26,24 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         }
         return $dql;
     }                            
-    
+    //Enviar los pagos adicionales con los permanentes
+    public function listaPagosAdicionalesyPermanentes($codigoProgramacionPago = "") {        
+        $em = $this->getEntityManager();
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+        $centroCosto = $arProgramacionPago->getCodigoCentroCostoFk();
+        $dql   = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa WHERE pa.codigoProgramacionPagoFk = $codigoProgramacionPago and pa.pagoAplicado = 0  or  (pa.permanente = 1 and pa.codigoCentroCostoFk = $centroCosto)";
+        $query = $em->createQuery($dql);
+        $dql = $query->getResult();
+        return $dql;
+    }                            
+    //listado nuevo por el cambio de centro de costo por programacion de pago
+    public function listaGeneralPagoActivosDQL($strEstado = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPago pp WHERE pp.estadoGenerado = 0 order by pp.fechaDesde Desc";
+        $query = $em->createQuery($dql);
+        $dql = $query->getResult();
+        return $dql;
+    }                            
     /*
      * Liquidar todos los pagos de la programacion de pago
      */
