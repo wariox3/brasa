@@ -1,13 +1,17 @@
 <?php
 
 namespace Brasa\RecursoHumanoBundle\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="rhu_empleado")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuEmpleadoRepository")
+ * @DoctrineAssert\UniqueEntity(fields={"numeroIdentificacion"},message="Ya existe este número de identificación")
+ * @DoctrineAssert\UniqueEntity(fields={"correo"},message="Ya existe este correo") 
  */
+
 class RhuEmpleado
 {
     /**
@@ -23,8 +27,9 @@ class RhuEmpleado
     private $codigoTipoIdentificacionFk;     
     
     /**
-     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
-     */    
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
+     */
+         
     private $numeroIdentificacion;        
     
     /**
@@ -94,6 +99,9 @@ class RhuEmpleado
     
     /**
      * @ORM\Column(name="correo", type="string", length=80, nullable=true)
+     * @Assert\Email(
+     * message = "Correo incorrecto",
+     * )
      */    
     private $correo;     
         
@@ -382,6 +390,8 @@ class RhuEmpleado
      */
     protected $rhRel; 
    
+ 
+    
     /**
      * Constructor
      */
@@ -490,7 +500,7 @@ class RhuEmpleado
      */
     public function setNombre1($nombre1)
     {
-        $this->nombre1 = strtoupper($nombre1);
+        $this->nombre1 = $nombre1;
 
         return $this;
     }

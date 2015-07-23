@@ -82,7 +82,7 @@ class PagosAdicionalesController extends Controller
                         $em->persist($arPagoAdicional);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoProgramacionCentroCosto' => $codigoProgramacionPago)));
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 }
             }
             if($form->get('BtnRetirarIncapacidad')->isClicked()) {

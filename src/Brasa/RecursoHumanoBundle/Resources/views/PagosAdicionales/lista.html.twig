@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h3>Centros de costos - pagos adicionales</h3>
+        <h3>Programación periodo - pagos adicionales</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}
@@ -22,7 +22,7 @@
                 <td>{{ arProgramacionPagos.CentroCostoRel.nombre  }}</td>
                 <td>{{ arProgramacionPagos.fechaDesde|date("Y/m/d")  }}</td> 
                 <td>{{ arProgramacionPagos.fechaHasta|date("Y/m/d")  }}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPagos.codigoProgramacionPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Editar registro"></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPagos.codigoProgramacionPagoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" title="Editar registrosssss"></a></td>
                 
             </tr>
             {% endfor %}
