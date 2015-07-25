@@ -107,7 +107,7 @@ class BaseEmpleadoController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()
-            ->add('BtnRetirarContrato', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))
             ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))    
@@ -130,13 +130,15 @@ class BaseEmpleadoController extends Controller
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         if($form->isValid()) {
-            if($form->get('BtnRetirarContrato')->isClicked()) {
+            if($form->get('BtnInactivarContrato')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoContrato) {
-                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-                        $em->remove($arContrato);
+                        $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+                        $arContratos->setEstadoActivo(0);
+                        $em->persist($arContratos);
+                        $em->flush();
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
@@ -248,7 +250,9 @@ class BaseEmpleadoController extends Controller
                 $arEmpleado->setCiudadRel($arSeleccion->getCiudadRel()); 
                 $arEmpleado->setCodigoSexoFk($arSeleccion->getCodigoSexoFk());
             }
-            $arEmpleado->setVrSalario(644350); //Parametrizar con configuracion salario minimo
+            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+            $douVrSalarioMinimo = $arConfiguracion->getVrSalario();
+            $arEmpleado->setVrSalario($douVrSalarioMinimo); //Parametrizar con configuracion salario minimo
         }
         $form = $this->createForm(new RhuEmpleadoType(), $arEmpleado);
         $form->handleRequest($request);

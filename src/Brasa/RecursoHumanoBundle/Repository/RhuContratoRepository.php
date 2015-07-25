@@ -51,6 +51,15 @@ class RhuContratoRepository extends EntityRepository {
         return $arContratos;
     } 
     
+    //verifica si el empleado tiene contratos abiertos
+    public function validarEmpleadoContrato($douValidarEmpleadoContrato = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT count(c.codigoContratoPk) FROM BrasaRecursoHumanoBundle:RhuContrato c where c.codigoEmpleadoFk = $douValidarEmpleadoContrato and c.estadoActivo = 1";
+        $query = $em->createQuery($dql);
+        $duoNumeroContratos = $query->getSingleScalarResult(); 
+        return $duoNumeroContratos;
+    }
+    
     public function numtoletras($xcifra) {
     $em = $this->getEntityManager();
         $xarray = array(0 => "Cero",

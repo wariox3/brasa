@@ -92,9 +92,10 @@ class UtilidadesPagosController extends Controller
                         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
                         if($arProgramacionPagoProcesar->getEmpleadosGenerados() == 1) {
                             $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-                            $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));                            
+                            $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));                                                        
                             foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {                                
                                 $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                                $arContratoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                                 $arPago->setEmpleadoRel($arProgramacionPagoDetalle->getEmpleadoRel());
                                 $arPago->setCentroCostoRel($arCentroCosto);
                                 $arPago->setFechaDesde($arProgramacionPagoProcesar->getFechaDesde());
@@ -387,7 +388,8 @@ class UtilidadesPagosController extends Controller
                                         $intPagoConceptoTransporte = $arConfiguracion->getCodigoAuxilioTransporte();
                                         //$intPagoConceptoTransporte = 18; //Se debe traer de la base de datos
                                         $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoTransporte);
-                                        $douVrDiaTransporte = 74000 / 30;
+                                        $duoVrAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
+                                        $douVrDiaTransporte = $duoVrAuxilioTransporte / 30;
                                         $douPagoDetalle = $douVrDiaTransporte * $intDiasTransporte;
                                         $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                         $arPagoDetalle->setPagoRel($arPago);

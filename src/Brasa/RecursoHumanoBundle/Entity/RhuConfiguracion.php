@@ -27,6 +27,11 @@ class RhuConfiguracion
     private $codigoAuxilioTransporte;
     
     /**
+     * @ORM\Column(name="vr_auxilio_transporte", type="float")
+     */    
+    private $vrAuxilioTransporte;
+    
+    /**
      * @ORM\Column(name="codigo_credito", type="integer")
      */    
     private $codigoCredito;
@@ -301,5 +306,29 @@ class RhuConfiguracion
     public function getCodigoFondoSolidaridadPension4()
     {
         return $this->codigoFondoSolidaridadPension4;
+    }
+
+    /**
+     * Set vrAuxilioTransporte
+     *
+     * @param float $vrAuxilioTransporte
+     *
+     * @return RhuConfiguracion
+     */
+    public function setVrAuxilioTransporte($vrAuxilioTransporte)
+    {
+        $this->vrAuxilioTransporte = $vrAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAuxilioTransporte
+     *
+     * @return float
+     */
+    public function getVrAuxilioTransporte()
+    {
+        return $this->vrAuxilioTransporte;
     }
 }

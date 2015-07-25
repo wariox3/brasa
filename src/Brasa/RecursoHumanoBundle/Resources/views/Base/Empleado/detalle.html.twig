@@ -65,30 +65,28 @@
                     </tr>                
                     <tr>
                         <td class="titulo">ENTIDAD PENSION:</td>
-                        <td class="td-in-well">{{ arEmpleado.entidadPensionRel.nombre|default('ERROR') }}</td>                    
-                        <td class="titulo"></td>
+                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadPensionRel.nombre|default('ERROR') }}</td>                    
                         <td class="td-in-well"></td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
                     </tr>                
                     <tr>
                         <td class="titulo">ENTIDAD SALUD:</td>
-                        <td class="td-in-well">{{ arEmpleado.entidadSaludRel.nombre|default('ERROR') }}</td>                    
-                        <td class="titulo"></td>
+                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadSaludRel.nombre|default('ERROR') }}</td>                    
                         <td class="td-in-well"></td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
                     </tr>                
                     <tr>
                         <td class="titulo">CAJA COMPENSACION:</td>
-                        <td class="td-in-well">{{ arEmpleado.entidadCajaRel.nombre|default('ERROR') }}</td>                    
-                        <td class="titulo"></td>
+                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadCajaRel.nombre|default('ERROR') }}</td>                    
                         <td class="td-in-well"></td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
                     </tr>                 
                     <tr>
-                        <td class="titulo" colspan="8">COMENTARIOS: {{ arEmpleado.comentarios }}</td>
+                        <td class="titulo" >COMENTARIOS: </td>
+                        <td class="td-in-well" colspan="7">{{ arEmpleado.comentarios }}</td>
                     </tr>
                 </table>
             </div>
@@ -146,7 +144,7 @@
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleado.codigoEmpleadoPk}) }}', 'NuevoContrato', 600, 900)" >Nuevo</a>                        
                     </div>
                     <div class="btn-group">                        
-                        {{ form_widget(form.BtnRetirarContrato, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                        {{ form_widget(form.BtnInactivarContrato, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
                 </div>
             </div>

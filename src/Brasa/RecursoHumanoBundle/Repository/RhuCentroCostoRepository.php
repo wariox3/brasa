@@ -116,5 +116,6 @@ class RhuCentroCostoRepository extends EntityRepository {
         
         $dql .= " ORDER BY cc.nombre";
         return $dql;
-    }                            
+    } 
+     
 }

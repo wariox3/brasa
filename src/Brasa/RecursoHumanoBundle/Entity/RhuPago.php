@@ -25,7 +25,8 @@ class RhuPago
     /**
      * @ORM\Column(name="codigo_programacion_pago_fk", type="integer", nullable=true)
      */    
-    private $codigoProgramacionPagoFk;    
+    private $codigoProgramacionPagoFk; 
+    
     
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
@@ -214,6 +215,8 @@ class RhuPago
     {
         $this->pagosDetallesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosDetallesSedesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesPagosPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->creditosPagosPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -344,6 +347,54 @@ class RhuPago
     public function getVrSalario()
     {
         return $this->vrSalario;
+    }
+
+    /**
+     * Set vrSalarioPeriodo
+     *
+     * @param float $vrSalarioPeriodo
+     *
+     * @return RhuPago
+     */
+    public function setVrSalarioPeriodo($vrSalarioPeriodo)
+    {
+        $this->vrSalarioPeriodo = $vrSalarioPeriodo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPeriodo
+     *
+     * @return float
+     */
+    public function getVrSalarioPeriodo()
+    {
+        return $this->vrSalarioPeriodo;
+    }
+
+    /**
+     * Set vrSalarioEmpleado
+     *
+     * @param float $vrSalarioEmpleado
+     *
+     * @return RhuPago
+     */
+    public function setVrSalarioEmpleado($vrSalarioEmpleado)
+    {
+        $this->vrSalarioEmpleado = $vrSalarioEmpleado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioEmpleado
+     *
+     * @return float
+     */
+    public function getVrSalarioEmpleado()
+    {
+        return $this->vrSalarioEmpleado;
     }
 
     /**
@@ -1036,54 +1087,6 @@ class RhuPago
     public function getPagosDetallesSedesPagoRel()
     {
         return $this->pagosDetallesSedesPagoRel;
-    }
-
-    /**
-     * Set vrSalarioPeriodo
-     *
-     * @param float $vrSalarioPeriodo
-     *
-     * @return RhuPago
-     */
-    public function setVrSalarioPeriodo($vrSalarioPeriodo)
-    {
-        $this->vrSalarioPeriodo = $vrSalarioPeriodo;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioPeriodo
-     *
-     * @return float
-     */
-    public function getVrSalarioPeriodo()
-    {
-        return $this->vrSalarioPeriodo;
-    }
-
-    /**
-     * Set vrSalarioEmpleado
-     *
-     * @param float $vrSalarioEmpleado
-     *
-     * @return RhuPago
-     */
-    public function setVrSalarioEmpleado($vrSalarioEmpleado)
-    {
-        $this->vrSalarioEmpleado = $vrSalarioEmpleado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioEmpleado
-     *
-     * @return float
-     */
-    public function getVrSalarioEmpleado()
-    {
-        return $this->vrSalarioEmpleado;
     }
 
     /**

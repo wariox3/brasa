@@ -266,6 +266,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
                 $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->pagosDetallesProgramacionPago($codigoProgramacionPago);                                              
+                
                 foreach ($arPagosDetalles AS $arPagoDetalle) { 
                     if($arPagoDetalle->getCodigoCreditoFk() != "" && $arPagoDetalle->getCodigoPagoConceptoFk() == 14) {
                         $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();

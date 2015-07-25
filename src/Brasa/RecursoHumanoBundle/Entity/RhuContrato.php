@@ -164,7 +164,6 @@ class RhuContrato
      */
     protected $SSPeriodosDetallesContratoRel; 
 
-
     /**
      * Constructor
      */

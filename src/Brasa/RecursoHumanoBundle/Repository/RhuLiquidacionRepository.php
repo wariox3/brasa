@@ -49,7 +49,9 @@ class RhuLiquidacionRepository extends EntityRepository {
         $douVacaciones = 0;
         if($intDiasLaborados > 0) {
             $douBasePrestaciones = ($douIBCTotal / $intDiasLaborados) * 30;            
-            $douAuxilioTransporte = 74000; // Traer de la base de datos
+            //$douAuxilioTransporte = 74000; // Traer de la base de datos
+            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//AUXILIO TRANSPORTE
+            $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
             $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
             $arLiquidacion->setVrBasePrestaciones($douBasePrestaciones);
             $arLiquidacion->setVrAuxilioTransporte($douAuxilioTransporte);

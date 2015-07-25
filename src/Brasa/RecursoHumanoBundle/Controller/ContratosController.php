@@ -80,6 +80,7 @@ class ContratosController extends Controller
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $mensaje = 0;
         if($codigoContrato != 0) {
             $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         } else {
@@ -90,41 +91,53 @@ class ContratosController extends Controller
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
             $douSalarioMinimo = $arConfiguracion->getVrSalario();
             $arContrato->setVrSalario($douSalarioMinimo); //Parametrizar con configuracion salario minimo
-        }
+        }        
+        $douValidarEmpleadoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->validarEmpleadoContrato($codigoEmpleado);
+        if ($douValidarEmpleadoContrato >= 1){
+                $mensaje = "El empleado tiene contrato abierto, no se puede generar otro contrato";
+            }
         $form = $this->createForm(new RhuContratoType(), $arContrato);
         $form->handleRequest($request);
-        if ($form->isValid()) {            
-            $arContrato = $form->getData();
-            $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
-            $arContrato->setEmpleadoRel($arEmpleado);      
-            $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
-            $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
-            $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
-            $em->persist($arContrato);
-            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
-            $douSalarioMinimo = $arConfiguracion->getVrSalario();
-            //$douSalarioMinimo = 644350;
-            if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
-                $arEmpleado->setAuxilioTransporte(1);
+        if ($form->isValid()) {                        
+            if ($douValidarEmpleadoContrato >= 1){
+                $mensaje = "El empleado tiene contrato abierto, no se puede generar otro contrato";
             }
-            $arEmpleado->setCentroCostoRel($arContrato->getCentroCostoRel());
-            $arEmpleado->setTipoTiempoRel($arContrato->getTipoTiempoRel());
-            $arEmpleado->setVrSalario($arContrato->getVrSalario());
-            $arEmpleado->setFechaContrato($arContrato->getFechaDesde());
-            $arEmpleado->setFechaFinalizaContrato($arContrato->getFechaHasta());
-            $arEmpleado->setClasificacionRiesgoRel($arContrato->getClasificacionRiesgoRel());
-            $arEmpleado->setCargoRel($arContrato->getCargoRel());
-            $arEmpleado->setCargoDescripcion($arContrato->getCargoDescripcion());
-            $arEmpleado->setTipoPensionRel($arContrato->getTipoPensionRel());
-            $em->persist($arEmpleado);
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            else {
+                $arContrato = $form->getData();
+                $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
+                $arContrato->setEmpleadoRel($arEmpleado);      
+                $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
+                $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
+                $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
+                $em->persist($arContrato);
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+                $douSalarioMinimo = $arConfiguracion->getVrSalario();
+                //$douSalarioMinimo = 644350;
+                if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
+                    $arEmpleado->setAuxilioTransporte(1);
+                }
+                $arEmpleado->setCentroCostoRel($arContrato->getCentroCostoRel());
+                $arEmpleado->setTipoTiempoRel($arContrato->getTipoTiempoRel());
+                $arEmpleado->setVrSalario($arContrato->getVrSalario());
+                $arEmpleado->setFechaContrato($arContrato->getFechaDesde());
+                $arEmpleado->setFechaFinalizaContrato($arContrato->getFechaHasta());
+                $arEmpleado->setClasificacionRiesgoRel($arContrato->getClasificacionRiesgoRel());
+                $arEmpleado->setCargoRel($arContrato->getCargoRel());
+                $arEmpleado->setCargoDescripcion($arContrato->getCargoDescripcion());
+                $arEmpleado->setTipoPensionRel($arContrato->getTipoPensionRel());
+                $em->persist($arEmpleado);
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>"; 
+            }
+            
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevo.html.twig', array(
             'arContrato' => $arContrato,
             'arEmpleado' => $arEmpleado,
+            'mensaje' => $mensaje,
             'form' => $form->createView()));
     }
+    
     public function terminarAction($codigoContrato) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -141,6 +154,7 @@ class ContratosController extends Controller
             $fechaHasta = $formContrato->get('fechaTerminacion')->getData()->format('Y-m-d');                        
             $arContrato->setFechaHasta(date_create($fechaHasta));            
             $arContrato->setIndefinido(0);
+            $arContrato->setEstadoActivo(0);
             $em->persist($arContrato);
             //Generar liquidacion
             $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();

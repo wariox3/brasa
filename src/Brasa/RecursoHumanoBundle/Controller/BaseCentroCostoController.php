@@ -43,8 +43,14 @@ class BaseCentroCostoController extends Controller
                     foreach ($arrSeleccionados AS $codigoCentroCosto) {
                         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
                         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
-                        if($arCentroCosto->getEstadoActivo() == 1) {
-                            $arCentroCosto->setEstadoActivo(0);
+                        $arContratosCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoCentroCostoFk' =>$codigoCentroCosto, 'estadoActivo' => 1)); 
+                        $douNumeroContratoActivos = count($arContratosCentroCosto);
+                        if($arCentroCosto->getEstadoActivo() == 1){
+                            if ($douNumeroContratoActivos == 0){
+                                $arCentroCosto->setEstadoActivo(0);
+                            }else {
+                                echo "<script>alert('No se  puede inactivar, el centro de costo tiene contrato(s) abierto(s)');</script>";
+                            }
                         } else {
                             $arCentroCosto->setEstadoActivo(1);
                         }

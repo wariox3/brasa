@@ -9,49 +9,55 @@
         <div class="panel-heading">Información general</div>
         <div class="panel-body">
             <div class="form-group form-group-sm">
-                <label class="col-sm-2 control-label">Código Auxilio Transporte:</label>
+                <label class="col-sm-2 control-label">Código auxilio transporte:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formConfiguracion.codigoAuxilioTransporte, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(formConfiguracion.ConceptoAuxilioTransporte, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">    
-                <label class="col-sm-2 control-label">Salario Mínimo Actual:</label>
+                <label class="col-sm-2 control-label">Valor auxilio transporte:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(formConfiguracion.vrAuxilioTransporte, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">    
+                <label class="col-sm-2 control-label">Salario mínimo:</label>
                 <div class="col-sm-10">
                         {{ form_widget(formConfiguracion.vrSalario, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>    
             <div class="form-group form-group-sm">    
-                <label class="col-sm-2 control-label">Código Crédito:</label>
+                <label class="col-sm-2 control-label">Código crédito:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formConfiguracion.codigoCredito, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(formConfiguracion.conceptoCredito, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">    
-                <label class="col-sm-2 control-label">Código Seguro:</label>
+                <label class="col-sm-2 control-label">Código seguro:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formConfiguracion.codigoSeguro, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(formConfiguracion.conceptoSeguro, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">    
-                <label class="col-sm-2 control-label">Código Tiempo Suplementario:</label>
+                <label class="col-sm-2 control-label">Código tiempo suplementario:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formConfiguracion.codigoTiempoSuplementario, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(formConfiguracion.conceptoTiempoSuplementario, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">    
-                <label class="col-sm-2 control-label">Código Horas Diurnas Trabajadas:</label>
+                <label class="col-sm-2 control-label">Código horas diurnas trabajadas:</label>
                 <div class="col-sm-10">
                         {{ form_widget(formConfiguracion.codigoHoraDiurnaTrabajada, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">    
-                <label class="col-sm-2 control-label">Código Aporte a Pensión:</label>
+                <label class="col-sm-2 control-label">Código aporte a pensión:</label>
                 <div class="col-sm-10">
                         {{ form_widget(formConfiguracion.codigoAportePension, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">    
-                <label class="col-sm-2 control-label">Código Aporte a Salud:</label>
+                <label class="col-sm-2 control-label">Código aporte a salud:</label>
                 <div class="col-sm-10">
                         {{ form_widget(formConfiguracion.codigoAporteSalud, { 'attr': {'class': 'form-control'} }) }}
                 </div>
