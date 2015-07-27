@@ -166,7 +166,11 @@ class FormatoHojaVida extends \FPDF_FPDF {
         } else {
             $this->Cell(25, 8, "NO", 1, 0, 'C', 1);
         }
-        $this->Cell(26, 8, "por implementar", 1, 0, 'C', 1);
+        if ($arEmpleado->getCabezaHogar()== 1) {
+            $this->Cell(26, 8, "SI", 1, 0, 'C', 1);
+        } else {
+            $this->Cell(26, 8, "NO", 1, 0, 'C', 1);
+        }
         $this->Cell(19, 8, $arEmpleado->getEstadoCivilRel()->getNombre(), 1, 0, 'C', 1);
         $this->Cell(14, 8, $arEmpleado->getRhRel()->getTipo(), 1, 0, 'C', 1);
         $this->Cell(9, 8, $arEmpleado->getRhRel()->getTipo(), 1, 0, 'C', 1);

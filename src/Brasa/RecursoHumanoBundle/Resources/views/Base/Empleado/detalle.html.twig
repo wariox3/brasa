@@ -67,15 +67,15 @@
                         <td class="titulo">ENTIDAD PENSION:</td>
                         <td class="td-in-well" colspan="2">{{ arEmpleado.entidadPensionRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="td-in-well"></td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">PADRE FAMILIA</td>
+                        <td class="td-in-well">{% if arEmpleado.padreFamilia == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>                
                     <tr>
                         <td class="titulo">ENTIDAD SALUD:</td>
                         <td class="td-in-well" colspan="2">{{ arEmpleado.entidadSaludRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="td-in-well"></td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">CABEZA FAMILIA</td>
+                        <td class="td-in-well">{% if arEmpleado.cabezaHogar == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>                
                     <tr>
                         <td class="titulo">CAJA COMPENSACION:</td>

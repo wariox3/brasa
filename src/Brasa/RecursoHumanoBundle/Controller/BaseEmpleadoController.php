@@ -251,6 +251,9 @@ class BaseEmpleadoController extends Controller
                 $arEmpleado->setCodigoSexoFk($arSeleccion->getCodigoSexoFk());
             }
             $arEmpleado->setVrSalario(0); //Parametrizar con configuracion salario minimo
+            if($request->request->get('ChkCabezaHogar')){
+               $arEmpleado->setCabezaHogar(1); 
+            }
         }
         $form = $this->createForm(new RhuEmpleadoType(), $arEmpleado);
         $form->handleRequest($request);
