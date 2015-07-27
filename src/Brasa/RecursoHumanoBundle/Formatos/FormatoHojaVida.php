@@ -133,7 +133,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
         else {
             $this->Cell(24, 8, "MASCULINO", 1, 0, 'C', 1);
         }
-        $this->Cell(33, 8, "por implementar", 1, 0, 'C', 1);
+        $this->Cell(33, 8, $arEmpleado->getLibretaMilitar(), 1, 0, 'C', 0);
         $this->Cell(42, 8, $arEmpleado->getCiudadExpedicionRel()->getNombre()." - ".$arEmpleado->getCiudadExpedicionRel()->getDepartamentoRel()->getNombre(), 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 26);
         $this->SetFont('Arial','B',8);

@@ -78,6 +78,12 @@
                 <div class="col-sm-10">
                         {{ form_widget(form.rhRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_rhRel" class="col-sm-2 control-label">Libreta militar:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.libretaMilitar, { 'attr': {'class': 'form-control'} }) }}
+                </div>
             </div>    
             <div class="form-group form-group-sm">
                 <label for="form_fechaNacimiento" class="col-sm-2 control-label">Fecha nacimiento:</label>
@@ -95,6 +101,7 @@
                 <label for="form_padreFamilia" class="col-sm-2 control-label">Padre de familia</label>
                 <div class="col-sm-10">
                         {{ form_widget(form.padreFamilia, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.cabezaFamilia, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>    
             <div class="form-group form-group-sm">
@@ -126,19 +133,19 @@
                 <div class="col-sm-10">
                         {{ form_widget(form.direccion, { 'attr': {'class': 'form-control'} }) }}
                 </div>
+            </div> 
+            <div class="form-group form-group-sm">
+                <label for="form_ciudadRel" class="col-sm-2 control-label">Ciudad residencia:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.ciudadRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
             </div>
             <div class="form-group form-group-sm">
                 <label for="form_barrio" class="col-sm-2 control-label">Barrio:</label>
                 <div class="col-sm-10">
                         {{ form_widget(form.barrioRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div> 
-            <div class="form-group form-group-sm">
-                <label for="form_ciudadRel" class="col-sm-2 control-label">Ciudad:</label>
-                <div class="col-sm-10">
-                        {{ form_widget(form.ciudadRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
+            </div>    
             <div class="form-group form-group-sm">
                 <label for="form_camisa" class="col-sm-2 control-label">Talla Camisa:</label>
                 <div class="col-sm-10">

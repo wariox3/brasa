@@ -74,12 +74,14 @@
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             <span class="caret"></span>
                         </button>
+                        {% if arEmpleados.centroCostoRel.nombre is defined %}
                         <ul class="dropdown-menu" role="menu">                            
                             <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': 0, 'codigoEmpleado': arEmpleados.codigoEmpleadoPk }) }}', 'AgregarCredito', 600, 900)" >Credito</a></li>                                                                            
                             <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleados.codigoEmpleadoPk}) }}', 'AgregarContrato', 600, 900)" >Contrato</a></li>                                                                                             
                             <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleados.codigoCentroCostoFk, 'codigoEmpleado': arEmpleados.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Incapacidad</a></li>
                             <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto': 0, 'codigoEmpleado': arEmpleados.codigoEmpleadoPk, 'codigoDisciplinario': 0 }) }}', 'AgregarProcesoDisciplinario', 600, 900)" >Proceso disciplinario</a></li>
                         </ul>
+                        {% endif%}
                     </div>                                        
                 </td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_nuevo', { 'codigoEmpleado':  arEmpleados.codigoEmpleadoPk, 'codigoSeleccion':  0 }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" title="Editar registro" width=20 height=20 title="Editar el registro"></a></td>                

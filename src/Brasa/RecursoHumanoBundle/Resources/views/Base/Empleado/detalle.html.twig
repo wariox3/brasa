@@ -18,8 +18,8 @@
                     <tr>
                         <td class="titulo">CODIGO:</td>
                         <td class="td-in-well">{{ arEmpleado.codigoEmpleadoPk }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">LIBRETA MILITAR:</td>
+                        <td class="td-in-well">{{ arEmpleado.libretaMilitar }}</td>
                         <td class="titulo">DIRECCION:</td>
                         <td class="td-in-well">{{ arEmpleado.direccion }}</td>
                     </tr>
@@ -37,7 +37,7 @@
                         <td class="titulo">TELEFONO:</td>
                         <td class="td-in-well">{{ arEmpleado.telefono }}</td>
                         <td class="titulo">CIUDAD:</td>
-                        <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre|default('ERROR') }}</td>                    
+                        <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre|default('SIN CONTRATO') }}</td>                    
                     </tr>                
                     <tr>
                         <td class="titulo">ESTADO CIVIL:</td>
@@ -51,35 +51,35 @@
                         <td class="titulo">FECHA NACIMIENTO:</td>
                         <td class="td-in-well">{{ arEmpleado.fechaNacimiento|date("Y/m/d") }}</td>                    
                         <td class="titulo">CLASIFICACION RIESGO:</td>
-                        <td class="td-in-well">{{ arEmpleado.clasificacionRiesgoRel.nombre|default('ERROR') }}</td>
+                        <td class="td-in-well">{{ arEmpleado.clasificacionRiesgoRel.nombre|default('SIN CONTRATO') }}</td>
                         <td class="titulo">CORREO:</td>
                         <td class="td-in-well">{{ arEmpleado.correo }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">TIPO PENSION:</td>
-                        <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('ERROR') }}</td>                    
+                        <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="titulo">CARGO:</td>
-                        <td class="td-in-well">{{ arEmpleado.cargoRel.nombre|default('ERROR') }}</td>
+                        <td class="td-in-well">{{ arEmpleado.cargoRel.nombre|default('SIN CONTRATO') }}</td>
                         <td class="titulo">DESCRIPCION CARGO:</td>
                         <td class="td-in-well">{{ arEmpleado.cargoDescripcion }}</td>
                     </tr>                
                     <tr>
                         <td class="titulo">ENTIDAD PENSION:</td>
-                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadPensionRel.nombre|default('ERROR') }}</td>                    
+                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadPensionRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="td-in-well"></td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
                     </tr>                
                     <tr>
                         <td class="titulo">ENTIDAD SALUD:</td>
-                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadSaludRel.nombre|default('ERROR') }}</td>                    
+                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadSaludRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="td-in-well"></td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
                     </tr>                
                     <tr>
                         <td class="titulo">CAJA COMPENSACION:</td>
-                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadCajaRel.nombre|default('ERROR') }}</td>                    
+                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="td-in-well"></td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
@@ -126,9 +126,9 @@
                             <td>{{ arContratos.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{% if arContratos.indefinido == 1 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                             <td style="text-align: right">{{ arContratos.vrSalario | number_format(0, '.', ',') }}</td>
-                            <td>{{ arContratos.cargoRel.nombre|default('ERROR')  }}</td>
+                            <td>{{ arContratos.cargoRel.nombre|default('SIN CONTRATO')  }}</td>
                             <td>{{ arContratos.cargoDescripcion  }}</td>
-                            <td>{{ arContratos.clasificacionRiesgoRel.nombre|default('ERROR') }}</td>                            
+                            <td>{{ arContratos.clasificacionRiesgoRel.nombre|default('SIN CONTRATO') }}</td>                            
                             <td>{% if arContratos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
                             <td style="text-align: center"><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arContratos.codigoContratoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                            

@@ -250,9 +250,7 @@ class BaseEmpleadoController extends Controller
                 $arEmpleado->setCiudadRel($arSeleccion->getCiudadRel()); 
                 $arEmpleado->setCodigoSexoFk($arSeleccion->getCodigoSexoFk());
             }
-            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
-            $douVrSalarioMinimo = $arConfiguracion->getVrSalario();
-            $arEmpleado->setVrSalario($douVrSalarioMinimo); //Parametrizar con configuracion salario minimo
+            $arEmpleado->setVrSalario(0); //Parametrizar con configuracion salario minimo
         }
         $form = $this->createForm(new RhuEmpleadoType(), $arEmpleado);
         $form->handleRequest($request);

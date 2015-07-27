@@ -30,7 +30,13 @@ class RhuEmpleado
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
      */
          
-    private $numeroIdentificacion;        
+    private $numeroIdentificacion;
+    
+    /**
+     * @ORM\Column(name="libreta_militar", type="string", length=20, nullable=false)
+     */
+         
+    private $libretaMilitar;
     
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
@@ -183,9 +189,9 @@ class RhuEmpleado
     private $estadoActivo = 1;
     
     /**     
-     * @ORM\Column(name="padre_familia", type="boolean")
+     * @ORM\Column(name="cabeza_hogar", type="boolean")
      */    
-    private $padreFamilia=0;
+    private $cabezaHogar= 0;
     
     
     /**     
@@ -242,7 +248,12 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="horas_laboradas_periodo", type="float")
      */
-    private $horasLaboradasPeriodo = 0;      
+    private $horasLaboradasPeriodo = 0;
+    
+    /**
+     * @ORM\Column(name="padre_familia", type="float")
+     */
+    private $padreFamilia = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
@@ -391,7 +402,6 @@ class RhuEmpleado
     protected $rhRel; 
    
  
-    
     /**
      * Constructor
      */
@@ -465,6 +475,30 @@ class RhuEmpleado
     public function getNumeroIdentificacion()
     {
         return $this->numeroIdentificacion;
+    }
+
+    /**
+     * Set libretaMilitar
+     *
+     * @param string $libretaMilitar
+     *
+     * @return RhuEmpleado
+     */
+    public function setLibretaMilitar($libretaMilitar)
+    {
+        $this->libretaMilitar = $libretaMilitar;
+
+        return $this;
+    }
+
+    /**
+     * Get libretaMilitar
+     *
+     * @return string
+     */
+    public function getLibretaMilitar()
+    {
+        return $this->libretaMilitar;
     }
 
     /**
@@ -2173,5 +2207,29 @@ class RhuEmpleado
     public function getRhRel()
     {
         return $this->rhRel;
+    }
+
+    /**
+     * Set cabezaHogar
+     *
+     * @param boolean $cabezaHogar
+     *
+     * @return RhuEmpleado
+     */
+    public function setCabezaHogar($cabezaHogar)
+    {
+        $this->cabezaHogar = $cabezaHogar;
+
+        return $this;
+    }
+
+    /**
+     * Get cabezaHogar
+     *
+     * @return boolean
+     */
+    public function getCabezaHogar()
+    {
+        return $this->cabezaHogar;
     }
 }
