@@ -54,6 +54,33 @@ class ConfiguracionController extends Controller
             'required' => false);                   
         $arrayPropiedadesConceptoTiempoSuplementario['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoTiempoSuplementario());                                    
         
+        $arrayPropiedadesConceptoHoraDiurnaTrabajada = array(
+            'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('cc')                                        
+                ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
+            'property' => 'nombre',
+            'required' => false);                   
+        $arrayPropiedadesConceptoHoraDiurnaTrabajada['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoHoraDiurnaTrabajada());                                    
+        
+        $arrayPropiedadesConceptoAportePension = array(
+            'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('cc')                                        
+                ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
+            'property' => 'nombre',
+            'required' => false);                   
+        $arrayPropiedadesConceptoAportePension['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoAportePension());                                    
+        
+        $arrayPropiedadesConceptoAporteSalud = array(
+            'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('cc')                                        
+                ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
+            'property' => 'nombre',
+            'required' => false);                   
+        $arrayPropiedadesConceptoAporteSalud['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoAporteSalud());                                    
+        
         $formConfiguracion = $this->createFormBuilder() 
             ->add('ConceptoAuxilioTransporte', 'entity', $arrayPropiedadesConceptoAuxilioTransporte)    
             ->add('vrAuxilioTransporte', 'number', array('data' => $arConfiguracion->getVrAuxilioTransporte(), 'required' => true))
@@ -61,9 +88,9 @@ class ConfiguracionController extends Controller
             ->add('conceptoCredito', 'entity', $arrayPropiedadesConceptoCredito)    
             ->add('conceptoSeguro', 'entity', $arrayPropiedadesConceptoSeguro)    
             ->add('conceptoTiempoSuplementario', 'entity', $arrayPropiedadesConceptoTiempoSuplementario)
-            ->add('codigoHoraDiurnaTrabajada', 'number', array('required' => true))
-            ->add('codigoAporteSalud', 'number', array('required' => true))
-            ->add('codigoAportePension', 'number', array('required' => true))
+            ->add('conceptoHoraDiurnaTrabajada', 'entity', $arrayPropiedadesConceptoHoraDiurnaTrabajada)
+            ->add('conceptoAportePension', 'entity', $arrayPropiedadesConceptoAportePension)
+            ->add('conceptoAporteSalud', 'entity', $arrayPropiedadesConceptoAporteSalud)
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -75,6 +102,9 @@ class ConfiguracionController extends Controller
             $codigoConceptoCredito = $controles['ConceptoCredito'];
             $codigoConceptoSeguro = $controles['ConceptoSeguro'];
             $codigoConceptoTiempoSuplementario = $controles['conceptoTiempoSuplementario'];
+            $codigoConceptoHoraDiurnaTrabajada = $controles['conceptoHoraDiurnaTrabajada'];
+            $codigoConceptoAportePension = $controles['conceptoAportePension'];
+            $codigoConceptoAporteSalud = $controles['conceptoAporteSalud'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -82,15 +112,9 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoCredito($codigoConceptoCredito);
             $arConfiguracion->setCodigoSeguro($codigoConceptoSeguro);
             $arConfiguracion->setCodigoTiempoSuplementario($codigoConceptoTiempoSuplementario);
-            /*$arConfiguracion->setCodigoCredito($arConfiguracion->getCodigoCredito());
-            $arConfiguracion->setCodigoSeguro($arConfiguracion->getCodigoSeguro());
-            $arConfiguracion->setCodigoTiempoSuplementario($arConfiguracion->getCodigoTiempoSuplementario());
-            $arConfiguracion->setCodigoHoraDiurnaTrabajada($arConfiguracion->getCodigoHoraDiurnaTrabajada());
-            $arConfiguracion->setCodigoAporteSalud($arConfiguracion->getCodigoAporteSalud());
-            $arConfiguracion->setCodigoAportePension($arConfiguracion->getCodigoAportePension());
-            $arConfiguracion->setVrAuxilioTransporte($arConfiguracion->getVrAuxilioTransporte());
-             * 
-             */
+            $arConfiguracion->setCodigoHoraDiurnaTrabajada($codigoConceptoHoraDiurnaTrabajada);
+            $arConfiguracion->setCodigoAportePension($codigoConceptoAportePension);
+            $arConfiguracion->setCodigoAporteSalud($codigoConceptoAporteSalud);
             $em->persist($arConfiguracion);
             $em->flush();
         }
