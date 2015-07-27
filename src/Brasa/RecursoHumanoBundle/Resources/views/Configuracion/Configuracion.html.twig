@@ -63,10 +63,17 @@
                 </div>
             </div>
              
-             <div class="modal-footer">
-            {{ form_widget(formConfiguracion.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+             
+            
     </div>
-    {{ form_end(formConfiguracion) }}
+            
+    
 </div>
+                
+        <div class="modal-footer">      
+            {{ form_widget(formConfiguracion.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+        </div>    
+   
+            {{ form_end(formConfiguracion) }}
 </div>      
 {% endblock %}

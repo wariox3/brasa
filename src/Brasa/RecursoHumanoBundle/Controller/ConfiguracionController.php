@@ -85,12 +85,12 @@ class ConfiguracionController extends Controller
             ->add('ConceptoAuxilioTransporte', 'entity', $arrayPropiedadesConceptoAuxilioTransporte)    
             ->add('vrAuxilioTransporte', 'number', array('data' => $arConfiguracion->getVrAuxilioTransporte(), 'required' => true))
             ->add('vrSalario', 'number', array('data' => $arConfiguracion->getVrSalario(), 'required' => true))
-            ->add('conceptoCredito', 'entity', $arrayPropiedadesConceptoCredito)    
-            ->add('conceptoSeguro', 'entity', $arrayPropiedadesConceptoSeguro)    
-            ->add('conceptoTiempoSuplementario', 'entity', $arrayPropiedadesConceptoTiempoSuplementario)
-            ->add('conceptoHoraDiurnaTrabajada', 'entity', $arrayPropiedadesConceptoHoraDiurnaTrabajada)
-            ->add('conceptoAportePension', 'entity', $arrayPropiedadesConceptoAportePension)
-            ->add('conceptoAporteSalud', 'entity', $arrayPropiedadesConceptoAporteSalud)
+            ->add('conceptoCredito', 'entity', $arrayPropiedadesConceptoCredito, array('required' => true))    
+            ->add('conceptoSeguro', 'entity', $arrayPropiedadesConceptoSeguro, array('required' => true))    
+            ->add('conceptoTiempoSuplementario', 'entity', $arrayPropiedadesConceptoTiempoSuplementario, array('required' => true))
+            ->add('conceptoHoraDiurnaTrabajada', 'entity', $arrayPropiedadesConceptoHoraDiurnaTrabajada, array('required' => true))
+            ->add('conceptoAportePension', 'entity', $arrayPropiedadesConceptoAportePension, array('required' => true))
+            ->add('conceptoAporteSalud', 'entity', $arrayPropiedadesConceptoAporteSalud, array('required' => true))
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -99,8 +99,8 @@ class ConfiguracionController extends Controller
             $codigoConceptoAuxilioTransporte = $controles['ConceptoAuxilioTransporte'];
             $ValorAuxilioTransporte = $controles['vrAuxilioTransporte'];
             $ValorSalario = $controles['vrSalario'];
-            $codigoConceptoCredito = $controles['ConceptoCredito'];
-            $codigoConceptoSeguro = $controles['ConceptoSeguro'];
+            $codigoConceptoCredito = $controles['conceptoCredito'];
+            $codigoConceptoSeguro = $controles['conceptoSeguro'];
             $codigoConceptoTiempoSuplementario = $controles['conceptoTiempoSuplementario'];
             $codigoConceptoHoraDiurnaTrabajada = $controles['conceptoHoraDiurnaTrabajada'];
             $codigoConceptoAportePension = $controles['conceptoAportePension'];

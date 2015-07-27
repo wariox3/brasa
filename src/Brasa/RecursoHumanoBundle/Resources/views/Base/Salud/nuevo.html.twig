@@ -32,11 +32,15 @@
                         {{ form_widget(formSalud.telefono, { 'attr': {'onkeypress': 'ValidaSoloNumeros();', 'class': 'form-control'} }) }}
                 </div>
             </div>        
-             <div class="modal-footer">
+             
+    
+</div>
+
+</div> 
+        <div class="modal-footer">
             <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_salud_listar') }}">Cancelar</a>
             {{ form_widget(formSalud.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
-    </div>
-    {{ form_end(formSalud) }}
+        </div>
+{{ form_end(formSalud) }}  
 </div>
-</div>      
 {% endblock %}
