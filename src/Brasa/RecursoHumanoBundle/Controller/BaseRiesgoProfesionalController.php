@@ -21,22 +21,22 @@ class BaseRiesgoProfesionalController extends Controller
             ->getForm(); 
         $form->handleRequest($request);
         
-        $arCajas = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
+        $arEntidadRiesgosProfesionales = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
         
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoEntidadCajaPk) {
-                    $arCaja = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
-                    $arCaja = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->find($codigoEntidadCajaPk);
-                    $em->remove($arCaja);
+                foreach ($arrSeleccionados AS $codigoEntidadRiesgoProfesionalPk) {
+                    $arEntidadRiesgosProfesionales = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                    $arEntidadRiesgosProfesionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoEntidadRiesgoProfesionalPk);
+                    $em->remove($arEntidadRiesgosProfesionales);
                     $em->flush();
                 }
             }
             
         if($form->get('BtnPdf')->isClicked()) {
-                $objFormatoCaja = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCaja();
-                $objFormatoCaja->Generar($this);
+                $objFormatoEntidadRiesgoProfesional = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEntidadRiesgoProfesional();
+                $objFormatoEntidadRiesgoProfesional->Generar($this);
         }    
         
         if($form->get('BtnExcel')->isClicked()) {
@@ -57,23 +57,23 @@ class BaseRiesgoProfesionalController extends Controller
                             ->setCellValue('D1', 'Direccion')
                             ->setCellValue('E1', 'Telefono');
                 $i = 2;
-                $arCajas = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->findAll();
+                $arEntidadRiesgosProfesionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->findAll();
                 
-                foreach ($arCajas as $arCaja) {
+                foreach ($arEntidadRiesgosProfesionales as $arEntidadRiesgosProfesionales) {
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arCaja->getcodigoEntidadCajaPk())
-                            ->setCellValue('B' . $i, $arCaja->getnombre())
-                            ->setCellValue('C' . $i, $arCaja->getnit())
-                            ->setCellValue('D' . $i, $arCaja->getdireccion())
-                            ->setCellValue('E' . $i, $arCaja->gettelefono());
+                            ->setCellValue('A' . $i, $arEntidadRiesgosProfesionales->getcodigoEntidadRiesgoPk())
+                            ->setCellValue('B' . $i, $arEntidadRiesgosProfesionales->getnombre())
+                            ->setCellValue('C' . $i, $arEntidadRiesgosProfesionales->getnit())
+                            ->setCellValue('D' . $i, $arEntidadRiesgosProfesionales->getdireccion())
+                            ->setCellValue('E' . $i, $arEntidadRiesgosProfesionales->gettelefono());
                     $i++;
                 }
-                $objPHPExcel->getActiveSheet()->setTitle('Cajas_compensacion');
+                $objPHPExcel->getActiveSheet()->setTitle('Riesgos_Profesionales');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="CajaCompensacion.xlsx"');
+                header('Content-Disposition: attachment;filename="Entidades_riesgos_Profesionales.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
@@ -87,37 +87,37 @@ class BaseRiesgoProfesionalController extends Controller
                 exit;
             }
         }
-        $arEntidadesCaja = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->findAll();
-        $arEntidadesCaja = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arEntidadesRiesgosProfesionales = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->findAll();
+        $arEntidadesRiesgosProfesionales = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/CajaCompensacion:listar.html.twig', array(
-                    'arEntidadesCaja' => $arEntidadesCaja,
+        return $this->render('BrasaRecursoHumanoBundle:Base/RiesgosProfesionales:listar.html.twig', array(
+                    'arEntidadesRiesgosProfesionales' => $arEntidadesRiesgosProfesionales,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoEntidadCajaPk) {
+    public function nuevoAction($codigoEntidadRiesgoProfesionalPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arCaja = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
-        if ($codigoEntidadCajaPk != 0)
+        $arEntidadRiesgoProfesional = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+        if ($codigoEntidadRiesgoProfesionalPk != 0)
         {
-            $arCaja = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->find($codigoEntidadCajaPk);
+            $arEntidadRiesgoProfesional = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoEntidadRiesgoProfesionalPk);
         }    
-        $formCaja = $this->createForm(new RhuCajaType(), $arCaja);
-        $formCaja->handleRequest($request);
-        if ($formCaja->isValid())
+        $formEntidadRiesgoProfesional = $this->createForm(new RhuCajaType(), $arEntidadRiesgoProfesional);
+        $formEntidadRiesgoProfesional->handleRequest($request);
+        if ($formEntidadRiesgoProfesional->isValid())
         {
             // guardar la tarea en la base de datos
-            $em->persist($arCaja);
-            $arCaja = $formCaja->getData();
+            $em->persist($arEntidadRiesgoProfesional);
+            $arCaja = $formEntidadRiesgoProfesional->getData();
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_caja_listar'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_RiesgoProfesional_listar'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/CajaCompensacion:nuevo.html.twig', array(
-            'formCaja' => $formCaja->createView(),
+        return $this->render('BrasaRecursoHumanoBundle:Base/RiesgoProfesional:nuevo.html.twig', array(
+            'formEntidadRiesgoProfesional' => $formEntidadRiesgoProfesional->createView(),
         ));
     }
 }

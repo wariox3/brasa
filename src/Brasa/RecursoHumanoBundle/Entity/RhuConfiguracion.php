@@ -17,6 +17,11 @@ class RhuConfiguracion
     private $codigoConfiguracionPk;
     
     /**
+     * @ORM\Column(name="codigo_entidad_riesgo_fk", type="integer")
+     */    
+    private $codigoEntidadRiesgoFk;
+    
+    /**
      * @ORM\Column(name="vr_salario", type="float")
      */    
     private $vrSalario;  
@@ -66,7 +71,13 @@ class RhuConfiguracion
      */    
     private $codigoFondoSolidaridadPension4;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
+     * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
+     */
+    protected $entidadRiesgoProfesionalRel;
 
+    
 
     /**
      * Set codigoConfiguracionPk
@@ -90,6 +101,30 @@ class RhuConfiguracion
     public function getCodigoConfiguracionPk()
     {
         return $this->codigoConfiguracionPk;
+    }
+
+    /**
+     * Set codigoEntidadRiesgoFk
+     *
+     * @param integer $codigoEntidadRiesgoFk
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoEntidadRiesgoFk($codigoEntidadRiesgoFk)
+    {
+        $this->codigoEntidadRiesgoFk = $codigoEntidadRiesgoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadRiesgoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadRiesgoFk()
+    {
+        return $this->codigoEntidadRiesgoFk;
     }
 
     /**
@@ -138,6 +173,30 @@ class RhuConfiguracion
     public function getCodigoAuxilioTransporte()
     {
         return $this->codigoAuxilioTransporte;
+    }
+
+    /**
+     * Set vrAuxilioTransporte
+     *
+     * @param float $vrAuxilioTransporte
+     *
+     * @return RhuConfiguracion
+     */
+    public function setVrAuxilioTransporte($vrAuxilioTransporte)
+    {
+        $this->vrAuxilioTransporte = $vrAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAuxilioTransporte
+     *
+     * @return float
+     */
+    public function getVrAuxilioTransporte()
+    {
+        return $this->vrAuxilioTransporte;
     }
 
     /**
@@ -309,26 +368,26 @@ class RhuConfiguracion
     }
 
     /**
-     * Set vrAuxilioTransporte
+     * Set entidadRiesgoProfesionalRel
      *
-     * @param float $vrAuxilioTransporte
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
      *
      * @return RhuConfiguracion
      */
-    public function setVrAuxilioTransporte($vrAuxilioTransporte)
+    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
     {
-        $this->vrAuxilioTransporte = $vrAuxilioTransporte;
+        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
 
         return $this;
     }
 
     /**
-     * Get vrAuxilioTransporte
+     * Get entidadRiesgoProfesionalRel
      *
-     * @return float
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
      */
-    public function getVrAuxilioTransporte()
+    public function getEntidadRiesgoProfesionalRel()
     {
-        return $this->vrAuxilioTransporte;
+        return $this->entidadRiesgoProfesionalRel;
     }
 }
