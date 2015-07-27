@@ -20,13 +20,13 @@
                         {{ form_widget(formClasificacion.porcentaje, { 'attr': {'onkeypress': 'txNombres();', 'class': 'form-control'} }) }}
                 </div>
             </div>    
-        
-                
-             <div class="modal-footer">
+    
+</div>
+</div>
+    <div class="modal-footer">
             <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_clasificacion_listar') }}">Cancelar</a>
             {{ form_widget(formClasificacion.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
-    </div>
+    </div>            
     {{ form_end(formClasificacion) }}
-</div>
-</div>      
+</div> 
 {% endblock %}

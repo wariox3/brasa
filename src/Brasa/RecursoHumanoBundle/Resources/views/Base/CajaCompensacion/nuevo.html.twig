@@ -32,11 +32,12 @@
                         {{ form_widget(formCaja.telefono, { 'attr': {'onkeypress': 'ValidaSoloNumeros();', 'class': 'form-control'} }) }}
                 </div>
             </div>        
-             <div class="modal-footer">
+</div>
+</div>
+    <div class="modal-footer">
             <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_caja_listar') }}">Cancelar</a>
             {{ form_widget(formCaja.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
-    </div>
-    {{ form_end(formCaja) }}
-</div>
-</div>      
+    </div>            
+{{ form_end(formCaja) }}
+</div>    
 {% endblock %}

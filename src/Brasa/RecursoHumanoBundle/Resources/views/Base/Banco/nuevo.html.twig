@@ -14,14 +14,13 @@
                         {{ form_widget(formBanco.nombre, { 'attr': {'onkeypress': 'txNombres();', 'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
             </div>
-        
-        
-                
-             <div class="modal-footer">
+    
+</div>
+</div>
+    <div class="modal-footer">
             <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_banco_listar') }}">Cancelar</a>
             {{ form_widget(formBanco.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>
     {{ form_end(formBanco) }}
-</div>
-</div>      
+</div>    
 {% endblock %}
