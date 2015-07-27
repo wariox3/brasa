@@ -40,7 +40,7 @@ brs_rhu_utilidades_pagos_cargar_tiempo_sede:
     
 brs_rhu_utilidades_pagos_pagar:
     path:     /rhumano/utilidades/pagos/pagar
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:pagar }  
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagosPagar:pagar }  
     
 brs_rhu_utilidades_notificaciones_cierreprogramacionpago:
     path:     /rhumano/utilidades/notificaciones/cierreprogramacionpago
