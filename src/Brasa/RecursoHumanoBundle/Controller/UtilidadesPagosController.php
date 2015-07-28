@@ -434,7 +434,7 @@ class UtilidadesPagosController extends Controller
                         $em->persist($arProgramacionPagoProcesar);
                         $em->persist($arCentroCosto);
                         $em->flush();
-                        //$em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }                

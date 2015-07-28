@@ -6,25 +6,8 @@
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
     {{ form_errors(form) }}
-    <div class="btn-toolbar" style="float:left">
-        <div class="btn-group">
-            <a  class="btn btn-default" href="{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}">Actualizar</a>
-            {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default'} }) }}
-            <!-- Split button -->
-            <div class="btn-group">
-                <button type="button" class="btn btn-default">Utilidades</button>
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }} " target="_blank">Adicionales</a></li>
-                    <li class="divider"></li>
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Generar adicionales (Masivo)</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <br /><br /><br />
+
+
     <div class="panel panel-default">
       <div class="panel-heading">Informacion programacion de pago</div>
       <div class="panel-body">
@@ -61,6 +44,24 @@
       </div>
     </div>
 
+    <div class="btn-toolbar" style="float:left">
+        <div class="btn-group">            
+            {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default'} }) }}
+            <!-- Split button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default">Utilidades</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }} " target="_blank">Adicionales</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Agregar tiempo suplementario (Masivo)</a></li>
+                </ul>
+            </div>
+        </div>
+    </div> <br /> <br /> <br />                    
+                    
     <div class="panel panel-default">
       <div class="panel-heading">Pagos adicionales</div>
       <div class="panel-body">
