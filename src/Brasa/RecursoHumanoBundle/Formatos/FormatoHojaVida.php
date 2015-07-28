@@ -134,7 +134,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
             $this->Cell(24, 8, "MASCULINO", 1, 0, 'C', 1);
         }
         $this->Cell(33, 8, $arEmpleado->getLibretaMilitar(), 1, 0, 'C', 0);
-        $this->Cell(42, 8, utf8_decode($arEmpleado->getCiudadExpedicionRel()->getNombre()." - ".$arEmpleado->getCiudadExpedicionRel()->getDepartamentoRel()->getNombre()), 1, 0, 'C', 1);
+        $this->Cell(42, 8, utf8_decode($arEmpleado->getCiudadExpedicionRel()->getNombre()), 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 26);
         $this->SetFont('Arial','B',8);
         $this->Cell(39, 5, "DIRECCION DE RESIDENCIA", 1, 0, 'C', 1);
@@ -305,73 +305,6 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
         $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
         $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
-        $this->SetXY($intX, $intY + 153);
-        $this->SetFont('Arial','b',8);
-        $this->Cell(59, 6, "NOMBRE BENEFICIARIOS", 1, 0, 'C', 1);
-        $this->Cell(8, 6, "HIJO", 1, 0, 'C', 1);
-        $this->Cell(8, 6, "HT", 1, 0, 'C', 1);
-        $this->Cell(10, 6, "EPS", 1, 0, 'C', 1);
-        $this->Cell(10, 6, "CCF", 1, 0, 'C', 1);
-        $this->Cell(27, 6, "FECHA NAC", 1, 0, 'C', 1);
-        $this->Cell(32, 6, "OCUPACION", 1, 0, 'C', 1);
-        $this->Cell(25, 6, "TELEFONO", 1, 0, 'C', 1);
-        $this->SetXY($intX, $intY + 159);
-        $this->SetFont('Arial','',8);
-        $this->Cell(59, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
-        $this->SetXY($intX, $intY + 165);
-        $this->Cell(59, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
-        $this->SetXY($intX, $intY + 171);
-        $this->Cell(59, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
-        $this->SetXY($intX, $intY + 177);
-        $this->Cell(59, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
-        $this->SetXY($intX, $intY + 183);
-        $this->Cell(59, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
-        $this->SetXY($intX, $intY + 189);
-         $this->Cell(59, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(8, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
-        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
-        
-
 
 //creamos la cabecera de la tabla.
            
