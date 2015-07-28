@@ -58,7 +58,8 @@ class BasePensionController extends Controller
                             ->setCellValue('B1', 'Nombre')
                             ->setCellValue('C1', 'Nit')
                             ->setCellValue('D1', 'Direccion')
-                            ->setCellValue('E1', 'Telefono');
+                            ->setCellValue('E1', 'Telefono')
+                            ->setCellValue('F1', 'Codigo_interface');
 
                 $i = 2;
                 $arPensiones = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->findAll();
@@ -70,7 +71,8 @@ class BasePensionController extends Controller
                             ->setCellValue('B' . $i, $arPension->getnombre())
                             ->setCellValue('C' . $i, $arPension->getnit())
                             ->setCellValue('D' . $i, $arPension->getdireccion())
-                            ->setCellValue('E' . $i, $arPension->gettelefono());
+                            ->setCellValue('E' . $i, $arPension->gettelefono())
+                            ->setCellValue('F' . $i, $arPension->getCodigoInterface());
                     $i++;
                 }
 
