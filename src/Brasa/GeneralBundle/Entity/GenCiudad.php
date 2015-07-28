@@ -14,6 +14,7 @@ class GenCiudad
     /**
      * @ORM\Id
      * @ORM\Column(name="codigo_ciudad_pk", type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoCiudadPk;
 
@@ -32,6 +33,11 @@ class GenCiudad
      * @ORM\Column(name="codigo_ruta_predeterminada_fk", type="integer", nullable=true)
      */
     private $codigoRutaPredeterminadaFk;    
+    
+    /**
+     * @ORM\Column(name="codigo_interface", type="string", length=15)
+     */
+    private $codigoInterface;    
     
     /**
      * @ORM\ManyToOne(targetEntity="GenDepartamento", inversedBy="ciudadesRel")
@@ -790,5 +796,29 @@ class GenCiudad
     public function getRhuSeleccionesCiudadExpedicionRel()
     {
         return $this->rhuSeleccionesCiudadExpedicionRel;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return GenCiudad
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 }
