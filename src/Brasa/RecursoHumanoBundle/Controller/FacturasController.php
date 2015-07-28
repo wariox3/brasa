@@ -30,8 +30,8 @@ class FacturasController extends Controller
             if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
-                $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
-                    ->setLastModifiedBy("Maarten Balliauw")
+                $objPHPExcel->getProperties()->setCreator("EMPRESA")
+                    ->setLastModifiedBy("EMPRESA")
                     ->setTitle("Office 2007 XLSX Test Document")
                     ->setSubject("Office 2007 XLSX Test Document")
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")

@@ -38,12 +38,12 @@ class RhuCentroCosto
     private $fechaUltimoPagoProgramado;    
     
     /**
-     * @ORM\Column(name="correo", type="string", length=60, nullable=true)
+     * @ORM\Column(name="correo", type="string", length=80, nullable=true)
      */    
     private $correo;    
     
     /**
-     * @ORM\Column(name="codigo_interface", type="string", length=10, nullable=true)
+     * @ORM\Column(name="codigo_interface", type="string", length=20, nullable=true)
      */    
     private $codigoInterface;    
     

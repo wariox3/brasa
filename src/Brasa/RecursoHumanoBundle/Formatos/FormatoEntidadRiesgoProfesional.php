@@ -7,7 +7,7 @@ class FormatoEntidadRiesgoProfesional extends \FPDF_FPDF {
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
-        $pdf = new FormatoEntidadRiesgoProfesional();
+        $pdf = new FormatoEntidadRiesgoProfesional('L');
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 11);
@@ -21,25 +21,25 @@ class FormatoEntidadRiesgoProfesional extends \FPDF_FPDF {
         $this->SetFont('Arial','B',12);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
-        $this->Cell(190, 8, "LISTADO ENTIDADES DE RIESGOS PROFESIONALES " , 1, 0, 'C', 1);
+        $this->Cell(270, 8, "LISTADO ENTIDADES DE RIESGOS PROFESIONALES " , 1, 0, 'C', 1);
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'NOMBRE', 'NIT', 'DIRECCION', 'TELEFONO');
+        $header = array('ID', 'NOMBRE', 'NIT', 'DIRECCION', 'TELEFONO','INTERFACE');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('Arial', 'B', 7);
+        $this->SetFont('Arial', 'B', 8);
 
         //creamos la cabecera de la tabla.
-        $w = array(8, 95, 16, 55, 16);
+        $w = array(10, 130, 20, 70, 20,20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
-                $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
+                $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
             else
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
 
@@ -54,20 +54,21 @@ class FormatoEntidadRiesgoProfesional extends \FPDF_FPDF {
         $arEntidadesRiesgoProfesional = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
         $arEntidadesRiesgoProfesional = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->findAll();
         $pdf->SetX(10);
-        $pdf->SetFont('Arial', '', 7);
+        $pdf->SetFont('Arial', '', 8);
         foreach ($arEntidadesRiesgoProfesional as $arEntidadesRiesgoProfesional) {            
-            $pdf->Cell(8, 4, $arEntidadesRiesgoProfesional->getcodigoEntidadRiesgoPk(), 1, 0, 'L');
-            $pdf->Cell(95, 4, $arEntidadesRiesgoProfesional->getNombre(), 1, 0, 'L');
-            $pdf->Cell(16, 4, $arEntidadesRiesgoProfesional->getNit(), 1, 0, 'L');
-            $pdf->Cell(55, 4, $arEntidadesRiesgoProfesional->getDireccion(), 1, 0, 'L');
-            $pdf->Cell(16, 4, $arEntidadesRiesgoProfesional->getTelefono(), 1, 0, 'L');
+            $pdf->Cell(10, 4, $arEntidadesRiesgoProfesional->getcodigoEntidadRiesgoPk(), 1, 0, 'C');
+            $pdf->Cell(130, 4, utf8_decode($arEntidadesRiesgoProfesional->getNombre()), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arEntidadesRiesgoProfesional->getNit(), 1, 0, 'L');
+            $pdf->Cell(70, 4, $arEntidadesRiesgoProfesional->getDireccion(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arEntidadesRiesgoProfesional->getTelefono(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arEntidadesRiesgoProfesional->getCodigoInterface(), 1, 0, 'C');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);//33
         }        
     }
 
     public function Footer() {
-        $this->SetXY(160, 270);
+        $this->SetXY(260, 190);
         $this->Cell(30, 35, utf8_decode('   Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          
     }    
 }

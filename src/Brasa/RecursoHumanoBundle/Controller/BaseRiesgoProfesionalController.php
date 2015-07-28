@@ -42,8 +42,8 @@ class BaseRiesgoProfesionalController extends Controller
         if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
-                $objPHPExcel->getProperties()->setCreator("JG Efectivos")
-                    ->setLastModifiedBy("JG Efectivos")
+                $objPHPExcel->getProperties()->setCreator("EMPRESA")
+                    ->setLastModifiedBy("EMPRESA")
                     ->setTitle("Office 2007 XLSX Test Document")
                     ->setSubject("Office 2007 XLSX Test Document")
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
@@ -55,17 +55,19 @@ class BaseRiesgoProfesionalController extends Controller
                             ->setCellValue('B1', 'Nombre')
                             ->setCellValue('C1', 'Nit')
                             ->setCellValue('D1', 'Direccion')
-                            ->setCellValue('E1', 'Telefono');
+                            ->setCellValue('E1', 'Telefono')
+                            ->setCellValue('F1', 'Codigo_interface');
                 $i = 2;
                 $arEntidadRiesgosProfesionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->findAll();
                 
                 foreach ($arEntidadRiesgosProfesionales as $arEntidadRiesgosProfesionales) {
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arEntidadRiesgosProfesionales->getcodigoEntidadRiesgoPk())
-                            ->setCellValue('B' . $i, $arEntidadRiesgosProfesionales->getnombre())
-                            ->setCellValue('C' . $i, $arEntidadRiesgosProfesionales->getnit())
-                            ->setCellValue('D' . $i, $arEntidadRiesgosProfesionales->getdireccion())
-                            ->setCellValue('E' . $i, $arEntidadRiesgosProfesionales->gettelefono());
+                            ->setCellValue('A' . $i, $arEntidadRiesgosProfesionales->getCodigoEntidadRiesgoPk())
+                            ->setCellValue('B' . $i, $arEntidadRiesgosProfesionales->getNombre())
+                            ->setCellValue('C' . $i, $arEntidadRiesgosProfesionales->getNit())
+                            ->setCellValue('D' . $i, $arEntidadRiesgosProfesionales->getDireccion())
+                            ->setCellValue('E' . $i, $arEntidadRiesgosProfesionales->getTelefono())
+                            ->setCellValue('F' . $i, $arEntidadRiesgosProfesionales->getCodigoInterface());
                     $i++;
                 }
                 $objPHPExcel->getActiveSheet()->setTitle('Riesgos_Profesionales');

@@ -182,8 +182,8 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
-        $objPHPExcel->getProperties()->setCreator("JG Efectivos")
-            ->setLastModifiedBy("JG Efectivos")
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
             ->setTitle("Office 2007 XLSX Test Document")
             ->setSubject("Office 2007 XLSX Test Document")
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
@@ -279,8 +279,8 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
-        $objPHPExcel->getProperties()->setCreator("JG Efectivos")
-            ->setLastModifiedBy("JG Efectivos")
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
             ->setTitle("Office 2007 XLSX Test Document")
             ->setSubject("Office 2007 XLSX Test Document")
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")

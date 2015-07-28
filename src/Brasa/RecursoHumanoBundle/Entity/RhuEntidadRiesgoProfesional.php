@@ -18,7 +18,7 @@ class RhuEntidadRiesgoProfesional
     private $codigoEntidadRiesgoPk;
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=120, nullable=true)
      */    
     private $nombre;    
     

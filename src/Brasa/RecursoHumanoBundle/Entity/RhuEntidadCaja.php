@@ -18,7 +18,7 @@ class RhuEntidadCaja
     private $codigoEntidadCajaPk;
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=120, nullable=true)
      */    
     private $nombre;    
     
@@ -35,29 +35,35 @@ class RhuEntidadCaja
     /**
      * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
      */    
-    private $telefono;    
+    private $telefono;  
+    
+    /**
+     * @ORM\Column(name="codigo_interface", type="string", length=20, nullable=true)
+     */    
+    private $codigoInterface;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="entidadCajaRel")
      */
     protected $empleadosEntidadCajaRel;    
 
+    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->empleadosEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get codigoEntidadSaludPk
+     * Get codigoEntidadCajaPk
      *
      * @return integer
      */
-    public function getCodigoEntidadSaludPk()
+    public function getCodigoEntidadCajaPk()
     {
-        return $this->codigoEntidadSaludPk;
+        return $this->codigoEntidadCajaPk;
     }
 
     /**
@@ -65,7 +71,7 @@ class RhuEntidadCaja
      *
      * @param string $nombre
      *
-     * @return RhuEntidadSalud
+     * @return RhuEntidadCaja
      */
     public function setNombre($nombre)
     {
@@ -85,45 +91,11 @@ class RhuEntidadCaja
     }
 
     /**
-     * Add empleadosEntidadSaludRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadSaludRel
-     *
-     * @return RhuEntidadSalud
-     */
-    public function addEmpleadosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadSaludRel)
-    {
-        $this->empleadosEntidadSaludRel[] = $empleadosEntidadSaludRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove empleadosEntidadSaludRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadSaludRel
-     */
-    public function removeEmpleadosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadSaludRel)
-    {
-        $this->empleadosEntidadSaludRel->removeElement($empleadosEntidadSaludRel);
-    }
-
-    /**
-     * Get empleadosEntidadSaludRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEmpleadosEntidadSaludRel()
-    {
-        return $this->empleadosEntidadSaludRel;
-    }
-
-    /**
      * Set nit
      *
      * @param string $nit
      *
-     * @return RhuEntidadSalud
+     * @return RhuEntidadCaja
      */
     public function setNit($nit)
     {
@@ -147,7 +119,7 @@ class RhuEntidadCaja
      *
      * @param string $direccion
      *
-     * @return RhuEntidadSalud
+     * @return RhuEntidadCaja
      */
     public function setDireccion($direccion)
     {
@@ -171,7 +143,7 @@ class RhuEntidadCaja
      *
      * @param string $telefono
      *
-     * @return RhuEntidadSalud
+     * @return RhuEntidadCaja
      */
     public function setTelefono($telefono)
     {
@@ -191,13 +163,27 @@ class RhuEntidadCaja
     }
 
     /**
-     * Get codigoEntidadCajaPk
+     * Set codigoInterface
      *
-     * @return integer
+     * @param string $codigoInterface
+     *
+     * @return RhuEntidadCaja
      */
-    public function getCodigoEntidadCajaPk()
+    public function setCodigoInterface($codigoInterface)
     {
-        return $this->codigoEntidadCajaPk;
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 
     /**
