@@ -24,7 +24,7 @@ class GenBarrio
     private $nombre; 
     
     /**
-     * @ORM\Column(name="codigo_ciudad_fk", type="integer")
+     * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
      */
     private $codigoCiudadFk;
     
@@ -43,8 +43,6 @@ class GenBarrio
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="barrioRel")
      */
     protected $rhuEmpleadosBarrioRel;
-    
- 
     
     /**
      * Constructor
