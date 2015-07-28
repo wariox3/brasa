@@ -15,6 +15,7 @@
             <th>NIT</th>
             <th>DIRECCIÓN</th>
             <th>TELÉFONO</th>
+            <th>CÓDIGO INTERFACE</th>
             <th></th>
             <th></th>
         </tr>
@@ -26,6 +27,7 @@
                 <td>{{arEntidadesCaja.nit}}</td>
                 <td>{{arEntidadesCaja.direccion}}</td>
                 <td>{{arEntidadesCaja.telefono}}</td>
+                <td>{{arEntidadesCaja.codigoInterface}}</td>
                 <td><a href="{{ path('brs_rhu_base_caja_nuevo',{'codigoEntidadCajaPk': arEntidadesCaja.codigoEntidadCajaPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEntidadesCaja.codigoEntidadCajaPk }}" /></td>
             {%endfor%}

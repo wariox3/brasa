@@ -58,7 +58,8 @@ class BaseCajaController extends Controller
                             ->setCellValue('B1', 'Nombre')
                             ->setCellValue('C1', 'Nit')
                             ->setCellValue('D1', 'Direccion')
-                            ->setCellValue('E1', 'Telefono');
+                            ->setCellValue('E1', 'Telefono')
+                            ->setCellValue('F1', 'Codigo_interface');
                 $i = 2;
                 $arCajas = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->findAll();
                 
@@ -68,7 +69,8 @@ class BaseCajaController extends Controller
                             ->setCellValue('B' . $i, $arCaja->getnombre())
                             ->setCellValue('C' . $i, $arCaja->getnit())
                             ->setCellValue('D' . $i, $arCaja->getdireccion())
-                            ->setCellValue('E' . $i, $arCaja->gettelefono());
+                            ->setCellValue('E' . $i, $arCaja->gettelefono())
+                            ->setCellValue('F' . $i, $arCaja->getCodigoInterface());
                     $i++;
                 }
                 $objPHPExcel->getActiveSheet()->setTitle('Cajas_compensacion');
@@ -92,7 +94,7 @@ class BaseCajaController extends Controller
         }
         $arEntidadesCaja = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->findAll();
-        $arEntidadesCaja = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arEntidadesCaja = $paginator->paginate($query, $this->get('request')->query->get('page', 1),30);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/CajaCompensacion:listar.html.twig', array(
                     'arEntidadesCaja' => $arEntidadesCaja,
