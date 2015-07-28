@@ -64,7 +64,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
         if ($arEmpleado->getCentroCostoRel() == ""){
             $this->Cell(100, 40, "SIN DEFINIR" , 0, 0, 'C', 0);
         } else {
-            $this->Cell(100, 40, $arEmpleado->getCentroCostoRel()->getNombre() , 0, 0, 'C', 0);
+            $this->Cell(100, 40, utf8_decode($arEmpleado->getCentroCostoRel()->getNombre()) , 0, 0, 'C', 0);
         }
         
         $this->SetXY(25, 32);
@@ -72,7 +72,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(30, 45, "CARGO" , 0, 0, 'L', 0);
         $this->Cell(100, 45, "______________________________________________________________" , 0, 0, 'C', 0);
         $this->SetXY(55, 32);
-        $this->Cell(100, 45, $arEmpleado->getCargoDescripcion() , 0, 0, 'C', 0);
+        $this->Cell(100, 45, utf8_decode($arEmpleado->getCargoDescripcion()) , 0, 0, 'C', 0);
         $this->SetXY(25, 38);
         $this->Cell(30, 50, "SALARIO" , 0, 0, 'L', 0);
         $this->Cell(100, 50, "______________________________________________________________" , 0, 0, 'C', 0);
@@ -113,8 +113,8 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(42, 5, "CEDULA", 1, 0, 'C', 0);
         $this->SetXY($intX, $intY + 5);
         $this->SetFont('Arial','',8);
-        $this->Cell(68, 8, $arEmpleado->getApellido1()." ".$arEmpleado->getApellido2(), 1, 0, 'C', 0);
-        $this->Cell(69, 8, $arEmpleado->getNombre1()." ".$arEmpleado->getNombre2(), 1, 0, 'C', 0);
+        $this->Cell(68, 8, utf8_decode($arEmpleado->getApellido1()." ".$arEmpleado->getApellido2()), 1, 0, 'C', 0);
+        $this->Cell(69, 8, utf8_decode($arEmpleado->getNombre1()." ".$arEmpleado->getNombre2()), 1, 0, 'C', 0);
         $this->Cell(42, 8, $arEmpleado->getNumeroIdentificacion(), 1, 0, 'C', 0);
         $this->SetXY($intX, $intY + 13);
         $this->SetFont('Arial','B',8);
@@ -126,7 +126,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->SetXY($intX, $intY + 18);
         $this->SetFont('Arial','',8);
         $this->Cell(39, 8, $arEmpleado->getFechaNacimiento()->format('Y/m/d'), 1, 0, 'C', 1);
-        $this->Cell(41, 8, $arEmpleado->getCiudadNacimientoRel()->getNombre(), 1, 0, 'C', 1);
+        $this->Cell(41, 8, utf8_decode($arEmpleado->getCiudadNacimientoRel()->getNombre()), 1, 0, 'C', 1);
         if ($arEmpleado->getCodigoSexoFk() == "F") { 
             $this->Cell(24, 8, "FEMENINO", 1, 0, 'C', 1);
         }
@@ -134,7 +134,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
             $this->Cell(24, 8, "MASCULINO", 1, 0, 'C', 1);
         }
         $this->Cell(33, 8, $arEmpleado->getLibretaMilitar(), 1, 0, 'C', 0);
-        $this->Cell(42, 8, $arEmpleado->getCiudadExpedicionRel()->getNombre()." - ".$arEmpleado->getCiudadExpedicionRel()->getDepartamentoRel()->getNombre(), 1, 0, 'C', 1);
+        $this->Cell(42, 8, utf8_decode($arEmpleado->getCiudadExpedicionRel()->getNombre()." - ".$arEmpleado->getCiudadExpedicionRel()->getDepartamentoRel()->getNombre()), 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 26);
         $this->SetFont('Arial','B',8);
         $this->Cell(39, 5, "DIRECCION DE RESIDENCIA", 1, 0, 'C', 1);
@@ -145,9 +145,9 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->SetXY($intX, $intY + 31);
         $this->SetFont('Arial','',8);
         $this->Cell(39, 10, $arEmpleado->getDireccion(), 1, 0, 'C', 1);
-        $this->Cell(34, 10, $arEmpleado->getCiudadRel()->getDepartamentoRel()->getNombre(), 1, 0, 'C', 1);
-        $this->Cell(31, 10, $arEmpleado->getCiudadRel()->getNombre(), 1, 0, 'C', 1);
-        $this->Cell(46, 10, $arEmpleado->getBarrioRel()->getNombre(), 1, 0, 'C', 1);
+        $this->Cell(34, 10, utf8_decode($arEmpleado->getCiudadRel()->getDepartamentoRel()->getNombre()), 1, 0, 'C', 1);
+        $this->Cell(31, 10, utf8_decode($arEmpleado->getCiudadRel()->getNombre()), 1, 0, 'C', 1);
+        $this->Cell(46, 10, utf8_decode($arEmpleado->getBarrioRel()->getNombre()), 1, 0, 'C', 1);
         $this->Cell(29, 10, $arEmpleado->getTelefono(), 1, 0, 'C', 1); 
         $this->SetXY($intX, $intY + 41);
         $this->SetFont('Arial','B',8);
@@ -181,10 +181,10 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(68, 5, "AFP", 1, 0, 'C', 1);
         $this->Cell(56, 5, "CCF", 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 59);
-        $this->SetFont('Arial','',8);
-        $this->Cell(55, 8, $arEmpleado->getEntidadSaludRel()->getNombre(), 1, 0, 'C', 1);
-        $this->Cell(68, 8, $arEmpleado->getEntidadPensionRel()->getNombre(), 1, 0, 'C', 1);
-        $this->Cell(56, 8, $arEmpleado->getEntidadCajaRel()->getNombre(), 1, 0, 'C', 1);
+        $this->SetFont('Arial','',6.5);
+        $this->Cell(55, 8, utf8_decode($arEmpleado->getEntidadSaludRel()->getNombre()), 1, 0, 'C', 1);
+        $this->Cell(68, 8, utf8_decode($arEmpleado->getEntidadPensionRel()->getNombre()), 1, 0, 'C', 1);
+        $this->Cell(56, 8, utf8_decode($arEmpleado->getEntidadCajaRel()->getNombre()), 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 67);
         $this->SetFont('Arial','B',8);
         $this->Cell(39, 5, "NIVEL DE ESTUDIO", 1, 0, 'C', 1);
