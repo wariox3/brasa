@@ -7,7 +7,7 @@ class FormatoSalud extends \FPDF_FPDF {
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
-        $pdf = new FormatoSalud();
+        $pdf = new FormatoSalud('L');
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 11);
@@ -21,14 +21,14 @@ class FormatoSalud extends \FPDF_FPDF {
         $this->SetFont('Arial','B',12);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
-        $this->Cell(190, 8, "LISTADO ENTIDADES DE SALUD " , 1, 0, 'C', 1);
+        $this->Cell(275, 8, "LISTADO ENTIDADES DE SALUD " , 1, 0, 'C', 1);
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'NOMBRE', 'NIT', 'DIRECCION', 'TELEFONO');
+        $header = array('ID', 'NOMBRE', 'NIT', 'DIRECCION', 'TELEFONO','INTERFACE');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -36,7 +36,7 @@ class FormatoSalud extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(8, 95, 16, 55, 16);
+        $w = array(10, 135, 20, 70, 20, 20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -56,18 +56,19 @@ class FormatoSalud extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arEntidadesSalud as $arEntidadesSalud) {            
-            $pdf->Cell(8, 4, $arEntidadesSalud->getCodigoEntidadSaludPk(), 1, 0, 'L');
-            $pdf->Cell(95, 4, $arEntidadesSalud->getNombre(), 1, 0, 'L');
-            $pdf->Cell(16, 4, $arEntidadesSalud->getNit(), 1, 0, 'L');
-            $pdf->Cell(55, 4, $arEntidadesSalud->getDireccion(), 1, 0, 'L');
-            $pdf->Cell(16, 4, $arEntidadesSalud->getTelefono(), 1, 0, 'L');
+            $pdf->Cell(10, 4, $arEntidadesSalud->getCodigoEntidadSaludPk(), 1, 0, 'L');
+            $pdf->Cell(135, 4, utf8_decode($arEntidadesSalud->getNombre()), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arEntidadesSalud->getNit(), 1, 0, 'L');
+            $pdf->Cell(70, 4, $arEntidadesSalud->getDireccion(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arEntidadesSalud->getTelefono(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arEntidadesSalud->getCodigoInterface(), 1, 0, 'L');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);//33
         }        
     }
 
     public function Footer() {
-        $this->SetXY(160, 270);
+        $this->SetXY(260, 190);
         $this->Cell(30, 35, utf8_decode('   Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          
     }    
 }

@@ -18,7 +18,7 @@ class RhuEntidadPension
     private $codigoEntidadPensionPk;
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=120, nullable=true)
      */    
     private $nombre;    
     
@@ -35,14 +35,19 @@ class RhuEntidadPension
     /**
      * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
      */    
-    private $telefono;     
+    private $telefono; 
+    
+    /**
+     * @ORM\Column(name="codigo_interface", type="string", length=20, nullable=true)
+     */    
+    private $codigoInterface;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="entidadPensionRel")
      */
     protected $empleadosEntidadPensionRel;    
 
-    /**
+     /**
      * Constructor
      */
     public function __construct()
@@ -82,40 +87,6 @@ class RhuEntidadPension
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add empleadosEntidadPensionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadPensionRel
-     *
-     * @return RhuEntidadPension
-     */
-    public function addEmpleadosEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadPensionRel)
-    {
-        $this->empleadosEntidadPensionRel[] = $empleadosEntidadPensionRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove empleadosEntidadPensionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadPensionRel
-     */
-    public function removeEmpleadosEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadPensionRel)
-    {
-        $this->empleadosEntidadPensionRel->removeElement($empleadosEntidadPensionRel);
-    }
-
-    /**
-     * Get empleadosEntidadPensionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEmpleadosEntidadPensionRel()
-    {
-        return $this->empleadosEntidadPensionRel;
     }
 
     /**
@@ -188,5 +159,63 @@ class RhuEntidadPension
     public function getTelefono()
     {
         return $this->telefono;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return RhuEntidadPension
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
+    }
+
+    /**
+     * Add empleadosEntidadPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadPensionRel
+     *
+     * @return RhuEntidadPension
+     */
+    public function addEmpleadosEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadPensionRel)
+    {
+        $this->empleadosEntidadPensionRel[] = $empleadosEntidadPensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosEntidadPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadPensionRel
+     */
+    public function removeEmpleadosEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEntidadPensionRel)
+    {
+        $this->empleadosEntidadPensionRel->removeElement($empleadosEntidadPensionRel);
+    }
+
+    /**
+     * Get empleadosEntidadPensionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosEntidadPensionRel()
+    {
+        return $this->empleadosEntidadPensionRel;
     }
 }

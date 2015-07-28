@@ -15,6 +15,7 @@
             <th>NIT</th>
             <th>DIRECCIÓN</th>
             <th>TELÉFONO</th>
+            <th>CÓDIGO INTERFACE</th>
             <th></th>
             <th></th>
         </tr>
@@ -26,6 +27,7 @@
                 <td>{{arEntidadesSalud.nit}}</td>
                 <td>{{arEntidadesSalud.direccion}}</td>
                 <td>{{arEntidadesSalud.telefono}}</td>
+                <td>{{arEntidadesSalud.codigoInterface}}</td>
                 <td><a href="{{ path('brs_rhu_base_salud_nuevo',{'codigoEntidadSaludPk': arEntidadesSalud.codigoEntidadSaludPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEntidadesSalud.codigoEntidadSaludPk }}" /></td>
             {%endfor%}

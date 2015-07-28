@@ -58,8 +58,8 @@ class BaseSaludController extends Controller
                             ->setCellValue('B1', 'Nombre')
                             ->setCellValue('C1', 'Nit')
                             ->setCellValue('D1', 'Direccion')
-                            ->setCellValue('E1', 'Telefono');
-
+                            ->setCellValue('E1', 'Telefono')
+                            ->setCellValue('F1', 'Codigo_interface');
                 $i = 2;
                 $arSaluds = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->findAll();
                 
@@ -69,7 +69,8 @@ class BaseSaludController extends Controller
                             ->setCellValue('B' . $i, $arSalud->getnombre())
                             ->setCellValue('C' . $i, $arSalud->getnit())
                             ->setCellValue('D' . $i, $arSalud->getdireccion())
-                            ->setCellValue('E' . $i, $arSalud->gettelefono());
+                            ->setCellValue('E' . $i, $arSalud->gettelefono())
+                            ->setCellValue('F' . $i, $arSalud->getCodigoInterface());
                     $i++;
                 }
 
@@ -95,7 +96,7 @@ class BaseSaludController extends Controller
         }
         $arEntidadesSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->findAll();
-        $arEntidadesSalud = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arEntidadesSalud = $paginator->paginate($query, $this->get('request')->query->get('page', 1),30);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Salud:listar.html.twig', array(
                     'arEntidadesSalud' => $arEntidadesSalud,
