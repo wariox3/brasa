@@ -10,35 +10,37 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <tr>
             
-            <th>Id</th>
-            <th>{{ knp_pagination_sortable(arEntidadesSalud, 'Nombre', 'nit') }}</th> 
-            <th>Nit</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
+            <th>ID</th>
+            <th>{{ knp_pagination_sortable(arEntidadesRiesgosProfesionales, 'NOMBRE', 'nit') }}</th> 
+            <th>NIT</th>
+            <th>DIRECCIÓN</th>
+            <th>TELÉFONO</th>
+            <th>CÓDIGO INTERFACE</th>
             <th></th>
             <th></th>
         </tr>
         
-            {%for arEntidadesSalud in arEntidadesSalud %}
+            {%for arEntidadesRiesgosProfesionales in arEntidadesRiesgosProfesionales %}
                <tr>
-                <td>{{arEntidadesSalud.codigoEntidadSaludPk}}</td>
-                <td>{{arEntidadesSalud.nombre}}</td>
-                <td>{{arEntidadesSalud.nit}}</td>
-                <td>{{arEntidadesSalud.direccion}}</td>
-                <td>{{arEntidadesSalud.telefono}}</td>
-                <td><a href="{{ path('brs_rhu_base_salud_nuevo',{'codigoEntidadSaludPk': arEntidadesSalud.codigoEntidadSaludPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEntidadesSalud.codigoEntidadSaludPk }}" /></td>
+                <td>{{arEntidadesRiesgosProfesionales.codigoEntidadRiesgoPk}}</td>
+                <td>{{arEntidadesRiesgosProfesionales.nombre}}</td>
+                <td>{{arEntidadesRiesgosProfesionales.nit}}</td>
+                <td>{{arEntidadesRiesgosProfesionales.direccion}}</td>
+                <td>{{arEntidadesRiesgosProfesionales.telefono}}</td>
+                <td>{{arEntidadesRiesgosProfesionales.codigoInterface}}</td>
+                <td><a href="{{ path('brs_rhu_base_riesgoProfesional_nuevo',{'codigoEntidadRiesgoProfesionalPk': arEntidadesRiesgosProfesionales.codigoEntidadRiesgoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEntidadesRiesgosProfesionales.codigoEntidadRiesgoPk }}" /></td>
             {%endfor%}
             </tr>            
     </table>
-    {{ knp_pagination_render(arEntidadesSalud) }}
+    {{ knp_pagination_render(arEntidadesRiesgosProfesionales) }}
     <div class="btn-toolbar" style="float: right">              
         <div class="btn-group">
             {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
         </div>
         <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_salud_nuevo', {'codigoEntidadSaludPk': 0}) }}">Nuevo</a>
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_riesgoProfesional_nuevo', {'codigoEntidadRiesgoProfesionalPk': 0}) }}">Nuevo</a>
         </div>
         <div class="btn-group">
             {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}</td>                   

@@ -170,6 +170,14 @@ brs_rhu_base_salud_nuevo:
    path:     /rhumano/base/salud/nuevo/{codigoEntidadSaludPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:nuevo }
    
+brs_rhu_base_riesgoProfesional_listar:
+   path:     /rhumano/base/riesgoProfesional/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRiesgoProfesional:listar }
+   
+brs_rhu_base_riesgoProfesional_nuevo:
+   path:     /rhumano/base/riesgoProfesional/nuevo/{codigoEntidadRiesgoProfesionalPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRiesgoProfesional:nuevo }   
+   
 brs_rhu_base_banco_listar:
    path:     /rhumano/base/banco/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:listar }

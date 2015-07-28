@@ -67,17 +67,14 @@ class RhuConfiguracion
     private $codigoAportePension;
     
     /**
-     * @ORM\Column(name="codigo_fondo_solidaridad_pension_4", type="integer")
-     */    
-    private $codigoFondoSolidaridadPension4;
-    
-    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
     protected $entidadRiesgoProfesionalRel;
 
     
+
+   
 
     /**
      * Set codigoConfiguracionPk
@@ -341,30 +338,6 @@ class RhuConfiguracion
     public function getCodigoAportePension()
     {
         return $this->codigoAportePension;
-    }
-
-    /**
-     * Set codigoFondoSolidaridadPension4
-     *
-     * @param integer $codigoFondoSolidaridadPension4
-     *
-     * @return RhuConfiguracion
-     */
-    public function setCodigoFondoSolidaridadPension4($codigoFondoSolidaridadPension4)
-    {
-        $this->codigoFondoSolidaridadPension4 = $codigoFondoSolidaridadPension4;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoFondoSolidaridadPension4
-     *
-     * @return integer
-     */
-    public function getCodigoFondoSolidaridadPension4()
-    {
-        return $this->codigoFondoSolidaridadPension4;
     }
 
     /**

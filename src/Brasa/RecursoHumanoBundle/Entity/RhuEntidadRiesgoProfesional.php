@@ -35,7 +35,12 @@ class RhuEntidadRiesgoProfesional
     /**
      * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
      */    
-    private $telefono;        
+    private $telefono;
+    
+    /**
+     * @ORM\Column(name="codigo_interface", type="string", length=10, nullable=true)
+     */    
+    private $codigoInterface;
 
     /**
      * @ORM\OneToMany(targetEntity="RhuConfiguracion", mappedBy="entidadRiesgoProfesionalRel")
@@ -190,5 +195,29 @@ class RhuEntidadRiesgoProfesional
     public function getConfiguracionEntidadRiesgoProfesionalRel()
     {
         return $this->configuracionEntidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return RhuEntidadRiesgoProfesional
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 }

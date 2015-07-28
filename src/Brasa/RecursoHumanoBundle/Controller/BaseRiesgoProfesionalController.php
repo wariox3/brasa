@@ -91,7 +91,7 @@ class BaseRiesgoProfesionalController extends Controller
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->findAll();
         $arEntidadesRiesgosProfesionales = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/RiesgosProfesionales:listar.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/RiesgoProfesional:listar.html.twig', array(
                     'arEntidadesRiesgosProfesionales' => $arEntidadesRiesgosProfesionales,
                     'form'=> $form->createView()
            
@@ -106,7 +106,7 @@ class BaseRiesgoProfesionalController extends Controller
         {
             $arEntidadRiesgoProfesional = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoEntidadRiesgoProfesionalPk);
         }    
-        $formEntidadRiesgoProfesional = $this->createForm(new RhuCajaType(), $arEntidadRiesgoProfesional);
+        $formEntidadRiesgoProfesional = $this->createForm(new RhuRiesgoProfesionalType(), $arEntidadRiesgoProfesional);
         $formEntidadRiesgoProfesional->handleRequest($request);
         if ($formEntidadRiesgoProfesional->isValid())
         {
@@ -114,7 +114,7 @@ class BaseRiesgoProfesionalController extends Controller
             $em->persist($arEntidadRiesgoProfesional);
             $arCaja = $formEntidadRiesgoProfesional->getData();
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_RiesgoProfesional_listar'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_riesgoProfesional_listar'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/RiesgoProfesional:nuevo.html.twig', array(
             'formEntidadRiesgoProfesional' => $formEntidadRiesgoProfesional->createView(),
