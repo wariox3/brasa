@@ -47,8 +47,7 @@ class UtilidadesPagosController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');        
-        $session = $this->getRequest()->getSession(); 
-        //$session->set('filtroCodigoCentroCosto', "532");
+        $session = $this->getRequest()->getSession();         
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -71,13 +70,7 @@ class UtilidadesPagosController extends Controller
             ->add('BtnGenerarEmpleados', 'submit', array('label'  => 'Generar empleados',))
             ->add('BtnNoGenerar', 'submit', array('label'  => 'No generar pago',))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
-            ->add('BtnGenerarArchivoBancolombia', 'submit', array('label'  => 'Generar archivo bancolombia',))
-            ->add('BtnLiquidar', 'submit', array('label'  => 'Generar por sede',))
-            ->add('BtnPagar', 'submit', array('label'  => 'Pagar',))
-            ->add('BtnAnular', 'submit', array('label'  => 'Anular',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarPago', 'submit', array('label'  => 'Eliminar',))                
-            ->add('BtnDeshacer', 'submit', array('label'  => 'Des-hacer',))                
             ->getForm();
         $form->handleRequest($request);                
         if($form->isValid()) {
@@ -456,6 +449,12 @@ class UtilidadesPagosController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }
+                if($form->get('BtnEliminarPago')->isClicked()) {                                
+                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Eliminar($codigoProgramacionPago);
+                    }
+                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));                
+                }                
             }
             if($form->get('BtnFiltrar')->isClicked()) {
                 $controles = $request->request->get('form');
@@ -463,62 +462,7 @@ class UtilidadesPagosController extends Controller
                 $session->set('dqlProgramacionPago', $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaGenerarPagoDQL(
                     "", $form->get('fechaHasta')->getData()->format('Y-m-d'), $session->get('filtroCodigoCentroCosto') 
                     ));                 
-            }
-            if($form->get('BtnPagar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');                
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagarSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));                
-            }
-            if($form->get('BtnLiquidar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarPagoDetalleSede($codigoProgramacionPago);
-                        /*$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-                        foreach($arPagos as $arPago) {
-                            $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->liquidar($arPago->getCodigoPagoPk());
-                        }*/
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
-                }
-            }
-            if($form->get('BtnAnular')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Anular($codigoProgramacionPago);
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
-                }
-            }
-            if($form->get('BtnEliminar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Eliminar($codigoProgramacionPago);
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
-                }
-            }            
-            if($form->get('BtnEliminarPago')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Eliminar($codigoProgramacionPago);
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
-                }
-            }            
-            if($form->get('BtnDeshacer')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->Deshacer($codigoProgramacionPago);
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
-                }
-            }            
+            }                                    
         } else {
             $session->set('dqlProgramacionPago', $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaGenerarPagoDQL(
                     "", "", $session->get('filtroCodigoCentroCosto') 
@@ -526,11 +470,8 @@ class UtilidadesPagosController extends Controller
         }       
         $query = $em->createQuery($session->get('dqlProgramacionPago'));
         $arProgramacionPago = $paginator->paginate($query, $request->query->get('page', 1), 100);                                        
-        $arProgramacionPagoPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        $arProgramacionPagoPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->findBy(array('estadoGenerado' => 1, 'estadoPagado' => 0, 'estadoAnulado' => 0));
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/Pago:generarPago.html.twig', array(
             'arProgramacionPago' => $arProgramacionPago,
-            'arProgramacionPagoPendientes' => $arProgramacionPagoPendientes,
             'form' => $form->createView()
             ));
     }

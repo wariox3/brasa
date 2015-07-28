@@ -14,25 +14,25 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-                <div class="form-group form-group-sm">  
+                <div class="form-group form-group-sm">
                     <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
-                    <div class="col-sm-10">                  
+                    <div class="col-sm-10">
                         {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                </div>                 
-                <div class="form-group form-group-sm">  
+                </div>
+                <div class="form-group form-group-sm">
                     <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
-                    <div class="col-sm-10">                  
+                    <div class="col-sm-10">
                         {{ form_widget(form.fechaHasta) }}
                     </div>
-                </div>                                           
+                </div>
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
                     </div>
-                </div>                                                                 
+                </div>
             </div>
-        </div>        
+        </div>
 
         <table  class="table table-striped table-bordered  table-condensed table-hover">
             <tr>
@@ -43,9 +43,8 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>DIAS</th>
-                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">G.E</p></th>                                
-                <th><p data-toggle="tooltip" data-placement="top" title="Ingresar pagos adicionales">P. AD</p></th>                
-                <th><p data-toggle="tooltip" data-placement="top" title="Pagos adicionales masivos">P. AD. MASIVO</p></th>
+                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">EMPLEADOS</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Enlaces relacionadas al pago">ENLACES</p></th>
                 <th style="text-align: center">RESUMEN</th>
                 <th></th>
             </tr>
@@ -57,10 +56,20 @@
                 <td>{{ arProgramacionPago.centroCostoRel.periodoPagoRel.nombre  }}</td>
                 <td>{{ arProgramacionPago.fechaDesde |date("Y/m/d")  }}</td>
                 <td {% if date(arProgramacionPago.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPago.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arProgramacionPago.dias  }}</td>                
-                <td {% if arProgramacionPago.empleadosGenerados == 1 %}class="success"{% endif %}>{% if arProgramacionPago.empleadosGenerados == 1 %} SI {% else %} NO {% endif %}</td>                
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Ver</a></td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Generar</a></td>
+                <td>{{ arProgramacionPago.dias  }}</td>
+                <td {% if arProgramacionPago.empleadosGenerados == 1 %}class="success"{% endif %}>{% if arProgramacionPago.empleadosGenerados == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs">Enlaces</button>
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Adicionales al pago</a></li>
+                            <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Generar tiempo suplementario masivo</a></li>
+                        </ul>
+                    </div>
+                </td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}" /></td>
             </tr>
@@ -69,63 +78,13 @@
 
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                
-                {{ form_widget(form.BtnNoGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                 {{ form_widget(form.BtnEliminarPago, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnNoGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
             </div>
         </div>
-        <!-- Fin Botones Menu Items -->
 
-    <br />
-    <br />
-    <div class="page-header">
-        <h3>Por pagar</h3>
-    </div>
-        <table  class="table table-striped table-bordered  table-condensed table-hover">
-            <tr>
-                <th>ID</th>
-                <th>COD</th>
-                <th>CENTRO COSTOS</th>
-                <th>PERIDOO</th>
-                <th>DESDE</th>
-                <th>HASTA</th>
-                <th>DIAS</th>
-                <th style="text-align: right">NETO PAGAR</th>
-                <th></th>
-            </tr>
-            {% for arProgramacionPagoPendientes in arProgramacionPagoPendientes %}
-            <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPagoPendientes.codigoProgramacionPagoPk }}">{{ arProgramacionPagoPendientes.codigoProgramacionPagoPk }} </td>
-                <td>{{ arProgramacionPagoPendientes.codigoCentroCostoFk  }}</td>
-                <td>{{ arProgramacionPagoPendientes.centroCostoRel.nombre  }}</td>
-                <td>{{ arProgramacionPagoPendientes.centroCostoRel.periodoPagoRel.nombre  }}</td>
-                <td>{{ arProgramacionPagoPendientes.fechaDesde |date("Y/m/d")  }}</td>
-                <td {% if date(arProgramacionPagoPendientes.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPagoPendientes.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arProgramacionPagoPendientes.dias  }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoPendientes.VrTotalNeto | number_format(2, '.', ',') }}</td>
-                <td><input type="checkbox" name="ChkSeleccionarPagar[]" value="{{ arProgramacionPagoPendientes.codigoProgramacionPagoPk }}" /></td>
-            </tr>
-            {% endfor %}
-        </table>
-
-        <div class="btn-toolbar" style="float: right">
-            <div class="btn-group">
-                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                    Generar archivo <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li>{{ form_widget(form.BtnGenerarArchivoBancolombia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                </li>
-                </ul>
-            </div>
-            <div class="btn-group">
-                {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-defoult btn-sm'} }) }}
-                {{ form_widget(form.BtnPagar, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
-                {{ form_widget(form.BtnDeshacer, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
-                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
-            </div>
-        </div>
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}
     {{ form_end(form) }}
