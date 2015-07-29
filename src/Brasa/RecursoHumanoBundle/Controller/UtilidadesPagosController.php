@@ -603,4 +603,13 @@ class UtilidadesPagosController extends Controller
             'form' => $form->createView()));
     }    
     
+    public function inconsistenciasAction ($codigoProgramacionPago) {
+        $em = $this->getDoctrine()->getManager();
+        $paginator  = $this->get('knp_paginator');                   
+        $arProgramacionPagoInconsistencias = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia();
+        $arProgramacionPagoInconsistencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoInconsistencia')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/Pago:inconsistencias.html.twig', array(
+            'arProgramacionPagoInconsistencias' => $arProgramacionPagoInconsistencias
+            ));
+    }    
 }

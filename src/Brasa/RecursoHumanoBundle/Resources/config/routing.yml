@@ -42,6 +42,10 @@ brs_rhu_utilidades_pagos_pagar:
     path:     /rhumano/utilidades/pagos/pagar
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagosPagar:pagar }  
     
+brs_rhu_utilidades_pagos_inconsistencias:
+    path:     /rhumano/utilidades/pagos/inconsistencias/{codigoProgramacionPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:inconsistencias }     
+    
 brs_rhu_utilidades_notificaciones_cierreprogramacionpago:
     path:     /rhumano/utilidades/notificaciones/cierreprogramacionpago
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesNotificaciones:cierreProgramacionPago }    

@@ -61,7 +61,7 @@
                 <td>{{ arProgramacionPago.dias  }}</td>
                 <td style="text-align: right">{{ arProgramacionPago.vrNeto | number_format(2, '.', ',') }}</td>
                 <td>{% if arProgramacionPago.empleadosGenerados == 1 %} SI ({{ arProgramacionPago.numeroEmpleados  }}) {% else %} NO {% endif %}</td>
-                <td>{% if arProgramacionPago.inconsistencias == 1 %} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arProgramacionPago.inconsistencias == 1 %} SI (<a href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 600, 900)" >Ver</a>){% else %} NO {% endif %}</td>                
                 <td>
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-xs">Enlaces</button>

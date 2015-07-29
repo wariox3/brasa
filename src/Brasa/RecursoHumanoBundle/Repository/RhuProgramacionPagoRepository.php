@@ -179,6 +179,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $intNumeroEmpleados = 0;
         $floNetoTotal = 0;
         $boolInconsistencias = 0;
+        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoInconsistencia')->eliminarProgramacionPago($codigoProgramacionPago);
         $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminarEmpleados($codigoProgramacionPago);
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
@@ -268,6 +269,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $em->persist($arProgramacionPagoDetalle);
             if($floNeto < 0) {
                 $boolInconsistencias = 1;
+                $arProgramacionPagoInconsistencia = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia();
+                $arProgramacionPagoInconsistencia->setProgramacionPagoRel($arProgramacionPago);
+                $arProgramacionPagoInconsistencia->setInconsistencia("El empleado " . $arContrato->getEmpleadoRel()->getNombreCorto() . " tiene deducciones muy altas");
+                $em->persist($arProgramacionPagoInconsistencia);
             }
             $intNumeroEmpleados++;
             $floNetoTotal += $floNeto;
