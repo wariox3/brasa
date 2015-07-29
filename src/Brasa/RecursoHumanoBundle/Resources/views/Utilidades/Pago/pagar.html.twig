@@ -7,7 +7,7 @@
 </script>
 <div class="container">
         <div class="page-header">
-            <h3>Pendientes por pagar</h3>
+            <h3>Periodos pendientes por pagar</h3>
         </div>    
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -55,27 +55,17 @@
                 <td>{{ arProgramacionPagoPendientes.fechaDesde |date("Y/m/d")  }}</td>
                 <td {% if date(arProgramacionPagoPendientes.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPagoPendientes.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{{ arProgramacionPagoPendientes.dias  }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoPendientes.VrTotalNeto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoPendientes.VrNeto | number_format(2, '.', ',') }}</td>
                 <td><input type="checkbox" name="ChkSeleccionarPagar[]" value="{{ arProgramacionPagoPendientes.codigoProgramacionPagoPk }}" /></td>
             </tr>
             {% endfor %}
         </table>
 
         <div class="btn-toolbar" style="float: right">
-            <div class="btn-group">
-                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                    Generar archivo <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li>{{ form_widget(form.BtnGenerarArchivoBancolombia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                </li>
-                </ul>
-            </div>
-            <div class="btn-group">
-                {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-defoult btn-sm'} }) }}
-                {{ form_widget(form.BtnPagar, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
-                {{ form_widget(form.BtnDeshacer, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
-                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+            <div class="btn-group">                
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                {{ form_widget(form.BtnDeshacer, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnPagar, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
             </div>
         </div>
         <!-- Fin Botones Menu Items -->

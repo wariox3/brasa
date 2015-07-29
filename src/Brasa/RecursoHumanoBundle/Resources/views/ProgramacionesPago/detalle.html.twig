@@ -9,7 +9,7 @@
 
 
     <div class="panel panel-default">
-      <div class="panel-heading">Informacion programacion de pago</div>
+      <div class="panel-heading">Detalle programacion de pago</div>
       <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
@@ -220,8 +220,8 @@
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_utilidades_pagos_generar_pago_resumen_agregarempleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_agregar_empleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>
                 {{ form_widget(form.BtnActualizarEmpleados, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
                 {{ form_widget(form.BtnEliminarEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
@@ -231,7 +231,7 @@
     </div>
     <div class="btn-toolbar" style="float:left">
         <div class="btn-group">
-            <a class="btn btn-default" href="{{ path('brs_rhu_utilidades_pagos_generar_pago') }}" style="float:left">Volver</a>
+            <a class="btn btn-default" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
         </div>
     </div>
     <br /><br />

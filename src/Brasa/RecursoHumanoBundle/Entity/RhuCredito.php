@@ -99,6 +99,11 @@ class RhuCredito
     private $estadoSuspendido = 0;
     
     /**
+     * @ORM\Column(name="vr_abonos", type="float")
+     */
+    private $vrAbonos = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="creditosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -708,5 +713,29 @@ class RhuCredito
     public function getLiquidacionesDeduccionesCreditoRel()
     {
         return $this->liquidacionesDeduccionesCreditoRel;
+    }
+
+    /**
+     * Set vrAbonos
+     *
+     * @param float $vrAbonos
+     *
+     * @return RhuCredito
+     */
+    public function setVrAbonos($vrAbonos)
+    {
+        $this->vrAbonos = $vrAbonos;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAbonos
+     *
+     * @return float
+     */
+    public function getVrAbonos()
+    {
+        return $this->vrAbonos;
     }
 }

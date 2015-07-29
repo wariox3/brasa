@@ -13,53 +13,65 @@
             <div class="panel-body">
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
-                        <th class="td-label">CODIGO CREDITO:</th>
+                        <td class="titulo">CODIGO CREDITO:</th>
                         <td class="td-in-well">{{ arCreditos.codigoCreditoPk }}</td>
-                        <th class="td-label">FECHA:</th>
+                        <td class="titulo">FECHA:</th>
                         <td class="td-in-well">{{ arCreditos.fecha |date("Y/m/d") }}</td>
+                        <td class="titulo">TOTAL CREDITO:</th>
+                        <td class="td-in-well" align="right">{{ arCreditos.vrPagar | number_format(2, '.', ',')}}</td>                        
                     </tr>
                     <tr>
-                        <th class="td-label">EMPLEADO:</th>
+                        <td class="titulo">EMPLEADO:</th>
                         <td class="td-in-well">{{ arCreditos.empleadoRel.nombreCorto }}</td>
-                        <th class="td-label">CREDITO:</th>
+                        <td class="titulo">CREDITO:</th>
                         <td class="td-in-well">{{ arCreditos.creditoTipoRel.nombre }}</td>
+                        <td class="titulo">VALOR CUOTA:</th>
+                        <td class="td-in-well" align="right">{{ arCreditos.vrCuota | number_format(2, '.', ',')}}</td>                                                
                     </tr>                    
                     <tr>
-                        <th class="td-label">VALOR CREDITO:</th>
-                        <td class="td-in-well" align="right">{{ arCreditos.vrPagar | number_format(2, '.', ',')}}</td>
-                        <th class="td-label">VALOR CUOTA:</th>
-                        <td class="td-in-well" align="right">{{ arCreditos.vrCuota | number_format(2, '.', ',')}}</td>
-                    </tr>
-                    <tr>
-                        <th class="td-label">NUMERO CUOTAS:</th>
-                        <td class="td-in-well">{{ arCreditos.numeroCuotas }}</td>
-                        <th class="td-label">CUOTA ACTUAL:</th>
-                        <td class="td-in-well">{{ arCreditos.numeroCuotaActual }}</td>
-                    </tr>
-                    <tr>
-                        <th class="td-label">SALDO:</th>
-                        <td class="td-in-well" align="right">{{ arCreditos.saldo | number_format(2, '.', ',')}}</td>
-                        <th class="td-label">PAGADO:</th>
-                        <td> {% if arCreditos.estadoPagado == 1 %}SI{% else %} NO {% endif %}</td>
-                    </tr>
-                    <tr>
-                        <th class="td-label">SALDO REAL:</th>
-                        <td class="td-label" align="right">{{ arCreditos.saldoTotal | number_format(2, '.', ',')}}</td>
-                        <th class="td-label">APROBADO:</th>
-                        <td> {% if arCreditos.aprobado == 0 %} NO {% else %} SI {% endif %} </td>
-                    </tr>
-                    <tr>
-                        <th class="td-label">TIPO PAGO:</th>
-                        <td class="td-label">{{ arCreditos.creditoTipopagoRel.nombre }}</td>
-                        <th class="td-label">SUSPENDIDO:</th>
-                        <td> {% if arCreditos.estadoSuspendido == 0 %} NO {% else %} SI {% endif %} </td>
-                    </tr>
-                    <tr>
-                        <th>COMENTARIOS:</th>
-                        <td class="td-label">{{ arCreditos.comentarios }}</td>
-                        <th class="td-label">SEGURO:</th>
+                        <td class="titulo"></th>
+                        <td class="td-in-well" align="right"></td>
+                        <td class="titulo"></th>
+                        <td class="td-in-well" align="right"></td>
+                        <td class="titulo">SEGURO:</th>
                         <td class="td-label" align="right">{{ arCreditos.seguro | number_format(2, '.', ',')}}</td>
                     </tr>
+                    <tr>
+                        <td class="titulo">NUMERO CUOTAS:</th>
+                        <td class="td-in-well">{{ arCreditos.numeroCuotas }}</td>
+                        <td class="titulo">CUOTA ACTUAL:</th>
+                        <td class="td-in-well">{{ arCreditos.numeroCuotaActual }}</td>
+                        <td class="titulo">ABONOS:</th>
+                        <td class="td-in-well" align="right">{{ arCreditos.vrAbonos | number_format(2, '.', ',')}}</td>                        
+                    </tr>
+                    <tr>
+                        <td class="titulo"></th>
+                        <td class="td-in-well" align="right"></td>
+                        <td class="titulo">PAGADO:</th>
+                        <td> {% if arCreditos.estadoPagado == 1 %}SI{% else %} NO {% endif %}</td>
+                        <td class="titulo">SALDO:</th>
+                        <td class="td-in-well" align="right">{{ arCreditos.saldo | number_format(2, '.', ',')}}</td>                                                
+                    </tr>
+                    <tr>
+                        <td class="titulo"></th>
+                        <td class="td-label" align="right"></td>
+                        <td class="titulo">APROBADO:</th>
+                        <td> {% if arCreditos.aprobado == 0 %} NO {% else %} SI {% endif %} </td>
+                        <td class="titulo">CUOTA TEMPORAL:</th>
+                        <td class="td-in-well" align="right">{{ arCreditos.vrCuotaTemporal | number_format(2, '.', ',')}}</td>                        
+                    </tr>
+                    <tr>
+                        <td class="titulo">TIPO PAGO:</th>
+                        <td class="td-label">{{ arCreditos.creditoTipopagoRel.nombre }}</td>
+                        <td class="titulo">SUSPENDIDO:</th>
+                        <td> {% if arCreditos.estadoSuspendido == 0 %} NO {% else %} SI {% endif %} </td>
+                        <td class="titulo">SALDO REAL:</th>
+                        <td class="td-in-well" align="right">{{ arCreditos.saldoTotal | number_format(2, '.', ',')}}</td>                                                                        
+                    </tr>
+                    <tr>
+                        <td class="titulo" >COMENTARIOS: </td>
+                        <td class="td-in-well" colspan="7">{{ arCreditos.comentarios }}</td>
+                    </tr>                    
                 </table>
             </div>
         </div>
