@@ -74,7 +74,7 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuRh',
                 'property' => 'tipo',
             ))                
-            ->add('correo', 'text', array('required' => false))
+            ->add('correo', 'text', array('required' => true))
             ->add('cuenta', 'text', array('required' => true))
             ->add('numeroIdentificacion', 'text', array('required' => true))            
             ->add('auxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
@@ -83,7 +83,11 @@ class RhuEmpleadoType extends AbstractType
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('camisa', 'text', array('required' => false))                            
             ->add('jeans', 'text', array('required' => false))                            
-            ->add('calzado', 'text', array('required' => false))                                            
+            ->add('calzado', 'text', array('required' => false))
+            ->add('empleadoEstudioTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo',
+                'property' => 'nombre',
+            ))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

@@ -26,12 +26,21 @@ class RhuEmpleadoEstudioTipo
      * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="empleadoEstudioTipoRel")
      */
     protected $empleadosEstudiosEmpleadoEstudioTipoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="empleadoEstudioTipoRel")
+     */
+    protected $empleadosEmpleadoEstudioTipoRel;
+    
+    
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->empleadosEstudiosEmpleadoEstudioTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosEmpleadoEstudioTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -100,5 +109,39 @@ class RhuEmpleadoEstudioTipo
     public function getEmpleadosEstudiosEmpleadoEstudioTipoRel()
     {
         return $this->empleadosEstudiosEmpleadoEstudioTipoRel;
+    }
+
+    /**
+     * Add empleadosEmpleadoEstudioTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEmpleadoEstudioTipoRel
+     *
+     * @return RhuEmpleadoEstudioTipo
+     */
+    public function addEmpleadosEmpleadoEstudioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEmpleadoEstudioTipoRel)
+    {
+        $this->empleadosEmpleadoEstudioTipoRel[] = $empleadosEmpleadoEstudioTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosEmpleadoEstudioTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEmpleadoEstudioTipoRel
+     */
+    public function removeEmpleadosEmpleadoEstudioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosEmpleadoEstudioTipoRel)
+    {
+        $this->empleadosEmpleadoEstudioTipoRel->removeElement($empleadosEmpleadoEstudioTipoRel);
+    }
+
+    /**
+     * Get empleadosEmpleadoEstudioTipoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosEmpleadoEstudioTipoRel()
+    {
+        return $this->empleadosEmpleadoEstudioTipoRel;
     }
 }

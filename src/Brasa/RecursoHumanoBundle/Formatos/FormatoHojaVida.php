@@ -2,7 +2,9 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoHojaVida extends \FPDF_FPDF {
     public static $em;
+    
     public static $codigoEmpleado;
+    
     public function Generar($miThis, $codigoEmpleado) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
@@ -17,6 +19,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $pdf->Output("Empleado$codigoEmpleado.pdf", 'D');        
         
     } 
+    
     public function Header() {
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find(self::$codigoEmpleado);
@@ -124,7 +127,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(33, 5, utf8_decode("LIBRETA MILITAR N°"), 1, 0, 'C', 0);
         $this->Cell(42, 5, "LUGAR DE EXPEDICION C.C", 1, 0, 'C', 0);
         $this->SetXY($intX, $intY + 18);
-        $this->SetFont('Arial','',8);
+        $this->SetFont('Arial','',7);
         $this->Cell(39, 8, $arEmpleado->getFechaNacimiento()->format('Y/m/d'), 1, 0, 'C', 1);
         $this->Cell(41, 8, utf8_decode($arEmpleado->getCiudadNacimientoRel()->getNombre()), 1, 0, 'C', 1);
         if ($arEmpleado->getCodigoSexoFk() == "F") { 

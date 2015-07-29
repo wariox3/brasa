@@ -256,10 +256,21 @@ class RhuEmpleado
     private $padreFamilia = 0;
     
     /**
+     * @ORM\Column(name="codigo_empleado_estudio_tipo_fk", type="integer", length=4, nullable=true)
+     */    
+    private $codigoEmpleadoEstudioTipoFk;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
-    protected $clasificacionRiesgoRel;    
+    protected $clasificacionRiesgoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEmpleadoEstudioTipo", inversedBy="empleadosEmpleadoEstudioTipoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_estudio_tipo_fk", referencedColumnName="codigo_empleado_estudio_tipo_pk")
+     */
+    protected $empleadoEstudioTipoRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuTipoIdentificacion", inversedBy="empleadosTipoIdentificacionRel")
@@ -1523,6 +1534,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoEmpleadoEstudioTipoFk
+     *
+     * @param integer $codigoEmpleadoEstudioTipoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoEmpleadoEstudioTipoFk($codigoEmpleadoEstudioTipoFk)
+    {
+        $this->codigoEmpleadoEstudioTipoFk = $codigoEmpleadoEstudioTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoEstudioTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoEstudioTipoFk()
+    {
+        return $this->codigoEmpleadoEstudioTipoFk;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -1544,6 +1579,30 @@ class RhuEmpleado
     public function getClasificacionRiesgoRel()
     {
         return $this->clasificacionRiesgoRel;
+    }
+
+    /**
+     * Set empleadoEstudioTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo $empleadoEstudioTipoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setEmpleadoEstudioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo $empleadoEstudioTipoRel = null)
+    {
+        $this->empleadoEstudioTipoRel = $empleadoEstudioTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoEstudioTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo
+     */
+    public function getEmpleadoEstudioTipoRel()
+    {
+        return $this->empleadoEstudioTipoRel;
     }
 
     /**
