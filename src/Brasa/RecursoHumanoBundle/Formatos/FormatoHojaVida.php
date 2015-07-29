@@ -305,7 +305,67 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
         $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
         $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
-
+        $this->SetXY($intX, $intY + 153);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(25, 6, "HIJO", 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(50, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 159);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(25, 6, "HIJO", 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(50, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 165);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(25, 6, "HIJO", 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(50, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 171);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(25, 6, "HIJO", 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(50, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 177);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(25, 6, "HIJO", 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(50, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 183);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(25, 6, "HIJO", 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(50, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(10, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(27, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(32, 6, "por implementar", 1, 0, 'L', 1);
+        $this->Cell(25, 6, "por implementar", 1, 0, 'L', 1);
+        
 //creamos la cabecera de la tabla.
            
             

@@ -45,15 +45,19 @@ class RhuEntidadCaja
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="entidadCajaRel")
      */
-    protected $empleadosEntidadCajaRel;    
-
+    protected $empleadosEntidadCajaRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="entidadCajaRel")
+     */
+    protected $empleadosEstudiosEntidadSaludRel;
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->empleadosEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosEstudiosEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -218,5 +222,39 @@ class RhuEntidadCaja
     public function getEmpleadosEntidadCajaRel()
     {
         return $this->empleadosEntidadCajaRel;
+    }
+
+    /**
+     * Add empleadosEstudiosEntidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEntidadSaludRel
+     *
+     * @return RhuEntidadCaja
+     */
+    public function addEmpleadosEstudiosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEntidadSaludRel)
+    {
+        $this->empleadosEstudiosEntidadSaludRel[] = $empleadosEstudiosEntidadSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosEstudiosEntidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEntidadSaludRel
+     */
+    public function removeEmpleadosEstudiosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEntidadSaludRel)
+    {
+        $this->empleadosEstudiosEntidadSaludRel->removeElement($empleadosEstudiosEntidadSaludRel);
+    }
+
+    /**
+     * Get empleadosEstudiosEntidadSaludRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosEstudiosEntidadSaludRel()
+    {
+        return $this->empleadosEstudiosEntidadSaludRel;
     }
 }

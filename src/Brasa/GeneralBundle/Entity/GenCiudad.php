@@ -127,36 +127,10 @@ class GenCiudad
     protected $barriosRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio", mappedBy="ciudadSecundariaRel")
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio", mappedBy="ciudadRel")
      */
-    protected $rhuEmpleadoEstudioCiudadSecundariaRel;
+    protected $rhuEmpleadosEstudiosCiudadRel;
     
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio", mappedBy="ciudadTecnicaRel")
-     */
-    protected $rhuEmpleadoEstudioCiudadTecnicaRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio", mappedBy="ciudadTecnologiaRel")
-     */
-    protected $rhuEmpleadoEstudioCiudadTecnologiaRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio", mappedBy="ciudadUniversitarioRel")
-     */
-    protected $rhuEmpleadoEstudioCiudadUniversitarioRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio", mappedBy="ciudadOtro1Rel")
-     */
-    protected $rhuEmpleadoEstudioCiudadOtro1Rel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio", mappedBy="ciudadOtro2Rel")
-     */
-    protected $rhuEmpleadoEstudioCiudadOtro2Rel;
-    
-   
     /**
      * Constructor
      */
@@ -170,22 +144,14 @@ class GenCiudad
         $this->despachosCiudadDestinoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puntosOperacionCiudadOrigenRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuSeleccionesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuCentroCostosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuSeleccionesCiudadNacimientoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuSeleccionesCiudadExpedicionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuEmpleadosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuEmpleadosCiudadNacimientoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuEmpleadosCiudadExpedicionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->barriosRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set codigoCiudadPk
-     *
-     * @param integer $codigoCiudadPk
-     *
-     * @return GenCiudad
-     */
-    public function setCodigoCiudadPk($codigoCiudadPk)
-    {
-        $this->codigoCiudadPk = $codigoCiudadPk;
-
-        return $this;
+        $this->rhuEmpleadosEstudiosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -268,6 +234,30 @@ class GenCiudad
     public function getCodigoRutaPredeterminadaFk()
     {
         return $this->codigoRutaPredeterminadaFk;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return GenCiudad
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 
     /**
@@ -591,74 +581,6 @@ class GenCiudad
     }
 
     /**
-     * Add rhuEmpleadosCiudadRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel
-     *
-     * @return GenCiudad
-     */
-    public function addRhuEmpleadosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel)
-    {
-        $this->rhuEmpleadosCiudadRel[] = $rhuEmpleadosCiudadRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove rhuEmpleadosCiudadRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel
-     */
-    public function removeRhuEmpleadosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel)
-    {
-        $this->rhuEmpleadosCiudadRel->removeElement($rhuEmpleadosCiudadRel);
-    }
-
-    /**
-     * Get rhuEmpleadosCiudadRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRhuEmpleadosCiudadRel()
-    {
-        return $this->rhuEmpleadosCiudadRel;
-    }
-
-    /**
-     * Add barriosRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barriosRel
-     *
-     * @return GenCiudad
-     */
-    public function addBarriosRel(\Brasa\GeneralBundle\Entity\GenBarrio $barriosRel)
-    {
-        $this->barriosRel[] = $barriosRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove barriosRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barriosRel
-     */
-    public function removeBarriosRel(\Brasa\GeneralBundle\Entity\GenBarrio $barriosRel)
-    {
-        $this->barriosRel->removeElement($barriosRel);
-    }
-
-    /**
-     * Get barriosRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getBarriosRel()
-    {
-        return $this->barriosRel;
-    }
-
-    /**
      * Add rhuCentroCostosCiudadRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $rhuCentroCostosCiudadRel
@@ -724,6 +646,74 @@ class GenCiudad
     public function getRhuSeleccionesCiudadNacimientoRel()
     {
         return $this->rhuSeleccionesCiudadNacimientoRel;
+    }
+
+    /**
+     * Add rhuSeleccionesCiudadExpedicionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadExpedicionRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuSeleccionesCiudadExpedicionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadExpedicionRel)
+    {
+        $this->rhuSeleccionesCiudadExpedicionRel[] = $rhuSeleccionesCiudadExpedicionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuSeleccionesCiudadExpedicionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadExpedicionRel
+     */
+    public function removeRhuSeleccionesCiudadExpedicionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadExpedicionRel)
+    {
+        $this->rhuSeleccionesCiudadExpedicionRel->removeElement($rhuSeleccionesCiudadExpedicionRel);
+    }
+
+    /**
+     * Get rhuSeleccionesCiudadExpedicionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuSeleccionesCiudadExpedicionRel()
+    {
+        return $this->rhuSeleccionesCiudadExpedicionRel;
+    }
+
+    /**
+     * Add rhuEmpleadosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuEmpleadosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel)
+    {
+        $this->rhuEmpleadosCiudadRel[] = $rhuEmpleadosCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuEmpleadosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel
+     */
+    public function removeRhuEmpleadosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCiudadRel)
+    {
+        $this->rhuEmpleadosCiudadRel->removeElement($rhuEmpleadosCiudadRel);
+    }
+
+    /**
+     * Get rhuEmpleadosCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuEmpleadosCiudadRel()
+    {
+        return $this->rhuEmpleadosCiudadRel;
     }
 
     /**
@@ -795,264 +785,70 @@ class GenCiudad
     }
 
     /**
-     * Add rhuSeleccionesCiudadExpedicionRel
+     * Add barriosRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadExpedicionRel
+     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barriosRel
      *
      * @return GenCiudad
      */
-    public function addRhuSeleccionesCiudadExpedicionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadExpedicionRel)
+    public function addBarriosRel(\Brasa\GeneralBundle\Entity\GenBarrio $barriosRel)
     {
-        $this->rhuSeleccionesCiudadExpedicionRel[] = $rhuSeleccionesCiudadExpedicionRel;
+        $this->barriosRel[] = $barriosRel;
 
         return $this;
     }
 
     /**
-     * Remove rhuSeleccionesCiudadExpedicionRel
+     * Remove barriosRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadExpedicionRel
+     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barriosRel
      */
-    public function removeRhuSeleccionesCiudadExpedicionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $rhuSeleccionesCiudadExpedicionRel)
+    public function removeBarriosRel(\Brasa\GeneralBundle\Entity\GenBarrio $barriosRel)
     {
-        $this->rhuSeleccionesCiudadExpedicionRel->removeElement($rhuSeleccionesCiudadExpedicionRel);
+        $this->barriosRel->removeElement($barriosRel);
     }
 
     /**
-     * Get rhuSeleccionesCiudadExpedicionRel
+     * Get barriosRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRhuSeleccionesCiudadExpedicionRel()
+    public function getBarriosRel()
     {
-        return $this->rhuSeleccionesCiudadExpedicionRel;
+        return $this->barriosRel;
     }
 
     /**
-     * Set codigoInterface
+     * Add rhuEmpleadosEstudiosCiudadRel
      *
-     * @param string $codigoInterface
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadosEstudiosCiudadRel
      *
      * @return GenCiudad
      */
-    public function setCodigoInterface($codigoInterface)
+    public function addRhuEmpleadosEstudiosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadosEstudiosCiudadRel)
     {
-        $this->codigoInterface = $codigoInterface;
+        $this->rhuEmpleadosEstudiosCiudadRel[] = $rhuEmpleadosEstudiosCiudadRel;
 
         return $this;
     }
 
     /**
-     * Get codigoInterface
+     * Remove rhuEmpleadosEstudiosCiudadRel
      *
-     * @return string
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadosEstudiosCiudadRel
      */
-    public function getCodigoInterface()
+    public function removeRhuEmpleadosEstudiosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadosEstudiosCiudadRel)
     {
-        return $this->codigoInterface;
+        $this->rhuEmpleadosEstudiosCiudadRel->removeElement($rhuEmpleadosEstudiosCiudadRel);
     }
 
     /**
-     * Add rhuEmpleadoEstudioCiudadSecundariaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadSecundariaRel
-     *
-     * @return GenCiudad
-     */
-    public function addRhuEmpleadoEstudioCiudadSecundariaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadSecundariaRel)
-    {
-        $this->rhuEmpleadoEstudioCiudadSecundariaRel[] = $rhuEmpleadoEstudioCiudadSecundariaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove rhuEmpleadoEstudioCiudadSecundariaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadSecundariaRel
-     */
-    public function removeRhuEmpleadoEstudioCiudadSecundariaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadSecundariaRel)
-    {
-        $this->rhuEmpleadoEstudioCiudadSecundariaRel->removeElement($rhuEmpleadoEstudioCiudadSecundariaRel);
-    }
-
-    /**
-     * Get rhuEmpleadoEstudioCiudadSecundariaRel
+     * Get rhuEmpleadosEstudiosCiudadRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRhuEmpleadoEstudioCiudadSecundariaRel()
+    public function getRhuEmpleadosEstudiosCiudadRel()
     {
-        return $this->rhuEmpleadoEstudioCiudadSecundariaRel;
-    }
-
-    /**
-     * Add rhuEmpleadoEstudioCiudadTecnicaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadTecnicaRel
-     *
-     * @return GenCiudad
-     */
-    public function addRhuEmpleadoEstudioCiudadTecnicaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadTecnicaRel)
-    {
-        $this->rhuEmpleadoEstudioCiudadTecnicaRel[] = $rhuEmpleadoEstudioCiudadTecnicaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove rhuEmpleadoEstudioCiudadTecnicaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadTecnicaRel
-     */
-    public function removeRhuEmpleadoEstudioCiudadTecnicaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadTecnicaRel)
-    {
-        $this->rhuEmpleadoEstudioCiudadTecnicaRel->removeElement($rhuEmpleadoEstudioCiudadTecnicaRel);
-    }
-
-    /**
-     * Get rhuEmpleadoEstudioCiudadTecnicaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRhuEmpleadoEstudioCiudadTecnicaRel()
-    {
-        return $this->rhuEmpleadoEstudioCiudadTecnicaRel;
-    }
-
-    /**
-     * Add rhuEmpleadoEstudioCiudadTecnologiaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadTecnologiaRel
-     *
-     * @return GenCiudad
-     */
-    public function addRhuEmpleadoEstudioCiudadTecnologiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadTecnologiaRel)
-    {
-        $this->rhuEmpleadoEstudioCiudadTecnologiaRel[] = $rhuEmpleadoEstudioCiudadTecnologiaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove rhuEmpleadoEstudioCiudadTecnologiaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadTecnologiaRel
-     */
-    public function removeRhuEmpleadoEstudioCiudadTecnologiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadTecnologiaRel)
-    {
-        $this->rhuEmpleadoEstudioCiudadTecnologiaRel->removeElement($rhuEmpleadoEstudioCiudadTecnologiaRel);
-    }
-
-    /**
-     * Get rhuEmpleadoEstudioCiudadTecnologiaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRhuEmpleadoEstudioCiudadTecnologiaRel()
-    {
-        return $this->rhuEmpleadoEstudioCiudadTecnologiaRel;
-    }
-
-    /**
-     * Add rhuEmpleadoEstudioCiudadUniversitarioRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadUniversitarioRel
-     *
-     * @return GenCiudad
-     */
-    public function addRhuEmpleadoEstudioCiudadUniversitarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadUniversitarioRel)
-    {
-        $this->rhuEmpleadoEstudioCiudadUniversitarioRel[] = $rhuEmpleadoEstudioCiudadUniversitarioRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove rhuEmpleadoEstudioCiudadUniversitarioRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadUniversitarioRel
-     */
-    public function removeRhuEmpleadoEstudioCiudadUniversitarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadUniversitarioRel)
-    {
-        $this->rhuEmpleadoEstudioCiudadUniversitarioRel->removeElement($rhuEmpleadoEstudioCiudadUniversitarioRel);
-    }
-
-    /**
-     * Get rhuEmpleadoEstudioCiudadUniversitarioRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRhuEmpleadoEstudioCiudadUniversitarioRel()
-    {
-        return $this->rhuEmpleadoEstudioCiudadUniversitarioRel;
-    }
-
-    /**
-     * Add rhuEmpleadoEstudioCiudadOtro1Rel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadOtro1Rel
-     *
-     * @return GenCiudad
-     */
-    public function addRhuEmpleadoEstudioCiudadOtro1Rel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadOtro1Rel)
-    {
-        $this->rhuEmpleadoEstudioCiudadOtro1Rel[] = $rhuEmpleadoEstudioCiudadOtro1Rel;
-
-        return $this;
-    }
-
-    /**
-     * Remove rhuEmpleadoEstudioCiudadOtro1Rel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadOtro1Rel
-     */
-    public function removeRhuEmpleadoEstudioCiudadOtro1Rel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadOtro1Rel)
-    {
-        $this->rhuEmpleadoEstudioCiudadOtro1Rel->removeElement($rhuEmpleadoEstudioCiudadOtro1Rel);
-    }
-
-    /**
-     * Get rhuEmpleadoEstudioCiudadOtro1Rel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRhuEmpleadoEstudioCiudadOtro1Rel()
-    {
-        return $this->rhuEmpleadoEstudioCiudadOtro1Rel;
-    }
-
-    /**
-     * Add rhuEmpleadoEstudioCiudadOtro2Rel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadOtro2Rel
-     *
-     * @return GenCiudad
-     */
-    public function addRhuEmpleadoEstudioCiudadOtro2Rel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadOtro2Rel)
-    {
-        $this->rhuEmpleadoEstudioCiudadOtro2Rel[] = $rhuEmpleadoEstudioCiudadOtro2Rel;
-
-        return $this;
-    }
-
-    /**
-     * Remove rhuEmpleadoEstudioCiudadOtro2Rel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadOtro2Rel
-     */
-    public function removeRhuEmpleadoEstudioCiudadOtro2Rel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $rhuEmpleadoEstudioCiudadOtro2Rel)
-    {
-        $this->rhuEmpleadoEstudioCiudadOtro2Rel->removeElement($rhuEmpleadoEstudioCiudadOtro2Rel);
-    }
-
-    /**
-     * Get rhuEmpleadoEstudioCiudadOtro2Rel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRhuEmpleadoEstudioCiudadOtro2Rel()
-    {
-        return $this->rhuEmpleadoEstudioCiudadOtro2Rel;
+        return $this->rhuEmpleadosEstudiosCiudadRel;
     }
 }

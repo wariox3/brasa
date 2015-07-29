@@ -23,93 +23,362 @@ class RhuEmpleadoFamilia
     private $codigoEmpleadoFk;
     
     /**
-     * @ORM\Column(name="conyugue", type="string", length=100, nullable=true)
+     * @ORM\Column(name="codigo_empleado_familia_parentesco_fk", type="integer")
      */    
-    private $conyugue;
+    private $codigoEmpleadoFamiliaParentescoFk;
     
     /**
-     * @ORM\Column(name="codigo_eps_conyugue_fk", type="integer", nullable=true)
+     * @ORM\Column(name="nombres", type="string", length=150, nullable=true)
      */    
-    private $epsConyugue;
+    private $nombres;
     
     /**
-     * @ORM\Column(name="codigo_caja_conyugue_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
      */    
-    private $cajaConyugue;
+    private $eps;
     
     /**
-     * @ORM\Column(name="fecha_nacimiento_conyugue", type="date", nullable=true)
+     * @ORM\Column(name="codigo_caja_fk", type="integer", nullable=true)
+     */    
+    private $caja;
+    
+    /**
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
      */ 
-    private $fechaNacimientoConyugue;
+    private $fechaNacimiento;
     
     /**
-     * @ORM\Column(name="ocupacion_conyugue", type="string", length=100, nullable=true)
+     * @ORM\Column(name="ocupacion", type="string", length=100, nullable=true)
      */    
-    private $ocupacionConyugue;
+    private $ocupacion;
     
     /**
-     * @ORM\Column(name="telefono_conyugue", type="string", length=15, nullable=true)
+     * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
      */    
-    private $telefonoConyugue;
+    private $telefono;
     
     /**
-     * @ORM\Column(name="madre", type="string", length=100, nullable=true)
-     */    
-    private $madre;
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="empleadosFamiliasEmpleadoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
+     */
+    protected $empleadoRel;
     
     /**
-     * @ORM\Column(name="codigo_eps_madre_fk", type="integer", nullable=true)
-     */    
-    private $epsMadre;
+     * @ORM\ManyToOne(targetEntity="RhuEmpleadoFamiliaParentesco", inversedBy="empleadosFamiliasEmpleadoFamiliaParentescoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_familia_parentesco_fk", referencedColumnName="codigo_empleado_familia_parentesco_pk")
+     */
+    protected $empleadoFamiliaParentescoRel;
     
     /**
-     * @ORM\Column(name="codigo_caja_madre_fk", type="integer", nullable=true)
-     */    
-    private $cajaMadre;
+     * @ORM\ManyToOne(targetEntity="RhuEntidadCaja", inversedBy="empleadosFamiliasEntidadCajaRel")
+     * @ORM\JoinColumn(name="codigo_entidad_caja_fk", referencedColumnName="codigo_entidad_caja_pk")
+     */
+    protected $entidadCajaRel;
     
     /**
-     * @ORM\Column(name="fecha_nacimiento_madre", type="date", nullable=true)
-     */ 
-    private $fechaNacimientoMadre;
+     * @ORM\ManyToOne(targetEntity="RhuEntidadSalud", inversedBy="empleadosFamiliasEntidadSaludRel")
+     * @ORM\JoinColumn(name="codigo_entidad_salud_fk", referencedColumnName="codigo_entidad_salud_pk")
+     */
+    protected $entidadSaludRel;
     
+    
+
+
     /**
-     * @ORM\Column(name="ocupacion_madre", type="string", length=100, nullable=true)
-     */    
-    private $ocupacionMadre;
-    
+     * Get codigoEmpleadoFamiliaPk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFamiliaPk()
+    {
+        return $this->codigoEmpleadoFamiliaPk;
+    }
+
     /**
-     * @ORM\Column(name="telefono_madre", type="string", length=15, nullable=true)
-     */    
-    private $telefonoMadre;
-    
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
     /**
-     * @ORM\Column(name="padre", type="string", length=100, nullable=true)
-     */    
-    private $padre;
-    
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
+    }
+
     /**
-     * @ORM\Column(name="codigo_eps_padre_fk", type="integer", nullable=true)
-     */    
-    private $epsPadre;
-    
+     * Set codigoEmpleadoFamiliaParentescoFk
+     *
+     * @param integer $codigoEmpleadoFamiliaParentescoFk
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setCodigoEmpleadoFamiliaParentescoFk($codigoEmpleadoFamiliaParentescoFk)
+    {
+        $this->codigoEmpleadoFamiliaParentescoFk = $codigoEmpleadoFamiliaParentescoFk;
+
+        return $this;
+    }
+
     /**
-     * @ORM\Column(name="codigo_caja_padre_fk", type="integer", nullable=true)
-     */    
-    private $cajaPadre;
-    
+     * Get codigoEmpleadoFamiliaParentescoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFamiliaParentescoFk()
+    {
+        return $this->codigoEmpleadoFamiliaParentescoFk;
+    }
+
     /**
-     * @ORM\Column(name="fecha_nacimiento_padre", type="date", nullable=true)
-     */ 
-    private $fechaNacimientoPadre;
-    
+     * Set nombres
+     *
+     * @param string $nombres
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setNombres($nombres)
+    {
+        $this->nombres = $nombres;
+
+        return $this;
+    }
+
     /**
-     * @ORM\Column(name="ocupacion_padre", type="string", length=100, nullable=true)
-     */    
-    private $ocupacionPadre;
-    
+     * Get nombres
+     *
+     * @return string
+     */
+    public function getNombres()
+    {
+        return $this->nombres;
+    }
+
     /**
-     * @ORM\Column(name="telefono_padre", type="string", length=15, nullable=true)
-     */    
-    private $telefonoPadre;
-    
+     * Set eps
+     *
+     * @param integer $eps
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setEps($eps)
+    {
+        $this->eps = $eps;
+
+        return $this;
+    }
+
+    /**
+     * Get eps
+     *
+     * @return integer
+     */
+    public function getEps()
+    {
+        return $this->eps;
+    }
+
+    /**
+     * Set caja
+     *
+     * @param integer $caja
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setCaja($caja)
+    {
+        $this->caja = $caja;
+
+        return $this;
+    }
+
+    /**
+     * Get caja
+     *
+     * @return integer
+     */
+    public function getCaja()
+    {
+        return $this->caja;
+    }
+
+    /**
+     * Set fechaNacimiento
+     *
+     * @param \DateTime $fechaNacimiento
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setFechaNacimiento($fechaNacimiento)
+    {
+        $this->fechaNacimiento = $fechaNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaNacimiento
+     *
+     * @return \DateTime
+     */
+    public function getFechaNacimiento()
+    {
+        return $this->fechaNacimiento;
+    }
+
+    /**
+     * Set ocupacion
+     *
+     * @param string $ocupacion
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setOcupacion($ocupacion)
+    {
+        $this->ocupacion = $ocupacion;
+
+        return $this;
+    }
+
+    /**
+     * Get ocupacion
+     *
+     * @return string
+     */
+    public function getOcupacion()
+    {
+        return $this->ocupacion;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set empleadoFamiliaParentescoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamiliaParentesco $empleadoFamiliaParentescoRel
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setEmpleadoFamiliaParentescoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamiliaParentesco $empleadoFamiliaParentescoRel = null)
+    {
+        $this->empleadoFamiliaParentescoRel = $empleadoFamiliaParentescoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoFamiliaParentescoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamiliaParentesco
+     */
+    public function getEmpleadoFamiliaParentescoRel()
+    {
+        return $this->empleadoFamiliaParentescoRel;
+    }
+
+    /**
+     * Set entidadCajaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel = null)
+    {
+        $this->entidadCajaRel = $entidadCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCajaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja
+     */
+    public function getEntidadCajaRel()
+    {
+        return $this->entidadCajaRel;
+    }
+
+    /**
+     * Set entidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel = null)
+    {
+        $this->entidadSaludRel = $entidadSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadSaludRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud
+     */
+    public function getEntidadSaludRel()
+    {
+        return $this->entidadSaludRel;
+    }
 }

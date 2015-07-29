@@ -400,8 +400,19 @@ class RhuEmpleado
      * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
      */
     protected $rhRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoFamilia", mappedBy="empleadoRel")
+     */
+    protected $empleadosFamiliasEmpleadoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="empleadoRel")
+     */
+    protected $empleadosEstudiosEmpleadoRel;
    
  
+    
     /**
      * Constructor
      */
@@ -417,6 +428,8 @@ class RhuEmpleado
         $this->liquidacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->disciplinariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->SSPeriodosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosFamiliasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosEstudiosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1198,27 +1211,27 @@ class RhuEmpleado
     }
 
     /**
-     * Set padreFamilia
+     * Set cabezaHogar
      *
-     * @param boolean $padreFamilia
+     * @param boolean $cabezaHogar
      *
      * @return RhuEmpleado
      */
-    public function setPadreFamilia($padreFamilia)
+    public function setCabezaHogar($cabezaHogar)
     {
-        $this->padreFamilia = $padreFamilia;
+        $this->cabezaHogar = $cabezaHogar;
 
         return $this;
     }
 
     /**
-     * Get padreFamilia
+     * Get cabezaHogar
      *
      * @return boolean
      */
-    public function getPadreFamilia()
+    public function getCabezaHogar()
     {
-        return $this->padreFamilia;
+        return $this->cabezaHogar;
     }
 
     /**
@@ -1483,6 +1496,30 @@ class RhuEmpleado
     public function getHorasLaboradasPeriodo()
     {
         return $this->horasLaboradasPeriodo;
+    }
+
+    /**
+     * Set padreFamilia
+     *
+     * @param float $padreFamilia
+     *
+     * @return RhuEmpleado
+     */
+    public function setPadreFamilia($padreFamilia)
+    {
+        $this->padreFamilia = $padreFamilia;
+
+        return $this;
+    }
+
+    /**
+     * Get padreFamilia
+     *
+     * @return float
+     */
+    public function getPadreFamilia()
+    {
+        return $this->padreFamilia;
     }
 
     /**
@@ -2210,26 +2247,70 @@ class RhuEmpleado
     }
 
     /**
-     * Set cabezaHogar
+     * Add empleadosFamiliasEmpleadoRel
      *
-     * @param boolean $cabezaHogar
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia $empleadosFamiliasEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function setCabezaHogar($cabezaHogar)
+    public function addEmpleadosFamiliasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia $empleadosFamiliasEmpleadoRel)
     {
-        $this->cabezaHogar = $cabezaHogar;
+        $this->empleadosFamiliasEmpleadoRel[] = $empleadosFamiliasEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Get cabezaHogar
+     * Remove empleadosFamiliasEmpleadoRel
      *
-     * @return boolean
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia $empleadosFamiliasEmpleadoRel
      */
-    public function getCabezaHogar()
+    public function removeEmpleadosFamiliasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia $empleadosFamiliasEmpleadoRel)
     {
-        return $this->cabezaHogar;
+        $this->empleadosFamiliasEmpleadoRel->removeElement($empleadosFamiliasEmpleadoRel);
+    }
+
+    /**
+     * Get empleadosFamiliasEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosFamiliasEmpleadoRel()
+    {
+        return $this->empleadosFamiliasEmpleadoRel;
+    }
+
+    /**
+     * Add empleadosEstudiosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addEmpleadosEstudiosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEmpleadoRel)
+    {
+        $this->empleadosEstudiosEmpleadoRel[] = $empleadosEstudiosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosEstudiosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEmpleadoRel
+     */
+    public function removeEmpleadosEstudiosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEmpleadoRel)
+    {
+        $this->empleadosEstudiosEmpleadoRel->removeElement($empleadosEstudiosEmpleadoRel);
+    }
+
+    /**
+     * Get empleadosEstudiosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosEstudiosEmpleadoRel()
+    {
+        return $this->empleadosEstudiosEmpleadoRel;
     }
 }
