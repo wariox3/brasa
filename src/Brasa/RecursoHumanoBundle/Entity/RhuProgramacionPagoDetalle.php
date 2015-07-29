@@ -76,6 +76,26 @@ class RhuProgramacionPagoDetalle
     private $indefinido = 0;    
     
     /**
+     * @ORM\Column(name="vr_devengado", type="float")
+     */
+    private $vrDevengado = 0;    
+
+    /**
+     * @ORM\Column(name="vr_deducciones", type="float", nullable=true)
+     */
+    private $vrDeducciones = 0;     
+
+    /**
+     * @ORM\Column(name="vr_creditos", type="float", nullable=true)
+     */
+    private $vrCreditos = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_neto_pagar", type="float", nullable=true)
+     */
+    private $vrNetoPagar = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
      */
@@ -495,5 +515,101 @@ class RhuProgramacionPagoDetalle
     public function getPagosDetallesProgramacionPagoDetalleRel()
     {
         return $this->pagosDetallesProgramacionPagoDetalleRel;
+    }
+
+    /**
+     * Set vrDevengado
+     *
+     * @param float $vrDevengado
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrDevengado($vrDevengado)
+    {
+        $this->vrDevengado = $vrDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDevengado
+     *
+     * @return float
+     */
+    public function getVrDevengado()
+    {
+        return $this->vrDevengado;
+    }
+
+    /**
+     * Set vrDeducciones
+     *
+     * @param float $vrDeducciones
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrDeducciones($vrDeducciones)
+    {
+        $this->vrDeducciones = $vrDeducciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDeducciones
+     *
+     * @return float
+     */
+    public function getVrDeducciones()
+    {
+        return $this->vrDeducciones;
+    }
+
+    /**
+     * Set vrCreditos
+     *
+     * @param float $vrCreditos
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrCreditos($vrCreditos)
+    {
+        $this->vrCreditos = $vrCreditos;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCreditos
+     *
+     * @return float
+     */
+    public function getVrCreditos()
+    {
+        return $this->vrCreditos;
+    }
+
+    /**
+     * Set vrNetoPagar
+     *
+     * @param float $vrNetoPagar
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrNetoPagar($vrNetoPagar)
+    {
+        $this->vrNetoPagar = $vrNetoPagar;
+
+        return $this;
+    }
+
+    /**
+     * Get vrNetoPagar
+     *
+     * @return float
+     */
+    public function getVrNetoPagar()
+    {
+        return $this->vrNetoPagar;
     }
 }

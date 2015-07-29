@@ -73,9 +73,9 @@ class RhuProgramacionPago
     private $novedadesVerificadas = 0;     
     
     /**
-     * @ORM\Column(name="vr_total_neto", type="float")
+     * @ORM\Column(name="vr_neto", type="float")
      */
-    private $vr_total_neto = 0;    
+    private $vr_neto = 0;    
     
     /**
      * @ORM\Column(name="empleados_generados", type="boolean")
@@ -87,6 +87,16 @@ class RhuProgramacionPago
      * @ORM\Column(name="no_generar_periodo", type="boolean")
      */    
     private $noGeneraPeriodo = 0;     
+    
+    /**
+     * @ORM\Column(name="numero_empleados", type="integer")
+     */    
+    private $numeroEmpleados = 0;    
+    
+    /**
+     * @ORM\Column(name="inconsistencias", type="boolean")
+     */    
+    private $inconsistencias = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="programacionesPagosCentroCostoRel")
@@ -115,6 +125,13 @@ class RhuProgramacionPago
     protected $licenciasRegistrosPagosProgramacionPagoRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuProgramacionPagoInconsistencia", mappedBy="programacionPagoRel")
+     */
+    protected $programacionesPagosInconsistenciasProgramacionPagoRel;      
+    
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -123,6 +140,7 @@ class RhuProgramacionPago
         $this->pagosProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasRegistrosPagosProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->programacionesPagosInconsistenciasProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -400,27 +418,27 @@ class RhuProgramacionPago
     }
 
     /**
-     * Set vrTotalNeto
+     * Set vrNeto
      *
-     * @param float $vrTotalNeto
+     * @param float $vrNeto
      *
      * @return RhuProgramacionPago
      */
-    public function setVrTotalNeto($vrTotalNeto)
+    public function setVrNeto($vrNeto)
     {
-        $this->vr_total_neto = $vrTotalNeto;
+        $this->vr_neto = $vrNeto;
 
         return $this;
     }
 
     /**
-     * Get vrTotalNeto
+     * Get vrNeto
      *
      * @return float
      */
-    public function getVrTotalNeto()
+    public function getVrNeto()
     {
-        return $this->vr_total_neto;
+        return $this->vr_neto;
     }
 
     /**
@@ -469,6 +487,54 @@ class RhuProgramacionPago
     public function getNoGeneraPeriodo()
     {
         return $this->noGeneraPeriodo;
+    }
+
+    /**
+     * Set numeroEmpleados
+     *
+     * @param integer $numeroEmpleados
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setNumeroEmpleados($numeroEmpleados)
+    {
+        $this->numeroEmpleados = $numeroEmpleados;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroEmpleados
+     *
+     * @return integer
+     */
+    public function getNumeroEmpleados()
+    {
+        return $this->numeroEmpleados;
+    }
+
+    /**
+     * Set inconsistencias
+     *
+     * @param boolean $inconsistencias
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setInconsistencias($inconsistencias)
+    {
+        $this->inconsistencias = $inconsistencias;
+
+        return $this;
+    }
+
+    /**
+     * Get inconsistencias
+     *
+     * @return boolean
+     */
+    public function getInconsistencias()
+    {
+        return $this->inconsistencias;
     }
 
     /**
@@ -629,5 +695,39 @@ class RhuProgramacionPago
     public function getLicenciasRegistrosPagosProgramacionPagoRel()
     {
         return $this->licenciasRegistrosPagosProgramacionPagoRel;
+    }
+
+    /**
+     * Add programacionesPagosInconsistenciasProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia $programacionesPagosInconsistenciasProgramacionPagoRel
+     *
+     * @return RhuProgramacionPago
+     */
+    public function addProgramacionesPagosInconsistenciasProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia $programacionesPagosInconsistenciasProgramacionPagoRel)
+    {
+        $this->programacionesPagosInconsistenciasProgramacionPagoRel[] = $programacionesPagosInconsistenciasProgramacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesPagosInconsistenciasProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia $programacionesPagosInconsistenciasProgramacionPagoRel
+     */
+    public function removeProgramacionesPagosInconsistenciasProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia $programacionesPagosInconsistenciasProgramacionPagoRel)
+    {
+        $this->programacionesPagosInconsistenciasProgramacionPagoRel->removeElement($programacionesPagosInconsistenciasProgramacionPagoRel);
+    }
+
+    /**
+     * Get programacionesPagosInconsistenciasProgramacionPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesPagosInconsistenciasProgramacionPagoRel()
+    {
+        return $this->programacionesPagosInconsistenciasProgramacionPagoRel;
     }
 }

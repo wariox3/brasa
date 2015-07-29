@@ -71,4 +71,25 @@ class RhuCreditoRepository extends EntityRepository {
         return $fechaAntigua;
     }
 
+    /**
+     * Devuelve el total de la cuota de los creditos de un empleado.
+     * 
+     * @author		Mario Estrada
+     * 
+     * @param string	Codigo del empleado
+     * @return float    Valor de la cuota
+     */    
+    public function cuotaCreditosNomina($codigoEmpleado) {
+        $em = $this->getEntityManager();                
+        $dql   = "SELECT SUM(c.vrCuota) FROM BrasaRecursoHumanoBundle:RhuCredito c "
+                . "WHERE c.codigoEmpleadoFk = " . $codigoEmpleado . " "
+                . "AND c.codigoCreditoTipoPagoFk = 1 "
+                . "AND c.estadoPagado = 0 "
+                . "AND c.aprobado = 1 "
+                . "AND c.estadoSuspendido = 0";
+        $query = $em->createQuery($dql);
+        $floCuota = $query->getSingleScalarResult();
+        return $floCuota;        
+    }    
+    
 }

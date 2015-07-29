@@ -43,7 +43,9 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>DIAS</th>
+                <th>NETO</th>
                 <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">EMPLEADOS</p></th>
+                <th>INCONSISTENCIAS</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Enlaces relacionadas al pago">ENLACES</p></th>
                 <th style="text-align: center">RESUMEN</th>
                 <th></th>
@@ -57,7 +59,9 @@
                 <td>{{ arProgramacionPago.fechaDesde |date("Y/m/d")  }}</td>
                 <td {% if date(arProgramacionPago.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPago.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{{ arProgramacionPago.dias  }}</td>
-                <td {% if arProgramacionPago.empleadosGenerados == 1 %}class="success"{% endif %}>{% if arProgramacionPago.empleadosGenerados == 1 %} SI {% else %} NO {% endif %}</td>
+                <td style="text-align: right">{{ arProgramacionPago.vrNeto | number_format(2, '.', ',') }}</td>
+                <td>{% if arProgramacionPago.empleadosGenerados == 1 %} SI ({{ arProgramacionPago.numeroEmpleados  }}) {% else %} NO {% endif %}</td>
+                <td>{% if arProgramacionPago.inconsistencias == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-xs">Enlaces</button>

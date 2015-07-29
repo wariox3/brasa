@@ -39,8 +39,6 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
-                    ->where('c.codigoDepartamentoFk = :codigoDepartamento')
-                    ->setParameter('codigoDepartamento', 5)
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
@@ -48,8 +46,6 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
-                    ->where('c.codigoDepartamentoFk = :codigoDepartamento')
-                    ->setParameter('codigoDepartamento', 5)
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                
@@ -57,8 +53,6 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
-                    ->where('c.codigoDepartamentoFk = :codigoDepartamento')
-                    ->setParameter('codigoDepartamento', 5)
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                

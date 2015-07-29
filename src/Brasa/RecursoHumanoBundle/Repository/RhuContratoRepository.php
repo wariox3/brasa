@@ -205,7 +205,7 @@ class RhuContratoRepository extends EntityRepository {
     return trim($xcadena);
 }
 
-        public function subfijo($xx) { // esta función regresa un subfijo para la cifra
+    public function subfijo($xx) { // esta función regresa un subfijo para la cifra
     $xx = trim($xx);
     $xstrlen = strlen($xx);
     if ($xstrlen == 1 || $xstrlen == 2 || $xstrlen == 3)

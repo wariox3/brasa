@@ -159,6 +159,9 @@
                 <th>INICIO</th>
                 <th>TERMINA</th>
                 <th>SALARIO</th>
+                <th>DEVENGADO</th>
+                <th>DEDUCCIONES</th>
+                <th>NETO</th>
                 <th>HORAS</th>
                 <th>H. REAL</th>
                 <th>DIAS</th>
@@ -179,9 +182,12 @@
                 <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{% if arProgramacionPagoDetalles.indefinido == 1 %} INDEFINIDO {% else %} {{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDevengado | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDeducciones | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrNetoPagar | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtHorasPeriodoReales[]" value="{{ arProgramacionPagoDetalles.horasPeriodoReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.dias | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiasReales[]" value="{{ arProgramacionPagoDetalles.diasReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.factorDia | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arProgramacionPagoDetalles.codigoEmpleadoFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>

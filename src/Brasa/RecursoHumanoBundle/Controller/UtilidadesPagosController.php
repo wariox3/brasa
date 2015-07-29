@@ -79,6 +79,8 @@ class UtilidadesPagosController extends Controller
                 if($form->get('BtnGenerar')->isClicked()) {
                     $boolErrores = 0;
                     foreach ($arrSeleccionados AS $codigoProgramacionPago) {
+                        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
                         $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                         $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
                         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
@@ -106,9 +108,7 @@ class UtilidadesPagosController extends Controller
                                 $intHorasLaboradas = $arProgramacionPagoDetalle->getHorasPeriodoReales();
                                 $intDiasTransporte = $arProgramacionPagoDetalle->getDiasReales();
                                 $douVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;
-                                $douVrHora = $douVrDia / 8;
-                                //$douVrSalarioMinimo = 644350; //Configurar desde configuraciones
-                                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+                                $douVrHora = $douVrDia / 8;                                
                                 $douVrSalarioMinimo = $arConfiguracion->getVrSalario();
                                 $douVrHoraSalarioMinimo = ($douVrSalarioMinimo / 30) / 8;
                                 $douDevengado = 0;
@@ -252,65 +252,58 @@ class UtilidadesPagosController extends Controller
                                     }
                                 }
 
-                                //Procesar creditos
-                                //$intConceptoCreditos = 14; //Configurar desde configuraciones
-                                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//CREDITO
-                                $intConceptoCreditos = $arConfiguracion->getCodigoCredito();
+                                //Procesar creditos                                                                                                
                                 $arPagoConceptoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConceptoCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intConceptoCreditos);
+                                $arPagoConceptoCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoCredito());
                                 $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                                $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'estadoPagado' => 0));
-                                foreach ($arCreditos as $arCredito) {
-                                    if ($arCredito->getCodigoCreditoTipoPagoFk() == 1){ //1= NOMINA
-                                        if($arCredito->getSaldoTotal() > 0) {
-                                            $arCreditoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                                            $arCreditoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCredito->getCodigoCreditoPk());
-                                            $douCuota = 0;
-                                            if ($arCreditoProcesar->getSaldoTotal() >= $arCreditoProcesar->getVrCuota()){
-                                                $douCuota = $arCreditoProcesar->getVrCuota();                                        
-                                            }
-                                            else {
-                                                $douCuota = $arCreditoProcesar->getSaldoTotal();                                         
-                                            }
-                                            $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $douCuota);
-                                            $arCreditoProcesar->setSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());
-                                            $em->persist($arCreditoProcesar);
+                                $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'codigoCreditoTipoPagoFk' => 1, 'estadoPagado' => 0, 'aprobado' => 1, 'estadoSuspendido' => 0));
+                                foreach ($arCreditos as $arCredito) {                                    
+                                    if($arCredito->getSaldoTotal() > 0) {
+                                        $arCreditoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                                        $arCreditoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCredito->getCodigoCreditoPk());
+                                        $douCuota = 0;
+                                        if ($arCreditoProcesar->getSaldoTotal() >= $arCreditoProcesar->getVrCuota()){
+                                            $douCuota = $arCreditoProcesar->getVrCuota();                                        
+                                        }
+                                        else {
+                                            $douCuota = $arCreditoProcesar->getSaldoTotal();                                         
+                                        }
+                                        $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $douCuota);
+                                        $arCreditoProcesar->setSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());
+                                        $em->persist($arCreditoProcesar);
 
+                                        $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                        $arPagoDetalle->setPagoRel($arPago);
+                                        $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCredito);
+                                        $douPagoDetalle = $douCuota; //Falta afectar credito
+                                        $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre());
+                                        $arPagoDetalle->setVrPago($douPagoDetalle);
+                                        $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
+                                        $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
+                                        $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                                        $arPagoDetalle->setCreditoRel($arCredito);
+                                        $em->persist($arPagoDetalle);
+                                        if($arCredito->getSeguro() > 0) {
+                                            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SEGURO
+                                            //$intConceptoCreditos = 27; //Configurar desde configuraciones
+                                            $intConceptoCreditos = $arConfiguracion->getCodigoSeguro();
+                                            $arPagoConceptoCreditoSeguro = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                            $arPagoConceptoCreditoSeguro = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intConceptoCreditos);                                        
                                             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                             $arPagoDetalle->setPagoRel($arPago);
-                                            $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCredito);
-                                            $douPagoDetalle = $douCuota; //Falta afectar credito
-                                            $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre());
+                                            $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCreditoSeguro);
+                                            $douPagoDetalle = $arCredito->getSeguro(); //Falta afectar credito
+                                            $arPagoDetalle->setDetalle("SEGURO DE CREDITO " . $arCredito->getCreditoTipoRel()->getNombre());
                                             $arPagoDetalle->setVrPago($douPagoDetalle);
                                             $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
                                             $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
                                             $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                                             $arPagoDetalle->setCreditoRel($arCredito);
-                                            $em->persist($arPagoDetalle);
-                                            if($arCredito->getSeguro() > 0) {
-                                                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SEGURO
-                                                //$intConceptoCreditos = 27; //Configurar desde configuraciones
-                                                $intConceptoCreditos = $arConfiguracion->getCodigoSeguro();
-                                                $arPagoConceptoCreditoSeguro = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                                $arPagoConceptoCreditoSeguro = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intConceptoCreditos);                                        
-                                                $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                                                $arPagoDetalle->setPagoRel($arPago);
-                                                $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCreditoSeguro);
-                                                $douPagoDetalle = $arCredito->getSeguro(); //Falta afectar credito
-                                                $arPagoDetalle->setDetalle("SEGURO DE CREDITO " . $arCredito->getCreditoTipoRel()->getNombre());
-                                                $arPagoDetalle->setVrPago($douPagoDetalle);
-                                                $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
-                                                $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
-                                                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                                                $arPagoDetalle->setCreditoRel($arCredito);
-                                                $em->persist($arPagoDetalle);                                        
-                                            }                                        
-                                        }
-                                    }
+                                            $em->persist($arPagoDetalle);                                        
+                                        }                                        
+                                    }                                    
                                 }
-                                
-                                
-                                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1); //HORAS DIURNAS TRABAJADAS
+                                                                                                
                                 //$intPagoConceptoSalario = 1; //Se debe traer de la base de datos
                                 $intPagoConceptoSalario = $arConfiguracion->getCodigoHoraDiurnaTrabajada();
                                 ////$intPagoConceptoSalud = 3; //Se debe traer de la base de datos
@@ -357,8 +350,7 @@ class UtilidadesPagosController extends Controller
                                 //Liquidar pension
                                 $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoPension);
                                 $douPorcentaje = $arPagoConcepto->getPorPorcentaje();                                
-                                if($douIngresoBaseCotizacion * $arCentroCosto->getPeriodoPagoRel()->getPeriodosMes() > $douVrSalarioMinimo * 4) {
-                                    $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//TIEMPO SUPLEMENTARIO
+                                if($douIngresoBaseCotizacion * $arCentroCosto->getPeriodoPagoRel()->getPeriodosMes() > $douVrSalarioMinimo * 4) {                                    
                                     $douPorcentaje = $arConfiguracion->getCodigoTiempoSuplementario();
                                     //$douPorcentaje = 5; //Traer de la configuracion
                                 }
@@ -377,9 +369,8 @@ class UtilidadesPagosController extends Controller
                                 //Subsidio transporte
                                 if($intDiasTransporte > 0) {
                                     if($arProgramacionPagoDetalle->getEmpleadoRel()->getAuxilioTransporte() == 1) {
-                                        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//AUXILIO DE TRANSPORTE
+                                        
                                         $intPagoConceptoTransporte = $arConfiguracion->getCodigoAuxilioTransporte();
-                                        //$intPagoConceptoTransporte = 18; //Se debe traer de la base de datos
                                         $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoTransporte);
                                         $duoVrAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
                                         $douVrDiaTransporte = $duoVrAuxilioTransporte / 30;
