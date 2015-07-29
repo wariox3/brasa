@@ -40,19 +40,19 @@
                         <th class="td-label">SALDO:</th>
                         <td class="td-in-well" align="right">{{ arCreditos.saldo | number_format(2, '.', ',')}}</td>
                         <th class="td-label">PAGADO:</th>
-                        <td {% if arCreditos.estadoPagado == 1 %} class="success">SI{% else %} <td class="danger"> NO {% endif %}</td>
+                        <td> {% if arCreditos.estadoPagado == 1 %}SI{% else %} NO {% endif %}</td>
                     </tr>
                     <tr>
                         <th class="td-label">SALDO REAL:</th>
                         <td class="td-label" align="right">{{ arCreditos.saldoTotal | number_format(2, '.', ',')}}</td>
                         <th class="td-label">APROBADO:</th>
-                        <td {% if arCreditos.aprobado == 0 %} class="danger"> NO {% else %} <td class="success"> SI {% endif %} </td>
+                        <td> {% if arCreditos.aprobado == 0 %} NO {% else %} SI {% endif %} </td>
                     </tr>
                     <tr>
                         <th class="td-label">TIPO PAGO:</th>
                         <td class="td-label">{{ arCreditos.creditoTipopagoRel.nombre }}</td>
                         <th class="td-label">SUSPENDIDO:</th>
-                        <td {% if arCreditos.estadoSuspendido == 0 %} class="danger"> NO {% else %} <td class="success"> SI {% endif %} </td>
+                        <td> {% if arCreditos.estadoSuspendido == 0 %} NO {% else %} SI {% endif %} </td>
                     </tr>
                     <tr>
                         <th>COMENTARIOS:</th>
@@ -65,6 +65,7 @@
         </div>
         <div class="btn-group">
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_creditos_refinanciar', { 'codigoCredito': arCreditos.codigoCreditoPk}) }}" style="float:left">Refinanciar</a>
         </div>
         <br><br>
         <div class="panel panel-default">
@@ -103,7 +104,7 @@
             
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a class="btn btn-default" href="{{ path('brs_rhu_creditos_lista') }}" style="float:left">Volver</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_creditos_lista') }}" style="float:left">Volver</a>
             </div>
         </div>
         <br /><br />

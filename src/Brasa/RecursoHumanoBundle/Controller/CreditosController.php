@@ -108,6 +108,38 @@ class CreditosController extends Controller
             ));
     } 
     
+    public function refinanciarAction($codigoCredito) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $formCredito = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_rhu_creditos_refinanciar', array('codigoCredito' => $codigoCredito)))
+            ->add('numeroCuotas', 'text', array('label'  => 'Numero cuotas'))                            
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $formCredito->handleRequest($request);        
+        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);                
+        if ($formCredito->isValid()) {
+            $intCuotas = $formCredito->get('numeroCuotas')->getData();            
+            $douVrCuota = $arCredito->getSaldoTotal() / $intCuotas;
+            $arCredito->setVrCuota($douVrCuota);
+            $arCredito->setNumeroCuotaActual(0);
+            $arCredito->setNumeroCuotas($intCuotas);
+            $em->persist($arCredito);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_rhu_credito_detalle', array('codigoCreditoPk' => $codigoCredito)));
+        }
+        $strErrores = "";
+        if($arCredito->getVrCuotaTemporal() > 0) {
+            $strErrores = "No se puede refinanciar el credito porque tiene periodos generados pendientes por pagar.";
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Creditos:refinanciar.html.twig', array(
+            'arCredito' => $arCredito,
+            'formCredito' => $formCredito->createView(),
+            'errores' => $strErrores
+        ));
+    }       
+    
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();

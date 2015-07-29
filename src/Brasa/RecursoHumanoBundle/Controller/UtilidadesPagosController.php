@@ -85,7 +85,7 @@ class UtilidadesPagosController extends Controller
                         $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
                         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
                         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
-                        if($arProgramacionPagoProcesar->getEmpleadosGenerados() == 1) {
+                        if($arProgramacionPagoProcesar->getEmpleadosGenerados() == 1 && $arProgramacionPagoProcesar->getInconsistencias() == 0) {
                             $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                             $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));                                                        
                             foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {                                
@@ -410,7 +410,7 @@ class UtilidadesPagosController extends Controller
                         }
                     }
                     if($boolErrores == 1) {
-                        $objMensaje->Mensaje("error", "Algunas programaciones no tienen empleados generados para pagar", $this);
+                        $objMensaje->Mensaje("error", "La programacion debe tener los empleados generados y sin inconsistencias", $this);
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_generar_pago'));
                 }

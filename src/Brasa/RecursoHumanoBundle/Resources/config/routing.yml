@@ -102,6 +102,10 @@ brs_rhu_creditos_nuevo:
     path:     /rhumano/creditos/nuevo/{codigoCredito}/{codigoEmpleado}
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:nuevo }          
 
+brs_rhu_creditos_refinanciar:
+    path:     /rhumano/creditos/refinanciar/{codigoCredito}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:refinanciar }
+
 brs_rhu_pagos_lista:
     path:     /rhumano/pagos/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Pagos:lista }     
