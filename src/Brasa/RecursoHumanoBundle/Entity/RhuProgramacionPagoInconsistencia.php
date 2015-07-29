@@ -23,7 +23,7 @@ class RhuProgramacionPagoInconsistencia
     private $codigoProgramacionPagoFk;     
     
     /**
-     * @ORM\Column(name="inconsistencia", type="string", length=60, nullable=true)
+     * @ORM\Column(name="inconsistencia", type="string", length=250, nullable=true)
      */    
     private $inconsistencia;        
     
