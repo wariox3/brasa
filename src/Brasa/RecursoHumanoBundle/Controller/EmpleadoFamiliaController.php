@@ -27,7 +27,7 @@ class EmpleadoFamiliaController extends Controller
             $em->persist($arEmpleadoFamilia);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_empleadoFamilia_nuevo', array('codigoEmpleado' => $codigoEmpleado, 'codigoEmpleadoFamilia' => 0 )));
+                return $this->redirect($this->generateUrl('brs_rhu_base_empleadoFamilia_nuevo', array('codigoEmpleado' => $codigoEmpleado, 'codigoEmpleadoFamilia' => 0 )));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
