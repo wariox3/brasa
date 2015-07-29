@@ -51,6 +51,7 @@ class RhuEntidadCaja
      * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="entidadCajaRel")
      */
     protected $empleadosEstudiosEntidadSaludRel;
+    
     /**
      * Constructor
      */

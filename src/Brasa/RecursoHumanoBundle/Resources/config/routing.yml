@@ -128,7 +128,23 @@ brs_rhu_base_empleados_nuevo:
 
 brs_rhu_base_empleados_nuevo_enlazar:
     path:     /rhumano/base/empleados/nuevo/enlazar/
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:enlazar }     
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:enlazar } 
+    
+brs_rhu_base_empleadoEstudio_lista:
+    path:     /rhumano/base/empleadoEstudio/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoEstudio:lista }         
+    
+brs_rhu_base_empleadoEstudio_nuevo:
+    path:     /rhumano/base/empleadoEstudio/nuevo/{codigoEmpleado}/{codigoEmpleadoEstudio}
+    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoEstudio:nuevo }
+    
+brs_rhu_base_empleadoFamilia_lista:
+    path:     /rhumano/base/empleadoFamilia/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoFamilia:lista }         
+    
+brs_rhu_base_empleadoFamilia_nuevo:
+    path:     /rhumano/base/empleadoFamilia/nuevo/{codigoEmpleado}/{codigoEmpleadoFamilia}
+    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoFamilia:nuevo }
 
 brs_rhu_base_contratos_lista:
     path:     /rhumano/base/contratos/lista/

@@ -52,6 +52,7 @@ class RhuEntidadSalud
      */
     protected $empleadosFamiliasEntidadSaludRel;
     
+    
     /**
      * Constructor
      */

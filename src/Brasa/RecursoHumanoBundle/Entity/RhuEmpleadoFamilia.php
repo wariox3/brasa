@@ -38,7 +38,7 @@ class RhuEmpleadoFamilia
     private $eps;
     
     /**
-     * @ORM\Column(name="codigo_caja_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
      */    
     private $caja;
     
@@ -81,8 +81,6 @@ class RhuEmpleadoFamilia
      */
     protected $entidadSaludRel;
     
-    
-
 
     /**
      * Get codigoEmpleadoFamiliaPk
