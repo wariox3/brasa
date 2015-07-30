@@ -10,27 +10,59 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuSsoPeriodoDetalleRepository extends EntityRepository {
+    
     public function listaDQL($codigoPeriodo) {                    
             $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle pd WHERE pd.codigoPeriodoFk = " . $codigoPeriodo;
             return $dql;
         } 
     
-    public function generar($codigoPeriodo) {
+    public function generar($codigoPeriodoDetalle) {
         $em = $this->getEntityManager();
-        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
-        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);        
-        $arSucursales = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal();
-        $arSucursales = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoSucursal')->findAll();
-        foreach ($arSucursales as $arSucursal) {
-            $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
-            $arPeriodoDetalle->setSsoPeriodoRel($arPeriodo);
-            $arPeriodoDetalle->setSsoSucursalRel($arSucursal);
-            $em->persist($arPeriodoDetalle);            
-        }
-        $arPeriodo->setEstadoGenerado(1);
-        $em->persist($arPeriodo);
-        $em->flush();
+        $i = 0;
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);        
+        $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+        $arPeriodoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk(), 'codigoSucursalFk' => $arPeriodoDetalle->getCodigoSucursalFk()));                
+        foreach ($arPeriodoEmpleados as $arPeriodoEmpleado) {
+            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->contratosPeriodoEmpleado($arPeriodoDetalle->getPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arPeriodoEmpleado->getCodigoEmpleadoFk());                    
+            if($arContrato <= 1) {
+                foreach ($arContratos as $arContrato) {
+                    $i++;
+                    $dateFechaDesde =  "";
+                    $dateFechaHasta =  "";
+                    $strNovedadIngreso = " ";
+                    $strNovedadRetiro = " ";
+                    $intDiasCotizar = 0;
+                    $fechaTerminaCotrato = $arContrato->getFechaHasta()->format('Y-m-d');
+                    if($fechaTerminaCotrato == '-0001-11-30') {
+                        $dateFechaHasta = $arPeriodoDetalle->getFechaHasta();
+                    } else {
+                        if($arContrato->getFechaHasta() > $arPeriodoDetalle->getFechaHasta()) {
+                            $dateFechaHasta = $arPeriodoDetalle->getFechaHasta();
+                        } else {
+                            $dateFechaHasta = $arContrato->getFechaHasta();
+                        }
+                    }
 
+                    if($arContrato->getFechaDesde() <  $arPeriodoDetalle->getFechaDesde() == true) {
+                        $dateFechaDesde = $arPeriodoDetalle->getFechaDesde();
+                    } else {
+                        $dateFechaDesde = $arContrato->getFechaDesde();
+                    }
+
+                    if($dateFechaDesde != "" && $dateFechaHasta != "") {
+                        $intDias = $dateFechaDesde->diff($dateFechaHasta);
+                        $intDias = $intDias->format('%a');
+                        $intDiasCotizar = $intDias + 1;
+                    }
+
+                    if($arContrato->getFechaDesde() >= $arPeriodoDetalle->getFechaDesde()) {
+                        $strNovedadIngreso = "X";
+                    }      
+                }
+            }
+        }
         return true;
     }
 }

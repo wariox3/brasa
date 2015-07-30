@@ -21,18 +21,30 @@ class RhuSsoPeriodoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
         $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);        
-        $arSucursales = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal();
-        $arSucursales = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoSucursal')->findAll();
-        foreach ($arSucursales as $arSucursal) {
-            $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
-            $arPeriodoDetalle->setSsoPeriodoRel($arPeriodo);
-            $arPeriodoDetalle->setSsoSucursalRel($arSucursal);
-            $em->persist($arPeriodoDetalle);            
+        if($arPeriodo->getEstadoGenerado() == 0) {
+            $arSucursales = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal();
+            $arSucursales = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoSucursal')->findAll();
+            foreach ($arSucursales as $arSucursal) {
+                $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+                $arPeriodoDetalle->setSsoPeriodoRel($arPeriodo);
+                $arPeriodoDetalle->setSsoSucursalRel($arSucursal);
+                $em->persist($arPeriodoDetalle);            
+            }
+            $arPeriodo->setEstadoGenerado(1);
+            $em->persist($arPeriodo);
+            $em->flush();            
         }
-        $arPeriodo->setEstadoGenerado(1);
-        $em->persist($arPeriodo);
+        
+        $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y-m-d'), $arPeriodo->getFechaHasta()->format('Y-m-d'));
+        foreach ($arContratos as $arContrato) {
+            $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+            $arPeriodoEmpleado->setSsoPeriodoRel($arPeriodo);
+            $arPeriodoEmpleado->setSsoSucursalRel($arContrato->getCentroCostoRel()->getSucursalRel());
+            $arPeriodoEmpleado->setEmpleadoRel($arContrato->getEmpleadoRel());
+            $em->persist($arPeriodoEmpleado);            
+        }
         $em->flush();
-
         return true;
     }
 }

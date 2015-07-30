@@ -49,8 +49,8 @@ class SeguridadSocialPeriodosController extends Controller
             if($form->get('BtnGenerar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoPeriodo) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->generar($codigoPeriodo);
+                    foreach ($arrSeleccionados AS $codigoPeriodoDetalle) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->generar($codigoPeriodoDetalle);
                     }
                 }                
             }            

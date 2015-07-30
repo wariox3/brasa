@@ -84,6 +84,11 @@ class RhuCentroCosto
     private $valorAdministracion = 0;     
     
     /**
+     * @ORM\Column(name="codigo_sucursal_fk", type="integer", nullable=true)
+     */    
+    private $codigoSucursalPagoFk;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
      * @ORM\JoinColumn(name="codigo_periodo_pago_fk", referencedColumnName="codigo_periodo_pago_pk")
      */
@@ -94,6 +99,12 @@ class RhuCentroCosto
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuSsoSucursal", inversedBy="centrosCostosSucursalRel")
+     * @ORM\JoinColumn(name="codigo_sucursal_fk", referencedColumnName="codigo_sucursal_pk")
+     */
+    protected $sucursalRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="RhuProgramacionPago", mappedBy="centroCostoRel")
@@ -990,5 +1001,53 @@ class RhuCentroCosto
     public function getServiciosCobrarCentroCostoRel()
     {
         return $this->serviciosCobrarCentroCostoRel;
+    }
+
+    /**
+     * Set codigoSucursalPagoFk
+     *
+     * @param integer $codigoSucursalPagoFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoSucursalPagoFk($codigoSucursalPagoFk)
+    {
+        $this->codigoSucursalPagoFk = $codigoSucursalPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSucursalPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSucursalPagoFk()
+    {
+        return $this->codigoSucursalPagoFk;
+    }
+
+    /**
+     * Set sucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $sucursalRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function setSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $sucursalRel = null)
+    {
+        $this->sucursalRel = $sucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sucursalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal
+     */
+    public function getSucursalRel()
+    {
+        return $this->sucursalRel;
     }
 }

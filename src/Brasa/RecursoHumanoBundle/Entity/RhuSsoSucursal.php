@@ -33,6 +33,16 @@ class RhuSsoSucursal
     protected $ssoPeriodosDetallesSsoSucursalRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="ssoSucursalRel")
+     */
+    protected $ssoPeriodosEmpleadosSsoSucursalRel;     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCentroCosto", mappedBy="sucursalRel")
+     */
+    protected $centrosCostosSucursalRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -130,5 +140,73 @@ class RhuSsoSucursal
     public function getSsoPeriodosDetallesSsoSucursalRel()
     {
         return $this->ssoPeriodosDetallesSsoSucursalRel;
+    }
+
+    /**
+     * Add ssoPeriodosEmpleadosSsoSucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoSucursalRel
+     *
+     * @return RhuSsoSucursal
+     */
+    public function addSsoPeriodosEmpleadosSsoSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoSucursalRel)
+    {
+        $this->ssoPeriodosEmpleadosSsoSucursalRel[] = $ssoPeriodosEmpleadosSsoSucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoPeriodosEmpleadosSsoSucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoSucursalRel
+     */
+    public function removeSsoPeriodosEmpleadosSsoSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoSucursalRel)
+    {
+        $this->ssoPeriodosEmpleadosSsoSucursalRel->removeElement($ssoPeriodosEmpleadosSsoSucursalRel);
+    }
+
+    /**
+     * Get ssoPeriodosEmpleadosSsoSucursalRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoPeriodosEmpleadosSsoSucursalRel()
+    {
+        return $this->ssoPeriodosEmpleadosSsoSucursalRel;
+    }
+
+    /**
+     * Add centrosCostosSucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosSucursalRel
+     *
+     * @return RhuSsoSucursal
+     */
+    public function addCentrosCostosSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosSucursalRel)
+    {
+        $this->centrosCostosSucursalRel[] = $centrosCostosSucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove centrosCostosSucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosSucursalRel
+     */
+    public function removeCentrosCostosSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centrosCostosSucursalRel)
+    {
+        $this->centrosCostosSucursalRel->removeElement($centrosCostosSucursalRel);
+    }
+
+    /**
+     * Get centrosCostosSucursalRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCentrosCostosSucursalRel()
+    {
+        return $this->centrosCostosSucursalRel;
     }
 }

@@ -48,6 +48,11 @@ class RhuSsoPeriodo
     protected $ssoPeriodosDetallesSsoPeriodoRel; 
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="ssoPeriodoRel")
+     */
+    protected $ssoPeriodosEmpleadosSsoPeriodoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -217,5 +222,39 @@ class RhuSsoPeriodo
     public function getSsoPeriodosDetallesSsoPeriodoRel()
     {
         return $this->ssoPeriodosDetallesSsoPeriodoRel;
+    }
+
+    /**
+     * Add ssoPeriodosEmpleadosSsoPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoPeriodoRel
+     *
+     * @return RhuSsoPeriodo
+     */
+    public function addSsoPeriodosEmpleadosSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoPeriodoRel)
+    {
+        $this->ssoPeriodosEmpleadosSsoPeriodoRel[] = $ssoPeriodosEmpleadosSsoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoPeriodosEmpleadosSsoPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoPeriodoRel
+     */
+    public function removeSsoPeriodosEmpleadosSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoPeriodoRel)
+    {
+        $this->ssoPeriodosEmpleadosSsoPeriodoRel->removeElement($ssoPeriodosEmpleadosSsoPeriodoRel);
+    }
+
+    /**
+     * Get ssoPeriodosEmpleadosSsoPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoPeriodosEmpleadosSsoPeriodoRel()
+    {
+        return $this->ssoPeriodosEmpleadosSsoPeriodoRel;
     }
 }

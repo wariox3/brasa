@@ -26,11 +26,18 @@
 
 
         <!-- Botones Menu Items -->
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_ss_periodo_lista') }}" style="float:left">Volver</a>
+            </div>
+        </div>
+
         <div class="btn-toolbar" style="float: right">                 
             <div class="btn-group">
                 {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}              
             </div>
-        </div>          
+        </div>  
+            
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}
     {{ form_end(form) }}   

@@ -422,7 +422,10 @@ class RhuEmpleado
      */
     protected $empleadosEstudiosEmpleadoRel;
    
- 
+     /**
+     * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="empleadoRel")
+     */
+    protected $ssoPeriodosEmpleadosEmpleadoRel; 
  
     /**
      * Constructor
@@ -2371,5 +2374,39 @@ class RhuEmpleado
     public function getEmpleadosEstudiosEmpleadoRel()
     {
         return $this->empleadosEstudiosEmpleadoRel;
+    }
+
+    /**
+     * Add ssoPeriodosEmpleadosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addSsoPeriodosEmpleadosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosEmpleadoRel)
+    {
+        $this->ssoPeriodosEmpleadosEmpleadoRel[] = $ssoPeriodosEmpleadosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoPeriodosEmpleadosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosEmpleadoRel
+     */
+    public function removeSsoPeriodosEmpleadosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosEmpleadoRel)
+    {
+        $this->ssoPeriodosEmpleadosEmpleadoRel->removeElement($ssoPeriodosEmpleadosEmpleadoRel);
+    }
+
+    /**
+     * Get ssoPeriodosEmpleadosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoPeriodosEmpleadosEmpleadoRel()
+    {
+        return $this->ssoPeriodosEmpleadosEmpleadoRel;
     }
 }
