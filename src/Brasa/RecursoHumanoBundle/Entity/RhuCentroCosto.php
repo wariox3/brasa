@@ -136,6 +136,11 @@ class RhuCentroCosto
     protected $pagosCentroCostoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuServicioCobrar", mappedBy="centroCostoRel")
+     */
+    protected $serviciosCobrarCentroCostoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuFactura", mappedBy="centroCostoRel")
      */
     protected $facturasCentroCostoRel;    
@@ -951,5 +956,39 @@ class RhuCentroCosto
     public function getLiquidacionesCentroCostoRel()
     {
         return $this->liquidacionesCentroCostoRel;
+    }
+
+    /**
+     * Add serviciosCobrarCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addServiciosCobrarCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel)
+    {
+        $this->serviciosCobrarCentroCostoRel[] = $serviciosCobrarCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosCobrarCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel
+     */
+    public function removeServiciosCobrarCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel)
+    {
+        $this->serviciosCobrarCentroCostoRel->removeElement($serviciosCobrarCentroCostoRel);
+    }
+
+    /**
+     * Get serviciosCobrarCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosCobrarCentroCostoRel()
+    {
+        return $this->serviciosCobrarCentroCostoRel;
     }
 }

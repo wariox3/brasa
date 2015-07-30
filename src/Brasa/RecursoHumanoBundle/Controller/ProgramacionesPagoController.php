@@ -370,7 +370,7 @@ class ProgramacionesPagoController extends Controller
             if($form->get('BtnPagar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagarSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_pagar'));                
+                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
             }                        
         }       
                 

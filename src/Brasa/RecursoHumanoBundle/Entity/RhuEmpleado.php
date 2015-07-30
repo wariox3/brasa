@@ -354,6 +354,11 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="empleadoRel")
      */
     protected $pagosEmpleadoRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuServicioCobrar", mappedBy="empleadoRel")
+     */
+    protected $serviciosCobrarEmpleadoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="empleadoRel")
@@ -2371,5 +2376,39 @@ class RhuEmpleado
     public function getEmpleadosEstudiosEmpleadoRel()
     {
         return $this->empleadosEstudiosEmpleadoRel;
+    }
+
+    /**
+     * Add serviciosCobrarEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addServiciosCobrarEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarEmpleadoRel)
+    {
+        $this->serviciosCobrarEmpleadoRel[] = $serviciosCobrarEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosCobrarEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarEmpleadoRel
+     */
+    public function removeServiciosCobrarEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarEmpleadoRel)
+    {
+        $this->serviciosCobrarEmpleadoRel->removeElement($serviciosCobrarEmpleadoRel);
+    }
+
+    /**
+     * Get serviciosCobrarEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosCobrarEmpleadoRel()
+    {
+        return $this->serviciosCobrarEmpleadoRel;
     }
 }

@@ -115,6 +115,11 @@ class RhuProgramacionPago
     protected $pagosProgramacionPagoRel; 
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuServicioCobrar", mappedBy="programacionPagoRel")
+     */
+    protected $serviciosCobrarProgramacionPagoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="programacionPagoRel")
      */
     protected $pagosAdicionalesProgramacionPagoRel;       
@@ -729,5 +734,39 @@ class RhuProgramacionPago
     public function getProgramacionesPagosInconsistenciasProgramacionPagoRel()
     {
         return $this->programacionesPagosInconsistenciasProgramacionPagoRel;
+    }
+
+    /**
+     * Add serviciosCobrarProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarProgramacionPagoRel
+     *
+     * @return RhuProgramacionPago
+     */
+    public function addServiciosCobrarProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarProgramacionPagoRel)
+    {
+        $this->serviciosCobrarProgramacionPagoRel[] = $serviciosCobrarProgramacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosCobrarProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarProgramacionPagoRel
+     */
+    public function removeServiciosCobrarProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarProgramacionPagoRel)
+    {
+        $this->serviciosCobrarProgramacionPagoRel->removeElement($serviciosCobrarProgramacionPagoRel);
+    }
+
+    /**
+     * Get serviciosCobrarProgramacionPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosCobrarProgramacionPagoRel()
+    {
+        return $this->serviciosCobrarProgramacionPagoRel;
     }
 }
