@@ -385,7 +385,7 @@
                             <td>{{ arEmpleadoEstudios.aprobados  }}</td>
                             <td>{{ arEmpleadoEstudios.ciudadRel.nombre  }}</td>
                             <td>{{ arEmpleadoEstudios.titulo  }}</td>                                                                                                               
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleadoEstudio_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': arEmpleadoEstudios.codigoEmpleadoEstudioPk }) }}', 'AgregarEstudio', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_estudio_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': arEmpleadoEstudios.codigoEmpleadoEstudioPk }) }}', 'AgregarEstudio', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarEmpleadoEstudio[]" value="{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }}" /></td>
                         </tr>
                     {% endfor %}
@@ -395,7 +395,7 @@
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleadoEstudio_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': 0 }) }}', 'AgregarProcesoEstudio', 600, 900)" >Nuevo</a> {% endif %}
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_estudio_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': 0 }) }}', 'AgregarProcesoEstudio', 600, 900)" >Nuevo</a> {% endif %}
                     </div>
                     <div class="btn-group">                        
                         {{ form_widget(form.BtnEliminarEmpleadoEstudio, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
@@ -429,7 +429,7 @@
                             <td>{{ arEmpleadoFamilia.fechaNacimiento | date('Y/m/d')  }}</td>
                             <td>{{ arEmpleadoFamilia.ocupacion  }}</td>
                             <td>{{ arEmpleadoFamilia.telefono  }}</td>                                                                                                               
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleadoFamilia_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoFamilia': arEmpleadoFamilia.codigoEmpleadoFamiliaPk }) }}', 'AgregarFamilia', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_familia_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoFamilia': arEmpleadoFamilia.codigoEmpleadoFamiliaPk }) }}', 'AgregarFamilia', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarEmpleadoFamilia[]" value="{{ arEmpleadoFamilia.codigoEmpleadoFamiliaPk }}" /></td>
                         </tr>
                     {% endfor %}
@@ -439,7 +439,7 @@
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleadoFamilia_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoFamilia': 0 }) }}', 'AgregarProcesoFamilia', 600, 900)" >Nuevo</a> {% endif %}
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_familia_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoFamilia': 0 }) }}', 'AgregarProcesoFamilia', 600, 900)" >Nuevo</a> {% endif %}
                     </div>
                     <div class="btn-group">                        
                         {{ form_widget(form.BtnEliminarEmpleadoFamilia, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
