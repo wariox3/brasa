@@ -16,6 +16,11 @@ class RhuConsecutivo
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoConsecutivoPk;
+
+    /**
+     * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
+     */    
+    private $nombre;       
     
     /**
      * @ORM\Column(name="consecutivo", type="integer")
@@ -55,5 +60,29 @@ class RhuConsecutivo
     public function getConsecutivo()
     {
         return $this->consecutivo;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return RhuConsecutivo
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
     }
 }

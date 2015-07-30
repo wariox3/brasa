@@ -37,6 +37,7 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>CODIGO</th>
+                <th>NUMERO</th>
                 <th>PERIODO</th>
                 <th>IDENTIFICACION</th>                
                 <th>EMPLEADO</th>                
@@ -53,6 +54,7 @@
             {% for arPagos in arPagos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }} </td>
+                <td>{{ arPagos.numero  }}</td>
                 <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}-{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arPagos.empleadoRel.nombreCorto  }}</td>

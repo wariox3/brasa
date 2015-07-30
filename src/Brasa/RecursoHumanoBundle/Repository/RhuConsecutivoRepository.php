@@ -10,6 +10,23 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuConsecutivoRepository extends EntityRepository {
-    
+    /**
+     * Sacar un consecutivo
+     *
+     * @author		Mario Estrada
+     *
+     * @param   integer	Codigo del consecutivo
+     */
+    public function consecutivo($codigoConsecutivo) {
+        $em = $this->getEntityManager();
+        $intNumero = 0;
+        $arConsecutivo = new \Brasa\RecursoHumanoBundle\Entity\RhuConsecutivo();
+        $arConsecutivo = $em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->find($codigoConsecutivo);     
+        $intNumero = $arConsecutivo->getConsecutivo();
+        $arConsecutivo->setConsecutivo($intNumero + 1);
+        $em->persist($arConsecutivo);
+        $em->flush();
+        return $intNumero;
+    }        
     
 }

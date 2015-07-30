@@ -39,7 +39,7 @@ class ProgramacionesPagoController extends Controller
                         $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
                         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
                         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
-                        if($arProgramacionPagoProcesar->getEmpleadosGenerados() == 1 && $arProgramacionPagoProcesar->getInconsistencias() == 0) {
+                        if($arProgramacionPagoProcesar->getEstadoGenerado() == 0 && $arProgramacionPagoProcesar->getEmpleadosGenerados() == 1 && $arProgramacionPagoProcesar->getInconsistencias() == 0) {
                             $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                             $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));                                                        
                             foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {                                
@@ -368,10 +368,22 @@ class ProgramacionesPagoController extends Controller
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
             }                
             if($form->get('BtnPagar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');                
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagarSeleccionados($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
-            }                        
+            }     
+            if($form->get('BtnDeshacer')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');  
+                foreach ($arrSeleccionados as $codigoProgramacionPago) {
+                    $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                    $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+                    if($arProgramacionPago->getEstadoGenerado() == 1 && $arProgramacionPago->getEstadoPagado() == 0) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->deshacer($codigoProgramacionPago);                        
+                    }
+                }
+                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
+            }                 
+            
         }       
                 
         $arProgramacionPago = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
