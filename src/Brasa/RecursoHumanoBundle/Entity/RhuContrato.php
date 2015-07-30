@@ -160,9 +160,10 @@ class RhuContrato
     protected $liquidacionesContratoRel; 
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuSSPeriodoDetalle", mappedBy="contratoRel")
+     * @ORM\OneToMany(targetEntity="RhuSsoPeriodoDetalle", mappedBy="contratoRel")
      */
-    protected $SSPeriodosDetallesContratoRel; 
+    protected $ssoPeriodosDetallesContratoRel; 
+
 
     /**
      * Constructor
@@ -170,7 +171,7 @@ class RhuContrato
     public function __construct()
     {
         $this->liquidacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->SSPeriodosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoPeriodosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -842,36 +843,36 @@ class RhuContrato
     }
 
     /**
-     * Add sSPeriodosDetallesContratoRel
+     * Add ssoPeriodosDetallesContratoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesContratoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesContratoRel
      *
      * @return RhuContrato
      */
-    public function addSSPeriodosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesContratoRel)
+    public function addSsoPeriodosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesContratoRel)
     {
-        $this->SSPeriodosDetallesContratoRel[] = $sSPeriodosDetallesContratoRel;
+        $this->ssoPeriodosDetallesContratoRel[] = $ssoPeriodosDetallesContratoRel;
 
         return $this;
     }
 
     /**
-     * Remove sSPeriodosDetallesContratoRel
+     * Remove ssoPeriodosDetallesContratoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesContratoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesContratoRel
      */
-    public function removeSSPeriodosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesContratoRel)
+    public function removeSsoPeriodosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesContratoRel)
     {
-        $this->SSPeriodosDetallesContratoRel->removeElement($sSPeriodosDetallesContratoRel);
+        $this->ssoPeriodosDetallesContratoRel->removeElement($ssoPeriodosDetallesContratoRel);
     }
 
     /**
-     * Get sSPeriodosDetallesContratoRel
+     * Get ssoPeriodosDetallesContratoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSSPeriodosDetallesContratoRel()
+    public function getSsoPeriodosDetallesContratoRel()
     {
-        return $this->SSPeriodosDetallesContratoRel;
+        return $this->ssoPeriodosDetallesContratoRel;
     }
 }

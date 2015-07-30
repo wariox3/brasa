@@ -5,10 +5,10 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_ss_periodo")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuSSPeriodoRepository")
+ * @ORM\Table(name="rhu_sso_periodo")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuSsoPeriodoRepository")
  */
-class RhuSSPeriodo
+class RhuSsoPeriodo
 {
     /**
      * @ORM\Id
@@ -43,16 +43,16 @@ class RhuSSPeriodo
     private $estadoGenerado = 0;     
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuSSPeriodoDetalle", mappedBy="ssPeriodoRel")
+     * @ORM\OneToMany(targetEntity="RhuSsoPeriodoDetalle", mappedBy="ssoPeriodoRel")
      */
-    protected $SSPeriodosDetallesSSPeriodoRel; 
+    protected $ssoPeriodosDetallesSsoPeriodoRel; 
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->SSPeriodosDetallesSSPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoPeriodosDetallesSsoPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -70,7 +70,7 @@ class RhuSSPeriodo
      *
      * @param integer $anio
      *
-     * @return RhuSSPeriodo
+     * @return RhuSsoPeriodo
      */
     public function setAnio($anio)
     {
@@ -94,7 +94,7 @@ class RhuSSPeriodo
      *
      * @param integer $mes
      *
-     * @return RhuSSPeriodo
+     * @return RhuSsoPeriodo
      */
     public function setMes($mes)
     {
@@ -118,7 +118,7 @@ class RhuSSPeriodo
      *
      * @param \DateTime $fechaDesde
      *
-     * @return RhuSSPeriodo
+     * @return RhuSsoPeriodo
      */
     public function setFechaDesde($fechaDesde)
     {
@@ -142,7 +142,7 @@ class RhuSSPeriodo
      *
      * @param \DateTime $fechaHasta
      *
-     * @return RhuSSPeriodo
+     * @return RhuSsoPeriodo
      */
     public function setFechaHasta($fechaHasta)
     {
@@ -166,7 +166,7 @@ class RhuSSPeriodo
      *
      * @param boolean $estadoGenerado
      *
-     * @return RhuSSPeriodo
+     * @return RhuSsoPeriodo
      */
     public function setEstadoGenerado($estadoGenerado)
     {
@@ -186,36 +186,36 @@ class RhuSSPeriodo
     }
 
     /**
-     * Add sSPeriodosDetallesSSPeriodoRel
+     * Add ssoPeriodosDetallesSsoPeriodoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesSSPeriodoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesSsoPeriodoRel
      *
-     * @return RhuSSPeriodo
+     * @return RhuSsoPeriodo
      */
-    public function addSSPeriodosDetallesSSPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesSSPeriodoRel)
+    public function addSsoPeriodosDetallesSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesSsoPeriodoRel)
     {
-        $this->SSPeriodosDetallesSSPeriodoRel[] = $sSPeriodosDetallesSSPeriodoRel;
+        $this->ssoPeriodosDetallesSsoPeriodoRel[] = $ssoPeriodosDetallesSsoPeriodoRel;
 
         return $this;
     }
 
     /**
-     * Remove sSPeriodosDetallesSSPeriodoRel
+     * Remove ssoPeriodosDetallesSsoPeriodoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesSSPeriodoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesSsoPeriodoRel
      */
-    public function removeSSPeriodosDetallesSSPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesSSPeriodoRel)
+    public function removeSsoPeriodosDetallesSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesSsoPeriodoRel)
     {
-        $this->SSPeriodosDetallesSSPeriodoRel->removeElement($sSPeriodosDetallesSSPeriodoRel);
+        $this->ssoPeriodosDetallesSsoPeriodoRel->removeElement($ssoPeriodosDetallesSsoPeriodoRel);
     }
 
     /**
-     * Get sSPeriodosDetallesSSPeriodoRel
+     * Get ssoPeriodosDetallesSsoPeriodoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSSPeriodosDetallesSSPeriodoRel()
+    public function getSsoPeriodosDetallesSsoPeriodoRel()
     {
-        return $this->SSPeriodosDetallesSSPeriodoRel;
+        return $this->ssoPeriodosDetallesSsoPeriodoRel;
     }
 }

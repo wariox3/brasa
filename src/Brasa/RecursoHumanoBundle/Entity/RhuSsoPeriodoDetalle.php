@@ -5,10 +5,10 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_ss_periodo_detalle")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuSSPeriodoDetalleRepository")
+ * @ORM\Table(name="rhu_sso_periodo_detalle")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuSsoPeriodoDetalleRepository")
  */
-class RhuSSPeriodoDetalle
+class RhuSsoPeriodoDetalle
 {
     /**
      * @ORM\Id
@@ -48,23 +48,25 @@ class RhuSSPeriodoDetalle
     private $tipoDocumentoCotizante;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSSPeriodo", inversedBy="SSPeriodosDetallesSSPeriodoRel")
+     * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="SsoPeriodosDetallesSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
-    protected $ssPeriodoRel;    
+    protected $ssoPeriodoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="SSPeriodosDetallesEmpleadoRel")
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="ssoPeriodosDetallesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;    
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="SSPeriodosDetallesContratoRel")
+     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="SsoPeriodosDetallesContratoRel")
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
     protected $contratoRel;    
     
+
+
 
 
     /**
@@ -82,7 +84,7 @@ class RhuSSPeriodoDetalle
      *
      * @param integer $codigoPeriodoFk
      *
-     * @return RhuSSPeriodoDetalle
+     * @return RhuSsoPeriodoDetalle
      */
     public function setCodigoPeriodoFk($codigoPeriodoFk)
     {
@@ -106,7 +108,7 @@ class RhuSSPeriodoDetalle
      *
      * @param integer $codigoEmpleadoFk
      *
-     * @return RhuSSPeriodoDetalle
+     * @return RhuSsoPeriodoDetalle
      */
     public function setCodigoEmpleadoFk($codigoEmpleadoFk)
     {
@@ -130,7 +132,7 @@ class RhuSSPeriodoDetalle
      *
      * @param integer $codigoContratoFk
      *
-     * @return RhuSSPeriodoDetalle
+     * @return RhuSsoPeriodoDetalle
      */
     public function setCodigoContratoFk($codigoContratoFk)
     {
@@ -150,83 +152,11 @@ class RhuSSPeriodoDetalle
     }
 
     /**
-     * Set ssPeriodoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodo $ssPeriodoRel
-     *
-     * @return RhuSSPeriodoDetalle
-     */
-    public function setSsPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodo $ssPeriodoRel = null)
-    {
-        $this->ssPeriodoRel = $ssPeriodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ssPeriodoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodo
-     */
-    public function getSsPeriodoRel()
-    {
-        return $this->ssPeriodoRel;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuSSPeriodoDetalle
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
-     * Set contratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
-     *
-     * @return RhuSSPeriodoDetalle
-     */
-    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
-    {
-        $this->contratoRel = $contratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get contratoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
-     */
-    public function getContratoRel()
-    {
-        return $this->contratoRel;
-    }
-
-    /**
      * Set tipoRegistro
      *
      * @param string $tipoRegistro
      *
-     * @return RhuSSPeriodoDetalle
+     * @return RhuSsoPeriodoDetalle
      */
     public function setTipoRegistro($tipoRegistro)
     {
@@ -250,7 +180,7 @@ class RhuSSPeriodoDetalle
      *
      * @param string $secuencia
      *
-     * @return RhuSSPeriodoDetalle
+     * @return RhuSsoPeriodoDetalle
      */
     public function setSecuencia($secuencia)
     {
@@ -274,7 +204,7 @@ class RhuSSPeriodoDetalle
      *
      * @param string $tipoDocumentoCotizante
      *
-     * @return RhuSSPeriodoDetalle
+     * @return RhuSsoPeriodoDetalle
      */
     public function setTipoDocumentoCotizante($tipoDocumentoCotizante)
     {
@@ -291,5 +221,77 @@ class RhuSSPeriodoDetalle
     public function getTipoDocumentoCotizante()
     {
         return $this->tipoDocumentoCotizante;
+    }
+
+    /**
+     * Set ssoPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel = null)
+    {
+        $this->ssoPeriodoRel = $ssoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoPeriodoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo
+     */
+    public function getSsoPeriodoRel()
+    {
+        return $this->ssoPeriodoRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
     }
 }

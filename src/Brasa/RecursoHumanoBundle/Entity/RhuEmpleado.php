@@ -401,9 +401,9 @@ class RhuEmpleado
     protected $disciplinariosEmpleadoRel;         
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuSSPeriodoDetalle", mappedBy="empleadoRel")
+     * @ORM\OneToMany(targetEntity="RhuSsoPeriodoDetalle", mappedBy="empleadoRel")
      */
-    protected $SSPeriodosDetallesEmpleadoRel;
+    protected $ssoPeriodosDetallesEmpleadoRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenBarrio", inversedBy="rhuEmpleadosBarrioRel")
@@ -428,6 +428,7 @@ class RhuEmpleado
     protected $empleadosEstudiosEmpleadoRel;
    
  
+ 
     /**
      * Constructor
      */
@@ -443,7 +444,7 @@ class RhuEmpleado
         $this->programacionesPagosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->disciplinariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->SSPeriodosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoPeriodosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosEstudiosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -2263,37 +2264,37 @@ class RhuEmpleado
     }
 
     /**
-     * Add sSPeriodosDetallesEmpleadoRel
+     * Add ssoPeriodosDetallesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function addSSPeriodosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesEmpleadoRel)
+    public function addSsoPeriodosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesEmpleadoRel)
     {
-        $this->SSPeriodosDetallesEmpleadoRel[] = $sSPeriodosDetallesEmpleadoRel;
+        $this->ssoPeriodosDetallesEmpleadoRel[] = $ssoPeriodosDetallesEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Remove sSPeriodosDetallesEmpleadoRel
+     * Remove ssoPeriodosDetallesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesEmpleadoRel
      */
-    public function removeSSPeriodosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSSPeriodoDetalle $sSPeriodosDetallesEmpleadoRel)
+    public function removeSsoPeriodosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesEmpleadoRel)
     {
-        $this->SSPeriodosDetallesEmpleadoRel->removeElement($sSPeriodosDetallesEmpleadoRel);
+        $this->ssoPeriodosDetallesEmpleadoRel->removeElement($ssoPeriodosDetallesEmpleadoRel);
     }
 
     /**
-     * Get sSPeriodosDetallesEmpleadoRel
+     * Get ssoPeriodosDetallesEmpleadoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSSPeriodosDetallesEmpleadoRel()
+    public function getSsoPeriodosDetallesEmpleadoRel()
     {
-        return $this->SSPeriodosDetallesEmpleadoRel;
+        return $this->ssoPeriodosDetallesEmpleadoRel;
     }
 
     /**
