@@ -4,14 +4,14 @@
 <div class="container">    
     {{ form_start(formCreditoTipo, { 'attr': {'class': 'form-horizontal'} }) }}
     {{ form_errors(formCreditoTipo) }}
-    <h3>Nuevo Tipo Credito</h3>
+    <h3>Nuevo tipo crédito</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
         <div class="panel-body">
             <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Nombre:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formCreditoTipo.nombre, { 'attr': {'onkeypress': 'txNombres();','class': 'form-control','autofocus':'autofocus'} }) }}
+                        {{ form_widget(formCreditoTipo.nombre, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
             </div>       
              

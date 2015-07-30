@@ -180,7 +180,7 @@ class CreditosController extends Controller
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
             ->add('BtnDesaprobar', 'submit', array('label'  => 'Desaprobar',))
-            ->add('BtnSuspender', 'submit', array('label'  => 'Suspender / No Suspender',))
+            ->add('BtnSuspender', 'submit', array('label'  => 'Suspender / No suspender',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))    
             ->getForm();
         return $form;

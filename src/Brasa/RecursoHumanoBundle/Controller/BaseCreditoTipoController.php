@@ -120,4 +120,116 @@ class BaseCreditoTipoController extends Controller
         ));
     }
     
+    public function detalleAction($codigoCreditoTipoPk) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->createFormBuilder()    
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->getForm();
+        $form->handleRequest($request);
+        $arCreditosTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
+        $arCreditosTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->find($codigoCreditoTipoPk);
+        $arCreditosTiposEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditosTiposEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoCreditoTipoFk' => $codigoCreditoTipoPk));
+        if($form->isValid()) {
+                      
+            if($form->get('BtnExcel')->isClicked())$em = $this->getDoctrine()->getManager();{
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+                    ->setLastModifiedBy("EMPRESA")
+                    ->setTitle("Office 2007 XLSX Test Document")
+                    ->setSubject("Office 2007 XLSX Test Document")
+                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("Test result file");
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A1', 'Codigo_Credito')
+                            ->setCellValue('B1', 'Tipo_Credito')
+                            ->setCellValue('C1', 'Fecha_Credito')
+                            ->setCellValue('D1', 'Centro_Costo')
+                            ->setCellValue('E1', 'Empleado')
+                            ->setCellValue('F1', 'Valor_Credito')
+                            ->setCellValue('G1', 'Valor_Cuota')
+                            ->setCellValue('H1', 'Valor_Seguro')
+                            ->setCellValue('I1', 'Cuotas')
+                            ->setCellValue('J1', 'Cuota_Actual')
+                            ->setCellValue('K1', 'Pagado')
+                            ->setCellValue('L1', 'Aprobado')
+                            ->setCellValue('M1', 'Suspendido');
+
+                $i = 2;
+                
+                foreach ($arCreditosTiposEmpleados as $arCreditosTiposEmpleados) {
+                    if ($arCreditosTiposEmpleados->getEstadoPagado() == 1)
+                    {
+                        $Estado = "SI";
+                    }
+                    else
+                    {
+                        $Estado = "NO"; 
+                    }
+                    if ($arCreditosTiposEmpleados->getAprobado() == 1)
+                    {
+                        $Aprobado = "SI";
+                    }
+                    else
+                    {
+                        $Aprobado = "NO"; 
+                    }
+                    if ($arCreditosTiposEmpleados->getEstadoSuspendido() == 1)
+                    {
+                        $Suspendido = "SI";
+                    }
+                    else
+                    {
+                        $Suspendido = "NO"; 
+                    }
+                    $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A' . $i, $arCreditosTiposEmpleados->getCodigoCreditoPk())
+                            ->setCellValue('B' . $i, $arCreditosTiposEmpleados->getCreditoTipoRel()->getNombre())
+                            ->setCellValue('C' . $i, $arCreditosTiposEmpleados->getFecha())
+                            ->setCellValue('D' . $i, $arCreditosTiposEmpleados->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                            ->setCellValue('E' . $i, $arCreditosTiposEmpleados->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('F' . $i, $arCreditosTiposEmpleados->getVrPagar())
+                            ->setCellValue('G' . $i, $arCreditosTiposEmpleados->getVrCuota())
+                            ->setCellValue('H' . $i, $arCreditosTiposEmpleados->getSeguro())
+                            ->setCellValue('I' . $i, $arCreditosTiposEmpleados->getNumeroCuotas())
+                            ->setCellValue('J' . $i, $arCreditosTiposEmpleados->getNumeroCuotaActual())
+                            ->setCellValue('K' . $i, $Estado)
+                            ->setCellValue('L' . $i, $Aprobado)
+                            ->setCellValue('M' . $i, $Suspendido);
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->setTitle('Creditos');
+                $objPHPExcel->setActiveSheetIndex(0);
+
+                // Redirect output to a client’s web browser (Excel2007)
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="Creditos.xlsx"');
+                header('Cache-Control: max-age=0');
+                // If you're serving to IE 9, then the following may be needed
+                header('Cache-Control: max-age=1');
+                // If you're serving to IE over SSL, then the following may be needed
+                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header ('Pragma: public'); // HTTP/1.0
+                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+                $objWriter->save('php://output');
+                exit;
+            }
+        }
+        $arCreditosTiposEmpleados = $paginator->paginate($arCreditosTiposEmpleados, $this->get('request')->query->get('page', 1),30);
+        return $this->render('BrasaRecursoHumanoBundle:Base/CreditoTipo:detalle.html.twig', array(
+                    'arCreditosTiposEmpleados' => $arCreditosTiposEmpleados,
+                    'arCreditosTipo' => $arCreditosTipo,
+                    'form' => $form->createView()
+                    ));
+    }
+    
 }
