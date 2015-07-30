@@ -15,20 +15,22 @@
                 <th>HASTA</th>
                 <th>GENERADO</th>
                 <th></th>
+                <th></th>
             </tr>
-            {% for arSSPeriodos in arSSPeriodos %}
+            {% for arSsoPeriodos in arSsoPeriodos %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arSSPeriodos.codigoPeriodoPk }}">{{ arSSPeriodos.codigoPeriodoPk }} </td>
-                <td>{{ arSSPeriodos.anio  }}</td>
-                <td>{{ arSSPeriodos.mes  }}</td>
-                <td>{{ arSSPeriodos.fechaDesde |date("Y/m/d")  }}</td>
-                <td>{{ arSSPeriodos.fechaHasta |date("Y/m/d")  }}</td>
-                <td {% if arSSPeriodos.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSSPeriodos.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>                                
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSSPeriodos.codigoPeriodoPk }}" /></td>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoPeriodos.codigoPeriodoPk }}">{{ arSsoPeriodos.codigoPeriodoPk }} </td>
+                <td>{{ arSsoPeriodos.anio  }}</td>
+                <td>{{ arSsoPeriodos.mes  }}</td>
+                <td>{{ arSsoPeriodos.fechaDesde |date("Y/m/d")  }}</td>
+                <td>{{ arSsoPeriodos.fechaHasta |date("Y/m/d")  }}</td>
+                <td {% if arSsoPeriodos.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodos.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>                                
+                <td style="text-align: center">{% if arSsoPeriodos.estadoGenerado == 1 %}<a href="{{ path('brs_rhu_ss_periodo_detalle', { 'codigoPeriodo': arSsoPeriodos.codigoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a>{% endif %}</td>                
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoPeriodos.codigoPeriodoPk }}" /></td>
             </tr>
             {% endfor %}                        
         </table>                       
-        {{ knp_pagination_render(arSSPeriodos) }}    
+        {{ knp_pagination_render(arSsoPeriodos) }}    
 
 
         <!-- Botones Menu Items -->

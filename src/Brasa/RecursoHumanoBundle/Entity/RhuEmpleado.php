@@ -398,12 +398,7 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="empleadoRel")
      */
-    protected $disciplinariosEmpleadoRel;         
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuSsoPeriodoDetalle", mappedBy="empleadoRel")
-     */
-    protected $ssoPeriodosDetallesEmpleadoRel;
+    protected $disciplinariosEmpleadoRel;             
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenBarrio", inversedBy="rhuEmpleadosBarrioRel")
@@ -444,7 +439,6 @@ class RhuEmpleado
         $this->programacionesPagosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->disciplinariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ssoPeriodosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosEstudiosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -2261,40 +2255,6 @@ class RhuEmpleado
     public function getDisciplinariosEmpleadoRel()
     {
         return $this->disciplinariosEmpleadoRel;
-    }
-
-    /**
-     * Add ssoPeriodosDetallesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addSsoPeriodosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesEmpleadoRel)
-    {
-        $this->ssoPeriodosDetallesEmpleadoRel[] = $ssoPeriodosDetallesEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove ssoPeriodosDetallesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesEmpleadoRel
-     */
-    public function removeSsoPeriodosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodosDetallesEmpleadoRel)
-    {
-        $this->ssoPeriodosDetallesEmpleadoRel->removeElement($ssoPeriodosDetallesEmpleadoRel);
-    }
-
-    /**
-     * Get ssoPeriodosDetallesEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSsoPeriodosDetallesEmpleadoRel()
-    {
-        return $this->ssoPeriodosDetallesEmpleadoRel;
     }
 
     /**

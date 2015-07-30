@@ -15,7 +15,7 @@ class RhuSsoPeriodoDetalle
      * @ORM\Column(name="codigo_periodo_detalle_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoPeriodoPk;   
+    private $codigoPeriodoDetallePk;   
 
     /**
      * @ORM\Column(name="codigo_periodo_fk", type="integer")
@@ -23,60 +23,36 @@ class RhuSsoPeriodoDetalle
     private $codigoPeriodoFk;    
     
     /**
-     * @ORM\Column(name="codigo_empleado_fk", type="integer")
+     * @ORM\Column(name="codigo_sucursal_fk", type="integer")
      */    
-    private $codigoEmpleadoFk; 
+    private $codigoSucursalFk;       
     
-    /**
-     * @ORM\Column(name="codigo_contrato_fk", type="integer")
+    /**     
+     * @ORM\Column(name="estado_generado", type="boolean")
      */    
-    private $codigoContratoFk;
-    
-    /**
-     * @ORM\Column(name="tipo_registro", type="string", length=2, nullable=true)
-     */    
-    private $tipoRegistro;     
-
-    /**
-     * @ORM\Column(name="secuencia", type="string", length=5, nullable=true)
-     */    
-    private $secuencia;    
-    
-    /**
-     * @ORM\Column(name="tipo_documento_cotizante", type="string", length=2, nullable=true)
-     */    
-    private $tipoDocumentoCotizante;     
+    private $estadoGenerado = 0;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="SsoPeriodosDetallesSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
     protected $ssoPeriodoRel;    
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="ssoPeriodosDetallesEmpleadoRel")
-     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
-     */
-    protected $empleadoRel;    
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="SsoPeriodosDetallesContratoRel")
-     * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
+     * @ORM\ManyToOne(targetEntity="RhuSsoSucursal", inversedBy="SsoPeriodosDetallesSsoSucursalRel")
+     * @ORM\JoinColumn(name="codigo_sucursal_fk", referencedColumnName="codigo_sucursal_pk")
      */
-    protected $contratoRel;    
+    protected $ssoSucursalRel;    
     
 
-
-
-
     /**
-     * Get codigoPeriodoPk
+     * Get codigoPeriodoDetallePk
      *
      * @return integer
      */
-    public function getCodigoPeriodoPk()
+    public function getCodigoPeriodoDetallePk()
     {
-        return $this->codigoPeriodoPk;
+        return $this->codigoPeriodoDetallePk;
     }
 
     /**
@@ -104,123 +80,27 @@ class RhuSsoPeriodoDetalle
     }
 
     /**
-     * Set codigoEmpleadoFk
+     * Set codigoSucursalFk
      *
-     * @param integer $codigoEmpleadoFk
+     * @param integer $codigoSucursalFk
      *
      * @return RhuSsoPeriodoDetalle
      */
-    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    public function setCodigoSucursalFk($codigoSucursalFk)
     {
-        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+        $this->codigoSucursalFk = $codigoSucursalFk;
 
         return $this;
     }
 
     /**
-     * Get codigoEmpleadoFk
+     * Get codigoSucursalFk
      *
      * @return integer
      */
-    public function getCodigoEmpleadoFk()
+    public function getCodigoSucursalFk()
     {
-        return $this->codigoEmpleadoFk;
-    }
-
-    /**
-     * Set codigoContratoFk
-     *
-     * @param integer $codigoContratoFk
-     *
-     * @return RhuSsoPeriodoDetalle
-     */
-    public function setCodigoContratoFk($codigoContratoFk)
-    {
-        $this->codigoContratoFk = $codigoContratoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoContratoFk
-     *
-     * @return integer
-     */
-    public function getCodigoContratoFk()
-    {
-        return $this->codigoContratoFk;
-    }
-
-    /**
-     * Set tipoRegistro
-     *
-     * @param string $tipoRegistro
-     *
-     * @return RhuSsoPeriodoDetalle
-     */
-    public function setTipoRegistro($tipoRegistro)
-    {
-        $this->tipoRegistro = $tipoRegistro;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoRegistro
-     *
-     * @return string
-     */
-    public function getTipoRegistro()
-    {
-        return $this->tipoRegistro;
-    }
-
-    /**
-     * Set secuencia
-     *
-     * @param string $secuencia
-     *
-     * @return RhuSsoPeriodoDetalle
-     */
-    public function setSecuencia($secuencia)
-    {
-        $this->secuencia = $secuencia;
-
-        return $this;
-    }
-
-    /**
-     * Get secuencia
-     *
-     * @return string
-     */
-    public function getSecuencia()
-    {
-        return $this->secuencia;
-    }
-
-    /**
-     * Set tipoDocumentoCotizante
-     *
-     * @param string $tipoDocumentoCotizante
-     *
-     * @return RhuSsoPeriodoDetalle
-     */
-    public function setTipoDocumentoCotizante($tipoDocumentoCotizante)
-    {
-        $this->tipoDocumentoCotizante = $tipoDocumentoCotizante;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoDocumentoCotizante
-     *
-     * @return string
-     */
-    public function getTipoDocumentoCotizante()
-    {
-        return $this->tipoDocumentoCotizante;
+        return $this->codigoSucursalFk;
     }
 
     /**
@@ -248,50 +128,50 @@ class RhuSsoPeriodoDetalle
     }
 
     /**
-     * Set empleadoRel
+     * Set ssoSucursalRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $ssoSucursalRel
      *
      * @return RhuSsoPeriodoDetalle
      */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    public function setSsoSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $ssoSucursalRel = null)
     {
-        $this->empleadoRel = $empleadoRel;
+        $this->ssoSucursalRel = $ssoSucursalRel;
 
         return $this;
     }
 
     /**
-     * Get empleadoRel
+     * Get ssoSucursalRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal
      */
-    public function getEmpleadoRel()
+    public function getSsoSucursalRel()
     {
-        return $this->empleadoRel;
+        return $this->ssoSucursalRel;
     }
 
     /**
-     * Set contratoRel
+     * Set estadoGenerado
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     * @param boolean $estadoGenerado
      *
      * @return RhuSsoPeriodoDetalle
      */
-    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    public function setEstadoGenerado($estadoGenerado)
     {
-        $this->contratoRel = $contratoRel;
+        $this->estadoGenerado = $estadoGenerado;
 
         return $this;
     }
 
     /**
-     * Get contratoRel
+     * Get estadoGenerado
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     * @return boolean
      */
-    public function getContratoRel()
+    public function getEstadoGenerado()
     {
-        return $this->contratoRel;
+        return $this->estadoGenerado;
     }
 }
