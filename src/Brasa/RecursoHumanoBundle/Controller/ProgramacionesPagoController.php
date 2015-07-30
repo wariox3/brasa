@@ -602,26 +602,31 @@ class ProgramacionesPagoController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO');
-
+                    ->setCellValue('A1', 'CODIG0');
+                    
         $i = 2;
-        $query = $em->createQuery($this->strSqlLista);
-        //$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPagos = $query->getResult();
-        foreach ($arPagos as $arPago) {            
+        
+        
+        
+        
+        $query = $em->createQuery($this->strDqlLista);
+        $arProgramacionesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionesPagos = $query->getResult();
+        foreach ($arProgramacionesPagos as $arProgramacionesPago) {
+           
+            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPago->getCodigoPagoPk());
+                   
+                    ->setCellValue('A' . $i, $arProgramacionesPago->getCodigoProgramacionPagoPk());
+                    
             $i++;
         }
-
-        $objPHPExcel->getActiveSheet()->setTitle('pagos');
+        $objPHPExcel->getActiveSheet()->setTitle('Examen');
         $objPHPExcel->setActiveSheetIndex(0);
-
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Pagos.xlsx"');
+        header('Content-Disposition: attachment;filename="Examenes.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
