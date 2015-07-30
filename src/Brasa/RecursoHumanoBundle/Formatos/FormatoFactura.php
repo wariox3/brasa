@@ -108,7 +108,7 @@ class FormatoFactura extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(10);
-        $header = array('ID','IBC','T.A','V.A','AUX. TRANS','ARP', 'EPS', 'PENSION', 'CAJA', 'CESANTIAS', 'VACACIONES', 'ADMON');
+        $header = array('COD','IBC','T.A','V.A','AUX. TRANS','ARP', 'EPS', 'PENSION', 'CAJA', 'CESANTIAS', 'VACACIONES', 'ADMON');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);

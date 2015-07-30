@@ -87,7 +87,7 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
         $this->SetFont('Arial', 'B', 8);
-        $header = array('ID', 'CREDITO', 'NOMBRE', 'VR. DEDUCCION', 'DETALLES');
+        $header = array('CODIGO', 'CREDITO', 'NOMBRE', 'VR. DEDUCCION', 'DETALLES');
         
         //creamos la cabecera de la tabla.
         $w = array(12, 15, 45, 24, 89);

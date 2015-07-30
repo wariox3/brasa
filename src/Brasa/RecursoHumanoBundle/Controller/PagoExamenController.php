@@ -152,7 +152,7 @@ class PagoExamenController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'ENTIDAD')
                     ->setCellValue('C1', 'TOTAL');
                     

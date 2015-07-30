@@ -29,7 +29,7 @@ class FormatoFacturaLista extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'NUMERO', 'FECHA', 'F. VENCE', 'CLIENTE', 'CENTRO COSTO', 'BRUTO', 'NETO');
+        $header = array('COD', 'NUMERO', 'FECHA', 'F. VENCE', 'CLIENTE', 'CENTRO COSTO', 'BRUTO', 'NETO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);

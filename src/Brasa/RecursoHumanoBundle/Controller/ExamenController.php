@@ -156,7 +156,7 @@ class ExamenController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('A1', 'CODIG0')
                     ->setCellValue('B1', 'ENTIDAD')
                     ->setCellValue('C1', 'CENTRO_COSTOS')
                     ->setCellValue('D1', 'FECHA')

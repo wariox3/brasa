@@ -20,19 +20,19 @@ class FormatoSede extends \FPDF_FPDF {
         $this->SetFont('Arial','B',12);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
-        $this->Cell(190, 8, "LISTADO SEDES" , 1, 0, 'C', 1);
+        $this->Cell(193, 8, "LISTADO SEDES" , 1, 0, 'C', 1);
         $this->EncabezadoDetalles();
     }
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'CENTRO COSTO', 'NOMBRE');
+        $header = array('CODIGO', 'CENTRO COSTO', 'NOMBRE');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
         $this->SetFont('Arial', 'B', 8);
         //creamos la cabecera de la tabla.
-        $w = array(10, 100, 80);
+        $w = array(13, 100, 80);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -51,7 +51,7 @@ class FormatoSede extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arSedes as $arSede) {            
-            $pdf->Cell(10, 4, $arSede->getCodigoSedePk(), 1, 0, 'L');
+            $pdf->Cell(13, 4, $arSede->getCodigoSedePk(), 1, 0, 'L');
             $pdf->Cell(100, 4, utf8_decode($arSede->getCentroCostoRel()->getNombre()), 1, 0, 'L');
             $pdf->Cell(80, 4, utf8_decode($arSede->getNombre()), 1, 0, 'L');
             $pdf->Ln();

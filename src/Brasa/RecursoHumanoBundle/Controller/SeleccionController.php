@@ -271,7 +271,7 @@ class SeleccionController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'TIPO')
                     ->setCellValue('C1', 'GRUPO')
                     ->setCellValue('D1', 'IDENTIFICACION')

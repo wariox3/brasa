@@ -32,7 +32,7 @@ class FormatoListaPagos extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'PERIODO','IDENTIFICACION', 'EMPLEADO', 'CENTRO COSTO', 'SALARIO', 'DEVENGADO', 'DEDUCCIONES', 'NETO');
+        $header = array('COD', 'PERIODO','IDENTIFICACION', 'EMPLEADO', 'CENTRO COSTO', 'SALARIO', 'DEVENGADO', 'DEDUCCIONES', 'NETO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);

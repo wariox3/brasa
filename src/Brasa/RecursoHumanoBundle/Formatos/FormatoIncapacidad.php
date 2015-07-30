@@ -30,7 +30,7 @@ class FormatoIncapacidad extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'IDENTIFICACION', 'EMPLEADO','CENTRO COSTOS', 'DESDE', 'HASTA', 'HORAS', 'TRANSCRIPCION');
+        $header = array('CODIGO', 'IDENTIFICACION', 'EMPLEADO','CENTRO COSTOS', 'DESDE', 'HASTA', 'HORAS', 'TRANSCRIPCION');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
