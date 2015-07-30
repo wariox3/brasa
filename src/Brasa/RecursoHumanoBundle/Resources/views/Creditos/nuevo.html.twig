@@ -2,6 +2,9 @@
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    {% if mensaje != "0" %}
+        <div class="alert alert-danger" role="alert">{{mensaje}}</div>
+    {% endif%}
     <h3>Nuevo credito</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>

@@ -212,30 +212,37 @@ class CreditosController extends Controller
         $form = $this->createForm(new RhuCreditoType(), $arCredito);       
         $form->handleRequest($request);
         if ($form->isValid()) {            
-            $arCredito = $form->getData();
-            $douVrPagar = $form->get('vrPagar')->getData();
-            $intCuotas = $form->get('numeroCuotas')->getData();
-            $vrSeguro = $form->get('seguro')->getData();
-            $vrSaltoTotal = $douVrPagar;
-            $douVrCuota = $douVrPagar / $intCuotas;
-            $arCredito->setVrCuota($douVrCuota);
-            $arSeleccion = $request->request->get('ChkSeleccionar');
-            //$arCredito->setCreditoTipoPagoRel($arCredito);   
-            $arCredito->setFecha(new \DateTime('now'));
-            $arCredito->setSaldo($vrSaltoTotal);
-            $arCredito->setSaldoTotal($vrSaltoTotal);
-            $arCredito->setNumeroCuotaActual(0);
-            $arCredito->setEmpleadoRel($arEmpleado);
-            $em->persist($arCredito);
-            $em->flush();                            
-            echo "<script languaje='javascript' type='text/javascript'>opener.location.reload();</script>";
-            echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";                
+            if ($form->get('vrPagar')->getData() == 0 || $form->get('numeroCuotas')->getData() == 0){
+                $mensaje = "El total a pagar y/o las cuotas no pueden estar en cero";
+            } else {
+                $arCredito = $form->getData();
+                $douVrPagar = $form->get('vrPagar')->getData();
+                $intCuotas = $form->get('numeroCuotas')->getData();
+                $vrSeguro = $form->get('seguro')->getData();
+                $vrSaltoTotal = $douVrPagar;
+                $douVrCuota = $douVrPagar / $intCuotas;
+                $arCredito->setVrCuota($douVrCuota);
+                $arSeleccion = $request->request->get('ChkSeleccionar');  
+                $arCredito->setFecha(new \DateTime('now'));
+                $arCredito->setSaldo($vrSaltoTotal);
+                $arCredito->setSaldoTotal($vrSaltoTotal);
+                $arCredito->setNumeroCuotaActual(0);
+                $arCredito->setEmpleadoRel($arEmpleado);
+                $em->persist($arCredito);
+                $em->flush();                            
+                echo "<script languaje='javascript' type='text/javascript'>opener.location.reload();</script>";
+                echo "<script languaje='javascript' type='text/javascript'>window.close();</script>"; 
+            }
+                            
         }                
-
-        return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevo.html.twig', array(
+        
+            return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevo.html.twig', array(
             'arCredito' => $arCredito,
             'PeriodoPago' => $PeriodoPago,
+            'mensaje' => $mensaje,
             'form' => $form->createView()));
+        
+        
     }
     
     public function detalleAction($codigoCreditoPk) {

@@ -17,7 +17,8 @@ class ConfiguracionController extends Controller
         $request = $this->getRequest();
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
-
+        $arConsecutivo = new \Brasa\RecursoHumanoBundle\Entity\RhuConsecutivo();
+        $arConsecutivo = $em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->findAll();
         $arrayPropiedadesConceptoAuxilioTransporte = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
             'query_builder' => function (EntityRepository $er) {
@@ -127,11 +128,27 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoAportePension($codigoConceptoAportePension);
             $arConfiguracion->setCodigoAporteSalud($codigoConceptoAporteSalud);
             $arConfiguracion->setCodigoEntidadRiesgoFk($codigoConceptoRiesgoProfesional);
+            
+            $arrControles = $request->request->All();
+            $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        $arConsecutivo = new \Brasa\RecursoHumanoBundle\Entity\RhuConsecutivo();
+                        $arConsecutivo = $em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->find($intCodigo);
+                        if(count($arConsecutivo) > 0) {                                            
+                                $intConsecutivo = $arrControles['TxtConsecutivo'.$intCodigo];
+                                $arConsecutivo->setConsecutivo($intConsecutivo);
+                                $em->persist($arConsecutivo);
+                            
+                        }
+                        $intIndice++;
+                    }
             $em->persist($arConfiguracion);
             $em->flush();
+            return $this->redirect($this->generateUrl('brs_rhu_configuracion_nomina', array('codigoConfiguracionPk' => 1)));
         }
         return $this->render('BrasaRecursoHumanoBundle:Configuracion:Configuracion.html.twig', array(
             'formConfiguracion' => $formConfiguracion->createView(),
+            'arConsecutivo' => $arConsecutivo
         ));
     }
     
