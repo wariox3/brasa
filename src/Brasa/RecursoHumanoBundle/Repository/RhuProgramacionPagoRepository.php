@@ -158,7 +158,18 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         }
     }    
     
-    public function listaDQL($strFechaDesde = "", $strFechaHasta = "", $codigoCentroCosto, $boolMostrarGenerados) {        
+    /**
+     * Listar las programaciones de pago segun parametros
+     * 
+     * @author		Mario Estrada
+     * 
+     * @param string	$strFechaDesde          Fecha desde
+     * @param string    $strFechaHasta          Fecha hasta
+     * @param integer   $codigoCentroCosto      Codigo del centro de costos
+     * @param boolean   $boolMostrarGenerados   Generados
+     * @param boolean   $boolMostrarPagados     Pagados
+     */    
+    public function listaDQL($strFechaDesde = "", $strFechaHasta = "", $codigoCentroCosto, $boolMostrarGenerados, $boolMostrarPagados) {        
         $em = $this->getEntityManager();
         $dql   = "SELECT pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPago pp WHERE pp.codigoProgramacionPagoPk <> 0 ";
         if($strFechaDesde != "" ) {
@@ -177,6 +188,12 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         if($boolMostrarGenerados == "0") {
             $dql .= " AND pp.estadoGenerado = 0";
         }  
+        if($boolMostrarPagados == 1 ) {
+            $dql .= " AND pp.estadoPagado = 1";
+        } 
+        if($boolMostrarPagados == "0") {
+            $dql .= " AND pp.estadoPagado = 0";
+        }        
         $dql .= " ORDER BY pp.codigoProgramacionPagoPk DESC";
         return $dql;
     }                            

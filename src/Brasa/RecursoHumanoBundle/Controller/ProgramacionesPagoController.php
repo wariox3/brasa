@@ -358,20 +358,6 @@ class ProgramacionesPagoController extends Controller
                 }
 
             }                
-            if($form->get('BtnGenerarEmpleados')->isClicked()) {
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                        $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarEmpleados($codigoProgramacionPago);
-                        $arProgramacionPagoProcesar->setEmpleadosGenerados(1);
-                        $em->persist($arProgramacionPagoProcesar);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                    
-                }
-
-            }
             if($form->get('BtnEliminarPago')->isClicked()) {                                
                 foreach ($arrSeleccionados AS $codigoProgramacionPago) {
                     $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -381,7 +367,11 @@ class ProgramacionesPagoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
             }                
-                        
+            if($form->get('BtnPagar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPagar');                
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagarSeleccionados($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_utilidades_pagos_pagar'));                
+            }                        
         }       
                 
         $arProgramacionPago = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
@@ -556,9 +546,11 @@ class ProgramacionesPagoController extends Controller
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
             ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'GENERADO', '0' => 'SIN GENERAR'), 'data' => $session->get('filtroEstadoGenerado')))                                            
+            ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PAGADOS', '0' => 'SIN PAGAR'), 'data' => $session->get('filtroEstadoPagado')))                                                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnGenerarEmpleados', 'submit', array('label'  => 'Generar empleados',))            
+            ->add('BtnPagar', 'submit', array('label'  => 'Pagar',))            
+            ->add('BtnDeshacer', 'submit', array('label'  => 'Des-hacer',))                                
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
             ->add('BtnEliminarPago', 'submit', array('label'  => 'Eliminar',))                 
             ->getForm();        
@@ -572,7 +564,8 @@ class ProgramacionesPagoController extends Controller
                     "",
                     "",
                     $session->get('filtroCodigoCentroCosto'),
-                    $session->get('filtroEstadoGenerado')
+                    $session->get('filtroEstadoGenerado'),
+                    $session->get('filtroEstadoPagado')
                     );  
     }         
     
@@ -582,6 +575,7 @@ class ProgramacionesPagoController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroEstadoGenerado', $form->get('estadoGenerado')->getData());        
+        $session->set('filtroEstadoPagado', $form->get('estadoPagado')->getData());        
     }         
     
     private function generarExcel() {
