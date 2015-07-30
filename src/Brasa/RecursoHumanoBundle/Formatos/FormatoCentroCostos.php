@@ -29,7 +29,7 @@ class FormatoCentroCostos extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'NOMBRE', 'PERIODO', 'HASTA', 'PAGO AUTOMATICO', 'HORA', 'ABIERTO', 'ACTIVO');
+        $header = array('COD', 'NOMBRE', 'PERIODO', 'HASTA', 'PAGO AUTOMATICO', 'HORA', 'ABIERTO', 'ACTIVO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);

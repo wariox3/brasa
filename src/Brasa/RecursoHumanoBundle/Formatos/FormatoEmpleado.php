@@ -28,7 +28,7 @@ class FormatoEmpleado extends \FPDF_FPDF {
     }
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'IDENTIFICACION', 'NOMBRE', 'CENTRO COSTOS', 'F. NACIMIENTO', 'TELEFONO', 'SALARIO', 'AUX.T', 'ACTIVO');
+        $header = array('CODIGO', 'IDENTIFICACION', 'NOMBRE', 'CENTRO COSTOS', 'F. NACIMIENTO', 'TELEFONO', 'SALARIO', 'AUX.T', 'ACTIVO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);

@@ -28,7 +28,7 @@ class FormatoSalud extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('ID', 'NOMBRE', 'NIT', 'DIRECCION', 'TELEFONO','INTERFACE');
+        $header = array('COD', 'NOMBRE', 'NIT', 'DIRECCION', 'TELEFONO','INTERFACE');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
