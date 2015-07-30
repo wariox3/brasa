@@ -34,17 +34,17 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->SetFont('Arial','b',12);
         $this->Cell(100, 21, "HOJA DE VIDA EMPRESARIAL" , 1, 0, 'C', 1);
         $this->SetFont('Arial','b',8);
-        $this->Cell(45, 7, "codigo:FOR-SS-02.03" , 1, 0, 'C', 1);
+        $this->Cell(45, 7, "" , 1, 0, 'C', 1);
         $this->SetXY(150, 12);
-        $this->Cell(45, 7, "Version: 03" , 1, 0, 'C', 1);
+        $this->Cell(45, 7, "" , 1, 0, 'C', 1);
         $this->SetXY(150, 19);
-        $this->Cell(45, 7, "Fecha: Abril de 2014" , 1, 0, 'C', 1);
+        $this->Cell(45, 7, "" , 1, 0, 'C', 1);
         $this->SetXY(195, 5);
-        $this->Cell(9, 7, "SS" , 1, 0, 'C', 1);
+        $this->Cell(9, 7, "" , 1, 0, 'C', 1);
         $this->SetXY(195, 12);
-        $this->Cell(9, 7, "N1" , 1, 0, 'C', 1);
+        $this->Cell(9, 7, "" , 1, 0, 'C', 1);
         $this->SetXY(195, 19);
-        $this->Cell(9, 7, "N2" , 1, 0, 'C', 1);
+        $this->Cell(9, 7, "" , 1, 0, 'C', 1);
         
         $this->SetXY(164, 35);
         $this->Cell(35, 45, "foto" , 1, 0, 'C', 1);
