@@ -50,6 +50,7 @@
                 <th>F. NACIMIENTO</th>
                 <th>TELEFONO</th>                
                 <th style="text-align: right">SALARIO</th>
+                <th>FECHA INICIO</th>
                 <th>AUX.T</th>
                 <th>ACT</th>
                 <th>ACCIONES NUEVO</th>
@@ -61,11 +62,12 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleados.codigoEmpleadoPk }}">{{ arEmpleados.codigoEmpleadoPk }} </td>
                 <td>{{ arEmpleados.numeroIdentificacion  }}</td>
-                <td>{{ arEmpleados.nombreCorto  }}</td>
+                <td>{{ arEmpleados.nombreCorto }}</td>
                 <td>{% if arEmpleados.centroCostoRel.nombre is defined %} {{ arEmpleados.centroCostoRel.nombre  }} {% endif %}</td>
                 <td>{{ arEmpleados.fechaNacimiento |date("Y/m/d")  }}</td>
                 <td>{{ arEmpleados.telefono }}</td>                
                 <td style="text-align: right">{{ arEmpleados.VrSalario | number_format(0, '.', ',') }}</td>                            
+                <td>{% if arEmpleados.fechaContrato != "" %} {{ arEmpleados.fechaContrato|date('Y/m/d')  }} {% else %} SIN DEFINIR {% endif %}</td>
                 <td>{% if arEmpleados.auxilioTransporte == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>{% if arEmpleados.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>
@@ -106,7 +108,7 @@
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="{{ path('brs_rhu_base_centros_costos_lista') }}">Centros costos</a></li>              
                   <li class="divider"></li>
-                  <li><a href="{{ path('brs_rhu_utilidades_pagos_generar_pago') }}">Generacion pagos</a></li>              
+                  <li><a href="{{ path('brs_rhu_programaciones_pago_lista') }}">Generacion pagos</a></li>              
                 </ul>
             </div> 
                 

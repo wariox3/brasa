@@ -28,7 +28,7 @@ class EmpleadoEstudioController extends Controller
             $em->persist($arEmpleadoEstudio);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_base_empleadoEstudio_nuevo', array('codigoEmpleado' => $codigoEmpleado, 'codigoEmpleadoEstudio' => 0 )));
+                return $this->redirect($this->generateUrl('brs_rhu_base_empleado_estudio_nuevo', array('codigoEmpleado' => $codigoEmpleado, 'codigoEmpleadoEstudio' => 0 )));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
