@@ -22,13 +22,17 @@ class RhuCentroCostoType extends AbstractType
                 'empty_data' => 4,
                 'empty_value' => 'QUINCENAL',
                 )) 
+            ->add('sucursalRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSsoSucursal',
+                'property' => 'nombre',
+                'required' => true))
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))    
+                'required' => true))                
             ->add('nombre', 'text', array('required' => true))   
             ->add('fechaUltimoPagoProgramado', 'date')
             ->add('horaPagoAutomatico', 'time')                

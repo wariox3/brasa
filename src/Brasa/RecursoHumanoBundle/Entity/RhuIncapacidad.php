@@ -106,7 +106,10 @@ class RhuIncapacidad
      */
     protected $incapacidadDiagnosticoRel; 
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="incapacidadRel")
+     */
+    protected $pagosDetallesIncapacidadRel;
 
 
     /**
@@ -525,5 +528,46 @@ class RhuIncapacidad
     public function getIncapacidadDiagnosticoRel()
     {
         return $this->incapacidadDiagnosticoRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosDetallesIncapacidadRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add pagosDetallesIncapacidadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesIncapacidadRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function addPagosDetallesIncapacidadRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesIncapacidadRel)
+    {
+        $this->pagosDetallesIncapacidadRel[] = $pagosDetallesIncapacidadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosDetallesIncapacidadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesIncapacidadRel
+     */
+    public function removePagosDetallesIncapacidadRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesIncapacidadRel)
+    {
+        $this->pagosDetallesIncapacidadRel->removeElement($pagosDetallesIncapacidadRel);
+    }
+
+    /**
+     * Get pagosDetallesIncapacidadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosDetallesIncapacidadRel()
+    {
+        return $this->pagosDetallesIncapacidadRel;
     }
 }

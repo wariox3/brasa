@@ -1,0 +1,72 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h3>Detalle centro de costo</h3>
+        </div>
+
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Información centro de costo</div>
+            <div class="panel-body">
+                <table width="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">CÓDIGO:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.codigoCentroCostoPk }}</td>
+                        <td class="titulo">NOMBRE:</th>
+                        <td class="td-in-well">{{ arCentrosCostos.nombre }}</td>
+                        <td class="titulo">PERIODO PAGO:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.periodoPagoRel.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">ÚLTIMO PERIODO PAGADO :</td>
+                        <td class="td-in-well">{{ arCentrosCostos.fechaUltimoPagoProgramado|date('Y/m/d') }}</td>
+                        <td class="titulo">PAGO ABIERTO:</th>
+                        <td class="td-in-well">{% if arCentrosCostos.pagoAbierto == 1 %} SI {% else %} NO {% endif%}</td>
+                        <td class="titulo">ACTIVO:</td>
+                        <td class="td-in-well">{% if arCentrosCostos.estadoActivo == 1 %} SI {% else %} NO {% endif%}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PAGO AUTOMÁTICO:</td>
+                        <td class="td-in-well">{% if arCentrosCostos.generarPagoAutomatico == 1 %} SI {% else %} NO {% endif%}</td>
+                        <td class="titulo">HORA PAGO AUTOMÁTICO:</th>
+                        <td class="td-in-well">{{ arCentrosCostos.horaPagoAutomatico|date('H:i')}}</td>
+                        <td class="titulo">CIUDAD:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.ciudadRel.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">CÓDIGO INTERFACE:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.codigoInterface|default('SIN CÓDIGO') }}
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo">SUCURSAL SEGURIDAD SOCIAL:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.sucursalRel.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PORCENTAJE ADMINISTRACIÓN:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.porcentajeAdministracion }}
+                        <td class="titulo">VALOR ADMINISTRACIÓN:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.valorAdministracion }}
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">COMENTARIOS:</td>
+                        <td class="td-in-well" colspan="5">{{ arCentrosCostos.comentarios }}
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Botones Menu Items -->
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_centros_costos_lista') }}" style="float:left">Volver</a>
+            </div>
+        </div>    
+        
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

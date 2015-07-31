@@ -28,6 +28,11 @@ class RhuPagoDetalle
     private $codigoCreditoFk;
     
     /**
+     * @ORM\Column(name="codigo_incapacidad_fk", type="integer", nullable=true)
+     */    
+    private $codigoIncapacidadFk;
+    
+    /**
      * @ORM\Column(name="vr_pago", type="float")
      */
     private $vrPago = 0;     
@@ -111,6 +116,12 @@ class RhuPagoDetalle
      * @ORM\JoinColumn(name="codigo_credito_fk", referencedColumnName="codigo_credito_pk")
      */
     protected $creditoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuIncapacidad", inversedBy="pagosDetallesIncapacidadRel")
+     * @ORM\JoinColumn(name="codigo_incapacidad_fk", referencedColumnName="codigo_incapacidad_pk")
+     */
+    protected $incapacidadRel;
     
     
     /**
@@ -553,5 +564,53 @@ class RhuPagoDetalle
     public function getCreditoRel()
     {
         return $this->creditoRel;
+    }
+
+    /**
+     * Set codigoIncapacidadFk
+     *
+     * @param integer $codigoIncapacidadFk
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setCodigoIncapacidadFk($codigoIncapacidadFk)
+    {
+        $this->codigoIncapacidadFk = $codigoIncapacidadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoIncapacidadFk
+     *
+     * @return integer
+     */
+    public function getCodigoIncapacidadFk()
+    {
+        return $this->codigoIncapacidadFk;
+    }
+
+    /**
+     * Set incapacidadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadRel
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setIncapacidadRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadRel = null)
+    {
+        $this->incapacidadRel = $incapacidadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidadRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad
+     */
+    public function getIncapacidadRel()
+    {
+        return $this->incapacidadRel;
     }
 }

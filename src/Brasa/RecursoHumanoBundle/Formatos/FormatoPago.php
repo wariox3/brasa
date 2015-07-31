@@ -2,7 +2,9 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoPago extends \FPDF_FPDF {
     public static $em;
+    
     public static $codigoPago;
+    
     public function Generar($miThis, $codigoPago) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
@@ -17,6 +19,7 @@ class FormatoPago extends \FPDF_FPDF {
         $pdf->Output("Pago$codigoPago.pdf", 'D');        
         
     } 
+    
     public function Header() {
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPago = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find(self::$codigoPago);
@@ -63,11 +66,11 @@ class FormatoPago extends \FPDF_FPDF {
         $this->SetFont('Arial','B',6.5);
         $this->Cell(24, 6, "EPS:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',6);
-        $this->Cell(24, 6, $arPago->getEmpleadoRel()->getEntidadSaludRel()->getNombre() , 1, 0, 'L', 1);
+        $this->Cell(24, 6, utf8_decode($arPago->getEmpleadoRel()->getEntidadSaludRel()->getNombre()) , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',6.5);
-        $this->Cell(24, 6, "SALUD :" , 1, 0, 'L', 1);
+        $this->Cell(24, 6, utf8_decode("PENSIÓN :") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',6);
-        $this->Cell(21, 6, $arPago->getEmpleadoRel()->getEntidadPensionRel()->getNombre() , 1, 0, 'L', 1);
+        $this->Cell(21, 6, utf8_decode($arPago->getEmpleadoRel()->getEntidadPensionRel()->getNombre()) , 1, 0, 'L', 1);
         //FILA 4
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',6.5);
@@ -110,7 +113,7 @@ class FormatoPago extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(40, 75, 12, 14, 12, 20, 20);
+        $w = array(40, 83, 11, 14, 9, 18, 18);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -129,21 +132,25 @@ class FormatoPago extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagoDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => self::$codigoPago));
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         foreach ($arPagoDetalle as $arPagoDetalle) {            
+            $pdf->SetFont('Arial', '', 6);
             $pdf->Cell(40, 4, $arPagoDetalle->getPagoConceptoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(75, 4, utf8_decode($arPagoDetalle->getDetalle()), 1, 0, 'L');
-            $pdf->Cell(12, 4, number_format($arPagoDetalle->getNumeroHoras(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(83, 4, utf8_decode($arPagoDetalle->getDetalle()), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(11, 4, number_format($arPagoDetalle->getNumeroHoras(), 2, '.', ','), 1, 0, 'R');
             $pdf->Cell(14, 4, number_format($arPagoDetalle->getVrHora(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(12, 4, number_format($arPagoDetalle->getPorcentajeAplicado(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(9, 4, number_format($arPagoDetalle->getPorcentajeAplicado(), 2, '.', ','), 1, 0, 'R');
             if($arPagoDetalle->getOperacion() == -1) {
-                $pdf->Cell(20, 4, "-".number_format($arPagoDetalle->getVrPago(), 2, '.', ','), 1, 0, 'R');    
+                $pdf->Cell(18, 4, "-".number_format($arPagoDetalle->getVrPago(), 2, '.', ','), 1, 0, 'R');    
             } else {
-                $pdf->Cell(20, 4, number_format(0, 2, '.', ','), 1, 0, 'R');    
+                $pdf->Cell(18, 4, number_format(0, 2, '.', ','), 1, 0, 'R');    
             }            
             if($arPagoDetalle->getOperacion() == 1) {
-                $pdf->Cell(20, 4, number_format($arPagoDetalle->getVrPago(), 2, '.', ','), 1, 0, 'R');    
+                $pdf->Cell(18, 4, number_format($arPagoDetalle->getVrPago(), 2, '.', ','), 1, 0, 'R');    
             } else {
-                $pdf->Cell(20, 4, number_format(0, 2, '.', ','), 1, 0, 'R');    
+                $pdf->Cell(18, 4, number_format(0, 2, '.', ','), 1, 0, 'R');    
             }            
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
@@ -169,7 +176,7 @@ class FormatoPago extends \FPDF_FPDF {
             $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
             $arPagoDetalles = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => self::$codigoPago));
                 $this->SetFillColor(236, 236, 236);
-                $pdf->Cell(193, 4, "INFORMACION DE CREDITOS", 1, 0, 'L');
+                $pdf->Cell(193, 4, utf8_decode("INFORMACIÓN DE CREDITOS"), 1, 0, 'L');
                 $pdf->Ln(4);
                 $pdf->Cell(24, 4, "CODIGO", 1, 0, 'L');
                 $pdf->Cell(24, 4, "FECHA", 1, 0, 'L');
@@ -180,9 +187,9 @@ class FormatoPago extends \FPDF_FPDF {
                 $pdf->Cell(24, 4, "APROBADO", 1, 0, 'L');
                 $pdf->Cell(24, 4, "SUSPENDIDO", 1, 0, 'L');
                 $pdf->Ln();
-                $pdf->SetFont('Arial', '', 7);
+                $pdf->SetFont('Arial', '', 8);
                 foreach ($arPagoDetalles as $arPagoDetalles) {
-                    if ($arPagoDetalles->getCodigoCreditoFk() <> "" && $arPagoDetalles->getCodigoPagoConceptoFk() == 14) { 
+                    if ($arPagoDetalles->getCodigoCreditoFk() <> "" && $arPagoDetalles->getCodigoPagoConceptoFk() == $arConfiguracion->getCodigoCredito()) { 
                         $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                         $arCredito = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalles->getCodigoCreditoFk());
                         $this->SetFillColor(272, 272, 272);
@@ -208,6 +215,37 @@ class FormatoPago extends \FPDF_FPDF {
                     }
                 
                 }
+            $pdf->Ln(8);
+            $pdf->SetFont('Arial', 'B', 7);
+            // INFORMACION DE INCAPACIDADES
+            $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+            $arPagoDetalles = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => self::$codigoPago));
+                $this->SetFillColor(236, 236, 236);
+                $pdf->Cell(193, 4, utf8_decode("INFORMACIÓN DE INCAPACIDADES"), 1, 0, 'L');
+                $pdf->Ln(4);
+                $pdf->Cell(32, 4, utf8_decode("CÓDIGO"), 1, 0, 'L');
+                $pdf->Cell(32, 4, "DESDE", 1, 0, 'L');
+                $pdf->Cell(32, 4, "HASTA", 1, 0, 'L');
+                $pdf->Cell(32, 4, "HORAS", 1, 0, 'L');
+                $pdf->Cell(32, 4, "VALOR HORA", 1, 0, 'L');
+                $pdf->Cell(33, 4, utf8_decode("NÚMERO EPS"), 1, 0, 'L');
+                $pdf->Ln();
+                $pdf->SetFont('Arial', '', 8);
+                foreach ($arPagoDetalles as $arPagoDetalles) {
+                    if ($arPagoDetalles->getCodigoIncapacidadFk() <> "" && $arPagoDetalles->getCodigoPagoConceptoFk() == $arConfiguracion->getCodigoIncapacidad()) { 
+                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+                        $arIncapacidad = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arPagoDetalles->getCodigoIncapacidadFk());
+                        $this->SetFillColor(272, 272, 272);
+                        $pdf->Cell(32, 4, $arIncapacidad->getCodigoIncapacidadPk(), 1, 0, 'L');
+                        $pdf->Cell(32, 4, $arIncapacidad->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');
+                        $pdf->Cell(32, 4, $arIncapacidad->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');
+                        $pdf->Cell(32, 4, $arPagoDetalles->getNumeroHoras(), 1, 0, 'L');
+                        $pdf->Cell(32, 4, number_format($arPagoDetalles->getVrHora(), 2, '.', ','), 1, 0, 'R');
+                        $pdf->Cell(33, 4, $arIncapacidad->getNumeroEps(), 1, 0, 'L');
+                        $pdf->Ln();
+                    }
+                
+                }    
     }
 
     public function Footer() {

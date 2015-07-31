@@ -69,6 +69,8 @@ class ProgramacionesPagoController extends Controller
                                 $douIngresoBaseCotizacion = 0;                                
 
                                 //Procesar Incapacidades
+                                $arPagoConceptoIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConceptoIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoIncapacidad());
                                 $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
                                 $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk()));
                                 foreach ($arIncapacidades as $arIncapacidad) {
@@ -103,11 +105,13 @@ class ProgramacionesPagoController extends Controller
                                     }
                                     $arPagoDetalle->setNumeroHoras($intHorasProcesarIncapacidad);
                                     $arPagoDetalle->setVrHora($douVrHora);
+                                    $arPagoDetalle->setDetalle($arIncapacidad->getIncapacidadDiagnosticoRel()->getNombre());
                                     $arPagoDetalle->setVrDia($douVrDia);
                                     $arPagoDetalle->setVrPago($douPagoDetalle);
                                     $arPagoDetalle->setOperacion($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
                                     $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                                    $arPagoDetalle->setIncapacidadRel($arIncapacidad);
                                     $em->persist($arPagoDetalle);
                                     if($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getPrestacional() == 1) {
                                         $douDevengado = $douDevengado + $douPagoDetalle;
@@ -301,7 +305,7 @@ class ProgramacionesPagoController extends Controller
                                 $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoPension);
                                 $douPorcentaje = $arPagoConcepto->getPorPorcentaje();                                
                                 if($douIngresoBaseCotizacion * $arCentroCosto->getPeriodoPagoRel()->getPeriodosMes() > $douVrSalarioMinimo * 4) {                                    
-                                    $douPorcentaje = 5; //
+                                    $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra(); //PORCENTAJE PENSION EXTRA DEL 5%
                                 }
                                 $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;
                                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
@@ -604,24 +608,36 @@ class ProgramacionesPagoController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO');
-
+                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('B1', 'CODIGO')
+                    ->setCellValue('C1', 'CENTRO COSTO')
+                    ->setCellValue('D1', 'PERIODO')
+                    ->setCellValue('E1', 'DESDE')
+                    ->setCellValue('F1', 'HASTA')
+                    ->setCellValue('G1', 'DIAS');
+        
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
-        //$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arPagos = $query->getResult();
         foreach ($arPagos as $arPago) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPago->getCodigoProgramacionPagoPk());
+                    ->setCellValue('A' . $i, $arPago->getCodigoProgramacionPagoPk())
+                    ->setCellValue('B' . $i, $arPago->getCodigoCentroCostoFk())
+                    ->setCellValue('C' . $i, $arPago->getCentroCostoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arPago->getCentroCostoRel()->getPeriodoPagoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arPago->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('F' . $i, $arPago->getFechaHasta())
+                    ->setCellValue('G' . $i, $arPago->getDias());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('progpagos');
+        $objPHPExcel->getActiveSheet()->setTitle('ProgramacionPagos');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Pagos.xlsx"');
+        header('Content-Disposition: attachment;filename="ProgramacionPagos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

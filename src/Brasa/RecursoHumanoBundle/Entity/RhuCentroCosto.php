@@ -86,7 +86,7 @@ class RhuCentroCosto
     /**
      * @ORM\Column(name="codigo_sucursal_fk", type="integer", nullable=true)
      */    
-    private $codigoSucursalPagoFk;    
+    private $codigoSucursalFk;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
@@ -172,6 +172,7 @@ class RhuCentroCosto
     protected $liquidacionesCentroCostoRel;    
     
    
+    
     /**
      * Constructor
      */
@@ -185,6 +186,7 @@ class RhuCentroCosto
         $this->incapacidadesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosCobrarCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sedesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->examenesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -514,6 +516,30 @@ class RhuCentroCosto
     }
 
     /**
+     * Set codigoSucursalFk
+     *
+     * @param integer $codigoSucursalFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoSucursalFk($codigoSucursalFk)
+    {
+        $this->codigoSucursalFk = $codigoSucursalFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSucursalFk
+     *
+     * @return integer
+     */
+    public function getCodigoSucursalFk()
+    {
+        return $this->codigoSucursalFk;
+    }
+
+    /**
      * Set periodoPagoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPeriodoPago $periodoPagoRel
@@ -559,6 +585,30 @@ class RhuCentroCosto
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Set sucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $sucursalRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function setSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $sucursalRel = null)
+    {
+        $this->sucursalRel = $sucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sucursalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal
+     */
+    public function getSucursalRel()
+    {
+        return $this->sucursalRel;
     }
 
     /**
@@ -834,6 +884,40 @@ class RhuCentroCosto
     }
 
     /**
+     * Add serviciosCobrarCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addServiciosCobrarCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel)
+    {
+        $this->serviciosCobrarCentroCostoRel[] = $serviciosCobrarCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosCobrarCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel
+     */
+    public function removeServiciosCobrarCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel)
+    {
+        $this->serviciosCobrarCentroCostoRel->removeElement($serviciosCobrarCentroCostoRel);
+    }
+
+    /**
+     * Get serviciosCobrarCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosCobrarCentroCostoRel()
+    {
+        return $this->serviciosCobrarCentroCostoRel;
+    }
+
+    /**
      * Add facturasCentroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturasCentroCostoRel
@@ -967,87 +1051,5 @@ class RhuCentroCosto
     public function getLiquidacionesCentroCostoRel()
     {
         return $this->liquidacionesCentroCostoRel;
-    }
-
-    /**
-     * Add serviciosCobrarCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function addServiciosCobrarCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel)
-    {
-        $this->serviciosCobrarCentroCostoRel[] = $serviciosCobrarCentroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove serviciosCobrarCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel
-     */
-    public function removeServiciosCobrarCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarCentroCostoRel)
-    {
-        $this->serviciosCobrarCentroCostoRel->removeElement($serviciosCobrarCentroCostoRel);
-    }
-
-    /**
-     * Get serviciosCobrarCentroCostoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getServiciosCobrarCentroCostoRel()
-    {
-        return $this->serviciosCobrarCentroCostoRel;
-    }
-
-    /**
-     * Set codigoSucursalPagoFk
-     *
-     * @param integer $codigoSucursalPagoFk
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCodigoSucursalPagoFk($codigoSucursalPagoFk)
-    {
-        $this->codigoSucursalPagoFk = $codigoSucursalPagoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSucursalPagoFk
-     *
-     * @return integer
-     */
-    public function getCodigoSucursalPagoFk()
-    {
-        return $this->codigoSucursalPagoFk;
-    }
-
-    /**
-     * Set sucursalRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $sucursalRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function setSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $sucursalRel = null)
-    {
-        $this->sucursalRel = $sucursalRel;
-
-        return $this;
-    }
-
-    /**
-     * Get sucursalRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal
-     */
-    public function getSucursalRel()
-    {
-        return $this->sucursalRel;
     }
 }

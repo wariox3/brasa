@@ -67,14 +67,23 @@ class RhuConfiguracion
     private $codigoAportePension;
     
     /**
+     * @ORM\Column(name="porcentaje_pension_extra", type="float")
+     */    
+    private $porcentajePensionExtra;
+    
+    /**
+     * @ORM\Column(name="codigo_incapacidad", type="integer")
+     */    
+    private $codigoIncapacidad;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
     protected $entidadRiesgoProfesionalRel;
 
-    
 
-   
+    
 
     /**
      * Set codigoConfiguracionPk
@@ -341,6 +350,30 @@ class RhuConfiguracion
     }
 
     /**
+     * Set porcentajePensionExtra
+     *
+     * @param float $porcentajePensionExtra
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPorcentajePensionExtra($porcentajePensionExtra)
+    {
+        $this->porcentajePensionExtra = $porcentajePensionExtra;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajePensionExtra
+     *
+     * @return float
+     */
+    public function getPorcentajePensionExtra()
+    {
+        return $this->porcentajePensionExtra;
+    }
+
+    /**
      * Set entidadRiesgoProfesionalRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
@@ -362,5 +395,29 @@ class RhuConfiguracion
     public function getEntidadRiesgoProfesionalRel()
     {
         return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set codigoIncapacidad
+     *
+     * @param integer $codigoIncapacidad
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoIncapacidad($codigoIncapacidad)
+    {
+        $this->codigoIncapacidad = $codigoIncapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoIncapacidad
+     *
+     * @return integer
+     */
+    public function getCodigoIncapacidad()
+    {
+        return $this->codigoIncapacidad;
     }
 }

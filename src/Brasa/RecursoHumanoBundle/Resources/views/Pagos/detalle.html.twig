@@ -13,51 +13,52 @@
 
     <!-- Encabezado Movimiento -->
     <div class="panel panel-default">
-      <div class="panel-heading">Informacion programacion pago</div>
+      <div class="panel-heading">Información programación pago</div>
       <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
-                    <td class="td-label">Codigo:</td>
+                    <td class="titulo">CÓDIGO:</td>
                     <td class="td-in-well">{{ arPago.codigoPagoPk }}</td>
-                    <td class="td-label">Numero:</td>
+                    <td class="titulo">NÚMERO:</td>
                     <td class="td-in-well">{{ arPago.numero }}</td>
-                    <td class="td-label">Salario:</td>
+                    <td class="titulo">SALARIO:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.empleadoRel.VrSalario | number_format(2, '.', ',') }}</td>
-                    <td class="td-label">Salario periodo:</td>
+                    <td class="titulo">SALARIO PERIODO:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.VrSalario | number_format(2, '.', ',') }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Empleado:</td>
+                    <td class="titulo">EMPLEADO:</td>
                     <td class="td-in-well">{{ arPago.empleadoRel.nombreCorto }}</td>
-                    <td class="td-label">Fecha:</td>
+                    <td class="titulo">FECHA:</td>
                     <td class="td-in-well">{{ arPago.fechaHasta|date("Y/m/d") }}</td>
-                    <td class="td-label">IBC:</td>
+                    <td class="titulo">IBC:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.VrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
-                    <td class="td-label">Total devengado:</td>
+                    <td class="titulo">TOTAL DEVENGADO:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.VrDevengado | number_format(2, '.', ',') }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">C. Costo</td>
+                    <td class="titulo">CENTRO. COSTO</td>
                     <td class="td-in-well" >{{ arPago.centroCostoRel.nombre }}</td>
-                    <td class="td-label">Desde:</td>
+                    <td class="titulo">DESDE:</td>
                     <td class="td-in-well">{{ arPago.fechaDesde|date("Y/m/d") }}</td>
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well-numerico" align="right"></td>
-                    <td class="td-label">Total deducciones:</td>
+                    <td class="titulo">TOTAL DEDUCCIONES:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.VrDeducciones | number_format(2, '.', ',')}}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Programacion:</td>
+                    <td class="titulo">PROGRAMACIÓN:</td>
                     <td class="td-in-well" >{{ arPago.codigoProgramacionPagoFk }}</td>
-                    <td class="td-label">Hasta:</td>
+                    <td class="titulo">HASTA:</td>
                     <td class="td-in-well">{{ arPago.fechaHasta|date("Y/m/d") }}</td>
-                    <td class="td-label"></td>
+                    <td class="titulo"></td>
                     <td class="td-in-well-numerico" align="right"></td>
-                    <td class="td-label">Total neto:</td>
+                    <td class="titulo">TOTAL NETO:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.VrNeto | number_format(2, '.', ',')}}</td>
                 </tr>                  
                 <tr>
-                    <td colspan="8">Comentarios:</td>
+                    <td class="titulo">COMENTARIOS:</td>
+                    <td colspan="7"></td>
                 </tr>
             </table>
       </div>

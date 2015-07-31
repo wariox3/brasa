@@ -37,6 +37,7 @@
                 <th>ACTIVO</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arCentrosCostos in arCentrosCostos %}
             <tr>
@@ -50,6 +51,7 @@
                 <td>{% if arCentrosCostos.pagoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCentrosCostos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_base_centros_costos_nuevo', { 'codigoCentroCosto':  arCentrosCostos.codigoCentroCostoPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
+                <td><a href="{{ path('brs_rhu_base_centros_costos_detalle', { 'codigoCentroCosto': arCentrosCostos.codigoCentroCostoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCentrosCostos.codigoCentroCostoPk }}" /></td>
             </tr>
             {% endfor %}

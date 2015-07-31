@@ -20,7 +20,15 @@ brs_rhu_base_creditotipo_nuevo:
    
 brs_rhu_base_creditotipo_detalle:
    path:     /rhumano/base/creditotipo/detalle/{codigoCreditoTipoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:detalle }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:detalle }
+   
+brs_rhu_base_ssosucursal_listar:
+   path:     /rhumano/base/ssosucursal/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSsoSucursal:listar }
+   
+brs_rhu_base_ssosucursal_nuevo:
+   path:     /rhumano/base/ssosucursal/nuevo/{codigoSucursalPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSsoSucursal:nuevo }   
 
 brs_rhu_utilidades_pagos_generar_periodo:
     path:     /rhumano/utilidades/pagos/generar/periodo
@@ -124,7 +132,11 @@ brs_rhu_base_centros_costos_lista:
 
 brs_rhu_base_centros_costos_nuevo:
     path:     /rhumano/base/centroscostos/nuevo/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:nuevo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:nuevo }
+    
+brs_rhu_base_centros_costos_detalle:
+    path:     /rhumano/base/centroscostos/detalle/{codigoCentroCosto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:detalle }    
     
 brs_rhu_base_empleados_lista:
     path:     /rhumano/base/empleados/lista
