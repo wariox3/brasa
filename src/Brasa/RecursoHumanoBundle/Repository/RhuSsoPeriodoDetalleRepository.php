@@ -25,7 +25,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         $arPeriodoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk(), 'codigoSucursalFk' => $arPeriodoDetalle->getCodigoSucursalFk()));                
         foreach ($arPeriodoEmpleados as $arPeriodoEmpleado) {
             $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->contratosPeriodoEmpleado($arPeriodoDetalle->getPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arPeriodoEmpleado->getCodigoEmpleadoFk());                    
+            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->contratosPeriodoEmpleado($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arPeriodoEmpleado->getCodigoEmpleadoFk());                    
             if($arContrato <= 1) {
                 foreach ($arContratos as $arContrato) {
                     $i++;
