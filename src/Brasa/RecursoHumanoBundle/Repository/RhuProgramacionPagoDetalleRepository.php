@@ -43,5 +43,17 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $em->persist($arProgramacionPagoDetalleProcesar);
         }
         $em->flush();
-    }    
+    } 
+    
+    public function listaDQLDetalleArchivo($codigoProgramacionPago = "") {        
+        $em = $this->getEntityManager();
+        $strSql = "SELECT ppd,e FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle ppd JOIN ppd.empleadoRel e WHERE
+                  ppd.codigoProgramacionPagoFk = ".$codigoProgramacionPago."";
+    
+        //$strSql .= " ORDER BY e.nombreCorto";
+        $query = $em->createQuery($strSql);
+        $arRegistros = $query->getResult();
+        return $arRegistros;        
+    }
+    
 }

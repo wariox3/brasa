@@ -332,8 +332,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         return true;
     }
 
-
-
     public function eliminarEmpleados($codigoProgramacionPago) {
         $em = $this->getEntityManager();
         $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
@@ -357,7 +355,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
                 . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
                 . " AND c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
-                . " AND c.indefinido = 1";
+                . " OR c.indefinido = 1";
         $query = $em->createQuery($dql);
         $arContratos = $query->getResult();
         foreach ($arContratos as $arContrato) {
@@ -452,6 +450,27 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em->flush();
         return true;
     }
-
+    
+    //listado de programaciones de pago pagadas para generar archivo txt bancolombia
+    public function listaDQLArchivo($codigoCentroCosto) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPago pp WHERE pp.estadoPagado = 1 ";
+        
+        if($codigoCentroCosto != "" && $codigoCentroCosto != 0) {
+            $dql .= " AND pp.codigoCentroCostoFk =" . $codigoCentroCosto;
+        }
+        
+        $dql .= " ORDER BY pp.codigoProgramacionPagoPk DESC";
+        return $dql;
+    }
+    
+    //total registros de la programacion de pago a exportar a txt
+    public function totalResgistrosProgramacionPago($codigoProgramacionPago) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT COUNT(c.codigoProgramacionPagoDetallePk) FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle c WHERE c.codigoProgramacionPagoFk = " . $codigoProgramacionPago ."AND c.vrNetoPagar > 0";
+        $query = $em->createQuery($dql);
+        $intRegistros = $query->getSingleScalarResult();
+        return $intRegistros;
+    }
 
 }

@@ -124,7 +124,15 @@ brs_rhu_programaciones_pago_agregar_empleado:
 
 brs_rhu_programaciones_pago_cargar_tiempo_sede:
     path:     /rhumano/programaciones/pago/cargar/tiempo/sede/{codigoProgramacionPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarTiempoSedes:cargar }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarTiempoSedes:cargar }
+    
+brs_rhu_programaciones_pago_archivo_lista:
+    path:     /rhumano/programaciones/pago/archivo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoArchivo:lista }     
+    
+brs_rhu_programaciones_pago_archivo_detalle:
+    path:     /rhumano/programaciones/pago/archivo/detalle/{codigoProgramacionPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoArchivo:detalle }    
     
 brs_rhu_base_centros_costos_lista:
     path:     /rhumano/base/centroscostos/lista
@@ -369,3 +377,7 @@ brs_rhu_disciplinario_detalle:
 brs_rhu_configuracion_nomina:
     path:     /rhumano/configuracion/{codigoConfiguracionPk}
     defaults: { _controller: BrasaRecursoHumanoBundle:Configuracion:configuracion }
+    
+brs_rhu_configuracion_general:
+    path:     /rhumano/configuracion/general/{codigoConfiguracionPk}
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConfiguracionGeneral:configuracion }    
