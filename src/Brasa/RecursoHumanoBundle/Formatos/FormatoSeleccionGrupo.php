@@ -64,9 +64,9 @@ class FormatoSeleccionGrupo extends \FPDF_FPDF {
         foreach ($arSelecciones as $arSeleccion) {            
             $pdf->Cell(10, 4, $arSeleccion->getCodigoSeleccionPk(), 1, 0, 'L');
             $pdf->Cell(40, 4, $arSeleccion->getSeleccionTipoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(22, 4, $arSeleccion->getFechaPruebas()->format('Y/m/d'), 1, 0, 'L');
             $pdf->Cell(22, 4, $arSeleccion->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(22, 4, $arSeleccion->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(65, 4, $arSeleccion->getNombreCorto(), 1, 0, 'L');
+            $pdf->Cell(65, 4, utf8_decode($arSeleccion->getNombreCorto()), 1, 0, 'L');
             $pdf->Cell(15, 4, $arSeleccion->getTelefono(), 1, 0, 'L');
             $pdf->Cell(20, 4, $arSeleccion->getCelular(), 1, 0, 'L');            
             $pdf->Ln();

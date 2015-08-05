@@ -420,19 +420,23 @@ class ProgramacionesPagoController extends Controller
             
             if($form->get('BtnActualizarEmpleados')->isClicked()) {            
                 $arrControles = $request->request->All();
+                $arEmpleadosDetalleProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findby(array('codigoProgramacionPagoFk' =>$codigoProgramacionPago));
+                $duoRegistrosDetalleEmpleados = count($arEmpleadosDetalleProgramacionPago);
                 $intIndice = 0;
-                foreach ($arrControles['LblCodigoDetalle'] as $intCodigo) {
-                   if($arrControles['TxtHorasPeriodoReales'][$intIndice] != "") {
-                       $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-                       $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
-                       $arProgramacionPagoDetalle->setHorasPeriodoReales($arrControles['TxtHorasPeriodoReales'][$intIndice]);
-                       $arProgramacionPagoDetalle->setDiasReales($arrControles['TxtDiasReales'][$intIndice]);
-                       $em->persist($arProgramacionPagoDetalle);
-                   }
-                   $intIndice++;
+                if ($duoRegistrosDetalleEmpleados != 0){
+                    foreach ($arrControles['LblCodigoDetalle'] as $intCodigo) {
+                       if($arrControles['TxtHorasPeriodoReales'][$intIndice] != "") {
+                           $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                           $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
+                           $arProgramacionPagoDetalle->setHorasPeriodoReales($arrControles['TxtHorasPeriodoReales'][$intIndice]);
+                           $arProgramacionPagoDetalle->setDiasReales($arrControles['TxtDiasReales'][$intIndice]);
+                           $em->persist($arProgramacionPagoDetalle);
+                       }
+                       $intIndice++;
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 }
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
             }
             if($form->get('BtnEliminarEmpleados')->isClicked()) {            
                 $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
