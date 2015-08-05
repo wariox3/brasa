@@ -44,7 +44,11 @@ class ExamenController extends Controller
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
         if($codigoExamen != 0) {
             $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+            
+        }else{
+            $arExamen->setFecha(new \DateTime('now'));
         }
+        //$arExamen->setFecha(new \DateTime('now'));
         $form = $this->createForm(new RhuExamenType, $arExamen);
         $form->handleRequest($request);
         if ($form->isValid()) {           

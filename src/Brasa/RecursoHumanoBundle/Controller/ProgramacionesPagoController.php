@@ -72,7 +72,8 @@ class ProgramacionesPagoController extends Controller
                                 $arPagoConceptoIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                                 $arPagoConceptoIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoIncapacidad());
                                 $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-                                $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk()));
+                                //$arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk()));//linea anterior
+                                $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->listadoIncapacidadesPendientesEmpleados($arProgramacionPagoDetalle->getCodigoEmpleadoFk());
                                 foreach ($arIncapacidades as $arIncapacidad) {
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
@@ -118,6 +119,10 @@ class ProgramacionesPagoController extends Controller
                                         $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $douIngresoBaseCotizacionIncapacidad;
                                         $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionIncapacidad);
                                     }
+                                    $arIncapacidadPagadas = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad;
+                                    $arIncapacidadPagadas = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arIncapacidad);
+                                    $arIncapacidadPagadas->setCantidadPendiente(0);
+                                    $em->persist($arIncapacidadPagadas);
                                 }
 
 
@@ -467,7 +472,7 @@ class ProgramacionesPagoController extends Controller
         $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPago->getCodigoCentroCostoFk(), 'pagoAplicado' => 0));
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-        $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoCentroCostoFk' => $arProgramacionPago->getCodigoCentroCostoFk()));
+        $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->listadoIncapacidadesPendientes($arProgramacionPago->getCodigoCentroCostoFk());
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoCentroCostoFk' => $arProgramacionPago->getCodigoCentroCostoFk()));
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));

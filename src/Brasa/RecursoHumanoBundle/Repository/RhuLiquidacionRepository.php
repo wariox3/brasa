@@ -92,7 +92,10 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arLiquidacion->setVrTotal($douTotal);
         $arLiquidacion->setVrSalario($douSalario);
         $arLiquidacion->setVrIngresoBaseCotizacion($douIBC);
-        $arLiquidacion->setVrIngresoBaseCotizacionTotal($douIBCTotal);                
+        $arLiquidacion->setVrIngresoBaseCotizacionTotal($douIBCTotal); 
+        $intDiasTotal = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
+        $intDiasTotal = $intDiasTotal->format('%a');
+        $arLiquidacion->setNumeroDias($intDiasTotal);
         $em->flush();
         return true;
     }        

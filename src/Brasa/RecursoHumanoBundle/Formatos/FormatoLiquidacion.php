@@ -64,7 +64,7 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 8);
         $this->Cell(35, 5, utf8_decode("NÚMERO DÍAS:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
-        $this->Cell(30, 5, $arLiquidacion->getDiasLaborados(), 1, 0, 'R', 1);
+        $this->Cell(30, 5, $arLiquidacion->getNumeroDias(), 1, 0, 'R', 1);
         //BLOQUE BASE LIQUIDACIÓN
         $intX = 120;
         $this->SetFont('Arial', 'B', 8);
