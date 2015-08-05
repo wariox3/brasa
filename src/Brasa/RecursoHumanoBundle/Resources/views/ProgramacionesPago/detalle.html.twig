@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h3>Resumen programacion pago</h3>
+        <h3>Resumen programación pago</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
     {{ form_errors(form) }}
@@ -27,11 +27,11 @@
     </div> <br /> <br /> <br /> 
     
     <div class="panel panel-default">
-      <div class="panel-heading">Detalle programacion de pago</div>
+      <div class="panel-heading">Detalle programación de pago</div>
       <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
-                    <td class="titulo">CODIGO:</td>
+                    <td class="titulo">CÓDIGO:</td>
                     <td class="td-in-well">{{ arProgramacionPago.codigoProgramacionPagoPk }}</td>
                     <td class="titulo">INCONSISTENCIAS:</td>
                     <td> {% if arProgramacionPago.inconsistencias == 0 %} NO {% else %} SI {% endif %} </td>                   
@@ -72,7 +72,7 @@
                 <th>SUBTIPO</th>
                 <th>DETALLE</th>
                 <th>EMPLEADO</th>
-                <th>CANT</th>
+                <th>CANTIDAD</th>
                 <th>VALOR</th>
                 <th>PERMANENTE</th>
             </tr>
@@ -164,7 +164,7 @@
                 <th>NETO</th>
                 <th>HORAS</th>
                 <th>H. REAL</th>
-                <th>DIAS</th>
+                <th>DÍAS</th>
                 <th>D. REAL</th>
                 <th>FAC</th>
                 <th></th>

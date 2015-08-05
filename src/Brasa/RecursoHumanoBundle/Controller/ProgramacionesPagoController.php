@@ -368,13 +368,15 @@ class ProgramacionesPagoController extends Controller
 
             }                
             if($form->get('BtnEliminarPago')->isClicked()) {                                
-                foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                    $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                    $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                    
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);                    
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPago->getCodigoCentroCostoFk());                                        
+                if ($arrSeleccionados > 0 ){
+                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
+                        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                    
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);                    
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPago->getCodigoCentroCostoFk());                                        
+                    }
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
             }                
             if($form->get('BtnPagar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');                
@@ -382,16 +384,18 @@ class ProgramacionesPagoController extends Controller
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
             }     
             if($form->get('BtnDeshacer')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');  
-                foreach ($arrSeleccionados as $codigoProgramacionPago) {
-                    $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                    $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                    if($arProgramacionPago->getEstadoGenerado() == 1 && $arProgramacionPago->getEstadoPagado() == 0) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->deshacer($codigoProgramacionPago);                        
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if ($arrSeleccionados > 0 ){
+                    foreach ($arrSeleccionados as $codigoProgramacionPago) {
+                        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+                        if($arProgramacionPago->getEstadoGenerado() == 1 && $arProgramacionPago->getEstadoPagado() == 0) {
+                            $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->deshacer($codigoProgramacionPago);                        
+                        }
                     }
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));                
-            }                 
+            }              
             
         }       
                 
