@@ -178,7 +178,7 @@ class FormatoPago extends \FPDF_FPDF {
                 $this->SetFillColor(236, 236, 236);
                 $pdf->Cell(193, 4, utf8_decode("INFORMACIÓN DE CREDITOS"), 1, 0, 'L');
                 $pdf->Ln(4);
-                $pdf->Cell(24, 4, "CODIGO", 1, 0, 'L');
+                $pdf->Cell(24, 4, utf8_decode("CÓDIGO"), 1, 0, 'L');
                 $pdf->Cell(24, 4, "FECHA", 1, 0, 'L');
                 $pdf->Cell(25, 4, "VALOR CREDITO", 1, 0, 'L');
                 $pdf->Cell(24, 4, "CUOTAS", 1, 0, 'L');
