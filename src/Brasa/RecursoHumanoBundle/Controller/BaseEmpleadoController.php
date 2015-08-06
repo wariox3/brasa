@@ -183,6 +183,7 @@ class BaseEmpleadoController extends Controller
             }  
             if($form->get('BtnRetirarLicencia')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarLicencia');
+                $mensajeLicencia = 0;
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoLicencia) {
                         $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
@@ -190,9 +191,8 @@ class BaseEmpleadoController extends Controller
                         if ($arLicencia->getEstadoCerrada()== 0){
                             $em->remove($arLicencia);
                         }else {
-                            echo "<script>alert('El registro no se puede eliminar, ha sido cerrado el proceso de la licencia.');</script>";
+                            $mensajeLicencia = "La licencia no se puede eliminar, ha sido cerrado el proceso de la licencia.";
                         }
-                        //$em->remove($arLicencia);
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
