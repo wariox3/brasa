@@ -353,6 +353,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                 . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
+                . " AND c.estadoActivo = 1"
                 . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
                 . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
                 . " OR c.indefinido = 1)";

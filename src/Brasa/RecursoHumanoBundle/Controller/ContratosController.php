@@ -80,7 +80,8 @@ class ContratosController extends Controller
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $mensaje = 0;
+        $objMensaje = 0;
+        $intEstado = 0;
         if($codigoContrato != 0) {
             $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         } else {
@@ -90,16 +91,17 @@ class ContratosController extends Controller
             $arContrato->setEstadoActivo(1);
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
             $douSalarioMinimo = $arConfiguracion->getVrSalario();
-            $arContrato->setVrSalario($douSalarioMinimo); //Parametrizar con configuracion salario minimo
+            $arContrato->setVrSalario($douSalarioMinimo); //se Parametrizó con configuracion salario minimo
             $douValidarEmpleadoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->validarEmpleadoContrato($codigoEmpleado);
+            if ($douValidarEmpleadoContrato >= 1){
+                $objMensaje = "El empleado tiene contrato abierto, no se puede generar otro contrato";
+                $intEstado = 1;
+            }
             
         }        
-        
-        
         $form = $this->createForm(new RhuContratoType(), $arContrato);
         $form->handleRequest($request);
-        if ($form->isValid()) {                        
-            
+        if ($form->isValid()) {                
                 $arContrato = $form->getData();
                 $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
                 $arContrato->setEmpleadoRel($arEmpleado);      
@@ -131,7 +133,8 @@ class ContratosController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevo.html.twig', array(
             'arContrato' => $arContrato,
             'arEmpleado' => $arEmpleado,
-            'mensaje' => $mensaje,
+            'objMensaje' => $objMensaje,
+            'intEstado' => $intEstado,
             'form' => $form->createView()));
     }
     
