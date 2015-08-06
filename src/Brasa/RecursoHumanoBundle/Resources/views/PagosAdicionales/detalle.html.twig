@@ -13,23 +13,23 @@
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
     <!-- Encabezado Movimiento -->
     <div class="panel panel-default">
-      <div class="panel-heading">Informacion programacion de pago</div>
+      <div class="panel-heading">Información programación de pago</div>
       <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
-                    <td class="td-label">Numero:</td>
+                    <td class="titulo">NÚMERO:</td>
                     <td class="td-in-well">{{ arProgramacionPago.codigoProgramacionPagoPk }}</td>
-                    <td class="td-label">Periodo desde:</td>
+                    <td class="titulo">PERIODO DESDE:</td>
                     <td class="td-in-well">{{ arProgramacionPago.fechaDesde |date("Y/m/d") }}</td>
                 </tr>
                 <tr>
-                    <td class="td-label">Centro de costo:</td>
+                    <td class="titulo">CENTRO DE COSTO:</td>
                     <td class="td-in-well">{{ arProgramacionPago.centroCostoRel.nombre }}</td>
-                    <td class="td-label">Periodo hasta:</td>
+                    <td class="titulo">PERIODO HASTA:</td>
                     <td class="td-in-well">{{ arProgramacionPago.fechaHasta |date("Y/m/d") }}</td>
                 </tr>
                 <tr>
-                    <td colspan="8">Comentarios:</td>
+                    <td class="titulo" colspan="8">COMENTARIOS:</td>
                 </tr>
             </table>
       </div>
@@ -43,7 +43,7 @@
                         <th>SUBTIPO</th>
                         <th>DETALLE</th>
                         <th>EMPLEADO</th>
-                        <th>CANT</th>
+                        <th>CANTIDAD</th>
                         <th>VALOR</th>
                         <th>PERMANENTE</th>
                         <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>

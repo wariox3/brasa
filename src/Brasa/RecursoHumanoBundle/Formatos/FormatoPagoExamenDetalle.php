@@ -28,7 +28,7 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         $this->SetXY(10, 30);
         $this->SetFillColor(272, 272, 272); 
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 6, "CODIGO:" , 1, 0, 'L', 1);
+        $this->Cell(30, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(30, 6, $arPagoExamen->getCodigoPagoExamenPk(), 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
@@ -47,7 +47,7 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(12);
-        $header = array('CODIGO', 'IDENTIFICACION', 'NOMBRE', 'PRECIO');
+        $header = array(utf8_decode('CÓDIGO'), utf8_decode('IDENTIFICACIÓN'), 'NOMBRE', 'PRECIO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);

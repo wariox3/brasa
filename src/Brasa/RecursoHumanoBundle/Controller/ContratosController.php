@@ -91,18 +91,15 @@ class ContratosController extends Controller
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
             $douSalarioMinimo = $arConfiguracion->getVrSalario();
             $arContrato->setVrSalario($douSalarioMinimo); //Parametrizar con configuracion salario minimo
+            $douValidarEmpleadoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->validarEmpleadoContrato($codigoEmpleado);
+            
         }        
-        $douValidarEmpleadoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->validarEmpleadoContrato($codigoEmpleado);
-        if ($douValidarEmpleadoContrato >= 1){
-                $mensaje = "El empleado tiene contrato abierto, no se puede generar otro contrato";
-            }
+        
+        
         $form = $this->createForm(new RhuContratoType(), $arContrato);
         $form->handleRequest($request);
         if ($form->isValid()) {                        
-            if ($douValidarEmpleadoContrato >= 1){
-                $mensaje = "El empleado tiene contrato abierto, no se puede generar otro contrato";
-            }
-            else {
+            
                 $arContrato = $form->getData();
                 $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
                 $arContrato->setEmpleadoRel($arEmpleado);      
@@ -128,7 +125,7 @@ class ContratosController extends Controller
                 $em->persist($arEmpleado);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>"; 
-            }
+            
             
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevo.html.twig', array(

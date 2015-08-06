@@ -85,18 +85,6 @@ class PagosAdicionalesController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 }
             }
-            if($form->get('BtnRetirarIncapacidad')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarIncapacidad');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoIncapacidad) {
-                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-                        $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
-                        $em->remove($arIncapacidad);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_detalle', array('codigoProgramacionCentroCosto' => $codigoProgramacionPago)));
-                }
-            }
         }
         //$arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         //$arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago, 'pagoAplicado' => 0));
