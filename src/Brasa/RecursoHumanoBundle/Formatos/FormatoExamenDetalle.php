@@ -44,7 +44,7 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "NOMBRE:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(100, 6, $arExamen->getNombreCorto(), 1, 0, 'L', 1);
+        $this->Cell(100, 6, utf8_decode($arExamen->getNombreCorto()), 1, 0, 'L', 1);
         $this->SetXY(10, 35);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "FECHA:" , 1, 0, 'L', 1);
@@ -65,11 +65,11 @@ class FormatoExamenDetalle extends \FPDF_FPDF {
         $this->Cell(100, 6, $arExamen->getEntidadExamenRel()->getNombre() , 1, 0, 'L', 1);
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 5, "DIRECCION:" , 1, 0, 'L', 1);
+        $this->Cell(30, 5, utf8_decode("DIRECCIÓN:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(100, 5, $direccion , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 5, "TELEFONO:" , 1, 0, 'L', 1);
+        $this->Cell(30, 5, utf8_decode("TELÉFONO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(30, 5, $telefono , 1, 0, 'L', 1);
         $this->EncabezadoDetalles();

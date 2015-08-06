@@ -33,7 +33,7 @@ class RhuEmpleado
     private $numeroIdentificacion;
     
     /**
-     * @ORM\Column(name="libreta_militar", type="string", length=20, nullable=false)
+     * @ORM\Column(name="libreta_militar", type="string", length=20, nullable=true)
      */
          
     private $libretaMilitar;
