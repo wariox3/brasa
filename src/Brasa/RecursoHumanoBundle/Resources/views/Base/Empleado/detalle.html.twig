@@ -12,15 +12,15 @@
         </div>
         <br /> <br />
         <div class="panel panel-default">
-            <div class="panel-heading">Informacion empleado</div>
+            <div class="panel-heading">Información empleado</div>
             <div class="panel-body">
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
-                        <td class="titulo">CODIGO:</td>
+                        <td class="titulo">CÓDIGO:</td>
                         <td class="td-in-well">{{ arEmpleado.codigoEmpleadoPk }}</td>
                         <td class="titulo">LIBRETA MILITAR:</td>
                         <td class="td-in-well">{{ arEmpleado.libretaMilitar }}</td>
-                        <td class="titulo">DIRECCION:</td>
+                        <td class="titulo">DIRECCIÓN:</td>
                         <td class="td-in-well">{{ arEmpleado.direccion }}</td>
                     </tr>
                     <tr>
@@ -32,7 +32,7 @@
                         <td class="td-in-well">{{ arEmpleado.barrioRel.nombre }}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">IDENTIFICACION:</td>
+                        <td class="titulo">IDENTIFICACIÓN:</td>
                         <td class="td-in-well">{{ arEmpleado.numeroIdentificacion }}</td>
                         <td class="titulo">TELEFONO:</td>
                         <td class="td-in-well">{{ arEmpleado.telefono }}</td>
@@ -56,15 +56,15 @@
                         <td class="td-in-well">{{ arEmpleado.correo }}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">TIPO PENSION:</td>
+                        <td class="titulo">TIPO PENSIÓN:</td>
                         <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="titulo">CARGO:</td>
                         <td class="td-in-well">{{ arEmpleado.cargoRel.nombre|default('SIN CONTRATO') }}</td>
-                        <td class="titulo">DESCRIPCION CARGO:</td>
+                        <td class="titulo">DESCRIPCIÓN CARGO:</td>
                         <td class="td-in-well">{{ arEmpleado.cargoDescripcion }}</td>
                     </tr>                
                     <tr>
-                        <td class="titulo">ENTIDAD PENSION:</td>
+                        <td class="titulo">ENTIDAD PENSIÓN:</td>
                         <td class="td-in-well" colspan="2">{{ arEmpleado.entidadPensionRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="td-in-well"></td>
                         <td class="titulo">PADRE FAMILIA</td>
@@ -78,7 +78,7 @@
                         <td class="td-in-well">{% if arEmpleado.cabezaHogar == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>                
                     <tr>
-                        <td class="titulo">CAJA COMPENSACION:</td>
+                        <td class="titulo">CAJA COMPENSACIÓN:</td>
                         <td class="td-in-well" colspan="2">{{ arEmpleado.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="td-in-well"></td>
                         <td class="titulo"></td>
@@ -100,7 +100,7 @@
                         <th>{{ knp_pagination_sortable(arContratos, 'CÓDIGO', 'e.codigoContratoPk') }}</th>
                         <th>TIPO</th>
                         <th>FECHA</th>
-                        <th>NUMERO</th>
+                        <th>NÚMERO</th>
                         <th>CENTRO COSTO</th>
                         <th>TIEMPO</th>
                         <th>DESDE</th>
@@ -241,10 +241,10 @@
                     <tr>
                         <th>{{ knp_pagination_sortable(arIncapacidades, 'CÓDIGO', 'e.codigoIncapacidadPk') }}</th>
                         <th>TIPO</th>
-                        <th>DIAGNOSTICO</th>
+                        <th>DIAGNÓSTICO</th>
                         <th>DESDE</th>
                         <th>HASTA</th>
-                        <th>DIAS</th>
+                        <th>DÍAS</th>
                         <th>PENDIENTES</th>
                         <th></th>
                         <th></th>
@@ -256,8 +256,8 @@
                             <td>{{ arIncapacidades.incapacidadDiagnosticoRel.nombre  }}</td>
                             <td>{{ arIncapacidades.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arIncapacidades.fechaHasta |date("Y/m/d")  }}</td>
-                            <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(2, '.', ',') }}</td>
-                            <td style="text-align: right">{{ arIncapacidades.cantidadPendiente | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arIncapacidades.cantidadPendiente | number_format(0, '.', ',') }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
                             <td><input type="checkbox" name="ChkSeleccionarIncapacidad[]" value="{{ arIncapacidades.codigoIncapacidadPk }}" /></td>
                         </tr>
@@ -285,9 +285,9 @@
                         <th>TIPO</th>
                         <th>DESDE</th>
                         <th>HASTA</th>
-                        <th>HORAS</th>
-                        <th>PENDIENTES</th>
+                        <th>DÍAS</th>
                         <th>AUX TRANS</th>
+                        <th>CERRADA</th>
                         <th>COMENTARIOS</th>
                         <th></th>
                     </tr>
@@ -297,9 +297,9 @@
                             <td>{{ arLicencias.pagoAdicionalSubtipoRel.nombre  }}</td>
                             <td>{{ arLicencias.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arLicencias.fechaHasta |date("Y/m/d")  }}</td>
-                            <td style="text-align: right">{{ arLicencias.cantidad | number_format(2, '.', ',') }}</td>
-                            <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arLicencias.dias | number_format(0, '.', ',') }}</td>
                             <td>{% if arLicencias.afectaTransporte == 1 %} SI {% else %} NO {% endif %}</td>
+                            <td>{% if arLicencias.estadoCerrada == 1 %} SI {% else %} NO {% endif %}</td>
                             <td>{{ arLicencias.comentarios }}</td>
                             <td><input type="checkbox" name="ChkSeleccionarLicencia[]" value="{{ arLicencias.codigoLicenciaPk }}" /></td>
                         </tr>
@@ -325,8 +325,8 @@
                     <tr>
                         <th>{{ knp_pagination_sortable(arDisciplinarios, 'CÓDIGO', 'e.codigoDisciplinarioPk') }}</th>
                         <th>FECHA</th>
-                        <th>C. CENTRO</th>                
-                        <th>IDENTIFICACION</th>
+                        <th>CENTRO CENTRO</th>                
+                        <th>IDENTIFICACIÓN</th>
                         <th>NOMBRE</th>                
                         <th>CARGO</th>
                         <th>PROCESO</th>

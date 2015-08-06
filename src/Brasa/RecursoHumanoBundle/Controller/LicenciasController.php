@@ -21,21 +21,19 @@ class LicenciasController extends Controller
         $arLicencia->setFechaDesde(new \DateTime('now'));
         $arLicencia->setFechaHasta(new \DateTime('now'));                
         $arLicencia->setCentroCostoRel($arCentroCosto);            
-                
-        
+        //$arLicencia->setEstadoCerrada(0);        
         $form = $this->createForm(new RhuLicenciaType(), $arLicencia); 
                     
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arLicencia = $form->getData();                                       
-            $arLicencia->setCantidadPendiente($arLicencia->getCantidad());
             if($codigoEmpleado != 0) { 
                 $arLicencia->setEmpleadoRel($arEmpleado);                
             }
             $em->persist($arLicencia);
             $em->flush();                        
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_incapacidad', array('codigoCentroCosto' => $codigoCentroCosto)));
+                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_licencia', array('codigoCentroCosto' => $codigoCentroCosto)));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }    
