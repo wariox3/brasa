@@ -38,19 +38,9 @@ class RhuLicencia
     private $codigoEmpleadoFk;            
     
     /**
-     * @ORM\Column(name="cantidad", type="float")
+     * @ORM\Column(name="dias", type="float")
      */
-    private $cantidad = 0;                
-
-    /**
-     * @ORM\Column(name="cantidad_afectada", type="float")
-     */
-    private $cantidadAfectada = 0;    
-    
-    /**
-     * @ORM\Column(name="cantidad_pendiente", type="float")
-     */
-    private $cantidadPendiente = 0;    
+    private $dias = 0;                  
         
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -67,6 +57,10 @@ class RhuLicencia
      */    
     private $afectaTransporte = 0;     
     
+    /**     
+     * @ORM\Column(name="estado_cerrada", type="boolean")
+     */    
+    private $estadoCerrada = 0;    
     
     /**
      * @ORM\Column(name="codigo_pago_adicional_subtipo_fk", type="integer", nullable=true)
@@ -91,19 +85,7 @@ class RhuLicencia
      */
     protected $empleadoRel;    
     
-    /**
-     * @ORM\OneToMany(targetEntity="RhuLicenciaRegistroPago", mappedBy="licenciaRel")
-     */
-    protected $licenciasRegistrosPagosLicenciaRel;    
 
-  
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->licenciasRegistrosPagosLicenciaRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get codigoLicenciaPk
@@ -212,75 +194,27 @@ class RhuLicencia
     }
 
     /**
-     * Set cantidad
+     * Set dias
      *
-     * @param float $cantidad
+     * @param float $dias
      *
      * @return RhuLicencia
      */
-    public function setCantidad($cantidad)
+    public function setDias($dias)
     {
-        $this->cantidad = $cantidad;
+        $this->dias = $dias;
 
         return $this;
     }
 
     /**
-     * Get cantidad
+     * Get dias
      *
      * @return float
      */
-    public function getCantidad()
+    public function getDias()
     {
-        return $this->cantidad;
-    }
-
-    /**
-     * Set cantidadAfectada
-     *
-     * @param float $cantidadAfectada
-     *
-     * @return RhuLicencia
-     */
-    public function setCantidadAfectada($cantidadAfectada)
-    {
-        $this->cantidadAfectada = $cantidadAfectada;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadAfectada
-     *
-     * @return float
-     */
-    public function getCantidadAfectada()
-    {
-        return $this->cantidadAfectada;
-    }
-
-    /**
-     * Set cantidadPendiente
-     *
-     * @param float $cantidadPendiente
-     *
-     * @return RhuLicencia
-     */
-    public function setCantidadPendiente($cantidadPendiente)
-    {
-        $this->cantidadPendiente = $cantidadPendiente;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadPendiente
-     *
-     * @return float
-     */
-    public function getCantidadPendiente()
-    {
-        return $this->cantidadPendiente;
+        return $this->dias;
     }
 
     /**
@@ -353,6 +287,30 @@ class RhuLicencia
     public function getAfectaTransporte()
     {
         return $this->afectaTransporte;
+    }
+
+    /**
+     * Set estadoCerrada
+     *
+     * @param boolean $estadoCerrada
+     *
+     * @return RhuLicencia
+     */
+    public function setEstadoCerrada($estadoCerrada)
+    {
+        $this->estadoCerrada = $estadoCerrada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrada
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrada()
+    {
+        return $this->estadoCerrada;
     }
 
     /**
@@ -449,39 +407,5 @@ class RhuLicencia
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
-    }
-
-    /**
-     * Add licenciasRegistrosPagosLicenciaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosLicenciaRel
-     *
-     * @return RhuLicencia
-     */
-    public function addLicenciasRegistrosPagosLicenciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosLicenciaRel)
-    {
-        $this->licenciasRegistrosPagosLicenciaRel[] = $licenciasRegistrosPagosLicenciaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove licenciasRegistrosPagosLicenciaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosLicenciaRel
-     */
-    public function removeLicenciasRegistrosPagosLicenciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicenciaRegistroPago $licenciasRegistrosPagosLicenciaRel)
-    {
-        $this->licenciasRegistrosPagosLicenciaRel->removeElement($licenciasRegistrosPagosLicenciaRel);
-    }
-
-    /**
-     * Get licenciasRegistrosPagosLicenciaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLicenciasRegistrosPagosLicenciaRel()
-    {
-        return $this->licenciasRegistrosPagosLicenciaRel;
     }
 }

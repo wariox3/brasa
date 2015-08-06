@@ -10,5 +10,25 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuLicenciaRepository extends EntityRepository {
-
+    public function licenciasPendientes($codigoCentroCosto, $fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT l FROM BrasaRecursoHumanoBundle:RhuLicencia l "
+                . "WHERE l.fechaHasta >= '" . $fechaDesde . "' "
+                . "AND l.fechaDesde <='" . $fechaHasta . "' "
+                . "AND l.codigoCentroCostoFk =" . $codigoCentroCosto;
+        $query = $em->createQuery($dql);
+        $arLicencias = $query->getResult();
+        return $arLicencias;
+    }
+    
+    public function licenciasPendientesEmpleado($codigoEmpleado, $fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT l FROM BrasaRecursoHumanoBundle:RhuLicencia l "
+                . "WHERE l.fechaHasta >= '" . $fechaDesde . "' "
+                . "AND l.fechaDesde <='" . $fechaHasta . "' "
+                . "AND l.codigoEmpleadoFk =" . $codigoEmpleado;
+        $query = $em->createQuery($dql);
+        $arLicencias = $query->getResult();
+        return $arLicencias;
+    }        
 }

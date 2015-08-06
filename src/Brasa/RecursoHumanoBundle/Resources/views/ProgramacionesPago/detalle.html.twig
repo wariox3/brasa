@@ -128,19 +128,17 @@
                 <tr>
                     <th>CÓDIGO</th>
                     <th>TIPO</th>
-                    <th>FECHA</th>
+                    <th>DESDE</th>
+                    <th>HASTA</th>
                     <th>EMPLEADO</th>
-                    <th>HORAS</th>
-                    <th>PENDIENTES</th>
                 </tr>
                 {% for arLicencias in arLicencias %}
                 <tr>
                     <td><input type="hidden" name="LblCodigo[]" value="{{ arLicencias.codigoLicenciaPk }}">{{ arLicencias.codigoLicenciaPk }} </td>
                     <td>{{ arLicencias.pagoAdicionalSubtipoRel.nombre  }}</td>
-                    <td>{{ arLicencias.fecha |date("Y/m/d")  }}</td>
+                    <td>{{ arLicencias.fechaDesde |date("Y/m/d")  }}</td>
+                    <td>{{ arLicencias.fechaHasta |date("Y/m/d")  }}</td>
                     <td>{{ arLicencias.empleadoRel.nombreCorto  }}</td>
-                    <td style="text-align: right">{{ arLicencias.cantidad | number_format(1, '.', ',') }}</td>
-                    <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(1, '.', ',') }}</td>
                 </tr>
                 {% endfor %}
             </table>

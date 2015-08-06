@@ -48,8 +48,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-        //Devolver incapacidades
-        //Devolver Licencias
         //Devolver pagos adicionales
         $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
@@ -364,8 +362,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
             $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
             $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
-            $arProgramacionPagoDetalle->setFechaDesde($arContrato->getFechaDesde());
-            $arProgramacionPagoDetalle->setFechaHasta($arContrato->getFechaHasta());
             $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
             $dateFechaDesde =  "";
             $dateFechaHasta =  "";
@@ -414,6 +410,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 }
                 $intDiasDevolver += $intDiasInhabilesFebrero;
             }
+            $arProgramacionPagoDetalle->setFechaDesde($dateFechaDesde);
+            $arProgramacionPagoDetalle->setFechaHasta($dateFechaHasta);
+            
             $arProgramacionPagoDetalle->setDias($intDiasDevolver);
             $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
             if($arContrato->getCodigoTipoTiempoFk() == 2) {
