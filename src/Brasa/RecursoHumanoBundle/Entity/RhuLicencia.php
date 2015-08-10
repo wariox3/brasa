@@ -38,9 +38,19 @@ class RhuLicencia
     private $codigoEmpleadoFk;            
     
     /**
-     * @ORM\Column(name="dias", type="float")
+     * @ORM\Column(name="cantidad", type="float")
      */
-    private $dias = 0;                  
+    private $cantidad = 0;
+    
+    /**
+     * @ORM\Column(name="cantidad_pendiente", type="float")
+     */
+    private $cantidadPendiente = 0;
+    
+    /**
+     * @ORM\Column(name="cantidad_afectada", type="float")
+     */
+    private $cantidadAfectada = 0;
         
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -85,7 +95,6 @@ class RhuLicencia
      */
     protected $empleadoRel;    
     
-
 
     /**
      * Get codigoLicenciaPk
@@ -194,27 +203,75 @@ class RhuLicencia
     }
 
     /**
-     * Set dias
+     * Set cantidad
      *
-     * @param float $dias
+     * @param float $cantidad
      *
      * @return RhuLicencia
      */
-    public function setDias($dias)
+    public function setCantidad($cantidad)
     {
-        $this->dias = $dias;
+        $this->cantidad = $cantidad;
 
         return $this;
     }
 
     /**
-     * Get dias
+     * Get cantidad
      *
      * @return float
      */
-    public function getDias()
+    public function getCantidad()
     {
-        return $this->dias;
+        return $this->cantidad;
+    }
+
+    /**
+     * Set cantidadPendiente
+     *
+     * @param float $cantidadPendiente
+     *
+     * @return RhuLicencia
+     */
+    public function setCantidadPendiente($cantidadPendiente)
+    {
+        $this->cantidadPendiente = $cantidadPendiente;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadPendiente
+     *
+     * @return float
+     */
+    public function getCantidadPendiente()
+    {
+        return $this->cantidadPendiente;
+    }
+
+    /**
+     * Set cantidadAfectada
+     *
+     * @param float $cantidadAfectada
+     *
+     * @return RhuLicencia
+     */
+    public function setCantidadAfectada($cantidadAfectada)
+    {
+        $this->cantidadAfectada = $cantidadAfectada;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadAfectada
+     *
+     * @return float
+     */
+    public function getCantidadAfectada()
+    {
+        return $this->cantidadAfectada;
     }
 
     /**
