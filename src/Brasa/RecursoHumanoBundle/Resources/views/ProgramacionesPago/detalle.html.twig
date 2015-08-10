@@ -102,16 +102,18 @@
                 <tr>
                     <th>CÓDIGO</th>
                     <th>TIPO</th>
-                    <th>FECHA</th>
+                    <th>DESDE</th>
+                    <th>HASTA</th>
                     <th>EMPLEADO</th>
-                    <th>HORAS</th>
-                    <th>PENDIENTES</th>
+                    <th>DIAS</th>
+                    <th>D. PENDIENTES</th>
                 </tr>
                 {% for arIncapacidades in arIncapacidades %}
                 <tr>
                     <td><input type="hidden" name="LblCodigo[]" value="{{ arIncapacidades.codigoIncapacidadPk }}">{{ arIncapacidades.codigoIncapacidadPk }} </td>
                     <td>{{ arIncapacidades.pagoAdicionalSubtipoRel.nombre  }}</td>
-                    <td>{{ arIncapacidades.fecha |date("Y/m/d")  }}</td>
+                    <td>{{ arIncapacidades.fechaDesde |date("Y/m/d")  }}</td>
+                    <td>{{ arIncapacidades.fechaHasta |date("Y/m/d")  }}</td>
                     <td>{{ arIncapacidades.empleadoRel.nombreCorto  }}</td>
                     <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(0, '.', ',') }}</td>
                     <td style="text-align: right">{{ arIncapacidades.cantidadPendiente | number_format(0, '.', ',') }}</td>
@@ -131,6 +133,8 @@
                     <th>DESDE</th>
                     <th>HASTA</th>
                     <th>EMPLEADO</th>
+                    <th>DIAS</th>
+                    <th>D. PENDIENTES</th>                    
                 </tr>
                 {% for arLicencias in arLicencias %}
                 <tr>
@@ -139,6 +143,8 @@
                     <td>{{ arLicencias.fechaDesde |date("Y/m/d")  }}</td>
                     <td>{{ arLicencias.fechaHasta |date("Y/m/d")  }}</td>
                     <td>{{ arLicencias.empleadoRel.nombreCorto  }}</td>
+                    <td style="text-align: right">{{ arLicencias.cantidad | number_format(0, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arLicencias.cantidadPendiente | number_format(0, '.', ',') }}</td>                    
                 </tr>
                 {% endfor %}
             </table>

@@ -10,25 +10,24 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuLicenciaRepository extends EntityRepository {
-    public function licenciasPendientes($codigoCentroCosto, $fechaDesde, $fechaHasta) {
-        $em = $this->getEntityManager();
-        $dql   = "SELECT l FROM BrasaRecursoHumanoBundle:RhuLicencia l "
-                . "WHERE l.fechaHasta >= '" . $fechaDesde . "' "
-                . "AND l.fechaDesde <='" . $fechaHasta . "' "
-                . "AND l.codigoCentroCostoFk =" . $codigoCentroCosto;
-        $query = $em->createQuery($dql);
-        $arLicencias = $query->getResult();
-        return $arLicencias;
-    }
     
-    public function licenciasPendientesEmpleado($codigoEmpleado, $fechaDesde, $fechaHasta) {
-        $em = $this->getEntityManager();
+    public function pendientesCentroCosto($strCodigoCentroCosto) {
+        $em = $this->getEntityManager();                
         $dql   = "SELECT l FROM BrasaRecursoHumanoBundle:RhuLicencia l "
-                . "WHERE l.fechaHasta >= '" . $fechaDesde . "' "
-                . "AND l.fechaDesde <='" . $fechaHasta . "' "
-                . "AND l.codigoEmpleadoFk =" . $codigoEmpleado;
+                . "WHERE l.codigoCentroCostoFk = " . $strCodigoCentroCosto . " "
+                . "AND l.cantidadPendiente != 0 ";
         $query = $em->createQuery($dql);
-        $arLicencias = $query->getResult();
-        return $arLicencias;
-    }        
+        $arLicenciasPendientes = $query->getResult();
+        return $arLicenciasPendientes;        
+    }
+        
+    public function pendientesEmpleado($strCodigoEmpleado) {
+        $em = $this->getEntityManager();                
+        $dql   = "SELECT l FROM BrasaRecursoHumanoBundle:RhuLicencia l "
+                . "WHERE l.codigoEmpleadoFk = " . $strCodigoEmpleado . " "
+                . "AND l.cantidadPendiente != 0 ";
+        $query = $em->createQuery($dql);
+        $arLicenciasPendientesEmpleado = $query->getResult();
+        return $arLicenciasPendientesEmpleado;        
+    }
 }

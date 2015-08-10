@@ -74,6 +74,20 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());
                     $em->persist($arCredito);
                 }
+                //Devolver incapacidades
+                if($arPagoDetalle->getCodigoIncapacidadFk() != "") {
+                    $arIncapacidadActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad;
+                    $arIncapacidadActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arPagoDetalle->getCodigoIncapacidadFk());
+                    $arIncapacidadActualizar->setCantidadPendiente($arIncapacidadActualizar->getCantidadPendiente() + ($arPagoDetalle->getNumeroHoras() / 8));
+                    $em->persist($arIncapacidadActualizar);                                                            
+                }
+                //Devolver licencias
+                if($arPagoDetalle->getCodigoLicenciaFk() != "") {
+                    $arLicenciaActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia;
+                    $arLicenciaActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->find($arPagoDetalle->getCodigoLicenciaFk());
+                    $arLicenciaActualizar->setCantidadPendiente($arLicenciaActualizar->getCantidadPendiente() + ($arPagoDetalle->getNumeroHoras() / 8));
+                    $em->persist($arLicenciaActualizar);                                                            
+                }                                
                 $em->remove($arPagoDetalle);
             }
             $em->remove($arPago);

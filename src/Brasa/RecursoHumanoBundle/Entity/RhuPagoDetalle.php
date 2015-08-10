@@ -33,6 +33,11 @@ class RhuPagoDetalle
     private $codigoIncapacidadFk;
     
     /**
+     * @ORM\Column(name="codigo_licencia_fk", type="integer", nullable=true)
+     */    
+    private $codigoLicenciaFk;    
+    
+    /**
      * @ORM\Column(name="vr_pago", type="float")
      */
     private $vrPago = 0;     
@@ -122,8 +127,15 @@ class RhuPagoDetalle
      * @ORM\JoinColumn(name="codigo_incapacidad_fk", referencedColumnName="codigo_incapacidad_pk")
      */
     protected $incapacidadRel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuLicencia", inversedBy="pagosDetallesLicenciaRel")
+     * @ORM\JoinColumn(name="codigo_licencia_fk", referencedColumnName="codigo_licencia_pk")
+     */
+    protected $licenciaRel;    
     
-    
+
+
     /**
      * Get codigoPagoDetallePk
      *
@@ -156,6 +168,78 @@ class RhuPagoDetalle
     public function getCodigoPagoFk()
     {
         return $this->codigoPagoFk;
+    }
+
+    /**
+     * Set codigoCreditoFk
+     *
+     * @param integer $codigoCreditoFk
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setCodigoCreditoFk($codigoCreditoFk)
+    {
+        $this->codigoCreditoFk = $codigoCreditoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCreditoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCreditoFk()
+    {
+        return $this->codigoCreditoFk;
+    }
+
+    /**
+     * Set codigoIncapacidadFk
+     *
+     * @param integer $codigoIncapacidadFk
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setCodigoIncapacidadFk($codigoIncapacidadFk)
+    {
+        $this->codigoIncapacidadFk = $codigoIncapacidadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoIncapacidadFk
+     *
+     * @return integer
+     */
+    public function getCodigoIncapacidadFk()
+    {
+        return $this->codigoIncapacidadFk;
+    }
+
+    /**
+     * Set codigoLicenciaFk
+     *
+     * @param integer $codigoLicenciaFk
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setCodigoLicenciaFk($codigoLicenciaFk)
+    {
+        $this->codigoLicenciaFk = $codigoLicenciaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoLicenciaFk
+     *
+     * @return integer
+     */
+    public function getCodigoLicenciaFk()
+    {
+        return $this->codigoLicenciaFk;
     }
 
     /**
@@ -233,7 +317,7 @@ class RhuPagoDetalle
     /**
      * Set numeroHoras
      *
-     * @param integer $numeroHoras
+     * @param float $numeroHoras
      *
      * @return RhuPagoDetalle
      */
@@ -247,7 +331,7 @@ class RhuPagoDetalle
     /**
      * Get numeroHoras
      *
-     * @return integer
+     * @return float
      */
     public function getNumeroHoras()
     {
@@ -276,6 +360,30 @@ class RhuPagoDetalle
     public function getVrHora()
     {
         return $this->vrHora;
+    }
+
+    /**
+     * Set porcentajeAplicado
+     *
+     * @param float $porcentajeAplicado
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setPorcentajeAplicado($porcentajeAplicado)
+    {
+        $this->porcentajeAplicado = $porcentajeAplicado;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeAplicado
+     *
+     * @return float
+     */
+    public function getPorcentajeAplicado()
+    {
+        return $this->porcentajeAplicado;
     }
 
     /**
@@ -375,78 +483,6 @@ class RhuPagoDetalle
     }
 
     /**
-     * Set pagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
-    {
-        $this->pagoRel = $pagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
-     */
-    public function getPagoRel()
-    {
-        return $this->pagoRel;
-    }
-
-    /**
-     * Set pagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
-    {
-        $this->pagoConceptoRel = $pagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoConceptoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
-     */
-    public function getPagoConceptoRel()
-    {
-        return $this->pagoConceptoRel;
-    }
-
-    /**
-     * Set porcentajeAplicado
-     *
-     * @param float $porcentajeAplicado
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setPorcentajeAplicado($porcentajeAplicado)
-    {
-        $this->porcentajeAplicado = $porcentajeAplicado;
-
-        return $this;
-    }
-
-    /**
-     * Get porcentajeAplicado
-     *
-     * @return float
-     */
-    public function getPorcentajeAplicado()
-    {
-        return $this->porcentajeAplicado;
-    }
-
-    /**
      * Set vrIngresoBaseCotizacion
      *
      * @param float $vrIngresoBaseCotizacion
@@ -495,6 +531,54 @@ class RhuPagoDetalle
     }
 
     /**
+     * Set pagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
+    {
+        $this->pagoRel = $pagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
+     */
+    public function getPagoRel()
+    {
+        return $this->pagoRel;
+    }
+
+    /**
+     * Set pagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
+    {
+        $this->pagoConceptoRel = $pagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoConceptoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
+     */
+    public function getPagoConceptoRel()
+    {
+        return $this->pagoConceptoRel;
+    }
+
+    /**
      * Set programacionPagoDetalleRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionPagoDetalleRel
@@ -516,30 +600,6 @@ class RhuPagoDetalle
     public function getProgramacionPagoDetalleRel()
     {
         return $this->programacionPagoDetalleRel;
-    }
-
-    /**
-     * Set codigoCreditoFk
-     *
-     * @param integer $codigoCreditoFk
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setCodigoCreditoFk($codigoCreditoFk)
-    {
-        $this->codigoCreditoFk = $codigoCreditoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCreditoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCreditoFk()
-    {
-        return $this->codigoCreditoFk;
     }
 
     /**
@@ -567,30 +627,6 @@ class RhuPagoDetalle
     }
 
     /**
-     * Set codigoIncapacidadFk
-     *
-     * @param integer $codigoIncapacidadFk
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setCodigoIncapacidadFk($codigoIncapacidadFk)
-    {
-        $this->codigoIncapacidadFk = $codigoIncapacidadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoIncapacidadFk
-     *
-     * @return integer
-     */
-    public function getCodigoIncapacidadFk()
-    {
-        return $this->codigoIncapacidadFk;
-    }
-
-    /**
      * Set incapacidadRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadRel
@@ -612,5 +648,29 @@ class RhuPagoDetalle
     public function getIncapacidadRel()
     {
         return $this->incapacidadRel;
+    }
+
+    /**
+     * Set licenciaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciaRel
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setLicenciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciaRel = null)
+    {
+        $this->licenciaRel = $licenciaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get licenciaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuLicencia
+     */
+    public function getLicenciaRel()
+    {
+        return $this->licenciaRel;
     }
 }
