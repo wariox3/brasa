@@ -87,8 +87,8 @@ class IncapacidadesController extends Controller
             $intDias = $intDias->format('%a');
             $intDias = $intDias + 1;
             
-                //$arIncapacidad->setCantidad($intDias * 8);
-                //$arIncapacidad->setCantidadPendiente($intDias * 8);
+            $arIncapacidad->setCantidad($intDias);
+            $arIncapacidad->setCantidadPendiente($intDias);
            
 
             if($codigoEmpleado != 0) { 
