@@ -53,6 +53,11 @@ class RhuIncapacidad
     private $cantidad = 0;                
 
     /**
+     * @ORM\Column(name="cantidad_afectada", type="integer")
+     */
+    private $cantidad_afectada = 0;    
+    
+    /**
      * @ORM\Column(name="cantidad_pendiente", type="integer")
      */
     private $cantidadPendiente = 0;    
@@ -111,6 +116,21 @@ class RhuIncapacidad
      */
     protected $pagosDetallesIncapacidadRel;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuIncapacidadRegistroPago", mappedBy="incapacidadRel")
+     */
+    protected $incapacidadesRegistrosPagosIncapcidadRel;    
+    
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosDetallesIncapacidadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incapacidadesRegistrosPagosIncapcidadRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoIncapacidadPk
@@ -288,6 +308,30 @@ class RhuIncapacidad
     public function getCantidad()
     {
         return $this->cantidad;
+    }
+
+    /**
+     * Set cantidadAfectada
+     *
+     * @param integer $cantidadAfectada
+     *
+     * @return RhuIncapacidad
+     */
+    public function setCantidadAfectada($cantidadAfectada)
+    {
+        $this->cantidad_afectada = $cantidadAfectada;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadAfectada
+     *
+     * @return integer
+     */
+    public function getCantidadAfectada()
+    {
+        return $this->cantidad_afectada;
     }
 
     /**
@@ -529,13 +573,6 @@ class RhuIncapacidad
     {
         return $this->incapacidadDiagnosticoRel;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->pagosDetallesIncapacidadRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add pagosDetallesIncapacidadRel
@@ -569,5 +606,39 @@ class RhuIncapacidad
     public function getPagosDetallesIncapacidadRel()
     {
         return $this->pagosDetallesIncapacidadRel;
+    }
+
+    /**
+     * Add incapacidadesRegistrosPagosIncapcidadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadRegistroPago $incapacidadesRegistrosPagosIncapcidadRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function addIncapacidadesRegistrosPagosIncapcidadRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadRegistroPago $incapacidadesRegistrosPagosIncapcidadRel)
+    {
+        $this->incapacidadesRegistrosPagosIncapcidadRel[] = $incapacidadesRegistrosPagosIncapcidadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove incapacidadesRegistrosPagosIncapcidadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadRegistroPago $incapacidadesRegistrosPagosIncapcidadRel
+     */
+    public function removeIncapacidadesRegistrosPagosIncapcidadRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadRegistroPago $incapacidadesRegistrosPagosIncapcidadRel)
+    {
+        $this->incapacidadesRegistrosPagosIncapcidadRel->removeElement($incapacidadesRegistrosPagosIncapcidadRel);
+    }
+
+    /**
+     * Get incapacidadesRegistrosPagosIncapcidadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIncapacidadesRegistrosPagosIncapcidadRel()
+    {
+        return $this->incapacidadesRegistrosPagosIncapcidadRel;
     }
 }

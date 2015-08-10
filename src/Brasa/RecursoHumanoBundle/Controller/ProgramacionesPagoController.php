@@ -71,58 +71,67 @@ class ProgramacionesPagoController extends Controller
                                 //Procesar Incapacidades
                                 $arPagoConceptoIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                                 $arPagoConceptoIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoIncapacidad());
-                                $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-                                //$arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk()));//linea anterior
-                                $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->listadoIncapacidadesPendientesEmpleados($arProgramacionPagoDetalle->getCodigoEmpleadoFk());
-                                foreach ($arIncapacidades as $arIncapacidad) {
-                                    $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                                    $arPagoDetalle->setPagoRel($arPago);
-                                    $arPagoDetalle->setPagoConceptoRel($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel());
-                                    $douPagoDetalle = 0;
-                                    $douIngresoBaseCotizacionIncapacidad = 0;
-                                    $intHorasLaboradas = $intHorasLaboradas - $arIncapacidad->getCantidad();
-                                    $intHorasProcesarIncapacidad = $arIncapacidad->getCantidad();
-                                    $intDiasTransporte = $intDiasTransporte - ($intHorasProcesarIncapacidad / $arProgramacionPagoDetalle->getFactorDia());
-
-
-                                    if($arIncapacidad->getCodigoPagoAdicionalSubtipoFk() == 28) {
-                                        if($arProgramacionPagoDetalle->getVrSalario() <= $douVrSalarioMinimo) {
-                                            $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
-                                            $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
+                                $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();                                
+                                $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->pendientesEmpleado($arProgramacionPagoDetalle->getCodigoEmpleadoFk());
+                                foreach ($arIncapacidades as $arIncapacidad) {                                    
+                                    //Validacion para saber si hay horas disponibles en el periodo
+                                    if($intHorasLaboradas > 0) {
+                                        $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                        $arPagoDetalle->setPagoRel($arPago);
+                                        $arPagoDetalle->setPagoConceptoRel($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel());
+                                        $douPagoDetalle = 0;
+                                        $douIngresoBaseCotizacionIncapacidad = 0;
+                                        $intCantidadHorasIncapacidad = $arIncapacidad->getCantidadPendiente() * 8;
+                                        if($intCantidadHorasIncapacidad < $intHorasLaboradas) {
+                                            $intHorasLaboradas = $intHorasLaboradas - $intCantidadHorasIncapacidad;    
+                                            $intHorasProcesarIncapacidad = $intCantidadHorasIncapacidad;
+                                        } else {
+                                            $intHorasProcesarIncapacidad = $intHorasLaboradas;
+                                            $intHorasLaboradas = 0;                                                
                                         }
-                                        if($arProgramacionPagoDetalle->getVrSalario() > $douVrSalarioMinimo && $arProgramacionPagoDetalle->getVrSalario() <= $douVrSalarioMinimo * 1.5) {
-                                            $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHoraSalarioMinimo;
-                                            $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
-                                        }
-                                        if($arProgramacionPagoDetalle->getVrSalario() > ($douVrSalarioMinimo * 1.5)) {
+
+                                        $intDiasTransporte = $intDiasTransporte - ($intHorasProcesarIncapacidad / $arProgramacionPagoDetalle->getFactorDia());
+
+                                        if($arIncapacidad->getCodigoPagoAdicionalSubtipoFk() == 28) {
+                                            if($arProgramacionPagoDetalle->getVrSalario() <= $douVrSalarioMinimo) {
+                                                $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
+                                                $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
+                                            }
+                                            if($arProgramacionPagoDetalle->getVrSalario() > $douVrSalarioMinimo && $arProgramacionPagoDetalle->getVrSalario() <= $douVrSalarioMinimo * 1.5) {
+                                                $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHoraSalarioMinimo;
+                                                $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
+                                            }
+                                            if($arProgramacionPagoDetalle->getVrSalario() > ($douVrSalarioMinimo * 1.5)) {
+                                                $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
+                                                $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;
+                                                $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
+                                            }
+                                        } else {
                                             $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
                                             $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;
                                             $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
                                         }
-                                    } else {
-                                        $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
-                                        $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;
-                                        $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
+                                        $arPagoDetalle->setNumeroHoras($intHorasProcesarIncapacidad);
+                                        $arPagoDetalle->setVrHora($douVrHora);
+                                        $arPagoDetalle->setDetalle($arIncapacidad->getIncapacidadDiagnosticoRel()->getNombre());
+                                        $arPagoDetalle->setVrDia($douVrDia);
+                                        $arPagoDetalle->setVrPago($douPagoDetalle);
+                                        $arPagoDetalle->setOperacion($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
+                                        $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
+                                        $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                                        $arPagoDetalle->setIncapacidadRel($arIncapacidad);
+                                        $em->persist($arPagoDetalle);
+                                        if($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getPrestacional() == 1) {
+                                            $douDevengado = $douDevengado + $douPagoDetalle;
+                                            $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $douIngresoBaseCotizacionIncapacidad;
+                                            $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionIncapacidad);
+                                        }
+                                        //Actualizar valores incapacidad
+                                        $arIncapacidadActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad;
+                                        $arIncapacidadActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arIncapacidad->getCodigoIncapacidadPk());
+                                        $arIncapacidadActualizar->setCantidadPendiente($arIncapacidadActualizar->getCantidadPendiente() - ($intHorasProcesarIncapacidad * 8));
+                                        $em->persist($arIncapacidadActualizar);                                        
                                     }
-                                    $arPagoDetalle->setNumeroHoras($intHorasProcesarIncapacidad);
-                                    $arPagoDetalle->setVrHora($douVrHora);
-                                    $arPagoDetalle->setDetalle($arIncapacidad->getIncapacidadDiagnosticoRel()->getNombre());
-                                    $arPagoDetalle->setVrDia($douVrDia);
-                                    $arPagoDetalle->setVrPago($douPagoDetalle);
-                                    $arPagoDetalle->setOperacion($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
-                                    $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getOperacion());
-                                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                                    $arPagoDetalle->setIncapacidadRel($arIncapacidad);
-                                    $em->persist($arPagoDetalle);
-                                    if($arIncapacidad->getPagoAdicionalSubtipoRel()->getPagoConceptoRel()->getPrestacional() == 1) {
-                                        $douDevengado = $douDevengado + $douPagoDetalle;
-                                        $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $douIngresoBaseCotizacionIncapacidad;
-                                        $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionIncapacidad);
-                                    }
-                                    $arIncapacidadPagadas = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad;
-                                    $arIncapacidadPagadas = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arIncapacidad);
-                                    $arIncapacidadPagadas->setCantidadPendiente(0);
-                                    $em->persist($arIncapacidadPagadas);
                                 }
 
 
@@ -491,7 +500,7 @@ class ProgramacionesPagoController extends Controller
         $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPago->getCodigoCentroCostoFk(), 'pagoAplicado' => 0));
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-        $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->listadoIncapacidadesPendientes($arProgramacionPago->getCodigoCentroCostoFk());
+        $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->pendientesCentroCosto($arProgramacionPago->getCodigoCentroCostoFk());
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->licenciasPendientes($arProgramacionPago->getCodigoCentroCostoFk(), $arProgramacionPago->getFechaDesde()->format('Y-m-d'), $arProgramacionPago->getFechaHasta()->format('Y-m-d'));
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));

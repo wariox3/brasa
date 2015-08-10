@@ -37,7 +37,7 @@ class RhuIncapacidadRepository extends EntityRepository {
     }                    
     
     //lista de incapacidades pendientes por centro centro de costo para el resumen de la programacioan de pago
-    public function listadoIncapacidadesPendientes($strCodigoCentroCosto) {
+    public function pendientesCentroCosto($strCodigoCentroCosto) {
         $em = $this->getEntityManager();                
         $dql   = "SELECT i FROM BrasaRecursoHumanoBundle:RhuIncapacidad i "
                 . "WHERE i.codigoCentroCostoFk = " . $strCodigoCentroCosto . " "
@@ -48,7 +48,7 @@ class RhuIncapacidadRepository extends EntityRepository {
     }
     
     //lista de incapacidades pendientes por empleado cuando se esta generando la nomina
-    public function listadoIncapacidadesPendientesEmpleados($strCodigoEmpleado) {
+    public function pendientesEmpleado($strCodigoEmpleado) {
         $em = $this->getEntityManager();                
         $dql   = "SELECT i FROM BrasaRecursoHumanoBundle:RhuIncapacidad i "
                 . "WHERE i.codigoEmpleadoFk = " . $strCodigoEmpleado . " "
