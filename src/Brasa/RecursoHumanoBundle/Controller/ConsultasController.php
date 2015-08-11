@@ -77,6 +77,40 @@ class ConsultasController extends Controller
             ));
     }
     
+    public function serviciosCobrarAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioCreditosLista();
+        $form->handleRequest($request);
+        $this->CreditosListar();
+        if ($form->isValid())
+        {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if($form->get('BtnExcelCredito')->isClicked()) {
+                $this->filtrarCreditoLista($form);
+                $this->CreditosListar();
+                $this->generarCreditoExcel();
+            }
+            if($form->get('BtnPDFCredito')->isClicked()) {
+                $this->filtrarCreditoLista($form);
+                $this->CreditosListar();
+                $objReporteCreditos = new \Brasa\RecursoHumanoBundle\Reportes\ReporteCreditos();
+                $objReporteCreditos->Generar($this, $this->strSqlCreditoLista);
+            }            
+            if($form->get('BtnFiltrarCredito')->isClicked()) {
+                $this->filtrarCreditoLista($form);
+                $this->CreditosListar();
+            }
+
+        }
+        $arCreditos = $paginator->paginate($em->createQuery($this->strSqlCreditoLista), $request->query->get('page', 1), 40);
+        return $this->render('BrasaRecursoHumanoBundle:Consultas/Servicios:porCobrar.html.twig', array(
+            'arCreditos' => $arCreditos,
+            'form' => $form->createView()
+            ));
+    }    
+    
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();

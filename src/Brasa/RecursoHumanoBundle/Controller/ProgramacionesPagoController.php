@@ -387,8 +387,10 @@ class ProgramacionesPagoController extends Controller
                     foreach ($arrSeleccionados AS $codigoProgramacionPago) {
                         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPago->getCodigoCentroCostoFk());
+                        if($arProgramacionPago->getEstadoPagado() == 0) {
+                            $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);
+                            $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPago->getCodigoCentroCostoFk());                            
+                        }
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
                 }

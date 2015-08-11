@@ -349,6 +349,10 @@ brs_rhu_consultas_costos_general:
 brs_rhu_consultas_creditos_general:    
     path:     /rhumano/consultas/creditos/general
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:creditosGeneral }    
+
+brs_rhu_consultas_servicios_cobrar:    
+    path:     /rhumano/consultas/servicios/cobrar
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:serviciosCobrar }
     
 brs_rhu_pago_examen_lista:
     path:     /rhumano/pago/examen/lista
