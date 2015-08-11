@@ -19,8 +19,13 @@ class CertificadoIngresoController extends Controller
         $ConfiguracionGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionGeneral')->find(1);
         $empleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $empleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
+        $fechaActual = date('Y-m-j');
+        $fechaPrimeraAnterior = strtotime ( '-1 year' , strtotime ( $fechaActual ) ) ;
+        $fechaPrimeraAnterior = date ( 'Y' , $fechaPrimeraAnterior );
+        $fechaSegundaAnterior = strtotime ( '-2 year' , strtotime ( $fechaActual ) ) ;
+        $fechaSegundaAnterior = date ( 'Y' , $fechaSegundaAnterior );
         
-        $formCertificado = $this->createFormBuilder() 
+        $formCertificado = $this->createFormBuilder()
             ->add('fechaExpedicion','date', array('data' => new \ DateTime('now')))
             ->add('LugarExpedicion', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
@@ -73,16 +78,29 @@ class CertificadoIngresoController extends Controller
             ->getForm();
         $formCertificado->handleRequest($request);
         if ($formCertificado->isValid()) {
-            $controles = $request->request->get('formCertificado');
+            
+            
             if($formCertificado->get('BtnGenerar')->isClicked()) {
-                $strFechaExpedicion = $controles['fechaExpedicion'];
+                $d = 2;
+                
+                
+                for ($i = 1; $i <= 3; $i++) {
+                $controles = $request->request->get('form');
+                $strFechaExpedicion = $formCertificado->get('fechaExpedicion')->getData();
+                $strLugarExpedicion = $controles['LugarExpedicion'];
                 $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
-                $objFormatoCertificadoIngreso->Generar($this, $codigoEmpleado,$strFechaExpedicion);
+                $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion);
+                
+                
+                
+                }
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/CertificadoIngreso:certificado.html.twig', array(
             'ConfiguracionGeneral' => $ConfiguracionGeneral,
             'empleado' => $empleado,
+            'fechaPrimeraAnterior' => $fechaPrimeraAnterior,
+            'fechaSegundaAnterior' => $fechaSegundaAnterior,
             'formCertificado' => $formCertificado->createView(),
         ));
     }
