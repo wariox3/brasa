@@ -7,11 +7,12 @@
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         
-            
-       
         <div class="btn-group">
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 3,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                        
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_certificadoIngreso_generar', { 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'Certificado', 600, 1000)" >Generar certificado de ingresos y retenciones</a>                        
         </div>
         <br /> <br />
         <div class="panel panel-default">
