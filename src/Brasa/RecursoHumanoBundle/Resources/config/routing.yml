@@ -112,7 +112,11 @@ brs_rhu_programaciones_pago_lista:
     
 brs_rhu_programaciones_pago_detalle:
     path:     /rhumano/programaciones/pago/detalle/{codigoProgramacionPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:detalle }     
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:detalle } 
+
+brs_rhu_programaciones_pago_detalle_prima:
+    path:     /rhumano/programaciones/pago/detalle/prima/{codigoProgramacionPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:detallePrima }         
 
 brs_rhu_programaciones_pago_inconsistencias:
     path:     /rhumano/programaciones/pago/inconsistencias/{codigoProgramacionPago}

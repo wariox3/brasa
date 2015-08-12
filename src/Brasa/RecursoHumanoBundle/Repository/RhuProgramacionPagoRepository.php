@@ -282,7 +282,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $dql .= " AND pp.codigoCentroCostoFk =" . $codigoCentroCosto;
         }
         if($intTipo != "" && $intTipo != 0) {
-            $dql .= " AND pp.codigoProgramacionPagoTipoFk =" . $intTipo;
+            $dql .= " AND pp.codigoPagoTipoFk =" . $intTipo;
         }        
         if($boolMostrarGenerados == 1 ) {
             $dql .= " AND pp.estadoGenerado = 1";
@@ -365,106 +365,148 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminarEmpleados($codigoProgramacionPago);
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-        $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
-                . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
-                . " AND c.estadoActivo = 1"
-                . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
-                . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
-                . " OR c.indefinido = 1)";
-        $query = $em->createQuery($dql);
-        $arContratos = $query->getResult();
-        foreach ($arContratos as $arContrato) {
-            $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-            $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
-            $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
-            $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
-            $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
-            $dateFechaDesde =  "";
-            $dateFechaHasta =  "";
-            $intDiasDevolver = 0;
-            $fechaFinalizaContrato = $arContrato->getFechaHasta();
-            if($arContrato->getIndefinido() == 1) {
-                $fecha = date_create(date('Y-m-d'));
-                date_modify($fecha, '+365 day');
-                $fechaFinalizaContrato = $fecha;
-            }
-            if($arContrato->getFechaDesde() <  $arProgramacionPago->getFechaDesde() == true) {
-                $dateFechaDesde = $arProgramacionPago->getFechaDesde();
-            } else {
-                if($arContrato->getFechaDesde() > $arProgramacionPago->getFechaHasta() == true) {
-                    $intDiasDevolver = 0;
-                } else {
-                    $dateFechaDesde = $arContrato->getFechaDesde();
+        if($arProgramacionPago->getCodigoPagoTipoFk() == 1) {
+            $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+            $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
+                    . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
+                    . " AND c.estadoActivo = 1"
+                    . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
+                    . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
+                    . " OR c.indefinido = 1)";
+            $query = $em->createQuery($dql);
+            $arContratos = $query->getResult();
+            foreach ($arContratos as $arContrato) {
+                $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
+                $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
+                $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
+                $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
+                $dateFechaDesde =  "";
+                $dateFechaHasta =  "";
+                $intDiasDevolver = 0;
+                $fechaFinalizaContrato = $arContrato->getFechaHasta();
+                if($arContrato->getIndefinido() == 1) {
+                    $fecha = date_create(date('Y-m-d'));
+                    date_modify($fecha, '+365 day');
+                    $fechaFinalizaContrato = $fecha;
                 }
-            }
-
-            if($fechaFinalizaContrato >  $arProgramacionPago->getFechaHasta() == true) {
-                $dateFechaHasta = $arProgramacionPago->getFechaHasta();
-            } else {
-                if($fechaFinalizaContrato < $arProgramacionPago->getFechaDesde() == true) {
-                    $intDiasDevolver = 0;
+                if($arContrato->getFechaDesde() <  $arProgramacionPago->getFechaDesde() == true) {
+                    $dateFechaDesde = $arProgramacionPago->getFechaDesde();
                 } else {
-                    $dateFechaHasta = $fechaFinalizaContrato;
-                }
-            }
-            if($dateFechaDesde != "" && $dateFechaHasta != "") {
-                $intDias = $dateFechaDesde->diff($dateFechaHasta);
-                $intDias = $intDias->format('%a');
-                $intDiasDevolver = $intDias + 1;
-                //Mes de febrero para periodos NO continuos
-                $intDiasInhabilesFebrero = 0;
-                if($arProgramacionPago->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo() == 0) {
-                    if($dateFechaHasta->format('md') == '0228' || $dateFechaHasta->format('md') == '0229') {
-                        //Verificar si el año es bisiesto
-
-                        if(date('L',mktime(1,1,1,1,1,$dateFechaHasta->format('Y'))) == 1) {
-                            $intDiasInhabilesFebrero = 1;
-                        } else {
-                            $intDiasInhabilesFebrero = 2;
-                        }
+                    if($arContrato->getFechaDesde() > $arProgramacionPago->getFechaHasta() == true) {
+                        $intDiasDevolver = 0;
+                    } else {
+                        $dateFechaDesde = $arContrato->getFechaDesde();
                     }
                 }
-                $intDiasDevolver += $intDiasInhabilesFebrero;
+
+                if($fechaFinalizaContrato >  $arProgramacionPago->getFechaHasta() == true) {
+                    $dateFechaHasta = $arProgramacionPago->getFechaHasta();
+                } else {
+                    if($fechaFinalizaContrato < $arProgramacionPago->getFechaDesde() == true) {
+                        $intDiasDevolver = 0;
+                    } else {
+                        $dateFechaHasta = $fechaFinalizaContrato;
+                    }
+                }
+                if($dateFechaDesde != "" && $dateFechaHasta != "") {
+                    $intDias = $dateFechaDesde->diff($dateFechaHasta);
+                    $intDias = $intDias->format('%a');
+                    $intDiasDevolver = $intDias + 1;
+                    //Mes de febrero para periodos NO continuos
+                    $intDiasInhabilesFebrero = 0;
+                    if($arProgramacionPago->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo() == 0) {
+                        if($dateFechaHasta->format('md') == '0228' || $dateFechaHasta->format('md') == '0229') {
+                            //Verificar si el año es bisiesto
+
+                            if(date('L',mktime(1,1,1,1,1,$dateFechaHasta->format('Y'))) == 1) {
+                                $intDiasInhabilesFebrero = 1;
+                            } else {
+                                $intDiasInhabilesFebrero = 2;
+                            }
+                        }
+                    }
+                    $intDiasDevolver += $intDiasInhabilesFebrero;
+                }
+                $arProgramacionPagoDetalle->setFechaDesde($dateFechaDesde);
+                $arProgramacionPagoDetalle->setFechaHasta($dateFechaHasta);
+
+                $arProgramacionPagoDetalle->setDias($intDiasDevolver);
+                $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
+                if($arContrato->getCodigoTipoTiempoFk() == 2) {
+                    $arProgramacionPagoDetalle->setHorasPeriodo($intDiasDevolver * 4);
+                    $arProgramacionPagoDetalle->setHorasPeriodoReales($intDiasDevolver * 4);
+                    $arProgramacionPagoDetalle->setFactorDia(4);
+                } else {
+                    $arProgramacionPagoDetalle->setHorasPeriodo($intDiasDevolver * 8);
+                    $arProgramacionPagoDetalle->setHorasPeriodoReales($intDiasDevolver * 8);
+                    $arProgramacionPagoDetalle->setFactorDia(8);
+                }
+                $floValorDia = $arProgramacionPagoDetalle->getVrSalario() / 30;
+                $floDevengado = $arProgramacionPagoDetalle->getDias() * $floValorDia;
+                $arProgramacionPagoDetalle->setVrDevengado($floDevengado);
+                $floCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->cuotaCreditosNomina($arContrato->getCodigoEmpleadoFk());
+                $arProgramacionPagoDetalle->setVrCreditos($floCreditos);
+                $floDeducciones = $floCreditos;
+                $arProgramacionPagoDetalle->setVrDeducciones($floDeducciones);
+                $floNeto = $floDevengado - $floDeducciones;
+                $arProgramacionPagoDetalle->setVrNetoPagar($floNeto);
+                $em->persist($arProgramacionPagoDetalle);
+                if($floNeto < 0) {
+                    $boolInconsistencias = 1;
+                    $arProgramacionPagoInconsistencia = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia();
+                    $arProgramacionPagoInconsistencia->setProgramacionPagoRel($arProgramacionPago);
+                    $arProgramacionPagoInconsistencia->setInconsistencia("El empleado " . $arContrato->getEmpleadoRel()->getNombreCorto() . " tiene deducciones muy altas");
+                    $em->persist($arProgramacionPagoInconsistencia);
+                }
+                $intNumeroEmpleados++;
+                $floNetoTotal += $floNeto;
             }
-            $arProgramacionPagoDetalle->setFechaDesde($dateFechaDesde);
-            $arProgramacionPagoDetalle->setFechaHasta($dateFechaHasta);
-            
-            $arProgramacionPagoDetalle->setDias($intDiasDevolver);
-            $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
-            if($arContrato->getCodigoTipoTiempoFk() == 2) {
-                $arProgramacionPagoDetalle->setHorasPeriodo($intDiasDevolver * 4);
-                $arProgramacionPagoDetalle->setHorasPeriodoReales($intDiasDevolver * 4);
-                $arProgramacionPagoDetalle->setFactorDia(4);
-            } else {
-                $arProgramacionPagoDetalle->setHorasPeriodo($intDiasDevolver * 8);
-                $arProgramacionPagoDetalle->setHorasPeriodoReales($intDiasDevolver * 8);
-                $arProgramacionPagoDetalle->setFactorDia(8);
-            }
-            $floValorDia = $arProgramacionPagoDetalle->getVrSalario() / 30;
-            $floDevengado = $arProgramacionPagoDetalle->getDias() * $floValorDia;
-            $arProgramacionPagoDetalle->setVrDevengado($floDevengado);
-            $floCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->cuotaCreditosNomina($arContrato->getCodigoEmpleadoFk());
-            $arProgramacionPagoDetalle->setVrCreditos($floCreditos);
-            $floDeducciones = $floCreditos;
-            $arProgramacionPagoDetalle->setVrDeducciones($floDeducciones);
-            $floNeto = $floDevengado - $floDeducciones;
-            $arProgramacionPagoDetalle->setVrNetoPagar($floNeto);
-            $em->persist($arProgramacionPagoDetalle);
-            if($floNeto < 0) {
-                $boolInconsistencias = 1;
-                $arProgramacionPagoInconsistencia = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia();
-                $arProgramacionPagoInconsistencia->setProgramacionPagoRel($arProgramacionPago);
-                $arProgramacionPagoInconsistencia->setInconsistencia("El empleado " . $arContrato->getEmpleadoRel()->getNombreCorto() . " tiene deducciones muy altas");
-                $em->persist($arProgramacionPagoInconsistencia);
-            }
-            $intNumeroEmpleados++;
-            $floNetoTotal += $floNeto;
+            $arProgramacionPago->setNumeroEmpleados($intNumeroEmpleados);
+            $arProgramacionPago->setVrNeto($floNetoTotal);
+            $arProgramacionPago->setInconsistencias($boolInconsistencias);
+            $em->flush();            
         }
-        $arProgramacionPago->setNumeroEmpleados($intNumeroEmpleados);
-        $arProgramacionPago->setVrNeto($floNetoTotal);
-        $arProgramacionPago->setInconsistencias($boolInconsistencias);
-        $em->flush();
+        if($arProgramacionPago->getCodigoPagoTipoFk() == 2) {
+            $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+            $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
+                    . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
+                    . " AND c.estadoActivo = 1"
+                    . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
+                    . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
+                    . " OR c.indefinido = 1)";
+            $query = $em->createQuery($dql);
+            $arContratos = $query->getResult();
+            foreach ($arContratos as $arContrato) {
+                $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
+                $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
+                $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
+                $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
+                $dateFechaDesde =  "";
+                if($arContrato->getFechaUltimoPagoPrimas() <=  $arProgramacionPago->getFechaDesde() == true) {
+                    $dateFechaDesde = $arProgramacionPago->getFechaDesde();
+                } else {
+                    $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
+                }
+                $intDia = $dateFechaDesde->format('j');
+                $intDiasMes = 31 - $intDia;                
+                $intMes = $dateFechaDesde->format('n');                
+                $intMesFinal = $arProgramacionPago->getFechaHasta()->format('n');
+                $intMeses = $intMesFinal - $intMes;
+                $intDias = ($intMeses * 30) + $intDiasMes;
+                
+                $arProgramacionPagoDetalle->setFechaDesde($dateFechaDesde);
+                $arProgramacionPagoDetalle->setFechaHasta($arProgramacionPago->getFechaHasta());
+                $arProgramacionPagoDetalle->setDias($intDias);
+                $arProgramacionPagoDetalle->setDiasReales($intDias);
+                $em->persist($arProgramacionPagoDetalle);
+                $intNumeroEmpleados++;
+                
+            }
+            $arProgramacionPago->setNumeroEmpleados($intNumeroEmpleados);            
+            $em->flush();           
+        }
         return true;
     }
     

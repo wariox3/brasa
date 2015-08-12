@@ -154,9 +154,19 @@ class RhuPagoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(p.vrIngresoBaseCotizacion) FROM BrasaRecursoHumanoBundle:RhuPago p "
                 . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
-                . "AND p.fechaHasta >= '" . $fechaDesde . "' AND p.fechaHasta <= '" . $fechaHasta . "'";
+                . "AND p.fechaDesde >= '" . $fechaDesde . "' AND p.fechaDesde <= '" . $fechaHasta . "'";
         $query = $em->createQuery($dql);
         $douIBC = $query->getSingleScalarResult();
         return $douIBC;
     }     
+    
+    public function devuelveAuxilioTransporteFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(p.vrAuxilioTransporteCotizacion) FROM BrasaRecursoHumanoBundle:RhuPago p "
+                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
+                . "AND p.fechaDesde >= '" . $fechaDesde . "' AND p.fechaDesde <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $douIBC = $query->getSingleScalarResult();
+        return $douIBC;
+    }         
 }

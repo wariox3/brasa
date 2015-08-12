@@ -18,8 +18,8 @@ class RhuCentroCostoRepository extends EntityRepository {
     
     public function generarProgramacionPago($codigoCentroCosto, $intTipo) {
         $em = $this->getEntityManager();                                                                       
-        $arProgramacionPagoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoTipo();
-        $arProgramacionPagoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoTipo')->find($intTipo);        
+        $arPagoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoTipo();
+        $arPagoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoTipo')->find($intTipo);        
         $arCentroCostoProceso = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();        
         $arCentroCostoProceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         if($arCentroCostoProceso->getEstadoActivo() == 1) {
@@ -68,7 +68,7 @@ class RhuCentroCostoRepository extends EntityRepository {
                     }
                 }
                 $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                $arProgramacionPago->setProgramacionPagoTipoRel($arProgramacionPagoTipo);
+                $arProgramacionPago->setPagoTipoRel($arPagoTipo);
                 $arProgramacionPago->setFechaDesde(date_create($dateDesde));
                 $arProgramacionPago->setFechaHasta(date_create($dateHasta));
                 $arProgramacionPago->setDias($arCentroCostoProceso->getPeriodoPagoRel()->getDias());
@@ -91,7 +91,7 @@ class RhuCentroCostoRepository extends EntityRepository {
                     $fechaHasta = date_create_from_format('Y/m/d', $intAnio .'/12/31');
                 }   
                 $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                $arProgramacionPago->setProgramacionPagoTipoRel($arProgramacionPagoTipo);
+                $arProgramacionPago->setPagoTipoRel($arPagoTipo);
                 $arProgramacionPago->setFechaDesde($fechaDesde);
                 $arProgramacionPago->setFechaHasta($fechaHasta);
                 $arProgramacionPago->setDias(0);

@@ -18,9 +18,9 @@ class RhuProgramacionPago
     private $codigoProgramacionPagoPk;
     
     /**
-     * @ORM\Column(name="codigo_programacion_pago_tipo_fk", type="integer", nullable=false)
+     * @ORM\Column(name="codigo_pago_tipo_fk", type="integer", nullable=false)
      */    
-    private $codigoProgramacionPagoTipoFk;     
+    private $codigoPagoTipoFk;     
     
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
@@ -104,10 +104,10 @@ class RhuProgramacionPago
     private $inconsistencias = 0;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuProgramacionPagoTipo", inversedBy="programacionesPagosProgramacionPagoTipoRel")
-     * @ORM\JoinColumn(name="codigo_programacion_pago_tipo_fk", referencedColumnName="codigo_programacion_pago_tipo_pk")
+     * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="programacionesPagosPagoTipoRel")
+     * @ORM\JoinColumn(name="codigo_pago_tipo_fk", referencedColumnName="codigo_pago_tipo_pk")
      */
-    protected $programacionPagoTipoRel;    
+    protected $pagoTipoRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="programacionesPagosCentroCostoRel")
@@ -139,7 +139,7 @@ class RhuProgramacionPago
      * @ORM\OneToMany(targetEntity="RhuProgramacionPagoInconsistencia", mappedBy="programacionPagoRel")
      */
     protected $programacionesPagosInconsistenciasProgramacionPagoRel;      
-    
+
     /**
      * Constructor
      */
@@ -163,27 +163,27 @@ class RhuProgramacionPago
     }
 
     /**
-     * Set codigoProgramacionPagoTipoFk
+     * Set codigoPagoTipoFk
      *
-     * @param integer $codigoProgramacionPagoTipoFk
+     * @param integer $codigoPagoTipoFk
      *
      * @return RhuProgramacionPago
      */
-    public function setCodigoProgramacionPagoTipoFk($codigoProgramacionPagoTipoFk)
+    public function setCodigoPagoTipoFk($codigoPagoTipoFk)
     {
-        $this->codigoProgramacionPagoTipoFk = $codigoProgramacionPagoTipoFk;
+        $this->codigoPagoTipoFk = $codigoPagoTipoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoProgramacionPagoTipoFk
+     * Get codigoPagoTipoFk
      *
      * @return integer
      */
-    public function getCodigoProgramacionPagoTipoFk()
+    public function getCodigoPagoTipoFk()
     {
-        return $this->codigoProgramacionPagoTipoFk;
+        return $this->codigoPagoTipoFk;
     }
 
     /**
@@ -571,27 +571,27 @@ class RhuProgramacionPago
     }
 
     /**
-     * Set programacionPagoTipoRel
+     * Set pagoTipoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoTipo $programacionPagoTipoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoTipo $pagoTipoRel
      *
      * @return RhuProgramacionPago
      */
-    public function setProgramacionPagoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoTipo $programacionPagoTipoRel = null)
+    public function setPagoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoTipo $pagoTipoRel = null)
     {
-        $this->programacionPagoTipoRel = $programacionPagoTipoRel;
+        $this->pagoTipoRel = $pagoTipoRel;
 
         return $this;
     }
 
     /**
-     * Get programacionPagoTipoRel
+     * Get pagoTipoRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoTipo
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoTipo
      */
-    public function getProgramacionPagoTipoRel()
+    public function getPagoTipoRel()
     {
-        return $this->programacionPagoTipoRel;
+        return $this->pagoTipoRel;
     }
 
     /**

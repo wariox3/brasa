@@ -4,6 +4,6 @@ namespace Brasa\RecursoHumanoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class RhuProgramacionPagoTipoRepository extends EntityRepository {
+class RhuPagoTipoRepository extends EntityRepository {
 
 }

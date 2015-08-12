@@ -31,6 +31,7 @@
                 <th>CIUDAD</th>
                 <th>PERIODO</th>
                 <th>HASTA</th>
+                <th>PRIMA HASTA</th>
                 <th>PAGO AUTOMATICO</th>
                 <th>HORA</th>
                 <th>ABIERTO</th>
@@ -46,6 +47,7 @@
                 <td>{{ arCentrosCostos.ciudadRel.nombre  }}</td>
                 <td>{{ arCentrosCostos.periodoPagoRel.nombre  }}</td>
                 <td>{{ arCentrosCostos.fechaUltimoPagoProgramado |date("Y/m/d")  }}</td>                
+                <td>{{ arCentrosCostos.fechaUltimoPagoPrima |date("Y/m/d")  }}</td>                                
                 <td>{% if arCentrosCostos.generarPagoAutomatico == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arCentrosCostos.horaPagoAutomatico |date("H:i")  }}</td>                
                 <td>{% if arCentrosCostos.pagoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
