@@ -89,6 +89,11 @@ class RhuCentroCosto
     private $codigoSucursalFk;    
     
     /**
+     * @ORM\Column(name="fecha_ultimo_pago_prima", type="date", nullable=true)
+     */    
+    private $fechaUltimoPagoPrima;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
      * @ORM\JoinColumn(name="codigo_periodo_pago_fk", referencedColumnName="codigo_periodo_pago_pk")
      */
@@ -173,6 +178,7 @@ class RhuCentroCosto
     
    
     
+
     /**
      * Constructor
      */
@@ -537,6 +543,30 @@ class RhuCentroCosto
     public function getCodigoSucursalFk()
     {
         return $this->codigoSucursalFk;
+    }
+
+    /**
+     * Set fechaUltimoPagoPrima
+     *
+     * @param \DateTime $fechaUltimoPagoPrima
+     *
+     * @return RhuCentroCosto
+     */
+    public function setFechaUltimoPagoPrima($fechaUltimoPagoPrima)
+    {
+        $this->fechaUltimoPagoPrima = $fechaUltimoPagoPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPagoPrima
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPagoPrima()
+    {
+        return $this->fechaUltimoPagoPrima;
     }
 
     /**

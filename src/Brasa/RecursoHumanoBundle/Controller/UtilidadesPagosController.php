@@ -14,21 +14,29 @@ class UtilidadesPagosController extends Controller
         $form = $this->createFormBuilder()
             ->add('ChkMostrarInactivos', 'checkbox', array('label'=> '', 'required'  => false,))
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => ''))
-            ->add('BtnBuscar', 'submit', array('label'  => 'Filtrar'))
-            //->add('Actualizar', 'submit')
-            ->add('Generar', 'submit')
+            ->add('BtnBuscar', 'submit', array('label'  => 'Filtrar'))            
+            ->add('BtnGenerarNomina', 'submit', array('label'  => 'Generar nomina',))
+            ->add('BtnGenerarPrima', 'submit', array('label'  => 'Generar prima',))            
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
             $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL('',0, ""));
-            if($form->get('Generar')->isClicked()) {
+            if($form->get('BtnGenerarNomina')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCentroCosto) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($codigoCentroCosto);
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($codigoCentroCosto, 1);
                     }
                 }
             }
+            if($form->get('BtnGenerarPrima')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoCentroCosto) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($codigoCentroCosto, 2);
+                    }
+                }
+            }            
             if($form->get('BtnBuscar')->isClicked()) {
                 $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->ListaDQL($form->get('TxtNombre')->getData(), $form->get('ChkMostrarInactivos')->getData(), ""));
             }

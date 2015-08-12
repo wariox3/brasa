@@ -575,7 +575,7 @@ class ProgramacionesPagoController extends Controller
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $arrayPropiedades = array(
+        $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cc')
@@ -587,10 +587,25 @@ class ProgramacionesPagoController extends Controller
                 'data' => ""
             );
         if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+            $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
+        $arrayPropiedadesTipo = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuProgramacionPagoTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoProgramacionPagoTipo')) {
+            $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuProgramacionPagoTipo", $session->get('filtroCodigoProgramacionPagoTipo'));
+        }        
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
+            ->add('programacionPagoTipoRel', 'entity', $arrayPropiedadesTipo)
             ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'GENERADO', '0' => 'SIN GENERAR'), 'data' => $session->get('filtroEstadoGenerado')))
             ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PAGADOS', '0' => 'SIN PAGAR'), 'data' => $session->get('filtroEstadoPagado')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -611,7 +626,8 @@ class ProgramacionesPagoController extends Controller
                     "",
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroEstadoGenerado'),
-                    $session->get('filtroEstadoPagado')
+                    $session->get('filtroEstadoPagado'),
+                    $session->get('filtroCodigoProgramacionPagoTipo')
                     );
     }
 
@@ -620,6 +636,7 @@ class ProgramacionesPagoController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroCodigoProgramacionPagoTipo', $controles['programacionPagoTipoRel']);
         $session->set('filtroEstadoGenerado', $form->get('estadoGenerado')->getData());
         $session->set('filtroEstadoPagado', $form->get('estadoPagado')->getData());
     }

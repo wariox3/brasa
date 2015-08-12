@@ -18,6 +18,11 @@ class RhuProgramacionPago
     private $codigoProgramacionPagoPk;
     
     /**
+     * @ORM\Column(name="codigo_programacion_pago_tipo_fk", type="integer", nullable=false)
+     */    
+    private $codigoProgramacionPagoTipoFk;     
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fechaDesde;    
@@ -99,6 +104,12 @@ class RhuProgramacionPago
     private $inconsistencias = 0;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuProgramacionPagoTipo", inversedBy="programacionesPagosProgramacionPagoTipoRel")
+     * @ORM\JoinColumn(name="codigo_programacion_pago_tipo_fk", referencedColumnName="codigo_programacion_pago_tipo_pk")
+     */
+    protected $programacionPagoTipoRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="programacionesPagosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -149,6 +160,30 @@ class RhuProgramacionPago
     public function getCodigoProgramacionPagoPk()
     {
         return $this->codigoProgramacionPagoPk;
+    }
+
+    /**
+     * Set codigoProgramacionPagoTipoFk
+     *
+     * @param integer $codigoProgramacionPagoTipoFk
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setCodigoProgramacionPagoTipoFk($codigoProgramacionPagoTipoFk)
+    {
+        $this->codigoProgramacionPagoTipoFk = $codigoProgramacionPagoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProgramacionPagoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProgramacionPagoTipoFk()
+    {
+        return $this->codigoProgramacionPagoTipoFk;
     }
 
     /**
@@ -533,6 +568,30 @@ class RhuProgramacionPago
     public function getInconsistencias()
     {
         return $this->inconsistencias;
+    }
+
+    /**
+     * Set programacionPagoTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoTipo $programacionPagoTipoRel
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setProgramacionPagoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoTipo $programacionPagoTipoRel = null)
+    {
+        $this->programacionPagoTipoRel = $programacionPagoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get programacionPagoTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoTipo
+     */
+    public function getProgramacionPagoTipoRel()
+    {
+        return $this->programacionPagoTipoRel;
     }
 
     /**
