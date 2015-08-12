@@ -169,14 +169,14 @@ class RhuPagoRepository extends EntityRepository {
         return $fechaUltimoPago;
     }   
     
-    public function devuelveIBCFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
+    public function devuelveCostosFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT SUM(p.vrIngresoBaseCotizacion) FROM BrasaRecursoHumanoBundle:RhuPago p "
+        $dql   = "SELECT SUM(p.vrIngresoBaseCotizacion) as IBC, SUM(p.vrPension) as Pension FROM BrasaRecursoHumanoBundle:RhuPago p "
                 . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " AND p.estadoPagado = 1"
                 . "AND p.fechaDesde >= '" . $fechaDesde . "' AND p.fechaDesde <= '" . $fechaHasta . "'";
         $query = $em->createQuery($dql);
-        $douIBC = $query->getSingleScalarResult();
-        return $douIBC;
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
     }     
     
 }
