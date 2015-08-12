@@ -246,9 +246,13 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $em->persist($arServicioCobrar);                      
                         
                         $arPagoProcesar->setNumero($em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->consecutivo(1));
+                        $arPagoProcesar->setEstadoPagado(1);
                         $em->persist($arPagoProcesar);                        
                     }
-                    
+                    $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+                    $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
+                    $arCentroCosto->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());
+                    $em->persist($arCentroCosto);
                     $arProgramacionPagoProcesar->setEstadoPagado(1);
                     $em->persist($arProgramacionPagoProcesar);                    
                 }

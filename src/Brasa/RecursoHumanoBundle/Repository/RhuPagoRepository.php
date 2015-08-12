@@ -94,9 +94,28 @@ class RhuPagoRepository extends EntityRepository {
         return $douNeto;
     }    
     
-    public function listaDQL($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "") {        
+    public function listaDql($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "", $intTipo = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoPk <> 0";
+        if($intNumero != "" && $intNumero != 0) {
+            $dql .= " AND p.numero = " . $intNumero;
+        }
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($intTipo != "" && $intTipo != 0) {
+            $dql .= " AND p.codigoPagoTipoFk =" . $intTipo;
+        }        
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }        
+        $dql .= " ORDER BY p.codigoPagoPk DESC";
+        return $dql;
+    }                        
+
+    public function listaDqlCostos($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoTipoFk = 1 AND p.estadoPagado = 1";
         if($intNumero != "" && $intNumero != 0) {
             $dql .= " AND p.numero = " . $intNumero;
         }
@@ -108,8 +127,8 @@ class RhuPagoRepository extends EntityRepository {
         }        
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
-    }                        
-
+    }                            
+    
     public function generarPagoDetalleSede ($codigoPago) {
         $em = $this->getEntityManager();
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
@@ -153,20 +172,11 @@ class RhuPagoRepository extends EntityRepository {
     public function devuelveIBCFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(p.vrIngresoBaseCotizacion) FROM BrasaRecursoHumanoBundle:RhuPago p "
-                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
+                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " AND p.estadoPagado = 1"
                 . "AND p.fechaDesde >= '" . $fechaDesde . "' AND p.fechaDesde <= '" . $fechaHasta . "'";
         $query = $em->createQuery($dql);
         $douIBC = $query->getSingleScalarResult();
         return $douIBC;
     }     
     
-    public function devuelveAuxilioTransporteFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
-        $em = $this->getEntityManager();
-        $dql   = "SELECT SUM(p.vrAuxilioTransporteCotizacion) FROM BrasaRecursoHumanoBundle:RhuPago p "
-                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
-                . "AND p.fechaDesde >= '" . $fechaDesde . "' AND p.fechaDesde <= '" . $fechaHasta . "'";
-        $query = $em->createQuery($dql);
-        $douIBC = $query->getSingleScalarResult();
-        return $douIBC;
-    }         
 }

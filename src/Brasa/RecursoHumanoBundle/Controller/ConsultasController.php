@@ -15,24 +15,24 @@ class ConsultasController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
-        $this->listar();
+        $this->listarCostosGeneral();
         if ($form->isValid())
         {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
-                $this->listar();
+                $this->listarCostosGeneral();
                 $this->generarExcel();
             }
             if($form->get('BtnPDF')->isClicked()) {
                 $this->filtrarLista($form);
-                $this->listar();
+                $this->listarCostosGeneral();
                 $objReporteCostos = new \Brasa\RecursoHumanoBundle\Reportes\ReporteCostos();
                 $objReporteCostos->Generar($this, $this->strSqlLista);
             }            
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
-                $this->listar();
+                $this->listarCostosGeneral();
             }
 
         }
@@ -111,10 +111,10 @@ class ConsultasController extends Controller
             ));
     }    
     
-    private function listar() {
+    private function listarCostosGeneral() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDQL(
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDqlCostos(
                     "",
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion')

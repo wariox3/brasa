@@ -74,22 +74,37 @@ class PagosController extends Controller
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
-        $arrayPropiedades = array(
+        $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')                                        
+                    return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false,  
+                'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",    
+                'empty_value' => "TODOS",
                 'data' => ""
-            );  
+            );
         if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
+            $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
+        $arrayPropiedadesTipo = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuPagoTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoPagoTipo')) {
+            $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoTipo", $session->get('filtroCodigoPagoTipo'));
         }
         $form = $this->createFormBuilder()                        
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
+            ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
+            ->add('pagoTipoRel', 'entity', $arrayPropiedadesTipo)
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                            
             ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroPagoNumero')))                                                   
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                                            
@@ -102,10 +117,11 @@ class PagosController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();                
         $session = $this->getRequest()->getSession();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDQL(
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDql(
                     $this->intNumero,
                     $session->get('filtroCodigoCentroCosto'),
-                    $session->get('filtroIdentificacion')
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroCodigoPagoTipo')
                     );  
     }         
     
@@ -114,6 +130,7 @@ class PagosController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);                
+        $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $this->intNumero = $form->get('TxtNumero')->getData();
     }         

@@ -31,6 +31,11 @@ class RhuCentroCosto
      * @ORM\Column(name="codigo_periodo_pago_fk", type="integer", nullable=true)
      */    
     private $codigoPeriodoPagoFk;       
+
+    /**
+     * @ORM\Column(name="fecha_ultimo_pago", type="date", nullable=true)
+     */    
+    private $fechaUltimoPago;     
     
     /**
      * @ORM\Column(name="fecha_ultimo_pago_programado", type="date", nullable=true)
@@ -1081,5 +1086,29 @@ class RhuCentroCosto
     public function getLiquidacionesCentroCostoRel()
     {
         return $this->liquidacionesCentroCostoRel;
+    }
+
+    /**
+     * Set fechaUltimoPago
+     *
+     * @param \DateTime $fechaUltimoPago
+     *
+     * @return RhuCentroCosto
+     */
+    public function setFechaUltimoPago($fechaUltimoPago)
+    {
+        $this->fechaUltimoPago = $fechaUltimoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPago()
+    {
+        return $this->fechaUltimoPago;
     }
 }

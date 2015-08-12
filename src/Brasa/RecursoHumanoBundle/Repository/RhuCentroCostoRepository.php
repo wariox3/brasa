@@ -81,14 +81,14 @@ class RhuCentroCostoRepository extends EntityRepository {
             //2 programacion prima
             if($intTipo == 2) {
                 $intAnio = $arCentroCostoProceso->getFechaUltimoPagoPrima()->format('Y');
-                if($arCentroCostoProceso->getFechaUltimoPagoPrima()->format('m-d') == '12-31') {
+                if($arCentroCostoProceso->getFechaUltimoPagoPrima()->format('m-d') == '12-30') {
                     $intAnio += 1;
                     $fechaDesde = date_create_from_format('Y/m/d', $intAnio .'/01/01');
                     $fechaHasta = date_create_from_format('Y/m/d', $intAnio .'/06/30');
                 }
                 if($arCentroCostoProceso->getFechaUltimoPagoPrima()->format('m-d') == '06-30') {
                     $fechaDesde = date_create_from_format('Y/m/d', $intAnio .'/07/01');
-                    $fechaHasta = date_create_from_format('Y/m/d', $intAnio .'/12/31');
+                    $fechaHasta = date_create_from_format('Y/m/d', $intAnio .'/12/30');
                 }   
                 $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                 $arProgramacionPago->setPagoTipoRel($arPagoTipo);
