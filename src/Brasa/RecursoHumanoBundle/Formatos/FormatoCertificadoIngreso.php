@@ -2,20 +2,19 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoCertificadoIngreso extends \FPDF_FPDF {
     public static $em;
-    
     public static $codigoEmpleado;
-    
+    public static $strFechaCertificado;
     public static $strFechaExpedicion;
-    
     public static $strLugarExpedicion;
     
     
     
-    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion) {        
+    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoEmpleado = $codigoEmpleado;
+        self::$strFechaCertificado = $strFechaCertificado;
         self::$strFechaExpedicion = $strFechaExpedicion;
         self::$strLugarExpedicion = $strLugarExpedicion;
         
@@ -57,7 +56,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Cell(110, 7.5, "Certificado de ingresos y Retenciones para Personas" , 0, 0, 'C', 1);
         $this->SetXY(35, 13);
         $this->Line(35, 20, 145, 20);
-        $this->Cell(110, 6.5, utf8_decode("Naturales Empleados Año Gravable 2014") , 0, 0, 'C', 1);
+        $this->Cell(110, 6.5, utf8_decode("Naturales Empleados Año Gravable ". self::$strFechaCertificado) , 0, 0, 'C', 1);
         //logo muisca
         $this->Line(145, 5, 175, 5);
         $this->Line(145, 5, 145, 20);
@@ -265,7 +264,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Cell(8, 5, utf8_decode("60.") , 1, 0, 'C', 1);
         $this->Cell(27, 5, utf8_decode("-") , 1, 0, 'R', 1);
         $this->SetXY(5, 205);
-        $this->Cell(165, 5, utf8_decode("Total retenciones año gravable 2014 (Suma casillas 46 + 60)") , 1, 0, 'L', 1);
+        $this->Cell(165, 5, utf8_decode("Total retenciones año gravable " . self::$strFechaCertificado. " (Suma casillas 46 + 60)") , 1, 0, 'L', 1);
         $this->Cell(8, 5, utf8_decode("61.") , 1, 0, 'C', 1);
         $this->Cell(27, 5, utf8_decode("-") , 1, 0, 'R', 1);
         //identificacion de bienes
@@ -305,7 +304,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         
         $this->SetXY(5, 243);
         $this->SetFont('Arial','b',8);
-        $this->Cell(165, 4, utf8_decode("Deudas vigentes a 31 de Diciembre de 2014") , 1, 0, 'L', 1);
+        $this->Cell(165, 4, utf8_decode("Deudas vigentes a 31 de Diciembre de ". self::$strFechaCertificado) , 1, 0, 'L', 1);
         $this->Cell(9, 4, utf8_decode("64.") , 1, 0, 'C', 1);
         $this->Cell(26, 4, utf8_decode("-") , 1, 0, 'R', 1);   
         //Identificación de las personas dependientes
@@ -338,7 +337,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Cell(128, 4, utf8_decode("aaaa") , 1, 0, 'L', 1);
         $this->Cell(35, 4, utf8_decode("aaaa") , 1, 0, 'L', 1);
         $this->SetXY(5, 271);
-        $this->Cell(160, 3, utf8_decode("Certifico que durante el año gravable 2014") , 1, 0, 'L', 1);
+        $this->Cell(160, 3, utf8_decode("Certifico que durante el año gravable ".self::$strFechaCertificado) , 1, 0, 'L', 1);
         $this->SetFont('Arial','b',8);
         $this->Cell(40, 3, utf8_decode("Firma del asalariado") , 1, 0, 'C', 1);
         $this->SetXY(5, 274);
@@ -357,7 +356,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Cell(160, 3, utf8_decode("6. Que el valor total de mis consignaciones bancarias, depósitos o inversiones financieras no excedieron la suma de 4.500 UVT ($123.683.000)") , 1, 0, 'L', 1);
         $this->SetXY(5, 292);
         $this->SetFont('Arial','',8);
-        $this->Cell(160, 3, utf8_decode("Por lo tanto manifiesto que no estoy obligado a presentar declaracióon de renta y complementarios por el año gravable 2014") , 1, 0, 'L', 1);
+        $this->Cell(160, 3, utf8_decode("Por lo tanto manifiesto que no estoy obligado a presentar declaracióon de renta y complementarios por el año gravable ". self::$strFechaCertificado) , 1, 0, 'L', 1);
     }
 
     public function Body($pdf) {
