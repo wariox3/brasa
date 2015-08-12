@@ -13,8 +13,12 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
     public static $strCertifico4;
     public static $strCertifico5;
     public static $strCertifico6;
+    public static $base;
+    public static $auxilioTransporte;
+    public static $periodoCertificadoDesde;
+    public static $periodoCertificadoHasta;
     
-    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$strCertifico1,$strCertifico2,$strCertifico3,$strCertifico4,$strCertifico5,$strCertifico6) {
+    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$strCertifico1,$strCertifico2,$strCertifico3,$strCertifico4,$strCertifico5,$strCertifico6,$base,$auxilioTransporte,$periodoCertificadoDesde,$periodoCertificadoHasta) {
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
@@ -29,6 +33,10 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         self::$strCertifico4 = $strCertifico4;
         self::$strCertifico5 = $strCertifico5;
         self::$strCertifico6 = $strCertifico6;
+        self::$base = $base;
+        self::$auxilioTransporte = $auxilioTransporte;
+        self::$periodoCertificadoDesde = $periodoCertificadoDesde;
+        self::$periodoCertificadoHasta = $periodoCertificadoHasta;
         $pdf = new FormatoCertificadoIngreso();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -101,8 +109,8 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Cell(55, 6, $arConfiguracion->getNit() , 1, 0, 'R', 1);
         $this->Cell(5, 6, " - " , 1, 0, 'C', 1);
         $this->Cell(13, 6, "3" , 1, 0, 'C', 1);
-        $this->Cell(30, 6, "" , 1, 0, 'C', 1);
-        $this->Cell(30, 6, "" , 1, 0, 'C', 1);
+        $this->Cell(30, 6, self::$base , 1, 0, 'C', 1);
+        $this->Cell(30, 6, self::$auxilioTransporte , 1, 0, 'C', 1);
         $this->Cell(30, 6, "" , 1, 0, 'C', 1);
         $this->Cell(30, 6, "" , 1, 0, 'C', 1);
         $this->SetXY(12, 42);
@@ -156,7 +164,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Cell(22, 6, utf8_decode("35. Cod Ciudad") , 1, 0, 'L', 1);
         $this->SetXY(5, 78);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 6, utf8_decode("30. DE: 2014-10-30  31. A: 2014-10-12") , 1, 0, 'C', 1);
+        $this->Cell(65, 6, utf8_decode("30. DE: $periodoCertificadoDesde  31. A: $periodoCertificadoHasta") , 1, 0, 'C', 1);
         $this->Cell(33, 6, self::$strFechaExpedicion->format('Y/m/d') , 1, 0, 'C', 1);
         $this->Cell(60, 6, utf8_decode($arCiudad->getNombre()) , 1, 0, 'C', 1);
         $this->Cell(20, 6, substr($arCiudad->getCodigoInterface(), 0, 2) , 1, 0, 'C', 1);  // bcd
@@ -176,7 +184,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->SetFont('Arial','',8);
         $this->Cell(158, 6, utf8_decode("Pagos al empleado (No incluye valores de las casillas 38 a 41)") , 1, 0, 'L', 1);
         $this->Cell(8, 6, utf8_decode("37.") , 1, 0, 'C', 1);
-        $this->Cell(34, 6, utf8_decode("200.000.00") , 1, 0, 'R', 1);
+        $this->Cell(34, 6, round(self::$base + self::$auxilioTransporte) , 1, 0, 'R', 1);
         $this->SetXY(5, 102);
         $this->Cell(158, 6, utf8_decode("Cesantías e intereses de cesantías efectivamente pagadas en el periodo") , 1, 0, 'L', 1);
         $this->Cell(8, 6, utf8_decode("38.") , 1, 0, 'C', 1);

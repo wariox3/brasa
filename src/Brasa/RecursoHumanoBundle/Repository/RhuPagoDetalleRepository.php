@@ -18,4 +18,24 @@ class RhuPagoDetalleRepository extends EntityRepository {
         $arPagosDetalles = $query->getResult();                
         return $arPagosDetalles;
     }*/
+    public function certificadoingresosTotalPagosEmpleado($codigoEmpleado, $strFechaCertificado) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
+                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
+                . "AND pd.codigoPagoConceptoFk = 1"
+                . "AND p.fechaDesde like '%" . $strFechaCertificado . "%' ";
+        $query = $em->createQuery($dql);
+        $douIBC = $query->getResult();
+        return $douIBC;
+    }
+    public function certificadoingresosTotalPagosEmpleadoAuxilio($codigoEmpleado, $strFechaCertificado) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
+                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
+                . "AND pd.codigoPagoConceptoFk = 18"
+                . "AND p.fechaDesde like '%" . $strFechaCertificado . "%' ";
+        $query = $em->createQuery($dql);
+        $douAuxilio = $query->getResult();
+        return $douAuxilio;
+    }
 }

@@ -19,8 +19,7 @@ class CertificadoIngresoController extends Controller
         $ConfiguracionGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionGeneral')->find(1);
         $empleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $empleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        $pagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $pagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->certificadoingresosTotalPagosEmpleado($codigoEmpleado);
+        
         $fechaActual = date('Y-m-j');
         $fechaPrimeraAnterior = strtotime ( '-1 year' , strtotime ( $fechaActual ) ) ;
         $fechaPrimeraAnterior = date ( 'Y' , $fechaPrimeraAnterior );
@@ -63,8 +62,32 @@ class CertificadoIngresoController extends Controller
                 $stCertifico4 = $controles['certifico4'];
                 $stCertifico5 = $controles['certifico5'];
                 $stCertifico6 = $controles['certifico6'];
-                $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
-                $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6);
+                $pagosBase = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                $pagosBase = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->certificadoingresosTotalPagosEmpleado($codigoEmpleado,2015);
+                $pagosAuxilio = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                $pagosAuxilio = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->certificadoingresosTotalPagosEmpleadoAuxilio($codigoEmpleado,2015);
+                
+                $periodoCertificadoDesde = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->certificadoingresosPeriodoDesde($codigoEmpleado,2015);
+                
+                $periodoCertificadoHasta = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->certificadoingresosPeriodoHasta($codigoEmpleado,2015);
+                $base = 0;
+                $auxilioTransporte = 0;
+                
+                
+                $duoRegistrosPagos = count($pagosBase);
+                if ($duoRegistrosPagos > 0){
+                    foreach ($pagosBase as $pagoBase) {
+                        $base = $base + $pagoBase->getVrPago();
+                    }
+                    foreach ($pagosAuxilio as $pagoAuxilio) {
+                        $auxilioTransporte = $auxilioTransporte + $pagoAuxilio->getVrPago();
+                    }
+                    $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
+                    $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$base,$auxilioTransporte,$periodoCertificadoDesde,$periodoCertificadoHasta);  
+                } else {
+                    $mensaje = "Este empleado no registra información de ingresos  y retenciones para el año". $strFechaCertificado ." ";
+                }
+                
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/CertificadoIngreso:certificado.html.twig', array(
