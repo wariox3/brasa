@@ -26,7 +26,7 @@
                 <div class="col-sm-10">
                         {{ form_widget(formCertificado.LugarExpedicion, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>
+            </div> 
         </div>
         <div class="panel-heading">Concepto a los aportes</div>
         <div class="panel-body">
@@ -37,138 +37,47 @@
                 </div>
             </div>    
         </div>
-        <div class="panel-heading">Datos a cargo del asalariado</div>
+        <div class="panel-heading">Certifico que:</div>
         <div class="panel-body">
             <div class="form-group form-group-sm">
-                <label for="form_arrendamientos" class="col-sm-2 control-label">Arrendamientos:</label>
+                <label for="form_sfp" class="col-sm-2 control-label">1.</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formCertificado.valorRecibido1, { 'attr': {'placeholder':'valor recibido'} })}}
-                        {{ form_widget(formCertificado.valorRetenido1, { 'attr': {'placeholder':'valor retenido'} })}}
+                        {{ form_widget(formCertificado.certifico1, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_hcs" class="col-sm-2 control-label">Honorarios, comisiones y servicios:</label>
+                <label for="form_sfp" class="col-sm-2 control-label">2.</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formCertificado.valorRecibido2, { 'attr': {'placeholder':'valor recibido'} })}}
-                        {{ form_widget(formCertificado.valorRetenido2, { 'attr': {'placeholder':'valor recibido'} })}}
+                        {{ form_widget(formCertificado.certifico2, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_interesRF" class="col-sm-2 control-label">Interes y rendimiento financiero:</label>
+                <label for="form_sfp" class="col-sm-2 control-label">3.</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formCertificado.valorRecibido3, { 'attr': {'placeholder':'valor recibido'} })}}
-                        {{ form_widget(formCertificado.valorRetenido3, { 'attr': {'placeholder':'valor recibido'} })}}
+                        {{ form_widget(formCertificado.certifico3, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_enajenacionAF" class="col-sm-2 control-label">Enajenación de activos fijos:</label>
+                <label for="form_sfp" class="col-sm-2 control-label">4.</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formCertificado.valorRecibido4, { 'attr': {'placeholder':'valor recibido'} })}}
-                        {{ form_widget(formCertificado.valorRetenido4, { 'attr': {'placeholder':'valor recibido'} })}}
+                        {{ form_widget(formCertificado.certifico4, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_lras" class="col-sm-2 control-label">Loterias, rifas, apuestas y similares:</label>
+                <label for="form_sfp" class="col-sm-2 control-label">5.</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formCertificado.valorRecibido5, { 'attr': {'placeholder':'valor recibido'} })}}
-                        {{ form_widget(formCertificado.valorRetenido5, { 'attr': {'placeholder':'valor recibido'} })}}
+                        {{ form_widget(formCertificado.certifico5, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_otros" class="col-sm-2 control-label">Otros:</label>
+                <label for="form_sfp" class="col-sm-2 control-label">6.</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formCertificado.valorRecibido6, { 'attr': {'placeholder':'valor recibido'} })}}
-                        {{ form_widget(formCertificado.valorRetenido6, { 'attr': {'placeholder':'valor recibido'} })}}
+                        {{ form_widget(formCertificado.certifico6, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>    
         </div>
-        <div class="panel-heading">Identificación de los bienes poseidos</div>
-        <div class="panel-body">
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">1. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.bienesPoseidos1, { 'attr': {'size': '50','placeholder':'bien poseido 1'} }) }}
-                        {{ form_widget(formCertificado.valorPatrimonial1, { 'attr': {'placeholder':'valor patrimonial'} })}}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">2. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.bienesPoseidos2, { 'attr': {'size': '50','placeholder':'bien poseido 2'} }) }}
-                        {{ form_widget(formCertificado.valorPatrimonial2, { 'attr': {'placeholder':'valor patrimonial'} })}}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">3. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.bienesPoseidos3, { 'attr': {'size': '50','placeholder':'bien poseido 3'} }) }}
-                        {{ form_widget(formCertificado.valorPatrimonial3, { 'attr': {'placeholder':'valor patrimonial'} })}}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">4. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.bienesPoseidos4, { 'attr': {'size': '50','placeholder':'bien poseido 4'} }) }}
-                        {{ form_widget(formCertificado.valorPatrimonial4, { 'attr': {'placeholder':'valor patrimonial'} })}}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">5. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.bienesPoseidos5, { 'attr': {'size': '50','placeholder':'bien poseido 5'} }) }}
-                        {{ form_widget(formCertificado.valorPatrimonial5, { 'attr': {'placeholder':'valor patrimonial'} })}}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">6. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.bienesPoseidos6, { 'attr': {'size': '50','placeholder':'bien poseido 6'} }) }}
-                        {{ form_widget(formCertificado.valorPatrimonial6, { 'attr': {'placeholder':'valor patrimonial'} })}}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">7. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.bienesPoseidos7, { 'attr': {'size': '50','placeholder':'bien poseido 7'} }) }}
-                        {{ form_widget(formCertificado.valorPatrimonial7, { 'attr': {'placeholder':'valor patrimonial'} })}}
-                </div>
-            </div>    
-        </div>
-        <div class="panel-heading">Identificación de las personas dependientes de acuerdo al parágrafo 2 del articulo 387 del E.T.</div>
-        <div class="panel-body">
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">1. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.personasDependientesCc1, { 'attr': {'size': '12','placeholder':'C.C o NIT'} }) }}
-                        {{ form_widget(formCertificado.personasDependientesNyA1, { 'attr': {'size': '45','placeholder':'Apellidos y nombres'} }) }}
-                        {{ form_widget(formCertificado.personasDependientesP1, { 'attr': {'size': '20','placeholder':'Perentesco'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">2. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.personasDependientesCc2, { 'attr': {'size': '12','placeholder':'C.C o NIT'} }) }}
-                        {{ form_widget(formCertificado.personasDependientesNyA2, { 'attr': {'size': '45','placeholder':'Apellidos y nombres'} }) }}
-                        {{ form_widget(formCertificado.personasDependientesP2, { 'attr': {'size': '20','placeholder':'Perentesco'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">3. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.personasDependientesCc3, { 'attr': {'size': '12','placeholder':'C.C o NIT'} }) }}
-                        {{ form_widget(formCertificado.personasDependientesNyA3, { 'attr': {'size': '45','placeholder':'Apellidos y nombres'} }) }}
-                        {{ form_widget(formCertificado.personasDependientesP3, { 'attr': {'size': '20','placeholder':'Perentesco'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_1" class="col-sm-2 control-label">4. </label>
-                <div class="col-sm-10">
-                        {{ form_widget(formCertificado.personasDependientesCc4, { 'attr': {'size': '12','placeholder':'C.C o NIT'} }) }}
-                        {{ form_widget(formCertificado.personasDependientesNyA4, { 'attr': {'size': '45','placeholder':'Apellidos y nombres'} }) }}
-                        {{ form_widget(formCertificado.personasDependientesP4, { 'attr': {'size': '20','placeholder':'Perentesco'} }) }}
-                </div>
-            </div>    
-        </div>        
+        
+        
     </div>                   
     <div class="modal-footer">              
         {{ form_widget(formCertificado.BtnGenerar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}            

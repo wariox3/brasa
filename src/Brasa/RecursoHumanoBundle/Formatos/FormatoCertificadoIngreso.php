@@ -6,10 +6,15 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
     public static $strFechaCertificado;
     public static $strFechaExpedicion;
     public static $strLugarExpedicion;
+    public static $strAfc;
+    public static $strCertifico1;
+    public static $strCertifico2;
+    public static $strCertifico3;
+    public static $strCertifico4;
+    public static $strCertifico5;
+    public static $strCertifico6;
     
-    
-    
-    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado) {        
+    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$strCertifico1,$strCertifico2,$strCertifico3,$strCertifico4,$strCertifico5,$strCertifico6) {
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
@@ -17,7 +22,13 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         self::$strFechaCertificado = $strFechaCertificado;
         self::$strFechaExpedicion = $strFechaExpedicion;
         self::$strLugarExpedicion = $strLugarExpedicion;
-        
+        self::$strAfc = $strAfc;
+        self::$strCertifico1 = $strCertifico1;
+        self::$strCertifico2 = $strCertifico2;
+        self::$strCertifico3 = $strCertifico3;
+        self::$strCertifico4 = $strCertifico4;
+        self::$strCertifico5 = $strCertifico5;
+        self::$strCertifico6 = $strCertifico6;
         $pdf = new FormatoCertificadoIngreso();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -200,12 +211,12 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->SetFont('Arial','',8);
         $this->Cell(158, 5, utf8_decode("Aportes obligatorios a fondos de pensiones y solidaridad pensional") , 1, 0, 'L', 1);
         $this->Cell(8, 5, utf8_decode("44.") , 1, 0, 'C', 1);
-        $this->Cell(34, 5, utf8_decode("200.000.00") , 1, 0, 'R', 1);
+        $this->Cell(34, 5, "" , 1, 0, 'R', 1);
         $this->SetXY(5, 147);
         $this->SetFont('Arial','',8);
         $this->Cell(158, 5, utf8_decode("Aportes obligatorios a fondos de pensiones y cuentas AFC") , 1, 0, 'L', 1);
         $this->Cell(8, 5, utf8_decode("45.") , 1, 0, 'C', 1);
-        $this->Cell(34, 5, utf8_decode("200.000.00") , 1, 0, 'R', 1);
+        $this->Cell(34, 5, utf8_decode(self::$strAfc) , 1, 0, 'R', 1);
         $this->SetXY(5, 152);
         $this->SetFont('Arial','b',8);
         $this->Cell(158, 5, utf8_decode("Valor de la retención en la fuente por salarios y demás pagos laborados") , 1, 0, 'L', 1);
@@ -342,18 +353,18 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Cell(40, 3, utf8_decode("Firma del asalariado") , 1, 0, 'C', 1);
         $this->SetXY(5, 274);
         $this->SetFont('Arial','',7);
-        $this->Cell(160, 3, utf8_decode("1. Mi patrimonio bruto era igual o inferior a 4.500 UVT ($123.683.000)") , 1, 0, 'L', 1);
+        $this->Cell(160, 3, utf8_decode(self::$strCertifico1) , 1, 0, 'L', 1);
         $this->Cell(40, 21, utf8_decode("") , 1, 0, 'L', 1);
         $this->SetXY(5, 277);
-        $this->Cell(160, 3, utf8_decode("2. No fui responsable del impuesto sobre las ventas") , 1, 0, 'L', 1);
+        $this->Cell(160, 3, utf8_decode(self::$strCertifico2) , 1, 0, 'L', 1);
         $this->SetXY(5, 280);
-        $this->Cell(160, 3, utf8_decode("3. Mis ingresos totales fueron iguales o inferiores a 1.400 UVT ($38.479.000)") , 1, 0, 'L', 1);
+        $this->Cell(160, 3, utf8_decode(self::$strCertifico3) , 1, 0, 'L', 1);
         $this->SetXY(5, 283);
-        $this->Cell(160, 3, utf8_decode("4. Mis consumos mediante tarjeta de crédito no excedieron la suma de 2.800 UVT ($76.958.000)") , 1, 0, 'L', 1);
+        $this->Cell(160, 3, utf8_decode(self::$strCertifico4) , 1, 0, 'L', 1);
         $this->SetXY(5, 286);
-        $this->Cell(160, 3, utf8_decode("5. Quen el total de mis compras y consumos no superaron la suma de 2.800 UVT ($76.958.000)") , 1, 0, 'L', 1);
+        $this->Cell(160, 3, utf8_decode(self::$strCertifico5) , 1, 0, 'L', 1);
         $this->SetXY(5, 289);
-        $this->Cell(160, 3, utf8_decode("6. Que el valor total de mis consignaciones bancarias, depósitos o inversiones financieras no excedieron la suma de 4.500 UVT ($123.683.000)") , 1, 0, 'L', 1);
+        $this->Cell(160, 3, utf8_decode(self::$strCertifico6) , 1, 0, 'L', 1);
         $this->SetXY(5, 292);
         $this->SetFont('Arial','',8);
         $this->Cell(160, 3, utf8_decode("Por lo tanto manifiesto que no estoy obligado a presentar declaracióon de renta y complementarios por el año gravable ". self::$strFechaCertificado) , 1, 0, 'L', 1);

@@ -19,6 +19,8 @@ class CertificadoIngresoController extends Controller
         $ConfiguracionGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionGeneral')->find(1);
         $empleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $empleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
+        $pagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $pagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->certificadoingresosTotalPagosEmpleado($codigoEmpleado);
         $fechaActual = date('Y-m-j');
         $fechaPrimeraAnterior = strtotime ( '-1 year' , strtotime ( $fechaActual ) ) ;
         $fechaPrimeraAnterior = date ( 'Y' , $fechaPrimeraAnterior );
@@ -27,6 +29,7 @@ class CertificadoIngresoController extends Controller
         $fechaTerceraAnterior = strtotime ( '-3 year' , strtotime ( $fechaActual ) ) ;
         $fechaTerceraAnterior = date ( 'Y' , $fechaTerceraAnterior );
         $formCertificado = $this->createFormBuilder()
+                
             ->add('fechaCertificado', 'choice', array('choices' => array($fechaPrimeraAnterior => $fechaPrimeraAnterior, $fechaSegundaAnterior => $fechaSegundaAnterior, $fechaTerceraAnterior => $fechaTerceraAnterior),))    
             ->add('fechaExpedicion','date', array('data' => new \ DateTime('now')))
             ->add('LugarExpedicion', 'entity', array(
@@ -37,57 +40,31 @@ class CertificadoIngresoController extends Controller
                 'property' => 'nombre',
                 'required' => true))
             ->add('afc', 'number', array('required' => false))
-            ->add('valorRecibido1', 'number', array('required' => false))
-            ->add('valorRecibido2', 'number', array('required' => false))
-            ->add('valorRecibido3', 'number', array('required' => false))
-            ->add('valorRecibido4', 'number', array('required' => false))
-            ->add('valorRecibido5', 'number', array('required' => false))
-            ->add('valorRecibido6', 'number', array('required' => false))
-            ->add('valorRetenido1', 'number', array('required' => false))
-            ->add('valorRetenido2', 'number', array('required' => false))
-            ->add('valorRetenido3', 'number', array('required' => false))
-            ->add('valorRetenido4', 'number', array('required' => false))
-            ->add('valorRetenido5', 'number', array('required' => false))
-            ->add('valorRetenido6', 'number', array('required' => false))                
-            ->add('bienesPoseidos1', 'text',  array('required' => false))                            
-            ->add('valorPatrimonial1', 'number', array('required' => false))
-            ->add('bienesPoseidos1', 'text', array('required' => false))                            
-            ->add('valorPatrimonial2', 'number', array('required' => false))
-            ->add('bienesPoseidos2', 'text', array('required' => false))                            
-            ->add('valorPatrimonial3', 'number', array('required' => false))
-            ->add('bienesPoseidos3', 'text', array('required' => false))                            
-            ->add('valorPatrimonial4', 'number', array('required' => false))
-            ->add('bienesPoseidos4', 'text', array('required' => false))                            
-            ->add('valorPatrimonial5', 'number', array('required' => false))
-            ->add('bienesPoseidos5', 'text', array('required' => false))                            
-            ->add('valorPatrimonial6', 'number', array('required' => false))
-            ->add('bienesPoseidos6', 'text', array('required' => false))                            
-            ->add('valorPatrimonial7', 'number', array('required' => false))
-            ->add('bienesPoseidos7', 'text', array('required' => false))
-            ->add('personasDependientesCc1', 'number', array('required' => false))
-            ->add('personasDependientesCc2', 'number', array('required' => false))
-            ->add('personasDependientesCc3', 'number', array('required' => false))                
-            ->add('personasDependientesCc4', 'number', array('required' => false))                
-            ->add('personasDependientesNyA1', 'text', array('required' => false))                
-            ->add('personasDependientesNyA2', 'text', array('required' => false))
-            ->add('personasDependientesNyA3', 'text', array('required' => false))
-            ->add('personasDependientesNyA4', 'text', array('required' => false))                
-            ->add('personasDependientesP1', 'text', array('required' => false))
-            ->add('personasDependientesP2', 'text', array('required' => false))
-            ->add('personasDependientesP3', 'text', array('required' => false))
-            ->add('personasDependientesP4', 'text', array('required' => false))                
+            ->add('certifico1', 'text', array('data' => '1. Mi patrimonio bruto era igual o inferior a 4.500 UVT ($123.683.000)', 'required' => true))                
+            ->add('certifico2', 'text', array('data' => '2. No fui responsable del impuesto sobre las ventas', 'required' => true))                
+            ->add('certifico3', 'text', array('data' => '3. Mis ingresos totales fueron iguales o inferiores a 1.400 UVT ($38.479.000)', 'required' => true))
+            ->add('certifico4', 'text', array('data' => '4. Mis consumos mediante tarjeta de crédito no excedieron la suma de 2.800 UVT ($76.958.000)', 'required' => true))
+            ->add('certifico5', 'text', array('data' => '5. Quen el total de mis compras y consumos no superaron la suma de 2.800 UVT ($76.958.000)', 'required' => true))                
+            ->add('certifico6', 'text', array('data' => '6. Que el valor total de mis consignaciones bancarias, depósitos o inversiones financieras no excedieron la suma de 4.500 UVT ($123.683.000)', 'required' => true))                
             ->add('BtnGenerar', 'submit', array('label' => 'Generar'))
             ->getForm();
         $formCertificado->handleRequest($request);
         if ($formCertificado->isValid()) {
             if($formCertificado->get('BtnGenerar')->isClicked()) {
+                
                 $controles = $request->request->get('form');
                 $strFechaExpedicion = $formCertificado->get('fechaExpedicion')->getData();
                 $strLugarExpedicion = $controles['LugarExpedicion'];
                 $strFechaCertificado = $controles['fechaCertificado'];
+                $strAfc = $controles['afc'];
+                $stCertifico1 = $controles['certifico1'];
+                $stCertifico2 = $controles['certifico2'];
+                $stCertifico3 = $controles['certifico3'];
+                $stCertifico4 = $controles['certifico4'];
+                $stCertifico5 = $controles['certifico5'];
+                $stCertifico6 = $controles['certifico6'];
                 $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
-                $objFormatoCertificadoIngreso->Generar(
-                $this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado);
+                $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6);
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/CertificadoIngreso:certificado.html.twig', array(
