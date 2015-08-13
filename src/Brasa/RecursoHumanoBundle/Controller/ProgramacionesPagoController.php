@@ -75,6 +75,26 @@ class ProgramacionesPagoController extends Controller
                                     $douDevengado = 0;
                                     $douIngresoBaseCotizacion = 0;
 
+                                    //Procesar vacaciones
+                                    $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoProcesar->getFechaDesde(), $arProgramacionPagoProcesar->getFechaHasta());
+                                    $intHorasVacaciones = $intDiasVacaciones * 8;
+                                    if($intDiasVacaciones > 0) {
+                                        $intHorasLaboradas = $intHorasLaboradas - $intHorasVacaciones;
+                                        $intDiasTransporte = $intDiasTransporte - $intDiasVacaciones;                                        
+                                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(31);
+                                        $douIngresoBaseCotizacionVacaciones = $intHorasVacaciones * $douVrHora;
+                                        $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                        $arPagoDetalle->setPagoRel($arPago);
+                                        $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);                                        
+                                        $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                                        $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
+                                        $arPagoDetalle->setNumeroHoras($intHorasVacaciones);
+                                        $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionVacaciones);
+                                        $em->persist($arPagoDetalle);                                         
+                                    }
+                                    
+                                    
+                                    
                                     //Procesar Incapacidades
                                     $arPagoConceptoIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                                     $arPagoConceptoIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoIncapacidad());
@@ -331,9 +351,14 @@ class ProgramacionesPagoController extends Controller
                                     //Liquidar pension
                                     $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoPension);
                                     $douPorcentaje = $arPagoConcepto->getPorPorcentaje();
-                                    if($douIngresoBaseCotizacion * $arCentroCosto->getPeriodoPagoRel()->getPeriodosMes() > $douVrSalarioMinimo * 4) {
-                                        $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra(); //PORCENTAJE PENSION EXTRA DEL 5%
+                                    if($intHorasLaboradas > 0) {
+                                        $douValorHoraIBC = $douIngresoBaseCotizacion / $intHorasLaboradas;
+                                        $douValorHoraMinimo = ($douVrSalarioMinimo / 240) * 4;
+                                        if($douValorHoraIBC > $douValorHoraMinimo) {
+                                            $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra(); //PORCENTAJE PENSION EXTRA DEL 5%
+                                        }                                        
                                     }
+                                    
                                     $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
@@ -374,10 +399,12 @@ class ProgramacionesPagoController extends Controller
                                 $em->flush();
 
                                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
-                                //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarPagoDetalleSede($codigoProgramacionPago);
+                                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarPagoDetalleSede($codigoProgramacionPago);
                                 if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
                                     $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 1);
                                 }
+                                  
+                                 
                             }
                             
                             if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {
