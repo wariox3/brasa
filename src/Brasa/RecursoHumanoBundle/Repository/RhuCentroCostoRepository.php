@@ -97,7 +97,7 @@ class RhuCentroCostoRepository extends EntityRepository {
                 $arProgramacionPago->setDias(0);
                 $arProgramacionPago->setCentroCostoRel($arCentroCostoProceso);
                 $em->persist($arProgramacionPago);                
-                $arCentroCostoProceso->setFechaUltimoPagoPrima($fechaHasta);                                
+                //$arCentroCostoProceso->setFechaUltimoPagoPrima($fechaHasta);                                
             }
             
             //3 programacion cesantias
@@ -114,7 +114,7 @@ class RhuCentroCostoRepository extends EntityRepository {
                 $arProgramacionPago->setDias(0);
                 $arProgramacionPago->setCentroCostoRel($arCentroCostoProceso);
                 $em->persist($arProgramacionPago);                
-                $arCentroCostoProceso->setFechaUltimoPagoCesantias($fechaHasta);                                
+                //$arCentroCostoProceso->setFechaUltimoPagoCesantias($fechaHasta);                                
             }            
             $em->persist($arCentroCostoProceso);
             $em->flush();

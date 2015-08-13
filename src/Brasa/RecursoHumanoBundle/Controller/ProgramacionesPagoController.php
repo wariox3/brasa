@@ -427,10 +427,19 @@ class ProgramacionesPagoController extends Controller
                                     $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoProcesar->getFechaDesde()->format('Y-m-d'), $arProgramacionPagoProcesar->getFechaHasta()->format('Y-m-d'));
                                     $floIbc = (float)$arrayCostos[0]['IBC'];
                                     if($arCentroCosto->getFechaUltimoPago() < $arProgramacionPagoProcesar->getFechaHasta()) {
-                                        $floVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;
-                                        $intDiasIbcAdicional = $arCentroCosto->getFechaUltimoPago()->diff($arProgramacionPagoProcesar->getFechaHasta());
-                                        $intDiasIbcAdicional = $intDiasIbcAdicional->format('%a');
-                                        $intDiasIbcAdicional = $intDiasIbcAdicional + 1;            
+                                        $floVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;                                        
+                                        $dateFechaDesde =  "";
+                                        if($arCentroCosto->getFechaUltimoPago() <=  $arProgramacionPagoProcesar->getFechaDesde() == true) {
+                                            $dateFechaDesde = $arProgramacionPagoProcesar->getFechaDesde();
+                                        } else {
+                                            $dateFechaDesde = $arCentroCosto->getFechaUltimoPago();
+                                        }
+                                        $intDia = $dateFechaDesde->format('j');
+                                        $intDiasMes = 30 - $intDia;                
+                                        $intMes = $dateFechaDesde->format('n');                
+                                        $intMesFinal = $arProgramacionPagoProcesar->getFechaHasta()->format('n');
+                                        $intMeses = $intMesFinal - $intMes;
+                                        $intDiasIbcAdicional = ($intMeses * 30) + $intDiasMes;                                        
                                         $floIbc +=  $intDiasIbcAdicional * $floVrDia;
                                     }
                                     $floSalarioPromedio = ($floIbc / $intDias) * 30;                                    

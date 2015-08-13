@@ -46,7 +46,31 @@
                     <td class="td-in-well"></td>
                     <td class="titulo">DESCRIPCION CARGO:</td>
                     <td class="td-in-well">{{ arContrato.cargoDescripcion }}</td>
-                </tr>                                 
+                </tr>
+                <tr>
+                    <td class="titulo">ULTIMO PAGO:</td>
+                    <td>{{ arContrato.fechaUltimoPago|date("Y/m/d") }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                </tr>                 
+                <tr>
+                    <td class="titulo">ULTIMA PRIMA:</td>
+                    <td>{{ arContrato.fechaUltimoPagoPrimas|date("Y/m/d") }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                </tr>                
+                <tr>
+                    <td class="titulo">ULTIMA CESANTIA:</td>
+                    <td>{{ arContrato.fechaUltimoPagoCesantias|date("Y/m/d") }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                </tr>                
                 <tr>
                     <td colspan="8">COMENTARIOS: {{ arContrato.comentarios }}</td>
                 </tr>

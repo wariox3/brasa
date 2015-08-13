@@ -30,7 +30,7 @@
                 <th>{{ knp_pagination_sortable(arCentrosCostos, 'NOMBRE', 'cc.nombre') }}</th>                                                
                 <th>CIUDAD</th>
                 <th>PERIODO</th>
-                <th>HASTA</th>
+                <th>PAGO</th>                
                 <th>PRIMAS</th>
                 <th>CESANTIAS</th>
                 <th>PAGO AUTOMATICO</th>
@@ -46,8 +46,8 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCentrosCostos.codigoCentroCostoPk }}">{{ arCentrosCostos.codigoCentroCostoPk }} </td>
                 <td>{{ arCentrosCostos.nombre  }}</td>
                 <td>{{ arCentrosCostos.ciudadRel.nombre  }}</td>
-                <td>{{ arCentrosCostos.periodoPagoRel.nombre  }}</td>
-                <td>{{ arCentrosCostos.fechaUltimoPagoProgramado |date("Y/m/d")  }}</td>                
+                <td>{{ arCentrosCostos.periodoPagoRel.nombre  }}</td>                
+                <td>{{ arCentrosCostos.fechaUltimoPago |date("Y/m/d")  }}</td>                                
                 <td>{{ arCentrosCostos.fechaUltimoPagoPrima |date("Y/m/d")  }}</td>                                
                 <td>{{ arCentrosCostos.fechaUltimoPagoCesantias |date("Y/m/d")  }}</td>                                                
                 <td>{% if arCentrosCostos.generarPagoAutomatico == 1 %} SI {% else %} NO {% endif %}</td>
