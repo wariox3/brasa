@@ -37,7 +37,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setDiasAdicionalesIBC($diasAdicionales);
             }
         }        
-        $douIBC = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveIBCFecha($arLiquidacion->getCodigoEmpleadoFk(), $arLiquidacion->getContratoRel()->getFechaDesde()->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'));        
+        $douIBC = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arLiquidacion->getCodigoEmpleadoFk(), $arLiquidacion->getContratoRel()->getFechaDesde()->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'));        
         $douIBCTotal = $douIBC + $douIBCAdicional;
         $intDiasLaborados = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
         $intDiasLaborados = $intDiasLaborados->format('%a');
@@ -98,5 +98,15 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arLiquidacion->setNumeroDias($intDiasTotal);
         $em->flush();
         return true;
-    }        
+    } 
+    
+    public function devuelveCesantiasFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(l.VrCesantias) as Cesantias FROM BrasaRecursoHumanoBundle:RhuLiquidacion l "
+                . "WHERE l.codigoEmpleadoFk = " . $codigoEmpleado 
+                . "AND l.fechaDesde >= '" . $fechaDesde . "' AND l.fechaDesde <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
+    } 
 }

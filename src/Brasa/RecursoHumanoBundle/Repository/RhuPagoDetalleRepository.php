@@ -18,24 +18,31 @@ class RhuPagoDetalleRepository extends EntityRepository {
         $arPagosDetalles = $query->getResult();                
         return $arPagosDetalles;
     }*/
-    public function certificadoingresosTotalPagosEmpleado($codigoEmpleado, $strFechaCertificado) {
+    public function devuelveRetencionFuenteEmpleadoFecha($codigoEmpleado, $strFechaCertificado) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
+        $dql   = "SELECT SUM(pd.vrPago) as Retencion FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
                 . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
-                . "AND pd.codigoPagoConceptoFk = 1"
+                . "AND pd.codigoPagoConceptoFk = 26"
                 . "AND p.fechaDesde like '%" . $strFechaCertificado . "%' ";
         $query = $em->createQuery($dql);
-        $douIBC = $query->getResult();
-        return $douIBC;
+        $douRetencion = $query->getSingleScalarResult();
+        return $douRetencion;
     }
-    public function certificadoingresosTotalPagosEmpleadoAuxilio($codigoEmpleado, $strFechaCertificado) {
+    public function devuelveOtrosIngresosEmpleadoFecha($codigoEmpleado, $strFechaCertificado) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
+        $dql   = "SELECT SUM(pd.vrPago) as Retencion FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
                 . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
-                . "AND pd.codigoPagoConceptoFk = 18"
-                . "AND p.fechaDesde like '%" . $strFechaCertificado . "%' ";
+                . "AND p.fechaDesde like '%" . $strFechaCertificado . "%' "
+                . "AND pd.codigoPagoConceptoFk = 5"
+                . "OR pd.codigoPagoConceptoFk = 15"
+                . "OR pd.codigoPagoConceptoFk = 17"
+                . "OR pd.codigoPagoConceptoFk = 19"
+                . "OR pd.codigoPagoConceptoFk = 22";
+                
+                
         $query = $em->createQuery($dql);
-        $douAuxilio = $query->getResult();
-        return $douAuxilio;
+        $douOtrosIngresos = $query->getSingleScalarResult();
+        return $douOtrosIngresos;
     }
+    
 }

@@ -19,7 +19,7 @@ class CertificadoIngresoController extends Controller
         $ConfiguracionGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionGeneral')->find(1);
         $empleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $empleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        
+        $mensaje = 0;
         $fechaActual = date('Y-m-j');
         $fechaPrimeraAnterior = strtotime ( '-1 year' , strtotime ( $fechaActual ) ) ;
         $fechaPrimeraAnterior = date ( 'Y' , $fechaPrimeraAnterior );
@@ -28,7 +28,6 @@ class CertificadoIngresoController extends Controller
         $fechaTerceraAnterior = strtotime ( '-3 year' , strtotime ( $fechaActual ) ) ;
         $fechaTerceraAnterior = date ( 'Y' , $fechaTerceraAnterior );
         $formCertificado = $this->createFormBuilder()
-                
             ->add('fechaCertificado', 'choice', array('choices' => array($fechaPrimeraAnterior => $fechaPrimeraAnterior, $fechaSegundaAnterior => $fechaSegundaAnterior, $fechaTerceraAnterior => $fechaTerceraAnterior),))    
             ->add('fechaExpedicion','date', array('data' => new \ DateTime('now')))
             ->add('LugarExpedicion', 'entity', array(
@@ -38,7 +37,7 @@ class CertificadoIngresoController extends Controller
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
-            ->add('afc', 'number', array('required' => false))
+            ->add('afc', 'number', array('data' => '0', 'required' => false))
             ->add('certifico1', 'text', array('data' => '1. Mi patrimonio bruto era igual o inferior a 4.500 UVT ($123.683.000)', 'required' => true))                
             ->add('certifico2', 'text', array('data' => '2. No fui responsable del impuesto sobre las ventas', 'required' => true))                
             ->add('certifico3', 'text', array('data' => '3. Mis ingresos totales fueron iguales o inferiores a 1.400 UVT ($38.479.000)', 'required' => true))
@@ -62,32 +61,35 @@ class CertificadoIngresoController extends Controller
                 $stCertifico4 = $controles['certifico4'];
                 $stCertifico5 = $controles['certifico5'];
                 $stCertifico6 = $controles['certifico6'];
-                
-                $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($codigoEmpleado,"2015-01-01", "2015-12-30" );
+                $datFechaCertificadoInicio = $strFechaCertificado."-01-01";
+                $datFechaCertificadoFin = $strFechaCertificado."-12-30";
+                $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($codigoEmpleado,$datFechaCertificadoInicio, $datFechaCertificadoFin);
                 $floIbc = (float)$arrayCostos[0]['IBC'];
                 $floPension = (float)$arrayCostos[0]['Pension'];
                 $floSalud = (float)$arrayCostos[0]['Salud'];
                 $floAuxilioTransporte = (float)$arrayCostos[0]['AuxilioTransporte'];
-                $floFechaInicio = $arrayCostos[0]['fechaInicio'];
-                $floFechaFin = $arrayCostos[0]['fechaFin'];
-                $base = 0;
-                $auxilioTransporte = 0;
-                
-                
-                
-                //if ($duoRegistrosPagos > 0){
-                    
+                $datFechaInicio = $arrayCostos[0]['fechaInicio'];
+                $datFechaFin = $arrayCostos[0]['fechaFin'];
+                $arrayCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->devuelveCesantiasFecha($codigoEmpleado,$datFechaCertificadoInicio, $datFechaCertificadoFin);
+                $floCesantias = (float)$arrayCesantias[0]['Cesantias'];
+                $douRetencion = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->devuelveRetencionFuenteEmpleadoFecha($codigoEmpleado, $strFechaCertificado);
+                $douRetencion = (float)$douRetencion;
+                $duoGestosRepresentacion = 0;
+                $douOtrosIngresos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->devuelveOtrosIngresosEmpleadoFecha($codigoEmpleado, $strFechaCertificado);
+                $douOtrosIngresos = (float)$douOtrosIngresos;
+                $duoTotalIngresos = $floIbc + $floCesantias + $duoGestosRepresentacion + $douOtrosIngresos + $floAuxilioTransporte;
+                if ( $floIbc > 0){
                     $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
-                    $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$floIbc);  
-                //} else {
-                  //  $mensaje = "Este empleado no registra información de ingresos  y retenciones para el año". $strFechaCertificado ." ";
-                //}
-                
+                    $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$floIbc,$floPension,$floSalud,$floAuxilioTransporte,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos);  
+                } else {
+                    $mensaje = "Este empleado no registra información de ingresos  y retenciones para el año ". $strFechaCertificado ." ";
+                }
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/CertificadoIngreso:certificado.html.twig', array(
             'ConfiguracionGeneral' => $ConfiguracionGeneral,
             'empleado' => $empleado,
+            'mensaje' => $mensaje,
             'formCertificado' => $formCertificado->createView(),
         ));
     }
