@@ -113,6 +113,11 @@ class RhuContrato
     private $fechaUltimoPagoPrimas;        
     
     /**
+     * @ORM\Column(name="fecha_ultimo_pago", type="date", nullable=true)
+     */    
+    private $fechaUltimoPago;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -159,6 +164,11 @@ class RhuContrato
      */
     protected $liquidacionesContratoRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuProgramacionPagoDetalle", mappedBy="contratoRel")
+     */
+    protected $programacionesPagosDetallesContratoRel;    
+    
 
     /**
      * Constructor
@@ -834,5 +844,63 @@ class RhuContrato
     public function getLiquidacionesContratoRel()
     {
         return $this->liquidacionesContratoRel;
+    }
+
+    /**
+     * Add programacionesPagosDetallesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addProgramacionesPagosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesContratoRel)
+    {
+        $this->programacionesPagosDetallesContratoRel[] = $programacionesPagosDetallesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesPagosDetallesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesContratoRel
+     */
+    public function removeProgramacionesPagosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionesPagosDetallesContratoRel)
+    {
+        $this->programacionesPagosDetallesContratoRel->removeElement($programacionesPagosDetallesContratoRel);
+    }
+
+    /**
+     * Get programacionesPagosDetallesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesPagosDetallesContratoRel()
+    {
+        return $this->programacionesPagosDetallesContratoRel;
+    }
+
+    /**
+     * Set fechaUltimoPago
+     *
+     * @param \DateTime $fechaUltimoPago
+     *
+     * @return RhuContrato
+     */
+    public function setFechaUltimoPago($fechaUltimoPago)
+    {
+        $this->fechaUltimoPago = $fechaUltimoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPago()
+    {
+        return $this->fechaUltimoPago;
     }
 }

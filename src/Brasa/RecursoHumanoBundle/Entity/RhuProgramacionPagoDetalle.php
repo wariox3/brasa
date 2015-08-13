@@ -28,6 +28,11 @@ class RhuProgramacionPagoDetalle
     private $codigoEmpleadoFk;           
 
     /**
+     * @ORM\Column(name="codigo_contrato_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoFk;    
+    
+    /**
      * @ORM\Column(name="horas_periodo", type="integer")
      */
     private $horasPeriodo = 0;     
@@ -106,6 +111,12 @@ class RhuProgramacionPagoDetalle
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;        
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="programacionesPagosDetallesContratoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
+     */
+    protected $contratoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuProgramacionPagoDetalleSede", mappedBy="programacionPagoDetalleRel")
@@ -611,5 +622,53 @@ class RhuProgramacionPagoDetalle
     public function getVrNetoPagar()
     {
         return $this->vrNetoPagar;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
     }
 }

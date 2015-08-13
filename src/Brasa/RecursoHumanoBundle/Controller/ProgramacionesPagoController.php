@@ -412,8 +412,7 @@ class ProgramacionesPagoController extends Controller
                                 $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));
                                 foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {
                                     $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                                    $arPago->setPagoTipoRel($arProgramacionPagoProcesar->getPagoTipoRel());
-                                    $arContratoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                                    $arPago->setPagoTipoRel($arProgramacionPagoProcesar->getPagoTipoRel());                                    
                                     $arPago->setEmpleadoRel($arProgramacionPagoDetalle->getEmpleadoRel());
                                     $arPago->setCentroCostoRel($arCentroCosto);
                                     $arPago->setFechaDesde($arProgramacionPagoProcesar->getFechaDesde());
@@ -445,15 +444,11 @@ class ProgramacionesPagoController extends Controller
                                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                     $arPagoDetalle->setPagoRel($arPago);
                                     $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
-                                    $arPagoDetalle->setVrHora(0);
-                                    $arPagoDetalle->setVrDia(0);
-                                    $arPagoDetalle->setNumeroHoras(0);
                                     $arPagoDetalle->setVrPago($floTotalPago);
                                     $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                                     $arPagoDetalle->setVrPagoOperado($floTotalPago * $arPagoConcepto->getOperacion());
                                     $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                                    $em->persist($arPagoDetalle);
-                                    $arPagoDetalle->setVrIngresoBaseCotizacion(0);
+                                    $em->persist($arPagoDetalle);                                    
 
                                 }
                                 $arProgramacionPagoProcesar->setEstadoGenerado(1);                                

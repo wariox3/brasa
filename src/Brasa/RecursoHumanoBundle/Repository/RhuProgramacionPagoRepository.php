@@ -136,6 +136,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             foreach ($arrSeleccionados AS $codigoProgramacionPago) {
                 $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                 $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+                $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+                $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());                                
                 if($arProgramacionPagoProcesar->getEstadoGenerado() == 1) {
                     $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                     $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
@@ -247,11 +249,34 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         
                         $arPagoProcesar->setNumero($em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->consecutivo(1));
                         $arPagoProcesar->setEstadoPagado(1);
-                        $em->persist($arPagoProcesar);                        
+                        $em->persist($arPagoProcesar);                         
                     }
-                    $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-                    $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
-                    $arCentroCosto->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());
+                    
+                    $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                    $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+                    foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {
+                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arProgramacionPagoDetalle->getCodigoContratoFk());                                                                        
+                        if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {                            
+                            $arContrato->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());
+                        }
+                        if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {
+                            $arContrato->setFechaUltimoPagoPrimas($arProgramacionPagoProcesar->getFechaHasta());
+                        }
+                        if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) {
+                            $arContrato->setFechaUltimoPagoCesantias($arProgramacionPagoProcesar->getFechaHasta());
+                        }   
+                        $em->persist($arContrato);                        
+                    }
+                    if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {
+                        $arCentroCosto->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());
+                    }
+                    if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {
+                        $arCentroCosto->setFechaUltimoPagoPrima($arProgramacionPagoProcesar->getFechaHasta());
+                    }
+                    if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) {
+                        $arCentroCosto->setFechaUltimoPagoCesantias($arProgramacionPagoProcesar->getFechaHasta());
+                    }                                            
                     $em->persist($arCentroCosto);
                     $arProgramacionPagoProcesar->setEstadoPagado(1);
                     $em->persist($arProgramacionPagoProcesar);                    
@@ -369,20 +394,20 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminarEmpleados($codigoProgramacionPago);
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
+                . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
+                . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
+                . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
+                . " OR c.indefinido = 1)";        
         if($arProgramacionPago->getCodigoPagoTipoFk() == 1) {
             $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
-                    . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
-                    . " AND c.estadoActivo = 1"
-                    . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
-                    . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
-                    . " OR c.indefinido = 1)";
             $query = $em->createQuery($dql);
             $arContratos = $query->getResult();
             foreach ($arContratos as $arContrato) {
                 $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                 $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
                 $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
+                $arProgramacionPagoDetalle->setContratoRel($arContrato);
                 $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
                 $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
                 $dateFechaDesde =  "";
@@ -473,18 +498,13 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         }
         if($arProgramacionPago->getCodigoPagoTipoFk() == 2) {
             $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
-                    . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
-                    . " AND c.estadoActivo = 1"
-                    . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
-                    . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
-                    . " OR c.indefinido = 1)";
             $query = $em->createQuery($dql);
             $arContratos = $query->getResult();
             foreach ($arContratos as $arContrato) {
                 $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                 $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
                 $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
+                $arProgramacionPagoDetalle->setContratoRel($arContrato);
                 $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
                 $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
                 $dateFechaDesde =  "";
@@ -513,18 +533,13 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         }
         if($arProgramacionPago->getCodigoPagoTipoFk() == 3) {
             $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
-                    . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
-                    . " AND c.estadoActivo = 1"
-                    . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
-                    . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
-                    . " OR c.indefinido = 1)";
             $query = $em->createQuery($dql);
             $arContratos = $query->getResult();
             foreach ($arContratos as $arContrato) {
                 $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                 $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
                 $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
+                $arProgramacionPagoDetalle->setContratoRel($arContrato);
                 $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
                 $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
                 $dateFechaDesde =  "";
