@@ -99,6 +99,23 @@ class RhuCentroCostoRepository extends EntityRepository {
                 $em->persist($arProgramacionPago);                
                 $arCentroCostoProceso->setFechaUltimoPagoPrima($fechaHasta);                                
             }
+            
+            //3 programacion cesantias
+            if($intTipo == 3) {
+                $intAnio = $arCentroCostoProceso->getFechaUltimoPagoCesantias()->format('Y');                
+                $intAnio += 1;
+                $fechaDesde = date_create_from_format('Y/m/d', $intAnio .'/01/01');
+                $fechaHasta = date_create_from_format('Y/m/d', $intAnio .'/12/30');
+                  
+                $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                $arProgramacionPago->setPagoTipoRel($arPagoTipo);
+                $arProgramacionPago->setFechaDesde($fechaDesde);
+                $arProgramacionPago->setFechaHasta($fechaHasta);
+                $arProgramacionPago->setDias(0);
+                $arProgramacionPago->setCentroCostoRel($arCentroCostoProceso);
+                $em->persist($arProgramacionPago);                
+                $arCentroCostoProceso->setFechaUltimoPagoCesantias($fechaHasta);                                
+            }            
             $em->persist($arCentroCostoProceso);
             $em->flush();
         }

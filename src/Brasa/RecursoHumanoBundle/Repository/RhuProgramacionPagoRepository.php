@@ -511,6 +511,46 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $arProgramacionPago->setNumeroEmpleados($intNumeroEmpleados);            
             $em->flush();           
         }
+        if($arProgramacionPago->getCodigoPagoTipoFk() == 3) {
+            $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+            $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
+                    . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
+                    . " AND c.estadoActivo = 1"
+                    . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
+                    . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
+                    . " OR c.indefinido = 1)";
+            $query = $em->createQuery($dql);
+            $arContratos = $query->getResult();
+            foreach ($arContratos as $arContrato) {
+                $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
+                $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
+                $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
+                $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
+                $dateFechaDesde =  "";
+                if($arContrato->getFechaUltimoPagoCesantias() <=  $arProgramacionPago->getFechaDesde() == true) {
+                    $dateFechaDesde = $arProgramacionPago->getFechaDesde();
+                } else {
+                    $dateFechaDesde = $arContrato->getFechaUltimoPagoCesantias();
+                }
+                $intDia = $dateFechaDesde->format('j');
+                $intDiasMes = 31 - $intDia;                
+                $intMes = $dateFechaDesde->format('n');                
+                $intMesFinal = $arProgramacionPago->getFechaHasta()->format('n');
+                $intMeses = $intMesFinal - $intMes;
+                $intDias = ($intMeses * 30) + $intDiasMes;
+                
+                $arProgramacionPagoDetalle->setFechaDesde($dateFechaDesde);
+                $arProgramacionPagoDetalle->setFechaHasta($arProgramacionPago->getFechaHasta());
+                $arProgramacionPagoDetalle->setDias($intDias);
+                $arProgramacionPagoDetalle->setDiasReales($intDias);
+                $em->persist($arProgramacionPagoDetalle);
+                $intNumeroEmpleados++;
+                
+            }
+            $arProgramacionPago->setNumeroEmpleados($intNumeroEmpleados);            
+            $em->flush();           
+        }        
         return true;
     }
     

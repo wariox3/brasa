@@ -38,6 +38,7 @@
                 <th>PERIODO</th>
                 <th>ULT. PAGO</th>
                 <th>ULT. PAGO PRIMA</th>
+                <th>ULT. PAGO CESANTIAS</th>
                 <th>ABIERTO</th>
                 <th>ACTIVO</th>
                 <th></th>
@@ -49,6 +50,7 @@
                 <td>{{ arCentroCosto.periodoPagoRel.nombre  }}</td>
                 <td>{{ arCentroCosto.fechaUltimoPagoProgramado |date("Y/m/d")  }}</td>
                 <td>{{ arCentroCosto.fechaUltimoPagoPrima |date("Y/m/d")  }}</td>
+                <td>{{ arCentroCosto.fechaUltimoPagoCesantias |date("Y/m/d")  }}</td>
                 <td>{% if arCentroCosto.pagoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCentroCosto.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCentroCosto.codigoCentroCostoPk }}" /></td>
@@ -59,6 +61,7 @@
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
+                {{ form_widget(form.BtnGenerarCesantias, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
                 {{ form_widget(form.BtnGenerarPrima, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
                 {{ form_widget(form.BtnGenerarNomina, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                                
             </div>

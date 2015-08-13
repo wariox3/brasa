@@ -376,6 +376,11 @@ class RhuEmpleado
     protected $incapacidadesEmpleadoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="empleadoRel")
+     */
+    protected $vacacionesEmpleadoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuLicencia", mappedBy="empleadoRel")
      */
     protected $licenciasEmpleadoRel;     
@@ -2408,5 +2413,39 @@ class RhuEmpleado
     public function getSsoPeriodosEmpleadosEmpleadoRel()
     {
         return $this->ssoPeriodosEmpleadosEmpleadoRel;
+    }
+
+    /**
+     * Add vacacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addVacacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel)
+    {
+        $this->vacacionesEmpleadoRel[] = $vacacionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel
+     */
+    public function removeVacacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel)
+    {
+        $this->vacacionesEmpleadoRel->removeElement($vacacionesEmpleadoRel);
+    }
+
+    /**
+     * Get vacacionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesEmpleadoRel()
+    {
+        return $this->vacacionesEmpleadoRel;
     }
 }

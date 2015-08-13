@@ -99,6 +99,11 @@ class RhuCentroCosto
     private $fechaUltimoPagoPrima;    
     
     /**
+     * @ORM\Column(name="fecha_ultimo_pago_cesantias", type="date", nullable=true)
+     */    
+    private $fechaUltimoPagoCesantias;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
      * @ORM\JoinColumn(name="codigo_periodo_pago_fk", referencedColumnName="codigo_periodo_pago_pk")
      */
@@ -1110,5 +1115,29 @@ class RhuCentroCosto
     public function getFechaUltimoPago()
     {
         return $this->fechaUltimoPago;
+    }
+
+    /**
+     * Set fechaUltimoPagoCesantias
+     *
+     * @param \DateTime $fechaUltimoPagoCesantias
+     *
+     * @return RhuCentroCosto
+     */
+    public function setFechaUltimoPagoCesantias($fechaUltimoPagoCesantias)
+    {
+        $this->fechaUltimoPagoCesantias = $fechaUltimoPagoCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPagoCesantias
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPagoCesantias()
+    {
+        return $this->fechaUltimoPagoCesantias;
     }
 }

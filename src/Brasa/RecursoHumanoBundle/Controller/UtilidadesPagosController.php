@@ -17,6 +17,7 @@ class UtilidadesPagosController extends Controller
             ->add('BtnBuscar', 'submit', array('label'  => 'Filtrar'))            
             ->add('BtnGenerarNomina', 'submit', array('label'  => 'Generar nomina',))
             ->add('BtnGenerarPrima', 'submit', array('label'  => 'Generar prima',))            
+            ->add('BtnGenerarCesantias', 'submit', array('label'  => 'Generar cesantias',))            
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -34,6 +35,14 @@ class UtilidadesPagosController extends Controller
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCentroCosto) {
                         $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($codigoCentroCosto, 2);
+                    }
+                }
+            } 
+            if($form->get('BtnGenerarCesantias')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoCentroCosto) {
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($codigoCentroCosto, 3);
                     }
                 }
             }            
