@@ -109,6 +109,7 @@ class BaseEmpleadoController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))
             ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnRetirarVacacion', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))    
             ->add('BtnEliminarDisciplinario', 'submit', array('label'  => 'Eliminar',))
@@ -123,6 +124,8 @@ class BaseEmpleadoController extends Controller
         $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
@@ -162,6 +165,20 @@ class BaseEmpleadoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
             }
+            
+            if($form->get('BtnRetirarVacacion')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarVacacion');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoVacacion) {
+                        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+                        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
+                        $em->remove($arVacacion);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
+                }
+            }
+            
             if($form->get('BtnEliminarCredito')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarCredito');
                 if(count($arrSeleccionados) > 0) {
@@ -245,6 +262,7 @@ class BaseEmpleadoController extends Controller
         }
         $arPagosAdicionales = $paginator->paginate($arPagosAdicionales, $this->get('request')->query->get('page', 1),5);
         $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('request')->query->get('page', 1),5);
+        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);
         $arLicencias = $paginator->paginate($arLicencias, $this->get('request')->query->get('page', 1),5);
         $arContratos = $paginator->paginate($arContratos, $this->get('request')->query->get('page', 1),5);
         $arCreditos = $paginator->paginate($arCreditos, $this->get('request')->query->get('page', 1),5);
@@ -255,6 +273,7 @@ class BaseEmpleadoController extends Controller
                     'arEmpleado' => $arEmpleado,
                     'arPagosAdicionales' => $arPagosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
+                    'arVacaciones' => $arVacaciones,
                     'arLicencias' => $arLicencias,
                     'arContratos' => $arContratos,
                     'arCreditos' => $arCreditos,

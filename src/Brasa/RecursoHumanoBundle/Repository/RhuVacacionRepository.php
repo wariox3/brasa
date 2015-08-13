@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuVacacionRepository extends EntityRepository {
+    
     public function dias($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
@@ -43,4 +44,18 @@ class RhuVacacionRepository extends EntityRepository {
         }
         return $intDiasDevolver;
     }
+    
+    public function listaVacacionesDQL($strCodigoCentroCosto = "", $strIdentificacion = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT v, e FROM BrasaRecursoHumanoBundle:RhuVacacion v JOIN v.empleadoRel e WHERE v.codigoVacacionPk <> 0";
+        
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        return $dql;
+    }
 }
+
