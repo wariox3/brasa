@@ -62,31 +62,26 @@ class CertificadoIngresoController extends Controller
                 $stCertifico4 = $controles['certifico4'];
                 $stCertifico5 = $controles['certifico5'];
                 $stCertifico6 = $controles['certifico6'];
-                $pagosBase = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                $pagosBase = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->certificadoingresosTotalPagosEmpleado($codigoEmpleado,2015);
-                $pagosAuxilio = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                $pagosAuxilio = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->certificadoingresosTotalPagosEmpleadoAuxilio($codigoEmpleado,2015);
                 
-                $periodoCertificadoDesde = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->certificadoingresosPeriodoDesde($codigoEmpleado,2015);
-                
-                $periodoCertificadoHasta = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->certificadoingresosPeriodoHasta($codigoEmpleado,2015);
+                $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($codigoEmpleado,"2015-01-01", "2015-12-30" );
+                $floIbc = (float)$arrayCostos[0]['IBC'];
+                $floPension = (float)$arrayCostos[0]['Pension'];
+                $floSalud = (float)$arrayCostos[0]['Salud'];
+                $floAuxilioTransporte = (float)$arrayCostos[0]['AuxilioTransporte'];
+                $floFechaInicio = $arrayCostos[0]['fechaInicio'];
+                $floFechaFin = $arrayCostos[0]['fechaFin'];
                 $base = 0;
                 $auxilioTransporte = 0;
                 
                 
-                $duoRegistrosPagos = count($pagosBase);
-                if ($duoRegistrosPagos > 0){
-                    foreach ($pagosBase as $pagoBase) {
-                        $base = $base + $pagoBase->getVrPago();
-                    }
-                    foreach ($pagosAuxilio as $pagoAuxilio) {
-                        $auxilioTransporte = $auxilioTransporte + $pagoAuxilio->getVrPago();
-                    }
+                
+                //if ($duoRegistrosPagos > 0){
+                    
                     $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
-                    $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$base,$auxilioTransporte,$periodoCertificadoDesde,$periodoCertificadoHasta);  
-                } else {
-                    $mensaje = "Este empleado no registra información de ingresos  y retenciones para el año". $strFechaCertificado ." ";
-                }
+                    $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$floIbc);  
+                //} else {
+                  //  $mensaje = "Este empleado no registra información de ingresos  y retenciones para el año". $strFechaCertificado ." ";
+                //}
                 
             }
         }
