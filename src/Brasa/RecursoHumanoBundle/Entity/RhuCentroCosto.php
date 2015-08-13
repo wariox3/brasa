@@ -186,7 +186,10 @@ class RhuCentroCosto
      */
     protected $liquidacionesCentroCostoRel;    
     
-   
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="centroCostoRel")
+     */
+    protected $vacacionesCentroCostoRel;
     
 
     /**
@@ -207,6 +210,7 @@ class RhuCentroCosto
         $this->sedesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->examenesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -289,6 +293,30 @@ class RhuCentroCosto
     public function getCodigoPeriodoPagoFk()
     {
         return $this->codigoPeriodoPagoFk;
+    }
+
+    /**
+     * Set fechaUltimoPago
+     *
+     * @param \DateTime $fechaUltimoPago
+     *
+     * @return RhuCentroCosto
+     */
+    public function setFechaUltimoPago($fechaUltimoPago)
+    {
+        $this->fechaUltimoPago = $fechaUltimoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPago()
+    {
+        return $this->fechaUltimoPago;
     }
 
     /**
@@ -577,6 +605,30 @@ class RhuCentroCosto
     public function getFechaUltimoPagoPrima()
     {
         return $this->fechaUltimoPagoPrima;
+    }
+
+    /**
+     * Set fechaUltimoPagoCesantias
+     *
+     * @param \DateTime $fechaUltimoPagoCesantias
+     *
+     * @return RhuCentroCosto
+     */
+    public function setFechaUltimoPagoCesantias($fechaUltimoPagoCesantias)
+    {
+        $this->fechaUltimoPagoCesantias = $fechaUltimoPagoCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPagoCesantias
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPagoCesantias()
+    {
+        return $this->fechaUltimoPagoCesantias;
     }
 
     /**
@@ -1094,50 +1146,36 @@ class RhuCentroCosto
     }
 
     /**
-     * Set fechaUltimoPago
+     * Add vacacionesCentroCostoRel
      *
-     * @param \DateTime $fechaUltimoPago
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesCentroCostoRel
      *
      * @return RhuCentroCosto
      */
-    public function setFechaUltimoPago($fechaUltimoPago)
+    public function addVacacionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesCentroCostoRel)
     {
-        $this->fechaUltimoPago = $fechaUltimoPago;
+        $this->vacacionesCentroCostoRel[] = $vacacionesCentroCostoRel;
 
         return $this;
     }
 
     /**
-     * Get fechaUltimoPago
+     * Remove vacacionesCentroCostoRel
      *
-     * @return \DateTime
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesCentroCostoRel
      */
-    public function getFechaUltimoPago()
+    public function removeVacacionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesCentroCostoRel)
     {
-        return $this->fechaUltimoPago;
+        $this->vacacionesCentroCostoRel->removeElement($vacacionesCentroCostoRel);
     }
 
     /**
-     * Set fechaUltimoPagoCesantias
+     * Get vacacionesCentroCostoRel
      *
-     * @param \DateTime $fechaUltimoPagoCesantias
-     *
-     * @return RhuCentroCosto
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setFechaUltimoPagoCesantias($fechaUltimoPagoCesantias)
+    public function getVacacionesCentroCostoRel()
     {
-        $this->fechaUltimoPagoCesantias = $fechaUltimoPagoCesantias;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaUltimoPagoCesantias
-     *
-     * @return \DateTime
-     */
-    public function getFechaUltimoPagoCesantias()
-    {
-        return $this->fechaUltimoPagoCesantias;
+        return $this->vacacionesCentroCostoRel;
     }
 }
