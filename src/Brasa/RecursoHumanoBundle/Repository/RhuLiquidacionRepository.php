@@ -37,7 +37,8 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setDiasAdicionalesIBC($diasAdicionales);
             }
         }        
-        $douIBC = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arLiquidacion->getCodigoEmpleadoFk(), $arLiquidacion->getContratoRel()->getFechaDesde()->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'));        
+        $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arLiquidacion->getCodigoEmpleadoFk(), $arLiquidacion->getContratoRel()->getFechaDesde()->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'));        
+        $douIBC = (float)$arrayCostos[0]['IBC']; 
         $douIBCTotal = $douIBC + $douIBCAdicional;
         $intDiasLaborados = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
         $intDiasLaborados = $intDiasLaborados->format('%a');
