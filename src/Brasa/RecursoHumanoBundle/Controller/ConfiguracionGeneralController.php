@@ -22,6 +22,7 @@ class ConfiguracionGeneralController extends Controller
             ->add('conceptoTipoCuenta', 'choice', array('choices' => array('D' => 'DÉBITO', 'C' => 'CRÉDITO'), 'preferred_choices' => array($arConfiguracionGeneral->getTipoCuenta()),))    
             ->add('cuenta', 'text', array('data' => $arConfiguracionGeneral->getCuenta(), 'required' => true))
             ->add('nit', 'number', array('data' => $arConfiguracionGeneral->getNit(), 'required' => true))
+            ->add('dv', 'number', array('data' => $arConfiguracionGeneral->getDv(), 'required' => true))
             ->add('empresa', 'text', array('data' => $arConfiguracionGeneral->getEmpresa(), 'required' => true))    
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
@@ -32,11 +33,13 @@ class ConfiguracionGeneralController extends Controller
             $ConceptoTipoCuenta = $controles['conceptoTipoCuenta'];
             $NumeroCuenta = $controles['cuenta'];
             $NumeroNit = $controles['nit'];
+            $NumeroDv = $controles['dv'];
             $NombreEmpresa = $controles['empresa'];
             // guardar la tarea en la base de datos
             $arConfiguracionGeneral->setTipoCuenta($ConceptoTipoCuenta);
             $arConfiguracionGeneral->setCuenta($NumeroCuenta);
             $arConfiguracionGeneral->setNit($NumeroNit);
+            $arConfiguracionGeneral->setDv($NumeroDv);
             $arConfiguracionGeneral->setEmpresa($NombreEmpresa);
             $em->persist($arConfiguracionGeneral);
             $em->flush();

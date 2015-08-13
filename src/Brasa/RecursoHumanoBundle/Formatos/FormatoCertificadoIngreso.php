@@ -95,7 +95,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Line(145, 5, 145, 20);
         $this->Line(145, 20,175, 20);
         $this->Line(175, 5, 175, 20);
-        $this->Image('imagenes/logos/muisca.png', 146, 6, 28, 12);
+        $this->Image('imagenes/logos/muisca.png', 146, 6, 28, 15);
         //logo 220
         $this->Line(175, 5, 205, 5);
         $this->Line(175, 5, 175, 20);
@@ -122,7 +122,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->SetFont('Arial','',8);
         $this->Cell(55, 6, $arConfiguracion->getNit() , 1, 0, 'R', 1);
         $this->Cell(5, 6, " - " , 1, 0, 'C', 1);
-        $this->Cell(13, 6, "3" , 1, 0, 'C', 1);
+        $this->Cell(13, 6, $arConfiguracion->getDv() , 1, 0, 'C', 1);
         $this->Cell(30, 6, "" , 1, 0, 'C', 1);
         $this->Cell(30, 6, "" , 1, 0, 'C', 1);
         $this->Cell(30, 6, "" , 1, 0, 'C', 1);

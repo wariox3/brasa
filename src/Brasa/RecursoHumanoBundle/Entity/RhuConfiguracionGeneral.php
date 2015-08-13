@@ -32,10 +32,16 @@ class RhuConfiguracionGeneral
     private $nit;
     
     /**
+     * @ORM\Column(name="dv", type="float")
+     */    
+    private $Dv;
+    
+    /**
      * @ORM\Column(name="empresa", type="string", length=90, nullable=false)
      */    
     private $empresa;
     
+
 
     /**
      * Set codigoConfiguracionPk
@@ -64,7 +70,7 @@ class RhuConfiguracionGeneral
     /**
      * Set cuenta
      *
-     * @param float $cuenta
+     * @param string $cuenta
      *
      * @return RhuConfiguracionGeneral
      */
@@ -78,7 +84,7 @@ class RhuConfiguracionGeneral
     /**
      * Get cuenta
      *
-     * @return float
+     * @return string
      */
     public function getCuenta()
     {
@@ -131,6 +137,30 @@ class RhuConfiguracionGeneral
     public function getNit()
     {
         return $this->nit;
+    }
+
+    /**
+     * Set dv
+     *
+     * @param float $dv
+     *
+     * @return RhuConfiguracionGeneral
+     */
+    public function setDv($dv)
+    {
+        $this->Dv = $dv;
+
+        return $this;
+    }
+
+    /**
+     * Get dv
+     *
+     * @return float
+     */
+    public function getDv()
+    {
+        return $this->Dv;
     }
 
     /**
