@@ -56,4 +56,14 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         return $arRegistros;        
     }
     
+    public function fechaPrimerPago($codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT MIN(pp.fechaDesde) FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle ppd JOIN ppd.programacionPagoRel pp "
+                . "WHERE ppd.codigoContratoFk = " . $codigoContrato
+                . " AND pp.estadoPagado = 1";                
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getSingleScalarResult();
+        return $arrayResultado;
+    }         
+    
 }

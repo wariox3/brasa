@@ -508,14 +508,23 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
                 $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
                 $dateFechaDesde =  "";
+                $dateFechaDesdePago =  "";
                 if($arContrato->getFechaUltimoPagoPrimas() <=  $arProgramacionPago->getFechaDesde() == true) {
                     $dateFechaDesde = $arProgramacionPago->getFechaDesde();
-                    if($arContratos->getFechaDesde() > 0) {
-                        0;
+                    $dateFechaDesdePago = $arProgramacionPago->getFechaDesde();
+                    if($arContrato->getFechaDesde() >= $dateFechaDesde) {
+                        $dateFechaDesde = $arContrato->getFechaDesde();
+                        $dateFechaDesdePago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->fechaPrimerPago($arContrato->getCodigoContratoPk());
+                        if($dateFechaDesdePago) {
+                            $dateFechaDesdePago = date_create_from_format('Y-m-d H:i', $dateFechaDesdePago . "00:00");
+                        } else {
+                            $dateFechaDesdePago = $dateFechaDesde;                            
+                        }
                     }
                     
                 } else {
                     $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
+                    $dateFechaDesdePago = $arContrato->getFechaUltimoPagoPrimas();
                 }
                 $intDia = $dateFechaDesde->format('j');
                 $intDiasMes = 31 - $intDia;                
@@ -526,6 +535,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 
                 $arProgramacionPagoDetalle->setFechaDesde($dateFechaDesde);
                 $arProgramacionPagoDetalle->setFechaHasta($arProgramacionPago->getFechaHasta());
+                $arProgramacionPagoDetalle->setFechaDesdePago($dateFechaDesdePago);
                 $arProgramacionPagoDetalle->setDias($intDias);
                 $arProgramacionPagoDetalle->setDiasReales($intDias);
                 $em->persist($arProgramacionPagoDetalle);

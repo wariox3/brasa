@@ -424,7 +424,7 @@ class ProgramacionesPagoController extends Controller
                                     $em->persist($arPago);
                                     $douSalarioMinimo = $arConfiguracion->getVrSalario();
                                     $intDias = $arProgramacionPagoDetalle->getDias();
-                                    $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoProcesar->getFechaDesde()->format('Y-m-d'), $arProgramacionPagoProcesar->getFechaHasta()->format('Y-m-d'));
+                                    $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'));
                                     $floIbc = (float)$arrayCostos[0]['IBC'];
                                     if($arCentroCosto->getFechaUltimoPago() < $arProgramacionPagoProcesar->getFechaHasta()) {
                                         $floVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;                                        

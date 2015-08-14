@@ -71,8 +71,9 @@
                 <th>CÓDIGO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>NOMBRE</th>
-                <th>INICIO</th>
-                <th>TERMINA</th>
+                <th>P. DESDE</th>
+                <th>DESDE</th>
+                <th>HASTA</th>
                 <th>SALARIO</th>
                 <th>DEVENGADO</th>
                 <th>DEDUCCIONES</th>
@@ -90,8 +91,9 @@
                 <td>{{ arProgramacionPagoDetalles.codigoEmpleadoFk}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td>
+                <td>{{ arProgramacionPagoDetalles.fechaDesdePago |date("Y/m/d")  }}</td>
                 <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
-                <td>{% if arProgramacionPagoDetalles.indefinido == 1 %} INDEFINIDO {% else %} {{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
+                <td>{{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDevengado | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDeducciones | number_format(2, '.', ',') }}</td>

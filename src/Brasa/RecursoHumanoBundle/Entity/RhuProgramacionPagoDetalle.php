@@ -74,6 +74,16 @@ class RhuProgramacionPagoDetalle
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
      */    
     private $fechaHasta;    
+
+    /**
+     * @ORM\Column(name="fecha_desde_pago", type="date", nullable=true)
+     */    
+    private $fechaDesdePago;    
+    
+    /**
+     * @ORM\Column(name="fecha_hasta_pago", type="date", nullable=true)
+     */    
+    private $fechaHastaPago;    
     
     /**     
      * @ORM\Column(name="indefinido", type="boolean")
@@ -670,5 +680,53 @@ class RhuProgramacionPagoDetalle
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set fechaDesdePago
+     *
+     * @param \DateTime $fechaDesdePago
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setFechaDesdePago($fechaDesdePago)
+    {
+        $this->fechaDesdePago = $fechaDesdePago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdePago
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdePago()
+    {
+        return $this->fechaDesdePago;
+    }
+
+    /**
+     * Set fechaHastaPago
+     *
+     * @param \DateTime $fechaHastaPago
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setFechaHastaPago($fechaHastaPago)
+    {
+        $this->fechaHastaPago = $fechaHastaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHastaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaHastaPago()
+    {
+        return $this->fechaHastaPago;
     }
 }
