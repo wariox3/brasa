@@ -53,7 +53,7 @@ class RhuVacacionRepository extends EntityRepository {
             $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }   
         if($strIdentificacion != "" ) {
-            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
         return $dql;
     }

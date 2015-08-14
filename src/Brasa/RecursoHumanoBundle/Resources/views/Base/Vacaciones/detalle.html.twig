@@ -10,66 +10,47 @@
         
         <div class="panel panel-default">
             <div class="panel-heading">Información de las vacaciones</div>
-            <div class="panel-body">
-                <div class="btn-group">
-                    {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                </div>    
+            <div class="panel-body">    
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
-                        <td class="titulo">CODIGO:</th>
+                        <td class="titulo">CODIGO:</td>
                         <td class="td-in-well">{{ arVacaciones.codigoVacacionPk }}</td>
                         <td class="titulo">FECHA:</th>
                         <td class="td-in-well">{{ arVacaciones.fecha |date("Y/m/d") }}</td>
-                        <td class="titulo">TOTAL CREDITO:</th>
-                        <td class="td-in-well" align="right">{{ arVacaciones.vrVacaciones | number_format(2, '.', ',')}}</td>                        
+                        <td class="titulo">SALARIO:</th>
+                        <td class="td-in-well" align="right">{{ arVacaciones.empleadoRel.vrSalario | number_format(2, '.', ',')}}</td>                        
                     </tr>
                     <tr>
-                        <td class="titulo">EMPLEADO:</th>
+                        <td class="titulo">EMPLEADO:</td>
                         <td class="td-in-well">{{ arVacaciones.empleadoRel.nombreCorto }}</td>
-                        <td class="titulo">CREDITO:</th>
+                        <td class="titulo">IDENTIFICACIÓN:</th>
                         <td class="td-in-well">{{ arVacaciones.empleadoRel.numeroIdentificacion }}</td>
-                        <td class="titulo">VALOR CUOTA:</th>
+                        <td class="titulo">IBC:</th>
                         <td class="td-in-well" align="right">{{ arVacaciones.vrIbc | number_format(2, '.', ',')}}</td>                                                
                     </tr>                    
                     <tr>
-                        <td class="titulo"></th>
-                        <td class="td-in-well" align="right"></td>
-                        <td class="titulo"></th>
-                        <td class="td-in-well" align="right"></td>
-                        <td class="titulo">SEGURO:</th>
-                        <td class="td-label" align="right">{{ arVacaciones.vrIbc | number_format(2, '.', ',')}}</td>
+                        <td class="titulo">DESDE</td>
+                        <td class="td-in-well">{{ arVacaciones.fechaDesde |date("Y/m/d") }}</td>
+                        <td class="titulo">HASTA</td>
+                        <td class="td-in-well">{{ arVacaciones.fechaHasta |date("Y/m/d") }}</td>
+                        <td class="titulo">VR. SALUD</td>
+                        <td class="td-label" align="right">{{ arVacaciones.vrSalud | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">NUMERO CUOTAS:</th>
+                        <td class="titulo">CENTRO COSTO</td>
+                        <td class="td-in-well">{{ arVacaciones.centroCostoRel.nombre }}</td>
+                        <td class="titulo">DÍAS VACACIONES</td>
                         <td class="td-in-well">{{ arVacaciones.diasVacaciones }}</td>
-                        <td class="titulo">CUOTA ACTUAL:</th>
-                        <td class="td-in-well">{{ arVacaciones.diasVacaciones }}</td>
-                        <td class="titulo">ABONOS:</th>
-                        <td class="td-in-well" align="right">{{ arVacaciones.vrIbc | number_format(2, '.', ',')}}</td>                        
+                        <td class="titulo">VR. PENSIÓN</td>
+                        <td class="td-label" align="right">{{ arVacaciones.vrPension | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo"></th>
+                        <td class="titulo"></td>
                         <td class="td-in-well" align="right"></td>
-                        <td class="titulo">PAGADO:</th>
+                        <td class="titulo">PAGADO:</td>
                         <td> {% if arVacaciones.estadoPagado == 1 %}SI{% else %} NO {% endif %}</td>
-                        <td class="titulo">SALDO:</th>
-                        <td class="td-in-well" align="right">{{ arVacaciones.Ibc | number_format(2, '.', ',')}}</td>                                                
-                    </tr>
-                    <tr>
-                        <td class="titulo"></th>
-                        <td class="td-label" align="right"></td>
-                        <td class="titulo">APROBADO:</th>
-                        <td> {% if arVacaciones.aprobado == 0 %} NO {% else %} SI {% endif %} </td>
-                        <td class="titulo">CUOTA TEMPORAL:</th>
-                        <td class="td-in-well" align="right">{{ arVacaciones.vrIbc | number_format(2, '.', ',')}}</td>                        
-                    </tr>
-                    <tr>
-                        <td class="titulo">TIPO PAGO:</th>
-                        <td class="td-label">{{ arVacaciones.centroCostoRel.nombre }}</td>
-                        <td class="titulo">SUSPENDIDO:</th>
-                        <td> {% if arVacaciones.estadoPagado == 0 %} NO {% else %} SI {% endif %} </td>
-                        <td class="titulo">SALDO REAL:</th>
-                        <td class="td-in-well" align="right">{{ arVacaciones.vrIbc | number_format(2, '.', ',')}}</td>                                                                        
+                        <td class="titulo">VR. VACACIONES:</th>
+                        <td class="td-in-well" align="right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',')}}</td>                                                
                     </tr>
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
@@ -80,6 +61,9 @@
         </div>
             
         <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                    {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_vacaciones_lista') }}" style="float:left">Volver</a>
             </div>

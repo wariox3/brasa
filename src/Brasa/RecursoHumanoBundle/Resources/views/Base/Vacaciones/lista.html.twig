@@ -38,13 +38,13 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arVacaciones, 'CÓDIGO', 'v.codigoVacacionPk') }}</th>
                 <th>CENTRO COSTO</th>
-                <th>HASTA</th>
                 <th>DESDE</th>
+                <th>HASTA</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
                 <th>DÍAS</th>
                 <th style="text-align: right">VR. VACACIONES</th>
-                <th style="text-align: center"></th>
+                <th>PAGADO</th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center"></th>
             </tr>
@@ -58,6 +58,7 @@
                 <td>{{ arVacaciones.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arVacaciones.diasVacaciones  }}</td>
                 <td>{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
+                <td>{% if arVacaciones.estadoPagado == 1 %} SI {% else %} NO {% endif %}</td>
                 {% if arVacaciones.estadoPagado == 1 %}
                         <td style="text-align: center"><a href="#marcador" onclick="javascript:alert('No se puede modificar el registro, se encuenta pagada!');"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 {% else %}

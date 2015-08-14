@@ -181,8 +181,8 @@ class VacacionesController extends Controller
         if($form->isValid()) {
                       
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoDetalleCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleCredito();
-                $objFormatoDetalleCredito->Generar($this, $codigoCreditoFk);
+                $objFormatoDetalleVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleVacaciones();
+                $objFormatoDetalleVacaciones->Generar($this, $codigoVacacion);
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:detalle.html.twig', array(
@@ -205,27 +205,23 @@ class VacacionesController extends Controller
                     ->setCategory("Test result file");
 
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo_Credito')
-                            ->setCellValue('B1', 'Tipo_Credito')
-                            ->setCellValue('C1', 'Fecha_Credito')
-                            ->setCellValue('D1', 'Centro_Costo')
-                            ->setCellValue('E1', 'Empleado')
-                            ->setCellValue('F1', 'Valor_Credito')
-                            ->setCellValue('G1', 'Valor_Cuota')
-                            ->setCellValue('H1', 'Valor_Seguro')
-                            ->setCellValue('I1', 'Cuotas')
-                            ->setCellValue('J1', 'Cuota_Actual')
-                            ->setCellValue('K1', 'Pagado')
-                            ->setCellValue('L1', 'Aprobado')
-                            ->setCellValue('M1', 'Suspendido');
+                            ->setCellValue('A1', 'Codigo')
+                            ->setCellValue('B1', 'Centro Costo')
+                            ->setCellValue('C1', 'Desde')
+                            ->setCellValue('D1', 'Hasta')
+                            ->setCellValue('E1', 'Identificación')
+                            ->setCellValue('F1', 'Empleado')
+                            ->setCellValue('G1', 'Dias')
+                            ->setCellValue('H1', 'Vr Vacaciones')
+                            ->setCellValue('I1', 'Pagado');
 
                 $i = 2;
                 $query = $em->createQuery($this->strSqlLista);
-                $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                $arCreditos = $query->getResult();
+                $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+                $arVacaciones = $query->getResult();
                 
-                foreach ($arCreditos as $arCredito) {
-                    if ($arCredito->getEstadoPagado() == 1)
+                foreach ($arVacaciones as $arVacacion) {
+                    if ($arVacacion->getEstadoPagado() == 1)
                     {
                         $Estado = "SI";
                     }
@@ -233,45 +229,26 @@ class VacacionesController extends Controller
                     {
                         $Estado = "NO"; 
                     }
-                    if ($arCredito->getAprobado() == 1)
-                    {
-                        $Aprobado = "SI";
-                    }
-                    else
-                    {
-                        $Aprobado = "NO"; 
-                    }
-                    if ($arCredito->getEstadoSuspendido() == 1)
-                    {
-                        $Suspendido = "SI";
-                    }
-                    else
-                    {
-                        $Suspendido = "NO"; 
-                    }
+                    
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
-                            ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
-                            ->setCellValue('C' . $i, $arCredito->getFecha())
-                            ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getCentroCostoRel()->getNombre())
-                            ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('F' . $i, $arCredito->getVrPagar())
-                            ->setCellValue('G' . $i, $arCredito->getVrCuota())
-                            ->setCellValue('H' . $i, $arCredito->getSeguro())
-                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotas())
-                            ->setCellValue('J' . $i, $arCredito->getNumeroCuotaActual())
-                            ->setCellValue('K' . $i, $Estado)
-                            ->setCellValue('L' . $i, $Aprobado)
-                            ->setCellValue('M' . $i, $Suspendido);
+                            ->setCellValue('A' . $i, $arVacacion->getCodigoVacacionPk())
+                            ->setCellValue('B' . $i, $arVacacion->getCentroCostoRel()->getNombre())
+                            ->setCellValue('C' . $i, $arVacacion->getFechaDesde())
+                            ->setCellValue('D' . $i, $arVacacion->getFechaHasta())
+                            ->setCellValue('E' . $i, $arVacacion->getEmpleadoRel()->getNumeroIdentificacion())
+                            ->setCellValue('F' . $i, $arVacacion->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('G' . $i, $arVacacion->getDiasVacaciones())
+                            ->setCellValue('H' . $i, round($arVacacion->getVrVacacion()))
+                            ->setCellValue('I' . $i, $Estado);
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('Creditos');
+                $objPHPExcel->getActiveSheet()->setTitle('Vacaciones');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Creditos.xlsx"');
+                header('Content-Disposition: attachment;filename="Vacaciones.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
