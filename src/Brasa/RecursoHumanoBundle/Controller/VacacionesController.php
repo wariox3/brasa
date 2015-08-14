@@ -125,7 +125,8 @@ class VacacionesController extends Controller
             $arVacacion->setFechaHasta(new \DateTime('now'));    
             $arVacacion->setCentroCostoRel($arCentroCosto);            
         }
-        
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $form = $this->createForm(new RhuVacacionType(), $arVacacion);     
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -134,12 +135,24 @@ class VacacionesController extends Controller
             $intDias = $arVacacion->getFechaDesde()->diff($arVacacion->getFechaHasta());
             $intDias = $intDias->format('%a');
             $intDias = $intDias + 1;
-            
-            $arVacacion->setCantidad($intDias);
-            $arVacacion->setCantidadPendiente($intDias);
-           
+            $floSalario = $arEmpleado->getVrSalario();
+            $floIbc = $floSalario / 30 * $intDias;
+            $arVacacion->setVrIbc($floIbc);
+            $arVacacion->setDiasVacaciones($intDias);
+            $douSalud = ($floIbc * 4) /100;
+            $arVacacion->setVrSalud($douSalud);
+            if ($floSalario >= ($arConfiguracion->getVrSalario() * 4)){
+                $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra();
+                $douPension = ($floIbc * $douPorcentaje) /100;
+            }
+            else {
+                $douPension = ($floIbc * 4) /100;
+            }
+            $arVacacion->setVrPension($douPension);
+            $douVacacion = $floIbc - $douPension - $douSalud;
+            $arVacacion->setVrVacacion($douVacacion);
             if($codigoEmpleado != 0) { 
-                $arVacacion->setEmpleadoRel($arEmpleado);                
+                $arVacacion->setEmpleadoRel($arEmpleado); 
             }
             $em->persist($arVacacion);
             $em->flush();                        

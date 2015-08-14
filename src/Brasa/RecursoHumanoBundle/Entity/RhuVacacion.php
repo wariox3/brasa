@@ -58,6 +58,11 @@ class RhuVacacion
     private $vrVacacion = 0;
     
     /**
+     * @ORM\Column(name="dias_vacaciones", type="float")
+     */
+    private $diasVacaciones = 0;
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;
@@ -83,8 +88,7 @@ class RhuVacacion
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;        
-
-
+    
 
     /**
      * Get codigoVacacionPk
@@ -286,6 +290,30 @@ class RhuVacacion
     public function getVrVacacion()
     {
         return $this->vrVacacion;
+    }
+
+    /**
+     * Set diasVacaciones
+     *
+     * @param float $diasVacaciones
+     *
+     * @return RhuVacacion
+     */
+    public function setDiasVacaciones($diasVacaciones)
+    {
+        $this->diasVacaciones = $diasVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacaciones
+     *
+     * @return float
+     */
+    public function getDiasVacaciones()
+    {
+        return $this->diasVacaciones;
     }
 
     /**
