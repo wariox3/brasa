@@ -11,6 +11,7 @@ class RhuVacacionType extends AbstractType
         $builder                        
             ->add('fechaDesde', 'date')
             ->add('fechaHasta', 'date')
+            ->add('estadoDisfrutadas', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                
             ->add('comentarios', 'textarea', array('required' => false))    
             ->add('guardar', 'submit');
     }

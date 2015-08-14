@@ -58,7 +58,7 @@ class RhuVacacion
     private $vrVacacion = 0;
     
     /**
-     * @ORM\Column(name="dias_vacaciones", type="float")
+     * @ORM\Column(name="dias_vacaciones", type="integer")
      */
     private $diasVacaciones = 0;
     
@@ -68,7 +68,7 @@ class RhuVacacion
     private $comentarios;
     
     /**
-     * @ORM\Column(name="estado_pagado", type="float")
+     * @ORM\Column(name="estado_pagado", type="boolean")
      */
     private $estadoPagado = 0;
     
@@ -76,6 +76,11 @@ class RhuVacacion
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
     private $codigoCentroCostoFk;
+
+    /**
+     * @ORM\Column(name="estado_disfrutadas", type="boolean")
+     */
+    private $estadoDisfrutadas = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="vacacionesCentroCostoRel")
@@ -89,6 +94,7 @@ class RhuVacacion
      */
     protected $empleadoRel;        
     
+
 
     /**
      * Get codigoVacacionPk
@@ -295,7 +301,7 @@ class RhuVacacion
     /**
      * Set diasVacaciones
      *
-     * @param float $diasVacaciones
+     * @param integer $diasVacaciones
      *
      * @return RhuVacacion
      */
@@ -309,7 +315,7 @@ class RhuVacacion
     /**
      * Get diasVacaciones
      *
-     * @return float
+     * @return integer
      */
     public function getDiasVacaciones()
     {
@@ -343,7 +349,7 @@ class RhuVacacion
     /**
      * Set estadoPagado
      *
-     * @param float $estadoPagado
+     * @param boolean $estadoPagado
      *
      * @return RhuVacacion
      */
@@ -357,7 +363,7 @@ class RhuVacacion
     /**
      * Get estadoPagado
      *
-     * @return float
+     * @return boolean
      */
     public function getEstadoPagado()
     {
@@ -386,6 +392,30 @@ class RhuVacacion
     public function getCodigoCentroCostoFk()
     {
         return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set estadoDisfrutadas
+     *
+     * @param boolean $estadoDisfrutadas
+     *
+     * @return RhuVacacion
+     */
+    public function setEstadoDisfrutadas($estadoDisfrutadas)
+    {
+        $this->estadoDisfrutadas = $estadoDisfrutadas;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoDisfrutadas
+     *
+     * @return boolean
+     */
+    public function getEstadoDisfrutadas()
+    {
+        return $this->estadoDisfrutadas;
     }
 
     /**

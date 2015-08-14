@@ -15,7 +15,7 @@ class RhuVacacionRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $dql   = "SELECT v FROM BrasaRecursoHumanoBundle:RhuVacacion v "
-                . "WHERE v.codigoEmpleadoFk = " . $codigoEmpleado
+                . "WHERE v.estadoDisfrutadas = 1 AND v.codigoEmpleadoFk = " . $codigoEmpleado
                 . " AND v.fechaDesde <= '" . $fechaHasta->format('Y-m-d') . "' "
                 . " AND v.fechaHasta >= '" . $fechaDesde->format('Y-m-d') . "' ";
         $query = $em->createQuery($dql);

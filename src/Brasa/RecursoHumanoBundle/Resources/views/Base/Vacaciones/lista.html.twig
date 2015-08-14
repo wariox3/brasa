@@ -4,11 +4,6 @@
     <div class="page-header">
         <h3>Lista vacaciones</h3>
     </div>
-    <div>
-        {% if mensaje != "0" %}        
-            <div class="alert alert-warning" role="alert">{{mensaje}}</div>
-        {% endif %}    
-    </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}
         <div class="panel panel-default">
@@ -45,6 +40,7 @@
                 <th>DÍAS</th>
                 <th style="text-align: right">VR. VACACIONES</th>
                 <th>PAGADO</th>
+                <th style="text-align: center"></th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center"></th>
             </tr>

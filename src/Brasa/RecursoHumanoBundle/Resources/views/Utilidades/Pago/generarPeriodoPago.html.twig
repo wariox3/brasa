@@ -36,6 +36,7 @@
                 <th>CÓDIGO</th>
                 <th>CENTRO COSTOS</th>
                 <th>PERIODO</th>
+                <th>ULT. PROGRAMACION</th>
                 <th>ULT. PAGO</th>
                 <th>ULT. PAGO PRIMA</th>
                 <th>ULT. PAGO CESANTIAS</th>
@@ -49,6 +50,7 @@
                 <td>{{ arCentroCosto.nombre  }}</td>
                 <td>{{ arCentroCosto.periodoPagoRel.nombre  }}</td>
                 <td>{{ arCentroCosto.fechaUltimoPagoProgramado |date("Y/m/d")  }}</td>
+                <td>{{ arCentroCosto.fechaUltimoPago |date("Y/m/d")  }}</td>
                 <td>{{ arCentroCosto.fechaUltimoPagoPrima |date("Y/m/d")  }}</td>
                 <td>{{ arCentroCosto.fechaUltimoPagoCesantias |date("Y/m/d")  }}</td>
                 <td>{% if arCentroCosto.pagoAbierto == 1 %} SI {% else %} NO {% endif %}</td>

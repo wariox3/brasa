@@ -16,7 +16,7 @@ class VacacionesController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
-        $mensaje = 0;
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if ($form->isValid())
         {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -26,7 +26,7 @@ class VacacionesController extends Controller
                         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
                         $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
                         if ($arVacaciones->getEstadoPagado() == 1 ) {
-                            $mensaje = "No se puede Eliminar el registro, por que ya fue pagada!";
+                            $objMensaje->Mensaje("error", "No se puede Eliminar el registro, por que ya fue pagada!", $this);
                         }
                         else {    
                             $em->remove($arVacaciones);
@@ -57,7 +57,6 @@ class VacacionesController extends Controller
         $arVacaciones = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                        
         return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:lista.html.twig', array(
             'arVacaciones' => $arVacaciones,
-            'mensaje' => $mensaje,
             'form' => $form->createView()
             ));
     } 

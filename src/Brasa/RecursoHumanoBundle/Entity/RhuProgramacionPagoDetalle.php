@@ -78,12 +78,7 @@ class RhuProgramacionPagoDetalle
     /**
      * @ORM\Column(name="fecha_desde_pago", type="date", nullable=true)
      */    
-    private $fechaDesdePago;    
-    
-    /**
-     * @ORM\Column(name="fecha_hasta_pago", type="date", nullable=true)
-     */    
-    private $fechaHastaPago;    
+    private $fechaDesdePago;          
     
     /**     
      * @ORM\Column(name="indefinido", type="boolean")
@@ -204,6 +199,30 @@ class RhuProgramacionPagoDetalle
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
     }
 
     /**
@@ -399,6 +418,30 @@ class RhuProgramacionPagoDetalle
     }
 
     /**
+     * Set fechaDesdePago
+     *
+     * @param \DateTime $fechaDesdePago
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setFechaDesdePago($fechaDesdePago)
+    {
+        $this->fechaDesdePago = $fechaDesdePago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdePago
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdePago()
+    {
+        return $this->fechaDesdePago;
+    }
+
+    /**
      * Set indefinido
      *
      * @param boolean $indefinido
@@ -420,122 +463,6 @@ class RhuProgramacionPagoDetalle
     public function getIndefinido()
     {
         return $this->indefinido;
-    }
-
-    /**
-     * Set programacionPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
-    {
-        $this->programacionPagoRel = $programacionPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get programacionPagoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
-     */
-    public function getProgramacionPagoRel()
-    {
-        return $this->programacionPagoRel;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
-     * Add programacionesPagosDetallesSedesProgramacionPagoDetalleRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function addProgramacionesPagosDetallesSedesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel)
-    {
-        $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel[] = $programacionesPagosDetallesSedesProgramacionPagoDetalleRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove programacionesPagosDetallesSedesProgramacionPagoDetalleRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel
-     */
-    public function removeProgramacionesPagosDetallesSedesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel)
-    {
-        $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel->removeElement($programacionesPagosDetallesSedesProgramacionPagoDetalleRel);
-    }
-
-    /**
-     * Get programacionesPagosDetallesSedesProgramacionPagoDetalleRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProgramacionesPagosDetallesSedesProgramacionPagoDetalleRel()
-    {
-        return $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel;
-    }
-
-    /**
-     * Add pagosDetallesProgramacionPagoDetalleRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesProgramacionPagoDetalleRel
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function addPagosDetallesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesProgramacionPagoDetalleRel)
-    {
-        $this->pagosDetallesProgramacionPagoDetalleRel[] = $pagosDetallesProgramacionPagoDetalleRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove pagosDetallesProgramacionPagoDetalleRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesProgramacionPagoDetalleRel
-     */
-    public function removePagosDetallesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesProgramacionPagoDetalleRel)
-    {
-        $this->pagosDetallesProgramacionPagoDetalleRel->removeElement($pagosDetallesProgramacionPagoDetalleRel);
-    }
-
-    /**
-     * Get pagosDetallesProgramacionPagoDetalleRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPagosDetallesProgramacionPagoDetalleRel()
-    {
-        return $this->pagosDetallesProgramacionPagoDetalleRel;
     }
 
     /**
@@ -635,27 +562,51 @@ class RhuProgramacionPagoDetalle
     }
 
     /**
-     * Set codigoContratoFk
+     * Set programacionPagoRel
      *
-     * @param integer $codigoContratoFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
      *
      * @return RhuProgramacionPagoDetalle
      */
-    public function setCodigoContratoFk($codigoContratoFk)
+    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
     {
-        $this->codigoContratoFk = $codigoContratoFk;
+        $this->programacionPagoRel = $programacionPagoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoContratoFk
+     * Get programacionPagoRel
      *
-     * @return integer
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
      */
-    public function getCodigoContratoFk()
+    public function getProgramacionPagoRel()
     {
-        return $this->codigoContratoFk;
+        return $this->programacionPagoRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
     }
 
     /**
@@ -683,50 +634,70 @@ class RhuProgramacionPagoDetalle
     }
 
     /**
-     * Set fechaDesdePago
+     * Add programacionesPagosDetallesSedesProgramacionPagoDetalleRel
      *
-     * @param \DateTime $fechaDesdePago
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel
      *
      * @return RhuProgramacionPagoDetalle
      */
-    public function setFechaDesdePago($fechaDesdePago)
+    public function addProgramacionesPagosDetallesSedesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel)
     {
-        $this->fechaDesdePago = $fechaDesdePago;
+        $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel[] = $programacionesPagosDetallesSedesProgramacionPagoDetalleRel;
 
         return $this;
     }
 
     /**
-     * Get fechaDesdePago
+     * Remove programacionesPagosDetallesSedesProgramacionPagoDetalleRel
      *
-     * @return \DateTime
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel
      */
-    public function getFechaDesdePago()
+    public function removeProgramacionesPagosDetallesSedesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede $programacionesPagosDetallesSedesProgramacionPagoDetalleRel)
     {
-        return $this->fechaDesdePago;
+        $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel->removeElement($programacionesPagosDetallesSedesProgramacionPagoDetalleRel);
     }
 
     /**
-     * Set fechaHastaPago
+     * Get programacionesPagosDetallesSedesProgramacionPagoDetalleRel
      *
-     * @param \DateTime $fechaHastaPago
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesPagosDetallesSedesProgramacionPagoDetalleRel()
+    {
+        return $this->programacionesPagosDetallesSedesProgramacionPagoDetalleRel;
+    }
+
+    /**
+     * Add pagosDetallesProgramacionPagoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesProgramacionPagoDetalleRel
      *
      * @return RhuProgramacionPagoDetalle
      */
-    public function setFechaHastaPago($fechaHastaPago)
+    public function addPagosDetallesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesProgramacionPagoDetalleRel)
     {
-        $this->fechaHastaPago = $fechaHastaPago;
+        $this->pagosDetallesProgramacionPagoDetalleRel[] = $pagosDetallesProgramacionPagoDetalleRel;
 
         return $this;
     }
 
     /**
-     * Get fechaHastaPago
+     * Remove pagosDetallesProgramacionPagoDetalleRel
      *
-     * @return \DateTime
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesProgramacionPagoDetalleRel
      */
-    public function getFechaHastaPago()
+    public function removePagosDetallesProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesProgramacionPagoDetalleRel)
     {
-        return $this->fechaHastaPago;
+        $this->pagosDetallesProgramacionPagoDetalleRel->removeElement($pagosDetallesProgramacionPagoDetalleRel);
+    }
+
+    /**
+     * Get pagosDetallesProgramacionPagoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosDetallesProgramacionPagoDetalleRel()
+    {
+        return $this->pagosDetallesProgramacionPagoDetalleRel;
     }
 }
