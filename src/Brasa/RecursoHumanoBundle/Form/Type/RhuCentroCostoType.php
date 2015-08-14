@@ -35,6 +35,8 @@ class RhuCentroCostoType extends AbstractType
                 'required' => true))                
             ->add('nombre', 'text', array('required' => true))   
             ->add('fechaUltimoPagoProgramado', 'date')
+            ->add('fechaUltimoPagoPrima', 'date')
+            ->add('fechaUltimoPagoCesantias', 'date')
             ->add('horaPagoAutomatico', 'time')                
             ->add('estadoActivo', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                      
             ->add('generarPagoAutomatico', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))

@@ -21,7 +21,7 @@
                         <td class="td-in-well">{{ arCentrosCostos.periodoPagoRel.nombre }}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">ÚLTIMO PERIODO PAGADO :</td>
+                        <td class="titulo">ÚLTIMA PROGRAMACION PAGO:</td>
                         <td class="td-in-well">{{ arCentrosCostos.fechaUltimoPagoProgramado|date('Y/m/d') }}</td>
                         <td class="titulo">PAGO ABIERTO:</th>
                         <td class="td-in-well">{% if arCentrosCostos.pagoAbierto == 1 %} SI {% else %} NO {% endif%}</td>
@@ -52,6 +52,30 @@
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
                     </tr>
+                    <tr>
+                        <td class="titulo">ULTIMO PAGO:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.fechaUltimoPago|date('Y/m/d') }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">ULTIMO PAGO PRIMAS:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.fechaUltimoPagoPrima|date('Y/m/d') }} </td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">ULTIMO PAGO CESANTIAS:</td>
+                        <td class="td-in-well">{{ arCentrosCostos.fechaUltimoPagoCesantias|date('Y/m/d') }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>                    
                     <tr>
                         <td class="titulo">COMENTARIOS:</td>
                         <td class="td-in-well" colspan="5">{{ arCentrosCostos.comentarios }}

@@ -100,7 +100,8 @@ class BaseCentroCostoController extends Controller
                     if($strPeriodo == 5 && $strDia != 30){
                         $objMensaje->Mensaje("error", "El periodo debe terminar en dia 30", $this);
                     }
-                    else {                        
+                    else {     
+                        $arCentroCosto->setFechaUltimoPago($arCentroCosto->getFechaUltimoPagoProgramado());
                         $em->persist($arCentroCosto);
                         $em->flush();
                         if($request->request->get('ChkGenerarPeriodo')) {

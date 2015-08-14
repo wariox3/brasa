@@ -80,7 +80,7 @@ class ContratosController extends Controller
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $objMensaje = 0;
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $intEstado = 0;
         if($codigoContrato != 0) {
             $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
@@ -94,19 +94,21 @@ class ContratosController extends Controller
             $arContrato->setVrSalario($douSalarioMinimo); //se Parametrizó con configuracion salario minimo
             $douValidarEmpleadoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->validarEmpleadoContrato($codigoEmpleado);
             if ($douValidarEmpleadoContrato >= 1){
-                $objMensaje = "El empleado tiene contrato abierto, no se puede generar otro contrato";
+                $objMensaje->Mensaje("error", "El empleado tiene contrato abierto, no se puede generar otro contrato", $this);                
                 $intEstado = 1;
             }
             
         }        
         $form = $this->createForm(new RhuContratoType(), $arContrato);
         $form->handleRequest($request);
-        if ($form->isValid()) {                
-                $arContrato = $form->getData();
+        if ($form->isValid()) {                  
+            $arContrato = $form->getData();
+            if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde()) {
                 $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
-                $arContrato->setEmpleadoRel($arEmpleado);      
-                $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
-                $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
+                $arContrato->setEmpleadoRel($arEmpleado);  
+                $arContrato->setFechaUltimoPago($arContrato->getCentroCostoRel()->getFechaUltimoPago());
+                $arContrato->setFechaUltimoPagoCesantias($arContrato->getCentroCostoRel()->getFechaUltimoPagoCesantias());
+                $arContrato->setFechaUltimoPagoPrimas($arContrato->getCentroCostoRel()->getFechaUltimoPagoPrima());
                 $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
                 $em->persist($arContrato);
                 $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
@@ -126,14 +128,14 @@ class ContratosController extends Controller
                 $arEmpleado->setTipoPensionRel($arContrato->getTipoPensionRel());
                 $em->persist($arEmpleado);
                 $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>"; 
-            
-            
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 
+            } else {
+                $objMensaje->Mensaje("error", "La fecha de inicio del contrato debe ser menor a la ultima fecha de pago del periodo " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d'), $this);
+            }                        
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevo.html.twig', array(
             'arContrato' => $arContrato,
-            'arEmpleado' => $arEmpleado,
-            'objMensaje' => $objMensaje,
+            'arEmpleado' => $arEmpleado,            
             'intEstado' => $intEstado,
             'form' => $form->createView()));
     }
