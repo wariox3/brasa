@@ -510,6 +510,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $dateFechaDesde =  "";
                 if($arContrato->getFechaUltimoPagoPrimas() <=  $arProgramacionPago->getFechaDesde() == true) {
                     $dateFechaDesde = $arProgramacionPago->getFechaDesde();
+                    if($arContratos->getFechaDesde() > 0) {
+                        0;
+                    }
+                    
                 } else {
                     $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
                 }
