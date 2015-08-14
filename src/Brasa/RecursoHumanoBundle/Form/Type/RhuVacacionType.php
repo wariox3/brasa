@@ -8,15 +8,11 @@ class RhuVacacionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder           
-            ->add('creditoTipoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCreditoTipo',
-                'property' => 'nombre',
-            ))             
-            ->add('vrPagar', 'number', array('required' => true))                                                                           
+        $builder                        
+            ->add('fechaDesde', 'date')
+            ->add('fechaHasta', 'date')
             ->add('comentarios', 'textarea', array('required' => false))    
-            ->add('guardar', 'submit')
-            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
+            ->add('guardar', 'submit');
     }
  
     public function getName()

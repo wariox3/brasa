@@ -376,7 +376,7 @@
                         <th>DESDE</th>
                         <th>HASTA</th>
                         <th>DÍAS</th>
-                        <th>PENDIENTES</th>
+                        <th>VR. VACACIONES</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -385,8 +385,8 @@
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arVacaciones.codigoVacacionPk }}">{{ arVacaciones.codigoVacacionPk }} </td>
                             <td>{{ arVacaciones.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arVacaciones.fechaHasta |date("Y/m/d")  }}</td>
-                            <td style="text-align: right">{{ arVacaciones.cantidad | number_format(0, '.', ',') }}</td>
-                            <td style="text-align: right">{{ arVacaciones.cantidadPendiente | number_format(0, '.', ',') }}</td>
+                            <td>{{ arVacaciones.diasVacaciones  }}</td>
+                            <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}', 'AgregarVacacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
                             <td><input type="checkbox" name="ChkSeleccionarVacacion[]" value="{{ arVacaciones.codigoVacacionPk }}" /></td>
                         </tr>
