@@ -65,7 +65,7 @@ class VacacionesController extends Controller
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacion')->listaVacacionesDQL(
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->listaVacacionesDQL(
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion')
                     );
@@ -169,17 +169,15 @@ class VacacionesController extends Controller
     }
     
     public function detalleAction($codigoVacacion) {
-        /*$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $form = $this->createFormBuilder()    
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
-        $codigoCreditoFk = $codigoCreditoPk;
-        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
-        $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
-        $arCreditoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => $codigoCreditoFk));
+        
+        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
         if($form->isValid()) {
                       
             if($form->get('BtnImprimir')->isClicked()) {
@@ -187,11 +185,10 @@ class VacacionesController extends Controller
                 $objFormatoDetalleCredito->Generar($this, $codigoCreditoFk);
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Creditos:detalle.html.twig', array(
-                    'arCreditoPago' => $arCreditoPago,
-                    'arCreditos' => $arCreditos,
+        return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:detalle.html.twig', array(
+                    'arVacaciones' => $arVacaciones,
                     'form' => $form->createView()
-                    ));*/
+                    ));
     }
     
     private function generarExcel() {
