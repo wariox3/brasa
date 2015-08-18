@@ -163,6 +163,21 @@ class RhuLiquidacion
     private $liquidarPrima = 0;        
     
     /**
+     * @ORM\Column(name="fecha_ultimo_pago_primas", type="date", nullable=true)
+     */    
+    private $fechaUltimoPagoPrimas;
+    
+    /**
+     * @ORM\Column(name="fecha_ultimo_pago_vacaciones", type="date", nullable=true)
+     */    
+    private $fechaUltimoPagoVacaciones;
+    
+    /**
+     * @ORM\Column(name="fecha_ultimo_pago_cesantias", type="date", nullable=true)
+     */    
+    private $fechaUltimoPagoCesantias;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -185,6 +200,15 @@ class RhuLiquidacion
      */
     protected $liquidacionesDeduccionesLiquidacionRel;  
 
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->liquidacionesDeduccionesLiquidacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoLiquidacionPk
@@ -485,78 +509,6 @@ class RhuLiquidacion
     }
 
     /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuLiquidacion
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuLiquidacion
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
-     * Set contratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
-     *
-     * @return RhuLiquidacion
-     */
-    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
-    {
-        $this->contratoRel = $contratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get contratoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
-     */
-    public function getContratoRel()
-    {
-        return $this->contratoRel;
-    }
-
-    /**
      * Set diasCesantias
      *
      * @param integer $diasCesantias
@@ -629,6 +581,30 @@ class RhuLiquidacion
     }
 
     /**
+     * Set diasLaborados
+     *
+     * @param integer $diasLaborados
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasLaborados($diasLaborados)
+    {
+        $this->diasLaborados = $diasLaborados;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLaborados
+     *
+     * @return integer
+     */
+    public function getDiasLaborados()
+    {
+        return $this->diasLaborados;
+    }
+
+    /**
      * Set fechaUltimoPago
      *
      * @param \DateTime $fechaUltimoPago
@@ -650,6 +626,30 @@ class RhuLiquidacion
     public function getFechaUltimoPago()
     {
         return $this->fechaUltimoPago;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacion
+     *
+     * @param float $vrIngresoBaseCotizacion
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIngresoBaseCotizacion($vrIngresoBaseCotizacion)
+    {
+        $this->VrIngresoBaseCotizacion = $vrIngresoBaseCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacion
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacion()
+    {
+        return $this->VrIngresoBaseCotizacion;
     }
 
     /**
@@ -677,6 +677,30 @@ class RhuLiquidacion
     }
 
     /**
+     * Set vrIngresoBaseCotizacionTotal
+     *
+     * @param float $vrIngresoBaseCotizacionTotal
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIngresoBaseCotizacionTotal($vrIngresoBaseCotizacionTotal)
+    {
+        $this->VrIngresoBaseCotizacionTotal = $vrIngresoBaseCotizacionTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacionTotal
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacionTotal()
+    {
+        return $this->VrIngresoBaseCotizacionTotal;
+    }
+
+    /**
      * Set diasAdicionalesIBC
      *
      * @param integer $diasAdicionalesIBC
@@ -698,102 +722,6 @@ class RhuLiquidacion
     public function getDiasAdicionalesIBC()
     {
         return $this->diasAdicionalesIBC;
-    }
-
-    /**
-     * Set liquidarCesantias
-     *
-     * @param boolean $liquidarCesantias
-     *
-     * @return RhuLiquidacion
-     */
-    public function setLiquidarCesantias($liquidarCesantias)
-    {
-        $this->liquidarCesantias = $liquidarCesantias;
-
-        return $this;
-    }
-
-    /**
-     * Get liquidarCesantias
-     *
-     * @return boolean
-     */
-    public function getLiquidarCesantias()
-    {
-        return $this->liquidarCesantias;
-    }
-
-    /**
-     * Set liquidarVacaciones
-     *
-     * @param boolean $liquidarVacaciones
-     *
-     * @return RhuLiquidacion
-     */
-    public function setLiquidarVacaciones($liquidarVacaciones)
-    {
-        $this->liquidarVacaciones = $liquidarVacaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get liquidarVacaciones
-     *
-     * @return boolean
-     */
-    public function getLiquidarVacaciones()
-    {
-        return $this->liquidarVacaciones;
-    }
-
-    /**
-     * Set liquidarPrima
-     *
-     * @param boolean $liquidarPrima
-     *
-     * @return RhuLiquidacion
-     */
-    public function setLiquidarPrima($liquidarPrima)
-    {
-        $this->liquidarPrima = $liquidarPrima;
-
-        return $this;
-    }
-
-    /**
-     * Get liquidarPrima
-     *
-     * @return boolean
-     */
-    public function getLiquidarPrima()
-    {
-        return $this->liquidarPrima;
-    }
-
-    /**
-     * Set vrIngresoBaseCotizacion
-     *
-     * @param float $vrIngresoBaseCotizacion
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrIngresoBaseCotizacion($vrIngresoBaseCotizacion)
-    {
-        $this->VrIngresoBaseCotizacion = $vrIngresoBaseCotizacion;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIngresoBaseCotizacion
-     *
-     * @return float
-     */
-    public function getVrIngresoBaseCotizacion()
-    {
-        return $this->VrIngresoBaseCotizacion;
     }
 
     /**
@@ -869,54 +797,6 @@ class RhuLiquidacion
     }
 
     /**
-     * Set diasLaborados
-     *
-     * @param integer $diasLaborados
-     *
-     * @return RhuLiquidacion
-     */
-    public function setDiasLaborados($diasLaborados)
-    {
-        $this->diasLaborados = $diasLaborados;
-
-        return $this;
-    }
-
-    /**
-     * Get diasLaborados
-     *
-     * @return integer
-     */
-    public function getDiasLaborados()
-    {
-        return $this->diasLaborados;
-    }
-
-    /**
-     * Set vrIngresoBaseCotizacionTotal
-     *
-     * @param float $vrIngresoBaseCotizacionTotal
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrIngresoBaseCotizacionTotal($vrIngresoBaseCotizacionTotal)
-    {
-        $this->VrIngresoBaseCotizacionTotal = $vrIngresoBaseCotizacionTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIngresoBaseCotizacionTotal
-     *
-     * @return float
-     */
-    public function getVrIngresoBaseCotizacionTotal()
-    {
-        return $this->VrIngresoBaseCotizacionTotal;
-    }
-
-    /**
      * Set vrSalario
      *
      * @param float $vrSalario
@@ -963,12 +843,221 @@ class RhuLiquidacion
     {
         return $this->VrTotal;
     }
+
     /**
-     * Constructor
+     * Set liquidarCesantias
+     *
+     * @param boolean $liquidarCesantias
+     *
+     * @return RhuLiquidacion
      */
-    public function __construct()
+    public function setLiquidarCesantias($liquidarCesantias)
     {
-        $this->liquidacionesDeduccionesLiquidacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidarCesantias = $liquidarCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarCesantias
+     *
+     * @return boolean
+     */
+    public function getLiquidarCesantias()
+    {
+        return $this->liquidarCesantias;
+    }
+
+    /**
+     * Set liquidarVacaciones
+     *
+     * @param boolean $liquidarVacaciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setLiquidarVacaciones($liquidarVacaciones)
+    {
+        $this->liquidarVacaciones = $liquidarVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarVacaciones
+     *
+     * @return boolean
+     */
+    public function getLiquidarVacaciones()
+    {
+        return $this->liquidarVacaciones;
+    }
+
+    /**
+     * Set liquidarPrima
+     *
+     * @param boolean $liquidarPrima
+     *
+     * @return RhuLiquidacion
+     */
+    public function setLiquidarPrima($liquidarPrima)
+    {
+        $this->liquidarPrima = $liquidarPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarPrima
+     *
+     * @return boolean
+     */
+    public function getLiquidarPrima()
+    {
+        return $this->liquidarPrima;
+    }
+
+    /**
+     * Set fechaUltimoPagoPrimas
+     *
+     * @param \DateTime $fechaUltimoPagoPrimas
+     *
+     * @return RhuLiquidacion
+     */
+    public function setFechaUltimoPagoPrimas($fechaUltimoPagoPrimas)
+    {
+        $this->fechaUltimoPagoPrimas = $fechaUltimoPagoPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPagoPrimas
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPagoPrimas()
+    {
+        return $this->fechaUltimoPagoPrimas;
+    }
+
+    /**
+     * Set fechaUltimoPagoVacaciones
+     *
+     * @param \DateTime $fechaUltimoPagoVacaciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setFechaUltimoPagoVacaciones($fechaUltimoPagoVacaciones)
+    {
+        $this->fechaUltimoPagoVacaciones = $fechaUltimoPagoVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPagoVacaciones
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPagoVacaciones()
+    {
+        return $this->fechaUltimoPagoVacaciones;
+    }
+
+    /**
+     * Set fechaUltimoPagoCesantias
+     *
+     * @param \DateTime $fechaUltimoPagoCesantias
+     *
+     * @return RhuLiquidacion
+     */
+    public function setFechaUltimoPagoCesantias($fechaUltimoPagoCesantias)
+    {
+        $this->fechaUltimoPagoCesantias = $fechaUltimoPagoCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPagoCesantias
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPagoCesantias()
+    {
+        return $this->fechaUltimoPagoCesantias;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuLiquidacion
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuLiquidacion
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
     }
 
     /**

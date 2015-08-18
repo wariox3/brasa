@@ -157,7 +157,7 @@ class ContratosController extends Controller
             $arContrato->setFechaHasta(date_create($fechaHasta));            
             $arContrato->setIndefinido(0);
             $arContrato->setEstadoActivo(0);
-            $em->persist($arContrato);
+            //$em->persist($arContrato);
             //Generar liquidacion
             $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
             $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
@@ -168,7 +168,14 @@ class ContratosController extends Controller
             $arLiquidacion->setLiquidarCesantias(1);
             $arLiquidacion->setLiquidarPrima(1);
             $arLiquidacion->setLiquidarVacaciones(1);
-            $em->persist($arLiquidacion);
+            $em->persist($arLiquidacion);            
+            //Verificar creditos
+            $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+            $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());        
+            foreach ($arCreditos as $arCredito) {
+                
+            }
+
             $em->flush();
             //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));

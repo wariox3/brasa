@@ -159,15 +159,7 @@ class RhuPagoRepository extends EntityRepository {
         $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.estadoCobrado = 0 "
                 . " AND p.codigoCentroCostoFk = " . $codigoCentroCosto;
         return $dql;
-    }                        
-    
-    public function devuelveFechaUltimoPago($codigoEmpleado) {
-        $em = $this->getEntityManager();
-        $dql   = "SELECT MAX(p.fechaHasta) FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.codigoEmpleadoFk = " . $codigoEmpleado;
-        $query = $em->createQuery($dql);
-        $fechaUltimoPago = $query->getSingleScalarResult();
-        return $fechaUltimoPago;
-    }   
+    }                              
     
     public function devuelveCostosFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();

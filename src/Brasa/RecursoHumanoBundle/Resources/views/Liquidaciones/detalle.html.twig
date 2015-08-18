@@ -22,7 +22,7 @@
             <div class="panel-body">
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
-                        <td class="titulo">CóDIGO:</td>
+                        <td class="titulo">CÓDIGO:</td>
                         <td class="td-in-well">{{ arLiquidacion.codigoLiquidacionPk }}</td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
@@ -40,24 +40,24 @@
                     <tr>
                         <td class="titulo">FECHA FIN:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaHasta|date("Y/m/d") }}</td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">ULTIMO PAGO PRIMAS:</td>
+                        <td align="right">{{ arLiquidacion.fechaUltimoPagoPrimas|date("Y/m/d") }}</td>
                         <td class="titulo">IBC TOTAL:</td>
                         <td align="right">$ {{ arLiquidacion.vrIngresoBaseCotizacionTotal | number_format(2, '.', ',') }}</td>                   
                     </tr>                                 
                     <tr>
                         <td class="titulo">FECHA ÚLTIMO PAGO:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaUltimoPago|date("Y/m/d") }}</td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">ULTIMO PAGO CESANTIAS:</td>
+                        <td align="right">{{ arLiquidacion.fechaUltimoPagoCesantias|date("Y/m/d") }}</td>
                         <td class="titulo">BASE PRESTACIONES:</td>
                         <td align="right">$ {{ arLiquidacion.vrBasePrestaciones | number_format(2, '.', ',') }}</td>                   
                     </tr>                                 
                     <tr>
                         <td class="titulo">EMPLEADO:</td>
                         <td class="td-in-well">{{ arLiquidacion.empleadoRel.nombreCorto|default('SIN EMPLEADO') }}</td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">ULTIMO PAGO VACACIONES:</td>
+                        <td align="right">{{ arLiquidacion.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>
                         <td class="titulo">AUXILIO TRANSPORTE:</td>
                         <td align="right">$ {{ arLiquidacion.vrAuxilioTransporte | number_format(2, '.', ',') }}</td>                   
                     </tr>                                                 

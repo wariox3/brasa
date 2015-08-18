@@ -76,7 +76,7 @@ class RhuCreditoRepository extends EntityRepository {
      * 
      * @author		Mario Estrada
      * 
-     * @param string	Codigo del empleado
+     * @param integer	Codigo del empleado
      * @return float    Valor de la cuota
      */    
     public function cuotaCreditosNomina($codigoEmpleado) {
@@ -116,4 +116,21 @@ class RhuCreditoRepository extends EntityRepository {
         return $duoTotal;
     }
     
+    /**
+     * Devuelve los creditos pendientes de un empleado.
+     * 
+     * @author		Mario Estrada
+     * 
+     * @param integer	Codigo del empleado
+     * @return objeto   Clase creditos
+     */         
+    public function pendientes($codigoEmpleado = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCredito c "
+                . "WHERE c.saldoTotal > 0 "
+                . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
+        $query = $em->createQuery($dql);
+        $arCreditos = $query->getResult();
+        return $arCreditos;
+    }    
 }

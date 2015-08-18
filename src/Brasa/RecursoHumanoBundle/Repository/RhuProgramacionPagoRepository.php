@@ -496,6 +496,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $arProgramacionPago->setInconsistencias($boolInconsistencias);
             $em->flush();            
         }
+        //Primas
         if($arProgramacionPago->getCodigoPagoTipoFk() == 2) {
             $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
             $query = $em->createQuery($dql);
@@ -545,6 +546,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $arProgramacionPago->setNumeroEmpleados($intNumeroEmpleados);            
             $em->flush();           
         }
+        
+        //Cesantias
         if($arProgramacionPago->getCodigoPagoTipoFk() == 3) {
             $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
             $query = $em->createQuery($dql);
