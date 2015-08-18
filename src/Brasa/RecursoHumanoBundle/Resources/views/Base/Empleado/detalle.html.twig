@@ -300,7 +300,7 @@
                             <td>{{ arLicencias.pagoAdicionalSubtipoRel.nombre  }}</td>
                             <td>{{ arLicencias.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arLicencias.fechaHasta |date("Y/m/d")  }}</td>
-                            <td style="text-align: right">{{ arLicencias.dias | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arLicencias.cantidad | number_format(0, '.', ',') }}</td>
                             <td>{% if arLicencias.afectaTransporte == 1 %} SI {% else %} NO {% endif %}</td>
                             <td>{% if arLicencias.estadoCerrada == 1 %} SI {% else %} NO {% endif %}</td>
                             <td>{{ arLicencias.comentarios }}</td>

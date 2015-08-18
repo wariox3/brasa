@@ -111,6 +111,7 @@ class VacacionesController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if($codigoEmpleado != 0) {            
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         } 
@@ -126,6 +127,10 @@ class VacacionesController extends Controller
         }
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+        $arCreditosTipoVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditosTipoVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaCreditosTipoVacacion($codigoEmpleado);
+        $duoRegistrosCreditos = count($arCreditosTipoVacacion);
+        $duoTotalCreditosTipoVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->TotalCreditosTipoVacacion($codigoEmpleado);
         $form = $this->createForm(new RhuVacacionType(), $arVacacion);     
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -148,22 +153,25 @@ class VacacionesController extends Controller
                 $douPension = ($floIbc * 4) /100;
             }
             $arVacacion->setVrPension($douPension);
-            $douVacacion = $floIbc - $douPension - $douSalud;
+            $douVacacion = $floIbc - $douPension - $douSalud - $duoTotalCreditosTipoVacacion;
             $arVacacion->setVrVacacion($douVacacion);
             if($codigoEmpleado != 0) { 
                 $arVacacion->setEmpleadoRel($arEmpleado); 
             }
-            $em->persist($arVacacion);
-            $em->flush();                        
-            
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                
-            
+            if ($douVacacion < 0){
+                $objMensaje->Mensaje("error", "No se puede guardar el registro por que el monto a deducir en mayor al monto a pagar.", $this);
+            } else {
+                $em->persist($arVacacion);
+                $em->flush();                        
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
         }                
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:nuevo.html.twig', array(
             'arCentroCosto' => $arCentroCosto,
             'arEmpleado' => $arEmpleado,
+            'arCreditosTipoVacacion' => $arCreditosTipoVacacion,
+            'duoRegistrosCreditos' => $duoRegistrosCreditos,
             'form' => $form->createView()));
     }
     
@@ -177,6 +185,10 @@ class VacacionesController extends Controller
         
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
+        $arCreditosTipoVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditosTipoVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaCreditosTipoVacacion($arVacaciones->getCodigoEmpleadoFk());
+        $duoRegistrosCreditos = count($arCreditosTipoVacacion);
+        $duoTotalCreditosTipoVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->TotalCreditosTipoVacacion($arVacaciones->getCodigoEmpleadoFk());
         if($form->isValid()) {
                       
             if($form->get('BtnImprimir')->isClicked()) {
@@ -186,6 +198,8 @@ class VacacionesController extends Controller
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:detalle.html.twig', array(
                     'arVacaciones' => $arVacaciones,
+                    'arCreditosTipoVacacion' => $arCreditosTipoVacacion,
+                    'duoTotalCreditosTipoVacacion' => $duoTotalCreditosTipoVacacion,
                     'form' => $form->createView()
                     ));
     }

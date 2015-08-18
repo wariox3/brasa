@@ -14,7 +14,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
-
+        $this->Header();    
         $pdf->Output("Vacaciones_$codigoVacacion.pdf", 'D');        
         
     } 
@@ -26,6 +26,10 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
     public function EncabezadoDetalles() {
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacaciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find(self::$codigoVacacion);        
+        $arCreditosTipoVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditosTipoVacacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaCreditosTipoVacacion($arVacaciones->getCodigoEmpleadoFk());
+        $duoRegistrosCreditos = count($arCreditosTipoVacacion);
+        $duoTotalCreditosTipoVacacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->TotalCreditosTipoVacacion($arVacaciones->getCodigoEmpleadoFk());
         $this->SetFillColor(217, 217, 217);        
         $this->SetFont('Arial','B',10);
         $this->SetXY(10, 16);
@@ -115,31 +119,63 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $intX = 120;
         $this->SetFont('Arial', 'B', 8);
         $this->SetFillColor(217, 217, 217);
-        $this->SetXY($intX, 70);        
+        $this->SetXY($intX, 64);        
         $this->Cell(43, 5, utf8_decode("SALARIO:"), 1, 0, 'L', 1);
-        $this->SetXY($intX, 76);
+        $this->SetXY($intX, 70);
         $this->Cell(43, 5, "IBC:", 1, 0, 'L', 1);
-        $this->SetXY($intX, 81);
+        $this->SetXY($intX, 76);
         $this->Cell(43, 5, "VR. SALUD:", 1, 0, 'L', 1); 
-        $this->SetXY($intX, 87);
+        $this->SetXY($intX, 82);
         $this->Cell(43, 5, utf8_decode("VR. PENSIÓN:"), 1, 0, 'L', 1);
-        $this->SetXY($intX, 93);
+        $this->SetXY($intX, 88);
+        $this->Cell(43, 5, utf8_decode("VR. OTRAS DEDUCCIONES:"), 1, 0, 'L', 1);
+        $this->SetXY($intX, 94);
         $this->Cell(43, 5, "VR. VACACIONES:", 1, 0, 'L', 1);
         $intX = 163;
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(272, 272, 272);
-        $this->SetXY($intX, 70);        
+        $this->SetXY($intX, 64);        
         $this->Cell(32, 5, number_format($arVacaciones->getEmpleadoRel()->getVrSalario(), 2, '.', ','), 1, 0, 'R', 1);
-        $this->SetXY($intX, 76);
+        $this->SetXY($intX, 70);
         $this->Cell(32, 5, number_format($arVacaciones->getVrIbc(), 2, '.', ','), 1, 0, 'R', 1);
-        $this->SetXY($intX, 81);
+        $this->SetXY($intX, 76);
         $this->Cell(32, 5, "(".number_format($arVacaciones->getVrSalud(), 2, '.', ',').")", 1, 0, 'R', 1);
-        $this->SetXY($intX, 87);
+        $this->SetXY($intX, 82);
         $this->Cell(32, 5, "(".number_format($arVacaciones->getVrPension(), 2, '.', ',').")", 1, 0, 'R', 1);
-        $this->SetXY($intX, 93);
+        $this->SetXY($intX, 88);
+        $this->Cell(32, 5, "(".number_format($duoTotalCreditosTipoVacacion, 2, '.', ',').")", 1, 0, 'R', 1);
+        $this->SetXY($intX, 94);
         $this->Cell(32, 5, number_format($arVacaciones->getVrVacacion(), 2, '.', ','), 1, 0, 'R', 1);
+        //DEDUCCIONES CREDITOS TIPO VACACIÓN
+        if ($duoRegistrosCreditos > 0){
+            $intX = 10;
+            $this->SetXY($intX, 103);
+            $this->SetFillColor(217, 217, 217);
+            $this->SetFont('Arial', 'B', 9);
+            $this->Cell(185, 5, utf8_decode("CRÉDITOS TIPO VACACIÓN:"), 1, 0, 'C', 1);
+
+            $intY = 103 + 5;
+            $this->SetXY($intX, $intY);
+
+            $this->SetFont('Arial', 'B', 8);
+            $this->Cell(30, 4, utf8_decode("CÓDIGO"), 1, 0, 'C', 1);
+            $this->Cell(110, 4, utf8_decode("TIPO"), 1, 0, 'L', 1);
+            $this->Cell(45, 4, utf8_decode("VALOR"), 1, 0, 'R', 1);
+            $incremento = 4;
+            foreach ($arCreditosTipoVacacion as $arCreditosTipoVacacion) {
+                $intY = $intY + $incremento;
+                $this->SetXY($intX, $intY);
+                $this->SetFillColor(255, 255, 255);
+                $this->SetFont('Arial', '', 8);
+                $this->Cell(30, 4, $arCreditosTipoVacacion->getCodigoCreditoPk(), 1, 0, 'L', 1);
+                $this->Cell(110, 4, utf8_decode($arCreditosTipoVacacion->getCreditoTipoRel()->getNombre()), 1, 0, 'L', 1);
+                $this->Cell(45, 4, number_format($arCreditosTipoVacacion->getVrPagar(), 2, '.', ','), 1, 0, 'R', 1);
+                $incremento = $incremento + 4;
+            }
+        }
         
-        //Restauraci�n de colores y fuentes
+        
+        //Restauración de colores y fuentes
         $this->SetFillColor(224, 235, 255);
         $this->SetTextColor(0);
         $this->SetFont('');
@@ -153,11 +189,11 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
     public function Footer() {
         
         $this->SetFont('Arial', 'B', 9);
-        $this->Text(10, 110, "FIRMA: _____________________________________________");
-        $this->Text(105, 110, "EMPRESA: __________________________________________");
-        $this->Text(10, 117, "C.C.:     ______________________ de ____________________");
+        $this->Text(10, 130, "FIRMA: _____________________________________________");
+        $this->Text(105, 130, "EMPRESA: __________________________________________");
+        $this->Text(10, 137, "C.C.:     ______________________ de ____________________");
         $this->SetFont('Arial', '', 8);
-        $this->Text(170, 130, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        $this->Text(170, 140, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 

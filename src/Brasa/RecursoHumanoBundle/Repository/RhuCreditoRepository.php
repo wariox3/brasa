@@ -90,6 +90,30 @@ class RhuCreditoRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $floCuota = $query->getSingleScalarResult();
         return $floCuota;        
-    }    
+    } 
+    
+    public function listaCreditosTipoVacacion($codigoEmpleado = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCredito c "
+                . "WHERE c.estadoPagado = 0"
+                . "AND c.codigoCreditoTipoPagoFk = 3"
+                . "AND c.aprobado = 1"
+                . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
+        $query = $em->createQuery($dql);
+        $arCreditosTipoVacacion = $query->getResult();
+        return $arCreditosTipoVacacion;
+    }
+    
+    public function TotalCreditosTipoVacacion($codigoEmpleado) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(c.saldo) FROM BrasaRecursoHumanoBundle:RhuCredito c "
+                . "WHERE c.estadoPagado = 0"
+                . "AND c.codigoCreditoTipoPagoFk = 3"
+                . "AND c.aprobado = 1"
+                . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
+        $query = $em->createQuery($dql);
+        $duoTotal = $query->getSingleScalarResult(); 
+        return $duoTotal;
+    }
     
 }
