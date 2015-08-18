@@ -44,7 +44,6 @@
             <tr>
                 <th>ID</th>
                 <th>TIPO</th>
-                <th>COD</th>
                 <th>CENTRO COSTOS</th>
                 <th>PERIODO</th>
                 <th>DESDE</th>
@@ -62,7 +61,6 @@
             {% for arProgramacionPago in arProgramacionPago %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">{{ arProgramacionPago.codigoProgramacionPagoPk }} </td>
-                <td>{{ arProgramacionPago.codigoCentroCostoFk  }}</td>
                 <td><b>{{ arProgramacionPago.pagoTipoRel.nombre  }}</b></td>
                 <td>{{ arProgramacionPago.centroCostoRel.nombre  }}</td>
                 <td>{{ arProgramacionPago.centroCostoRel.periodoPagoRel.nombre  }}</td>
