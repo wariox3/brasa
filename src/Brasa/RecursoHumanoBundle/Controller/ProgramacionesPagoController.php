@@ -443,7 +443,7 @@ class ProgramacionesPagoController extends Controller
                                         $floIbc +=  $intDiasIbcAdicional * $floVrDia;
                                     }
                                     $floSalarioPromedio = ($floIbc / $intDias) * 30;                                    
-                                    if($floSalarioPromedio <=  $douSalarioMinimo ) {
+                                    if($floSalarioPromedio <=  $douSalarioMinimo * 2 ) {
                                         $floSalarioPromedio += $arConfiguracion->getVrAuxilioTransporte();
                                     }
                                     $floTotalPago = ($floSalarioPromedio * $intDias) / 360;
