@@ -1,42 +1,6 @@
 {% extends '::base.html.twig' %}
 
 {% block content %}
-      <script>
-  $(function() {
-    $( "#datepicker" ).datepicker();
-  });
-
-  $(function() {
-    var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-    $( "#tags" ).autocomplete({
-      source: availableTags
-    });
-  });
-   
-  </script>
     <div class="container">
         <div class="page-header">
           <h1>Recursos humanos y nomina <small>¿Como inicio?</small></h1>
@@ -48,15 +12,6 @@
           <a href="{{ path('brs_rhu_base_empleados_lista') }}" class="list-group-item">Crear contratos de trabajo</a>
           <a href="{{ path('brs_rhu_inicio') }}" class="list-group-item">Programaciones de pago (Generar)</a>
           <a href="{{ path('brs_rhu_inicio') }}" class="list-group-item">Pagar nomina</a>
-        </div>
-    {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
-    {{ form_errors(form) }}
-    <p>Date: <input type="text" id="datepicker"></p>    
-    
-<div class="ui-widget">
-  <label for="tags">Tags: </label>
-  <input id="tags">
-</div>      
-    {{ form_end(form) }}        
+        </div>     
     </div>
 {% endblock %}
