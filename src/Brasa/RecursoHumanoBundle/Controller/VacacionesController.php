@@ -111,7 +111,7 @@ class VacacionesController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        
         if($codigoEmpleado != 0) {            
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         } 
@@ -127,10 +127,10 @@ class VacacionesController extends Controller
         }
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
-        $arCreditosTipoVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arCreditosTipoVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaCreditosTipoVacacion($codigoEmpleado);
-        $duoRegistrosCreditos = count($arCreditosTipoVacacion);
-        $duoTotalCreditosTipoVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->TotalCreditosTipoVacacion($codigoEmpleado);
+        $arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($codigoEmpleado);
+        $floTotalPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->totalPendientes($codigoEmpleado);
+        $arVacacionesCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
         $form = $this->createForm(new RhuVacacionType(), $arVacacion);     
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -153,25 +153,26 @@ class VacacionesController extends Controller
                 $douPension = ($floIbc * 4) /100;
             }
             $arVacacion->setVrPension($douPension);
-            $douVacacion = $floIbc - $douPension - $douSalud - $duoTotalCreditosTipoVacacion;
+            $douVacacion = $floIbc - $douPension - $douSalud - floatval($floTotalPendientes);
             $arVacacion->setVrVacacion($douVacacion);
             if($codigoEmpleado != 0) { 
                 $arVacacion->setEmpleadoRel($arEmpleado); 
             }
-            if ($douVacacion < 0){
-                $objMensaje->Mensaje("error", "No se puede guardar el registro por que el monto a deducir en mayor al monto a pagar.", $this);
-            } else {
-                $em->persist($arVacacion);
-                $em->flush();                        
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
+            
+            $arVacacionesCreditos->setCodigoVacacionFk($arVacacion);
+            $arVacacionesCreditos->setCodigoCreditoFk($arCreditosPendientes);
+            
+            
+            $em->persist($arVacacion);
+            $em->persist($arVacacionesCreditos);
+            $em->flush();                        
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }                
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:nuevo.html.twig', array(
             'arCentroCosto' => $arCentroCosto,
             'arEmpleado' => $arEmpleado,
-            'arCreditosTipoVacacion' => $arCreditosTipoVacacion,
-            'duoRegistrosCreditos' => $duoRegistrosCreditos,
+            'arCreditosPendientes' => $arCreditosPendientes,
             'form' => $form->createView()));
     }
     

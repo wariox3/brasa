@@ -55,7 +55,7 @@
                         <td class="titulo">PAGADO:</td>
                         <td> {% if arVacaciones.estadoPagado == 1 %}SI{% else %} NO {% endif %}</td>
                         <td class="titulo">VR. OTRAS DEDUCCIONES:</th>
-                        <td class="td-in-well" align="right">{{ duoTotalCreditosTipoVacacion | number_format(2, '.', ',')}}</td>                                                
+                        <td class="td-in-well" align="right">{{ arVacaciones.vrDeduccion | number_format(2, '.', ',')}}</td>                                                
                     </tr>
                     <tr>
                         <td class="titulo"></td>

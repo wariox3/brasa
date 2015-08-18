@@ -53,6 +53,11 @@ class RhuVacacion
     private $vrIbc = 0;
     
     /**
+     * @ORM\Column(name="vr_deduccion", type="float")
+     */
+    private $vrDeduccion = 0;
+    
+    /**
      * @ORM\Column(name="vr_vacacion", type="float")
      */
     private $vrVacacion = 0;
@@ -94,7 +99,19 @@ class RhuVacacion
      */
     protected $empleadoRel;        
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="vacacionRel")
+     */
+    protected $VacacionesCreditosVacacionRel;
 
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->VacacionesCreditosVacacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoVacacionPk
@@ -272,6 +289,30 @@ class RhuVacacion
     public function getVrIbc()
     {
         return $this->vrIbc;
+    }
+
+    /**
+     * Set vrDeduccion
+     *
+     * @param float $vrDeduccion
+     *
+     * @return RhuVacacion
+     */
+    public function setVrDeduccion($vrDeduccion)
+    {
+        $this->vrDeduccion = $vrDeduccion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDeduccion
+     *
+     * @return float
+     */
+    public function getVrDeduccion()
+    {
+        return $this->vrDeduccion;
     }
 
     /**
@@ -464,5 +505,39 @@ class RhuVacacion
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Add vacacionesCreditosVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel
+     *
+     * @return RhuVacacion
+     */
+    public function addVacacionesCreditosVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel)
+    {
+        $this->VacacionesCreditosVacacionRel[] = $vacacionesCreditosVacacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesCreditosVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel
+     */
+    public function removeVacacionesCreditosVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel)
+    {
+        $this->VacacionesCreditosVacacionRel->removeElement($vacacionesCreditosVacacionRel);
+    }
+
+    /**
+     * Get vacacionesCreditosVacacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesCreditosVacacionRel()
+    {
+        return $this->VacacionesCreditosVacacionRel;
     }
 }

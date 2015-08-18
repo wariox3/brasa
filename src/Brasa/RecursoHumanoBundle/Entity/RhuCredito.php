@@ -135,7 +135,12 @@ class RhuCredito
     /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacionDeduccion", mappedBy="creditoRel")
      */
-    protected $liquidacionesDeduccionesCreditoRel;    
+    protected $liquidacionesDeduccionesCreditoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="creditoRel")
+     */
+    protected $VacacionesCreditosCreditoRel;
     
     
     /**
@@ -145,6 +150,8 @@ class RhuCredito
     {
         $this->creditosPagosCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosDetallesCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidacionesDeduccionesCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->VacacionesCreditosCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -542,6 +549,30 @@ class RhuCredito
     }
 
     /**
+     * Set vrAbonos
+     *
+     * @param float $vrAbonos
+     *
+     * @return RhuCredito
+     */
+    public function setVrAbonos($vrAbonos)
+    {
+        $this->vrAbonos = $vrAbonos;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAbonos
+     *
+     * @return float
+     */
+    public function getVrAbonos()
+    {
+        return $this->vrAbonos;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -716,26 +747,36 @@ class RhuCredito
     }
 
     /**
-     * Set vrAbonos
+     * Add vacacionesCreditosCreditoRel
      *
-     * @param float $vrAbonos
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosCreditoRel
      *
      * @return RhuCredito
      */
-    public function setVrAbonos($vrAbonos)
+    public function addVacacionesCreditosCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosCreditoRel)
     {
-        $this->vrAbonos = $vrAbonos;
+        $this->VacacionesCreditosCreditoRel[] = $vacacionesCreditosCreditoRel;
 
         return $this;
     }
 
     /**
-     * Get vrAbonos
+     * Remove vacacionesCreditosCreditoRel
      *
-     * @return float
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosCreditoRel
      */
-    public function getVrAbonos()
+    public function removeVacacionesCreditosCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosCreditoRel)
     {
-        return $this->vrAbonos;
+        $this->VacacionesCreditosCreditoRel->removeElement($vacacionesCreditosCreditoRel);
+    }
+
+    /**
+     * Get vacacionesCreditosCreditoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesCreditosCreditoRel()
+    {
+        return $this->VacacionesCreditosCreditoRel;
     }
 }

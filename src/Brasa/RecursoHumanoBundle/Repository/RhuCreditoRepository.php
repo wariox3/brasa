@@ -92,30 +92,6 @@ class RhuCreditoRepository extends EntityRepository {
         return $floCuota;        
     } 
     
-    public function listaCreditosTipoVacacion($codigoEmpleado = "") {        
-        $em = $this->getEntityManager();
-        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCredito c "
-                . "WHERE c.estadoPagado = 0"
-                . "AND c.codigoCreditoTipoPagoFk = 3"
-                . "AND c.aprobado = 1"
-                . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
-        $query = $em->createQuery($dql);
-        $arCreditosTipoVacacion = $query->getResult();
-        return $arCreditosTipoVacacion;
-    }
-    
-    public function TotalCreditosTipoVacacion($codigoEmpleado) {        
-        $em = $this->getEntityManager();
-        $dql   = "SELECT SUM(c.saldo) FROM BrasaRecursoHumanoBundle:RhuCredito c "
-                . "WHERE c.estadoPagado = 0"
-                . "AND c.codigoCreditoTipoPagoFk = 3"
-                . "AND c.aprobado = 1"
-                . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
-        $query = $em->createQuery($dql);
-        $duoTotal = $query->getSingleScalarResult(); 
-        return $duoTotal;
-    }
-    
     /**
      * Devuelve los creditos pendientes de un empleado.
      * 
@@ -124,13 +100,26 @@ class RhuCreditoRepository extends EntityRepository {
      * @param integer	Codigo del empleado
      * @return objeto   Clase creditos
      */         
+    
     public function pendientes($codigoEmpleado = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCredito c "
                 . "WHERE c.saldoTotal > 0 "
+                . "AND c.aprobado = 1"
                 . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
         $query = $em->createQuery($dql);
         $arCreditos = $query->getResult();
         return $arCreditos;
-    }    
+    }
+    
+    public function TotalPendientes($codigoEmpleado = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(c.saldo) FROM BrasaRecursoHumanoBundle:RhuCredito c "
+                . "WHERE c.saldoTotal > 0 "
+                . "AND c.aprobado = 1"
+                . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
+        $query = $em->createQuery($dql);
+        $arCreditos = $query->getResult();
+        return $arCreditos;
+    }
 }
