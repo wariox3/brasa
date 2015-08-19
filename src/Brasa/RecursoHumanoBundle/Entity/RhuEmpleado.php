@@ -2454,4 +2454,38 @@ class RhuEmpleado
     {
         return $this->vacacionesEmpleadoRel;
     }
+
+    /**
+     * Add dotacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel)
+    {
+        $this->dotacionesEmpleadoRel[] = $dotacionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove dotacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel
+     */
+    public function removeDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel)
+    {
+        $this->dotacionesEmpleadoRel->removeElement($dotacionesEmpleadoRel);
+    }
+
+    /**
+     * Get dotacionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDotacionesEmpleadoRel()
+    {
+        return $this->dotacionesEmpleadoRel;
+    }
 }

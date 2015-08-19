@@ -12,17 +12,15 @@ class DotacionController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();       
+        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();       
         if($codigoEmpleado != 0) {            
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         } 
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
-        $arLicencia->setAfectaTransporte(1);
-        $arLicencia->setFechaDesde(new \DateTime('now'));
-        $arLicencia->setFechaHasta(new \DateTime('now'));                
-        $arLicencia->setCentroCostoRel($arCentroCosto);            
-        //$arLicencia->setEstadoCerrada(0);        
-        $form = $this->createForm(new RhuLicenciaType(), $arLicencia); 
+        
+        $arDotacion->setFecha(new \DateTime('now'));
+        $arDotacion->setCentroCostoRel($arCentroCosto);                    
+        $form = $this->createForm(new RhuDotacionType(), $arDotacion); 
                     
         $form->handleRequest($request);
         if ($form->isValid()) {            
