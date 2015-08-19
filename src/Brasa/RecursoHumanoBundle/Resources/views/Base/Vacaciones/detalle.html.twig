@@ -10,6 +10,7 @@
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                     {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                    {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
             </div>
         </div>
         <br /><br />
@@ -73,28 +74,36 @@
             </div>
         </div>
         <div class="panel panel-default">
-
-                <table  class="table table-striped table-bordered table-condensed table-hover">
-                    <tr>
-                        <th>CODIGO CRÉDITO</th>
-                        <th>TIPO CRÉDITO</th>
-                        <th style="text-align: right">VR. CUOTA</th>
-                    </tr>
-                    {% for arCreditosTipoVacacion in arCreditosTipoVacacion %}
-                        <tr>
-                            <td>{{ arCreditosTipoVacacion.codigoCreditoPk  }}</td>
-                            <td>{{ arCreditosTipoVacacion.CreditoTipoRel.nombre() }}</td>
-                            <td style="text-align: right">{{ arCreditosTipoVacacion.VrPagar | number_format(2, '.', ',') }}</td>
-                            
-                        </tr>
-                    {% endfor %}
-                </table>
+            <table class="table table-striped table-bordered table-condensed">
+                <tr>
+                    <th>CÓDIGO</th>
+                    <th>TIPO</th>
+                    <th style="text-align: right">VALOR</th>
+                    <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                </tr>
+                {% for arVacacionDeducciones in arVacacionDeducciones %}
+                <tr>
+                    <td>
+                        <input type="hidden" name="LblCodigoGuia[]" value="{{ arVacacionDeducciones.codigoVacacionCreditoPk }}">
+                        <span class="badge">{{ arVacacionDeducciones.codigoVacacionCreditoPk }}</span>
+                    </td>
+                    <td>{{ arVacacionDeducciones.creditoRel.creditoTipoRel.nombre }}</td>           
+                    <td style="text-align: right">{{ arVacacionDeducciones.vrDeduccion | number_format(2, '.', ',') }}</td>
+                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arVacacionDeducciones.codigoVacacionCreditoPk }}" /></td>
+                </tr>
+                {% endfor %}
+            </table>
         </div> 
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_vacaciones_lista') }}" style="float:left">Volver</a>
             </div>
-        </div>        
+        </div>  
+        <div class="btn-toolbar" style="float: right">                           
+            <div class="btn-group">                
+                {{ form_widget(form.BtnEliminarDeduccion, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            </div>
+        </div>             
         {{ form_rest(form) }}
         {{ form_end(form) }}
     </div>

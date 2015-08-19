@@ -40,6 +40,7 @@ class LiquidacionesController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
+            ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
             ->getForm();
         $form->handleRequest($request);
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
@@ -50,6 +51,19 @@ class LiquidacionesController extends Controller
                 $objFormatoLiquidacion->Generar($this, $codigoLiquidacion);
             }
             if($form->get('BtnLiquidar')->isClicked()) {
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
+                return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
+            }            
+            if($form->get('BtnEliminarDeduccion')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoLiquidacionDeduccion) {
+                        $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
+                        $arLiquidacionDeduccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->find($codigoLiquidacionDeduccion);
+                        $em->remove($arLiquidacionDeduccion);                        
+                    }
+                    $em->flush();
+                }                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
                 return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
             }            

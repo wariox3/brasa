@@ -50,12 +50,49 @@ class RhuVacacionRepository extends EntityRepository {
         $dql   = "SELECT v, e FROM BrasaRecursoHumanoBundle:RhuVacacion v JOIN v.empleadoRel e WHERE v.codigoVacacionPk <> 0";
         
         if($strCodigoCentroCosto != "") {
-            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+            $dql .= " AND v.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
         return $dql;
     }
+
+    public function liquidar($codigoVacacion) {        
+        $em = $this->getEntityManager();
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
+        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);         
+        $intDias = $arVacacion->getFechaDesde()->diff($arVacacion->getFechaHasta());
+        $intDias = $intDias->format('%a');
+        $intDias = $intDias + 1;
+        $floSalario = $arVacacion->getEmpleadoRel()->getVrSalario();
+        $floIbc = $floSalario / 30 * $intDias;
+        $arVacacion->setVrIbc($floIbc);
+        $arVacacion->setDiasVacaciones($intDias);
+        $douSalud = ($floIbc * 4) /100;
+        $arVacacion->setVrSalud($douSalud);
+        if ($floSalario >= ($arConfiguracion->getVrSalario() * 4)){
+            $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra();
+            $douPension = ($floIbc * $douPorcentaje) /100;
+        }
+        else {
+            $douPension = ($floIbc * 4) /100;
+        }
+        $arVacacion->setVrPension($douPension);                                   
+        
+        $floDeducciones = 0;
+        $arVacacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
+        $arVacacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->FindBy(array('codigoVacacionFk' => $codigoVacacion));        
+        foreach ($arVacacionDeducciones as $arVacacionDeduccion) {
+            $floDeducciones += $arVacacionDeduccion->getVrDeduccion();
+        }
+        $arVacacion->setVrDeduccion($floDeducciones);
+        $floTotal = $arVacacion->getVrIbc() -  $arVacacion->getVrPension() - $arVacacion->getVrSalud() - $floDeducciones;
+        $arVacacion->setVrVacacion($floTotal);
+        $em->flush();
+        return true;
+    }     
+    
 }
 

@@ -47,7 +47,7 @@
             {% for arVacaciones in arVacaciones %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arVacaciones.codigoVacacionPk }}">{{ arVacaciones.codigoVacacionPk }} </td>
-                <td>{{ arVacaciones.empleadoRel.centroCostoRel.nombre  }}</td>
+                <td>{{ arVacaciones.diasVacaciones  }}</td>
                 <td>{{ arVacaciones.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arVacaciones.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{{ arVacaciones.empleadoRel.numeroIdentificacion  }}</td>

@@ -157,7 +157,7 @@ class ContratosController extends Controller
             $arContrato->setFechaHasta(date_create($fechaHasta));            
             $arContrato->setIndefinido(0);
             $arContrato->setEstadoActivo(0);
-            //$em->persist($arContrato);
+            $em->persist($arContrato);
             //Generar liquidacion
             $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
             $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
