@@ -282,6 +282,7 @@ class CreditosController extends Controller
             ->add('creditoRel', 'text', array('data' => $codigoCreditoPk, 'attr' => array('readonly' => 'readonly')))
             ->add('vrCuota', 'text', array('data' => round($arCredito->getVrCuota(),2), 'attr' => array('readonly' => 'readonly')))
             ->add('saldo', 'text', array('data' => round($arCredito->getSaldo(),2), 'attr' => array('readonly' => 'readonly')))    
+            ->add('saldoTotal', 'text', array('data' => round($arCredito->getSaldoTotal(),2), 'attr' => array('readonly' => 'readonly')))        
             ->add('vrAbono','text')
             ->add('tipoPago','hidden', array('data' => 'ABONO'))    
             ->add('save', 'submit', array('label' => 'Guardar'))    

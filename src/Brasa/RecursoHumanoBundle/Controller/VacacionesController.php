@@ -165,7 +165,7 @@ class VacacionesController extends Controller
         $form = $this->createFormBuilder()    
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
-            ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))                
+            ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
             ->getForm();
         $form->handleRequest($request);
         
@@ -201,6 +201,44 @@ class VacacionesController extends Controller
                     'arVacacionDeducciones' => $arVacacionDeducciones,
                     'form' => $form->createView()
                     ));
+    }
+    
+    public function detalleNuevoAction($codigoVacacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
+        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arVacacion->getCodigoEmpleadoFk());
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) { 
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $floVrDeducciones = 0;
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoCredito) {                    
+                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+                        $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
+                        $arVacacionCredito->setCreditoRel($arCreditos);
+                        $arVacacionCredito->setVacacionRel($arVacacion);
+                        $arVacacionCredito->setVrDeduccion($arCreditos->getSaldoTotal());
+                        $em->persist($arVacacionCredito);            
+                        $floVrDeducciones += $arCreditos->getSaldoTotal();
+            }                    
+            $em->flush();                        
+            $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());                    
+                }                
+            }            
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:detallenuevo.html.twig', array(
+            'arCreditos' => $arCreditos,
+            'arVacacion' => $arVacacion,
+            'form' => $form->createView()));
     }
     
     private function generarExcel() {
