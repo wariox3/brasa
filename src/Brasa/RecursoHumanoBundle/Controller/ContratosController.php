@@ -173,11 +173,14 @@ class ContratosController extends Controller
             $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
             $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());        
             foreach ($arCreditos as $arCredito) {
-                
+                $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
+                $arLiquidacionDeduccion->setCreditoRel($arCredito);
+                $arLiquidacionDeduccion->setLiquidacionRel($arLiquidacion);
+                $arLiquidacionDeduccion->setVrDeduccion($arCredito->getSaldoTotal());
+                $em->persist($arLiquidacionDeduccion);
             }
 
-            $em->flush();
-            //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            $em->flush();            
             return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:terminar.html.twig', array(

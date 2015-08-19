@@ -89,14 +89,23 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setFechaUltimoPagoVacaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones());
             }
         }       
+        $floDeducciones = 0;
+        $arLiquidacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
+        $arLiquidacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));        
+        foreach ($arLiquidacionDeducciones as $arLiquidacionDeduccion) {
+            $floDeducciones += $arLiquidacionDeduccion->getVrDeduccion();
+        }
         $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones;
+        $douTotal = $douTotal - $floDeducciones;
         $arLiquidacion->setVrTotal($douTotal);
         $arLiquidacion->setVrSalario($douSalario);
         $arLiquidacion->setVrIngresoBaseCotizacion($douIBC);
         $arLiquidacion->setVrIngresoBaseCotizacionTotal($douIBCTotal); 
+        $arLiquidacion->setVrDeducciones($floDeducciones);
         $intDiasTotal = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
         $intDiasTotal = $intDiasTotal->format('%a');
         $arLiquidacion->setNumeroDias($intDiasTotal);
+        
         $em->flush();
         return true;
     } 

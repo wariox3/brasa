@@ -178,6 +178,11 @@ class RhuLiquidacion
     private $fechaUltimoPagoCesantias;    
     
     /**
+     * @ORM\Column(name="vr_deducciones", type="float")
+     */
+    private $VrDeducciones = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -1092,5 +1097,29 @@ class RhuLiquidacion
     public function getLiquidacionesDeduccionesLiquidacionRel()
     {
         return $this->liquidacionesDeduccionesLiquidacionRel;
+    }
+
+    /**
+     * Set vrDeducciones
+     *
+     * @param float $vrDeducciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrDeducciones($vrDeducciones)
+    {
+        $this->VrDeducciones = $vrDeducciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDeducciones
+     *
+     * @return float
+     */
+    public function getVrDeducciones()
+    {
+        return $this->VrDeducciones;
     }
 }
