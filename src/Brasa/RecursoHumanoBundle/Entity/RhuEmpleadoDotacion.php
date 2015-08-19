@@ -5,17 +5,17 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_dotacion")
+ * @ORM\Table(name="rhu_empleado_dotacion")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuDotacionRepository")
  */
-class RhuDotacion
+class RhuEmpleadoDotacion
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_dotacion_pk", type="integer")
+     * @ORM\Column(name="codigo_empleado_dotacion_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoDotacionPk;                    
+    private $codigoEmpleadoDotacionPk;                    
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -30,7 +30,7 @@ class RhuDotacion
     /**
      * @ORM\Column(name="dotacion", type="string", nullable=true)
      */
-    private $dotacion = 0;
+    private $dotacion;
     
     /**
      * @ORM\Column(name="cantidad", type="float")
@@ -60,15 +60,16 @@ class RhuDotacion
      */
     protected $empleadoRel;    
     
+    
 
     /**
-     * Get codigoDotacionPk
+     * Get codigoEmpleadoDotacionPk
      *
      * @return integer
      */
-    public function getCodigoDotacionPk()
+    public function getCodigoEmpleadoDotacionPk()
     {
-        return $this->codigoDotacionPk;
+        return $this->codigoEmpleadoDotacionPk;
     }
 
     /**
@@ -76,7 +77,7 @@ class RhuDotacion
      *
      * @param \DateTime $fecha
      *
-     * @return RhuDotacion
+     * @return RhuEmpleadoDotacion
      */
     public function setFecha($fecha)
     {
@@ -100,7 +101,7 @@ class RhuDotacion
      *
      * @param integer $codigoEmpleadoFk
      *
-     * @return RhuDotacion
+     * @return RhuEmpleadoDotacion
      */
     public function setCodigoEmpleadoFk($codigoEmpleadoFk)
     {
@@ -124,7 +125,7 @@ class RhuDotacion
      *
      * @param string $dotacion
      *
-     * @return RhuDotacion
+     * @return RhuEmpleadoDotacion
      */
     public function setDotacion($dotacion)
     {
@@ -148,7 +149,7 @@ class RhuDotacion
      *
      * @param float $cantidad
      *
-     * @return RhuDotacion
+     * @return RhuEmpleadoDotacion
      */
     public function setCantidad($cantidad)
     {
@@ -172,7 +173,7 @@ class RhuDotacion
      *
      * @param integer $codigoCentroCostoFk
      *
-     * @return RhuDotacion
+     * @return RhuEmpleadoDotacion
      */
     public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
@@ -196,7 +197,7 @@ class RhuDotacion
      *
      * @param string $comentarios
      *
-     * @return RhuDotacion
+     * @return RhuEmpleadoDotacion
      */
     public function setComentarios($comentarios)
     {
@@ -220,7 +221,7 @@ class RhuDotacion
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
      *
-     * @return RhuDotacion
+     * @return RhuEmpleadoDotacion
      */
     public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
     {
@@ -244,7 +245,7 @@ class RhuDotacion
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
      *
-     * @return RhuDotacion
+     * @return RhuEmpleadoDotacion
      */
     public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
     {

@@ -96,7 +96,11 @@ brs_rhu_vacaciones_detalle:
 
 brs_rhu_licencias_nuevo:
     path:     /rhumano/licencias/nuevo/{codigoCentroCosto}/{codigoEmpleado}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:nuevo }     
+    defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:nuevo }  
+    
+brs_rhu_base_empleado_dotacion_nuevo:
+    path:     /rhumano/base/empleadoDotacion/nuevo/{codigoEmpleado}/{codigoEmpleadoDotacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:nuevo }    
     
 brs_rhu_creditos_lista:
     path:     /rhumano/creditos/lista

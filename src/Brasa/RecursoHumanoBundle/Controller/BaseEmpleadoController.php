@@ -111,7 +111,8 @@ class BaseEmpleadoController extends Controller
             ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnRetirarVacacion', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))    
+            ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnEliminarDotacion', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarDisciplinario', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoEstudio', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoFamilia', 'submit', array('label'  => 'Eliminar',))
@@ -138,6 +139,8 @@ class BaseEmpleadoController extends Controller
         $arEmpleadoEstudios = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arEmpleadoFamilia = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia();
         $arEmpleadoFamilia = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoFamilia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arEmpleadoDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
+        $arEmpleadoDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         if($form->isValid()) {
             if($form->get('BtnInactivarContrato')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
@@ -255,6 +258,19 @@ class BaseEmpleadoController extends Controller
                 }
             }
             
+            if($form->get('BtnEliminarDotacion')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleadoDotacion');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoEmpleadoDotacion) {
+                        $arEmpleadoDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
+                        $arEmpleadoDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->find($codigoEmpleadoDotacion);
+                        $em->remove($arEmpleadoDotacion);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
+                }
+            }
+            
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoHojaVida = new \Brasa\RecursoHumanoBundle\Formatos\FormatoHojaVida();
                 $objFormatoHojaVida->Generar($this, $codigoEmpleado);
@@ -269,6 +285,7 @@ class BaseEmpleadoController extends Controller
         $arDisciplinarios = $paginator->paginate($arDisciplinarios, $this->get('request')->query->get('page', 1),5);
         $arEmpleadoEstudios = $paginator->paginate($arEmpleadoEstudios, $this->get('request')->query->get('page', 1),6);
         $arEmpleadoFamilia = $paginator->paginate($arEmpleadoFamilia, $this->get('request')->query->get('page', 1),8);
+        $arEmpleadoDotacion = $paginator->paginate($arEmpleadoDotacion, $this->get('request')->query->get('page', 1),8);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
                     'arPagosAdicionales' => $arPagosAdicionales,
@@ -280,6 +297,7 @@ class BaseEmpleadoController extends Controller
                     'arDisciplinarios' => $arDisciplinarios,
                     'arEmpleadoEstudios' => $arEmpleadoEstudios,
                     'arEmpleadoFamilia' => $arEmpleadoFamilia,
+                    'arEmpleadoDotacion' => $arEmpleadoDotacion,
                     'form' => $form->createView()
                     ));
     }

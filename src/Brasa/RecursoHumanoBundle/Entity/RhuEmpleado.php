@@ -433,7 +433,7 @@ class RhuEmpleado
     protected $ssoPeriodosEmpleadosEmpleadoRel;
  
      /**
-     * @ORM\OneToMany(targetEntity="RhuDotacion", mappedBy="empleadoRel")
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacion", mappedBy="empleadoRel")
      */
     protected $dotacionesEmpleadoRel;
     
@@ -448,6 +448,7 @@ class RhuEmpleado
         $this->pagosAdicionalesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesPagosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -455,6 +456,8 @@ class RhuEmpleado
         $this->disciplinariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosEstudiosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoPeriodosEmpleadosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dotacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -2102,6 +2105,40 @@ class RhuEmpleado
     }
 
     /**
+     * Add vacacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addVacacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel)
+    {
+        $this->vacacionesEmpleadoRel[] = $vacacionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel
+     */
+    public function removeVacacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel)
+    {
+        $this->vacacionesEmpleadoRel->removeElement($vacacionesEmpleadoRel);
+    }
+
+    /**
+     * Get vacacionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesEmpleadoRel()
+    {
+        return $this->vacacionesEmpleadoRel;
+    }
+
+    /**
      * Add licenciasEmpleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasEmpleadoRel
@@ -2422,47 +2459,13 @@ class RhuEmpleado
     }
 
     /**
-     * Add vacacionesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addVacacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel)
-    {
-        $this->vacacionesEmpleadoRel[] = $vacacionesEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove vacacionesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel
-     */
-    public function removeVacacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel)
-    {
-        $this->vacacionesEmpleadoRel->removeElement($vacacionesEmpleadoRel);
-    }
-
-    /**
-     * Get vacacionesEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVacacionesEmpleadoRel()
-    {
-        return $this->vacacionesEmpleadoRel;
-    }
-
-    /**
      * Add dotacionesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function addDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel)
+    public function addDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesEmpleadoRel)
     {
         $this->dotacionesEmpleadoRel[] = $dotacionesEmpleadoRel;
 
@@ -2472,9 +2475,9 @@ class RhuEmpleado
     /**
      * Remove dotacionesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesEmpleadoRel
      */
-    public function removeDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel)
+    public function removeDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesEmpleadoRel)
     {
         $this->dotacionesEmpleadoRel->removeElement($dotacionesEmpleadoRel);
     }

@@ -487,7 +487,45 @@
                     </div>
                 </div>
             </div>
-        </div>             
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Dotación</div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>{{ knp_pagination_sortable(arEmpleadoDotacion, 'CÓDIGO', 'e.codigoEmpleadoDotacionPk') }}</th>
+                        <th>DOTACIÓN</th>
+                        <th>CANTIDAD</th>                
+                        <th>FECHA</th>
+                        <th>COMENTARIOS</th>                
+                        <th style="text-align: center"></th>
+                        <th></th>
+                    </tr>
+                    {% for arEmpleadoDotacion in arEmpleadoDotacion%}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoDotacion.codigoEmpleadoDotacionPk }}">{{ arEmpleadoDotacion.codigoEmpleadoDotacionPk }} </td>
+                            <td>{{ arEmpleadoDotacion.dotacion  }}</td>
+                            <td>{{ arEmpleadoDotacion.cantidad  }}</td>
+                            <td>{{ arEmpleadoDotacion.fecha | date('Y/m/d')  }}</td>
+                            <td>{{ arEmpleadoDotacion.comentarios  }}</td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_dotacion_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoDotacion': arEmpleadoDotacion.codigoEmpleadoDotacionPk }) }}', 'AgregarDotacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td><input type="checkbox" name="ChkSeleccionarEmpleadoDotacion[]" value="{{ arEmpleadoDotacion.codigoEmpleadoDotacionPk }}" /></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arEmpleadoDotacion) }} 
+                </div>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_dotacion_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoDotacion': 0 }) }}', 'AgregarDotacion', 600, 900)" >Nuevo</a> {% endif %}
+                    </div>
+                    <div class="btn-group">                        
+                        {{ form_widget(form.BtnEliminarDotacion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                    </div>
+                </div>
+            </div>
+        </div>            
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_lista') }}" style="float:left">Volver</a>
