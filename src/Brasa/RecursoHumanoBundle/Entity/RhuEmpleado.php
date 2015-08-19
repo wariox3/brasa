@@ -430,8 +430,14 @@ class RhuEmpleado
      /**
      * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="empleadoRel")
      */
-    protected $ssoPeriodosEmpleadosEmpleadoRel; 
+    protected $ssoPeriodosEmpleadosEmpleadoRel;
  
+     /**
+     * @ORM\OneToMany(targetEntity="RhuDotacion", mappedBy="empleadoRel")
+     */
+    protected $dotacionesEmpleadoRel;
+    
+    
     /**
      * Constructor
      */
