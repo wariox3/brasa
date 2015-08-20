@@ -89,9 +89,9 @@ class RhuEmpleado
     private $codigoCiudadExpedicionFk;
     
     /**
-     * @ORM\Column(name="codigo_barrio_fk", type="integer", length=80, nullable=true)
+     * @ORM\Column(name="barrio", type="string", length=100, nullable=true)
      */    
-    private $codigoBarrioFk;    
+    private $barrio;    
     
     /**
      * @ORM\Column(name="codigo_rh_fk", type="integer", nullable=true)
@@ -161,7 +161,14 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="vr_salario", type="float")
      */
-    private $VrSalario = 0;         
+    private $VrSalario = 0;
+    
+    
+    /**
+     * @ORM\Column(name="fecha_expedicion_identificacion", type="date", nullable=true)
+     */ 
+    
+    private $fechaExpedicionIdentificacion;
     
     /**
      * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
@@ -405,13 +412,8 @@ class RhuEmpleado
      */
     protected $disciplinariosEmpleadoRel;             
     
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenBarrio", inversedBy="rhuEmpleadosBarrioRel")
-     * @ORM\JoinColumn(name="codigo_barrio_fk", referencedColumnName="codigo_barrio_pk")
-     */
-    protected $barrioRel;
     
-        /**
+     /**
      * @ORM\ManyToOne(targetEntity="RhuRh", inversedBy="empleadosRhRel")
      * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
      */
@@ -783,27 +785,27 @@ class RhuEmpleado
     }
 
     /**
-     * Set codigoBarrioFk
+     * Set barrio
      *
-     * @param integer $codigoBarrioFk
+     * @param string $barrio
      *
      * @return RhuEmpleado
      */
-    public function setCodigoBarrioFk($codigoBarrioFk)
+    public function setBarrio($barrio)
     {
-        $this->codigoBarrioFk = $codigoBarrioFk;
+        $this->barrio = $barrio;
 
         return $this;
     }
 
     /**
-     * Get codigoBarrioFk
+     * Get barrio
      *
-     * @return integer
+     * @return string
      */
-    public function getCodigoBarrioFk()
+    public function getBarrio()
     {
-        return $this->codigoBarrioFk;
+        return $this->barrio;
     }
 
     /**
@@ -1116,6 +1118,30 @@ class RhuEmpleado
     public function getVrSalario()
     {
         return $this->VrSalario;
+    }
+
+    /**
+     * Set fechaExpedicionIdentificacion
+     *
+     * @param \DateTime $fechaExpedicionIdentificacion
+     *
+     * @return RhuEmpleado
+     */
+    public function setFechaExpedicionIdentificacion($fechaExpedicionIdentificacion)
+    {
+        $this->fechaExpedicionIdentificacion = $fechaExpedicionIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaExpedicionIdentificacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaExpedicionIdentificacion()
+    {
+        return $this->fechaExpedicionIdentificacion;
     }
 
     /**
@@ -2306,30 +2332,6 @@ class RhuEmpleado
     public function getDisciplinariosEmpleadoRel()
     {
         return $this->disciplinariosEmpleadoRel;
-    }
-
-    /**
-     * Set barrioRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barrioRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setBarrioRel(\Brasa\GeneralBundle\Entity\GenBarrio $barrioRel = null)
-    {
-        $this->barrioRel = $barrioRel;
-
-        return $this;
-    }
-
-    /**
-     * Get barrioRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenBarrio
-     */
-    public function getBarrioRel()
-    {
-        return $this->barrioRel;
     }
 
     /**

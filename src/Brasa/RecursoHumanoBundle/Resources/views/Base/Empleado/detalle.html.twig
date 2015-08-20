@@ -33,7 +33,7 @@
                         <td class="titulo">CELULAR:</td>
                         <td class="td-in-well">{{ arEmpleado.celular }}</td>
                         <td class="titulo">BARRIO:</td>
-                        <td class="td-in-well">{{ arEmpleado.barrioRel.nombre }}</td>
+                        <td class="td-in-well">{{ arEmpleado.barrio }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">IDENTIFICACIÓN:</td>
@@ -85,8 +85,8 @@
                         <td class="titulo">CAJA COMPENSACIÓN:</td>
                         <td class="td-in-well" colspan="2">{{ arEmpleado.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>                    
                         <td class="td-in-well"></td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">AUXILIO TRANSPORTE</td>
+                        <td class="td-in-well">{% if arEmpleado.auxilioTransporte == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>                 
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
@@ -520,7 +520,7 @@
                                     </div>
                                     <div class="btn-toolbar" style="float: right">
                                         <div class="btn-group">
-                                            {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_estudio_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': 0 }) }}', 'AgregarProcesoEstudio', 600, 900)" >Nuevo</a> {% endif %}
+                                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_estudio_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': 0 }) }}', 'AgregarProcesoEstudio', 600, 900)" >Nuevo</a>
                                         </div>
                                         <div class="btn-group">                        
                                             {{ form_widget(form.BtnEliminarEmpleadoEstudio, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
@@ -572,7 +572,7 @@
                                     </div>
                                     <div class="btn-toolbar" style="float: right">
                                         <div class="btn-group">
-                                            {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_familia_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoFamilia': 0 }) }}', 'AgregarProcesoFamilia', 600, 900)" >Nuevo</a> {% endif %}
+                                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_familia_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoFamilia': 0 }) }}', 'AgregarProcesoFamilia', 600, 900)" >Nuevo</a>
                                         </div>
                                         <div class="btn-group">                        
                                             {{ form_widget(form.BtnEliminarEmpleadoFamilia, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}

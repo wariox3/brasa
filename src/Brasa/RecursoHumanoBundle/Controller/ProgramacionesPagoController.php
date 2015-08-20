@@ -275,6 +275,9 @@ class ProgramacionesPagoController extends Controller
                                             }
                                             $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $douCuota);
                                             $arCreditoProcesar->setSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());
+                                            if ($arCreditoProcesar->getSaldoTotal() <= 0){
+                                                $arCreditoProcesar->setEstadoPagado(1);
+                                            }
                                             $em->persist($arCreditoProcesar);
 
                                             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();

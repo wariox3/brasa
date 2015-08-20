@@ -88,9 +88,9 @@ class RhuSeleccion
     private $codigoCiudadFk;    
     
     /**
-     * @ORM\Column(name="codigo_barrio_fk", type="integer", length=80, nullable=true)
+     * @ORM\Column(name="barrio", type="string", length=100, nullable=true)
      */    
-    private $codigoBarrioFk;
+    private $barrio;
     
     /**
      * @ORM\Column(name="codigo_rh_fk", type="integer", nullable=true)
@@ -210,11 +210,6 @@ class RhuSeleccion
      */
     protected $ciudadExpedicionRel;
     
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenBarrio", inversedBy="rhuSeleccionesBarrioRel")
-     * @ORM\JoinColumn(name="codigo_barrio_fk", referencedColumnName="codigo_barrio_pk")
-     */
-    protected $barrioRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuRh", inversedBy="seleccionesRhRel")
@@ -238,7 +233,6 @@ class RhuSeleccion
      */
     protected $seleccionesPruebasSeleccionRel;    
    
-
 
     /**
      * Constructor
@@ -596,27 +590,27 @@ class RhuSeleccion
     }
 
     /**
-     * Set codigoBarrioFk
+     * Set barrio
      *
-     * @param integer $codigoBarrioFk
+     * @param string $barrio
      *
      * @return RhuSeleccion
      */
-    public function setCodigoBarrioFk($codigoBarrioFk)
+    public function setBarrio($barrio)
     {
-        $this->codigoBarrioFk = $codigoBarrioFk;
+        $this->barrio = $barrio;
 
         return $this;
     }
 
     /**
-     * Get codigoBarrioFk
+     * Get barrio
      *
-     * @return integer
+     * @return string
      */
-    public function getCodigoBarrioFk()
+    public function getBarrio()
     {
-        return $this->codigoBarrioFk;
+        return $this->barrio;
     }
 
     /**
@@ -737,6 +731,54 @@ class RhuSeleccion
     public function getFechaNacimiento()
     {
         return $this->fecha_nacimiento;
+    }
+
+    /**
+     * Set codigoCiudadNacimientoFk
+     *
+     * @param integer $codigoCiudadNacimientoFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoCiudadNacimientoFk($codigoCiudadNacimientoFk)
+    {
+        $this->codigoCiudadNacimientoFk = $codigoCiudadNacimientoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadNacimientoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadNacimientoFk()
+    {
+        return $this->codigoCiudadNacimientoFk;
+    }
+
+    /**
+     * Set codigoCiudadExpedicionFk
+     *
+     * @param integer $codigoCiudadExpedicionFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoCiudadExpedicionFk($codigoCiudadExpedicionFk)
+    {
+        $this->codigoCiudadExpedicionFk = $codigoCiudadExpedicionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadExpedicionFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadExpedicionFk()
+    {
+        return $this->codigoCiudadExpedicionFk;
     }
 
     /**
@@ -1052,27 +1094,51 @@ class RhuSeleccion
     }
 
     /**
-     * Set barrioRel
+     * Set ciudadNacimientoRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barrioRel
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel
      *
      * @return RhuSeleccion
      */
-    public function setBarrioRel(\Brasa\GeneralBundle\Entity\GenBarrio $barrioRel = null)
+    public function setCiudadNacimientoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel = null)
     {
-        $this->barrioRel = $barrioRel;
+        $this->ciudadNacimientoRel = $ciudadNacimientoRel;
 
         return $this;
     }
 
     /**
-     * Get barrioRel
+     * Get ciudadNacimientoRel
      *
-     * @return \Brasa\GeneralBundle\Entity\GenBarrio
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
      */
-    public function getBarrioRel()
+    public function getCiudadNacimientoRel()
     {
-        return $this->barrioRel;
+        return $this->ciudadNacimientoRel;
+    }
+
+    /**
+     * Set ciudadExpedicionRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setCiudadExpedicionRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel = null)
+    {
+        $this->ciudadExpedicionRel = $ciudadExpedicionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadExpedicionRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadExpedicionRel()
+    {
+        return $this->ciudadExpedicionRel;
     }
 
     /**
@@ -1189,101 +1255,5 @@ class RhuSeleccion
     public function getSeleccionesPruebasSeleccionRel()
     {
         return $this->seleccionesPruebasSeleccionRel;
-    }
-
-    /**
-     * Set codigoCiudadNacimientoFk
-     *
-     * @param integer $codigoCiudadNacimientoFk
-     *
-     * @return RhuSeleccion
-     */
-    public function setCodigoCiudadNacimientoFk($codigoCiudadNacimientoFk)
-    {
-        $this->codigoCiudadNacimientoFk = $codigoCiudadNacimientoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadNacimientoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCiudadNacimientoFk()
-    {
-        return $this->codigoCiudadNacimientoFk;
-    }
-
-    /**
-     * Set ciudadNacimientoRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setCiudadNacimientoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel = null)
-    {
-        $this->ciudadNacimientoRel = $ciudadNacimientoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadNacimientoRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadNacimientoRel()
-    {
-        return $this->ciudadNacimientoRel;
-    }
-
-    /**
-     * Set codigoCiudadExpedicionFk
-     *
-     * @param integer $codigoCiudadExpedicionFk
-     *
-     * @return RhuSeleccion
-     */
-    public function setCodigoCiudadExpedicionFk($codigoCiudadExpedicionFk)
-    {
-        $this->codigoCiudadExpedicionFk = $codigoCiudadExpedicionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadExpedicionFk
-     *
-     * @return integer
-     */
-    public function getCodigoCiudadExpedicionFk()
-    {
-        return $this->codigoCiudadExpedicionFk;
-    }
-
-    /**
-     * Set ciudadExpedicionRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setCiudadExpedicionRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel = null)
-    {
-        $this->ciudadExpedicionRel = $ciudadExpedicionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadExpedicionRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadExpedicionRel()
-    {
-        return $this->ciudadExpedicionRel;
     }
 }

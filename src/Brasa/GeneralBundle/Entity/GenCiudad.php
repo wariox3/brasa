@@ -122,14 +122,10 @@ class GenCiudad
     protected $rhuEmpleadosCiudadExpedicionRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="GenBarrio", mappedBy="ciudadRel")
-     */
-    protected $barriosRel;
-    
-    /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio", mappedBy="ciudadRel")
      */
     protected $rhuEmpleadosEstudiosCiudadRel;
+    
     
     /**
      * Constructor
@@ -150,7 +146,6 @@ class GenCiudad
         $this->rhuEmpleadosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuEmpleadosCiudadNacimientoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuEmpleadosCiudadExpedicionRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->barriosRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuEmpleadosEstudiosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -782,40 +777,6 @@ class GenCiudad
     public function getRhuEmpleadosCiudadExpedicionRel()
     {
         return $this->rhuEmpleadosCiudadExpedicionRel;
-    }
-
-    /**
-     * Add barriosRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barriosRel
-     *
-     * @return GenCiudad
-     */
-    public function addBarriosRel(\Brasa\GeneralBundle\Entity\GenBarrio $barriosRel)
-    {
-        $this->barriosRel[] = $barriosRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove barriosRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenBarrio $barriosRel
-     */
-    public function removeBarriosRel(\Brasa\GeneralBundle\Entity\GenBarrio $barriosRel)
-    {
-        $this->barriosRel->removeElement($barriosRel);
-    }
-
-    /**
-     * Get barriosRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getBarriosRel()
-    {
-        return $this->barriosRel;
     }
 
     /**

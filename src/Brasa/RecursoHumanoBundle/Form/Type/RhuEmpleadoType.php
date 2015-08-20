@@ -58,18 +58,16 @@ class RhuEmpleadoType extends AbstractType
                 'required' => true))                
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))                                                        
             ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
+            ->add('fechaExpedicionIdentificacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                
             ->add('nombre1', 'text', array('required' => true))
-            ->add('libretaMilitar', 'number', array('required' => false))
+            ->add('libretaMilitar', 'choice', array('choices' => array('1' => '1° CLASE', '2' => '2° CLASE', '0' => 'NO APLICA')))
             ->add('nombre2', 'text', array('required' => false))
             ->add('apellido1', 'text', array('required' => true))
             ->add('apellido2', 'text', array('required' => false))
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
             ->add('direccion', 'text', array('required' => false))
-            ->add('barrioRel', 'entity', array(
-                'class' => 'BrasaGeneralBundle:GenBarrio',
-                'property' => 'nombre',
-            ))
+            ->add('barrio', 'text', array('required' => true))
             ->add('rhRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuRh',
                 'property' => 'tipo',

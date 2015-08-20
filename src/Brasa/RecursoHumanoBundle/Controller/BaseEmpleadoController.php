@@ -339,6 +339,12 @@ class BaseEmpleadoController extends Controller
             $arrControles = $request->request->All();
             $arEmpleado = $form->getData();
             $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());            
+            if ($arEmpleado->getLibretaMilitar() <> 0){
+                $arEmpleado->setLibretaMilitar($arEmpleado->getNumeroIdentificacion());
+            }
+            else {
+                $arEmpleado->setLibretaMilitar("");
+            }
             $em->persist($arEmpleado);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {

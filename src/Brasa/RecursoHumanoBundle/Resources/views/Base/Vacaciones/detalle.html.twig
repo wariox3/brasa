@@ -37,22 +37,22 @@
                     <tr>
                         <td class="titulo">DESDE</td>
                         <td class="td-in-well">{{ arVacaciones.fechaDesde |date("Y/m/d") }}</td>
-                        <td class="titulo">HASTA</td>
-                        <td class="td-in-well">{{ arVacaciones.fechaHasta |date("Y/m/d") }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
                         <td class="titulo">VR. SALUD</td>
                         <td class="td-label" align="right">{{ arVacaciones.vrSalud | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">CENTRO COSTO</td>
-                        <td class="td-in-well">{{ arVacaciones.centroCostoRel.nombre }}</td>
+                        <td class="titulo">HASTA</td>
+                        <td class="td-in-well">{{ arVacaciones.fechaHasta |date("Y/m/d") }}</td>
                         <td class="titulo">DÍAS VACACIONES</td>
                         <td class="td-in-well">{{ arVacaciones.diasVacaciones }}</td>
                         <td class="titulo">VR. PENSIÓN</td>
                         <td class="td-label" align="right">{{ arVacaciones.vrPension | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well" align="right"></td>
+                        <td class="titulo">CENTRO COSTO</td>
+                        <td class="td-in-well">{{ arVacaciones.centroCostoRel.nombre }}</td>
                         <td class="titulo">PAGADO:</td>
                         <td> {% if arVacaciones.estadoPagado == 1 %}SI{% else %} NO {% endif %}</td>
                         <td class="titulo">VR. OTRAS DEDUCCIONES:</th>

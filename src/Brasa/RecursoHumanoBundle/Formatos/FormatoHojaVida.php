@@ -158,7 +158,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(46, 8, $arEmpleado->getDireccion(), 1, 0, 'C', 1);
         $this->Cell(34, 8, utf8_decode($arEmpleado->getCiudadRel()->getDepartamentoRel()->getNombre()), 1, 0, 'C', 1);
         $this->Cell(49, 8, utf8_decode($arEmpleado->getCiudadRel()->getNombre()), 1, 0, 'C', 1);
-        $this->Cell(46, 8, utf8_decode($arEmpleado->getBarrioRel()->getNombre()), 1, 0, 'C', 1);
+        $this->Cell(46, 8, utf8_decode($arEmpleado->getBarrio()), 1, 0, 'C', 1);
         $this->Cell(29, 8, $arEmpleado->getTelefono(), 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 44);
         $this->SetFont('Arial','B',8);
