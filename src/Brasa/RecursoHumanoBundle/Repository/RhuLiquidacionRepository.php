@@ -64,9 +64,9 @@ class RhuLiquidacionRepository extends EntityRepository {
         }  
 
         if($arLiquidacion->getLiquidarCesantias() == 1) {            
-            $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();
+            $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();            
             $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
-            $intDiasCesantias = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                
+            $intDiasCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                
             $douCesantias = ($douBasePrestacionesTotal * $intDiasCesantias) / 360;
             $douInteresesCesantias = $douCesantias * 0.12;
             $arLiquidacion->setFechaUltimoPagoCesantias($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias());
@@ -167,6 +167,10 @@ class RhuLiquidacionRepository extends EntityRepository {
         } else {                    
             $intMesInicio = $dateFechaDesde->format('n');                
             $intMesFinal = $dateFechaHasta->format('n');
+            $miVariable = 1;
+            for ($i = 1; $i <= 10; $i++) {
+                echo "hola";
+            }
             if($intMesInicio != $intMesFinal) {                        
                 $intMeses = $intMesFinal - $intMesInicio;
                 if($intMeses > 1) {
