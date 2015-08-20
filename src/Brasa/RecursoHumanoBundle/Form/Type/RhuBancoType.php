@@ -14,6 +14,8 @@ class RhuBancoType extends AbstractType
     {
         $builder
             ->add('nombre', 'text', array('required' => true))
+            ->add('convenioNomina', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
+            ->add('numeroDigitos', 'number', array('required' => true))
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }
 

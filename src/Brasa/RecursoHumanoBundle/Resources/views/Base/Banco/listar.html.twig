@@ -12,6 +12,8 @@
             
             <th>CÓDIGO</th>
             <th>{{ knp_pagination_sortable(arBancos, 'NOMBRE', 'codigo') }}</th> 
+            <th>CONVENIO NOMINA</th>
+            <th>DIGITOS CUENTA</th>
             <th></th>
             <th></th>
         </tr>
@@ -20,6 +22,8 @@
                <tr>
                 <td>{{arBancos.codigoBancoPk}}</td>
                 <td>{{arBancos.nombre}}</td>
+                <td>{% if arBancos.convenioNomina == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{{arBancos.numeroDigitos}}</td>
                 <td><a href="{{ path('brs_rhu_base_banco_nuevo',{'codigoBancoPk': arBancos.codigoBancoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arBancos.codigoBancoPk }}" /></td>
             {%endfor%}

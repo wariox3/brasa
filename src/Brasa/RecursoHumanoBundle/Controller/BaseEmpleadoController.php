@@ -306,6 +306,7 @@ class BaseEmpleadoController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if($codigoEmpleado != 0) {
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         } else {
@@ -345,12 +346,20 @@ class BaseEmpleadoController extends Controller
             else {
                 $arEmpleado->setLibretaMilitar("");
             }
-            $em->persist($arEmpleado);
-            $em->flush();
+            $campo1 = $arEmpleado->getCuenta();
+            $campo2 = $arEmpleado->getBancoRel()->getNumeroDigitos();
+            if (strlen($arEmpleado->getCuenta()) != $arEmpleado->getBancoRel()->getNumeroDigitos()){
+                $objMensaje->Mensaje("error", "El numero de digitos de esta cuenta no es valido para el banco ". $arEmpleado->getBancoRel()->getNombre(), $this);
+            } else {
+                $em->persist($arEmpleado);
+                $em->flush(); 
+            
+            
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0, 'codigoSeleccion' => 0)));
             } else {
                 return $this->redirect($this->generateUrl('brs_rhu_base_empleados_lista'));
+            }
             }
         }
 

@@ -55,15 +55,25 @@ class BaseBancoController extends Controller
 
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Nombre');
+                            ->setCellValue('B1', 'Nombre')
+                            ->setCellValue('C1', 'Convenio Nomina')
+                            ->setCellValue('D1', 'Digitos Cuenta');
 
                 $i = 2;
                 $arBancos = $em->getRepository('BrasaRecursoHumanoBundle:RhuBanco')->findAll();
                 
                 foreach ($arBancos as $arBancos) {
+                    if ($arBancos->getConvenioNomina() == 1){
+                        $convenio = "SI";
+                    } else {
+                        $convenio = "NO";
+                    }
+                        
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arBancos->getCodigoBancoPk())
-                            ->setCellValue('B' . $i, $arBancos->getNombre());
+                            ->setCellValue('B' . $i, $arBancos->getNombre())
+                            ->setCellValue('C' . $i, $convenio)
+                            ->setCellValue('D' . $i, $arBancos->getNumeroDigitos());
                     $i++;
                 }
 
@@ -97,6 +107,7 @@ class BaseBancoController extends Controller
            
         ));
     }
+    
     public function nuevoAction($codigoBancoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -110,8 +121,8 @@ class BaseBancoController extends Controller
         if ($formBanco->isValid())
         {
             // guardar la tarea en la base de datos
-            $em->persist($arBanco);
             $arBanco = $formBanco->getData();
+            $em->persist($arBanco);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_banco_listar'));
         }

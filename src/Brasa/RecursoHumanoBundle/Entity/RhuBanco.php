@@ -20,13 +20,24 @@ class RhuBanco
     /**
      * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
      */    
-    private $nombre;    
+    private $nombre;
+    
+    /**
+     * @ORM\Column(name="convenio_nomina", type="boolean")
+     */    
+    private $convenioNomina = 0;
+    
+    /**
+     * @ORM\Column(name="numero_digitos", type="integer", nullable=true)
+     */    
+    private $numeroDigitos;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="bancoRel")
      */
     protected $empleadosBancoRel;    
 
+    
     /**
      * Constructor
      */
@@ -67,6 +78,54 @@ class RhuBanco
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set convenioNomina
+     *
+     * @param boolean $convenioNomina
+     *
+     * @return RhuBanco
+     */
+    public function setConvenioNomina($convenioNomina)
+    {
+        $this->convenioNomina = $convenioNomina;
+
+        return $this;
+    }
+
+    /**
+     * Get convenioNomina
+     *
+     * @return boolean
+     */
+    public function getConvenioNomina()
+    {
+        return $this->convenioNomina;
+    }
+
+    /**
+     * Set numeroDigitos
+     *
+     * @param integer $numeroDigitos
+     *
+     * @return RhuBanco
+     */
+    public function setNumeroDigitos($numeroDigitos)
+    {
+        $this->numeroDigitos = $numeroDigitos;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroDigitos
+     *
+     * @return integer
+     */
+    public function getNumeroDigitos()
+    {
+        return $this->numeroDigitos;
     }
 
     /**

@@ -17,8 +17,13 @@ class RhuEmpleadoType extends AbstractType
             ))
             ->add('bancoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuBanco',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('b')
+                    ->where('b.convenioNomina = :convenioNomina')
+                    ->setParameter('convenioNomina', 1)
+                    ->orderBy('b.nombre', 'ASC');},
                 'property' => 'nombre',
-            ))                
+                'required' => true))                
             ->add('entidadSaludRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
                 'property' => 'nombre',

@@ -28,14 +28,14 @@ class FormatoBanco extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('CODIGO', 'NOMBRE');
+        $header = array(utf8_decode('CÓDIGO'), 'NOMBRE','CONVENIO NOMINA',utf8_decode('NÚMERO DIGITOS'));
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
         $this->SetFont('Arial', 'B', 8);
         //creamos la cabecera de la tabla.
-        $w = array(20, 170);
+        $w = array(20, 110, 30,30);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -54,8 +54,15 @@ class FormatoBanco extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 8);
         foreach ($arBancos as $arBancos) {            
+            if ($arBancos->getConvenioNomina() == 1){
+                $convenio = "SI";
+            } else {
+                $convenio = "NO";
+            }
             $pdf->Cell(20, 4, $arBancos->getCodigoBancoPk(), 1, 0, 'L');
-            $pdf->Cell(170, 4, utf8_decode($arBancos->getNombre()), 1, 0, 'L');            
+            $pdf->Cell(110, 4, utf8_decode($arBancos->getNombre()), 1, 0, 'L');
+            $pdf->Cell(30, 4, $convenio, 1, 0, 'L');
+            $pdf->Cell(30, 4, $arBancos->getNumeroDigitos(), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);//33
         }        
