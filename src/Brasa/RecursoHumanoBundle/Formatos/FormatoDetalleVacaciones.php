@@ -27,7 +27,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacaciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find(self::$codigoVacacion);        
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-        $arCreditos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->find(self::$codigoVacacion);
+        $arCreditos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->findBy(array('codigoVacacionFk' => self::$codigoVacacion));
         $duoRegistrosCreditos = count($arCreditos);
         //$duoTotalCreditosTipoVacacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->TotalCreditosTipoVacacion($arVacaciones->getCodigoEmpleadoFk());
         $this->SetFillColor(217, 217, 217);        
@@ -168,8 +168,8 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
                 $this->SetFillColor(255, 255, 255);
                 $this->SetFont('Arial', '', 8);
                 $this->Cell(30, 4, $arCreditos->getCodigoCreditoFk(), 1, 0, 'L', 1);
-                $this->Cell(110, 4, $arCreditos->getVrDeduccion(), 1, 0, 'L', 1);
-                $this->Cell(45, 4, number_format($arCreditos->getVrPagar(), 2, '.', ','), 1, 0, 'R', 1);
+                $this->Cell(110, 4, utf8_decode($arCreditos->getCreditoRel()->getCreditoTipoRel()->getNombre()), 1, 0, 'L', 1);
+                $this->Cell(45, 4, number_format($arCreditos->getVrDeduccion(), 2, '.', ','), 1, 0, 'R', 1);
                 $incremento = $incremento + 4;
             }
         }
