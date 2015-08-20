@@ -26,10 +26,10 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
     public function EncabezadoDetalles() {
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacaciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find(self::$codigoVacacion);        
-        $arCreditosTipoVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arCreditosTipoVacacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaCreditosTipoVacacion($arVacaciones->getCodigoEmpleadoFk());
-        $duoRegistrosCreditos = count($arCreditosTipoVacacion);
-        $duoTotalCreditosTipoVacacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->TotalCreditosTipoVacacion($arVacaciones->getCodigoEmpleadoFk());
+        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
+        $arCreditos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->find(self::$codigoVacacion);
+        $duoRegistrosCreditos = count($arCreditos);
+        //$duoTotalCreditosTipoVacacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->TotalCreditosTipoVacacion($arVacaciones->getCodigoEmpleadoFk());
         $this->SetFillColor(217, 217, 217);        
         $this->SetFont('Arial','B',10);
         $this->SetXY(10, 16);
@@ -143,7 +143,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $this->SetXY($intX, 82);
         $this->Cell(32, 5, "(".number_format($arVacaciones->getVrPension(), 2, '.', ',').")", 1, 0, 'R', 1);
         $this->SetXY($intX, 88);
-        $this->Cell(32, 5, "(".number_format($duoTotalCreditosTipoVacacion, 2, '.', ',').")", 1, 0, 'R', 1);
+        $this->Cell(32, 5, "(".number_format($arVacaciones->getVrDeduccion(), 2, '.', ',').")", 1, 0, 'R', 1);
         $this->SetXY($intX, 94);
         $this->Cell(32, 5, number_format($arVacaciones->getVrVacacion(), 2, '.', ','), 1, 0, 'R', 1);
         //DEDUCCIONES CREDITOS TIPO VACACIÓN
@@ -162,14 +162,14 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
             $this->Cell(110, 4, utf8_decode("TIPO"), 1, 0, 'L', 1);
             $this->Cell(45, 4, utf8_decode("VALOR"), 1, 0, 'R', 1);
             $incremento = 4;
-            foreach ($arCreditosTipoVacacion as $arCreditosTipoVacacion) {
+            foreach ($arCreditos as $arCreditos) {
                 $intY = $intY + $incremento;
                 $this->SetXY($intX, $intY);
                 $this->SetFillColor(255, 255, 255);
                 $this->SetFont('Arial', '', 8);
-                $this->Cell(30, 4, $arCreditosTipoVacacion->getCodigoCreditoPk(), 1, 0, 'L', 1);
-                $this->Cell(110, 4, utf8_decode($arCreditosTipoVacacion->getCreditoTipoRel()->getNombre()), 1, 0, 'L', 1);
-                $this->Cell(45, 4, number_format($arCreditosTipoVacacion->getVrPagar(), 2, '.', ','), 1, 0, 'R', 1);
+                $this->Cell(30, 4, $arCreditos->getCodigoCreditoFk(), 1, 0, 'L', 1);
+                $this->Cell(110, 4, $arCreditos->getVrDeduccion(), 1, 0, 'L', 1);
+                $this->Cell(45, 4, number_format($arCreditos->getVrPagar(), 2, '.', ','), 1, 0, 'R', 1);
                 $incremento = $incremento + 4;
             }
         }
