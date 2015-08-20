@@ -255,18 +255,20 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                     $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
                     foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {
-                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arProgramacionPagoDetalle->getCodigoContratoFk());                                                                        
-                        if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {                            
-                            $arContrato->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());
-                        }
-                        if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {
-                            $arContrato->setFechaUltimoPagoPrimas($arProgramacionPagoProcesar->getFechaHasta());
-                        }
-                        if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) {
-                            $arContrato->setFechaUltimoPagoCesantias($arProgramacionPagoProcesar->getFechaHasta());
-                        }   
-                        $em->persist($arContrato);                        
+                        if($arProgramacionPagoDetalle->getCodigoContratoFk()) {
+                            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arProgramacionPagoDetalle->getCodigoContratoFk());                                                                        
+                            if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {                            
+                                $arContrato->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());
+                            }
+                            if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {
+                                $arContrato->setFechaUltimoPagoPrimas($arProgramacionPagoProcesar->getFechaHasta());
+                            }
+                            if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) {
+                                $arContrato->setFechaUltimoPagoCesantias($arProgramacionPagoProcesar->getFechaHasta());
+                            }   
+                            $em->persist($arContrato);                            
+                        }                        
                     }
                     if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {
                         $arCentroCosto->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());

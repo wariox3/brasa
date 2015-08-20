@@ -43,15 +43,20 @@ class RhuLiquidacionRepository extends EntityRepository {
         $douIBCTotal = $douIBC + $douIBCAdicional;
         $intDiasLaborados = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
         $intDiasLaborados = $intDiasLaborados->format('%a');
+        $intDiasLaborados = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaDesde(), $arLiquidacion->getContratoRel()->getFechaHasta()) - 1;
         $douSalario = $arLiquidacion->getContratoRel()->getVrSalario();
         $douBasePrestacionesTotal = 0;        
         $douCesantias = 0;
         $douInteresesCesantias = 0;
         $douPrima = 0;
         $douVacaciones = 0;
+        $douAuxilioTransporte = 0;
         if($intDiasLaborados > 0) {
-            $douBasePrestaciones = ($douIBCTotal / $intDiasLaborados) * 30;                        
-            $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
+            $douBasePrestaciones = ($douIBCTotal / $intDiasLaborados) * 30;   
+            if($douSalario <= $arConfiguracion->getVrSalario() * 2) {
+                $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
+            }
+            
             $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
             $arLiquidacion->setVrBasePrestaciones($douBasePrestaciones);
             $arLiquidacion->setVrAuxilioTransporte($douAuxilioTransporte);
@@ -82,7 +87,8 @@ class RhuLiquidacionRepository extends EntityRepository {
         if($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones() <= $arLiquidacion->getContratoRel()->getFechaDesde()) {
             if($arLiquidacion->getLiquidarVacaciones() == 1) {
                 $intDiasVacaciones = $arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
-                $intDiasVacaciones = $intDiasVacaciones->format('%a');                
+                $intDiasVacaciones = $intDiasVacaciones->format('%a'); 
+                $intDiasVacaciones = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones(), $arLiquidacion->getContratoRel()->getFechaHasta()) - 1;
                 $douVacaciones = ($douSalario * $intDiasVacaciones) / 720;
                 $arLiquidacion->setDiasVacaciones($intDiasVacaciones);
                 $arLiquidacion->setVrVacaciones($douVacaciones);
@@ -104,7 +110,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arLiquidacion->setVrDeducciones($floDeducciones);
         $intDiasTotal = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
         $intDiasTotal = $intDiasTotal->format('%a');
-        $arLiquidacion->setNumeroDias($intDiasTotal);
+        $arLiquidacion->setNumeroDias($intDiasLaborados);
         
         $em->flush();
         return true;
