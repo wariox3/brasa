@@ -19,6 +19,8 @@ class EmpleadoDotacionController extends Controller
             $arEmpleadoDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->find($codigoEmpleadoDotacion);
         }            
         $arEmpleadoDotacion->setFecha(new \DateTime('now'));
+        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());
+        $arEmpleadoDotacion->setCentroCostoRel($arCentroCosto);
         $form = $this->createForm(new RhuEmpleadoDotacionType, $arEmpleadoDotacion);
         $form->handleRequest($request);
         if ($form->isValid()) {           

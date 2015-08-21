@@ -33,11 +33,6 @@ class RhuEmpleadoDotacion
     private $codigoCentroCostoFk;
     
     /**
-     * @ORM\Column(name="dotacion", type="string", nullable=true)
-     */
-    private $dotacion;
-    
-    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;
@@ -153,30 +148,6 @@ class RhuEmpleadoDotacion
     public function getCodigoCentroCostoFk()
     {
         return $this->codigoCentroCostoFk;
-    }
-
-    /**
-     * Set dotacion
-     *
-     * @param string $dotacion
-     *
-     * @return RhuEmpleadoDotacion
-     */
-    public function setDotacion($dotacion)
-    {
-        $this->dotacion = $dotacion;
-
-        return $this;
-    }
-
-    /**
-     * Get dotacion
-     *
-     * @return string
-     */
-    public function getDotacion()
-    {
-        return $this->dotacion;
     }
 
     /**

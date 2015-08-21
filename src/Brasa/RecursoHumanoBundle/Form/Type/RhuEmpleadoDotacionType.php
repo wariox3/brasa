@@ -11,8 +11,7 @@ class RhuEmpleadoDotacionType extends AbstractType
     {        
         $builder                                      
             ->add('fecha', 'date')
-            ->add('dotacion', 'text', array('required' => true))
-            ->add('cantidad', 'number', array('required' => true))
+            ->add('codigoInternoReferencia', 'number', array('required' => true))
             ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
