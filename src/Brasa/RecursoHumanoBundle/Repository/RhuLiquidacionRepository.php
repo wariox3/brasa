@@ -164,32 +164,12 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $intDias += $dateFechaHasta->format('j');      
             }
             $intDias += $intAnios;
-        } else {                    
-            $intMesInicio = $dateFechaDesde->format('n');                
-            $intMesFinal = $dateFechaHasta->format('n');
-            $miVariable = 1;
-            for ($i = 1; $i <= 10; $i++) {
-                echo "hola";
-            }
-            if($intMesInicio != $intMesFinal) {                        
-                $intMeses = $intMesFinal - $intMesInicio;
-                if($intMeses > 1) {
-                    $intDia = $dateFechaDesde->format('j');
-                    $intDiasMes = 31 - $intDia;                
-                    $intDias = ($intMeses * 30) + $intDiasMes;  
-
-                    $intDia = $dateFechaHasta->format('j');      
-                    $intDias += $intDia;                             
-                } 
-
-                if($intMeses == 1) {
-                    $intDia = $dateFechaDesde->format('j');
-                    $intDiasMes = 31 - $intDia;                
-                    $intDias = $intDiasMes;  
-
-                    $intDia = $dateFechaHasta->format('j');      
-                    $intDias += $intDia;                             
-                }                     
+        } else {                                           
+            if($dateFechaDesde->format('n') != $dateFechaHasta->format('n')) {                        
+                $intMeses = $dateFechaHasta->format('n') - $dateFechaDesde->format('n') - 1;
+                $intDiasInicio = $this->diasPrestacionesMes($dateFechaDesde->format('j'));
+                $intDiasFinal = $this->diasPrestacionesMes($dateFechaHasta->format('j'));
+                $intDias = $intDiasInicio + $intDiasFinal + ($intMeses * 30);
             } else {
                 $intDias = 1 + ($dateFechaHasta->format('j') - $dateFechaDesde->format('j'));                               
             }                        
@@ -197,4 +177,18 @@ class RhuLiquidacionRepository extends EntityRepository {
         
         return $intDias;
     }
+    
+    public function diasPrestacionesMes($intDia) {
+        $intDiasDevolver = 0;
+        if($intDia < 15) {
+            $intDiasDevolver = $intDia;
+        } else {
+            if($intDia == 31) {
+                $intDiasDevolver = 1;
+            } else {
+                $intDiasDevolver = 31 - $intDia; 
+            }
+        }
+        return $intDiasDevolver;
+    }    
 }

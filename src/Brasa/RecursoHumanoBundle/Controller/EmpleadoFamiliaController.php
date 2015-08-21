@@ -17,6 +17,10 @@ class EmpleadoFamiliaController extends Controller
         $arEmpleadoFamilia = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia();
         if($codigoEmpleadoFamilia != 0) {
             $arEmpleadoFamilia = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoFamilia')->find($codigoEmpleadoFamilia);
+        } else {
+            $arEmpleadoFamilia->setEntidadCajaRel($arEmpleado->getEntidadCajaRel());
+            $arEmpleadoFamilia->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
+            $arEmpleadoFamilia->setNombres('Mario');
         }            
         
         $form = $this->createForm(new RhuEmpleadoFamiliaType, $arEmpleadoFamilia);
