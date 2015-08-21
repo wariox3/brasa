@@ -37,7 +37,7 @@ class FormatoIncapacidad extends \FPDF_FPDF {
         $this->SetLineWidth(.2);
         $this->SetFont('Arial', 'B', 7);
         //creamos la cabecera de la tabla.
-        $w = array(12, 22, 60, 90, 17, 17, 17,17,17,23);
+        $w = array(12, 22, 60, 90, 15, 15, 11,12,16,22);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -60,19 +60,35 @@ class FormatoIncapacidad extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         foreach ($arIncapacidades as $arIncapacidad) {            
             $pdf->Cell(12, 4, $arIncapacidad->getCodigoIncapacidadPk(), 1, 0, 'L');
-            $pdf->Cell(23, 4, $arIncapacidad->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(65, 4, utf8_decode($arIncapacidad->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');
-            $pdf->Cell(95, 4, utf8_decode($arIncapacidad->getCentroCostoRel()->getNombre()), 1, 0, 'L');
-            $pdf->Cell(19, 4, $arIncapacidad->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');
-            $pdf->Cell(19, 4, $arIncapacidad->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');
-            $pdf->Cell(19, 4, $arIncapacidad->getCantidad(), 1, 0, 'L');
-            if ($arIncapacidad->getEstadoTranscripcion() == 1)
+            $pdf->Cell(22, 4, $arIncapacidad->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(60, 4, utf8_decode($arIncapacidad->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');
+            $pdf->Cell(90, 4, utf8_decode($arIncapacidad->getCentroCostoRel()->getNombre()), 1, 0, 'L');
+            $pdf->Cell(15, 4, $arIncapacidad->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');
+            $pdf->Cell(15, 4, $arIncapacidad->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');
+            $pdf->Cell(11, 4, $arIncapacidad->getCantidad(), 1, 0, 'L');
+            if ($arIncapacidad->getEstadoCobrar() == 1)
             {    
-                $pdf->Cell(23, 4, "SI", 1, 0, 'L');
+                $pdf->Cell(12, 4, "SI", 1, 0, 'L');
             }
             else
             {
-                $pdf->Cell(23, 4, "NO", 1, 0, 'L');
+                $pdf->Cell(12, 4, "NO", 1, 0, 'L');
+            }
+            if ($arIncapacidad->getEstadoProrroga() == 1)
+            {    
+                $pdf->Cell(16, 4, "SI", 1, 0, 'L');
+            }
+            else
+            {
+                $pdf->Cell(16, 4, "NO", 1, 0, 'L');
+            }
+            if ($arIncapacidad->getEstadoTranscripcion() == 1)
+            {    
+                $pdf->Cell(16, 4, "SI", 1, 0, 'L');
+            }
+            else
+            {
+                $pdf->Cell(22, 4, "NO", 1, 0, 'L');
             }
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
