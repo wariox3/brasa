@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="rhu_empleado_dotacion")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuDotacionRepository")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuEmpleadoDotacionRepository")
  */
 class RhuEmpleadoDotacion
 {
@@ -18,9 +18,9 @@ class RhuEmpleadoDotacion
     private $codigoEmpleadoDotacionPk;                    
     
     /**
-     * @ORM\Column(name="fecha", type="date", nullable=true)
+     * @ORM\Column(name="numero_interno_referencia", type="integer", nullable=true)
      */    
-    private $fecha;        
+    private $codigoInternoReferencia;        
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -28,20 +28,19 @@ class RhuEmpleadoDotacion
     private $codigoEmpleadoFk;            
     
     /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoFk;
+    
+    /**
      * @ORM\Column(name="dotacion", type="string", nullable=true)
      */
     private $dotacion;
     
     /**
-     * @ORM\Column(name="cantidad", type="float")
-     */
-    private $cantidad = 0;
-    
-        
-    /**
-     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
-    private $codigoCentroCostoFk;          
+    private $fecha;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -58,9 +57,21 @@ class RhuEmpleadoDotacion
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="dotacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
-    protected $empleadoRel;    
+    protected $empleadoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacion", mappedBy="empleadoDotacionRel")
+     */
+    protected $empleadosDotacionesEmpleadoDotacionRel;
     
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->empleadosDotacionesEmpleadoDotacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoEmpleadoDotacionPk
@@ -73,27 +84,27 @@ class RhuEmpleadoDotacion
     }
 
     /**
-     * Set fecha
+     * Set codigoInternoReferencia
      *
-     * @param \DateTime $fecha
+     * @param integer $codigoInternoReferencia
      *
      * @return RhuEmpleadoDotacion
      */
-    public function setFecha($fecha)
+    public function setCodigoInternoReferencia($codigoInternoReferencia)
     {
-        $this->fecha = $fecha;
+        $this->codigoInternoReferencia = $codigoInternoReferencia;
 
         return $this;
     }
 
     /**
-     * Get fecha
+     * Get codigoInternoReferencia
      *
-     * @return \DateTime
+     * @return integer
      */
-    public function getFecha()
+    public function getCodigoInternoReferencia()
     {
-        return $this->fecha;
+        return $this->codigoInternoReferencia;
     }
 
     /**
@@ -121,6 +132,30 @@ class RhuEmpleadoDotacion
     }
 
     /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return RhuEmpleadoDotacion
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
      * Set dotacion
      *
      * @param string $dotacion
@@ -145,51 +180,27 @@ class RhuEmpleadoDotacion
     }
 
     /**
-     * Set cantidad
+     * Set fecha
      *
-     * @param float $cantidad
+     * @param \DateTime $fecha
      *
      * @return RhuEmpleadoDotacion
      */
-    public function setCantidad($cantidad)
+    public function setFecha($fecha)
     {
-        $this->cantidad = $cantidad;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
     /**
-     * Get cantidad
+     * Get fecha
      *
-     * @return float
+     * @return \DateTime
      */
-    public function getCantidad()
+    public function getFecha()
     {
-        return $this->cantidad;
-    }
-
-    /**
-     * Set codigoCentroCostoFk
-     *
-     * @param integer $codigoCentroCostoFk
-     *
-     * @return RhuEmpleadoDotacion
-     */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
-    {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoFk()
-    {
-        return $this->codigoCentroCostoFk;
+        return $this->fecha;
     }
 
     /**
@@ -262,5 +273,39 @@ class RhuEmpleadoDotacion
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Add empleadosDotacionesEmpleadoDotacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoDotacionRel
+     *
+     * @return RhuEmpleadoDotacion
+     */
+    public function addEmpleadosDotacionesEmpleadoDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoDotacionRel)
+    {
+        $this->empleadosDotacionesEmpleadoDotacionRel[] = $empleadosDotacionesEmpleadoDotacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosDotacionesEmpleadoDotacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoDotacionRel
+     */
+    public function removeEmpleadosDotacionesEmpleadoDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoDotacionRel)
+    {
+        $this->empleadosDotacionesEmpleadoDotacionRel->removeElement($empleadosDotacionesEmpleadoDotacionRel);
+    }
+
+    /**
+     * Get empleadosDotacionesEmpleadoDotacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosDotacionesEmpleadoDotacionRel()
+    {
+        return $this->empleadosDotacionesEmpleadoDotacionRel;
     }
 }
