@@ -117,6 +117,11 @@ class RhuContrato
      */    
     private $fechaUltimoPago;     
     
+    /**     
+     * @ORM\Column(name="estado_liquidado", type="boolean")
+     */    
+    private $estadoLiquidado = 1;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -902,5 +907,29 @@ class RhuContrato
     public function getFechaUltimoPago()
     {
         return $this->fechaUltimoPago;
+    }
+
+    /**
+     * Set estadoLiquidado
+     *
+     * @param boolean $estadoLiquidado
+     *
+     * @return RhuContrato
+     */
+    public function setEstadoLiquidado($estadoLiquidado)
+    {
+        $this->estadoLiquidado = $estadoLiquidado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoLiquidado
+     *
+     * @return boolean
+     */
+    public function getEstadoLiquidado()
+    {
+        return $this->estadoLiquidado;
     }
 }
