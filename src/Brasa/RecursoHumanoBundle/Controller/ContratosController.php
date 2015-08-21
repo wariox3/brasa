@@ -107,8 +107,8 @@ class ContratosController extends Controller
                 $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
                 $arContrato->setEmpleadoRel($arEmpleado);  
                 $arContrato->setFechaUltimoPago($arContrato->getCentroCostoRel()->getFechaUltimoPago());
-                $arContrato->setFechaUltimoPagoCesantias($arContrato->getCentroCostoRel()->getFechaUltimoPagoCesantias());
-                $arContrato->setFechaUltimoPagoPrimas($arContrato->getCentroCostoRel()->getFechaUltimoPagoPrima());
+                $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
+                $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
                 $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
                 $em->persist($arContrato);
                 $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
@@ -130,7 +130,7 @@ class ContratosController extends Controller
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 
             } else {
-                $objMensaje->Mensaje("error", "La fecha de inicio del contrato debe ser menor a la ultima fecha de pago del periodo " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d'), $this);
+                $objMensaje->Mensaje("error", "La fecha de inicio del contrato debe ser mayor a la ultima fecha de pago del periodo " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d'), $this);
             }                        
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevo.html.twig', array(

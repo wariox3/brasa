@@ -66,7 +66,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         if($arLiquidacion->getLiquidarCesantias() == 1) {            
             $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();
             $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
-            $intDiasCesantias = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta) - 1;                
+            $intDiasCesantias = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                
             $douCesantias = ($douBasePrestacionesTotal * $intDiasCesantias) / 360;
             $douInteresesCesantias = $douCesantias * 0.12;
             $arLiquidacion->setFechaUltimoPagoCesantias($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias());
@@ -77,7 +77,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         if($arLiquidacion->getLiquidarPrima() == 1) {            
             $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas();
             $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
-            $intDiasPrima = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta) - 1;                
+            $intDiasPrima = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                
             $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
             $arLiquidacion->setDiasPrimas($intDiasPrima);
             $arLiquidacion->setVrPrima($douPrima);                
@@ -86,9 +86,7 @@ class RhuLiquidacionRepository extends EntityRepository {
 
         if($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones() <= $arLiquidacion->getContratoRel()->getFechaDesde()) {
             if($arLiquidacion->getLiquidarVacaciones() == 1) {
-                $intDiasVacaciones = $arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
-                $intDiasVacaciones = $intDiasVacaciones->format('%a'); 
-                $intDiasVacaciones = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones(), $arLiquidacion->getContratoRel()->getFechaHasta()) - 1;
+                $intDiasVacaciones = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones(), $arLiquidacion->getContratoRel()->getFechaHasta());
                 $douVacaciones = ($douSalario * $intDiasVacaciones) / 720;
                 $arLiquidacion->setDiasVacaciones($intDiasVacaciones);
                 $arLiquidacion->setVrVacaciones($douVacaciones);
