@@ -120,7 +120,7 @@ class RhuContrato
     /**     
      * @ORM\Column(name="estado_liquidado", type="boolean")
      */    
-    private $estadoLiquidado = 1;     
+    private $estadoLiquidado = 0;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
@@ -174,13 +174,13 @@ class RhuContrato
      */
     protected $programacionesPagosDetallesContratoRel;    
     
-
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->liquidacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->programacionesPagosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -650,6 +650,54 @@ class RhuContrato
     }
 
     /**
+     * Set fechaUltimoPago
+     *
+     * @param \DateTime $fechaUltimoPago
+     *
+     * @return RhuContrato
+     */
+    public function setFechaUltimoPago($fechaUltimoPago)
+    {
+        $this->fechaUltimoPago = $fechaUltimoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoPago()
+    {
+        return $this->fechaUltimoPago;
+    }
+
+    /**
+     * Set estadoLiquidado
+     *
+     * @param boolean $estadoLiquidado
+     *
+     * @return RhuContrato
+     */
+    public function setEstadoLiquidado($estadoLiquidado)
+    {
+        $this->estadoLiquidado = $estadoLiquidado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoLiquidado
+     *
+     * @return boolean
+     */
+    public function getEstadoLiquidado()
+    {
+        return $this->estadoLiquidado;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -883,53 +931,5 @@ class RhuContrato
     public function getProgramacionesPagosDetallesContratoRel()
     {
         return $this->programacionesPagosDetallesContratoRel;
-    }
-
-    /**
-     * Set fechaUltimoPago
-     *
-     * @param \DateTime $fechaUltimoPago
-     *
-     * @return RhuContrato
-     */
-    public function setFechaUltimoPago($fechaUltimoPago)
-    {
-        $this->fechaUltimoPago = $fechaUltimoPago;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaUltimoPago
-     *
-     * @return \DateTime
-     */
-    public function getFechaUltimoPago()
-    {
-        return $this->fechaUltimoPago;
-    }
-
-    /**
-     * Set estadoLiquidado
-     *
-     * @param boolean $estadoLiquidado
-     *
-     * @return RhuContrato
-     */
-    public function setEstadoLiquidado($estadoLiquidado)
-    {
-        $this->estadoLiquidado = $estadoLiquidado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoLiquidado
-     *
-     * @return boolean
-     */
-    public function getEstadoLiquidado()
-    {
-        return $this->estadoLiquidado;
     }
 }
