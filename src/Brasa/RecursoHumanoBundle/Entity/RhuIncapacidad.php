@@ -85,7 +85,17 @@ class RhuIncapacidad
     /**     
      * @ORM\Column(name="estado_transcripcion", type="boolean")
      */    
-    private $estadoTranscripcion = 0;      
+    private $estadoTranscripcion = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_cobrar", type="boolean")
+     */    
+    private $estadoCobrar = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_prorroga", type="boolean")
+     */    
+    private $estadoProrroga = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoAdicionalSubtipo", inversedBy="incapacidadesPagoAdicionalSubtipoRel")
@@ -468,6 +478,54 @@ class RhuIncapacidad
     public function getEstadoTranscripcion()
     {
         return $this->estadoTranscripcion;
+    }
+
+    /**
+     * Set estadoCobrar
+     *
+     * @param boolean $estadoCobrar
+     *
+     * @return RhuIncapacidad
+     */
+    public function setEstadoCobrar($estadoCobrar)
+    {
+        $this->estadoCobrar = $estadoCobrar;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCobrar
+     *
+     * @return boolean
+     */
+    public function getEstadoCobrar()
+    {
+        return $this->estadoCobrar;
+    }
+
+    /**
+     * Set estadoProrroga
+     *
+     * @param boolean $estadoProrroga
+     *
+     * @return RhuIncapacidad
+     */
+    public function setEstadoProrroga($estadoProrroga)
+    {
+        $this->estadoProrroga = $estadoProrroga;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoProrroga
+     *
+     * @return boolean
+     */
+    public function getEstadoProrroga()
+    {
+        return $this->estadoProrroga;
     }
 
     /**

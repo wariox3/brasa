@@ -20,7 +20,6 @@ class EmpleadoFamiliaController extends Controller
         } else {
             $arEmpleadoFamilia->setEntidadCajaRel($arEmpleado->getEntidadCajaRel());
             $arEmpleadoFamilia->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
-            $arEmpleadoFamilia->setNombres('Mario');
         }            
         
         $form = $this->createForm(new RhuEmpleadoFamiliaType, $arEmpleadoFamilia);

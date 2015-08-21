@@ -32,8 +32,7 @@
                     <div class="col-sm-10">                  
                         {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                </div>                     
-
+                </div>        
                 <div class="form-group form-group-sm">  
                     <label for="form_estadoTranscripcion" class="col-sm-2 control-label">Transcripcion:</label>
                     <div class="col-sm-10">                  
@@ -56,7 +55,9 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th style="text-align: right">HORAS</th>
-                <th>TRANSCRIPCION</th>
+                <th>COBRAR</th>
+                <th>PRORROGA</th>
+                <th>TRANSCRIPCIÓN</th>
                 <th style="text-align: center"></th>                
                 <th></th>
             </tr>
@@ -69,7 +70,9 @@
                 <td>{{ arIncapacidades.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arIncapacidades.fechaHasta |date("Y/m/d")  }}</td>                                                
                 <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(2, '.', ',') }}</td>                                            
-                <td>{% if arIncapacidades.estadoTranscripcion == 1 %} SI {% else %} NO {% endif %}</td>                                
+                <td>{% if arIncapacidades.estadoCobrar == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arIncapacidades.estadoProrroga == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arIncapacidades.estadoTranscripcion == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arIncapacidades.codigoCentroCostoFk, 'codigoEmpleado': arIncapacidades.codigoEmpleadoFk, 'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}', 'AgregarIncapacidad', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                               
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arIncapacidades.codigoIncapacidadPk }}" /></td>
             </tr>

@@ -30,14 +30,14 @@ class FormatoIncapacidad extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('CODIGO', 'IDENTIFICACION', 'EMPLEADO','CENTRO COSTOS', 'DESDE', 'HASTA', 'HORAS', 'TRANSCRIPCION');
+        $header = array('CODIGO', 'IDENTIFICACION', 'EMPLEADO','CENTRO COSTOS', 'DESDE', 'HASTA', 'HORAS', 'COBRAR','PRORROGA','TRANSCRIPCION');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
         $this->SetFont('Arial', 'B', 7);
         //creamos la cabecera de la tabla.
-        $w = array(12, 23, 65, 95, 19, 19, 19, 23);
+        $w = array(12, 22, 60, 90, 17, 17, 17,17,17,23);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
