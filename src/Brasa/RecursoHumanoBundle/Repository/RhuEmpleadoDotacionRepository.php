@@ -11,5 +11,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuEmpleadoDotacionRepository extends EntityRepository {
     
-    
+    public function listaDQL($strIdentificacion = "", $codigoCentroCosto = "") {        
+        $dql   = "SELECT d, e FROM BrasaRecursoHumanoBundle:RhuEmpleadoDotacion d JOIN d.empleadoRel e WHERE d.codigoEmpleadoDotacionPk <> 0";
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        if($codigoCentroCosto != "" ) {
+            $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
+        }
+        $dql .= " ORDER BY d.fecha";
+        return $dql;
+    }       
 }
