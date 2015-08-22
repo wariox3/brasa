@@ -8,14 +8,18 @@
         <tr>
             <th>CÓDIGO</th>
             <th>ELEMENTO DOTACIÓN</th>
-            <th></th>
+            <th>CANTIDAD</th>
+            <th>SERIE</th>
+            <th>LOTE</th>
         </tr>
         
             {%for arDotacionElementos in arDotacionElementos %}
                <tr>
-                <td>{{arDotacionElementos.codigoDotacionElementoPk}}</td>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arDotacionElementos.codigoDotacionElementoPk }}">{{ arDotacionElementos.codigoDotacionElementoPk }}</td>
                 <td>{{arDotacionElementos.dotacion}}</td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDotacionElementos.codigoDotacionElementoPk }}" /></td>
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtSerie[]"  size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtLote[]"  size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
             {%endfor%}
             </tr>            
     </table>    

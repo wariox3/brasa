@@ -168,30 +168,37 @@ class EmpleadoDotacionController extends Controller
         $arEmpleadoDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
         $arEmpleadoDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->find($codigoEmpleadoDotacion);
         $arDotacionElementos = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-        $arDotacionElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
+                        $arDotacionElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request); 
-        if ($form->isValid()) { 
+        if ($form->isValid()) {
+            $arrControles = $request->request->All();
             if ($form->get('BtnGuardar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoDotacionElementoPk) {                    
-                        $arDotacionElementos = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-                        $arDotacionElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($codigoDotacionElementoPk);
-                        $arEmpleadoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle();
-                        $arEmpleadoDotacionDetalle->setEmpleadoDotacionRel($arEmpleadoDotacion);
-                        $arEmpleadoDotacionDetalle->setDotacionElementoRel($arDotacionElementos);
-                        $arEmpleadoDotacionDetalle->setCantidadAsignada(1);
-                        $arEmpleadoDotacionDetalle->setCantidadDevuelta(0);
-                        $arEmpleadoDotacionDetalle->setSerie(0);
-                        $arEmpleadoDotacionDetalle->setLote(0);
-                        $em->persist($arEmpleadoDotacionDetalle);            
-                    }                    
-                    $em->flush();                        
-                }                
+                if (isset($arrControles['TxtCantidad'])) {
+                    $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        if($arrControles['TxtCantidad'][$intIndice] > 0 ){
+                            $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
+                            $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($intCodigo);
+                            $arEmpleadoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle();
+                            $arEmpleadoDotacionDetalle->setEmpleadoDotacionRel($arEmpleadoDotacion);
+                            
+                            $arEmpleadoDotacionDetalle->setDotacionElementoRel($arDotacionElemento);
+                            $intCantidad = $arrControles['TxtCantidad'][$intIndice];
+                            $arEmpleadoDotacionDetalle->setCantidadAsignada($intCantidad);
+                            $arEmpleadoDotacionDetalle->setCantidadDevuelta(0);
+                            $intLote = $arrControles['TxtLote'][$intIndice];
+                            $intSerie = $arrControles['TxtSerie'][$intIndice];
+                            $arEmpleadoDotacionDetalle->setSerie($intSerie);
+                            $arEmpleadoDotacionDetalle->setLote($intLote);
+                            $em->persist($arEmpleadoDotacionDetalle);                                
+                        }                        
+                        $intIndice++;
+                    }
+                }
+                $em->flush();                                        
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
