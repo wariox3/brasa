@@ -46,7 +46,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
      * @param integer	Codigo de la programacion de pago
      */    
     public function generar($codigoProgramacionPago) {
-        $em = $this->getEntityManager();            
+        $em = $this->getEntityManager(); 
+        set_time_limit(0);
         $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         if($arProgramacionPagoProcesar->getEstadoGenerado() == 0 && $arProgramacionPagoProcesar->getEmpleadosGenerados() == 1 && $arProgramacionPagoProcesar->getInconsistencias() == 0) {
@@ -98,8 +99,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionVacaciones);
                         $em->persist($arPagoDetalle);                                         
                     }
-
-
 
                     //Procesar Incapacidades
                     $arPagoConceptoIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
@@ -166,7 +165,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $em->persist($arIncapacidadActualizar);
                         }
                     }
-
 
                     //Procesar Licencias
                     $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
@@ -318,7 +316,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         }
                     }
 
-
                     $intPagoConceptoSalario = $arConfiguracion->getCodigoHoraDiurnaTrabajada();
                     $intPagoConceptoSalud = $arConfiguracion->getCodigoAporteSalud();
                     $intPagoConceptoPension = $arConfiguracion->getCodigoAportePension();
@@ -341,7 +338,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $douDevengado = $douDevengado + $douPagoDetalle;
                     $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $douPagoDetalle;
                     $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
-
 
                     //Liquidar salud
                     $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoSalud);
@@ -401,6 +397,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $em->persist($arPagoDetalle);
                         }
                     }
+                    
                 }
                 $arProgramacionPagoProcesar->setEstadoGenerado(1);
                 $em->persist($arCentroCosto);
@@ -412,8 +409,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 1);
                 }
-
-
             }
 
             if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {
@@ -546,6 +541,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
             }                            
         }        
+        set_time_limit(90);
         return true;
     }
     
