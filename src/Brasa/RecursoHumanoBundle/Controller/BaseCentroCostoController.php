@@ -132,7 +132,6 @@ class BaseCentroCostoController extends Controller
         $form->handleRequest($request);
         $arCentrosCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
-
         return $this->render('BrasaRecursoHumanoBundle:Base/CentroCosto:detalle.html.twig', array(
                     'arCentrosCostos' => $arCentrosCostos,
                     'form' => $form->createView()

@@ -373,7 +373,6 @@ class ProgramacionesPagoController extends Controller
 
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -385,36 +384,24 @@ class ProgramacionesPagoController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'ID')
-                    ->setCellValue('B1', 'CODIGO')
-                    ->setCellValue('C1', 'CENTRO COSTO')
-                    ->setCellValue('D1', 'PERIODO')
-                    ->setCellValue('E1', 'DESDE')
-                    ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'DIAS');
+                    ->setCellValue('A1', 'Codigo');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
-        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        $arPagos = $query->getResult();
-        foreach ($arPagos as $arPago) {
+        $arProgramacionesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionesPagos = $query->getResult();
+        foreach ($arProgramacionesPagos as $arProgramacionPago) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPago->getCodigoProgramacionPagoPk())
-                    ->setCellValue('B' . $i, $arPago->getCodigoCentroCostoFk())
-                    ->setCellValue('C' . $i, $arPago->getCentroCostoRel()->getNombre())
-                    ->setCellValue('D' . $i, $arPago->getCentroCostoRel()->getPeriodoPagoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arPago->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('F' . $i, $arPago->getFechaHasta())
-                    ->setCellValue('G' . $i, $arPago->getDias());
+                    ->setCellValue('A' . $i, $arProgramacionPago->getProgramacionPagoPk());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('ProgramacionPagos');
+        $objPHPExcel->getActiveSheet()->setTitle('PrograPago');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ProgramacionPagos.xlsx"');
+        header('Content-Disposition: attachment;filename="PrograPago.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
