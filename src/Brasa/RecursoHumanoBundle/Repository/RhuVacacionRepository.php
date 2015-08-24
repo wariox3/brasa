@@ -63,9 +63,10 @@ class RhuVacacionRepository extends EntityRepository {
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);         
-        $intDias = $arVacacion->getFechaDesde()->diff($arVacacion->getFechaHasta());
-        $intDias = $intDias->format('%a');
-        $intDias = $intDias + 1;
+        $intDias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arVacacion->getFechaDesde(), $arVacacion->getFechaHasta());
+        //$intDias = $arVacacion->getFechaDesde()->diff($arVacacion->getFechaHasta());
+        //$intDias = $intDias->format('%a');
+        //$intDias = $intDias + 1;
         $floSalario = $arVacacion->getEmpleadoRel()->getVrSalario();
         $floIbc = $floSalario / 30 * $intDias;
         $arVacacion->setVrIbc($floIbc);

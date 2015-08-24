@@ -330,6 +330,7 @@ class ProgramacionesPagoController extends Controller
             ->add('pagoTipoRel', 'entity', $arrayPropiedadesTipo)
             ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'GENERADO', '0' => 'SIN GENERAR'), 'data' => $session->get('filtroEstadoGenerado')))
             ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PAGADOS', '0' => 'SIN PAGAR'), 'data' => $session->get('filtroEstadoPagado')))
+            ->add('fechaHasta', 'date', array('required' => true, 'widget' => 'single_text'))                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnPagar', 'submit', array('label'  => 'Pagar',))
@@ -345,7 +346,7 @@ class ProgramacionesPagoController extends Controller
         $session = $this->getRequest()->getSession();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaDQL(
                     "",
-                    "",
+                    $session->get('filtroFechaHasta'),
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroEstadoGenerado'),
                     $session->get('filtroEstadoPagado'),
@@ -361,6 +362,13 @@ class ProgramacionesPagoController extends Controller
         $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
         $session->set('filtroEstadoGenerado', $form->get('estadoGenerado')->getData());
         $session->set('filtroEstadoPagado', $form->get('estadoPagado')->getData());
+        if($form->get('fechaHasta')->getData()) {
+            $session->set('filtroFechaHasta', $form->get('fechaHasta')->getData()->format('Y-m-d'));
+        } else {
+            $session->set('filtroFechaHasta', "");
+        }
+            
+        
     }
 
     private function generarExcel() {

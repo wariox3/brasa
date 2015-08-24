@@ -38,8 +38,8 @@ class ProgramacionesPagoArchivoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
-        $arConfiguracionGeneral = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracionGeneral();
-        $arConfiguracionGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionGeneral')->find(1);        
+        $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);        
         $form = $this->createFormBuilder()
             ->add('BtnGenerarTxt', 'submit', array('label'  => 'Generar archivo',))
             ->add('descripcion', 'text', array('data'  => '225PAGO NOMI '),array('required' => true))
@@ -58,13 +58,13 @@ class ProgramacionesPagoArchivoController extends Controller
                 } else {
                   if ($controles['fechaAplicacion'] == ""){
                     $mensajefechaTransmision = "Se requiere la fecha de aplicación";
-                  }else {  
-                    
+                  }else {                  
                 $strNombreArchivo = "PagoNomina" . date('YmdHis') . ".txt";
-                $ar = fopen($strNombreArchivo,"a") or die("Problemas en la creacion del archivo plano");
+                $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;
+                $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
                 // Encabezado
-                $strNitEmpresa = $arConfiguracionGeneral->getNit();
-                $strNombreEmpresa = $arConfiguracionGeneral->getEmpresa();
+                $strNitEmpresa = $arConfiguracionGeneral->getNitEmpresa();
+                $strNombreEmpresa = $arConfiguracionGeneral->getNombreEmpresa();
                 $strTipoPagoSecuencia = $controles['descripcion'];
                 $strFechaCreacion = $controles['fechaTransmision'];
                 $strSecuencia = $controles['secuencia'];
@@ -95,8 +95,7 @@ class ProgramacionesPagoArchivoController extends Controller
                         fputs($ar, "\r\n");
                     }
                 //Fin cuerpo
-                fclose($ar);
-                $strArchivo = $strNombreArchivo;
+                fclose($ar);                
                 header('Content-Description: File Transfer');
                       header('Content-Type: text/csv; charset=ISO-8859-15');
                       header('Content-Disposition: attachment; filename='.basename($strArchivo));

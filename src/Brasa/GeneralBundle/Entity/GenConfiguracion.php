@@ -58,7 +58,27 @@ class GenConfiguracion
      */
     private $nitVentasMostrador = 0;         
 
-
+    /**
+     * @ORM\Column(name="ruta_temporal", type="string", length=500, nullable=true)
+     */      
+    private $rutaTemporal;    
+    
+    /**
+     * @ORM\Column(name="nit_empresa", type="string", length=20, nullable=true)
+     */    
+    private $nitEmpresa;
+    
+    /**
+     * @ORM\Column(name="digito_verificacion_empresa", type="string", length=2, nullable=true)
+     */    
+    private $digitoVerificacionEmpresa;
+    
+    /**
+     * @ORM\Column(name="nombre_empresa", type="string", length=90, nullable=true)
+     */    
+    private $nombreEmpresa;    
+    
+    
     /**
      * Get codigoConfiguracionPk
      *
@@ -251,5 +271,101 @@ class GenConfiguracion
     public function getNitVentasMostrador()
     {
         return $this->nitVentasMostrador;
+    }
+
+    /**
+     * Set rutaTemporal
+     *
+     * @param string $rutaTemporal
+     *
+     * @return GenConfiguracion
+     */
+    public function setRutaTemporal($rutaTemporal)
+    {
+        $this->rutaTemporal = $rutaTemporal;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaTemporal
+     *
+     * @return string
+     */
+    public function getRutaTemporal()
+    {
+        return $this->rutaTemporal;
+    }
+
+    /**
+     * Set nitEmpresa
+     *
+     * @param string $nitEmpresa
+     *
+     * @return GenConfiguracion
+     */
+    public function setNitEmpresa($nitEmpresa)
+    {
+        $this->nitEmpresa = $nitEmpresa;
+
+        return $this;
+    }
+
+    /**
+     * Get nitEmpresa
+     *
+     * @return string
+     */
+    public function getNitEmpresa()
+    {
+        return $this->nitEmpresa;
+    }
+
+    /**
+     * Set digitoVerificacionEmpresa
+     *
+     * @param string $digitoVerificacionEmpresa
+     *
+     * @return GenConfiguracion
+     */
+    public function setDigitoVerificacionEmpresa($digitoVerificacionEmpresa)
+    {
+        $this->digitoVerificacionEmpresa = $digitoVerificacionEmpresa;
+
+        return $this;
+    }
+
+    /**
+     * Get digitoVerificacionEmpresa
+     *
+     * @return string
+     */
+    public function getDigitoVerificacionEmpresa()
+    {
+        return $this->digitoVerificacionEmpresa;
+    }
+
+    /**
+     * Set nombreEmpresa
+     *
+     * @param string $nombreEmpresa
+     *
+     * @return GenConfiguracion
+     */
+    public function setNombreEmpresa($nombreEmpresa)
+    {
+        $this->nombreEmpresa = $nombreEmpresa;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreEmpresa
+     *
+     * @return string
+     */
+    public function getNombreEmpresa()
+    {
+        return $this->nombreEmpresa;
     }
 }

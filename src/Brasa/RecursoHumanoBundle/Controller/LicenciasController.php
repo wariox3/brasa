@@ -30,6 +30,13 @@ class LicenciasController extends Controller
             if($codigoEmpleado != 0) { 
                 $arLicencia->setEmpleadoRel($arEmpleado);                
             }
+            $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
+            $intDias = $intDias->format('%a');
+            $intDias = $intDias + 1;
+            
+            $arLicencia->setCantidad($intDias);
+            $arLicencia->setCantidadPendiente($intDias);
+            
             $em->persist($arLicencia);
             $em->flush();                        
             if($form->get('guardarnuevo')->isClicked()) {

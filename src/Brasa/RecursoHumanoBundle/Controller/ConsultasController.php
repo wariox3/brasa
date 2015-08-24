@@ -75,7 +75,7 @@ class ConsultasController extends Controller
             'arCreditos' => $arCreditos,
             'form' => $form->createView()
             ));
-    }
+    }   
     
     public function serviciosCobrarAction() {
         $em = $this->getDoctrine()->getManager();
@@ -131,7 +131,7 @@ class ConsultasController extends Controller
                     $session->get('filtroDesde'),
                     $session->get('filtroHasta')
                     );
-    }
+    }   
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
