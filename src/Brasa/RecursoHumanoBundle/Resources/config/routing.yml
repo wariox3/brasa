@@ -100,34 +100,38 @@ brs_rhu_vacaciones_detalle_nuevo:
 
 brs_rhu_licencias_nuevo:
     path:     /rhumano/licencias/nuevo/{codigoCentroCosto}/{codigoEmpleado}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:nuevo }  
+    defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:nuevo } 
+    
+brs_rhu_base_empleado_dotacion_lista:
+    path:     /rhumano/base/empleado/dotacion/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:lista}    
     
 brs_rhu_base_empleado_dotacion_nuevo:
-    path:     /rhumano/base/empleadoDotacion/nuevo/{codigoEmpleado}/{codigoEmpleadoDotacion}
+    path:     /rhumano/base/empleado/dotacion/nuevo/{codigoEmpleado}/{codigoEmpleadoDotacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:nuevo }
     
+brs_rhu_base_empleado_dotacion_nuevo_dotacion:
+    path:     /rhumano/base/empleado/dotacion/nuevo/dotacion
+    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:nuevoDotacion }    
+    
 brs_rhu_base_empleado_dotacion_detalle:
-    path:     /rhumano/base/empleadoDotacion/detalle/{codigoEmpleadoDotacion}
+    path:     /rhumano/base/empleado/dotacion/detalle/{codigoEmpleadoDotacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:detalle }
     
 brs_rhu_base_empleado_dotacion_detalle_nuevo:
-   path:     /rhumano/base/empleadoDotacion/detalle/nuevo/{codigoEmpleadoDotacion}
+   path:     /rhumano/base/empleado/dotacion/detalle/nuevo/{codigoEmpleadoDotacion}
    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:detalleNuevo }
    
 brs_rhu_base_empleado_dotacion_detalle_editar:
    path:     /rhumano/base/empleadoDotacion/detalle/editar/{codigoEmpleadoDotacionDetalle}
-   defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:editarElemento }   
-    
-brs_rhu_base_empleado_dotacion_lista:
-    path:     /rhumano/base/empleadoDotacion/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:lista}    
+   defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:editarElemento }       
     
 brs_rhu_base_dotacionElemento_lista:
-    path:     /rhumano/base/dotacionElemento/lista
+    path:     /rhumano/base/dotacion/elemento/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionElemento:lista }
     
 brs_rhu_base_dotacionElemento_nuevo:
-    path:     /rhumano/base/dotacionElemento/nuevo/{codigoDotacionElemento}
+    path:     /rhumano/base/dotacion/elemento/nuevo/{codigoDotacionElemento}
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionElemento:nuevo }    
     
 brs_rhu_creditos_lista:

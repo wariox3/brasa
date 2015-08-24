@@ -125,6 +125,38 @@ class EmpleadoDotacionController extends Controller
             'form' => $form->createView()));
     }
     
+    public function nuevoDotacionAction() {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        
+        $form = $this->createFormBuilder()
+            ->add('numeroIdentificacion', 'text', array('required' => true))
+            ->add('fecha', 'date', array('data' => new \DateTime('now')))
+            ->add('codigoInternoReferencia', 'number', array('required' => true))
+            ->add('comentarios', 'textarea', array('required' => false))    
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {           
+            $arEmpleadoDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
+            $arEmpleadoDotacion = $form->getData();
+            
+            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $form->get('numeroIdentificacion')->getData(), 'estadoActivo' => 1));
+            
+            
+            //$arEmpleadoDotacion->setCentroCostoRel($arEmpleado[0]);
+            $arEmpleadoDotacion->setCodigoEmpleadoFk($arEmpleado[0]);
+            $em->persist($arEmpleadoDotacion);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:nuevoDotacion.html.twig', array(
+            
+            'form' => $form->createView()));
+    }
+    
     public function detalleAction($codigoEmpleadoDotacion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
