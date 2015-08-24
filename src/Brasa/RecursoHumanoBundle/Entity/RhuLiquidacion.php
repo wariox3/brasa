@@ -68,6 +68,11 @@ class RhuLiquidacion
     private $VrPrima = 0;    
 
     /**
+     * @ORM\Column(name="vr_deduccion_prima", type="float")
+     */
+    private $VrDeduccionPrima = 0;    
+    
+    /**
      * @ORM\Column(name="vr_vacaciones", type="float")
      */
     private $VrVacaciones = 0;    
@@ -1121,5 +1126,29 @@ class RhuLiquidacion
     public function getVrDeducciones()
     {
         return $this->VrDeducciones;
+    }
+
+    /**
+     * Set vrDeduccionPrima
+     *
+     * @param float $vrDeduccionPrima
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrDeduccionPrima($vrDeduccionPrima)
+    {
+        $this->VrDeduccionPrima = $vrDeduccionPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDeduccionPrima
+     *
+     * @return float
+     */
+    public function getVrDeduccionPrima()
+    {
+        return $this->VrDeduccionPrima;
     }
 }

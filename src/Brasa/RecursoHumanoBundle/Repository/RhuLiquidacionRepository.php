@@ -31,8 +31,9 @@ class RhuLiquidacionRepository extends EntityRepository {
         if($dateFechaUltimoPago != null) {
             $arLiquidacion->setFechaUltimoPago($dateFechaUltimoPago);
             if($arLiquidacion->getFechaUltimoPago() < $arLiquidacion->getFechaHasta()) {
-                $diasAdicionales = $arLiquidacion->getFechaUltimoPago()->diff($arLiquidacion->getFechaHasta());
-                $diasAdicionales = $diasAdicionales->format('%a');
+                $dateFechaUltimoPagoLiquidacion = $arLiquidacion->getFechaUltimoPago();
+                date_add($dateFechaUltimoPagoLiquidacion, date_interval_create_from_date_string('1 days'));                
+                $diasAdicionales = $this->diasPrestaciones($dateFechaUltimoPagoLiquidacion, $arLiquidacion->getFechaHasta());
                 $douIBCAdicional = ($arLiquidacion->getContratoRel()->getVrSalario()/30) * $diasAdicionales;
                 $arLiquidacion->setVrIngresoBaseCotizacionAdicional($douIBCAdicional);                
                 $arLiquidacion->setDiasAdicionalesIBC($diasAdicionales);
@@ -41,14 +42,13 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arLiquidacion->getCodigoEmpleadoFk(), $arLiquidacion->getContratoRel()->getFechaDesde()->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'));        
         $douIBC = (float)$arrayCostos[0]['IBC']; 
         $douIBCTotal = $douIBC + $douIBCAdicional;
-        $intDiasLaborados = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
-        $intDiasLaborados = $intDiasLaborados->format('%a');
-        $intDiasLaborados = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaDesde(), $arLiquidacion->getContratoRel()->getFechaHasta()) - 1;
+        $intDiasLaborados = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaDesde(), $arLiquidacion->getContratoRel()->getFechaHasta());
         $douSalario = $arLiquidacion->getContratoRel()->getVrSalario();
         $douBasePrestacionesTotal = 0;        
         $douCesantias = 0;
         $douInteresesCesantias = 0;
         $douPrima = 0;
+        $douDeduccionPrima = 0;
         $douVacaciones = 0;
         $douAuxilioTransporte = 0;
         if($intDiasLaborados > 0) {
@@ -80,10 +80,16 @@ class RhuLiquidacionRepository extends EntityRepository {
             $intDiasPrima = 0;
             if($dateFechaDesde <= $dateFechaHasta) {
                 $intDiasPrima = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
-            }                            
-            $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
-            $arLiquidacion->setDiasPrimas($intDiasPrima);
-            $arLiquidacion->setVrPrima($douPrima);                
+                $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
+                $arLiquidacion->setDiasPrimas($intDiasPrima);
+                $arLiquidacion->setVrPrima($douPrima);            
+            } else {
+                $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 1;    
+                $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
+                $arLiquidacion->setDiasPrimas($intDiasPrima * -1);
+                $arLiquidacion->setVrDeduccionPrima($douPrima);   
+                $douDeduccionPrima = $douPrima;
+            }                                                                                
             $arLiquidacion->setFechaUltimoPagoPrimas($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas());
         }
 
@@ -103,7 +109,7 @@ class RhuLiquidacionRepository extends EntityRepository {
             $floDeducciones += $arLiquidacionDeduccion->getVrDeduccion();
         }
         $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones;
-        $douTotal = $douTotal - $floDeducciones;
+        $douTotal = $douTotal - $floDeducciones - $douDeduccionPrima;
         $arLiquidacion->setVrTotal($douTotal);
         $arLiquidacion->setVrSalario($douSalario);
         $arLiquidacion->setVrIngresoBaseCotizacion($douIBC);
@@ -115,7 +121,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         
         $em->flush();
         return true;
-    } 
+    }    
     
     public function devuelveCesantiasFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
@@ -134,44 +140,41 @@ class RhuLiquidacionRepository extends EntityRepository {
         $intAnios = 0;
         $intMeses = 0;
         if($intAnioInicio != $intAnioFin) {
-            if(($intAnioFin - $intAnioInicio) > 1) {
-                $intAnios = ($intAnioFin - $intAnioInicio) - 1;
+            $intDiferenciaAnio = $intAnioFin - $intAnioInicio;            
+            if(($intDiferenciaAnio) > 1) {
+                $intAnios = $intDiferenciaAnio - 1;
                 $intAnios = $intAnios * 12 * 30;                        
             }
 
             $dateFechaTemporal = date_create_from_format('Y-m-d H:i', $intAnioInicio . '-12-30' . "00:00");
-            $intMesInicio = $dateFechaDesde->format('n');                
-            $intMesFinal = $dateFechaTemporal->format('n');
-            if($intMesInicio != $intMesFinal) {                        
-                $intMeses = $intMesFinal - $intMesInicio;
-                if($intMeses >= 1) {
-                    $intDia = $dateFechaDesde->format('j');
-                    $intDiasMes = 31 - $intDia;                
-                    $intDias = ($intMeses * 30) + $intDiasMes;                            
-                }            
+            if($dateFechaDesde->format('n') != $dateFechaTemporal->format('n')) {                        
+                $intMeses = $dateFechaTemporal->format('n') - $dateFechaDesde->format('n') - 1;
+                $intDiasInicio = $this->diasPrestacionesMes($dateFechaDesde->format('j'), 1);
+                $intDiasFinal = $this->diasPrestacionesMes($dateFechaTemporal->format('j'), 0);
+                $intDias = $intDiasInicio + $intDiasFinal + ($intMeses * 30);
             } else {
-                $intDia = $dateFechaDesde->format('j');
-                $intDias = 31 - $intDia;                                        
+                if($dateFechaTemporal->format('j') == $dateFechaDesde->format('j')) {
+                    $intDias = 0;
+                } else {
+                    $intDias = 1 + ($dateFechaTemporal->format('j') - $dateFechaDesde->format('j'));                               
+                }                
             }
 
             $dateFechaTemporal = date_create_from_format('Y-m-d H:i', $intAnioFin . '-01-01' . "00:00");
-            $intMesInicio = $dateFechaTemporal->format('n');                
-            $intMesFinal = $dateFechaHasta->format('n');
-            if($intMesInicio != $intMesFinal) {                        
-                $intMeses = $intMesFinal - $intMesInicio;
-                if($intMeses >= 1) {
-                    $intDia = $dateFechaHasta->format('j');      
-                    $intDias += ($intMeses * 30) + $intDia;                            
-                }
+            if($dateFechaTemporal->format('n') != $dateFechaHasta->format('n')) {                        
+                $intMeses = $dateFechaHasta->format('n') - $dateFechaTemporal->format('n') - 1;
+                $intDiasInicio = $this->diasPrestacionesMes($dateFechaTemporal->format('j'), 1);
+                $intDiasFinal = $this->diasPrestacionesMes($dateFechaHasta->format('j'), 0);
+                $intDias += $intDiasInicio + $intDiasFinal + ($intMeses * 30);
             } else {
-                $intDias += $dateFechaHasta->format('j');      
+                $intDias += 1 + ($dateFechaHasta->format('j') - $dateFechaTemporal->format('j'));                               
             }
             $intDias += $intAnios;
         } else {                                           
             if($dateFechaDesde->format('n') != $dateFechaHasta->format('n')) {                        
                 $intMeses = $dateFechaHasta->format('n') - $dateFechaDesde->format('n') - 1;
-                $intDiasInicio = $this->diasPrestacionesMes($dateFechaDesde->format('j'));
-                $intDiasFinal = $this->diasPrestacionesMes($dateFechaHasta->format('j'));
+                $intDiasInicio = $this->diasPrestacionesMes($dateFechaDesde->format('j'), 1);
+                $intDiasFinal = $this->diasPrestacionesMes($dateFechaHasta->format('j'), 0);
                 $intDias = $intDiasInicio + $intDiasFinal + ($intMeses * 30);
             } else {
                 $intDias = 1 + ($dateFechaHasta->format('j') - $dateFechaDesde->format('j'));                               
@@ -181,17 +184,13 @@ class RhuLiquidacionRepository extends EntityRepository {
         return $intDias;
     }
     
-    public function diasPrestacionesMes($intDia) {
+    public function diasPrestacionesMes($intDia, $intDesde) {
         $intDiasDevolver = 0;
-        if($intDia < 15) {
-            $intDiasDevolver = $intDia;
+        if($intDesde == 1) {
+            $intDiasDevolver = 31 - $intDia;
         } else {
-            if($intDia == 31) {
-                $intDiasDevolver = 1;
-            } else {
-                $intDiasDevolver = 31 - $intDia; 
-            }
-        }
+            $intDiasDevolver = $intDia;
+        }          
         return $intDiasDevolver;
     }    
 }

@@ -508,6 +508,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                     $arPagoDetalle->setPagoRel($arPago);
                     $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
+                    $arPagoDetalle->setDetalle($intDias . " Dias de cesantias");
                     $arPagoDetalle->setVrHora(0);
                     $arPagoDetalle->setVrDia(0);
                     $arPagoDetalle->setNumeroHoras(0);
