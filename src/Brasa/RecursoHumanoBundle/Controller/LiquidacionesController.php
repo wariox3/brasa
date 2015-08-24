@@ -78,9 +78,10 @@ class LiquidacionesController extends Controller
     }        
     
     private function listar() {
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();                
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->listaDQL(                
-                "");  
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->listaDql(                
+               $session->get('filtroIdentificacion'));  
     }     
     
     private function formularioLista() {
@@ -96,15 +97,7 @@ class LiquidacionesController extends Controller
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        if($controles['fechaDesdeInicia']) {            
-            $this->fechaDesdeInicia = $controles['fechaDesdeInicia'];            
-        }
-        if($controles['fechaHastaInicia']) {            
-            $this->fechaHastaInicia = $controles['fechaHastaInicia'];            
-        }        
-        //$session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        
+        $controles = $request->request->get('form');        
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
     }    
     

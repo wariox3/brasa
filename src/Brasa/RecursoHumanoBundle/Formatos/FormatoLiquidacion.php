@@ -30,10 +30,11 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',10);
         $this->SetXY(10, 16);
         $this->Cell(185, 7, utf8_decode('LIQUIDACIÓN DE PRESTACIONES SOCIALES'), 1, 0, 'C', 1);        
+        $intY = 25;
         //FILA 1
         $this->SetFont('Arial', 'B', 8);
         $this->SetFillColor(236, 236, 236);
-        $this->SetXY(10, 25);        
+        $this->SetXY(10, $intY);        
         $this->Cell(35, 5, utf8_decode("LIQUIDACIÓN:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
         $this->Cell(20, 5, $arLiquidacion->getCodigoLiquidacionPk(), 1, 0, 'L', 1);
@@ -42,8 +43,9 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetFont('Arial', '', 7);
         $this->Cell(95, 5, utf8_decode($arLiquidacion->getCentroCostoRel()->getNombre()), 1, 0, 'L', 1);
         //FILA 2
+        $intY += 5;
         $this->SetFont('Arial', 'B', 8);
-        $this->SetXY(10, 30);        
+        $this->SetXY(10, $intY);        
         $this->Cell(35, 5, utf8_decode("DOCUMENTO:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
         $this->Cell(20, 5, $arLiquidacion->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L', 1);
@@ -52,80 +54,114 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetFont('Arial', '', 7);
         $this->Cell(95, 5, utf8_decode($arLiquidacion->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L', 1);
         //FILA 3
+        $intY += 5;
         $this->SetFont('Arial', 'B', 8);
-        $this->SetXY(10, 35);        
+        $this->SetXY(10, $intY);        
         $this->Cell(35, 5, utf8_decode("DESDE:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
         $this->Cell(20, 5, $arLiquidacion->getFechaDesde()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 8);
-        $this->Cell(35, 5, "HASTA:", 1, 0, 'L', 1);
+        $this->Cell(35, 5, "", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
-        $this->Cell(30, 5, $arLiquidacion->getFechaHasta()->format('Y/m/d'), 1, 0, 'L', 1);
+        $this->Cell(30, 5, "", 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 8);
-        $this->Cell(35, 5, utf8_decode("NÚMERO DÍAS:"), 1, 0, 'L', 1);
+        $this->Cell(35, 5, utf8_decode("DIAS LABORADOS:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
         $this->Cell(30, 5, $arLiquidacion->getNumeroDias(), 1, 0, 'R', 1);
+        //Fila 4
+        $intY += 5;
+        $this->SetFont('Arial', 'B', 8);
+        $this->SetXY(10, $intY);        
+        $this->Cell(35, 5, utf8_decode("HASTA:"), 1, 0, 'L', 1);
+        $this->SetFont('Arial', '', 7);
+        $this->Cell(20, 5, $arLiquidacion->getFechaHasta()->format('Y/m/d'), 1, 0, 'L', 1);
+        $this->SetFont('Arial', 'B', 8);
+        $this->Cell(35, 5, "", 1, 0, 'L', 1);
+        $this->SetFont('Arial', '', 7);
+        $this->Cell(30, 5, "", 1, 0, 'L', 1);
+        $this->SetFont('Arial', 'B', 8);
+        $this->Cell(35, 5, utf8_decode("DIAS NOMINA ADIC:"), 1, 0, 'L', 1);
+        $this->SetFont('Arial', '', 7);
+        $this->Cell(30, 5, $arLiquidacion->getDiasAdicionalesIBC(), 1, 0, 'R', 1);        
+        
         //BLOQUE BASE LIQUIDACIÓN
         $intX = 120;
         $this->SetFont('Arial', 'B', 8);
         $this->SetFillColor(236, 236, 236);
+        
         $this->SetXY($intX, 50);        
-        $this->Cell(43, 5, utf8_decode("BASE LIQUIDACIÓN:"), 1, 0, 'L', 1);
+        $this->Cell(43, 5, utf8_decode("IBC:"), 1, 0, 'L', 1);
         $this->SetXY($intX, 56);
-        $this->Cell(43, 5, "BASE OTRAS LIQUIDACINES:", 1, 0, 'L', 1);
-        $this->SetXY($intX, 61);
+        $this->Cell(43, 5, "BASE PRESTACIONES:", 1, 0, 'L', 1);
+        $this->SetXY($intX, 62);
         $this->Cell(43, 5, "AUXILIO TRANSPORTE:", 1, 0, 'L', 1);            
+        $this->SetXY($intX, 68);
+        $this->Cell(43, 5, "BASE PRESTACIONES TOTAL:", 1, 0, 'L', 1);         
         $intX = 163;
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(272, 272, 272);
         $this->SetXY($intX, 50);        
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrBasePrestaciones(), 2, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrIngresoBaseCotizacionTotal(), 2, '.', ','), 1, 0, 'R', 1);
         $this->SetXY($intX, 56);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrBasePrestacionesTotal(), 2, '.', ','), 1, 0, 'R', 1);
-        $this->SetXY($intX, 61);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrBasePrestaciones(), 2, '.', ','), 1, 0, 'R', 1);
+        $this->SetXY($intX, 62);
         $this->Cell(32, 5, number_format($arLiquidacion->getVrAuxilioTransporte(), 2, '.', ','), 1, 0, 'R', 1);        
-        //BLOQUE DÍAS PRESTACIONES
-        $intX = 120;
-        $this->SetFont('Arial', 'B', 8);
-        $this->SetFillColor(236, 236, 236);
-        $this->SetXY($intX, 75);        
-        $this->Cell(43, 5, utf8_decode("DÍAS VACACIONES:"), 1, 0, 'L', 1);
-        $this->SetXY($intX, 81);
-        $this->Cell(43, 5, utf8_decode("DÍAS CESANTIAS:"), 1, 0, 'L', 1);
-        $this->SetXY($intX, 87);
-        $this->Cell(43, 5, utf8_decode("DÍAS PRIMA:"), 1, 0, 'L', 1);            
-        $intX = 163;
-        $this->SetFont('Arial', '', 8);
-        $this->SetFillColor(272, 272, 272);
-        $this->SetXY($intX, 75);        
-        $this->Cell(32, 5, $arLiquidacion->getDiasVacaciones(), 1, 0, 'R', 1);
-        $this->SetXY($intX, 81);
-        $this->Cell(32, 5, $arLiquidacion->getDiasCesantias(), 1, 0, 'R', 1);
-        $this->SetXY($intX, 87);
-        $this->Cell(32, 5, $arLiquidacion->getDiasPrimas(), 1, 0, 'R', 1);
+        $this->SetXY($intX, 68);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrBasePrestacionesTotal(), 2, '.', ','), 1, 0, 'R', 1);        
+        
         //BLOQUE TOTALES
-        $intX = 120;
         $this->SetFont('Arial', 'B', 8);
-        $this->SetFillColor(236, 236, 236);
-        $this->SetXY($intX, 102);        
-        $this->Cell(43, 5, utf8_decode("CESANTÍAS:"), 1, 0, 'L', 1);
-        $this->SetXY($intX, 108);
-        $this->Cell(43, 5, "INTERESES:", 1, 0, 'L', 1);
-        $this->SetXY($intX, 114);
-        $this->Cell(43, 5, "PRIMA SEMESTRAL:", 1, 0, 'L', 1);        
-        $this->SetXY($intX, 120);
-        $this->Cell(43, 5, "VACACIONES:", 1, 0, 'L', 1);    
-        $intX = 163;
-        $this->SetFont('Arial', '', 8);
-        $this->SetFillColor(272, 272, 272);
-        $this->SetXY($intX, 102);        
+        $this->SetFillColor(236, 236, 236);        
+        $intX = 60;
+        $this->SetXY($intX + 63, 96);        
+        $this->Cell(15, 5, utf8_decode("DIAS"), 1, 0, 'R', 1);
+        $this->SetXY($intX+78, 96);        
+        $this->Cell(25, 5, utf8_decode("DESDE"), 1, 0, 'L', 1);        
+        $this->SetXY($intX+103, 96);        
+        $this->Cell(32, 5, utf8_decode("TOTAL"), 1, 0, 'R', 1);                
+        
+        $this->SetXY($intX + 28, 102);        
+        $this->Cell(33, 5, utf8_decode("CESANTÍAS:"), 1, 0, 'L', 1);       
+        $this->SetXY($intX + 28, 108);
+        $this->Cell(33, 5, "INTERESES:", 1, 0, 'L', 1);
+        $this->SetXY($intX + 28, 114);
+        $this->Cell(33, 5, "PRIMA SEMESTRAL:", 1, 0, 'L', 1);        
+        $this->SetXY($intX + 28, 120);
+        $this->Cell(33, 5, "VACACIONES:", 1, 0, 'L', 1);    
+        
+        $this->SetFont('Arial', '', 8);   
+        $this->SetFillColor(272, 272, 272);        
+        $this->SetXY($intX + 63, 102);        
+        $this->Cell(15, 5, number_format($arLiquidacion->getDiasCesantias(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->SetXY($intX + 63, 108);
+        $this->Cell(15, 5, number_format($arLiquidacion->getDiasCesantias(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->SetXY($intX + 63, 114);
+        $this->Cell(15, 5, number_format($arLiquidacion->getDiasPrimas(), 0, '.', ','), 1, 0, 'R', 1);        
+        $this->SetXY($intX + 63, 120);
+        $this->Cell(15, 5, number_format($arLiquidacion->getDiasVacaciones(), 0, '.', ','), 1, 0, 'R', 1);        
+
+        $this->SetXY($intX + 78, 102);        
+        $this->Cell(25, 5, $arLiquidacion->getFechaUltimoPagoCesantias()->format('Y-m-d'), 1, 0, 'L', 1);
+        $this->SetXY($intX + 78, 108);
+        $this->Cell(25, 5, $arLiquidacion->getFechaUltimoPagoCesantias()->format('Y-m-d'), 1, 0, 'L', 1);
+        $this->SetXY($intX + 78, 114);
+        $this->Cell(25, 5, $arLiquidacion->getFechaUltimoPagoPrimas()->format('Y-m-d'), 1, 0, 'L', 1);        
+        $this->SetXY($intX + 78, 120);
+        $this->Cell(25, 5, $arLiquidacion->getFechaUltimoPagoVacaciones()->format('Y-m-d'), 1, 0, 'L', 1);                
+        
+        //$intX = 163;
+        $this->SetXY($intX + 103, 102);        
         $this->Cell(32, 5, number_format($arLiquidacion->getVrCesantias(), 2, '.', ','), 1, 0, 'R', 1);
-        $this->SetXY($intX, 108);
+        $this->SetXY($intX + 103, 108);
         $this->Cell(32, 5, number_format($arLiquidacion->getVrInteresesCesantias(), 2, '.', ','), 1, 0, 'R', 1);
-        $this->SetXY($intX, 114);
+        $this->SetXY($intX + 103, 114);
         $this->Cell(32, 5, number_format($arLiquidacion->getVrPrima(), 2, '.', ','), 1, 0, 'R', 1);        
-        $this->SetXY($intX, 120);
+        $this->SetXY($intX + 103, 120);
         $this->Cell(32, 5, number_format($arLiquidacion->getVrVacaciones(), 2, '.', ','), 1, 0, 'R', 1);
+        
+        $this->SetFont('Arial', 'B', 8);
+        $this->SetXY($intX + 103, 126);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrTotal(), 2, '.', ','), 1, 0, 'R', 1);        
         
         $this->Ln(15);
         

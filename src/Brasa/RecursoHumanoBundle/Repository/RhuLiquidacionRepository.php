@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuLiquidacionRepository extends EntityRepository {
     
-    public function listaDQL($strIdentificacion = "") {        
+    public function listaDql($strIdentificacion = "") {        
         $dql   = "SELECT l, e FROM BrasaRecursoHumanoBundle:RhuLiquidacion l JOIN l.empleadoRel e WHERE l.codigoLiquidacionPk <> 0";
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
@@ -77,7 +77,10 @@ class RhuLiquidacionRepository extends EntityRepository {
         if($arLiquidacion->getLiquidarPrima() == 1) {            
             $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas();
             $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
-            $intDiasPrima = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                
+            $intDiasPrima = 0;
+            if($dateFechaDesde <= $dateFechaHasta) {
+                $intDiasPrima = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
+            }                            
             $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
             $arLiquidacion->setDiasPrimas($intDiasPrima);
             $arLiquidacion->setVrPrima($douPrima);                
