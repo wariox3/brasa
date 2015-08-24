@@ -156,7 +156,10 @@ class BaseCentroCostoController extends Controller
                             ->setCellValue('B1', 'Nombre')
                             ->setCellValue('C1', 'Ciudad')
                             ->setCellValue('D1', 'Periodo')
-                            ->setCellValue('E1', 'Abierto');
+                            ->setCellValue('E1', 'Abierto')
+                            ->setCellValue('F1', 'Ult pago')
+                            ->setCellValue('G1', 'Ult pago prima')
+                            ->setCellValue('H1', 'Ult pago cesantias');
 
                 $i = 2;
                 $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
@@ -166,7 +169,10 @@ class BaseCentroCostoController extends Controller
                             ->setCellValue('B' . $i, $arCentroCosto->getNombre())
                             ->setCellValue('C' . $i, $arCentroCosto->getCiudadRel()->getNombre())
                             ->setCellValue('D' . $i, $arCentroCosto->getPeriodoPagoRel()->getNombre())
-                            ->setCellValue('E' . $i, $arCentroCosto->getPagoAbierto());
+                            ->setCellValue('E' . $i, $arCentroCosto->getPagoAbierto())
+                            ->setCellValue('F' . $i, $arCentroCosto->getFechaUltimoPago()->format('Y-m-d'))
+                            ->setCellValue('G' . $i, $arCentroCosto->getFechaUltimoPagoPrima()->format('Y-m-d'))
+                            ->setCellValue('H' . $i, $arCentroCosto->getFechaUltimoPagoCesantias()->format('Y-m-d'));
                     $i++;
                 }
 

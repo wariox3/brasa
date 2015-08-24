@@ -32,50 +32,9 @@ class BaseEmpleadoController extends Controller
             }
 
             if($form->get('BtnExcel')->isClicked()) {
-                $objPHPExcel = new \PHPExcel();
-                // Set document properties
-                $objPHPExcel->getProperties()->setCreator("EMPRESA")
-                    ->setLastModifiedBy("EMPRESA")
-                    ->setTitle("Office 2007 XLSX Test Document")
-                    ->setSubject("Office 2007 XLSX Test Document")
-                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-                    ->setKeywords("office 2007 openxml php")
-                    ->setCategory("Test result file");
-
-                $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Identificacion')
-                            ->setCellValue('C1', 'Nombre');
-
-                $i = 2;
-                $query = $em->createQuery($this->strSqlLista);
-                $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleados = $query->getResult();
-                foreach ($arEmpleados as $arEmpleado) {
-                    $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
-                            ->setCellValue('B' . $i, $arEmpleado->getNumeroIdentificacion())
-                            ->setCellValue('C' . $i, $arEmpleado->getNombreCorto());
-                    $i++;
-                }
-
-                $objPHPExcel->getActiveSheet()->setTitle('Empleados');
-                $objPHPExcel->setActiveSheetIndex(0);
-
-                // Redirect output to a client’s web browser (Excel2007)
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Empleados.xlsx"');
-                header('Cache-Control: max-age=0');
-                // If you're serving to IE 9, then the following may be needed
-                header('Cache-Control: max-age=1');
-                // If you're serving to IE over SSL, then the following may be needed
-                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header ('Pragma: public'); // HTTP/1.0
-                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-                $objWriter->save('php://output');
-                exit;
+                $this->filtrarLista($form);
+                $this->listar();
+                $this->generarExcel();
             }
 
             if($form->get('BtnInactivar')->isClicked()) {
@@ -446,6 +405,60 @@ class BaseEmpleadoController extends Controller
                 $session->get('filtroIdentificacion'),
                 ""                
                 );         
-    }       
+    }   
+    
+    private function generarExcel() {
+        $em = $this->getDoctrine()->getManager();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'Codigo')
+                    ->setCellValue('B1', 'Identificacion')
+                    ->setCellValue('C1', 'Nombre')
+                    ->setCellValue('D1', 'Telefono')
+                    ->setCellValue('E1', 'Celular')
+                    ->setCellValue('F1', 'Direccion');
+
+        $i = 2;
+        $query = $em->createQuery($this->strSqlLista);
+        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleados = $query->getResult();
+        foreach ($arEmpleados as $arEmpleado) {
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
+                    ->setCellValue('B' . $i, $arEmpleado->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arEmpleado->getNombreCorto())
+                    ->setCellValue('D' . $i, $arEmpleado->getTelefono())
+                    ->setCellValue('E' . $i, $arEmpleado->getCelular())
+                    ->setCellValue('F' . $i, $arEmpleado->getDireccion());
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('Empleados');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Empleados.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }    
     
 }
