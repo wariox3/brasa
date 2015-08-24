@@ -1040,6 +1040,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 } else {
                     $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
                     $dateFechaDesdePago = $arContrato->getFechaUltimoPagoPrimas();
+                    $dateFechaDesdePago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->fechaPrimerPago($arContrato->getCodigoContratoPk());
+                    $dateFechaDesdePago = date_create_from_format('Y-m-d H:i', $dateFechaDesdePago . "00:00");                    
                 }
                 $intDia = $dateFechaDesde->format('j');
                 $intDiasMes = 31 - $intDia;                
