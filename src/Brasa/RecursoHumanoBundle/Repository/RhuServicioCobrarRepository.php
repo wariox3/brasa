@@ -11,4 +11,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuServicioCobrarRepository extends EntityRepository {
     
+    public function listaServiciosPorCobrarDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT s, e FROM BrasaRecursoHumanoBundle:RhuServicioCobrar s JOIN s.empleadoRel e WHERE s.codigoServicioCobrarPk <> 0";
+        
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND s.fechaDesde >='" . $strDesde . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND s.fechaHasta <='" . $strHasta . "'";
+        }
+        
+        return $dql;
+    }
+    
 }

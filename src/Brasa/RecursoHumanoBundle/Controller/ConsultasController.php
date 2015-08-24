@@ -9,6 +9,7 @@ class ConsultasController extends Controller
 {
     var $strSqlLista = "";
     var $strSqlCreditoLista = "";
+    var $strSqlServiciosPorCobrarLista = "";
     public function costosGeneralAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -81,32 +82,32 @@ class ConsultasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        $form = $this->formularioCreditosLista();
+        $form = $this->formularioServiciosPorCobrarLista();
         $form->handleRequest($request);
-        $this->CreditosListar();
+        $this->ServiciosPorCobrarListar();
         if ($form->isValid())
         {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnExcelCredito')->isClicked()) {
-                $this->filtrarCreditoLista($form);
-                $this->CreditosListar();
-                $this->generarCreditoExcel();
+                $this->filtrarServiciosPorCobrarLista($form);
+                $this->ServiciosPorCobrarListar();
+                $this->generarServiciosPorCobrarExcel();
             }
-            if($form->get('BtnPDFCredito')->isClicked()) {
-                $this->filtrarCreditoLista($form);
-                $this->CreditosListar();
-                $objReporteCreditos = new \Brasa\RecursoHumanoBundle\Reportes\ReporteCreditos();
-                $objReporteCreditos->Generar($this, $this->strSqlCreditoLista);
+            if($form->get('BtnPDFServiciosPorCobrar')->isClicked()) {
+                $this->filtrarServiciosPorCobrarLista($form);
+                $this->ServiciosPorCobrarListar();
+                $objReporteServiciosPorCobrar = new \Brasa\RecursoHumanoBundle\Reportes\ReporteServiciosPorCobrar();
+                $objReporteServiciosPorCobrar->Generar($this, $this->strSqlServiciosPorCobrarLista);
             }            
-            if($form->get('BtnFiltrarCredito')->isClicked()) {
-                $this->filtrarCreditoLista($form);
-                $this->CreditosListar();
+            if($form->get('BtnFiltrarServiciosPorCobrar')->isClicked()) {
+                $this->filtrarServiciosPorCobrarLista($form);
+                $this->ServiciosPorCobrarListar();
             }
 
         }
-        $arCreditos = $paginator->paginate($em->createQuery($this->strSqlCreditoLista), $request->query->get('page', 1), 40);
+        $arServiciosPorCobrar = $paginator->paginate($em->createQuery($this->strSqlServiciosPorCobrarLista), $request->query->get('page', 1), 40);
         return $this->render('BrasaRecursoHumanoBundle:Consultas/Servicios:porCobrar.html.twig', array(
-            'arCreditos' => $arCreditos,
+            'arServiciosPorCobrar' => $arServiciosPorCobrar,
             'form' => $form->createView()
             ));
     }    
@@ -131,7 +132,19 @@ class ConsultasController extends Controller
                     $session->get('filtroDesde'),
                     $session->get('filtroHasta')
                     );
-    }   
+    } 
+    
+    private function ServiciosPorCobrarListar() {
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strSqlServiciosPorCobrarLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuServicioCobrar')->listaServiciosPorCobrarDQL(
+                    "",
+                    $session->get('filtroCodigoCentroCosto'),
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
+                    );
+    }
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
@@ -192,6 +205,37 @@ class ConsultasController extends Controller
             ->getForm();
         return $form;
     }
+    
+    private function formularioServiciosPorCobrarLista() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
+        $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->fechaAntigua();
+        
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('fechaDesde', 'date', array('label'  => 'Desde', 'data' => new \DateTime($fechaAntigua))) 
+            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))
+            ->add('BtnFiltrarServiciosPorCobrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcelServiciosPorCobrar', 'submit', array('label'  => 'Excel',))
+            ->add('BtnPDFServiciosPorCobrar', 'submit', array('label'  => 'PDF',))
+            ->getForm();
+        return $form;
+    }
 
     private function filtrarLista($form) {
         $session = $this->getRequest()->getSession();
@@ -202,6 +246,16 @@ class ConsultasController extends Controller
     }
     
     private function filtrarCreditoLista($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData()->format('Y-m-d'));
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData()->format('Y-m-d'));
+    }
+    
+    private function filtrarServiciosPorCobrarLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
@@ -373,6 +427,84 @@ class ConsultasController extends Controller
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="ConsultaCreditos.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+    
+    private function generarServiciosPorCobrarExcel() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'TIPO')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'CENTRO COSTOS')
+                    ->setCellValue('E1', 'IDENTIFICACION')
+                    ->setCellValue('F1', 'NOMBRE')
+                    ->setCellValue('G1', 'VR. CREDITO')
+                    ->setCellValue('H1', 'VR. CUOTA')
+                    ->setCellValue('I1', 'VR. SALDO')
+                    ->setCellValue('J1', 'CUOTAS')
+                    ->setCellValue('K1', 'CUOTA ACTUAL')
+                    ->setCellValue('L1', 'APROBADO')
+                    ->setCellValue('M1', 'SUSPENDIDO');
+
+        $i = 2;
+        $query = $em->createQuery($this->strSqlServiciosPorCobrarLista);
+        $arServiciosPorCobrar = new \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar();
+        $arServiciosPorCobrar = $query->getResult();
+        foreach ($arCreditos as $arCredito) {
+            if ($arCredito->getAprobado() == 1) {
+                $Aprobado = "SI";
+            }
+            if ($arCredito->getEstadoSuspendido() == 1) {
+                $Suspendido = "SI";
+            }
+            else {
+                $Suspendido = "NO";
+            }
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
+                    ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arCredito->getFecha()->Format('Y-m-d'))
+                    ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arCredito->getVrPagar())
+                    ->setCellValue('H' . $i, $arCredito->getVrCuota())
+                    ->setCellValue('I' . $i, $arCredito->getSaldo())
+                    ->setCellValue('J' . $i, $arCredito->getNumeroCuotas())
+                    ->setCellValue('K' . $i, $arCredito->getNumeroCuotaActual())
+                    ->setCellValue('L' . $i, $Aprobado)
+                    ->setCellValue('M' . $i, $Suspendido);
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('ServiciosPorCobrar');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="ConsultaServiciosPorCobrar.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
