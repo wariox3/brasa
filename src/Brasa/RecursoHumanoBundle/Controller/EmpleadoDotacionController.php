@@ -128,7 +128,7 @@ class EmpleadoDotacionController extends Controller
     public function nuevoDotacionAction() {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
             ->add('numeroIdentificacion', 'text', array('required' => true))
             ->add('fecha', 'date', array('data' => new \DateTime('now')))
@@ -139,17 +139,23 @@ class EmpleadoDotacionController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {           
             $arEmpleadoDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
-            $arEmpleadoDotacion = $form->getData();
-            
             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $form->get('numeroIdentificacion')->getData(), 'estadoActivo' => 1));
-            
-            
-            //$arEmpleadoDotacion->setCentroCostoRel($arEmpleado[0]);
-            $arEmpleadoDotacion->setCodigoEmpleadoFk($arEmpleado[0]);
-            $em->persist($arEmpleadoDotacion);
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            if (count($arEmpleado) == 0){
+                $objMensaje->Mensaje("error", "No existe el número de identificación", $this);
+            }else {
+                $arEmpleadoDotacion->setEmpleadoRel($arEmpleado[0]);
+                $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
+                $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
+                $arEmpleadoDotacion->setCentroCostoRel($arCentroCosto);
+                $arEmpleadoDotacion->setFecha($form->get('fecha')->getData());
+                $arEmpleadoDotacion->setCodigoInternoReferencia($form->get('codigoInternoReferencia')->getData());
+                $arEmpleadoDotacion->setComentarios($form->get('comentarios')->getData());
+                $em->persist($arEmpleadoDotacion);
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:nuevoDotacion.html.twig', array(
@@ -171,7 +177,8 @@ class EmpleadoDotacionController extends Controller
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoEmpleadoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEmpleadoDotacionDetalle();
                 $objFormatoEmpleadoDotacionDetalle->Generar($this, $codigoEmpleadoDotacion);
-            }     
+            }
+            
             if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
