@@ -88,7 +88,7 @@ class ConsultasController extends Controller
         if ($form->isValid())
         {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnExcelCredito')->isClicked()) {
+            if($form->get('BtnExcelServiciosPorCobrar')->isClicked()) {
                 $this->filtrarServiciosPorCobrarLista($form);
                 $this->ServiciosPorCobrarListar();
                 $this->generarServiciosPorCobrarExcel();
@@ -138,7 +138,6 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlServiciosPorCobrarLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuServicioCobrar')->listaServiciosPorCobrarDQL(
-                    "",
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
@@ -223,13 +222,12 @@ class ConsultasController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
-        $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->fechaAntigua();
         
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('fechaDesde', 'date', array('label'  => 'Desde', 'data' => new \DateTime($fechaAntigua))) 
-            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrarServiciosPorCobrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcelServiciosPorCobrar', 'submit', array('label'  => 'Excel',))
             ->add('BtnPDFServiciosPorCobrar', 'submit', array('label'  => 'PDF',))
@@ -261,8 +259,8 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData()->format('Y-m-d'));
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData()->format('Y-m-d'));
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
     private function generarExcel() {
@@ -455,47 +453,80 @@ class ConsultasController extends Controller
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'CENTRO COSTOS')
-                    ->setCellValue('E1', 'IDENTIFICACION')
-                    ->setCellValue('F1', 'NOMBRE')
-                    ->setCellValue('G1', 'VR. CREDITO')
-                    ->setCellValue('H1', 'VR. CUOTA')
-                    ->setCellValue('I1', 'VR. SALDO')
-                    ->setCellValue('J1', 'CUOTAS')
-                    ->setCellValue('K1', 'CUOTA ACTUAL')
-                    ->setCellValue('L1', 'APROBADO')
-                    ->setCellValue('M1', 'SUSPENDIDO');
+                    ->setCellValue('B1', 'CENTRO COSTOS')
+                    ->setCellValue('C1', 'IDENTIFICACION')
+                    ->setCellValue('D1', 'EMPLEADO')
+                    ->setCellValue('E1', 'DESDE')
+                    ->setCellValue('F1', 'HASTA')
+                    ->setCellValue('G1', 'VR. SALARIO')
+                    ->setCellValue('H1', 'VR. SALARIO PERIODO')
+                    ->setCellValue('I1', 'VR. SALARIO EMPLEADO')
+                    ->setCellValue('J1', 'VR. DEVENGADO')
+                    ->setCellValue('K1', 'VR. DEDUCCIONES')
+                    ->setCellValue('L1', 'VR. ADICIONAL TIEMPO')
+                    ->setCellValue('M1', 'VR. ADICIONAL VALOR')
+                    ->setCellValue('N1', 'VR. AUXILIO TRANSPORTE')
+                    ->setCellValue('O1', 'VR. AUXILIO TRANSPORTE COTIZACION')
+                    ->setCellValue('P1', 'VR. ARP')
+                    ->setCellValue('Q1', 'VR. EPS')
+                    ->setCellValue('R1', 'VR. PENSION')
+                    ->setCellValue('S1', 'VR. CAJA COMPENSACION')
+                    ->setCellValue('T1', 'VR. SENA')
+                    ->setCellValue('U1', 'VR. ICBF')
+                    ->setCellValue('V1', 'VR. CESANTIAS')
+                    ->setCellValue('W1', 'VR. VACACIONES')
+                    ->setCellValue('X1', 'VR. ADMINISTRACION')
+                    ->setCellValue('Y1', 'VR. NETO')
+                    ->setCellValue('Z1', 'VR. BRUTO')
+                    ->setCellValue('AA1', 'VR. TOTAL COBRAR')
+                    ->setCellValue('AB1', 'VR. COSTO')
+                    ->setCellValue('AC1', 'VR. INGRESO BASE COTIZACION')
+                    ->setCellValue('AD1', 'ESTADO COBRADO')
+                    ->setCellValue('AE1', 'DIAS PERIODO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlServiciosPorCobrarLista);
         $arServiciosPorCobrar = new \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar();
         $arServiciosPorCobrar = $query->getResult();
-        foreach ($arCreditos as $arCredito) {
-            if ($arCredito->getAprobado() == 1) {
-                $Aprobado = "SI";
+        foreach ($arServiciosPorCobrar as $arServiciosPorCobrar) {
+            if ($arServiciosPorCobrar->getEstadoCobrado() == 1) {
+                $estado = "SI";
+            } else {
+                $estado = "NO";
             }
-            if ($arCredito->getEstadoSuspendido() == 1) {
-                $Suspendido = "SI";
-            }
-            else {
-                $Suspendido = "NO";
-            }
+            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
-                    ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arCredito->getFecha()->Format('Y-m-d'))
-                    ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getCentroCostoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('F' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $arCredito->getVrPagar())
-                    ->setCellValue('H' . $i, $arCredito->getVrCuota())
-                    ->setCellValue('I' . $i, $arCredito->getSaldo())
-                    ->setCellValue('J' . $i, $arCredito->getNumeroCuotas())
-                    ->setCellValue('K' . $i, $arCredito->getNumeroCuotaActual())
-                    ->setCellValue('L' . $i, $Aprobado)
-                    ->setCellValue('M' . $i, $Suspendido);
+                    ->setCellValue('A' . $i, $arServiciosPorCobrar->getCodigoServicioCobrarPk())
+                    ->setCellValue('B' . $i, $arServiciosPorCobrar->getCentroCostoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arServiciosPorCobrar->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arServiciosPorCobrar->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arServiciosPorCobrar->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('F' . $i, $arServiciosPorCobrar->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('G' . $i, $arServiciosPorCobrar->getVrSalario())
+                    ->setCellValue('H' . $i, $arServiciosPorCobrar->getVrSalarioPeriodo())
+                    ->setCellValue('I' . $i, $arServiciosPorCobrar->getVrSalarioEmpleado())
+                    ->setCellValue('J' . $i, $arServiciosPorCobrar->getVrDevengado())
+                    ->setCellValue('K' . $i, $arServiciosPorCobrar->getVrDeducciones())
+                    ->setCellValue('L' . $i, $arServiciosPorCobrar->getVrAdicionalTiempo())
+                    ->setCellValue('M' . $i, $arServiciosPorCobrar->getVrAdicionalValor())
+                    ->setCellValue('N' . $i, $arServiciosPorCobrar->getVrAuxilioTransporte())
+                    ->setCellValue('O' . $i, $arServiciosPorCobrar->getVrAuxilioTransporteCotizacion())
+                    ->setCellValue('P' . $i, $arServiciosPorCobrar->getVrArp())
+                    ->setCellValue('Q' . $i, $arServiciosPorCobrar->getVrEps())
+                    ->setCellValue('R' . $i, $arServiciosPorCobrar->getVrPension())
+                    ->setCellValue('S' . $i, $arServiciosPorCobrar->getVrCaja())
+                    ->setCellValue('T' . $i, $arServiciosPorCobrar->getVrSena())
+                    ->setCellValue('U' . $i, $arServiciosPorCobrar->getVrIcbf())
+                    ->setCellValue('V' . $i, $arServiciosPorCobrar->getVrCesantias())
+                    ->setCellValue('W' . $i, $arServiciosPorCobrar->getVrVacaciones())
+                    ->setCellValue('X' . $i, $arServiciosPorCobrar->getVrAdministracion())
+                    ->setCellValue('Y' . $i, $arServiciosPorCobrar->getVrNeto())
+                    ->setCellValue('Z' . $i, $arServiciosPorCobrar->getVrBruto())
+                    ->setCellValue('AA' . $i, $arServiciosPorCobrar->getVrTotalCobrar())
+                    ->setCellValue('AB' . $i, $arServiciosPorCobrar->getVrCosto())
+                    ->setCellValue('AC' . $i, $arServiciosPorCobrar->getVrIngresoBaseCotizacion())
+                    ->setCellValue('AD' . $i, $estado)
+                    ->setCellValue('AE' . $i, $arServiciosPorCobrar->getDiasPeriodo());
             $i++;
         }
 

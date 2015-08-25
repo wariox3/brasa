@@ -1,6 +1,10 @@
 {% extends '::base.html.twig' %}
 {% block content %}
 <div class="container">
+    <script type="text/javascript">
+    $(document).ready(function() {
+            $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
+    </script>
     <div class="page-header">
         <h3>Servicios por cobrar</h3>
     </div>
@@ -46,48 +50,50 @@
                 <th>CENTRO COSTO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>                
-                <th>PROGRAMACIÓN PAGO</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th style="text-align: right">VR. SALARIO</th>
-                <th style="text-align: right">VR. DEVENGADO</th>
-                <th style="text-align: right">VR. DEDUCCIONES</th>
-                <th style="text-align: right">VR. AUX TRANSPORTE</th>
-                <th style="text-align: right">BASE AUX TRANSPORTE</th>
                 <th style="text-align: right">VR. ARP</th>
                 <th style="text-align: right">VR. EPS</th>
                 <th style="text-align: right">VR. PENSIÓN</th>
-                <th style="text-align: right">VR. CESANTIAS</th>
-                <th style="text-align: right">VR. VACACIONES</th>
+                <th style="text-align: right">VR. AUX TRANSPORTE</th>
                 <th style="text-align: right">VR. NETO</th>
                 <th style="text-align: right">VR. TOTAL COBRAR</th>
-                <th style="text-align: right">VR. INGRESO BASE COTIZACIÓN</th>
             </tr>
-            
+            {% set douTotalNeto = 0  %}
+            {% set douTotalCobrar = 0  %}
             {% for arServiciosPorCobrar in arServiciosPorCobrar %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arServiciosPorCobrar.codigoServicioCobrarPk }}">{{ arServiciosPorCobrar.codigoServicioCobrarPk }} </td>
                 <td>{{ arServiciosPorCobrar.centroCostoRel.nombre  }}</td>
                 <td>{{ arServiciosPorCobrar.empleadoRel.numeroIdentificacion  }}</td>
-                <td>{{ arServiciosPorCobrar.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arServiciosPorCobrar.codigoProgramacionPagoFk  }}</td>                
+                <td>{{ arServiciosPorCobrar.empleadoRel.nombreCorto  }}</td>                
                 <td>{{ arServiciosPorCobrar.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arServiciosPorCobrar.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrSalario | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrDevengado | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrDeducciones | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrAuxilioTransporte | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrAuxilioTransporteCotizacion | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrArp | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrEps | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrPension | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrCesantias | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrVacaciones | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrAuxilioTransporte | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrNeto | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrTotalCobrar | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
+                {% set douTotalNeto = douTotalNeto + arServiciosPorCobrar.vrNeto %}
+                {% set douTotalCobrar = douTotalCobrar + arServiciosPorCobrar.vrTotalCobrar %}
             </tr>
-            {% endfor %}                           
+            {% endfor %}
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>                
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="text-align: right">{{ douTotalNeto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalCobrar | number_format(2, '.', ',') }}</td>
         </table>
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">
@@ -98,10 +104,9 @@
             </div>
         </div>                
         <div class="btn-toolbar" style="float: right">                 
-            <div class="btn-group">                
-                
-                
-                {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            <div class="btn-group">                   
+                {{ form_widget(form.BtnExcelServiciosPorCobrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                {{ form_widget(form.BtnPDFServiciosPorCobrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}   
             </div>
         </div>
         
