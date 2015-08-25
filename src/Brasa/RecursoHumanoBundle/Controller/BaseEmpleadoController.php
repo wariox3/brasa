@@ -308,7 +308,7 @@ class BaseEmpleadoController extends Controller
             $campo1 = $arEmpleado->getCuenta();
             $campo2 = $arEmpleado->getBancoRel()->getNumeroDigitos();
             if (strlen($arEmpleado->getCuenta()) != $arEmpleado->getBancoRel()->getNumeroDigitos()){
-                $objMensaje->Mensaje("error", "El numero de digitos de esta cuenta no es valido para el banco ". $arEmpleado->getBancoRel()->getNombre(), $this);
+                $objMensaje->Mensaje("error", "El numero de digitos son (". $arEmpleado->getBancoRel()->getNumeroDigitos() .") para el banco ". $arEmpleado->getBancoRel()->getNombre(), $this);
             } else {
                 $em->persist($arEmpleado);
                 $em->flush(); 

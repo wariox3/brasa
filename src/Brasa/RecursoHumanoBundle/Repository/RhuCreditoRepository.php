@@ -24,10 +24,10 @@ class RhuCreditoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND c.fecha >='" . $strDesde . "'";
+            $dql .= " AND c.fecha >='" . date_format($strDesde, ('Y-m-d')) . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND c.fecha <='" . $strHasta . "'";
+            $dql .= " AND c.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";

@@ -13,7 +13,7 @@ class RhuServicioCobrarRepository extends EntityRepository {
     
     public function listaServiciosPorCobrarDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT s, e FROM BrasaRecursoHumanoBundle:RhuServicioCobrar s JOIN s.empleadoRel e WHERE s.codigoServicioCobrarPk <> 0";
+        $dql   = "SELECT s, e FROM BrasaRecursoHumanoBundle:RhuServicioCobrar s JOIN s.empleadoRel e WHERE s.codigoServicioCobrarPk <> 0 AND s.estadoCobrado <> 1";
         
         if($strCodigoCentroCosto != "") {
             $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
@@ -22,10 +22,10 @@ class RhuServicioCobrarRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND s.fechaDesde >='" . $strDesde . "'";
+            $dql .= " AND s.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
         }
         if($strHasta != "") {
-            $dql .= " AND s.fechaHasta <='" . $strHasta . "'";
+            $dql .= " AND s.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         
         return $dql;

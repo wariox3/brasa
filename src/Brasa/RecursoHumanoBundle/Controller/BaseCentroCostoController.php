@@ -90,14 +90,15 @@ class BaseCentroCostoController extends Controller
         if ($form->isValid()) {
             $arCentroCosto = $form->getData();
             $strDia = $arCentroCosto->getFechaUltimoPagoProgramado()->format('d');
+            $strMes = $arCentroCosto->getFechaUltimoPagoProgramado()->format('m');
             $strPeriodo = $arCentroCosto->getPeriodoPagoRel()->getCodigoPeriodoPagoPk();
-            if ($strPeriodo == 2 && ($strDia != 10 && $strDia != 20 && $strDia != 30)) {
+            if ($strPeriodo == 2 && ($strDia != 10 && $strDia != 20 && $strDia != 30 && $strMes != 2)) {
                 $objMensaje->Mensaje("error", "El periodo debe terminar en dias 10, 20 o 30", $this);
             } else {
-                if($strPeriodo == 4 && ($strDia != 15 && $strDia != 30)){
+                if($strPeriodo == 4 && ($strDia != 15 && $strDia != 30 && $strMes != 2) ){
                     $objMensaje->Mensaje("error", "El periodo debe terminar en dias 15 o 30", $this);    
                 } else {
-                    if($strPeriodo == 5 && $strDia != 30){
+                    if($strPeriodo == 5 && $strDia != 30 && $strMes != 2){
                         $objMensaje->Mensaje("error", "El periodo debe terminar en dia 30", $this);
                     }
                     else {     

@@ -196,8 +196,8 @@ class ConsultasController extends Controller
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('fechaDesde', 'date', array('label'  => 'Desde', 'data' => new \DateTime($fechaAntigua))) 
-            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrarCredito', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcelCredito', 'submit', array('label'  => 'Excel',))
             ->add('BtnPDFCredito', 'submit', array('label'  => 'PDF',))
@@ -249,8 +249,8 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData()->format('Y-m-d'));
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData()->format('Y-m-d'));
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
     
     private function filtrarServiciosPorCobrarLista($form) {
