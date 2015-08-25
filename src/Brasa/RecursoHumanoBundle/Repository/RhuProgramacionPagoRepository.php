@@ -66,9 +66,13 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arPago->setCentroCostoRel($arCentroCosto);
                     $arPago->setFechaDesde($arProgramacionPagoProcesar->getFechaDesde());
                     $arPago->setFechaHasta($arProgramacionPagoProcesar->getFechaHasta());
+                    $arPago->setFechaDesdePago($arProgramacionPagoDetalle->getFechaDesdePago());
                     $arPago->setVrSalarioEmpleado($arProgramacionPagoDetalle->getVrSalario());
                     $arPago->setVrSalarioPeriodo(($arProgramacionPagoDetalle->getVrSalario() / 30) * $arProgramacionPagoDetalle->getDias());
                     $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
+                    if($arProgramacionPagoDetalle->getCodigoContratoFk()) {
+                        $arPago->setContratoRel($arProgramacionPagoDetalle->getContratoRel());
+                    }
                     $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
                     $em->persist($arPago);
 
@@ -168,7 +172,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
 
                     //Procesar Licencias
                     $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
-                    $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->pendientesEmpleado($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesde()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'));
+                    $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->pendientesEmpleado($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'));
                     foreach ($arLicencias as $arLicencia) {
                         if($intHorasLaboradas > 0) {
                             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
@@ -428,7 +432,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $em->persist($arPago);
                     $douSalarioMinimo = $arConfiguracion->getVrSalario();
                     $intDias = $arProgramacionPagoDetalle->getDias();
-                    $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'));
+                    $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
                     $floIbc = (float)$arrayCostos[0]['IBC'];
                     if($arCentroCosto->getFechaUltimoPago() < $arProgramacionPagoProcesar->getFechaHasta()) {
                         $floVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;                                        
@@ -445,6 +449,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $intMeses = $intMesFinal - $intMes;
                         $intDiasIbcAdicional = ($intMeses * 30) + $intDiasMes;                                        
                         $floIbc +=  $intDiasIbcAdicional * $floVrDia;
+                        $arPago->setComentarios("Dado que se pagan las primas antes del periodo, se proyectan (" . $intDiasIbcAdicional . ") dias restantes con el salario");
                     }
                     $floSalarioPromedio = ($floIbc / $intDias) * 30;                                    
                     if($floSalarioPromedio <=  $douSalarioMinimo * 2 ) {
@@ -457,6 +462,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                     $arPagoDetalle->setPagoRel($arPago);
                     $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
+                    $arPagoDetalle->setDetalle($intDias . " Dias de primas (IBC " . number_format($floIbc, 2, '.', ',') . " )");
                     $arPagoDetalle->setVrPago($floTotalPago);
                     $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                     $arPagoDetalle->setVrPagoOperado($floTotalPago * $arPagoConcepto->getOperacion());
@@ -488,7 +494,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $em->persist($arPago);
                     $douSalarioMinimo = $arConfiguracion->getVrSalario();
                     $intDias = $arProgramacionPagoDetalle->getDias();
-                    $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoProcesar->getFechaDesde()->format('Y-m-d'), $arProgramacionPagoProcesar->getFechaHasta()->format('Y-m-d'));
+                    $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoProcesar->getFechaDesde()->format('Y-m-d'), $arProgramacionPagoProcesar->getFechaHasta()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
                     $floIbc = (float)$arrayCostos[0]['IBC'];
                     if($arCentroCosto->getFechaUltimoPago() < $arProgramacionPagoProcesar->getFechaHasta()) {
                         $floVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;
@@ -508,7 +514,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                     $arPagoDetalle->setPagoRel($arPago);
                     $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
-                    $arPagoDetalle->setDetalle($intDias . " Dias de cesantias");
+                    $arPagoDetalle->setDetalle($intDias . " Dias de cesantias (IBC " . number_format($floIbc, 2, '.', ',') . " )");
                     $arPagoDetalle->setVrHora(0);
                     $arPagoDetalle->setVrDia(0);
                     $arPagoDetalle->setNumeroHoras(0);
@@ -964,7 +970,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     }
                     $intDiasDevolver += $intDiasInhabilesFebrero;
                 }
-                $arProgramacionPagoDetalle->setFechaDesde($dateFechaDesde);
+                $arProgramacionPagoDetalle->setFechaDesdePago($dateFechaDesde);
+                $arProgramacionPagoDetalle->setFechaDesde($arContrato->getFechaDesde());
                 $arProgramacionPagoDetalle->setFechaHasta($dateFechaHasta);
 
                 $arProgramacionPagoDetalle->setDias($intDiasDevolver);

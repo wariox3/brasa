@@ -31,6 +31,11 @@ class RhuPago
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
     private $codigoEmpleadoFk;      
+
+    /**
+     * @ORM\Column(name="codigo_contrato_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoFk;    
     
     /**
      * @ORM\Column(name="codigo_programacion_pago_fk", type="integer", nullable=true)
@@ -48,6 +53,11 @@ class RhuPago
      */    
     private $fechaHasta;    
 
+    /**
+     * @ORM\Column(name="fecha_desde_pago", type="date", nullable=true)
+     */    
+    private $fechaDesdePago;    
+    
     /**
      * @ORM\Column(name="vr_salario", type="float")
      */
@@ -186,6 +196,11 @@ class RhuPago
     private $estadoPagado = 0;         
     
     /**
+     * @ORM\Column(name="comentarios", type="string", length=500, nullable=true)
+     */    
+    private $comentarios;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="pagosPagoTipoRel")
      * @ORM\JoinColumn(name="codigo_pago_tipo_fk", referencedColumnName="codigo_pago_tipo_pk")
      */
@@ -202,6 +217,12 @@ class RhuPago
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="pagosContratoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
+     */
+    protected $contratoRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="pagosProgramacionPagoRel")
@@ -1313,5 +1334,101 @@ class RhuPago
     public function getEstadoPagado()
     {
         return $this->estadoPagado;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuPago
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuPago
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
+    }
+
+    /**
+     * Set fechaDesdePago
+     *
+     * @param \DateTime $fechaDesdePago
+     *
+     * @return RhuPago
+     */
+    public function setFechaDesdePago($fechaDesdePago)
+    {
+        $this->fechaDesdePago = $fechaDesdePago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdePago
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdePago()
+    {
+        return $this->fechaDesdePago;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuPago
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 }

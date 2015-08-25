@@ -48,6 +48,7 @@
                 <th>IDENTIFICACION</th>                
                 <th>EMPLEADO</th>                
                 <th>C. COSTO</th>
+                <th>P. DESDE</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th style="text-align: right">SALARIO</th>
@@ -65,6 +66,7 @@
                 <td>{{ arPagos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arPagos.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arPagos.centroCostoRel.nombre  }}</td>                
+                <td>{{ arPagos.fechaDesdePago |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arPagos.vrSalario | number_format(2, '.', ',') }}</td>

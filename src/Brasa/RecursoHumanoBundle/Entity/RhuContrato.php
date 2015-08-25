@@ -175,6 +175,11 @@ class RhuContrato
     protected $programacionesPagosDetallesContratoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="contratoRel")
+     */
+    protected $pagosContratoRel;      
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -931,5 +936,39 @@ class RhuContrato
     public function getProgramacionesPagosDetallesContratoRel()
     {
         return $this->programacionesPagosDetallesContratoRel;
+    }
+
+    /**
+     * Add pagosContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addPagosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosContratoRel)
+    {
+        $this->pagosContratoRel[] = $pagosContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosContratoRel
+     */
+    public function removePagosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosContratoRel)
+    {
+        $this->pagosContratoRel->removeElement($pagosContratoRel);
+    }
+
+    /**
+     * Get pagosContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosContratoRel()
+    {
+        return $this->pagosContratoRel;
     }
 }

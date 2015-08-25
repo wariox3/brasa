@@ -45,8 +45,8 @@
                 <tr>
                     <td class="titulo">PERIODO DESDE:</td>
                     <td class="td-in-well">{{ arProgramacionPago.fechaDesde |date("Y/m/d") }}</td>                    
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>                   
+                    <td class="titulo">GENERADO:</td>
+                    <td> {% if arProgramacionPago.estadoGenerado == 0 %} NO {% else %} SI {% endif %}</td>                   
                 </tr>                
                 <tr>
 
@@ -160,6 +160,7 @@
                 <th>CÓDIGO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>NOMBRE</th>
+                <th>P. DESDE</th>
                 <th>INICIO</th>
                 <th>TERMINA</th>
                 <th>SALARIO</th>
@@ -183,6 +184,7 @@
                 <td>{{ arProgramacionPagoDetalles.codigoEmpleadoFk}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td>
+                <td>{{ arProgramacionPagoDetalles.fechaDesdePago |date("Y/m/d")  }}</td>
                 <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{% if arProgramacionPagoDetalles.indefinido == 1 %} INDEFINIDO {% else %} {{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>
