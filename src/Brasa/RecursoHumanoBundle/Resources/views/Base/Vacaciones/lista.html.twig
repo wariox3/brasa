@@ -33,11 +33,15 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arVacaciones, 'CÓDIGO', 'v.codigoVacacionPk') }}</th>
                 <th>CENTRO COSTO</th>
-                <th>DESDE</th>
-                <th>HASTA</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
-                <th>DÍAS</th>
+                <th>PERIODO DESDE</th>
+                <th>PERIODO HASTA</th>
+                <th>DÍAS VACACIONES</th>
+                <th>DÍAS PAGADOS</th>
+                <th>DISFRUTADO DESDE</th>
+                <th>DISFRUTADO HASTA</th>
+                <th style="text-align: right">VR. DEDUCCIONES</th>
                 <th style="text-align: right">VR. VACACIONES</th>
                 <th>PAGADO</th>
                 <th style="text-align: center"></th>
@@ -47,12 +51,16 @@
             {% for arVacaciones in arVacaciones %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arVacaciones.codigoVacacionPk }}">{{ arVacaciones.codigoVacacionPk }} </td>
-                <td>{{ arVacaciones.diasVacaciones  }}</td>
-                <td>{{ arVacaciones.fechaDesde |date("Y/m/d")  }}</td>
-                <td>{{ arVacaciones.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{{ arVacaciones.centroCostoRel.nombre  }}</td>
                 <td>{{ arVacaciones.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arVacaciones.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arVacaciones.diasVacaciones  }}</td>
+                <td>{{ arVacaciones.fechaDesdePeriodo |date("Y/m/d")  }}</td>
+                <td>{{ arVacaciones.fechaHastaPeriodo |date("Y/m/d")  }}</td>
+                <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>
+                <td style="text-align: right">{{ arVacaciones.diasVacacionesPagadas  }}</td>
+                <td>{{ arVacaciones.fechaDesde |date("Y/m/d")  }}</td>
+                <td>{{ arVacaciones.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{{ arVacaciones.vrDeduccion | number_format(2, '.', ',') }}</td>
                 <td>{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
                 <td>{% if arVacaciones.estadoPagado == 1 %} SI {% else %} NO {% endif %}</td>
                 {% if arVacaciones.estadoPagado == 1 %}

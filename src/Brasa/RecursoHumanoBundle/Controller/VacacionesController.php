@@ -129,8 +129,8 @@ class VacacionesController extends Controller
             $fechaHastaPeriodo = $arContratoEmpleado->getFechaUltimoPagoVacaciones()->format('Y/m/d');
             $fechaHastaPeriodo= date('Y-m-d',strtotime('+365 days', strtotime($fechaHastaPeriodo)));
             $arVacacion->setFechaHastaPeriodo(new \DateTime($fechaHastaPeriodo));
-            $arVacacion->setFechaDesdeDisfrute(new \DateTime('now'));
-            $arVacacion->setFechaHastaDisfrute(new \DateTime('now'));
+            $arVacacion->setFechaDesde(new \DateTime('now'));
+            $arVacacion->setFechaHasta(new \DateTime('now'));
             $arVacacion->setCentroCostoRel($arCentroCosto);
             if ($arVacacion->getFechaHastaPeriodo() > date('Y/m/d')){
                 $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
@@ -142,14 +142,9 @@ class VacacionesController extends Controller
         if ($form->isValid()) {            
             $arVacacion = $form->getData();   
             $arVacacion->setEmpleadoRel($arEmpleado);
-            $arVacacion->setDiasVacaciones(365);
-            if ($arVacacion->getFechaHastaPeriodo() > date('Y/m/d')){
-                $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
-            }
-            else {
+            
                 
             $em->persist($arVacacion);
-            
             //Calcular deducciones credito
             $floVrDeducciones = 0;
             $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
@@ -166,7 +161,7 @@ class VacacionesController extends Controller
             
             $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
+            
         }                
         $arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($codigoEmpleado);
