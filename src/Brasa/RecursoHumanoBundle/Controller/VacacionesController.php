@@ -135,15 +135,12 @@ class VacacionesController extends Controller
             if ($arVacacion->getFechaHastaPeriodo() > date('Y/m/d')){
                 $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
             }
-        }
-                
+        }      
         $form = $this->createForm(new RhuVacacionType(), $arVacacion);     
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arVacacion = $form->getData();   
-            $arVacacion->setEmpleadoRel($arEmpleado);
-            
-                
+            $arVacacion->setEmpleadoRel($arEmpleado);    
             $em->persist($arVacacion);
             //Calcular deducciones credito
             $floVrDeducciones = 0;

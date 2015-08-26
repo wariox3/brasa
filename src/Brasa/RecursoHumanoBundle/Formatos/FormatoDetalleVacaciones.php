@@ -122,10 +122,10 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $intX = 120;
         $this->SetFont('Arial', 'B', 8);
         $this->SetFillColor(217, 217, 217);
-        $this->SetXY($intX, 64);        
-        $this->Cell(43, 5, utf8_decode("SALARIO:"), 1, 0, 'L', 1);
+        
+        
         $this->SetXY($intX, 70);
-        $this->Cell(43, 5, "IBC:", 1, 0, 'L', 1);
+        $this->Cell(43, 5, "SALARIO:", 1, 0, 'L', 1);
         $this->SetXY($intX, 76);
         $this->Cell(43, 5, "VR. SALUD:", 1, 0, 'L', 1); 
         $this->SetXY($intX, 82);
@@ -136,11 +136,9 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $this->Cell(43, 5, "VR. VACACIONES:", 1, 0, 'L', 1);
         $intX = 163;
         $this->SetFont('Arial', '', 8);
-        $this->SetFillColor(272, 272, 272);
-        $this->SetXY($intX, 64);        
-        $this->Cell(32, 5, number_format($arVacaciones->getEmpleadoRel()->getVrSalario(), 2, '.', ','), 1, 0, 'R', 1);
+        $this->SetFillColor(272, 272, 272);        
         $this->SetXY($intX, 70);
-        $this->Cell(32, 5, number_format($arVacaciones->getVrIbc(), 2, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(32, 5, number_format($arVacaciones->getEmpleadoRel()->getVrSalario(), 2, '.', ','), 1, 0, 'R', 1);
         $this->SetXY($intX, 76);
         $this->Cell(32, 5, "(".number_format($arVacaciones->getVrSalud(), 2, '.', ',').")", 1, 0, 'R', 1);
         $this->SetXY($intX, 82);
