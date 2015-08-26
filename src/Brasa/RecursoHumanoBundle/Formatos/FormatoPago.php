@@ -27,7 +27,7 @@ class FormatoPago extends \FPDF_FPDF {
         $this->SetFont('Arial','B',10);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 20);
-        $this->Cell(193, 10, "COMPROBANTE PAGO NOMINA " , 1, 0, 'L', 1);
+        $this->Cell(193, 10, "COMPROBANTE PAGO ". $arPago->getPagoTipoRel()->getNombre()."" , 1, 0, 'L', 1);
         $this->SetFillColor(272, 272, 272);  
         //FILA 1
         $this->SetXY(10, 30);
