@@ -116,20 +116,25 @@ class VacacionesController extends Controller
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         } 
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
-        $arContratoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratos')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado, ));
+        $arContratoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContratoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado, 'estadoActivo' => 1));
         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();       
         if($codigoVacacion != 0) {
             $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
         } else {
             $arVacacion->setFecha(new \DateTime('now'));
-            $arVacacion->setFechaDesdePeriodo();
-            $arVacacion->setFechaHastaPeriodo(new \DateTime('now'));
+            foreach ($arContratoEmpleado as $arContratoEmpleado) {
+                $arVacacion->setFechaDesdePeriodo($arContratoEmpleado->getFechaUltimoPagoVacaciones());
+            }
+            $resulta = $arContratoEmpleado->getFechaUltimoPagoVacaciones();
+            date_add($resulta, date_interval_create_from_date_string('365 days'));
+            
+            $arVacacion->setFechaHastaPeriodo($resulta);
             $arVacacion->setFechaDesdeDisfrute(new \DateTime('now'));
             $arVacacion->setFechaHastaDisfrute(new \DateTime('now'));
             $arVacacion->setCentroCostoRel($arCentroCosto);            
         }
-        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
+                
         $form = $this->createForm(new RhuVacacionType(), $arVacacion);     
         $form->handleRequest($request);
         if ($form->isValid()) {            
