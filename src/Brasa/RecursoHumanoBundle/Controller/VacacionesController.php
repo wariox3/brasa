@@ -111,7 +111,7 @@ class VacacionesController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if($codigoEmpleado != 0) {            
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         } 
@@ -126,13 +126,15 @@ class VacacionesController extends Controller
             foreach ($arContratoEmpleado as $arContratoEmpleado) {
                 $arVacacion->setFechaDesdePeriodo($arContratoEmpleado->getFechaUltimoPagoVacaciones());
             }
-            $resulta = $arContratoEmpleado->getFechaUltimoPagoVacaciones();
-            date_add($resulta, date_interval_create_from_date_string('365 days'));
-            
-            $arVacacion->setFechaHastaPeriodo($resulta);
+            $fechaHastaPeriodo = $arContratoEmpleado->getFechaUltimoPagoVacaciones()->format('Y/m/d');
+            $fechaHastaPeriodo= date('Y-m-d',strtotime('+365 days', strtotime($fechaHastaPeriodo)));
+            $arVacacion->setFechaHastaPeriodo(new \DateTime($fechaHastaPeriodo));
             $arVacacion->setFechaDesdeDisfrute(new \DateTime('now'));
             $arVacacion->setFechaHastaDisfrute(new \DateTime('now'));
-            $arVacacion->setCentroCostoRel($arCentroCosto);            
+            $arVacacion->setCentroCostoRel($arCentroCosto);
+            if ($arVacacion->getFechaHastaPeriodo() > date('Y/m/d')){
+                $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
+            }
         }
                 
         $form = $this->createForm(new RhuVacacionType(), $arVacacion);     
@@ -140,6 +142,12 @@ class VacacionesController extends Controller
         if ($form->isValid()) {            
             $arVacacion = $form->getData();   
             $arVacacion->setEmpleadoRel($arEmpleado);
+            $arVacacion->setDiasVacaciones(365);
+            if ($arVacacion->getFechaHastaPeriodo() > date('Y/m/d')){
+                $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
+            }
+            else {
+                
             $em->persist($arVacacion);
             
             //Calcular deducciones credito
@@ -154,9 +162,11 @@ class VacacionesController extends Controller
                 $em->persist($arVacacionCredito);            
                 $floVrDeducciones += $arCredito->getSaldoTotal();
             }                    
-            $em->flush();                        
+            $em->flush();
+            
             $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
         }                
         $arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($codigoEmpleado);

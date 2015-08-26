@@ -38,14 +38,14 @@ class RhuVacacion
     private $fechaHastaPeriodo;
     
     /**
-     * @ORM\Column(name="fecha_desde_disfrute", type="date")
+     * @ORM\Column(name="fecha_desde", type="date")
      */    
-    private $fechaDesdeDisfrute;    
+    private $fechaDesde;    
     
     /**
-     * @ORM\Column(name="fecha_hasta_disfrute", type="date")
+     * @ORM\Column(name="fecha_hasta", type="date")
      */    
-    private $fechaHastaDisfrute;
+    private $fechaHasta;
     
     /**
      * @ORM\Column(name="vr_salud", type="float")
@@ -76,6 +76,11 @@ class RhuVacacion
      * @ORM\Column(name="dias_vacaciones_pagadas", type="integer")
      */
     private $diasVacacionesPagadas = 0;
+    
+    /**
+     * @ORM\Column(name="dias_vacaciones", type="integer")
+     */
+    private $diasVacaciones = 0;
     
     /**
      * @ORM\Column(name="dias_vacaciones_disfrute", type="integer")
@@ -119,6 +124,7 @@ class RhuVacacion
      */
     protected $VacacionesCreditosVacacionRel;
    
+    
     /**
      * Constructor
      */
@@ -234,51 +240,51 @@ class RhuVacacion
     }
 
     /**
-     * Set fechaDesdeDisfrute
+     * Set fechaDesde
      *
-     * @param \DateTime $fechaDesdeDisfrute
+     * @param \DateTime $fechaDesde
      *
      * @return RhuVacacion
      */
-    public function setFechaDesdeDisfrute($fechaDesdeDisfrute)
+    public function setFechaDesde($fechaDesde)
     {
-        $this->fechaDesdeDisfrute = $fechaDesdeDisfrute;
+        $this->fechaDesde = $fechaDesde;
 
         return $this;
     }
 
     /**
-     * Get fechaDesdeDisfrute
+     * Get fechaDesde
      *
      * @return \DateTime
      */
-    public function getFechaDesdeDisfrute()
+    public function getFechaDesde()
     {
-        return $this->fechaDesdeDisfrute;
+        return $this->fechaDesde;
     }
 
     /**
-     * Set fechaHastaDisfrute
+     * Set fechaHasta
      *
-     * @param \DateTime $fechaHastaDisfrute
+     * @param \DateTime $fechaHasta
      *
      * @return RhuVacacion
      */
-    public function setFechaHastaDisfrute($fechaHastaDisfrute)
+    public function setFechaHasta($fechaHasta)
     {
-        $this->fechaHastaDisfrute = $fechaHastaDisfrute;
+        $this->fechaHasta = $fechaHasta;
 
         return $this;
     }
 
     /**
-     * Get fechaHastaDisfrute
+     * Get fechaHasta
      *
      * @return \DateTime
      */
-    public function getFechaHastaDisfrute()
+    public function getFechaHasta()
     {
-        return $this->fechaHastaDisfrute;
+        return $this->fechaHasta;
     }
 
     /**
@@ -423,6 +429,30 @@ class RhuVacacion
     public function getDiasVacacionesPagadas()
     {
         return $this->diasVacacionesPagadas;
+    }
+
+    /**
+     * Set diasVacaciones
+     *
+     * @param integer $diasVacaciones
+     *
+     * @return RhuVacacion
+     */
+    public function setDiasVacaciones($diasVacaciones)
+    {
+        $this->diasVacaciones = $diasVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacaciones
+     *
+     * @return integer
+     */
+    public function getDiasVacaciones()
+    {
+        return $this->diasVacaciones;
     }
 
     /**
