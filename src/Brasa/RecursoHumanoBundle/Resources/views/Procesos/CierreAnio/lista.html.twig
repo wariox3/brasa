@@ -1,0 +1,27 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h3>Cierres año</h3>
+    </div>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <table  class="table table-striped table-bordered table-condensed table-hover">
+            <tr>
+                <th>CÓDIGO</th>
+                <th>ANIO</th>
+                <th></th>
+            </tr>
+            {% for arCierresAnios in arCierresAnios %}
+            <tr>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arCierresAnios.codigoCierreAnioPk }}">{{ arCierresAnios.codigoCierreAnioPk }} </td>
+                <td>{{ arCierresAnios.anio  }}</td>
+                <td><button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arCierresAnios.codigoCierreAnioPk }}">Cerrar</button></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+
+</div>
+{% endblock %}
