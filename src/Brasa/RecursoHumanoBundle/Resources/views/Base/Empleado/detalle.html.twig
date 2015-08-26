@@ -277,9 +277,9 @@
                             <td>{{ arIncapacidades.fechaHasta |date("Y/m/d")  }}</td>
                             <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arIncapacidades.cantidadPendiente | number_format(0, '.', ',') }}</td>
+                            <td>{% if arIncapacidades.estadoTranscripcion == 1 %}SI {% else %}NO {% endif %}</td>
                             <td>{% if arIncapacidades.estadoCobrar == 1 %}SI {% else %}NO {% endif %}</td>
                             <td>{% if arIncapacidades.estadoProrroga == 1 %}SI {% else %}NO {% endif %}</td>
-                            <td>{% if arIncapacidades.estadoTranscripcion == 1 %}SI {% else %}NO {% endif %}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
                             <td><input type="checkbox" name="ChkSeleccionarIncapacidad[]" value="{{ arIncapacidades.codigoIncapacidadPk }}" /></td>
                         </tr>

@@ -116,13 +116,16 @@ class VacacionesController extends Controller
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         } 
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
+        $arContratoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratos')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado, ));
         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();       
         if($codigoVacacion != 0) {
             $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
         } else {
             $arVacacion->setFecha(new \DateTime('now'));
-            $arVacacion->setFechaDesde(new \DateTime('now'));
-            $arVacacion->setFechaHasta(new \DateTime('now'));    
+            $arVacacion->setFechaDesdePeriodo();
+            $arVacacion->setFechaHastaPeriodo(new \DateTime('now'));
+            $arVacacion->setFechaDesdeDisfrute(new \DateTime('now'));
+            $arVacacion->setFechaHastaDisfrute(new \DateTime('now'));
             $arVacacion->setCentroCostoRel($arCentroCosto);            
         }
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();

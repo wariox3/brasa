@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td class="titulo">PERIODO HASTA:</td>
-                        <td class="td-in-well">{{ arProgramacionPago.fechaDesde|date('Y/m/d') }}</td>
+                        <td class="td-in-well">{{ arProgramacionPago.fechaHasta|date('Y/m/d') }}</td>
                         <td class="titulo">PAGADO:</td>
                         <td class="td-in-well">{% if arProgramacionPago.estadoPagado == 1 %} SI{% else %} NO {% endif %}</td>
                     </tr>

@@ -15,8 +15,8 @@ class ConfiguracionGeneralController extends Controller
     public function configuracionAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arConfiguracionGeneral = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracionGeneral();
-        $arConfiguracionGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionGeneral')->find(1);
+        $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         
         $formConfiguracionGeneral = $this->createFormBuilder() 
             ->add('conceptoTipoCuenta', 'choice', array('choices' => array('D' => 'DÉBITO', 'C' => 'CRÉDITO'), 'preferred_choices' => array($arConfiguracionGeneral->getTipoCuenta()),))    
