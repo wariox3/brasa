@@ -112,6 +112,12 @@ class RhuPagoRepository extends EntityRepository {
         $dql .= " ORDER BY p.codigoPagoPk DESC";
         return $dql;
     }                        
+    
+    public function pendientesContabilizarDql() {        
+        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.exportadoContabilidad = 0";       
+        $dql .= " ORDER BY p.codigoPagoPk DESC";
+        return $dql;
+    }                            
 
     public function listaDqlCostos($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "") {        
         $em = $this->getEntityManager();

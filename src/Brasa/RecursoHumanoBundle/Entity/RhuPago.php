@@ -201,6 +201,11 @@ class RhuPago
     private $comentarios;    
     
     /**
+     * @ORM\Column(name="exportado_contabilidad", type="boolean")
+     */    
+    private $exportadoContabilidad = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="pagosPagoTipoRel")
      * @ORM\JoinColumn(name="codigo_pago_tipo_fk", referencedColumnName="codigo_pago_tipo_pk")
      */
@@ -1430,5 +1435,29 @@ class RhuPago
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set exportadoContabilidad
+     *
+     * @param boolean $exportadoContabilidad
+     *
+     * @return RhuPago
+     */
+    public function setExportadoContabilidad($exportadoContabilidad)
+    {
+        $this->exportadoContabilidad = $exportadoContabilidad;
+
+        return $this;
+    }
+
+    /**
+     * Get exportadoContabilidad
+     *
+     * @return boolean
+     */
+    public function getExportadoContabilidad()
+    {
+        return $this->exportadoContabilidad;
     }
 }
