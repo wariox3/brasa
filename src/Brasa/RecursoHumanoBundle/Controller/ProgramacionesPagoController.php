@@ -31,8 +31,12 @@ class ProgramacionesPagoController extends Controller
             }
             if($request->request->get('OpGenerar')) {
                 $codigoProgramacionPago = $request->request->get('OpGenerar');                
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generar($codigoProgramacionPago);
-                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
+                $strResultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generar($codigoProgramacionPago);
+                if($strResultado == "") {
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
+                } else {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }                                                
             }
             if($request->request->get('OpDeshacer')) {
                 $codigoProgramacionPago = $request->request->get('OpDeshacer');                
@@ -44,17 +48,7 @@ class ProgramacionesPagoController extends Controller
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagar($codigoProgramacionPago);
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
             }            
-            if($form->get('BtnGenerar')->isClicked()) {
-                if(count($arrSeleccionados) > 0) {
-                    $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-                    $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);                    
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generar($codigoProgramacionPago);                        
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
-                }
 
-            }
             if($form->get('BtnEliminarPago')->isClicked()) {
                 if ($arrSeleccionados > 0 ){
                     foreach ($arrSeleccionados AS $codigoProgramacionPago) {
@@ -68,27 +62,7 @@ class ProgramacionesPagoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
                 }
             }
-            if($form->get('BtnPagar')->isClicked()) {
-                if(count($arrSeleccionados) > 0) {                    
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {                
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagar($codigoProgramacionPago);                        
-                    }
-                }                                                
-                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
-            }
-            if($form->get('BtnDeshacer')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if ($arrSeleccionados > 0 ){
-                    foreach ($arrSeleccionados as $codigoProgramacionPago) {
-                        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                        if($arProgramacionPago->getEstadoGenerado() == 1 && $arProgramacionPago->getEstadoPagado() == 0) {
-                            $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->deshacer($codigoProgramacionPago);
-                        }
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
-                }
-            }
+
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
@@ -351,9 +325,6 @@ class ProgramacionesPagoController extends Controller
             ->add('fechaHasta', 'date', array('required' => true, 'widget' => 'single_text'))                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPagar', 'submit', array('label'  => 'Pagar',))
-            ->add('BtnDeshacer', 'submit', array('label'  => 'Des-hacer',))
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
             ->add('BtnEliminarPago', 'submit', array('label'  => 'Eliminar',))
             ->getForm();
         return $form;

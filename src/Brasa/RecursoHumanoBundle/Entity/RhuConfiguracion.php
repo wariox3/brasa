@@ -77,6 +77,11 @@ class RhuConfiguracion
     private $codigoIncapacidad;
     
     /**
+     * @ORM\Column(name="anio_actual", type="integer")
+     */    
+    private $anioActual;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
@@ -419,5 +424,29 @@ class RhuConfiguracion
     public function getCodigoIncapacidad()
     {
         return $this->codigoIncapacidad;
+    }
+
+    /**
+     * Set anioActual
+     *
+     * @param integer $anioActual
+     *
+     * @return RhuConfiguracion
+     */
+    public function setAnioActual($anioActual)
+    {
+        $this->anioActual = $anioActual;
+
+        return $this;
+    }
+
+    /**
+     * Get anioActual
+     *
+     * @return integer
+     */
+    public function getAnioActual()
+    {
+        return $this->anioActual;
     }
 }

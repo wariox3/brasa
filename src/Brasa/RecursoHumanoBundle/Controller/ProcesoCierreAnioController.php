@@ -17,9 +17,16 @@ class ProcesoCierreAnioController extends Controller
         $this->listar();
         if($form->isValid()) {
             if($request->request->get('OpCerrar')) {
-                $codigoAnioCierre = $request->request->get('OpCerrar');                
+                $codigoAnioCierre = $request->request->get('OpCerrar');               
+                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $arConfiguracion->setAnioActual($arConfiguracion->getAnioActual() + 1);
+                $em->persist($arConfiguracion);
                 $arCierreAnio = new \Brasa\RecursoHumanoBundle\Entity\RhuCierreAnio();
-                echo $codigoAnioCierre;
+                $arCierreAnio = $em->getRepository('BrasaRecursoHumanoBundle:RhuCierreAnio')->find($codigoAnioCierre);
+                $arCierreAnio->setEstadoCerrado(1);
+                $em->persist($arCierreAnio);
+                $em->flush();
                 //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generar($codigoProgramacionPago);
                 //return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
             }
