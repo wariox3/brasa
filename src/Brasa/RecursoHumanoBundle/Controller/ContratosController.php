@@ -116,6 +116,8 @@ class ContratosController extends Controller
                 //$douSalarioMinimo = 644350;
                 if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
                     $arEmpleado->setAuxilioTransporte(1);
+                } else {
+                    $arEmpleado->setAuxilioTransporte(0);
                 }
                 $arEmpleado->setCentroCostoRel($arContrato->getCentroCostoRel());
                 $arEmpleado->setTipoTiempoRel($arContrato->getTipoTiempoRel());
@@ -159,6 +161,18 @@ class ContratosController extends Controller
             $arContrato->setEstadoActivo(0);
             $arContrato->setEstadoLiquidado(1);
             $em->persist($arContrato);
+            
+            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());        
+            $arEmpleado->setCodigoCentroCostoFk(NULL);
+            $arEmpleado->setCodigoTipoTiempoFk(NULL);
+            $arEmpleado->setVrSalario(0);
+            $arEmpleado->setCodigoClasificacionRiesgoFk(NULL);
+            $arEmpleado->setCodigoCargoFk(NULL);
+            $arEmpleado->setCargoDescripcion(NULL);            
+            $arEmpleado->setCodigoTipoPensionFk(NULL);  
+            $em->persist($arEmpleado);
+            
             //Generar liquidacion
             $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
             $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
@@ -180,8 +194,8 @@ class ContratosController extends Controller
                 $arLiquidacionDeduccion->setVrDeduccion($arCredito->getSaldoTotal());
                 $em->persist($arLiquidacionDeduccion);
             }
-
             $em->flush();            
+            $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($arLiquidacion->getCodigoLiquidacionPk());
             return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:terminar.html.twig', array(

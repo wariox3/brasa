@@ -69,8 +69,9 @@
                     </tr>                
                     <tr>
                         <td class="titulo">ENTIDAD PENSIÓN:</td>
-                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadPensionRel.nombre|default('SIN CONTRATO') }}</td>                    
-                        <td class="td-in-well"></td>
+                        <td>{{ arEmpleado.entidadPensionRel.nombre|default('SIN CONTRATO') }}</td>                    
+                        <td class="titulo">AUXILIO TRANSPORTE:</td>
+                        <td class="td-in-well">{% if arEmpleado.auxilioTransporte == 1 %} SI {% else %} NO{% endif %}</td>
                         <td class="titulo">PADRE FAMILIA</td>
                         <td class="td-in-well">{% if arEmpleado.padreFamilia == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>                

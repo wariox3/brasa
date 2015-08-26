@@ -1,443 +1,447 @@
 brs_rhu_inicio:
-    path:     /rhumano/inicio   
+    path:     /rhu/inicio   
     defaults: { _controller: BrasaRecursoHumanoBundle:Default:inicio }
     
 brs_rhu_credito_detalle:
-    path:     /rhumano/creditos/detalle/{codigoCreditoPk}
+    path:     /rhu/creditos/detalle/{codigoCreditoPk}
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:detalle }
     
 brs_rhu_credito_nuevo_detalle:
-    path:     /rhumano/creditos/detalle/nuevo/{codigoCreditoPk}
+    path:     /rhu/creditos/detalle/nuevo/{codigoCreditoPk}
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:nuevoDetalle }    
 
 brs_rhu_base_creditotipo_listar:
-   path:     /rhumano/base/creditotipo/listar
+   path:     /rhu/base/creditotipo/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:listar }
    
 brs_rhu_base_creditotipo_nuevo:
-   path:     /rhumano/base/creditotipo/nuevo/{codigoCreditoTipoPk}
+   path:     /rhu/base/creditotipo/nuevo/{codigoCreditoTipoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:nuevo }
    
 brs_rhu_base_creditotipo_detalle:
-   path:     /rhumano/base/creditotipo/detalle/{codigoCreditoTipoPk}
+   path:     /rhu/base/creditotipo/detalle/{codigoCreditoTipoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:detalle }
    
 brs_rhu_base_ssosucursal_listar:
-   path:     /rhumano/base/ssosucursal/listar
+   path:     /rhu/base/ssosucursal/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSsoSucursal:listar }
    
 brs_rhu_base_ssosucursal_nuevo:
-   path:     /rhumano/base/ssosucursal/nuevo/{codigoSucursalPk}
+   path:     /rhu/base/ssosucursal/nuevo/{codigoSucursalPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSsoSucursal:nuevo }   
 
 brs_rhu_utilidades_pagos_generar_periodo:
-    path:     /rhumano/utilidades/pagos/generar/periodo
+    path:     /rhu/utilidades/pagos/generar/periodo
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:generarPeriodo }          
     
 brs_rhu_utilidades_pagos_pagar:
-    path:     /rhumano/utilidades/pagos/pagar
+    path:     /rhu/utilidades/pagos/pagar
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagosPagar:pagar }      
     
 brs_rhu_utilidades_notificaciones_cierreprogramacionpago:
-    path:     /rhumano/utilidades/notificaciones/cierreprogramacionpago
+    path:     /rhu/utilidades/notificaciones/cierreprogramacionpago
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesNotificaciones:cierreProgramacionPago }    
     
 brs_rhu_pagos_adicionales_lista:
-    path:     /rhumano/pagos/adicionales/lista
+    path:     /rhu/pagos/adicionales/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:lista }     
     
 brs_rhu_pagos_adicionales_detalle:
-    path:     /rhumano/pagos/adicionales/detalle/{codigoProgramacionPago}
+    path:     /rhu/pagos/adicionales/detalle/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:detalle }         
 
 brs_rhu_pagos_adicionales_generarmasivo_lista:
-    path:     /rhumano/pagos/adicionales/generarmasivo/lista
+    path:     /rhu/pagos/adicionales/generarmasivo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoLista }
 
 brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle:
-    path:     /rhumano/pagos/adicionales/generarmasivo/suplementario/detalle/{codigoCentroCosto}
+    path:     /rhu/pagos/adicionales/generarmasivo/suplementario/detalle/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoSuplementarioDetalle }
 
 brs_rhu_pagos_adicionales_agregar_tiempo:
-    path:     /rhumano/pagos/adicionales/agregar/tiempo/{codigoProgramacionPago}
+    path:     /rhu/pagos/adicionales/agregar/tiempo/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempo }    
 
 brs_rhu_pagos_adicionales_agregar_valor:
-    path:     /rhumano/pagos/adicionales/agregar/valor/{codigoProgramacionPago}/{tipo}
+    path:     /rhu/pagos/adicionales/agregar/valor/{codigoProgramacionPago}/{tipo}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valor }    
 
 brs_rhu_liquidaciones_lista:
-    path:     /rhumano/liquidaciones/lista
+    path:     /rhu/liquidaciones/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Liquidaciones:lista }
 
 brs_rhu_liquidaciones_detalle:
-    path:     /rhumano/liquidaciones/detalle/{codigoLiquidacion}
+    path:     /rhu/liquidaciones/detalle/{codigoLiquidacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Liquidaciones:detalle } 
 
 brs_rhu_incapacidades_lista:
-    path:     /rhumano/incapacidades/lista
+    path:     /rhu/incapacidades/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:lista }    
 
 brs_rhu_incapacidades_nuevo:
-    path:     /rhumano/incapacidades/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoIncapacidad}
+    path:     /rhu/incapacidades/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoIncapacidad}
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:nuevo }
     
 brs_rhu_vacaciones_lista:
-    path:     /rhumano/vacaciones/lista
+    path:     /rhu/vacaciones/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:lista }    
 
 brs_rhu_vacaciones_nuevo:
-    path:     /rhumano/vacaciones/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoVacacion}
+    path:     /rhu/vacaciones/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoVacacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:nuevo }
     
 brs_rhu_vacaciones_detalle:
-    path:     /rhumano/vacaciones/detalle/{codigoVacacion}
+    path:     /rhu/vacaciones/detalle/{codigoVacacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:detalle }
     
 brs_rhu_vacaciones_detalle_nuevo:
-   path:     /rhumano/vacaciones/detalle/nuevo/{codigoVacacion}
+   path:     /rhu/vacaciones/detalle/nuevo/{codigoVacacion}
    defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:detallenuevo }    
 
 brs_rhu_licencias_nuevo:
-    path:     /rhumano/licencias/nuevo/{codigoCentroCosto}/{codigoEmpleado}
+    path:     /rhu/licencias/nuevo/{codigoCentroCosto}/{codigoEmpleado}
     defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:nuevo } 
     
 brs_rhu_base_empleado_dotacion_lista:
-    path:     /rhumano/base/empleado/dotacion/lista
+    path:     /rhu/base/empleado/dotacion/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:lista}    
     
 brs_rhu_base_empleado_dotacion_nuevo:
-    path:     /rhumano/base/empleado/dotacion/nuevo/{codigoEmpleado}/{codigoEmpleadoDotacion}
+    path:     /rhu/base/empleado/dotacion/nuevo/{codigoEmpleado}/{codigoEmpleadoDotacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:nuevo }
     
 brs_rhu_base_empleado_dotacion_nuevo_dotacion:
-    path:     /rhumano/base/empleado/dotacion/nuevo/dotacion
+    path:     /rhu/base/empleado/dotacion/nuevo/dotacion
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:nuevoDotacion }    
     
 brs_rhu_base_empleado_dotacion_detalle:
-    path:     /rhumano/base/empleado/dotacion/detalle/{codigoEmpleadoDotacion}
+    path:     /rhu/base/empleado/dotacion/detalle/{codigoEmpleadoDotacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:detalle }
     
 brs_rhu_base_empleado_dotacion_detalle_nuevo:
-   path:     /rhumano/base/empleado/dotacion/detalle/nuevo/{codigoEmpleadoDotacion}
+   path:     /rhu/base/empleado/dotacion/detalle/nuevo/{codigoEmpleadoDotacion}
    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:detalleNuevo }
    
 brs_rhu_base_empleado_dotacion_detalle_editar:
-   path:     /rhumano/base/empleadoDotacion/detalle/editar/{codigoEmpleadoDotacionDetalle}
+   path:     /rhu/base/empleadoDotacion/detalle/editar/{codigoEmpleadoDotacionDetalle}
    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoDotacion:editarElemento }       
     
 brs_rhu_base_dotacionElemento_lista:
-    path:     /rhumano/base/dotacion/elemento/lista
+    path:     /rhu/base/dotacion/elemento/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionElemento:lista }
     
 brs_rhu_base_dotacionElemento_nuevo:
-    path:     /rhumano/base/dotacion/elemento/nuevo/{codigoDotacionElemento}
+    path:     /rhu/base/dotacion/elemento/nuevo/{codigoDotacionElemento}
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionElemento:nuevo }    
     
 brs_rhu_creditos_lista:
-    path:     /rhumano/creditos/lista
+    path:     /rhu/creditos/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:lista }       
 
 brs_rhu_creditos_nuevo:
-    path:     /rhumano/creditos/nuevo/{codigoCredito}/{codigoEmpleado}
+    path:     /rhu/creditos/nuevo/{codigoCredito}/{codigoEmpleado}
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:nuevo }          
 
 brs_rhu_creditos_refinanciar:
-    path:     /rhumano/creditos/refinanciar/{codigoCredito}
+    path:     /rhu/creditos/refinanciar/{codigoCredito}
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:refinanciar }
 
 brs_rhu_pagos_lista:
-    path:     /rhumano/pagos/lista
+    path:     /rhu/pagos/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Pagos:lista }     
     
 brs_rhu_pagos_detalle:
-    path:     /rhumano/pagos/detalle/{codigoPago}
+    path:     /rhu/pagos/detalle/{codigoPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:Pagos:detalle }    
 
 brs_rhu_programaciones_pago_lista:
-    path:     /rhumano/programaciones/pago/lista
+    path:     /rhu/programaciones/pago/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:lista }     
     
 brs_rhu_programaciones_pago_detalle:
-    path:     /rhumano/programaciones/pago/detalle/{codigoProgramacionPago}
+    path:     /rhu/programaciones/pago/detalle/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:detalle } 
 
 brs_rhu_programaciones_pago_detalle_prima:
-    path:     /rhumano/programaciones/pago/detalle/prima/{codigoProgramacionPago}
+    path:     /rhu/programaciones/pago/detalle/prima/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:detallePrima }         
 
 brs_rhu_programaciones_pago_inconsistencias:
-    path:     /rhumano/programaciones/pago/inconsistencias/{codigoProgramacionPago}
+    path:     /rhu/programaciones/pago/inconsistencias/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:inconsistencias }         
 
 brs_rhu_programaciones_pago_agregar_empleado:
-    path:     /rhumano/programaciones/pago/agregar/empleado/{codigoProgramacionPago}
+    path:     /rhu/programaciones/pago/agregar/empleado/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:agregarEmpleado }     
 
 brs_rhu_programaciones_pago_cargar_tiempo_sede:
-    path:     /rhumano/programaciones/pago/cargar/tiempo/sede/{codigoProgramacionPago}
+    path:     /rhu/programaciones/pago/cargar/tiempo/sede/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarTiempoSedes:cargar }
     
 brs_rhu_programaciones_pago_archivo_lista:
-    path:     /rhumano/programaciones/pago/archivo/lista
+    path:     /rhu/programaciones/pago/archivo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoArchivo:lista }     
     
 brs_rhu_programaciones_pago_archivo_detalle:
-    path:     /rhumano/programaciones/pago/archivo/detalle/{codigoProgramacionPago}
+    path:     /rhu/programaciones/pago/archivo/detalle/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoArchivo:detalle }    
     
 brs_rhu_base_centros_costos_lista:
-    path:     /rhumano/base/centroscostos/lista
+    path:     /rhu/base/centroscostos/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:lista } 
 
 brs_rhu_base_centros_costos_nuevo:
-    path:     /rhumano/base/centroscostos/nuevo/{codigoCentroCosto}
+    path:     /rhu/base/centroscostos/nuevo/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:nuevo }
     
 brs_rhu_base_centros_costos_detalle:
-    path:     /rhumano/base/centroscostos/detalle/{codigoCentroCosto}
+    path:     /rhu/base/centroscostos/detalle/{codigoCentroCosto}
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:detalle }    
     
 brs_rhu_base_empleados_lista:
-    path:     /rhumano/base/empleados/lista
+    path:     /rhu/base/empleados/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:lista }     
     
 brs_rhu_base_empleados_detalles:
-    path:     /rhumano/base/empleados/detalles/{codigoEmpleado}
+    path:     /rhu/base/empleados/detalles/{codigoEmpleado}
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:detalle }    
     
 brs_rhu_base_empleados_nuevo:
-    path:     /rhumano/base/empleados/nuevo/{codigoEmpleado}/{codigoSeleccion}
+    path:     /rhu/base/empleados/nuevo/{codigoEmpleado}/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:nuevo }     
 
 brs_rhu_base_empleados_nuevo_enlazar:
-    path:     /rhumano/base/empleados/nuevo/enlazar/
+    path:     /rhu/base/empleados/nuevo/enlazar/
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:enlazar }         
     
 brs_rhu_base_empleado_estudio_nuevo:
-    path:     /rhumano/base/empleadoEstudio/nuevo/{codigoEmpleado}/{codigoEmpleadoEstudio}
+    path:     /rhu/base/empleadoEstudio/nuevo/{codigoEmpleado}/{codigoEmpleadoEstudio}
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoEstudio:nuevo }   
     
 brs_rhu_base_empleado_familia_nuevo:
-    path:     /rhumano/base/empleadoFamilia/nuevo/{codigoEmpleado}/{codigoEmpleadoFamilia}
+    path:     /rhu/base/empleadoFamilia/nuevo/{codigoEmpleado}/{codigoEmpleadoFamilia}
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoFamilia:nuevo }
 
 brs_rhu_base_contratos_lista:
-    path:     /rhumano/base/contratos/lista/
+    path:     /rhu/base/contratos/lista/
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:lista }    
 
 brs_rhu_base_contratos_detalles:
-    path:     /rhumano/base/contratos/detalle/{codigoContrato}
+    path:     /rhu/base/contratos/detalle/{codigoContrato}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:detalle }        
     
 brs_rhu_contratos_nuevo:
-    path:     /rhumano/contratos/nuevo/{codigoContrato}/{codigoEmpleado}
+    path:     /rhu/contratos/nuevo/{codigoContrato}/{codigoEmpleado}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:nuevo }    
 
 brs_rhu_contratos_terminar:
-    path:     /rhumano/contratos/terminar/{codigoContrato}
+    path:     /rhu/contratos/terminar/{codigoContrato}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:terminar }        
     
 brs_rhu_facturas_lista:
-    path:     /rhumano/facturas/lista
+    path:     /rhu/facturas/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:lista }    
     
 brs_rhu_facturas_nuevo:
-    path:     /rhumano/facturas/nuevo/{codigoFactura}
+    path:     /rhu/facturas/nuevo/{codigoFactura}
     defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:nuevo }        
     
 brs_rhu_facturas_detalle:
-    path:     /rhumano/facturas/detalle/{codigoFactura}
+    path:     /rhu/facturas/detalle/{codigoFactura}
     defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalle }    
 
 brs_rhu_facturas_agregar_pago:
-    path:     /rhumano/facturas/agregarpago/{codigoFactura}
+    path:     /rhu/facturas/agregarpago/{codigoFactura}
     defaults: { _controller: BrasaRecursoHumanoBundle:FacturasAgregarPago:lista }        
 
 brs_rhu_base_salud_listar:
-   path:     /rhumano/base/salud/listar
+   path:     /rhu/base/salud/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:listar }
    
 brs_rhu_base_salud_nuevo:
-   path:     /rhumano/base/salud/nuevo/{codigoEntidadSaludPk}
+   path:     /rhu/base/salud/nuevo/{codigoEntidadSaludPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:nuevo }
    
 brs_rhu_base_riesgoProfesional_listar:
-   path:     /rhumano/base/riesgoProfesional/listar
+   path:     /rhu/base/riesgoProfesional/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseRiesgoProfesional:listar }
    
 brs_rhu_base_riesgoProfesional_nuevo:
-   path:     /rhumano/base/riesgoProfesional/nuevo/{codigoEntidadRiesgoProfesionalPk}
+   path:     /rhu/base/riesgoProfesional/nuevo/{codigoEntidadRiesgoProfesionalPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseRiesgoProfesional:nuevo }   
    
 brs_rhu_base_banco_listar:
-   path:     /rhumano/base/banco/listar
+   path:     /rhu/base/banco/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:listar }
    
 brs_rhu_base_banco_nuevo:
-   path:     /rhumano/base/banco/nuevo/{codigoBancoPk}
+   path:     /rhu/base/banco/nuevo/{codigoBancoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:nuevo }
    
 brs_rhu_base_certificadoIngreso_generar:
-   path:     /rhumano/base/Certificado/generar/{codigoEmpleado}
+   path:     /rhu/base/Certificado/generar/{codigoEmpleado}
    defaults: { _controller: BrasaRecursoHumanoBundle:CertificadoIngreso:certificado }   
    
 brs_rhu_base_caja_listar:
-   path:     /rhumano/base/caja/listar
+   path:     /rhu/base/caja/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCaja:listar }
    
 brs_rhu_base_caja_nuevo:
-   path:     /rhumano/base/caja/nuevo/{codigoEntidadCajaPk}
+   path:     /rhu/base/caja/nuevo/{codigoEntidadCajaPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCaja:nuevo }
    
 brs_rhu_base_cargo_listar:
-   path:     /rhumano/base/cargo/listar
+   path:     /rhu/base/cargo/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCargo:listar }
    
 brs_rhu_base_cargo_nuevo:
-   path:     /rhumano/base/cargo/nuevo/{codigoCargoPk}
+   path:     /rhu/base/cargo/nuevo/{codigoCargoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCargo:nuevo }
    
 brs_rhu_base_clasificacion_listar:
-   path:     /rhumano/base/clasificacion/listar
+   path:     /rhu/base/clasificacion/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseClasificacionRiesgos:listar }
    
 brs_rhu_base_clasificacion_nuevo:
-   path:     /rhumano/base/clasificacion/nuevo/{codigoClasificacionPk}
+   path:     /rhu/base/clasificacion/nuevo/{codigoClasificacionPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseClasificacionRiesgos:nuevo }   
    
 brs_rhu_base_sede_listar:
-   path:     /rhumano/base/sede/listar
+   path:     /rhu/base/sede/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSede:lista }
    
 brs_rhu_base_sede_nuevo:
-   path:     /rhumano/base/sede/nuevo/{codigoSedePk}
+   path:     /rhu/base/sede/nuevo/{codigoSedePk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSede:nuevo }
    
 brs_rhu_examen_listar:
-   path:     /rhumano/examen/listar
+   path:     /rhu/examen/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:lista } 
    
 brs_rhu_examen_nuevo:
-   path:     /rhumano/examen/nuevo/{codigoExamen}
+   path:     /rhu/examen/nuevo/{codigoExamen}
    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:nuevo }
    
 brs_rhu_examen_detalle:
-   path:     /rhumano/examen/detalle/{codigoExamen}
+   path:     /rhu/examen/detalle/{codigoExamen}
    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalle }
    
 brs_rhu_examen_detalle_nuevo:
-   path:     /rhumano/examen/detalle/nuevo/{codigoExamen}
+   path:     /rhu/examen/detalle/nuevo/{codigoExamen}
    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detallenuevo }   
    
 brs_rhu_base_entidadexamen_listar:
-   path:     /rhumano/base/entidadexamen/listar
+   path:     /rhu/base/entidadexamen/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:listar }
    
 brs_rhu_base_entidadexamen_nuevo:
-   path:     /rhumano/base/entidadexamen/nuevo/{codigoEntidadExamenPk}
+   path:     /rhu/base/entidadexamen/nuevo/{codigoEntidadExamenPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:nuevo }
    
 brs_rhu_base_examentipo_listar:      
-   path:     /rhumano/base/examentipo/listar
+   path:     /rhu/base/examentipo/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenTipo:listar }
    
 brs_rhu_base_examentipo_nuevo:
-   path:     /rhumano/base/examentipo/nuevo/{codigoExamenTipoPk}
+   path:     /rhu/base/examentipo/nuevo/{codigoExamenTipoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenTipo:nuevo }   
 
 brs_rhu_base_pension_listar:
-   path:     /rhumano/base/pension/listar
+   path:     /rhu/base/pension/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BasePension:listar }
    
 brs_rhu_base_pension_nuevo:
-   path:     /rhumano/base/pension/nuevo/{codigoEntidadPensionPk}
+   path:     /rhu/base/pension/nuevo/{codigoEntidadPensionPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BasePension:nuevo }    
 
 brs_rhu_seleccion_lista:
-    path:     /rhumano/seleccion/lista
+    path:     /rhu/seleccion/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:lista }         
     
 brs_rhu_seleccion_nuevo:
-    path:     /rhumano/seleccion/nuevo/{codigoSeleccion}
+    path:     /rhu/seleccion/nuevo/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:nuevo } 
 
 brs_rhu_seleccion_agregar_referencia:
-    path:     /rhumano/seleccion/agregar/referencia/{codigoSeleccion}
+    path:     /rhu/seleccion/agregar/referencia/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarReferencia } 
 
 brs_rhu_seleccion_agregar_prueba:
-    path:     /rhumano/seleccion/agregar/prueba/{codigoSeleccion}
+    path:     /rhu/seleccion/agregar/prueba/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarPrueba }
 
 brs_rhu_seleccion_detalle:
-    path:     /rhumano/seleccion/detalle/{codigoSeleccion}
+    path:     /rhu/seleccion/detalle/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:detalle }     
     
 brs_rhu_selecciongrupo_lista:
-    path:     /rhumano/selecciongrupo/lista
+    path:     /rhu/selecciongrupo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionGrupo:lista }
     
 brs_rhu_selecciongrupo_nuevo:
-    path:     /rhumano/selecciongrupo/nuevo/{codigoSeleccionGrupo}
+    path:     /rhu/selecciongrupo/nuevo/{codigoSeleccionGrupo}
     defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionGrupo:nuevo }     
     
 brs_rhu_selecciongrupo_detalle:
-    path:     /rhumano/selecciongrupo/detalle/{codigoSeleccionGrupo}
+    path:     /rhu/selecciongrupo/detalle/{codigoSeleccionGrupo}
     defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionGrupo:detalle }    
 
 brs_rhu_ss_periodo_lista:
-    path:     /rhumano/seguridadsocial/periodo/lista
+    path:     /rhu/seguridadsocial/periodo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:lista }     
 
 brs_rhu_ss_periodo_detalle:
-    path:     /rhumano/seguridadsocial/periodo/detalle/{codigoPeriodo}
+    path:     /rhu/seguridadsocial/periodo/detalle/{codigoPeriodo}
     defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalle }         
     
 brs_rhu_consultas_costos_general:    
-    path:     /rhumano/consultas/costos/general
+    path:     /rhu/consultas/costos/general
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:costosGeneral }
     
 brs_rhu_consultas_creditos_general:    
-    path:     /rhumano/consultas/creditos/general
+    path:     /rhu/consultas/creditos/general
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:creditosGeneral }    
 
 brs_rhu_consultas_servicios_cobrar:    
-    path:     /rhumano/consultas/servicios/cobrar
+    path:     /rhu/consultas/servicios/cobrar
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:serviciosCobrar }
     
 brs_rhu_pago_examen_lista:
-    path:     /rhumano/pago/examen/lista
+    path:     /rhu/pago/examen/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:PagoExamen:lista}
 
 brs_rhu_pago_examen_nuevo:
-    path:     /rhumano/pago/examen/nuevo/{codigoPagoExamen}
+    path:     /rhu/pago/examen/nuevo/{codigoPagoExamen}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagoExamen:nuevo}
 
 brs_rhu_pago_examen_detalle:
-    path:     /rhumano/pago/examen/detalle/{codigoPagoExamen}
+    path:     /rhu/pago/examen/detalle/{codigoPagoExamen}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagoExamen:detalle}
     
 brs_rhu_pago_examen_detalle_nuevo:
-    path:     /rhumano/pago/examen/detalle/nuevo/{codigoPagoExamen}
+    path:     /rhu/pago/examen/detalle/nuevo/{codigoPagoExamen}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagoExamen:detalleNuevo}    
     
 brs_rhu_disciplinario_lista:
-    path:     /rhumano/disciplinario/lista
+    path:     /rhu/disciplinario/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Disciplinario:lista }         
     
 brs_rhu_disciplinario_nuevo:
-    path:     /rhumano/disciplinario/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoDisciplinario}
+    path:     /rhu/disciplinario/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoDisciplinario}
     defaults: { _controller: BrasaRecursoHumanoBundle:Disciplinario:nuevo }     
 
 brs_rhu_disciplinario_detalle:
-    path:     /rhumano/disciplinario/detalle/{codigoDisciplinario}
+    path:     /rhu/disciplinario/detalle/{codigoDisciplinario}
     defaults: { _controller: BrasaRecursoHumanoBundle:Disciplinario:detalle }
     
 brs_rhu_configuracion_nomina:
-    path:     /rhumano/configuracion/{codigoConfiguracionPk}
+    path:     /rhu/configuracion/{codigoConfiguracionPk}
     defaults: { _controller: BrasaRecursoHumanoBundle:Configuracion:configuracion }
     
 brs_rhu_configuracion_general:
-    path:     /rhumano/configuracion/general/{codigoConfiguracionPk}
+    path:     /rhu/configuracion/general/{codigoConfiguracionPk}
     defaults: { _controller: BrasaRecursoHumanoBundle:ConfiguracionGeneral:configuracion }    
+    
+brs_rhu_proceso_cierre_anio:
+    path:     /rhu/proceso/cierre/anio
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoCierreAnio:lista }        

@@ -85,10 +85,9 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setVrPrima($douPrima);            
             } else {
                 $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 1;    
-                $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
+                $douDeduccionPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
                 $arLiquidacion->setDiasPrimas($intDiasPrima * -1);
-                $arLiquidacion->setVrDeduccionPrima($douPrima);   
-                $douDeduccionPrima = $douPrima;
+                $arLiquidacion->setVrDeduccionPrima($douDeduccionPrima);                   
             }                                                                                
             $arLiquidacion->setFechaUltimoPagoPrimas($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas());
         }
