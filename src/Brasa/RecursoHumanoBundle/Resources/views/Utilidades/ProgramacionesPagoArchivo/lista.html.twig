@@ -54,7 +54,7 @@
                 {% if  arProgramacionPagoArchivo.archivoExportado == 1%}
                     <td style="text-align: center"><a href="" onclick="alert('Archivo Generado para esta programación de pago')"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 {% else %}
-                    <td style="text-align: center"><a href="{{ path('brs_rhu_programaciones_pago_archivo_detalle', { 'codigoProgramacionPago':  arProgramacionPagoArchivo.codigoProgramacionPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
+                    <td style="text-align: center"><a href="{{ path('brs_rhu_utilidades_programaciones_pago_archivo_detalle', { 'codigoProgramacionPago':  arProgramacionPagoArchivo.codigoProgramacionPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 {% endif %}    
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionPagoArchivo.codigoProgramacionPagoPk }}" /></td>
             </tr>

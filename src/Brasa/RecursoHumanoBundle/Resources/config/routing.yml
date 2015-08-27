@@ -178,13 +178,17 @@ brs_rhu_programaciones_pago_cargar_tiempo_sede:
     path:     /rhu/programaciones/pago/cargar/tiempo/sede/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarTiempoSedes:cargar }
     
-brs_rhu_programaciones_pago_archivo_lista:
-    path:     /rhu/programaciones/pago/archivo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoArchivo:lista }     
+brs_rhu_utilidades_programaciones_pago_archivo_lista:
+    path:     /rhu/utilidades/programaciones/pago/archivo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProgramacionesPagoArchivo:lista }     
     
-brs_rhu_programaciones_pago_archivo_detalle:
-    path:     /rhu/programaciones/pago/archivo/detalle/{codigoProgramacionPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoArchivo:detalle }    
+brs_rhu_utilidades_programaciones_pago_archivo_detalle:
+    path:     /rhu/utilidades/programaciones/pago/archivo/detalle/{codigoProgramacionPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProgramacionesPagoArchivo:detalle }
+    
+brs_rhu_utilidades_medios_magneticos_lista:
+    path:     /rhu/utilidades/mediosmagneticos/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesMediosMagneticos:MediosMagneticos }    
     
 brs_rhu_base_centros_costos_lista:
     path:     /rhu/base/centroscostos/lista

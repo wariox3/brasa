@@ -5,7 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 
-class ProgramacionesPagoArchivoController extends Controller
+class UtilidadesProgramacionesPagoArchivoController extends Controller
 {
     var $strDqlLista = "";
     var $intNumero = 0;
@@ -25,7 +25,7 @@ class ProgramacionesPagoArchivoController extends Controller
             }                          
         }            
         $arProgramacionPagoArchivo = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPagoArchivo:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/ProgramacionesPagoArchivo:lista.html.twig', array(
             'arProgramacionPagoArchivo' => $arProgramacionPagoArchivo,
             'form' => $form->createView()));
     }       
@@ -119,7 +119,7 @@ class ProgramacionesPagoArchivoController extends Controller
         
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));
         $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 500);        
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPagoArchivo:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/ProgramacionesPagoArchivo:detalle.html.twig', array(
                 'arProgramacionPagoDetalles' => $arProgramacionPagoDetalles,
                 'arProgramacionPago' => $arProgramacionPago,
                 'mensajefechaTransmision' => $mensajefechaTransmision,
