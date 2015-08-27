@@ -11,6 +11,8 @@
             <div class="btn-group">
                     {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                     {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
+                    <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_vacaciones_editar_disfrutadas', { 'codigoVacacion': arVacaciones.codigoVacacionPk}) }}" style="float:left">Editar Disfrutadas</a>
+                    
             </div>
         </div>
         <br /><br />

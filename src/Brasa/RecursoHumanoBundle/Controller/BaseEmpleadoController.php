@@ -134,6 +134,12 @@ class BaseEmpleadoController extends Controller
                     foreach ($arrSeleccionados AS $codigoVacacion) {
                         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
                         $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
+                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $arVacacion->getCodigoEmpleadoFk(),'estadoActivo' => 1));
+                        foreach ($arContrato as $arContrato) {
+                            $arContrato->setFechaUltimoPagoVacaciones($arVacacion->getFechaDesdePeriodo());
+                            $em->persist($arContrato);
+                        }
                         $em->remove($arVacacion);
                     }
                     $em->flush();

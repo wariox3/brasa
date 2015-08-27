@@ -63,8 +63,6 @@ class RhuVacacionRepository extends EntityRepository {
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);         
-        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' =>$arVacacion->getCodigoEmpleadoFk(), 'estadoActivo' => 1));
         if ($arVacacion->getEstadoDisfrutadas() == 0){
             $floSalario = $arVacacion->getEmpleadoRel()->getVrSalario();
             $floSalario = $floSalario / 2;
@@ -83,9 +81,6 @@ class RhuVacacionRepository extends EntityRepository {
             $arVacacion->setVrIbc(0);
             $floTotal = $floSalario - $floDeducciones;
             $arVacacion->setVrVacacion($floTotal);
-            foreach ($arContrato as $arContrato) {
-                $arContrato->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());
-            }   
             $em->flush();
         }else{
         $intDiasDisfrutados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arVacacion->getFechaDesde(), $arVacacion->getFechaHasta());
@@ -115,10 +110,6 @@ class RhuVacacionRepository extends EntityRepository {
         $arVacacion->setDiasVacaciones(365);
         $arVacacion->setDiasVacacionesPagadas(15);
         $arVacacion->setDiasVacacionesDisfrute($intDiasDisfrutados);
-        foreach ($arContrato as $arContrato) {
-            $arContrato->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());
-        }
-        
         $em->flush();
         }
         return true;
