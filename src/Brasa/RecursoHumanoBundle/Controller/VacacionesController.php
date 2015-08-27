@@ -132,13 +132,19 @@ class VacacionesController extends Controller
                 foreach ($arContratoEmpleado as $arContratoEmpleado) {
                     $arVacacion->setFechaDesdePeriodo($arContratoEmpleado->getFechaUltimoPagoVacaciones());
                 }
-                $fechaHastaPeriodo = $arContratoEmpleado->getFechaUltimoPagoVacaciones()->format('Y/m/d');
-                $fechaHastaPeriodo= date('Y/m/d',strtotime('+365 days', strtotime($fechaHastaPeriodo)));
+                    $fechaHastaPeriodo = $arContratoEmpleado->getFechaUltimoPagoVacaciones()->format('Y/m/d');
+                    $fechaHastaPeriodo= date('Y/m/d',strtotime('+364 days', strtotime($fechaHastaPeriodo)));
+                    $date = substr($fechaHastaPeriodo, 8,12);
+                    if ($date == 31){
+                        $fechaHastaPeriodo= date('Y/m/d',strtotime('-1 days', strtotime($fechaHastaPeriodo)));
+                }
+                
                 $arVacacion->setFechaHastaPeriodo(new \DateTime($fechaHastaPeriodo));
                 $arVacacion->setFechaDesde(new \DateTime('now'));
                 $arVacacion->setFechaHasta(new \DateTime('now'));
                 $arVacacion->setCentroCostoRel($arCentroCosto);
-                if ($arVacacion->getFechaHastaPeriodo() > date('Y/m/d')){
+                $fechaActual = date('Y/m/d');
+                if ($fechaHastaPeriodo > $fechaActual){
                     $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
                 }
             }
@@ -149,11 +155,13 @@ class VacacionesController extends Controller
             if ($control == 1){
                 $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this); 
             }else {
-                if ($arVacacion->getFechaHastaPeriodo() > date('Y/m/d')){
+                if ($fechaHastaPeriodo > $fechaActual){
                     $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
                 } else {
                    $arVacacion = $form->getData();   
-                    $arVacacion->setEmpleadoRel($arEmpleado);    
+                    $arVacacion->setEmpleadoRel($arEmpleado); 
+                    $arVacacion->setFechaDesdePeriodo($arContratoEmpleado->getFechaUltimoPagoVacaciones());
+                    $arVacacion->setFechaHastaPeriodo(new \DateTime($fechaHastaPeriodo));
                     $em->persist($arVacacion);
                     //Calcular deducciones credito
                     $floVrDeducciones = 0;
