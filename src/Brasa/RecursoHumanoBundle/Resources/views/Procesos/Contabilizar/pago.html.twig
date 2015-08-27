@@ -22,7 +22,6 @@
                 <th style="text-align: right">DEDUCCIONES</th>
                 <th style="text-align: right">NETO</th>
                 <th></th>
-                <th></th>
             </tr>
             {% for arPagos in arPagos %}
             <tr>
@@ -39,7 +38,6 @@
                 <td style="text-align: right">{{ arPagos.vrDevengado | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrDeducciones | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrNeto | number_format(2, '.', ',') }}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_detalle', { 'codigoPago': arPagos.codigoPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagos.codigoPagoPk }}" /></td>
             </tr>
             {% endfor %}
