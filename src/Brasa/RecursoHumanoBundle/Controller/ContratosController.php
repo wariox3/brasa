@@ -195,7 +195,7 @@ class ContratosController extends Controller
                 $em->persist($arLiquidacionDeduccion);
             }
             $em->flush();            
-            $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($arLiquidacion->getCodigoLiquidacionPk());
+            //$em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($arLiquidacion->getCodigoLiquidacionPk());
             return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:terminar.html.twig', array(
