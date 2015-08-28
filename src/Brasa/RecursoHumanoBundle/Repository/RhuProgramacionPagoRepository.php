@@ -493,6 +493,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPago->setVrSalarioPeriodo(($arProgramacionPagoDetalle->getVrSalario() / 30) * $arProgramacionPagoDetalle->getDias());
                         $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
                         $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
+                        if($arProgramacionPagoDetalle->getCodigoContratoFk()) {
+                            $arPago->setContratoRel($arProgramacionPagoDetalle->getContratoRel());
+                        }
                         $em->persist($arPago);
                         $douSalarioMinimo = $arConfiguracion->getVrSalario();
                         $intDias = $arProgramacionPagoDetalle->getDias();
