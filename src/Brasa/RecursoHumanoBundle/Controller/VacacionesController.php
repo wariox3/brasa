@@ -145,7 +145,7 @@ class VacacionesController extends Controller
                 $arVacacion->setCentroCostoRel($arCentroCosto);
                 $fechaActual = date('Y/m/d');
                 $fechaUltimoPago = $arContratoEmpleado->getFechaUltimoPago()->format('Y/m/d');
-                if ($fechaHastaPeriodo > $fechaUltimoPago){
+                if ($fechaHastaPeriodo >= $fechaUltimoPago){
                     $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
                 }
             }
