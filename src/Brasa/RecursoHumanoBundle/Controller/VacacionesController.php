@@ -144,7 +144,8 @@ class VacacionesController extends Controller
                 $arVacacion->setFechaHasta(new \DateTime('now'));
                 $arVacacion->setCentroCostoRel($arCentroCosto);
                 $fechaActual = date('Y/m/d');
-                if ($fechaHastaPeriodo > $fechaActual){
+                $fechaUltimoPago = $arContratoEmpleado->getFechaUltimoPago()->format('Y/m/d');
+                if ($fechaHastaPeriodo > $fechaUltimoPago){
                     $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
                 }
             }
@@ -155,7 +156,7 @@ class VacacionesController extends Controller
             if ($control == 1){
                 $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this); 
             }else {
-                if ($fechaHastaPeriodo > $fechaActual){
+                if ($fechaHastaPeriodo > $fechaUltimoPago){
                     $objMensaje->Mensaje("error", "El empleado no ha cumplido los 365 dias trabajos para disfrutas las vacaciones", $this);
                 } else {
                    $arVacacion = $form->getData();   
