@@ -50,7 +50,7 @@ class User implements UserInterface, \Serializable
     private $isActive;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $empresa;       
     
