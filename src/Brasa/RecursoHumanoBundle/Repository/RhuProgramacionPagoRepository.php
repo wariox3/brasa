@@ -526,8 +526,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                         $em->persist($arPagoDetalle);
                         $arPagoDetalle->setVrIngresoBaseCotizacion(0);
-
-                        $floTotalPagoIntereses = $floTotalPago * 0.12;
+                        
+                        $floPorcentajeIntereses = (($intDias * 12) / 360)/100;
+                        $floTotalPagoIntereses = $floTotalPago * $floPorcentajeIntereses;
+                        
                         //Intereses cesantias
                         $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(30);
                         $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
@@ -728,8 +730,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $douSalarioSeguridadSocial = $douSalarioPeriodo + $douAdicionTiempo + $douAdicionValor;
                 $douDiaAuxilioTransporte = 74000 / 30;
                 $douAuxilioTransporteCotizacion = $arPagoProcesar->getDiasPeriodo() * $douDiaAuxilioTransporte;
-                $douArp = ($douSalarioSeguridadSocial * $arPagoProcesar->getEmpleadoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
-                $douPension = ($douSalarioSeguridadSocial * $arPagoProcesar->getEmpleadoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
+                $douArp = ($douSalarioSeguridadSocial * $arPagoProcesar->getContratoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
+                $douPension = ($douSalarioSeguridadSocial * $arPagoProcesar->getContratoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
                 $douCaja = ($douSalarioSeguridadSocial * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
                 $douCesantias = (($douSalarioSeguridadSocial + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
                 $douVacaciones = ($douSalarioPeriodo * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
