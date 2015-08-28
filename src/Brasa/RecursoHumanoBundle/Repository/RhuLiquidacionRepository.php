@@ -68,7 +68,8 @@ class RhuLiquidacionRepository extends EntityRepository {
             $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
             $intDiasCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                
             $douCesantias = ($douBasePrestacionesTotal * $intDiasCesantias) / 360;
-            $douInteresesCesantias = $douCesantias * 0.12;
+            $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
+            $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
             $arLiquidacion->setFechaUltimoPagoCesantias($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias());
             $arLiquidacion->setDiasCesantias($intDiasCesantias);
             $arLiquidacion->setVrCesantias($douCesantias);
