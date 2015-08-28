@@ -32,16 +32,25 @@ pagination {
     border-width: 2px; 
 }
 .panel-default > .panel-heading {
-    color: #080E65;
-    background-color: #16C5A6;
+    color: #FFFFFF;
+    background-color: #016A01;
     border-color: #ddd;
 }
     
 .navbar-default {
-    background-color: #8CDED0;
-    border-color: #e7e7e7;
+
 }
 
 .table > tbody > tr > th {
-    background-color:  #F1D96B;
+    background-color:  #FFD800;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    color: #555;
+    background-color: #90DE90;
+}
+
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+    margin-bottom: 5px; 
+    border: 2px solid #FFD800;
 }
