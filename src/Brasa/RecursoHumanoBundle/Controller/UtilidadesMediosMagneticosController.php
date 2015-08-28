@@ -7,10 +7,8 @@ use Doctrine\ORM\EntityRepository;
 
 class UtilidadesMediosMagneticosController extends Controller
 {
-    var $strDqlLista = "";
-    var $intNumero = 0;
                
-    public function MediosMagneticosAction() {
+    public function InformeAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $form = $this->createFormBuilder()
@@ -114,7 +112,7 @@ class UtilidadesMediosMagneticosController extends Controller
             
         }
                 
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/MediosMagneticos:MediosMagneticos.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/MediosMagneticos:Informe.html.twig', array(
                 'form' => $form->createView() 
                 ));
     }            

@@ -186,9 +186,13 @@ brs_rhu_utilidades_programaciones_pago_archivo_detalle:
     path:     /rhu/utilidades/programaciones/pago/archivo/detalle/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProgramacionesPagoArchivo:detalle }
     
-brs_rhu_utilidades_medios_magneticos_lista:
-    path:     /rhu/utilidades/mediosmagneticos/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesMediosMagneticos:MediosMagneticos }    
+brs_rhu_utilidades_medios_magneticos_informe:
+    path:     /rhu/utilidades/mediosmagneticos/informe
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesMediosMagneticos:Informe }    
+    
+brs_rhu_utilidades_informacion_dane_informe:
+    path:     /rhu/utilidades/informaciondane/informe
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesInformacionDane:Informe }        
     
 brs_rhu_base_centros_costos_lista:
     path:     /rhu/base/centroscostos/lista
