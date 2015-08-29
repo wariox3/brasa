@@ -110,6 +110,14 @@ class ContratosController extends Controller
                 $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
                 $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
                 $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
+                $arContrato->setFactor($arContrato->getTipoTiempoRel()->getFactor());
+                $arContrato->setFactorHorasDia($arContrato->getTipoTiempoRel()->getFactorHorasDia());
+                if($arContrato->getTipoTiempoRel()->getFactor() > 0) {
+                    $arContrato->setVrSalarioPago($arContrato->getVrSalario() / $arContrato->getTipoTiempoRel()->getFactor());
+                } else {
+                    $arContrato->setVrSalarioPago($arContrato->getVrSalario());
+                }
+                
                 $em->persist($arContrato);
                 $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
                 $douSalarioMinimo = $arConfiguracion->getVrSalario();

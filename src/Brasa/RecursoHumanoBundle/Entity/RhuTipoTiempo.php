@@ -28,6 +28,11 @@ class RhuTipoTiempo
     private $factor = 0;    
     
     /**
+     * @ORM\Column(name="factor_horas_dia", type="integer", nullable=true)
+     */    
+    private $factorHorasDia = 8;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="tipoTiempoRel")
      */
     protected $contratosTipoTiempoRel;    
@@ -169,5 +174,53 @@ class RhuTipoTiempo
     public function getFactor()
     {
         return $this->factor;
+    }
+
+    /**
+     * Set factorHoras
+     *
+     * @param integer $factorHoras
+     *
+     * @return RhuTipoTiempo
+     */
+    public function setFactorHoras($factorHoras)
+    {
+        $this->factorHoras = $factorHoras;
+
+        return $this;
+    }
+
+    /**
+     * Get factorHoras
+     *
+     * @return integer
+     */
+    public function getFactorHoras()
+    {
+        return $this->factorHoras;
+    }
+
+    /**
+     * Set factorHorasDia
+     *
+     * @param integer $factorHorasDia
+     *
+     * @return RhuTipoTiempo
+     */
+    public function setFactorHorasDia($factorHorasDia)
+    {
+        $this->factorHorasDia = $factorHorasDia;
+
+        return $this;
+    }
+
+    /**
+     * Get factorHorasDia
+     *
+     * @return integer
+     */
+    public function getFactorHorasDia()
+    {
+        return $this->factorHorasDia;
     }
 }

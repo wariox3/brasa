@@ -106,6 +106,16 @@ class RhuProgramacionPagoDetalle
     private $vrNetoPagar = 0;     
     
     /**
+     * @ORM\Column(name="vr_dia", type="float")
+     */
+    private $vrDia = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_hora", type="float")
+     */
+    private $vrHora = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
      */
@@ -699,5 +709,53 @@ class RhuProgramacionPagoDetalle
     public function getPagosDetallesProgramacionPagoDetalleRel()
     {
         return $this->pagosDetallesProgramacionPagoDetalleRel;
+    }
+
+    /**
+     * Set vrDia
+     *
+     * @param float $vrDia
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrDia($vrDia)
+    {
+        $this->vrDia = $vrDia;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDia
+     *
+     * @return float
+     */
+    public function getVrDia()
+    {
+        return $this->vrDia;
+    }
+
+    /**
+     * Set vrHora
+     *
+     * @param float $vrHora
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrHora($vrHora)
+    {
+        $this->vrHora = $vrHora;
+
+        return $this;
+    }
+
+    /**
+     * Get vrHora
+     *
+     * @return float
+     */
+    public function getVrHora()
+    {
+        return $this->vrHora;
     }
 }

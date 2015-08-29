@@ -77,6 +77,11 @@ class RhuContrato
      */
     private $VrSalario = 0;    
     
+    /**
+     * @ORM\Column(name="vr_salario_pago", type="float")
+     */
+    private $VrSalarioPago = 0;    
+    
     /**     
      * @ORM\Column(name="estado_activo", type="boolean")
      */    
@@ -120,7 +125,20 @@ class RhuContrato
     /**     
      * @ORM\Column(name="estado_liquidado", type="boolean")
      */    
-    private $estadoLiquidado = 0;     
+    private $estadoLiquidado = 0;   
+    
+    /**
+     * Este factor se utiliza para saber de cuantas horas se compone un dia
+     * @ORM\Column(name="factor", type="integer", nullable=true)     
+     */    
+    private $factor = 0;     
+    
+    /**
+     * @ORM\Column(name="factor_horas_dia", type="integer", nullable=true)
+     */    
+    private $factorHorasDia = 0;    
+    
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
@@ -970,5 +988,101 @@ class RhuContrato
     public function getPagosContratoRel()
     {
         return $this->pagosContratoRel;
+    }
+
+    /**
+     * Set factor
+     *
+     * @param integer $factor
+     *
+     * @return RhuContrato
+     */
+    public function setFactor($factor)
+    {
+        $this->factor = $factor;
+
+        return $this;
+    }
+
+    /**
+     * Get factor
+     *
+     * @return integer
+     */
+    public function getFactor()
+    {
+        return $this->factor;
+    }
+
+    /**
+     * Set factorHoras
+     *
+     * @param integer $factorHoras
+     *
+     * @return RhuContrato
+     */
+    public function setFactorHoras($factorHoras)
+    {
+        $this->factorHoras = $factorHoras;
+
+        return $this;
+    }
+
+    /**
+     * Get factorHoras
+     *
+     * @return integer
+     */
+    public function getFactorHoras()
+    {
+        return $this->factorHoras;
+    }
+
+    /**
+     * Set factorHorasDia
+     *
+     * @param integer $factorHorasDia
+     *
+     * @return RhuContrato
+     */
+    public function setFactorHorasDia($factorHorasDia)
+    {
+        $this->factorHorasDia = $factorHorasDia;
+
+        return $this;
+    }
+
+    /**
+     * Get factorHorasDia
+     *
+     * @return integer
+     */
+    public function getFactorHorasDia()
+    {
+        return $this->factorHorasDia;
+    }
+
+    /**
+     * Set vrSalarioPago
+     *
+     * @param float $vrSalarioPago
+     *
+     * @return RhuContrato
+     */
+    public function setVrSalarioPago($vrSalarioPago)
+    {
+        $this->VrSalarioPago = $vrSalarioPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPago
+     *
+     * @return float
+     */
+    public function getVrSalarioPago()
+    {
+        return $this->VrSalarioPago;
     }
 }

@@ -34,7 +34,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $dateFechaUltimoPagoLiquidacion = $arLiquidacion->getFechaUltimoPago();
                 date_add($dateFechaUltimoPagoLiquidacion, date_interval_create_from_date_string('1 days'));                
                 $diasAdicionales = $this->diasPrestaciones($dateFechaUltimoPagoLiquidacion, $arLiquidacion->getFechaHasta());
-                $douIBCAdicional = ($arLiquidacion->getContratoRel()->getVrSalario()/30) * $diasAdicionales;
+                $douIBCAdicional = ($arLiquidacion->getContratoRel()->getVrSalarioPago()/30) * $diasAdicionales;
                 $arLiquidacion->setVrIngresoBaseCotizacionAdicional($douIBCAdicional);                
                 $arLiquidacion->setDiasAdicionalesIBC($diasAdicionales);
             }
