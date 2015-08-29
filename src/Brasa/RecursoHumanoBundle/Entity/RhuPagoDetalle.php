@@ -68,6 +68,11 @@ class RhuPagoDetalle
     private $porcentajeAplicado = 0;    
     
     /**
+     * @ORM\Column(name="numero_dias", type="float")
+     */
+    private $numeroDias = 0;     
+    
+    /**
      * @ORM\Column(name="vr_dia", type="float")
      */
     private $vrDia = 0;    
@@ -672,5 +677,29 @@ class RhuPagoDetalle
     public function getLicenciaRel()
     {
         return $this->licenciaRel;
+    }
+
+    /**
+     * Set numeroDias
+     *
+     * @param float $numeroDias
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setNumeroDias($numeroDias)
+    {
+        $this->numeroDias = $numeroDias;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroDias
+     *
+     * @return float
+     */
+    public function getNumeroDias()
+    {
+        return $this->numeroDias;
     }
 }

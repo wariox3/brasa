@@ -393,7 +393,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                 $arPagoDetalle->setPagoRel($arPago);
                                 $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoDetalle->setNumeroHoras($intDiasTransporte);
+                                $arPagoDetalle->setNumeroHoras(0);
+                                $arPagoDetalle->setNumeroDias($intDiasTransporte);
                                 $arPagoDetalle->setVrHora($douVrDiaTransporte / 8);
                                 $arPagoDetalle->setVrDia($douVrDiaTransporte);
                                 $arPagoDetalle->setVrPago($douPagoDetalle);
@@ -428,7 +429,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPago->setFechaDesde($arProgramacionPagoProcesar->getFechaDesde());
                         $arPago->setFechaHasta($arProgramacionPagoProcesar->getFechaHasta());
                         $arPago->setVrSalarioEmpleado($arProgramacionPagoDetalle->getVrSalario());
-                        $arPago->setVrSalarioPeriodo(($arProgramacionPagoDetalle->getVrSalario() / 30) * $arProgramacionPagoDetalle->getDias());
+                        $arPago->setVrSalarioPeriodo($arProgramacionPagoDetalle->getVrDevengado());
                         $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
                         $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
                         $em->persist($arPago);
@@ -490,7 +491,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPago->setFechaDesde($arProgramacionPagoProcesar->getFechaDesde());
                         $arPago->setFechaHasta($arProgramacionPagoProcesar->getFechaHasta());
                         $arPago->setVrSalarioEmpleado($arProgramacionPagoDetalle->getVrSalario());
-                        $arPago->setVrSalarioPeriodo(($arProgramacionPagoDetalle->getVrSalario() / 30) * $arProgramacionPagoDetalle->getDias());
+                        $arPago->setVrSalarioPeriodo($arProgramacionPagoDetalle->getVrDevengado());
                         $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
                         $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
                         if($arProgramacionPagoDetalle->getCodigoContratoFk()) {

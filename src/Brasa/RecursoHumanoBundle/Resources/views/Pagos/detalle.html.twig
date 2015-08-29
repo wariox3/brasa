@@ -28,9 +28,9 @@
                 </tr>
                 <tr>
                     <td class="titulo">EMPLEADO:</td>
-                    <td class="td-in-well">{{ arPago.empleadoRel.nombreCorto }}</td>
-                    <td class="titulo">FECHA:</td>
-                    <td class="td-in-well">{{ arPago.fechaHasta|date("Y/m/d") }}</td>
+                    <td class="td-in-well">{{ arPago.empleadoRel.numeroIdentificacion }} - {{ arPago.empleadoRel.nombreCorto }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
                     <td class="titulo">IBC:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.VrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
                     <td class="titulo">TOTAL DEVENGADO:</td>
@@ -55,7 +55,17 @@
                     <td class="td-in-well-numerico" align="right"></td>
                     <td class="titulo">TOTAL NETO:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.VrNeto | number_format(2, '.', ',')}}</td>
-                </tr>                  
+                </tr>  
+                <tr>
+                    <td class="titulo">CONTRATO:</td>
+                    <td class="td-in-well" >{{ arPago.codigoContratoFk }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well-numerico" align="right"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well-numerico" align="right"></td>
+                </tr>                
                 <tr>
                     <td class="titulo">COMENTARIOS:</td>
                     <td colspan="7">{{ arPago.comentarios }}</td>
@@ -88,6 +98,7 @@
                             <th>DETALLE</th>
                             <th style="text-align: right">PORCENTAJE</th>
                             <th style="text-align: right">HORAS</th>
+                            <th style="text-align: right">DIAS</th>
                             <th style="text-align: right">VR. HORA</th>
                             <th style="text-align: right">VR. PAGO</th>
                             <th style="text-align: right">OP</th>
@@ -105,6 +116,7 @@
                             <td>{{ arPagoDetalles.detalle }}</td>                            
                             <td style="text-align: right">{{ arPagoDetalles.porcentajeAplicado | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.numeroHoras | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetalles.numeroDias | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.vrHora | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.vrPago | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.operacion | number_format(0, '.', ',') }}</td>
