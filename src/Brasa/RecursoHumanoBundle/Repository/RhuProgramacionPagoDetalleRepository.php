@@ -45,6 +45,26 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         $em->flush();
     } 
     
+    public function listaProgramacionesPagoDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ppd, pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle ppd JOIN ppd.programacionPagoRel pp JOIN ppd.empleadoRel e WHERE ppd.codigoProgramacionPagoDetallePk <> 0 AND pp.estadoGenerado <> 0 AND pp.estadoPagado <> 1";
+        
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND ppd.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND pp.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND pp.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        
+        return $dql;
+    }
+    
     public function listaDQLDetalleArchivo($codigoProgramacionPago = "") {        
         $em = $this->getEntityManager();
         $strSql = "SELECT ppd,e FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle ppd JOIN ppd.empleadoRel e WHERE
