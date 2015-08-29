@@ -58,8 +58,8 @@ class RhuPagoRepository extends EntityRepository {
         $douSalarioSeguridadSocial = $douSalarioPeriodo + $douAdicionTiempo + $douAdicionValor;
         $douDiaAuxilioTransporte = 74000 / 30;
         $douAuxilioTransporteCotizacion = $arPago->getDiasPeriodo() * $douDiaAuxilioTransporte;
-        $douArp = ($douSalarioSeguridadSocial * $arPago->getEmpleadoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
-        $douPension = ($douSalarioSeguridadSocial * $arPago->getEmpleadoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
+        $douArp = ($douSalarioSeguridadSocial * $arPago->getContratoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
+        $douPension = ($douSalarioSeguridadSocial * $arPago->getContratoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
         $douCaja = ($douSalarioSeguridadSocial * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
         $douCesantias = (($douSalarioSeguridadSocial + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
         $douVacaciones = ($douSalarioPeriodo * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
