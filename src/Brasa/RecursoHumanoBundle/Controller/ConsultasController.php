@@ -95,7 +95,7 @@ class ConsultasController extends Controller
                 $this->generarProgramacionesPagoExcel();
             }
             if($form->get('BtnPDFProgramacionesPago')->isClicked()) {
-                $this->filtrarProgramacionesLista($form);
+                $this->filtrarProgramacionesPagoLista($form);
                 $this->ProgramacionesPagoListar();
                 $objReporteProgramacionesPago = new \Brasa\RecursoHumanoBundle\Reportes\ReporteProgramacionesPago();
                 $objReporteProgramacionesPago->Generar($this, $this->strSqlProgramacionesPagoLista);
