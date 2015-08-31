@@ -4,6 +4,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuProgramacionPagoType;
 
 class ProgramacionesPagoController extends Controller
 {
@@ -54,9 +55,8 @@ class ProgramacionesPagoController extends Controller
                     foreach ($arrSeleccionados AS $codigoProgramacionPago) {
                         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                        if($arProgramacionPago->getEstadoPagado() == 0) {
-                            $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);
-                            $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarPeriodoPago($arProgramacionPago->getCodigoCentroCostoFk());
+                        if($arProgramacionPago->getEstadoPagado() == 0 && $arProgramacionPago->getEstadoGenerado() == 0) {
+                            $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);                            
                         }
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
@@ -81,6 +81,26 @@ class ProgramacionesPagoController extends Controller
             'form' => $form->createView()));
     }
 
+    public function nuevoAction() {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();    
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();        
+        $arProgramacionPago->setFechaDesde(new \DateTime('now'));
+        $arProgramacionPago->setFechaHasta(new \DateTime('now'));
+        $form = $this->createForm(new RhuProgramacionPagoType(), $arProgramacionPago);
+        $form->handleRequest($request);
+        if ($form->isValid()) {            
+            $arProgramacionPago = $form->getData();
+            $em->persist($arProgramacionPago);
+            $em->flush();                       
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                        
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:nuevo.html.twig', array(            
+            'form' => $form->createView()));
+    }
+    
     public function detalleAction($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

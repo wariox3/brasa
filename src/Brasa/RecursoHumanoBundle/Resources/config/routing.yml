@@ -166,6 +166,10 @@ brs_rhu_programaciones_pago_detalle_prima:
     path:     /rhu/programaciones/pago/detalle/prima/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:detallePrima }         
 
+brs_rhu_programaciones_pago_nuevo:
+    path:     /rhu/programaciones/pago/nuevo
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:nuevo }     
+
 brs_rhu_programaciones_pago_inconsistencias:
     path:     /rhu/programaciones/pago/inconsistencias/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:inconsistencias }         
