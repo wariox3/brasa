@@ -92,6 +92,7 @@ class ProgramacionesPagoController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arProgramacionPago = $form->getData();
+            $arProgramacionPago->setNoGeneraPeriodo(1);
             $em->persist($arProgramacionPago);
             $em->flush();                       
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                        

@@ -75,8 +75,9 @@ class ContratosController extends Controller
     }    
     
     public function nuevoAction($codigoContrato, $codigoEmpleado) {
-        $request = $this->getRequest();
+        $request = $this->getRequest();        
         $em = $this->getDoctrine()->getManager();
+        $arUsuario = $this->get('security.context')->getToken()->getUser();                
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -102,11 +103,11 @@ class ContratosController extends Controller
         $form = $this->createForm(new RhuContratoType(), $arContrato);
         $form->handleRequest($request);
         if ($form->isValid()) {                  
-            $arContrato = $form->getData();
-            if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde()) {
+            $arContrato = $form->getData();            
+            if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),1)) {
                 $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
                 $arContrato->setEmpleadoRel($arEmpleado);  
-                $arContrato->setFechaUltimoPago($arContrato->getCentroCostoRel()->getFechaUltimoPago());
+                $arContrato->setFechaUltimoPago($arContrato->getFechaDesde());
                 $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
                 $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
                 $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());

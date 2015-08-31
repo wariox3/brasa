@@ -5,7 +5,7 @@ namespace Brasa\GeneralBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\DoctrineBundle\ConnectionFactory;
 class DefaultController extends Controller
-{
+{    
     public function indexAction()
     {
         // Chart
@@ -30,7 +30,6 @@ class DefaultController extends Controller
         $arUsuario = new \Brasa\SeguridadBundle\Entity\User();
         $arUsuario = $this->get('security.context')->getToken()->getUser();
         $strUsuario = $arUsuario->getNombreCorto();
-        
         //$destinatario = $this->contenedor->getParameter('contact_email');
         //$obj = new \Brasa\GeneralBundle\MisClases\CambiarBD();
         //$obj->setUpAppConnection($this);
