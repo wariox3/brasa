@@ -187,7 +187,9 @@ class ConsultasController extends Controller
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
+                    $session->get('filtroHasta'),
+                    $session->get('filtroCodigoProgramacionPago'),
+                    $session->get('filtroCodigoProgramacionPagoDetalle')
                     );
     }
 
@@ -271,9 +273,10 @@ class ConsultasController extends Controller
         
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))    
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('codigoProgramacionPago', 'text', array('label'  => 'codigoProgramacionPago'))
             ->add('BtnFiltrarProgramacionesPago', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcelProgramacionesPago', 'submit', array('label'  => 'Excel',))
             ->add('BtnPDFProgramacionesPago', 'submit', array('label'  => 'PDF',))
@@ -650,89 +653,53 @@ class ConsultasController extends Controller
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'CENTRO COSTOS')
-                    ->setCellValue('C1', 'IDENTIFICACION')
-                    ->setCellValue('D1', 'EMPLEADO')
-                    ->setCellValue('E1', 'DESDE')
-                    ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'VR. SALARIO')
-                    ->setCellValue('H1', 'VR. SALARIO PERIODO')
-                    ->setCellValue('I1', 'VR. SALARIO EMPLEADO')
-                    ->setCellValue('J1', 'VR. DEVENGADO')
-                    ->setCellValue('K1', 'VR. DEDUCCIONES')
-                    ->setCellValue('L1', 'VR. ADICIONAL TIEMPO')
-                    ->setCellValue('M1', 'VR. ADICIONAL VALOR')
-                    ->setCellValue('N1', 'VR. AUXILIO TRANSPORTE')
-                    ->setCellValue('O1', 'VR. AUXILIO TRANSPORTE COTIZACION')
-                    ->setCellValue('P1', 'VR. ARP')
-                    ->setCellValue('Q1', 'VR. EPS')
-                    ->setCellValue('R1', 'VR. PENSION')
-                    ->setCellValue('S1', 'VR. CAJA COMPENSACION')
-                    ->setCellValue('T1', 'VR. SENA')
-                    ->setCellValue('U1', 'VR. ICBF')
-                    ->setCellValue('V1', 'VR. CESANTIAS')
-                    ->setCellValue('W1', 'VR. VACACIONES')
-                    ->setCellValue('X1', 'VR. ADMINISTRACION')
-                    ->setCellValue('Y1', 'VR. NETO')
-                    ->setCellValue('Z1', 'VR. BRUTO')
-                    ->setCellValue('AA1', 'VR. TOTAL COBRAR')
-                    ->setCellValue('AB1', 'VR. COSTO')
-                    ->setCellValue('AC1', 'VR. INGRESO BASE COTIZACION')
-                    ->setCellValue('AD1', 'ESTADO COBRADO')
-                    ->setCellValue('AE1', 'DIAS PERIODO');
+                    ->setCellValue('B1', 'CÓDIGO PROGRAMA')
+                    ->setCellValue('C1', 'CENTRO COSTOS')
+                    ->setCellValue('D1', 'IDENTIFICACIÓN')
+                    ->setCellValue('E1', 'EMPLEADO')
+                    ->setCellValue('F1', 'DESDE')
+                    ->setCellValue('G1', 'HASTA')
+                    ->setCellValue('H1', 'VR. SALARIO ')
+                    ->setCellValue('I1', 'HORAS')
+                    ->setCellValue('J1', 'DÍAS')
+                    ->setCellValue('K1', 'VR. HORAS')
+                    ->setCellValue('L1', 'VR. DÍAS')
+                    ->setCellValue('M1', 'VR. DEVENGADO')
+                    ->setCellValue('N1', 'VR. DEDUCCIONES')
+                    ->setCellValue('O1', 'VR. CRÉDITOS')
+                    ->setCellValue('P1', 'VR. NETO');
 
         $i = 2;
-        $query = $em->createQuery($this->strSqlServiciosPorCobrarLista);
-        $arServiciosPorCobrar = new \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar();
-        $arServiciosPorCobrar = $query->getResult();
-        foreach ($arServiciosPorCobrar as $arServiciosPorCobrar) {
-            if ($arServiciosPorCobrar->getEstadoCobrado() == 1) {
-                $estado = "SI";
-            } else {
-                $estado = "NO";
-            }
-            
+        $query = $em->createQuery($this->strSqlProgramacionesPagoLista);
+        $arProgramacionesPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionesPago = $query->getResult();
+        foreach ($arProgramacionesPago as $arProgramacionesPago) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arServiciosPorCobrar->getCodigoServicioCobrarPk())
-                    ->setCellValue('B' . $i, $arServiciosPorCobrar->getCentroCostoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arServiciosPorCobrar->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('D' . $i, $arServiciosPorCobrar->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('E' . $i, $arServiciosPorCobrar->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('F' . $i, $arServiciosPorCobrar->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('G' . $i, $arServiciosPorCobrar->getVrSalario())
-                    ->setCellValue('H' . $i, $arServiciosPorCobrar->getVrSalarioPeriodo())
-                    ->setCellValue('I' . $i, $arServiciosPorCobrar->getVrSalarioEmpleado())
-                    ->setCellValue('J' . $i, $arServiciosPorCobrar->getVrDevengado())
-                    ->setCellValue('K' . $i, $arServiciosPorCobrar->getVrDeducciones())
-                    ->setCellValue('L' . $i, $arServiciosPorCobrar->getVrAdicionalTiempo())
-                    ->setCellValue('M' . $i, $arServiciosPorCobrar->getVrAdicionalValor())
-                    ->setCellValue('N' . $i, $arServiciosPorCobrar->getVrAuxilioTransporte())
-                    ->setCellValue('O' . $i, $arServiciosPorCobrar->getVrAuxilioTransporteCotizacion())
-                    ->setCellValue('P' . $i, $arServiciosPorCobrar->getVrArp())
-                    ->setCellValue('Q' . $i, $arServiciosPorCobrar->getVrEps())
-                    ->setCellValue('R' . $i, $arServiciosPorCobrar->getVrPension())
-                    ->setCellValue('S' . $i, $arServiciosPorCobrar->getVrCaja())
-                    ->setCellValue('T' . $i, $arServiciosPorCobrar->getVrSena())
-                    ->setCellValue('U' . $i, $arServiciosPorCobrar->getVrIcbf())
-                    ->setCellValue('V' . $i, $arServiciosPorCobrar->getVrCesantias())
-                    ->setCellValue('W' . $i, $arServiciosPorCobrar->getVrVacaciones())
-                    ->setCellValue('X' . $i, $arServiciosPorCobrar->getVrAdministracion())
-                    ->setCellValue('Y' . $i, $arServiciosPorCobrar->getVrNeto())
-                    ->setCellValue('Z' . $i, $arServiciosPorCobrar->getVrBruto())
-                    ->setCellValue('AA' . $i, $arServiciosPorCobrar->getVrTotalCobrar())
-                    ->setCellValue('AB' . $i, $arServiciosPorCobrar->getVrCosto())
-                    ->setCellValue('AC' . $i, $arServiciosPorCobrar->getVrIngresoBaseCotizacion())
-                    ->setCellValue('AD' . $i, $estado)
-                    ->setCellValue('AE' . $i, $arServiciosPorCobrar->getDiasPeriodo());
+                    ->setCellValue('A' . $i, $arProgramacionesPago->getCodigoProgramacionPagoDetallePk())
+                    ->setCellValue('B' . $i, $arProgramacionesPago->getCodigoProgramacionPagoFk())
+                    ->setCellValue('C' . $i, $arProgramacionesPago->getProgramacionPagoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arProgramacionesPago->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arProgramacionesPago->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arProgramacionesPago->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('G' . $i, $arProgramacionesPago->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('H' . $i, $arProgramacionesPago->getVrSalario())
+                    ->setCellValue('I' . $i, $arProgramacionesPago->getHorasPeriodoReales())
+                    ->setCellValue('J' . $i, $arProgramacionesPago->getDiasReales())
+                    ->setCellValue('K' . $i, $arProgramacionesPago->getVrHora())
+                    ->setCellValue('L' . $i, $arProgramacionesPago->getVrDia())
+                    ->setCellValue('M' . $i, $arProgramacionesPago->getVrDevengado())
+                    ->setCellValue('N' . $i, $arProgramacionesPago->getVrDeducciones())
+                    ->setCellValue('O' . $i, $arProgramacionesPago->getVrCreditos())
+                    ->setCellValue('P' . $i, $arProgramacionesPago->getVrNetoPagar());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('ServiciosPorCobrar');
+        $objPHPExcel->getActiveSheet()->setTitle('ProgramacionesPagos');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ConsultaServiciosPorCobrar.xlsx"');
+        header('Content-Disposition: attachment;filename="ReporteProgramacionesPagos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

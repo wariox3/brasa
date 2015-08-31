@@ -45,7 +45,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         $em->flush();
     } 
     
-    public function listaProgramacionesPagoDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+    public function listaProgramacionesPagoDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "", $strProgramacionPago = "",$strProgramacionPagoDetalle = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT ppd, pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle ppd JOIN ppd.programacionPagoRel pp JOIN ppd.empleadoRel e WHERE ppd.codigoProgramacionPagoDetallePk <> 0 AND pp.estadoGenerado <> 0 AND pp.estadoPagado <> 1";
         
@@ -60,6 +60,12 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         }
         if($strHasta != "") {
             $dql .= " AND pp.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        if($strProgramacionPago != "") {
+            $dql .= " AND pp.codigoProgramacionPagoFk ='" . $strProgramacionPago . "'";
+        }
+        if($strProgramacionPagoDetalle != "") {
+            $dql .= " AND pp.codigoProgramacionPagoDetallePk ='" . $strProgramacionPagoDetalle . "'";
         }
         
         return $dql;

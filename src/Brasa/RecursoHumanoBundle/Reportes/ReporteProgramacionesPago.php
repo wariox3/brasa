@@ -23,7 +23,7 @@ class ReporteProgramacionesPago extends \FPDF_FPDF {
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
         $this->SetXY(2, 10);
-        $this->Cell(289, 8, 'REPORTE PROGRAMACIONES PAGO DETALLE', 1, 0, 'C', 1);                                                
+        $this->Cell(294, 8, 'REPORTE PROGRAMACIONES PAGO DETALLE', 1, 0, 'C', 1);                                                
         $this->Ln(12);
         $this->EncabezadoDetalles();
         
@@ -39,7 +39,7 @@ class ReporteProgramacionesPago extends \FPDF_FPDF {
         $this->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(11, 14, 42, 19, 45, 14,14,17,10,10,13,13,19,20,18,15);
+        $w = array(11, 14, 42, 19, 45, 14,14,17,10,10,13,13,19,20,16,17);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
@@ -78,8 +78,8 @@ class ReporteProgramacionesPago extends \FPDF_FPDF {
             $pdf->Cell(13, 4, number_format($arReporteProgramacionesPagoDetalle->getVrDia(), 2, '.', ','), 1, 0, 'R');
             $pdf->Cell(19, 4, number_format($arReporteProgramacionesPagoDetalle->getVrDevengado(), 2, '.', ','), 1, 0, 'R');
             $pdf->Cell(20, 4, number_format($arReporteProgramacionesPagoDetalle->getVrDeducciones(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(18, 4, number_format($arReporteProgramacionesPagoDetalle->getVrCreditos(), 2, '.', ','), 1, 0, 'R');
-            $pdf->Cell(15, 4, number_format($arReporteProgramacionesPagoDetalle->getVrNetoPagar(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(16, 4, number_format($arReporteProgramacionesPagoDetalle->getVrCreditos(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(17, 4, number_format($arReporteProgramacionesPagoDetalle->getVrNetoPagar(), 2, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
             $douTotalDevengado += $arReporteProgramacionesPagoDetalle->getVrDevengado();
@@ -91,7 +91,7 @@ class ReporteProgramacionesPago extends \FPDF_FPDF {
         $pdf->SetFont('Arial', 'B', 6.5);
         $pdf->Cell(11, 4, "", 1, 0, 'L');
         $pdf->Cell(14, 4, "", 1, 0, 'L');            
-        $pdf->Cell(40, 4, "", 1, 0, 'L');            
+        $pdf->Cell(42, 4, "", 1, 0, 'L');            
         $pdf->Cell(19, 4, "", 1, 0, 'R');
         $pdf->Cell(45, 4, "", 1, 0, 'R');
         $pdf->Cell(14, 4, "", 1, 0, 'R');
@@ -102,9 +102,9 @@ class ReporteProgramacionesPago extends \FPDF_FPDF {
         $pdf->Cell(13, 4, "", 1, 0, 'R');
         $pdf->Cell(13, 4, "", 1, 0, 'R');
         $pdf->Cell(19, 4, number_format($douTotalDevengado, 2, '.', ','), 1, 0, 'R');
-        $pdf->Cell(19, 4, number_format($douTotalDeducciones, 2, '.', ','), 1, 0, 'R');
-        $pdf->Cell(18, 4, number_format($douTotalCreditos, 2, '.', ','), 1, 0, 'R');
-        $pdf->Cell(15, 4, number_format($douTotalNeto, 2, '.', ','), 1, 0, 'R');
+        $pdf->Cell(20, 4, number_format($douTotalDeducciones, 2, '.', ','), 1, 0, 'R');
+        $pdf->Cell(16, 4, number_format($douTotalCreditos, 2, '.', ','), 1, 0, 'R');
+        $pdf->Cell(17, 4, number_format($douTotalNeto, 2, '.', ','), 1, 0, 'R');
         $pdf->Ln();        
     }
 
