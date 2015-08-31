@@ -50,7 +50,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         $dql   = "SELECT ppd, pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle ppd JOIN ppd.programacionPagoRel pp JOIN ppd.empleadoRel e WHERE ppd.codigoProgramacionPagoDetallePk <> 0 AND pp.estadoGenerado <> 0 AND pp.estadoPagado <> 1";
         
         if($strCodigoCentroCosto != "") {
-            $dql .= " AND ppd.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+            $dql .= " AND pp.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";

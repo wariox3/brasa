@@ -76,13 +76,25 @@ class GenConfiguracion
     /**
      * @ORM\Column(name="nombre_empresa", type="string", length=90, nullable=true)
      */    
-    private $nombreEmpresa;    
+    private $nombreEmpresa; 
+    
+    /**
+     * @ORM\Column(name="telefono_empresa", type="string", length=25, nullable=true)
+     */    
+    private $telefonoEmpresa;
+    
+    /**
+     * @ORM\Column(name="direccion_empresa", type="string", length=120, nullable=true)
+     */    
+    private $direccionEmpresa;
     
     
+    
+
     /**
      * Get codigoConfiguracionPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoConfiguracionPk()
     {
@@ -93,6 +105,7 @@ class GenConfiguracion
      * Set baseRetencionFuente
      *
      * @param float $baseRetencionFuente
+     *
      * @return GenConfiguracion
      */
     public function setBaseRetencionFuente($baseRetencionFuente)
@@ -105,7 +118,7 @@ class GenConfiguracion
     /**
      * Get baseRetencionFuente
      *
-     * @return float 
+     * @return float
      */
     public function getBaseRetencionFuente()
     {
@@ -116,6 +129,7 @@ class GenConfiguracion
      * Set baseRetencionCREE
      *
      * @param float $baseRetencionCREE
+     *
      * @return GenConfiguracion
      */
     public function setBaseRetencionCREE($baseRetencionCREE)
@@ -128,7 +142,7 @@ class GenConfiguracion
     /**
      * Get baseRetencionCREE
      *
-     * @return float 
+     * @return float
      */
     public function getBaseRetencionCREE()
     {
@@ -139,6 +153,7 @@ class GenConfiguracion
      * Set porcentajeRetencionFuente
      *
      * @param float $porcentajeRetencionFuente
+     *
      * @return GenConfiguracion
      */
     public function setPorcentajeRetencionFuente($porcentajeRetencionFuente)
@@ -151,7 +166,7 @@ class GenConfiguracion
     /**
      * Get porcentajeRetencionFuente
      *
-     * @return float 
+     * @return float
      */
     public function getPorcentajeRetencionFuente()
     {
@@ -162,6 +177,7 @@ class GenConfiguracion
      * Set porcentajeRetencionCREE
      *
      * @param float $porcentajeRetencionCREE
+     *
      * @return GenConfiguracion
      */
     public function setPorcentajeRetencionCREE($porcentajeRetencionCREE)
@@ -174,7 +190,7 @@ class GenConfiguracion
     /**
      * Get porcentajeRetencionCREE
      *
-     * @return float 
+     * @return float
      */
     public function getPorcentajeRetencionCREE()
     {
@@ -185,6 +201,7 @@ class GenConfiguracion
      * Set baseRetencionIvaVentas
      *
      * @param float $baseRetencionIvaVentas
+     *
      * @return GenConfiguracion
      */
     public function setBaseRetencionIvaVentas($baseRetencionIvaVentas)
@@ -197,7 +214,7 @@ class GenConfiguracion
     /**
      * Get baseRetencionIvaVentas
      *
-     * @return float 
+     * @return float
      */
     public function getBaseRetencionIvaVentas()
     {
@@ -208,6 +225,7 @@ class GenConfiguracion
      * Set porcentajeRetencionIvaVentas
      *
      * @param float $porcentajeRetencionIvaVentas
+     *
      * @return GenConfiguracion
      */
     public function setPorcentajeRetencionIvaVentas($porcentajeRetencionIvaVentas)
@@ -220,7 +238,7 @@ class GenConfiguracion
     /**
      * Get porcentajeRetencionIvaVentas
      *
-     * @return float 
+     * @return float
      */
     public function getPorcentajeRetencionIvaVentas()
     {
@@ -231,6 +249,7 @@ class GenConfiguracion
      * Set fechaUltimoCierre
      *
      * @param \DateTime $fechaUltimoCierre
+     *
      * @return GenConfiguracion
      */
     public function setFechaUltimoCierre($fechaUltimoCierre)
@@ -243,7 +262,7 @@ class GenConfiguracion
     /**
      * Get fechaUltimoCierre
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaUltimoCierre()
     {
@@ -254,6 +273,7 @@ class GenConfiguracion
      * Set nitVentasMostrador
      *
      * @param integer $nitVentasMostrador
+     *
      * @return GenConfiguracion
      */
     public function setNitVentasMostrador($nitVentasMostrador)
@@ -266,7 +286,7 @@ class GenConfiguracion
     /**
      * Get nitVentasMostrador
      *
-     * @return integer 
+     * @return integer
      */
     public function getNitVentasMostrador()
     {
@@ -367,5 +387,53 @@ class GenConfiguracion
     public function getNombreEmpresa()
     {
         return $this->nombreEmpresa;
+    }
+
+    /**
+     * Set telefonoEmpresa
+     *
+     * @param string $telefonoEmpresa
+     *
+     * @return GenConfiguracion
+     */
+    public function setTelefonoEmpresa($telefonoEmpresa)
+    {
+        $this->telefonoEmpresa = $telefonoEmpresa;
+
+        return $this;
+    }
+
+    /**
+     * Get telefonoEmpresa
+     *
+     * @return string
+     */
+    public function getTelefonoEmpresa()
+    {
+        return $this->telefonoEmpresa;
+    }
+
+    /**
+     * Set direccionEmpresa
+     *
+     * @param string $direccionEmpresa
+     *
+     * @return GenConfiguracion
+     */
+    public function setDireccionEmpresa($direccionEmpresa)
+    {
+        $this->direccionEmpresa = $direccionEmpresa;
+
+        return $this;
+    }
+
+    /**
+     * Get direccionEmpresa
+     *
+     * @return string
+     */
+    public function getDireccionEmpresa()
+    {
+        return $this->direccionEmpresa;
     }
 }
