@@ -192,5 +192,33 @@ class RhuLiquidacionRepository extends EntityRepository {
             $intDiasDevolver = $intDia;
         }          
         return $intDiasDevolver;
-    }    
+    } 
+    
+    public function diasPrestacionesHasta($intDias, $dateFechaDesde) {
+        $strFechaHasta = "";
+        $intAnio = $dateFechaDesde->format('Y');
+        $intMes = $dateFechaDesde->format('n');
+        $intDia = $dateFechaDesde->format('j');
+        $intDiasAcumulados = 1;
+        $i = $intDia;
+        while($intDiasAcumulados <= $intDias) {            
+            //echo $intDiasAcumulados . "(" . $i . ")" . "(" . $intMes . ")" . "(" . $intAnio . ")" . "<br />";
+            $fechaHastaPeriodo = $intAnio . "-" . $intMes . "-" . $i;
+            if($i == 30) {
+                $i = 1;                
+                if($intMes == 12) {
+                    $intMes = 1;
+                    $intAnio++;
+                } else {
+                    $intMes++;                    
+                }                    
+            } else {
+                $i++;                
+            }            
+            $intDiasAcumulados++;
+        }
+        
+        $fechaHastaPeriodo = date_create_from_format('Y-n-j', $fechaHastaPeriodo);                                                                                
+        return $fechaHastaPeriodo;
+    }
 }
