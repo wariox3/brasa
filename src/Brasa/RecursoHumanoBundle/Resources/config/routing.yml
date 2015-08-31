@@ -82,6 +82,22 @@ brs_rhu_incapacidades_nuevo:
     path:     /rhu/incapacidades/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoIncapacidad}
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:nuevo }
     
+brs_rhu_incapacidades_pagos_nuevo:
+    path:     /rhu/incapacidades/pagos/nuevo/{codigoIncapacidadPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoIncapacidad:nuevo }    
+    
+brs_rhu_incapacidades_pagos_lista:
+    path:     /rhu/incapacidades/pagos/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoIncapacidad:lista }
+    
+brs_rhu_incapacidades_pagos_detalle:
+    path:     /rhu/incapacidades/pagos/detalle/{codigoIncapacidadPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoIncapacidad:detalle }
+    
+brs_rhu_incapacidades_pagos_detalle_nuevo:
+    path:     /rhu/incapacidades/pagos/detalle/nuevo/{codigoIncapacidadPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoIncapacidad:detalleNuevo }    
+    
 brs_rhu_vacaciones_lista:
     path:     /rhu/vacaciones/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:lista }    

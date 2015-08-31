@@ -98,6 +98,21 @@ class RhuIncapacidad
     private $estadoProrroga = 0;
     
     /**
+     * @ORM\Column(name="vr_incapacidad", type="float")
+     */
+    private $vrIncapacidad = 0;
+    
+    /**
+     * @ORM\Column(name="vr_pagado", type="float")
+     */
+    private $vrPagado = 0;
+    
+    /**
+     * @ORM\Column(name="vr_saldo", type="float")
+     */
+    private $vrSaldo = 0;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoAdicionalSubtipo", inversedBy="incapacidadesPagoAdicionalSubtipoRel")
      * @ORM\JoinColumn(name="codigo_pago_adicional_subtipo_fk", referencedColumnName="codigo_pago_adicional_subtipo_pk")
      */
@@ -125,13 +140,21 @@ class RhuIncapacidad
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="incapacidadRel")
      */
     protected $pagosDetallesIncapacidadRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuIncapacidadPagoDetalle", mappedBy="incapacidadRel")
+     */
+    protected $incapacidadesIncapacidadPagoRel;
 
+   
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->pagosDetallesIncapacidadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incapacidadesIncapacidadPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -529,6 +552,78 @@ class RhuIncapacidad
     }
 
     /**
+     * Set vrIncapacidad
+     *
+     * @param float $vrIncapacidad
+     *
+     * @return RhuIncapacidad
+     */
+    public function setVrIncapacidad($vrIncapacidad)
+    {
+        $this->vrIncapacidad = $vrIncapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIncapacidad
+     *
+     * @return float
+     */
+    public function getVrIncapacidad()
+    {
+        return $this->vrIncapacidad;
+    }
+
+    /**
+     * Set vrPagado
+     *
+     * @param float $vrPagado
+     *
+     * @return RhuIncapacidad
+     */
+    public function setVrPagado($vrPagado)
+    {
+        $this->vrPagado = $vrPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPagado
+     *
+     * @return float
+     */
+    public function getVrPagado()
+    {
+        return $this->vrPagado;
+    }
+
+    /**
+     * Set vrSaldo
+     *
+     * @param float $vrSaldo
+     *
+     * @return RhuIncapacidad
+     */
+    public function setVrSaldo($vrSaldo)
+    {
+        $this->vrSaldo = $vrSaldo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSaldo
+     *
+     * @return float
+     */
+    public function getVrSaldo()
+    {
+        return $this->vrSaldo;
+    }
+
+    /**
      * Set pagoAdicionalSubtipoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel
@@ -656,5 +751,39 @@ class RhuIncapacidad
     public function getPagosDetallesIncapacidadRel()
     {
         return $this->pagosDetallesIncapacidadRel;
+    }
+
+    /**
+     * Add incapacidadesIncapacidadPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle $incapacidadesIncapacidadPagoRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function addIncapacidadesIncapacidadPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle $incapacidadesIncapacidadPagoRel)
+    {
+        $this->incapacidadesIncapacidadPagoRel[] = $incapacidadesIncapacidadPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove incapacidadesIncapacidadPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle $incapacidadesIncapacidadPagoRel
+     */
+    public function removeIncapacidadesIncapacidadPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle $incapacidadesIncapacidadPagoRel)
+    {
+        $this->incapacidadesIncapacidadPagoRel->removeElement($incapacidadesIncapacidadPagoRel);
+    }
+
+    /**
+     * Get incapacidadesIncapacidadPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIncapacidadesIncapacidadPagoRel()
+    {
+        return $this->incapacidadesIncapacidadPagoRel;
     }
 }

@@ -99,6 +99,7 @@ class ConsultasController extends Controller
                 $this->ProgramacionesPagoListar();
                 $objReporteProgramacionesPago = new \Brasa\RecursoHumanoBundle\Reportes\ReporteProgramacionesPago();
                 $objReporteProgramacionesPago->Generar($this, $this->strSqlProgramacionesPagoLista);
+                
             }            
             if($form->get('BtnFiltrarProgramacionesPago')->isClicked()) {
                 $this->filtrarProgramacionesPagoLista($form);
@@ -106,9 +107,9 @@ class ConsultasController extends Controller
             }
 
         }
-        $arProgramacionesPago = $paginator->paginate($em->createQuery($this->strSqlProgramacionesPagoLista), $request->query->get('page', 1), 40);
+        $arPagos = $paginator->paginate($em->createQuery($this->strSqlProgramacionesPagoLista), $request->query->get('page', 1), 40);
         return $this->render('BrasaRecursoHumanoBundle:Consultas/ProgramacionesPagos:ProgramacionesPago.html.twig', array(
-            'arProgramacionesPago' => $arProgramacionesPago,
+            'arPagos' => $arPagos,
             'form' => $form->createView()
             ));
     }
@@ -188,8 +189,7 @@ class ConsultasController extends Controller
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
                     $session->get('filtroHasta'),
-                    $session->get('filtroCodigoPago'),
-                    $session->get('filtroCodigoProgramacionPago')
+                    $session->get('filtroCodigoPago')
                     );
     }
 
@@ -277,7 +277,6 @@ class ConsultasController extends Controller
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('codigoPago', 'text', array('label'  => 'codigoPago'))
-            ->add('codigoProgramacionPago', 'text', array('label'  => 'codigoProgramacionPago'))    
             ->add('BtnFiltrarProgramacionesPago', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcelProgramacionesPago', 'submit', array('label'  => 'Excel',))
             ->add('BtnPDFProgramacionesPago', 'submit', array('label'  => 'PDF',))
@@ -342,7 +341,6 @@ class ConsultasController extends Controller
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
         $session->set('filtroCodigoPago', $form->get('codigoPago')->getData());
-        $session->set('filtroCodigoProgramacionPago', $form->get('codigoProgramacionPago')->getData());
     }
     
     private function filtrarServiciosPorCobrarLista($form) {
@@ -656,44 +654,38 @@ class ConsultasController extends Controller
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'CÓDIGO PROGRAMA')
-                    ->setCellValue('C1', 'CENTRO COSTOS')
+                    ->setCellValue('B1', 'NÚMERO')
+                    ->setCellValue('C1', 'TIPO')
                     ->setCellValue('D1', 'IDENTIFICACIÓN')
                     ->setCellValue('E1', 'EMPLEADO')
-                    ->setCellValue('F1', 'DESDE')
-                    ->setCellValue('G1', 'HASTA')
-                    ->setCellValue('H1', 'VR. SALARIO ')
-                    ->setCellValue('I1', 'HORAS')
-                    ->setCellValue('J1', 'DÍAS')
-                    ->setCellValue('K1', 'VR. HORAS')
-                    ->setCellValue('L1', 'VR. DÍAS')
-                    ->setCellValue('M1', 'VR. DEVENGADO')
-                    ->setCellValue('N1', 'VR. DEDUCCIONES')
-                    ->setCellValue('O1', 'VR. CRÉDITOS')
-                    ->setCellValue('P1', 'VR. NETO');
+                    ->setCellValue('F1', 'CENTRO COSTOS')
+                    ->setCellValue('G1', 'PERIODO DESDE')
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'HASTA')
+                    ->setCellValue('J1', 'VR. SALARIO ')
+                    ->setCellValue('K1', 'VR. DEVENGADO')
+                    ->setCellValue('L1', 'VR. DEDUCCIONES')
+                    ->setCellValue('M1', 'VR. NETO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlProgramacionesPagoLista);
-        $arProgramacionesPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-        $arProgramacionesPago = $query->getResult();
-        foreach ($arProgramacionesPago as $arProgramacionesPago) {
+        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPagos = $query->getResult();
+        foreach ($arPagos as $arPago) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arProgramacionesPago->getCodigoProgramacionPagoDetallePk())
-                    ->setCellValue('B' . $i, $arProgramacionesPago->getCodigoProgramacionPagoFk())
-                    ->setCellValue('C' . $i, $arProgramacionesPago->getProgramacionPagoRel()->getCentroCostoRel()->getNombre())
-                    ->setCellValue('D' . $i, $arProgramacionesPago->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arProgramacionesPago->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arProgramacionesPago->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('G' . $i, $arProgramacionesPago->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('H' . $i, $arProgramacionesPago->getVrSalario())
-                    ->setCellValue('I' . $i, $arProgramacionesPago->getHorasPeriodoReales())
-                    ->setCellValue('J' . $i, $arProgramacionesPago->getDiasReales())
-                    ->setCellValue('K' . $i, $arProgramacionesPago->getVrHora())
-                    ->setCellValue('L' . $i, $arProgramacionesPago->getVrDia())
-                    ->setCellValue('M' . $i, $arProgramacionesPago->getVrDevengado())
-                    ->setCellValue('N' . $i, $arProgramacionesPago->getVrDeducciones())
-                    ->setCellValue('O' . $i, $arProgramacionesPago->getVrCreditos())
-                    ->setCellValue('P' . $i, $arProgramacionesPago->getVrNetoPagar());
+                    ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
+                    ->setCellValue('B' . $i, $arPago->getNumero())
+                    ->setCellValue('C' . $i, $arPago->getPagoTipoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arPago->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arPago->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arPago->getCentroCostoRel()->getNombre())
+                    ->setCellValue('G' . $i, $arPago->getFechaDesdePago()->format('Y/m/d'))
+                    ->setCellValue('H' . $i, $arPago->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('I' . $i, $arPago->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('J' . $i, $arPago->getVrSalario())
+                    ->setCellValue('K' . $i, $arPago->getVrDevengado())
+                    ->setCellValue('L' . $i, $arPago->getVrDeducciones())
+                    ->setCellValue('M' . $i, $arPago->getVrNeto());
             $i++;
         }
 

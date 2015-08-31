@@ -52,6 +52,12 @@ class RhuEntidadSalud
      */
     protected $empleadosFamiliasEntidadSaludRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuIncapacidadPago", mappedBy="entidadSaludRel")
+     */
+    protected $incapacidadesPagosEntidadSaludRel;
+    
+    
     
     /**
      * Constructor
@@ -60,6 +66,7 @@ class RhuEntidadSalud
     {
         $this->empleadosEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incapacidadesPagosEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -258,5 +265,39 @@ class RhuEntidadSalud
     public function getEmpleadosFamiliasEntidadSaludRel()
     {
         return $this->empleadosFamiliasEntidadSaludRel;
+    }
+
+    /**
+     * Add incapacidadesPagosEntidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPago $incapacidadesPagosEntidadSaludRel
+     *
+     * @return RhuEntidadSalud
+     */
+    public function addIncapacidadesPagosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPago $incapacidadesPagosEntidadSaludRel)
+    {
+        $this->incapacidadesPagosEntidadSaludRel[] = $incapacidadesPagosEntidadSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove incapacidadesPagosEntidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPago $incapacidadesPagosEntidadSaludRel
+     */
+    public function removeIncapacidadesPagosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPago $incapacidadesPagosEntidadSaludRel)
+    {
+        $this->incapacidadesPagosEntidadSaludRel->removeElement($incapacidadesPagosEntidadSaludRel);
+    }
+
+    /**
+     * Get incapacidadesPagosEntidadSaludRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIncapacidadesPagosEntidadSaludRel()
+    {
+        return $this->incapacidadesPagosEntidadSaludRel;
     }
 }
