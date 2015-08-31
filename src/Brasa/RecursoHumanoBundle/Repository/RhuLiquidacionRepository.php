@@ -43,7 +43,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $douIBC = (float)$arrayCostos[0]['IBC']; 
         $douIBCTotal = $douIBC + $douIBCAdicional;
         $intDiasLaborados = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaDesde(), $arLiquidacion->getContratoRel()->getFechaHasta());
-        $douSalario = $arLiquidacion->getContratoRel()->getVrSalario();
+        $douSalario = $arLiquidacion->getContratoRel()->getVrSalarioPago();
         $douBasePrestacionesTotal = 0;        
         $douCesantias = 0;
         $douInteresesCesantias = 0;
