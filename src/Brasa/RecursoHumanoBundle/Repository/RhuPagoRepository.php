@@ -113,6 +113,32 @@ class RhuPagoRepository extends EntityRepository {
         return $dql;
     }                        
     
+    public function listaConsultaPagosDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "", $strProgramacionPago = "",$strProgramacionPagoDetalle = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoPk <> 0";
+        
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        if($strProgramacionPago != "") {
+            $dql .= " AND pd.codigoPagoPk ='" . $strPago . "'";
+        }
+        if($strProgramacionPagoDetalle != "") {
+            $dql .= " AND p.codigoProgramacionPagoFk ='" . $strProgramacionPago . "'";
+        }
+        
+        return $dql;
+    }
+    
     public function pendientesContabilizarDql() {        
         $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.exportadoContabilidad = 0";       
         $dql .= " ORDER BY p.codigoPagoPk DESC";

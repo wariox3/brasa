@@ -45,32 +45,6 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         $em->flush();
     } 
     
-    public function listaProgramacionesPagoDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "", $strProgramacionPago = "",$strProgramacionPagoDetalle = "") {        
-        $em = $this->getEntityManager();
-        $dql   = "SELECT ppd, pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle ppd JOIN ppd.programacionPagoRel pp JOIN ppd.empleadoRel e WHERE ppd.codigoProgramacionPagoDetallePk <> 0 AND pp.estadoGenerado <> 0 AND pp.estadoPagado <> 1";
-        
-        if($strCodigoCentroCosto != "") {
-            $dql .= " AND pp.codigoCentroCostoFk = " . $strCodigoCentroCosto;
-        }   
-        if($strIdentificacion != "" ) {
-            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
-        }
-        if ($strDesde != ""){
-            $dql .= " AND ppd.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
-        }
-        if($strHasta != "") {
-            $dql .= " AND ppd.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
-        }
-        if($strProgramacionPago != "") {
-            $dql .= " AND ppd.codigoProgramacionPagoFk ='" . $strProgramacionPago . "'";
-        }
-        if($strProgramacionPagoDetalle != "") {
-            $dql .= " AND ppd.codigoProgramacionPagoDetallePk ='" . $strProgramacionPagoDetalle . "'";
-        }
-        
-        return $dql;
-    }
-    
     public function listaDQLDetalleArchivo($codigoProgramacionPago = "") {        
         $em = $this->getEntityManager();
         $strSql = "SELECT ppd,e FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle ppd JOIN ppd.empleadoRel e WHERE

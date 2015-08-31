@@ -183,13 +183,13 @@ class ConsultasController extends Controller
     private function ProgramacionesPagoListar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strSqlProgramacionesPagoLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaProgramacionesPagoDQL(
+        $this->strSqlProgramacionesPagoLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaConsultaPagosDQL(
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
                     $session->get('filtroHasta'),
-                    $session->get('filtroCodigoProgramacionPago'),
-                    $session->get('filtroCodigoProgramacionPagoDetalle')
+                    $session->get('filtroCodigoPago'),
+                    $session->get('filtroCodigoProgramacionPago')
                     );
     }
 
@@ -276,8 +276,8 @@ class ConsultasController extends Controller
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))    
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('codigoProgramacionPago', 'text', array('label'  => 'codigoProgramacionPago'))
-            ->add('codigoProgramacionPagoDetalle', 'text', array('label'  => 'codigoProgramacionPagoDetalle'))    
+            ->add('codigoPago', 'text', array('label'  => 'codigoPago'))
+            ->add('codigoProgramacionPago', 'text', array('label'  => 'codigoProgramacionPago'))    
             ->add('BtnFiltrarProgramacionesPago', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcelProgramacionesPago', 'submit', array('label'  => 'Excel',))
             ->add('BtnPDFProgramacionesPago', 'submit', array('label'  => 'PDF',))
@@ -341,8 +341,8 @@ class ConsultasController extends Controller
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $session->set('filtroCodigoPago', $form->get('codigoPago')->getData());
         $session->set('filtroCodigoProgramacionPago', $form->get('codigoProgramacionPago')->getData());
-        $session->set('filtroCodigoProgramacionPagoDetalle', $form->get('codigoProgramacionPagoDetalle')->getData());
     }
     
     private function filtrarServiciosPorCobrarLista($form) {
