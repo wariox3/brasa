@@ -432,6 +432,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPago->setVrSalarioPeriodo($arProgramacionPagoDetalle->getVrDevengado());
                         $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
                         $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
+                        if($arProgramacionPagoDetalle->getCodigoContratoFk()) {
+                            $arPago->setContratoRel($arProgramacionPagoDetalle->getContratoRel());
+                        }                        
                         $em->persist($arPago);
                         $douSalarioMinimo = $arConfiguracion->getVrSalario();
                         $intDias = $arProgramacionPagoDetalle->getDias();
@@ -1027,6 +1030,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         if($arProgramacionPago->getCodigoPagoTipoFk() == 2) {
             $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                 . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
+                . " AND c.fechaUltimoPagoPrimas < '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "                    
                 . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
                 . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
                 . " OR c.indefinido = 1) "
@@ -1086,6 +1090,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         if($arProgramacionPago->getCodigoPagoTipoFk() == 3) {
             $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                 . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
+                . " AND c.fechaUltimoPagoCesantias < '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "                    
                 . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
                 . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
                 . " OR c.indefinido = 1) "
