@@ -277,6 +277,7 @@ class ConsultasController extends Controller
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('codigoProgramacionPago', 'text', array('label'  => 'codigoProgramacionPago'))
+            ->add('codigoProgramacionPagoDetalle', 'text', array('label'  => 'codigoProgramacionPagoDetalle'))    
             ->add('BtnFiltrarProgramacionesPago', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcelProgramacionesPago', 'submit', array('label'  => 'Excel',))
             ->add('BtnPDFProgramacionesPago', 'submit', array('label'  => 'PDF',))
@@ -340,6 +341,8 @@ class ConsultasController extends Controller
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $session->set('filtroCodigoProgramacionPago', $form->get('codigoProgramacionPago')->getData());
+        $session->set('filtroCodigoProgramacionPagoDetalle', $form->get('codigoProgramacionPagoDetalle')->getData());
     }
     
     private function filtrarServiciosPorCobrarLista($form) {

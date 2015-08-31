@@ -56,16 +56,16 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND pp.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND ppd.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
         }
         if($strHasta != "") {
-            $dql .= " AND pp.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND ppd.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         if($strProgramacionPago != "") {
-            $dql .= " AND pp.codigoProgramacionPagoFk ='" . $strProgramacionPago . "'";
+            $dql .= " AND ppd.codigoProgramacionPagoFk ='" . $strProgramacionPago . "'";
         }
         if($strProgramacionPagoDetalle != "") {
-            $dql .= " AND pp.codigoProgramacionPagoDetallePk ='" . $strProgramacionPagoDetalle . "'";
+            $dql .= " AND ppd.codigoProgramacionPagoDetallePk ='" . $strProgramacionPagoDetalle . "'";
         }
         
         return $dql;
