@@ -218,7 +218,7 @@ class RhuLiquidacionRepository extends EntityRepository {
             $intDiasAcumulados++;
         }
         
-        $fechaHastaPeriodo = date_create_from_format('Y-n-j', $fechaHastaPeriodo);                                                                                
+        $fechaHastaPeriodo = date_create_from_format('Y-n-j H:i', $fechaHastaPeriodo . " 00:00");                                                                                
         return $fechaHastaPeriodo;
     }
 }

@@ -130,7 +130,7 @@ class VacacionesController extends Controller
                 $arVacacion->setFechaDesde(new \DateTime('now'));
                 $arVacacion->setFechaHasta(new \DateTime('now'));
                 $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());                                                  
-                if ($fechaHastaPeriodo < $arContrato->getFechaUltimoPago()){
+                if ($fechaHastaPeriodo > $arContrato->getFechaUltimoPago()){
                     $objMensaje->Mensaje("error", "El empleado no ha cumplido el periodo para disfrutar las vacaciones", $this);
                 }
             }
