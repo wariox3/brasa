@@ -45,7 +45,12 @@ class RhuIncapacidad
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
-    private $codigoEmpleadoFk;            
+    private $codigoEmpleadoFk; 
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadSaludFk;
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -122,7 +127,13 @@ class RhuIncapacidad
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="incapacidadesCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $centroCostoRel;        
+    protected $centroCostoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadSalud", inversedBy="incapacidadesEntidadSaludRel")
+     * @ORM\JoinColumn(name="codigo_entidad_salud_fk", referencedColumnName="codigo_entidad_salud_pk")
+     */
+    protected $incapacidadRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="incapacidadesEmpleadoRel")
@@ -146,8 +157,7 @@ class RhuIncapacidad
      */
     protected $incapacidadesIncapacidadPagoRel;
 
-   
-    
+      
     /**
      * Constructor
      */
@@ -309,6 +319,30 @@ class RhuIncapacidad
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoEntidadSaludFk
+     *
+     * @param integer $codigoEntidadSaludFk
+     *
+     * @return RhuIncapacidad
+     */
+    public function setCodigoEntidadSaludFk($codigoEntidadSaludFk)
+    {
+        $this->codigoEntidadSaludFk = $codigoEntidadSaludFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadSaludFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadSaludFk()
+    {
+        return $this->codigoEntidadSaludFk;
     }
 
     /**
@@ -669,6 +703,30 @@ class RhuIncapacidad
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Set incapacidadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $incapacidadRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function setIncapacidadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $incapacidadRel = null)
+    {
+        $this->incapacidadRel = $incapacidadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidadRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud
+     */
+    public function getIncapacidadRel()
+    {
+        return $this->incapacidadRel;
     }
 
     /**

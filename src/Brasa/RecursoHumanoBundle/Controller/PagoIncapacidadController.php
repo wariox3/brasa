@@ -93,7 +93,7 @@ class PagoIncapacidadController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arIncapacidadPago = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPago();
-        $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->find($codigoIncapacidadPago);
+        $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEntidadSaludFk' => $arIncapacidadPago->getCodigoEntidadSaludFk(), 'estadoCobrar' => 1));
         $form = $this->createFormBuilder()
@@ -107,8 +107,8 @@ class PagoIncapacidadController extends Controller
                     foreach ($arrSeleccionados AS $codigoIncapacidad) {                    
                         $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
                         $arIncapacidadPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
-                        $arIncapacidadPagoDetalle->setPagoExamenRel($arIncapacidadPago);
-                        $arIncapacidadPagoDetalle->setExamenRel($arIncapacidad);
+                        $arIncapacidadPagoDetalle->setIncapacidadPagoRel($arIncapacidadPago);
+                        $arIncapacidadPagoDetalle->setIncapacidadRel($arIncapacidad);
                         $arIncapacidadPagoDetalle->setVrPrecio($arIncapacidad->getVrTotal());                                                
                         $em->persist($arIncapacidadPagoDetalle); 
                         //$arIncapacidad->setEstadoPagado(1);
@@ -116,12 +116,12 @@ class PagoIncapacidadController extends Controller
                     }
                     $em->flush();
                 }
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->liquidar($codigoPagoExamen);
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->liquidar($codigoIncapacidadPago);
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        return $this->render('BrasaRecursoHumanoBundle:Examen/PagoExamen:detalleNuevo.html.twig', array(
-            'arExamenes' => $arExamenes,
+        return $this->render('BrasaRecursoHumanoBundle:Incapacidades/PagoIncapacidades:detalleNuevo.html.twig', array(
+            'arIncapacidades' => $arIncapacidades,
             'form' => $form->createView()));
     }    
     

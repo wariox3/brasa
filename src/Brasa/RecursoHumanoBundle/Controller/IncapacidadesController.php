@@ -94,6 +94,7 @@ class IncapacidadesController extends Controller
             if($codigoEmpleado != 0) { 
                 $arIncapacidad->setEmpleadoRel($arEmpleado);                
             }
+            $arIncapacidad->setIncapacidadRel($arEmpleado->getEntidadSaludRel());
             $em->persist($arIncapacidad);
             $em->flush();                        
             if($form->get('guardarnuevo')->isClicked()) {                

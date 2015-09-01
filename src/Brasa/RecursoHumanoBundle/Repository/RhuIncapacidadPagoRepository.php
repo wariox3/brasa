@@ -41,4 +41,17 @@ class RhuIncapacidadPagoRepository extends EntityRepository {
         $douRegistrosIncapacidadPagoDetalle = $query->getSingleScalarResult();
         return $douRegistrosIncapacidadPagoDetalle;
     }
+    
+    public function liquidar($codigoIncapacidadPago) {
+        $em = $this->getEntityManager();
+        $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);
+        $arIncapacidadPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:IncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
+        $douTotal = 0;
+        foreach ($arIncapacidadPagoDetalles AS $arIncapacidadPagoDetalle) {
+            $douTotal += $arIncapacidadPagoDetalle->getVrPrecio();
+        }
+        $arIncapacidadPago->setVrTotal($douTotal);
+        $em->persist($arIncapacidadPago);
+        $em->flush();
+    }
 }
