@@ -34,6 +34,7 @@
                 <th>EPS</th>
                 <th style="text-align: right">TOTAL</th>
                 <th>COMENTARIOS</th>
+                <th>AUTORIZADO</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -43,6 +44,7 @@
                 <td>{{ arIncapacidadPagos.entidadSaludRel.nombre  }}</td>                
                 <td style="text-align: right">{{ arIncapacidadPagos.vrTotal | number_format(2, '.', ',') }}</td>
                 <td>{{ arIncapacidadPagos.comentarios  }}</td>
+                <td>{% if arIncapacidadPagos.estadoAutorizado == 1 %}SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_incapacidades_pagos_detalle', { 'codigoIncapacidadPago':  arIncapacidadPagos.codigoIncapacidadPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arIncapacidadPagos.codigoIncapacidadPagoPk }}" /></td>
             </tr>

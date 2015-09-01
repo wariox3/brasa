@@ -45,7 +45,7 @@ class RhuIncapacidadPagoRepository extends EntityRepository {
     public function liquidar($codigoIncapacidadPago) {
         $em = $this->getEntityManager();
         $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);
-        $arIncapacidadPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:IncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
+        $arIncapacidadPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
         $douTotal = 0;
         foreach ($arIncapacidadPagoDetalles AS $arIncapacidadPagoDetalle) {
             $douTotal += $arIncapacidadPagoDetalle->getVrPago();

@@ -38,9 +38,9 @@ class RhuIncapacidadPago
     private $vrTotal = 0;
     
     /**     
-     * @ORM\Column(name="estado_aprobado", type="boolean")
+     * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAprobado = 0;
+    private $estadoAutorizado = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadSalud", inversedBy="incapacidadesPagosEntidadSaludRel")
@@ -54,6 +54,7 @@ class RhuIncapacidadPago
     protected $incapacidadesPagosDetallesIncapacidadPagoRel;
     
     
+   
     /**
      * Constructor
      */
@@ -166,6 +167,30 @@ class RhuIncapacidadPago
     public function getVrTotal()
     {
         return $this->vrTotal;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuIncapacidadPago
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 
     /**
