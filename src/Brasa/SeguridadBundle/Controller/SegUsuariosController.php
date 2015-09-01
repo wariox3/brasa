@@ -68,6 +68,33 @@ class SegUsuariosController extends Controller
         ));
     }
 
+    public function cambiarClaveAction($codigoUsuario) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $formUsuario = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_seg_admin_usuario_cambiar_clave', array('codigoUsuario' => $codigoUsuario)))
+            ->add('password', 'text')                            
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $formUsuario->handleRequest($request);        
+        $arUsuario = new \Brasa\SeguridadBundle\Entity\User();
+        $arUsuario = $em->getRepository('BrasaSeguridadBundle:User')->find($codigoUsuario);        
+        
+        if ($formUsuario->isValid()) {            
+            $factory = $this->get('security.encoder_factory');
+            $encoder = $factory->getEncoder($arUsuario);
+            $password = $encoder->encodePassword($formUsuario->get('password')->getData(), $arUsuario->getSalt());
+            $arUsuario->setPassword($password);   
+            $em->persist($arUsuario);
+            $em->flush();                        
+            return $this->redirect($this->generateUrl('brs_seg_admin_usuario_lista'));
+        }
+        return $this->render('BrasaSeguridadBundle:Usuarios:cambiarClave.html.twig', array(
+            'arUsuario' => $arUsuario,
+            'formUsuario' => $formUsuario->createView()
+        ));
+    }       
+    
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaSeguridadBundle:User')->listaDql();
@@ -87,8 +114,7 @@ class SegUsuariosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => ""))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => ""))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
