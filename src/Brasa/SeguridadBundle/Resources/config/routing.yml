@@ -19,3 +19,7 @@ brs_seg_admin_usuario_lista:
 brs_seg_admin_usuario_nuevo:
     pattern:   /admin/usuario/nuevo/{codigoUsuario}
     defaults:  { _controller: BrasaSeguridadBundle:SegUsuarios:nuevo }    
+
+brs_seg_todos_recuperar_clave:
+    pattern:   /todos/recuperar/clave
+    defaults:  { _controller: BrasaSeguridadBundle:SegUsuarios:recuperar }
