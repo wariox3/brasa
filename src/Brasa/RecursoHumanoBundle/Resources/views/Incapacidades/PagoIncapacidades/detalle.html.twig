@@ -29,11 +29,15 @@
                         <td class="td-in-well"></td>
                     </tr>
                     <tr>
-                    <td class="titulo" >TOTAL:</td>
-                    <td align="right">{{ arIncapacidadPago.vrTotal | number_format(2, '.', ',')}}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                        <td class="titulo" >TOTAL:</td>
+                        <td align="right">{{ arIncapacidadPago.vrTotal | number_format(2, '.', ',')}}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="titulo" >COMENTARIOS:</td>
+                        <td colspan="3">{{ arIncapacidadPago.comentarios}}</td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -49,11 +53,11 @@
 
         <br /><br />
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#examenes" data-toggle="tab">Exámenes</a></li>
+            <li class="active"><a href="#incapacidades" data-toggle="tab">Incapacidades</a></li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane active" id="examenes">
+            <div class="tab-pane active" id="incapacidades">
                 <!-- Menu Encabezado Movimiento -->
                 <div id="examenes" style="width: 100%"><br>
                     <table class="table table-striped table-bordered table-condensed">
@@ -61,17 +65,23 @@
                             <th>CÓDIGO</th>
                             <th>CÓDIGO INCAPACIDAD</th>
                             <th>IDENTIFICACIÓN</th>
-                            <th>EMPLEADO</th>                
-                            <th>PAGO</th>                
+                            <th>EMPLEADO</th>
+                            <th>TIPO</th>
+                            <th>DIGNÓSTICO</th>
+                            <th align="right">PAGO</th>                
                             <th></th>
                         </tr>
                         {% for arIncapacidadPagoDetalle in arIncapacidadPagoDetalle %}
                             <tr>
-                                <td>{{ arIncapacidadPagoDetalle.codigoPagoExamenDetallePk  }}</td>
-                                <td>{{ arIncapacidadPagoDetalle.examenRel.identificacion  }}</td>
-                                <td>{{ arIncapacidadPagoDetalle.examenRel.nombreCorto  }}</td>                
-                                <td class="td-in-well" align="right">{{ arIncapacidadPagoDetalle.vrPrecio | number_format(2, '.', ',') }}</td>
-                                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arIncapacidadPagoDetalle.codigoPagoExamenDetallePk }}" /></td>
+                                <td>{{ arIncapacidadPagoDetalle.codigoIncapacidadPagoDetallePk  }}</td>
+                                <td>{{ arIncapacidadPagoDetalle.codigoIncapacidadFk  }}</td>
+                                <td>{{ arIncapacidadPagoDetalle.incapacidadRel.empleadoRel.numeroIdentificacion  }}</td>
+                                <td>{{ arIncapacidadPagoDetalle.incapacidadRel.empleadoRel.nombreCorto  }}</td>
+                                <td>{{ arIncapacidadPagoDetalle.incapacidadRel.pagoAdicionalSubtipoRel.nombre  }}</td>
+                                <td>{{ arIncapacidadPagoDetalle.incapacidadRel.incapacidadDiagnosticoRel.nombre  }}</td>
+                                <td class="td-in-well" align="right">{{ arIncapacidadPagoDetalle.vrPago | number_format(2, '.', ',') }}</td>
+                                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arIncapacidadPagoDetalle.codigoIncapacidadPagoDetallePk }}" /></td>
+                                
                             </tr>
                         {% endfor %}
                     </table>

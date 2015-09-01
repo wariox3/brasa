@@ -48,7 +48,7 @@ class RhuIncapacidadPagoRepository extends EntityRepository {
         $arIncapacidadPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:IncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
         $douTotal = 0;
         foreach ($arIncapacidadPagoDetalles AS $arIncapacidadPagoDetalle) {
-            $douTotal += $arIncapacidadPagoDetalle->getVrPrecio();
+            $douTotal += $arIncapacidadPagoDetalle->getVrPago();
         }
         $arIncapacidadPago->setVrTotal($douTotal);
         $em->persist($arIncapacidadPago);

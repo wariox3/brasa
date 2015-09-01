@@ -37,6 +37,11 @@ class RhuIncapacidadPago
      */
     private $vrTotal = 0;
     
+    /**     
+     * @ORM\Column(name="estado_aprobado", type="boolean")
+     */    
+    private $estadoAprobado = 0;
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadSalud", inversedBy="incapacidadesPagosEntidadSaludRel")
      * @ORM\JoinColumn(name="codigo_entidad_salud_fk", referencedColumnName="codigo_entidad_salud_pk")

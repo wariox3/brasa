@@ -13,6 +13,7 @@ class RhuPagoIncapacidadType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
                 'property' => 'nombre',
             ))
+            ->add('comentarios', 'textarea', array('required' => false))  
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
     }

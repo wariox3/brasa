@@ -10,8 +10,7 @@
             <th>IDENTIFICACIÓN</th>
             <th>EMPLEADO</th>
             <th>CENTRO COSTOS</th>
-            <th>DIAGNÓSTICO</th>
-            <th>DIAGNÓSTICO</th>
+            <th>TIPO</th>
             <th>DESDE</th>
             <th>HASTA</th>
             <th>DÍAS</th>
@@ -19,8 +18,8 @@
             <th>PRORROGA</th>
             <th>TRANSCRIPCIÓN</th>
             <th style="text-align: right">VALOR INCAPACIDAD</th>
-            <th style="text-align: right">VALOR PAGADO</th>
             <th style="text-align: right">VALOR COBRADO</th>
+            <th style="text-align: right">VALOR SALDO</th>
             <th></th>
         </tr>        
             {%for arIncapacidades in arIncapacidades %}
@@ -29,9 +28,9 @@
                 <td>{{arIncapacidades.empleadoRel.numeroIdentificacion}}</td>
                 <td>{{arIncapacidades.empleadoRel.nombreCorto}}</td>
                 <td>{{arIncapacidades.empleadoRel.centroCostoRel.nombre}}</td>
-                <td>{{arIncapacidades.incapacidadDiagnosticoRel.incapacidadDiagnostico.nombre}}</td>
-                <td>{{arIncapacidades.desde |date("Y/m/d")}}</td>
-                <td>{{arIncapacidades.hasta |date("Y/m/d")}}</td>
+                <td>{{arIncapacidades.pagoAdicionalSubtipoRel.nombre}}</td>
+                <td>{{arIncapacidades.fechaDesde |date("Y/m/d")}}</td>
+                <td>{{arIncapacidades.fechaHasta |date("Y/m/d")}}</td>
                 <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(2, '.', ',') }}</td>                                            
                 <td>{% if arIncapacidades.estadoCobrar == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arIncapacidades.estadoProrroga == 1 %} SI {% else %} NO {% endif %}</td>

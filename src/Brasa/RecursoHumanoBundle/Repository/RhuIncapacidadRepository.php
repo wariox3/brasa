@@ -57,4 +57,15 @@ class RhuIncapacidadRepository extends EntityRepository {
         $arIncapacidadesPendientesEmpleado = $query->getResult();
         return $arIncapacidadesPendientesEmpleado;        
     }
+    
+    //lista de incapacidades por cobrar y por entidad de salud
+    public function listaIncapacidadesEntidadSaludCobrar($strCodigoEntidadSalud = '') {
+        $em = $this->getEntityManager();                
+        $dql   = "SELECT i FROM BrasaRecursoHumanoBundle:RhuIncapacidad i "
+                . "WHERE i.codigoEntidadSaludFk = " . $strCodigoEntidadSalud . " "
+                . "AND i.estadoCobrar = 1 AND i.vrSaldo > 0";
+        $query = $em->createQuery($dql);
+        $arIncapacidadesCobrar = $query->getResult();
+        return $arIncapacidadesCobrar;        
+    }
 }

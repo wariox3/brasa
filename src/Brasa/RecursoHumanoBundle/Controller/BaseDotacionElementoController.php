@@ -95,6 +95,7 @@ class BaseDotacionElementoController extends Controller
            
         ));
     }
+    
     public function nuevoAction($codigoDotacionElemento) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
