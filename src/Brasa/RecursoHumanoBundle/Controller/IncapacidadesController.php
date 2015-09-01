@@ -81,6 +81,8 @@ class IncapacidadesController extends Controller
                     
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
             $arrControles = $request->request->All();
             $arIncapacidad = $form->getData();                          
             $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
@@ -95,6 +97,27 @@ class IncapacidadesController extends Controller
                 $arIncapacidad->setEmpleadoRel($arEmpleado);                
             }
             $arIncapacidad->setIncapacidadRel($arEmpleado->getEntidadSaludRel());
+            $floVrIncapacidad = 0;
+            $douVrDia = $arEmpleado->getVrSalario() / 30;
+            $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;
+            $intTipo = $arIncapacidad->getPagoAdicionalSubtipoRel()->getCodigoPagoAdicionalSubtipoPk();
+            if($intTipo == 28) {
+                if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
+                    $floVrIncapacidad = $intDias * $douVrDia;                    
+                }
+                if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
+                    $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
+                }
+                if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
+                    $floVrIncapacidad = $intDias * $douVrDia;
+                    $floVrIncapacidad = ($floVrIncapacidad * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;                    
+                }
+            } else {
+                $floVrIncapacidad = $intDias * $douVrDia;
+                $floVrIncapacidad = ($floVrIncapacidad * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;                
+            }     
+            $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
+            $arIncapacidad->setVrSaldo($floVrIncapacidad);
             $em->persist($arIncapacidad);
             $em->flush();                        
             if($form->get('guardarnuevo')->isClicked()) {                
