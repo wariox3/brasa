@@ -52,7 +52,19 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $empresa;       
+    private $empresa; 
+    
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $roles;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="SegRoles", inversedBy="usuariosRolRel")
+     * @ORM\JoinColumn(name="roles", referencedColumnName="codigo_rol_pk")
+     */
+    protected $rolRel;     
+    
     
     public function __construct()
     {
@@ -89,7 +101,7 @@ class User implements UserInterface, \Serializable
      */
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return array($this->roles);
     }
 
     /**
@@ -283,5 +295,43 @@ class User implements UserInterface, \Serializable
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Set roles
+     *
+     * @param string $roles
+     *
+     * @return User
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Set rolRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegRoles $rolRel
+     *
+     * @return User
+     */
+    public function setRolRel(\Brasa\SeguridadBundle\Entity\SegRoles $rolRel = null)
+    {
+        $this->rolRel = $rolRel;
+
+        return $this;
+    }
+
+    /**
+     * Get rolRel
+     *
+     * @return \Brasa\SeguridadBundle\Entity\SegRoles
+     */
+    public function getRolRel()
+    {
+        return $this->rolRel;
     }
 }

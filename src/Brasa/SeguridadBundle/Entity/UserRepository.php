@@ -12,4 +12,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    public function listaDql() {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT u FROM BrasaSeguridadBundle:User u";
+        $dql .= " ORDER BY u.nombreCorto ASC";
+        return $dql;
+    } 
 }

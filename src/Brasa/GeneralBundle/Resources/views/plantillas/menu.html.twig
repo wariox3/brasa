@@ -433,7 +433,14 @@
                                 <li><a href="{{ path('brs_rhu_configuracion_general', { 'codigoConfiguracionPk': 1 }) }}">General</a></li>
                             </ul>
                         </li>
-                        <li><a href="#">Seguridad</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">Seguridad</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ path('brs_seg_admin_usuario_lista') }}">Usuarios</a></li>                                    
+                                </ul>
+                            </li>                            
+                        {% endif %}
                         <li><a href="#">Parametrizacion</a></li>
                         <li class="divider"></li>
                         <li><a href="{{ path('logout') }}">Salir</a></li>
