@@ -120,6 +120,22 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 $douPagoDetalle = 0;
                                 $douIngresoBaseCotizacionIncapacidad = 0;
                                 $intCantidadHorasIncapacidad = $arIncapacidad->getCantidadPendiente() * 8;
+                                $intHorasTomadas = 0;
+                                if($arIncapacidad->getFechaDesde() >= $arProgramacionPagoProcesar->getFechaDesde() && $arIncapacidad->getFechaDesde() <= $arProgramacionPagoProcesar->getFechaHasta()) {
+                                    if($arIncapacidad->getFechaHasta() <= $arProgramacionPagoProcesar->getFechaHasta()) {
+                                        $intHorasTomadas = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
+                                        $intHorasTomadas = $intHorasTomadas->format('%a');
+                                        $intHorasTomadas = ($intHorasTomadas + 1) * 8;
+                                    } else {
+                                        $intHorasTomadas = $arIncapacidad->getFechaDesde()->diff($arProgramacionPagoProcesar->getFechaHasta());
+                                        $intHorasTomadas = $intHorasTomadas->format('%a');
+                                        $intHorasTomadas = ($intHorasTomadas + 1) * 8;                                        
+                                    }                                                                        
+                                }
+                                if($intHorasTomadas > 0 && $intHorasTomadas < $intCantidadHorasIncapacidad) {
+                                    $intCantidadHorasIncapacidad = $intHorasTomadas;
+                                }
+                                
                                 if($intCantidadHorasIncapacidad < $intHorasLaboradas) {
                                     $intHorasLaboradas = $intHorasLaboradas - $intCantidadHorasIncapacidad;
                                     $intHorasProcesarIncapacidad = $intCantidadHorasIncapacidad;
@@ -127,7 +143,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                     $intHorasProcesarIncapacidad = $intHorasLaboradas;
                                     $intHorasLaboradas = 0;
                                 }
-
+                                                               
                                 $intDiasTransporte = $intDiasTransporte - ($intHorasProcesarIncapacidad / $arProgramacionPagoDetalle->getFactorDia());
 
                                 if($arIncapacidad->getCodigoPagoAdicionalSubtipoFk() == 28) {
@@ -167,7 +183,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 //Actualizar valores incapacidad
                                 $arIncapacidadActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad;
                                 $arIncapacidadActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arIncapacidad->getCodigoIncapacidadPk());
-                                $arIncapacidadActualizar->setCantidadPendiente(($intCantidadHorasIncapacidad - $intHorasProcesarIncapacidad) / 8);
+                                $arIncapacidadActualizar->setCantidadPendiente($arIncapacidadActualizar->getCantidadPendiente() - ($intHorasProcesarIncapacidad) / 8);
                                 $em->persist($arIncapacidadActualizar);
                             }
                         }
