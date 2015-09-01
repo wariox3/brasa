@@ -36,6 +36,25 @@ class RhuIncapacidadRepository extends EntityRepository {
         return $dql;
     }                    
     
+    public function listaIncapacidadesCobrarDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT i, e FROM BrasaRecursoHumanoBundle:RhuIncapacidad i JOIN i.empleadoRel e WHERE i.codigoIncapacidadPk <> 0 AND i.estadoCobrar = 1 AND i.vrSaldo > 0";
+        
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND i.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND i.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND i.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        return $dql;
+    }
+    
     //lista de incapacidades pendientes por centro centro de costo para el resumen de la programacioan de pago
     public function pendientesCentroCosto($strCodigoCentroCosto) {
         $em = $this->getEntityManager();                
