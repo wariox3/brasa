@@ -80,23 +80,34 @@ class PagoIncapacidadController extends Controller
             }
             if($form->get('BtnAutorizar')->isClicked()) {
                 
+                $arIncapacidadPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
+                $arIncapacidadPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
+                foreach ($arIncapacidadPagoDetalles AS $arIncapacidadPagoDetalle) {                    
+                    $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+                    $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arIncapacidadPagoDetalle->getCodigoIncapacidadFk());
+                    $arIncapacidad->setVrPagado($arIncapacidadPagoDetalle->getVrPago());
+                    $arIncapacidad->setVrSaldo($arIncapacidad->getVrIncapacidad() - $arIncapacidad->getVrPagado());
+                    $em->persist($arIncapacidad);
+                }
+                $arIncapacidadPago = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPago();
+                $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);
+                $arIncapacidadPago->setEstadoAutorizado(1);
+                $em->persist($arIncapacidadPago);
+                $em->flush();
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->liquidar($codigoIncapacidadPago);
             }
             if ($form->get('BtnActualizar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $arrControles = $request->request->All();
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoIncapacidadPagoDetalle) {                    
-                        $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPagoDetalle);
-                        $arIncapacidadPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
-                        //$arIncapacidadPagoDetalle->setIncapacidadPagoRel($arIncapacidadPago);
-                        //$arIncapacidadPagoDetalle->setIncapacidadRel($arIncapacidad);
-                        $intValorPago = $arrControles['TxtValorPago'][$intIndice];
-                        $arEmpleadoDotacionDetalle->setCantidadAsignada($intValorPago);
-                        $arIncapacidadPagoDetalle->setVrPago($arIncapacidad->getVrSaldo());                                                
-                        $em->persist($arIncapacidadPagoDetalle); 
-                    }
-                    $em->flush();
+                $intIndice = 1;
+                $arIncapacidadPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
+                $arIncapacidadPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
+                foreach ($arIncapacidadPagoDetalles AS $arIncapacidadPagoDetalle) {                    
+                    $arIncapacidadPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->find($arIncapacidadPagoDetalle);
+                    $intValorPago = $arrControles['TxtValorPago'][$intIndice];
+                    $arIncapacidadPagoDetalle->setVrPago($intValorPago);                                                
+                    $em->persist($arIncapacidadPagoDetalle); 
                 }
+                $em->flush();
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->liquidar($codigoIncapacidadPago);
             }
         }        
