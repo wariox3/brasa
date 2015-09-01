@@ -74,7 +74,7 @@ class PagoIncapacidadController extends Controller
                 $objFormatoIncapacidadPagoDetalle->Generar($this, $codigoIncapacidadPago);
             }
             if($form->get('BtnEliminar')->isClicked()) {                
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->eliminarDetallesSeleccionados($arrSeleccionados,$codigoIncapacidadPago);
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->liquidar($codigoIncapacidadPago);
                 return $this->redirect($this->generateUrl('brs_rhu_incapacidades_pagos_detalle', array('codigoIncapacidadPago' => $codigoIncapacidadPago)));           
             }
@@ -137,7 +137,7 @@ class PagoIncapacidadController extends Controller
         if ($form->isValid()) { 
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                
+                $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoIncapacidad) {                    
                         $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
@@ -149,6 +149,7 @@ class PagoIncapacidadController extends Controller
                     }
                     $em->flush();
                 }
+             
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->liquidar($codigoIncapacidadPago);
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                

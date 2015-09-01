@@ -11,16 +11,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuIncapacidadPagoDetalleRepository extends EntityRepository {
     
-    public function eliminarDetallesSeleccionados($arrSeleccionados) {        
+    public function eliminarDetallesSeleccionados($arrSeleccionados,$codigoIncapacidadPago) {        
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
-            foreach ($arrSeleccionados AS $codigoIncapacidadPagoDetalle) {                
-                $arIncapacidadPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->find($codigoIncapacidadPagoDetalle);
-                $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arIncapacidadPagoDetalle->getCodigoIncapacidadFk());
-                $arIncapacidad->setVrPagado(0);
-                $em->persist($arIncapacidad);
-                $em->remove($arIncapacidadPagoDetalle);  
-            }  $em->flush();                                       
+            $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);
+            if ($arIncapacidadPago->getEstadoAutorizado()== 0){
+                foreach ($arrSeleccionados AS $codigoIncapacidadPagoDetalle) {                
+                    $arIncapacidadPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->find($codigoIncapacidadPagoDetalle);
+                    $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arIncapacidadPagoDetalle->getCodigoIncapacidadFk());
+                    $arIncapacidad->setVrPagado(0);
+                    $em->persist($arIncapacidad);
+                    $em->remove($arIncapacidadPagoDetalle);  
+                }
+                $em->flush();
+            }
+                                                     
         }
                
     } 
