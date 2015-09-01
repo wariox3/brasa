@@ -141,7 +141,7 @@ class VacacionesController extends Controller
             if (count($arContrato) >= 0){
                 $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
                 $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(360, $fechaDesdePeriodo);                                               
-                if ($fechaHastaPeriodo < $arContrato->getFechaUltimoPago()){
+                if ($fechaHastaPeriodo > $arContrato->getFechaUltimoPago()){
                     $objMensaje->Mensaje("error", "El empleado no ha cumplido el periodo para disfrutar las vacaciones", $this);
                 } else {
                     $arVacacion = $form->getData();   
