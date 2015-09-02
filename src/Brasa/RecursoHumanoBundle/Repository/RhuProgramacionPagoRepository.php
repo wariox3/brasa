@@ -471,7 +471,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $arPago->setComentarios("Dado que se pagan las primas antes del periodo, se proyectan (" . $intDiasIbcAdicional . ") dias restantes con el salario");
                         }
                         $floSalarioPromedio = ($floIbc / $intDias) * 30;                                    
-                        if($floSalarioPromedio <=  $douSalarioMinimo * 2 ) {
+                        if(round($floSalarioPromedio) <=  $douSalarioMinimo * 2 ) {
                             $floSalarioPromedio += $arConfiguracion->getVrAuxilioTransporte();
                         }
                         $floTotalPago = ($floSalarioPromedio * $intDias) / 360;
@@ -528,7 +528,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         }
                         $floSalarioPromedio = ($floIbc / $intDias) * 30;   
                         $strMensajeAuxilioTransporte = "";
-                        if(round($floSalarioPromedio) <=  $douSalarioMinimo ) {
+                        if(round($floSalarioPromedio) <=  $douSalarioMinimo * 2 ) {
                             $floSalarioPromedio += $arConfiguracion->getVrAuxilioTransporte();
                             $strMensajeAuxilioTransporte = " + Aux. transporte (" . $arConfiguracion->getVrAuxilioTransporte() . ")";
                         }
