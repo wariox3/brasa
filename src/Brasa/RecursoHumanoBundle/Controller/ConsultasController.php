@@ -811,15 +811,18 @@ class ConsultasController extends Controller
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'TIPO')
                     ->setCellValue('C1', 'DIAGNOSTICO')
-                    ->setCellValue('D1', 'IDENTIFICACIÓN')
-                    ->setCellValue('E1', 'EMPLEADO')
-                    ->setCellValue('F1', 'CENTRO COSTOS')
-                    ->setCellValue('G1', 'DESDE')
-                    ->setCellValue('H1', 'HASTA')
-                    ->setCellValue('I1', 'DÍAS')
-                    ->setCellValue('J1', 'PRORROGA')
-                    ->setCellValue('K1', 'TRANSCRIPCIÓN')
-                    ->setCellValue('L1', 'VR. INCAPACIDAD');
+                    ->setCellValue('D1', 'EPS')
+                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'EMPLEADO')
+                    ->setCellValue('G1', 'CENTRO COSTOS')
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'HASTA')
+                    ->setCellValue('J1', 'DÍAS')
+                    ->setCellValue('K1', 'PRORROGA')
+                    ->setCellValue('L1', 'TRANSCRIPCIÓN')
+                    ->setCellValue('M1', 'VR. INCAPACIDAD')
+                    ->setCellValue('N1', 'VR. PAGADO')
+                    ->setCellValue('O1', 'VR. SALDO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlIncapacidadesCobrarLista);
@@ -840,15 +843,18 @@ class ConsultasController extends Controller
                     ->setCellValue('A' . $i, $arIncapacidadesCobrar->getCodigoIncapacidadPk())
                     ->setCellValue('B' . $i, $arIncapacidadesCobrar->getPagoAdicionalSubtipoRel()->getNombre())
                     ->setCellValue('C' . $i, $arIncapacidadesCobrar->getIncapacidadDiagnosticoRel()->getNombre())
-                    ->setCellValue('D' . $i, $arIncapacidadesCobrar->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arIncapacidadesCobrar->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arIncapacidadesCobrar->getCentroCostoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arIncapacidadesCobrar->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('H' . $i, $arIncapacidadesCobrar->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('I' . $i, $arIncapacidadesCobrar->getCantidad())
-                    ->setCellValue('J' . $i, $prorroga)
-                    ->setCellValue('K' . $i, $transcripcion)
-                    ->setCellValue('L' . $i, $arIncapacidadesCobrar->getVrIncapacidad());
+                    ->setCellValue('D' . $i, $arIncapacidadesCobrar->getEntidadSaludRel()->getNombre())
+                    ->setCellValue('E' . $i, $arIncapacidadesCobrar->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arIncapacidadesCobrar->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arIncapacidadesCobrar->getCentroCostoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arIncapacidadesCobrar->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('I' . $i, $arIncapacidadesCobrar->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('J' . $i, $arIncapacidadesCobrar->getCantidad())
+                    ->setCellValue('K' . $i, $prorroga)
+                    ->setCellValue('L' . $i, $transcripcion)
+                    ->setCellValue('M' . $i, $arIncapacidadesCobrar->getVrIncapacidad())
+                    ->setCellValue('N' . $i, $arIncapacidadesCobrar->getVrIncapacidad())
+                    ->setCellValue('O' . $i, $arIncapacidadesCobrar->getVrSaldo());
             $i++;
         }
 

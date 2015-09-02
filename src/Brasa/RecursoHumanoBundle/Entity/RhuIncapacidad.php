@@ -133,7 +133,7 @@ class RhuIncapacidad
      * @ORM\ManyToOne(targetEntity="RhuEntidadSalud", inversedBy="incapacidadesEntidadSaludRel")
      * @ORM\JoinColumn(name="codigo_entidad_salud_fk", referencedColumnName="codigo_entidad_salud_pk")
      */
-    protected $incapacidadRel;
+    protected $entidadSaludRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="incapacidadesEmpleadoRel")
@@ -706,27 +706,27 @@ class RhuIncapacidad
     }
 
     /**
-     * Set incapacidadRel
+     * Set entidadSaludRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $incapacidadRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel
      *
      * @return RhuIncapacidad
      */
-    public function setIncapacidadRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $incapacidadRel = null)
+    public function setEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel = null)
     {
-        $this->incapacidadRel = $incapacidadRel;
+        $this->entidadSaludRel = $entidadSaludRel;
 
         return $this;
     }
 
     /**
-     * Get incapacidadRel
+     * Get entidadSaludRel
      *
      * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud
      */
-    public function getIncapacidadRel()
+    public function getEntidadSaludRel()
     {
-        return $this->incapacidadRel;
+        return $this->entidadSaludRel;
     }
 
     /**

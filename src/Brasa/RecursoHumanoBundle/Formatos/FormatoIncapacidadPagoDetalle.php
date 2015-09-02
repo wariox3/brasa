@@ -52,13 +52,13 @@ class FormatoIncapacidadPagoDetalle extends \FPDF_FPDF {
         $this->Cell(22, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',7);
-        $this->Cell(78, 6, $arIncapacidadPago->getCodigoIncapacidadPagoPk() , 1, 0, 'L', 1);
+        $this->Cell(70, 6, $arIncapacidadPago->getCodigoIncapacidadPagoPk() , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',7);
         $this->SetFillColor(200, 200, 200);
         $this->Cell(24, 6, "ENTIDAD:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(69, 6, $arIncapacidadPago->getEntidadSaludRel()->getNombre() , 1, 0, 'L', 1);
+        $this->Cell(77, 6, $arIncapacidadPago->getEntidadSaludRel()->getNombre() , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',6.5);
         //FILA 2
         $this->SetXY(10, 45);
@@ -68,25 +68,25 @@ class FormatoIncapacidadPagoDetalle extends \FPDF_FPDF {
         $this->SetFont('Arial','',7);
         $this->SetFillColor(255, 255, 255);
         if ($arIncapacidadPago->getEstadoAutorizado() == 1){
-            $this->Cell(78, 6, "SI" , 1, 0, 'L', 1);
+            $this->Cell(70, 6, "SI" , 1, 0, 'L', 1);
         }else {
-            $this->Cell(78, 6, "NO" , 1, 0, 'L', 1);
+            $this->Cell(70, 6, "NO" , 1, 0, 'L', 1);
         }
         $this->SetFont('Arial','B',7);
         $this->SetFillColor(200, 200, 200);
         $this->Cell(24, 6, "TOTAL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(69, 6, number_format($arIncapacidadPago->getVrTotal(), 2, '.', ',') , 1, 0, 'R', 1);
+        $this->Cell(77, 6, number_format($arIncapacidadPago->getVrTotal(), 2, '.', ',') , 1, 0, 'R', 1);
         
         //FILA 3
         $this->SetXY(10, 50);
         $this->SetFont('Arial','B',7);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(22, 6, "COMENTARIOS:" , 1, 0, 'L', 1);                            
+        $this->Cell(22, 5, "COMENTARIOS:" , 1, 0, 'L', 1);                            
         $this->SetFont('Arial','',6);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(170, 6, $arIncapacidadPago->getComentarios() , 1, 0, 'L', 1);
+        $this->Cell(171, 5, $arIncapacidadPago->getComentarios() , 1, 0, 'L', 1);
 
         
         $this->EncabezadoDetalles();
@@ -95,7 +95,7 @@ class FormatoIncapacidadPagoDetalle extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('CONCEPTO', 'DETALLE', 'HORAS', 'VR. HORA', '%', 'DEDUCCION', 'DEVENGADO');
+        $header = array(utf8_decode('CÓDIGO'), 'INCAPACIDAD', utf8_decode('IDENTIFICACIÓN'), 'TIPO',utf8_decode('EMPLEADO'), 'VR. PAGO');
         $this->SetFillColor(200, 200, 200);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -103,10 +103,10 @@ class FormatoIncapacidadPagoDetalle extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(40, 83, 11, 14, 9, 18, 18);
+        $w = array(12, 20, 25, 41, 75, 20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
-                $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
+                $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
             else
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
 
@@ -122,33 +122,20 @@ class FormatoIncapacidadPagoDetalle extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         $pdf->SetFillColor(200, 200, 200);
 
-        // INFORMACION DETALLEDO
+        // INFORMACION DETALLADO
         $arIncapacidadPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
         $arIncapacidadPagoDetalles = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => self::$codigoIncapacidadPago));
-            $pdf->Cell(193, 4, utf8_decode("INFORMACIÓN DETALLE INCAPACIDADES"), 1, 0, 'L',true);
-            $pdf->Ln(4);
-            $pdf->Cell(24, 4, utf8_decode("CÓDIGO"), 1, 0, 'L',true);
-            $pdf->Cell(24, 4, "IDENTIFICACION", 1, 0, 'L',true);
-            $pdf->Cell(24, 4, "EMPLEADO", 1, 0, 'L',true);
-            $pdf->Cell(25, 4, "TIPO", 1, 0, 'L',true);
-            $pdf->Cell(24, 4, "DIAGNOSTICO", 1, 0, 'L',true);
-            $pdf->Cell(24, 4, "PAGO", 1, 0, 'L',true);
+        foreach ($arIncapacidadPagoDetalles as $arIncapacidadPagoDetalles) {
+            $pdf->Cell(12, 4, $arIncapacidadPagoDetalles->getCodigoIncapacidadFk(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(25, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');
+            $pdf->Cell(41, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getPagoAdicionalSubtipoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(75, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getPagoAdicionalSubtipoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(20, 4, number_format($arIncapacidadPagoDetalles->getVrPago(), 2, '.', ','), 1, 0, 'R');
             $pdf->Ln();
-            $pdf->SetFont('Arial', '', 8);
-            foreach ($arIncapacidadPagoDetalles as $arIncapacidadPagoDetalles) {
-                
-                    $pdf->Cell(24, 4, $arIncapacidadPagoDetalles->getCodigoIncapacidadFk(), 1, 0, 'L');
-                    $pdf->Cell(24, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-                    $pdf->Cell(25, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');
-                    $pdf->Cell(24, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getPagoAdicionalSubtipoRel()->getNombre(), 1, 0, 'L');
-                    $pdf->Cell(24, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getIncapacidadDiagnosticoRel()->getNombre(), 1, 0, 'L');
-                    $pdf->Cell(24, 4, number_format($arIncapacidadPagoDetalles->getVrPago(), 2, '.', ','), 1, 0, 'R');
-                    $pdf->Ln();
-                
-
-            }
-            $pdf->Ln(8);
-            $pdf->SetFont('Arial', 'B', 7);
+        }
+        $pdf->Ln(8);
+        $pdf->SetFont('Arial', 'B', 7);
             
                 
                    

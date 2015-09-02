@@ -222,12 +222,16 @@ class ContratosController extends Controller
         $session->set('dqlContratoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(                
                 $session->get('filtroIdentificacion'),
                 $this->fechaDesdeInicia,
-                $this->fechaHastaInicia
+                $this->fechaHastaInicia,
+                $session->get('filtroCodigoCentroCosto')
                 ));  
     }     
     
     private function formularioLista() {
-        $session = $this->getRequest()->getSession();        
+        $session = $this->getRequest()->getSession(); 
+        
+        
+        
         $form = $this->createFormBuilder()                        
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
             ->add('fechaDesdeInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                            
@@ -248,9 +252,12 @@ class ContratosController extends Controller
         if($controles['fechaHastaInicia']) {            
             $this->fechaHastaInicia = $controles['fechaHastaInicia'];            
         }        
-        //$session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        
+        
+        
     }    
     
     private function generarExcel() {
