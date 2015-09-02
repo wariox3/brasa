@@ -107,7 +107,10 @@ class ContratosController extends Controller
             if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),1)) {
                 $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
                 $arContrato->setEmpleadoRel($arEmpleado);  
-                $arContrato->setFechaUltimoPago($arContrato->getFechaDesde());
+                $dateFechaUltimoPago = $arContrato->getFechaDesde()->format('Y-m-d');
+                $dateFechaUltimoPago = date("Y-m-d", strtotime("$dateFechaUltimoPago -1 day")); 
+                $dateFechaUltimoPago = date_create_from_format('Y-m-d H:i', $dateFechaUltimoPago . "00:00");
+                $arContrato->setFechaUltimoPago($dateFechaUltimoPago);
                 $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
                 $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
                 $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
@@ -311,5 +314,6 @@ class ContratosController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }        
+    }   
+     
 }
