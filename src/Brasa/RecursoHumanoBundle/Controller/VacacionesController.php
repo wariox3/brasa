@@ -55,7 +55,7 @@ class VacacionesController extends Controller
             }
         }
         $arVacaciones = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                        
-        return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:lista.html.twig', array(
             'arVacaciones' => $arVacaciones,
             'form' => $form->createView()
             ));
@@ -159,12 +159,10 @@ class VacacionesController extends Controller
                         $em->persist($arVacacionCredito);            
                         $floVrDeducciones += $arCredito->getSaldoTotal();
                     }
-                    /*$arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                    $arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContrato->getCodigoContratoPk());                    
                     $arContratoActualizar->setFechaUltimoPagoVacaciones($fechaHastaPeriodo);
                     $em->persist($arContratoActualizar);                     
-                     * 
-                     */
                     $em->flush();
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";  
@@ -173,7 +171,7 @@ class VacacionesController extends Controller
         }                
         $arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($codigoEmpleado);
-        return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:nuevo.html.twig', array(
             'arEmpleado' => $arEmpleado,
             'arCreditosPendientes' => $arCreditosPendientes,
             'form' => $form->createView()));
@@ -210,7 +208,7 @@ class VacacionesController extends Controller
             return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:editarDisfrutadas.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:editarDisfrutadas.html.twig', array(
             'arVacacion' => $arVacacion,
             'form' => $form->createView()
         ));
@@ -253,7 +251,7 @@ class VacacionesController extends Controller
         }
         $arVacacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
         $arVacacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->FindBy(array('codigoVacacionFk' => $codigoVacacion));        
-        return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:detalle.html.twig', array(
                     'arVacaciones' => $arVacaciones,
                     'arVacacionDeducciones' => $arVacacionDeducciones,
                     'form' => $form->createView()
@@ -292,7 +290,7 @@ class VacacionesController extends Controller
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/Vacaciones:detallenuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:detallenuevo.html.twig', array(
             'arCreditos' => $arCreditos,
             'arVacacion' => $arVacacion,
             'form' => $form->createView()));

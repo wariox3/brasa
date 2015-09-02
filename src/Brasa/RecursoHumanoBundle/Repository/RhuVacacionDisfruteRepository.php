@@ -24,5 +24,39 @@ class RhuVacacionDisfruteRepository extends EntityRepository {
         return $dql;
     }    
     
+    public function dias($codigoEmpleado, $fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $dql   = "SELECT v FROM BrasaRecursoHumanoBundle:RhuVacacionDisfrute v "
+                . "WHERE v.codigoEmpleadoFk = " . $codigoEmpleado
+                . " AND v.fechaDesde <= '" . $fechaHasta->format('Y-m-d') . "' "
+                . " AND v.fechaHasta >= '" . $fechaDesde->format('Y-m-d') . "' ";
+        $query = $em->createQuery($dql);
+        $arVacaciones = $query->getResult();
+        $intDiasDevolver = 0;
+        foreach ($arVacaciones as $arVacacion) {
+            $dateFechaDesde =  "";
+            $dateFechaHasta =  "";
+            
+            if($arVacacion->getFechaDesde() <  $fechaDesde == true) {
+                $dateFechaDesde = $fechaDesde;
+            } else {
+                $dateFechaDesde = $arVacacion->getFechaDesde();
+            }
+
+            if($arVacacion->getFechaHasta() >  $fechaHasta == true) {
+                $dateFechaHasta = $fechaHasta;
+            } else {
+                $dateFechaHasta = $arVacacion->getFechaHasta();
+            }
+            if($dateFechaDesde != "" && $dateFechaHasta != "") {
+                $intDias = $dateFechaDesde->diff($dateFechaHasta);
+                $intDias = $intDias->format('%a');
+                $intDiasDevolver += $intDias + 1;
+            }
+        }
+        return $intDiasDevolver;
+    }    
+    
 }
 

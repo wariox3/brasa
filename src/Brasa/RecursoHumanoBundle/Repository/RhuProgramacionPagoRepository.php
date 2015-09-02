@@ -89,7 +89,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $douIngresoBaseCotizacion = 0;
 
                         //Procesar vacaciones
-                        $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoProcesar->getFechaDesde(), $arProgramacionPagoProcesar->getFechaHasta());
+                        $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->dias($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoProcesar->getFechaDesde(), $arProgramacionPagoProcesar->getFechaHasta());
                         $intHorasVacaciones = $intDiasVacaciones * 8;
                         if($intDiasVacaciones > 0) {
                             $intHorasLaboradas = $intHorasLaboradas - $intHorasVacaciones;

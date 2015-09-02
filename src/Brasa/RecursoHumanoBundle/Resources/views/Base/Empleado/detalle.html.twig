@@ -6,13 +6,13 @@
         </div>
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
-        
+
         <div class="btn-group">
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 3,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                        
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 3,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
         </div>
         <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_certificadoIngreso_generar', { 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'Certificado', 600, 1000)" >Generar certificado de ingresos y retenciones</a>                        
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_certificadoIngreso_generar', { 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'Certificado', 600, 1000)" >Generar certificado de ingresos y retenciones</a>
         </div>
         <br /> <br />
         <div class="panel panel-default">
@@ -41,19 +41,19 @@
                         <td class="titulo">TELEFONO:</td>
                         <td class="td-in-well">{{ arEmpleado.telefono }}</td>
                         <td class="titulo">CIUDAD:</td>
-                        <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre|default('SIN CONTRATO') }}</td>                    
-                    </tr>                
+                        <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre|default('SIN CONTRATO') }}</td>
+                    </tr>
                     <tr>
                         <td class="titulo">ESTADO CIVIL:</td>
-                        <td class="td-in-well">{{ arEmpleado.estadoCivilRel.nombre }}</td>                    
+                        <td class="td-in-well">{{ arEmpleado.estadoCivilRel.nombre }}</td>
                         <td class="titulo">SEXO:</td>
                         <td class="td-in-well">{% if arEmpleado.codigoSexoFk == "M" %} MASCULINO {% else %} FEMENINO{% endif %}</td>
                         <td class="titulo">RH</td>
                         <td class="td-in-well">{{ arEmpleado.rhRel.tipo }}</td>
-                    </tr>                
+                    </tr>
                     <tr>
                         <td class="titulo">FECHA NACIMIENTO:</td>
-                        <td class="td-in-well">{{ arEmpleado.fechaNacimiento|date("Y/m/d") }}</td>                    
+                        <td class="td-in-well">{{ arEmpleado.fechaNacimiento|date("Y/m/d") }}</td>
                         <td class="titulo">CLASIFICACION RIESGO:</td>
                         <td class="td-in-well">{{ arEmpleado.clasificacionRiesgoRel.nombre|default('SIN CONTRATO') }}</td>
                         <td class="titulo">CORREO:</td>
@@ -61,34 +61,34 @@
                     </tr>
                     <tr>
                         <td class="titulo">TIPO PENSIÓN:</td>
-                        <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('SIN CONTRATO') }}</td>                    
+                        <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('SIN CONTRATO') }}</td>
                         <td class="titulo">CARGO:</td>
                         <td class="td-in-well">{{ arEmpleado.cargoRel.nombre|default('SIN CONTRATO') }}</td>
                         <td class="titulo">DESCRIPCIÓN CARGO:</td>
                         <td class="td-in-well">{{ arEmpleado.cargoDescripcion }}</td>
-                    </tr>                
+                    </tr>
                     <tr>
                         <td class="titulo">ENTIDAD PENSIÓN:</td>
-                        <td>{{ arEmpleado.entidadPensionRel.nombre|default('SIN CONTRATO') }}</td>                    
+                        <td>{{ arEmpleado.entidadPensionRel.nombre|default('SIN CONTRATO') }}</td>
                         <td class="titulo">AUXILIO TRANSPORTE:</td>
                         <td class="td-in-well">{% if arEmpleado.auxilioTransporte == 1 %} SI {% else %} NO{% endif %}</td>
                         <td class="titulo">PADRE FAMILIA</td>
                         <td class="td-in-well">{% if arEmpleado.padreFamilia == 1 %} SI {% else %} NO{% endif %}</td>
-                    </tr>                
+                    </tr>
                     <tr>
                         <td class="titulo">ENTIDAD SALUD:</td>
-                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadSaludRel.nombre|default('SIN CONTRATO') }}</td>                    
+                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadSaludRel.nombre|default('SIN CONTRATO') }}</td>
                         <td class="td-in-well"></td>
                         <td class="titulo">CABEZA FAMILIA</td>
                         <td class="td-in-well">{% if arEmpleado.cabezaHogar == 1 %} SI {% else %} NO{% endif %}</td>
-                    </tr>                
+                    </tr>
                     <tr>
                         <td class="titulo">CAJA COMPENSACIÓN:</td>
-                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>                    
+                        <td class="td-in-well" colspan="2">{{ arEmpleado.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>
                         <td class="td-in-well"></td>
                         <td class="titulo">AUXILIO TRANSPORTE</td>
                         <td class="td-in-well">{% if arEmpleado.auxilioTransporte == 1 %} SI {% else %} NO{% endif %}</td>
-                    </tr>                 
+                    </tr>
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
                         <td class="td-in-well" colspan="7">{{ arEmpleado.comentarios }}</td>
@@ -110,7 +110,7 @@
             <li><a href="#dotacion" data-toggle="tab">Dotación</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane active" id="contrato">                 
+            <div class="tab-pane active" id="contrato">
                 <br />
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
@@ -144,32 +144,32 @@
                             <td style="text-align: right">{{ arContratos.vrSalario | number_format(0, '.', ',') }}</td>
                             <td>{{ arContratos.cargoRel.nombre|default('SIN CONTRATO')  }}</td>
                             <td>{{ arContratos.cargoDescripcion  }}</td>
-                            <td>{{ arContratos.clasificacionRiesgoRel.nombre|default('SIN CONTRATO') }}</td>                            
+                            <td>{{ arContratos.clasificacionRiesgoRel.nombre|default('SIN CONTRATO') }}</td>
                             <td>{% if arContratos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
-                            <td style="text-align: center"><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arContratos.codigoContratoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                            
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td style="text-align: center"><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arContratos.codigoContratoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarContrato[]" value="{{ arContratos.codigoContratoPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
 
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arContratos) }} 
-                </div> 
+                    {{ knp_pagination_render(arContratos) }}
+                </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleado.codigoEmpleadoPk}) }}', 'NuevoContrato', 600, 900)" >Nuevo</a>{% endif %}
                     </div>
-                    <div class="btn-group">                        
+                    <div class="btn-group">
                         {{ form_widget(form.BtnInactivarContrato, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
-                </div>   
+                </div>
             </div>
-            
-                                    
-                                    
-                    
-                    
+
+
+
+
+
             <div class="tab-pane" id="credito">
                 <br />
                 <table  class="table table-striped table-bordered table-condensed table-hover">
@@ -202,28 +202,28 @@
                                             <td {% if arCreditos.Aprobado == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
                                             <td {% if arCreditos.estadoSuspendido == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
                                             {% if arCreditos.Aprobado == 1 %}
-                                                <td style="text-align: center"><a href="#marcador" onclick="javascript:alert('No se puede modificar el credito, se encuenta aprobado o cancelado!');"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                                                <td style="text-align: center"><a href="#marcador" onclick="javascript:alert('No se puede modificar el credito, se encuenta aprobado o cancelado!');"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                                                     {% else %}
-                                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk,  'codigoEmpleado': arCreditos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk,  'codigoEmpleado': arCreditos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                                                     {% endif %}
                                             <td><input type="checkbox" name="ChkSeleccionarCredito[]" value="{{ arCreditos.codigoCreditoPk }}" /></td>
                                         </tr>
                                     {% endfor %}
                                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arCreditos) }} 
+                    {{ knp_pagination_render(arCreditos) }}
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': 0, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarCredito', 600, 900)" >Nuevo</a>{% endif %}
                     </div>
 
-                    <div class="btn-group">                        
+                    <div class="btn-group">
                         {{ form_widget(form.BtnEliminarCredito, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
-                </div>      
-            </div>            
-                                    
+                </div>
+            </div>
+
             <div class="tab-pane" id="pagosAdicionales">
                 <br />
                 <table class="table table-striped table-bordered table-condensed">
@@ -248,10 +248,10 @@
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arPagosAdicionales) }} 
-                </div>    
-            </div>                        
-                               
+                    {{ knp_pagination_render(arPagosAdicionales) }}
+                </div>
+            </div>
+
             <div class="tab-pane" id="incapacidades">
                 <br />
                 <table class="table table-striped table-bordered table-condensed">
@@ -281,24 +281,24 @@
                             <td>{% if arIncapacidades.estadoTranscripcion == 1 %}SI {% else %}NO {% endif %}</td>
                             <td>{% if arIncapacidades.estadoCobrar == 1 %}SI {% else %}NO {% endif %}</td>
                             <td>{% if arIncapacidades.estadoProrroga == 1 %}SI {% else %}NO {% endif %}</td>
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarIncapacidad[]" value="{{ arIncapacidades.codigoIncapacidadPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arIncapacidades) }} 
+                    {{ knp_pagination_render(arIncapacidades) }}
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Nuevo</a> {% endif %}                        
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Nuevo</a> {% endif %}
                     </div>
-                    <div class="btn-group">                        
+                    <div class="btn-group">
                         {{ form_widget(form.BtnRetirarIncapacidad, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
-                </div>            
-            </div>                        
-                                                                
+                </div>
+            </div>
+
             <div class="tab-pane" id="licencias">
                 <br />
                 <table class="table table-striped table-bordered table-condensed">
@@ -328,27 +328,27 @@
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arLicencias) }} 
+                    {{ knp_pagination_render(arLicencias) }}
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarLicencia', 600, 900)" >Nuevo</a>{% endif %}                        
+                        {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarLicencia', 600, 900)" >Nuevo</a>{% endif %}
                     </div>
-                    <div class="btn-group">                        
+                    <div class="btn-group">
                         {{ form_widget(form.BtnRetirarLicencia, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
-                </div>            
-            </div>                            
-                                                                   
+                </div>
+            </div>
+
            <div class="tab-pane" id="procesosDisciplinarios">
                 <br />
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>{{ knp_pagination_sortable(arDisciplinarios, 'CÓDIGO', 'e.codigoDisciplinarioPk') }}</th>
                             <th>FECHA</th>
-                            <th>CENTRO CENTRO</th>                
+                            <th>CENTRO CENTRO</th>
                             <th>IDENTIFICACIÓN</th>
-                            <th>NOMBRE</th>                
+                            <th>NOMBRE</th>
                             <th>CARGO</th>
                             <th>PROCESO</th>
                             <th>CAUSAL</th>
@@ -364,34 +364,35 @@
                                 <td>{{ arDisciplinarios.empleadoRel.numeroIdentificacion  }}</td>
                                 <td>{{ arDisciplinarios.empleadoRel.nombreCorto  }}</td>
                                 <td>{{ arDisciplinarios.empleadoRel.cargoDescripcion  }}</td>
-                                <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>                                
-                                <td>{{ arDisciplinarios.asunto  }}</td>                                                                                                                
-                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                                <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
+                                <td>{{ arDisciplinarios.asunto  }}</td>
+                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                                 <td><input type="checkbox" name="ChkSeleccionarDisciplinario[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}" /></td>
                             </tr>
                         {% endfor %}
                     </table>
                     <div class="btn-toolbar" style="float: left">
-                        {{ knp_pagination_render(arDisciplinarios) }} 
+                        {{ knp_pagination_render(arDisciplinarios) }}
                     </div>
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
-                            {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': 0 }) }}', 'AgregarProcesoDisciplinario', 600, 900)" >Nuevo</a> {% endif %}                        
+                            {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': 0 }) }}', 'AgregarProcesoDisciplinario', 600, 900)" >Nuevo</a> {% endif %}
                         </div>
-                        <div class="btn-group">                        
+                        <div class="btn-group">
                             {{ form_widget(form.BtnEliminarDisciplinario, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                         </div>
-                    </div>            
-            </div>                             
-                                        
+                    </div>
+            </div>
+
             <div class="tab-pane" id="vacaciones">
                 <br />
+                <h4>Pago</h4>
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th>{{ knp_pagination_sortable(arVacaciones, 'CÓDIGO', 'e.codigoVacacionPk') }}</th>
                         <th>DESDE</th>
                         <th>HASTA</th>
-                        <th>DIAS</th>                        
+                        <th>DIAS</th>
                         <th>VR. DEDUCCIONES</th>
                         <th>TOTAL</th>
                         <th></th>
@@ -402,33 +403,34 @@
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arVacaciones.codigoVacacionPk }}">{{ arVacaciones.codigoVacacionPk }} </td>
                             <td>{{ arVacaciones.fechaDesdePeriodo |date("Y/m/d")  }}</td>
                             <td>{{ arVacaciones.fechaHastaPeriodo |date("Y/m/d")  }}</td>
-                            <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>                                                        
+                            <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>
                             <td style="text-align: right">{{ arVacaciones.vrDeduccion | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}', 'AgregarVacacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}', 'AgregarVacacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarVacacion[]" value="{{ arVacaciones.codigoVacacionPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arVacaciones) }} 
+                    {{ knp_pagination_render(arVacaciones) }}
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a> {% endif %}                        
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a> {% endif %}
                     </div>
-                    <div class="btn-group">                        
+                    <div class="btn-group">
                         {{ form_widget(form.BtnRetirarVacacion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
-                </div>  
-                    
+                </div>
+
                 <br /><br />
+                <h4>Disfrute</h4>
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th>{{ knp_pagination_sortable(arVacacionesDisfrute, 'CÓDIGO', 'e.codigoVacacionDisfrutePk') }}</th>
                         <th>DESDE</th>
                         <th>HASTA</th>
-                        <th>DIAS</th>                        
+                        <th>DIAS</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -437,32 +439,32 @@
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arVacacionesDisfrute.codigoVacacionDisfrutePk }}">{{ arVacacionesDisfrute.codigoVacacionDisfrutePk }} </td>
                             <td>{{ arVacacionesDisfrute.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arVacacionesDisfrute.fechaHasta |date("Y/m/d")  }}</td>
-                            <td style="text-align: right">{{ arVacacionesDisfrute.dias  }}</td>                                                                                                                
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_disfrute_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoVacacion': arVacacionesDisfrute.codigoVacacionDisfrutePk }) }}', 'AgregarVacacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                            <td style="text-align: right">{{ arVacacionesDisfrute.dias  }}</td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_disfrute_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoVacacion': arVacacionesDisfrute.codigoVacacionDisfrutePk }) }}', 'AgregarVacacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarVacacion[]" value="{{ arVacacionesDisfrute.codigoVacacionDisfrutePk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arVacacionesDisfrute) }} 
+                    {{ knp_pagination_render(arVacacionesDisfrute) }}
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_disfrute_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a> {% endif %}                        
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_disfrute_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a> {% endif %}
                     </div>
-                </div>                     
-            </div>                            
-                                        
-            
+                </div>
+            </div>
+
+
             <div class="tab-pane" id="estudios">
                 <br />
                                     <table class="table table-striped table-bordered table-condensed">
                                         <tr>
                                             <th>{{ knp_pagination_sortable(arEmpleadoEstudios, 'CÓDIGO', 'e.codigoEmpleadoEstudioPk') }}</th>
                                             <th>ESTUDIO</th>
-                                            <th>INSTITUCIÓN</th>                
+                                            <th>INSTITUCIÓN</th>
                                             <th>AÑOS APROBADOS</th>
-                                            <th>CIUDAD</th>                
+                                            <th>CIUDAD</th>
                                             <th>TÍTULO OBTENIDO</th>
                                             <th style="text-align: center"></th>
                                             <th></th>
@@ -474,34 +476,34 @@
                                                 <td>{{ arEmpleadoEstudios.institucion  }}</td>
                                                 <td>{{ arEmpleadoEstudios.aprobados  }}</td>
                                                 <td>{{ arEmpleadoEstudios.ciudadRel.nombre  }}</td>
-                                                <td>{{ arEmpleadoEstudios.titulo  }}</td>                                                                                                               
+                                                <td>{{ arEmpleadoEstudios.titulo  }}</td>
                                                 <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_estudio_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': arEmpleadoEstudios.codigoEmpleadoEstudioPk }) }}', 'AgregarEstudio', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                                                 <td><input type="checkbox" name="ChkSeleccionarEmpleadoEstudio[]" value="{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }}" /></td>
                                             </tr>
                                         {% endfor %}
                                     </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arEmpleadoEstudios) }} 
+                    {{ knp_pagination_render(arEmpleadoEstudios) }}
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_estudio_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': 0 }) }}', 'AgregarProcesoEstudio', 600, 900)" >Nuevo</a>
                     </div>
-                    <div class="btn-group">                        
+                    <div class="btn-group">
                         {{ form_widget(form.BtnEliminarEmpleadoEstudio, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
-                </div>            
-            </div>                            
-                                        
+                </div>
+            </div>
+
             <div class="tab-pane" id="familia">
                 <br />
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th>{{ knp_pagination_sortable(arEmpleadoFamilia, 'CÓDIGO', 'e.codigoEmpleadoFamiliaPk') }}</th>
                         <th>PARENTESCO</th>
-                        <th>NOMBRES Y APELLIDOS</th>                
+                        <th>NOMBRES Y APELLIDOS</th>
                         <th>EPS</th>
-                        <th>CAJA COMPENSACIÓN</th>                
+                        <th>CAJA COMPENSACIÓN</th>
                         <th>FECHA NACIMIENTO</th>
                         <th>OCUPACIÓN</th>
                         <th>TELÉFONO</th>
@@ -517,33 +519,33 @@
                             <td>{{ arEmpleadoFamilia.entidadCajaRel.nombre  }}</td>
                             <td>{{ arEmpleadoFamilia.fechaNacimiento | date('Y/m/d')  }}</td>
                             <td>{{ arEmpleadoFamilia.ocupacion  }}</td>
-                            <td>{{ arEmpleadoFamilia.telefono  }}</td>                                                                                                               
+                            <td>{{ arEmpleadoFamilia.telefono  }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_familia_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoFamilia': arEmpleadoFamilia.codigoEmpleadoFamiliaPk }) }}', 'AgregarFamilia', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarEmpleadoFamilia[]" value="{{ arEmpleadoFamilia.codigoEmpleadoFamiliaPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arEmpleadoFamilia) }} 
+                    {{ knp_pagination_render(arEmpleadoFamilia) }}
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_familia_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoFamilia': 0 }) }}', 'AgregarProcesoFamilia', 600, 900)" >Nuevo</a>
                     </div>
-                    <div class="btn-group">                        
+                    <div class="btn-group">
                         {{ form_widget(form.BtnEliminarEmpleadoFamilia, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
-                </div>            
+                </div>
             </div>
-                                     
+
             <div class="tab-pane" id="dotacion">
                 <br />
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th>{{ knp_pagination_sortable(arEmpleadoDotacion, 'CÓDIGO', 'e.codigoEmpleadoDotacionPk') }}</th>
                         <th>FECHA</th>
-                        <th>NÚMERO INTERNO REFERENCIA</th>                
-                        <th>COMENTARIOS</th>                
+                        <th>NÚMERO INTERNO REFERENCIA</th>
+                        <th>COMENTARIOS</th>
                         <th style="text-align: center"></th>
                         <th></th>
                     </tr>
@@ -559,18 +561,18 @@
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arEmpleadoDotacion) }} 
+                    {{ knp_pagination_render(arEmpleadoDotacion) }}
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_dotacion_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoDotacion': 0 }) }}', 'AgregarDotacion', 600, 900)" >Nuevo</a> {% endif %}
                     </div>
-                    <div class="btn-group">                        
+                    <div class="btn-group">
                         {{ form_widget(form.BtnEliminarDotacion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
-                    </div>               
-                </div>            
-            </div>                                                      
-        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_lista') }}" style="float:left">Volver</a>
