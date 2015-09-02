@@ -38,16 +38,6 @@ class RhuVacacion
     private $fechaHastaPeriodo;
     
     /**
-     * @ORM\Column(name="fecha_desde", type="date")
-     */    
-    private $fechaDesde;    
-    
-    /**
-     * @ORM\Column(name="fecha_hasta", type="date")
-     */    
-    private $fechaHasta;
-    
-    /**
      * @ORM\Column(name="vr_salud", type="float")
      */
     private $vrSalud = 0;
@@ -70,22 +60,12 @@ class RhuVacacion
     /**
      * @ORM\Column(name="vr_vacacion", type="float")
      */
-    private $vrVacacion = 0;
-    
-    /**
-     * @ORM\Column(name="dias_vacaciones_pagadas", type="integer")
-     */
-    private $diasVacacionesPagadas = 0;
+    private $vrVacacion = 0;    
     
     /**
      * @ORM\Column(name="dias_vacaciones", type="integer")
      */
-    private $diasVacaciones = 0;
-    
-    /**
-     * @ORM\Column(name="dias_vacaciones_disfrute", type="integer")
-     */
-    private $diasVacacionesDisfrute = 0;
+    private $diasVacaciones = 0;   
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -100,12 +80,7 @@ class RhuVacacion
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
-    private $codigoCentroCostoFk;
-
-    /**
-     * @ORM\Column(name="estado_disfrutadas", type="boolean")
-     */
-    private $estadoDisfrutadas = 0;    
+    private $codigoCentroCostoFk;   
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="vacacionesCentroCostoRel")
@@ -123,8 +98,7 @@ class RhuVacacion
      * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="vacacionRel")
      */
     protected $VacacionesCreditosVacacionRel;
-   
-    
+      
     /**
      * Constructor
      */
@@ -237,54 +211,6 @@ class RhuVacacion
     public function getFechaHastaPeriodo()
     {
         return $this->fechaHastaPeriodo;
-    }
-
-    /**
-     * Set fechaDesde
-     *
-     * @param \DateTime $fechaDesde
-     *
-     * @return RhuVacacion
-     */
-    public function setFechaDesde($fechaDesde)
-    {
-        $this->fechaDesde = $fechaDesde;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDesde
-     *
-     * @return \DateTime
-     */
-    public function getFechaDesde()
-    {
-        return $this->fechaDesde;
-    }
-
-    /**
-     * Set fechaHasta
-     *
-     * @param \DateTime $fechaHasta
-     *
-     * @return RhuVacacion
-     */
-    public function setFechaHasta($fechaHasta)
-    {
-        $this->fechaHasta = $fechaHasta;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaHasta
-     *
-     * @return \DateTime
-     */
-    public function getFechaHasta()
-    {
-        return $this->fechaHasta;
     }
 
     /**
@@ -408,30 +334,6 @@ class RhuVacacion
     }
 
     /**
-     * Set diasVacacionesPagadas
-     *
-     * @param integer $diasVacacionesPagadas
-     *
-     * @return RhuVacacion
-     */
-    public function setDiasVacacionesPagadas($diasVacacionesPagadas)
-    {
-        $this->diasVacacionesPagadas = $diasVacacionesPagadas;
-
-        return $this;
-    }
-
-    /**
-     * Get diasVacacionesPagadas
-     *
-     * @return integer
-     */
-    public function getDiasVacacionesPagadas()
-    {
-        return $this->diasVacacionesPagadas;
-    }
-
-    /**
      * Set diasVacaciones
      *
      * @param integer $diasVacaciones
@@ -453,30 +355,6 @@ class RhuVacacion
     public function getDiasVacaciones()
     {
         return $this->diasVacaciones;
-    }
-
-    /**
-     * Set diasVacacionesDisfrute
-     *
-     * @param integer $diasVacacionesDisfrute
-     *
-     * @return RhuVacacion
-     */
-    public function setDiasVacacionesDisfrute($diasVacacionesDisfrute)
-    {
-        $this->diasVacacionesDisfrute = $diasVacacionesDisfrute;
-
-        return $this;
-    }
-
-    /**
-     * Get diasVacacionesDisfrute
-     *
-     * @return integer
-     */
-    public function getDiasVacacionesDisfrute()
-    {
-        return $this->diasVacacionesDisfrute;
     }
 
     /**

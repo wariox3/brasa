@@ -103,7 +103,7 @@ brs_rhu_vacaciones_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:lista }    
 
 brs_rhu_vacaciones_nuevo:
-    path:     /rhu/vacaciones/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoVacacion}
+    path:     /rhu/vacaciones/nuevo/{codigoEmpleado}/{codigoVacacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:nuevo }
     
 brs_rhu_vacaciones_detalle:
@@ -113,6 +113,22 @@ brs_rhu_vacaciones_detalle:
 brs_rhu_vacaciones_detalle_nuevo:
    path:     /rhu/vacaciones/detalle/nuevo/{codigoVacacion}
    defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:detallenuevo }    
+
+brs_rhu_vacaciones_disfrute_lista:
+    path:     /rhu/vacaciones/disfrute/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:VacacionesDisfrute:lista }    
+
+brs_rhu_vacaciones_disfrute_nuevo:
+    path:     /rhu/vacaciones/disfrute/nuevo/{codigoEmpleado}/{codigoVacacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:VacacionesDisfrute:nuevo }
+    
+brs_rhu_vacaciones_disfrute_detalle:
+    path:     /rhu/vacaciones/disfrute/detalle/{codigoVacacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:VacacionesDisfrute:detalle }
+    
+brs_rhu_vacaciones_disfrute_detalle_nuevo:
+   path:     /rhu/vacaciones/disfrute/detalle/nuevo/{codigoVacacion}
+   defaults: { _controller: BrasaRecursoHumanoBundle:VacacionesDisfrute:detallenuevo } 
 
 brs_rhu_licencias_nuevo:
     path:     /rhu/licencias/nuevo/{codigoCentroCosto}/{codigoEmpleado}

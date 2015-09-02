@@ -20,7 +20,31 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
     } 
     
     public function Header() {                        
-        $this->EncabezadoDetalles();        
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+       $this->SetFillColor(200, 200, 200);        
+        $this->SetFont('Arial','B',10);
+        //Logo
+        $this->SetXY(53, 10);
+        $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
+        //INFORMACIÓN EMPRESA
+        $this->Cell(143, 7, utf8_decode("PAGO DE VACACIONES"), 0, 0, 'C', 1);
+        $this->SetXY(53, 18);
+        $this->SetFont('Arial','B',9);
+        $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 22);
+        $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 26);
+        $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 30);
+        $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
+        $this->Ln(1);
+        $this->EncabezadoDetalles(); 
+        
     }
 
     public function EncabezadoDetalles() {
@@ -28,16 +52,12 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $arVacaciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find(self::$codigoVacacion);        
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
         $arCreditos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->findBy(array('codigoVacacionFk' => self::$codigoVacacion));
-        $duoRegistrosCreditos = count($arCreditos);
-        //$duoTotalCreditosTipoVacacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->TotalCreditosTipoVacacion($arVacaciones->getCodigoEmpleadoFk());
-        $this->SetFillColor(217, 217, 217);        
-        $this->SetFont('Arial','B',10);
-        $this->SetXY(10, 16);
-        $this->Cell(185, 7, utf8_decode('COMPROBANTE DE VACACIONES'), 1, 0, 'C',True);        
+        $duoRegistrosCreditos = count($arCreditos);       
+        $intY = 40;
         //FILA 1
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->SetXY(10, 25);        
+        $this->SetXY(10, $intY);        
         $this->Cell(31, 6, utf8_decode("CÓDIGO:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
@@ -51,7 +71,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         //FILA 2
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->SetXY(10, 31);        
+        $this->SetXY(10, $intY + 6);        
         $this->Cell(31, 6, utf8_decode("EMPLEADO:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7.5);
         $this->SetFillColor(255, 255, 255);
@@ -65,11 +85,11 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         //FILA 3
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->SetXY(10, 37);        
-        $this->Cell(31, 6, "PERIODO VACACIONES:", 1, 0, 'L', 1);
+        $this->SetXY(10, $intY + 12);        
+        $this->Cell(31, 6, "DESDE:", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(63, 6, $arVacaciones->getFechaDesdePeriodo()->format('Y/m/d')." - ". $arVacaciones->getFechaHastaPeriodo()->format('Y/m/d'), 1, 0, 'L', 1);
+        $this->Cell(63, 6, $arVacaciones->getFechaDesdePeriodo()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->Cell(26, 6, "CENTRO COSTOS:", 1, 0, 'L', 1);         
@@ -79,74 +99,76 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         //FILA 4
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->SetXY(10, 43);        
-        $this->Cell(31, 6, "PERIODO DISFRUTADO:", 1, 0, 'L', 1);
+        $this->SetXY(10, $intY + 18);        
+        $this->Cell(31, 6, "HASTA:", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(63, 6, $arVacaciones->getFechaDesde()->format('Y/m/d')." - ". $arVacaciones->getFechaHasta()->format('Y/m/d'), 1, 0, 'L', 1);
+        $this->Cell(63, 6, $arVacaciones->getFechaHastaPeriodo()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->Cell(26, 6, utf8_decode("DÍAS VACACIONES:"), 1, 0, 'L', 1);         
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(65, 6, utf8_decode($arVacaciones->getDiasVacaciones()), 1, 0, 'L', 1);
+        $this->Cell(65, 6, $arVacaciones->getDiasVacaciones(), 1, 0, 'R', 1);
+        
         //FILA 5
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->SetXY(10, 49);
-        $this->Cell(31, 6, "PAGADA:", 1, 0, 'L', 1);
+        $this->SetXY(10, $intY + 24);        
+        $this->Cell(31, 6, "", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        if ($arVacaciones->getEstadoPagado() == 1){
-           $this->Cell(63, 6, "SI", 1, 0, 'L', 1);
-        }
-        else {
-           $this->Cell(63, 6, "NO", 1, 0, 'L', 1);  
-        }
+        $this->Cell(63, 6, '', 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->Cell(26, 6, utf8_decode("DÍAS PAGADOS:"), 1, 0, 'L', 1);         
+        $this->Cell(26, 6, utf8_decode("SALARIO:"), 1, 0, 'L', 1);         
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(65, 6, utf8_decode($arVacaciones->getDiasVacacionesPagadas()), 1, 0, 'L', 1);
+        $this->Cell(65, 6, number_format($arVacaciones->getEmpleadoRel()->getVrSalario(), 0, '.', ','), 1, 0, 'R', 1);        
         
         //FILA 6
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->SetXY(10, 55);        
+        $this->SetXY(10, $intY + 30);        
         $this->Cell(31, 6, utf8_decode("COMENTARIOS:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
         $this->Cell(154, 6, $arVacaciones->getComentarios(), 1, 0, 'L', 1);
+        
         //BLOQUE VACACIONES
         $intX = 120;
+        $intY = 80;
         $this->SetFont('Arial', 'B', 8);
-        $this->SetFillColor(217, 217, 217);
-        
-        
-        $this->SetXY($intX, 70);
-        $this->Cell(43, 5, "SALARIO:", 1, 0, 'L', 1);
-        $this->SetXY($intX, 76);
+        $this->SetFillColor(217, 217, 217);                
+        $this->SetXY($intX, $intY);
+        $this->Cell(43, 5, "TOTAL VACACIONES:", 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 6);
         $this->Cell(43, 5, "VR. SALUD:", 1, 0, 'L', 1); 
-        $this->SetXY($intX, 82);
+        $this->SetXY($intX, $intY + 12);
         $this->Cell(43, 5, utf8_decode("VR. PENSIÓN:"), 1, 0, 'L', 1);
-        $this->SetXY($intX, 88);
-        $this->Cell(43, 5, utf8_decode("VR. OTRAS DEDUCCIONES:"), 1, 0, 'L', 1);
-        $this->SetXY($intX, 94);
-        $this->Cell(43, 5, "VR. VACACIONES:", 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 18);
+        $this->Cell(43, 5, utf8_decode("VR. DEDUCCION CREDITOS:"), 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 24);
+        $this->Cell(43, 5, utf8_decode("TOTAL DEDUCCIONES:"), 1, 0, 'L', 1);        
+        $this->SetXY($intX, $intY + 30);
+        $this->Cell(43, 5, "TOTAL A PAGAR:", 1, 0, 'L', 1);
         $intX = 163;
+        $intY = 80;
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(272, 272, 272);        
-        $this->SetXY($intX, 70);
-        $this->Cell(32, 5, number_format($arVacaciones->getEmpleadoRel()->getVrSalario(), 2, '.', ','), 1, 0, 'R', 1);
-        $this->SetXY($intX, 76);
-        $this->Cell(32, 5, "(".number_format($arVacaciones->getVrSalud(), 2, '.', ',').")", 1, 0, 'R', 1);
-        $this->SetXY($intX, 82);
-        $this->Cell(32, 5, "(".number_format($arVacaciones->getVrPension(), 2, '.', ',').")", 1, 0, 'R', 1);
-        $this->SetXY($intX, 88);
-        $this->Cell(32, 5, "(".number_format($arVacaciones->getVrDeduccion(), 2, '.', ',').")", 1, 0, 'R', 1);
-        $this->SetXY($intX, 94);
-        $this->Cell(32, 5, number_format($arVacaciones->getVrVacacion(), 2, '.', ','), 1, 0, 'R', 1);
+        $this->SetXY($intX, $intY);
+        $this->Cell(32, 5, number_format($arVacaciones->getVrVacacion() + $arVacaciones->getVrDeduccion()+ $arVacaciones->getVrSalud()+ $arVacaciones->getVrPension(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->SetXY($intX, $intY + 6);
+        $this->Cell(32, 5, "(".number_format($arVacaciones->getVrSalud(), 0, '.', ',').")", 1, 0, 'R', 1);
+        $this->SetXY($intX, $intY + 12);
+        $this->Cell(32, 5, "(".number_format($arVacaciones->getVrPension(), 0, '.', ',').")", 1, 0, 'R', 1);
+        $this->SetXY($intX, $intY + 18);
+        $this->Cell(32, 5, "(".number_format($arVacaciones->getVrDeduccion(), 0, '.', ',').")", 1, 0, 'R', 1);
+        $floTotalDeducciones = $arVacaciones->getVrSalud() + $arVacaciones->getVrPension() + $arVacaciones->getVrDeduccion();
+        $this->SetXY($intX, $intY + 24);        
+        $this->Cell(32, 5, number_format($floTotalDeducciones, 0, '.', ','), 1, 0, 'R', 1);
+        $this->SetXY($intX, $intY + 30);
+        $this->Cell(32, 5, number_format($arVacaciones->getVrVacacion(), 0, '.', ','), 1, 0, 'R', 1);
         //DEDUCCIONES CREDITOS TIPO VACACIÓN
         if ($duoRegistrosCreditos > 0){
             $intX = 10;

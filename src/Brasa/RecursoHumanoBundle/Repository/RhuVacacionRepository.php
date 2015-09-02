@@ -62,28 +62,7 @@ class RhuVacacionRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
-        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);         
-        if ($arVacacion->getEstadoDisfrutadas() == 0){
-            $floSalario = $arVacacion->getEmpleadoRel()->getVrSalario();
-            $floSalario = $floSalario / 2;
-            $floDeducciones = 0;
-            $arVacacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-            $arVacacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->FindBy(array('codigoVacacionFk' => $codigoVacacion));        
-            foreach ($arVacacionDeducciones as $arVacacionDeduccion) {
-                $floDeducciones += $arVacacionDeduccion->getVrDeduccion();
-            }
-            $arVacacion->setDiasVacaciones(365);
-            $arVacacion->setDiasVacacionesPagadas(15);
-            $arVacacion->setDiasVacacionesDisfrute(0);
-            $arVacacion->setVrDeduccion($floDeducciones);
-            $arVacacion->setVrSalud(0);
-            $arVacacion->setVrPension(0);
-            $arVacacion->setVrIbc(0);
-            $floTotal = $floSalario - $floDeducciones;
-            $arVacacion->setVrVacacion($floTotal);
-            $em->flush();
-        }else{
-        $intDiasDisfrutados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arVacacion->getFechaDesde(), $arVacacion->getFechaHasta());
+        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);                 
         $intDias = 15;
         $floSalario = $arVacacion->getEmpleadoRel()->getVrSalario();
         $floSalario = $floSalario / 30 * $intDias;
@@ -93,8 +72,7 @@ class RhuVacacionRepository extends EntityRepository {
         if ($floSalario >= ($arConfiguracion->getVrSalario() * 4)){
             $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra();
             $douPension = ($floSalario * $douPorcentaje) /100;
-        }
-        else {
+        } else {
             $douPension = ($floSalario * 4) /100;
         }
         $arVacacion->setVrPension($douPension);                                   
@@ -107,11 +85,9 @@ class RhuVacacionRepository extends EntityRepository {
         $arVacacion->setVrDeduccion($floDeducciones);
         $floTotal = $floSalario - $floDeducciones - $arVacacion->getVrPension() - $arVacacion->getVrSalud();
         $arVacacion->setVrVacacion($floTotal);
-        $arVacacion->setDiasVacaciones(365);
-        $arVacacion->setDiasVacacionesPagadas(15);
-        $arVacacion->setDiasVacacionesDisfrute($intDiasDisfrutados);
+        $arVacacion->setDiasVacaciones(15);
         $em->flush();
-        }
+        
         return true;
     }     
     

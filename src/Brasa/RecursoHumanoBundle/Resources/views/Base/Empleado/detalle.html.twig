@@ -389,15 +389,11 @@
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th>{{ knp_pagination_sortable(arVacaciones, 'CÓDIGO', 'e.codigoVacacionPk') }}</th>
-                        <th>PERIODO DESDE</th>
-                        <th>PERIODO HASTA</th>
-                        <th>DIAS VACACIONES</th>
-                        <th>DIAS PAGADOS</th>
-                        <th>DISFRUTADOS DESDE</th>
-                        <th>DISFRUTADOS HASTA</th>
-                        <th>DIAS DISFRUTADOS</th>
+                        <th>DESDE</th>
+                        <th>HASTA</th>
+                        <th>DIAS</th>                        
                         <th>VR. DEDUCCIONES</th>
-                        <th>VR. VACACIONES</th>
+                        <th>TOTAL</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -406,11 +402,7 @@
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arVacaciones.codigoVacacionPk }}">{{ arVacaciones.codigoVacacionPk }} </td>
                             <td>{{ arVacaciones.fechaDesdePeriodo |date("Y/m/d")  }}</td>
                             <td>{{ arVacaciones.fechaHastaPeriodo |date("Y/m/d")  }}</td>
-                            <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>
-                            <td style="text-align: right">{{ arVacaciones.diasVacacionesPagadas  }}</td>
-                            <td>{{ arVacaciones.fechaDesde |date("Y/m/d")  }}</td>
-                            <td>{{ arVacaciones.fechaHasta |date("Y/m/d")  }}</td>
-                            <td style="text-align: right">{{ arVacaciones.diasVacacionesDisfrute  }}</td>
+                            <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>                                                        
                             <td style="text-align: right">{{ arVacaciones.vrDeduccion | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}', 'AgregarVacacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
@@ -423,12 +415,42 @@
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a> {% endif %}                        
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a> {% endif %}                        
                     </div>
                     <div class="btn-group">                        
                         {{ form_widget(form.BtnRetirarVacacion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>
-                </div>            
+                </div>  
+                    
+                <br /><br />
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>{{ knp_pagination_sortable(arVacacionesDisfrute, 'CÓDIGO', 'e.codigoVacacionDisfrutePk') }}</th>
+                        <th>DESDE</th>
+                        <th>HASTA</th>
+                        <th>DIAS</th>                        
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for arVacacionesDisfrute in arVacacionesDisfrute %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arVacacionesDisfrute.codigoVacacionDisfrutePk }}">{{ arVacacionesDisfrute.codigoVacacionDisfrutePk }} </td>
+                            <td>{{ arVacacionesDisfrute.fechaDesde |date("Y/m/d")  }}</td>
+                            <td>{{ arVacacionesDisfrute.fechaHasta |date("Y/m/d")  }}</td>
+                            <td style="text-align: right">{{ arVacacionesDisfrute.dias  }}</td>                                                                                                                
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_disfrute_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoVacacion': arVacacionesDisfrute.codigoVacacionDisfrutePk }) }}', 'AgregarVacacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>                            
+                            <td><input type="checkbox" name="ChkSeleccionarVacacion[]" value="{{ arVacacionesDisfrute.codigoVacacionDisfrutePk }}" /></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arVacacionesDisfrute) }} 
+                </div>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_disfrute_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a> {% endif %}                        
+                    </div>
+                </div>                     
             </div>                            
                                         
             

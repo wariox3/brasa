@@ -388,6 +388,11 @@ class RhuEmpleado
     protected $vacacionesEmpleadoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="empleadoRel")
+     */
+    protected $vacacionesDisfruteEmpleadoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuLicencia", mappedBy="empleadoRel")
      */
     protected $licenciasEmpleadoRel;     
@@ -2492,5 +2497,39 @@ class RhuEmpleado
     public function getDotacionesEmpleadoRel()
     {
         return $this->dotacionesEmpleadoRel;
+    }
+
+    /**
+     * Add vacacionesDisfruteEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel)
+    {
+        $this->vacacionesDisfruteEmpleadoRel[] = $vacacionesDisfruteEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesDisfruteEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel
+     */
+    public function removeVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel)
+    {
+        $this->vacacionesDisfruteEmpleadoRel->removeElement($vacacionesDisfruteEmpleadoRel);
+    }
+
+    /**
+     * Get vacacionesDisfruteEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesDisfruteEmpleadoRel()
+    {
+        return $this->vacacionesDisfruteEmpleadoRel;
     }
 }

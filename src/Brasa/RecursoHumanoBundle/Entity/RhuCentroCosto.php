@@ -190,6 +190,11 @@ class RhuCentroCosto
      * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="centroCostoRel")
      */
     protected $vacacionesCentroCostoRel;
+   
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="centroCostoRel")
+     */
+    protected $vacacionesDisfruteCentroCostoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacion", mappedBy="centroCostoRel")
@@ -1217,5 +1222,39 @@ class RhuCentroCosto
     public function getDotacionesCentroCostoRel()
     {
         return $this->dotacionesCentroCostoRel;
+    }
+
+    /**
+     * Add vacacionesDisfruteCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addVacacionesDisfruteCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteCentroCostoRel)
+    {
+        $this->vacacionesDisfruteCentroCostoRel[] = $vacacionesDisfruteCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesDisfruteCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteCentroCostoRel
+     */
+    public function removeVacacionesDisfruteCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteCentroCostoRel)
+    {
+        $this->vacacionesDisfruteCentroCostoRel->removeElement($vacacionesDisfruteCentroCostoRel);
+    }
+
+    /**
+     * Get vacacionesDisfruteCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesDisfruteCentroCostoRel()
+    {
+        return $this->vacacionesDisfruteCentroCostoRel;
     }
 }
