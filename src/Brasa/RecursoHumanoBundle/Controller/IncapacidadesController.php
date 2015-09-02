@@ -96,7 +96,7 @@ class IncapacidadesController extends Controller
             if($codigoEmpleado != 0) { 
                 $arIncapacidad->setEmpleadoRel($arEmpleado);                
             }
-            $arIncapacidad->setIncapacidadRel($arEmpleado->getEntidadSaludRel());
+            $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
             $floVrIncapacidad = 0;
             $douVrDia = $arEmpleado->getVrSalario() / 30;
             $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;

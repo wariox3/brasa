@@ -126,11 +126,11 @@ class FormatoIncapacidadPagoDetalle extends \FPDF_FPDF {
         $arIncapacidadPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
         $arIncapacidadPagoDetalles = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => self::$codigoIncapacidadPago));
         foreach ($arIncapacidadPagoDetalles as $arIncapacidadPagoDetalles) {
-            $pdf->Cell(12, 4, $arIncapacidadPagoDetalles->getCodigoIncapacidadFk(), 1, 0, 'L');
-            $pdf->Cell(20, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(25, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');
-            $pdf->Cell(41, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getPagoAdicionalSubtipoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(75, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getPagoAdicionalSubtipoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(12, 4, $arIncapacidadPagoDetalles->getCodigoIncapacidadPagoDetallePk(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arIncapacidadPagoDetalles->getCodigoIncapacidadFk(), 1, 0, 'L');
+            $pdf->Cell(25, 4, $arIncapacidadPagoDetalles->getIncapacidadRel()->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(41, 4, utf8_decode($arIncapacidadPagoDetalles->getIncapacidadRel()->getPagoAdicionalSubtipoRel()->getNombre()), 1, 0, 'L');
+            $pdf->Cell(75, 4, utf8_decode($arIncapacidadPagoDetalles->getIncapacidadRel()->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');
             $pdf->Cell(20, 4, number_format($arIncapacidadPagoDetalles->getVrPago(), 2, '.', ','), 1, 0, 'R');
             $pdf->Ln();
         }

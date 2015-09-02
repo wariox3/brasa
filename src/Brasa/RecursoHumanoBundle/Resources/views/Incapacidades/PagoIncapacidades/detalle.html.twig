@@ -75,7 +75,7 @@
                                 <td>{{ arIncapacidadPagoDetalle.incapacidadRel.pagoAdicionalSubtipoRel.nombre  }}</td>
                                 <td>{{ arIncapacidadPagoDetalle.incapacidadRel.incapacidadDiagnosticoRel.nombre  }}</td>
                                 {% if arIncapacidadPago.estadoAutorizado == 0 %}
-                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorPago[]" value="{{ arIncapacidadPagoDetalle.vrPago }}" size="20" style="text-align: right; width:85px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorPago[]" value="{{ arIncapacidadPagoDetalle.vrPago  }}" size="20" style="text-align: right; width:85px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                                 {% else %}
                                 <td class="td-in-well" align="right">{{ arIncapacidadPagoDetalle.vrPago | number_format(2, '.', ',') }}</td>
                                 {% endif %}
