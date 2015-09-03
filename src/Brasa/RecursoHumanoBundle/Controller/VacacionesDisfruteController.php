@@ -73,7 +73,7 @@ class VacacionesDisfruteController extends Controller
         $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->find($codigoVacacion);
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoDetalleVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleVacaciones();
+                $objFormatoDetalleVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoVacacionesDisfrutadas();
                 $objFormatoDetalleVacaciones->Generar($this, $codigoVacacion);
             }
             if($form->get('BtnLiquidar')->isClicked()) {
