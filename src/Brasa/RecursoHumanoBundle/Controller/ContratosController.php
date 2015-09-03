@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuContratoType;
+use Doctrine\ORM\EntityRepository;
 class ContratosController extends Controller
 {
     var $fechaDesdeInicia;
@@ -227,13 +228,30 @@ class ContratosController extends Controller
                 $session->get('filtroIdentificacion'),
                 $this->fechaDesdeInicia,
                 $this->fechaHastaInicia,
-                $session->get('filtroContratoActivo')
+                $session->get('filtroContratoActivo'),
+                $session->get('filtroCodigoCentroCosto')
                 ));  
     }     
     
     private function formularioLista() {
-        $session = $this->getRequest()->getSession();        
-        $form = $this->createFormBuilder()                        
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }        
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)    
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
             ->add('fechaDesdeInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                            
             ->add('fechaHastaInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
@@ -258,6 +276,7 @@ class ContratosController extends Controller
         
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }    
     
     private function generarExcel() {
