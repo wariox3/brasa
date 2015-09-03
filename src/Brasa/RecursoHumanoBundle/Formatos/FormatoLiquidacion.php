@@ -19,18 +19,37 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         
     } 
     
-    public function Header() {                        
+    public function Header() {    
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $this->SetFillColor(200, 200, 200);        
+        $this->SetFont('Arial','B',10);
+        //Logo
+        $this->SetXY(53, 10);
+        $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
+        //INFORMACIÓN EMPRESA
+        $this->Cell(143, 7, utf8_decode("PAGO DE VACACIONES"), 0, 0, 'C', 1);
+        $this->SetXY(53, 18);
+        $this->SetFont('Arial','B',9);
+        $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 22);
+        $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 26);
+        $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 30);
+        $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
+        $this->Ln(1);        
         $this->EncabezadoDetalles();        
     }
 
     public function EncabezadoDetalles() {
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
-        $arLiquidacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find(self::$codigoLiquidacion);        
-        $this->SetFillColor(236, 236, 236);        
-        $this->SetFont('Arial','B',10);
-        $this->SetXY(10, 16);
-        $this->Cell(185, 7, utf8_decode('LIQUIDACIÓN DE PRESTACIONES SOCIALES'), 1, 0, 'C', 1);        
-        $intY = 25;
+        $arLiquidacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find(self::$codigoLiquidacion);              
+        $intY = 42;
         //FILA 1
         $this->SetFont('Arial', 'B', 8);
         $this->SetFillColor(236, 236, 236);
@@ -85,29 +104,29 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->Cell(30, 5, $arLiquidacion->getDiasAdicionalesIBC(), 1, 0, 'R', 1);        
         
         //BLOQUE BASE LIQUIDACIÓN
-        $intX = 120;
+        $intX = 123;
+        $intY = 70;
         $this->SetFont('Arial', 'B', 8);
-        $this->SetFillColor(236, 236, 236);
-        
-        $this->SetXY($intX, 50);        
-        $this->Cell(43, 5, utf8_decode("IBC:"), 1, 0, 'L', 1);
-        $this->SetXY($intX, 56);
-        $this->Cell(43, 5, "BASE PRESTACIONES:", 1, 0, 'L', 1);
-        $this->SetXY($intX, 62);
-        $this->Cell(43, 5, "AUXILIO TRANSPORTE:", 1, 0, 'L', 1);            
-        $this->SetXY($intX, 68);
-        $this->Cell(43, 5, "BASE PRESTACIONES TOTAL:", 1, 0, 'L', 1);         
+        $this->SetFillColor(236, 236, 236);        
+        $this->SetXY($intX, $intY);        
+        $this->Cell(40, 5, utf8_decode("IBC:"), 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 6);
+        $this->Cell(40, 5, "BASE PRESTACIONES:", 1, 0, 'L', 1);
+        $this->SetXY($intX, $intY + 12);
+        $this->Cell(40, 5, "AUXILIO TRANSPORTE:", 1, 0, 'L', 1);            
+        $this->SetXY($intX, $intY + 18);
+        $this->Cell(40, 5, "TOTAL BASE:", 1, 0, 'L', 1);         
         $intX = 163;
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(272, 272, 272);
-        $this->SetXY($intX, 50);        
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrIngresoBaseCotizacionTotal(), 2, '.', ','), 1, 0, 'R', 1);
-        $this->SetXY($intX, 56);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrBasePrestaciones(), 2, '.', ','), 1, 0, 'R', 1);
-        $this->SetXY($intX, 62);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrAuxilioTransporte(), 2, '.', ','), 1, 0, 'R', 1);        
-        $this->SetXY($intX, 68);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrBasePrestacionesTotal(), 2, '.', ','), 1, 0, 'R', 1);        
+        $this->SetXY($intX, $intY);        
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrIngresoBaseCotizacionTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->SetXY($intX, $intY + 6);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrBasePrestaciones(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->SetXY($intX, $intY + 12);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrAuxilioTransporte(), 0, '.', ','), 1, 0, 'R', 1);        
+        $this->SetXY($intX, $intY + 18);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrBasePrestacionesTotal(), 0, '.', ','), 1, 0, 'R', 1);        
         
         //BLOQUE TOTALES
         $this->SetFont('Arial', 'B', 8);
@@ -165,21 +184,21 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         
         //$intX = 163;
         $this->SetXY($intX + 113, 102);        
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrCesantias(), 2, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrCesantias(), 0, '.', ','), 1, 0, 'R', 1);
         $this->SetXY($intX + 113, 108);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrInteresesCesantias(), 2, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrInteresesCesantias(), 0, '.', ','), 1, 0, 'R', 1);
         $this->SetXY($intX + 113, 114);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrPrima(), 2, '.', ','), 1, 0, 'R', 1);        
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrPrima(), 0, '.', ','), 1, 0, 'R', 1);        
         $this->SetXY($intX + 113, 120);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrVacaciones(), 2, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrVacaciones(), 0, '.', ','), 1, 0, 'R', 1);
         $this->SetXY($intX + 113, 126);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrDeducciones(), 2, '.', ','), 1, 0, 'R', 1);        
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrDeducciones(), 0, '.', ','), 1, 0, 'R', 1);        
         $this->SetXY($intX + 113, 132);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrDeduccionPrima(), 2, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrDeduccionPrima(), 0, '.', ','), 1, 0, 'R', 1);
         
         $this->SetFont('Arial', 'B', 8);
         $this->SetXY($intX + 113, 138);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrTotal(), 2, '.', ','), 1, 0, 'R', 1);        
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);        
         
         $this->Ln(15);
         
@@ -191,10 +210,10 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
         $this->SetFont('Arial', 'B', 8);
-        $header = array('COD', 'CREDITO', 'NOMBRE', 'VR. DEDUCCION', 'DETALLES');
+        $header = array('COD', 'CONCEPTO', 'NOMBRE', 'DETALLES', 'VALOR');
         
         //creamos la cabecera de la tabla.
-        $w = array(12, 15, 45, 24, 89);
+        $w = array(12, 15, 45, 89, 24);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -215,11 +234,18 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 8);
         foreach ($arLiquidacionDeduccion as $arLiquidacionDeduccion) {            
             $pdf->Cell(12, 4, $arLiquidacionDeduccion->getCodigoLiquidacionDeduccionPk(), 1, 0, 'L');
-            $pdf->Cell(15, 4, $arLiquidacionDeduccion->getCodigoCreditoFk(), 1, 0, 'L');
-            $pdf->Cell(45, 4, $arLiquidacionDeduccion->getCreditoRel()->getCreditoTipoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(24, 4, number_format($arLiquidacionDeduccion->getVrDeduccion(), 2,'.',','), 1, 0, 'R');
-            $pdf->SetFont('Arial', '', 7);
+            
+            if($arLiquidacionDeduccion->getCodigoCreditoFk()) {
+                $pdf->Cell(15, 4, $arLiquidacionDeduccion->getCodigoCreditoFk(), 1, 0, 'L');
+                $pdf->Cell(45, 4, $arLiquidacionDeduccion->getCreditoRel()->getCreditoTipoRel()->getNombre(), 1, 0, 'L');
+            } else {
+                $pdf->Cell(15, 4, $arLiquidacionDeduccion->getCodigoLiquidacionDeduccionConceptoFk(), 1, 0, 'L');
+                $pdf->Cell(45, 4, $arLiquidacionDeduccion->getLiquidacionDeduccionConceptoRel()->getNombre(), 1, 0, 'L');                
+            }
+            
             $pdf->Cell(89, 4, $arLiquidacionDeduccion->getDetalle(), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(24, 4, number_format($arLiquidacionDeduccion->getVrDeduccion(), 0,'.',','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }

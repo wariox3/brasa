@@ -22,7 +22,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
     public function Header() {                        
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-       $this->SetFillColor(200, 200, 200);        
+        $this->SetFillColor(200, 200, 200);        
         $this->SetFont('Arial','B',10);
         //Logo
         $this->SetXY(53, 10);

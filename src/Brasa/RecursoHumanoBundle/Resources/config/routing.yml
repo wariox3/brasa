@@ -74,6 +74,10 @@ brs_rhu_liquidaciones_detalle:
     path:     /rhu/liquidaciones/detalle/{codigoLiquidacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Liquidaciones:detalle } 
 
+brs_rhu_liquidaciones_detalle_nuevo_concepto:
+    path:     /rhu/liquidaciones/detalle/nuevo/concepto/{codigoLiquidacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Liquidaciones:detalleNuevoConcepto } 
+
 brs_rhu_incapacidades_lista:
     path:     /rhu/incapacidades/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:lista }    

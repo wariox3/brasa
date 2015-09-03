@@ -28,8 +28,8 @@ pagination {
 
 .panel {
     border-color: #6b9311;
-    
-
+    border-bottom-width: 5px;
+    border-width: 2px; 
 }
 .panel-default > .panel-heading {
     color: #FFFFFF;

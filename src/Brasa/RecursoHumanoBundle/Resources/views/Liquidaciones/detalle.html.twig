@@ -27,7 +27,7 @@
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
                         <td class="titulo">IBC:</td>
-                        <td align="right">$ {{ arLiquidacion.vrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
+                        <td align="right">$ {{ arLiquidacion.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">FECHA INICIO:</td>
@@ -35,7 +35,7 @@
                         <td class="titulo">DÍAS ADICIONALES:</td>
                         <td align="right">{{ arLiquidacion.diasAdicionalesIBC }}</td>
                         <td class="titulo">IBC DÍAS ADICIONALES:</td>
-                        <td align="right">{{ arLiquidacion.VrIngresoBaseCotizacionAdicional | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">{{ arLiquidacion.VrIngresoBaseCotizacionAdicional | number_format(0, '.', ',') }}</td>                   
                     </tr>    
                     <tr>
                         <td class="titulo">FECHA FIN:</td>
@@ -43,7 +43,7 @@
                         <td class="titulo">ULTIMO PAGO PRIMAS:</td>
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoPrimas|date("Y/m/d") }}</td>
                         <td class="titulo">IBC TOTAL:</td>
-                        <td align="right">$ {{ arLiquidacion.vrIngresoBaseCotizacionTotal | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrIngresoBaseCotizacionTotal | number_format(0, '.', ',') }}</td>                   
                     </tr>                                 
                     <tr>
                         <td class="titulo">FECHA ÚLTIMO PAGO:</td>
@@ -51,7 +51,7 @@
                         <td class="titulo">ULTIMO PAGO CESANTIAS:</td>
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoCesantias|date("Y/m/d") }}</td>
                         <td class="titulo">BASE PRESTACIONES:</td>
-                        <td align="right">$ {{ arLiquidacion.vrBasePrestaciones | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrBasePrestaciones | number_format(0, '.', ',') }}</td>                   
                     </tr>                                 
                     <tr>
                         <td class="titulo">EMPLEADO:</td>
@@ -59,7 +59,7 @@
                         <td class="titulo">ULTIMO PAGO VACACIONES:</td>
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>
                         <td class="titulo">AUXILIO TRANSPORTE:</td>
-                        <td align="right">$ {{ arLiquidacion.vrAuxilioTransporte | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrAuxilioTransporte | number_format(0, '.', ',') }}</td>                   
                     </tr>                                                 
                     <tr>
                         <td class="titulo">IDENTIFICACIÓN:</td>
@@ -67,15 +67,15 @@
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">BASE PRESTACIONES TOTAL:</td>
-                        <td align="right">$ {{ arLiquidacion.vrBasePrestacionesTotal | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrBasePrestacionesTotal | number_format(0, '.', ',') }}</td>                   
                     </tr>                    
                     <tr>
                         <td class="titulo">SALARIO:</td>
-                        <td align="right">$ {{ arLiquidacion.vrSalario | number_format(2, '.', ',') }}</td>
+                        <td align="right">$ {{ arLiquidacion.vrSalario | number_format(0, '.', ',') }}</td>
                         <td class="titulo">DÍAS CESANTIAS:</td>
                         <td align="right">{{ arLiquidacion.diasCesantias }}</td>
                         <td class="titulo">CESANTIAS:</td>
-                        <td align="right">$ {{ arLiquidacion.vrCesantias | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrCesantias | number_format(0, '.', ',') }}</td>                   
                     </tr>                    
                     <tr>
                         <td class="titulo">CONTRATO:</td>
@@ -83,7 +83,7 @@
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">INTERESES:</td>
-                        <td align="right">$ {{ arLiquidacion.vrInteresesCesantias | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrInteresesCesantias | number_format(0, '.', ',') }}</td>                   
                     </tr>
                     <tr>
                         <td class="titulo">CENTRO COSTOS:</td>
@@ -91,7 +91,7 @@
                         <td class="titulo">DÍAS PRIMAS:</td>
                         <td align="right">{{ arLiquidacion.diasPrimas }}</td>
                         <td class="titulo">PRIMA:</td>
-                        <td align="right">$ {{ arLiquidacion.vrPrima | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrPrima | number_format(0, '.', ',') }}</td>                   
                     </tr>
                     <tr>
                         <td class="titulo"></td>
@@ -99,7 +99,7 @@
                         <td class="titulo">DÍAS VACACIONES:</td>
                         <td align="right">{{ arLiquidacion.diasVacaciones }}</td>
                         <td class="titulo">VACACIONES:</td>
-                        <td align="right">$ {{ arLiquidacion.vrVacaciones | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrVacaciones | number_format(0, '.', ',') }}</td>                   
                     </tr>                    
                     <tr>
                         <td class="titulo"></td>
@@ -107,7 +107,7 @@
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">DEDUCCIONES:</td>
-                        <td align="right">$ {{ arLiquidacion.vrDeducciones | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrDeducciones | number_format(0, '.', ',') }}</td>                   
                     </tr> 
                     <tr>
                         <td class="titulo"></td>
@@ -115,7 +115,7 @@
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">DEDUCCION PRIMA:</td>
-                        <td align="right">$ {{ arLiquidacion.vrDeduccionPrima | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrDeduccionPrima | number_format(0, '.', ',') }}</td>                   
                     </tr>                     
                     <tr>
                         <td class="titulo"></td>
@@ -123,7 +123,7 @@
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">TOTAL:</td>
-                        <td align="right">$ {{ arLiquidacion.vrTotal | number_format(2, '.', ',') }}</td>                   
+                        <td align="right">$ {{ arLiquidacion.vrTotal | number_format(0, '.', ',') }}</td>                   
                     </tr>                    
                     <tr>
                         <td colspan="8">COMENTARIOS: {{ arLiquidacion.comentarios }}</td>
@@ -133,7 +133,7 @@
         </div>
         <br /><br />
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#deducciones" data-toggle="tab">Deducciones</a></li>                        
+            <li class="active"><a href="#deducciones" data-toggle="tab">Deducciones</a></li>                                                            
         </ul> 
         <div class="tab-content">
         <div class="tab-pane active" id="deducciones">
@@ -152,7 +152,11 @@
                             <input type="hidden" name="LblCodigoGuia[]" value="{{ arLiquidacionDeducciones.codigoLiquidacionDeduccionPk }}">
                             <span class="badge">{{ arLiquidacionDeducciones.codigoLiquidacionDeduccionPk }}</span>
                         </td>
-                        <td>{{ arLiquidacionDeducciones.creditoRel.creditoTipoRel.nombre }}</td>           
+                        {% if arLiquidacionDeducciones.codigoCreditoFk %}
+                            <td>{{ arLiquidacionDeducciones.creditoRel.creditoTipoRel.nombre |default('') }}</td>           
+                        {% else %}
+                            <td>{{ arLiquidacionDeducciones.liquidacionDeduccionConceptoRel.nombre |default('') }}</td>           
+                        {% endif %}
                         <td style="text-align: right">{{ arLiquidacionDeducciones.vrDeduccion | number_format(2, '.', ',') }}</td>
                         <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arLiquidacionDeducciones.codigoLiquidacionDeduccionPk }}" /></td>
                     </tr>
@@ -167,6 +171,9 @@
                 </div>
                 <!-- Fin Botones Menu Items -->
                 <div class="btn-toolbar" style="float: right">                           
+                    <div class="btn-group">                
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_liquidaciones_detalle_nuevo_concepto', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk}) }}', 'AgregarNuevoConcepto', 600, 900)">Agregar concepto</a>
+                    </div>
                     <div class="btn-group">                
                         {{ form_widget(form.BtnEliminarDeduccion, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                     </div>

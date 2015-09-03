@@ -55,10 +55,7 @@
                         <th>TIEMPO</th>
                         <th>DESDE</th>
                         <th>HASTA</th>
-                        <th>SALARIO</th>
-                        <th>CARGO</th>
-                        <th>D. CARGO</th>
-                        <th>C. RIESGO</th>
+                        <th>SALARIO</th>                                                
                         <th>VIGENTE</th>
                         <th></th>
                         <th></th>                        
@@ -76,10 +73,7 @@
                             <td>{{ arContratos.tipoTiempoRel.nombre  }}</td>
                             <td>{{ arContratos.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{% if arContratos.indefinido == 1 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
-                            <td style="text-align: right">{{ arContratos.vrSalario | number_format(0, '.', ',') }}</td>
-                            <td>{{ arContratos.cargoRel.nombre|default('ERROR')  }}</td>
-                            <td>{{ arContratos.cargoDescripcion  }}</td>
-                            <td>{{ arContratos.clasificacionRiesgoRel.nombre|default('ERROR') }}</td>                            
+                            <td style="text-align: right">{{ arContratos.vrSalario | number_format(0, '.', ',') }}</td>                            
                             <td>{% if arContratos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
                             {% if arContratos.indefinido == 1 %}
                                 <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_contratos_terminar', { 'codigoContrato': arContratos.codigoContratoPk}) }}" style="float:left">Terminar</a></td>                                

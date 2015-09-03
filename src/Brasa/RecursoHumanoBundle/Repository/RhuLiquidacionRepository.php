@@ -123,6 +123,25 @@ class RhuLiquidacionRepository extends EntityRepository {
         return true;
     }    
     
+    public function liquidarDeducciones($codigoLiquidacion) {        
+        $em = $this->getEntityManager();        
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
+        $floDeducciones = 0;
+        $arLiquidacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
+        $arLiquidacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));        
+        foreach ($arLiquidacionDeducciones as $arLiquidacionDeduccion) {
+            $floDeducciones += $arLiquidacionDeduccion->getVrDeduccion();
+        }
+        $douTotal = $arLiquidacion->getVrCesantias() + $arLiquidacion->getVrInteresesCesantias() + $arLiquidacion->getVrPrima() + $arLiquidacion->getVrVacaciones();
+        $douTotal = $douTotal - ($floDeducciones + $arLiquidacion->getVrDeduccionPrima());
+        $arLiquidacion->setVrTotal($douTotal);                        
+        $arLiquidacion->setVrDeducciones($floDeducciones);
+        $em->persist($arLiquidacion);
+        $em->flush();
+        return true;
+    }        
+    
     public function devuelveCesantiasFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(l.VrCesantias) as Cesantias FROM BrasaRecursoHumanoBundle:RhuLiquidacion l "

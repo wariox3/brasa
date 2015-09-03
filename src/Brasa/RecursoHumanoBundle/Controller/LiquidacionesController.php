@@ -63,6 +63,7 @@ class LiquidacionesController extends Controller
                         $em->remove($arLiquidacionDeduccion);                        
                     }
                     $em->flush();
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarDeducciones($codigoLiquidacion);
                 }                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
                 return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
@@ -76,6 +77,47 @@ class LiquidacionesController extends Controller
                     'form' => $form->createView()
                     ));
     }        
+    
+    public function detalleNuevoConceptoAction($codigoLiquidacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);        
+        $form = $this->createFormBuilder()                            
+            ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
+            ->getForm();
+        $form->handleRequest($request);
+    
+        if($form->isValid()) {            
+            if($form->get('BtnAgregar')->isClicked()) {  
+                $arrControles = $request->request->All();
+                if (isset($arrControles['TxtValor'])) {
+                    $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        if($arrControles['TxtValor'][$intIndice] != "" && $arrControles['TxtValor'][$intIndice] != 0) {
+                            $arLiquidacionDeduccionConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto();
+                            $arLiquidacionDeduccionConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccionConcepto')->find($intCodigo);                                                                                    
+                            $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
+                            $arLiquidacionDeduccion->setLiquidacionDeduccionConceptoRel($arLiquidacionDeduccionConcepto);                            
+                            $arLiquidacionDeduccion->setLiquidacionRel($arLiquidacion);
+                            $floValor = $arrControles['TxtValor'][$intIndice];
+                            $arLiquidacionDeduccion->setVrDeduccion($floValor);
+                            $em->persist($arLiquidacionDeduccion);                                
+                        }                        
+                        $intIndice++;
+                    }
+                    $em->flush();
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarDeducciones($codigoLiquidacion);
+                }                                                                                                                                      
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            }
+        }
+        $arLiquidacionDeduccionConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto();
+        $arLiquidacionDeduccionConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccionConcepto')->findAll();        
+        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:detalleNuevoConcepto.html.twig', array(            
+            'arLiquidacion' => $arLiquidacion,
+            'arLiquidacionDeduccionConceptos' => $arLiquidacionDeduccionConceptos,
+            'form' => $form->createView()));
+    }       
     
     private function listar() {
         $session = $this->getRequest()->getSession();

@@ -28,6 +28,11 @@ class RhuLiquidacionDeduccion
     private $codigoCreditoFk;
     
     /**
+     * @ORM\Column(name="codigo_liquidacion_deduccion_concepto_fk", type="integer", nullable=true)
+     */    
+    private $codigoLiquidacionDeduccionConceptoFk;    
+    
+    /**
      * @ORM\Column(name="vr_deduccion", type="float")
      */
     private $vrDeduccion = 0;         
@@ -49,6 +54,13 @@ class RhuLiquidacionDeduccion
      */
     protected $creditoRel;    
     
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuLiquidacionDeduccionConcepto", inversedBy="liquidacionesDeduccionesLiquidacionDeduccionConceptoRel")
+     * @ORM\JoinColumn(name="codigo_liquidacion_deduccion_concepto_fk", referencedColumnName="codigo_liquidacion_deduccion_concepto_pk")
+     */
+    protected $liquidacionDeduccionConceptoRel;    
+
+
 
     /**
      * Get codigoLiquidacionDeduccionPk
@@ -106,6 +118,30 @@ class RhuLiquidacionDeduccion
     public function getCodigoCreditoFk()
     {
         return $this->codigoCreditoFk;
+    }
+
+    /**
+     * Set codigoLiquidacionDeduccionConceptoFk
+     *
+     * @param integer $codigoLiquidacionDeduccionConceptoFk
+     *
+     * @return RhuLiquidacionDeduccion
+     */
+    public function setCodigoLiquidacionDeduccionConceptoFk($codigoLiquidacionDeduccionConceptoFk)
+    {
+        $this->codigoLiquidacionDeduccionConceptoFk = $codigoLiquidacionDeduccionConceptoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoLiquidacionDeduccionConceptoFk
+     *
+     * @return integer
+     */
+    public function getCodigoLiquidacionDeduccionConceptoFk()
+    {
+        return $this->codigoLiquidacionDeduccionConceptoFk;
     }
 
     /**
@@ -202,5 +238,29 @@ class RhuLiquidacionDeduccion
     public function getCreditoRel()
     {
         return $this->creditoRel;
+    }
+
+    /**
+     * Set liquidacionDeduccionConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto $liquidacionDeduccionConceptoRel
+     *
+     * @return RhuLiquidacionDeduccion
+     */
+    public function setLiquidacionDeduccionConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto $liquidacionDeduccionConceptoRel = null)
+    {
+        $this->liquidacionDeduccionConceptoRel = $liquidacionDeduccionConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidacionDeduccionConceptoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto
+     */
+    public function getLiquidacionDeduccionConceptoRel()
+    {
+        return $this->liquidacionDeduccionConceptoRel;
     }
 }
