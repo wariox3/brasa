@@ -13,13 +13,13 @@
             <div class="form-group form-group-sm">
                 <label for="form_fechaDesde" class="col-sm-3 control-label">Desde:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.fechaDesde , { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.fechaDesde , {'attr': {'maxlength' : 10} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
                 <label for="form_fechaHasta" class="col-sm-3 control-label">Hasta:</label>
                 <div class="col-sm-9">
-                        {{ form_widget(form.fechaHasta, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }}
                 </div>
             </div>     
             <div class="form-group">

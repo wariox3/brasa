@@ -37,6 +37,12 @@
                         {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }} 
                     </div>                
                 </div>
+                <div class="form-group form-group-sm">  
+                    <label for="form_entidadSaludRel" class="col-sm-2 control-label">Eps:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.entidadSaludRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrarIncapacidadesCobrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}

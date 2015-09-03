@@ -64,8 +64,8 @@ class ReporteCostos extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         foreach ($arPagos as $arPago) {            
             $pdf->Cell(23, 4, $arPago->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(65, 4, $arPago->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');            
-            $pdf->Cell(95, 4, $arPago->getCentroCostoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(65, 4, utf8_decode($arPago->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');            
+            $pdf->Cell(95, 4, utf8_decode($arPago->getCentroCostoRel()->getNombre()), 1, 0, 'L');
             $pdf->Cell(23, 4, $arPago->getFechaDesde()->format('y-m-d') . "_" . $arPago->getFechaHasta()->format('y-m-d'), 1, 0, 'L');
             $pdf->Cell(20, 4, number_format($arPago->getVrIngresoBaseCotizacion(), 2, '.', ','), 1, 0, 'R');
             $pdf->Cell(20, 4, number_format($arPago->getVrAuxilioTransporte(), 2, '.', ','), 1, 0, 'R');
@@ -81,10 +81,10 @@ class ReporteCostos extends \FPDF_FPDF {
         $pdf->Cell(23, 4, "", 1, 0, 'L');
         $pdf->Cell(65, 4, "", 1, 0, 'L');            
         $pdf->Cell(95, 4, "", 1, 0, 'L');            
-        $pdf->Cell(23, 4, number_format($douTotalIBC, 2, '.', ','), 1, 0, 'R');
+        $pdf->Cell(23, 4, "", 1, 0, 'R');
+        $pdf->Cell(20, 4, number_format($douTotalIBC, 2, '.', ','), 1, 0, 'R');
         $pdf->Cell(20, 4, number_format($douTotalAuxilioTransporte, 2, '.', ','), 1, 0, 'R');
-        $pdf->Cell(20, 4, number_format($douTotalCesantias, 2, '.', ','), 1, 0, 'R');
-        $pdf->Cell(15, 4, "", 1, 0, 'R');
+        $pdf->Cell(15, 4, number_format($douTotalCesantias, 2, '.', ','), 1, 0, 'R');
         $pdf->Cell(14, 4, "", 1, 0, 'R');
         $pdf->Ln();        
     }

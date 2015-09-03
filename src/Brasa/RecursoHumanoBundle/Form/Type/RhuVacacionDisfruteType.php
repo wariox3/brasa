@@ -10,8 +10,8 @@ class RhuVacacionDisfruteType extends AbstractType
     {
         $builder                        
             
-            ->add('fechaDesde','date',array('widget' => 'single_text','attr' => array('class' => 'date')))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'attr' => array('class' => 'date')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy/MM/dd','attr' => array('class' => 'date', )))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy/MM/dd', 'attr' => array('class' => 'date',)))
             ->add('comentarios', 'textarea', array('required' => false))    
             ->add('guardar', 'submit');
     }

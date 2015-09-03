@@ -61,9 +61,9 @@ class ReporteCreditos extends \FPDF_FPDF {
             $pdf->Cell(10, 4, $arCredito->getCodigoCreditoPk(), 1, 0, 'L');
             $pdf->Cell(48, 4, utf8_decode($arCredito->getCreditoTipoRel()->getNombre()), 1, 0, 'L');            
             $pdf->Cell(12, 4, $arCredito->getFecha()->format('Y/m/d'), 1, 0, 'L');            
-            $pdf->Cell(79, 4, "FUNDACION CANES CENTRO DE REHABILIDACION ECUESTRE DE RISARAL", 1, 0, 'L');
+            $pdf->Cell(79, 4, utf8_decode($arCredito->getEmpleadoRel()->getCentroCostoRel()->getNombre()), 1, 0, 'L');
             $pdf->Cell(18, 4, $arCredito->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(53, 4, "FERNANDO ANTONIO MONTEALEGRE CIFUENTES", 1, 0, 'L');
+            $pdf->Cell(53, 4, utf8_decode($arCredito->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');
             $pdf->Cell(15, 4, number_format($arCredito->getVrPagar(), 2,'.',','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arCredito->getVrCuota(), 2,'.',','), 1, 0, 'R');
             $pdf->Cell(15, 4, number_format($arCredito->getSaldo(), 2,'.',','), 1, 0, 'R');

@@ -1,6 +1,10 @@
 {% extends '::base.html.twig' %}
 {% block content %}
 <div class="container">
+    <script type="text/javascript">
+    $(document).ready(function() {
+            $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
+    </script>
     <div class="page-header">
         <h3>Consulta costos general</h3>
     </div>
@@ -24,13 +28,13 @@
                 <div class="form-group form-group-sm">  
                     <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
                     <div class="col-sm-10">                  
-                        {{ form_widget(form.fechaDesde, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }}
                     </div>
                 </div>                     
                 <div class="form-group form-group-sm">  
                     <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
                     <div class="col-sm-10">                  
-                        {{ form_widget(form.fechaHasta, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }}
                     </div>
                 </div>                     
                 <div class="form-group form-group-sm">

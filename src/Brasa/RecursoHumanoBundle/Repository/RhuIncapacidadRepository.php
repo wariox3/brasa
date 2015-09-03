@@ -36,10 +36,9 @@ class RhuIncapacidadRepository extends EntityRepository {
         return $dql;
     }                    
     
-    public function listaIncapacidadesCobrarDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+    public function listaIncapacidadesCobrarDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "",$strCodigoEntidadSalud = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT i, e FROM BrasaRecursoHumanoBundle:RhuIncapacidad i JOIN i.empleadoRel e WHERE i.codigoIncapacidadPk <> 0 AND i.estadoCobrar = 1 AND i.vrSaldo > 0";
-        
         if($strCodigoCentroCosto != "") {
             $dql .= " AND i.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }   
@@ -51,6 +50,9 @@ class RhuIncapacidadRepository extends EntityRepository {
         }
         if($strHasta != "") {
             $dql .= " AND i.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        if($strCodigoEntidadSalud != "") {
+            $dql .= " AND i.codigoEntidadSaludFk = " . $strCodigoEntidadSalud;
         }
         return $dql;
     }

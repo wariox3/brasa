@@ -66,8 +66,8 @@ class ReporteProgramacionesPago extends \FPDF_FPDF {
             $pdf->Cell(30, 4, $arPago->getFechaDesde()->format('Y/m/d')."_".$arPago->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');
             $pdf->Cell(22, 4, $arPago->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 6);
-            $pdf->Cell(58, 4, $arPago->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L');
-            $pdf->Cell(85, 4, $arPago->getCentroCostoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(58, 4, utf8_decode($arPago->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');
+            $pdf->Cell(85, 4, utf8_decode($arPago->getCentroCostoRel()->getNombre()), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(19, 4, number_format($arPago->getVrSalario(),2,'.',','), 1, 0, 'R');
             $pdf->Cell(19, 4, number_format($arPago->getVrDevengado(),2,'.',','), 1, 0, 'R');
