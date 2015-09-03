@@ -64,12 +64,12 @@ class ReporteIncapacidadesCobrar extends \FPDF_FPDF {
         foreach ($arIncapacidades as $arIncapacidad) {            
             $pdf->Cell(12, 4, $arIncapacidad->getCodigoIncapacidadPk(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 6);
-            $pdf->Cell(44, 4, utf8_decode($arIncapacidad->getEntidadSaludRel()->getNombre()), 1, 0, 'L');
+            $pdf->Cell(46, 4, utf8_decode($arIncapacidad->getEntidadSaludRel()->getNombre()), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(25, 4, $arIncapacidad->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'R');
             $pdf->SetFont('Arial', '', 6);
-            $pdf->Cell(43, 4, utf8_decode($arIncapacidad->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');
-            $pdf->Cell(44, 4, utf8_decode($arIncapacidad->getCentroCostoRel()->getNombre()), 1, 0, 'L');
+            $pdf->Cell(45, 4, utf8_decode($arIncapacidad->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');
+            $pdf->Cell(46, 4, utf8_decode($arIncapacidad->getCentroCostoRel()->getNombre()), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(15, 4, $arIncapacidad->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');
             $pdf->Cell(15, 4, $arIncapacidad->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');

@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuContratoRepository extends EntityRepository {
     
-    public function listaDQL($strIdentificacion = "", $fechaDesdeInicia = "", $fechaHastaInicia = "", $boolMostrarActivos = 2) {        
+    public function listaDQL($strIdentificacion = "", $fechaDesdeInicia = "", $fechaHastaInicia = "", $boolMostrarActivos = 2, $strCodigoCentroCosto = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
@@ -27,6 +27,9 @@ class RhuContratoRepository extends EntityRepository {
         } 
         if($boolMostrarActivos == "0") {
             $dql .= " AND c.estadoActivo = 0";
+        }
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND c.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }
         $dql .= " ORDER BY c.codigoContratoPk";
         return $dql;
