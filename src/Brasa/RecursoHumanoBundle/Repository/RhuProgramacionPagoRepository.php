@@ -481,7 +481,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                         $arPagoDetalle->setPagoRel($arPago);
                         $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
-                        $arPagoDetalle->setDetalle($intDias . " Dias de primas (IBC " . number_format($floIbc, 2, '.', ',') . " )");
+                        $arPagoDetalle->setDetalle($intDias . " Dias de primas (IBC " . number_format($floIbc, 0, '.', ',') . " )");
                         $arPagoDetalle->setVrPago($floTotalPago);
                         $arPagoDetalle->setNumeroDias($intDias);
                         $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());

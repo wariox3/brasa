@@ -23,7 +23,7 @@ class RhuCierreAnio
     private $anio = 0;
     
     /**
-     * @ORM\Column(name="estadoCerrado", type="boolean")
+     * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
     private $estadoCerrado = 0;    
     

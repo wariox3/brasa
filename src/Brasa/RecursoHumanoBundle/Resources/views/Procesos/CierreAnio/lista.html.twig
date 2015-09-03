@@ -16,7 +16,7 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCierresAnios.codigoCierreAnioPk }}">{{ arCierresAnios.codigoCierreAnioPk }} </td>
                 <td>{{ arCierresAnios.anio  }}</td>
-                <td><button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arCierresAnios.codigoCierreAnioPk }}">Cerrar</button></td>
+                <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_proceso_cierre_anio_cerrar', { 'codigoCierreAnio': arCierresAnios.codigoCierreAnioPk}) }}" style="float:left">Cerrar</a></td>                                                
             </tr>
             {% endfor %}
         </table>

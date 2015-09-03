@@ -13,7 +13,7 @@ class RhuVacacionDisfruteRepository extends EntityRepository {
     
     public function listaDql($strCodigoCentroCosto = "", $strIdentificacion = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT v, e FROM BrasaRecursoHumanoBundle:RhuVacacion v JOIN v.empleadoRel e WHERE v.codigoVacacionPk <> 0";
+        $dql   = "SELECT v, e FROM BrasaRecursoHumanoBundle:RhuVacacionDisfrute v JOIN v.empleadoRel e WHERE v.codigoVacacionDisfrutePk <> 0";
         
         if($strCodigoCentroCosto != "") {
             $dql .= " AND v.codigoCentroCostoFk = " . $strCodigoCentroCosto;
