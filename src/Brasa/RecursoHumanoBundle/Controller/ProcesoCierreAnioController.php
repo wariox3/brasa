@@ -44,6 +44,7 @@ class ProcesoCierreAnioController extends Controller
             $floAuxilioTransporte = $form->get('auxilioTransporte')->getData();
             $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+            $floSalarioMinimoAnterior = $arConfiguracion->getVrSalario();
             $arConfiguracion->setAnioActual($arConfiguracion->getAnioActual() + 1);
             $arConfiguracion->setVrSalario($floSalarioMinimo);
             $arConfiguracion->setVrAuxilioTransporte($floAuxilioTransporte);
@@ -52,7 +53,27 @@ class ProcesoCierreAnioController extends Controller
             $arCierreAnio = $em->getRepository('BrasaRecursoHumanoBundle:RhuCierreAnio')->find($codigoCierreAnio);
             $arCierreAnio->setEstadoCerrado(1);
             $em->persist($arCierreAnio);
-            $em->flush();            
+            $strDql = "UPDATE rhu_contrato "
+                    . "SET vr_salario = " . $floSalarioMinimo . ", "
+                    . "vr_salario_pago = " . $floSalarioMinimo . " "
+                    . "WHERE codigo_tipo_tiempo_fk = 1 "
+                    . "AND indefinido = 1 "
+                    . "AND vr_salario = " . $floSalarioMinimoAnterior;            
+            $objCon = $em->getConnection()->executeQuery($strDql);            
+
+            $strDql = "UPDATE rhu_contrato "
+                    . "SET vr_salario = " . $floSalarioMinimo . ", "
+                    . "vr_salario_pago = " . $floSalarioMinimo / 2 . " "
+                    . "WHERE codigo_tipo_tiempo_fk = 2 "
+                    . "AND indefinido = 1 "
+                    . "AND vr_salario = " . $floSalarioMinimoAnterior;            
+            $objCon = $em->getConnection()->executeQuery($strDql);            
+                        
+            $strDql = "UPDATE rhu_empleado "
+                    . "SET vr_salario = " . $floSalarioMinimo . " "
+                    . "WHERE vr_salario = " . $floSalarioMinimoAnterior;                       
+            $objCon = $em->getConnection()->executeQuery($strDql);
+            //$em->flush();            
             return $this->redirect($this->generateUrl('brs_rhu_proceso_cierre_anio'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Procesos/CierreAnio:cerrar.html.twig', array(
