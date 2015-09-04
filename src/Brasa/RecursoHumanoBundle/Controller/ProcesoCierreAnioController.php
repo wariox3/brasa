@@ -73,7 +73,7 @@ class ProcesoCierreAnioController extends Controller
                     . "SET vr_salario = " . $floSalarioMinimo . " "
                     . "WHERE vr_salario = " . $floSalarioMinimoAnterior;                       
             $objCon = $em->getConnection()->executeQuery($strDql);
-            //$em->flush();            
+            $em->flush();            
             return $this->redirect($this->generateUrl('brs_rhu_proceso_cierre_anio'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Procesos/CierreAnio:cerrar.html.twig', array(
