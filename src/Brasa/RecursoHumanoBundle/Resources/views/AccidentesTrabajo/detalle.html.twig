@@ -1,0 +1,74 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h3>Detalles de las vacaciones disfrutadas</h3>
+        </div>
+
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                    {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                    {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
+        </div>
+        <br /><br />
+        <div class="panel panel-default">
+            <div class="panel-heading">Información de las vacaciones</div>
+            <div class="panel-body">
+                <table widtd="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">CODIGO:</td>
+                        <td class="td-in-well">{{ arVacaciones.codigoVacacionDisfrutePk }}</td>
+                        <td class="titulo">FECHA:</td>
+                        <td class="td-in-well">{{ arVacaciones.fecha |date("Y/m/d") }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well" align="right"></td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">EMPLEADO:</td>
+                        <td class="td-in-well">{{ arVacaciones.empleadoRel.nombreCorto }}</td>
+                        <td class="titulo">IDENTIFICACIÓN:</td>
+                        <td class="td-in-well">{{ arVacaciones.empleadoRel.numeroIdentificacion }}</td>
+                        <td class="titulo">SALARIO:</td>
+                        <td class="td-in-well" align="right">{{ arVacaciones.empleadoRel.vrSalario | number_format(2, '.', ',')}}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PERIODO DESDE</td>
+                        <td class="td-in-well">{{ arVacaciones.fechaDesde |date("Y/m/d") }}</td>
+                        <td class="titulo">DÍAS</td>
+                        <td class="td-in-well">{{ arVacaciones.dias }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-label" align="right"></td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PERIODO HASTA</td>
+                        <td class="td-in-well">{{ arVacaciones.fechaHasta |date("Y/m/d") }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-label" align="right"></td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">CENTRO COSTO</td>
+                        <td class="td-in-well" colspan="7">{{ arVacaciones.centroCostoRel.nombre }}</td>
+
+                    </tr>
+                    <tr>
+                        <td class="titulo" >COMENTARIOS: </td>
+                        <td class="td-in-well" colspan="7">{{ arVacaciones.comentarios }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_vacaciones_disfrute_lista') }}" style="float:left">Volver</a>
+            </div>
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

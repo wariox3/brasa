@@ -439,10 +439,15 @@ class RhuEmpleado
      */
     protected $ssoPeriodosEmpleadosEmpleadoRel;
  
-     /**
+    /**
      * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacion", mappedBy="empleadoRel")
      */
     protected $dotacionesEmpleadoRel;
+    
+     /**
+     * @ORM\OneToMany(targetEntity="RhuAccidenteTrabajo", mappedBy="empleadoRel")
+     */
+    protected $accidentesTrabajoEmpleadoRel;
     
     
     /**
@@ -456,6 +461,7 @@ class RhuEmpleado
         $this->creditosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vacacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesDisfruteEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesPagosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -465,6 +471,7 @@ class RhuEmpleado
         $this->empleadosEstudiosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoPeriodosEmpleadosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dotacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->accidentesTrabajoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -2170,6 +2177,40 @@ class RhuEmpleado
     }
 
     /**
+     * Add vacacionesDisfruteEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel)
+    {
+        $this->vacacionesDisfruteEmpleadoRel[] = $vacacionesDisfruteEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesDisfruteEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel
+     */
+    public function removeVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel)
+    {
+        $this->vacacionesDisfruteEmpleadoRel->removeElement($vacacionesDisfruteEmpleadoRel);
+    }
+
+    /**
+     * Get vacacionesDisfruteEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesDisfruteEmpleadoRel()
+    {
+        return $this->vacacionesDisfruteEmpleadoRel;
+    }
+
+    /**
      * Add licenciasEmpleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasEmpleadoRel
@@ -2500,36 +2541,36 @@ class RhuEmpleado
     }
 
     /**
-     * Add vacacionesDisfruteEmpleadoRel
+     * Add accidentesTrabajoEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function addVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel)
+    public function addAccidentesTrabajoEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel)
     {
-        $this->vacacionesDisfruteEmpleadoRel[] = $vacacionesDisfruteEmpleadoRel;
+        $this->accidentesTrabajoEmpleadoRel[] = $accidentesTrabajoEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Remove vacacionesDisfruteEmpleadoRel
+     * Remove accidentesTrabajoEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel
      */
-    public function removeVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel)
+    public function removeAccidentesTrabajoEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel)
     {
-        $this->vacacionesDisfruteEmpleadoRel->removeElement($vacacionesDisfruteEmpleadoRel);
+        $this->accidentesTrabajoEmpleadoRel->removeElement($accidentesTrabajoEmpleadoRel);
     }
 
     /**
-     * Get vacacionesDisfruteEmpleadoRel
+     * Get accidentesTrabajoEmpleadoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getVacacionesDisfruteEmpleadoRel()
+    public function getAccidentesTrabajoEmpleadoRel()
     {
-        return $this->vacacionesDisfruteEmpleadoRel;
+        return $this->accidentesTrabajoEmpleadoRel;
     }
 }

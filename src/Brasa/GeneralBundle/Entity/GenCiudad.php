@@ -126,6 +126,11 @@ class GenCiudad
      */
     protected $rhuEmpleadosEstudiosCiudadRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo", mappedBy="ciudadRel")
+     */
+    protected $rhuaccidentesTrabajoCiudadRel;
+    
     
     /**
      * Constructor
@@ -147,6 +152,7 @@ class GenCiudad
         $this->rhuEmpleadosCiudadNacimientoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuEmpleadosCiudadExpedicionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuEmpleadosEstudiosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuaccidentesTrabajoCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -811,5 +817,39 @@ class GenCiudad
     public function getRhuEmpleadosEstudiosCiudadRel()
     {
         return $this->rhuEmpleadosEstudiosCiudadRel;
+    }
+
+    /**
+     * Add rhuaccidentesTrabajoCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $rhuaccidentesTrabajoCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuaccidentesTrabajoCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $rhuaccidentesTrabajoCiudadRel)
+    {
+        $this->rhuaccidentesTrabajoCiudadRel[] = $rhuaccidentesTrabajoCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuaccidentesTrabajoCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $rhuaccidentesTrabajoCiudadRel
+     */
+    public function removeRhuaccidentesTrabajoCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $rhuaccidentesTrabajoCiudadRel)
+    {
+        $this->rhuaccidentesTrabajoCiudadRel->removeElement($rhuaccidentesTrabajoCiudadRel);
+    }
+
+    /**
+     * Get rhuaccidentesTrabajoCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuaccidentesTrabajoCiudadRel()
+    {
+        return $this->rhuaccidentesTrabajoCiudadRel;
     }
 }

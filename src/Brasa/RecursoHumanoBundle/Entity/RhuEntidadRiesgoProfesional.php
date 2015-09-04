@@ -46,15 +46,20 @@ class RhuEntidadRiesgoProfesional
      * @ORM\OneToMany(targetEntity="RhuConfiguracion", mappedBy="entidadRiesgoProfesionalRel")
      */
     protected $configuracionEntidadRiesgoProfesionalRel;
-   
-   
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuAccidenteTrabajo", mappedBy="entidadRiesgoProfesionalRel")
+     */
+    protected $accidentesTrabajoEntidadRiesgoRel;
+   
+   
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->configuracionEntidadRiesgoProfesionalRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->accidentesTrabajoEntidadRiesgoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -164,6 +169,30 @@ class RhuEntidadRiesgoProfesional
     }
 
     /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return RhuEntidadRiesgoProfesional
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
+    }
+
+    /**
      * Add configuracionEntidadRiesgoProfesionalRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion $configuracionEntidadRiesgoProfesionalRel
@@ -198,26 +227,36 @@ class RhuEntidadRiesgoProfesional
     }
 
     /**
-     * Set codigoInterface
+     * Add accidentesTrabajoEntidadRiesgoRel
      *
-     * @param string $codigoInterface
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEntidadRiesgoRel
      *
      * @return RhuEntidadRiesgoProfesional
      */
-    public function setCodigoInterface($codigoInterface)
+    public function addAccidentesTrabajoEntidadRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEntidadRiesgoRel)
     {
-        $this->codigoInterface = $codigoInterface;
+        $this->accidentesTrabajoEntidadRiesgoRel[] = $accidentesTrabajoEntidadRiesgoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoInterface
+     * Remove accidentesTrabajoEntidadRiesgoRel
      *
-     * @return string
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEntidadRiesgoRel
      */
-    public function getCodigoInterface()
+    public function removeAccidentesTrabajoEntidadRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEntidadRiesgoRel)
     {
-        return $this->codigoInterface;
+        $this->accidentesTrabajoEntidadRiesgoRel->removeElement($accidentesTrabajoEntidadRiesgoRel);
+    }
+
+    /**
+     * Get accidentesTrabajoEntidadRiesgoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAccidentesTrabajoEntidadRiesgoRel()
+    {
+        return $this->accidentesTrabajoEntidadRiesgoRel;
     }
 }
