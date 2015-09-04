@@ -454,6 +454,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $em->persist($arPago);
                         $douSalarioMinimo = $arConfiguracion->getVrSalario();
                         $intDias = $arProgramacionPagoDetalle->getDias();
+                        $intDiasContinuos = $arProgramacionPagoDetalle->getFechaDesde()->diff($arProgramacionPagoDetalle->getFechaHasta());
+                        $intDiasContinuos = $intDiasContinuos->format('%a');
+                        $intDiasContinuos += 1;
                         $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
                         $floIbc = (float)$arrayCostos[0]['IBC'];
                         $dateFechaUltimoPago = $arProgramacionPagoDetalle->getContratoRel()->getFechaUltimoPago();                        
@@ -470,7 +473,12 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $floIbc +=  $intDiasIbcAdicional * $floVrDia;
                             $arPago->setComentarios("Dado que se pagan las primas antes del periodo, se proyectan (" . $intDiasIbcAdicional . ") dias restantes con el salario");
                         }
-                        $floSalarioPromedio = ($floIbc / $intDias) * 30;                                    
+                        if($arCentroCosto->getPeriodoPagoRel()->getContinuo() == 1) {
+                            $floSalarioPromedio = ($floIbc / $intDiasContinuos) * 30;
+                        } else {
+                            $floSalarioPromedio = ($floIbc / $intDias) * 30;
+                        }
+                                                            
                         if(round($floSalarioPromedio) <=  $douSalarioMinimo * 2 ) {
                             $floSalarioPromedio += $arConfiguracion->getVrAuxilioTransporte();
                         }
