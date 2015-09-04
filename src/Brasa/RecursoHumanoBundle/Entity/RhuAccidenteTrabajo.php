@@ -69,9 +69,9 @@ class RhuAccidenteTrabajo
     private $fechaIncapacidadHasta;
     
     /**
-     * @ORM\Column(name="dias", type="integer")
+     * @ORM\Column(name="dias", type="integer", nullable=true)
      */
-    private $dias = 0;
+    private $dias;
     
     /**
      * @ORM\Column(name="cie10", type="string", length=20, nullable=true)
@@ -126,12 +126,12 @@ class RhuAccidenteTrabajo
     /**
      * @ORM\Column(name="factor_personal", type="string", length=200, nullable=true)
      */    
-    private $factoPersonal;
+    private $factorPersonal;
     
     /**
      * @ORM\Column(name="factor_trabajo", type="string", length=200, nullable=true)
      */    
-    private $factoTrabajo;
+    private $factorTrabajo;
     
     /**
      * @ORM\Column(name="plan_accion_1", type="string", length=200, nullable=true)
@@ -196,32 +196,32 @@ class RhuAccidenteTrabajo
     /**
      * @ORM\Column(name="participante_investigacion_1", type="string", length=100, nullable=true)
      */    
-    private $participanteInvetigacion1;
+    private $participanteInvestigacion1;
     
     /**
      * @ORM\Column(name="cargo_participante_investigacion_1", type="string", length=100, nullable=true)
      */    
-    private $cargoParticipanteInvetigacion1;
+    private $cargoParticipanteInvestigacion1;
     
     /**
      * @ORM\Column(name="participante_investigacion_2", type="string", length=100, nullable=true)
      */    
-    private $participanteInvetigacion2;
+    private $participanteInvestigacion2;
     
     /**
      * @ORM\Column(name="cargo_participante_investigacion_2", type="string", length=100, nullable=true)
      */    
-    private $cargoParticipanteInvetigacion2;
+    private $cargoParticipanteInvestigacion2;
     
     /**
      * @ORM\Column(name="participante_investigacion_3", type="string", length=100, nullable=true)
      */    
-    private $participanteInvetigacion3;
+    private $participanteInvestigacion3;
     
     /**
      * @ORM\Column(name="cargo_participante_investigacion_3", type="string", length=100, nullable=true)
      */    
-    private $cargoParticipanteInvetigacion3;
+    private $cargoParticipanteInvestigacion3;
     
     /**
      * @ORM\Column(name="representante_legal", type="string", length=100, nullable=true)
@@ -277,10 +277,6 @@ class RhuAccidenteTrabajo
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
     protected $entidadRiesgoProfesionalRel;
-    
-    
-    
-    
     
     
 
@@ -799,51 +795,51 @@ class RhuAccidenteTrabajo
     }
 
     /**
-     * Set factoPersonal
+     * Set factorPersonal
      *
-     * @param string $factoPersonal
+     * @param string $factorPersonal
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setFactoPersonal($factoPersonal)
+    public function setFactorPersonal($factorPersonal)
     {
-        $this->factoPersonal = $factoPersonal;
+        $this->factorPersonal = $factorPersonal;
 
         return $this;
     }
 
     /**
-     * Get factoPersonal
+     * Get factorPersonal
      *
      * @return string
      */
-    public function getFactoPersonal()
+    public function getFactorPersonal()
     {
-        return $this->factoPersonal;
+        return $this->factorPersonal;
     }
 
     /**
-     * Set factoTrabajo
+     * Set factorTrabajo
      *
-     * @param string $factoTrabajo
+     * @param string $factorTrabajo
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setFactoTrabajo($factoTrabajo)
+    public function setFactorTrabajo($factorTrabajo)
     {
-        $this->factoTrabajo = $factoTrabajo;
+        $this->factorTrabajo = $factorTrabajo;
 
         return $this;
     }
 
     /**
-     * Get factoTrabajo
+     * Get factorTrabajo
      *
      * @return string
      */
-    public function getFactoTrabajo()
+    public function getFactorTrabajo()
     {
-        return $this->factoTrabajo;
+        return $this->factorTrabajo;
     }
 
     /**
@@ -1135,147 +1131,147 @@ class RhuAccidenteTrabajo
     }
 
     /**
-     * Set participanteInvetigacion1
+     * Set participanteInvestigacion1
      *
-     * @param string $participanteInvetigacion1
+     * @param string $participanteInvestigacion1
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setParticipanteInvetigacion1($participanteInvetigacion1)
+    public function setParticipanteInvestigacion1($participanteInvestigacion1)
     {
-        $this->participanteInvetigacion1 = $participanteInvetigacion1;
+        $this->participanteInvestigacion1 = $participanteInvestigacion1;
 
         return $this;
     }
 
     /**
-     * Get participanteInvetigacion1
+     * Get participanteInvestigacion1
      *
      * @return string
      */
-    public function getParticipanteInvetigacion1()
+    public function getParticipanteInvestigacion1()
     {
-        return $this->participanteInvetigacion1;
+        return $this->participanteInvestigacion1;
     }
 
     /**
-     * Set cargoParticipanteInvetigacion1
+     * Set cargoParticipanteInvestigacion1
      *
-     * @param string $cargoParticipanteInvetigacion1
+     * @param string $cargoParticipanteInvestigacion1
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setCargoParticipanteInvetigacion1($cargoParticipanteInvetigacion1)
+    public function setCargoParticipanteInvestigacion1($cargoParticipanteInvestigacion1)
     {
-        $this->cargoParticipanteInvetigacion1 = $cargoParticipanteInvetigacion1;
+        $this->cargoParticipanteInvestigacion1 = $cargoParticipanteInvestigacion1;
 
         return $this;
     }
 
     /**
-     * Get cargoParticipanteInvetigacion1
+     * Get cargoParticipanteInvestigacion1
      *
      * @return string
      */
-    public function getCargoParticipanteInvetigacion1()
+    public function getCargoParticipanteInvestigacion1()
     {
-        return $this->cargoParticipanteInvetigacion1;
+        return $this->cargoParticipanteInvestigacion1;
     }
 
     /**
-     * Set participanteInvetigacion2
+     * Set participanteInvestigacion2
      *
-     * @param string $participanteInvetigacion2
+     * @param string $participanteInvestigacion2
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setParticipanteInvetigacion2($participanteInvetigacion2)
+    public function setParticipanteInvestigacion2($participanteInvestigacion2)
     {
-        $this->participanteInvetigacion2 = $participanteInvetigacion2;
+        $this->participanteInvestigacion2 = $participanteInvestigacion2;
 
         return $this;
     }
 
     /**
-     * Get participanteInvetigacion2
+     * Get participanteInvestigacion2
      *
      * @return string
      */
-    public function getParticipanteInvetigacion2()
+    public function getParticipanteInvestigacion2()
     {
-        return $this->participanteInvetigacion2;
+        return $this->participanteInvestigacion2;
     }
 
     /**
-     * Set cargoParticipanteInvetigacion2
+     * Set cargoParticipanteInvestigacion2
      *
-     * @param string $cargoParticipanteInvetigacion2
+     * @param string $cargoParticipanteInvestigacion2
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setCargoParticipanteInvetigacion2($cargoParticipanteInvetigacion2)
+    public function setCargoParticipanteInvestigacion2($cargoParticipanteInvestigacion2)
     {
-        $this->cargoParticipanteInvetigacion2 = $cargoParticipanteInvetigacion2;
+        $this->cargoParticipanteInvestigacion2 = $cargoParticipanteInvestigacion2;
 
         return $this;
     }
 
     /**
-     * Get cargoParticipanteInvetigacion2
+     * Get cargoParticipanteInvestigacion2
      *
      * @return string
      */
-    public function getCargoParticipanteInvetigacion2()
+    public function getCargoParticipanteInvestigacion2()
     {
-        return $this->cargoParticipanteInvetigacion2;
+        return $this->cargoParticipanteInvestigacion2;
     }
 
     /**
-     * Set participanteInvetigacion3
+     * Set participanteInvestigacion3
      *
-     * @param string $participanteInvetigacion3
+     * @param string $participanteInvestigacion3
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setParticipanteInvetigacion3($participanteInvetigacion3)
+    public function setParticipanteInvestigacion3($participanteInvestigacion3)
     {
-        $this->participanteInvetigacion3 = $participanteInvetigacion3;
+        $this->participanteInvestigacion3 = $participanteInvestigacion3;
 
         return $this;
     }
 
     /**
-     * Get participanteInvetigacion3
+     * Get participanteInvestigacion3
      *
      * @return string
      */
-    public function getParticipanteInvetigacion3()
+    public function getParticipanteInvestigacion3()
     {
-        return $this->participanteInvetigacion3;
+        return $this->participanteInvestigacion3;
     }
 
     /**
-     * Set cargoParticipanteInvetigacion3
+     * Set cargoParticipanteInvestigacion3
      *
-     * @param string $cargoParticipanteInvetigacion3
+     * @param string $cargoParticipanteInvestigacion3
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setCargoParticipanteInvetigacion3($cargoParticipanteInvetigacion3)
+    public function setCargoParticipanteInvestigacion3($cargoParticipanteInvestigacion3)
     {
-        $this->cargoParticipanteInvetigacion3 = $cargoParticipanteInvetigacion3;
+        $this->cargoParticipanteInvestigacion3 = $cargoParticipanteInvestigacion3;
 
         return $this;
     }
 
     /**
-     * Get cargoParticipanteInvetigacion3
+     * Get cargoParticipanteInvestigacion3
      *
      * @return string
      */
-    public function getCargoParticipanteInvetigacion3()
+    public function getCargoParticipanteInvestigacion3()
     {
-        return $this->cargoParticipanteInvetigacion3;
+        return $this->cargoParticipanteInvestigacion3;
     }
 
     /**

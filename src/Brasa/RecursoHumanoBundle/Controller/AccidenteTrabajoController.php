@@ -165,7 +165,7 @@ class AccidenteTrabajoController extends Controller
             ->add('tipoAccidente', 'choice', array('choices'   => array('1' => 'ACCIDENTE', '2' => 'ACCIDENTE GRAVE', '3' => 'ACCIDENTE MORTAL', '4' => 'INCIDENTE')))
             ->add('fechaEnviaInvestigacion', 'date', array('data' => new \DateTime('now')))
             ->add('fechaIncapacidadDesde', 'date', array('data' => new \DateTime('now')))                
-            ->add('fechaIncapacidadDesde', 'date', array('data' => new \DateTime('now')))
+            ->add('fechaIncapacidadHasta', 'date', array('data' => new \DateTime('now')))
             ->add('dias', 'number', array('required' => false))
             ->add('cie10', 'text', array('required' => false))
             ->add('diagnostico', 'text', array('required' => false))
@@ -198,10 +198,10 @@ class AccidenteTrabajoController extends Controller
             ->add('participanteInvestigacion3', 'text', array('required' => false))                
             ->add('cargoParticipanteInvestigacion3', 'text', array('required' => false))                
             ->add('representanteLegal', 'text', array('required' => false))                
-            ->add('CargorepresentanteLegal', 'text', array('required' => false))
+            ->add('cargoRepresentanteLegal', 'text', array('required' => false))
             ->add('licencia', 'text', array('required' => false))
             ->add('fechaVerificacion', 'date', array('data' => new \DateTime('now'))) 
-            ->add('reponsableVerficacion', 'text', array('required' => false))                
+            ->add('reponsableVerificacion', 'text', array('required' => false))                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -217,15 +217,15 @@ class AccidenteTrabajoController extends Controller
                 $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
                 $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
-                $arCiudad = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCiudadRel());
+                //$arCiudad = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCiudadRel());
                 $arAccidentesTrabajo->setCentroCostoRel($arCentroCosto);
-                $arAccidentesTrabajo->setCiudadRel($arCiudad);
+                $arAccidentesTrabajo->setCiudadRel($arAccidentesTrabajo->getCiudadRel());
                 $arAccidentesTrabajo->setCodigoFurat($form->get('codigoFurat')->getData());
                 $arAccidentesTrabajo->setFechaAccidente($form->get('fechaAccidente')->getData());
                 $arAccidentesTrabajo->setTipoAccidente($form->get('tipoAccidente')->getData());
                 $arAccidentesTrabajo->setFechaEnviaInvestigacion($form->get('fechaEnviaInvestigacion')->getData());
-                $arAccidentesTrabajo->setFechaIncapacidadDesde($form->get('FechaIncapacidadDesde')->getData());
-                $arAccidentesTrabajo->setFechaIncapacidadHasta($form->get('FechaIncapacidadHasta')->getData());
+                $arAccidentesTrabajo->setFechaIncapacidadDesde($form->get('fechaIncapacidadDesde')->getData());
+                $arAccidentesTrabajo->setFechaIncapacidadHasta($form->get('fechaIncapacidadHasta')->getData());
                 $arAccidentesTrabajo->setDias($form->get('dias')->getData());
                 $arAccidentesTrabajo->setCie10($form->get('cie10')->getData());
                 $arAccidentesTrabajo->setDiagnostico($form->get('diagnostico')->getData());
@@ -238,8 +238,8 @@ class AccidenteTrabajoController extends Controller
                 $arAccidentesTrabajo->setDescripcionAccidente($form->get('descripcionAccidente')->getData());
                 $arAccidentesTrabajo->setActoInseguro($form->get('actoInseguro')->getData());
                 $arAccidentesTrabajo->setCondicionInsegura($form->get('condicionInsegura')->getData());
-                $arAccidentesTrabajo->setFactoPersonal($form->get('factoPersonal')->getData());
-                $arAccidentesTrabajo->setFactoTrabajo($form->get('factoTrabajo')->getData());
+                $arAccidentesTrabajo->setFactorPersonal($form->get('factorPersonal')->getData());
+                $arAccidentesTrabajo->setFactorTrabajo($form->get('factorTrabajo')->getData());
                 $arAccidentesTrabajo->setPlanAccion1($form->get('planAccion1')->getData());
                 $arAccidentesTrabajo->setTipoControl1($form->get('tipoControl1')->getData());
                 $arAccidentesTrabajo->setFechaVerificacion1($form->get('fechaVerificacion1')->getData());
@@ -252,19 +252,17 @@ class AccidenteTrabajoController extends Controller
                 $arAccidentesTrabajo->setTipoControl3($form->get('tipoControl3')->getData());
                 $arAccidentesTrabajo->setFechaVerificacion3($form->get('fechaVerificacion3')->getData());
                 $arAccidentesTrabajo->setAreaResponsable3($form->get('areaResponsable3')->getData());
-                $arAccidentesTrabajo->setParticipanteInvetigacion1($form->get('participanteInvetigacion1')->getData());
-                $arAccidentesTrabajo->setCargoParticipanteInvetigacion1($form->get('cargoParticipanteInvetigacion1')->getData());
-                $arAccidentesTrabajo->setParticipanteInvetigacion2($form->get('participanteInvetigacion2')->getData());
-                $arAccidentesTrabajo->setCargoParticipanteInvetigacion2($form->get('cargoParticipanteInvetigacion2')->getData());
-                $arAccidentesTrabajo->setParticipanteInvetigacion3($form->get('participanteInvetigacion3')->getData());
-                $arAccidentesTrabajo->setCargoParticipanteInvetigacion3($form->get('cargoParticipanteInvetigacion3')->getData());
+                $arAccidentesTrabajo->setParticipanteInvestigacion1($form->get('participanteInvestigacion1')->getData());
+                $arAccidentesTrabajo->setCargoParticipanteInvestigacion1($form->get('cargoParticipanteInvestigacion1')->getData());
+                $arAccidentesTrabajo->setParticipanteInvestigacion2($form->get('participanteInvestigacion2')->getData());
+                $arAccidentesTrabajo->setCargoParticipanteInvestigacion2($form->get('cargoParticipanteInvestigacion2')->getData());
+                $arAccidentesTrabajo->setParticipanteInvestigacion3($form->get('participanteInvestigacion3')->getData());
+                $arAccidentesTrabajo->setCargoParticipanteInvestigacion3($form->get('cargoParticipanteInvestigacion3')->getData());
                 $arAccidentesTrabajo->setRepresentanteLegal($form->get('representanteLegal')->getData());
                 $arAccidentesTrabajo->setCargoRepresentanteLegal($form->get('cargoRepresentanteLegal')->getData());
                 $arAccidentesTrabajo->setLicencia($form->get('licencia')->getData());
                 $arAccidentesTrabajo->setFechaVerificacion($form->get('fechaVerificacion')->getData());
-                $arAccidentesTrabajo->setResponsableVerificacion($form->get('responsableVerificacion')->getData());
-                
-                
+                $arAccidentesTrabajo->setResponsableVerificacion($form->get('reponsableVerificacion')->getData());
                 $em->persist($arAccidentesTrabajo);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
