@@ -48,9 +48,9 @@ class RhuEntidadCaja
     protected $empleadosEntidadCajaRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="entidadCajaRel")
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoFamilia", mappedBy="entidadCajaRel")
      */
-    protected $empleadosEstudiosEntidadSaludRel;
+    protected $empleadosFamiliasEntidadCajaRel;
     
     /**
      * Constructor
@@ -58,7 +58,7 @@ class RhuEntidadCaja
     public function __construct()
     {
         $this->empleadosEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->empleadosEstudiosEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosFamiliasEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -226,36 +226,36 @@ class RhuEntidadCaja
     }
 
     /**
-     * Add empleadosEstudiosEntidadSaludRel
+     * Add empleadosFamiliasEntidadCajaRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEntidadSaludRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia $empleadosFamiliasEntidadCajaRel
      *
      * @return RhuEntidadCaja
      */
-    public function addEmpleadosEstudiosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEntidadSaludRel)
+    public function addEmpleadosFamiliasEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia $empleadosFamiliasEntidadCajaRel)
     {
-        $this->empleadosEstudiosEntidadSaludRel[] = $empleadosEstudiosEntidadSaludRel;
+        $this->empleadosFamiliasEntidadCajaRel[] = $empleadosFamiliasEntidadCajaRel;
 
         return $this;
     }
 
     /**
-     * Remove empleadosEstudiosEntidadSaludRel
+     * Remove empleadosFamiliasEntidadCajaRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEntidadSaludRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia $empleadosFamiliasEntidadCajaRel
      */
-    public function removeEmpleadosEstudiosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEntidadSaludRel)
+    public function removeEmpleadosFamiliasEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia $empleadosFamiliasEntidadCajaRel)
     {
-        $this->empleadosEstudiosEntidadSaludRel->removeElement($empleadosEstudiosEntidadSaludRel);
+        $this->empleadosFamiliasEntidadCajaRel->removeElement($empleadosFamiliasEntidadCajaRel);
     }
 
     /**
-     * Get empleadosEstudiosEntidadSaludRel
+     * Get empleadosFamiliasEntidadCajaRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEmpleadosEstudiosEntidadSaludRel()
+    public function getEmpleadosFamiliasEntidadCajaRel()
     {
-        return $this->empleadosEstudiosEntidadSaludRel;
+        return $this->empleadosFamiliasEntidadCajaRel;
     }
 }

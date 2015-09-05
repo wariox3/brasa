@@ -41,7 +41,7 @@ class RhuSede
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoDetalleSede", mappedBy="sedeRel")
      */
-    protected $pagosDetallesSedeRel;     
+    protected $pagosDetallesSedesSedeRel;     
 
     /**
      * Constructor
@@ -49,6 +49,7 @@ class RhuSede
     public function __construct()
     {
         $this->programacionesPagosDetallesSedeRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosDetallesSedesSedeRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -168,36 +169,36 @@ class RhuSede
     }
 
     /**
-     * Add pagosDetallesSedeRel
+     * Add pagosDetallesSedesSedeRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedeRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesSedeRel
      *
      * @return RhuSede
      */
-    public function addPagosDetallesSedeRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedeRel)
+    public function addPagosDetallesSedesSedeRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesSedeRel)
     {
-        $this->pagosDetallesSedeRel[] = $pagosDetallesSedeRel;
+        $this->pagosDetallesSedesSedeRel[] = $pagosDetallesSedesSedeRel;
 
         return $this;
     }
 
     /**
-     * Remove pagosDetallesSedeRel
+     * Remove pagosDetallesSedesSedeRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedeRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesSedeRel
      */
-    public function removePagosDetallesSedeRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedeRel)
+    public function removePagosDetallesSedesSedeRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede $pagosDetallesSedesSedeRel)
     {
-        $this->pagosDetallesSedeRel->removeElement($pagosDetallesSedeRel);
+        $this->pagosDetallesSedesSedeRel->removeElement($pagosDetallesSedesSedeRel);
     }
 
     /**
-     * Get pagosDetallesSedeRel
+     * Get pagosDetallesSedesSedeRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPagosDetallesSedeRel()
+    public function getPagosDetallesSedesSedeRel()
     {
-        return $this->pagosDetallesSedeRel;
+        return $this->pagosDetallesSedesSedeRel;
     }
 }

@@ -35,12 +35,12 @@ class RhuEmpleadoFamilia
     /**
      * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
      */    
-    private $eps;
+    private $codigoEntidadSaludFk;
     
     /**
      * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
      */    
-    private $caja;
+    private $codigoEntidadCajaFk;
     
     /**
      * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
@@ -165,51 +165,51 @@ class RhuEmpleadoFamilia
     }
 
     /**
-     * Set eps
+     * Set codigoEntidadSaludFk
      *
-     * @param integer $eps
+     * @param integer $codigoEntidadSaludFk
      *
      * @return RhuEmpleadoFamilia
      */
-    public function setEps($eps)
+    public function setCodigoEntidadSaludFk($codigoEntidadSaludFk)
     {
-        $this->eps = $eps;
+        $this->codigoEntidadSaludFk = $codigoEntidadSaludFk;
 
         return $this;
     }
 
     /**
-     * Get eps
+     * Get codigoEntidadSaludFk
      *
      * @return integer
      */
-    public function getEps()
+    public function getCodigoEntidadSaludFk()
     {
-        return $this->eps;
+        return $this->codigoEntidadSaludFk;
     }
 
     /**
-     * Set caja
+     * Set codigoEntidadCajaFk
      *
-     * @param integer $caja
+     * @param integer $codigoEntidadCajaFk
      *
      * @return RhuEmpleadoFamilia
      */
-    public function setCaja($caja)
+    public function setCodigoEntidadCajaFk($codigoEntidadCajaFk)
     {
-        $this->caja = $caja;
+        $this->codigoEntidadCajaFk = $codigoEntidadCajaFk;
 
         return $this;
     }
 
     /**
-     * Get caja
+     * Get codigoEntidadCajaFk
      *
      * @return integer
      */
-    public function getCaja()
+    public function getCodigoEntidadCajaFk()
     {
-        return $this->caja;
+        return $this->codigoEntidadCajaFk;
     }
 
     /**

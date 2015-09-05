@@ -42,12 +42,15 @@ class RhuSsoSucursal
      */
     protected $centrosCostosSucursalRel;     
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->ssoPeriodosDetallesSsoSucursalRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoPeriodosEmpleadosSsoSucursalRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->centrosCostosSucursalRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

@@ -77,16 +77,17 @@ class RhuExamen
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoExamenDetalle", mappedBy="examenRel")
      */
-    protected $pagosExamanesDetallesExamenRel;
+    protected $pagosExamenesDetallesExamenRel;
 
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->examenesExamenDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pagosExamanesDetallesExamenRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosExamenesDetallesExamenRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -244,6 +245,54 @@ class RhuExamen
     }
 
     /**
+     * Set vrTotal
+     *
+     * @param float $vrTotal
+     *
+     * @return RhuExamen
+     */
+    public function setVrTotal($vrTotal)
+    {
+        $this->vrTotal = $vrTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotal
+     *
+     * @return float
+     */
+    public function getVrTotal()
+    {
+        return $this->vrTotal;
+    }
+
+    /**
+     * Set estadoPagado
+     *
+     * @param boolean $estadoPagado
+     *
+     * @return RhuExamen
+     */
+    public function setEstadoPagado($estadoPagado)
+    {
+        $this->estadoPagado = $estadoPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagado()
+    {
+        return $this->estadoPagado;
+    }
+
+    /**
      * Set entidadExamenRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen $entidadExamenRel
@@ -326,84 +375,36 @@ class RhuExamen
     }
 
     /**
-     * Add pagosExamanesDetallesExamenRel
+     * Add pagosExamenesDetallesExamenRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamanesDetallesExamenRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamenesDetallesExamenRel
      *
      * @return RhuExamen
      */
-    public function addPagosExamanesDetallesExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamanesDetallesExamenRel)
+    public function addPagosExamenesDetallesExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamenesDetallesExamenRel)
     {
-        $this->pagosExamanesDetallesExamenRel[] = $pagosExamanesDetallesExamenRel;
+        $this->pagosExamenesDetallesExamenRel[] = $pagosExamenesDetallesExamenRel;
 
         return $this;
     }
 
     /**
-     * Remove pagosExamanesDetallesExamenRel
+     * Remove pagosExamenesDetallesExamenRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamanesDetallesExamenRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamenesDetallesExamenRel
      */
-    public function removePagosExamanesDetallesExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamanesDetallesExamenRel)
+    public function removePagosExamenesDetallesExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle $pagosExamenesDetallesExamenRel)
     {
-        $this->pagosExamanesDetallesExamenRel->removeElement($pagosExamanesDetallesExamenRel);
+        $this->pagosExamenesDetallesExamenRel->removeElement($pagosExamenesDetallesExamenRel);
     }
 
     /**
-     * Get pagosExamanesDetallesExamenRel
+     * Get pagosExamenesDetallesExamenRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPagosExamanesDetallesExamenRel()
+    public function getPagosExamenesDetallesExamenRel()
     {
-        return $this->pagosExamanesDetallesExamenRel;
-    }
-
-    /**
-     * Set vrTotal
-     *
-     * @param float $vrTotal
-     *
-     * @return RhuExamen
-     */
-    public function setVrTotal($vrTotal)
-    {
-        $this->vrTotal = $vrTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotal
-     *
-     * @return float
-     */
-    public function getVrTotal()
-    {
-        return $this->vrTotal;
-    }
-
-    /**
-     * Set estadoPagado
-     *
-     * @param boolean $estadoPagado
-     *
-     * @return RhuExamen
-     */
-    public function setEstadoPagado($estadoPagado)
-    {
-        $this->estadoPagado = $estadoPagado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoPagado
-     *
-     * @return boolean
-     */
-    public function getEstadoPagado()
-    {
-        return $this->estadoPagado;
+        return $this->pagosExamenesDetallesExamenRel;
     }
 }

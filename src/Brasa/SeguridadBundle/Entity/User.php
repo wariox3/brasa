@@ -60,7 +60,7 @@ class User implements UserInterface, \Serializable
     private $roles;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="SegRoles", inversedBy="usuariosRolRel")
+     * @ORM\ManyToOne(targetEntity="SegRoles", inversedBy="usersRolRel")
      * @ORM\JoinColumn(name="roles", referencedColumnName="codigo_rol_pk")
      */
     protected $rolRel;     

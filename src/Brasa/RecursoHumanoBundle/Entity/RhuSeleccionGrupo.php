@@ -57,10 +57,9 @@ class RhuSeleccionGrupo
     protected $centroCostoRel;    
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="selecccionGrupoRel")
+     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="seleccionGrupoRel")
      */
     protected $seleccionesSeleccionGrupoRel;
-    
     
 
     /**
@@ -68,7 +67,7 @@ class RhuSeleccionGrupo
      */
     public function __construct()
     {
-        $this->seleccionSeleccionGrupoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesSeleccionGrupoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -130,6 +129,30 @@ class RhuSeleccionGrupo
     }
 
     /**
+     * Set cantidadSolicitida
+     *
+     * @param integer $cantidadSolicitida
+     *
+     * @return RhuSeleccionGrupo
+     */
+    public function setCantidadSolicitida($cantidadSolicitida)
+    {
+        $this->cantidadSolicitida = $cantidadSolicitida;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadSolicitida
+     *
+     * @return integer
+     */
+    public function getCantidadSolicitida()
+    {
+        return $this->cantidadSolicitida;
+    }
+
+    /**
      * Set fechaPruebas
      *
      * @param \DateTime $fechaPruebas
@@ -156,7 +179,7 @@ class RhuSeleccionGrupo
     /**
      * Set estadoAbierto
      *
-     * @param boolean $estadoAbierto
+     * @param integer $estadoAbierto
      *
      * @return RhuSeleccionGrupo
      */
@@ -170,7 +193,7 @@ class RhuSeleccionGrupo
     /**
      * Get estadoAbierto
      *
-     * @return boolean
+     * @return integer
      */
     public function getEstadoAbierto()
     {
@@ -226,40 +249,6 @@ class RhuSeleccionGrupo
     }
 
     /**
-     * Add seleccionSeleccionGrupoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionSeleccionGrupoRel
-     *
-     * @return RhuSeleccionGrupo
-     */
-    public function addSeleccionSeleccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionSeleccionGrupoRel)
-    {
-        $this->seleccionSeleccionGrupoRel[] = $seleccionSeleccionGrupoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove seleccionSeleccionGrupoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionSeleccionGrupoRel
-     */
-    public function removeSeleccionSeleccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionSeleccionGrupoRel)
-    {
-        $this->seleccionSeleccionGrupoRel->removeElement($seleccionSeleccionGrupoRel);
-    }
-
-    /**
-     * Get seleccionSeleccionGrupoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSeleccionSeleccionGrupoRel()
-    {
-        return $this->seleccionSeleccionGrupoRel;
-    }
-
-    /**
      * Add seleccionesSeleccionGrupoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionGrupoRel
@@ -291,53 +280,5 @@ class RhuSeleccionGrupo
     public function getSeleccionesSeleccionGrupoRel()
     {
         return $this->seleccionesSeleccionGrupoRel;
-    }
-
-    /**
-     * Set cantidadSolicitidad
-     *
-     * @param integer $cantidadSolicitidad
-     *
-     * @return RhuSeleccionGrupo
-     */
-    public function setCantidadSolicitidad($cantidadSolicitidad)
-    {
-        $this->cantidadSolicitidad = $cantidadSolicitidad;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadSolicitidad
-     *
-     * @return integer
-     */
-    public function getCantidadSolicitidad()
-    {
-        return $this->cantidadSolicitidad;
-    }
-
-    /**
-     * Set cantidadSolicitida
-     *
-     * @param integer $cantidadSolicitida
-     *
-     * @return RhuSeleccionGrupo
-     */
-    public function setCantidadSolicitida($cantidadSolicitida)
-    {
-        $this->cantidadSolicitida = $cantidadSolicitida;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadSolicitida
-     *
-     * @return integer
-     */
-    public function getCantidadSolicitida()
-    {
-        return $this->cantidadSolicitida;
     }
 }

@@ -48,7 +48,7 @@ class RhuEmpleadoDotacionDetalle
     private $lote;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleadoDotacion", inversedBy="empleadosDotacionesEmpleadoDotacionRel")
+     * @ORM\ManyToOne(targetEntity="RhuEmpleadoDotacion", inversedBy="empleadosDotacionesDetallesEmpleadoDotacionRel")
      * @ORM\JoinColumn(name="codigo_empleado_dotacion_fk", referencedColumnName="codigo_empleado_dotacion_pk")
      */
     protected $empleadoDotacionRel;

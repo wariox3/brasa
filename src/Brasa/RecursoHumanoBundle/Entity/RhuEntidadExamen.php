@@ -45,9 +45,7 @@ class RhuEntidadExamen
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoExamen", mappedBy="entidadExamenRel")
      */
-    protected $pagosExamanesEntidadExamenRel;
-    
-   
+    protected $pagosExamenesEntidadExamenRel;
     
     /**
      * Constructor
@@ -55,7 +53,7 @@ class RhuEntidadExamen
     public function __construct()
     {
         $this->examenesEntidadExamenRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pagosExamanesEntidadExamenRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosExamenesEntidadExamenRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -199,36 +197,36 @@ class RhuEntidadExamen
     }
 
     /**
-     * Add pagosExamanesEntidadExamenRel
+     * Add pagosExamenesEntidadExamenRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagosExamanesEntidadExamenRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagosExamenesEntidadExamenRel
      *
      * @return RhuEntidadExamen
      */
-    public function addPagosExamanesEntidadExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagosExamanesEntidadExamenRel)
+    public function addPagosExamenesEntidadExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagosExamenesEntidadExamenRel)
     {
-        $this->pagosExamanesEntidadExamenRel[] = $pagosExamanesEntidadExamenRel;
+        $this->pagosExamenesEntidadExamenRel[] = $pagosExamenesEntidadExamenRel;
 
         return $this;
     }
 
     /**
-     * Remove pagosExamanesEntidadExamenRel
+     * Remove pagosExamenesEntidadExamenRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagosExamanesEntidadExamenRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagosExamenesEntidadExamenRel
      */
-    public function removePagosExamanesEntidadExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagosExamanesEntidadExamenRel)
+    public function removePagosExamenesEntidadExamenRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen $pagosExamenesEntidadExamenRel)
     {
-        $this->pagosExamanesEntidadExamenRel->removeElement($pagosExamanesEntidadExamenRel);
+        $this->pagosExamenesEntidadExamenRel->removeElement($pagosExamenesEntidadExamenRel);
     }
 
     /**
-     * Get pagosExamanesEntidadExamenRel
+     * Get pagosExamenesEntidadExamenRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPagosExamanesEntidadExamenRel()
+    public function getPagosExamenesEntidadExamenRel()
     {
-        return $this->pagosExamanesEntidadExamenRel;
+        return $this->pagosExamenesEntidadExamenRel;
     }
 }

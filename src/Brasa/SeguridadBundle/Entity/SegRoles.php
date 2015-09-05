@@ -21,6 +21,10 @@ class SegRoles
      */    
     private $nombre;   
     
+    /**
+     * @ORM\OneToMany(targetEntity="User", mappedBy="rolRel")
+     */
+    protected $usersRolRel;    
 
     /**
      * Set codigoRolPk
@@ -68,5 +72,46 @@ class SegRoles
     public function getNombre()
     {
         return $this->nombre;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->usersRolRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add usersRolRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\User $usersRolRel
+     *
+     * @return SegRoles
+     */
+    public function addUsersRolRel(\Brasa\SeguridadBundle\Entity\User $usersRolRel)
+    {
+        $this->usersRolRel[] = $usersRolRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove usersRolRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\User $usersRolRel
+     */
+    public function removeUsersRolRel(\Brasa\SeguridadBundle\Entity\User $usersRolRel)
+    {
+        $this->usersRolRel->removeElement($usersRolRel);
+    }
+
+    /**
+     * Get usersRolRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsersRolRel()
+    {
+        return $this->usersRolRel;
     }
 }

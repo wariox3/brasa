@@ -388,7 +388,7 @@ class RhuEmpleado
     protected $vacacionesEmpleadoRel;    
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="empleadoRel")
+     * @ORM\OneToMany(targetEntity="RhuVacacionDisfrute", mappedBy="empleadoRel")
      */
     protected $vacacionesDisfruteEmpleadoRel;     
     
@@ -442,7 +442,7 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacion", mappedBy="empleadoRel")
      */
-    protected $dotacionesEmpleadoRel;
+    protected $empleadosDotacionesEmpleadoRel;
     
      /**
      * @ORM\OneToMany(targetEntity="RhuAccidenteTrabajo", mappedBy="empleadoRel")
@@ -2572,5 +2572,39 @@ class RhuEmpleado
     public function getAccidentesTrabajoEmpleadoRel()
     {
         return $this->accidentesTrabajoEmpleadoRel;
+    }
+
+    /**
+     * Add empleadosDotacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addEmpleadosDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoRel)
+    {
+        $this->empleadosDotacionesEmpleadoRel[] = $empleadosDotacionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosDotacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoRel
+     */
+    public function removeEmpleadosDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoRel)
+    {
+        $this->empleadosDotacionesEmpleadoRel->removeElement($empleadosDotacionesEmpleadoRel);
+    }
+
+    /**
+     * Get empleadosDotacionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosDotacionesEmpleadoRel()
+    {
+        return $this->empleadosDotacionesEmpleadoRel;
     }
 }

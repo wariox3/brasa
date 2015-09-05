@@ -33,23 +33,24 @@ class RhuSsoPeriodoEmpleado
     private $codigoEmpleadoFk;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="SsoPeriodosEmpleadosSsoPeriodoRel")
+     * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosEmpleadosSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
     protected $ssoPeriodoRel;    
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSsoSucursal", inversedBy="SsoPeriodosEmpleadosSsoSucursalRel")
+     * @ORM\ManyToOne(targetEntity="RhuSsoSucursal", inversedBy="ssoPeriodosEmpleadosSsoSucursalRel")
      * @ORM\JoinColumn(name="codigo_sucursal_fk", referencedColumnName="codigo_sucursal_pk")
      */
     protected $ssoSucursalRel;       
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="SsoPeriodosEmpleadosEmpleadoRel")
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="ssoPeriodosEmpleadosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;      
     
+
 
     /**
      * Get codigoPeriodoEmpleadoPk

@@ -33,17 +33,19 @@ class RhuSsoPeriodoDetalle
     private $estadoGenerado = 0;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="SsoPeriodosDetallesSsoPeriodoRel")
+     * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosDetallesSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
     protected $ssoPeriodoRel;    
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSsoSucursal", inversedBy="SsoPeriodosDetallesSsoSucursalRel")
+     * @ORM\ManyToOne(targetEntity="RhuSsoSucursal", inversedBy="ssoPeriodosDetallesSsoSucursalRel")
      * @ORM\JoinColumn(name="codigo_sucursal_fk", referencedColumnName="codigo_sucursal_pk")
      */
     protected $ssoSucursalRel;    
     
+
+
 
     /**
      * Get codigoPeriodoDetallePk
@@ -104,6 +106,30 @@ class RhuSsoPeriodoDetalle
     }
 
     /**
+     * Set estadoGenerado
+     *
+     * @param boolean $estadoGenerado
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setEstadoGenerado($estadoGenerado)
+    {
+        $this->estadoGenerado = $estadoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoGenerado()
+    {
+        return $this->estadoGenerado;
+    }
+
+    /**
      * Set ssoPeriodoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel
@@ -149,29 +175,5 @@ class RhuSsoPeriodoDetalle
     public function getSsoSucursalRel()
     {
         return $this->ssoSucursalRel;
-    }
-
-    /**
-     * Set estadoGenerado
-     *
-     * @param boolean $estadoGenerado
-     *
-     * @return RhuSsoPeriodoDetalle
-     */
-    public function setEstadoGenerado($estadoGenerado)
-    {
-        $this->estadoGenerado = $estadoGenerado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoGenerado
-     *
-     * @return boolean
-     */
-    public function getEstadoGenerado()
-    {
-        return $this->estadoGenerado;
     }
 }

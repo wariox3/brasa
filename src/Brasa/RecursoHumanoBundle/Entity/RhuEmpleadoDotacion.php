@@ -49,15 +49,15 @@ class RhuEmpleadoDotacion
     protected $centroCostoRel;            
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="dotacionesEmpleadoRel")
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="empleadosDotacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacion", mappedBy="empleadoDotacionRel")
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacionDetalle", mappedBy="empleadoDotacionRel")
      */
-    protected $empleadosDotacionesEmpleadoDotacionRel;
+    protected $empleadosDotacionesDetallesEmpleadoDotacionRel;
     
     
     /**
@@ -278,5 +278,39 @@ class RhuEmpleadoDotacion
     public function getEmpleadosDotacionesEmpleadoDotacionRel()
     {
         return $this->empleadosDotacionesEmpleadoDotacionRel;
+    }
+
+    /**
+     * Add empleadosDotacionesDetallesEmpleadoDotacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $empleadosDotacionesDetallesEmpleadoDotacionRel
+     *
+     * @return RhuEmpleadoDotacion
+     */
+    public function addEmpleadosDotacionesDetallesEmpleadoDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $empleadosDotacionesDetallesEmpleadoDotacionRel)
+    {
+        $this->empleadosDotacionesDetallesEmpleadoDotacionRel[] = $empleadosDotacionesDetallesEmpleadoDotacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosDotacionesDetallesEmpleadoDotacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $empleadosDotacionesDetallesEmpleadoDotacionRel
+     */
+    public function removeEmpleadosDotacionesDetallesEmpleadoDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $empleadosDotacionesDetallesEmpleadoDotacionRel)
+    {
+        $this->empleadosDotacionesDetallesEmpleadoDotacionRel->removeElement($empleadosDotacionesDetallesEmpleadoDotacionRel);
+    }
+
+    /**
+     * Get empleadosDotacionesDetallesEmpleadoDotacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosDotacionesDetallesEmpleadoDotacionRel()
+    {
+        return $this->empleadosDotacionesDetallesEmpleadoDotacionRel;
     }
 }

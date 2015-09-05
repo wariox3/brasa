@@ -45,6 +45,8 @@ class RhuPagoExamenDetalle
     protected $pagoExamenRel;         
        
 
+
+
     /**
      * Get codigoPagoExamenDetallePk
      *

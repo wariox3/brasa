@@ -192,7 +192,7 @@ class RhuCentroCosto
     protected $vacacionesCentroCostoRel;
    
     /**
-     * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="centroCostoRel")
+     * @ORM\OneToMany(targetEntity="RhuVacacionDisfrute", mappedBy="centroCostoRel")
      */
     protected $vacacionesDisfruteCentroCostoRel;    
     
@@ -206,6 +206,7 @@ class RhuCentroCosto
      */
     protected $accidentesTrabajoCentroCostoRel;
     
+
 
     /**
      * Constructor
@@ -1200,11 +1201,11 @@ class RhuCentroCosto
     /**
      * Add vacacionesDisfruteCentroCostoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteCentroCostoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteCentroCostoRel
      *
      * @return RhuCentroCosto
      */
-    public function addVacacionesDisfruteCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteCentroCostoRel)
+    public function addVacacionesDisfruteCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteCentroCostoRel)
     {
         $this->vacacionesDisfruteCentroCostoRel[] = $vacacionesDisfruteCentroCostoRel;
 
@@ -1214,9 +1215,9 @@ class RhuCentroCosto
     /**
      * Remove vacacionesDisfruteCentroCostoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteCentroCostoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteCentroCostoRel
      */
-    public function removeVacacionesDisfruteCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteCentroCostoRel)
+    public function removeVacacionesDisfruteCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteCentroCostoRel)
     {
         $this->vacacionesDisfruteCentroCostoRel->removeElement($vacacionesDisfruteCentroCostoRel);
     }

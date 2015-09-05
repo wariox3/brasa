@@ -95,10 +95,12 @@ class RhuPagoDetalleSede
     protected $pagoConceptoRel;     
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSede", inversedBy="PagosDetallesSedeRel")
+     * @ORM\ManyToOne(targetEntity="RhuSede", inversedBy="pagosDetallesSedesSedeRel")
      * @ORM\JoinColumn(name="codigo_sede_fk", referencedColumnName="codigo_sede_pk")
      */
     protected $sedeRel;     
+
+
 
 
     /**
@@ -400,6 +402,30 @@ class RhuPagoDetalleSede
     }
 
     /**
+     * Set codigoSedeFk
+     *
+     * @param integer $codigoSedeFk
+     *
+     * @return RhuPagoDetalleSede
+     */
+    public function setCodigoSedeFk($codigoSedeFk)
+    {
+        $this->codigoSedeFk = $codigoSedeFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSedeFk
+     *
+     * @return integer
+     */
+    public function getCodigoSedeFk()
+    {
+        return $this->codigoSedeFk;
+    }
+
+    /**
      * Set pagoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
@@ -445,30 +471,6 @@ class RhuPagoDetalleSede
     public function getPagoConceptoRel()
     {
         return $this->pagoConceptoRel;
-    }
-
-    /**
-     * Set codigoSedeFk
-     *
-     * @param integer $codigoSedeFk
-     *
-     * @return RhuPagoDetalleSede
-     */
-    public function setCodigoSedeFk($codigoSedeFk)
-    {
-        $this->codigoSedeFk = $codigoSedeFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSedeFk
-     *
-     * @return integer
-     */
-    public function getCodigoSedeFk()
-    {
-        return $this->codigoSedeFk;
     }
 
     /**
