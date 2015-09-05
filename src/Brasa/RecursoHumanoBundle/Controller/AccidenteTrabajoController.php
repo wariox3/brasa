@@ -273,6 +273,137 @@ class AccidenteTrabajoController extends Controller
             
             'form' => $form->createView()));
     }
+    
+    public function editarAction($codigoAccidenteTrabajo) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arAccidentesTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
+        $arAccidentesTrabajo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAccidenteTrabajo')->find($codigoAccidenteTrabajo);
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arAccidentesTrabajo->getCodigoEmpleadoFk());
+        $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
+        $form = $this->createFormBuilder()
+            ->add('numeroIdentificacion', 'text', array('data' => $arEmpleadoFinal->getNumeroIdentificacion(),'required' => true))
+            ->add('ciudadRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCiudad',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))
+            ->add('codigoFurat', 'number', array('required' => false))
+            ->add('fechaAccidente', 'date', array('data' => new \DateTime('now')))
+            ->add('tipoAccidente', 'choice', array('choices'   => array('1' => 'ACCIDENTE', '2' => 'ACCIDENTE GRAVE', '3' => 'ACCIDENTE MORTAL', '4' => 'INCIDENTE')))
+            ->add('fechaEnviaInvestigacion', 'date', array('data' => new \DateTime('now')))
+            ->add('fechaIncapacidadDesde', 'date', array('data' => new \DateTime('now')))                
+            ->add('fechaIncapacidadHasta', 'date', array('data' => new \DateTime('now')))
+            ->add('dias', 'number', array('required' => false))
+            ->add('cie10', 'text', array('required' => false))
+            ->add('diagnostico', 'text', array('required' => false))
+            ->add('naturalezaLesion', 'text', array('required' => false))
+            ->add('cuerpoAfectado', 'text', array('required' => false))
+            ->add('agente', 'text', array('required' => false))
+            ->add('mecanismoAccidente', 'text', array('required' => false))
+            ->add('lugarAccidente', 'text', array('required' => false))                
+            ->add('descripcionAccidente', 'textarea', array('required' => false))
+            ->add('actoInseguro', 'textarea', array('required' => false))
+            ->add('condicionInsegura', 'textarea', array('required' => false))
+            ->add('factorPersonal', 'textarea', array('required' => false))
+            ->add('factorTrabajo', 'textarea', array('required' => false))
+            ->add('planAccion1', 'textarea', array('required' => false))
+            ->add('tipoControl1', 'choice', array('choices' => array('1' => 'FUENTE', '2' => 'MEDIO', '3' => 'PERSONA')))
+            ->add('fechaVerificacion1', 'date', array('data' => new \DateTime('now')))                
+            ->add('areaResponsable1', 'text', array('required' => false))
+            ->add('planAccion2', 'textarea', array('required' => false))
+            ->add('tipoControl2', 'choice', array('choices' => array('1' => 'FUENTE', '2' => 'MEDIO', '3' => 'PERSONA')))
+            ->add('fechaVerificacion2', 'date', array('data' => new \DateTime('now')))                
+            ->add('areaResponsable2', 'text', array('required' => false))                
+            ->add('planAccion3', 'textarea', array('required' => false))
+            ->add('tipoControl3', 'choice', array('choices' => array('1' => 'FUENTE', '2' => 'MEDIO', '3' => 'PERSONA')))
+            ->add('fechaVerificacion3', 'date', array('data' => new \DateTime('now')))                
+            ->add('areaResponsable3', 'text', array('required' => false))
+            ->add('participanteInvestigacion1', 'text', array('required' => false))                
+            ->add('cargoParticipanteInvestigacion1', 'text', array('required' => false))
+            ->add('participanteInvestigacion2', 'text', array('required' => false))                
+            ->add('cargoParticipanteInvestigacion2', 'text', array('required' => false))                
+            ->add('participanteInvestigacion3', 'text', array('required' => false))                
+            ->add('cargoParticipanteInvestigacion3', 'text', array('required' => false))                
+            ->add('representanteLegal', 'text', array('required' => false))                
+            ->add('cargoRepresentanteLegal', 'text', array('required' => false))
+            ->add('licencia', 'text', array('required' => false))
+            ->add('fechaVerificacion', 'date', array('data' => new \DateTime('now'))) 
+            ->add('reponsableVerificacion', 'text', array('required' => false))                
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {           
+            
+            
+            if (count($arEmpleado) == 0){
+                $objMensaje->Mensaje("error", "No existe el número de identificación", $this);
+            }else {
+                
+                $arAccidentesTrabajo->setEmpleadoRel($arEmpleado[0]);
+                
+                $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
+                //$arCiudad = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCiudadRel());
+                $arAccidentesTrabajo->setCentroCostoRel($arCentroCosto);
+                $arAccidentesTrabajo->setCiudadRel($arAccidentesTrabajo->getCiudadRel());
+                $arAccidentesTrabajo->setCodigoFurat($form->get('codigoFurat')->getData());
+                $arAccidentesTrabajo->setFechaAccidente($form->get('fechaAccidente')->getData());
+                $arAccidentesTrabajo->setTipoAccidente($form->get('tipoAccidente')->getData());
+                $arAccidentesTrabajo->setFechaEnviaInvestigacion($form->get('fechaEnviaInvestigacion')->getData());
+                $arAccidentesTrabajo->setFechaIncapacidadDesde($form->get('fechaIncapacidadDesde')->getData());
+                $arAccidentesTrabajo->setFechaIncapacidadHasta($form->get('fechaIncapacidadHasta')->getData());
+                $arAccidentesTrabajo->setDias($form->get('dias')->getData());
+                $arAccidentesTrabajo->setCie10($form->get('cie10')->getData());
+                $arAccidentesTrabajo->setDiagnostico($form->get('diagnostico')->getData());
+                $arAccidentesTrabajo->setNaturalezaLesion($form->get('naturalezaLesion')->getData());
+                $arAccidentesTrabajo->setCuerpoAfectado($form->get('cuerpoAfectado')->getData());
+                $arAccidentesTrabajo->setAgente($form->get('agente')->getData());
+                $arAccidentesTrabajo->setMecanismoAccidente($form->get('mecanismoAccidente')->getData());
+                $arAccidentesTrabajo->setLugarAccidente($form->get('lugarAccidente')->getData());
+                $arAccidentesTrabajo->setCodigoFurat($form->get('codigoFurat')->getData());
+                $arAccidentesTrabajo->setDescripcionAccidente($form->get('descripcionAccidente')->getData());
+                $arAccidentesTrabajo->setActoInseguro($form->get('actoInseguro')->getData());
+                $arAccidentesTrabajo->setCondicionInsegura($form->get('condicionInsegura')->getData());
+                $arAccidentesTrabajo->setFactorPersonal($form->get('factorPersonal')->getData());
+                $arAccidentesTrabajo->setFactorTrabajo($form->get('factorTrabajo')->getData());
+                $arAccidentesTrabajo->setPlanAccion1($form->get('planAccion1')->getData());
+                $arAccidentesTrabajo->setTipoControl1($form->get('tipoControl1')->getData());
+                $arAccidentesTrabajo->setFechaVerificacion1($form->get('fechaVerificacion1')->getData());
+                $arAccidentesTrabajo->setAreaResponsable1($form->get('areaResponsable1')->getData());
+                $arAccidentesTrabajo->setPlanAccion2($form->get('planAccion2')->getData());
+                $arAccidentesTrabajo->setTipoControl2($form->get('tipoControl2')->getData());
+                $arAccidentesTrabajo->setFechaVerificacion2($form->get('fechaVerificacion2')->getData());
+                $arAccidentesTrabajo->setAreaResponsable2($form->get('areaResponsable2')->getData());
+                $arAccidentesTrabajo->setPlanAccion3($form->get('planAccion3')->getData());
+                $arAccidentesTrabajo->setTipoControl3($form->get('tipoControl3')->getData());
+                $arAccidentesTrabajo->setFechaVerificacion3($form->get('fechaVerificacion3')->getData());
+                $arAccidentesTrabajo->setAreaResponsable3($form->get('areaResponsable3')->getData());
+                $arAccidentesTrabajo->setParticipanteInvestigacion1($form->get('participanteInvestigacion1')->getData());
+                $arAccidentesTrabajo->setCargoParticipanteInvestigacion1($form->get('cargoParticipanteInvestigacion1')->getData());
+                $arAccidentesTrabajo->setParticipanteInvestigacion2($form->get('participanteInvestigacion2')->getData());
+                $arAccidentesTrabajo->setCargoParticipanteInvestigacion2($form->get('cargoParticipanteInvestigacion2')->getData());
+                $arAccidentesTrabajo->setParticipanteInvestigacion3($form->get('participanteInvestigacion3')->getData());
+                $arAccidentesTrabajo->setCargoParticipanteInvestigacion3($form->get('cargoParticipanteInvestigacion3')->getData());
+                $arAccidentesTrabajo->setRepresentanteLegal($form->get('representanteLegal')->getData());
+                $arAccidentesTrabajo->setCargoRepresentanteLegal($form->get('cargoRepresentanteLegal')->getData());
+                $arAccidentesTrabajo->setLicencia($form->get('licencia')->getData());
+                $arAccidentesTrabajo->setFechaVerificacion($form->get('fechaVerificacion')->getData());
+                $arAccidentesTrabajo->setResponsableVerificacion($form->get('reponsableVerificacion')->getData());
+                $em->persist($arAccidentesTrabajo);
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:AccidentesTrabajo:nuevo.html.twig', array(
+            
+            'form' => $form->createView()));
+    }
 
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();

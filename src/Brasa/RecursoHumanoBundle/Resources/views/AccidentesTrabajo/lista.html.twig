@@ -41,6 +41,7 @@
                 <th>ESTADO</th>
                 <th style="text-align: center"></th>                
                 <th style="text-align: center"></th>
+                <th style="text-align: center"></th>
             </tr>
             {% for arAccidentesTrabajo in arAccidentesTrabajo %}
             <tr>
@@ -52,6 +53,7 @@
                 <td>{{ arAccidentesTrabajo.tipoAccidente  }}</td>
                 <td>{{ arAccidentesTrabajo.diagnostico  }}</td>
                 <td>{% if arAccidentesTrabajo.estadoAccidente == 1 %}CERRADO{% else %}ABIERTO{% endif %}</td>
+                <td><a href="{{ path('brs_rhu_accidente_trabajo_editar',{'codigoAccidenteTrabajo': arAccidentesTrabajo.codigoAccidenteTrabajoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><a href="{{ path('brs_rhu_accidente_trabajo_detalle', { 'codigoAccidenteTrabajo': arAccidentesTrabajo.codigoAccidenteTrabajoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAccidentesTrabajo.codigoAccidenteTrabajoPk }}" /></td>
             </tr>
