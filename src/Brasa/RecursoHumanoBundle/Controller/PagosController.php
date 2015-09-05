@@ -4,16 +4,15 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 class PagosController extends Controller
 {
-    var $strSqlLista = "";
+    var $strDqlLista = "";
     var $intNumero = 0;
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();  
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
@@ -32,19 +31,18 @@ class PagosController extends Controller
                 $this->filtrarLista($form);
                 $this->listar();
                 $objFormatoPagos = new \Brasa\RecursoHumanoBundle\Formatos\FormatoListaPagos();
-                $objFormatoPagos->Generar($this, $this->strSqlLista);
+                $objFormatoPagos->Generar($this, $this->strDqlLista);
             }
         }       
                 
-        $arPagos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 50);                               
+        $arPagos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
         return $this->render('BrasaRecursoHumanoBundle:Pagos:lista.html.twig', array(
             'arPagos' => $arPagos,
             'form' => $form->createView()));
     }       
     
-    public function detalleAction($codigoPago) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();    
+    public function detalleAction($codigoPago, Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         $objMensaje = $this->get('mensajes_brasa');        
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
@@ -72,8 +70,8 @@ class PagosController extends Controller
     }    
     
     private function formularioLista() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
+        $em = $this->getDoctrine()->getManager();        
+        $session = $this->get('session');
         $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -116,8 +114,8 @@ class PagosController extends Controller
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();                
-        $session = $this->getRequest()->getSession();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDql(
+        $session = $this->get('session');
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDql(
                     $this->intNumero,
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
@@ -125,9 +123,8 @@ class PagosController extends Controller
                     );  
     }         
     
-    private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
+    private function filtrarLista($form, Request $request) {
+        $session = $this->get('session');        
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);                
         $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
@@ -136,8 +133,7 @@ class PagosController extends Controller
     }         
     
     private function generarExcel() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -152,7 +148,7 @@ class PagosController extends Controller
                     ->setCellValue('A1', 'CODIGO');
 
         $i = 2;
-        $query = $em->createQuery($this->strSqlLista);
+        $query = $em->createQuery($this->strDqlLista);
         //$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPagos = $query->getResult();
         foreach ($arPagos as $arPago) {            
