@@ -142,10 +142,6 @@ brs_rhu_accidente_trabajo_nuevo:
     path:     /rhu/accidente/trabajo/nuevo/{codigoAccidenteTrabajo}
     defaults: { _controller: BrasaRecursoHumanoBundle:AccidenteTrabajo:nuevo }
     
-brs_rhu_accidente_trabajo_editar:
-    path:     /rhu/accidente/trabajo/editar/{codigoAccidenteTrabajo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:AccidenteTrabajo:editar }    
-    
 brs_rhu_accidente_trabajo_detalle:
     path:     /rhu/accidente/trabajo/detalle/{codigoAccidenteTrabajo}
     defaults: { _controller: BrasaRecursoHumanoBundle:AccidenteTrabajo:detalle }   

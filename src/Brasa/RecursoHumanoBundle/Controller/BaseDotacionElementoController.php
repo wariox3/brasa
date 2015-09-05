@@ -32,6 +32,7 @@ class BaseDotacionElementoController extends Controller
                     $arDotacionElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($codigoDotacionElementoPk);
                     $em->remove($arDotacionElementos);
                     $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleado_dotacion_lista'));
                 }
             }
             
