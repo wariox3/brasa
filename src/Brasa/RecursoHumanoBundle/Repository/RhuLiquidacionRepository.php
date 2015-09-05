@@ -26,6 +26,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
+        $boolPeriodoContinuo = $arLiquidacion->getContratoRel()->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo();
         $douIBCAdicional = 0;
         $dateFechaUltimoPago = $arLiquidacion->getContratoRel()->getFechaUltimoPago();                        
         if($dateFechaUltimoPago != null) {
@@ -52,7 +53,13 @@ class RhuLiquidacionRepository extends EntityRepository {
         $douVacaciones = 0;
         $douAuxilioTransporte = 0;
         if($intDiasLaborados > 0) {
-            $douBasePrestaciones = ($douIBCTotal / $intDiasLaborados) * 30;   
+            if($boolPeriodoContinuo == 1) {
+                $intDiasContinuos = $this->diasContinuos($arLiquidacion->getContratoRel()->getFechaDesde(), $arLiquidacion->getContratoRel()->getFechaHasta());
+                $douBasePrestaciones = ($douIBCTotal / $intDiasContinuos) * 30;
+            } else {
+                $douBasePrestaciones = ($douIBCTotal / $intDiasLaborados) * 30;
+            }
+               
             if($douSalario <= $arConfiguracion->getVrSalario() * 2) {
                 $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
             }
@@ -66,8 +73,8 @@ class RhuLiquidacionRepository extends EntityRepository {
         if($arLiquidacion->getLiquidarCesantias() == 1) {            
             $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();            
             $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
-            $intDiasCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                
-            $douCesantias = ($douBasePrestacionesTotal * $intDiasCesantias) / 360;
+            $intDiasCesantias = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                            
+            $douCesantias = ($douBasePrestacionesTotal * $intDiasCesantias) / 360;          
             $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
             $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
             $arLiquidacion->setFechaUltimoPagoCesantias($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias());
@@ -240,5 +247,13 @@ class RhuLiquidacionRepository extends EntityRepository {
         
         $fechaHastaPeriodo = date_create_from_format('Y-n-j H:i', $fechaHastaPeriodo . " 00:00");                                                                                
         return $fechaHastaPeriodo;
+    }
+    
+    public function diasContinuos($dateFechaDesde, $dateFechaHasta) {
+        $intDias = 0;
+        $intDias = $dateFechaDesde->diff($dateFechaHasta);
+        $intDias = $intDias->format('%a');
+        $intDias += 1;
+        return $intDias;
     }
 }
