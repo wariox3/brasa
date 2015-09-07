@@ -75,7 +75,7 @@ class ExamenController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnAutorizar', 'submit', array('label'  => 'Autorizar'))
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar', 'attr' => array('disabled' => 'disabled')))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
             ->getForm();        
         $form->handleRequest($request);
