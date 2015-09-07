@@ -143,12 +143,29 @@ class ExamenController extends Controller
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        return $this->render('BrasaRecursoHumanoBundle:Examen:detallenuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Examen:detalleNuevo.html.twig', array(
             'arExamenTipos' => $arExamenTipos,
             'arExamen' => $arExamen,
             'form' => $form->createView()));
     }
 
+    public function detalleNuevoComentarioAction($codigoExamenDetalle) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+        $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->find($codigoExamenDetalle);
+        $form = $this->createForm(new RhuExamenDetalleType, $arExamenDetalle);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arExamenDetalle = $form->getData();
+            $em->persist($arExamenDetalle);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Examen:detalleNuevoComentario.html.twig', array(
+            'form' => $form->createView()));
+    }    
+    
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();

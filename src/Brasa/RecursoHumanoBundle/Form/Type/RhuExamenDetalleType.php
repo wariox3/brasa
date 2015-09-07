@@ -8,7 +8,8 @@ class RhuExamenDetalleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                                                                                                                   
+        $builder         
+            ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit');
     }
  

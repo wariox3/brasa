@@ -38,6 +38,11 @@ class RhuExamenDetalle
     private $vrPrecio;
     
     /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuExamenTipo", inversedBy="examenesDetallesExamenTipoRel")
      * @ORM\JoinColumn(name="codigo_examen_tipo_fk", referencedColumnName="codigo_examen_tipo_pk")
      */
@@ -202,5 +207,29 @@ class RhuExamenDetalle
     public function getExamenRel()
     {
         return $this->examenRel;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuExamenDetalle
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 }
