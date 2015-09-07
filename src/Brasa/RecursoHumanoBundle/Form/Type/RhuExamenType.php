@@ -9,6 +9,10 @@ class RhuExamenType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder           
+            ->add('examenClaseRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuExamenClase',
+                'property' => 'nombre',
+            ))                
             ->add('entidadExamenRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
                 'property' => 'nombre',
@@ -17,7 +21,8 @@ class RhuExamenType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'property' => 'nombre',
             ))   
-            ->add('fecha', 'date')                                                                           
+            ->add('fecha', 'date')   
+            ->add('comentarios', 'textarea', array('required' => false))
             ->add('identificacion', 'number', array('required' => true))
             ->add('nombreCorto', 'text', array('required' => true))
             ->add('guardar', 'submit')

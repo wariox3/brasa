@@ -23,6 +23,11 @@ class RhuExamen
     private $codigoCentroCostoFk;
     
     /**
+     * @ORM\Column(name="codigo_examen_clase_fk", type="integer", nullable=false)
+     */    
+    private $codigoExamenClaseFk;    
+    
+    /**
      * @ORM\Column(name="codigo_entidad_examen_fk", type="integer", nullable=true)
      */    
     private $codigoEntidadExamenFk;
@@ -36,6 +41,11 @@ class RhuExamen
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
     private $estadoAprobado = 0;     
+
+    /**     
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */    
+    private $estadoAutorizado = 0;    
     
     /**
      * @ORM\Column(name="nombreCorto", type="string")
@@ -58,6 +68,17 @@ class RhuExamen
     private $estadoPagado = 0;
     
     /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuExamenClase", inversedBy="examenesExamenClaseRel")
+     * @ORM\JoinColumn(name="codigo_examen_clase_fk", referencedColumnName="codigo_examen_clase_pk")
+     */
+    protected $examenClaseRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadExamen", inversedBy="examenesEntidadExamenRel")
      * @ORM\JoinColumn(name="codigo_entidad_examen_fk", referencedColumnName="codigo_entidad_examen_pk")
      */
@@ -78,8 +99,6 @@ class RhuExamen
      * @ORM\OneToMany(targetEntity="RhuPagoExamenDetalle", mappedBy="examenRel")
      */
     protected $pagosExamenesDetallesExamenRel;
-
-    
 
     /**
      * Constructor
@@ -122,6 +141,30 @@ class RhuExamen
     public function getCodigoCentroCostoFk()
     {
         return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set codigoExamenClaseFk
+     *
+     * @param integer $codigoExamenClaseFk
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoExamenClaseFk($codigoExamenClaseFk)
+    {
+        $this->codigoExamenClaseFk = $codigoExamenClaseFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoExamenClaseFk
+     *
+     * @return integer
+     */
+    public function getCodigoExamenClaseFk()
+    {
+        return $this->codigoExamenClaseFk;
     }
 
     /**
@@ -293,6 +336,30 @@ class RhuExamen
     }
 
     /**
+     * Set examenClaseRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenClase $examenClaseRel
+     *
+     * @return RhuExamen
+     */
+    public function setExamenClaseRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenClase $examenClaseRel = null)
+    {
+        $this->examenClaseRel = $examenClaseRel;
+
+        return $this;
+    }
+
+    /**
+     * Get examenClaseRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuExamenClase
+     */
+    public function getExamenClaseRel()
+    {
+        return $this->examenClaseRel;
+    }
+
+    /**
      * Set entidadExamenRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen $entidadExamenRel
@@ -406,5 +473,53 @@ class RhuExamen
     public function getPagosExamenesDetallesExamenRel()
     {
         return $this->pagosExamenesDetallesExamenRel;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuExamen
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuExamen
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 }

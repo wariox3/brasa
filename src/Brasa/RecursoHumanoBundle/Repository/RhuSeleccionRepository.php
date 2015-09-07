@@ -98,11 +98,14 @@ class RhuSeleccionRepository extends EntityRepository {
                 if ($arSeleccion->getEstadoAprobado() == 0){
                     $arSeleccion->setEstadoAprobado(1);
                     //Se inserta la seleccion aprobada en la entidad examen
+                    $arExamenClase = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenClase();
+                    $arExamenClase = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenClase')->find(1);
                     $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
                     $arExamen->setFecha(new \ DateTime("now"));
                     $arExamen->setCentroCostoRel($arSeleccion->getCentroCostoRel());
                     $arExamen->setIdentificacion($arSeleccion->getNumeroIdentificacion());
                     $arExamen->setNombreCorto($arSeleccion->getNombreCorto());
+                    $arExamen->setExamenClaseRel($arExamenClase);
                     $em->persist($arExamen);     
                 }
                 $em->persist($arSeleccion);                

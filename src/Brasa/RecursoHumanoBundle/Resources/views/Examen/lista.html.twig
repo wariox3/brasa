@@ -37,6 +37,7 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>{{ knp_pagination_sortable(arExamenes, 'CÓDIGO', 'e.codigoExamenPk') }}</th>
+                <th>TIPO</th>
                 <th>ENTIDAD</th>
                 <th>CENTRO COSTO</th>
                 <th>FECHA</th>
@@ -49,8 +50,9 @@
                 <th></th>
             </tr>
             {% for arExamenes in arExamenes %}
-            <tr>
+            <tr>                
                 <td>{{ arExamenes.codigoExamenPk  }}</td>
+                <td>{{ arExamenes.examenClaseRel.nombre  }}</td>
                 <td>{{ arExamenes.entidadExamenRel.nombre|default('SIN ENTIDAD')  }}</td>
                 <td>{{ arExamenes.centroCostoRel.nombre }}</td>
                 <td>{{ arExamenes.fecha | date("Y/m/d")}}</td>

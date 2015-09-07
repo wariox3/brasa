@@ -23,19 +23,17 @@ class RhuExamenTipo
     private $nombre;            
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuExamenTipo", mappedBy="examenTipoRel")
+     * @ORM\OneToMany(targetEntity="RhuExamenDetalle", mappedBy="examenTipoRel")
      */
-    protected $examenesExamenTipoRel;
-    
-   
-
+    protected $examenesDetallesExamenTipoRel;
+      
    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->examenesExamenTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->examenesDetallesExamenTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -73,36 +71,36 @@ class RhuExamenTipo
     }
 
     /**
-     * Add examenesExamenTipoRel
+     * Add examenesDetallesExamenTipoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo $examenesExamenTipoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesDetallesExamenTipoRel
      *
      * @return RhuExamenTipo
      */
-    public function addExamenesExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo $examenesExamenTipoRel)
+    public function addExamenesDetallesExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesDetallesExamenTipoRel)
     {
-        $this->examenesExamenTipoRel[] = $examenesExamenTipoRel;
+        $this->examenesDetallesExamenTipoRel[] = $examenesDetallesExamenTipoRel;
 
         return $this;
     }
 
     /**
-     * Remove examenesExamenTipoRel
+     * Remove examenesDetallesExamenTipoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo $examenesExamenTipoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesDetallesExamenTipoRel
      */
-    public function removeExamenesExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo $examenesExamenTipoRel)
+    public function removeExamenesDetallesExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesDetallesExamenTipoRel)
     {
-        $this->examenesExamenTipoRel->removeElement($examenesExamenTipoRel);
+        $this->examenesDetallesExamenTipoRel->removeElement($examenesDetallesExamenTipoRel);
     }
 
     /**
-     * Get examenesExamenTipoRel
+     * Get examenesDetallesExamenTipoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getExamenesExamenTipoRel()
+    public function getExamenesDetallesExamenTipoRel()
     {
-        return $this->examenesExamenTipoRel;
+        return $this->examenesDetallesExamenTipoRel;
     }
 }

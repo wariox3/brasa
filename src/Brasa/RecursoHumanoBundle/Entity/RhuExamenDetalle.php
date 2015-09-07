@@ -38,7 +38,7 @@ class RhuExamenDetalle
     private $vrPrecio;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuExamenTipo", inversedBy="examenesExamenTipoRel")
+     * @ORM\ManyToOne(targetEntity="RhuExamenTipo", inversedBy="examenesDetallesExamenTipoRel")
      * @ORM\JoinColumn(name="codigo_examen_tipo_fk", referencedColumnName="codigo_examen_tipo_pk")
      */
     protected $examenTipoRel;

@@ -33,6 +33,14 @@ class RhuExamenRepository extends EntityRepository {
         $em->persist($arExamen);
         $em->flush();
     }
+    
+    public function autorizar($codigoExamen) {
+        $em = $this->getEntityManager();
+        $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);       
+        $arExamen->setEstadoAutorizado(1);
+        $em->persist($arExamen);
+        $em->flush();
+    }    
 
     public function eliminarExamen($arrSeleccionados) {
         $em = $this->getEntityManager();

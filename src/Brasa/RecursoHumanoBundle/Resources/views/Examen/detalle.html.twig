@@ -35,6 +35,12 @@
                     <td class="td-in-well" {% if arExamen.estadoAprobado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                 </tr>
                 <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo">AUTORIZADO:</td>
+                    <td class="td-in-well" {% if arExamen.estadoAutorizado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
+                </tr>                
+                <tr>
                     <td></td>
                     <td></td>
                     <td class="titulo" >TOTAL:</td>
@@ -49,6 +55,7 @@
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">                
+                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 6,  'numero': arExamen.codigoExamenPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                                        
             </div>
@@ -86,12 +93,19 @@
             </div>
         </div>
         <div class="btn-toolbar" style="float: right">              
+        {% if arExamen.estadoAutorizado == 0 %}
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo', {'codigoExamen': arExamen.codigoExamenPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo</a>
+            </div>
+        {% endif %}
         <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo', {'codigoExamen': arExamen.codigoExamenPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo</a>
-        </div>
-        <div class="btn-group">
-            {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
-            {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}               
+            {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                            
+            {% if arExamen.estadoAutorizado == 0 %}
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}               
+            {% else %}
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm', 'disabled': 'disabled'} }) }}               
+            {% endif %}
+            {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm', 'disabled': 'disabled'} }) }}               
         </div>
     </div> 
     </div>            
