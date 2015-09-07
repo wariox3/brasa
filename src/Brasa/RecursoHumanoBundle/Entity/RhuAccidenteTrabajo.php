@@ -39,7 +39,7 @@ class RhuAccidenteTrabajo
     private $codigoEmpleadoFk;
     
     /**
-     * @ORM\Column(name="fecha_accidente", type="date")
+     * @ORM\Column(name="fecha_accidente", type="date", nullable=true)
      */    
     private $fechaAccidente;
     
@@ -49,7 +49,7 @@ class RhuAccidenteTrabajo
     private $tipoAccidente;
     
     /**
-     * @ORM\Column(name="fecha_envia_investigacion", type="date")
+     * @ORM\Column(name="fecha_envia_investigacion", type="date", nullable=true)
      */    
     private $fechaEnviaInvestigacion;
     
@@ -59,12 +59,12 @@ class RhuAccidenteTrabajo
     private $codigoCiudadAccidenteFk;
     
     /**
-     * @ORM\Column(name="fecha_incapacidad_desde", type="date")
+     * @ORM\Column(name="fecha_incapacidad_desde", type="date", nullable=true)
      */    
     private $fechaIncapacidadDesde;
     
     /**
-     * @ORM\Column(name="fecha_incapacidad_hasta", type="date")
+     * @ORM\Column(name="fecha_incapacidad_hasta", type="date", nullable=true)
      */    
     private $fechaIncapacidadHasta;
     
@@ -144,7 +144,7 @@ class RhuAccidenteTrabajo
     private $tipoControl1;
     
     /**
-     * @ORM\Column(name="fecha_verificacion_1", type="date")
+     * @ORM\Column(name="fecha_verificacion_1", type="date", nullable=true)
      */    
     private $fechaVerificacion1;
     
@@ -164,7 +164,7 @@ class RhuAccidenteTrabajo
     private $tipoControl2;
     
     /**
-     * @ORM\Column(name="fecha_verificacion_2", type="date")
+     * @ORM\Column(name="fecha_verificacion_2", type="date", nullable=true)
      */    
     private $fechaVerificacion2;
     
@@ -184,7 +184,7 @@ class RhuAccidenteTrabajo
     private $tipoControl3;
     
     /**
-     * @ORM\Column(name="fecha_verificacion_3", type="date")
+     * @ORM\Column(name="fecha_verificacion_3", type="date", nullable=true)
      */    
     private $fechaVerificacion3;
     
@@ -240,7 +240,7 @@ class RhuAccidenteTrabajo
     private $licencia;
     
     /**
-     * @ORM\Column(name="fecha_verificacion", type="date")
+     * @ORM\Column(name="fecha_verificacion", type="date", nullable=true)
      */    
     private $fechaVerificacion;
     

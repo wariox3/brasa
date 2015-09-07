@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAccidenteTrabajoType;
 use Doctrine\ORM\EntityRepository;
 
@@ -139,14 +140,14 @@ class AccidenteTrabajoController extends Controller
             $arAccidenteTrabajo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAccidenteTrabajo')->find($codigoAccidenteTrabajo);
         }
         else {
-            $arAccidenteTrabajo->getFechaAccidente(new \DateTime('now'));
+            /*$arAccidenteTrabajo->getFechaAccidente(new \DateTime('now'));
             $arAccidenteTrabajo->getFechaEnviaInvestigacion(new \DateTime('now'));
             $arAccidenteTrabajo->getFechaIncapacidadDesde(new \DateTime('now'));
             $arAccidenteTrabajo->getFechaIncapacidadHasta(new \DateTime('now'));
             $arAccidenteTrabajo->getFechaVerificacion1(new \DateTime('now'));
             $arAccidenteTrabajo->getFechaVerificacion2(new \DateTime('now'));
             $arAccidenteTrabajo->getFechaVerificacion3(new \DateTime('now'));
-            $arAccidenteTrabajo->getFechaVerificacion(new \DateTime('now'));
+            $arAccidenteTrabajo->getFechaVerificacion(new \DateTime('now'));*/
         }
         $form = $this->createForm(new RhuAccidenteTrabajoType(), $arAccidenteTrabajo);
         $form->handleRequest($request);
@@ -191,24 +192,62 @@ class AccidenteTrabajoController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO');
+            ->setCellValue('A1', 'CÓDIGO')
+            ->setCellValue('B1', 'IDENTIFICACIÓN')
+            ->setCellValue('C1', 'EMPLEADO')
+            ->setCellValue('D1', 'CARGO')
+            ->setCellValue('E1', 'CENTRO COSTO')
+            ->setCellValue('F1', 'FECHA ACCIDENTE')
+            ->setCellValue('G1', 'CIUDAD ACCIDENTE')
+            ->setCellValue('H1', 'INCAPACIDAD DESDE')
+            ->setCellValue('I1', 'INCAPACIDAD HASTA')
+            ->setCellValue('J1', 'DÍAS')
+            ->setCellValue('K1', 'TIPO INCAPACIDAD')
+            ->setCellValue('L1', 'FECHA ENVÍA INVESTIGACIÓN')
+            ->setCellValue('M1', 'CIE10')
+            ->setCellValue('N1', 'DIAGNÓSTICO')
+            ->setCellValue('OD1', 'NATURALEZA DE LA LESIÓN')
+            ->setCellValue('P1', 'PARTE DEL CUERPO AFECTADA')
+            ->setCellValue('Q1', 'AGENTE')
+            ->setCellValue('R1', 'MECANISMO DEL ACCIDENTE')
+            ->setCellValue('S1', 'LUGAR DEL ACCIDENTE')
+            ->setCellValue('T1', 'DESCRIPCIÓN DEL ACCIDENTE');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
-        //$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arAccidentesTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
         $arAccidentesTrabajo = $query->getResult();
         foreach ($arAccidentesTrabajo as $arAccidentesTrabajo) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk());
+                    ->setCellValue('A' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('B' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('D' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getCargoDescripcion())
+                    ->setCellValue('E' . $i, $arAccidentesTrabajo->getCentroCostoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arAccidentesTrabajo->getFechaAccidente())
+                    ->setCellValue('G' . $i, $arAccidentesTrabajo->getCiudadRel()->getNombre())
+                    ->setCellValue('H' . $i, $arAccidentesTrabajo->getFechaIncapacidadDesde())
+                    ->setCellValue('I' . $i, $arAccidentesTrabajo->getFechaIncapacidadHasta())
+                    ->setCellValue('J' . $i, $arAccidentesTrabajo->getDias())
+                    ->setCellValue('K' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('L' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('M' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('N' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('O' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('P' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('Q' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('R' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('S' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                    ->setCellValue('T' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('pagos');
+        $objPHPExcel->getActiveSheet()->setTitle('AccidenteTrabajo');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Pagos.xlsx"');
+        header('Content-Disposition: attachment;filename="AccidentesTrabajo.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -220,6 +259,6 @@ class AccidenteTrabajoController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    } 
+    }
 
 }

@@ -2,8 +2,12 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
+
+
+
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEntidadExamenType;
 
 /**
@@ -127,33 +131,32 @@ class BaseEntidadExamenController extends Controller
     public function detalleAction($codigoEntidadExamenPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $form = $this->createFormBuilder()                        
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))            
+        $form = $this->createFormBuilder()                                   
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
-            /*if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoExamenDetalle();
-                $objFormatoPagoExamenDetalle->Generar($this, $codigoPagoExamen);
-            }*/
+            
             if($form->get('BtnEliminar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoFacturaDetallePago) {
-                        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arFacturaDetallePagoEliminar->getCodigoPagoFk());                        
-                        $em->persist($arPago);
-                        $em->remove($arFacturaDetallePagoEliminar);                        
+                    foreach ($arrSeleccionados AS $codigoDetalleTipo) {
+                        $arExamenListaPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->find($codigoDetalleTipo);                        
+                        $em->persist($arExamenListaPrecio);
+                        $em->remove($arExamenListaPrecio);                        
                     }
                     $em->flush();  
-                    return $this->redirect($this->generateUrl('brs_rhu_facturas_detalle', array('codigoFactura' => $codigoFactura)));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_entidadexamen_detalle', array('codigoEntidadExamenPk' => $codigoEntidadExamenPk)));
                 }
             }
         } 
         $arEntidadExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
         $arEntidadExamenes = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->find($codigoEntidadExamenPk);
+        $arEntidadExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenListaPrecio();
+        $arEntidadExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->findBy(array('codigoEntidadExamenFk' => $codigoEntidadExamenPk));
         return $this->render('BrasaRecursoHumanoBundle:Base/EntidadExamen:detalle.html.twig', array(
                     'arEntidadExamenes' => $arEntidadExamenes,
+                    'arEntidadExamenDetalle' => $arEntidadExamenDetalle,
                     'form' => $form->createView()
                     ));
     } 
@@ -161,33 +164,40 @@ class BaseEntidadExamenController extends Controller
     public function detalleNuevoAction($codigoEntidadExamenPk) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        
-        $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findAll();
         $arEntidadExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
         $arEntidadExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->find($codigoEntidadExamenPk);
+        $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
+        $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findAll();
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request); 
-        if ($form->isValid()) { 
+        if ($form->isValid()) {
+            $arrControles = $request->request->All();
             if ($form->get('BtnGuardar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoExamenTipo) {                    
-                        $arExamenTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($codigoExamenTipo);
-                        $arEntidadExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenListaPrecio();
-                        $arEntidadExamenDetalle->setExamenRel($arEntidadExamen);
-                        $arEntidadExamenDetalle->setExamenTipoRel($arExamenTipo); 
-                        $arEntidadExamenDetalle->setPrecio($form->get('precio')->getData());
-                        $em->persist($arEntidadExamenDetalle);                                                
+                if (isset($arrControles['TxtPrecio'])) {
+                    $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        if($arrControles['TxtPrecio'][$intIndice] > 0 ){
+                            $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
+                            $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($intCodigo);
+                            $arEntidadExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenListaPrecio();
+                            $arEntidadExamenDetalle->setEntidadExamenRel($arEntidadExamen);
+                            $arEntidadExamenDetalle->setExamenTipoRel($arExamenTipos);
+                            $duoPrecio = $arrControles['TxtPrecio'][$intIndice];
+                            $arEntidadExamenDetalle->setPrecio($duoPrecio);
+                            $em->persist($arEntidadExamenDetalle);                                
+                        }                        
+                        $intIndice++;
                     }
-                    $em->flush();                    
-                }                
+                }
+                $em->flush();                                        
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/EntidadExamen:detallenuevo.html.twig', array(
+            'arEntidadExamen' => $arEntidadExamen,
             'arExamenTipos' => $arExamenTipos,
-            'arExamen' => $arExamen,
             'form' => $form->createView()));
     }
 }
