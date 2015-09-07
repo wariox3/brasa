@@ -179,9 +179,12 @@ class BaseEntidadExamenController extends Controller
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
                         if($arrControles['TxtPrecio'][$intIndice] > 0 ){
+                            
                             $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
                             $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($intCodigo);
+                            $arExamenListaPrecios = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($intCodigo);
                             $arEntidadExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenListaPrecio();
+                            
                             $arEntidadExamenDetalle->setEntidadExamenRel($arEntidadExamen);
                             $arEntidadExamenDetalle->setExamenTipoRel($arExamenTipos);
                             $duoPrecio = $arrControles['TxtPrecio'][$intIndice];
