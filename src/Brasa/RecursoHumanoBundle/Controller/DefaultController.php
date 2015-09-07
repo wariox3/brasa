@@ -18,6 +18,18 @@ class DefaultController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Default:inicio.html.twig', array (
             'form' => $form->createView()
         ));
+    }    
+    
+    public function comoIniciarAction() {
+        $request = $this->getRequest();
+        $form = $this->createFormBuilder()                        
+            ->add('BtnInactivar', 'submit', array('label'  => 'Activar / Inactivar',))
+                               
+            ->getForm();                               
+        $form->handleRequest($request);
+        return $this->render('BrasaRecursoHumanoBundle:Default:comoIniciar.html.twig', array (
+            'form' => $form->createView()
+        ));
     }
     
 }

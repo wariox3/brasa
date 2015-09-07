@@ -1,6 +1,10 @@
 brs_rhu_inicio:
     path:     /rhu/inicio   
     defaults: { _controller: BrasaRecursoHumanoBundle:Default:inicio }
+
+brs_rhu_como_iniciar:
+    path:     /rhu/como/iniciar   
+    defaults: { _controller: BrasaRecursoHumanoBundle:Default:comoIniciar }
     
 brs_rhu_credito_detalle:
     path:     /rhu/creditos/detalle/{codigoCreditoPk}

@@ -4,17 +4,16 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuProgramacionPagoType;
 
 class ProgramacionesPagoController extends Controller
 {
     var $strDqlLista = "";
     var $intNumero = 0;
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
+        $paginator  = $this->get('knp_paginator');        
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista();
         $form->handleRequest($request);
@@ -64,12 +63,12 @@ class ProgramacionesPagoController extends Controller
             }
 
             if($form->get('BtnExcel')->isClicked()) {
-                $this->filtrarLista($form);
+                $this->filtrarLista($form, $request);
                 $this->listar();
                 $this->generarExcel();
             }
             if($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrarLista($form);
+                $this->filtrarLista($form, $request);
                 $this->listar();
             }            
 
@@ -81,10 +80,8 @@ class ProgramacionesPagoController extends Controller
             'form' => $form->createView()));
     }
 
-    public function nuevoAction() {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();    
+    public function nuevoAction(Request $request) {        
+        $em = $this->getDoctrine()->getManager();        
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();        
         $arProgramacionPago->setFechaDesde(new \DateTime('now'));
         $arProgramacionPago->setFechaHasta(new \DateTime('now'));
@@ -102,9 +99,8 @@ class ProgramacionesPagoController extends Controller
             'form' => $form->createView()));
     }
     
-    public function detalleAction($codigoProgramacionPago) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function detalleAction($codigoProgramacionPago, Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         $objMensaje = $this->get('mensajes_brasa');
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -215,9 +211,8 @@ class ProgramacionesPagoController extends Controller
                     ));
     }
 
-    public function detallePrimaAction($codigoProgramacionPago) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function detallePrimaAction($codigoProgramacionPago, Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         $objMensaje = $this->get('mensajes_brasa');
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -252,8 +247,7 @@ class ProgramacionesPagoController extends Controller
                     ));
     }
 
-    public function agregarEmpleadoAction($codigoProgramacionPago) {
-        $request = $this->getRequest();
+    public function agregarEmpleadoAction($codigoProgramacionPago, Request $request) {        
         $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder()
             ->add('numeroIdentificacion', 'text', array('required' => true))
@@ -308,8 +302,8 @@ class ProgramacionesPagoController extends Controller
     }
 
     private function formularioLista() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();        
+        $session = $this->get('session');
         $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -353,7 +347,7 @@ class ProgramacionesPagoController extends Controller
 
     private function listar() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = $this->get('session');
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaDQL(
                     "",
                     $session->get('filtroFechaHasta'),
@@ -364,9 +358,8 @@ class ProgramacionesPagoController extends Controller
                     );
     }
 
-    private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
+    private function filtrarLista($form, Request $request) {
+        $session = $this->get('session');        
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
