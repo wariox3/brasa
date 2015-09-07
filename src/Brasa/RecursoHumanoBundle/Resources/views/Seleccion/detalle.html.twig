@@ -88,6 +88,7 @@
                             <th>CELULAR</th>
                             <th>TELEFONO</th>
                             <th>DIRECCION</th>
+                            <th>CIUDAD</th>
                             <th>VERIFICADA</th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
@@ -102,6 +103,7 @@
                             <td>{{ arSeleccionReferencias.celular }}</td>
                             <td>{{ arSeleccionReferencias.telefono }}</td>
                             <td>{{ arSeleccionReferencias.direccion }}</td>
+                            <td>{{ arSeleccionReferencias.ciudadRel.nombre }}</td>
                             <td {% if arSeleccionReferencias.estadoVerificada == 1 %}class="success"{% endif %}>{% if arSeleccionReferencias.estadoVerificada == 1 %} SI {% else %} NO {% endif %}</td>
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}" /></td>
                         </tr>

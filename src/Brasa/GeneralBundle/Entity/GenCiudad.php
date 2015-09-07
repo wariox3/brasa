@@ -92,6 +92,11 @@ class GenCiudad
     protected $rhuSeleccionesCiudadRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia", mappedBy="ciudadRel")
+     */
+    protected $rhuSeleccionesReferenciasCiudadRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto", mappedBy="ciudadRel")
      */
     protected $rhuCentroCostosCiudadRel;
@@ -851,5 +856,39 @@ class GenCiudad
     public function getRhuaccidentesTrabajoCiudadRel()
     {
         return $this->rhuaccidentesTrabajoCiudadRel;
+    }
+
+    /**
+     * Add rhuSeleccionesReferenciasCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuSeleccionesReferenciasCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel)
+    {
+        $this->rhuSeleccionesReferenciasCiudadRel[] = $rhuSeleccionesReferenciasCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuSeleccionesReferenciasCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel
+     */
+    public function removeRhuSeleccionesReferenciasCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel)
+    {
+        $this->rhuSeleccionesReferenciasCiudadRel->removeElement($rhuSeleccionesReferenciasCiudadRel);
+    }
+
+    /**
+     * Get rhuSeleccionesReferenciasCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuSeleccionesReferenciasCiudadRel()
+    {
+        return $this->rhuSeleccionesReferenciasCiudadRel;
     }
 }

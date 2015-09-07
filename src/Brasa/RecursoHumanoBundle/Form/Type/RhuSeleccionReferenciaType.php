@@ -14,6 +14,13 @@ class RhuSeleccionReferenciaType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionTipoReferencia',
                 'property' => 'nombre',
             ))
+            ->add('ciudadRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCiudad',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))               
             ->add('nombreCorto', 'text', array('required' => true))                            
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
