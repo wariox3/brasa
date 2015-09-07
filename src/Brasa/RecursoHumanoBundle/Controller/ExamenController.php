@@ -73,9 +73,9 @@ class ExamenController extends Controller
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
         $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);        
         $form = $this->createFormBuilder()
-            ->add('BtnAutorizar', 'submit', array('label'  => 'Autorizar', 'attr' => array('disabled' => 'disabled')))
+            ->add('BtnAutorizar', 'submit', array('label'  => 'Autorizar'))
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar', 'attr' => array('disabled' => 'disabled')))
             ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
             ->getForm();        
         $form->handleRequest($request);
