@@ -174,20 +174,18 @@ class BaseEntidadExamenController extends Controller
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoExamenTipo) {                    
                         $arExamenTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($codigoExamenTipo);
-                        $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
-                        $arExamenDetalle->setExamenTipoRel($arExamenTipo); 
-                        $arExamenDetalle->setExamenRel($arExamen);
-                        $douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
-                        $arExamenDetalle->setVrPrecio($douPrecio);
-                        $em->persist($arExamenDetalle);                                                
+                        $arEntidadExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenListaPrecio();
+                        $arEntidadExamenDetalle->setExamenRel($arEntidadExamen);
+                        $arEntidadExamenDetalle->setExamenTipoRel($arExamenTipo); 
+                        $arEntidadExamenDetalle->setPrecio($form->get('precio')->getData());
+                        $em->persist($arEntidadExamenDetalle);                                                
                     }
-                    $em->flush();
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);                    
+                    $em->flush();                    
                 }                
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        return $this->render('BrasaRecursoHumanoBundle:Examen:detallenuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/EntidadExamen:detallenuevo.html.twig', array(
             'arExamenTipos' => $arExamenTipos,
             'arExamen' => $arExamen,
             'form' => $form->createView()));
