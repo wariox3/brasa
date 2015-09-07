@@ -133,6 +133,7 @@ class BaseEntidadExamenController extends Controller
         $request = $this->getRequest();
         $form = $this->createFormBuilder()                                   
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))    
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -148,6 +149,20 @@ class BaseEntidadExamenController extends Controller
                     $em->flush();  
                     return $this->redirect($this->generateUrl('brs_rhu_base_entidadexamen_detalle', array('codigoEntidadExamenPk' => $codigoEntidadExamenPk)));
                 }
+            }
+            if ($form->get('BtnActualizar')->isClicked()) {
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                $arEntidadExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenListaPrecio();
+                $arEntidadExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->findBy(array('codigoEntidadExamenFk' => $codigoEntidadExamenPk));
+                foreach ($arEntidadExamenDetalle AS $arEntidadExamenDetalle) {                    
+                    $arEntidadExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->find($arEntidadExamenDetalle);
+                    $intPrecio = $arrControles['TxtPrecio'][$intIndice];
+                    $arEntidadExamenDetalle->setPrecio($intPrecio);                                                
+                    $em->persist($arEntidadExamenDetalle);
+                    $intIndice++;
+                }
+                $em->flush();
             }
         } 
         $arEntidadExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
@@ -179,17 +194,25 @@ class BaseEntidadExamenController extends Controller
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
                         if($arrControles['TxtPrecio'][$intIndice] > 0 ){
-                            
+                            $intDato = 0;
                             $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
                             $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($intCodigo);
                             $arExamenListaPrecios = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($intCodigo);
                             $arEntidadExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenListaPrecio();
-                            
-                            $arEntidadExamenDetalle->setEntidadExamenRel($arEntidadExamen);
-                            $arEntidadExamenDetalle->setExamenTipoRel($arExamenTipos);
-                            $duoPrecio = $arrControles['TxtPrecio'][$intIndice];
-                            $arEntidadExamenDetalle->setPrecio($duoPrecio);
-                            $em->persist($arEntidadExamenDetalle);                                
+                            $arEntidadExamenDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->findBy(array('codigoEntidadExamenFk' => $codigoEntidadExamenPk));
+                            foreach ($arEntidadExamenDetalles as $arEntidadExamenDetalles){
+                               if ($arEntidadExamenDetalles->getCodigoExamenTipoFk() == $intCodigo){
+                                   $intDato++;
+                               } 
+                            }
+                            if ($intDato == 0){
+                                $arEntidadExamenDetalle->setEntidadExamenRel($arEntidadExamen);
+                                $arEntidadExamenDetalle->setExamenTipoRel($arExamenTipos);
+                                $duoPrecio = $arrControles['TxtPrecio'][$intIndice];
+                                $arEntidadExamenDetalle->setPrecio($duoPrecio);
+                                $em->persist($arEntidadExamenDetalle);
+                            }
+                                                            
                         }                        
                         $intIndice++;
                     }
