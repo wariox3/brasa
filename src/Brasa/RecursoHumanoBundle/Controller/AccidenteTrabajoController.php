@@ -62,42 +62,23 @@ class AccidenteTrabajoController extends Controller
             ));
     }
 
-    public function detalleAction($codigoVacacion) {
+    public function detalleAction($codigoAccidenteTrabajo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))            
+                        
             ->getForm();
         $form->handleRequest($request);
 
-        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
-        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->find($codigoVacacion);
+        $arAccidenteTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
+        $arAccidenteTrabajo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAccidenteTrabajo')->find($codigoAccidenteTrabajo);
         if($form->isValid()) {
-            if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoDetalleVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoVacacionesDisfrutadas();
-                $objFormatoDetalleVacaciones->Generar($this, $codigoVacacion);
-            }
-            if($form->get('BtnLiquidar')->isClicked()) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($codigoVacacion);
-                return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));
-            }
-            if($form->get('BtnEliminarDeduccion')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoVacacionDeduccion) {
-                        $arVacacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-                        $arVacacionDeduccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->find($codigoVacacionDeduccion);
-                        $em->remove($arVacacionDeduccion);
-                    }
-                    $em->flush();
-                }
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($codigoVacacion);
-                return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));
-            }
+            
+            
         }
-        return $this->render('BrasaRecursoHumanoBundle:VacacionesDisfrute:detalle.html.twig', array(
-                    'arVacaciones' => $arVacaciones,
+        return $this->render('BrasaRecursoHumanoBundle:AccidentesTrabajo:detalle.html.twig', array(
+                    'arAccidenteTrabajo' => $arAccidenteTrabajo,
                     'form' => $form->createView()
                     ));
     }    
@@ -210,51 +191,71 @@ class AccidenteTrabajoController extends Controller
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
 
-                $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Centro Costo')
-                            ->setCellValue('C1', 'Desde')
-                            ->setCellValue('D1', 'Hasta')
-                            ->setCellValue('E1', 'Identificación')
-                            ->setCellValue('F1', 'Empleado')
-                            ->setCellValue('G1', 'Dias')
-                            ->setCellValue('H1', 'Vr Vacaciones')
-                            ->setCellValue('I1', 'Pagado');
+                $objPHPExcel->setActiveSheetIndex(0)->setAutoFilter($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'IDENTIFICACIÓN')
+                            ->setCellValue('C1', 'EMPLEADO')
+                            ->setCellValue('D1', 'CARGO')
+                            ->setCellValue('E1', 'CENTRO COSTO')
+                            ->setCellValue('F1', 'FECHA ACCIDENTE')
+                            ->setCellValue('G1', 'CIUDAD ACCIDENTE')
+                            ->setCellValue('H1', 'INCAPACIDAD DESDE')
+                            ->setCellValue('I1', 'INCAPACIDAD HASTA')
+                            ->setCellValue('J1', 'DÍAS')
+                            ->setCellValue('K1', 'TIPO INCAPACIDAD')
+                            ->setCellValue('L1', 'FECHA ENVÍA INVESTIGACIÓN')
+                            ->setCellValue('M1', 'CIE10')
+                            ->setCellValue('N1', 'DIAGNÓSTICO')
+                            ->setCellValue('OD1', 'NATURALEZA DE LA LESIÓN')
+                            ->setCellValue('P1', 'PARTE DEL CUERPO AFECTADA')
+                            ->setCellValue('Q1', 'AGENTE')
+                            ->setCellValue('R1', 'MECANISMO DEL ACCIDENTE')
+                            ->setCellValue('S1', 'LUGAR DEL ACCIDENTE')
+                            ->setCellValue('T1', 'DESCRIPCIÓN DEL ACCIDENTE');
 
                 $i = 2;
                 $query = $em->createQuery($this->strSqlLista);
-                $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
-                $arVacaciones = $query->getResult();
+                $arAccidentesTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
+                $arAccidentesTrabajo = $query->getResult();
 
-                foreach ($arVacaciones as $arVacacion) {
-                    if ($arVacacion->getEstadoPagado() == 1)
-                    {
-                        $Estado = "SI";
+                foreach ($arAccidentesTrabajo as $arAccidentesTrabajo) {
+                    if ($arAccidentesTrabajo->getTipoAccidente() == 1){
+                        $tipoAccidente = "ACCIDENTE";
+                    } else {
+                        if ($arAccidentesTrabajo->getTipoAccidente() == 2){
+                            $tipoAccidente = "ACCIDENTE GRAVE";
+                        }
                     }
-                    else
-                    {
-                        $Estado = "NO";
-                    }
-
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arVacacion->getCodigoVacacionPk())
-                            ->setCellValue('B' . $i, $arVacacion->getCentroCostoRel()->getNombre())
-                            ->setCellValue('C' . $i, $arVacacion->getFechaDesde())
-                            ->setCellValue('D' . $i, $arVacacion->getFechaHasta())
-                            ->setCellValue('E' . $i, $arVacacion->getEmpleadoRel()->getNumeroIdentificacion())
-                            ->setCellValue('F' . $i, $arVacacion->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('G' . $i, $arVacacion->getDiasVacaciones())
-                            ->setCellValue('H' . $i, round($arVacacion->getVrVacacion()))
-                            ->setCellValue('I' . $i, $Estado);
+                            ->setCellValue('A' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('B' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getNumeroIdentificacion())
+                            ->setCellValue('C' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('D' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getCargoDescripcion())
+                            ->setCellValue('E' . $i, $arAccidentesTrabajo->getCentroCostoRel()->getNombre())
+                            ->setCellValue('F' . $i, $arAccidentesTrabajo->getFechaAccidente())
+                            ->setCellValue('G' . $i, $arAccidentesTrabajo->getCiudadRel()->getNombre())
+                            ->setCellValue('H' . $i, $arAccidentesTrabajo->getFechaIncapacidadDesde())
+                            ->setCellValue('I' . $i, $arAccidentesTrabajo->getFechaIncapacidadHasta())
+                            ->setCellValue('J' . $i, $arAccidentesTrabajo->getDias())
+                            ->setCellValue('K' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('L' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('M' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('N' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('O' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('P' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('Q' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('R' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('S' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
+                            ->setCellValue('T' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk());
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('Vacaciones');
+                $objPHPExcel->getActiveSheet()->setTitle('Accidentes_de_Trabajo');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Vacaciones.xlsx"');
+                header('Content-Disposition: attachment;filename="Accidentes_de_Trabajo.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');

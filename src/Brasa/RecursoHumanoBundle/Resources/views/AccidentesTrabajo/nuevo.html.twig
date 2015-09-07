@@ -28,7 +28,7 @@
                 </div>
             </div>     
             <div class="form-group">
-                <label for="form_codigoFurat" class="col-sm-3 control-label">Código furat:</label>
+                <label for="form_codigoFurat" class="col-sm-3 control-label">Código:</label>
                 <div class="col-sm-9">
                             {{ form_widget(form.codigoFurat, { 'attr': {'class': 'form-control'} }) }}
                 </div>
@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label for="form_fechaAccidente" class="col-sm-3 control-label">Fecha accidente:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaAccidente, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.fechaAccidente, {'attr': {'maxlength' : 10} }) }} 
                 </div>
             </div>
             <div class="form-group">
@@ -48,19 +48,19 @@
             <div class="form-group">
                 <label for="form_fechaEnviaInvestigacion" class="col-sm-3 control-label">fecha envia investigación:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaEnviaInvestigacion, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.fechaEnviaInvestigacion, {'attr': {'maxlength' : 10} }) }}
                 </div>
             </div>
             <div class="form-group">
                 <label for="form_fechaIncapacidadDesde" class="col-sm-3 control-label">fecha incapacidad desde:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaIncapacidadDesde, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.fechaIncapacidadDesde, {'attr': {'maxlength' : 10} }) }}
                 </div>
             </div>
             <div class="form-group">
                 <label for="form_fechaIncapacidadHasta" class="col-sm-3 control-label">fecha incapacidad hasta:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaIncapacidadHasta, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.fechaIncapacidadHasta, {'attr': {'maxlength' : 10} }) }}
                 </div>
             </div>
             <div class="form-group">
@@ -158,7 +158,7 @@
             <div class="form-group">
                 <label for="form_fechaVerificacion1" class="col-sm-3 control-label">Fecha verificación:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaVerificacion1, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.fechaVerificacion1, {'attr': {'maxlength' : 10} }) }}
                 </div>
             </div>
             <div class="form-group">
@@ -182,7 +182,7 @@
             <div class="form-group">
                 <label for="form_fechaVerificacion2" class="col-sm-3 control-label">Fecha verificación:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaVerificacion2, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.fechaVerificacion2, {'attr': {'maxlength' : 10} }) }}
                 </div>
             </div>
             <div class="form-group">
@@ -206,7 +206,7 @@
             <div class="form-group">
                 <label for="form_fechaVerificacion3" class="col-sm-3 control-label">Fecha verificación:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaVerificacion3, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.fechaVerificacion3, {'attr': {'maxlength' : 10} }) }}
                 </div>
             </div>
             <div class="form-group">
@@ -273,7 +273,7 @@
             <div class="form-group">
                 <label for="form_fechaVerificacion" class="col-sm-3 control-label">Fecha verificación</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaVerificacion, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.fechaVerificacion, {'attr': {'maxlength' : 10} }) }}
                 </div>
             </div>
             <div class="form-group">

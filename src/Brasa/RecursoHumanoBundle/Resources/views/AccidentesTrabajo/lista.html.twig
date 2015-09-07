@@ -50,7 +50,10 @@
                 <td>{{ arAccidentesTrabajo.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arAccidentesTrabajo.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arAccidentesTrabajo.fechaAccidente | date('Y/m/d')  }}</td>
-                <td>{{ arAccidentesTrabajo.tipoAccidente  }}</td>
+                <td>{% if arAccidentesTrabajo.tipoAccidente == 1 %}ACCIDENTE {% endif%}
+                    {% if arAccidentesTrabajo.tipoAccidente == 2 %}ACCIDENTE GRAVE {% endif %}
+                    {% if arAccidentesTrabajo.tipoAccidente == 3 %}ACCIDENTE MORTAL {% endif %}
+                    {% if arAccidentesTrabajo.tipoAccidente == 4 %}INCIDENTE {% endif %}</td>
                 <td>{{ arAccidentesTrabajo.diagnostico  }}</td>
                 <td>{% if arAccidentesTrabajo.estadoAccidente == 1 %}CERRADO{% else %}ABIERTO{% endif %}</td>
                 <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_accidente_trabajo_nuevo', { 'codigoAccidenteTrabajo': arAccidentesTrabajo.codigoAccidenteTrabajoPk }) }}', 'AgregarAccidente', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>

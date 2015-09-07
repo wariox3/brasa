@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         <div class="page-header">
-            <h3>Detalles de las vacaciones disfrutadas</h3>
+            <h3>Detalles accidente de trabajo</h3>
         </div>
 
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
@@ -10,54 +10,167 @@
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                     {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                    {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
         </div>
         <br /><br />
         <div class="panel panel-default">
-            <div class="panel-heading">Información de las vacaciones</div>
+            <div class="panel-heading">Información general del accidente</div>
             <div class="panel-body">
+                <div class="panel-heading">Información del empleado</div>
                 <table widtd="100%" class="table table-condensed table-bordered">
                     <tr>
-                        <td class="titulo">CODIGO:</td>
-                        <td class="td-in-well">{{ arVacaciones.codigoVacacionDisfrutePk }}</td>
-                        <td class="titulo">FECHA:</td>
-                        <td class="td-in-well">{{ arVacaciones.fecha |date("Y/m/d") }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well" align="right"></td>
+                        <td class="titulo">CÓDIGO:</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.codigoAccidenteTrabajoPk }}</td>
+                        <td class="titulo">CENTRO COSTOS:</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.centroCostoRel.nombre }}</td>
+                        <td class="titulo">FECHA ACCIDENTE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.fechaAccidente |date("Y/m/d") }}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">EMPLEADO:</td>
-                        <td class="td-in-well">{{ arVacaciones.empleadoRel.nombreCorto }}</td>
                         <td class="titulo">IDENTIFICACIÓN:</td>
-                        <td class="td-in-well">{{ arVacaciones.empleadoRel.numeroIdentificacion }}</td>
-                        <td class="titulo">SALARIO:</td>
-                        <td class="td-in-well" align="right">{{ arVacaciones.empleadoRel.vrSalario | number_format(2, '.', ',')}}</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.empleadoRel.numeroIdentificacion }}</td>
+                        <td class="titulo">EMPLEADO:</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.empleadoRel.nombreCorto }}</td>
+                        <td class="titulo">CARGO</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.empleadoRel.cargoDescripcion }}</td>
+                    </tr>
+                </table>
+                <div class="panel-heading">Información del accidente</div>
+                <table widtd="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">CIUDAD ACCIDENTE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.ciudadRel.nombre }}</td>
+                        <td class="titulo">RADICADO O FURAT:</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.codigoFurat }}</td>
+                        <td class="titulo">TIPO ACCIDENTE  </td>
+                        <td>{% if arAccidenteTrabajo.tipoAccidente == 1 %}ACCIDENTE {% endif%}
+                            {% if arAccidenteTrabajo.tipoAccidente == 2 %}ACCIDENTE GRAVE {% endif %}
+                            {% if arAccidenteTrabajo.tipoAccidente == 3 %}ACCIDENTE MORTAL {% endif %}
+                            {% if arAccidenteTrabajo.tipoAccidente == 4 %}INCIDENTE {% endif %}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">PERIODO DESDE</td>
-                        <td class="td-in-well">{{ arVacaciones.fechaDesde |date("Y/m/d") }}</td>
-                        <td class="titulo">DÍAS</td>
-                        <td class="td-in-well">{{ arVacaciones.dias }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-label" align="right"></td>
-                    </tr>
-                    <tr>
-                        <td class="titulo">PERIODO HASTA</td>
-                        <td class="td-in-well">{{ arVacaciones.fechaHasta |date("Y/m/d") }}</td>
+                        <td class="titulo">ARL</td>
+                        <td class="td-in-well">{{ "" }}</td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
-                        <td class="titulo"></td>
-                        <td class="td-label" align="right"></td>
+                        <td class="titulo">ESTADO  </td>
+                        <td class="td-in-well">{% if arAccidenteTrabajo.tipoAccidente == 1%}CERRADO {% else %}ABIERTO{% endif %}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">CENTRO COSTO</td>
-                        <td class="td-in-well" colspan="7">{{ arVacaciones.centroCostoRel.nombre }}</td>
-
+                        <td class="titulo">INCAPACIDAD DESDE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.fechaIncapacidadDesde |date("Y/m/d")}}</td>
+                        <td class="titulo">INCAPACIDAD HASTA</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.fechaIncapacidadHasta |date("Y/m/d")}}</td>
+                        <td class="titulo">DÍAS</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.dias }}</td>
+                    </tr>
+                </table>
+                <div class="panel-heading">Análisis del accidente o incidente</div>        
+                <table widtd="100%" class="table table-condensed table-bordered">        
+                    <tr>
+                        <td class="titulo">CIE10</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.cie10 }}</td>
+                        <td class="titulo">DIAGNÓSTICO</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.diagnostico }}</td>
+                        <td class="titulo">NATURALEZA DE LA LESIÓN  </td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.naturalezaLesion }}</td>
                     </tr>
                     <tr>
-                        <td class="titulo" >COMENTARIOS: </td>
-                        <td class="td-in-well" colspan="7">{{ arVacaciones.comentarios }}</td>
+                        <td class="titulo">PARTE DEL CUERPO AFECTADO</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.cuerpoAfectado }}</td>
+                        <td class="titulo">AGENTE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.agente }}</td>
+                        <td class="titulo">MECANISMO DEL ACCIDENTE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.mecanismoAccidente }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">LUGAR ACCIDENTE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.lugarAccidente }}</td>
+                        <td class="titulo">DESCRIPCIÓN ACCIDENTE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.descripcionAccidente }}</td>
+                        <td class="titulo">ACTO INSEGURO</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.actoInseguro }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">CONDICIÓN INSEGURA</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.condicionInsegura }}</td>
+                        <td class="titulo">FACTOR PERSONAL</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.factorPersonal }}</td>
+                        <td class="titulo">FACTOR TRABAJO</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.factorTrabajo }}</td>
+                    </tr>
+                </table>
+                <div class="panel-heading">Recomendaciones B49</div>
+                <div class="panel-heading">Lista priorizada de acciones de intervención</div>
+                <table widtd="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">PLAN DE ACCIÓN</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.planAccion1 }}</td>
+                        <td class="titulo">TIPO CONTROL</td>
+                        <td class="td-in-well">{% if arAccidenteTrabajo.tipoControl1 == 1%}FUENTE {% endif%}
+                                               {% if arAccidenteTrabajo.tipoControl1 == 2%}MEDIO {% else %}PERSONA{% endif %}</td>
+                        <td class="titulo">FECHA VERIFICACIÓN</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.fechaVerificacion1 |date("Y/m/d")}}</td>
+                        <td class="titulo">ÁREA RESPONSABLE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.areaResponsable1 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PLAN DE ACCIÓN</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.planAccion2 }}</td>
+                        <td class="titulo">TIPO CONTROL</td>
+                        <td class="td-in-well">{% if arAccidenteTrabajo.tipoControl2 == 1 %}FUENTE {% endif%}
+                                               {% if arAccidenteTrabajo.tipoControl2 == 2 %}MEDIO {% endif %}
+                                               {% if arAccidenteTrabajo.tipoControl2 == 3 %}PERSONA{% endif %}</td>
+                        <td class="titulo">FECHA VERIFICACIÓN</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.fechaVerificacion2 |date("Y/m/d")}}</td>
+                        <td class="titulo">ÁREA RESPONSABLE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.areaResponsable2 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PLAN DE ACCIÓN</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.planAccion3 }}</td>
+                        <td class="titulo">TIPO CONTROL</td>
+                        <td class="td-in-well">{% if arAccidenteTrabajo.tipoControl3 == 1%}FUENTE {% endif%}
+                                               {% if arAccidenteTrabajo.tipoControl3 == 2%}MEDIO {% else %}PERSONA{% endif %}</td>
+                        <td class="titulo">FECHA VERIFICACIÓN</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.fechaVerificacion3 |date("Y/m/d")}}</td>
+                        <td class="titulo">ÁREA RESPONSABLE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.areaResponsable3 }}</td>
+                    </tr>
+                    <tr>
+                </table>
+                <div class="panel-heading">Participantes de la investigación</div>    
+                <table widtd="100%" class="table table-condensed table-bordered">    
+                        <td class="titulo">PARTICIPANTE DE LA INVESTIGACIÓN</td>
+                        <td class="td-in-well" colspan="2">{{ arAccidenteTrabajo.participanteInvestigacion1 }}</td>
+                        <td class="titulo">CARGO</td>
+                        <td class="td-in-well" colspan="2">{{ arAccidenteTrabajo.cargoParticipanteInvestigacion1 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PARTICIPANTE DE LA INVESTIGACIÓN</td>
+                        <td class="td-in-well" colspan="2">{{ arAccidenteTrabajo.participanteInvestigacion2 }}</td>
+                        <td class="titulo">CARGO</td>
+                        <td class="td-in-well" colspan="2">{{ arAccidenteTrabajo.cargoParticipanteInvestigacion2 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PARTICIPANTE DE LA INVESTIGACIÓN</td>
+                        <td class="td-in-well" colspan="2">{{ arAccidenteTrabajo.participanteInvestigacion3 }}</td>
+                        <td class="titulo">CARGO</td>
+                        <td class="td-in-well" colspan="2" colspan="2">{{ arAccidenteTrabajo.cargoParticipanteInvestigacion3 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">REPRESENTANTE LEGAL</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.representanteLegal }}</td>
+                        <td class="titulo">CARGO</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.cargoRepresentanteLegal }}</td>
+                        <td class="titulo">LICENCIA</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.licencia }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">RESPONSABLE</td>
+                        <td class="td-in-well" colspan="2">{{ arAccidenteTrabajo.responsableVerificacion }}</td>
+                        <td class="titulo">FECHA VERIFICACIÓN</td>
+                        <td class="td-in-well" colspan="2">{{ arAccidenteTrabajo.fechaVerificacion | date('Y/m/d') }}</td>
                     </tr>
                 </table>
             </div>
@@ -65,7 +178,7 @@
 
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_vacaciones_disfrute_lista') }}" style="float:left">Volver</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_accidente_trabajo_lista') }}" style="float:left">Volver</a>
             </div>
         </div>
         {{ form_rest(form) }}
