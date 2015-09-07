@@ -39,11 +39,11 @@ class AccidenteTrabajoController extends Controller
                 $this->listar();
             }
 
-            /*if ($form->get('BtnExcel')->isClicked()) {
+            if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
                 $this->generarExcel();
-            }*/
+            }
             /*if($form->get('BtnPdf')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
@@ -179,94 +179,47 @@ class AccidenteTrabajoController extends Controller
     }
 
     private function generarExcel() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
-                    ->setLastModifiedBy("EMPRESA")
-                    ->setTitle("Office 2007 XLSX Test Document")
-                    ->setSubject("Office 2007 XLSX Test Document")
-                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-                    ->setKeywords("office 2007 openxml php")
-                    ->setCategory("Test result file");
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
 
-                $objPHPExcel->setActiveSheetIndex(0)->setAutoFilter($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
-                            ->setCellValue('A1', 'CÓDIGO')
-                            ->setCellValue('B1', 'IDENTIFICACIÓN')
-                            ->setCellValue('C1', 'EMPLEADO')
-                            ->setCellValue('D1', 'CARGO')
-                            ->setCellValue('E1', 'CENTRO COSTO')
-                            ->setCellValue('F1', 'FECHA ACCIDENTE')
-                            ->setCellValue('G1', 'CIUDAD ACCIDENTE')
-                            ->setCellValue('H1', 'INCAPACIDAD DESDE')
-                            ->setCellValue('I1', 'INCAPACIDAD HASTA')
-                            ->setCellValue('J1', 'DÍAS')
-                            ->setCellValue('K1', 'TIPO INCAPACIDAD')
-                            ->setCellValue('L1', 'FECHA ENVÍA INVESTIGACIÓN')
-                            ->setCellValue('M1', 'CIE10')
-                            ->setCellValue('N1', 'DIAGNÓSTICO')
-                            ->setCellValue('OD1', 'NATURALEZA DE LA LESIÓN')
-                            ->setCellValue('P1', 'PARTE DEL CUERPO AFECTADA')
-                            ->setCellValue('Q1', 'AGENTE')
-                            ->setCellValue('R1', 'MECANISMO DEL ACCIDENTE')
-                            ->setCellValue('S1', 'LUGAR DEL ACCIDENTE')
-                            ->setCellValue('T1', 'DESCRIPCIÓN DEL ACCIDENTE');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CODIGO');
 
-                $i = 2;
-                $query = $em->createQuery($this->strSqlLista);
-                $arAccidentesTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
-                $arAccidentesTrabajo = $query->getResult();
+        $i = 2;
+        $query = $em->createQuery($this->strSqlLista);
+        //$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arAccidentesTrabajo = $query->getResult();
+        foreach ($arAccidentesTrabajo as $arAccidentesTrabajo) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk());
+            $i++;
+        }
 
-                foreach ($arAccidentesTrabajo as $arAccidentesTrabajo) {
-                    if ($arAccidentesTrabajo->getTipoAccidente() == 1){
-                        $tipoAccidente = "ACCIDENTE";
-                    } else {
-                        if ($arAccidentesTrabajo->getTipoAccidente() == 2){
-                            $tipoAccidente = "ACCIDENTE GRAVE";
-                        }
-                    }
-                    $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('B' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getNumeroIdentificacion())
-                            ->setCellValue('C' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('D' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getCargoDescripcion())
-                            ->setCellValue('E' . $i, $arAccidentesTrabajo->getCentroCostoRel()->getNombre())
-                            ->setCellValue('F' . $i, $arAccidentesTrabajo->getFechaAccidente())
-                            ->setCellValue('G' . $i, $arAccidentesTrabajo->getCiudadRel()->getNombre())
-                            ->setCellValue('H' . $i, $arAccidentesTrabajo->getFechaIncapacidadDesde())
-                            ->setCellValue('I' . $i, $arAccidentesTrabajo->getFechaIncapacidadHasta())
-                            ->setCellValue('J' . $i, $arAccidentesTrabajo->getDias())
-                            ->setCellValue('K' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('L' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('M' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('N' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('O' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('P' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('Q' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('R' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('S' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                            ->setCellValue('T' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk());
-                    $i++;
-                }
+        $objPHPExcel->getActiveSheet()->setTitle('pagos');
+        $objPHPExcel->setActiveSheetIndex(0);
 
-                $objPHPExcel->getActiveSheet()->setTitle('Accidentes_de_Trabajo');
-                $objPHPExcel->setActiveSheetIndex(0);
-
-                // Redirect output to a client’s web browser (Excel2007)
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Accidentes_de_Trabajo.xlsx"');
-                header('Cache-Control: max-age=0');
-                // If you're serving to IE 9, then the following may be needed
-                header('Cache-Control: max-age=1');
-                // If you're serving to IE over SSL, then the following may be needed
-                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header ('Pragma: public'); // HTTP/1.0
-                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-                $objWriter->save('php://output');
-                exit;
-            }
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Pagos.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    } 
 
 }

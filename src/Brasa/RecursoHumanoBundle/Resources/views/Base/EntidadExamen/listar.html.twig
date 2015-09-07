@@ -17,6 +17,7 @@
             <th>TELÉFONO</th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
         
             {%for arEntidadesExamen in arEntidadesExamen %}
@@ -27,6 +28,7 @@
                 <td>{{arEntidadesExamen.direccion}}</td>
                 <td>{{arEntidadesExamen.telefono}}</td>
                 <td><a href="{{ path('brs_rhu_base_entidadexamen_nuevo',{'codigoEntidadExamenPk': arEntidadesExamen.codigoEntidadExamenPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td><a href="{{ path('brs_rhu_base_entidadexamen_detalle', { 'codigoEntidadExamenPk': arEntidadesExamen.codigoEntidadExamenPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEntidadesExamen.codigoEntidadExamenPk }}" /></td>
             {%endfor%}
             </tr>            
