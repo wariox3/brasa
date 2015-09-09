@@ -129,7 +129,7 @@ class EmpleadoDotacionController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $form = $this->createFormBuilder()
+        $form = $this->createFormBuilder()                
             ->add('numeroIdentificacion', 'text', array('required' => true))
             ->add('fecha', 'date', array('data' => new \DateTime('now')))
             ->add('codigoInternoReferencia', 'number', array('required' => true))

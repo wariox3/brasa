@@ -9,7 +9,7 @@ class RhuEmpleadoDotacionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {        
-        $builder                                      
+        $builder                                
             ->add('fecha', 'date')
             ->add('codigoInternoReferencia', 'number', array('required' => true))
             ->add('comentarios', 'textarea', array('required' => false))                
