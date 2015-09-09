@@ -12,7 +12,7 @@ class RhuAccidenteTrabajo
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_codigo_accidente_trabajo_pk", type="integer")
+     * @ORM\Column(name="codigo_accidente_trabajo_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoAccidenteTrabajoPk;
@@ -44,9 +44,9 @@ class RhuAccidenteTrabajo
     private $fechaAccidente;
     
     /**
-     * @ORM\Column(name="tipo_accidente", type="string", length=20, nullable=true)
+     * @ORM\Column(name="codigo_accidente_trabajo_tipo_accidente_fk", type="integer", nullable=true)
      */    
-    private $tipoAccidente;
+    private $codigoAccidenteTrabajoTipoAccidenteFk;
     
     /**
      * @ORM\Column(name="fecha_envia_investigacion", type="date", nullable=true)
@@ -139,9 +139,9 @@ class RhuAccidenteTrabajo
     private $planAccion1;
     
     /**
-     * @ORM\Column(name="tipo_control_1", type="string", length=2, nullable=true)
+     * @ORM\Column(name="codigo_accidente_trabajo_tipo_control_uno_fk", type="integer", nullable=true)
      */    
-    private $tipoControl1;
+    private $codigoAccidenteTrabajoTipoControlUnoFk;
     
     /**
      * @ORM\Column(name="fecha_verificacion_1", type="date", nullable=true)
@@ -159,9 +159,9 @@ class RhuAccidenteTrabajo
     private $planAccion2;
     
     /**
-     * @ORM\Column(name="tipo_control_2", type="string", length=2, nullable=true)
+     * @ORM\Column(name="codigo_accidente_trabajo_tipo_control_dos_fk", type="integer", nullable=true)
      */    
-    private $tipoControl2;
+    private $codigoAccidenteTrabajoTipoControlDosFk;
     
     /**
      * @ORM\Column(name="fecha_verificacion_2", type="date", nullable=true)
@@ -179,9 +179,9 @@ class RhuAccidenteTrabajo
     private $planAccion3;
     
     /**
-     * @ORM\Column(name="tipo_control_3", type="string", length=2, nullable=true)
+     * @ORM\Column(name="codigo_accidente_trabajo_tipo_control_tres_fk", type="integer", nullable=true)
      */    
-    private $tipoControl3;
+    private $codigoAccidenteTrabajoTipoControlTresFk;
     
     /**
      * @ORM\Column(name="fecha_verificacion_3", type="date", nullable=true)
@@ -278,7 +278,31 @@ class RhuAccidenteTrabajo
      */
     protected $entidadRiesgoProfesionalRel;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuAccidenteTrabajoTipoAccidente", inversedBy="accidentesTrabajoAccidenteTrabajoTipoAccidenteRel")
+     * @ORM\JoinColumn(name="codigo_accidente_trabajo_tipo_accidente_fk", referencedColumnName="codigo_accidente_trabajo_tipo_accidente_pk")
+     */
+    protected $tipoAccidenteRel;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuAccidenteTrabajoTipoControl", inversedBy="accidentesTrabajoAccidenteTrabajoTipoControlUnoRel")
+     * @ORM\JoinColumn(name="codigo_accidente_trabajo_tipo_control_uno_fk", referencedColumnName="codigo_accidente_trabajo_tipo_control_pk")
+     */
+    protected $tipoControlUnoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuAccidenteTrabajoTipoControl", inversedBy="accidentesTrabajoAccidenteTrabajoTipoControlDosRel")
+     * @ORM\JoinColumn(name="codigo_accidente_trabajo_tipo_control_dos_fk", referencedColumnName="codigo_accidente_trabajo_tipo_control_pk")
+     */
+    protected $tipoControlDosRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuAccidenteTrabajoTipoControl", inversedBy="accidentesTrabajoAccidenteTrabajoTipoControlTresRel")
+     * @ORM\JoinColumn(name="codigo_accidente_trabajo_tipo_control_tres_fk", referencedColumnName="codigo_accidente_trabajo_tipo_control_pk")
+     */
+    protected $tipoControlTresRel;
+    
+   
 
     /**
      * Get codigoAccidenteTrabajoPk
@@ -411,27 +435,27 @@ class RhuAccidenteTrabajo
     }
 
     /**
-     * Set tipoAccidente
+     * Set codigoAccidenteTrabajoTipoAccidenteFk
      *
-     * @param string $tipoAccidente
+     * @param integer $codigoAccidenteTrabajoTipoAccidenteFk
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setTipoAccidente($tipoAccidente)
+    public function setCodigoAccidenteTrabajoTipoAccidenteFk($codigoAccidenteTrabajoTipoAccidenteFk)
     {
-        $this->tipoAccidente = $tipoAccidente;
+        $this->codigoAccidenteTrabajoTipoAccidenteFk = $codigoAccidenteTrabajoTipoAccidenteFk;
 
         return $this;
     }
 
     /**
-     * Get tipoAccidente
+     * Get codigoAccidenteTrabajoTipoAccidenteFk
      *
-     * @return string
+     * @return integer
      */
-    public function getTipoAccidente()
+    public function getCodigoAccidenteTrabajoTipoAccidenteFk()
     {
-        return $this->tipoAccidente;
+        return $this->codigoAccidenteTrabajoTipoAccidenteFk;
     }
 
     /**
@@ -867,27 +891,27 @@ class RhuAccidenteTrabajo
     }
 
     /**
-     * Set tipoControl1
+     * Set codigoAccidenteTrabajoTipoControlUnoFk
      *
-     * @param string $tipoControl1
+     * @param integer $codigoAccidenteTrabajoTipoControlUnoFk
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setTipoControl1($tipoControl1)
+    public function setCodigoAccidenteTrabajoTipoControlUnoFk($codigoAccidenteTrabajoTipoControlUnoFk)
     {
-        $this->tipoControl1 = $tipoControl1;
+        $this->codigoAccidenteTrabajoTipoControlUnoFk = $codigoAccidenteTrabajoTipoControlUnoFk;
 
         return $this;
     }
 
     /**
-     * Get tipoControl1
+     * Get codigoAccidenteTrabajoTipoControlUnoFk
      *
-     * @return string
+     * @return integer
      */
-    public function getTipoControl1()
+    public function getCodigoAccidenteTrabajoTipoControlUnoFk()
     {
-        return $this->tipoControl1;
+        return $this->codigoAccidenteTrabajoTipoControlUnoFk;
     }
 
     /**
@@ -963,27 +987,27 @@ class RhuAccidenteTrabajo
     }
 
     /**
-     * Set tipoControl2
+     * Set codigoAccidenteTrabajoTipoControlDosFk
      *
-     * @param string $tipoControl2
+     * @param integer $codigoAccidenteTrabajoTipoControlDosFk
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setTipoControl2($tipoControl2)
+    public function setCodigoAccidenteTrabajoTipoControlDosFk($codigoAccidenteTrabajoTipoControlDosFk)
     {
-        $this->tipoControl2 = $tipoControl2;
+        $this->codigoAccidenteTrabajoTipoControlDosFk = $codigoAccidenteTrabajoTipoControlDosFk;
 
         return $this;
     }
 
     /**
-     * Get tipoControl2
+     * Get codigoAccidenteTrabajoTipoControlDosFk
      *
-     * @return string
+     * @return integer
      */
-    public function getTipoControl2()
+    public function getCodigoAccidenteTrabajoTipoControlDosFk()
     {
-        return $this->tipoControl2;
+        return $this->codigoAccidenteTrabajoTipoControlDosFk;
     }
 
     /**
@@ -1059,27 +1083,27 @@ class RhuAccidenteTrabajo
     }
 
     /**
-     * Set tipoControl3
+     * Set codigoAccidenteTrabajoTipoControlTresFk
      *
-     * @param string $tipoControl3
+     * @param integer $codigoAccidenteTrabajoTipoControlTresFk
      *
      * @return RhuAccidenteTrabajo
      */
-    public function setTipoControl3($tipoControl3)
+    public function setCodigoAccidenteTrabajoTipoControlTresFk($codigoAccidenteTrabajoTipoControlTresFk)
     {
-        $this->tipoControl3 = $tipoControl3;
+        $this->codigoAccidenteTrabajoTipoControlTresFk = $codigoAccidenteTrabajoTipoControlTresFk;
 
         return $this;
     }
 
     /**
-     * Get tipoControl3
+     * Get codigoAccidenteTrabajoTipoControlTresFk
      *
-     * @return string
+     * @return integer
      */
-    public function getTipoControl3()
+    public function getCodigoAccidenteTrabajoTipoControlTresFk()
     {
-        return $this->tipoControl3;
+        return $this->codigoAccidenteTrabajoTipoControlTresFk;
     }
 
     /**
@@ -1512,5 +1536,101 @@ class RhuAccidenteTrabajo
     public function getEntidadRiesgoProfesionalRel()
     {
         return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set tipoAccidenteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoAccidente $tipoAccidenteRel
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setTipoAccidenteRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoAccidente $tipoAccidenteRel = null)
+    {
+        $this->tipoAccidenteRel = $tipoAccidenteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoAccidenteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoAccidente
+     */
+    public function getTipoAccidenteRel()
+    {
+        return $this->tipoAccidenteRel;
+    }
+
+    /**
+     * Set tipoControlUnoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoControl $tipoControlUnoRel
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setTipoControlUnoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoControl $tipoControlUnoRel = null)
+    {
+        $this->tipoControlUnoRel = $tipoControlUnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoControlUnoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoControl
+     */
+    public function getTipoControlUnoRel()
+    {
+        return $this->tipoControlUnoRel;
+    }
+
+    /**
+     * Set tipoControlDosRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoControl $tipoControlDosRel
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setTipoControlDosRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoControl $tipoControlDosRel = null)
+    {
+        $this->tipoControlDosRel = $tipoControlDosRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoControlDosRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoControl
+     */
+    public function getTipoControlDosRel()
+    {
+        return $this->tipoControlDosRel;
+    }
+
+    /**
+     * Set tipoControlTresRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoControl $tipoControlTresRel
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setTipoControlTresRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoControl $tipoControlTresRel = null)
+    {
+        $this->tipoControlTresRel = $tipoControlTresRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoControlTresRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajoTipoControl
+     */
+    public function getTipoControlTresRel()
+    {
+        return $this->tipoControlTresRel;
     }
 }

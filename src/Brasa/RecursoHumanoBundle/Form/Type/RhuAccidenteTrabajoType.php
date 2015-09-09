@@ -23,7 +23,9 @@ class RhuAccidenteTrabajoType extends AbstractType
                 'required' => true))
             ->add('codigoFurat', 'number', array('required' => true))
             ->add('fechaAccidente','date',array('required' => true ,'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('tipoAccidente', 'choice', array('choices'   => array('1' => 'ACCIDENTE', '2' => 'ACCIDENTE GRAVE', '3' => 'ACCIDENTE MORTAL', '4' => 'INCIDENTE')))
+            ->add('tipoAccidenteRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuAccidenteTrabajoTipoAccidente',
+                        'property' => 'nombre',))
             ->add('fechaEnviaInvestigacion', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaIncapacidadDesde', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaIncapacidadHasta', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
@@ -41,15 +43,21 @@ class RhuAccidenteTrabajoType extends AbstractType
             ->add('factorPersonal', 'textarea', array('required' => false))
             ->add('factorTrabajo', 'textarea', array('required' => false))
             ->add('planAccion1', 'textarea', array('required' => false))
-            ->add('tipoControl1', 'choice', array('choices' => array('1' => 'FUENTE', '2' => 'MEDIO', '3' => 'PERSONA')))
+            ->add('tipoControlUnoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuAccidenteTrabajoTipoControl',
+                        'property' => 'nombre',))
             ->add('fechaVerificacion1', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('areaResponsable1', 'text', array('required' => false))
             ->add('planAccion2', 'textarea', array('required' => false))
-            ->add('tipoControl2', 'choice', array('choices' => array('1' => 'FUENTE', '2' => 'MEDIO', '3' => 'PERSONA')))
+            ->add('tipoControlDosRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuAccidenteTrabajoTipoControl',
+                        'property' => 'nombre',))
             ->add('fechaVerificacion2', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('areaResponsable2', 'text', array('required' => false))                
             ->add('planAccion3', 'textarea', array('required' => false))
-            ->add('tipoControl3', 'choice', array('choices' => array('1' => 'FUENTE', '2' => 'MEDIO', '3' => 'PERSONA')))
+            ->add('tipoControlTresRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuAccidenteTrabajoTipoControl',
+                        'property' => 'nombre',))
             ->add('fechaVerificacion3', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('areaResponsable3', 'text', array('required' => false))
             ->add('participanteInvestigacion1', 'text', array('required' => false))                
