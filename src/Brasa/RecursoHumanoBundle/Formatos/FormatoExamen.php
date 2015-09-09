@@ -74,9 +74,9 @@ class FormatoExamen extends \FPDF_FPDF {
         $this->Cell(100, 6, $arExamen->getCentroCostoRel()->getNombre() , 1, 0, 'L', 1);
         $this->SetXY(10, $intY + 10);
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 6, "" , 1, 0, 'L', 1);
+        $this->Cell(30, 6, "CLASE" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(30, 6, "" , 1, 0, 'R', 1);
+        $this->Cell(30, 6, $arExamen->getExamenClaseRel()->getNombre() , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "ENTIDAD EXAMEN:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);

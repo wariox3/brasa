@@ -35,8 +35,8 @@
                     <td class="td-in-well" {% if arExamen.estadoAprobado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                 </tr>
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">CLASE</td>
+                    <td class="td-in-well">{{ arExamen.examenClaseRel.nombre }}</td>
                     <td class="titulo">AUTORIZADO:</td>
                     <td class="td-in-well" {% if arExamen.estadoAutorizado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                 </tr>                
@@ -75,7 +75,7 @@
                 <th>CODIGO</th>
                 <th>TIPO</th>
                 <th>TIPO EXAMEN</th>
-                <th>PRECIO</th>
+                <th style="text-align: right">PRECIO</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Aprobado">APROBADO</p></th>                
                 <th>COMENTARIOS</th>    
                 <th></th>

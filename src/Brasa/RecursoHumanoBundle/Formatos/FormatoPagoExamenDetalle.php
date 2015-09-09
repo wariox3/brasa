@@ -18,14 +18,35 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         
     } 
     public function Header() {
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $this->SetFillColor(200, 200, 200);        
+        $this->SetFont('Arial','B',10);
+        //Logo
+        
+        $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
+        //INFORMACIÓN EMPRESA
+        $this->SetXY(50, 10);
+        $this->Cell(150, 7, utf8_decode("DETALLE PAGO ENTIDAD EXAMEN"), 0, 0, 'C', 1);
+        $this->SetXY(50, 18);
+        $this->SetFont('Arial','B',9);
+        $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(50, 22);
+        $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(50, 26);
+        $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(50, 30);
+        $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
+        
         $arPagoExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen();
         $arPagoExamen = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->find(self::$codigoPagoExamen);
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
-        //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
-        $this->SetXY(10, 20);
-        $this->Cell(190, 10, "DATOS PAGO ENTIDAD EXAMEN " , 1, 0, 'L', 1);
-        $this->SetXY(10, 30);
+        $this->SetXY(10, 40);
         $this->SetFillColor(272, 272, 272); 
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
@@ -35,11 +56,15 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         $this->Cell(30, 6, "ENTIDAD:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(100, 6, utf8_decode($arPagoExamen->getEntidadExamenRel()->getNombre()), 1, 0, 'L', 1);
-        $this->SetXY(10, 35);
+        $this->SetXY(10, 45);
         $this->SetFont('Arial','B',8);
-        $this->Cell(60, 5, "TOTAL:" , 1, 0, 'R', 1);
+        $this->Cell(30, 5, utf8_decode("NÚMERO SOPORTE:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(130, 5, number_format($arPagoExamen->getVrTotal(), 2, '.', ',') , 1, 0, 'R', 1);
+        $this->Cell(30, 5, $arPagoExamen->getNumeroSoporte() , 1, 0, 'R', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 5, "TOTAL:" , 1, 0, 'R', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(100, 5, number_format($arPagoExamen->getVrTotal(), 2, '.', ',') , 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->EncabezadoDetalles();
         

@@ -3,9 +3,9 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAccidenteTrabajoType;
 use Doctrine\ORM\EntityRepository;
+
 
 class AccidenteTrabajoController extends Controller
 {
@@ -32,6 +32,25 @@ class AccidenteTrabajoController extends Controller
                         else {
                             $em->remove($arAccidentesTrabajo);
                             $em->flush();
+                            return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
+                        }
+                    }
+                }
+                $this->filtrarLista($form);
+                $this->listar();
+            }
+            if ($form->get('BtnCerrar')->isClicked()) {
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoAccidenteTrabajo) {
+                        $arAccidentesTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
+                        $arAccidentesTrabajo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAccidenteTrabajo')->find($codigoAccidenteTrabajo);
+                        if ($arAccidentesTrabajo->getEstadoAccidente() == 0 ) {
+                            $arAccidentesTrabajo->setEstadoAccidente(1);
+                            $em->persist($arAccidentesTrabajo);
+                            $em->flush();
+                            return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
+                        }
+                        else {
                             return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
                         }
                     }
@@ -89,7 +108,9 @@ class AccidenteTrabajoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuAccidenteTrabajo')->listaDql(
                     $session->get('filtroCodigoCentroCosto'),
-                    $session->get('filtroIdentificacion')
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
                     );
     }
 
@@ -114,8 +135,11 @@ class AccidenteTrabajoController extends Controller
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnCerrar', 'submit', array('label'  => 'Cerrar',))    
             //->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->getForm();
@@ -128,12 +152,18 @@ class AccidenteTrabajoController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
     public function nuevoAction($codigoAccidenteTrabajo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+        $arEntidadRiesgo = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+        $arEntidadRiesgo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracion->getCodigoEntidadRiesgoFk());
         $arAccidenteTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
         if ($codigoAccidenteTrabajo != 0)
         {
@@ -166,6 +196,7 @@ class AccidenteTrabajoController extends Controller
             
                 $arAccidenteTrabajo->setCentroCostoRel($arCentroCosto);
                 $arAccidenteTrabajo->setEmpleadoRel($arEmpleadoFinal);
+                $arAccidenteTrabajo->setEntidadRiesgoProfesionalRel($arEntidadRiesgo);
                 $em->persist($arAccidenteTrabajo);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
@@ -190,61 +221,22 @@ class AccidenteTrabajoController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-
         $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'CÓDIGO')
-            ->setCellValue('B1', 'IDENTIFICACIÓN')
-            ->setCellValue('C1', 'EMPLEADO')
-            ->setCellValue('D1', 'CARGO')
-            ->setCellValue('E1', 'CENTRO COSTO')
-            ->setCellValue('F1', 'FECHA ACCIDENTE')
-            ->setCellValue('G1', 'CIUDAD ACCIDENTE')
-            ->setCellValue('H1', 'INCAPACIDAD DESDE')
-            ->setCellValue('I1', 'INCAPACIDAD HASTA')
-            ->setCellValue('J1', 'DÍAS')
-            ->setCellValue('K1', 'TIPO INCAPACIDAD')
-            ->setCellValue('L1', 'FECHA ENVÍA INVESTIGACIÓN')
-            ->setCellValue('M1', 'CIE10')
-            ->setCellValue('N1', 'DIAGNÓSTICO')
-            ->setCellValue('OD1', 'NATURALEZA DE LA LESIÓN')
-            ->setCellValue('P1', 'PARTE DEL CUERPO AFECTADA')
-            ->setCellValue('Q1', 'AGENTE')
-            ->setCellValue('R1', 'MECANISMO DEL ACCIDENTE')
-            ->setCellValue('S1', 'LUGAR DEL ACCIDENTE')
-            ->setCellValue('T1', 'DESCRIPCIÓN DEL ACCIDENTE');
-
+                    ->setCellValue('A1', 'CODIGO')
+                    ;
+                    
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
-        $arAccidentesTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
         $arAccidentesTrabajo = $query->getResult();
-        foreach ($arAccidentesTrabajo as $arAccidentesTrabajo) {            
+        foreach ($arAccidentesTrabajo as $arAccidenteTrabajo) {
+            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('B' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arAccidentesTrabajo->getEmpleadoRel()->getCargoDescripcion())
-                    ->setCellValue('E' . $i, $arAccidentesTrabajo->getCentroCostoRel()->getNombre())
-                    ->setCellValue('F' . $i, $arAccidentesTrabajo->getFechaAccidente())
-                    ->setCellValue('G' . $i, $arAccidentesTrabajo->getCiudadRel()->getNombre())
-                    ->setCellValue('H' . $i, $arAccidentesTrabajo->getFechaIncapacidadDesde())
-                    ->setCellValue('I' . $i, $arAccidentesTrabajo->getFechaIncapacidadHasta())
-                    ->setCellValue('J' . $i, $arAccidentesTrabajo->getDias())
-                    ->setCellValue('K' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('L' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('M' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('N' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('O' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('P' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('Q' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('R' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('S' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk())
-                    ->setCellValue('T' . $i, $arAccidentesTrabajo->getCodigoAccidenteTrabajoPk());
+                    ->setCellValue('A' . $i, $arAccidenteTrabajo->getDias())
+                    ;
             $i++;
         }
-
-        $objPHPExcel->getActiveSheet()->setTitle('AccidenteTrabajo');
+        $objPHPExcel->getActiveSheet()->setTitle('Accidentes');
         $objPHPExcel->setActiveSheetIndex(0);
-
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="AccidentesTrabajo.xlsx"');

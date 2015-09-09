@@ -32,6 +32,7 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arPagoExamenes, 'CÓDIGO', 'e.codigoPagoExamenPk') }}</th>
                 <th>ENTIDAD</th>
+                <th>NÚMERO SOPORTE</th>
                 <th style="text-align: right">TOTAL</th>
                 <th></th>
                 <th></th>
@@ -40,6 +41,7 @@
             <tr>
                 <td>{{ arPagoExamenes.codigoPagoExamenPk  }}</td>
                 <td>{{ arPagoExamenes.entidadExamenRel.nombre  }}</td>                
+                <td>{{ arPagoExamenes.numeroSoporte  }}</td>
                 <td style="text-align: right">{{ arPagoExamenes.vrTotal | number_format(2, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pago_examen_detalle', { 'codigoPagoExamen':  arPagoExamenes.codigoPagoExamenPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoExamenes.codigoPagoExamenPk }}" /></td>

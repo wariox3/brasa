@@ -20,13 +20,32 @@ class FormatoSeleccionGrupo extends \FPDF_FPDF {
     public function Header() {
         $arSeleccionGrupo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
         $arSeleccionGrupo = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find(self::$codigoSeleccionGrupo);
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $this->SetFillColor(200, 200, 200);        
+        $this->SetFont('Arial','B',10);
+        //Logo
+        $this->SetXY(53, 10);
+        $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
+        //INFORMACIÓN EMPRESA
+        $this->Cell(150, 7, utf8_decode("GRUPO SELECCIÓN ". $arSeleccionGrupo->getCodigoSeleccionGrupoPk()." ". $arSeleccionGrupo->getNombre()), 0, 0, 'C', 1);
+        $this->SetXY(53, 18);
+        $this->SetFont('Arial','B',9);
+        $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 22);
+        $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 26);
+        $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 30);
+        $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);
+        
+        
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
-        //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
-        $this->SetXY(10, 20);
-        $this->Cell(44, 6, "GRUPO SELECCION " . $arSeleccionGrupo->getCodigoSeleccionGrupoPk(), 1, 0, 'L', 1);
-        $this->SetXY(56, 20);
-        $this->Cell(148, 6, $arSeleccionGrupo->getNombre(), 1, 0, 'L', 1);
         
         $this->EncabezadoDetalles();
         

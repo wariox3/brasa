@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuAccidenteTrabajoRepository extends EntityRepository {
    
-    public function listaDql($strCodigoCentroCosto = "", $strIdentificacion = "") {        
+    public function listaDql($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT at, e FROM BrasaRecursoHumanoBundle:RhuAccidenteTrabajo at JOIN at.empleadoRel e WHERE at.codigoAccidenteTrabajoPk <> 0";
         
@@ -20,6 +20,12 @@ class RhuAccidenteTrabajoRepository extends EntityRepository {
         }   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND at.fechaAccidente >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND at.fechaAccidente <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         return $dql;
     }    

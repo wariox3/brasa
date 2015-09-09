@@ -28,6 +28,11 @@ class RhuPagoExamen
     private $vrTotal = 0;
     
     /**
+     * @ORM\Column(name="numero_soporte", type="string", length=20, nullable=true)
+     */    
+    private $numeroSoporte;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadExamen", inversedBy="pagosExamenesEntidadExamenRel")
      * @ORM\JoinColumn(name="codigo_entidad_examen_fk", referencedColumnName="codigo_entidad_examen_pk")
      */
@@ -103,6 +108,30 @@ class RhuPagoExamen
     public function getVrTotal()
     {
         return $this->vrTotal;
+    }
+
+    /**
+     * Set numeroSoporte
+     *
+     * @param string $numeroSoporte
+     *
+     * @return RhuPagoExamen
+     */
+    public function setNumeroSoporte($numeroSoporte)
+    {
+        $this->numeroSoporte = $numeroSoporte;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroSoporte
+     *
+     * @return string
+     */
+    public function getNumeroSoporte()
+    {
+        return $this->numeroSoporte;
     }
 
     /**

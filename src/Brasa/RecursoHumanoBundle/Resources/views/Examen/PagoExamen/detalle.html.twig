@@ -8,7 +8,7 @@
     </script>
     <div class="container">
         <div class="page-header">
-            <h3>Detalle pago examen</h3>
+            <h3>Detalle pago exámen</h3>
         </div>
 
         <!-- Encabezado Movimiento -->
@@ -25,8 +25,8 @@
                     <tr>
                         <td class="titulo">ENTIDAD:</td>
                         <td class="td-in-well">{{ arPagoExamen.entidadExamenRel.nombre }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">NÚMERO SOPORTE</td>
+                        <td class="td-in-well">{{ arPagoExamen.numeroSoporte}}</td>
                     </tr>
                     <tr>
                     <td class="titulo" >TOTAL:</td>
@@ -61,7 +61,7 @@
                             <th>CÓDIGO</th>
                             <th>IDENTIFICACIÓN</th>
                             <th>NOMBRE</th>                
-                            <th>PRECIO</th>                
+                            <th style="text-align: right">PRECIO</th>                
                             <th></th>
                         </tr>
                         {% for arPagoExamenDetalle in arPagoExamenDetalle %}

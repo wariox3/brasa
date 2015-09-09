@@ -13,6 +13,7 @@ class RhuPagoExamenType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
                 'property' => 'nombre',
             ))
+            ->add('numeroSoporte', 'text',array('required' => false))    
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
     }
