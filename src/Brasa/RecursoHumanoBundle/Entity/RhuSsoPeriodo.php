@@ -53,6 +53,11 @@ class RhuSsoPeriodo
     protected $ssoPeriodosEmpleadosSsoPeriodoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="ssoPeriodoRel")
+     */
+    protected $ssoAportesSsoPeriodoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -256,5 +261,39 @@ class RhuSsoPeriodo
     public function getSsoPeriodosEmpleadosSsoPeriodoRel()
     {
         return $this->ssoPeriodosEmpleadosSsoPeriodoRel;
+    }
+
+    /**
+     * Add ssoAportesSsoPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesSsoPeriodoRel
+     *
+     * @return RhuSsoPeriodo
+     */
+    public function addSsoAportesSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesSsoPeriodoRel)
+    {
+        $this->ssoAportesSsoPeriodoRel[] = $ssoAportesSsoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoAportesSsoPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesSsoPeriodoRel
+     */
+    public function removeSsoAportesSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesSsoPeriodoRel)
+    {
+        $this->ssoAportesSsoPeriodoRel->removeElement($ssoAportesSsoPeriodoRel);
+    }
+
+    /**
+     * Get ssoAportesSsoPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoAportesSsoPeriodoRel()
+    {
+        return $this->ssoAportesSsoPeriodoRel;
     }
 }

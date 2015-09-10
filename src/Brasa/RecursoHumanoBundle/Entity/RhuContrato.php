@@ -197,6 +197,16 @@ class RhuContrato
      */
     protected $pagosContratoRel;      
     
+     /**
+     * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="contratoRel")
+     */
+    protected $ssoPeriodosEmpleadosContratoRel;    
+
+     /**
+     * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="contratoRel")
+     */
+    protected $ssoAportesContratoRel;     
+    
     /**
      * Constructor
      */
@@ -1084,5 +1094,73 @@ class RhuContrato
     public function getVrSalarioPago()
     {
         return $this->VrSalarioPago;
+    }
+
+    /**
+     * Add ssoPeriodosEmpleadosContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addSsoPeriodosEmpleadosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosContratoRel)
+    {
+        $this->ssoPeriodosEmpleadosContratoRel[] = $ssoPeriodosEmpleadosContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoPeriodosEmpleadosContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosContratoRel
+     */
+    public function removeSsoPeriodosEmpleadosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosContratoRel)
+    {
+        $this->ssoPeriodosEmpleadosContratoRel->removeElement($ssoPeriodosEmpleadosContratoRel);
+    }
+
+    /**
+     * Get ssoPeriodosEmpleadosContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoPeriodosEmpleadosContratoRel()
+    {
+        return $this->ssoPeriodosEmpleadosContratoRel;
+    }
+
+    /**
+     * Add ssoAportesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addSsoAportesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesContratoRel)
+    {
+        $this->ssoAportesContratoRel[] = $ssoAportesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoAportesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesContratoRel
+     */
+    public function removeSsoAportesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesContratoRel)
+    {
+        $this->ssoAportesContratoRel->removeElement($ssoAportesContratoRel);
+    }
+
+    /**
+     * Get ssoAportesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoAportesContratoRel()
+    {
+        return $this->ssoAportesContratoRel;
     }
 }

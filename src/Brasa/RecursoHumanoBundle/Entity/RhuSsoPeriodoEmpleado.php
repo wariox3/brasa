@@ -31,6 +31,31 @@ class RhuSsoPeriodoEmpleado
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
      */    
     private $codigoEmpleadoFk;
+
+    /**
+     * @ORM\Column(name="codigo_contrato_fk", type="integer")
+     */    
+    private $codigoContratoFk;    
+    
+    /**
+     * @ORM\Column(name="dias", type="integer")
+     */    
+    private $dias = 0;
+    
+    /**
+     * @ORM\Column(name="vr_salario", type="float")
+     */    
+    private $vrSalario;
+    
+    /**
+     * @ORM\Column(name="ingreso", type="string", length=1)
+     */
+    private $ingreso;    
+
+    /**
+     * @ORM\Column(name="retiro", type="string", length=1)
+     */
+    private $retiro;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosEmpleadosSsoPeriodoRel")
@@ -49,7 +74,12 @@ class RhuSsoPeriodoEmpleado
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;      
-    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="ssoPeriodosEmpleadosContratoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
+     */
+    protected $contratoRel;     
 
 
     /**
@@ -204,5 +234,149 @@ class RhuSsoPeriodoEmpleado
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
+    }
+
+    /**
+     * Set vrSalario
+     *
+     * @param float $vrSalario
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setVrSalario($vrSalario)
+    {
+        $this->vrSalario = $vrSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalario
+     *
+     * @return float
+     */
+    public function getVrSalario()
+    {
+        return $this->vrSalario;
+    }
+
+    /**
+     * Set ingreso
+     *
+     * @param string $ingreso
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setIngreso($ingreso)
+    {
+        $this->ingreso = $ingreso;
+
+        return $this;
+    }
+
+    /**
+     * Get ingreso
+     *
+     * @return string
+     */
+    public function getIngreso()
+    {
+        return $this->ingreso;
+    }
+
+    /**
+     * Set retiro
+     *
+     * @param string $retiro
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setRetiro($retiro)
+    {
+        $this->retiro = $retiro;
+
+        return $this;
+    }
+
+    /**
+     * Get retiro
+     *
+     * @return string
+     */
+    public function getRetiro()
+    {
+        return $this->retiro;
     }
 }

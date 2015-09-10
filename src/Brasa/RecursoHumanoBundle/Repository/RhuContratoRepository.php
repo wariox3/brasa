@@ -63,8 +63,7 @@ class RhuContratoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                 ." WHERE (c.fechaHasta >= '" . $fechaDesde . "' OR c.indefinido = 1) "
-                . "AND c.fechaDesde <= '" . $fechaHasta . "' "
-                . "GROUP BY c.codigoEmpleadoFk";
+                . "AND c.fechaDesde <= '" . $fechaHasta . "' ";
         $query = $em->createQuery($dql);        
         $arContratos = $query->getResult();        
         return $arContratos;

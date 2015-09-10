@@ -38,6 +38,11 @@ class GenCiudad
      * @ORM\Column(name="codigo_interface", type="string", length=15)
      */
     private $codigoInterface;    
+
+    /**
+     * @ORM\Column(name="codigo_dane", type="string", length=3)
+     */
+    private $codigoDane;     
     
     /**
      * @ORM\ManyToOne(targetEntity="GenDepartamento", inversedBy="ciudadesRel")
@@ -890,5 +895,29 @@ class GenCiudad
     public function getRhuSeleccionesReferenciasCiudadRel()
     {
         return $this->rhuSeleccionesReferenciasCiudadRel;
+    }
+
+    /**
+     * Set codigoDane
+     *
+     * @param string $codigoDane
+     *
+     * @return GenCiudad
+     */
+    public function setCodigoDane($codigoDane)
+    {
+        $this->codigoDane = $codigoDane;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDane
+     *
+     * @return string
+     */
+    public function getCodigoDane()
+    {
+        return $this->codigoDane;
     }
 }

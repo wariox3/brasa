@@ -23,6 +23,11 @@ class RhuTipoIdentificacion
     private $nombre;      
 
     /**
+     * @ORM\Column(name="codigo_interface", type="string", length=2, nullable=true)
+     */    
+    private $codigoInterface;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="tipoIdentificacionRel")
      */
     protected $empleadosTipoIdentificacionRel;    
@@ -140,5 +145,29 @@ class RhuTipoIdentificacion
     public function getSeleccionesTipoIdentificacionRel()
     {
         return $this->seleccionesTipoIdentificacionRel;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return RhuTipoIdentificacion
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 }

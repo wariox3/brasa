@@ -17,52 +17,54 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         } 
     
     public function generar($codigoPeriodoDetalle) {
-        $em = $this->getEntityManager();
-        $i = 0;
+        $em = $this->getEntityManager();        
         $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
         $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);        
+        $i = 1;
         $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
         $arPeriodoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk(), 'codigoSucursalFk' => $arPeriodoDetalle->getCodigoSucursalFk()));                
         foreach ($arPeriodoEmpleados as $arPeriodoEmpleado) {
-            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->contratosPeriodoEmpleado($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arPeriodoEmpleado->getCodigoEmpleadoFk());                    
-            if($arContrato <= 1) {
-                foreach ($arContratos as $arContrato) {
-                    $i++;
-                    $dateFechaDesde =  "";
-                    $dateFechaHasta =  "";
-                    $strNovedadIngreso = " ";
-                    $strNovedadRetiro = " ";
-                    $intDiasCotizar = 0;
-                    $fechaTerminaCotrato = $arContrato->getFechaHasta()->format('Y-m-d');
-                    if($fechaTerminaCotrato == '-0001-11-30') {
-                        $dateFechaHasta = $arPeriodoDetalle->getFechaHasta();
-                    } else {
-                        if($arContrato->getFechaHasta() > $arPeriodoDetalle->getFechaHasta()) {
-                            $dateFechaHasta = $arPeriodoDetalle->getFechaHasta();
-                        } else {
-                            $dateFechaHasta = $arContrato->getFechaHasta();
-                        }
-                    }
-
-                    if($arContrato->getFechaDesde() <  $arPeriodoDetalle->getFechaDesde() == true) {
-                        $dateFechaDesde = $arPeriodoDetalle->getFechaDesde();
-                    } else {
-                        $dateFechaDesde = $arContrato->getFechaDesde();
-                    }
-
-                    if($dateFechaDesde != "" && $dateFechaHasta != "") {
-                        $intDias = $dateFechaDesde->diff($dateFechaHasta);
-                        $intDias = $intDias->format('%a');
-                        $intDiasCotizar = $intDias + 1;
-                    }
-
-                    if($arContrato->getFechaDesde() >= $arPeriodoDetalle->getFechaDesde()) {
-                        $strNovedadIngreso = "X";
-                    }      
-                }
-            }
-        }
+            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPeriodoEmpleado->getCodigoEmpleadoFk());        
+            $arAporte = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
+            $arAporte->setSsoPeriodoRel($arPeriodoEmpleado->getSsoPeriodoRel());
+            $arAporte->setSsoPeriodoDetalleRel($arPeriodoDetalle);
+            $arAporte->setSsoSucursalRel($arPeriodoEmpleado->getSsoSucursalRel());
+            $arAporte->setEmpleadoRel($arPeriodoEmpleado->getEmpleadoRel());
+            $arAporte->setContratoRel($arPeriodoEmpleado->getContratoRel());
+            $arAporte->setTipoRegistro(2);
+            $arAporte->setSecuencia($i);
+            $arAporte->setTipoDocumento($arEmpleado->getTipoIdentificacionRel()->getCodigoInterface());
+            $arAporte->setTipoCotizante($arEmpleado->getCodigoTipoCotizanteFk());
+            $arAporte->setSubtipoCotizante($arEmpleado->getCodigoSubtipoCotizanteFk());
+            $arAporte->setExtranjeroNoObligadoCotizarPension(' ');
+            $arAporte->setColombianoResidenteExterior(' ');
+            $arAporte->setCodigoDepartamentoUbicacionlaboral($arPeriodoEmpleado->getContratoRel()->getCentroCostoRel()->getCiudadRel()->getDepartamentoRel()->getCodigoDane());
+            $arAporte->setCodigoMunicipioUbicacionlaboral($arPeriodoEmpleado->getContratoRel()->getCentroCostoRel()->getCiudadRel()->getCodigoDane());
+            $arAporte->setPrimerNombre($arEmpleado->getNombre1());
+            $arAporte->setSegundoNombre($arEmpleado->getNombre2());
+            $arAporte->setPrimerApellido($arEmpleado->getApellido1());
+            $arAporte->setSegundoApellido($arEmpleado->getApellido2());
+            $arAporte->setIngreso();
+            $em->persist($arAporte);
+            $i++;
+        } 
+        $arPeriodoDetalle->setEstadoGenerado(1);
+        $em->persist($arPeriodoDetalle);
+        $em->flush();
         return true;
     }
+    
+    public function desgenerar($codigoPeriodoDetalle) {
+        $em = $this->getEntityManager();
+        $strSql = "DELETE FROM rhu_sso_aporte WHERE codigo_periodo_detalle_fk = " . $codigoPeriodoDetalle;
+        $em->getConnection()->executeQuery($strSql); 
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
+        $arPeriodoDetalle->setEstadoGenerado(0);
+        $em->persist($arPeriodoDetalle);
+        $em->flush();
+        return true;
+    }    
+    
 }

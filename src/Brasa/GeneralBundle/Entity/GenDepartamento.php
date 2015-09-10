@@ -24,6 +24,11 @@ class GenDepartamento
     private $nombre;
 
     /**
+     * @ORM\Column(name="codigo_dane", type="string", length=2)
+     */
+    private $codigoDane;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="GenCiudad", mappedBy="departamentoRel")
      */
     protected $ciudadesRel;
@@ -117,5 +122,29 @@ class GenDepartamento
     public function getCiudadesRel()
     {
         return $this->ciudadesRel;
+    }
+
+    /**
+     * Set codigoDane
+     *
+     * @param string $codigoDane
+     *
+     * @return GenDepartamento
+     */
+    public function setCodigoDane($codigoDane)
+    {
+        $this->codigoDane = $codigoDane;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDane
+     *
+     * @return string
+     */
+    public function getCodigoDane()
+    {
+        return $this->codigoDane;
     }
 }

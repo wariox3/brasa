@@ -10,5 +10,18 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
-
+    
+    public function listaDql($codigoPeriodo, $codigoSucursal) {                    
+            $dql   = "SELECT pe FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe "
+                    ."WHERE pe.codigoPeriodoFk = " . $codigoPeriodo . " "
+                    . "AND pe.codigoSucursalFk = " . $codigoSucursal;
+            return $dql;
+        } 
+        
+    public function actualizar($codigoPeriodo, $codigoSucursal) {
+        $em = $this->getEntityManager();
+        $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+        $arPeriodoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy();        
+        return true;
+    }
 }

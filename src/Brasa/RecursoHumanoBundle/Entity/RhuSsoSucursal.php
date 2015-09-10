@@ -36,6 +36,11 @@ class RhuSsoSucursal
      * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="ssoSucursalRel")
      */
     protected $ssoPeriodosEmpleadosSsoSucursalRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="ssoSucursalRel")
+     */
+    protected $ssoAportesSsoSucursalRel;      
     
     /**
      * @ORM\OneToMany(targetEntity="RhuCentroCosto", mappedBy="sucursalRel")
@@ -211,5 +216,39 @@ class RhuSsoSucursal
     public function getCentrosCostosSucursalRel()
     {
         return $this->centrosCostosSucursalRel;
+    }
+
+    /**
+     * Add ssoAportesSsoSucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesSsoSucursalRel
+     *
+     * @return RhuSsoSucursal
+     */
+    public function addSsoAportesSsoSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesSsoSucursalRel)
+    {
+        $this->ssoAportesSsoSucursalRel[] = $ssoAportesSsoSucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoAportesSsoSucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesSsoSucursalRel
+     */
+    public function removeSsoAportesSsoSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesSsoSucursalRel)
+    {
+        $this->ssoAportesSsoSucursalRel->removeElement($ssoAportesSsoSucursalRel);
+    }
+
+    /**
+     * Get ssoAportesSsoSucursalRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoAportesSsoSucursalRel()
+    {
+        return $this->ssoAportesSsoSucursalRel;
     }
 }

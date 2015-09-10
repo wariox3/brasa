@@ -469,6 +469,10 @@ brs_rhu_ss_periodo_lista:
 brs_rhu_ss_periodo_detalle:
     path:     /rhu/seguridadsocial/periodo/detalle/{codigoPeriodo}
     defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalle }         
+
+brs_rhu_ss_periodo_detalle_empleados:
+    path:     /rhu/seguridadsocial/periodo/detalle/empleados/{codigoPeriodoDetalle}
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalleEmpleados }     
     
 brs_rhu_consultas_costos_general:    
     path:     /rhu/consultas/costos/general

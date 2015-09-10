@@ -16,6 +16,7 @@
                 <th>GENERADO</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arSsoPeriodos in arSsoPeriodos %}
             <tr>
@@ -25,6 +26,14 @@
                 <td>{{ arSsoPeriodos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSsoPeriodos.fechaHasta |date("Y/m/d")  }}</td>
                 <td {% if arSsoPeriodos.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodos.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>                                
+                <td>
+                    {% if arSsoPeriodos.estadoGenerado == 0 %}
+                        <button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSsoPeriodos.codigoPeriodoPk }}">Generar</button> 
+                    {% else %}
+                        <button class="btn btn-default btn-xs" type="submit" name="OpDesgenerar" value="{{ arSsoPeriodos.codigoPeriodoPk }}">Desgenerar</button> 
+                    {% endif %} 
+                </td>
+                
                 <td style="text-align: center">{% if arSsoPeriodos.estadoGenerado == 1 %}<a href="{{ path('brs_rhu_ss_periodo_detalle', { 'codigoPeriodo': arSsoPeriodos.codigoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a>{% endif %}</td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoPeriodos.codigoPeriodoPk }}" /></td>
             </tr>
@@ -34,11 +43,7 @@
 
 
         <!-- Botones Menu Items -->
-        <div class="btn-toolbar" style="float: right">                 
-            <div class="btn-group">
-                {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}              
-            </div>
-        </div>          
+         
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}
     {{ form_end(form) }}   
