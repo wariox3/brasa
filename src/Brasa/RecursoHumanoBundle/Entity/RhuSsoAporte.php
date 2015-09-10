@@ -110,52 +110,52 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="ingreso", type="string", length=1)
      */
-    private $ingreso;    
+    private $ingreso = ' ';    
 
     /**
      * @ORM\Column(name="retiro", type="string", length=1)
      */
-    private $retiro;    
+    private $retiro = ' ';    
     
     /**
      * @ORM\Column(name="traslado_desde_otra_eps", type="string", length=1)
      */
-    private $trasladoDesdeOtraEps;
+    private $trasladoDesdeOtraEps = ' ';
 
     /**
      * @ORM\Column(name="traslado_a_otra_eps", type="string", length=1)
      */
-    private $trasladoAOtraEps;    
+    private $trasladoAOtraEps = ' ';    
     
     /**
      * @ORM\Column(name="traslado_desde_otra_pension", type="string", length=1)
      */
-    private $trasladoDesdeOtraPension;
+    private $trasladoDesdeOtraPension = ' ';
 
     /**
      * @ORM\Column(name="traslado_a_otra_pension", type="string", length=1)
      */
-    private $trasladoAOtraPension;    
+    private $trasladoAOtraPension = ' ';    
 
     /**
      * @ORM\Column(name="variacion_permanente_salario", type="string", length=1)
      */
-    private $variacionPermanenteSalario;    
+    private $variacionPermanenteSalario = ' ';    
     
     /**
      * @ORM\Column(name="correcciones", type="string", length=1)
      */
-    private $correcciones; 
+    private $correcciones = ' '; 
     
     /**
      * @ORM\Column(name="variacion_transitoria_salario", type="string", length=1)
      */
-    private $variacionTransitoriaSalario;      
+    private $variacionTransitoriaSalario = ' ';      
     
     /**
      * @ORM\Column(name="suspension_temporal_contrato_licencia_servicios", type="string", length=1)
      */
-    private $suspensionTemporalContratoLicenciaServicios;    
+    private $suspensionTemporalContratoLicenciaServicios = ' ';    
     
     
     /**

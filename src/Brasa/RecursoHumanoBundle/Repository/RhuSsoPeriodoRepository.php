@@ -38,76 +38,13 @@ class RhuSsoPeriodoRepository extends EntityRepository {
             $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y-m-d'), $arPeriodo->getFechaHasta()->format('Y-m-d'));
             foreach ($arContratos as $arContrato) {
                 $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
-                $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->findBy(array('codigoSucursalFk' => $arContrato->getCentroCostoRel()->getCodigoSucursalFk()));
-                
+                $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->findOneBy(array('codigoSucursalFk' => $arContrato->getCentroCostoRel()->getCodigoSucursalFk(), 'codigoPeriodoFk' => $codigoPeriodo));                
                 $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
                 $arPeriodoEmpleado->setEmpleadoRel($arContrato->getEmpleadoRel());
                 $arPeriodoEmpleado->setSsoPeriodoRel($arPeriodo);
                 $arPeriodoEmpleado->setSsoSucursalRel($arContrato->getCentroCostoRel()->getSucursalRel());
-                $arPeriodoEmpleado->setContratoRel($arContrato);
-                
-                $i++;
-                
-                $dateFechaDesde =  "";
-                $dateFechaHasta =  "";
-                $strNovedadIngreso = " ";
-                $strNovedadRetiro = " ";
-                $intDiasCotizar = 0;
-                $fechaTerminaCotrato = $arContrato->getFechaHasta()->format('Y-m-d');
-                if($fechaTerminaCotrato == '-0001-11-30') {
-                    $dateFechaHasta = $arPeriodo->getFechaHasta();
-                } else {
-                    if($arContrato->getFechaHasta() > $arPeriodo->getFechaHasta()) {
-                        $dateFechaHasta = $arPeriodo->getFechaHasta();
-                    } else {
-                        $dateFechaHasta = $arContrato->getFechaHasta();
-                    }
-                }
-
-                if($arContrato->getFechaDesde() <  $arPeriodo->getFechaDesde() == true) {
-                    $dateFechaDesde = $arPeriodo->getFechaDesde();
-                } else {
-                    $dateFechaDesde = $arContrato->getFechaDesde();
-                }
-
-                if($dateFechaDesde != "" && $dateFechaHasta != "") {
-                    $intDias = $dateFechaDesde->diff($dateFechaHasta);
-                    $intDias = $intDias->format('%a');                        
-                    $intDiasCotizar = $intDias + 1;
-                    if($intDiasCotizar == 31) {
-                        $intDiasCotizar = $intDiasCotizar - 1;
-                    } else {
-                        if($arPeriodo->getFechaHasta()->format('d') == 28) {
-                            if($arContrato->getFechaHasta() >= $arPeriodo->getFechaHasta() || $fechaTerminaCotrato == '-0001-11-30') {
-                                $intDiasCotizar = $intDiasCotizar + 2;
-                            }
-                        }
-                        if($arPeriodo->getFechaHasta()->format('d') == 29) {
-                            if($arContrato->getFechaHasta() >= $arPeriodo->getFechaHasta() || $fechaTerminaCotrato == '-0001-11-30') {
-                                $intDiasCotizar = $intDiasCotizar + 1;
-                            }
-                        }                    
-                        if($arPeriodo->getFechaHasta()->format('d') == 31) {
-                            if($arContrato->getFechaHasta() >= $arPeriodo->getFechaHasta() || $fechaTerminaCotrato == '-0001-11-30') {
-                                if($arContrato->getFechaDesde()->format('d') != 31) {
-                                    $intDiasCotizar = $intDiasCotizar - 1;
-                                }                                    
-                            }
-                        }                            
-                    }
-                }
-
-                if($arContrato->getFechaDesde() >= $arPeriodo->getFechaDesde()) {
-                    $strNovedadIngreso = "X";
-                }
-
-                if($fechaTerminaCotrato <= $arPeriodo->getFechaHasta()) {                    
-                    $strNovedadRetiro = "X";                    
-                }
-
-                $floSalario = $arContrato->getVrSalario();
-                $arPeriodoEmpleado->setVrSalario($floSalario);
-                $arPeriodoEmpleado->setDias($intDiasCotizar);                
+                $arPeriodoEmpleado->setContratoRel($arContrato);               
+                $arPeriodoEmpleado->setSsoPeriodoDetalleRel($arPeriodoDetalle);
                 $em->persist($arPeriodoEmpleado);
             }
 

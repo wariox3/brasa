@@ -49,6 +49,10 @@ class RhuSsoPeriodoDetalle
      */
     protected $ssoAportesSsoPeriodoDetalleRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="ssoPeriodoDetalleRel")
+     */
+    protected $ssoPeriodosEmpleadosSsoPeriodoDetalleRel;     
 
     /**
      * Get codigoPeriodoDetallePk
@@ -219,5 +223,39 @@ class RhuSsoPeriodoDetalle
     public function getSsoAportesSsoPeriodoDetalleRel()
     {
         return $this->ssoAportesSsoPeriodoDetalleRel;
+    }
+
+    /**
+     * Add ssoPeriodosEmpleadosSsoPeriodoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoPeriodoDetalleRel
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function addSsoPeriodosEmpleadosSsoPeriodoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoPeriodoDetalleRel)
+    {
+        $this->ssoPeriodosEmpleadosSsoPeriodoDetalleRel[] = $ssoPeriodosEmpleadosSsoPeriodoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoPeriodosEmpleadosSsoPeriodoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoPeriodoDetalleRel
+     */
+    public function removeSsoPeriodosEmpleadosSsoPeriodoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosSsoPeriodoDetalleRel)
+    {
+        $this->ssoPeriodosEmpleadosSsoPeriodoDetalleRel->removeElement($ssoPeriodosEmpleadosSsoPeriodoDetalleRel);
+    }
+
+    /**
+     * Get ssoPeriodosEmpleadosSsoPeriodoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoPeriodosEmpleadosSsoPeriodoDetalleRel()
+    {
+        return $this->ssoPeriodosEmpleadosSsoPeriodoDetalleRel;
     }
 }

@@ -1,0 +1,44 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h3>Lista aportes por periodo detalle</h3>
+    </div>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}                        
+        <table  class="table table-striped table-bordered table-condensed table-hover">            
+            <tr>
+                <th>CÓDIGO</th>
+                <th>IDENTIFICACION</th>
+                <th>CONTRATO</th>
+                <th>DIAS</th>
+                <th>ING</th>
+                <th>RETIRO</th>
+            </tr>
+            {% for arSsoAportes in arSsoAportes %}
+            <tr>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoAportes.codigoAportePk }}">{{ arSsoAportes.codigoAportePk }} </td>
+                <td>{{ arSsoAportes.empleadoRel.numeroIdentificacion  }}</td>
+                <td>{{ arSsoAportes.codigoContratoFk  }}</td>
+                <td>{{ arSsoAportes.codigoContratoFk  }}</td>
+                <td>{{ arSsoAportes.ingreso  }}</td>
+                <td>{{ arSsoAportes.retiro  }}</td>
+            </tr>
+            {% endfor %}                        
+        </table>                       
+        {{ knp_pagination_render(arSsoAportes) }}    
+
+
+        <!-- Botones Menu Items -->
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_ss_periodo_detalle', { 'codigoPeriodo': arPeriodoDetalle.codigoPeriodoFk }) }}" style="float:left">Volver</a>
+            </div>
+        </div>
+            
+        <!-- Fin Botones Menu Items -->
+        {{ form_rest(form) }}
+    {{ form_end(form) }}   
+    
+</div>
+{% endblock %}

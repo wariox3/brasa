@@ -10,6 +10,7 @@ class SeguridadSocialPeriodosController extends Controller
     var $strDqlLista = "";
     var $strDqlListaDetalle = "";
     var $strDqlListaEmpleados = "";
+    var $strDqlListaDetalleAportes = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -86,6 +87,32 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }         
     
+    public function detalleAportesAction($codigoPeriodoDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();  
+        $paginator  = $this->get('knp_paginator');        
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);        
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
+        $this->listarDetalleAportes($codigoPeriodoDetalle);
+        if($form->isValid()) { 
+            if($request->request->get('OpGenerar')) {
+                $codigoPeriodoDetalle = $request->request->get('OpGenerar');                
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->generar($codigoPeriodoDetalle);                
+            } 
+            if($request->request->get('OpDesgenerar')) {
+                $codigoPeriodoDetalle = $request->request->get('OpDesgenerar');                
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->desgenerar($codigoPeriodoDetalle);                
+            }             
+        }                            
+        $arSsoAportes = $paginator->paginate($em->createQuery($this->strDqlListaDetalleAportes), $request->query->get('page', 1), 50);                               
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:detalleAportes.html.twig', array(
+            'arPeriodoDetalle' => $arPeriodoDetalle,
+            'arSsoAportes' => $arSsoAportes,
+            'form' => $form->createView()));
+    }
+    
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->listaDQL();  
@@ -101,4 +128,9 @@ class SeguridadSocialPeriodosController extends Controller
         $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaDql($codigoPeriodo, $codigoSucursal);  
     }    
 
+    private function listarDetalleAportes($codigoPeriodoDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $this->strDqlListaDetalleAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->listaDQL($codigoPeriodoDetalle);  
+    }    
+    
 }

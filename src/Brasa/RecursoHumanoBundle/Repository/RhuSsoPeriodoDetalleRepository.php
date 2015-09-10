@@ -20,6 +20,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         $em = $this->getEntityManager();        
         $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
         $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);        
+        $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
         $i = 1;
         $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
         $arPeriodoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk(), 'codigoSucursalFk' => $arPeriodoDetalle->getCodigoSucursalFk()));                
@@ -45,7 +46,8 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setSegundoNombre($arEmpleado->getNombre2());
             $arAporte->setPrimerApellido($arEmpleado->getApellido1());
             $arAporte->setSegundoApellido($arEmpleado->getApellido2());
-            $arAporte->setIngreso();
+            $arAporte->setIngreso($arPeriodoEmpleado->getIngreso());
+            $arAporte->setRetiro($arPeriodoEmpleado->getRetiro());
             $em->persist($arAporte);
             $i++;
         } 

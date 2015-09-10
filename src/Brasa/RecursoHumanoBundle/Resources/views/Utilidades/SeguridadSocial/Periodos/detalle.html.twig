@@ -14,6 +14,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arSsoPeriodoDetalles in arSsoPeriodoDetalles %}
             <tr>
@@ -27,7 +28,8 @@
                         <button class="btn btn-danger btn-xs" type="submit" name="OpDesgenerar" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Desgenerar</button> 
                     {% endif %} 
                 </td>                
-                <td style="text-align: center"><a href="{{ path('brs_rhu_ss_periodo_detalle_empleados', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" ></a></td>                
+                <td style="text-align: center">{% if arSsoPeriodoDetalles.estadoGenerado == 1 %}<a href="{{ path('brs_rhu_ss_periodo_detalle_aportes', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a>{% endif %}</td>                                
+                <td style="text-align: center"><a href="{{ path('brs_rhu_ss_periodo_detalle_empleados', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" ></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}" /></td>
             </tr>
             {% endfor %}                        

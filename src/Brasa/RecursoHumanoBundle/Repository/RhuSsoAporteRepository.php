@@ -10,5 +10,8 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuSsoAporteRepository extends EntityRepository {
-    
+    public function listaDQL($codigoPeriodoDetalle) {                    
+            $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuSsoAporte a WHERE a.codigoPeriodoDetalleFk = " . $codigoPeriodoDetalle;
+            return $dql;
+        }     
 }
