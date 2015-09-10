@@ -192,18 +192,20 @@ class AccidenteTrabajoController extends Controller
                 $objMensaje->Mensaje("error", "No existe el número de identificación", $this);
             }else {
                 if ($arEmpleadoFinal->getCodigoCentroCostoFk() == ""){
-                    $objMensaje->Mensaje("error", "No tiene contrato", $this);
+                    $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this);
                 }else {
-            $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
+                    $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+                    $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
+
+                    $arAccidenteTrabajo->setCentroCostoRel($arCentroCosto);
+                    $arAccidenteTrabajo->setEmpleadoRel($arEmpleadoFinal);
+                    $arAccidenteTrabajo->setEntidadRiesgoProfesionalRel($arEntidadRiesgo);
+                    $em->persist($arAccidenteTrabajo);
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }
             
-                $arAccidenteTrabajo->setCentroCostoRel($arCentroCosto);
-                $arAccidenteTrabajo->setEmpleadoRel($arEmpleadoFinal);
-                $arAccidenteTrabajo->setEntidadRiesgoProfesionalRel($arEntidadRiesgo);
-                $em->persist($arAccidenteTrabajo);
-                $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }}
+            }
         }
 
         return $this->render('BrasaRecursoHumanoBundle:AccidentesTrabajo:nuevo.html.twig', array(
