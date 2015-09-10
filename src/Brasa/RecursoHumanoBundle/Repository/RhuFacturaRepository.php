@@ -10,6 +10,29 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuFacturaRepository extends EntityRepository {
+    
+    public function listaDql($strCodigoTercero = "", $strCodigoCentroCosto = "", $strNumero = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT f, t FROM BrasaRecursoHumanoBundle:RhuFactura f JOIN f.terceroRel t WHERE f.codigoFacturaPk <> 0";
+        if($strCodigoTercero != "") {
+            $dql .= " AND t.codigoTerceroFk = " . $strCodigoTercero;
+        }
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND f.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }           
+        if($strNumero != "" ) {
+            $dql .= " AND f.numero = '" . $strNumero . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND f.fecha >='" . $strDesde . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND f.fecha <='" . $strHasta . "'";
+        }
+        $dql .= " ORDER BY f.codigoFacturaPk DESC";
+        return $dql;
+    }
+    
     public function liquidar($codigoFactura) {        
         $em = $this->getEntityManager();
         $arConfiguraciones = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();

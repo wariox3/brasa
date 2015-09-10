@@ -10,13 +10,20 @@ class RhuFacturaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                          
-            ->add('centroCostoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+            ->add('terceroRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenTercero',
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => true))                 
+                    return $er->createQueryBuilder('t')
+                    ->orderBy('t.nombreCorto', 'ASC');},
+                'property' => 'nombreCorto',
+                'required' => true))
+            ->add('centroCostoRel', 'entity', array(
+            'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('cc')
+                ->orderBy('cc.nombre', 'ASC');},
+            'property' => 'nombre',
+            'required' => true))                 
             ->add('comentarios', 'textarea', array('required' => false))                                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
