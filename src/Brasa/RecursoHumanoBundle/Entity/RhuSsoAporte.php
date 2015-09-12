@@ -157,6 +157,72 @@ class RhuSsoAporte
      */
     private $suspensionTemporalContratoLicenciaServicios = ' ';    
     
+    /**
+     * @ORM\Column(name="dias_licencia", type="integer")
+     */    
+    private $diasLicencia = 0;     
+    
+    /**
+     * @ORM\Column(name="incapacidad_general", type="string", length=1)
+     */
+    private $incapacidadGeneral = ' ';    
+    
+    /**
+     * @ORM\Column(name="dias_incapacidad_general", type="integer")
+     */
+    private $diasIncapacidadGeneral = 0;    
+    
+    /**
+     * @ORM\Column(name="licencia_maternidad", type="string", length=1)
+     */
+    private $licenciaMaternidad = ' ';        
+
+    /**
+     * @ORM\Column(name="dias_licencia_maternidad", type="integer")
+     */
+    private $diasLicenciaMaternidad = 0;    
+    
+    /**
+     * @ORM\Column(name="vacaciones", type="string", length=1)
+     */
+    private $vacaciones = ' ';     
+    
+    /**
+     * @ORM\Column(name="aporte_voluntario", type="string", length=1)
+     */
+    private $aporteVoluntario = ' ';     
+
+    /**
+     * @ORM\Column(name="variacion_centros_trabajo", type="string", length=1)
+     */
+    private $variacionCentrosTrabajo = ' ';         
+    
+    /**
+     * @ORM\Column(name="incapacidad_accidente_trabajo_enfermedad_profesional", type="integer")
+     */
+    private $incapacidadAccidenteTrabajoEnfermedadProfesional = 0;    
+    
+    /**
+     * @ORM\Column(name="salario_basico", type="float")
+     */
+    private $salarioBasico = 0;
+    
+    /**
+     * @ORM\Column(name="salario_mes_anterior", type="float")
+     */
+    private $salarioMesAnterior = 0;    
+    
+    /**
+     * @ORM\Column(name="salario_integral", type="string", length=1)
+     */
+    private $salarioIntegral = 0;    
+    
+    /**
+     * @ORM\Column(name="suplementario", type="float")
+     */
+    private $suplementario = 0;     
+    
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoAportesSsoPeriodoRel")
@@ -187,6 +253,7 @@ class RhuSsoAporte
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
     protected $contratoRel;          
+
 
     /**
      * Get codigoAportePk
@@ -871,6 +938,246 @@ class RhuSsoAporte
     }
 
     /**
+     * Set diasLicencia
+     *
+     * @param integer $diasLicencia
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasLicencia($diasLicencia)
+    {
+        $this->diasLicencia = $diasLicencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicencia
+     *
+     * @return integer
+     */
+    public function getDiasLicencia()
+    {
+        return $this->diasLicencia;
+    }
+
+    /**
+     * Set incapacidadGeneral
+     *
+     * @param string $incapacidadGeneral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIncapacidadGeneral($incapacidadGeneral)
+    {
+        $this->incapacidadGeneral = $incapacidadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidadGeneral
+     *
+     * @return string
+     */
+    public function getIncapacidadGeneral()
+    {
+        return $this->incapacidadGeneral;
+    }
+
+    /**
+     * Set diasIncapacidadGeneral
+     *
+     * @param integer $diasIncapacidadGeneral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasIncapacidadGeneral($diasIncapacidadGeneral)
+    {
+        $this->diasIncapacidadGeneral = $diasIncapacidadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get diasIncapacidadGeneral
+     *
+     * @return integer
+     */
+    public function getDiasIncapacidadGeneral()
+    {
+        return $this->diasIncapacidadGeneral;
+    }
+
+    /**
+     * Set licenciaMaternidad
+     *
+     * @param string $licenciaMaternidad
+     *
+     * @return RhuSsoAporte
+     */
+    public function setLicenciaMaternidad($licenciaMaternidad)
+    {
+        $this->licenciaMaternidad = $licenciaMaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get licenciaMaternidad
+     *
+     * @return string
+     */
+    public function getLicenciaMaternidad()
+    {
+        return $this->licenciaMaternidad;
+    }
+
+    /**
+     * Set diasLicenciaMaternidad
+     *
+     * @param integer $diasLicenciaMaternidad
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasLicenciaMaternidad($diasLicenciaMaternidad)
+    {
+        $this->diasLicenciaMaternidad = $diasLicenciaMaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicenciaMaternidad
+     *
+     * @return integer
+     */
+    public function getDiasLicenciaMaternidad()
+    {
+        return $this->diasLicenciaMaternidad;
+    }
+
+    /**
+     * Set vacaciones
+     *
+     * @param string $vacaciones
+     *
+     * @return RhuSsoAporte
+     */
+    public function setVacaciones($vacaciones)
+    {
+        $this->vacaciones = $vacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vacaciones
+     *
+     * @return string
+     */
+    public function getVacaciones()
+    {
+        return $this->vacaciones;
+    }
+
+    /**
+     * Set salarioBasico
+     *
+     * @param float $salarioBasico
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSalarioBasico($salarioBasico)
+    {
+        $this->salarioBasico = $salarioBasico;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioBasico
+     *
+     * @return float
+     */
+    public function getSalarioBasico()
+    {
+        return $this->salarioBasico;
+    }
+
+    /**
+     * Set salarioMesAnterior
+     *
+     * @param float $salarioMesAnterior
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSalarioMesAnterior($salarioMesAnterior)
+    {
+        $this->salarioMesAnterior = $salarioMesAnterior;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioMesAnterior
+     *
+     * @return float
+     */
+    public function getSalarioMesAnterior()
+    {
+        return $this->salarioMesAnterior;
+    }
+
+    /**
+     * Set salarioIntegral
+     *
+     * @param string $salarioIntegral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSalarioIntegral($salarioIntegral)
+    {
+        $this->salarioIntegral = $salarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioIntegral
+     *
+     * @return string
+     */
+    public function getSalarioIntegral()
+    {
+        return $this->salarioIntegral;
+    }
+
+    /**
+     * Set suplementario
+     *
+     * @param float $suplementario
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSuplementario($suplementario)
+    {
+        $this->suplementario = $suplementario;
+
+        return $this;
+    }
+
+    /**
+     * Get suplementario
+     *
+     * @return float
+     */
+    public function getSuplementario()
+    {
+        return $this->suplementario;
+    }
+
+    /**
      * Set ssoPeriodoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel
@@ -988,5 +1295,77 @@ class RhuSsoAporte
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set aporteVoluntario
+     *
+     * @param string $aporteVoluntario
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAporteVoluntario($aporteVoluntario)
+    {
+        $this->aporteVoluntario = $aporteVoluntario;
+
+        return $this;
+    }
+
+    /**
+     * Get aporteVoluntario
+     *
+     * @return string
+     */
+    public function getAporteVoluntario()
+    {
+        return $this->aporteVoluntario;
+    }
+
+    /**
+     * Set variacionCentrosTrabajo
+     *
+     * @param string $variacionCentrosTrabajo
+     *
+     * @return RhuSsoAporte
+     */
+    public function setVariacionCentrosTrabajo($variacionCentrosTrabajo)
+    {
+        $this->variacionCentrosTrabajo = $variacionCentrosTrabajo;
+
+        return $this;
+    }
+
+    /**
+     * Get variacionCentrosTrabajo
+     *
+     * @return string
+     */
+    public function getVariacionCentrosTrabajo()
+    {
+        return $this->variacionCentrosTrabajo;
+    }
+
+    /**
+     * Set incapacidadAccidenteTrabajoEnfermedadProfesional
+     *
+     * @param integer $incapacidadAccidenteTrabajoEnfermedadProfesional
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIncapacidadAccidenteTrabajoEnfermedadProfesional($incapacidadAccidenteTrabajoEnfermedadProfesional)
+    {
+        $this->incapacidadAccidenteTrabajoEnfermedadProfesional = $incapacidadAccidenteTrabajoEnfermedadProfesional;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidadAccidenteTrabajoEnfermedadProfesional
+     *
+     * @return integer
+     */
+    public function getIncapacidadAccidenteTrabajoEnfermedadProfesional()
+    {
+        return $this->incapacidadAccidenteTrabajoEnfermedadProfesional;
     }
 }

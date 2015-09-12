@@ -11,6 +11,8 @@
                 <th>CÓDIGO</th>
                 <th>SUCURSAL</th>
                 <th>GENERADO</th>
+                <th>DESDE</th>
+                <th>HASTA</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -21,6 +23,8 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }} </td>
                 <td>{{ arSsoPeriodoDetalles.SsoSucursalRel.nombre  }}</td>
                 <td {% if arSsoPeriodoDetalles.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>                                                
+                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaDesde |date("Y/m/d")  }}</td>
+                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaHasta |date("Y/m/d")  }}</td>
                 <td>
                     {% if arSsoPeriodoDetalles.estadoGenerado == 0 %}
                         <button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Generar</button> 

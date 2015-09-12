@@ -89,4 +89,41 @@ class RhuIncapacidadRepository extends EntityRepository {
         $arIncapacidadesCobrar = $query->getResult();
         return $arIncapacidadesCobrar;        
     }
+    
+    public function diasIncapacidad($fechaDesde, $fechaHasta, $codigoEmpleado, $tipo) {
+        $em = $this->getEntityManager();
+        $dql = "SELECT incapacidad FROM BrasaRecursoHumanoBundle:RhuIncapacidad incapacidad "
+                . "WHERE (incapacidad.fechaDesde >= '" . $fechaDesde->format('Y-m-d') . "' OR incapacidad.fechaHasta = '0000-00-00') "
+                . "AND incapacidad.fechaDesde <='" . $fechaHasta->format('Y-m-d') . "' "
+                . "AND incapacidad.codigoEmpleadoFk = '" . $codigoEmpleado . "' "
+                . "AND incapacidad.codigoPagoAdicionalSubtipoFk = " . $tipo;       
+        $objQuery = $em->createQuery($dql);  
+        $arIncapacidades = $objQuery->getResult();                
+        $intDiasIncapacidad = 0;
+        foreach ($arIncapacidades as $arIncapacidad) {
+            $dateFechaDesde =  "";
+            $dateFechaHasta =  "";               
+            if($arIncapacidad->getFechaHasta() > $fechaHasta == true) {
+                $dateFechaHasta = $fechaHasta;
+            } else {
+                $dateFechaHasta = $arIncapacidad->getFechaHasta();
+            }
+
+            if($arIncapacidad->getFechaDesde() <  $fechaDesde == true) {
+                $dateFechaDesde = $fechaDesde;
+            } else {
+                $dateFechaDesde = $arIncapacidad->getFechaDesde();
+            }
+
+            if($dateFechaDesde != "" && $dateFechaHasta != "") {
+                $intDias = $dateFechaDesde->diff($dateFechaHasta);
+                $intDias = $intDias->format('%a');
+                $intDiasIncapacidad += $intDias + 1;
+            }  
+        }
+        if($intDiasIncapacidad > 30) {
+            $intDiasIncapacidad = 30;
+        }
+        return $intDiasIncapacidad;
+    }                    
 }

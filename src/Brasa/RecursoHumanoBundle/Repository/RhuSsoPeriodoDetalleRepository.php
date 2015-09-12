@@ -50,8 +50,24 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setRetiro($arPeriodoEmpleado->getRetiro());
             if($arPeriodoEmpleado->getVrSuplementario() > 0) {
                 $arAporte->setVariacionTransitoriaSalario('X');
+                $arAporte->setSuplementario($arPeriodoEmpleado->getVrSuplementario());
             }
-            
+            if($arPeriodoEmpleado->getDiasLicencia() > 0) {
+                $arAporte->setSuspensionTemporalContratoLicenciaServicios('X');
+                $arAporte->setDiasLicencia($arPeriodoEmpleado->getDiasLicencia());
+            }
+            if($arPeriodoEmpleado->getDiasIncapacidadGeneral() > 0) {
+                $arAporte->setIncapacidadGeneral('X');
+                $arAporte->setDiasIncapacidadGeneral($arPeriodoEmpleado->getDiasIncapacidadGeneral());
+            }
+            if($arPeriodoEmpleado->getDiasLicenciaMaternidad() > 0) {
+                $arAporte->setLicenciaMaternidad('X');
+                $arAporte->setDiasLicenciaMaternidad($arPeriodoEmpleado->getDiasLicenciaMaternidad());
+            }       
+            if($arPeriodoEmpleado->getDiasIncapacidadLaboral() > 0) {
+                $arAporte->setIncapacidadAccidenteTrabajoEnfermedadProfesional($arPeriodoEmpleado->getDiasIncapacidadLaboral());
+            }            
+            $arAporte->setSalarioBasico($arPeriodoEmpleado->getVrSalario());            
             $em->persist($arAporte);
             $i++;
         } 

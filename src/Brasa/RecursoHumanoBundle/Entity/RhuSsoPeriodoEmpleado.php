@@ -68,6 +68,26 @@ class RhuSsoPeriodoEmpleado
     private $retiro = ' ';    
     
     /**
+     * @ORM\Column(name="dias_licencia", type="integer")
+     */    
+    private $diasLicencia = 0;    
+    
+    /**
+     * @ORM\Column(name="dias_incapacidad_general", type="integer")
+     */    
+    private $diasIncapacidadGeneral = 0;    
+
+    /**
+     * @ORM\Column(name="dias_licencia_maternidad", type="integer")
+     */    
+    private $diasLicenciaMaternidad = 0;    
+    
+    /**
+     * @ORM\Column(name="dias_incapacidad_laboral", type="integer")
+     */    
+    private $diasIncapacidadLaboral = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosEmpleadosSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
@@ -466,5 +486,101 @@ class RhuSsoPeriodoEmpleado
     public function getVrSuplementario()
     {
         return $this->vrSuplementario;
+    }
+
+    /**
+     * Set diasLicencia
+     *
+     * @param integer $diasLicencia
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasLicencia($diasLicencia)
+    {
+        $this->diasLicencia = $diasLicencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicencia
+     *
+     * @return integer
+     */
+    public function getDiasLicencia()
+    {
+        return $this->diasLicencia;
+    }
+
+    /**
+     * Set diasIncapacidadGeneral
+     *
+     * @param integer $diasIncapacidadGeneral
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasIncapacidadGeneral($diasIncapacidadGeneral)
+    {
+        $this->diasIncapacidadGeneral = $diasIncapacidadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get diasIncapacidadGeneral
+     *
+     * @return integer
+     */
+    public function getDiasIncapacidadGeneral()
+    {
+        return $this->diasIncapacidadGeneral;
+    }
+
+    /**
+     * Set diasLicenciaMaternidad
+     *
+     * @param integer $diasLicenciaMaternidad
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasLicenciaMaternidad($diasLicenciaMaternidad)
+    {
+        $this->diasLicenciaMaternidad = $diasLicenciaMaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicenciaMaternidad
+     *
+     * @return integer
+     */
+    public function getDiasLicenciaMaternidad()
+    {
+        return $this->diasLicenciaMaternidad;
+    }
+
+    /**
+     * Set diasIncapacidadLaboral
+     *
+     * @param integer $diasIncapacidadLaboral
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasIncapacidadLaboral($diasIncapacidadLaboral)
+    {
+        $this->diasIncapacidadLaboral = $diasIncapacidadLaboral;
+
+        return $this;
+    }
+
+    /**
+     * Get diasIncapacidadLaboral
+     *
+     * @return integer
+     */
+    public function getDiasIncapacidadLaboral()
+    {
+        return $this->diasIncapacidadLaboral;
     }
 }

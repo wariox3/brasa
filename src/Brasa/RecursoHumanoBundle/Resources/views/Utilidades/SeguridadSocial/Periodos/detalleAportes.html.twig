@@ -16,6 +16,9 @@
                 <th>RET</th>
                 <th>VST</th>
                 <th>SLN</th>
+                <th>IGE</th>
+                <th>LMA</th>
+                <th>IRP</th>
                 <th>SALARIO</th>
                 <th>SUPLE</th>
             </tr>
@@ -28,6 +31,12 @@
                 <td>{{ arSsoAportes.ingreso  }}</td>
                 <td>{{ arSsoAportes.retiro  }}</td>
                 <td>{{ arSsoAportes.variacionTransitoriaSalario }}</td>
+                <td>{% if arSsoAportes.suspensionTemporalContratoLicenciaServicios == 'X' %}{{ arSsoAportes.suspensionTemporalContratoLicenciaServicios }}{{ arSsoAportes.diasLicencia }} {% endif %}</td>                
+                <td>{% if arSsoAportes.incapacidadGeneral == 'X' %}{{ arSsoAportes.incapacidadGeneral }}{{ arSsoAportes.diasIncapacidadGeneral }} {% endif %}</td>                
+                <td>{% if arSsoAportes.licenciaMaternidad == 'X' %}{{ arSsoAportes.licenciaMaternidad }}{{ arSsoAportes.diasLicenciaMaternidad }} {% endif %}</td>                
+                <td>{% if arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional > 0 %}{{ arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional }} {% endif %}</td>                
+                <td style="text-align: right">{{ arSsoAportes.salarioBasico | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSsoAportes.suplementario | number_format(0, '.', ',') }}</td>
             </tr>
             {% endfor %}                        
         </table>                       
