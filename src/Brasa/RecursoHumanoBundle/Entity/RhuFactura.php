@@ -20,7 +20,7 @@ class RhuFactura
     /**
      * @ORM\Column(name="numero", type="integer")
      */
-    private $numero;    
+    private $numero = 0;    
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)

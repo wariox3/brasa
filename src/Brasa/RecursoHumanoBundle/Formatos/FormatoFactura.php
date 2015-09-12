@@ -20,14 +20,32 @@ class FormatoFactura extends \FPDF_FPDF {
     public function Header() {
         $arFactura = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
         $arFactura = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->find(self::$codigoFactura);
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $this->SetFillColor(200, 200, 200);        
+        $this->SetFont('Arial','B',10);
+        //Logo
+        $this->SetXY(53, 10);
+        $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
+        //INFORMACIÓN EMPRESA
+        $this->Cell(150, 7, utf8_decode("FACTURA DE VENTA N°: ". $arFactura->getCodigoFacturaPk().""), 0, 0, 'C', 1);
+        $this->SetXY(53, 18);
+        $this->SetFont('Arial','B',9);
+        $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 22);
+        $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 26);
+        $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 30);
+        $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);
         
-        $this->SetFillColor(236, 236, 236);        
-        $this->SetFont('Arial','B',12);
-        //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
-        $this->SetXY(10, 20);
-        $this->Cell(194, 10, utf8_decode("INFORMACIÓN PROGRAMACIÓN PAGO ") , 1, 0, 'L', 1);
+        //ENCABEZADO
         $this->SetFillColor(272, 272, 272);
-        $this->SetXY(10, 30);
+        $this->SetXY(10, 40);
         $this->SetFont('Arial','B',7);
         $this->Cell(24, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -40,7 +58,7 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->Cell(22, 6, "BRUTO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->Cell(22, 6, number_format($arFactura->getVrBruto(), 2,'.',',') , 1, 0, 'R', 1);
-        $this->SetXY(10, 35);
+        $this->SetXY(10, 45);
         $this->SetFont('Arial','B',7);
         $this->Cell(24, 6, utf8_decode("NÚMERO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -53,7 +71,7 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->Cell(22, 6, "(-)RETE FUENTE:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->Cell(22, 6, number_format($arFactura->getVrRetencionFuente(), 2,'.',',') , 1, 0, 'R', 1);
-        $this->SetXY(10, 40);
+        $this->SetXY(10, 50);
         $this->SetFont('Arial','B',7);
         $this->Cell(24, 6, "TERCERO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -62,7 +80,7 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->Cell(22, 6, "(-)RETE CREE:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->Cell(22, 6, number_format($arFactura->getVrRetencionCree(), 2,'.',',') , 1, 0, 'R', 1);
-        $this->SetXY(10, 45);
+        $this->SetXY(10, 55);
         $this->SetFont('Arial','B',7);
         $this->Cell(24, 6, "CENTRO COSTO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',6);
@@ -75,7 +93,7 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->Cell(22, 6, "(+)IVA:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->Cell(22, 6, number_format($arFactura->getVrIva(), 2,'.',',') , 1, 0, 'R', 1);
-        $this->SetXY(10, 50);
+        $this->SetXY(10, 60);
         $this->SetFont('Arial','B',7);
         $this->Cell(24, 6, "" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -88,7 +106,7 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->Cell(22, 6, "(-)RETE IVA:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->Cell(22, 6, number_format($arFactura->getVrRetencionIva(), 2,'.',',') , 1, 0, 'R', 1);
-        $this->SetXY(10, 55);
+        $this->SetXY(10, 65);
         $this->SetFont('Arial','B',7);
         $this->Cell(24, 6, "" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -131,12 +149,12 @@ class FormatoFactura extends \FPDF_FPDF {
     }
 
     public function Body($pdf) {
-        $arFacturaDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago();
-        $arFacturaDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetallePago')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
+        $arFacturaDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
+        $arFacturaDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetalle')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arFacturaDetalle as $arFacturaDetalle) {            
-            $pdf->Cell(10, 4, $arFacturaDetalle->getCodigoFacturaDetallePagoPk(), 1, 0, 'L');
+            $pdf->Cell(10, 4, $arFacturaDetalle->getCodigoFacturaDetallePk(), 1, 0, 'L');
             $pdf->Cell(18, 4, number_format($arFacturaDetalle->getVrIngresoBaseCotizacion(), 2, '.', ','), 1, 0, 'R');
             $pdf->Cell(16, 4, number_format($arFacturaDetalle->getVrAdicionalTiempo(), 2, '.', ','), 1, 0, 'R');
             $pdf->Cell(16, 4, number_format($arFacturaDetalle->getVrAdicionalValor(), 2, '.', ','), 1, 0, 'R');

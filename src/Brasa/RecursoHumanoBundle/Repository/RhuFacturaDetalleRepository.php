@@ -11,4 +11,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuFacturaDetalleRepository extends EntityRepository {
     
+    public function devuelveNumeroFacturasDetalle($codigoFactura) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT COUNT(f.codigoFacturaDetallePk) FROM BrasaRecursoHumanoBundle:RhuFacturaDetalle f WHERE f.codigoFacturaFk = " . $codigoFactura;
+        $query = $em->createQuery($dql);
+        $douNumeroFacturasDetalle = $query->getSingleScalarResult();
+        return $douNumeroFacturasDetalle;
+    } 
+    
 }

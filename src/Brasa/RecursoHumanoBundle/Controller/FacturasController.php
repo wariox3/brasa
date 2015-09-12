@@ -14,16 +14,30 @@ class FacturasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
         $paginator  = $this->get('knp_paginator');
-        $strSqlLista = $this->getRequest()->getSession();        
+        $strSqlLista = $this->getRequest()->getSession(); 
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioFiltro();
         $form->handleRequest($request);        
         $this->listar();          
         if ($form->isValid()) {            
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
-            /*if ($form->get('BtnEliminar')->isClicked()) {    
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->eliminarPagoExamenSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_pago_examen_lista'));
-            }*/
+            if($form->get('BtnEliminar')->isClicked()){    
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoFactura) {
+                        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
+                        $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->find($codigoFactura);
+                        $arFacturasDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetalle')->devuelveNumeroFacturasDetalle($codigoFactura);    
+                        if($arFacturasDetalle == 0){
+                            $em->remove($arSelecciones);
+                            $em->flush();
+                        }
+                        else {
+                            $objMensaje->Mensaje("error", "No se puede eliminar la factura, tiene registros liquidados", $this);
+                        }
+                    }
+                    return $this->redirect($this->generateUrl('brs_rhu_facturas_lista'));    
+                }
+            }
             if ($form->get('BtnFiltrar')->isClicked()) {    
                 $this->filtrar($form);
                 $this->listar();
@@ -49,13 +63,17 @@ class FacturasController extends Controller
         }
         else{
            $arFactura->setFecha(new \DateTime('now'));
-           $arFactura->setFechaVence(new \DateTime('now'));
+           
         }
         $form = $this->createForm(new RhuFacturaType(), $arFactura);       
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arFactura = $form->getData(); 
-            //$arFactura->setTerceroRel($arFactura);
+            $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
+            $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->find($form->get('terceroRel')->getData());
+            $diasPlazo = $arTercero->getPlazoPagoCliente() - 1;
+            $fechaVence = date('Y-m-d', strtotime('+'.$diasPlazo.' day')) ;  
+            $arFactura->setFechaVence(new \DateTime($fechaVence));
             $em->persist($arFactura);
             $em->flush();                            
             if($form->get('guardarnuevo')->isClicked()) {
@@ -73,12 +91,10 @@ class FacturasController extends Controller
     
     public function detalleAction($codigoFactura) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();         
-        $objMensaje = $this->get('mensajes_brasa');        
+        $request = $this->getRequest();                 
         $form = $this->createFormBuilder()                        
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))            
-            ->add('BtnReliquidar', 'submit', array('label'  => 'Reliquidar',))
-            ->add('BtnRetirarDetalle', 'submit', array('label'  => 'Retirar',))            
+            ->add('BtnRetirarDetalle', 'submit', array('label'  => 'Eliminar',))            
             ->getForm();
         $form->handleRequest($request);        
         $arFactura = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
@@ -136,7 +152,7 @@ class FacturasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoTerceros', $controles['terceroRel']);
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtNumero')->getData());
+        $session->set('filtroNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
@@ -182,7 +198,6 @@ class FacturasController extends Controller
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->getForm();
         return $form;
@@ -202,76 +217,53 @@ class FacturasController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'DESDE')
-                    ->setCellValue('C1', 'HASTA')
-                    ->setCellValue('D1', 'IDENTIFICACION')
-                    ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'CENTRO COSTOS')
-                    ->setCellValue('G1', 'BASICO')
-                    ->setCellValue('H1', 'TIEMPO EXTRA')
-                    ->setCellValue('I1', 'VALORES ADICIONALES')
-                    ->setCellValue('J1', 'AUX. TRANSPORTE')
-                    ->setCellValue('K1', 'ARP')
-                    ->setCellValue('L1', 'EPS')
-                    ->setCellValue('M1', 'PENSION')
-                    ->setCellValue('N1', 'CAJA')
-                    ->setCellValue('O1', 'ICBF')
-                    ->setCellValue('P1', 'SENA')
-                    ->setCellValue('Q1', 'CESANTIAS')
-                    ->setCellValue('R1', 'VACACIONES')
-                    ->setCellValue('S1', 'ADMON')
-                    ->setCellValue('T1', 'COSTO')
-                    ->setCellValue('U1', 'TOTAL')
-                    ->setCellValue('W1', 'NETO')
-                    ->setCellValue('X1', 'IBC')
-                    ->setCellValue('Y1', 'AUX. TRANSPORTE COTIZACION')
-                    ->setCellValue('Z1', 'DIAS PERIODO')
-                    ->setCellValue('AA1', 'SALARIO PERIODO')
-                    ->setCellValue('AB1', 'SALARIO EMPLEADO');
+                    ->setCellValue('A1', 'CODIGO FACTURA')
+                    ->setCellValue('B1', 'NÚMERO')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'FECHA VENCE')
+                    ->setCellValue('E1', 'CLIENTE')
+                    ->setCellValue('F1', 'CENTRO COSTO')
+                    ->setCellValue('G1', 'VR. BRUTO')
+                    ->setCellValue('H1', 'VR. NETO')
+                    ->setCellValue('I1', 'VR. RETENCION FUENTE')
+                    ->setCellValue('J1', 'VR. RETENCION CREE')
+                    ->setCellValue('K1', 'VR. RETENCION IVA')
+                    ->setCellValue('L1', 'VR. BASE AIU')
+                    ->setCellValue('M1', 'VR. TOTAL ADMNISTRACION')
+                    ->setCellValue('N1', 'VR. TOTAL INGRESO MISION')
+                    ->setCellValue('O1', 'VR. COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
-        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPagos = $query->getResult();
-        foreach ($arPagos as $arPago) {
+        $arFacturas = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
+        $arFacturas = $query->getResult();
+        foreach ($arFacturas as $arFactura) {
+            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
-                    ->setCellValue('B' . $i, $arPago->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('C' . $i, $arPago->getFechaHasta()->Format('Y-m-d'))
-                    ->setCellValue('D' . $i, $arPago->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arPago->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arPago->getCentroCostoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arPago->getVrSalario())
-                    ->setCellValue('H' . $i, $arPago->getVrAdicionalTiempo())
-                    ->setCellValue('I' . $i, $arPago->getVrAdicionalValor())
-                    ->setCellValue('J' . $i, $arPago->getVrAuxilioTransporte())
-                    ->setCellValue('K' . $i, $arPago->getVrArp())
-                    ->setCellValue('L' . $i, $arPago->getVrEps())
-                    ->setCellValue('M' . $i, $arPago->getVrPension())
-                    ->setCellValue('N' . $i, $arPago->getVrCaja())
-                    ->setCellValue('O' . $i, $arPago->getVrIcbf())
-                    ->setCellValue('P' . $i, $arPago->getVrSena())
-                    ->setCellValue('Q' . $i, $arPago->getVrCesantias())
-                    ->setCellValue('R' . $i, $arPago->getVrVacaciones())
-                    ->setCellValue('S' . $i, $arPago->getVrAdministracion())
-                    ->setCellValue('T' . $i, $arPago->getVrCosto())
-                    ->setCellValue('U' . $i, $arPago->getVrTotalCobrar())
-                    ->setCellValue('W' . $i, $arPago->getVrNeto())
-                    ->setCellValue('X' . $i, $arPago->getVrIngresoBaseCotizacion())
-                    ->setCellValue('Y' . $i, $arPago->getVrAuxilioTransporteCotizacion())
-                    ->setCellValue('Z' . $i, $arPago->getDiasPeriodo())
-                    ->setCellValue('AA' . $i, $arPago->getVrSalarioPeriodo())
-                    ->setCellValue('AB' . $i, $arPago->getVrSalarioEmpleado());
+                    ->setCellValue('A' . $i, $arFactura->getCodigoFacturaPk())
+                    ->setCellValue('B' . $i, $arFactura->getNumero())
+                    ->setCellValue('C' . $i, $arFactura->getFecha()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arFactura->getFechaVence()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arFactura->getTerceroRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arFactura->getCentroCostoRel()->getNombre())
+                    ->setCellValue('G' . $i, $arFactura->getVrBruto())
+                    ->setCellValue('H' . $i, $arFactura->getVrNeto())
+                    ->setCellValue('I' . $i, $arFactura->getVrRetencionFuente())
+                    ->setCellValue('J' . $i, $arFactura->getVrRetencionCree())
+                    ->setCellValue('K' . $i, $arFactura->getVrRetencionIva())
+                    ->setCellValue('L' . $i, $arFactura->getVrBaseAIU())
+                    ->setCellValue('M' . $i, $arFactura->getVrTotalAdministracion())
+                    ->setCellValue('N' . $i, $arFactura->getVrIngresoMision())
+                    ->setCellValue('O' . $i, $arFactura->getComentarios());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('costos');
+        $objPHPExcel->getActiveSheet()->setTitle('Facturas');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Costos.xlsx"');
+        header('Content-Disposition: attachment;filename="facturas.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

@@ -23,10 +23,7 @@ class RhuFacturaType extends AbstractType
                 return $er->createQueryBuilder('cc')
                 ->orderBy('cc.nombre', 'ASC');},
             'property' => 'nombre',
-            'required' => true))
-            ->add('numero', 'number', array('required' => true))            
-            ->add('fecha', 'date', array('required' => false))
-            ->add('fechaVence', 'date', array('required' => false))
+            'required' => true))          
             ->add('comentarios', 'textarea', array('required' => false))                                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
