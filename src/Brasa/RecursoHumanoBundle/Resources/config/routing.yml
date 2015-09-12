@@ -314,9 +314,9 @@ brs_rhu_facturas_detalle:
     path:     /rhu/facturas/detalle/{codigoFactura}
     defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalle }    
 
-brs_rhu_facturas_agregar_pago:
-    path:     /rhu/facturas/agregarpago/{codigoFactura}
-    defaults: { _controller: BrasaRecursoHumanoBundle:FacturasAgregarPago:lista }        
+brs_rhu_facturas_agregar_servicio_cobrar:
+    path:     /rhu/facturas/agregarserviciocobrar/{codigoFactura}
+    defaults: { _controller: BrasaRecursoHumanoBundle:FacturasAgregarServicioCobrar:lista }        
 
 brs_rhu_base_salud_listar:
    path:     /rhu/base/salud/listar

@@ -15,7 +15,7 @@ class RhuFacturaRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $dql   = "SELECT f, t FROM BrasaRecursoHumanoBundle:RhuFactura f JOIN f.terceroRel t WHERE f.codigoFacturaPk <> 0";
         if($strCodigoTercero != "") {
-            $dql .= " AND t.codigoTerceroFk = " . $strCodigoTercero;
+            $dql .= " AND f.codigoTerceroFk = " . $strCodigoTercero;
         }
         if($strCodigoCentroCosto != "") {
             $dql .= " AND f.codigoCentroCostoFk = " . $strCodigoCentroCosto;
@@ -35,26 +35,26 @@ class RhuFacturaRepository extends EntityRepository {
     
     public function liquidar($codigoFactura) {        
         $em = $this->getEntityManager();
-        $arConfiguraciones = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-        $arConfiguraciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+        $arConfiguraciones = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguraciones = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arFactura = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
         $arFactura = $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->find($codigoFactura);         
-        $arFacturaDetallesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago();
-        $arFacturaDetallesPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetallePago')->findBy(array('codigoFacturaFk' => $codigoFactura));
+        $arFacturaDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
+        $arFacturaDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));
         $douAdministracion = 0;
         $douIngresoMision = 0;
-        foreach ($arFacturaDetallesPagos as $arFacturaDetallePago) {
-            $douAdministracion += $arFacturaDetallePago->getVrAdministracion();
-            $douIngresoMision += $arFacturaDetallePago->getVrIngresoMision();
+        foreach ($arFacturaDetalles as $arFacturaDetalle) {
+            $douAdministracion += $arFacturaDetalle->getVrAdministracion();
+            //$douIngresoMision += $arFacturaDetalle->getVrIngresoMision();
         }
         $douBaseAIU = (($douAdministracion+$douIngresoMision)*10)/100;
         $douTotalBruto = $douIngresoMision + $douAdministracion;
         $douRetencionFuente = 0;
         $douRetencionCREE = ($douBaseAIU * $arConfiguraciones->getPorcentajeRetencionCREE()) / 100;
-        $douIva = ($douBaseAIU * $arConfiguraciones->getPorcentajeIvaVentas()) / 100;
-        $douRetencionIva = ($douIva * $arConfiguraciones->getPorcentajeRetencionIva()) / 100;        
+        $douIva = ($douBaseAIU * $arConfiguraciones->getPorcentajeRetencionIvaVentas()) / 100;
+        $douRetencionIva = ($douIva * $arConfiguraciones->getPorcentajeRetencionIvaVentas()) / 100;        
         if($arFactura->getTerceroRel()->getRetencionFuenteVentas() == 1) {
-            if ($douBaseAIU >= $arConfiguraciones->getBaseRetencionFuenteServicios()) {
+            if ($douBaseAIU >= $arConfiguraciones->getBaseRetencionFuente()) {
                 $douRetencionFuente = ($douBaseAIU * $arConfiguraciones->getPorcentajeRetencionFuenteServicios()) / 100;
             }            
         }

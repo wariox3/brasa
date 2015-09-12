@@ -20,7 +20,7 @@ class RhuFactura
     /**
      * @ORM\Column(name="numero", type="integer")
      */
-    private $numero = 0;    
+    private $numero;    
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -107,20 +107,15 @@ class RhuFactura
     /**
      * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="facturaRel")
      */
-    protected $facturasDetallesFacturaRel;      
+    protected $facturasDetallesFacturaRel;                
 
-    /**
-     * @ORM\OneToMany(targetEntity="RhuFacturaDetallePago", mappedBy="facturaRel")
-     */
-    protected $facturasDetallesPagosFacturaRel;          
-
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->facturasDetallesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->facturasDetallesPagosFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -326,6 +321,78 @@ class RhuFactura
     }
 
     /**
+     * Set vrBaseAIU
+     *
+     * @param float $vrBaseAIU
+     *
+     * @return RhuFactura
+     */
+    public function setVrBaseAIU($vrBaseAIU)
+    {
+        $this->VrBaseAIU = $vrBaseAIU;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBaseAIU
+     *
+     * @return float
+     */
+    public function getVrBaseAIU()
+    {
+        return $this->VrBaseAIU;
+    }
+
+    /**
+     * Set vrTotalAdministracion
+     *
+     * @param float $vrTotalAdministracion
+     *
+     * @return RhuFactura
+     */
+    public function setVrTotalAdministracion($vrTotalAdministracion)
+    {
+        $this->VrTotalAdministracion = $vrTotalAdministracion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalAdministracion
+     *
+     * @return float
+     */
+    public function getVrTotalAdministracion()
+    {
+        return $this->VrTotalAdministracion;
+    }
+
+    /**
+     * Set vrIngresoMision
+     *
+     * @param float $vrIngresoMision
+     *
+     * @return RhuFactura
+     */
+    public function setVrIngresoMision($vrIngresoMision)
+    {
+        $this->VrIngresoMision = $vrIngresoMision;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoMision
+     *
+     * @return float
+     */
+    public function getVrIngresoMision()
+    {
+        return $this->VrIngresoMision;
+    }
+
+    /**
      * Set vrIva
      *
      * @param float $vrIva
@@ -501,111 +568,5 @@ class RhuFactura
     public function getFacturasDetallesFacturaRel()
     {
         return $this->facturasDetallesFacturaRel;
-    }
-
-    /**
-     * Add facturasDetallesPagosFacturaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosFacturaRel
-     *
-     * @return RhuFactura
-     */
-    public function addFacturasDetallesPagosFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosFacturaRel)
-    {
-        $this->facturasDetallesPagosFacturaRel[] = $facturasDetallesPagosFacturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasDetallesPagosFacturaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosFacturaRel
-     */
-    public function removeFacturasDetallesPagosFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosFacturaRel)
-    {
-        $this->facturasDetallesPagosFacturaRel->removeElement($facturasDetallesPagosFacturaRel);
-    }
-
-    /**
-     * Get facturasDetallesPagosFacturaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasDetallesPagosFacturaRel()
-    {
-        return $this->facturasDetallesPagosFacturaRel;
-    }
-
-    /**
-     * Set vrBaseAIU
-     *
-     * @param float $vrBaseAIU
-     *
-     * @return RhuFactura
-     */
-    public function setVrBaseAIU($vrBaseAIU)
-    {
-        $this->VrBaseAIU = $vrBaseAIU;
-
-        return $this;
-    }
-
-    /**
-     * Get vrBaseAIU
-     *
-     * @return float
-     */
-    public function getVrBaseAIU()
-    {
-        return $this->VrBaseAIU;
-    }
-
-    /**
-     * Set vrTotalAdministracion
-     *
-     * @param float $vrTotalAdministracion
-     *
-     * @return RhuFactura
-     */
-    public function setVrTotalAdministracion($vrTotalAdministracion)
-    {
-        $this->VrTotalAdministracion = $vrTotalAdministracion;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalAdministracion
-     *
-     * @return float
-     */
-    public function getVrTotalAdministracion()
-    {
-        return $this->VrTotalAdministracion;
-    }
-
-    /**
-     * Set vrIngresoMision
-     *
-     * @param float $vrIngresoMision
-     *
-     * @return RhuFactura
-     */
-    public function setVrIngresoMision($vrIngresoMision)
-    {
-        $this->VrIngresoMision = $vrIngresoMision;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIngresoMision
-     *
-     * @return float
-     */
-    public function getVrIngresoMision()
-    {
-        return $this->VrIngresoMision;
     }
 }

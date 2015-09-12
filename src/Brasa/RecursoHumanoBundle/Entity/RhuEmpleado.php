@@ -476,6 +476,11 @@ class RhuEmpleado
      */
     protected $accidentesTrabajoEmpleadoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="empleadoRel")
+     */
+    protected $facturasDetallesEmpleadoRel;
+    
     
     /**
      * Constructor
@@ -497,8 +502,10 @@ class RhuEmpleado
         $this->empleadosFamiliasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosEstudiosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoPeriodosEmpleadosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->dotacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoAportesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosDotacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->accidentesTrabajoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1640,6 +1647,54 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoTipoCotizanteFk
+     *
+     * @param integer $codigoTipoCotizanteFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoTipoCotizanteFk($codigoTipoCotizanteFk)
+    {
+        $this->codigoTipoCotizanteFk = $codigoTipoCotizanteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoCotizanteFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoCotizanteFk()
+    {
+        return $this->codigoTipoCotizanteFk;
+    }
+
+    /**
+     * Set codigoSubtipoCotizanteFk
+     *
+     * @param integer $codigoSubtipoCotizanteFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoSubtipoCotizanteFk($codigoSubtipoCotizanteFk)
+    {
+        $this->codigoSubtipoCotizanteFk = $codigoSubtipoCotizanteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSubtipoCotizanteFk
+     *
+     * @return integer
+     */
+    public function getCodigoSubtipoCotizanteFk()
+    {
+        return $this->codigoSubtipoCotizanteFk;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -2000,6 +2055,54 @@ class RhuEmpleado
     }
 
     /**
+     * Set ssoTipoCotizanteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setSsoTipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel = null)
+    {
+        $this->ssoTipoCotizanteRel = $ssoTipoCotizanteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoTipoCotizanteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante
+     */
+    public function getSsoTipoCotizanteRel()
+    {
+        return $this->ssoTipoCotizanteRel;
+    }
+
+    /**
+     * Set ssoSubtipoCotizanteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setSsoSubtipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel = null)
+    {
+        $this->ssoSubtipoCotizanteRel = $ssoSubtipoCotizanteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoSubtipoCotizanteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante
+     */
+    public function getSsoSubtipoCotizanteRel()
+    {
+        return $this->ssoSubtipoCotizanteRel;
+    }
+
+    /**
      * Add pagosEmpleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosEmpleadoRel
@@ -2206,11 +2309,11 @@ class RhuEmpleado
     /**
      * Add vacacionesDisfruteEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function addVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel)
+    public function addVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteEmpleadoRel)
     {
         $this->vacacionesDisfruteEmpleadoRel[] = $vacacionesDisfruteEmpleadoRel;
 
@@ -2220,9 +2323,9 @@ class RhuEmpleado
     /**
      * Remove vacacionesDisfruteEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteEmpleadoRel
      */
-    public function removeVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesDisfruteEmpleadoRel)
+    public function removeVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteEmpleadoRel)
     {
         $this->vacacionesDisfruteEmpleadoRel->removeElement($vacacionesDisfruteEmpleadoRel);
     }
@@ -2534,71 +2637,37 @@ class RhuEmpleado
     }
 
     /**
-     * Add dotacionesEmpleadoRel
+     * Add ssoAportesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function addDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesEmpleadoRel)
+    public function addSsoAportesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEmpleadoRel)
     {
-        $this->dotacionesEmpleadoRel[] = $dotacionesEmpleadoRel;
+        $this->ssoAportesEmpleadoRel[] = $ssoAportesEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Remove dotacionesEmpleadoRel
+     * Remove ssoAportesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEmpleadoRel
      */
-    public function removeDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesEmpleadoRel)
+    public function removeSsoAportesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEmpleadoRel)
     {
-        $this->dotacionesEmpleadoRel->removeElement($dotacionesEmpleadoRel);
+        $this->ssoAportesEmpleadoRel->removeElement($ssoAportesEmpleadoRel);
     }
 
     /**
-     * Get dotacionesEmpleadoRel
+     * Get ssoAportesEmpleadoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDotacionesEmpleadoRel()
+    public function getSsoAportesEmpleadoRel()
     {
-        return $this->dotacionesEmpleadoRel;
-    }
-
-    /**
-     * Add accidentesTrabajoEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addAccidentesTrabajoEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel)
-    {
-        $this->accidentesTrabajoEmpleadoRel[] = $accidentesTrabajoEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove accidentesTrabajoEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel
-     */
-    public function removeAccidentesTrabajoEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel)
-    {
-        $this->accidentesTrabajoEmpleadoRel->removeElement($accidentesTrabajoEmpleadoRel);
-    }
-
-    /**
-     * Get accidentesTrabajoEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAccidentesTrabajoEmpleadoRel()
-    {
-        return $this->accidentesTrabajoEmpleadoRel;
+        return $this->ssoAportesEmpleadoRel;
     }
 
     /**
@@ -2636,132 +2705,70 @@ class RhuEmpleado
     }
 
     /**
-     * Add ssoAportesEmpleadoRel
+     * Add accidentesTrabajoEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function addSsoAportesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEmpleadoRel)
+    public function addAccidentesTrabajoEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel)
     {
-        $this->ssoAportesEmpleadoRel[] = $ssoAportesEmpleadoRel;
+        $this->accidentesTrabajoEmpleadoRel[] = $accidentesTrabajoEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Remove ssoAportesEmpleadoRel
+     * Remove accidentesTrabajoEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel
      */
-    public function removeSsoAportesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEmpleadoRel)
+    public function removeAccidentesTrabajoEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo $accidentesTrabajoEmpleadoRel)
     {
-        $this->ssoAportesEmpleadoRel->removeElement($ssoAportesEmpleadoRel);
+        $this->accidentesTrabajoEmpleadoRel->removeElement($accidentesTrabajoEmpleadoRel);
     }
 
     /**
-     * Get ssoAportesEmpleadoRel
+     * Get accidentesTrabajoEmpleadoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSsoAportesEmpleadoRel()
+    public function getAccidentesTrabajoEmpleadoRel()
     {
-        return $this->ssoAportesEmpleadoRel;
+        return $this->accidentesTrabajoEmpleadoRel;
     }
 
     /**
-     * Set codigoTipoCotizanteFk
+     * Add facturasDetallesEmpleadoRel
      *
-     * @param integer $codigoTipoCotizanteFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function setCodigoTipoCotizanteFk($codigoTipoCotizanteFk)
+    public function addFacturasDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesEmpleadoRel)
     {
-        $this->codigoTipoCotizanteFk = $codigoTipoCotizanteFk;
+        $this->facturasDetallesEmpleadoRel[] = $facturasDetallesEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoTipoCotizanteFk
+     * Remove facturasDetallesEmpleadoRel
      *
-     * @return integer
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesEmpleadoRel
      */
-    public function getCodigoTipoCotizanteFk()
+    public function removeFacturasDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesEmpleadoRel)
     {
-        return $this->codigoTipoCotizanteFk;
+        $this->facturasDetallesEmpleadoRel->removeElement($facturasDetallesEmpleadoRel);
     }
 
     /**
-     * Set codigoSubtipoCotizanteFk
+     * Get facturasDetallesEmpleadoRel
      *
-     * @param integer $codigoSubtipoCotizanteFk
-     *
-     * @return RhuEmpleado
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setCodigoSubtipoCotizanteFk($codigoSubtipoCotizanteFk)
+    public function getFacturasDetallesEmpleadoRel()
     {
-        $this->codigoSubtipoCotizanteFk = $codigoSubtipoCotizanteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSubtipoCotizanteFk
-     *
-     * @return integer
-     */
-    public function getCodigoSubtipoCotizanteFk()
-    {
-        return $this->codigoSubtipoCotizanteFk;
-    }
-
-    /**
-     * Set ssoTipoCotizanteRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setSsoTipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel = null)
-    {
-        $this->ssoTipoCotizanteRel = $ssoTipoCotizanteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ssoTipoCotizanteRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante
-     */
-    public function getSsoTipoCotizanteRel()
-    {
-        return $this->ssoTipoCotizanteRel;
-    }
-
-    /**
-     * Set ssoSubtipoCotizanteRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setSsoSubtipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel = null)
-    {
-        $this->ssoSubtipoCotizanteRel = $ssoSubtipoCotizanteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ssoSubtipoCotizanteRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante
-     */
-    public function getSsoSubtipoCotizanteRel()
-    {
-        return $this->ssoSubtipoCotizanteRel;
+        return $this->facturasDetallesEmpleadoRel;
     }
 }

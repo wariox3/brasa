@@ -251,9 +251,9 @@ class RhuPago
     protected $serviciosCobrarPagoRel;     
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuFacturaDetallePago", mappedBy="pagoRel")
+     * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="pagoRel")
      */
-    protected $facturasDetallesPagosPagoRel;    
+    protected $facturasDetallesPagoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuCreditoPago", mappedBy="pagoRel")
@@ -269,7 +269,7 @@ class RhuPago
         $this->pagosDetallesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosDetallesSedesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviciosCobrarPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->facturasDetallesPagosPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosPagosPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -356,6 +356,30 @@ class RhuPago
     }
 
     /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuPago
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
+    }
+
+    /**
      * Set codigoProgramacionPagoFk
      *
      * @param integer $codigoProgramacionPagoFk
@@ -425,6 +449,30 @@ class RhuPago
     public function getFechaHasta()
     {
         return $this->fechaHasta;
+    }
+
+    /**
+     * Set fechaDesdePago
+     *
+     * @param \DateTime $fechaDesdePago
+     *
+     * @return RhuPago
+     */
+    public function setFechaDesdePago($fechaDesdePago)
+    {
+        $this->fechaDesdePago = $fechaDesdePago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdePago
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdePago()
+    {
+        return $this->fechaDesdePago;
     }
 
     /**
@@ -1052,6 +1100,78 @@ class RhuPago
     }
 
     /**
+     * Set estadoPagado
+     *
+     * @param boolean $estadoPagado
+     *
+     * @return RhuPago
+     */
+    public function setEstadoPagado($estadoPagado)
+    {
+        $this->estadoPagado = $estadoPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagado()
+    {
+        return $this->estadoPagado;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuPago
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set exportadoContabilidad
+     *
+     * @param boolean $exportadoContabilidad
+     *
+     * @return RhuPago
+     */
+    public function setExportadoContabilidad($exportadoContabilidad)
+    {
+        $this->exportadoContabilidad = $exportadoContabilidad;
+
+        return $this;
+    }
+
+    /**
+     * Get exportadoContabilidad
+     *
+     * @return boolean
+     */
+    public function getExportadoContabilidad()
+    {
+        return $this->exportadoContabilidad;
+    }
+
+    /**
      * Set pagoTipoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoTipo $pagoTipoRel
@@ -1121,6 +1241,30 @@ class RhuPago
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuPago
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
     }
 
     /**
@@ -1250,37 +1394,37 @@ class RhuPago
     }
 
     /**
-     * Add facturasDetallesPagosPagoRel
+     * Add facturasDetallesPagoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosPagoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesPagoRel
      *
      * @return RhuPago
      */
-    public function addFacturasDetallesPagosPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosPagoRel)
+    public function addFacturasDetallesPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesPagoRel)
     {
-        $this->facturasDetallesPagosPagoRel[] = $facturasDetallesPagosPagoRel;
+        $this->facturasDetallesPagoRel[] = $facturasDetallesPagoRel;
 
         return $this;
     }
 
     /**
-     * Remove facturasDetallesPagosPagoRel
+     * Remove facturasDetallesPagoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosPagoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesPagoRel
      */
-    public function removeFacturasDetallesPagosPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetallePago $facturasDetallesPagosPagoRel)
+    public function removeFacturasDetallesPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesPagoRel)
     {
-        $this->facturasDetallesPagosPagoRel->removeElement($facturasDetallesPagosPagoRel);
+        $this->facturasDetallesPagoRel->removeElement($facturasDetallesPagoRel);
     }
 
     /**
-     * Get facturasDetallesPagosPagoRel
+     * Get facturasDetallesPagoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFacturasDetallesPagosPagoRel()
+    public function getFacturasDetallesPagoRel()
     {
-        return $this->facturasDetallesPagosPagoRel;
+        return $this->facturasDetallesPagoRel;
     }
 
     /**
@@ -1315,149 +1459,5 @@ class RhuPago
     public function getCreditosPagosPagoRel()
     {
         return $this->creditosPagosPagoRel;
-    }
-
-    /**
-     * Set estadoPagado
-     *
-     * @param boolean $estadoPagado
-     *
-     * @return RhuPago
-     */
-    public function setEstadoPagado($estadoPagado)
-    {
-        $this->estadoPagado = $estadoPagado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoPagado
-     *
-     * @return boolean
-     */
-    public function getEstadoPagado()
-    {
-        return $this->estadoPagado;
-    }
-
-    /**
-     * Set codigoContratoFk
-     *
-     * @param integer $codigoContratoFk
-     *
-     * @return RhuPago
-     */
-    public function setCodigoContratoFk($codigoContratoFk)
-    {
-        $this->codigoContratoFk = $codigoContratoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoContratoFk
-     *
-     * @return integer
-     */
-    public function getCodigoContratoFk()
-    {
-        return $this->codigoContratoFk;
-    }
-
-    /**
-     * Set contratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
-     *
-     * @return RhuPago
-     */
-    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
-    {
-        $this->contratoRel = $contratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get contratoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
-     */
-    public function getContratoRel()
-    {
-        return $this->contratoRel;
-    }
-
-    /**
-     * Set fechaDesdePago
-     *
-     * @param \DateTime $fechaDesdePago
-     *
-     * @return RhuPago
-     */
-    public function setFechaDesdePago($fechaDesdePago)
-    {
-        $this->fechaDesdePago = $fechaDesdePago;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDesdePago
-     *
-     * @return \DateTime
-     */
-    public function getFechaDesdePago()
-    {
-        return $this->fechaDesdePago;
-    }
-
-    /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     *
-     * @return RhuPago
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
-    }
-
-    /**
-     * Set exportadoContabilidad
-     *
-     * @param boolean $exportadoContabilidad
-     *
-     * @return RhuPago
-     */
-    public function setExportadoContabilidad($exportadoContabilidad)
-    {
-        $this->exportadoContabilidad = $exportadoContabilidad;
-
-        return $this;
-    }
-
-    /**
-     * Get exportadoContabilidad
-     *
-     * @return boolean
-     */
-    public function getExportadoContabilidad()
-    {
-        return $this->exportadoContabilidad;
     }
 }

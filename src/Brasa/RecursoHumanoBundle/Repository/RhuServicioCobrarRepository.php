@@ -31,4 +31,10 @@ class RhuServicioCobrarRepository extends EntityRepository {
         return $dql;
     }
     
+    public function pendienteCobrar($codigoCentroCosto) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT sc FROM BrasaRecursoHumanoBundle:RhuServicioCobrar sc WHERE sc.estadoCobrado = 0 "
+                . " AND sc.codigoCentroCostoFk = " . $codigoCentroCosto;
+        return $dql;
+    }
 }

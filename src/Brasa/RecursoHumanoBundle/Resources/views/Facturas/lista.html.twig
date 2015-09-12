@@ -58,17 +58,19 @@
                 <th style="text-align: right">NETO</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arFacturas in arFacturas %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arFacturas.codigoFacturaPk }}">{{ arFacturas.codigoFacturaPk }} </td>                
                 <td>{{ arFacturas.numero  }}</td>
-                <td>{{ arFacturas.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arFacturas.fechaVence |date("Y/m/d")  }}</td>
+                <td>{{ arFacturas.fecha | date("Y/m/d")  }}</td>
+                <td>{{ arFacturas.fechaVence | date("Y/m/d")  }}</td>
                 <td>{{ arFacturas.terceroRel.nombreCorto  }}</td>
                 <td>{{ arFacturas.centroCostoRel.nombre  }}</td>
                 <td style="text-align: right">{{ arFacturas.VrBruto | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arFacturas.VrNeto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_facturas_nuevo', { 'codigoFactura':  arFacturas.codigoFacturaPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" title="Editar registro" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_facturas_detalle', { 'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturas.codigoFacturaPk }}" /></td>
             </tr>

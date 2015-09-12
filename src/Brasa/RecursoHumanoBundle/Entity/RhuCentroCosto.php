@@ -206,7 +206,11 @@ class RhuCentroCosto
      */
     protected $accidentesTrabajoCentroCostoRel;
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="centroCostoRel")
+     */
+    protected $facturasDetallesCentroCostoRel;
+    
 
     /**
      * Constructor
@@ -230,6 +234,7 @@ class RhuCentroCosto
         $this->vacacionesDisfruteCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dotacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->accidentesTrabajoCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1298,5 +1303,39 @@ class RhuCentroCosto
     public function getAccidentesTrabajoCentroCostoRel()
     {
         return $this->accidentesTrabajoCentroCostoRel;
+    }
+
+    /**
+     * Add facturasDetallesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addFacturasDetallesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesCentroCostoRel)
+    {
+        $this->facturasDetallesCentroCostoRel[] = $facturasDetallesCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesCentroCostoRel
+     */
+    public function removeFacturasDetallesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesCentroCostoRel)
+    {
+        $this->facturasDetallesCentroCostoRel->removeElement($facturasDetallesCentroCostoRel);
+    }
+
+    /**
+     * Get facturasDetallesCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesCentroCostoRel()
+    {
+        return $this->facturasDetallesCentroCostoRel;
     }
 }

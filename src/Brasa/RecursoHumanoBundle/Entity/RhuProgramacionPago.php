@@ -138,8 +138,14 @@ class RhuProgramacionPago
     /**
      * @ORM\OneToMany(targetEntity="RhuProgramacionPagoInconsistencia", mappedBy="programacionPagoRel")
      */
-    protected $programacionesPagosInconsistenciasProgramacionPagoRel;      
+    protected $programacionesPagosInconsistenciasProgramacionPagoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="programacionPagoRel")
+     */
+    protected $facturasDetallesProgramacionPagoRel;
 
+    
     /**
      * Constructor
      */
@@ -150,6 +156,7 @@ class RhuProgramacionPago
         $this->serviciosCobrarProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesPagosInconsistenciasProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesProgramacionPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -786,5 +793,39 @@ class RhuProgramacionPago
     public function getProgramacionesPagosInconsistenciasProgramacionPagoRel()
     {
         return $this->programacionesPagosInconsistenciasProgramacionPagoRel;
+    }
+
+    /**
+     * Add facturasDetallesProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesProgramacionPagoRel
+     *
+     * @return RhuProgramacionPago
+     */
+    public function addFacturasDetallesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesProgramacionPagoRel)
+    {
+        $this->facturasDetallesProgramacionPagoRel[] = $facturasDetallesProgramacionPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesProgramacionPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesProgramacionPagoRel
+     */
+    public function removeFacturasDetallesProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesProgramacionPagoRel)
+    {
+        $this->facturasDetallesProgramacionPagoRel->removeElement($facturasDetallesProgramacionPagoRel);
+    }
+
+    /**
+     * Get facturasDetallesProgramacionPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesProgramacionPagoRel()
+    {
+        return $this->facturasDetallesProgramacionPagoRel;
     }
 }

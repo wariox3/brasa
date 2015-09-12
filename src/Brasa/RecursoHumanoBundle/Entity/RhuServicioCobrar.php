@@ -197,9 +197,21 @@ class RhuServicioCobrar
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="serviciosCobrarProgramacionPagoRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
      */
-    protected $programacionPagoRel;    
+    protected $programacionPagoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="servicioCobrarRel")
+     */
+    protected $facturasDetallesServicioCobrarRel;
     
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->facturasDetallesServicioCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoServicioCobrarPk
@@ -209,6 +221,30 @@ class RhuServicioCobrar
     public function getCodigoServicioCobrarPk()
     {
         return $this->codigoServicioCobrarPk;
+    }
+
+    /**
+     * Set codigoPagoFk
+     *
+     * @param integer $codigoPagoFk
+     *
+     * @return RhuServicioCobrar
+     */
+    public function setCodigoPagoFk($codigoPagoFk)
+    {
+        $this->codigoPagoFk = $codigoPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoFk()
+    {
+        return $this->codigoPagoFk;
     }
 
     /**
@@ -932,6 +968,30 @@ class RhuServicioCobrar
     }
 
     /**
+     * Set pagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
+     *
+     * @return RhuServicioCobrar
+     */
+    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
+    {
+        $this->pagoRel = $pagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
+     */
+    public function getPagoRel()
+    {
+        return $this->pagoRel;
+    }
+
+    /**
      * Set centroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
@@ -1004,50 +1064,36 @@ class RhuServicioCobrar
     }
 
     /**
-     * Set codigoPagoFk
+     * Add facturasDetallesServicioCobrarRel
      *
-     * @param integer $codigoPagoFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesServicioCobrarRel
      *
      * @return RhuServicioCobrar
      */
-    public function setCodigoPagoFk($codigoPagoFk)
+    public function addFacturasDetallesServicioCobrarRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesServicioCobrarRel)
     {
-        $this->codigoPagoFk = $codigoPagoFk;
+        $this->facturasDetallesServicioCobrarRel[] = $facturasDetallesServicioCobrarRel;
 
         return $this;
     }
 
     /**
-     * Get codigoPagoFk
+     * Remove facturasDetallesServicioCobrarRel
      *
-     * @return integer
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesServicioCobrarRel
      */
-    public function getCodigoPagoFk()
+    public function removeFacturasDetallesServicioCobrarRel(\Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle $facturasDetallesServicioCobrarRel)
     {
-        return $this->codigoPagoFk;
+        $this->facturasDetallesServicioCobrarRel->removeElement($facturasDetallesServicioCobrarRel);
     }
 
     /**
-     * Set pagoRel
+     * Get facturasDetallesServicioCobrarRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
-     *
-     * @return RhuServicioCobrar
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
+    public function getFacturasDetallesServicioCobrarRel()
     {
-        $this->pagoRel = $pagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
-     */
-    public function getPagoRel()
-    {
-        return $this->pagoRel;
+        return $this->facturasDetallesServicioCobrarRel;
     }
 }
