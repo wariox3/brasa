@@ -45,7 +45,7 @@ class RhuFacturaRepository extends EntityRepository {
         $douIngresoMision = 0;
         foreach ($arFacturaDetalles as $arFacturaDetalle) {
             $douAdministracion += $arFacturaDetalle->getVrAdministracion();
-            //$douIngresoMision += $arFacturaDetalle->getVrIngresoMision();
+            $douIngresoMision += $arFacturaDetalle->getVrTotalCobrar();
         }
         $douBaseAIU = (($douAdministracion+$douIngresoMision)*10)/100;
         $douTotalBruto = $douIngresoMision + $douAdministracion;
@@ -55,7 +55,7 @@ class RhuFacturaRepository extends EntityRepository {
         $douRetencionIva = ($douIva * $arConfiguraciones->getPorcentajeRetencionIvaVentas()) / 100;        
         if($arFactura->getTerceroRel()->getRetencionFuenteVentas() == 1) {
             if ($douBaseAIU >= $arConfiguraciones->getBaseRetencionFuente()) {
-                $douRetencionFuente = ($douBaseAIU * $arConfiguraciones->getPorcentajeRetencionFuenteServicios()) / 100;
+                $douRetencionFuente = ($douBaseAIU * $arConfiguraciones->getPorcentajeRetencionFuente()) / 100;
             }            
         }
         $arFactura->setVrBaseAIU($douBaseAIU);
