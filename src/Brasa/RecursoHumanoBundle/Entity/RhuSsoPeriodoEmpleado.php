@@ -51,6 +51,11 @@ class RhuSsoPeriodoEmpleado
      * @ORM\Column(name="vr_salario", type="float")
      */    
     private $vrSalario = 0;
+
+    /**
+     * @ORM\Column(name="vr_suplementario", type="float")
+     */    
+    private $vrSuplementario = 0;    
     
     /**
      * @ORM\Column(name="ingreso", type="string", length=1)
@@ -437,5 +442,29 @@ class RhuSsoPeriodoEmpleado
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set vrSuplementario
+     *
+     * @param float $vrSuplementario
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setVrSuplementario($vrSuplementario)
+    {
+        $this->vrSuplementario = $vrSuplementario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSuplementario
+     *
+     * @return float
+     */
+    public function getVrSuplementario()
+    {
+        return $this->vrSuplementario;
     }
 }

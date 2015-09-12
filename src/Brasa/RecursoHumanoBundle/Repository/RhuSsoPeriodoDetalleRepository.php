@@ -48,6 +48,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setSegundoApellido($arEmpleado->getApellido2());
             $arAporte->setIngreso($arPeriodoEmpleado->getIngreso());
             $arAporte->setRetiro($arPeriodoEmpleado->getRetiro());
+            if($arPeriodoEmpleado->getVrSuplementario() > 0) {
+                $arAporte->setVariacionTransitoriaSalario('X');
+            }
+            
             $em->persist($arAporte);
             $i++;
         } 

@@ -156,7 +156,7 @@ class GenTercero
     private $codigoActividadEconomica;    
     
     /**
-     * @ORM\Column(name="pocertaje_cree", type="float")
+     * @ORM\Column(name="porcentaje_cree", type="float")
      */
     private $porcentajeCREE = 0;    
     

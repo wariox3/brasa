@@ -13,7 +13,11 @@
                 <th>CONTRATO</th>
                 <th>DIAS</th>
                 <th>ING</th>
-                <th>RETIRO</th>
+                <th>RET</th>
+                <th>VST</th>
+                <th>SLN</th>
+                <th>SALARIO</th>
+                <th>SUPLE</th>
             </tr>
             {% for arSsoAportes in arSsoAportes %}
             <tr>
@@ -23,6 +27,7 @@
                 <td>{{ arSsoAportes.codigoContratoFk  }}</td>
                 <td>{{ arSsoAportes.ingreso  }}</td>
                 <td>{{ arSsoAportes.retiro  }}</td>
+                <td>{{ arSsoAportes.variacionTransitoriaSalario }}</td>
             </tr>
             {% endfor %}                        
         </table>                       

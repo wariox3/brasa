@@ -204,4 +204,15 @@ class RhuPagoRepository extends EntityRepository {
         return $arrayResultado;
     }     
     
+    public function tiempoSuplementario($fechaDesde, $fechaHasta, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(p.vrAdicionalTiempo) as suplementario FROM BrasaRecursoHumanoBundle:RhuPago p "
+                . "WHERE p.estadoPagado = 1 "
+                . "AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $floSuplementario = $arrayResultado[0]['suplementario'];
+        return $floSuplementario;
+    }        
 }

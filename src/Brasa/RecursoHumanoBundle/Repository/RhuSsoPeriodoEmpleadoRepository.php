@@ -90,6 +90,9 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $arPeriodoEmpleadoActualizar->setDias($intDiasCotizar);
             $arPeriodoEmpleadoActualizar->setIngreso($strNovedadIngreso);
             $arPeriodoEmpleadoActualizar->setRetiro($strNovedadRetiro);
+            $floSuplementario = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->tiempoSuplementario($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());
+            $arPeriodoEmpleadoActualizar->setVrSuplementario($floSuplementario);
+            $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicencia($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arPeriodoEmpleado->getCodigoEmpleadoFk());
             $em->persist($arPeriodoEmpleadoActualizar);
         }
         $em->flush();

@@ -30,4 +30,42 @@ class RhuLicenciaRepository extends EntityRepository {
         $arLicenciasPendientesEmpleado = $query->getResult();
         return $arLicenciasPendientesEmpleado;        
     }
+    
+    public function diasLicencia($fechaDesde, $fechaHasta, $codigoEmpleado) {
+        $em = $this->getEntityManager();
+        $dql = "SELECT licencia FROM BrasaRecursoHumanoBundle:RhuLicencia licencia "
+                . "WHERE (licencia.fechaDesde >= '" . $fechaDesde . "' OR licencia.fechaHasta = '0000-00-00') "
+                . "AND licencia.fechaDesde <='" . $fechaHasta . "' "
+                . "AND licencia.codigoEmpleadoFk = '" . $codigoEmpleado . "'";       
+        $objQuery = $em->createQuery($dql);  
+        $arLicencias = $objQuery->getResult();                
+        $intDiasLicencia = 0;
+        foreach ($arLicencias as $arLicencias) {
+            $dateFechaDesde =  "";
+            $dateFechaHasta =  "";               
+            if($arIncapacidad->getFechater() > $fechaHasta == true) {
+                $dateFechaHasta = $fechaHasta;
+            } else {
+                $dateFechaHasta = $arIncapacidad->getFechater();
+            }
+
+            if($arIncapacidad->getFechaini() <  $fechaDesde == true) {
+                $dateFechaDesde = $fechaDesde;
+            } else {
+                $dateFechaDesde = $arIncapacidad->getFechaini();
+            }
+
+            if($dateFechaDesde != "" && $dateFechaHasta != "") {
+                $intDias = $dateFechaDesde->diff($dateFechaHasta);
+                $intDias = $intDias->format('%a');
+                $intDiasIncapacidad += $intDias + 1;
+            }  
+        }
+        if($intDiasIncapacidad > 30) {
+            $intDiasIncapacidad = 30;
+        }
+         * 
+         */
+        return 0;
+    }                
 }
