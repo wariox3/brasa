@@ -28,6 +28,16 @@ class RhuSsoPeriodo
     private $mes = 0; 
     
     /**
+     * @ORM\Column(name="anio_pago", type="integer")
+     */
+    private $anioPago = 0;
+    
+    /**
+     * @ORM\Column(name="mes_pago", type="integer")
+     */
+    private $mesPago = 0;    
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fechaDesde;    
@@ -42,6 +52,11 @@ class RhuSsoPeriodo
      */    
     private $estadoGenerado = 0;     
 
+    /**
+     * @ORM\Column(name="fecha_pago", type="date", nullable=true)
+     */    
+    private $fechaPago;    
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuSsoPeriodoDetalle", mappedBy="ssoPeriodoRel")
      */
@@ -295,5 +310,77 @@ class RhuSsoPeriodo
     public function getSsoAportesSsoPeriodoRel()
     {
         return $this->ssoAportesSsoPeriodoRel;
+    }
+
+    /**
+     * Set anioPago
+     *
+     * @param integer $anioPago
+     *
+     * @return RhuSsoPeriodo
+     */
+    public function setAnioPago($anioPago)
+    {
+        $this->anioPago = $anioPago;
+
+        return $this;
+    }
+
+    /**
+     * Get anioPago
+     *
+     * @return integer
+     */
+    public function getAnioPago()
+    {
+        return $this->anioPago;
+    }
+
+    /**
+     * Set mesPago
+     *
+     * @param integer $mesPago
+     *
+     * @return RhuSsoPeriodo
+     */
+    public function setMesPago($mesPago)
+    {
+        $this->mesPago = $mesPago;
+
+        return $this;
+    }
+
+    /**
+     * Get mesPago
+     *
+     * @return integer
+     */
+    public function getMesPago()
+    {
+        return $this->mesPago;
+    }
+
+    /**
+     * Set fechaPago
+     *
+     * @param \DateTime $fechaPago
+     *
+     * @return RhuSsoPeriodo
+     */
+    public function setFechaPago($fechaPago)
+    {
+        $this->fechaPago = $fechaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaPago()
+    {
+        return $this->fechaPago;
     }
 }

@@ -270,27 +270,87 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="ibc_pension", type="float")
      */
-    private $ibcPension;     
+    private $ibcPension = 0;     
 
     /**
      * @ORM\Column(name="ibc_salud", type="float")
      */
-    private $ibcSalud;    
+    private $ibcSalud = 0;    
     
     /**
      * @ORM\Column(name="ibc_riesgos_profesionales", type="float")
      */
-    private $ibcRiesgosProfesionales;    
+    private $ibcRiesgosProfesionales = 0;    
     
     /**
      * @ORM\Column(name="ibc_caja", type="float")
      */
-    private $ibcCaja;     
+    private $ibcCaja = 0;     
     
     /**
      * @ORM\Column(name="tarifa_pension", type="float")
      */
-    private $tarifaPension;         
+    private $tarifaPension = 0;         
+
+    /**
+     * @ORM\Column(name="tarifa_salud", type="float")
+     */
+    private $tarifaSalud = 0;
+    
+    /**
+     * @ORM\Column(name="tarifa_riesgos", type="float")
+     */
+    private $tarifaRiesgos = 0;    
+    
+    /**
+     * @ORM\Column(name="tarifa_caja", type="float")
+     */
+    private $tarifaCaja = 0;    
+    
+    /**
+     * @ORM\Column(name="cotizacion_pension", type="float")
+     */
+    private $cotizacionPension = 0;    
+
+    /**
+     * @ORM\Column(name="cotizacion_salud", type="float")
+     */
+    private $cotizacionSalud = 0; 
+    
+    /**
+     * @ORM\Column(name="cotizacion_riesgos", type="float")
+     */
+    private $cotizacionRiesgos = 0;
+    
+    /**
+     * @ORM\Column(name="cotizacion_caja", type="float")
+     */
+    private $cotizacionCaja = 0;    
+    
+    /**
+     * @ORM\Column(name="aporte_voluntario_fondo_pensiones_obligatorias", type="string", length=9)
+     */
+    private $aporteVoluntarioFondoPensionesObligatorias;    
+    
+    /**
+     * @ORM\Column(name="cotizacion_voluntario_fondo_pensiones_obligatorias", type="string", length=9)
+     */
+    private $cotizacionVoluntarioFondoPensionesObligatorias;    
+    
+    /**
+     * @ORM\Column(name="total_cotizacion", type="float")
+     */
+    private $totalCotizacion;    
+    
+    /**
+     * @ORM\Column(name="aportes_fondo_solidaridad_pensional_solidaridad", type="float")
+     */
+    private $aportesFondoSolidaridadPensionalSolidaridad;    
+    
+    /**
+     * @ORM\Column(name="aportes_fondo_solidaridad_pensional_subsistencia", type="float")
+     */
+    private $aportesFondoSolidaridadPensionalSubsistencia;      
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoAportesSsoPeriodoRel")
@@ -1771,5 +1831,293 @@ class RhuSsoAporte
     public function getTarifaPension()
     {
         return $this->tarifaPension;
+    }
+
+    /**
+     * Set tarifaSalud
+     *
+     * @param float $tarifaSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaSalud($tarifaSalud)
+    {
+        $this->tarifaSalud = $tarifaSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaSalud
+     *
+     * @return float
+     */
+    public function getTarifaSalud()
+    {
+        return $this->tarifaSalud;
+    }
+
+    /**
+     * Set tarifaRiesgos
+     *
+     * @param float $tarifaRiesgos
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaRiesgos($tarifaRiesgos)
+    {
+        $this->tarifaRiesgos = $tarifaRiesgos;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaRiesgos
+     *
+     * @return float
+     */
+    public function getTarifaRiesgos()
+    {
+        return $this->tarifaRiesgos;
+    }
+
+    /**
+     * Set tarifaCaja
+     *
+     * @param float $tarifaCaja
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaCaja($tarifaCaja)
+    {
+        $this->tarifaCaja = $tarifaCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaCaja
+     *
+     * @return float
+     */
+    public function getTarifaCaja()
+    {
+        return $this->tarifaCaja;
+    }
+
+    /**
+     * Set cotizacionPension
+     *
+     * @param float $cotizacionPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionPension($cotizacionPension)
+    {
+        $this->cotizacionPension = $cotizacionPension;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionPension
+     *
+     * @return float
+     */
+    public function getCotizacionPension()
+    {
+        return $this->cotizacionPension;
+    }
+
+    /**
+     * Set cotizacionSalud
+     *
+     * @param float $cotizacionSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionSalud($cotizacionSalud)
+    {
+        $this->cotizacionSalud = $cotizacionSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionSalud
+     *
+     * @return float
+     */
+    public function getCotizacionSalud()
+    {
+        return $this->cotizacionSalud;
+    }
+
+    /**
+     * Set cotizacionRiesgos
+     *
+     * @param float $cotizacionRiesgos
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionRiesgos($cotizacionRiesgos)
+    {
+        $this->cotizacionRiesgos = $cotizacionRiesgos;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionRiesgos
+     *
+     * @return float
+     */
+    public function getCotizacionRiesgos()
+    {
+        return $this->cotizacionRiesgos;
+    }
+
+    /**
+     * Set cotizacionCaja
+     *
+     * @param float $cotizacionCaja
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionCaja($cotizacionCaja)
+    {
+        $this->cotizacionCaja = $cotizacionCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionCaja
+     *
+     * @return float
+     */
+    public function getCotizacionCaja()
+    {
+        return $this->cotizacionCaja;
+    }
+
+    /**
+     * Set aporteVoluntarioFondoPensionesObligatorias
+     *
+     * @param string $aporteVoluntarioFondoPensionesObligatorias
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAporteVoluntarioFondoPensionesObligatorias($aporteVoluntarioFondoPensionesObligatorias)
+    {
+        $this->aporteVoluntarioFondoPensionesObligatorias = $aporteVoluntarioFondoPensionesObligatorias;
+
+        return $this;
+    }
+
+    /**
+     * Get aporteVoluntarioFondoPensionesObligatorias
+     *
+     * @return string
+     */
+    public function getAporteVoluntarioFondoPensionesObligatorias()
+    {
+        return $this->aporteVoluntarioFondoPensionesObligatorias;
+    }
+
+    /**
+     * Set cotizacionVoluntarioFondoPensionesObligatorias
+     *
+     * @param string $cotizacionVoluntarioFondoPensionesObligatorias
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionVoluntarioFondoPensionesObligatorias($cotizacionVoluntarioFondoPensionesObligatorias)
+    {
+        $this->cotizacionVoluntarioFondoPensionesObligatorias = $cotizacionVoluntarioFondoPensionesObligatorias;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionVoluntarioFondoPensionesObligatorias
+     *
+     * @return string
+     */
+    public function getCotizacionVoluntarioFondoPensionesObligatorias()
+    {
+        return $this->cotizacionVoluntarioFondoPensionesObligatorias;
+    }
+
+    /**
+     * Set totalCotizacion
+     *
+     * @param float $totalCotizacion
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTotalCotizacion($totalCotizacion)
+    {
+        $this->totalCotizacion = $totalCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get totalCotizacion
+     *
+     * @return float
+     */
+    public function getTotalCotizacion()
+    {
+        return $this->totalCotizacion;
+    }
+
+    /**
+     * Set aportesFondoSolidaridadPensionalSolidaridad
+     *
+     * @param float $aportesFondoSolidaridadPensionalSolidaridad
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAportesFondoSolidaridadPensionalSolidaridad($aportesFondoSolidaridadPensionalSolidaridad)
+    {
+        $this->aportesFondoSolidaridadPensionalSolidaridad = $aportesFondoSolidaridadPensionalSolidaridad;
+
+        return $this;
+    }
+
+    /**
+     * Get aportesFondoSolidaridadPensionalSolidaridad
+     *
+     * @return float
+     */
+    public function getAportesFondoSolidaridadPensionalSolidaridad()
+    {
+        return $this->aportesFondoSolidaridadPensionalSolidaridad;
+    }
+
+    /**
+     * Set aportesFondoSolidaridadPensionalSubsistencia
+     *
+     * @param float $aportesFondoSolidaridadPensionalSubsistencia
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAportesFondoSolidaridadPensionalSubsistencia($aportesFondoSolidaridadPensionalSubsistencia)
+    {
+        $this->aportesFondoSolidaridadPensionalSubsistencia = $aportesFondoSolidaridadPensionalSubsistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get aportesFondoSolidaridadPensionalSubsistencia
+     *
+     * @return float
+     */
+    public function getAportesFondoSolidaridadPensionalSubsistencia()
+    {
+        return $this->aportesFondoSolidaridadPensionalSubsistencia;
     }
 }

@@ -17,6 +17,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arSsoPeriodoDetalles in arSsoPeriodoDetalles %}
             <tr>
@@ -25,6 +26,7 @@
                 <td {% if arSsoPeriodoDetalles.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>                                                
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarArchivo" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Archivo plano</button>  {% endif %}</td>
                 <td>
                     {% if arSsoPeriodoDetalles.estadoGenerado == 0 %}
                         <button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Generar</button> 

@@ -121,29 +121,45 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setIbcPension($floIbcPension);
             $arAporte->setIbcSalud($floIbcSalud);
             $arAporte->setIbcRiesgosProfesionales($floIbcRiesgos);
-            $arAporte->setIbcCaja($floIbcCaja);                        
-            
-            $douCotizacionPension = 0;
-            $douCotizacionFSPSolidaridad = 0;
-            $douCotizacionFSPSubsistencia = 0;
+            $arAporte->setIbcCaja($floIbcCaja);                                    
             
             $floTarifaPension = $arPeriodoEmpleado->getTarifaPension() + 4;            
             $floTarifaSalud = 4;
-            if($arEmpleado->getCodigoTipoCotizanteFk() == 19) {
-                $douTarifaSalud = 12.5;
+            if($arEmpleado->getCodigoTipoCotizanteFk() == 19 || $arEmpleado->getCodigoTipoCotizanteFk() == 12) {
+                $floTarifaSalud = 12.5;
             }
-            $floTarifaRiesgos = 0;
-            /*$douCotizacionPension = $this->redondearAporte($floIbcTotal, $floIbcPension, $douTarifaPension, $intDiasCotizarPension);
-            $arPila->setCotizacionObligatoria($douCotizacionPension);
-            $douCotizacionFSPSolidaridad = 0;
-            $douCotizacionFSPSubsistencia = 0;
+            $floTarifaRiesgos = $arPeriodoEmpleado->getTarifaRiesgos();
+            $floTarifaCaja = 4;
+            $arAporte->setTarifaPension($floTarifaPension);
+            $arAporte->setTarifaSalud($floTarifaSalud);
+            $arAporte->setTarifaRiesgos($floTarifaRiesgos);
+            $arAporte->setTarifaCaja($floTarifaCaja);            
+            
+            $floCotizacionFSPSolidaridad = 0;
+            $floCotizacionFSPSubsistencia = 0;            
+            $floAporteVoluntarioFondoPensionesObligatorias = 0;
+            $floCotizacionVoluntariaFondoPensionesObligatorias = 0;
+            
+            $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension);            
             if($floSalario >= (644350 * 4)) {
-                $douCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
-                $douCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
+                $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
+                $floCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
             }
-            $arPila->setAportesFondoSolidaridadPensionalSolidaridad($douCotizacionFSPSolidaridad);
-            $arPila->setAportesFondoSolidaridadPensionalSubsistencia($douCotizacionFSPSubsistencia);            
-            */
+            $floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
+            $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud);
+            $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos);
+            $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja);
+            
+            $arAporte->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
+            $arAporte->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
+            $arAporte->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
+            $arAporte->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSolidaridad);
+            $arAporte->setTotalCotizacion($floTotalCotizacion);
+            $arAporte->setCotizacionPension($floCotizacionPension);
+            $arAporte->setCotizacionSalud($floCotizacionSalud);
+            $arAporte->setCotizacionRiesgos($floCotizacionRiesgos);
+            $arAporte->setCotizacionCaja($floCotizacionCaja);            
+            
             $em->persist($arAporte);
             $i++;
         } 
@@ -234,5 +250,72 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         $floValorDia = 644350 / 30;
         $floIbcBruto = intval($intDias * $floValorDia);
         return $floIbcBruto;
-    }     
+    }    
+    
+    public function redondearAporte($floIbcTotal, $floIbc, $floTarifa, $intDias) {
+        $floTarifa = $floTarifa / 100;
+        $floIbcBruto = ($floIbcTotal / 30) * $intDias;        
+        $floCotizacionRedondeada = round($floIbc * $floTarifa, -2, PHP_ROUND_HALF_DOWN);        
+        $floCotizacionCalculada = $floIbcBruto * $floTarifa;
+        $floCotizacionIBC = $floIbc * $floTarifa;
+        $floResiduo = fmod($floCotizacionIBC, 100);
+        $floCotizacionMinimo = $this->redondearAporteMinimo($floTarifa, $intDias);
+        if($floCotizacionRedondeada < $floCotizacionMinimo) {
+            if($floResiduo > 50) {
+                $floCotizacionRedondeada = intval($floCotizacionIBC/100) * 100 + 100;
+            } else {
+                if($floCotizacionIBC - $floResiduo >= $floCotizacionCalculada) {
+                    $floCotizacionRedondeada = $floCotizacionIBC - $floResiduo;
+                } else {
+                    $floCotizacionRedondeada = $floCotizacionIBC;
+                }
+            }
+
+            if(round($floCotizacionRedondeada) >= $floCotizacionCalculada) {
+                $floCotizacion = round($floCotizacionRedondeada);
+            } else {
+                $floCotizacion = ceil($floCotizacionRedondeada);                                
+            }
+        } else {
+            $floCotizacion = $floCotizacionRedondeada;
+        }
+        return $floCotizacion;
+    }
+
+    public function redondearAporteMinimo($floTarifa, $intDias) {
+        $floSalario = 644350;
+        $douValorDia = $floSalario / 30;
+        $floIbcReal = $douValorDia * $intDias;
+        if($intDias != 30) {
+            $floIbcRedondeo = round($floIbcReal, -3, PHP_ROUND_HALF_DOWN);
+            if($floIbcRedondeo > $floIbcReal) {
+                $floIbc = ceil($floIbcRedondeo);
+            } else {
+                $floIbc = ceil($floIbcReal);
+            }
+
+        } else {
+            $floIbc = $floSalario;
+        }
+        $douCotizacion = 0;
+        $floCotizacionCalculada = $floIbcReal * $floTarifa;
+        $floCotizacionIBC = $floIbc * $floTarifa;
+        $floResiduo = fmod($floCotizacionIBC, 100);
+        if($floResiduo > 50) {
+            $floCotizacionRedondeada = intval($floCotizacionIBC/100) * 100 + 100;
+        } else {
+            if($floCotizacionIBC - $floResiduo >= $floCotizacionCalculada) {
+                $floCotizacionRedondeada = $floCotizacionIBC - $floResiduo;
+            } else {
+                $floCotizacionRedondeada = $floCotizacionIBC;
+            }
+        }
+
+        if(round($floCotizacionRedondeada) >= $floCotizacionCalculada) {
+            $douCotizacion = round($floCotizacionRedondeada);
+        } else {
+            $douCotizacion = ceil($floCotizacionRedondeada);
+        }
+        return $douCotizacion;
+    }    
 }
