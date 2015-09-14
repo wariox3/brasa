@@ -48,6 +48,12 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setSegundoApellido($arEmpleado->getApellido2());
             $arAporte->setIngreso($arPeriodoEmpleado->getIngreso());
             $arAporte->setRetiro($arPeriodoEmpleado->getRetiro());
+
+            //Parametros generales
+            $floSalario = $arPeriodoEmpleado->getVrSalario();
+            $floSuplementario = $arPeriodoEmpleado->getVrSuplementario();            
+            $floIbcIncapacidades = 0;
+            
             if($arPeriodoEmpleado->getVrSuplementario() > 0) {
                 $arAporte->setVariacionTransitoriaSalario('X');
                 $arAporte->setSuplementario($arPeriodoEmpleado->getVrSuplementario());
@@ -59,6 +65,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             if($arPeriodoEmpleado->getDiasIncapacidadGeneral() > 0) {
                 $arAporte->setIncapacidadGeneral('X');
                 $arAporte->setDiasIncapacidadGeneral($arPeriodoEmpleado->getDiasIncapacidadGeneral());
+                $floSalarioMesActual = $floSalario + $floSuplementario;   
+                $floSalarioMesAnterior = $this->ibcMesAnterior($arEmpleado->getCodigoEmpleadoPk(), $arPeriodoDetalle->getSsoPeriodoRel()->getMes(), $arPeriodoDetalle->getSsoPeriodoRel()->getAnio());
+                $floIbcIncapacidadGeneral = $this->liquidarIncapacidadGeneral($floSalarioMesActual, $floSalarioMesAnterior, $arPeriodoEmpleado->getDiasIncapacidadGeneral());                        
+                $floIbcIncapacidades += $floIbcIncapacidadGeneral;                
             }
             if($arPeriodoEmpleado->getDiasLicenciaMaternidad() > 0) {
                 $arAporte->setLicenciaMaternidad('X');
@@ -66,8 +76,74 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             }       
             if($arPeriodoEmpleado->getDiasIncapacidadLaboral() > 0) {
                 $arAporte->setIncapacidadAccidenteTrabajoEnfermedadProfesional($arPeriodoEmpleado->getDiasIncapacidadLaboral());
-            }            
+                $floSalarioMesActual = $floSalario + $floSuplementario;   
+                $floSalarioMesAnterior = $this->ibcMesAnterior($arEmpleado->getCodigoEmpleadoPk(), $arPeriodoDetalle->getSsoPeriodoRel()->getMes(), $arPeriodoDetalle->getSsoPeriodoRel()->getAnio());
+                $floIbcIncapacidadLaboral = $this->liquidarIncapacidadLaboral($floSalarioMesActual, $floSalarioMesAnterior, $arPeriodoEmpleado->getDiasIncapacidadLaboral());                        
+                $floIbcIncapacidades += $floIbcIncapacidadLaboral;                                        
+            }                        
             $arAporte->setSalarioBasico($arPeriodoEmpleado->getVrSalario());            
+            $arAporte->setCodigoEntidadPensionPertenece($arEmpleado->getEntidadPensionRel()->getCodigoInterface());
+            $arAporte->setCodigoEntidadSaludPertenece($arEmpleado->getEntidadSaludRel()->getCodigoInterface());
+            $arAporte->setCodigoEntidadCajaPertenece($arEmpleado->getEntidadCajaRel()->getCodigoInterface());
+            
+            //Dias
+            $intDiasLicenciaNoRemunerada = $arPeriodoEmpleado->getDiasLicencia();
+            $intDiasIncapacidades = $arPeriodoEmpleado->getDiasIncapacidadGeneral() + $arPeriodoEmpleado->getDiasIncapacidadLaboral();
+            $intDiasLicenciaMaternidad = $arPeriodoEmpleado->getDiasLicenciaMaternidad();
+            $intDiasVacaciones = 0;
+            
+            $intDiasCotizar = $arPeriodoEmpleado->getDias();
+            $intDiasCotizarPension = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
+            $intDiasCotizarSalud = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
+            $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
+            $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad;
+            if($arAporte->getTipoCotizante() == '19') {
+                $intDiasCotizarPension = 0;
+                $intDiasCotizarCaja = 0;
+            }            
+            $arAporte->setDiasCotizadosPension($intDiasCotizarPension);
+            $arAporte->setDiasCotizadosSalud($intDiasCotizarSalud);
+            $arAporte->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
+            $arAporte->setDiasCotizadosCajaCompensacion($intDiasCotizarCaja);                        
+            
+            //Ibc
+            $floIbcBrutoSeguridadSocialPension = (($intDiasCotizarPension - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;
+            $floIbcBrutoSeguridadSocialSalud = (($intDiasCotizarSalud - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;                    
+            $floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30)) + $floSuplementario;
+            $floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30)) + $floSuplementario;
+            $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoSeguridadSocialPension);
+            $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSeguridadSocialSalud);
+            $floIbcRiesgos = $this->redondearIbc($intDiasCotizarRiesgos, $floIbcBrutoRiesgos);
+            $floIbcCaja = $this->redondearIbc($intDiasCotizarCaja, $floIbcBrutoCaja);
+            if($intDiasCotizarRiesgos <= 0) {
+                $floIbcRiesgos = 0;
+            }
+            $arAporte->setIbcPension($floIbcPension);
+            $arAporte->setIbcSalud($floIbcSalud);
+            $arAporte->setIbcRiesgosProfesionales($floIbcRiesgos);
+            $arAporte->setIbcCaja($floIbcCaja);                        
+            
+            $douCotizacionPension = 0;
+            $douCotizacionFSPSolidaridad = 0;
+            $douCotizacionFSPSubsistencia = 0;
+            
+            $floTarifaPension = $arPeriodoEmpleado->getTarifaPension() + 4;            
+            $floTarifaSalud = 4;
+            if($arEmpleado->getCodigoTipoCotizanteFk() == 19) {
+                $douTarifaSalud = 12.5;
+            }
+            $floTarifaRiesgos = 0;
+            /*$douCotizacionPension = $this->redondearAporte($floIbcTotal, $floIbcPension, $douTarifaPension, $intDiasCotizarPension);
+            $arPila->setCotizacionObligatoria($douCotizacionPension);
+            $douCotizacionFSPSolidaridad = 0;
+            $douCotizacionFSPSubsistencia = 0;
+            if($floSalario >= (644350 * 4)) {
+                $douCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
+                $douCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
+            }
+            $arPila->setAportesFondoSolidaridadPensionalSolidaridad($douCotizacionFSPSolidaridad);
+            $arPila->setAportesFondoSolidaridadPensionalSubsistencia($douCotizacionFSPSubsistencia);            
+            */
             $em->persist($arAporte);
             $i++;
         } 
@@ -89,4 +165,74 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         return true;
     }    
     
+    public function ibcMesAnterior($codigoEmpleado, $intMes, $intAnio) {
+        $em = $this->getEntityManager();
+        $floIbcMesAnterior = 0;
+        /*
+        $arSsoPila = new \Soga\NominaBundle\Entity\SsoPila();
+        $arSsoPila = $em->getRepository('SogaNominaBundle:SsoPila')->findOneBy(array('numeroIdentificacion' => $strIdentificacion, 'anio' => $intAnio, 'mes' => $intMes - 1));
+        if(count($arSsoPila) > 0) {
+            $floIbcMesAnterior = $arSsoPila->getSalarioBasico() + $arSsoPila->getTiempoSuplementario();
+        }
+         * 
+         */
+        return $floIbcMesAnterior;        
+    }    
+    
+    public function liquidarIncapacidadGeneral($floSalario, $floSalarioAnterior, $intDias) {
+        if($floSalarioAnterior > 0) {
+            $floSalario = $floSalarioAnterior;
+        }                
+        $floValorDia = $floSalario / 30;
+        $floValorDiaSalarioMinimo = 644350 / 30;
+        $floIbcIncapacidad = 0;       
+                
+        if($floSalario <= 644350) {
+            $floIbcIncapacidad = $intDias * $floValorDia;            
+        }
+        if($floSalario > 644350 && $floSalario <= 644350 * 1.5) {
+            $floIbcIncapacidad = $intDias * $floValorDiaSalarioMinimo;            
+        }
+        if($floSalario > (644350 * 1.5)) {
+            $floIbcIncapacidad = $intDias * $floValorDia; 
+            $floIbcIncapacidad = ($floIbcIncapacidad * 66.67)/100;            
+        }        
+        
+        return $floIbcIncapacidad;
+    }    
+    
+    public function liquidarIncapacidadLaboral($floSalario, $floSalarioAnterior, $intDias) {
+        if($floSalarioAnterior > 0) {
+            $floSalario = $floSalarioAnterior;
+        }                
+        $floValorDia = $floSalario / 30;        
+        $floIbcIncapacidad = $intDias * $floValorDia;         
+        return $floIbcIncapacidad;
+    }        
+    
+    public function redondearIbc($intDias, $floIbcBruto) {
+        $floIbc = 0;       
+        $floIbcRedondedado = round($floIbcBruto, -3, PHP_ROUND_HALF_DOWN);
+        $floIbcMinimo = $this->redondearIbcMinimo($intDias);
+        $floResiduo = fmod($floIbcBruto, 1000);
+        if($floIbcRedondedado < $floIbcMinimo) {
+            if($floResiduo > 500) {
+                $floIbc = intval($floIbcBruto/1000)*1000+1000;
+            } else {
+                $floIbc = $floIbcBruto;
+            }
+            $floIbc = ceil($floIbc);
+        } else {
+            $floIbc = $floIbcRedondedado;
+        }
+
+        return $floIbc;
+    }
+
+    public function redondearIbcMinimo ($intDias) {
+        $floIbcMinimo = 0;
+        $floValorDia = 644350 / 30;
+        $floIbcBruto = intval($intDias * $floValorDia);
+        return $floIbcBruto;
+    }     
 }

@@ -100,6 +100,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $arPeriodoEmpleado->setDiasLicenciaMaternidad($intDiasLicenciaMaternidad);
             $intDiasIncapacidadLaboral = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidad($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 29);
             $arPeriodoEmpleado->setDiasIncapacidadLaboral($intDiasIncapacidadLaboral);            
+            $arPeriodoEmpleadoActualizar->setTarifaPension($arContrato->getTipoPensionRel()->getPorcentajeCotizacion());
             $em->persist($arPeriodoEmpleadoActualizar);
         }
         $em->flush();

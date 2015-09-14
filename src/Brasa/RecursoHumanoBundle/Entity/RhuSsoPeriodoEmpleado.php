@@ -86,6 +86,16 @@ class RhuSsoPeriodoEmpleado
      * @ORM\Column(name="dias_incapacidad_laboral", type="integer")
      */    
     private $diasIncapacidadLaboral = 0;    
+
+    /**
+     * @ORM\Column(name="tarifa_pension", type="float")
+     */    
+    private $tarifaPension = 0;    
+    
+    /**
+     * @ORM\Column(name="tarifa_riesgos", type="float")
+     */    
+    private $tarifaRiesgos = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosEmpleadosSsoPeriodoRel")
@@ -582,5 +592,53 @@ class RhuSsoPeriodoEmpleado
     public function getDiasIncapacidadLaboral()
     {
         return $this->diasIncapacidadLaboral;
+    }
+
+    /**
+     * Set tarifaPension
+     *
+     * @param float $tarifaPension
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setTarifaPension($tarifaPension)
+    {
+        $this->tarifaPension = $tarifaPension;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaPension
+     *
+     * @return float
+     */
+    public function getTarifaPension()
+    {
+        return $this->tarifaPension;
+    }
+
+    /**
+     * Set tarifaRiesgos
+     *
+     * @param float $tarifaRiesgos
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setTarifaRiesgos($tarifaRiesgos)
+    {
+        $this->tarifaRiesgos = $tarifaRiesgos;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaRiesgos
+     *
+     * @return float
+     */
+    public function getTarifaRiesgos()
+    {
+        return $this->tarifaRiesgos;
     }
 }

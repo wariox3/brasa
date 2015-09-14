@@ -203,6 +203,51 @@ class RhuSsoAporte
     private $incapacidadAccidenteTrabajoEnfermedadProfesional = 0;    
     
     /**
+     * @ORM\Column(name="codigo_entidad_pension_pertenece", type="string", length=6)
+     */
+    private $codigoEntidadPensionPertenece;     
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_pension_traslada", type="string", length=6)
+     */
+    private $codigoEntidadPensionTraslada = '      ';    
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_salud_pertenece", type="string", length=6)
+     */
+    private $codigoEntidadSaludPertenece;     
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_salud_traslada", type="string", length=6)
+     */
+    private $codigoEntidadSaludTraslada = '      ';    
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_caja_pertenece", type="string", length=6)
+     */
+    private $codigoEntidadCajaPertenece;    
+    
+    /**
+     * @ORM\Column(name="dias_cotizados_pension", type="integer")
+     */
+    private $diasCotizadosPension = 0;
+    
+    /**
+     * @ORM\Column(name="dias_cotizados_salud", type="integer")
+     */
+    private $diasCotizadosSalud = 0;    
+
+    /**
+     * @ORM\Column(name="dias_cotizados_riesgos_profesionales", type="integer")
+     */
+    private $diasCotizadosRiesgosProfesionales = 0;    
+        
+    /**
+     * @ORM\Column(name="dias_cotizados_caja_compensacion", type="integer")
+     */
+    private $diasCotizadosCajaCompensacion = 0;    
+    
+    /**
      * @ORM\Column(name="salario_basico", type="float")
      */
     private $salarioBasico = 0;
@@ -215,14 +260,37 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="salario_integral", type="string", length=1)
      */
-    private $salarioIntegral = 0;    
+    private $salarioIntegral = ' ';    
     
     /**
      * @ORM\Column(name="suplementario", type="float")
      */
     private $suplementario = 0;     
     
+    /**
+     * @ORM\Column(name="ibc_pension", type="float")
+     */
+    private $ibcPension;     
+
+    /**
+     * @ORM\Column(name="ibc_salud", type="float")
+     */
+    private $ibcSalud;    
     
+    /**
+     * @ORM\Column(name="ibc_riesgos_profesionales", type="float")
+     */
+    private $ibcRiesgosProfesionales;    
+    
+    /**
+     * @ORM\Column(name="ibc_caja", type="float")
+     */
+    private $ibcCaja;     
+    
+    /**
+     * @ORM\Column(name="tarifa_pension", type="float")
+     */
+    private $tarifaPension;         
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoAportesSsoPeriodoRel")
@@ -1367,5 +1435,341 @@ class RhuSsoAporte
     public function getIncapacidadAccidenteTrabajoEnfermedadProfesional()
     {
         return $this->incapacidadAccidenteTrabajoEnfermedadProfesional;
+    }
+
+    /**
+     * Set codigoEntidadPensionPertenece
+     *
+     * @param string $codigoEntidadPensionPertenece
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadPensionPertenece($codigoEntidadPensionPertenece)
+    {
+        $this->codigoEntidadPensionPertenece = $codigoEntidadPensionPertenece;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadPensionPertenece
+     *
+     * @return string
+     */
+    public function getCodigoEntidadPensionPertenece()
+    {
+        return $this->codigoEntidadPensionPertenece;
+    }
+
+    /**
+     * Set codigoEntidadPensionTraslada
+     *
+     * @param string $codigoEntidadPensionTraslada
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadPensionTraslada($codigoEntidadPensionTraslada)
+    {
+        $this->codigoEntidadPensionTraslada = $codigoEntidadPensionTraslada;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadPensionTraslada
+     *
+     * @return string
+     */
+    public function getCodigoEntidadPensionTraslada()
+    {
+        return $this->codigoEntidadPensionTraslada;
+    }
+
+    /**
+     * Set codigoEntidadSaludPertenece
+     *
+     * @param string $codigoEntidadSaludPertenece
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadSaludPertenece($codigoEntidadSaludPertenece)
+    {
+        $this->codigoEntidadSaludPertenece = $codigoEntidadSaludPertenece;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadSaludPertenece
+     *
+     * @return string
+     */
+    public function getCodigoEntidadSaludPertenece()
+    {
+        return $this->codigoEntidadSaludPertenece;
+    }
+
+    /**
+     * Set codigoEntidadSaludTraslada
+     *
+     * @param string $codigoEntidadSaludTraslada
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadSaludTraslada($codigoEntidadSaludTraslada)
+    {
+        $this->codigoEntidadSaludTraslada = $codigoEntidadSaludTraslada;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadSaludTraslada
+     *
+     * @return string
+     */
+    public function getCodigoEntidadSaludTraslada()
+    {
+        return $this->codigoEntidadSaludTraslada;
+    }
+
+    /**
+     * Set codigoEntidadCajaPertenece
+     *
+     * @param string $codigoEntidadCajaPertenece
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadCajaPertenece($codigoEntidadCajaPertenece)
+    {
+        $this->codigoEntidadCajaPertenece = $codigoEntidadCajaPertenece;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadCajaPertenece
+     *
+     * @return string
+     */
+    public function getCodigoEntidadCajaPertenece()
+    {
+        return $this->codigoEntidadCajaPertenece;
+    }
+
+    /**
+     * Set diasCotizadosPension
+     *
+     * @param integer $diasCotizadosPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasCotizadosPension($diasCotizadosPension)
+    {
+        $this->diasCotizadosPension = $diasCotizadosPension;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCotizadosPension
+     *
+     * @return integer
+     */
+    public function getDiasCotizadosPension()
+    {
+        return $this->diasCotizadosPension;
+    }
+
+    /**
+     * Set diasCotizadosSalud
+     *
+     * @param integer $diasCotizadosSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasCotizadosSalud($diasCotizadosSalud)
+    {
+        $this->diasCotizadosSalud = $diasCotizadosSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCotizadosSalud
+     *
+     * @return integer
+     */
+    public function getDiasCotizadosSalud()
+    {
+        return $this->diasCotizadosSalud;
+    }
+
+    /**
+     * Set diasCotizadosRiesgosProfesionales
+     *
+     * @param integer $diasCotizadosRiesgosProfesionales
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasCotizadosRiesgosProfesionales($diasCotizadosRiesgosProfesionales)
+    {
+        $this->diasCotizadosRiesgosProfesionales = $diasCotizadosRiesgosProfesionales;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCotizadosRiesgosProfesionales
+     *
+     * @return integer
+     */
+    public function getDiasCotizadosRiesgosProfesionales()
+    {
+        return $this->diasCotizadosRiesgosProfesionales;
+    }
+
+    /**
+     * Set diasCotizadosCajaCompensacion
+     *
+     * @param integer $diasCotizadosCajaCompensacion
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasCotizadosCajaCompensacion($diasCotizadosCajaCompensacion)
+    {
+        $this->diasCotizadosCajaCompensacion = $diasCotizadosCajaCompensacion;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCotizadosCajaCompensacion
+     *
+     * @return integer
+     */
+    public function getDiasCotizadosCajaCompensacion()
+    {
+        return $this->diasCotizadosCajaCompensacion;
+    }
+
+    /**
+     * Set ibcPension
+     *
+     * @param float $ibcPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIbcPension($ibcPension)
+    {
+        $this->ibcPension = $ibcPension;
+
+        return $this;
+    }
+
+    /**
+     * Get ibcPension
+     *
+     * @return float
+     */
+    public function getIbcPension()
+    {
+        return $this->ibcPension;
+    }
+
+    /**
+     * Set ibcSalud
+     *
+     * @param float $ibcSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIbcSalud($ibcSalud)
+    {
+        $this->ibcSalud = $ibcSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get ibcSalud
+     *
+     * @return float
+     */
+    public function getIbcSalud()
+    {
+        return $this->ibcSalud;
+    }
+
+    /**
+     * Set ibcRiesgosProfesionales
+     *
+     * @param float $ibcRiesgosProfesionales
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIbcRiesgosProfesionales($ibcRiesgosProfesionales)
+    {
+        $this->ibcRiesgosProfesionales = $ibcRiesgosProfesionales;
+
+        return $this;
+    }
+
+    /**
+     * Get ibcRiesgosProfesionales
+     *
+     * @return float
+     */
+    public function getIbcRiesgosProfesionales()
+    {
+        return $this->ibcRiesgosProfesionales;
+    }
+
+    /**
+     * Set ibcCaja
+     *
+     * @param float $ibcCaja
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIbcCaja($ibcCaja)
+    {
+        $this->ibcCaja = $ibcCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get ibcCaja
+     *
+     * @return float
+     */
+    public function getIbcCaja()
+    {
+        return $this->ibcCaja;
+    }
+
+    /**
+     * Set tarifaPension
+     *
+     * @param float $tarifaPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaPension($tarifaPension)
+    {
+        $this->tarifaPension = $tarifaPension;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaPension
+     *
+     * @return float
+     */
+    public function getTarifaPension()
+    {
+        return $this->tarifaPension;
     }
 }

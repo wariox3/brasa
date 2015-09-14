@@ -21,6 +21,14 @@
                 <th>IRP</th>
                 <th>SALARIO</th>
                 <th>SUPLE</th>
+                <th>D.P</th>
+                <th>D.S</th>
+                <th>D.R</th>
+                <th>D.C</th>
+                <th>IBC.P</th>
+                <th>IBC.S</th>
+                <th>IBC.R</th>
+                <th>IBC.C</th>
             </tr>
             {% for arSsoAportes in arSsoAportes %}
             <tr>
@@ -37,6 +45,14 @@
                 <td>{% if arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional > 0 %}{{ arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional }} {% endif %}</td>                
                 <td style="text-align: right">{{ arSsoAportes.salarioBasico | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.suplementario | number_format(0, '.', ',') }}</td>
+                <td>{{ arSsoAportes.diasCotizadosPension  }}</td>
+                <td>{{ arSsoAportes.diasCotizadosSalud  }}</td>
+                <td>{{ arSsoAportes.diasCotizadosRiesgosProfesionales  }}</td>
+                <td>{{ arSsoAportes.diasCotizadosCajaCompensacion  }}</td>
+                <td style="text-align: right">{{ arSsoAportes.ibcPension | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSsoAportes.ibcSalud | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSsoAportes.ibcRiesgosProfesionales | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSsoAportes.ibcCaja | number_format(0, '.', ',') }}</td>
             </tr>
             {% endfor %}                        
         </table>                       
