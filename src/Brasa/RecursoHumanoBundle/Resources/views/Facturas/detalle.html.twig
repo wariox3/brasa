@@ -22,7 +22,7 @@
                     <td class="titulo">FECHA:</td>
                     <td class="td-in-well">{{ arFactura.fecha|date("Y/m/d") }}</td>
                     <td class="titulo">BRUTO:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrBruto | number_format(2, '.', ',') }}</td>                   
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrBruto | number_format(0, '.', ',') }}</td>                   
                 </tr>
                 <tr>
                     <td class="titulo">NUMERO:</td>
@@ -30,7 +30,7 @@
                     <td class="titulo">VENCE:</td>
                     <td class="td-in-well">{{ arFactura.fechaVence|date("Y/m/d") }}</td>
                     <td class="titulo">(-)RETENCION FUENTE:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrRetencionFuente | number_format(2, '.', ',') }}</td>                   
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrRetencionFuente | number_format(0, '.', ',') }}</td>                   
                 </tr>
                 <tr>
                     <td class="titulo">TERCERO:</td>
@@ -38,31 +38,31 @@
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
                     <td class="titulo">RETENCION CREE:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrRetencionCREE | number_format(2, '.', ',') }}</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrRetencionCREE | number_format(0, '.', ',') }}</td>
                 </tr>    
                 <tr>
                     <td class="titulo">CENTRO COSTO:</td>
                     <td class="td-in-well">{{ arFactura.centroCostoRel.nombre }}</td>
                     <td class="titulo">BASE AIU:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrBaseAIU | number_format(2, '.', ',') }}</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrBaseAIU | number_format(0, '.', ',') }}</td>
                     <td class="titulo">(+)IVA:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrIva | number_format(2, '.', ',') }}</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrIva | number_format(0, '.', ',') }}</td>
                 </tr>                 
                 <tr>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
                     <td class="titulo">ADMINISTRACION:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrTotalAdministracion | number_format(2, '.', ',') }}</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrTotalAdministracion | number_format(0, '.', ',') }}</td>
                     <td class="titulo">(-)RETENCION IVA:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrRetencionIva | number_format(2, '.', ',') }}</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrRetencionIva | number_format(0, '.', ',') }}</td>
                 </tr> 
                 <tr>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
                     <td class="titulo">INGRESO MISION:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrIngresoMision | number_format(2, '.', ',')}}</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrIngresoMision | number_format(0, '.', ',')}}</td>
                     <td class="titulo">TOTAL NETO:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrNeto | number_format(2, '.', ',') }}</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arFactura.vrNeto | number_format(0, '.', ',') }}</td>
                 </tr>                 
                 <tr>
                     <td class="titulo">COMENTARIOS:</td>
@@ -102,17 +102,17 @@
                             <tr> 
                                 <td><input type="hidden" name="LblCodigo[]" value="{{ arFacturaDetalles.codigoFacturaDetallePk }}">{{ arFacturaDetalles.codigoFacturaDetallePk }}</td>                                  
                                 <td style="text-align: right">{{ arFacturaDetalles.codigoPagoFk }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrAdicionalTiempo | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrAdicionalValor | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrAuxilioTransporte | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrArp | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrEps | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrPension | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrCaja | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrCesantias | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrVacaciones | number_format(2, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arFacturaDetalles.VrAdministracion | number_format(2, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrAdicionalTiempo | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrAdicionalValor | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrAuxilioTransporte | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrArp | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrEps | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrPension | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrCaja | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrCesantias | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrVacaciones | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.VrAdministracion | number_format(0, '.', ',') }}</td>
                                 <td><input type="checkbox" name="ChkSeleccionarPago[]" value="{{ arFacturaDetalles.codigoFacturaDetallePk }}" /></td>
                             </tr>
                         {% endfor %} 

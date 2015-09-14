@@ -88,8 +88,13 @@
                 <td>{{ arExamenDetalle.examenTipoRel.nombre|default('ERROR')}}</td>
                 <td class="td-in-well" align="right">{{ arExamenDetalle.vrPrecio | number_format(2, '.', ',') }}</td>
                 <td>{% if arExamenDetalle.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{{ arExamenDetalle.comentarios}}</td>                
+                <td>{{ arExamenDetalle.comentarios}}</td>
+                {% if arExamen.estadoAutorizado == 0 %}
                 <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo_comentario', { 'codigoExamenDetalle': arExamenDetalle.codigoExamenDetallePk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                {% else %}
+                <td style="text-align: center"><a href="" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                {% endif %}
+                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}" /></td>
             </tr>
             {% endfor %}

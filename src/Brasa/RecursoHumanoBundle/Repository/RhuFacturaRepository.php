@@ -37,6 +37,8 @@ class RhuFacturaRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arConfiguraciones = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguraciones = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arFactura = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
         $arFactura = $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->find($codigoFactura);         
         $arFacturaDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
@@ -45,13 +47,14 @@ class RhuFacturaRepository extends EntityRepository {
         $douIngresoMision = 0;
         foreach ($arFacturaDetalles as $arFacturaDetalle) {
             $douAdministracion += $arFacturaDetalle->getVrAdministracion();
-            $douIngresoMision += $arFacturaDetalle->getVrTotalCobrar();
+            $douIngresoMision += $arFacturaDetalle->getVrCosto();
         }
-        $douBaseAIU = (($douAdministracion+$douIngresoMision)*10)/100;
+        
         $douTotalBruto = $douIngresoMision + $douAdministracion;
+        $douBaseAIU = (($douTotalBruto)*10)/100;
         $douRetencionFuente = 0;
         $douRetencionCREE = ($douBaseAIU * $arConfiguraciones->getPorcentajeRetencionCREE()) / 100;
-        $douIva = ($douBaseAIU * $arConfiguraciones->getPorcentajeRetencionIvaVentas()) / 100;
+        $douIva = ($douBaseAIU * $arConfiguracionNomina->getPorcentajeIva()) / 100;
         $douRetencionIva = ($douIva * $arConfiguraciones->getPorcentajeRetencionIvaVentas()) / 100;        
         if($arFactura->getTerceroRel()->getRetencionFuenteVentas() == 1) {
             if ($douBaseAIU >= $arConfiguraciones->getBaseRetencionFuente()) {

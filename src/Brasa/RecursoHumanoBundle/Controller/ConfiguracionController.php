@@ -113,6 +113,7 @@ class ConfiguracionController extends Controller
             ->add('conceptoRiesgoProfesional', 'entity', $arrayPropiedadesConceptoRiesgoProfesional, array('required' => true))
             ->add('porcentajePensionExtra', 'number', array('data' => $arConfiguracion->getPorcentajePensionExtra(), 'required' => true))    
             ->add('conceptoIncapacidad', 'entity', $arrayPropiedadesConceptoIncapacidad, array('required' => true))    
+            ->add('porcentajeIva', 'number', array('data' => $arConfiguracion->getPorcentajeIva(), 'required' => true))        
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -130,10 +131,12 @@ class ConfiguracionController extends Controller
             $codigoConceptoAportePension = $controles['conceptoAportePension'];
             $codigoConceptoAporteSalud = $controles['conceptoAporteSalud'];
             $codigoConceptoRiesgoProfesional = $controles['conceptoRiesgoProfesional'];
+            $porcentajeIva = $controles['porcentajeIva'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
             $arConfiguracion->setPorcentajePensionExtra($porcentajePensionExtra);
+            $arConfiguracion->setPorcentajeIva($porcentajeIva);
             $arConfiguracion->setVrSalario($ValorSalario);
             $arConfiguracion->setCodigoCredito($codigoConceptoCredito);
             $arConfiguracion->setCodigoIncapacidad($codigoConceptoIncapacidad);

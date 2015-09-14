@@ -36,7 +36,7 @@
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>{{ knp_pagination_sortable(arExamenes, 'CÓDIGO', 'e.codigoExamenPk') }}</th>
+                <th>{{ knp_pagination_sortable(arExamenes, 'CÓDIGO', 'sg.codigoExamenPk') }}</th>
                 <th>CLASE</th>
                 <th>ENTIDAD</th>
                 <th>CENTRO COSTO</th>
@@ -60,7 +60,11 @@
                 <td>{{ arExamenes.nombreCorto }}</td>
                 <td style="text-align: right">{{ arExamenes.vrTotal | number_format(2, '.', ',') }}</td>                
                 <td>{% if arExamenes.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_nuevo', { 'codigoExamen': arExamenes.codigoExamenPk }) }}', 'AgregarExamen', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                {% if arExamenes.estadoAprobado == 0%}
+                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_nuevo', { 'codigoExamen': arExamenes.codigoExamenPk }) }}', 'AgregarExamen', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>    
+                {% else %}
+                <td style="text-align: center"><a href="" onClick="alert('No se puede editar, el examen ha sido aprobado')" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                {% endif %}
                 {% if  arExamenes.codigoEntidadExamenFk == "" %}
                 <td style="text-align: center"><a href="" onClick="alert('Por favor asigne la entidad del examen para ingresar al detalle!')"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 {% else %}
