@@ -79,7 +79,12 @@ class RhuConfiguracion
     /**
      * @ORM\Column(name="anio_actual", type="integer")
      */    
-    private $anioActual;    
+    private $anioActual; 
+    
+    /**
+     * @ORM\Column(name="porcentaje_iva", type="float")
+     */    
+    private $porcentajeIva;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
@@ -448,5 +453,29 @@ class RhuConfiguracion
     public function getAnioActual()
     {
         return $this->anioActual;
+    }
+
+    /**
+     * Set porcentajeIva
+     *
+     * @param float $porcentajeIva
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPorcentajeIva($porcentajeIva)
+    {
+        $this->porcentajeIva = $porcentajeIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeIva
+     *
+     * @return float
+     */
+    public function getPorcentajeIva()
+    {
+        return $this->porcentajeIva;
     }
 }
