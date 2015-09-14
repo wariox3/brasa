@@ -138,7 +138,15 @@ class RhuContrato
      */    
     private $factorHorasDia = 0;    
     
-    
+    /**
+     * @ORM\Column(name="codigo_tipo_cotizante_fk", type="integer", nullable=false)
+     */    
+    private $codigoTipoCotizanteFk;    
+
+    /**
+     * @ORM\Column(name="codigo_subtipo_cotizante_fk", type="integer", nullable=false)
+     */    
+    private $codigoSubtipoCotizanteFk;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
@@ -182,6 +190,18 @@ class RhuContrato
      */
     protected $tipoPensionRel;     
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuSsoTipoCotizante", inversedBy="contratosSsoTipoCotizanteRel")
+     * @ORM\JoinColumn(name="codigo_tipo_cotizante_fk", referencedColumnName="codigo_tipo_cotizante_pk")
+     */
+    protected $ssoTipoCotizanteRel;     
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuSsoSubtipoCotizante", inversedBy="contratosSsoSubtipoCotizanteRel")
+     * @ORM\JoinColumn(name="codigo_subtipo_cotizante_fk", referencedColumnName="codigo_subtipo_cotizante_pk")
+     */
+    protected $ssoSubtipoCotizanteRel;    
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="contratoRel")
      */
@@ -1162,5 +1182,101 @@ class RhuContrato
     public function getSsoAportesContratoRel()
     {
         return $this->ssoAportesContratoRel;
+    }
+
+    /**
+     * Set codigoTipoCotizanteFk
+     *
+     * @param integer $codigoTipoCotizanteFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoTipoCotizanteFk($codigoTipoCotizanteFk)
+    {
+        $this->codigoTipoCotizanteFk = $codigoTipoCotizanteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoCotizanteFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoCotizanteFk()
+    {
+        return $this->codigoTipoCotizanteFk;
+    }
+
+    /**
+     * Set codigoSubtipoCotizanteFk
+     *
+     * @param integer $codigoSubtipoCotizanteFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoSubtipoCotizanteFk($codigoSubtipoCotizanteFk)
+    {
+        $this->codigoSubtipoCotizanteFk = $codigoSubtipoCotizanteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSubtipoCotizanteFk
+     *
+     * @return integer
+     */
+    public function getCodigoSubtipoCotizanteFk()
+    {
+        return $this->codigoSubtipoCotizanteFk;
+    }
+
+    /**
+     * Set ssoTipoCotizanteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel
+     *
+     * @return RhuContrato
+     */
+    public function setSsoTipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel = null)
+    {
+        $this->ssoTipoCotizanteRel = $ssoTipoCotizanteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoTipoCotizanteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante
+     */
+    public function getSsoTipoCotizanteRel()
+    {
+        return $this->ssoTipoCotizanteRel;
+    }
+
+    /**
+     * Set ssoSubtipoCotizanteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel
+     *
+     * @return RhuContrato
+     */
+    public function setSsoSubtipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel = null)
+    {
+        $this->ssoSubtipoCotizanteRel = $ssoSubtipoCotizanteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoSubtipoCotizanteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante
+     */
+    public function getSsoSubtipoCotizanteRel()
+    {
+        return $this->ssoSubtipoCotizanteRel;
     }
 }

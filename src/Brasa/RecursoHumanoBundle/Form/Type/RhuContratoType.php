@@ -39,7 +39,15 @@ class RhuContratoType extends AbstractType
             ->add('cargoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
                 'property' => 'nombre',
+            ))  
+            ->add('ssoTipoCotizanteRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSsoTipoCotizante',
+                'property' => 'nombre',
             ))                            
+            ->add('ssoSubtipoCotizanteRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSsoSubtipoCotizante',
+                'property' => 'nombre',
+            ))                             
             ->add('fechaDesde', 'date', array('required' => true)) 
             //->add('fechaHasta', 'date', array('required' => true)) 
             ->add('vrSalario', 'number', array('required' => true))  

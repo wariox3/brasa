@@ -28,6 +28,11 @@ class RhuSsoTipoCotizante
     protected $empleadosSsoTipoCotizanteRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="ssoTipoCotizanteRel")
+     */
+    protected $contratosSsoTipoCotizanteRel;      
+    
+    /**
      * Get codigoTipoCotizantePk
      *
      * @return integer
@@ -100,5 +105,39 @@ class RhuSsoTipoCotizante
     public function getEmpleadosSsoTipoCotizanteRel()
     {
         return $this->empleadosSsoTipoCotizanteRel;
+    }
+
+    /**
+     * Add contratosSsoTipoCotizanteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSsoTipoCotizanteRel
+     *
+     * @return RhuSsoTipoCotizante
+     */
+    public function addContratosSsoTipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSsoTipoCotizanteRel)
+    {
+        $this->contratosSsoTipoCotizanteRel[] = $contratosSsoTipoCotizanteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosSsoTipoCotizanteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSsoTipoCotizanteRel
+     */
+    public function removeContratosSsoTipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSsoTipoCotizanteRel)
+    {
+        $this->contratosSsoTipoCotizanteRel->removeElement($contratosSsoTipoCotizanteRel);
+    }
+
+    /**
+     * Get contratosSsoTipoCotizanteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosSsoTipoCotizanteRel()
+    {
+        return $this->contratosSsoTipoCotizanteRel;
     }
 }

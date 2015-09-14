@@ -60,15 +60,7 @@ class RhuEmpleadoType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))      
-            ->add('ssoTipoCotizanteRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuSsoTipoCotizante',
-                'property' => 'nombre',
-            ))                            
-            ->add('ssoSubtipoCotizanteRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuSsoSubtipoCotizante',
-                'property' => 'nombre',
-            ))                                            
+                'required' => true))                                                 
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))                                                        
             ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
             ->add('fechaExpedicionIdentificacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                

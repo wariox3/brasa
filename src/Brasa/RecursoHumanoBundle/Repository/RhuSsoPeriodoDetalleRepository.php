@@ -36,8 +36,8 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setTipoRegistro(2);
             $arAporte->setSecuencia($i);
             $arAporte->setTipoDocumento($arEmpleado->getTipoIdentificacionRel()->getCodigoInterface());
-            $arAporte->setTipoCotizante($arEmpleado->getCodigoTipoCotizanteFk());
-            $arAporte->setSubtipoCotizante($arEmpleado->getCodigoSubtipoCotizanteFk());
+            $arAporte->setTipoCotizante($arPeriodoEmpleado->getContratoRel()->getCodigoTipoCotizanteFk());
+            $arAporte->setSubtipoCotizante($arPeriodoEmpleado->getContratoRel()->getCodigoSubtipoCotizanteFk());
             $arAporte->setExtranjeroNoObligadoCotizarPension(' ');
             $arAporte->setColombianoResidenteExterior(' ');
             $arAporte->setCodigoDepartamentoUbicacionlaboral($arPeriodoEmpleado->getContratoRel()->getCentroCostoRel()->getCiudadRel()->getDepartamentoRel()->getCodigoDane());
@@ -125,7 +125,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             
             $floTarifaPension = $arPeriodoEmpleado->getTarifaPension() + 4;            
             $floTarifaSalud = 4;
-            if($arEmpleado->getCodigoTipoCotizanteFk() == 19 || $arEmpleado->getCodigoTipoCotizanteFk() == 12) {
+            if($arPeriodoEmpleado->getContratoRel()->getCodigoTipoCotizanteFk() == 19 || $arPeriodoEmpleado->getContratoRel()->getCodigoTipoCotizanteFk() == 12) {
                 $floTarifaSalud = 12.5;
             }
             $floTarifaRiesgos = $arPeriodoEmpleado->getTarifaRiesgos();
