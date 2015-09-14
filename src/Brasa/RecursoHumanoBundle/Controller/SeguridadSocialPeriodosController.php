@@ -106,8 +106,7 @@ class SeguridadSocialPeriodosController extends Controller
                     fputs($ar, $arSsoAporte->getColombianoResidenteExterior());
                     fputs($ar, $arSsoAporte->getCodigoDepartamentoUbicacionlaboral());
                     fputs($ar, $arSsoAporte->getCodigoMunicipioUbicacionlaboral());
-                    fputs($ar, $this->RellenarNr($arSsoAporte->getPrimerApellido(), "-", 20, "D"));
-                    $strPrueba = $this->RellenarNr($arSsoAporte->getPrimerApellido(), " ", 20, "D");
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getPrimerApellido(), " ", 20, "D"));                    
                     fputs($ar, $this->RellenarNr($arSsoAporte->getSegundoApellido(), " ", 30, "D"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getPrimerNombre(), " ", 20, "D"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getSegundoNombre(), " ", 30, "D"));
@@ -127,21 +126,21 @@ class SeguridadSocialPeriodosController extends Controller
                     fputs($ar, $arSsoAporte->getAporteVoluntario());
                     fputs($ar, $arSsoAporte->getVariacionCentrosTrabajo());
                     fputs($ar, $this->RellenarNr($arSsoAporte->getIncapacidadAccidenteTrabajoEnfermedadProfesional(), "0", 2, "I"));
-                    /*fputs($ar, $arSsoAporte->getCodigoEntidadPensionPertenece());
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getCodigoEntidadPensionPertenece(), " ", 6, "D"));
                     fputs($ar, $arSsoAporte->getCodigoEntidadPensionTraslada());
-                    fputs($ar, $arSsoAporte->getCodigoEntidadSaludPertenece());
-                    fputs($ar, $arSsoAporte->getCodigoEntidadSaludTraslada());
-                    fputs($ar, $arSsoAporte->getCodigoEntidadCajaPertenece());
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getCodigoEntidadSaludPertenece(), " ", 6, "D"));
+                    fputs($ar, $arSsoAporte->getCodigoEntidadSaludTraslada());                    
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getCodigoEntidadCajaPertenece(), " ", 6, "D"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getDiasCotizadosPension(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getDiasCotizadosSalud(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getDiasCotizadosRiesgosProfesionales(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getDiasCotizadosCajaCompensacion(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getSalarioBasico(), "0", 9, "I"));
-                    fputs($ar, $arSsoPila->getSalarioIntegral());
-                    fputs($ar, $this->RellenarNr($arSsoPila->getIbcPension(), "0", 9, "I"));
-                    fputs($ar, $this->RellenarNr($arSsoPila->getIbcSalud(), "0", 9, "I"));
-                    fputs($ar, $this->RellenarNr($arSsoPila->getIbcRiesgosProfesionales(), "0", 9, "I"));
-                    fputs($ar, $this->RellenarNr($arSsoPila->getIbcCaja(), "0", 9, "I"));
+                    fputs($ar, $arSsoAporte->getSalarioIntegral());
+                    /*fputs($ar, $this->RellenarNr($arSsoAporte->getIbcPension(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getIbcSalud(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getIbcRiesgosProfesionales(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getIbcCaja(), "0", 9, "I"));
                     fputs($ar, $arSsoAporte->getTarifaAportesPensiones());
                     fputs($ar, $this->RellenarNr($arSsoPila->getCotizacionObligatoria(), "0", 9, "I"));
                     fputs($ar, $arSsoAporte->getAporteVoluntarioFondoPensionesObligatorias());
@@ -272,6 +271,7 @@ class SeguridadSocialPeriodosController extends Controller
     }
 
     public static function RellenarNr($Nro, $Str, $NroCr, $strPosicion) {
+        $Nro = utf8_decode($Nro);
         $Longitud = strlen($Nro);
         $Nc = $NroCr - $Longitud;
         for ($i = 0; $i < $Nc; $i++) {

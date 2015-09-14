@@ -141,6 +141,8 @@ class ContratosController extends Controller
                 $arEmpleado->setCargoRel($arContrato->getCargoRel());
                 $arEmpleado->setCargoDescripcion($arContrato->getCargoDescripcion());
                 $arEmpleado->setTipoPensionRel($arContrato->getTipoPensionRel());
+                $arEmpleado->setSsoTipoCotizanteRel($arContrato->getSsoTipoCotizanteRel());
+                $arEmpleado->setSsoSubtipoCotizanteRel($arContrato->getSsoSubtipoCotizanteRel());
                 $em->persist($arEmpleado);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 
@@ -195,6 +197,8 @@ class ContratosController extends Controller
                     $arEmpleado->setCodigoCargoFk(NULL);
                     $arEmpleado->setCargoDescripcion(NULL);            
                     $arEmpleado->setCodigoTipoPensionFk(NULL);  
+                    $arEmpleado->setCodigoTipoCotizanteFk(NULL);
+                    $arEmpleado->setCodigoSubtipoCotizanteFk(NULL);
                     $em->persist($arEmpleado);
 
                     //Generar liquidacion

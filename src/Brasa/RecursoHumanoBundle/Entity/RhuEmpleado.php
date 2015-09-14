@@ -268,12 +268,12 @@ class RhuEmpleado
     private $codigoEmpleadoEstudioTipoFk;
     
     /**
-     * @ORM\Column(name="codigo_tipo_cotizante_fk", type="integer", nullable=false)
+     * @ORM\Column(name="codigo_tipo_cotizante_fk", type="integer", nullable=true)
      */    
     private $codigoTipoCotizanteFk;    
 
     /**
-     * @ORM\Column(name="codigo_subtipo_cotizante_fk", type="integer", nullable=false)
+     * @ORM\Column(name="codigo_subtipo_cotizante_fk", type="integer", nullable=true)
      */    
     private $codigoSubtipoCotizanteFk;            
     
