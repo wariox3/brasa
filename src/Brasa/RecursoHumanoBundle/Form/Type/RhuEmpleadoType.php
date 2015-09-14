@@ -78,7 +78,7 @@ class RhuEmpleadoType extends AbstractType
                 'property' => 'tipo',
             ))                
             ->add('correo', 'text', array('required' => true))
-            ->add('cuenta', 'text', array('required' => true))
+            ->add('cuenta', 'text', array('required' => false))
             ->add('numeroIdentificacion', 'text', array('required' => true))            
             ->add('auxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('padreFamilia', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))         

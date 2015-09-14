@@ -298,9 +298,9 @@ class FormatoHojaVida extends \FPDF_FPDF {
     }
 
     public function Footer() {
-        $this->SetFont('Arial','B', 9);    
-        $this->SetFont('Arial','', 10);  
-        
+        $this->SetFont('Arial','B', 10); 
+        $this->Cell(30, 35, "Firma empresa" , 0, 0, 'L', 0);        
+        $this->Cell(30, 35, "Firma empleado" , 0, 0, 'L', 0);                
     }    
 }
 

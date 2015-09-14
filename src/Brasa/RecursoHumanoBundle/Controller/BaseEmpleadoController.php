@@ -308,6 +308,7 @@ class BaseEmpleadoController extends Controller
         $form = $this->createForm(new RhuEmpleadoType(), $arEmpleado);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $boolErrores = 0;
             $arrControles = $request->request->All();
             $arEmpleado = $form->getData();
             $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());            
@@ -317,20 +318,21 @@ class BaseEmpleadoController extends Controller
             else {
                 $arEmpleado->setLibretaMilitar("");
             }
-            $campo1 = $arEmpleado->getCuenta();
-            $campo2 = $arEmpleado->getBancoRel()->getNumeroDigitos();
-            if (strlen($arEmpleado->getCuenta()) != $arEmpleado->getBancoRel()->getNumeroDigitos()){
-                $objMensaje->Mensaje("error", "El numero de digitos son (". $arEmpleado->getBancoRel()->getNumeroDigitos() .") para el banco ". $arEmpleado->getBancoRel()->getNombre(), $this);
-            } else {
-                $em->persist($arEmpleado);
-                $em->flush(); 
             
-            
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0, 'codigoSeleccion' => 0)));
-            } else {
-                return $this->redirect($this->generateUrl('brs_rhu_base_empleados_lista'));
+            if($arEmpleado->getCuenta() != "") {
+                if (strlen($arEmpleado->getCuenta()) != $arEmpleado->getBancoRel()->getNumeroDigitos()){
+                    $objMensaje->Mensaje("error", "El numero de digitos son (". $arEmpleado->getBancoRel()->getNumeroDigitos() .") para el banco ". $arEmpleado->getBancoRel()->getNombre(), $this);
+                    $boolErrores = 1;
+                }
             }
+            if($boolErrores == 0) {
+                $em->persist($arEmpleado);
+                $em->flush();                         
+                if($form->get('guardarnuevo')->isClicked()) {
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0, 'codigoSeleccion' => 0)));
+                } else {
+                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_lista'));
+                }                
             }
         }
 
