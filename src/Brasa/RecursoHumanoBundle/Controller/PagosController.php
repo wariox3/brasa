@@ -18,17 +18,17 @@ class PagosController extends Controller
         $this->listar();
         if($form->isValid()) {
             if($form->get('BtnExcel')->isClicked()) {
-                $this->filtrarLista($form);
+                $this->filtrarLista($form, $request);
                 $this->listar();
                 $this->generarExcel();
             }            
             if($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrarLista($form);
+                $this->filtrarLista($form, $request);
                 $this->listar();
             } 
             
             if($form->get('BtnPdf')->isClicked()) {
-                $this->filtrarLista($form);
+                $this->filtrarLista($form, $request);
                 $this->listar();
                 $objFormatoPagos = new \Brasa\RecursoHumanoBundle\Formatos\FormatoListaPagos();
                 $objFormatoPagos->Generar($this, $this->strDqlLista);
