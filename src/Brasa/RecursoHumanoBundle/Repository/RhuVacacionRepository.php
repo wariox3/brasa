@@ -32,6 +32,7 @@ class RhuVacacionRepository extends EntityRepository {
         $intDias = 15;
         $floSalario = $arVacacion->getEmpleadoRel()->getVrSalario();        
         $floSalarioPromedio = 0;
+        $contrato = $arVacacion->getCodigoContratoFk();
         $arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
         $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arVacacion->getCodigoContratoFk(), $arVacacion->getFechaDesdePeriodo()->format('Y-m-d'), $arVacacion->getFechaHastaPeriodo()->format('Y-m-d'));                 
         if(count($arCambiosSalario) > 0) {
