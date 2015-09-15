@@ -13,6 +13,8 @@
                 <th>GENERADO</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
+                <th>MES</th>
+                <th>MES PAGO</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -26,6 +28,8 @@
                 <td {% if arSsoPeriodoDetalles.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>                                                
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.mes  }}</td>
+                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.mesPago  }}</td>
                 <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarArchivo" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Archivo plano</button>  {% endif %}</td>
                 <td>
                     {% if arSsoPeriodoDetalles.estadoGenerado == 0 %}
