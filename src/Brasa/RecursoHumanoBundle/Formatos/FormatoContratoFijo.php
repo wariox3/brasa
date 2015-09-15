@@ -47,7 +47,7 @@ class FormatoContratoFijo extends \FPDF_FPDF {
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion3 = $arContrato->getEmpleadoRel()->getDireccion();
-        $sustitucion4 = $arContrato->getEmpleadoRel()->getBarrioRel()->getNombre();
+        $sustitucion4 = $arContrato->getEmpleadoRel()->getBarrio();
         $sustitucion5 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
         $sustitucion6 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getNombre()." - ".$arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getDepartamentoRel()->getNombre();
         $sustitucion7 = $arContrato->getCargoRel()->getNombre();
