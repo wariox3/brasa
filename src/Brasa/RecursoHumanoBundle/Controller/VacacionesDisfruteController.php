@@ -146,12 +146,14 @@ class VacacionesDisfruteController extends Controller
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
     }
 
-    public function nuevoAction($codigoEmpleado, $codigoVacacion = 0) {
+    public function nuevoAction($codigoContrato, $codigoVacacion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);        
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
+        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
         if($codigoVacacion != 0) {
             $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->find($codigoVacacion);
@@ -166,6 +168,7 @@ class VacacionesDisfruteController extends Controller
             $arVacacion = $form->getData();
             $arVacacion->setEmpleadoRel($arEmpleado);
             $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+            $arVacacion->setContratoRel($arContrato);
             $intDias = $arVacacion->getFechaDesde()->diff($arVacacion->getFechaHasta());
             $intDias = $intDias->format('%a');
             $intDias += 1;

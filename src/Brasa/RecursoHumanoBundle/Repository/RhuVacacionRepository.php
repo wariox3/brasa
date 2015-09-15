@@ -34,7 +34,7 @@ class RhuVacacionRepository extends EntityRepository {
         $floSalarioPromedio = 0;
         $contrato = $arVacacion->getCodigoContratoFk();
         $arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
-        $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arVacacion->getCodigoContratoFk(), $arVacacion->getFechaDesdePeriodo()->format('Y-m-d'), $arVacacion->getFechaHastaPeriodo()->format('Y-m-d'));                 
+        $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arVacacion->getContratoRel()->getCodigoContratoPk(), $arVacacion->getFechaDesdePeriodo()->format('Y-m-d'), $arVacacion->getFechaHastaPeriodo()->format('Y-m-d'));                 
         if(count($arCambiosSalario) > 0) {
             $floPrimerSalario = $arCambiosSalario[0]->getVrSalarioAnterior();
             $intNumeroRegistros = count($arCambiosSalario) + 1;
@@ -66,8 +66,8 @@ class RhuVacacionRepository extends EntityRepository {
         }
         $arVacacion->setVrDeduccion($floDeducciones);
         $arVacacion->setVrVacacionBruto($floTotalVacacionBruto);
-        $floTotal = $floSalarioPromedio - $floDeducciones - $arVacacion->getVrPension() - $arVacacion->getVrSalud();        
-        $arVacacion->setVrVacacion($floTotal);        
+        $floTotalVacacion = $floTotalVacacionBruto - $floDeducciones - $arVacacion->getVrPension() - $arVacacion->getVrSalud();        
+        $arVacacion->setVrVacacion($floTotalVacacion);        
         $arVacacion->setDiasVacaciones(15);
         $arVacacion->setVrSalarioActual($floSalario);
         $arVacacion->setVrSalarioPromedio($floSalarioPromedio);

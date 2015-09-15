@@ -127,7 +127,7 @@ brs_rhu_vacaciones_disfrute_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:VacacionesDisfrute:lista }    
 
 brs_rhu_vacaciones_disfrute_nuevo:
-    path:     /rhu/vacaciones/disfrute/nuevo/{codigoEmpleado}/{codigoVacacion}
+    path:     /rhu/vacaciones/disfrute/nuevo/{codigoContrato}/{codigoVacacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:VacacionesDisfrute:nuevo }
     
 brs_rhu_vacaciones_disfrute_detalle:

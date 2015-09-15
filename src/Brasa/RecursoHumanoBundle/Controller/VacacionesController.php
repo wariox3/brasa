@@ -147,7 +147,6 @@ class VacacionesController extends Controller
                 $arVacacion->setFechaHastaPeriodo($fechaHastaPeriodo);
                 $arVacacion->setContratoRel($arContrato);
                 $em->persist($arVacacion);
-                
                 //Calcular deducciones credito
                 $floVrDeducciones = 0;
                 $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
@@ -163,9 +162,9 @@ class VacacionesController extends Controller
                 $arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                 $arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContrato->getCodigoContratoPk());                    
                 $arContratoActualizar->setFechaUltimoPagoVacaciones($fechaHastaPeriodo);
-                $em->persist($arContratoActualizar);                     
-                
+                $em->persist($arContratoActualizar);                                     
                 $em->flush();
+                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());
               
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";  
