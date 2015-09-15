@@ -124,12 +124,27 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $this->Cell(26, 6, utf8_decode("SALARIO:"), 1, 0, 'L', 1);         
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(65, 6, number_format($arVacaciones->getEmpleadoRel()->getVrSalario(), 0, '.', ','), 1, 0, 'R', 1);        
-        
+        $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioActual(), 0, '.', ','), 1, 0, 'R', 1);        
+
         //FILA 6
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->SetXY(10, $intY + 30);        
+        $this->Cell(31, 6, "", 1, 0, 'L', 1);
+        $this->SetFont('Arial', '', 8);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(63, 6, '', 1, 0, 'L', 1);
+        $this->SetFont('Arial', 'B', 7);
+        $this->SetFillColor(217, 217, 217);
+        $this->Cell(26, 6, utf8_decode("SALARIO BASE:"), 1, 0, 'L', 1);         
+        $this->SetFont('Arial', '', 8);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioPromedio(), 0, '.', ','), 1, 0, 'R', 1);                
+        
+        //FILA 7
+        $this->SetFont('Arial', 'B', 7);
+        $this->SetFillColor(217, 217, 217);
+        $this->SetXY(10, $intY + 36);        
         $this->Cell(31, 6, utf8_decode("COMENTARIOS:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
@@ -137,7 +152,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         
         //BLOQUE VACACIONES
         $intX = 120;
-        $intY = 80;
+        $intY = 90;
         $this->SetFont('Arial', 'B', 8);
         $this->SetFillColor(217, 217, 217);                
         $this->SetXY($intX, $intY);
@@ -153,7 +168,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $this->SetXY($intX, $intY + 30);
         $this->Cell(43, 5, "TOTAL A PAGAR:", 1, 0, 'L', 1);
         $intX = 163;
-        $intY = 80;
+        $intY = 90;
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(272, 272, 272);        
         $this->SetXY($intX, $intY);
@@ -212,11 +227,11 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
     public function Footer() {
         
         $this->SetFont('Arial', 'B', 9);
-        $this->Text(10, 130, "FIRMA: _____________________________________________");
-        $this->Text(105, 130, "EMPRESA: __________________________________________");
-        $this->Text(10, 137, "C.C.:     ______________________ de ____________________");
+        $this->Text(10, 160, "FIRMA: _____________________________________________");
+        $this->Text(105, 160, "EMPRESA: __________________________________________");
+        $this->Text(10, 167, "C.C.:     ______________________ de ____________________");
         $this->SetFont('Arial', '', 8);
-        $this->Text(170, 140, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        $this->Text(170, 190, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 

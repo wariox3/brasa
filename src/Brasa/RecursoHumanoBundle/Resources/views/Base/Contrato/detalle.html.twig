@@ -42,16 +42,16 @@
                 <tr>
                     <td class="titulo">CLASIFICACION RIESGO:</td>
                     <td class="td-in-well">{{ arContrato.clasificacionRiesgoRel.nombre|default('SIN CENTRO COSTO') }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">IDENTIFICACION</td>
+                    <td class="td-in-well">{{ arContrato.empleadoRel.numeroIdentificacion }}</td>
                     <td class="titulo">DESCRIPCION CARGO:</td>
                     <td class="td-in-well">{{ arContrato.cargoDescripcion }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">ULTIMO PAGO:</td>
                     <td>{{ arContrato.fechaUltimoPago|date("Y/m/d") }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">EMPLEADO</td>
+                    <td class="td-in-well">{{ arContrato.empleadoRel.nombreCorto }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
                 </tr>                 
@@ -85,7 +85,107 @@
             </table>
             </div>
         </div>
+        <a name="marcador"></a>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#cambiosalario" data-toggle="tab">Cambio salario</a></li>
+            <li><a href="#vacaciones" data-toggle="tab">Vacaciones</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="cambiosalario">
+                <br />
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>CODIGO</th>
+                        <th>FECHA</th>
+                        <th>ANTERIOR</th>
+                        <th>NUEVO</th>
+                        <th>DETALLE</th>
+                    </tr>
+                    {% for arCambiosSalario in arCambiosSalario %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arCambiosSalario.codigoCambioSalarioPk }}">{{ arCambiosSalario.codigoCambioSalarioPk }} </td>
+                            <td>{{ arCambiosSalario.fecha |date("Y/m/d")  }}</td>                            
+                            <td style="text-align: right">{{ arCambiosSalario.vrSalarioAnterior | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arCambiosSalario.vrSalarioNuevo | number_format(0, '.', ',') }}</td>
+                            <td>{{ arCambiosSalario.detalle  }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
 
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arCambiosSalario) }}
+                </div>
+                <div class="btn-toolbar" style="float: right">
+                </div>
+            </div>
+                    
+            <div class="tab-pane" id="vacaciones">
+                <br />
+                <h4>Pago</h4>
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>CODIGO</th>
+                        <th>DESDE</th>
+                        <th>HASTA</th>
+                        <th>DIAS</th>
+                        <th>VR. DEDUCCIONES</th>
+                        <th>TOTAL</th>
+                        <th></th>
+                    </tr>
+                    {% for arVacaciones in arVacaciones %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arVacaciones.codigoVacacionPk }}">{{ arVacaciones.codigoVacacionPk }} </td>
+                            <td>{{ arVacaciones.fechaDesdePeriodo |date("Y/m/d")  }}</td>
+                            <td>{{ arVacaciones.fechaHastaPeriodo |date("Y/m/d")  }}</td>
+                            <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>
+                            <td style="text-align: right">{{ arVacaciones.vrDeduccion | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>                            
+                            <td><input type="checkbox" name="ChkSeleccionarVacacion[]" value="{{ arVacaciones.codigoVacacionPk }}" /></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arVacaciones) }}
+                </div>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a>
+                    </div>
+                </div>
+
+                <br /><br />
+                <h4>Disfrute</h4>
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>CODIGO</th>
+                        <th>DESDE</th>
+                        <th>HASTA</th>
+                        <th>DIAS</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for arVacacionesDisfrute in arVacacionesDisfrute %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arVacacionesDisfrute.codigoVacacionDisfrutePk }}">{{ arVacacionesDisfrute.codigoVacacionDisfrutePk }} </td>
+                            <td>{{ arVacacionesDisfrute.fechaDesde |date("Y/m/d")  }}</td>
+                            <td>{{ arVacacionesDisfrute.fechaHasta |date("Y/m/d")  }}</td>
+                            <td style="text-align: right">{{ arVacacionesDisfrute.dias  }}</td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_disfrute_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoVacacion': arVacacionesDisfrute.codigoVacacionDisfrutePk }) }}', 'AgregarVacacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td><input type="checkbox" name="ChkSeleccionarVacacion[]" value="{{ arVacacionesDisfrute.codigoVacacionDisfrutePk }}" /></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arVacacionesDisfrute) }}
+                </div>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_disfrute_nuevo', {'codigoEmpleado': arContrato.codigoEmpleadoFk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_contratos_lista') }}" style="float:left">Volver</a>

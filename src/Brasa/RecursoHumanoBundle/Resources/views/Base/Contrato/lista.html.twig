@@ -74,7 +74,7 @@
                             <td>{{ arContratos.contratoTipoRel.nombre|default('SIN TIPO')  }}</td>
                             <td>{{ arContratos.fecha |date("Y/m/d")  }}</td>
                             <td>{{ arContratos.numero  }}</td>
-                            <td>{{ arContratos.empleadoRel.nombreCorto  }}</td>
+                            <td><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arContratos.codigoEmpleadoFk }) }}" target="_blanck" >{{ arContratos.empleadoRel.nombreCorto  }}</a></td>
                             <td>{{ arContratos.centroCostoRel.nombre  }}</td>
                             <td>{{ arContratos.tipoTiempoRel.nombre  }}</td>
                             <td>{{ arContratos.fechaDesde |date("Y/m/d")  }}</td>

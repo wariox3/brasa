@@ -111,7 +111,7 @@ brs_rhu_vacaciones_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:lista }    
 
 brs_rhu_vacaciones_nuevo:
-    path:     /rhu/vacaciones/nuevo/{codigoEmpleado}/{codigoVacacion}
+    path:     /rhu/vacaciones/nuevo/{codigoContrato}/{codigoVacacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:nuevo }
     
 brs_rhu_vacaciones_detalle:

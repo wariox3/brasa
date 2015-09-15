@@ -34,6 +34,7 @@ class ProcesoCierreAnioController extends Controller
             ->setAction($this->generateUrl('brs_rhu_proceso_cierre_anio_cerrar', array('codigoCierreAnio' => $codigoCierreAnio)))
             ->add('salarioMinimo', 'number')
             ->add('auxilioTransporte', 'number')
+            ->add('fechaAplicacion', 'date', array('data' => new \DateTime('now')))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -42,37 +43,45 @@ class ProcesoCierreAnioController extends Controller
         if ($form->isValid()) {  
             $floSalarioMinimo = $form->get('salarioMinimo')->getData();
             $floAuxilioTransporte = $form->get('auxilioTransporte')->getData();
+            $dateFechaAplicacion = $form->get('fechaAplicacion')->getData();
             $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
             $floSalarioMinimoAnterior = $arConfiguracion->getVrSalario();
-            $arConfiguracion->setAnioActual($arConfiguracion->getAnioActual() + 1);
-            $arConfiguracion->setVrSalario($floSalarioMinimo);
-            $arConfiguracion->setVrAuxilioTransporte($floAuxilioTransporte);
-            $em->persist($arConfiguracion);            
+                        
             $arCierreAnio = new \Brasa\RecursoHumanoBundle\Entity\RhuCierreAnio();
             $arCierreAnio = $em->getRepository('BrasaRecursoHumanoBundle:RhuCierreAnio')->find($codigoCierreAnio);
             $arCierreAnio->setEstadoCerrado(1);
+            
             $em->persist($arCierreAnio);
-            $strDql = "UPDATE rhu_contrato "
-                    . "SET vr_salario = " . $floSalarioMinimo . ", "
-                    . "vr_salario_pago = " . $floSalarioMinimo . " "
-                    . "WHERE codigo_tipo_tiempo_fk = 1 "
-                    . "AND indefinido = 1 "
-                    . "AND vr_salario = " . $floSalarioMinimoAnterior;            
-            $objCon = $em->getConnection()->executeQuery($strDql);            
-
-            $strDql = "UPDATE rhu_contrato "
-                    . "SET vr_salario = " . $floSalarioMinimo . ", "
-                    . "vr_salario_pago = " . $floSalarioMinimo / 2 . " "
-                    . "WHERE codigo_tipo_tiempo_fk = 2 "
-                    . "AND indefinido = 1 "
-                    . "AND vr_salario = " . $floSalarioMinimoAnterior;            
-            $objCon = $em->getConnection()->executeQuery($strDql);            
-                        
-            $strDql = "UPDATE rhu_empleado "
-                    . "SET vr_salario = " . $floSalarioMinimo . " "
-                    . "WHERE vr_salario = " . $floSalarioMinimoAnterior;                       
-            $objCon = $em->getConnection()->executeQuery($strDql);
+            
+            
+            $arContratoMinimos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+            $arContratoMinimos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('estadoActivo' => 1, 'VrSalario' => $arConfiguracion->getVrSalario()));
+            foreach ($arContratoMinimos as $arContratoMinimo){
+                $arCambioSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
+                $arCambioSalario->setContratoRel($arContratoMinimo);
+                $arCambioSalario->setEmpleadoRel($arContratoMinimo->getEmpleadoRel());
+                $arCambioSalario->setFecha($dateFechaAplicacion);
+                $arCambioSalario->setVrSalarioAnterior($floSalarioMinimoAnterior);
+                $arCambioSalario->setVrSalarioNuevo($floSalarioMinimo);
+                $arCambioSalario->setDetalle('ACTUALIZACION SALARIO MINIMO');
+                $em->persist($arCambioSalario);
+                $arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                $arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContratoMinimo->getCodigoContratoPk());
+                $arContratoActualizar->setVrSalario($floSalarioMinimo);
+                if ($arContratoActualizar->getCodigoTipoTiempoFk() == 2){
+                    $arContratoActualizar->setVrSalarioPago($floSalarioMinimo / 2);
+                }
+                $em->persist($arContratoActualizar);
+                $arEmpleadoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleadoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContratoMinimo->getCodigoEmpleadoFk());
+                $arEmpleadoActualizar->setVrSalario($floSalarioMinimo);
+                $em->persist($arEmpleadoActualizar);
+            }
+            $arConfiguracion->setAnioActual($arConfiguracion->getAnioActual() + 1);
+            $arConfiguracion->setVrSalario($floSalarioMinimo);
+            $arConfiguracion->setVrAuxilioTransporte($floAuxilioTransporte);
+            $em->persist($arConfiguracion);
             $em->flush();            
             return $this->redirect($this->generateUrl('brs_rhu_proceso_cierre_anio'));
         }

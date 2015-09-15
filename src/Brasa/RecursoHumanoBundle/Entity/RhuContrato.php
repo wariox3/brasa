@@ -228,6 +228,21 @@ class RhuContrato
     protected $ssoAportesContratoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuCambioSalario", mappedBy="contratoRel")
+     */
+    protected $cambiosSalariosContratoRel;     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="contratoRel")
+     */
+    protected $vacacionesContratoRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVacacionDisfrute", mappedBy="contratoRel")
+     */
+    protected $vacacionesDisfrutesContratoRel;         
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1278,5 +1293,107 @@ class RhuContrato
     public function getSsoSubtipoCotizanteRel()
     {
         return $this->ssoSubtipoCotizanteRel;
+    }
+
+    /**
+     * Add cambiosSalariosContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario $cambiosSalariosContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addCambiosSalariosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario $cambiosSalariosContratoRel)
+    {
+        $this->cambiosSalariosContratoRel[] = $cambiosSalariosContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cambiosSalariosContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario $cambiosSalariosContratoRel
+     */
+    public function removeCambiosSalariosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario $cambiosSalariosContratoRel)
+    {
+        $this->cambiosSalariosContratoRel->removeElement($cambiosSalariosContratoRel);
+    }
+
+    /**
+     * Get cambiosSalariosContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCambiosSalariosContratoRel()
+    {
+        return $this->cambiosSalariosContratoRel;
+    }
+
+    /**
+     * Add vacacionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addVacacionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesContratoRel)
+    {
+        $this->vacacionesContratoRel[] = $vacacionesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesContratoRel
+     */
+    public function removeVacacionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesContratoRel)
+    {
+        $this->vacacionesContratoRel->removeElement($vacacionesContratoRel);
+    }
+
+    /**
+     * Get vacacionesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesContratoRel()
+    {
+        return $this->vacacionesContratoRel;
+    }
+
+    /**
+     * Add vacacionesDisfrutesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfrutesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addVacacionesDisfrutesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfrutesContratoRel)
+    {
+        $this->vacacionesDisfrutesContratoRel[] = $vacacionesDisfrutesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesDisfrutesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfrutesContratoRel
+     */
+    public function removeVacacionesDisfrutesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfrutesContratoRel)
+    {
+        $this->vacacionesDisfrutesContratoRel->removeElement($vacacionesDisfrutesContratoRel);
+    }
+
+    /**
+     * Get vacacionesDisfrutesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesDisfrutesContratoRel()
+    {
+        return $this->vacacionesDisfrutesContratoRel;
     }
 }

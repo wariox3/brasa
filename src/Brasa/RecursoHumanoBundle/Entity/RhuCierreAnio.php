@@ -25,7 +25,12 @@ class RhuCierreAnio
     /**
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
-    private $estadoCerrado = 0;    
+    private $estadoCerrado = 0; 
+    
+    /**
+     * @ORM\Column(name="fecha_aplicacion", type="date")
+     */    
+    private $fechaAplicacion;
     
 
     /**
@@ -84,5 +89,29 @@ class RhuCierreAnio
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Set fechaAplicacion
+     *
+     * @param \DateTime $fechaAplicacion
+     *
+     * @return RhuCierreAnio
+     */
+    public function setFechaAplicacion($fechaAplicacion)
+    {
+        $this->fechaAplicacion = $fechaAplicacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaAplicacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaAplicacion()
+    {
+        return $this->fechaAplicacion;
     }
 }

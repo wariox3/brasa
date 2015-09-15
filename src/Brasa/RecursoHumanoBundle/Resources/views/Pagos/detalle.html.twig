@@ -8,7 +8,7 @@
 </script>
 <div class="container">
     <div class="page-header">
-        <h3>Pago {{ arPago.codigoPagoPk }}</h3>
+        <h3>Pago</h3>
     </div>
 
     <!-- Encabezado Movimiento -->
@@ -29,8 +29,8 @@
                 <tr>
                     <td class="titulo">EMPLEADO:</td>
                     <td class="td-in-well">{{ arPago.empleadoRel.numeroIdentificacion }} - {{ arPago.empleadoRel.nombreCorto }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">TIPO:</td>
+                    <td class="td-in-well">{{ arPago.pagoTipoRel.nombre }}</td>
                     <td class="titulo">IBC:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.VrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
                     <td class="titulo">TOTAL DEVENGADO:</td>

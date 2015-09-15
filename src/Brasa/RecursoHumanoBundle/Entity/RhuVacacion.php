@@ -23,6 +23,11 @@ class RhuVacacion
     private $codigoEmpleadoFk;    
     
     /**
+     * @ORM\Column(name="codigo_contrato_fk", type="integer", nullable=false)
+     */    
+    private $codigoContratoFk;    
+    
+    /**
      * @ORM\Column(name="fecha", type="date")
      */    
     private $fecha;    
@@ -83,6 +88,21 @@ class RhuVacacion
     private $codigoCentroCostoFk;   
     
     /**
+     * @ORM\Column(name="vr_salario_actual", type="float")
+     */
+    private $vrSalarioActual = 0;     
+
+    /**
+     * @ORM\Column(name="vr_salario_promedio", type="float")
+     */
+    private $vrSalarioPromedio = 0;         
+
+    /**
+     * @ORM\Column(name="vr_vacacion_bruto", type="float")
+     */
+    private $vrVacacionBruto = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="vacacionesCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -93,6 +113,12 @@ class RhuVacacion
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;        
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="vacacionesContratoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
+     */
+    protected $contratoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="vacacionRel")
@@ -533,5 +559,125 @@ class RhuVacacion
     public function getVacacionesCreditosVacacionRel()
     {
         return $this->VacacionesCreditosVacacionRel;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuVacacion
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuVacacion
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
+    }
+
+    /**
+     * Set vrSalarioActual
+     *
+     * @param float $vrSalarioActual
+     *
+     * @return RhuVacacion
+     */
+    public function setVrSalarioActual($vrSalarioActual)
+    {
+        $this->vrSalarioActual = $vrSalarioActual;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioActual
+     *
+     * @return float
+     */
+    public function getVrSalarioActual()
+    {
+        return $this->vrSalarioActual;
+    }
+
+    /**
+     * Set vrSalarioPromedio
+     *
+     * @param float $vrSalarioPromedio
+     *
+     * @return RhuVacacion
+     */
+    public function setVrSalarioPromedio($vrSalarioPromedio)
+    {
+        $this->vrSalarioPromedio = $vrSalarioPromedio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedio
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedio()
+    {
+        return $this->vrSalarioPromedio;
+    }
+
+    /**
+     * Set vrVacacionBruto
+     *
+     * @param float $vrVacacionBruto
+     *
+     * @return RhuVacacion
+     */
+    public function setVrVacacionBruto($vrVacacionBruto)
+    {
+        $this->vrVacacionBruto = $vrVacacionBruto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrVacacionBruto
+     *
+     * @return float
+     */
+    public function getVrVacacionBruto()
+    {
+        return $this->vrVacacionBruto;
     }
 }

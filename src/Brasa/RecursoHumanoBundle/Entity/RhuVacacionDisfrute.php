@@ -21,6 +21,11 @@ class RhuVacacionDisfrute
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
     private $codigoEmpleadoFk;    
+
+    /**
+     * @ORM\Column(name="codigo_contrato_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoFk;     
     
     /**
      * @ORM\Column(name="fecha", type="date")
@@ -64,6 +69,11 @@ class RhuVacacionDisfrute
      */
     protected $empleadoRel;        
     
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="vacacionesDisfrutesContratoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
+     */
+    protected $contratoRel;    
 
 
     /**
@@ -290,5 +300,53 @@ class RhuVacacionDisfrute
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuVacacionDisfrute
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuVacacionDisfrute
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
     }
 }

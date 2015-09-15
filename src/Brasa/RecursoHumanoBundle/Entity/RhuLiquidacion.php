@@ -187,6 +187,11 @@ class RhuLiquidacion
      */
     private $VrDeducciones = 0;     
     
+    /**     
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */    
+    private $estadoAutorizado = 0;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -1150,5 +1155,29 @@ class RhuLiquidacion
     public function getVrDeduccionPrima()
     {
         return $this->VrDeduccionPrima;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 }

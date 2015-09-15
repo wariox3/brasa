@@ -481,6 +481,10 @@ class RhuEmpleado
      */
     protected $facturasDetallesEmpleadoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCambioSalario", mappedBy="empleadoRel")
+     */
+    protected $cambiosSalariosEmpleadoRel;    
     
     /**
      * Constructor
@@ -2770,5 +2774,39 @@ class RhuEmpleado
     public function getFacturasDetallesEmpleadoRel()
     {
         return $this->facturasDetallesEmpleadoRel;
+    }
+
+    /**
+     * Add cambiosSalariosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario $cambiosSalariosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addCambiosSalariosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario $cambiosSalariosEmpleadoRel)
+    {
+        $this->cambiosSalariosEmpleadoRel[] = $cambiosSalariosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cambiosSalariosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario $cambiosSalariosEmpleadoRel
+     */
+    public function removeCambiosSalariosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario $cambiosSalariosEmpleadoRel)
+    {
+        $this->cambiosSalariosEmpleadoRel->removeElement($cambiosSalariosEmpleadoRel);
+    }
+
+    /**
+     * Get cambiosSalariosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCambiosSalariosEmpleadoRel()
+    {
+        return $this->cambiosSalariosEmpleadoRel;
     }
 }

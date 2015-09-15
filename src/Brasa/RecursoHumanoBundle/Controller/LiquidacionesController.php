@@ -35,10 +35,11 @@ class LiquidacionesController extends Controller
     
     public function detalleAction($codigoLiquidacion) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $mensaje = 0;
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $request = $this->getRequest();        
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->add('BtnAutorizar', 'submit', array('label'  => 'Autorizar',))
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
             ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
             ->getForm();
@@ -50,9 +51,19 @@ class LiquidacionesController extends Controller
                 $objFormatoLiquidacion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoLiquidacion();
                 $objFormatoLiquidacion->Generar($this, $codigoLiquidacion);
             }
+            if($form->get('BtnAutorizar')->isClicked()) {
+                $arLiquidacion->setEstadoAutorizado(1);
+                $em->persist($arLiquidacion);
+                $em->flush();
+            }
             if($form->get('BtnLiquidar')->isClicked()) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
-                return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
+                if($arLiquidacion->getEstadoAutorizado() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
+                    return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
+                } else {
+                    $objMensaje->Mensaje("error", "No puede reliquidar una liquidacion autorizada", $this);
+                }
+
             }            
             if($form->get('BtnEliminarDeduccion')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');

@@ -36,6 +36,7 @@ class ContratosController extends Controller
     
     public function detalleAction($codigoContrato) {
         $em = $this->getDoctrine()->getManager();
+        $paginator  = $this->get('knp_paginator');
         $request = $this->getRequest();
         $mensaje = 0;
         $form = $this->createFormBuilder()
@@ -69,8 +70,20 @@ class ContratosController extends Controller
                 
             }
         }
+        $arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
+        $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->findBy(array('codigoContratoFk' => $codigoContrato));
+        $arCambiosSalario = $paginator->paginate($arCambiosSalario, $this->get('request')->query->get('page', 1),5);
+        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('codigoContratoFk' => $codigoContrato));        
+        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);        
+        $arVacacionesDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
+        $arVacacionesDisfrute = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->findBy(array('codigoContratoFk' => $codigoContrato));        
+        $arVacacionesDisfrute = $paginator->paginate($arVacacionesDisfrute, $this->get('request')->query->get('page', 1),5);        
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:detalle.html.twig', array(
                     'arContrato' => $arContrato,
+                    'arCambiosSalario' => $arCambiosSalario,
+                    'arVacaciones' => $arVacaciones,
+                    'arVacacionesDisfrute' => $arVacacionesDisfrute,
                     'form' => $form->createView()
                     ));
     }    
@@ -206,7 +219,13 @@ class ContratosController extends Controller
                     $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
                     $arLiquidacion->setEmpleadoRel($arContrato->getEmpleadoRel());
                     $arLiquidacion->setContratoRel($arContrato);
-                    $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
+                    if($arContrato->getFechaUltimoPagoCesantias() > $arContrato->getFechaDesde()) {
+                        $arLiquidacion->setFechaDesde($arContrato->getFechaUltimoPagoCesantias());
+                    } else {
+                        $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
+                    }
+                    
+                    
                     $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
                     $arLiquidacion->setLiquidarCesantias(1);
                     $arLiquidacion->setLiquidarPrima(1);
