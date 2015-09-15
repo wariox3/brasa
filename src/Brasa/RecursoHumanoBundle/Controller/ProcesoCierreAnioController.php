@@ -69,6 +69,7 @@ class ProcesoCierreAnioController extends Controller
                 $arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                 $arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContratoMinimo->getCodigoContratoPk());
                 $arContratoActualizar->setVrSalario($floSalarioMinimo);
+                $arContratoActualizar->setVrSalarioPago($floSalarioMinimo);
                 if ($arContratoActualizar->getCodigoTipoTiempoFk() == 2){
                     $arContratoActualizar->setVrSalarioPago($floSalarioMinimo / 2);
                 }
