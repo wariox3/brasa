@@ -93,7 +93,7 @@ class RhuSsoAporte
     private $primerNombre;     
 
     /**
-     * @ORM\Column(name="segundo_nombre", type="string", length=30)
+     * @ORM\Column(name="segundo_nombre", type="string", length=30, nullable=true)
      */
     private $segundoNombre;    
     
@@ -103,7 +103,7 @@ class RhuSsoAporte
     private $primerApellido;
 
     /**
-     * @ORM\Column(name="segundo_apellido", type="string", length=30)
+     * @ORM\Column(name="segundo_apellido", type="string", length=30, nullable=true)
      */
     private $segundoApellido;    
     
