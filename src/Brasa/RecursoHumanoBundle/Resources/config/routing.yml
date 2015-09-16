@@ -300,7 +300,11 @@ brs_rhu_contratos_nuevo:
 
 brs_rhu_contratos_terminar:
     path:     /rhu/contratos/terminar/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:terminar }        
+    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:terminar }
+    
+brs_rhu_cambio_salario_nuevo:
+    path:     /rhu/cambiosalario/nuevo/{codigoContrato}/{codigoCambioSalario}
+    defaults: { _controller: BrasaRecursoHumanoBundle:CambioSalario:nuevo }    
     
 brs_rhu_facturas_lista:
     path:     /rhu/facturas/lista
@@ -545,3 +549,4 @@ brs_rhu_proceso_cierre_anio_cerrar:
 brs_rhu_proceso_contabilizar_pago:
     path:     /rhu/proceso/contabilizar/pago
     defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPago:lista }     
+    

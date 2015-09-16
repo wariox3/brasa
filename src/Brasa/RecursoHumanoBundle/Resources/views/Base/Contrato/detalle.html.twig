@@ -111,7 +111,11 @@
                         </tr>
                     {% endfor %}
                 </table>
-
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoCambioSalario': 0 }) }}', 'AgregarCambioSalario', 600, 900)" >Nuevo</a>
+                    </div>
+                </div>        
                 <div class="btn-toolbar" style="float: left">
                     {{ knp_pagination_render(arCambiosSalario) }}
                 </div>

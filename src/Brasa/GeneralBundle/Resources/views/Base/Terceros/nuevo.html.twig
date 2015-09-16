@@ -1,220 +1,182 @@
-<script>
-    $('#myModal').modal('toggle');
-</script>
-<form class="well" id="FrmNuevo" action="{{path('maestros_general_terceros_nuevo', { 'codigoTerceroPk':  codigoTerceroPk})}}" method="post" >
-    <div class="modal hide" id="myModal">
+{% extends '::base.html.twig' %}
 
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-            <h3>{%if arTercero is not null%}Editar{%else%}Crear Tercero{%endif%}</h3>
-        </div>
-
-        <div class="modal-body">
-            <div class="well">
-
-                <div class="tabbable"> <!-- Only required for left/right tabs -->
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab1" data-toggle="tab">General</a></li>
-                        <li><a href="#tab2" data-toggle="tab">Impuestos</a></li>
-                        <li><a href="#tab3" data-toggle="tab">Comercial</a></li>
-                        <li><a href="#tab4" data-toggle="tab">Cliente</a></li>
-                        <li><a href="#tab5" data-toggle="tab">Proveedor</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab1">
-                            <table>
-
-                                <tr>
-                                    <td><strong>Identificación:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtCodigoTercero" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.codigoTerceroPk}}" readonly="true" {% endif %} onkeypress="return validarNumeros(event)" width="200px" placeholder="NIT Cliente" required autofocus/></td>
-                                <tr>
-
-                                <tr>
-                                    <td><strong>Nombre Corto:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtNombreCorto"  {% if arTercero is defined and arTercero is not null %} value="{{arTercero.nombreCortoTercero}}" {% endif %}  placeholder="Nombre Corto" width="300px"></input></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Nombres</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtNombres" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.nombres}}" {% endif %}   placeholder="Nombres" width="300px"></input></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Apellido 1:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtApellido1" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.apellido1}}" {% endif %} placeholder="Primer Apellido" width="300px"></input></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Apellido 2:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtApellido2" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.apellido2}}" {% endif %} placeholder="Segundo Apellido" width="300px"></input></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Dirección:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtDireccion" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.direccion}}" {% endif %} placeholder="Dirección" width="300px"></input></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Teléfono:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtTelefono" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.telefono}}" {% endif %} placeholder="Teléfono" width="300px"></input></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Celular:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtCelular" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.celular}}" {% endif %} placeholder="Celular" width="300px"></input></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Fax:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtFax" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.fax}}" {% endif %} placeholder="Fax" width="300px"></input></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Email:</strong><br/></td>
-                                    <td><input type="email" class="span4" name="TxtEmail" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.email}}" {% endif %} placeholder="Email" width="300px"></input></td>
-                                </tr>
-
-                            </table>
-                        </div>
-
-                        <div class="tab-pane" id="tab2">
-                            <table>
-                                <tr>
-                                    <td><strong>Retefuente:</strong><br/></td>
-                                    <td><input type="checkbox" {% if arTercero is defined and arTercero is not null and arTercero.retencionFuenteVentas == 1 %} checked="true" {% endif %} name="ChkRetefteVentas"/></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Autoretenedor:</strong><br/></td>
-                                    <td><input type="checkbox" {% if arTercero is defined and arTercero is not null and arTercero.autoretenedor == 1%} checked="true" {% endif %} name="ChkAutoretenedor"/></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Retefuente Sin Base(ventas):</strong><br/></td>
-                                    <td><input type="checkbox" {% if arTercero is defined and arTercero is not null and arTercero.retencionFuenteVentasSinBase == 1%}  checked="true" {% endif %} name="ChkRetefteSinBaseVentas"/></td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Clasificación Tributaria:</strong><br/></td>
-                                    <td>
-                                        <select name="CboClasificacionTributaria" required>
-                                            <option value="">Seleccione</option>
-                                            {% for clasificacionTributaria in arClasificacionesTributarias %}
-                                                    <option value="{{clasificacionTributaria.codigoClasificacionTributariaPk}}" {%if arTercero.codigoClasificacionTributariaFk is defined %} {%if clasificacionTributaria.codigoClasificacionTributariaPk == arTercero.codigoClasificacionTributariaFk %} selected {%endif%} {%endif%}>{{clasificacionTributaria.nombreClasificacionTributaria}}</option>
-                                            {%endfor%}
-                                        </select>
-                                    </td>
-                                </tr>                              
-                                <tr>
-                                    <td><strong>Codigo Actividad Economica(DIAN):</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtCodigoActividadEconomica" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.codigoActividadEconomica}}" {% endif %} placeholder="codigo (DIAN)" width="300px"></input></td>
-                                </tr>                                
-                                <tr>
-                                    <td><strong>Porcentaje CREE:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtPorcentajeCREE" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.porcentajeCREE}}" {% endif %} placeholder="Porcentaje CREE" width="300px"></input></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="tab-pane" id="tab3">
-                            <table>
-                                <tr>
-                                    <td><strong>Asesor:</strong><br/></td>
-                                    <td>
-                                        <select name="CboAsesores" required>
-                                            <option value="">Seleccione</option>
-                                            {% for asesor in arAsesores %}
-                                                    <option value="{{asesor.codigoAsesorPk}}" {%if arTercero.codigoAsesorFk is defined %} {%if asesor.codigoAsesorPk == arTercero.codigoAsesorFk %} selected {%endif%} {%endif%}>{{asesor.nombre}}</option>
-                                            {%endfor%}
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>   
-                        <div class="tab-pane" id="tab4">
-                            <table>
-                                <tr>
-                                    <td><strong>Lista Precios:</strong><br/></td>
-                                    <td>
-                                        <select name="CboListaPrecios" required>
-                                            <option value="">Seleccione</option>
-                                            {% for listaPrecios in arListasPrecios %}
-                                                    <option value="{{listaPrecios.codigoListaPreciosPk}}" {%if arTercero.codigoListaPrecioFk is defined %} {%if listaPrecios.codigoListaPreciosPk == arTercero.codigoListaPrecioFk %} selected {%endif%} {%endif%}>{{listaPrecios.nombre}}</option>
-                                            {%endfor%}
-                                        </select>
-                                    </td>
-                                </tr>                                
-                                <tr>
-                                    <td><strong>Forma Pago:</strong><br/></td>
-                                    <td>
-                                        <select name="CboFormasPagoCliente" required>
-                                            <option value="">Seleccione</option>
-                                            {% for formasPago in arFormasPago %}
-                                                    <option value="{{formasPago.codigoFormaPagoPk}}" {%if arTercero.codigoFormaPagoClienteFk is defined %} {%if formasPago.codigoFormaPagoPk == arTercero.codigoFormaPagoClienteFk %} selected {%endif%} {%endif%}>{{formasPago.nombreFormaPago}}</option>
-                                            {%endfor%}
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Plazo Pago:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtPlazoPagoCliente" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.plazoPagoCliente}}" {% endif %} placeholder="Plazo pago cliente" width="300px"></input></td>
-                                </tr>   
-                                <tr>
-                                    <td><strong>Contacto:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtContactoCliente" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.contactoCliente}}" {% endif %} placeholder="Contacto cliente" width="300px"></input></td>
-                                </tr>                                
-                                <tr>
-                                    <td><strong>Celular contacto:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtCelularContactoCliente" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.celularContactoCliente}}" {% endif %} placeholder="Celular contacto cliente" width="300px"></input></td>
-                                </tr>                                                                
-                            </table>
-                        </div> 
-                        <div class="tab-pane" id="tab5">
-                            <table>
-                                <tr>
-                                    <td><strong>Lista Costos:</strong><br/></td>
-                                    <td>
-                                        <select name="CboListaCostos" required>
-                                            <option value="">Seleccione</option>
-                                            {% for listaCostos in arListasCostos %}
-                                                    <option value="{{listaCostos.codigoListaCostosPk}}" {%if arTercero.codigoListaCostoFk is defined %} {%if listaCostos.codigoListaCostosPk == arTercero.codigoListaCostoFk %} selected {%endif%} {%endif%}>{{listaCostos.nombre}}</option>
-                                            {%endfor%}
-                                        </select>
-                                    </td>
-                                </tr>                                
-                                <tr>
-                                    <td><strong>Forma Pago:</strong><br/></td>
-                                    <td>
-                                        <select name="CboFormasPagoProveedor" required>
-                                            <option value="">Seleccione</option>
-                                            {% for formasPago in arFormasPago %}
-                                                    <option value="{{formasPago.codigoFormaPagoPk}}" {%if arTercero.codigoFormaPagoProveedorFk is defined %} {%if formasPago.codigoFormaPagoPk == arTercero.codigoFormaPagoProveedorFk %} selected {%endif%} {%endif%}>{{formasPago.nombreFormaPago}}</option>
-                                            {%endfor%}
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Plazo Pago:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtPlazoPagoProveedor" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.plazoPagoProveedor}}" {% endif %} placeholder="Plazo pago proveedor" width="300px"></input></td>
-                                </tr>                                
-                                <tr>
-                                    <td><strong>Contacto:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtContactoProveedor" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.contactoProveedor}}" {% endif %} placeholder="Contacto proveedor" width="300px"></input></td>
-                                </tr>                                
-                                <tr>
-                                    <td><strong>Celular contacto:</strong><br/></td>
-                                    <td><input type="text" class="span4" name="TxtCelularContactoProveedor" {% if arTercero is defined and arTercero is not null %} value="{{arTercero.celularContactoProveedor}}" {% endif %} placeholder="Celular contacto proveedor" width="300px"></input></td>
-                                </tr>                                
-                            </table>
-                        </div>                             
-                    </div>
+{% block content %}
+<div class="container">    
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    {{ form_errors(form) }}
+    <h3>Nuevo tercero</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">Información general</div>
+        <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Nit:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.nit, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
             </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Digito verificación:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.digitoVerificacion, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Nombre:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.nombreCorto, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Clasificación tributaria:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.clasificacionTributariaRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Forma pago cliente:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.formaPagoClienteRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Forma pago proveedor:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.formaPagoProveedorRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Actividad económica:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.codigoActividadEconomica, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>        
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Nombres:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.nombres, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Primer apellido:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.apellido1, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Segundo apellido:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.apellido2, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Asesor:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.asesorRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Negocio transporte:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.negociacionRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Plazo cliente:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.plazoPagoCliente, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Plazo proveedor:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.plazoPagoProveedor, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Dirección:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.direccion, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Teléfono:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.telefono, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Celular:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.celular, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Fax:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.fax, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Email:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.email, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Retención fuente ventas:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.retencionFuenteVentas, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Retención fuente ventas sin base:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.retencionFuenteVentasSinBase, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Porcentaje cree:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.porcentajeCREE, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Autoretenedor:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.autoretenedor, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Contacto cliente:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.contactoCliente, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Celular contacto cliente:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.celularContactoCliente, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Contacto proveedor:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.contactoProveedor, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Celular contacto proveedor:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.celularContactoProveedor, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+                
         </div>
-
-        <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
-            <button id="link_guardar" class="btn btn-primary" type="submit" name="OpSubmit" value="OpGuardar">Guardar</button>
-        </div>
-
-</div>
-</form>
+    </div>
+    <div class="modal-footer">
+            <a class="btn btn-default btn-sm" href="{{ path('brs_gen_base_terceros') }}">Cancelar</a>
+            {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+    </div>
+    {{ form_end(form) }}
+</div>    
+{% endblock %}

@@ -195,7 +195,12 @@ class RhuLiquidacion
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;     
+    private $estadoAutorizado = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_generado", type="boolean")
+     */    
+    private $estadoGenerado = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
@@ -1208,5 +1213,29 @@ class RhuLiquidacion
     public function getVrSalarioVacaciones()
     {
         return $this->VrSalarioVacaciones;
+    }
+
+    /**
+     * Set estadoGenerado
+     *
+     * @param boolean $estadoGenerado
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEstadoGenerado($estadoGenerado)
+    {
+        $this->estadoGenerado = $estadoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoGenerado()
+    {
+        return $this->estadoGenerado;
     }
 }

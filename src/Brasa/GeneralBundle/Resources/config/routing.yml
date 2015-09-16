@@ -6,6 +6,10 @@ brs_gen_base_terceros:
     path:     /general/base/terceros
     defaults: { _controller: BrasaGeneralBundle:BaseTerceros:lista }
     
+brs_gen_base_terceros_nuevo:
+    path:     /general/base/terceros/nuevo/{codigoTercero}
+    defaults: { _controller: BrasaGeneralBundle:BaseTerceros:nuevo }    
+    
 #Utilidades    
 brs_gen_buscar_tercero:
     pattern:  /general/buscar/tercero/{campoCodigo}/{campoNombre}/

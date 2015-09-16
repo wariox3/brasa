@@ -61,6 +61,7 @@ class IncapacidadesController extends Controller
     public function nuevoAction($codigoCentroCosto, $codigoEmpleado, $codigoIncapacidad = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         if($codigoEmpleado != 0) {            
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
@@ -81,6 +82,7 @@ class IncapacidadesController extends Controller
                     
         $form->handleRequest($request);
         if ($form->isValid()) {
+            
             $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
             $arrControles = $request->request->All();
@@ -118,13 +120,18 @@ class IncapacidadesController extends Controller
             }     
             $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
             $arIncapacidad->setVrSaldo($floVrIncapacidad);
-            $em->persist($arIncapacidad);
-            $em->flush();                        
-            if($form->get('guardarnuevo')->isClicked()) {                
-                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_incapacidad', array('codigoCentroCosto' => $codigoCentroCosto)));
+            if ($arIncapacidad->getFechaDesde() > $arIncapacidad->getFechaHasta()){
+                $objMensaje->Mensaje("error", "La fecha desde no puede ser mayor a la fecha hasta!", $this);
             } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }    
+                $em->persist($arIncapacidad);
+                $em->flush();
+            
+                if($form->get('guardarnuevo')->isClicked()) {                
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_incapacidad', array('codigoCentroCosto' => $codigoCentroCosto)));
+                } else {
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }
+            }
             
         }                
 
