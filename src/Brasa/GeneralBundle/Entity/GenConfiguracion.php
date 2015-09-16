@@ -66,7 +66,7 @@ class GenConfiguracion
     /**
      * @ORM\Column(name="nit_empresa", type="string", length=20, nullable=true)
      */      
-    private $nit; 
+    private $nitEmpresa; 
     
     /**
      * @ORM\Column(name="digito_verificacion_empresa", type="string", length=2, nullable=true)
@@ -327,27 +327,27 @@ class GenConfiguracion
     }
 
     /**
-     * Set nit
+     * Set nitEmpresa
      *
-     * @param string $nit
+     * @param string $nitEmpresa
      *
      * @return GenConfiguracion
      */
-    public function setNit($nit)
+    public function setNitEmpresa($nitEmpresa)
     {
-        $this->nit = $nit;
+        $this->nitEmpresa = $nitEmpresa;
 
         return $this;
     }
 
     /**
-     * Get nit
+     * Get nitEmpresa
      *
      * @return string
      */
-    public function getNit()
+    public function getNitEmpresa()
     {
-        return $this->nit;
+        return $this->nitEmpresa;
     }
 
     /**
