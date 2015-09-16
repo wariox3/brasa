@@ -146,6 +146,11 @@ class RhuLiquidacion
      * @ORM\Column(name="vr_salario", type="float")
      */
     private $VrSalario = 0;     
+
+    /**
+     * @ORM\Column(name="vr_salario_vacaciones", type="float")
+     */
+    private $VrSalarioVacaciones = 0;     
     
     /**
      * @ORM\Column(name="vr_total", type="float")
@@ -1179,5 +1184,29 @@ class RhuLiquidacion
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set vrSalarioVacaciones
+     *
+     * @param float $vrSalarioVacaciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioVacaciones($vrSalarioVacaciones)
+    {
+        $this->VrSalarioVacaciones = $vrSalarioVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioVacaciones
+     *
+     * @return float
+     */
+    public function getVrSalarioVacaciones()
+    {
+        return $this->VrSalarioVacaciones;
     }
 }

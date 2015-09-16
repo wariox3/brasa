@@ -94,6 +94,10 @@ class RhuLiquidacionRepository extends EntityRepository {
             $intDiasPrima = 0;
             if($dateFechaDesde < $dateFechaHasta) {
                 $intDiasPrima = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
+                if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
+                    $intDiasPrima = $intDiasPrima - 1;
+                }
+                
                 $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
                 $arLiquidacion->setDiasPrimas($intDiasPrima);
                 $arLiquidacion->setVrPrima($douPrima);            
@@ -109,8 +113,28 @@ class RhuLiquidacionRepository extends EntityRepository {
 
         if($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones() < $arLiquidacion->getFechaHasta()) {
             if($arLiquidacion->getLiquidarVacaciones() == 1) {
-                $intDiasVacaciones = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones(), $arLiquidacion->getContratoRel()->getFechaHasta());
-                $douVacaciones = ($douSalario * $intDiasVacaciones) / 720;
+                $floSalarioPromedio = 0;    
+                $fecha = $arLiquidacion->getFechaHasta()->format('Y-m-d');
+                $nuevafecha = strtotime ( '-90 day' , strtotime ( $fecha ) ) ;
+                $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
+                $fechaDesdeCambioSalario = date_create_from_format('Y-m-d H:i', $nuevafecha . " 00:00"); 
+                
+                $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arLiquidacion->getContratoRel()->getCodigoContratoPk(), $fechaDesdeCambioSalario->format('Y-m-d'), $arLiquidacion->getFechaHasta()->format('Y-m-d'));                 
+                if(count($arCambiosSalario) > 0) {
+                    $floPrimerSalario = $arCambiosSalario[0]->getVrSalarioAnterior();
+                    $intNumeroRegistros = count($arCambiosSalario) + 1;
+                    $floSumaSalarios = 0;
+                    foreach ($arCambiosSalario as $arCambioSalario) {
+                        $floSumaSalarios += $arCambioSalario->getVrSalarioNuevo();
+                    }
+                    $floSalarioPromedio = round((($floSumaSalarios + $floPrimerSalario) / $intNumeroRegistros));
+
+                } else {
+                    $floSalarioPromedio = $douSalario;
+                }                
+                $intDiasVacaciones = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones(), $arLiquidacion->getContratoRel()->getFechaHasta());                                
+                $douVacaciones = ($floSalarioPromedio * $intDiasVacaciones) / 720;
+                $arLiquidacion->setVrSalarioVacaciones($floSalarioPromedio);
                 $arLiquidacion->setDiasVacaciones($intDiasVacaciones);
                 $arLiquidacion->setVrVacaciones($douVacaciones);
                 $arLiquidacion->setFechaUltimoPagoVacaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones());
