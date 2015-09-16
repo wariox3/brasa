@@ -11,12 +11,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuLiquidacionRepository extends EntityRepository {
     
-    public function listaDql($strIdentificacion = "") {        
+    public function listaDql($strIdentificacion = "", $boolEstadoGenerado = "") {        
         $dql   = "SELECT l, e FROM BrasaRecursoHumanoBundle:RhuLiquidacion l JOIN l.empleadoRel e WHERE l.codigoLiquidacionPk <> 0";
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
-
+        if($boolEstadoGenerado == 1 ) {
+            $dql .= " AND l.estadoGenerado = 1";
+        } elseif($boolEstadoGenerado == 0) {
+            $dql .= " AND l.estadoGenerado = 0";
+        }
         $dql .= " ORDER BY l.codigoLiquidacionPk";
         return $dql;
     }  
@@ -38,6 +42,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $douIBCAdicional = ($arLiquidacion->getContratoRel()->getVrSalarioPago()/30) * $diasAdicionales;
                 $arLiquidacion->setVrIngresoBaseCotizacionAdicional($douIBCAdicional);                
                 $arLiquidacion->setDiasAdicionalesIBC($diasAdicionales);
+                $arLiquidacion->setEstadoGenerado(1);
             }
         }
         if($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias() > $arLiquidacion->getContratoRel()->getFechaDesde()) {

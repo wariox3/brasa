@@ -134,13 +134,15 @@ class LiquidacionesController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();                
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->listaDql(                
-               $session->get('filtroIdentificacion'));  
+               $session->get('filtroIdentificacion'),
+               $session->get('filtroGenerado')); 
     }     
     
     private function formularioLista() {
         $session = $this->getRequest()->getSession();        
         $form = $this->createFormBuilder()                        
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+            ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroGenerado')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',)) 
             ->getForm();        
@@ -150,8 +152,9 @@ class LiquidacionesController extends Controller
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
-        $controles = $request->request->get('form');        
+        $controles = $request->request->get('form');
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroGenerado', $controles['estadoGenerado']);
     }    
     
     private function generarExcel() {

@@ -70,7 +70,12 @@ class RhuContrato
     /**
      * @ORM\Column(name="cargo_descripcion", type="string", length=60, nullable=true)
      */    
-    private $cargoDescripcion;    
+    private $cargoDescripcion;
+    
+    /**
+     * @ORM\Column(name="horario_trabajo", type="string", length=100, nullable=true)
+     */    
+    private $horarioTrabajo;
     
     /**
      * @ORM\Column(name="vr_salario", type="float")
@@ -1395,5 +1400,29 @@ class RhuContrato
     public function getVacacionesDisfrutesContratoRel()
     {
         return $this->vacacionesDisfrutesContratoRel;
+    }
+
+    /**
+     * Set horarioTrabajo
+     *
+     * @param string $horarioTrabajo
+     *
+     * @return RhuContrato
+     */
+    public function setHorarioTrabajo($horarioTrabajo)
+    {
+        $this->horarioTrabajo = $horarioTrabajo;
+
+        return $this;
+    }
+
+    /**
+     * Get horarioTrabajo
+     *
+     * @return string
+     */
+    public function getHorarioTrabajo()
+    {
+        return $this->horarioTrabajo;
     }
 }
