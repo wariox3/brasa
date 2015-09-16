@@ -15,8 +15,40 @@ class ProcesoContabilizarPagoController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
-        if($form->isValid()) {
-
+        if($form->isValid()) {            
+            if ($form->get('BtnContabilizar')->isClicked()) {    
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    $arComprobanteContable = new \Brasa\ContabilidadBundle\Entity\CtbComprobanteContable();                    
+                    $arComprobanteContable =$em->getRepository('BrasaContabilidadBundle:CtbComprobanteContable')->find(8);
+                    $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();                    
+                    $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(1);                           
+                    foreach ($arrSeleccionados AS $codigo) {             
+                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigo);
+                        $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                        $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigo));
+                        foreach ($arPagoDetalles as $arPagoDetalle) {
+                            $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->find($arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk());                            
+                            $arRegistro->setComprobanteContableRel($arComprobanteContable);
+                            $arRegistro->setCentroCostosRel($arCentroCosto);
+                            $arRegistro->setCuentaRel($arCuenta);
+                            $arRegistro->setNumero($arPago->getNumero());
+                            $arRegistro->setFecha($arPago->getFechaDesde());
+                            if($arPagoDetalle->getPagoConceptoRel()->getTipoCuenta() == 1) {
+                                $arRegistro->setDebito($arPagoDetalle->getVrPago());
+                            } else {
+                                $arRegistro->setCredito($arPagoDetalle->getVrPago());
+                            }
+                            $em->persist($arRegistro);
+                            //echo $arPagoDetalle->getCodigoPagoDetallePk() . "[" . $arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk() . "]" . "<br/>";
+                        }
+                        
+                    }
+                    $em->flush();
+                }
+            }            
         }       
                 
         $arPagos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               

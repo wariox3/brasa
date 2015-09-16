@@ -87,7 +87,17 @@ class RhuPagoConcepto
      */
     protected $pagosAdicionalesSubtiposPagoConceptoRel;     
     
+    /**
+     * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20)
+     */     
+    private $codigoCuentaFk;     
 
+    /**
+     * @ORM\Column(name="tipoCuenta", type="bigint")
+     */     
+    private $tipoCuenta = 1;
+    
+    
     /**
      * Constructor
      */
@@ -483,5 +493,53 @@ class RhuPagoConcepto
     public function getPagosAdicionalesSubtiposPagoConceptoRel()
     {
         return $this->pagosAdicionalesSubtiposPagoConceptoRel;
+    }
+
+    /**
+     * Set codigoCuentaFk
+     *
+     * @param string $codigoCuentaFk
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setCodigoCuentaFk($codigoCuentaFk)
+    {
+        $this->codigoCuentaFk = $codigoCuentaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaFk()
+    {
+        return $this->codigoCuentaFk;
+    }
+
+    /**
+     * Set tipoCuenta
+     *
+     * @param integer $tipoCuenta
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setTipoCuenta($tipoCuenta)
+    {
+        $this->tipoCuenta = $tipoCuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuenta
+     *
+     * @return integer
+     */
+    public function getTipoCuenta()
+    {
+        return $this->tipoCuenta;
     }
 }
