@@ -31,6 +31,7 @@ class RhuCentroCostoRepository extends EntityRepository {
                     $intDias = $intDias - 1;
                     $dateDesde = date("Y/m/d", strtotime("$dateDesde +1 day"));
                     $dateHasta = date("Y/m/d", strtotime("$dateDesde +$intDias day"));
+                    $dateHastaReal = $dateHasta;
                 } else {
                     //Para procesar el mes de febrero
                     $intDiasInhabilesFebrero = 0;
@@ -57,20 +58,33 @@ class RhuCentroCostoRepository extends EntityRepository {
                     }
                     $strMesDesde = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y/m');
                     $strMesHasta = date("Y/m", strtotime("$dateDesde +$intDias day"));
+                    $strMes = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('m');
+                    $strAnio = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y');
+                    $strUltimoDia = date("d",(mktime(0,0,0,$strMes+1,1,$strAnio)-1));
+                    
                     if($strMesDesde != $strMesHasta) {
                         $dateDesde = $strMesHasta . "/01";
                         $intDias = $intDias - 1;
                         $dateHasta = date("Y/m/d", strtotime("$dateDesde +$intDias day"));
+                        $dateHastaReal = $dateHasta;
                     } else {
                         $intDias = $intDias - 1;
                         $dateDesde = date("Y/m/d", strtotime("$dateDesde +1 day"));
                         $dateHasta = date("Y/m/d", strtotime("$dateDesde +$intDias day"));
+                        if($strUltimoDia == "31") {
+                            $dateHastaReal = $strAnio . "/" . $strMes . "/" . $strUltimoDia;
+                        } else {
+                            $dateHastaReal = $dateHasta;
+                        }
+                        
                     }
                 }
                 $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                 $arProgramacionPago->setPagoTipoRel($arPagoTipo);
                 $arProgramacionPago->setFechaDesde(date_create($dateDesde));
                 $arProgramacionPago->setFechaHasta(date_create($dateHasta));
+                $arProgramacionPago->setFechaHastaReal(date_create($dateHastaReal));
+                
                 $arProgramacionPago->setDias($arCentroCostoProceso->getPeriodoPagoRel()->getDias());
                 $arProgramacionPago->setCentroCostoRel($arCentroCostoProceso);
                 $em->persist($arProgramacionPago);

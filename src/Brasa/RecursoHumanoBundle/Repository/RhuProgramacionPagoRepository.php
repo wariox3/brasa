@@ -946,8 +946,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         if($arProgramacionPago->getCodigoPagoTipoFk() == 1) {             
             $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                     . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
-                    . " AND c.fechaUltimoPago < '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
-                    . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
+                    . " AND c.fechaUltimoPago < '" . $arProgramacionPago->getFechaHastaReal()->format('Y-m-d') . "' "
+                    . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHastaReal()->format('Y-m-d') . "' "
                     . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
                     . " OR c.indefinido = 1)";            
             $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -973,7 +973,13 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $dateFechaDesde = $arProgramacionPago->getFechaDesde();
                 } else {
                     if($arContrato->getFechaDesde() > $arProgramacionPago->getFechaHasta() == true) {
-                        $intDiasDevolver = 0;
+                        if($arContrato->getFechaDesde() == $arProgramacionPago->getFechaHastaReal()) {
+                            $dateFechaDesde = $arProgramacionPago->getFechaHastaReal();
+                            $intDiasDevolver = 1;                        
+                        } else {
+                            $intDiasDevolver = 0;                        
+                        }
+                        
                     } else {
                         $dateFechaDesde = $arContrato->getFechaDesde();
                     }
@@ -1003,8 +1009,15 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 $intDiasInhabilesFebrero = 2;
                             }
                         }
-                    }
-                    $intDiasDevolver += $intDiasInhabilesFebrero;
+                        
+                        if($dateFechaDesde->format('d') == "31") {
+                            $intDiasDevolver = 1;
+                        } else {
+                            $intDiasDevolver += $intDiasInhabilesFebrero;
+                        }
+                    } else {
+                        $intDiasDevolver += $intDiasInhabilesFebrero;
+                    }                    
                 }
                 
                 $arProgramacionPagoDetalle->setFechaDesdePago($dateFechaDesde);

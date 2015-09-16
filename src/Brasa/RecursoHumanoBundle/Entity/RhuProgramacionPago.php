@@ -31,6 +31,11 @@ class RhuProgramacionPago
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
      */    
     private $fechaHasta;
+
+    /**
+     * @ORM\Column(name="fecha_hasta_real", type="date", nullable=true)
+     */    
+    private $fechaHastaReal;    
     
     /**
      * @ORM\Column(name="dias", type="integer")
@@ -827,5 +832,29 @@ class RhuProgramacionPago
     public function getFacturasDetallesProgramacionPagoRel()
     {
         return $this->facturasDetallesProgramacionPagoRel;
+    }
+
+    /**
+     * Set fechaHastaReal
+     *
+     * @param \DateTime $fechaHastaReal
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setFechaHastaReal($fechaHastaReal)
+    {
+        $this->fechaHastaReal = $fechaHastaReal;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHastaReal
+     *
+     * @return \DateTime
+     */
+    public function getFechaHastaReal()
+    {
+        return $this->fechaHastaReal;
     }
 }
