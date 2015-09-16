@@ -252,6 +252,9 @@ class RhuLiquidacionRepository extends EntityRepository {
             $intDiasDevolver = 31 - $intDia;
         } else {
             $intDiasDevolver = $intDia;
+            if($intDia == 31) {
+                $intDiasDevolver =  30;
+            }
         }          
         return $intDiasDevolver;
     } 
