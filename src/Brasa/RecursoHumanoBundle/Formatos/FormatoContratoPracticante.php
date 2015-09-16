@@ -46,10 +46,10 @@ class FormatoContratoPracticante extends \FPDF_FPDF {
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
-        $sustitucion3 = "por definir"; //municipio y departamento expedicion cedula
+        $sustitucion3 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre(); //municipio y departamento expedicion cedula
         $sustitucion4 = $arContrato->getCentroCostoRel()->getNombre();
         $sustitucion5 = $arContrato->getCargoRel()->getNombre();
-        $sustitucion6 = "ROTATIVOS";
+        $sustitucion6 = $arContrato->getHorarioTrabajo();
         $sustitucion7 = $arContrato->getFechaDesde()->format('Y/m/d');
         $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras($arContrato->getVrSalario());
         $sustitucion8 = $salarioLetras." $(";
@@ -67,7 +67,7 @@ class FormatoContratoPracticante extends \FPDF_FPDF {
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $sustitucion15 = strftime("%d de %B de %Y", strtotime($sustitucion15)); 
         $sustitucion16 = $arContrato->getEmpleadoRel()->getNombreCorto();
-        $sustitucion17 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion()." de ". $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre()." - ". $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getDepartamentoRel()->getNombre();
+        $sustitucion17 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion()." de ". $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
         //contenido de la cadena
         $cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';

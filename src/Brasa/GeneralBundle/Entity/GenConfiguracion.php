@@ -65,8 +65,8 @@ class GenConfiguracion
     
     /**
      * @ORM\Column(name="nit_empresa", type="string", length=20, nullable=true)
-     */    
-    private $nitEmpresa;
+     */      
+    private $nit; 
     
     /**
      * @ORM\Column(name="digito_verificacion_empresa", type="string", length=2, nullable=true)
@@ -88,6 +88,15 @@ class GenConfiguracion
      */    
     private $direccionEmpresa;
     
+    /**
+     * @ORM\Column(name="tipo_cuenta", type="string", length=20, nullable=true)
+     */    
+    private $tipoCuenta;
+    
+    /**
+     * @ORM\Column(name="cuenta", type="string", length=20, nullable=true)
+     */    
+    private $cuenta;
     
     
 
@@ -318,27 +327,27 @@ class GenConfiguracion
     }
 
     /**
-     * Set nitEmpresa
+     * Set nit
      *
-     * @param string $nitEmpresa
+     * @param string $nit
      *
      * @return GenConfiguracion
      */
-    public function setNitEmpresa($nitEmpresa)
+    public function setNit($nit)
     {
-        $this->nitEmpresa = $nitEmpresa;
+        $this->nit = $nit;
 
         return $this;
     }
 
     /**
-     * Get nitEmpresa
+     * Get nit
      *
      * @return string
      */
-    public function getNitEmpresa()
+    public function getNit()
     {
-        return $this->nitEmpresa;
+        return $this->nit;
     }
 
     /**
@@ -435,5 +444,53 @@ class GenConfiguracion
     public function getDireccionEmpresa()
     {
         return $this->direccionEmpresa;
+    }
+
+    /**
+     * Set tipoCuenta
+     *
+     * @param string $tipoCuenta
+     *
+     * @return GenConfiguracion
+     */
+    public function setTipoCuenta($tipoCuenta)
+    {
+        $this->tipoCuenta = $tipoCuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuenta
+     *
+     * @return string
+     */
+    public function getTipoCuenta()
+    {
+        return $this->tipoCuenta;
+    }
+
+    /**
+     * Set cuenta
+     *
+     * @param string $cuenta
+     *
+     * @return GenConfiguracion
+     */
+    public function setCuenta($cuenta)
+    {
+        $this->cuenta = $cuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get cuenta
+     *
+     * @return string
+     */
+    public function getCuenta()
+    {
+        return $this->cuenta;
     }
 }

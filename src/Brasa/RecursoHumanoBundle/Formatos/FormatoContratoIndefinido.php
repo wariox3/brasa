@@ -49,7 +49,7 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $sustitucion3 = $arContrato->getEmpleadoRel()->getDireccion();
         $sustitucion4 = $arContrato->getEmpleadoRel()->getBarrio();
         $sustitucion5 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
-        $sustitucion6 = $arContrato->getEmpleadoRel()->getCiudadRel()->getNombre()." - ".$arContrato->getEmpleadoRel()->getCiudadRel()->getDepartamentoRel()->getNombre();
+        $sustitucion6 = $arContrato->getEmpleadoRel()->getCiudadRel()->getNombre();
         $sustitucion7 = $arContrato->getCargoRel()->getNombre();
         $sustitucion8 = number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion9 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
@@ -60,8 +60,8 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $sustitucion12 = strftime("%d de %B de %Y", strtotime($sustitucion12));
         $sustitucion13 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion14 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
-        $sustitucion15 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre()." - ";
-        $sustitucion16 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getDepartamentoRel()->getNombre();
+        $sustitucion15 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
+        $sustitucion16 = "";
         //contenido de la cadena
         $cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
