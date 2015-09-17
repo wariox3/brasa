@@ -11,6 +11,7 @@ class LicenciasController extends Controller
     public function nuevoAction($codigoCentroCosto, $codigoEmpleado) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();       
         if($codigoEmpleado != 0) {            
@@ -36,7 +37,7 @@ class LicenciasController extends Controller
             
             $arLicencia->setCantidad($intDias);
             $arLicencia->setCantidadPendiente($intDias);
-            if ($arIncapacidad->getFechaDesde() > $arIncapacidad->getFechaHasta()){
+            if ($arLicencia->getFechaDesde() > $arLicencia->getFechaHasta()){
                 $objMensaje->Mensaje("error", "La fecha desde no puede ser mayor a la fecha hasta!", $this);
             } else {
                 $em->persist($arLicencia);

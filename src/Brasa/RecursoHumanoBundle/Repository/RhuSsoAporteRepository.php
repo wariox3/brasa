@@ -13,5 +13,19 @@ class RhuSsoAporteRepository extends EntityRepository {
     public function listaDQL($codigoPeriodoDetalle) {                    
             $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuSsoAporte a WHERE a.codigoPeriodoDetalleFk = " . $codigoPeriodoDetalle;
             return $dql;
-        }     
+    }
+    public function listaAportesDQL($strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ssoa, ssoap, e FROM BrasaRecursoHumanoBundle:RhuSsoAporte ssoa JOIN ssoa.ssoPeriodoRel ssoap JOIN ssoa.empleadoRel e WHERE ssoa.codigoAportePk <> 0 ";   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND ssoap.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND ssoap.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        return $dql;
+    }
 }
