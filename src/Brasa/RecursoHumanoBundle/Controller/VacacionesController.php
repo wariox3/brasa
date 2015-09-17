@@ -161,7 +161,10 @@ class VacacionesController extends Controller
                 }
                 $arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                 $arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContrato->getCodigoContratoPk());                    
-                $arContratoActualizar->setFechaUltimoPagoVacaciones($fechaHastaPeriodo);
+                
+                $fechaDesdePeriodo = $arContratoActualizar->getFechaUltimoPagoVacaciones();                                
+                $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(361, $fechaDesdePeriodo);                                                               
+                $arContratoActualizar->setFechaUltimoPagoVacaciones($fechaHastaPeriodo);                
                 $em->persist($arContratoActualizar);                                     
                 $em->flush();
                 
@@ -219,16 +222,27 @@ class VacacionesController extends Controller
     public function detalleAction($codigoVacacion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $form = $this->createFormBuilder()    
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
-            ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
-            ->getForm();
-        $form->handleRequest($request);
-        
-        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
-        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
-        if($form->isValid()) {                      
+        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);        
+        $form = $this->formularioDetalle($arVacacion);        
+        $form->handleRequest($request);       
+        if($form->isValid()) {       
+            if($form->get('BtnAutorizar')->isClicked()) {            
+                if($arVacacion->getEstadoAutorizado() == 0) {
+                    $arVacacion->setEstadoAutorizado(1);
+                    $em->persist($arVacacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
+                }
+            }
+            if($form->get('BtnDesAutorizar')->isClicked()) {            
+                if($arVacacion->getEstadoAutorizado() == 1) {
+                    $arVacacion->setEstadoAutorizado(0);
+                    $em->persist($arVacacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
+                }
+            }            
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoDetalleVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleVacaciones();
                 $objFormatoDetalleVacaciones->Generar($this, $codigoVacacion);
@@ -249,16 +263,38 @@ class VacacionesController extends Controller
                 }                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($codigoVacacion);
                 return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
-            }            
+            }   
+            
         }
         $arVacacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
         $arVacacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->FindBy(array('codigoVacacionFk' => $codigoVacacion));        
         return $this->render('BrasaRecursoHumanoBundle:Vacaciones:detalle.html.twig', array(
-                    'arVacaciones' => $arVacaciones,
+                    'arVacaciones' => $arVacacion,
                     'arVacacionDeducciones' => $arVacacionDeducciones,
                     'form' => $form->createView()
                     ));
     }
+    
+    private function formularioDetalle($arVacacion) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);
+        if($arVacacion->getEstadoAutorizado() == 1) {            
+            $arrBotonLiquidar['disabled'] = true;
+            $arrBotonAutorizar['disabled'] = true;
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;
+        }
+        $form = $this->createFormBuilder()    
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
+                    ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)
+                    ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
+                    ->getForm();  
+        return $form;
+    }    
     
     public function detalleNuevoAction($codigoVacacion) {
         $request = $this->getRequest();

@@ -32,13 +32,13 @@ class RhuVacacionRepository extends EntityRepository {
         $intDias = 15;
         $floSalario = $arVacacion->getEmpleadoRel()->getVrSalario();        
         //Analizar cambios de salario
-        $fecha = $arVacacion->getFechaHastaPeriodo()->format('Y-m-d');
+        $fecha = $arVacacion->getFecha()->format('Y-m-d');
         $nuevafecha = strtotime ( '-90 day' , strtotime ( $fecha ) ) ;
         $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
         $fechaDesdeCambioSalario = date_create_from_format('Y-m-d H:i', $nuevafecha . " 00:00");        
         $floSalarioPromedio = 0;        
         $arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
-        $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arVacacion->getContratoRel()->getCodigoContratoPk(), $fechaDesdeCambioSalario->format('Y-m-d'), $arVacacion->getFechaHastaPeriodo()->format('Y-m-d'));                 
+        $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arVacacion->getContratoRel()->getCodigoContratoPk(), $fechaDesdeCambioSalario->format('Y-m-d'), $arVacacion->getFecha()->format('Y-m-d'));                 
         if(count($arCambiosSalario) > 0) {
             $floPrimerSalario = $arCambiosSalario[0]->getVrSalarioAnterior();
             $intNumeroRegistros = count($arCambiosSalario) + 1;
