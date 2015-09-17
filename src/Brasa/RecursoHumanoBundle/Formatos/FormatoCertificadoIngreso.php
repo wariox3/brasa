@@ -71,8 +71,8 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $arEmpleado = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find(self::$codigoEmpleado);        
         $arCiudad = new \Brasa\GeneralBundle\Entity\GenCiudad();
         $arCiudad = self::$em->getRepository('BrasaGeneralBundle:GenCiudad')->find(self::$strLugarExpedicion);        
-        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracionGeneral();
-        $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionGeneral')->find(1);        
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);        
         $this->SetFillColor(255, 255, 255);
         $this->SetDrawColor(00, 99, 00);
         $this->SetFont('Arial','B',12);
@@ -120,9 +120,9 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Line(5, 54, 12, 54);//linea abajo de la imagen retenedor
         $this->SetXY(12, 36);
         $this->SetFont('Arial','',8);
-        $this->Cell(55, 6, $arConfiguracion->getNit() , 1, 0, 'R', 1);
+        $this->Cell(55, 6, $arConfiguracion->getNitEmpresa() , 1, 0, 'R', 1);
         $this->Cell(5, 6, " - " , 1, 0, 'C', 1);
-        $this->Cell(13, 6, $arConfiguracion->getDv() , 1, 0, 'C', 1);
+        $this->Cell(13, 6, $arConfiguracion->getDigitoVerificacionEmpresa() , 1, 0, 'C', 1);
         $this->Cell(30, 6, "" , 1, 0, 'C', 1);
         $this->Cell(30, 6, "" , 1, 0, 'C', 1);
         $this->Cell(30, 6, "" , 1, 0, 'C', 1);
@@ -132,7 +132,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->Cell(193, 6, utf8_decode("11. Razón Social") , 1, 0, 'L', 1);
         $this->SetXY(12, 48);
         $this->SetFont('Arial','',8);
-        $this->Cell(193, 6, utf8_decode($arConfiguracion->getEmpresa()) , 1, 0, 'L', 1);
+        $this->Cell(193, 6, utf8_decode($arConfiguracion->getNombreEmpresa()) , 1, 0, 'L', 1);
         //Asalariado
         $this->Image('imagenes/logos/asociado.jpg', 4, 55, 7, 16);
         $this->Line(5, 54, 5, 72);//linea derecha de la imagen retenedor

@@ -36,15 +36,17 @@ class LicenciasController extends Controller
             
             $arLicencia->setCantidad($intDias);
             $arLicencia->setCantidadPendiente($intDias);
-            
-            $em->persist($arLicencia);
-            $em->flush();                        
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_licencia', array('codigoCentroCosto' => $codigoCentroCosto)));
+            if ($arIncapacidad->getFechaDesde() > $arIncapacidad->getFechaHasta()){
+                $objMensaje->Mensaje("error", "La fecha desde no puede ser mayor a la fecha hasta!", $this);
             } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }    
-            
+                $em->persist($arLicencia);
+                $em->flush();                        
+                if($form->get('guardarnuevo')->isClicked()) {
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_licencia', array('codigoCentroCosto' => $codigoCentroCosto)));
+                } else {
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }    
+            }
         }                
 
         return $this->render('BrasaRecursoHumanoBundle:Licencias:nuevo.html.twig', array(

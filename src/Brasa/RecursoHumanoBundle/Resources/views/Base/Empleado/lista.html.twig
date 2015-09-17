@@ -95,7 +95,10 @@
         </table>                       
            
         <div class="btn-toolbar" style="float: left">
-            {{ knp_pagination_render(arEmpleados) }} 
+            {{ knp_pagination_render(arEmpleados) }}
+            <div class="btn-group">
+                <div class="btn btn-default btn-sm">Empleados <span class="badge">{{ arEmpleados.getTotalItemCount }}</span></div>
+            </div>
         </div>
 
         <!-- Botones Menu Items -->
