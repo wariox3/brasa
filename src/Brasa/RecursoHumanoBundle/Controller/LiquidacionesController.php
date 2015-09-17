@@ -147,7 +147,7 @@ class LiquidacionesController extends Controller
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',)) 
             ->getForm();        
         return $form;
-    }    
+    }            
     
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();

@@ -810,11 +810,20 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {                            
                         $arContrato->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());
                     }
-                    if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {
-                        $arContrato->setFechaUltimoPagoPrimas($arProgramacionPagoProcesar->getFechaHasta());
+                    if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {                        
+                        if($arProgramacionPagoProcesar->getFechaHasta()->format('md') == '1230') {
+                            $strAnio = $arProgramacionPagoProcesar->getFechaHasta()->format('Y');
+                            $strFecha = $strAnio + 1 . "/01/01";
+                        } else {
+                            $strAnio = $arProgramacionPagoProcesar->getFechaHasta()->format('Y');
+                            $strFecha = $strAnio . "/07/01";                            
+                        }
+                        $arContrato->setFechaUltimoPagoPrimas(date_create($strFecha));
                     }
-                    if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) {
-                        $arContrato->setFechaUltimoPagoCesantias($arProgramacionPagoProcesar->getFechaHasta());
+                    if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) { 
+                        $strAnio = $arProgramacionPagoProcesar->getFechaHasta()->format('Y');
+                        $strFecha = $strAnio + 1 . "/01/01";                        
+                        $arContrato->setFechaUltimoPagoCesantias(date_create($strFecha));
                     }   
                     $em->persist($arContrato);                            
                 }                        
