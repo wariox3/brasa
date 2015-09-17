@@ -42,7 +42,6 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $douIBCAdicional = ($arLiquidacion->getContratoRel()->getVrSalarioPago()/30) * $diasAdicionales;
                 $arLiquidacion->setVrIngresoBaseCotizacionAdicional($douIBCAdicional);                
                 $arLiquidacion->setDiasAdicionalesIBC($diasAdicionales);
-                $arLiquidacion->setEstadoGenerado(1);
             }
         }
         if($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias() > $arLiquidacion->getContratoRel()->getFechaDesde()) {
@@ -161,7 +160,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $intDiasTotal = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
         $intDiasTotal = $intDiasTotal->format('%a');
         $arLiquidacion->setNumeroDias($intDiasLaborados);
-        
+        $arLiquidacion->setEstadoGenerado(1);
         $em->flush();
         return true;
     }    

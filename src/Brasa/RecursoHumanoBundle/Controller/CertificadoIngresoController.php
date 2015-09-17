@@ -2,6 +2,7 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller;
 
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
@@ -15,8 +16,8 @@ class CertificadoIngresoController extends Controller
     public function CertificadoAction($codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $ConfiguracionGeneral = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracionGeneral();
-        $ConfiguracionGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionGeneral')->find(1);
+        $ConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $ConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $empleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $empleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $mensaje = 0;
@@ -63,7 +64,7 @@ class CertificadoIngresoController extends Controller
                 $stCertifico6 = $controles['certifico6'];
                 $datFechaCertificadoInicio = $strFechaCertificado."-01-01";
                 $datFechaCertificadoFin = $strFechaCertificado."-12-30";
-                $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($codigoEmpleado,$datFechaCertificadoInicio, $datFechaCertificadoFin);
+                $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($codigoEmpleado,$datFechaCertificadoInicio, $datFechaCertificadoFin );
                 $floIbc = (float)$arrayCostos[0]['IBC'];
                 $floPension = (float)$arrayCostos[0]['Pension'];
                 $floSalud = (float)$arrayCostos[0]['Salud'];

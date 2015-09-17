@@ -32,7 +32,7 @@ class ConfiguracionGeneralController extends Controller
             ->add('porcentajeRetencionCree', 'text', array('data' => $arConfiguracionGeneral->getPorcentajeRetencionCREE(), 'required' => true))
             ->add('baseRetencionIvaVentas', 'text', array('data' => $arConfiguracionGeneral->getBaseRetencionIvaVentas(), 'required' => true))    
             ->add('porcentajeRetencionIvaVentas', 'text', array('data' => $arConfiguracionGeneral->getPorcentajeRetencionIvaVentas(), 'required' => true))
-            ->add('fechaUltimoCierre', 'date', array('required' => true))
+            ->add('fechaUltimoCierre', 'date', array('data' => $arConfiguracionGeneral->getFechaUltimoCierre(), 'required' => true))
             ->add('nitVentasMostrador', 'text', array('data' => $arConfiguracionGeneral->getNitVentasMostrador(), 'required' => true))    
             ->add('rutaTemporal', 'text', array('data' => $arConfiguracionGeneral->getRutaTemporal(), 'required' => true))    
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
@@ -46,15 +46,37 @@ class ConfiguracionGeneralController extends Controller
             $NumeroNit = $controles['nitEmpresa'];
             $NumeroDv = $controles['digitoVerificacion'];
             $NombreEmpresa = $controles['nombreEmpresa'];
+            $TelefonoEmpresa = $controles['telefonoEmpresa'];
+            $DireccionEmpresa = $controles['direccionEmpresa'];
+            $BaseRetencionFuente = $controles['baseRetencionFuente'];
+            $BaseRetencionCree = $controles['baseRetencionCree'];
+            $PorcentajeRetencionFuente = $controles['porcentajeRetencionFuente'];
+            $PorcentajeRetencionCree = $controles['porcentajeRetencionCree'];
+            $BaseRetencionIvaVentas = $controles['baseRetencionIvaVentas'];
+            $PorcentajeRetencionIvaVentas = $controles['porcentajeRetencionIvaVentas'];
+            $FechaUltimoCierre = $formConfiguracionGeneral->get('fechaUltimoCierre')->getData();
+            $NitVentasMostrador = $controles['nitVentasMostrador'];
+            $RutaTemporal = $controles['rutaTemporal'];
             // guardar la tarea en la base de datos
             $arConfiguracionGeneral->setTipoCuenta($ConceptoTipoCuenta);
             $arConfiguracionGeneral->setCuenta($NumeroCuenta);
             $arConfiguracionGeneral->setNitEmpresa($NumeroNit);
             $arConfiguracionGeneral->setDigitoVerificacionEmpresa($NumeroDv);
             $arConfiguracionGeneral->setNitEmpresa($NombreEmpresa);
+            $arConfiguracionGeneral->setTelefonoEmpresa($TelefonoEmpresa);
+            $arConfiguracionGeneral->setDireccionEmpresa($DireccionEmpresa);
+            $arConfiguracionGeneral->setBaseRetencionFuente($BaseRetencionFuente);
+            $arConfiguracionGeneral->setBaseRetencionCree($BaseRetencionCree);
+            $arConfiguracionGeneral->setPorcentajeRetencionFuente($PorcentajeRetencionFuente);
+            $arConfiguracionGeneral->setPorcentajeRetencionCREE($PorcentajeRetencionCree);
+            $arConfiguracionGeneral->setBaseRetencionIvaVentas($BaseRetencionIvaVentas);
+            $arConfiguracionGeneral->setPorcentajeRetencionIvaVentas($PorcentajeRetencionIvaVentas);
+            $arConfiguracionGeneral->setFechaUltimoCierre($FechaUltimoCierre);
+            $arConfiguracionGeneral->setNitVentasMostrador($NitVentasMostrador);
+            $arConfiguracionGeneral->setRutaTemporal($RutaTemporal);
             $em->persist($arConfiguracionGeneral);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_configuracion_general', array('codigoConfiguracionPk' => 1)));
+            return $this->redirect($this->generateUrl('brs_gen_configuracion_general', array('codigoConfiguracionPk' => 1)));
         }
         return $this->render('BrasaGeneralBundle:ConfiguracionGeneral:Configuracion.html.twig', array(
             'formConfiguracionGeneral' => $formConfiguracionGeneral->createView(),
