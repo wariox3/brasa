@@ -443,7 +443,7 @@
                             <a tabindex="-1" href="#">Configuración</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ path('brs_rhu_configuracion_nomina', { 'codigoConfiguracionPk': 1 }) }}">Nomina</a></li>
-                                <li><a href="{{ path('brs_rhu_configuracion_general', { 'codigoConfiguracionPk': 1 }) }}">General</a></li>
+                                <li><a href="{{ path('brs_gen_configuracion_general', { 'codigoConfiguracionPk': 1 }) }}">General</a></li>
                             </ul>
                         </li>
                         {% if is_granted('ROLE_ADMIN') %}

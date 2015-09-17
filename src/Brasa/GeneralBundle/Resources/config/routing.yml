@@ -8,7 +8,11 @@ brs_gen_base_terceros:
     
 brs_gen_base_terceros_nuevo:
     path:     /general/base/terceros/nuevo/{codigoTercero}
-    defaults: { _controller: BrasaGeneralBundle:BaseTerceros:nuevo }    
+    defaults: { _controller: BrasaGeneralBundle:BaseTerceros:nuevo } 
+    
+brs_gen_configuracion_general:
+    path:     /gen/configuracion/general/{codigoConfiguracionPk}
+    defaults: { _controller: BrasaGeneralBundle:ConfiguracionGeneral:configuracion }    
     
 #Utilidades    
 brs_gen_buscar_tercero:
