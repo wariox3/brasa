@@ -22,4 +22,23 @@ class RhuIbcRepository extends EntityRepository {
             return $arrayResultado;
         }    
     
+    public function listaDqlCostosIbc($strContrato = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT i, e FROM BrasaRecursoHumanoBundle:RhuIbc i JOIN i.empleadoRel e WHERE i.codigoIbcPk <> 0";
+        if($strContrato != "") {
+            $dql .= " AND i.codigoContratoFk = " . $strContrato;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND i.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND i.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
+        return $dql;
+    }         
+    
 }
