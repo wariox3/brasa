@@ -458,8 +458,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $intDiasContinuos = $arProgramacionPagoDetalle->getFechaDesde()->diff($arProgramacionPagoDetalle->getFechaHasta());
                         $intDiasContinuos = $intDiasContinuos->format('%a');
                         $intDiasContinuos += 1;
-                        $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
-                        $floIbc = (float)$arrayCostos[0]['IBC'];
+                        $arIbc = $em->getRepository('BrasaRecursoHumanoBundle:RhuIbc')->devuelveIbcFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
+                        $floIbc = $arIbc->getVrIngresoBaseCotizacion();                        
+                        //$arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
+                        //$floIbc = (float)$arrayCostos[0]['IBC'];
                         $dateFechaUltimoPago = $arProgramacionPagoDetalle->getContratoRel()->getFechaUltimoPago();                        
                         if($dateFechaUltimoPago < $arProgramacionPagoProcesar->getFechaHasta()) {
                             $floVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;                                        
