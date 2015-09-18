@@ -30,145 +30,140 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        if ($arLiquidacion->getFecha()->format('Y') > $arConfiguracion->getAnioActual()){
-            $objMensaje->Mensaje("error", "No se puede liquidar por que no se ha cerrado el año ".$arConfiguracion->getAnioActual()."", $this);
-        } else {
-            $boolPeriodoContinuo = $arLiquidacion->getContratoRel()->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo();
-            $douIBCAdicional = 0;
-            $dateFechaUltimoPago = $arLiquidacion->getContratoRel()->getFechaUltimoPago();                        
-            if($dateFechaUltimoPago != null) {
-                $arLiquidacion->setFechaUltimoPago($dateFechaUltimoPago);
-                if($arLiquidacion->getFechaUltimoPago() < $arLiquidacion->getFechaHasta()) {
-                    $dateFechaUltimoPagoLiquidacion = $arLiquidacion->getFechaUltimoPago();
-                    date_add($dateFechaUltimoPagoLiquidacion, date_interval_create_from_date_string('1 days'));                
-                    $diasAdicionales = $this->diasPrestaciones($dateFechaUltimoPagoLiquidacion, $arLiquidacion->getFechaHasta());
-                    $douIBCAdicional = ($arLiquidacion->getContratoRel()->getVrSalarioPago()/30) * $diasAdicionales;
-                    $arLiquidacion->setVrIngresoBaseCotizacionAdicional($douIBCAdicional);                
-                    $arLiquidacion->setDiasAdicionalesIBC($diasAdicionales);
-                }
+        $boolPeriodoContinuo = $arLiquidacion->getContratoRel()->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo();
+        $douIBCAdicional = 0;
+        $dateFechaUltimoPago = $arLiquidacion->getContratoRel()->getFechaUltimoPago();                        
+        if($dateFechaUltimoPago != null) {
+            $arLiquidacion->setFechaUltimoPago($dateFechaUltimoPago);
+            if($arLiquidacion->getFechaUltimoPago() < $arLiquidacion->getFechaHasta()) {
+                $dateFechaUltimoPagoLiquidacion = $arLiquidacion->getFechaUltimoPago();
+                date_add($dateFechaUltimoPagoLiquidacion, date_interval_create_from_date_string('1 days'));                
+                $diasAdicionales = $this->diasPrestaciones($dateFechaUltimoPagoLiquidacion, $arLiquidacion->getFechaHasta());
+                $douIBCAdicional = ($arLiquidacion->getContratoRel()->getVrSalarioPago()/30) * $diasAdicionales;
+                $arLiquidacion->setVrIngresoBaseCotizacionAdicional($douIBCAdicional);                
+                $arLiquidacion->setDiasAdicionalesIBC($diasAdicionales);
             }
-            if($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias() > $arLiquidacion->getContratoRel()->getFechaDesde()) {
-                $fechaDesdePrestacional = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();            
-            } else {
-                $fechaDesdePrestacional = $arLiquidacion->getContratoRel()->getFechaDesde();
-            }
-
-            $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arLiquidacion->getCodigoEmpleadoFk(), $fechaDesdePrestacional->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());        
-            $douIBC = (float)$arrayCostos[0]['IBC']; 
-            $douIBCTotal = $douIBC + $douIBCAdicional;
-            $intDiasLaborados = $this->diasPrestaciones($fechaDesdePrestacional, $arLiquidacion->getContratoRel()->getFechaHasta());
-            $douSalario = $arLiquidacion->getContratoRel()->getVrSalarioPago();
-            $douBasePrestacionesTotal = 0;        
-            $douCesantias = 0;
-            $douInteresesCesantias = 0;
-            $douPrima = 0;
-            $douDeduccionPrima = 0;
-            $douVacaciones = 0;
-            $douAuxilioTransporte = 0;
-            if($intDiasLaborados > 0) {
-                if($boolPeriodoContinuo == 1) {
-                    $intDiasContinuos = $this->diasContinuos($arLiquidacion->getContratoRel()->getFechaDesde(), $arLiquidacion->getContratoRel()->getFechaHasta());
-                    $douBasePrestaciones = ($douIBCTotal / $intDiasContinuos) * 30;
-                } else {
-                    $douBasePrestaciones = ($douIBCTotal / $intDiasLaborados) * 30;
-                }
-
-                if($douSalario <= $arConfiguracion->getVrSalario() * 2) {
-                    $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
-                }
-
-                $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
-                $arLiquidacion->setVrBasePrestaciones($douBasePrestaciones);
-                $arLiquidacion->setVrAuxilioTransporte($douAuxilioTransporte);
-                $arLiquidacion->setVrBasePrestacionesTotal($douBasePrestacionesTotal);            
-            }  
-
-            if($arLiquidacion->getLiquidarCesantias() == 1) {            
-                $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();            
-                $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
-                $intDiasCesantias = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                            
-                $douCesantias = ($douBasePrestacionesTotal * $intDiasCesantias) / 360;          
-                $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
-                $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
-                $arLiquidacion->setFechaUltimoPagoCesantias($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias());
-                $arLiquidacion->setDiasCesantias($intDiasCesantias);
-                $arLiquidacion->setVrCesantias($douCesantias);
-                $arLiquidacion->setVrInteresesCesantias($douInteresesCesantias);                        
-            }
-            if($arLiquidacion->getLiquidarPrima() == 1) {            
-                $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas();
-                $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
-                $intDiasPrima = 0;
-                if($dateFechaDesde <= $dateFechaHasta) {
-                    $intDiasPrima = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
-                    if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
-                        $intDiasPrima = $intDiasPrima - 1;
-                    }
-
-                    $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
-                    $arLiquidacion->setDiasPrimas($intDiasPrima);
-                    $arLiquidacion->setVrPrima($douPrima);            
-                } else {
-                    $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 2;    
-                    $douDeduccionPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
-                    $arLiquidacion->setDiasPrimas($intDiasPrima * -1);
-                    $arLiquidacion->setVrPrima(0); 
-                    $arLiquidacion->setVrDeduccionPrima($douDeduccionPrima);                   
-                }                                                                                
-                $arLiquidacion->setFechaUltimoPagoPrimas($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas());
-            }
-
-            if($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones() < $arLiquidacion->getFechaHasta()) {
-                if($arLiquidacion->getLiquidarVacaciones() == 1) {
-                    $floSalarioPromedio = 0;    
-                    $fecha = $arLiquidacion->getFechaHasta()->format('Y-m-d');
-                    $nuevafecha = strtotime ( '-90 day' , strtotime ( $fecha ) ) ;
-                    $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
-                    $fechaDesdeCambioSalario = date_create_from_format('Y-m-d H:i', $nuevafecha . " 00:00"); 
-
-                    $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arLiquidacion->getContratoRel()->getCodigoContratoPk(), $fechaDesdeCambioSalario->format('Y-m-d'), $arLiquidacion->getFechaHasta()->format('Y-m-d'));                 
-                    if(count($arCambiosSalario) > 0) {
-                        $floPrimerSalario = $arCambiosSalario[0]->getVrSalarioAnterior();
-                        $intNumeroRegistros = count($arCambiosSalario) + 1;
-                        $floSumaSalarios = 0;
-                        foreach ($arCambiosSalario as $arCambioSalario) {
-                            $floSumaSalarios += $arCambioSalario->getVrSalarioNuevo();
-                        }
-                        $floSalarioPromedio = round((($floSumaSalarios + $floPrimerSalario) / $intNumeroRegistros));
-
-                    } else {
-                        $floSalarioPromedio = $douSalario;
-                    }                
-                    $intDiasVacaciones = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones(), $arLiquidacion->getContratoRel()->getFechaHasta());                                
-                    $douVacaciones = ($floSalarioPromedio * $intDiasVacaciones) / 720;
-                    $arLiquidacion->setVrSalarioVacaciones($floSalarioPromedio);
-                    $arLiquidacion->setDiasVacaciones($intDiasVacaciones);
-                    $arLiquidacion->setVrVacaciones($douVacaciones);
-                    $arLiquidacion->setFechaUltimoPagoVacaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones());
-                }
-            }       
-            $floDeducciones = 0;
-            $arLiquidacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
-            $arLiquidacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));        
-            foreach ($arLiquidacionDeducciones as $arLiquidacionDeduccion) {
-                $floDeducciones += $arLiquidacionDeduccion->getVrDeduccion();
-            }
-            $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones;
-            $douTotal = $douTotal - $floDeducciones - $douDeduccionPrima;
-            $arLiquidacion->setVrTotal($douTotal);
-            $arLiquidacion->setVrSalario($douSalario);
-            $arLiquidacion->setVrIngresoBaseCotizacion($douIBC);
-            $arLiquidacion->setVrIngresoBaseCotizacionTotal($douIBCTotal); 
-            $arLiquidacion->setVrDeducciones($floDeducciones);        
-            $intDiasTotal = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
-            $intDiasTotal = $intDiasTotal->format('%a');
-            $arLiquidacion->setNumeroDias($intDiasLaborados);
-            $arLiquidacion->setEstadoGenerado(1);
-            $arLiquidacion->setFechaInicioContrato($arLiquidacion->getContratoRel()->getFechaDesde());
-            $em->flush();
-            return true;
         }
+        if($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias() > $arLiquidacion->getContratoRel()->getFechaDesde()) {
+            $fechaDesdePrestacional = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();            
+        } else {
+            $fechaDesdePrestacional = $arLiquidacion->getContratoRel()->getFechaDesde();
+        }
+        
+        $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arLiquidacion->getCodigoEmpleadoFk(), $fechaDesdePrestacional->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());        
+        $douIBC = (float)$arrayCostos[0]['IBC']; 
+        $douIBCTotal = $douIBC + $douIBCAdicional;
+        $intDiasLaborados = $this->diasPrestaciones($fechaDesdePrestacional, $arLiquidacion->getContratoRel()->getFechaHasta());
+        $douSalario = $arLiquidacion->getContratoRel()->getVrSalarioPago();
+        $douBasePrestacionesTotal = 0;        
+        $douCesantias = 0;
+        $douInteresesCesantias = 0;
+        $douPrima = 0;
+        $douDeduccionPrima = 0;
+        $douVacaciones = 0;
+        $douAuxilioTransporte = 0;
+        if($intDiasLaborados > 0) {
+            if($boolPeriodoContinuo == 1) {
+                $intDiasContinuos = $this->diasContinuos($arLiquidacion->getContratoRel()->getFechaDesde(), $arLiquidacion->getContratoRel()->getFechaHasta());
+                $douBasePrestaciones = ($douIBCTotal / $intDiasContinuos) * 30;
+            } else {
+                $douBasePrestaciones = ($douIBCTotal / $intDiasLaborados) * 30;
+            }
+               
+            if($douSalario <= $arConfiguracion->getVrSalario() * 2) {
+                $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
+            }
+            
+            $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
+            $arLiquidacion->setVrBasePrestaciones($douBasePrestaciones);
+            $arLiquidacion->setVrAuxilioTransporte($douAuxilioTransporte);
+            $arLiquidacion->setVrBasePrestacionesTotal($douBasePrestacionesTotal);            
+        }  
+
+        if($arLiquidacion->getLiquidarCesantias() == 1) {            
+            $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();            
+            $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
+            $intDiasCesantias = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                            
+            $douCesantias = ($douBasePrestacionesTotal * $intDiasCesantias) / 360;          
+            $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
+            $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
+            $arLiquidacion->setFechaUltimoPagoCesantias($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias());
+            $arLiquidacion->setDiasCesantias($intDiasCesantias);
+            $arLiquidacion->setVrCesantias($douCesantias);
+            $arLiquidacion->setVrInteresesCesantias($douInteresesCesantias);                        
+        }
+        if($arLiquidacion->getLiquidarPrima() == 1) {            
+            $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas();
+            $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
+            $intDiasPrima = 0;
+            if($dateFechaDesde <= $dateFechaHasta) {
+                $intDiasPrima = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
+                if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
+                    $intDiasPrima = $intDiasPrima - 1;
+                }
+                
+                $douPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
+                $arLiquidacion->setDiasPrimas($intDiasPrima);
+                $arLiquidacion->setVrPrima($douPrima);            
+            } else {
+                $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 2;    
+                $douDeduccionPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
+                $arLiquidacion->setDiasPrimas($intDiasPrima * -1);
+                $arLiquidacion->setVrPrima(0); 
+                $arLiquidacion->setVrDeduccionPrima($douDeduccionPrima);                   
+            }                                                                                
+            $arLiquidacion->setFechaUltimoPagoPrimas($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas());
+        }
+
+        if($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones() < $arLiquidacion->getFechaHasta()) {
+            if($arLiquidacion->getLiquidarVacaciones() == 1) {
+                $floSalarioPromedio = 0;    
+                $fecha = $arLiquidacion->getFechaHasta()->format('Y-m-d');
+                $nuevafecha = strtotime ( '-90 day' , strtotime ( $fecha ) ) ;
+                $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
+                $fechaDesdeCambioSalario = date_create_from_format('Y-m-d H:i', $nuevafecha . " 00:00"); 
+                
+                $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arLiquidacion->getContratoRel()->getCodigoContratoPk(), $fechaDesdeCambioSalario->format('Y-m-d'), $arLiquidacion->getFechaHasta()->format('Y-m-d'));                 
+                if(count($arCambiosSalario) > 0) {
+                    $floPrimerSalario = $arCambiosSalario[0]->getVrSalarioAnterior();
+                    $intNumeroRegistros = count($arCambiosSalario) + 1;
+                    $floSumaSalarios = 0;
+                    foreach ($arCambiosSalario as $arCambioSalario) {
+                        $floSumaSalarios += $arCambioSalario->getVrSalarioNuevo();
+                    }
+                    $floSalarioPromedio = round((($floSumaSalarios + $floPrimerSalario) / $intNumeroRegistros));
+
+                } else {
+                    $floSalarioPromedio = $douSalario;
+                }                
+                $intDiasVacaciones = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones(), $arLiquidacion->getContratoRel()->getFechaHasta());                                
+                $douVacaciones = ($floSalarioPromedio * $intDiasVacaciones) / 720;
+                $arLiquidacion->setVrSalarioVacaciones($floSalarioPromedio);
+                $arLiquidacion->setDiasVacaciones($intDiasVacaciones);
+                $arLiquidacion->setVrVacaciones($douVacaciones);
+                $arLiquidacion->setFechaUltimoPagoVacaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones());
+            }
+        }       
+        $floDeducciones = 0;
+        $arLiquidacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
+        $arLiquidacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));        
+        foreach ($arLiquidacionDeducciones as $arLiquidacionDeduccion) {
+            $floDeducciones += $arLiquidacionDeduccion->getVrDeduccion();
+        }
+        $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones;
+        $douTotal = $douTotal - $floDeducciones - $douDeduccionPrima;
+        $arLiquidacion->setVrTotal($douTotal);
+        $arLiquidacion->setVrSalario($douSalario);
+        $arLiquidacion->setVrIngresoBaseCotizacion($douIBC);
+        $arLiquidacion->setVrIngresoBaseCotizacionTotal($douIBCTotal); 
+        $arLiquidacion->setVrDeducciones($floDeducciones);        
+        $intDiasTotal = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
+        $intDiasTotal = $intDiasTotal->format('%a');
+        $arLiquidacion->setNumeroDias($intDiasLaborados);
+        $arLiquidacion->setEstadoGenerado(1);
+        $arLiquidacion->setFechaInicioContrato($arLiquidacion->getContratoRel()->getFechaDesde());
+        $em->flush();
+        return true;
     }    
     
     public function liquidarDeducciones($codigoLiquidacion) {        
