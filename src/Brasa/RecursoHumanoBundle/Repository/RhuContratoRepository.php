@@ -89,6 +89,18 @@ class RhuContratoRepository extends EntityRepository {
         return $duoNumeroContratos;
     }
     
+    //lista contratos con las vacaciones cumplidas 365 dias
+    public function listaContratosVacacionCumplidaDQL($strCodigoCentroCosto = "", $strIdentificacion = "") {        
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.indefinido = 1 AND DATEDIFF((c.fechaDesde),(c.fechaUltimoPago))>=2";
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND c.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        return $dql;
+    }
+    
     public function numtoletras($xcifra) {
     $em = $this->getEntityManager();
         $xarray = array(0 => "Cero",

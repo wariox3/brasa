@@ -504,7 +504,11 @@ brs_rhu_consultas_incapacidades_cobrar_pago:
     
 brs_rhu_consultas_sso_aportes:    
     path:     /rhu/consultas/sso/aportes
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:Aportes }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:Aportes }
+    
+brs_rhu_consultas_contrato_vacaciones_pagar:    
+    path:     /rhu/consultas/contrato/vacaciones/pagar
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:VacacionesPagar }    
     
 brs_rhu_pago_examen_lista:
     path:     /rhu/pago/examen/lista

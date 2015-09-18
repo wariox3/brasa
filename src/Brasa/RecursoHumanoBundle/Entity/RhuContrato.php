@@ -8,6 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="rhu_contrato")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuContratoRepository")
  */
+
+/**
+ * DateDiffFunction ::= "DATEDIFF" "(" ArithmeticPrimary "," ArithmeticPrimary ")"
+ */
 class RhuContrato
 {
     /**
