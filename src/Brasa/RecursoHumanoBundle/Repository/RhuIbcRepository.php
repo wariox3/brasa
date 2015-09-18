@@ -11,5 +11,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuIbcRepository extends EntityRepository {
     
+    public function devuelveCostosFecha($codigoEmpleado, $fechaDesde, $fechaHasta, $codigoContrato) {
+            $em = $this->getEntityManager();
+            $dql   = "SELECT SUM(p.vrIngresoBaseCotizacion) as IBC, SUM(p.vrPension) as Pension, SUM(p.vrEps) as Salud, SUM(p.vrAuxilioTransporte) as AuxilioTransporte, MIN(p.fechaDesde) as fechaInicio, MAX(p.fechaHasta) as fechaFin FROM BrasaRecursoHumanoBundle:RhuPago p "
+                    . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " AND p.estadoPagado = 1 "
+                    . "AND p.codigoContratoFk = " . $codigoContrato . " "
+                    . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
+            $query = $em->createQuery($dql);
+            $arrayResultado = $query->getResult();
+            return $arrayResultado;
+        }    
     
 }

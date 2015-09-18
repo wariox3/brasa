@@ -487,6 +487,11 @@ class RhuEmpleado
     protected $cambiosSalariosEmpleadoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuIbc", mappedBy="empleadoRel")
+     */
+    protected $ibcsEmpleadoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -2808,5 +2813,39 @@ class RhuEmpleado
     public function getCambiosSalariosEmpleadoRel()
     {
         return $this->cambiosSalariosEmpleadoRel;
+    }
+
+    /**
+     * Add ibcsEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addIbcsEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsEmpleadoRel)
+    {
+        $this->ibcsEmpleadoRel[] = $ibcsEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ibcsEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsEmpleadoRel
+     */
+    public function removeIbcsEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsEmpleadoRel)
+    {
+        $this->ibcsEmpleadoRel->removeElement($ibcsEmpleadoRel);
+    }
+
+    /**
+     * Get ibcsEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIbcsEmpleadoRel()
+    {
+        return $this->ibcsEmpleadoRel;
     }
 }

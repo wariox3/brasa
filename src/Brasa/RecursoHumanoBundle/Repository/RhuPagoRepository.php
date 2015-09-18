@@ -203,6 +203,7 @@ class RhuPagoRepository extends EntityRepository {
         $arrayResultado = $query->getResult();
         return $arrayResultado;
     }
+    
     public function devuelveCostosFechaCertificadoIngreso($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(p.vrIngresoBaseCotizacion) as IBC, SUM(p.vrPension) as Pension, SUM(p.vrEps) as Salud, SUM(p.vrAuxilioTransporte) as AuxilioTransporte, MIN(p.fechaDesde) as fechaInicio, MAX(p.fechaHasta) as fechaFin FROM BrasaRecursoHumanoBundle:RhuPago p "

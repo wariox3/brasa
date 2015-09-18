@@ -248,6 +248,11 @@ class RhuContrato
     protected $vacacionesDisfrutesContratoRel;         
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuIbc", mappedBy="contratoRel")
+     */
+    protected $ibcsContratoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1424,5 +1429,39 @@ class RhuContrato
     public function getHorarioTrabajo()
     {
         return $this->horarioTrabajo;
+    }
+
+    /**
+     * Add ibcsContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addIbcsContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsContratoRel)
+    {
+        $this->ibcsContratoRel[] = $ibcsContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ibcsContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsContratoRel
+     */
+    public function removeIbcsContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsContratoRel)
+    {
+        $this->ibcsContratoRel->removeElement($ibcsContratoRel);
+    }
+
+    /**
+     * Get ibcsContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIbcsContratoRel()
+    {
+        return $this->ibcsContratoRel;
     }
 }

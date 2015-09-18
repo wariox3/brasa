@@ -193,7 +193,7 @@ class RhuPago
     /**
      * @ORM\Column(name="estado_pagado", type="boolean")
      */    
-    private $estadoPagado = 0;         
+    private $estadoPagado = 0;                
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=500, nullable=true)
@@ -203,7 +203,7 @@ class RhuPago
     /**
      * @ORM\Column(name="exportado_contabilidad", type="boolean")
      */    
-    private $exportadoContabilidad = 0;     
+    private $exportadoContabilidad = 0;        
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="pagosPagoTipoRel")
@@ -1459,5 +1459,29 @@ class RhuPago
     public function getCreditosPagosPagoRel()
     {
         return $this->creditosPagosPagoRel;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param boolean $dias
+     *
+     * @return RhuPago
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return boolean
+     */
+    public function getDias()
+    {
+        return $this->dias;
     }
 }
