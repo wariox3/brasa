@@ -8,10 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="rhu_contrato")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuContratoRepository")
  */
-
-/**
- * DateDiffFunction ::= "DATEDIFF" "(" ArithmeticPrimary "," ArithmeticPrimary ")"
- */
 class RhuContrato
 {
     /**
@@ -256,6 +252,7 @@ class RhuContrato
      */
     protected $ibcsContratoRel;     
     
+
     /**
      * Constructor
      */
@@ -263,6 +260,13 @@ class RhuContrato
     {
         $this->liquidacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesPagosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoPeriodosEmpleadosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoAportesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cambiosSalariosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesDisfrutesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ibcsContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -540,6 +544,30 @@ class RhuContrato
     }
 
     /**
+     * Set horarioTrabajo
+     *
+     * @param string $horarioTrabajo
+     *
+     * @return RhuContrato
+     */
+    public function setHorarioTrabajo($horarioTrabajo)
+    {
+        $this->horarioTrabajo = $horarioTrabajo;
+
+        return $this;
+    }
+
+    /**
+     * Get horarioTrabajo
+     *
+     * @return string
+     */
+    public function getHorarioTrabajo()
+    {
+        return $this->horarioTrabajo;
+    }
+
+    /**
      * Set vrSalario
      *
      * @param float $vrSalario
@@ -561,6 +589,30 @@ class RhuContrato
     public function getVrSalario()
     {
         return $this->VrSalario;
+    }
+
+    /**
+     * Set vrSalarioPago
+     *
+     * @param float $vrSalarioPago
+     *
+     * @return RhuContrato
+     */
+    public function setVrSalarioPago($vrSalarioPago)
+    {
+        $this->VrSalarioPago = $vrSalarioPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPago
+     *
+     * @return float
+     */
+    public function getVrSalarioPago()
+    {
+        return $this->VrSalarioPago;
     }
 
     /**
@@ -780,6 +832,102 @@ class RhuContrato
     }
 
     /**
+     * Set factor
+     *
+     * @param integer $factor
+     *
+     * @return RhuContrato
+     */
+    public function setFactor($factor)
+    {
+        $this->factor = $factor;
+
+        return $this;
+    }
+
+    /**
+     * Get factor
+     *
+     * @return integer
+     */
+    public function getFactor()
+    {
+        return $this->factor;
+    }
+
+    /**
+     * Set factorHorasDia
+     *
+     * @param integer $factorHorasDia
+     *
+     * @return RhuContrato
+     */
+    public function setFactorHorasDia($factorHorasDia)
+    {
+        $this->factorHorasDia = $factorHorasDia;
+
+        return $this;
+    }
+
+    /**
+     * Get factorHorasDia
+     *
+     * @return integer
+     */
+    public function getFactorHorasDia()
+    {
+        return $this->factorHorasDia;
+    }
+
+    /**
+     * Set codigoTipoCotizanteFk
+     *
+     * @param integer $codigoTipoCotizanteFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoTipoCotizanteFk($codigoTipoCotizanteFk)
+    {
+        $this->codigoTipoCotizanteFk = $codigoTipoCotizanteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoCotizanteFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoCotizanteFk()
+    {
+        return $this->codigoTipoCotizanteFk;
+    }
+
+    /**
+     * Set codigoSubtipoCotizanteFk
+     *
+     * @param integer $codigoSubtipoCotizanteFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoSubtipoCotizanteFk($codigoSubtipoCotizanteFk)
+    {
+        $this->codigoSubtipoCotizanteFk = $codigoSubtipoCotizanteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSubtipoCotizanteFk
+     *
+     * @return integer
+     */
+    public function getCodigoSubtipoCotizanteFk()
+    {
+        return $this->codigoSubtipoCotizanteFk;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -948,6 +1096,54 @@ class RhuContrato
     }
 
     /**
+     * Set ssoTipoCotizanteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel
+     *
+     * @return RhuContrato
+     */
+    public function setSsoTipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel = null)
+    {
+        $this->ssoTipoCotizanteRel = $ssoTipoCotizanteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoTipoCotizanteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante
+     */
+    public function getSsoTipoCotizanteRel()
+    {
+        return $this->ssoTipoCotizanteRel;
+    }
+
+    /**
+     * Set ssoSubtipoCotizanteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel
+     *
+     * @return RhuContrato
+     */
+    public function setSsoSubtipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel = null)
+    {
+        $this->ssoSubtipoCotizanteRel = $ssoSubtipoCotizanteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoSubtipoCotizanteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante
+     */
+    public function getSsoSubtipoCotizanteRel()
+    {
+        return $this->ssoSubtipoCotizanteRel;
+    }
+
+    /**
      * Add liquidacionesContratoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesContratoRel
@@ -1050,102 +1246,6 @@ class RhuContrato
     }
 
     /**
-     * Set factor
-     *
-     * @param integer $factor
-     *
-     * @return RhuContrato
-     */
-    public function setFactor($factor)
-    {
-        $this->factor = $factor;
-
-        return $this;
-    }
-
-    /**
-     * Get factor
-     *
-     * @return integer
-     */
-    public function getFactor()
-    {
-        return $this->factor;
-    }
-
-    /**
-     * Set factorHoras
-     *
-     * @param integer $factorHoras
-     *
-     * @return RhuContrato
-     */
-    public function setFactorHoras($factorHoras)
-    {
-        $this->factorHoras = $factorHoras;
-
-        return $this;
-    }
-
-    /**
-     * Get factorHoras
-     *
-     * @return integer
-     */
-    public function getFactorHoras()
-    {
-        return $this->factorHoras;
-    }
-
-    /**
-     * Set factorHorasDia
-     *
-     * @param integer $factorHorasDia
-     *
-     * @return RhuContrato
-     */
-    public function setFactorHorasDia($factorHorasDia)
-    {
-        $this->factorHorasDia = $factorHorasDia;
-
-        return $this;
-    }
-
-    /**
-     * Get factorHorasDia
-     *
-     * @return integer
-     */
-    public function getFactorHorasDia()
-    {
-        return $this->factorHorasDia;
-    }
-
-    /**
-     * Set vrSalarioPago
-     *
-     * @param float $vrSalarioPago
-     *
-     * @return RhuContrato
-     */
-    public function setVrSalarioPago($vrSalarioPago)
-    {
-        $this->VrSalarioPago = $vrSalarioPago;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioPago
-     *
-     * @return float
-     */
-    public function getVrSalarioPago()
-    {
-        return $this->VrSalarioPago;
-    }
-
-    /**
      * Add ssoPeriodosEmpleadosContratoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosContratoRel
@@ -1211,102 +1311,6 @@ class RhuContrato
     public function getSsoAportesContratoRel()
     {
         return $this->ssoAportesContratoRel;
-    }
-
-    /**
-     * Set codigoTipoCotizanteFk
-     *
-     * @param integer $codigoTipoCotizanteFk
-     *
-     * @return RhuContrato
-     */
-    public function setCodigoTipoCotizanteFk($codigoTipoCotizanteFk)
-    {
-        $this->codigoTipoCotizanteFk = $codigoTipoCotizanteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTipoCotizanteFk
-     *
-     * @return integer
-     */
-    public function getCodigoTipoCotizanteFk()
-    {
-        return $this->codigoTipoCotizanteFk;
-    }
-
-    /**
-     * Set codigoSubtipoCotizanteFk
-     *
-     * @param integer $codigoSubtipoCotizanteFk
-     *
-     * @return RhuContrato
-     */
-    public function setCodigoSubtipoCotizanteFk($codigoSubtipoCotizanteFk)
-    {
-        $this->codigoSubtipoCotizanteFk = $codigoSubtipoCotizanteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSubtipoCotizanteFk
-     *
-     * @return integer
-     */
-    public function getCodigoSubtipoCotizanteFk()
-    {
-        return $this->codigoSubtipoCotizanteFk;
-    }
-
-    /**
-     * Set ssoTipoCotizanteRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel
-     *
-     * @return RhuContrato
-     */
-    public function setSsoTipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante $ssoTipoCotizanteRel = null)
-    {
-        $this->ssoTipoCotizanteRel = $ssoTipoCotizanteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ssoTipoCotizanteRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante
-     */
-    public function getSsoTipoCotizanteRel()
-    {
-        return $this->ssoTipoCotizanteRel;
-    }
-
-    /**
-     * Set ssoSubtipoCotizanteRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel
-     *
-     * @return RhuContrato
-     */
-    public function setSsoSubtipoCotizanteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante $ssoSubtipoCotizanteRel = null)
-    {
-        $this->ssoSubtipoCotizanteRel = $ssoSubtipoCotizanteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ssoSubtipoCotizanteRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante
-     */
-    public function getSsoSubtipoCotizanteRel()
-    {
-        return $this->ssoSubtipoCotizanteRel;
     }
 
     /**
@@ -1409,30 +1413,6 @@ class RhuContrato
     public function getVacacionesDisfrutesContratoRel()
     {
         return $this->vacacionesDisfrutesContratoRel;
-    }
-
-    /**
-     * Set horarioTrabajo
-     *
-     * @param string $horarioTrabajo
-     *
-     * @return RhuContrato
-     */
-    public function setHorarioTrabajo($horarioTrabajo)
-    {
-        $this->horarioTrabajo = $horarioTrabajo;
-
-        return $this;
-    }
-
-    /**
-     * Get horarioTrabajo
-     *
-     * @return string
-     */
-    public function getHorarioTrabajo()
-    {
-        return $this->horarioTrabajo;
     }
 
     /**
