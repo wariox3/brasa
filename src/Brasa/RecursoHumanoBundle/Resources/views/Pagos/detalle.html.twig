@@ -58,7 +58,7 @@
                 </tr>  
                 <tr>
                     <td class="titulo">CONTRATO:</td>
-                    <td class="td-in-well" >{{ arPago.codigoContratoFk }}</td>
+                    <td><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arPago.codigoContratoFk }) }}" target="_blanck" >{{ arPago.codigoContratoFk }}</a></td>                                            
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
                     <td class="titulo"></td>

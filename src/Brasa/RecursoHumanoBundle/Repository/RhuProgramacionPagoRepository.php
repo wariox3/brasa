@@ -58,6 +58,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             if($arProgramacionPagoProcesar->getFechaDesde()->format('Y') <= $arConfiguracion->getAnioActual()) {
                 $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
                 $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
+                
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {
                     $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                     $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));
@@ -798,7 +799,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
 
                 $arPagoProcesar->setNumero($em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->consecutivo(1));
                 $arPagoProcesar->setEstadoPagado(1);
-                $em->persist($arPagoProcesar);                         
+                $em->persist($arPagoProcesar); 
+                
             }
 
             $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();

@@ -26,11 +26,20 @@ class RhuCentroCostoRepository extends EntityRepository {
             //1 programacion nomina
             if($intTipo == 1) {
                 $intDias = $arCentroCostoProceso->getPeriodoPagoRel()->getDias();
+                $intDiasPeriodo = $arCentroCostoProceso->getPeriodoPagoRel()->getDias();
                 $dateDesde = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y-m-d');
                 if($arCentroCostoProceso->getPeriodoPagoRel()->getContinuo() == 1) {
                     $intDias = $intDias - 1;
                     $dateDesde = date("Y/m/d", strtotime("$dateDesde +1 day"));
                     $dateHasta = date("Y/m/d", strtotime("$dateDesde +$intDias day"));
+                    if($arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('md') == '1229') {
+                        $dateHasta = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y') . "/12/31";
+                        $intDiasPeriodo = 2;                        
+                    }
+                    if($arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('md') == '1230') {                        
+                        $dateHasta = $arCentroCostoProceso->getFechaUltimoPagoProgramado()->format('Y') . "/12/31";                        
+                        $intDiasPeriodo = 1;
+                    }
                     $dateHastaReal = $dateHasta;
                 } else {
                     //Para procesar el mes de febrero
@@ -83,9 +92,8 @@ class RhuCentroCostoRepository extends EntityRepository {
                 $arProgramacionPago->setPagoTipoRel($arPagoTipo);
                 $arProgramacionPago->setFechaDesde(date_create($dateDesde));
                 $arProgramacionPago->setFechaHasta(date_create($dateHasta));
-                $arProgramacionPago->setFechaHastaReal(date_create($dateHastaReal));
-                
-                $arProgramacionPago->setDias($arCentroCostoProceso->getPeriodoPagoRel()->getDias());
+                $arProgramacionPago->setFechaHastaReal(date_create($dateHastaReal));                
+                $arProgramacionPago->setDias($intDiasPeriodo);
                 $arProgramacionPago->setCentroCostoRel($arCentroCostoProceso);
                 $em->persist($arProgramacionPago);
                 $arCentroCostoProceso->setPagoAbierto(1);

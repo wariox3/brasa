@@ -106,7 +106,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setDiasPrimas($intDiasPrima);
                 $arLiquidacion->setVrPrima($douPrima);            
             } else {
-                $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 1;    
+                $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 2;    
                 $douDeduccionPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
                 $arLiquidacion->setDiasPrimas($intDiasPrima * -1);
                 $arLiquidacion->setVrPrima(0); 
@@ -156,11 +156,12 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arLiquidacion->setVrSalario($douSalario);
         $arLiquidacion->setVrIngresoBaseCotizacion($douIBC);
         $arLiquidacion->setVrIngresoBaseCotizacionTotal($douIBCTotal); 
-        $arLiquidacion->setVrDeducciones($floDeducciones);
+        $arLiquidacion->setVrDeducciones($floDeducciones);        
         $intDiasTotal = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
         $intDiasTotal = $intDiasTotal->format('%a');
         $arLiquidacion->setNumeroDias($intDiasLaborados);
         $arLiquidacion->setEstadoGenerado(1);
+        $arLiquidacion->setFechaInicioContrato($arLiquidacion->getContratoRel()->getFechaDesde());
         $em->flush();
         return true;
     }    

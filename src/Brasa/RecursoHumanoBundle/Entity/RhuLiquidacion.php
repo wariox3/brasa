@@ -203,6 +203,11 @@ class RhuLiquidacion
     private $estadoGenerado = 0;
     
     /**
+     * @ORM\Column(name="fecha_inicio_contrato", type="date", nullable=true)
+     */    
+    private $fechaInicioContrato;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -1237,5 +1242,29 @@ class RhuLiquidacion
     public function getEstadoGenerado()
     {
         return $this->estadoGenerado;
+    }
+
+    /**
+     * Set fechaInicioContrato
+     *
+     * @param \DateTime $fechaInicioContrato
+     *
+     * @return RhuLiquidacion
+     */
+    public function setFechaInicioContrato($fechaInicioContrato)
+    {
+        $this->fechaInicioContrato = $fechaInicioContrato;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioContrato
+     *
+     * @return \DateTime
+     */
+    public function getFechaInicioContrato()
+    {
+        return $this->fechaInicioContrato;
     }
 }
