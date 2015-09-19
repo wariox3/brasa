@@ -262,12 +262,6 @@ class ConsultasController extends Controller
                 $this->filtrarVacacionesPagarLista($form);
                 $this->VacacionesPagarListar();
                 $this->generarVacacionesPagarExcel();
-            }
-            if($form->get('BtnPDFVacacionesPagar')->isClicked()) {
-                $this->filtrarVacacionesPagarLista($form);
-                $this->VacacionesPagarListar();
-                $objReporteVacacionesPagar = new \Brasa\RecursoHumanoBundle\Reportes\ReporteVacacionesPagar();
-                $objReporteVacacionesPagar->Generar($this, $this->strSqlVacacionesPagarLista);
             }            
             if($form->get('BtnFiltrarVacacionesPagar')->isClicked()) {
                 $this->filtrarVacacionesPagarLista($form);
@@ -368,7 +362,8 @@ class ConsultasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strSqlVacacionesPagarLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaContratosVacacionCumplidaDQL(
                     $session->get('filtroCodigoCentroCosto'),
-                    $session->get('filtroIdentificacion')
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroHasta')
                     );
     }
 
@@ -589,9 +584,9 @@ class ConsultasController extends Controller
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))    
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrarVacacionesPagar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcelVacacionesPagar', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPDFVacacionesPagar', 'submit', array('label'  => 'PDF',))
             ->getForm();
         return $form;
     }
@@ -674,6 +669,7 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
     private function generarExcel() {
@@ -1361,153 +1357,50 @@ class ConsultasController extends Controller
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'SUCURSAL')
-                    ->setCellValue('C1', 'IDENTIFICACIÓN')
-                    ->setCellValue('D1', 'EMPLEADO')
-                    ->setCellValue('E1', 'SECUENCIA')
-                    ->setCellValue('F1', 'TIPO DOCUMENTO')
-                    ->setCellValue('G1', 'TIPO COTIZANTE')
-                    ->setCellValue('H1', 'SUBTIPO COTIZANTE')
-                    ->setCellValue('I1', 'DEPARTAMENTO')
-                    ->setCellValue('J1', 'MUNICIPIO')
-                    ->setCellValue('K1', 'INGRESO')
-                    ->setCellValue('L1', 'RETIRO')
-                    ->setCellValue('M1', 'TRANSLADO DESDE OTRA EPS')
-                    ->setCellValue('N1', 'TRANSLADO A OTRA EPS')
-                    ->setCellValue('O1', 'TRANSLADO DESDE OTRA PENSIÓN')
-                    ->setCellValue('P1', 'TRANSLADO A OTRA PENSIÓN')
-                    ->setCellValue('Q1', 'VARIACIÓN PERMANENTE SALARIO')
-                    ->setCellValue('R1', 'CORRECCIONES')
-                    ->setCellValue('S1', 'VARIACIÓN TRANSITORIA SALARIO')
-                    ->setCellValue('T1', 'SUSPENCIÓN TEMPORAL CONTRATO LICENCIA SERVICIOS')
-                    ->setCellValue('U1', 'DÍAS LICENCIAS')
-                    ->setCellValue('V1', 'SALARIO BÁSICO')
-                    ->setCellValue('W1', 'SALARIO MES ANTERIOR')
-                    ->setCellValue('X1', 'SALARIO INTEGRAL')
-                    ->setCellValue('Y1', 'SUPLEMENTARIO')
-                    ->setCellValue('Z1', 'INCAPACIDAD GENERAL')
-                    ->setCellValue('AA1', 'DÍAS INCAPACIDAD GENERAL')
-                    ->setCellValue('AB1', 'LICENCIA MATERNIDAD')
-                    ->setCellValue('AC1', 'DÍAS LICENCIAS MATERNIDAD')
-                    ->setCellValue('AD1', 'VACACIONES')
-                    ->setCellValue('AE1', 'APORTE VOLUNTARIO')
-                    ->setCellValue('AF1', 'VARIACIÓN CENTRO TRABAJO')
-                    ->setCellValue('AG1', 'INCAPACIDAD ACCIDENTE TRABAJO ENFERMEDAD PROFESIONAL')
-                    ->setCellValue('AH1', 'ENTIDAD PENSIÓN')
-                    ->setCellValue('AI1', 'ENTIDAD PENSIÓN TRASLADA')
-                    ->setCellValue('AJ1', 'ENTIDAD SALUD')
-                    ->setCellValue('AK1', 'ENTIDAD SALUD TRASLADA')
-                    ->setCellValue('AL1', 'CAJA COMPENSACIÓN')
-                    ->setCellValue('AM1', 'DÍAS COTIZADOS PENSIÓN')
-                    ->setCellValue('AN1', 'DÍAS COTIZADOS SALUD')
-                    ->setCellValue('AO1', 'DIAS COTIZADOS RIESGOS PROFESIONALES')
-                    ->setCellValue('AP1', 'DIAS COTIZADOS CAJAS COMPENSACIÓN')
-                    ->setCellValue('AQ1', 'IBC PENSIÓN')
-                    ->setCellValue('AR1', 'IBC SALUD')
-                    ->setCellValue('AS1', 'IBC RIESGOS PROFESIONALES')
-                    ->setCellValue('AT1', 'IBC CAJA COMPENSACIÓN')
-                    ->setCellValue('AU1', 'TARIFA PENSIÓN')
-                    ->setCellValue('AV1', 'TARIFA SALUD')
-                    ->setCellValue('AW1', 'TARIFA RIESGOS PROFESIONALES')
-                    ->setCellValue('AX1', 'TARIFA CAJA COMPENSACIÓN')
-                    ->setCellValue('AY1', 'COTIZACIÓN PENSIÓN')
-                    ->setCellValue('AZ1', 'COTIZACIÓN SALUD')
-                    ->setCellValue('BA1', 'COTIZACIÓN RIESGOS PROFESIONALES')
-                    ->setCellValue('BB1', 'COTIZACION CAJA COMPENSACIÓN')
-                    ->setCellValue('BC1', 'APORTE VOLUNTARIO FONDO PENSIONES OBLIGATORIAS')
-                    ->setCellValue('BD1', 'COTIZACIÓN VOLUNTARIO FONDO PENSIONES OBLIGATORIAS')
-                    ->setCellValue('BE1', 'TOTAL COTIZACIÓN')
-                    ->setCellValue('BF1', 'APORTES FONDO SOLIDARIDAD PENSIONAL SOLIDARIDAD');
+                    ->setCellValue('B1', 'TIPO CONTRATO')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'NÚMERO')
+                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'EMPLEADO')
+                    ->setCellValue('G1', 'CENTRO COSTO')
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'FECHA ULTIMO PAGO')
+                    ->setCellValue('J1', 'FECHA ULTIMO VACACIONES')
+                    ->setCellValue('K1', 'SALARIO')
+                    ->setCellValue('L1', 'VIGENTE');
         $i = 2;
-        $query = $em->createQuery($this->strSqlAportesLista);
-        $arAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
-        $arAportes = $query->getResult();
+        $query = $em->createQuery($this->strSqlVacacionesPagarLista);
+        $arVacacionesPagar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arVacacionesPagar = $query->getResult();
         
-        foreach ($arAportes as $arAporte) {
-        $arEntidadPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
-        $arEntidadPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->findBy(array('codigoInterface' =>$arAporte->getCodigoEntidadPensionPertenece()));
-        $arEntidadPensionPertenece = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
-        $arEntidadPensionPertenece = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->find($arEntidadPension[0]);
-        
-        $arEntidadSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
-        $arEntidadSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->findBy(array('codigoInterface' =>$arAporte->getCodigoEntidadSaludPertenece()));
-        $arEntidadSaludPertenece = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
-        $arEntidadSaludPertenece = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($arEntidadSalud[0]);
-        
-        $arEntidadCaja = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
-        $arEntidadCaja = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->findBy(array('codigoInterface' =>$arAporte->getCodigoEntidadCajaPertenece()));
-        $arEntidadCajaPertenece = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
-        $arEntidadCajaPertenece = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->find($arEntidadCaja[0]);
-        
+        foreach ($arVacacionesPagar as $arVacacionesPagar) {
+            if ($arVacacionesPagar->getEstadoActivo() == 1){
+                $vigente = "SI";
+            } else {
+                $vigente = "NO";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arAporte->getCodigoAportePk())
-                    ->setCellValue('B' . $i, $arAporte->getSsoSucursalRel()->getNombre())
-                    ->setCellValue('C' . $i, $arAporte->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('D' . $i, $arAporte->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('E' . $i, $arAporte->getSecuencia())
-                    ->setCellValue('F' . $i, $arAporte->getEmpleadoRel()->getTipoIdentificacionRel()->getNombre())
-                    ->setCellValue('G' . $i, $arAporte->getContratoRel()->getSsoTipoCotizanteRel()->getNombre())
-                    ->setCellValue('H' . $i, $arAporte->getContratoRel()->getSsoSubtipoCotizanteRel()->getNombre())
-                    ->setCellValue('I' . $i, $arAporte->getEmpleadoRel()->getCiudadRel()->getDepartamentoRel()->getNombre())
-                    ->setCellValue('J' . $i, $arAporte->getEmpleadoRel()->getCiudadRel()->getNombre())
-                    ->setCellValue('K' . $i, $arAporte->getIngreso())
-                    ->setCellValue('L' . $i, $arAporte->getRetiro())
-                    ->setCellValue('M' . $i, $arAporte->getTrasladoDesdeOtraEps())
-                    ->setCellValue('N' . $i, $arAporte->getTrasladoAOtraEps())
-                    ->setCellValue('O' . $i, $arAporte->getTrasladoDesdeOtraPension())
-                    ->setCellValue('P' . $i, $arAporte->getTrasladoAOtraPension())
-                    ->setCellValue('Q' . $i, $arAporte->getVariacionPermanenteSalario())
-                    ->setCellValue('R' . $i, $arAporte->getCorrecciones())
-                    ->setCellValue('S' . $i, $arAporte->getVariacionTransitoriaSalario())
-                    ->setCellValue('T' . $i, $arAporte->getSuspensionTemporalContratoLicenciaServicios())
-                    ->setCellValue('U' . $i, $arAporte->getDiasLicencia())
-                    ->setCellValue('V' . $i, $arAporte->getSalarioBasico())
-                    ->setCellValue('W' . $i, $arAporte->getSalarioMesAnterior())
-                    ->setCellValue('X' . $i, $arAporte->getSalarioIntegral())
-                    ->setCellValue('Y' . $i, $arAporte->getSuplementario())
-                    ->setCellValue('Z' . $i, $arAporte->getIncapacidadGeneral())
-                    ->setCellValue('AA' . $i, $arAporte->getDiasIncapacidadGeneral())
-                    ->setCellValue('AB' . $i, $arAporte->getLicenciaMaternidad())
-                    ->setCellValue('AC' . $i, $arAporte->getDiasLicenciaMaternidad())
-                    ->setCellValue('AD' . $i, $arAporte->getVacaciones())
-                    ->setCellValue('AE' . $i, $arAporte->getAporteVoluntario())
-                    ->setCellValue('AF' . $i, $arAporte->getVariacionCentrosTrabajo())
-                    ->setCellValue('AG' . $i, $arAporte->getIncapacidadAccidenteTrabajoEnfermedadProfesional())
-                    ->setCellValue('AH' . $i, $arEntidadPensionPertenece->getNombre())
-                    ->setCellValue('AI' . $i, $arAporte->getCodigoEntidadPensionTraslada())
-                    ->setCellValue('AJ' . $i, $arEntidadSaludPertenece->getNombre())
-                    ->setCellValue('AK' . $i, $arAporte->getCodigoEntidadSaludTraslada())
-                    ->setCellValue('AL' . $i, $arEntidadCajaPertenece->getNombre())
-                    ->setCellValue('AM' . $i, $arAporte->getDiasCotizadosPension())
-                    ->setCellValue('AN' . $i, $arAporte->getDiasCotizadosSalud())
-                    ->setCellValue('AO' . $i, $arAporte->getDiasCotizadosRiesgosProfesionales())
-                    ->setCellValue('AP' . $i, $arAporte->getDiasCotizadosCajaCompensacion())
-                    ->setCellValue('AQ' . $i, $arAporte->getIbcPension())
-                    ->setCellValue('AR' . $i, $arAporte->getIbcSalud())
-                    ->setCellValue('AS' . $i, $arAporte->getIbcRiesgosProfesionales())
-                    ->setCellValue('AT' . $i, $arAporte->getIbcCaja())
-                    ->setCellValue('AU' . $i, $arAporte->getTarifaPension())
-                    ->setCellValue('AV' . $i, $arAporte->getTarifaSalud())
-                    ->setCellValue('AW' . $i, $arAporte->getTarifaRiesgos())
-                    ->setCellValue('AX' . $i, $arAporte->getTarifaCaja())
-                    ->setCellValue('AY' . $i, $arAporte->getCotizacionPension())
-                    ->setCellValue('AZ' . $i, $arAporte->getCotizacionSalud())
-                    ->setCellValue('BA' . $i, $arAporte->getCotizacionRiesgos())
-                    ->setCellValue('BB' . $i, $arAporte->getCotizacionCaja())
-                    ->setCellValue('BC' . $i, $arAporte->getAporteVoluntarioFondoPensionesObligatorias())
-                    ->setCellValue('BD' . $i, $arAporte->getCotizacionVoluntarioFondoPensionesObligatorias())
-                    ->setCellValue('BE' . $i, $arAporte->getTotalCotizacion())
-                    ->setCellValue('BF' . $i, $arAporte->getAportesFondoSolidaridadPensionalSolidaridad())
-                    ;
+                    ->setCellValue('A' . $i, $arVacacionesPagar->getCodigoContratoPk())
+                    ->setCellValue('B' . $i, $arVacacionesPagar->getContratoTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arVacacionesPagar->getFecha()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arVacacionesPagar->getNumero())
+                    ->setCellValue('E' . $i, $arVacacionesPagar->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arVacacionesPagar->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arVacacionesPagar->getCentroCostoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arVacacionesPagar->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('I' . $i, $arVacacionesPagar->getFechaUltimoPago()->format('Y/m/d'))
+                    ->setCellValue('J' . $i, $arVacacionesPagar->getFechaUltimoPagoVacaciones()->format('Y/m/d'))
+                    ->setCellValue('K' . $i, $arVacacionesPagar->getVrSalarioPago())
+                    ->setCellValue('L' . $i, $vigente);
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Aportes');
+        $objPHPExcel->getActiveSheet()->setTitle('ReporteVacacionesPorPagar');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ReporteAportes.xlsx"');
+        header('Content-Disposition: attachment;filename="ReporteVacacionesPorPagar.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

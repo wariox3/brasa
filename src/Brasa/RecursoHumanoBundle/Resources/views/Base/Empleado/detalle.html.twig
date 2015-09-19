@@ -396,7 +396,6 @@
                         <th>VR. DEDUCCIONES</th>
                         <th>TOTAL</th>
                         <th></th>
-                        <th></th>
                     </tr>
                     {% for arVacaciones in arVacaciones %}
                         <tr>
@@ -406,7 +405,6 @@
                             <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>
                             <td style="text-align: right">{{ arVacaciones.vrDeduccion | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}', 'AgregarVacacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarVacacion[]" value="{{ arVacaciones.codigoVacacionPk }}" /></td>
                         </tr>
                     {% endfor %}

@@ -90,13 +90,16 @@ class RhuContratoRepository extends EntityRepository {
     }
     
     //lista contratos con las vacaciones cumplidas 365 dias
-    public function listaContratosVacacionCumplidaDQL($strCodigoCentroCosto = "", $strIdentificacion = "") {        
-        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.indefinido = 1 AND DATEDIFF((c.fechaDesde),(c.fechaUltimoPago))>=2";
+    public function listaContratosVacacionCumplidaDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strHasta = "") {        
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoLiquidado = 0";
         if($strCodigoCentroCosto != "") {
             $dql .= " AND c.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND c.fechaUltimoPagoVacaciones <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         return $dql;
     }
