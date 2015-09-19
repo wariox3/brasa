@@ -126,18 +126,21 @@ class BaseCentroCostoController extends Controller
     public function detalleAction($codigoCentroCosto) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        
-        $form = $this->createFormBuilder()    
-            
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->createFormBuilder()               
             ->getForm();
         $form->handleRequest($request);
+        $arSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuSede();
+        $arSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSede')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));
+        $arSedes = $paginator->paginate($arSedes, $this->get('request')->query->get('page', 1),5);
         $arCentrosCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         return $this->render('BrasaRecursoHumanoBundle:Base/CentroCosto:detalle.html.twig', array(
-                    'arCentrosCostos' => $arCentrosCostos,
-                    'form' => $form->createView()
+            'arSedes' => $arSedes,        
+            'arCentrosCostos' => $arCentrosCostos,
+            'form' => $form->createView()
                     ));
-    }
+    }    
     
      private function generarExcel() {
          $em = $this->getDoctrine()->getManager();

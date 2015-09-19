@@ -251,6 +251,11 @@ class RhuContrato
      * @ORM\OneToMany(targetEntity="RhuIbc", mappedBy="contratoRel")
      */
     protected $ibcsContratoRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuContratoSede", mappedBy="contratoRel")
+     */
+    protected $contratosSedesContratoRel;    
     
 
     /**
@@ -1447,5 +1452,39 @@ class RhuContrato
     public function getIbcsContratoRel()
     {
         return $this->ibcsContratoRel;
+    }
+
+    /**
+     * Add contratosSedesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede $contratosSedesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addContratosSedesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoSede $contratosSedesContratoRel)
+    {
+        $this->contratosSedesContratoRel[] = $contratosSedesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosSedesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede $contratosSedesContratoRel
+     */
+    public function removeContratosSedesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoSede $contratosSedesContratoRel)
+    {
+        $this->contratosSedesContratoRel->removeElement($contratosSedesContratoRel);
+    }
+
+    /**
+     * Get contratosSedesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosSedesContratoRel()
+    {
+        return $this->contratosSedesContratoRel;
     }
 }

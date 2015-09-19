@@ -79,11 +79,15 @@ class ContratosController extends Controller
         $arVacacionesDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
         $arVacacionesDisfrute = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->findBy(array('codigoContratoFk' => $codigoContrato));        
         $arVacacionesDisfrute = $paginator->paginate($arVacacionesDisfrute, $this->get('request')->query->get('page', 1),5);        
+        $arContratoSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede();
+        $arContratoSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoSede')->findBy(array('codigoContratoFk' => $codigoContrato));        
+        $arContratoSedes = $paginator->paginate($arContratoSedes, $this->get('request')->query->get('page', 1),5);                
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:detalle.html.twig', array(
                     'arContrato' => $arContrato,
                     'arCambiosSalario' => $arCambiosSalario,
                     'arVacaciones' => $arVacaciones,
                     'arVacacionesDisfrute' => $arVacacionesDisfrute,
+                    'arContratoSedes' => $arContratoSedes,
                     'form' => $form->createView()
                     ));
     }    
@@ -258,6 +262,40 @@ class ContratosController extends Controller
             'formContrato' => $formContrato->createView()
         ));
     }   
+    
+    public function detalleSedeNuevoAction($codigoContrato) {
+        $request = $this->getRequest();        
+        $em = $this->getDoctrine()->getManager();        
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();                    
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);        
+        $codigoCentroCosto = $arContrato->getCodigoCentroCostoFk();
+        $form = $this->createFormBuilder()
+            ->add('sedeRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSede',
+                'query_builder' => function (EntityRepository $er) use($codigoCentroCosto) {
+                    return $er->createQueryBuilder('s')
+                    ->where('s.codigoCentroCostoFk = :centroCosto')
+                    ->setParameter('centroCosto', $codigoCentroCosto)
+                    ->orderBy('s.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))
+            ->add('guardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {                  
+            $arContratoSede = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede();              
+            $arContratoSede->setContratoRel($arContrato);
+            $arContratoSede->setSedeRel($form->get('sedeRel')->getData());
+            $em->persist($arContratoSede);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                                     
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevaSede.html.twig', array(
+            'arContrato' => $arContrato,
+            'form' => $form->createView()));
+    }    
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();

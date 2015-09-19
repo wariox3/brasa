@@ -210,7 +210,6 @@ class RhuCentroCosto
      * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="centroCostoRel")
      */
     protected $facturasDetallesCentroCostoRel;
-    
 
     /**
      * Constructor

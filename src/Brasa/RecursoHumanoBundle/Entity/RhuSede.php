@@ -44,6 +44,11 @@ class RhuSede
     protected $pagosDetallesSedesSedeRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuContratoSede", mappedBy="sedeRel")
+     */
+    protected $contratosSedesSedeRel; 
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -200,5 +205,39 @@ class RhuSede
     public function getPagosDetallesSedesSedeRel()
     {
         return $this->pagosDetallesSedesSedeRel;
+    }
+
+    /**
+     * Add contratosSedesSedeRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede $contratosSedesSedeRel
+     *
+     * @return RhuSede
+     */
+    public function addContratosSedesSedeRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoSede $contratosSedesSedeRel)
+    {
+        $this->contratosSedesSedeRel[] = $contratosSedesSedeRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosSedesSedeRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede $contratosSedesSedeRel
+     */
+    public function removeContratosSedesSedeRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoSede $contratosSedesSedeRel)
+    {
+        $this->contratosSedesSedeRel->removeElement($contratosSedesSedeRel);
+    }
+
+    /**
+     * Get contratosSedesSedeRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosSedesSedeRel()
+    {
+        return $this->contratosSedesSedeRel;
     }
 }

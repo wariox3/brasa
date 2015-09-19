@@ -13,13 +13,16 @@ class RhuIbcRepository extends EntityRepository {
     
     public function devuelveIbcFecha($codigoEmpleado, $fechaDesde, $fechaHasta, $codigoContrato) {
             $em = $this->getEntityManager();
-            $dql   = "SELECT SUM(ibc.vrIngresoBaseCotizacion) FROM BrasaRecursoHumanoBundle:RhuIbc ibc "
+            $dql   = "SELECT SUM(ibc.vrIngresoBaseCotizacion) as vrIngresoBaseCotizacion FROM BrasaRecursoHumanoBundle:RhuIbc ibc "
                     . "WHERE ibc.codigoEmpleadoFk = " . $codigoEmpleado . " "
                     . "AND ibc.codigoContratoFk = " . $codigoContrato . " "
                     . "AND ibc.fechaDesde >= '" . $fechaDesde . "' AND ibc.fechaHasta <= '" . $fechaHasta . "'";
-            $query = $em->createQuery($dql);
-            $arrayResultado = $query->getResult();
-            return $arrayResultado;
+            $query = $em->createQuery($dql);            
+            $floIbc = $query->getSingleScalarResult();
+            if(!$floIbc) {
+                $floIbc = 0;
+            } 
+            return $floIbc;
         }    
     
     public function listaDqlCostosIbc($strContrato = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        

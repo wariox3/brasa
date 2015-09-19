@@ -107,15 +107,18 @@ class RhuCentroCostoRepository extends EntityRepository {
                     $intAnio += 1;
                     $fechaDesde = date_create_from_format('Y/m/d', $intAnio .'/01/01');
                     $fechaHasta = date_create_from_format('Y/m/d', $intAnio .'/06/30');
+                    $fechaHastaReal = date_create_from_format('Y/m/d', $intAnio .'/06/30');
                 }
                 if($arCentroCostoProceso->getFechaUltimoPagoPrima()->format('m-d') == '06-30') {
                     $fechaDesde = date_create_from_format('Y/m/d', $intAnio .'/07/01');
                     $fechaHasta = date_create_from_format('Y/m/d', $intAnio .'/12/30');
+                    $fechaHastaReal = date_create_from_format('Y/m/d', $intAnio .'/12/31');
                 }   
                 $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                 $arProgramacionPago->setPagoTipoRel($arPagoTipo);
                 $arProgramacionPago->setFechaDesde($fechaDesde);
                 $arProgramacionPago->setFechaHasta($fechaHasta);
+                $arProgramacionPago->setFechaHastaReal($fechaHastaReal);
                 $arProgramacionPago->setDias(0);
                 $arProgramacionPago->setCentroCostoRel($arCentroCostoProceso);
                 $em->persist($arProgramacionPago);                

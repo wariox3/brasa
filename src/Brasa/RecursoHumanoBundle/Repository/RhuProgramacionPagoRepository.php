@@ -458,8 +458,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $intDiasContinuos = $arProgramacionPagoDetalle->getFechaDesde()->diff($arProgramacionPagoDetalle->getFechaHasta());
                         $intDiasContinuos = $intDiasContinuos->format('%a');
                         $intDiasContinuos += 1;
-                        $arIbc = $em->getRepository('BrasaRecursoHumanoBundle:RhuIbc')->devuelveIbcFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
-                        $floIbc = $arIbc->getVrIngresoBaseCotizacion();                        
+                        
+                        $floIbc = $em->getRepository('BrasaRecursoHumanoBundle:RhuIbc')->devuelveIbcFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoProcesar->getFechaHastaReal()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
                         //$arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
                         //$floIbc = (float)$arrayCostos[0]['IBC'];
                         $dateFechaUltimoPago = $arProgramacionPagoDetalle->getContratoRel()->getFechaUltimoPago();                        
@@ -803,43 +803,45 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arPagoProcesar->setEstadoPagado(1);
                 $em->persist($arPagoProcesar); 
                 
-                if($arPagoProcesar->getFechaDesde()->format('m') == $arPagoProcesar->getFechaHasta()->format('m')) {
-                    $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
-                    $arIbc->setFechaDesde($arPagoProcesar->getFechaDesde());
-                    $arIbc->setFechaHasta($arPagoProcesar->getFechaHasta());
-                    $arIbc->setContratoRel($arPagoProcesar->getContratoRel());
-                    $arIbc->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
-                    $arIbc->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
-                    $em->persist($arIbc);
-                } else {
-                    $intDiasHasta = $arPagoProcesar->getFechaHasta()->format('j');
-                    $intDiasDesde = $arPagoProcesar->getDiasPeriodo() - $intDiasHasta;
-                    $vrIbcPromedioDia = 0;
-                    if($arPagoProcesar->getDiasPeriodo() > 0) {
-                        $vrIbcPromedioDia = $arPagoProcesar->getVrIngresoBaseCotizacion() / $arPagoProcesar->getDiasPeriodo();                        
+                if($arPagoProcesar->getCodigoPagoTipoFk() == 1) {
+                    if($arPagoProcesar->getFechaDesde()->format('m') == $arPagoProcesar->getFechaHasta()->format('m')) {
+                        $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
+                        $arIbc->setFechaDesde($arPagoProcesar->getFechaDesde());
+                        $arIbc->setFechaHasta($arPagoProcesar->getFechaHasta());
+                        $arIbc->setContratoRel($arPagoProcesar->getContratoRel());
+                        $arIbc->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
+                        $arIbc->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
+                        $em->persist($arIbc);
+                    } else {
+                        $intDiasHasta = $arPagoProcesar->getFechaHasta()->format('j');
+                        $intDiasDesde = $arPagoProcesar->getDiasPeriodo() - $intDiasHasta;
+                        $vrIbcPromedioDia = 0;
+                        if($arPagoProcesar->getDiasPeriodo() > 0) {
+                            $vrIbcPromedioDia = $arPagoProcesar->getVrIngresoBaseCotizacion() / $arPagoProcesar->getDiasPeriodo();                        
+                        }                    
+                        $strAnio = $arPagoProcesar->getFechaDesde()->format('Y');
+                        $strMes = $arPagoProcesar->getFechaDesde()->format('m');
+                        $intUltimoDiaMes = date("d",(mktime(0,0,0,$strMes+1,1,$strAnio)-1));
+                        $strFechaHasta = $arPagoProcesar->getFechaDesde()->format('Y/m') ."/" . $intUltimoDiaMes;
+
+                        $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
+                        $arIbc->setFechaDesde($arPagoProcesar->getFechaDesde());
+                        $arIbc->setFechaHasta(date_create($strFechaHasta));
+                        $arIbc->setContratoRel($arPagoProcesar->getContratoRel());
+                        $arIbc->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
+                        $arIbc->setVrIngresoBaseCotizacion( $vrIbcPromedioDia * $intDiasDesde);
+                        $em->persist($arIbc);
+
+                        $strFechaDesde = $arPagoProcesar->getFechaHasta()->format('Y/m') . "/01";
+                        $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
+                        $arIbc->setFechaDesde(date_create($strFechaDesde));
+                        $arIbc->setFechaHasta($arPagoProcesar->getFechaHasta());
+                        $arIbc->setContratoRel($arPagoProcesar->getContratoRel());
+                        $arIbc->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
+                        $arIbc->setVrIngresoBaseCotizacion($vrIbcPromedioDia * $intDiasHasta);
+                        $em->persist($arIbc);                    
+
                     }                    
-                    $strAnio = $arPagoProcesar->getFechaDesde()->format('Y');
-                    $strMes = $arPagoProcesar->getFechaDesde()->format('m');
-                    $intUltimoDiaMes = date("d",(mktime(0,0,0,$strMes+1,1,$strAnio)-1));
-                    $strFechaHasta = $arPagoProcesar->getFechaDesde()->format('Y/m') ."/" . $intUltimoDiaMes;
-                    
-                    $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
-                    $arIbc->setFechaDesde($arPagoProcesar->getFechaDesde());
-                    $arIbc->setFechaHasta(date_create($strFechaHasta));
-                    $arIbc->setContratoRel($arPagoProcesar->getContratoRel());
-                    $arIbc->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
-                    $arIbc->setVrIngresoBaseCotizacion( $vrIbcPromedioDia * $intDiasDesde);
-                    $em->persist($arIbc);
-                    
-                    $strFechaDesde = $arPagoProcesar->getFechaHasta()->format('Y/m') . "/01";
-                    $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
-                    $arIbc->setFechaDesde(date_create($strFechaDesde));
-                    $arIbc->setFechaHasta($arPagoProcesar->getFechaHasta());
-                    $arIbc->setContratoRel($arPagoProcesar->getContratoRel());
-                    $arIbc->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
-                    $arIbc->setVrIngresoBaseCotizacion($vrIbcPromedioDia * $intDiasHasta);
-                    $em->persist($arIbc);                    
-                    
                 }
             }
 

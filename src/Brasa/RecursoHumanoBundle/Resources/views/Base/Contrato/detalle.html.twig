@@ -89,6 +89,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#cambiosalario" data-toggle="tab">Cambio salario</a></li>
             <li><a href="#vacaciones" data-toggle="tab">Vacaciones</a></li>
+            <li><a href="#sedes" data-toggle="tab">Sedes</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="cambiosalario">
@@ -188,6 +189,29 @@
                     </div>
                 </div>
             </div>
+            <div class="tab-pane" id="sedes">  
+                <br />
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>CODIGO</th>
+                        <th>SEDE</th>
+                    </tr>
+                    {% for arContratoSedes in arContratoSedes %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arContratoSedes.codigoContratoSedePk }}">{{ arContratoSedes.codigoContratoSedePk }} </td>
+                            <td>{{ arContratoSedes.sedeRel.nombre  }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arContratoSedes) }}
+                </div>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_sedes_nuevo', {'codigoContrato': arContrato.codigoContratoPk }) }}', 'AgregarSede', 600, 900)" >Nuevo</a>
+                    </div>
+                </div>
+            </div>                    
         </div>
         
         <div class="btn-toolbar" style="float:left">
