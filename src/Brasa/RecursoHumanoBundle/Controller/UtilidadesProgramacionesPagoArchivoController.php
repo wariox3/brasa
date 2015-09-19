@@ -61,6 +61,7 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
                   }else {                  
                 $strNombreArchivo = "PagoNomina" . date('YmdHis') . ".txt";
                 $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;
+                //$strArchivo = "" . $strNombreArchivo;
                 $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
                 // Encabezado
                 $strNitEmpresa = $arConfiguracionGeneral->getNitEmpresa();

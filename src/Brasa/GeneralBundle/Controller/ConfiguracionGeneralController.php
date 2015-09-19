@@ -43,7 +43,7 @@ class ConfiguracionGeneralController extends Controller
             
             $ConceptoTipoCuenta = $controles['conceptoTipoCuenta'];
             $NumeroCuenta = $controles['cuenta'];
-            $NumeroNit = $controles['nitEmpresa'];
+            $NitEmpresa = $formConfiguracionGeneral->get('nitEmpresa')->getData();
             $NumeroDv = $controles['digitoVerificacion'];
             $NombreEmpresa = $controles['nombreEmpresa'];
             $TelefonoEmpresa = $controles['telefonoEmpresa'];
@@ -60,9 +60,9 @@ class ConfiguracionGeneralController extends Controller
             // guardar la tarea en la base de datos
             $arConfiguracionGeneral->setTipoCuenta($ConceptoTipoCuenta);
             $arConfiguracionGeneral->setCuenta($NumeroCuenta);
-            $arConfiguracionGeneral->setNitEmpresa($NumeroNit);
+            $arConfiguracionGeneral->setNitEmpresa($NitEmpresa);
             $arConfiguracionGeneral->setDigitoVerificacionEmpresa($NumeroDv);
-            $arConfiguracionGeneral->setNitEmpresa($NombreEmpresa);
+            $arConfiguracionGeneral->setNombreEmpresa($NombreEmpresa);
             $arConfiguracionGeneral->setTelefonoEmpresa($TelefonoEmpresa);
             $arConfiguracionGeneral->setDireccionEmpresa($DireccionEmpresa);
             $arConfiguracionGeneral->setBaseRetencionFuente($BaseRetencionFuente);
