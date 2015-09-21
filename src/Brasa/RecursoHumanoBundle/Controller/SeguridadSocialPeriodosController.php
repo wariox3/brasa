@@ -208,6 +208,84 @@ class SeguridadSocialPeriodosController extends Controller
                 $em->flush();
                 exit;
             }
+            
+            if($request->request->get('OpGenerarExcel')) {
+                $codigoPeriodoDetalle = $request->request->get('OpGenerarExcel');
+
+                $em = $this->getDoctrine()->getManager();        
+                $objPHPExcel = new \PHPExcel();
+                 // Set document properties
+                $objPHPExcel->getProperties()->setCreator("EMPRESA")
+                    ->setLastModifiedBy("EMPRESA")
+                    ->setTitle("Office 2007 XLSX Test Document")
+                    ->setSubject("Office 2007 XLSX Test Document")
+                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("Test result file");
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                    
+                    ->setCellValue('A1', 'PERIODO DETALLE')
+                    ->setCellValue('A2', 'CÓDIGO SUCURSAL')
+                    ->setCellValue('A3', 'SUCURSAL')
+                    ->setCellValue('A5', 'CÓDIGO PERIODO')
+                    ->setCellValue('B5', 'IDENTIFICACIÓN')
+                    ->setCellValue('C5', 'CONTRATO')
+                    ->setCellValue('D5', 'INGRESO')
+                    ->setCellValue('E5', 'RETIRO')
+                    ->setCellValue('F5', 'VARIACIÓN TRANSITORIA SALARIO')
+                    ->setCellValue('G5', 'LICENCIA NO REMUNERADA')
+                    ->setCellValue('H5', 'INCAPACIDAD GENERAL')
+                    ->setCellValue('I5', 'LICENCIA MATERNIDAD')
+                    ->setCellValue('J5', 'RIESGOS PROFESIONALES')
+                    ->setCellValue('K5', 'SALARIO')
+                    ->setCellValue('L5', 'SUPLEMENTARIO')
+                    ->setCellValue('M5', 'DÍAS PENSION')
+                    ->setCellValue('N5', 'DÍAS SALUD')
+                    ->setCellValue('O5', 'DÍAS RIESGOS PROFESIONALES')
+                    ->setCellValue('P5', 'DÍAS CAJA COMPENSACIÓN')
+                    ->setCellValue('Q5', 'IBC PENSIÓN')
+                    ->setCellValue('R5', 'IBC SALUD')
+                    ->setCellValue('S5', 'IBC RIESGOS PROFESIONALES')
+                    ->setCellValue('T5', 'IBC CAJA COMPENSACIÓN')
+                    ->setCellValue('U5', 'TARIFA PENSIÓN')
+                    ->setCellValue('V5', 'TARIFA SALUD')
+                    ->setCellValue('W5', 'TARIFA RIESGOS PROFESIONALES')
+                    ->setCellValue('X5', 'TARIFA CAJA COMPENSACIÓN')
+                    ->setCellValue('Y5', 'COTIZACIÓN PENSIÓN')
+                    ->setCellValue('Z5', 'COTIZACIÓN SALUD')
+                    ->setCellValue('AA5', 'COTIZACIÓN RIESGOS PROFESIONALES')
+                    ->setCellValue('AB5', 'COTIZACIÓN CAJA COMPENSACIÓN');
+                $i = 6;
+                $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+                $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
+                
+                $arSsoAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
+                $arSsoAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));
+                foreach ($arSsoAportes as $arSsoAporte) {            
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arSsoAporte->getCodigoAportePk());
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->setTitle('SsoAportes');
+                $objPHPExcel->setActiveSheetIndex(0);
+
+                // Redirect output to a client’s web browser (Excel2007)
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="SsoAportes.xlsx"');
+                header('Cache-Control: max-age=0');
+                // If you're serving to IE 9, then the following may be needed
+                header('Cache-Control: max-age=1');
+                // If you're serving to IE over SSL, then the following may be needed
+                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header ('Pragma: public'); // HTTP/1.0
+                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+                $objWriter->save('php://output');
+                exit;
+            }
         }
         $arSsoPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlListaDetalle), $request->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:detalle.html.twig', array(
