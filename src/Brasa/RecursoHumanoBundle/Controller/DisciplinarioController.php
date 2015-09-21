@@ -54,8 +54,12 @@ class DisciplinarioController extends Controller
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+        $arTipoDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
         if($codigoDisciplinario != 0) {
             $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
+            $arTipoDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($arDisciplinario->getCodigoDisciplinarioTipoFk());
+        } else {
+            $arTipoDisciplinario = "";
         }            
         
         $form = $this->createForm(new RhuDisciplinarioType, $arDisciplinario);
@@ -75,6 +79,7 @@ class DisciplinarioController extends Controller
 
         return $this->render('BrasaRecursoHumanoBundle:Disciplinario:nuevo.html.twig', array(
             'arDisciplinario' => $arDisciplinario,
+            'arTipoDisciplinario' => $arTipoDisciplinario,
             'form' => $form->createView()));
     }
     

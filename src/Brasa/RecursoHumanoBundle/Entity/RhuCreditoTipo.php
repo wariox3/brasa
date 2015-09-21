@@ -20,7 +20,12 @@ class RhuCreditoTipo
     /**
      * @ORM\Column(name="nombre", type="string", length=80, nullable=true)
      */    
-    private $nombre;            
+    private $nombre;
+    
+    /**
+     * @ORM\Column(name="cupo_maximo", type="integer", nullable=true)
+     */    
+    private $cupoMaximo;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuCredito", mappedBy="creditoTipoRel")
@@ -100,5 +105,29 @@ class RhuCreditoTipo
     public function getCreditosCreditoTipoRel()
     {
         return $this->creditosCreditoTipoRel;
+    }
+
+    /**
+     * Set cupoMaximo
+     *
+     * @param integer $cupoMaximo
+     *
+     * @return RhuCreditoTipo
+     */
+    public function setCupoMaximo($cupoMaximo)
+    {
+        $this->cupoMaximo = $cupoMaximo;
+
+        return $this;
+    }
+
+    /**
+     * Get cupoMaximo
+     *
+     * @return integer
+     */
+    public function getCupoMaximo()
+    {
+        return $this->cupoMaximo;
     }
 }

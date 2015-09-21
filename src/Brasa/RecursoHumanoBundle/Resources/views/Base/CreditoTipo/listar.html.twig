@@ -12,6 +12,7 @@
             
             <th>CÓDIGO</th>
             <th>{{ knp_pagination_sortable(arCreditoTipos, 'NOMBRE', 'nombre') }}</th> 
+            <th>CUPO MÁXIMO</th>
             <th></th>
             <th></th>
             <th></th>
@@ -21,6 +22,7 @@
                <tr>
                 <td>{{arCreditoTipos.codigoCreditoTipoPk}}</td>
                 <td>{{arCreditoTipos.nombre}}</td>
+                <td>{{arCreditoTipos.cupoMaximo}}</td>
                 <td><a href="{{ path('brs_rhu_base_creditotipo_nuevo',{'codigoCreditoTipoPk': arCreditoTipos.codigoCreditoTipoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                 <td><a href="{{ path('brs_rhu_base_creditotipo_detalle', { 'codigoCreditoTipoPk': arCreditoTipos.codigoCreditoTipoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCreditoTipos.codigoCreditoTipoPk }}" /></td>

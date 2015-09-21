@@ -28,7 +28,7 @@ class FormatoTipoCredito extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('CODIGO', 'NOMBRE');
+        $header = array('CODIGO', 'NOMBRE',utf8_decode('CUPO MÁXIMO'));
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -36,7 +36,7 @@ class FormatoTipoCredito extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 170);
+        $w = array(20, 140,30);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -57,7 +57,8 @@ class FormatoTipoCredito extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         foreach ($arTipoCreditos as $arTipoCreditos) {            
             $pdf->Cell(20, 4, $arTipoCreditos->getCodigoCreditoTipoPk(), 1, 0, 'L');
-            $pdf->Cell(170, 4, utf8_decode($arTipoCreditos->getNombre()), 1, 0, 'L');
+            $pdf->Cell(140, 4, utf8_decode($arTipoCreditos->getNombre()), 1, 0, 'L');
+            $pdf->Cell(30, 4, utf8_decode($arTipoCreditos->getCupoMaximo()), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);//33
         }        

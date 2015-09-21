@@ -33,9 +33,34 @@ class RhuBanco
     private $numeroDigitos;
     
     /**
+     * @ORM\Column(name="codigo_general", type="string", length=20, nullable=true)
+     */    
+    private $codigoGeneral;
+    
+    /**
+     * @ORM\Column(name="nit", type="string", length=10, nullable=true)
+     */    
+    private $nit;    
+    
+    /**
+     * @ORM\Column(name="direccion", type="string", length=80, nullable=true)
+     */    
+    private $direccion;    
+    
+    /**
+     * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
+     */    
+    private $telefono;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="bancoRel")
      */
-    protected $empleadosBancoRel;    
+    protected $empleadosBancoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\GeneralBundle\Entity\GenBanco", mappedBy="bancoRel")
+     */
+    protected $rhuBancosBancoRel;
 
     
     /**
@@ -160,5 +185,135 @@ class RhuBanco
     public function getEmpleadosBancoRel()
     {
         return $this->empleadosBancoRel;
+    }
+
+    /**
+     * Set codigoGeneral
+     *
+     * @param string $codigoGeneral
+     *
+     * @return RhuBanco
+     */
+    public function setCodigoGeneral($codigoGeneral)
+    {
+        $this->codigoGeneral = $codigoGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoGeneral
+     *
+     * @return string
+     */
+    public function getCodigoGeneral()
+    {
+        return $this->codigoGeneral;
+    }
+
+    /**
+     * Set nit
+     *
+     * @param string $nit
+     *
+     * @return RhuBanco
+     */
+    public function setNit($nit)
+    {
+        $this->nit = $nit;
+
+        return $this;
+    }
+
+    /**
+     * Get nit
+     *
+     * @return string
+     */
+    public function getNit()
+    {
+        return $this->nit;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return RhuBanco
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return RhuBanco
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    /**
+     * Add rhuBancosBancoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenBanco $rhuBancosBancoRel
+     *
+     * @return RhuBanco
+     */
+    public function addRhuBancosBancoRel(\Brasa\GeneralBundle\Entity\GenBanco $rhuBancosBancoRel)
+    {
+        $this->rhuBancosBancoRel[] = $rhuBancosBancoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuBancosBancoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenBanco $rhuBancosBancoRel
+     */
+    public function removeRhuBancosBancoRel(\Brasa\GeneralBundle\Entity\GenBanco $rhuBancosBancoRel)
+    {
+        $this->rhuBancosBancoRel->removeElement($rhuBancosBancoRel);
+    }
+
+    /**
+     * Get rhuBancosBancoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuBancosBancoRel()
+    {
+        return $this->rhuBancosBancoRel;
     }
 }

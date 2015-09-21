@@ -54,10 +54,14 @@ class BaseBancoController extends Controller
                     ->setCategory("Test result file");
 
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
+                            ->setCellValue('A1', 'Código')
                             ->setCellValue('B1', 'Nombre')
-                            ->setCellValue('C1', 'Convenio Nomina')
-                            ->setCellValue('D1', 'Digitos Cuenta');
+                            ->setCellValue('C1', 'Nit')
+                            ->setCellValue('D1', 'Código General')
+                            ->setCellValue('E1', 'Convenio Nomina')
+                            ->setCellValue('F1', 'Teléfono')
+                            ->setCellValue('G1', 'Dirección')
+                            ->setCellValue('H1', 'Digitos Cuenta');
 
                 $i = 2;
                 $arBancos = $em->getRepository('BrasaRecursoHumanoBundle:RhuBanco')->findAll();
@@ -72,8 +76,12 @@ class BaseBancoController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arBancos->getCodigoBancoPk())
                             ->setCellValue('B' . $i, $arBancos->getNombre())
-                            ->setCellValue('C' . $i, $convenio)
-                            ->setCellValue('D' . $i, $arBancos->getNumeroDigitos());
+                            ->setCellValue('C' . $i, $arBancos->getNit())
+                            ->setCellValue('D' . $i, $arBancos->getCodigoGeneral())
+                            ->setCellValue('E' . $i, $convenio)
+                            ->setCellValue('F' . $i, $arBancos->getTelefono())
+                            ->setCellValue('G' . $i, $arBancos->getDireccion())
+                            ->setCellValue('H' . $i, $arBancos->getNumeroDigitos());
                     $i++;
                 }
 

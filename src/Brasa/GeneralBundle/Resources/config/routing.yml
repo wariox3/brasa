@@ -8,7 +8,15 @@ brs_gen_base_terceros:
     
 brs_gen_base_terceros_nuevo:
     path:     /general/base/terceros/nuevo/{codigoTercero}
-    defaults: { _controller: BrasaGeneralBundle:BaseTerceros:nuevo } 
+    defaults: { _controller: BrasaGeneralBundle:BaseTerceros:nuevo }
+    
+brs_gen_base_bancos:
+    path:     /general/base/bancos
+    defaults: { _controller: BrasaGeneralBundle:BaseBancos:lista }
+    
+brs_gen_base_bancos_nuevo:
+    path:     /general/base/bancos/nuevo/{codigoBanco}
+    defaults: { _controller: BrasaGeneralBundle:BaseBancos:nuevo }    
     
 brs_gen_configuracion_general:
     path:     /gen/configuracion/general/{codigoConfiguracionPk}

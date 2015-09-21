@@ -24,6 +24,7 @@ class ConfiguracionGeneralController extends Controller
             ->add('nitEmpresa', 'text', array('data' => $arConfiguracionGeneral->getNitEmpresa(), 'required' => true))
             ->add('digitoVerificacion', 'number', array('data' => $arConfiguracionGeneral->getDigitoVerificacionEmpresa(), 'required' => true))
             ->add('nombreEmpresa', 'text', array('data' => $arConfiguracionGeneral->getNombreEmpresa(), 'required' => true))    
+            ->add('sigla', 'text', array('data' => $arConfiguracionGeneral->getSigla(), 'required' => true))    
             ->add('telefonoEmpresa', 'text', array('data' => $arConfiguracionGeneral->getTelefonoEmpresa(), 'required' => true))
             ->add('direccionEmpresa', 'text', array('data' => $arConfiguracionGeneral->getDireccionEmpresa(), 'required' => true))    
             ->add('baseRetencionFuente', 'text', array('data' => $arConfiguracionGeneral->getBaseRetencionFuente(), 'required' => true))
@@ -46,6 +47,7 @@ class ConfiguracionGeneralController extends Controller
             $NitEmpresa = $formConfiguracionGeneral->get('nitEmpresa')->getData();
             $NumeroDv = $controles['digitoVerificacion'];
             $NombreEmpresa = $controles['nombreEmpresa'];
+            $Sigla = $controles['sigla'];
             $TelefonoEmpresa = $controles['telefonoEmpresa'];
             $DireccionEmpresa = $controles['direccionEmpresa'];
             $BaseRetencionFuente = $controles['baseRetencionFuente'];
@@ -63,6 +65,7 @@ class ConfiguracionGeneralController extends Controller
             $arConfiguracionGeneral->setNitEmpresa($NitEmpresa);
             $arConfiguracionGeneral->setDigitoVerificacionEmpresa($NumeroDv);
             $arConfiguracionGeneral->setNombreEmpresa($NombreEmpresa);
+            $arConfiguracionGeneral->setSigla($Sigla);
             $arConfiguracionGeneral->setTelefonoEmpresa($TelefonoEmpresa);
             $arConfiguracionGeneral->setDireccionEmpresa($DireccionEmpresa);
             $arConfiguracionGeneral->setBaseRetencionFuente($BaseRetencionFuente);

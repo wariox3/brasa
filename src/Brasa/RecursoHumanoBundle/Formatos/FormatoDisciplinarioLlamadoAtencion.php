@@ -64,18 +64,23 @@ class FormatoDisciplinarioLlamadoAtencion extends \FPDF_FPDF {
         $arDisciplinario = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find(self::$codigoDisciplinario);        
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($arDisciplinario->getCodigoDisciplinarioTipoFk());        
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);        
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arDisciplinario->getEmpleadoRel()->getNombreCorto();
         $sustitucion2 = $arDisciplinario->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion3 = $arDisciplinario->getAsunto();
+        $sustitucion4 = $arConfiguracion->getNombreEmpresa();
         
         $cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
         $patron3 = '/#3/';
+        $patron4 = '/#4/';
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron4, $sustitucion4, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);        
    
     }

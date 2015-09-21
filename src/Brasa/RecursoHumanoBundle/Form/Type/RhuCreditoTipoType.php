@@ -9,7 +9,8 @@ class RhuCreditoTipoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                                                                                    
-            ->add('nombre', 'text', array('required' => true))                                
+            ->add('nombre', 'text', array('required' => true))
+            ->add('cupoMaximo', 'number', array('required' => false))
             ->add('guardar', 'submit');        
     }
  

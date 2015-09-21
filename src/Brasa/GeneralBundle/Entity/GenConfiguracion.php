@@ -76,7 +76,12 @@ class GenConfiguracion
     /**
      * @ORM\Column(name="nombre_empresa", type="string", length=90, nullable=true)
      */    
-    private $nombreEmpresa; 
+    private $nombreEmpresa;
+    
+    /**
+     * @ORM\Column(name="sigla", type="string", length=90, nullable=true)
+     */    
+    private $sigla;
     
     /**
      * @ORM\Column(name="telefono_empresa", type="string", length=25, nullable=true)
@@ -492,5 +497,29 @@ class GenConfiguracion
     public function getCuenta()
     {
         return $this->cuenta;
+    }
+
+    /**
+     * Set sigla
+     *
+     * @param string $sigla
+     *
+     * @return GenConfiguracion
+     */
+    public function setSigla($sigla)
+    {
+        $this->sigla = $sigla;
+
+        return $this;
+    }
+
+    /**
+     * Get sigla
+     *
+     * @return string
+     */
+    public function getSigla()
+    {
+        return $this->sigla;
     }
 }

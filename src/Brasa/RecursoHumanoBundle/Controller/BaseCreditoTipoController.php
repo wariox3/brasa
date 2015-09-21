@@ -54,7 +54,8 @@ class BaseCreditoTipoController extends Controller
 
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Nombre');
+                            ->setCellValue('B1', 'Nombre')
+                            ->setCellValue('C1', 'Cupo Máximo');
 
                 $i = 2;
                 $arCreditoTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->findAll();
@@ -62,7 +63,8 @@ class BaseCreditoTipoController extends Controller
                 foreach ($arCreditoTipos as $arCreditoTipo) {
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCreditoTipo->getcodigoCreditoTipoPk())
-                            ->setCellValue('B' . $i, $arCreditoTipo->getnombre());
+                            ->setCellValue('B' . $i, $arCreditoTipo->getnombre())
+                            ->setCellValue('C' . $i, $arCreditoTipo->getCupoMaximo());
                     $i++;
                 }
 
