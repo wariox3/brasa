@@ -99,11 +99,18 @@ class GenConfiguracion
     private $tipoCuenta;
     
     /**
-     * @ORM\Column(name="cuenta", type="string", length=20, nullable=true)
-     */    
-    private $cuenta;
+     * @ORM\Column(name="codigo_banco_gen_fk", type="integer")
+     */
+    private $codigoBancoGenFk;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="GenBanco", inversedBy="configuracionesBancoRel")
+     * @ORM\JoinColumn(name="codigo_banco_gen_fk", referencedColumnName="codigo_banco_general_pk")
+     */
+    protected $bancosRel;
     
     
+
 
     /**
      * Get codigoConfiguracionPk
@@ -404,6 +411,30 @@ class GenConfiguracion
     }
 
     /**
+     * Set sigla
+     *
+     * @param string $sigla
+     *
+     * @return GenConfiguracion
+     */
+    public function setSigla($sigla)
+    {
+        $this->sigla = $sigla;
+
+        return $this;
+    }
+
+    /**
+     * Get sigla
+     *
+     * @return string
+     */
+    public function getSigla()
+    {
+        return $this->sigla;
+    }
+
+    /**
      * Set telefonoEmpresa
      *
      * @param string $telefonoEmpresa
@@ -476,50 +507,50 @@ class GenConfiguracion
     }
 
     /**
-     * Set cuenta
+     * Set codigoBancoGenFk
      *
-     * @param string $cuenta
+     * @param integer $codigoBancoGenFk
      *
      * @return GenConfiguracion
      */
-    public function setCuenta($cuenta)
+    public function setCodigoBancoGenFk($codigoBancoGenFk)
     {
-        $this->cuenta = $cuenta;
+        $this->codigoBancoGenFk = $codigoBancoGenFk;
 
         return $this;
     }
 
     /**
-     * Get cuenta
+     * Get codigoBancoGenFk
      *
-     * @return string
+     * @return integer
      */
-    public function getCuenta()
+    public function getCodigoBancoGenFk()
     {
-        return $this->cuenta;
+        return $this->codigoBancoGenFk;
     }
 
     /**
-     * Set sigla
+     * Set bancosRel
      *
-     * @param string $sigla
+     * @param \Brasa\GeneralBundle\Entity\GenBanco $bancosRel
      *
      * @return GenConfiguracion
      */
-    public function setSigla($sigla)
+    public function setBancosRel(\Brasa\GeneralBundle\Entity\GenBanco $bancosRel = null)
     {
-        $this->sigla = $sigla;
+        $this->bancosRel = $bancosRel;
 
         return $this;
     }
 
     /**
-     * Get sigla
+     * Get bancosRel
      *
-     * @return string
+     * @return \Brasa\GeneralBundle\Entity\GenBanco
      */
-    public function getSigla()
+    public function getBancosRel()
     {
-        return $this->sigla;
+        return $this->bancosRel;
     }
 }

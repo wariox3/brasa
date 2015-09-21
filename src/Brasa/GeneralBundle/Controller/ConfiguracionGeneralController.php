@@ -17,10 +17,17 @@ class ConfiguracionGeneralController extends Controller
         $request = $this->getRequest();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        
+        $arrayPropiedadesBancos = array(
+            'class' => 'BrasaGeneralBundle:GenBanco',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('b')                                        
+                ->orderBy('b.codigoBancoGeneralPk', 'ASC');},
+            'property' => 'codigoBancoFk',
+            'required' => false);                   
+        $arrayPropiedadesBancos['data'] = $em->getReference("BrasaGeneralBundle:GenConfiguracion", $arConfiguracionGeneral->getCodigoBancoGenFk());                                    
         $formConfiguracionGeneral = $this->createFormBuilder() 
             ->add('conceptoTipoCuenta', 'choice', array('choices' => array('D' => 'DÉBITO', 'C' => 'CRÉDITO'), 'preferred_choices' => array($arConfiguracionGeneral->getTipoCuenta()),))    
-            ->add('cuenta', 'text', array('data' => $arConfiguracionGeneral->getCuenta(), 'required' => true))
+            ->add('bancosRel', 'entity', $arrayPropiedadesBancos)    
             ->add('nitEmpresa', 'text', array('data' => $arConfiguracionGeneral->getNitEmpresa(), 'required' => true))
             ->add('digitoVerificacion', 'number', array('data' => $arConfiguracionGeneral->getDigitoVerificacionEmpresa(), 'required' => true))
             ->add('nombreEmpresa', 'text', array('data' => $arConfiguracionGeneral->getNombreEmpresa(), 'required' => true))    
@@ -43,7 +50,7 @@ class ConfiguracionGeneralController extends Controller
             $controles = $request->request->get('form');                        
             
             $ConceptoTipoCuenta = $controles['conceptoTipoCuenta'];
-            $NumeroCuenta = $controles['cuenta'];
+            $NumeroCuenta = $controles['bancosRel'];
             $NitEmpresa = $formConfiguracionGeneral->get('nitEmpresa')->getData();
             $NumeroDv = $controles['digitoVerificacion'];
             $NombreEmpresa = $controles['nombreEmpresa'];
@@ -61,7 +68,7 @@ class ConfiguracionGeneralController extends Controller
             $RutaTemporal = $controles['rutaTemporal'];
             // guardar la tarea en la base de datos
             $arConfiguracionGeneral->setTipoCuenta($ConceptoTipoCuenta);
-            $arConfiguracionGeneral->setCuenta($NumeroCuenta);
+            $arConfiguracionGeneral->setCodigoBancoGenFk($NumeroCuenta);
             $arConfiguracionGeneral->setNitEmpresa($NitEmpresa);
             $arConfiguracionGeneral->setDigitoVerificacionEmpresa($NumeroDv);
             $arConfiguracionGeneral->setNombreEmpresa($NombreEmpresa);

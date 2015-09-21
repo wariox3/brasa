@@ -32,9 +32,21 @@ class GenBanco
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuBanco", inversedBy="rhuBancosBancoRel")
      * @ORM\JoinColumn(name="codigo_banco_fk", referencedColumnName="codigo_banco_pk")
      */
-    protected $bancoRel;     
+    protected $bancoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="GenConfiguracion", mappedBy="bancosRel")
+     */
+    protected $configuracionesBancoRel;
     
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->configuracionesBancoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoBancoGeneralPk
@@ -116,5 +128,39 @@ class GenBanco
     public function getBancoRel()
     {
         return $this->bancoRel;
+    }
+
+    /**
+     * Add configuracionesBancoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesBancoRel
+     *
+     * @return GenBanco
+     */
+    public function addConfiguracionesBancoRel(\Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesBancoRel)
+    {
+        $this->configuracionesBancoRel[] = $configuracionesBancoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove configuracionesBancoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesBancoRel
+     */
+    public function removeConfiguracionesBancoRel(\Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesBancoRel)
+    {
+        $this->configuracionesBancoRel->removeElement($configuracionesBancoRel);
+    }
+
+    /**
+     * Get configuracionesBancoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConfiguracionesBancoRel()
+    {
+        return $this->configuracionesBancoRel;
     }
 }
