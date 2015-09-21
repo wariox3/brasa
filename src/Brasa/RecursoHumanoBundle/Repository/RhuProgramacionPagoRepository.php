@@ -529,13 +529,14 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $em->persist($arPago);
                         $douSalarioMinimo = $arConfiguracion->getVrSalario();
                         $intDias = $arProgramacionPagoDetalle->getDias();
+                        $intDiasContinuos = $arProgramacionPagoDetalle->getFechaDesde()->diff($arProgramacionPagoDetalle->getFechaHasta());
+                        $intDiasContinuos = $intDiasContinuos->format('%a');
+                        $intDiasContinuos += 1;                        
                         $floIbc = $em->getRepository('BrasaRecursoHumanoBundle:RhuIbc')->devuelveIbcFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoProcesar->getFechaHastaReal()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
-                        if($arCentroCosto->getFechaUltimoPago() < $arProgramacionPagoProcesar->getFechaHasta()) {
-                            $floVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;
-                            $intDiasIbcAdicional = $arCentroCosto->getFechaUltimoPago()->diff($arProgramacionPagoProcesar->getFechaHasta());
-                            $intDiasIbcAdicional = $intDiasIbcAdicional->format('%a');
-                            $intDiasIbcAdicional = $intDiasIbcAdicional + 1;            
-                            $floIbc +=  $intDiasIbcAdicional * $floVrDia;
+                        if($arCentroCosto->getPeriodoPagoRel()->getContinuo() == 1) {
+                            $floSalarioPromedio = ($floIbc / $intDiasContinuos) * 30;
+                        } else {
+                            $floSalarioPromedio = ($floIbc / $intDias) * 30;
                         }
                         $floSalarioPromedio = ($floIbc / $intDias) * 30;   
                         $strMensajeAuxilioTransporte = "";
