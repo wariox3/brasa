@@ -50,8 +50,11 @@ class RhuLiquidacionRepository extends EntityRepository {
             $fechaDesdePrestacional = $arLiquidacion->getContratoRel()->getFechaDesde();
         }
         
-        $arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arLiquidacion->getCodigoEmpleadoFk(), $fechaDesdePrestacional->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());        
-        $douIBC = (float)$arrayCostos[0]['IBC']; 
+        //$arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arLiquidacion->getCodigoEmpleadoFk(), $fechaDesdePrestacional->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());        
+        //$douIBC = (float)$arrayCostos[0]['IBC']; 
+        
+        $douIBC = $em->getRepository('BrasaRecursoHumanoBundle:RhuIbc')->devuelveIbcFecha($arLiquidacion->getCodigoEmpleadoFk(), $fechaDesdePrestacional->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());        
+        
         $douIBCTotal = $douIBC + $douIBCAdicional;
         $intDiasLaborados = $this->diasPrestaciones($fechaDesdePrestacional, $arLiquidacion->getContratoRel()->getFechaHasta());
         $douSalario = $arLiquidacion->getContratoRel()->getVrSalarioPago();

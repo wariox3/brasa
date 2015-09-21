@@ -537,8 +537,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $floSalarioPromedio = ($floIbc / $intDiasContinuos) * 30;
                         } else {
                             $floSalarioPromedio = ($floIbc / $intDias) * 30;
-                        }
-                        $floSalarioPromedio = ($floIbc / $intDias) * 30;   
+                        }                           
                         $strMensajeAuxilioTransporte = "";
                         if(round($floSalarioPromedio) <=  $douSalarioMinimo * 2 ) {
                             $floSalarioPromedio += $arConfiguracion->getVrAuxilioTransporte();
@@ -1020,7 +1019,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $fechaFinalizaContrato = $arContrato->getFechaHasta();
                 if($arContrato->getIndefinido() == 1) {
                     $fecha = date_create(date('Y-m-d'));
-                    date_modify($fecha, '+365 day');
+                    date_modify($fecha, '+100000 day');
                     $fechaFinalizaContrato = $fecha;
                 }
                 if($arContrato->getFechaDesde() <  $arProgramacionPago->getFechaDesde() == true) {

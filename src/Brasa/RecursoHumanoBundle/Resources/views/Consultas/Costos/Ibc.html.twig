@@ -50,6 +50,7 @@
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>                
                 <th>CÓDIGO CONTRATO</th>
+                <th>SALARIO</th>
                 <th>IBC</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
@@ -61,13 +62,14 @@
                 <td>{{ arIbc.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arIbc.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arIbc.codigoContratoFk  }}</td>
-                <td style="text-align: right">{{ arIbc.vrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arIbc.contratoRel.VrSalario | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arIbc.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
                 <td>{{ arIbc.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arIbc.fechaHasta |date("Y/m/d")  }}</td>
                 {% set douTotalIBC = douTotalIBC + arIbc.vrIngresoBaseCotizacion %}                
             </tr>
             {% endfor %}
-                <td colspan="4"></td>
+                <td colspan="5"></td>
                 <td style="text-align: right">{{ douTotalIBC | number_format(2, '.', ',') }}</td>
                 <td colspan="2"></td>
         </table>

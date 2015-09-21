@@ -127,6 +127,11 @@ class RhuContrato
      */    
     private $fechaUltimoPago;     
     
+    /**
+     * @ORM\Column(name="fecha_inicio_ibc", type="date", nullable=true)
+     */    
+    private $fechaInicioIbc;     
+    
     /**     
      * @ORM\Column(name="estado_liquidado", type="boolean")
      */    
@@ -1523,5 +1528,29 @@ class RhuContrato
     public function getProyeccionesContratoRel()
     {
         return $this->proyeccionesContratoRel;
+    }
+
+    /**
+     * Set fechaInicioIbc
+     *
+     * @param \DateTime $fechaInicioIbc
+     *
+     * @return RhuContrato
+     */
+    public function setFechaInicioIbc($fechaInicioIbc)
+    {
+        $this->fechaInicioIbc = $fechaInicioIbc;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioIbc
+     *
+     * @return \DateTime
+     */
+    public function getFechaInicioIbc()
+    {
+        return $this->fechaInicioIbc;
     }
 }
