@@ -89,7 +89,7 @@ class ProgramacionesPagoController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arProgramacionPago = $form->getData();
-            $arProgramacionPago->setFechaHastaReal($arProgramacionPago->getFechaHastaReal());
+            $arProgramacionPago->setFechaHastaReal($arProgramacionPago->getFechaHasta());
             $arProgramacionPago->setNoGeneraPeriodo(1);
             $em->persist($arProgramacionPago);
             $em->flush();                       
