@@ -257,7 +257,10 @@ class RhuContrato
      */
     protected $contratosSedesContratoRel;    
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuProyeccion", mappedBy="contratoRel")
+     */
+    protected $proyeccionesContratoRel; 
     /**
      * Constructor
      */
@@ -1486,5 +1489,39 @@ class RhuContrato
     public function getContratosSedesContratoRel()
     {
         return $this->contratosSedesContratoRel;
+    }
+
+    /**
+     * Add proyeccionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion $proyeccionesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addProyeccionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProyeccion $proyeccionesContratoRel)
+    {
+        $this->proyeccionesContratoRel[] = $proyeccionesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove proyeccionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion $proyeccionesContratoRel
+     */
+    public function removeProyeccionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProyeccion $proyeccionesContratoRel)
+    {
+        $this->proyeccionesContratoRel->removeElement($proyeccionesContratoRel);
+    }
+
+    /**
+     * Get proyeccionesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProyeccionesContratoRel()
+    {
+        return $this->proyeccionesContratoRel;
     }
 }

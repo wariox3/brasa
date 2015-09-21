@@ -492,6 +492,11 @@ class RhuEmpleado
     protected $ibcsEmpleadoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuProyeccion", mappedBy="empleadoRel")
+     */
+    protected $proyeccionesEmpleadoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -2847,5 +2852,39 @@ class RhuEmpleado
     public function getIbcsEmpleadoRel()
     {
         return $this->ibcsEmpleadoRel;
+    }
+
+    /**
+     * Add proyeccionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion $proyeccionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addProyeccionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProyeccion $proyeccionesEmpleadoRel)
+    {
+        $this->proyeccionesEmpleadoRel[] = $proyeccionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove proyeccionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion $proyeccionesEmpleadoRel
+     */
+    public function removeProyeccionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProyeccion $proyeccionesEmpleadoRel)
+    {
+        $this->proyeccionesEmpleadoRel->removeElement($proyeccionesEmpleadoRel);
+    }
+
+    /**
+     * Get proyeccionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProyeccionesEmpleadoRel()
+    {
+        return $this->proyeccionesEmpleadoRel;
     }
 }
