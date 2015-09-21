@@ -256,15 +256,62 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('Z5', 'COTIZACIÓN SALUD')
                     ->setCellValue('AA5', 'COTIZACIÓN RIESGOS PROFESIONALES')
                     ->setCellValue('AB5', 'COTIZACIÓN CAJA COMPENSACIÓN');
-                $i = 6;
+                
                 $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
                 $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
-                
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('B1', $arPeriodoDetalle->getCodigoPeriodoDetallePk())
+                    ->setCellValue('B2', $arPeriodoDetalle->getCodigoSucursalFk())
+                    ->setCellValue('B3', $arPeriodoDetalle->getSsoSucursalRel()->getNombre())    ;
+                $i = 6;
                 $arSsoAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
                 $arSsoAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));
                 foreach ($arSsoAportes as $arSsoAporte) {            
+                    $suspencionTemporalContratoLicenciaServicios = "";
+                    if ($arSsoAporte->getSuspensionTemporalContratoLicenciaServicios() == "X"){
+                       $suspencionTemporalContratoLicenciaServicios = $arSsoAporte->getSuspensionTemporalContratoLicenciaServicios()." ". $arSsoAporte->getDiasLicencia(); 
+                    }
+                    $incapacidadGeneral = "";
+                    if ($arSsoAporte->getIncapacidadGeneral() == "X"){
+                       $incapacidadGeneral = $arSsoAporte->getIncapacidadGeneral()." ". $arSsoAporte->getDiasIncapacidadGeneral(); 
+                    }
+                    $licenciaMaternidad = "";
+                    if ($arSsoAporte->getLicenciaMaternidad() == "X"){
+                       $licenciaMaternidad = $arSsoAporte->getgetLicenciaMaternidad()." ". $arSsoAporte->getDiasLicenciaMaternidad(); 
+                    }
+                    $riesgosProfesionales = "";
+                    if ($arSsoAporte->getIncapacidadAccidenteTrabajoEnfermedadProfesional() > 0){
+                       $riesgosProfesionales = $arSsoAporte->getIncapacidadAccidenteTrabajoEnfermedadProfesional(); 
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arSsoAporte->getCodigoAportePk());
+                    ->setCellValue('A' . $i, $arSsoAporte->getCodigoAportePk())
+                    ->setCellValue('B' . $i, $arSsoAporte->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arSsoAporte->getCodigoContratoFk())
+                    ->setCellValue('D' . $i, $arSsoAporte->getIngreso())        
+                    ->setCellValue('E' . $i, $arSsoAporte->getRetiro())
+                    ->setCellValue('F' . $i, $arSsoAporte->getVariacionTransitoriaSalario())
+                    ->setCellValue('G' . $i, $suspencionTemporalContratoLicenciaServicios)
+                    ->setCellValue('H' . $i, $incapacidadGeneral)
+                    ->setCellValue('I' . $i, $licenciaMaternidad)
+                    ->setCellValue('J' . $i, $riesgosProfesionales)
+                    ->setCellValue('K' . $i, $arSsoAporte->getSalarioBasico())
+                    ->setCellValue('L' . $i, $arSsoAporte->getSuplementario())
+                    ->setCellValue('M' . $i, $arSsoAporte->getDiasCotizadosPension())
+                    ->setCellValue('N' . $i, $arSsoAporte->getDiasCotizadosSalud())
+                    ->setCellValue('O' . $i, $arSsoAporte->getDiasCotizadosRiesgosProfesionales())
+                    ->setCellValue('P' . $i, $arSsoAporte->getDiasCotizadosCajaCompensacion())
+                    ->setCellValue('Q' . $i, $arSsoAporte->getIbcPension())
+                    ->setCellValue('R' . $i, $arSsoAporte->getIbcSalud())
+                    ->setCellValue('S' . $i, $arSsoAporte->getIbcRiesgosProfesionales())
+                    ->setCellValue('T' . $i, $arSsoAporte->getIbcCaja())
+                    ->setCellValue('U' . $i, $arSsoAporte->getTarifaPension())
+                    ->setCellValue('V' . $i, $arSsoAporte->getTarifaSalud())
+                    ->setCellValue('W' . $i, $arSsoAporte->getTarifaRiesgos())
+                    ->setCellValue('X' . $i, $arSsoAporte->getTarifaCaja())
+                    ->setCellValue('Y' . $i, $arSsoAporte->getCotizacionPension())
+                    ->setCellValue('Z' . $i, $arSsoAporte->getCotizacionSalud())
+                    ->setCellValue('AA' . $i, $arSsoAporte->getCotizacionRiesgos())
+                    ->setCellValue('AB' . $i, $arSsoAporte->getCotizacionCaja());
                     $i++;
                 }
 
