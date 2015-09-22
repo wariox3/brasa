@@ -80,9 +80,9 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetFont('Arial', '', 7);
         $this->Cell(20, 5, $arLiquidacion->getFechaDesde()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 8);
-        $this->Cell(35, 5, "", 1, 0, 'L', 1);
+        $this->Cell(35, 5, utf8_decode("NÚMERO CUENTA:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
-        $this->Cell(30, 5, "", 1, 0, 'L', 1);
+        $this->Cell(30, 5, $arLiquidacion->getEmpleadoRel()->getCuenta(), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 8);
         $this->Cell(35, 5, utf8_decode("DIAS LABORADOS:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);

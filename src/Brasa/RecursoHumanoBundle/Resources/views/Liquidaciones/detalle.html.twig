@@ -65,8 +65,8 @@
                     <tr>
                         <td class="titulo">IDENTIFICACIÓN:</td>
                         <td>{{ arLiquidacion.empleadoRel.numeroIdentificacion}}</td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">NÚMERO CUENTA:</td>
+                        <td align="right">{{ arLiquidacion.empleadoRel.cuenta}}</td>
                         <td class="titulo">BASE PRESTACIONES TOTAL:</td>
                         <td align="right">$ {{ arLiquidacion.vrBasePrestacionesTotal | number_format(0, '.', ',') }}</td>                   
                     </tr>                    
