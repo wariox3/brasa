@@ -22,8 +22,8 @@ class ConfiguracionGeneralController extends Controller
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('b')                                        
                 ->orderBy('b.codigoBancoGeneralPk', 'ASC');},
-            'property' => 'codigoBancoFk',
-            'required' => false);                   
+            'property' => 'cuenta',
+            'required' => true);                   
         $arrayPropiedadesBancos['data'] = $em->getReference("BrasaGeneralBundle:GenConfiguracion", $arConfiguracionGeneral->getCodigoBancoGenFk());                                    
         $formConfiguracionGeneral = $this->createFormBuilder() 
             ->add('conceptoTipoCuenta', 'choice', array('choices' => array('D' => 'DÉBITO', 'C' => 'CRÉDITO'), 'preferred_choices' => array($arConfiguracionGeneral->getTipoCuenta()),))    

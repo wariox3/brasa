@@ -45,7 +45,7 @@ class BaseExamenTipoController extends Controller
             
         }
         $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->ordenarExamenTipos();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findAll();
         $arExamenTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/ExamenTipo:listar.html.twig', array(
