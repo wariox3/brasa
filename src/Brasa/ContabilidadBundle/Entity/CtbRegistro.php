@@ -68,6 +68,10 @@ class CtbRegistro
      */    
     private $descripcionContable;     
     
+    /**
+     * @ORM\Column(name="exportado", type="boolean")
+     */    
+    private $exportado = 0;    
               
     
     /**
@@ -441,5 +445,29 @@ class CtbRegistro
     public function getComprobanteContableRel()
     {
         return $this->comprobanteContableRel;
+    }
+
+    /**
+     * Set exportado
+     *
+     * @param boolean $exportado
+     *
+     * @return CtbRegistro
+     */
+    public function setExportado($exportado)
+    {
+        $this->exportado = $exportado;
+
+        return $this;
+    }
+
+    /**
+     * Get exportado
+     *
+     * @return boolean
+     */
+    public function getExportado()
+    {
+        return $this->exportado;
     }
 }

@@ -5,3 +5,11 @@ buscarcuentas:
 brs_ctb_consultas_registros:
     path:     /ctb/consultas/registros/
     defaults: { _controller: BrasaContabilidadBundle:ConsultasRegistros:lista }   
+
+brs_ctb_utilidades_intercambio_datos_generar:
+    path:     /ctb/utilidades/intercambio/datos/generar
+    defaults: { _controller: BrasaContabilidadBundle:UtilidadesIntercambioDatos:generar }
+    
+brs_ctb_utilidades_intercambio_datos_exportar:
+    path:     /ctb/utilidades/intercambio/datos/exportar
+    defaults: { _controller: BrasaContabilidadBundle:UtilidadesIntercambioDatos:exportar }    

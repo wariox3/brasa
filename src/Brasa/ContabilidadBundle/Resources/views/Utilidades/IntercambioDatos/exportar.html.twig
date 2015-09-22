@@ -6,7 +6,7 @@
             $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
     </script>
     <div class="page-header">
-        <h3>Consulta registros</h3>
+        <h3>Exportar registros</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}
@@ -57,8 +57,6 @@
                 <th>BASE</th>
                 <th>DETALLE</th>
             </tr>
-            {% set floDebito = 0  %} 
-            {% set floCredito = 0  %} 
             {% for arRegistros in arRegistros %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arRegistros.codigoRegistroPk }}">{{ arRegistros.codigoRegistroPk }} </td>
@@ -71,14 +69,8 @@
                 <td style="text-align: right">{{ arRegistros.credito | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arRegistros.base | number_format(0, '.', ',') }}</td>
                 <td>{{ arRegistros.descripcionContable  }}</td>
-                {% set floDebito = floDebito + arRegistros.debito %}
-                {% set floCredito = floCredito + arRegistros.credito %}
             </tr>
-            {% endfor %}  
-                <td colspan="6"></td>
-                <td style="text-align: right">{{ floDebito | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ floCredito | number_format(0, '.', ',') }}</td>
-                <td colspan="2"></td>            
+            {% endfor %}            
         </table>
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">
@@ -88,7 +80,7 @@
         </div>                
         <div class="btn-toolbar" style="float: right">                 
             <div class="btn-group">
-                {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                {{ form_widget(form.BtnExportar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
         </div>
         

@@ -13,8 +13,11 @@ use Doctrine\ORM\EntityRepository;
 class CtbRegistroRepository extends EntityRepository
 {
 
-    public function listaDql() {        
+    public function listaDql($boolExportado = "") {        
         $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.codigoRegistroPk <> 0";
+        if($boolExportado == "0") {
+            $dql .= " AND r.exportado = 0";
+        }
         return $dql;
     }           
     
