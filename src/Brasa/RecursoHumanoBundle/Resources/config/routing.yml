@@ -292,7 +292,15 @@ brs_rhu_base_contratos_lista:
 
 brs_rhu_base_contratos_detalles:
     path:     /rhu/base/contratos/detalle/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:detalle }        
+    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:detalle }
+    
+brs_rhu_base_contratos_tipo_lista:
+   path:     /rhu/base/contratos/tipo/lista/
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseContratoTipo:lista }    
+    
+brs_rhu_base_contratos_tipo_nuevo:
+   path:     /rhu/base/contratos/tipo/nuevo/{codigoContratoTipo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseContratoTipo:nuevo }    
     
 brs_rhu_base_disciplinario_tipo_lista:
     path:     /rhu/base/disciplinario/tipo/lista
