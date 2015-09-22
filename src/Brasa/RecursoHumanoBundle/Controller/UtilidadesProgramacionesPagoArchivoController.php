@@ -22,7 +22,30 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
-            }                          
+            }
+            if($form->get('BtnGenerar')->isClicked()) {
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
+                        
+                        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+                        foreach ($arPagos AS $arPagos){
+                            $arPagoExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
+                            $arPagoExportar->setNumeroIdentificacion($arPagos->getEmpleadoRel()->getNumeroIdentificacion());
+                            $arPagoExportar->setNombreCorto($arPagos->getEmpleadoRel()->getNombreCorto());
+                            $arPagoExportar->setCuenta($arPagos->getEmpleadoRel()->getCuenta());
+                            $arPagoExportar->setVrPago($arPagos->getVrNeto());
+                            $em->persist($arPagoExportar);
+                            $em->flush();
+                            
+                        }
+                        
+                    }
+                }
+                $this->filtrarLista($form);
+                $this->listar();  
+            }
+            
         }            
         $arProgramacionPagoArchivo = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/ProgramacionesPagoArchivo:lista.html.twig', array(
@@ -60,8 +83,8 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
                     $mensajefechaTransmision = "Se requiere la fecha de aplicación";
                   }else {                  
                 $strNombreArchivo = "PagoNomina" . date('YmdHis') . ".txt";
-                $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;
-                //$strArchivo = "" . $strNombreArchivo;
+                //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;
+                $strArchivo = "" . $strNombreArchivo;
                 $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
                 // Encabezado
                 $strNitEmpresa = $arConfiguracionGeneral->getNitEmpresa();
@@ -147,7 +170,8 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
         }
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                                             
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
             ->getForm();        
         return $form;
     }      
