@@ -37,6 +37,16 @@ class RhuPagoExportar
      * @ORM\Column(name="vr_pago", type="float")
      */
     private $vr_pago = 0;
+    
+    /**
+     * @ORM\Column(name="tipo", type="string", length=80, nullable=true)
+     */    
+    private $tipo;
+    
+    /**
+     * @ORM\Column(name="soporte", type="string", length=80, nullable=true)
+     */    
+    private $soporte;
 
     /**
      * Get codigoPagoExportarPk
@@ -142,5 +152,53 @@ class RhuPagoExportar
     public function getVrPago()
     {
         return $this->vr_pago;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return RhuPagoExportar
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return RhuPagoExportar
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
     }
 }
