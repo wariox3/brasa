@@ -531,7 +531,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $intDias = $arProgramacionPagoDetalle->getDias();
                         $intDiasContinuos = $arProgramacionPagoDetalle->getFechaDesde()->diff($arProgramacionPagoDetalle->getFechaHasta());
                         $intDiasContinuos = $intDiasContinuos->format('%a');
-                        $intDiasContinuos += 1;                        
+                        $intDiasContinuos += 1;   
+                        
                         $floIbc = $em->getRepository('BrasaRecursoHumanoBundle:RhuIbc')->devuelveIbcFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoProcesar->getFechaHastaReal()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
                         if($arCentroCosto->getPeriodoPagoRel()->getContinuo() == 1) {
                             $floSalarioPromedio = ($floIbc / $intDiasContinuos) * 30;
@@ -806,7 +807,12 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 if($arPagoProcesar->getCodigoPagoTipoFk() == 1) {
                     if($arPagoProcesar->getFechaDesde()->format('m') == $arPagoProcesar->getFechaHasta()->format('m')) {
                         $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
-                        $arIbc->setFechaDesde($arPagoProcesar->getFechaDesde());
+                        if($arPagoProcesar->getContratoRel()->getFechaDesde() > $arPagoProcesar->getFechaDesde()) {
+                            $arIbc->setFechaDesde($arPagoProcesar->getContratoRel()->getFechaDesde());
+                        } else {
+                            $arIbc->setFechaDesde($arPagoProcesar->getFechaDesde());
+                        }
+                        
                         $arIbc->setFechaHasta($arPagoProcesar->getFechaHasta());
                         $arIbc->setContratoRel($arPagoProcesar->getContratoRel());
                         $arIbc->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
@@ -823,9 +829,13 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $strMes = $arPagoProcesar->getFechaDesde()->format('m');
                         $intUltimoDiaMes = date("d",(mktime(0,0,0,$strMes+1,1,$strAnio)-1));
                         $strFechaHasta = $arPagoProcesar->getFechaDesde()->format('Y/m') ."/" . $intUltimoDiaMes;
-
                         $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
-                        $arIbc->setFechaDesde($arPagoProcesar->getFechaDesde());
+                        if($arPagoProcesar->getContratoRel()->getFechaDesde() > $arPagoProcesar->getFechaDesde()) {
+                            $arIbc->setFechaDesde($arPagoProcesar->getContratoRel()->getFechaDesde());
+                        } else {
+                            $arIbc->setFechaDesde($arPagoProcesar->getFechaDesde());
+                        }                        
+                                                
                         $arIbc->setFechaHasta(date_create($strFechaHasta));
                         $arIbc->setContratoRel($arPagoProcesar->getContratoRel());
                         $arIbc->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());

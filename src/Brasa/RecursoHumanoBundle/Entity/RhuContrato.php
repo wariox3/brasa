@@ -125,12 +125,7 @@ class RhuContrato
     /**
      * @ORM\Column(name="fecha_ultimo_pago", type="date", nullable=true)
      */    
-    private $fechaUltimoPago;     
-    
-    /**
-     * @ORM\Column(name="fecha_inicio_ibc", type="date", nullable=true)
-     */    
-    private $fechaInicioIbc;     
+    private $fechaUltimoPago;             
     
     /**     
      * @ORM\Column(name="estado_liquidado", type="boolean")
@@ -266,6 +261,7 @@ class RhuContrato
      * @ORM\OneToMany(targetEntity="RhuProyeccion", mappedBy="contratoRel")
      */
     protected $proyeccionesContratoRel; 
+
     /**
      * Constructor
      */
@@ -280,6 +276,8 @@ class RhuContrato
         $this->vacacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vacacionesDisfrutesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ibcsContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosSedesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->proyeccionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1528,29 +1526,5 @@ class RhuContrato
     public function getProyeccionesContratoRel()
     {
         return $this->proyeccionesContratoRel;
-    }
-
-    /**
-     * Set fechaInicioIbc
-     *
-     * @param \DateTime $fechaInicioIbc
-     *
-     * @return RhuContrato
-     */
-    public function setFechaInicioIbc($fechaInicioIbc)
-    {
-        $this->fechaInicioIbc = $fechaInicioIbc;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaInicioIbc
-     *
-     * @return \DateTime
-     */
-    public function getFechaInicioIbc()
-    {
-        return $this->fechaInicioIbc;
     }
 }
