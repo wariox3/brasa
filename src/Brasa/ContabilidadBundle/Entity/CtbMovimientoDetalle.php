@@ -91,7 +91,7 @@ class CtbMovimientoDetalle
     protected $movimientoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuentaContable", inversedBy="CtbMovimientoDetalle")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbMovimientoDetalle")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
     protected $cuentaRel;       

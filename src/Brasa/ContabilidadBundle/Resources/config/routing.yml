@@ -1,3 +1,7 @@
 buscarcuentas:
   pattern: /buscarcuentas
   defaults: { _controller: BrasaContabilidadBundle:Contabilidad:buscarCuentas}
+  
+brs_ctb_consultas_registros:
+    path:     /ctb/consultas/registros/
+    defaults: { _controller: BrasaContabilidadBundle:ConsultasRegistros:lista }   

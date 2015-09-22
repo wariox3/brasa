@@ -100,13 +100,13 @@ class CtbMovimientoConcepto
     protected $movimientoTipoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuentaContable", inversedBy="CtbMovimientoConcepto")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbMovimientoConcepto")
      * @ORM\JoinColumn(name="codigo_cuenta_total_fk", referencedColumnName="codigo_cuenta_pk")
      */
     protected $cuentaTotalRel;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuentaContable", inversedBy="CtbMovimientoConcepto")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbMovimientoConcepto")
      * @ORM\JoinColumn(name="codigo_cuenta_bruto_fk", referencedColumnName="codigo_cuenta_pk")
      */
     protected $cuentaBrutoRel;

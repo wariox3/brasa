@@ -13,6 +13,11 @@ use Doctrine\ORM\EntityRepository;
 class CtbRegistroRepository extends EntityRepository
 {
 
+    public function listaDql() {        
+        $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.codigoRegistroPk <> 0";
+        return $dql;
+    }           
+    
     /**
      * Contabiliza un movimiento de inventario
      * @param integer $codigoMovimiento codigo del movimiento que se va a procesar.

@@ -46,7 +46,7 @@ class CtbImpuesto
     private $tipo = 0;        
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuentaContable", inversedBy="CtbImpuesto")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbImpuesto")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
     protected $cuentaRel;    

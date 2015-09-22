@@ -71,7 +71,7 @@ class CtbAsientoDetalle
     protected $asientoRel; 
 
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuentaContable", inversedBy="CtbAsientoDetalle")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbAsientoDetalle")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
     private $cuentaRel;        

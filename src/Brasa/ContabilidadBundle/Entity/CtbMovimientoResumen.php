@@ -54,7 +54,7 @@ class CtbMovimientoResumen
     private $base = 0;     
   
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuentaContable", inversedBy="CtbMovimientoResumen")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbMovimientoResumen")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
     protected $cuentaRel;     

@@ -44,7 +44,7 @@ class CtbBanco
     private $codigo;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuentaContable", inversedBy="CtbBanco")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbBanco")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
     protected $cuentaRel;       

@@ -71,7 +71,7 @@ class CtbRegistro
               
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuentaContable", inversedBy="CtbRegistro")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbRegistro")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
     protected $cuentaRel;       
@@ -93,6 +93,7 @@ class CtbRegistro
      * @ORM\JoinColumn(name="codigo_comprobante_contable_fk", referencedColumnName="codigo_comprobante_contable_pk")
      */
     protected $comprobanteContableRel;     
+
 
 
 
@@ -349,11 +350,11 @@ class CtbRegistro
     /**
      * Set cuentaRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaRel
      *
      * @return CtbRegistro
      */
-    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaRel = null)
+    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaRel = null)
     {
         $this->cuentaRel = $cuentaRel;
 
@@ -363,7 +364,7 @@ class CtbRegistro
     /**
      * Get cuentaRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCuentaContable
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCuenta
      */
     public function getCuentaRel()
     {

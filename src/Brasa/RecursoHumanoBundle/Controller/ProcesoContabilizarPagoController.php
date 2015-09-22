@@ -24,27 +24,43 @@ class ProcesoContabilizarPagoController extends Controller
                     $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();                    
                     $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(1);                           
                     foreach ($arrSeleccionados AS $codigo) {             
-                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                        //$arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigo);
-                        $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                        $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigo));
-                        foreach ($arPagoDetalles as $arPagoDetalle) {
+                        //$arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
+                        $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arPago->getEmpleadoRel()->getNumeroIdentificacion()));
+                        if(count($arTercero) > 0) {
+                            $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                            $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigo));
+                            foreach ($arPagoDetalles as $arPagoDetalle) {
+                                $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk());                            
+                                $arRegistro->setComprobanteContableRel($arComprobanteContable);
+                                $arRegistro->setCentroCostosRel($arCentroCosto);
+                                $arRegistro->setCuentaRel($arCuenta);
+                                $arRegistro->setTerceroRel($arTercero);
+                                $arRegistro->setNumero($arPago->getNumero());
+                                $arRegistro->setFecha($arPago->getFechaDesde());
+                                if($arPagoDetalle->getPagoConceptoRel()->getTipoCuenta() == 1) {
+                                    $arRegistro->setDebito($arPagoDetalle->getVrPago());
+                                } else {
+                                    $arRegistro->setCredito($arPagoDetalle->getVrPago());
+                                }
+                                $arRegistro->setDescripcionContable($arPagoDetalle->getPagoConceptoRel()->getNombre());
+                                $em->persist($arRegistro);                                
+                                //echo $arPagoDetalle->getCodigoPagoDetallePk() . "[" . $arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk() . "]" . "<br/>";
+                            }                              
                             $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuentaContable')->find($arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk());                            
+                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('21981847');                            
                             $arRegistro->setComprobanteContableRel($arComprobanteContable);
                             $arRegistro->setCentroCostosRel($arCentroCosto);
                             $arRegistro->setCuentaRel($arCuenta);
+                            $arRegistro->setTerceroRel($arTercero);
                             $arRegistro->setNumero($arPago->getNumero());
                             $arRegistro->setFecha($arPago->getFechaDesde());
-                            if($arPagoDetalle->getPagoConceptoRel()->getTipoCuenta() == 1) {
-                                $arRegistro->setDebito($arPagoDetalle->getVrPago());
-                            } else {
-                                $arRegistro->setCredito($arPagoDetalle->getVrPago());
-                            }
-                            $em->persist($arRegistro);
-                            //echo $arPagoDetalle->getCodigoPagoDetallePk() . "[" . $arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk() . "]" . "<br/>";
-                        }
-                        
+                            $arRegistro->setCredito($arPago->getVrNeto() );                            
+                            $arRegistro->setDescripcionContable('NOMINA POR PAGAR');
+                            $em->persist($arRegistro);                            
+                        }                        
                     }
                     $em->flush();
                 }
