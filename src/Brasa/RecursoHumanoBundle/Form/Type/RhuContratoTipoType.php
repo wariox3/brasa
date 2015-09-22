@@ -8,10 +8,7 @@ class RhuContratoTipoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                                                                                    
-            ->add('titulo', 'text', array('required' => true))                                
-            ->add('contenido', 'textarea', array('required' => true))                                
-            ->add('guardar', 'submit');        
+              
     }
  
     public function getName()

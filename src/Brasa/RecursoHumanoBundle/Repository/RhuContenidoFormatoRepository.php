@@ -11,5 +11,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuContenidoFormatoRepository extends EntityRepository {
     
-    
+    public function listaDql() {        
+        $dql   = "SELECT cf FROM BrasaRecursoHumanoBundle:RhuContenidoFormato cf WHERE cf.codigoContenidoFormatoPk <> 0";        
+        $dql .= " ORDER BY cf.codigoContenidoFormatoPk";
+        return $dql;
+    }
 }
