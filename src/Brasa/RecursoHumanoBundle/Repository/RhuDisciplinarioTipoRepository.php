@@ -10,5 +10,11 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuDisciplinarioTipoRepository extends EntityRepository {
-
+    
+    public function listaDql() {        
+        $dql   = "SELECT dt FROM BrasaRecursoHumanoBundle:RhuDisciplinarioTipo dt WHERE dt.codigoDisciplinarioTipoPk <> 0";        
+        $dql .= " ORDER BY dt.nombre";
+        return $dql;
+    }       
+    
 }
