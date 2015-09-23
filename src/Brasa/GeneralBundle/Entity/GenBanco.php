@@ -23,7 +23,10 @@ class GenBanco
      */
     private $nombre;    
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="GenCuenta", mappedBy="bancoRel")
+     */
+    protected $cuentasBancoRel;
 
     /**
      * Get codigoBancoPk
@@ -57,5 +60,46 @@ class GenBanco
     public function getNombre()
     {
         return $this->nombre;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->cuentasBancoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add cuentasBancoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCuenta $cuentasBancoRel
+     *
+     * @return GenBanco
+     */
+    public function addCuentasBancoRel(\Brasa\GeneralBundle\Entity\GenCuenta $cuentasBancoRel)
+    {
+        $this->cuentasBancoRel[] = $cuentasBancoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cuentasBancoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCuenta $cuentasBancoRel
+     */
+    public function removeCuentasBancoRel(\Brasa\GeneralBundle\Entity\GenCuenta $cuentasBancoRel)
+    {
+        $this->cuentasBancoRel->removeElement($cuentasBancoRel);
+    }
+
+    /**
+     * Get cuentasBancoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCuentasBancoRel()
+    {
+        return $this->cuentasBancoRel;
     }
 }

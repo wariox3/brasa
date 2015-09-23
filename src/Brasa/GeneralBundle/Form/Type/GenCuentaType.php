@@ -4,7 +4,7 @@ namespace Brasa\GeneralBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class GenBancoType extends AbstractType
+class GenCuentaType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder

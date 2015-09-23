@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
     <div class="page-header">    
-        <h3>Listado bancos</h3>
+        <h3>Listado cuentas bancarias</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
     {{ form_errors(form) }} 
@@ -11,21 +11,21 @@
         <tr>
             
             <th>CÓDIGO</th>
-            <th>{{ knp_pagination_sortable(arBancos, 'NOMBRE', 'codigo') }}</th>             
+            <th>{{ knp_pagination_sortable(arCuentas, 'NOMBRE', 'codigo') }}</th>             
             <th></th>
             <th></th>
         </tr>
         
-            {%for arBancos in arBancos %}
+            {%for arCuentas in arCuentas %}
                <tr>
-                <td>{{arBancos.codigoBancoPk}}</td>
-                <td>{{arBancos.nombre}}</td>                
-                <td><a href="{{ path('brs_gen_base_bancos_nuevo',{'codigoBanco': arBancos.codigoBancoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arBancos.codigoBancoPk }}" /></td>
+                <td>{{arCuentas.codigoCuentaPk}}</td>
+                <td>{{arCuentas.nombre}}</td>                
+                <td><a href="{{ path('brs_gen_base_bancos_nuevo',{'codigoBanco': arCuentas.codigoCuentaPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCuentas.codigoCuentaPk }}" /></td>
             {%endfor%}
             </tr>            
     </table>
-    {{ knp_pagination_render(arBancos) }}
+    {{ knp_pagination_render(arCuentas) }}
     <div class="btn-toolbar" style="float: right">              
         <div class="btn-group">                
             {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                

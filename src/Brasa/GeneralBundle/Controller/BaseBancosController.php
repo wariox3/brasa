@@ -30,7 +30,7 @@ class BaseBancosController extends Controller
                     $em->flush();
                 }
             }
-        if($form->get('BtnExcel')->isClicked()) {
+            if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")
