@@ -53,6 +53,7 @@ class CtbImpuesto
 
 
 
+
     /**
      * Get codigoImpuestoPk
      *
@@ -186,11 +187,11 @@ class CtbImpuesto
     /**
      * Set cuentaRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaRel
      *
      * @return CtbImpuesto
      */
-    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaRel = null)
+    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaRel = null)
     {
         $this->cuentaRel = $cuentaRel;
 
@@ -200,7 +201,7 @@ class CtbImpuesto
     /**
      * Get cuentaRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCuentaContable
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCuenta
      */
     public function getCuentaRel()
     {

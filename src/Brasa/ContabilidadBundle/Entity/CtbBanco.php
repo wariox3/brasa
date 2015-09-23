@@ -57,6 +57,7 @@ class CtbBanco
 
 
 
+
     /**
      * Get codigoBancoPk
      *
@@ -190,11 +191,11 @@ class CtbBanco
     /**
      * Set cuentaRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaRel
      *
      * @return CtbBanco
      */
-    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaRel = null)
+    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaRel = null)
     {
         $this->cuentaRel = $cuentaRel;
 
@@ -204,7 +205,7 @@ class CtbBanco
     /**
      * Get cuentaRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCuentaContable
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCuenta
      */
     public function getCuentaRel()
     {

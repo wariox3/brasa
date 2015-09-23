@@ -67,6 +67,7 @@ class CtbMovimientoResumen
 
     
 
+
     /**
      * Get codigoMovimientoResumenPk
      *
@@ -248,11 +249,11 @@ class CtbMovimientoResumen
     /**
      * Set cuentaRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaRel
      *
      * @return CtbMovimientoResumen
      */
-    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaRel = null)
+    public function setCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaRel = null)
     {
         $this->cuentaRel = $cuentaRel;
 
@@ -262,7 +263,7 @@ class CtbMovimientoResumen
     /**
      * Get cuentaRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCuentaContable
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCuenta
      */
     public function getCuentaRel()
     {
