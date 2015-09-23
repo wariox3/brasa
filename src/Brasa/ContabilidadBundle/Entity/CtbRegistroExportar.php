@@ -20,7 +20,7 @@ class CtbRegistroExportar
     
     
     /**
-     * @ORM\Column(name="comprobante", type="string", length=10)
+     * @ORM\Column(name="comprobante", type="string", length=10, nullable=true)
      */     
     private $comprobante;
     
@@ -30,27 +30,27 @@ class CtbRegistroExportar
     private $fecha;    
     
     /**
-     * @ORM\Column(name="numero", type="string", length=20)
+     * @ORM\Column(name="numero", type="string", length=20, nullable=true)
      */     
     private $numero;
     
     /**
-     * @ORM\Column(name="cuenta", type="string", length=20)
+     * @ORM\Column(name="cuenta", type="string", length=20, nullable=true)
      */     
     private $cuenta;      
     
     /**
-     * @ORM\Column(name="nit", type="string", length=20)
+     * @ORM\Column(name="nit", type="string", length=20, nullable=true)
      */     
     private $nit;
 
     /**
-     * @ORM\Column(name="centro_costo", type="string", length=20)
+     * @ORM\Column(name="centro_costo", type="string", length=20, nullable=true)
      */     
     private $centroCosto;
     
     /**
-     * @ORM\Column(name="tipo", type="string", length=1)
+     * @ORM\Column(name="tipo", type="string", length=1, nullable=true)
      */     
     private $tipo;    
     
