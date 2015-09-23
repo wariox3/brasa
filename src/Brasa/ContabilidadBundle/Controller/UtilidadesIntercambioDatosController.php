@@ -20,12 +20,20 @@ class UtilidadesIntercambioDatosController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnExportar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigo) {
-                        
+                    foreach ($arrSeleccionados as $codigoRegistro) {
+                        echo $codigoRegistro;
+                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+                        $arRegistroExportar = new \Brasa\ContabilidadBundle\Entity\CtbRegistroExportar();
+                        $arRegistroExportar->setComprobante($arRegistro->getCodigoComprobanteContableFk());
+                        $arRegistroExportar->setNumero($arRegistro->getNumero());
+                        $arRegistroExportar->setCuenta($arRegistro->getCuentaRel());
+                        $arRegistroExportar->setDebito($arRegistro->getDebito());
+                        $arRegistroExportar->setCredito($arRegistro->getCredito());
+                        $em->persist($arRegistroExportar);
                     }
+                    $em->flush();
                 }
             }            
-
         }
         $arRegistros = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
         return $this->render('BrasaContabilidadBundle:Utilidades/IntercambioDatos:exportar.html.twig', array(
