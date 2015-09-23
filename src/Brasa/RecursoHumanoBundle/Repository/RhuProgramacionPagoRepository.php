@@ -1249,14 +1249,29 @@ class RhuProgramacionPagoRepository extends EntityRepository {
     }
     
     //listado de programaciones de pago pagadas para generar archivo txt bancolombia
-    public function listaDQLArchivo($codigoCentroCosto) {
+    public function listaDQLArchivo($codigoCentroCosto, $intTipo = "", $boolMostrarGenerados, $strFechaDesde = "", $strFechaHasta = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPago pp WHERE pp.estadoPagado = 1 ";
         
         if($codigoCentroCosto != "" && $codigoCentroCosto != 0) {
             $dql .= " AND pp.codigoCentroCostoFk =" . $codigoCentroCosto;
         }
-        
+        if($intTipo != "" && $intTipo != 0) {
+            $dql .= " AND pp.codigoPagoTipoFk =" . $intTipo;
+        }
+        if($boolMostrarGenerados == 1 ) {
+            $dql .= " AND pp.archivoExportado = 1";
+        }
+        if($boolMostrarGenerados == "0") {
+            $dql .= " AND pp.archivoExportado = 0";
+        }
+        if($strFechaDesde != "" ) {
+            $dql .= " AND pp.fechaHasta >='" . date_format($strFechaDesde, ('Y-m-d')). "'";
+        }
+
+        if($strFechaHasta != "") {
+            $dql .= " AND pp.fechaHasta <='" . date_format($strFechaHasta, ('Y-m-d')). "'";
+        }
         $dql .= " ORDER BY pp.codigoProgramacionPagoPk DESC";
         return $dql;
     }

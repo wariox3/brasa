@@ -26,7 +26,7 @@ class ConfiguracionGeneralController extends Controller
             'required' => true);                   
         $arrayPropiedadesBancos['data'] = $em->getReference("BrasaGeneralBundle:GenConfiguracion", $arConfiguracionGeneral->getCodigoBancoGenFk());                                    
         $formConfiguracionGeneral = $this->createFormBuilder() 
-            ->add('conceptoTipoCuenta', 'choice', array('choices' => array('D' => 'DÉBITO', 'C' => 'CRÉDITO'), 'preferred_choices' => array($arConfiguracionGeneral->getTipoCuenta()),))    
+            ->add('conceptoTipoCuenta', 'choice', array('choices' => array('D' => 'CORRIENTE', 'S' => 'AHORRO'), 'preferred_choices' => array($arConfiguracionGeneral->getTipoCuenta()),))    
             ->add('bancosRel', 'entity', $arrayPropiedadesBancos)    
             ->add('nitEmpresa', 'text', array('data' => $arConfiguracionGeneral->getNitEmpresa(), 'required' => true))
             ->add('digitoVerificacion', 'number', array('data' => $arConfiguracionGeneral->getDigitoVerificacionEmpresa(), 'required' => true))

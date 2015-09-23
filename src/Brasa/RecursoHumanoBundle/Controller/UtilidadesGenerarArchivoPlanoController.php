@@ -13,11 +13,19 @@ class UtilidadesGenerarArchivoPlanoController extends Controller
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);        
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arrayPropiedadesBancos = array(
+            'class' => 'BrasaGeneralBundle:GenBanco',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('b')                                        
+                ->orderBy('b.codigoBancoGeneralPk', 'ASC');},
+            'property' => 'cuenta',
+            'required' => true);                   
+        $arrayPropiedadesBancos['data'] = $em->getReference("BrasaGeneralBundle:GenConfiguracion", $arConfiguracionGeneral->getCodigoBancoGenFk());                                    
         $form = $this->createFormBuilder()
             ->add('BtnGenerarTxt', 'submit', array('label'  => 'Generar archivo',))
             ->add('descripcion', 'text', array('data'  => '225PAGO NOMI '),array('required' => true))
-            ->add('cuenta', 'text', array('data'  => '42073078473'),array('required' => true))
+            ->add('bancosRel', 'entity', $arrayPropiedadesBancos) 
             ->add('tipoCuenta', 'choice', array('choices' => array('D' => 'CORRIENTE', 'S' => 'AHORRO')))
             ->add('fechaTransmision', 'text', array('required' => true))
             ->add('secuencia', 'choice', array('choices' => array('A' => 'A', 'B' => 'B','C' => 'C', 'D' => 'D','E' => 'E', 'F' => 'F','G' => 'G', 'H' => 'H','I' => 'I', 'J' => 'J','K' => 'K', 'L' => 'L','M' => 'M', 'N' => 'N','O' => 'O', 'P' => 'P','Q' => 'Q', 'R' => 'R','S' => 'S', 'T' => 'T', 'U' => 'U', 'V' => 'V', 'W' => 'W', 'X' => 'X', 'Y' => 'Y', 'Z' => 'Z'),))
@@ -49,7 +57,7 @@ class UtilidadesGenerarArchivoPlanoController extends Controller
                             $strFechaCreacion = $controles['fechaTransmision'];
                             $strSecuencia = $controles['secuencia'];
                             $strFechaAplicacion = $controles['fechaAplicacion'];
-                            $strCuenta = $controles['cuenta'];
+                            $strCuenta = $controles['bancosRel'];
                             $strTipoCuenta = $controles['tipoCuenta'];
                             $strNumeroRegistros = count($arPagoExportar);
                             $strNumeroRegistros = $this->RellenarNr($strNumeroRegistros, "0", 6, "I");

@@ -76,12 +76,41 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
+        $form = $this->createFormBuilder()
+            ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if($form->get('BtnGenerar')->isClicked()) {
+                if(count($arrSeleccionados) > 0) {
+                    $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                    $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+                    if ($arProgramacionPago->getArchivoExportado() == 0){
+                        foreach ($arrSeleccionados AS $codigoPago) {
+                            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
+                            $arPagoExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
+                            $arPagoExportar->setNumeroIdentificacion($arPagos->getEmpleadoRel()->getNumeroIdentificacion());
+                            $arPagoExportar->setNombreCorto($arPagos->getEmpleadoRel()->getNombreCorto());
+                            $arPagoExportar->setCuenta($arPagos->getEmpleadoRel()->getCuenta());
+                            $arPagoExportar->setVrPago($arPagos->getVrNeto());
+                            $arPagoExportar->setSoporte($arPagos->getCodigoProgramacionPagoFk());
+                            $arPagoExportar->setTipo($arPagos->getCodigoPagoTipoFk());
+                            $em->persist($arPagoExportar);
+                            $em->flush();
+                       } 
+                    }  
+                }    
+            }
+        }        
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaPagosDQL($codigoProgramacionPago));
         $arPagos = $paginator->paginate($query, $request->query->get('page', 1), 500);        
+        
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/GenerarArchivosPagos/ProgramacionesPagoArchivo:detalle.html.twig', array(
                 'arPagos' => $arPagos,
                 'arProgramacionPago' => $arProgramacionPago,
-                ));
+                'form' => $form->createView()));
     }            
     
     private function formularioLista() {
@@ -117,7 +146,10 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
         }
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedades) 
-            ->add('pagoTipoRel', 'entity', $arrayPropiedadesTipo)    
+            ->add('pagoTipoRel', 'entity', $arrayPropiedadesTipo)
+            ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroEstadoGenerado')))    
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnCerrar', 'submit', array('label'  => 'Cerrar'))    
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
