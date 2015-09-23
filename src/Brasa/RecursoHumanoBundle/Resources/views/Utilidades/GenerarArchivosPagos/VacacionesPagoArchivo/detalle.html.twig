@@ -1,0 +1,148 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h3>Detalle programación pago</h3>
+        </div>
+
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        
+        {% if mensajefechaTransmision != "0" %}
+            <div class="alert alert-danger" role="alert">{{mensajefechaTransmision}}</div>
+        {% endif%}
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Información de la programación de pago</div>
+            <div class="panel-body">
+                <table width="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">CÓDIGO:</td>
+                        <td class="td-in-well">{{ arProgramacionPago.codigoProgramacionpagoPk }}</td>
+                        <td class="titulo">INCONSISTENCIAS:</td>
+                        <td class="td-in-well">{{ arProgramacionPago.codigoProgramacionpagoPk }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">CENTRO COSTOS:</tD>
+                        <td class="td-in-well">{{ arProgramacionPago.centroCostoRel.nombre }}</td>
+                        <td class="titulo">PERIODO:</td>
+                        <td class="td-in-well">{{ arProgramacionPago.centroCostoRel.periodoPagoRel.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PERIODO DESDE:</td>
+                        <td class="td-in-well">{{ arProgramacionPago.fechaDesde|date('Y/m/d') }}</td>
+                        <td class="titulo">GENERADO:</td>
+                        <td class="td-in-well">{% if arProgramacionPago.estadoGenerado == 1 %} SI{% else %} NO {% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">PERIODO HASTA:</td>
+                        <td class="td-in-well">{{ arProgramacionPago.fechaHasta|date('Y/m/d') }}</td>
+                        <td class="titulo">PAGADO:</td>
+                        <td class="td-in-well">{% if arProgramacionPago.estadoPagado == 1 %} SI{% else %} NO {% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">COMENTARIOS:</td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo">NETO PAGAR:</td>
+                        <td class="td-in-well">{{ arProgramacionPago.vrNeto | number_format(2, '.', ',') }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="panel panel-default">
+
+                <table  class="table table-striped table-bordered table-condensed table-hover">
+            <tr>
+                <th>{{ knp_pagination_sortable(arProgramacionPagoDetalles, 'ID', 'CODIGO') }}</th>
+                <th>IDENTIFICACIÓN</th>
+                <th>EMPLEADO</th>
+                <th>N° CUENTA</th>
+                <th>HORAS</th>
+                <th style="text-align: right">DÍAS</th>
+                <th>DESDE</th>
+                <th>HASTA</th>
+                <th style="text-align: right">VR. DEVENGADO</th>
+                <th style="text-align: right">VR. DEDUCCIONES</th>
+                <th style="text-align: right">VR. CREDITOS</th>
+                <th style="text-align: right">VR. NETO PAGAR</th>
+            </tr>
+            {% for arProgramacionPagoDetalles in arProgramacionPagoDetalles %}
+            <tr>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}">{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }} </td>
+                <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion  }}</td>
+                <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto  }}</td>
+                <td>{{ arProgramacionPagoDetalles.empleadoRel.cuenta  }}</td>
+                <td>{{ arProgramacionPagoDetalles.horasPeriodoReales  }}</td>
+                <td>{{ arProgramacionPagoDetalles.diasReales  }}</td>
+                <td>{{ arProgramacionPagoDetalles.fechaDesde|date('Y/m/d')  }}</td>
+                <td>{{ arProgramacionPagoDetalles.fechaHasta|date('Y/m/d')  }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDevengado | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDeducciones | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrCreditos | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrNetoPagar | number_format(2, '.', ',') }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        </div>
+        {{ knp_pagination_render(arProgramacionPagoDetalles) }}
+        <!-- Botones Menu Items -->
+        <!-- Formulario configuracion archivo-->
+        <div class="panel panel-default">
+        <div class="panel-heading">Informacion a generar</div>
+        <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label for="form_descripcion" class="col-sm-2 control-label">Descripción:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.descripcion, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_cuenta" class="col-sm-2 control-label">Cuenta:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.cuenta, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_tipoCuenta" class="col-sm-2 control-label">Tipo cuenta:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.tipoCuenta, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_fechaTransmision" class="col-sm-2 control-label">Fecha transmisión (yymmdd):</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.fechaTransmision, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_secuencia" class="col-sm-2 control-label">Secuencia:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.secuencia, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_fechaAplicacion" class="col-sm-2 control-label">Fecha aplicación (yymmdd):</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.fechaAplicacion, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+        </div>
+    </div>
+        <!-- Fin-->
+        <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">
+                {{ form_widget(form.BtnGenerarTxt, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
+        </div>
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_utilidades_programaciones_pago_archivo_lista') }}" style="float:left">Volver</a>
+            </div>
+        </div>    
+        
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

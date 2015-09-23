@@ -233,6 +233,10 @@ brs_rhu_programaciones_pago_agregar_empleado:
 brs_rhu_programaciones_pago_cargar_tiempo_sede:
     path:     /rhu/programaciones/pago/cargar/tiempo/sede/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarTiempoSedes:cargar }
+
+brs_rhu_utilidades_generar_archivo_plano:
+    path:     /rhu/utilidades/generar/archivo/plano
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesGenerarArchivoPlano:Generar }    
     
 brs_rhu_utilidades_programaciones_pago_archivo_lista:
     path:     /rhu/utilidades/programaciones/pago/archivo/lista
