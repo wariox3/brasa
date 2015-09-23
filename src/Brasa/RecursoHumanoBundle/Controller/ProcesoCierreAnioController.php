@@ -56,7 +56,9 @@ class ProcesoCierreAnioController extends Controller
             
             
             $arContratoMinimos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $arContratoMinimos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('estadoActivo' => 1, 'VrSalario' => $arConfiguracion->getVrSalario()));
+            $strDql = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c WHERE c.estadoActivo = 1 AND c.indefinido = 1 AND c.VrSalario <= " . $arConfiguracion->getVrSalario();
+            $query = $em->createQuery($strDql);
+            $arContratoMinimos = $query->getResult();                        
             foreach ($arContratoMinimos as $arContratoMinimo){
                 $arCambioSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
                 $arCambioSalario->setContratoRel($arContratoMinimo);
