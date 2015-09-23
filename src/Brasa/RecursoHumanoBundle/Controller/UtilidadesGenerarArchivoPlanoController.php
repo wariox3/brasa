@@ -65,7 +65,7 @@ class UtilidadesGenerarArchivoPlanoController extends Controller
                                     $duoNombreCorto = substr($arPagoExportar->getNombreCorto(), 0, 18);
                                     fputs($ar, $this->RellenarNr($duoNombreCorto,"0", 18, "I"));
                                     fputs($ar, "005600078");
-                                    fputs($ar, $this->RellenarNr($arPagoExportar->getEmpleadoRel()->getCuenta(), "0", 17, "I"));
+                                    fputs($ar, $this->RellenarNr($arPagoExportar->getCuenta(), "0", 17, "I"));
                                     fputs($ar, "S37");
                                     $duoValorNetoPagar = round($arPagoExportar->getVrPago());
                                     fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 10, "I")));
