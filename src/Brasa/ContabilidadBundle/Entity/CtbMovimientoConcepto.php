@@ -124,6 +124,7 @@ class CtbMovimientoConcepto
     
 
 
+
     /**
      * Get codigoMovimientoConceptoPk
      *
@@ -545,11 +546,11 @@ class CtbMovimientoConcepto
     /**
      * Set cuentaTotalRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaTotalRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaTotalRel
      *
      * @return CtbMovimientoConcepto
      */
-    public function setCuentaTotalRel(\Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaTotalRel = null)
+    public function setCuentaTotalRel(\Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaTotalRel = null)
     {
         $this->cuentaTotalRel = $cuentaTotalRel;
 
@@ -559,7 +560,7 @@ class CtbMovimientoConcepto
     /**
      * Get cuentaTotalRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCuentaContable
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCuenta
      */
     public function getCuentaTotalRel()
     {
@@ -569,11 +570,11 @@ class CtbMovimientoConcepto
     /**
      * Set cuentaBrutoRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaBrutoRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaBrutoRel
      *
      * @return CtbMovimientoConcepto
      */
-    public function setCuentaBrutoRel(\Brasa\ContabilidadBundle\Entity\CtbCuentaContable $cuentaBrutoRel = null)
+    public function setCuentaBrutoRel(\Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaBrutoRel = null)
     {
         $this->cuentaBrutoRel = $cuentaBrutoRel;
 
@@ -583,7 +584,7 @@ class CtbMovimientoConcepto
     /**
      * Get cuentaBrutoRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCuentaContable
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCuenta
      */
     public function getCuentaBrutoRel()
     {
