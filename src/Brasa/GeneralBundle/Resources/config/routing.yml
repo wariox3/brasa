@@ -12,15 +12,19 @@ brs_gen_base_terceros_nuevo:
     
 brs_gen_base_bancos:
     path:     /general/base/bancos
-    defaults: { _controller: BrasaGeneralBundle:BaseBancos:lista }
-    
-brs_gen_base_cuentas:
-    path:     /general/base/cuentas
-    defaults: { _controller: BrasaGeneralBundle:BaseCuentas:lista }    
+    defaults: { _controller: BrasaGeneralBundle:BaseBancos:lista }   
     
 brs_gen_base_bancos_nuevo:
     path:     /general/base/bancos/nuevo/{codigoBanco}
     defaults: { _controller: BrasaGeneralBundle:BaseBancos:nuevo }    
+
+brs_gen_base_cuentas:
+    path:     /general/base/cuentas
+    defaults: { _controller: BrasaGeneralBundle:BaseCuentas:lista }    
+
+brs_gen_base_cuentas_nuevo:
+    path:     /general/base/cuentas/nuevo/{codigoCuenta}
+    defaults: { _controller: BrasaGeneralBundle:BaseCuentas:nuevo }    
     
 brs_gen_configuracion_general:
     path:     /gen/configuracion/general/{codigoConfiguracionPk}

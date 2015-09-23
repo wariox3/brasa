@@ -13,7 +13,11 @@ class GenCuentaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('bancoRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenBanco',
+                        'property' => 'nombre',))                
             ->add('nombre', 'text', array('required' => true))
+            ->add('tipo', 'text', array('required' => true))
             ->add('BtnGuardar', 'submit', array('label' => 'Guardar'));
     }
 

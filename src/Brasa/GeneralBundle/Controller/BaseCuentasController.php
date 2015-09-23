@@ -42,25 +42,22 @@ class BaseCuentasController extends Controller
         ));
     }
     
-    public function nuevoAction($codigoBanco) {
+    public function nuevoAction($codigoCuenta) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arBanco = new \Brasa\GeneralBundle\Entity\GenBanco();
-        if ($codigoBanco != 0)
-        {
-            $arBanco = $em->getRepository('BrasaGeneralBundle:GenBanco')->find($codigoBanco);
+        $arCuenta = new \Brasa\GeneralBundle\Entity\GenCuenta();
+        if ($codigoCuenta != 0) {
+            $arCuenta = $em->getRepository('BrasaGeneralBundle:GenCuenta')->find($codigoCuenta);
         }    
-        $form = $this->createForm(new GenBancoType(), $arBanco);
+        $form = $this->createForm(new GenCuentaType(), $arCuenta);
         $form->handleRequest($request);
-        if ($form->isValid())
-        {
-            // guardar la tarea en la base de datos
-            $arBanco = $form->getData();
-            $em->persist($arBanco);
+        if ($form->isValid()) {            
+            $arCuenta = $form->getData();
+            $em->persist($arCuenta);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_gen_base_bancos'));
+            return $this->redirect($this->generateUrl('brs_gen_base_cuentas'));
         }
-        return $this->render('BrasaGeneralBundle:Base/Bancos:nuevo.html.twig', array(
+        return $this->render('BrasaGeneralBundle:Base/Cuentas:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }
