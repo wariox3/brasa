@@ -17,17 +17,7 @@ class ConfiguracionGeneralController extends Controller
         $request = $this->getRequest();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $arrayPropiedadesBancos = array(
-            'class' => 'BrasaGeneralBundle:GenBanco',
-            'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('b')                                        
-                ->orderBy('b.codigoBancoGeneralPk', 'ASC');},
-            'property' => 'cuenta',
-            'required' => true);                   
-        $arrayPropiedadesBancos['data'] = $em->getReference("BrasaGeneralBundle:GenConfiguracion", $arConfiguracionGeneral->getCodigoBancoGenFk());                                    
         $formConfiguracionGeneral = $this->createFormBuilder() 
-            ->add('conceptoTipoCuenta', 'choice', array('choices' => array('D' => 'CORRIENTE', 'S' => 'AHORRO'), 'preferred_choices' => array($arConfiguracionGeneral->getTipoCuenta()),))    
-            ->add('bancosRel', 'entity', $arrayPropiedadesBancos)    
             ->add('nitEmpresa', 'text', array('data' => $arConfiguracionGeneral->getNitEmpresa(), 'required' => true))
             ->add('digitoVerificacion', 'number', array('data' => $arConfiguracionGeneral->getDigitoVerificacionEmpresa(), 'required' => true))
             ->add('nombreEmpresa', 'text', array('data' => $arConfiguracionGeneral->getNombreEmpresa(), 'required' => true))    

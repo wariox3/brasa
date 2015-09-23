@@ -21,7 +21,12 @@ class GenCuenta
     /**
      * @ORM\Column(name="nombre", type="string", length=60)
      */
-    private $nombre;    
+    private $nombre;
+    
+    /**
+     * @ORM\Column(name="cuenta", type="string", length=20)
+     */
+    private $cuenta;
     
     /**
      * @ORM\Column(name="tipo", type="string", length=60)
@@ -144,5 +149,29 @@ class GenCuenta
     public function getBancoRel()
     {
         return $this->bancoRel;
+    }
+
+    /**
+     * Set cuenta
+     *
+     * @param string $cuenta
+     *
+     * @return GenCuenta
+     */
+    public function setCuenta($cuenta)
+    {
+        $this->cuenta = $cuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get cuenta
+     *
+     * @return string
+     */
+    public function getCuenta()
+    {
+        return $this->cuenta;
     }
 }

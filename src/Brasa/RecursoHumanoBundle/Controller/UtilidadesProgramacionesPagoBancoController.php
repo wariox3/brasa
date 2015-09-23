@@ -5,7 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 
-class UtilidadesProgramacionesPagoArchivoController extends Controller
+class UtilidadesProgramacionesPagoBancoController extends Controller
 {
     var $strDqlLista = "";
     var $intNumero = 0;
@@ -28,44 +28,37 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
                     foreach ($arrSeleccionados AS $codigoProgramacionPago) {
                         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                        if ($arProgramacionPago->getArchivoExportado() == 0)    
+                        if ($arProgramacionPago->getArchivoExportadoBanco() == 0)    
                         {
                             $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-                            foreach ($arPagos AS $arPagos){
+                            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago, 'archivoExportadoBanco' => 0));
+                            foreach ($arPagos AS $arPago){
+                                $arPagoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                                $arPagoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk()); 
                                 $arPagoExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
-                                $arPagoExportar->setNumeroIdentificacion($arPagos->getEmpleadoRel()->getNumeroIdentificacion());
-                                $arPagoExportar->setNombreCorto($arPagos->getEmpleadoRel()->getNombreCorto());
-                                $arPagoExportar->setCuenta($arPagos->getEmpleadoRel()->getCuenta());
-                                $arPagoExportar->setVrPago($arPagos->getVrNeto());
-                                $arPagoExportar->setSoporte($arPagos->getCodigoProgramacionPagoFk());
-                                $arPagoExportar->setTipo($arPagos->getCodigoPagoTipoFk());
+                                $arPagoExportar->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
+                                $arPagoExportar->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
+                                $arPagoExportar->setCuenta($arPago->getEmpleadoRel()->getCuenta());
+                                $arPagoExportar->setVrPago($arPago->getVrNeto());
+                                $arPagoExportar->setSoporte($arPago->getCodigoProgramacionPagoFk());
+                                $arPagoExportar->setTipo($arPago->getCodigoPagoTipoFk());
+                                $arPagoActualizar->setArchivoExportadoBanco(1);
                                 $em->persist($arPagoExportar);
-                                $em->flush();
+                                $em->persist($arPagoActualizar);
                             }
+                           $arProgramacionPago->setArchivoExportadoBanco(1) ;
+                           $em->persist($arProgramacionPago);
+                           $em->flush();
                         }
                     }
                 }
                 $this->filtrarLista($form);
                 $this->listar();  
             }
-            if($form->get('BtnCerrar')->isClicked()) {
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                        $arProgramacionPago->setArchivoExportado(1);
-                        $em->persist($arProgramacionPago);
-                        $em->flush();
-                      
-                    }
-                }
-                $this->filtrarLista($form);
-                $this->listar();  
-            }
+            
         }            
         $arProgramacionPagoArchivo = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/GenerarArchivosPagos/ProgramacionesPagoArchivo:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/PagoBanco/ProgramacionesPagoBanco:lista.html.twig', array(
             'arProgramacionPagoArchivo' => $arProgramacionPagoArchivo,
             'form' => $form->createView()));
     }       
@@ -77,37 +70,36 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
         $form = $this->createFormBuilder()
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
+            ->add('BtnGenerar', 'submit', array('label'  => 'Exportar banco',))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnGenerar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                    $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                    if ($arProgramacionPago->getArchivoExportado() == 0){
-                        foreach ($arrSeleccionados AS $codigoPago) {
-                            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
-                            $arPagoExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
-                            $arPagoExportar->setNumeroIdentificacion($arPagos->getEmpleadoRel()->getNumeroIdentificacion());
-                            $arPagoExportar->setNombreCorto($arPagos->getEmpleadoRel()->getNombreCorto());
-                            $arPagoExportar->setCuenta($arPagos->getEmpleadoRel()->getCuenta());
-                            $arPagoExportar->setVrPago($arPagos->getVrNeto());
-                            $arPagoExportar->setSoporte($arPagos->getCodigoProgramacionPagoFk());
-                            $arPagoExportar->setTipo($arPagos->getCodigoPagoTipoFk());
-                            $em->persist($arPagoExportar);
-                            $em->flush();
-                       } 
-                    }  
+                    foreach ($arrSeleccionados AS $codigoPago) {
+                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
+                        $arPagoExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
+                        $arPagoExportar->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
+                        $arPagoExportar->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
+                        $arPagoExportar->setCuenta($arPago->getEmpleadoRel()->getCuenta());
+                        $arPagoExportar->setVrPago($arPago->getVrNeto());
+                        $arPagoExportar->setSoporte($arPago->getCodigoProgramacionPagoFk());
+                        $arPagoExportar->setTipo($arPago->getCodigoPagoTipoFk());
+                        $em->persist($arPagoExportar);
+                        $arPago->setArchivoExportadoBanco(1);
+                        $em->persist($arPago);
+                        
+                   }
+                   $em->flush();
                 }    
             }
         }        
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaPagosDQL($codigoProgramacionPago));
         $arPagos = $paginator->paginate($query, $request->query->get('page', 1), 500);        
         
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/GenerarArchivosPagos/ProgramacionesPagoArchivo:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/PagoBanco/ProgramacionesPagoBanco:detalle.html.twig', array(
                 'arPagos' => $arPagos,
                 'arProgramacionPago' => $arProgramacionPago,
                 'form' => $form->createView()));
@@ -150,9 +142,8 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
             ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroEstadoGenerado')))    
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))    
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnCerrar', 'submit', array('label'  => 'Cerrar'))    
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))    
+            ->add('BtnGenerar', 'submit', array('label'  => 'Exportar banco'))    
             ->getForm();        
         return $form;
     }      

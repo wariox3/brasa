@@ -203,7 +203,12 @@ class RhuPago
     /**
      * @ORM\Column(name="estado_contabilizado", type="boolean")
      */    
-    private $estadoContabilizado = 0;        
+    private $estadoContabilizado = 0;
+    
+    /**
+     * @ORM\Column(name="archivo_exportado_banco", type="boolean")
+     */    
+    private $archivoExportadoBanco = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="pagosPagoTipoRel")
@@ -260,7 +265,6 @@ class RhuPago
      */
     protected $creditosPagosPagoRel;
     
-
 
     /**
      * Constructor
@@ -1170,6 +1174,30 @@ class RhuPago
     public function getEstadoContabilizado()
     {
         return $this->estadoContabilizado;
+    }
+
+    /**
+     * Set archivoExportadoBanco
+     *
+     * @param boolean $archivoExportadoBanco
+     *
+     * @return RhuPago
+     */
+    public function setArchivoExportadoBanco($archivoExportadoBanco)
+    {
+        $this->archivoExportadoBanco = $archivoExportadoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get archivoExportadoBanco
+     *
+     * @return boolean
+     */
+    public function getArchivoExportadoBanco()
+    {
+        return $this->archivoExportadoBanco;
     }
 
     /**

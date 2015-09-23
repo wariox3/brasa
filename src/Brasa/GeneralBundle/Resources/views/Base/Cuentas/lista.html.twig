@@ -12,6 +12,7 @@
             
             <th>CÓDIGO</th>
             <th>{{ knp_pagination_sortable(arCuentas, 'NOMBRE', 'codigo') }}</th>             
+            <th>CUENTA</th>
             <th>BANCO</th>
             <th>TIPO</th>
             <th></th>
@@ -21,7 +22,8 @@
             {%for arCuentas in arCuentas %}
                <tr>
                 <td>{{arCuentas.codigoCuentaPk}}</td>
-                <td>{{arCuentas.nombre}}</td>                
+                <td>{{arCuentas.nombre}}</td>
+                <td>{{arCuentas.cuenta}}</td>
                 <td>{{arCuentas.bancoRel.nombre}}</td>                
                 <td>{{arCuentas.tipo}}</td>                
                 <td><a href="{{ path('brs_gen_base_cuentas_nuevo',{'codigoCuenta': arCuentas.codigoCuentaPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>

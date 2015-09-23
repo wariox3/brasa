@@ -4,7 +4,7 @@
         <div class="page-header">
             <h3>Detalle programación pago</h3>
         </div>
-        
+
         <div class="panel panel-default">
             <div class="panel-heading">Información de la programación de pago</div>
             <div class="panel-body">
@@ -56,7 +56,8 @@
                     <th style="text-align: right">VR. DEVENGADO</th>
                     <th style="text-align: right">VR. DEDUCCIONES</th>
                     <th style="text-align: right">VR. NETO PAGAR</th>
-                    <th></th>
+                    <th>EXPORTADO</th>
+                    <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                 </tr>
                 {% for arPagos in arPagos %}
                 <tr>
@@ -70,24 +71,25 @@
                     <td style="text-align: right">{{ arPagos.vrDevengado | number_format(2, '.', ',') }}</td>
                     <td style="text-align: right">{{ arPagos.vrDeducciones | number_format(2, '.', ',') }}</td>
                     <td style="text-align: right">{{ arPagos.vrNeto | number_format(2, '.', ',') }}</td>
+                    <td>{% if arPagos.archivoExportadoBanco == 1 %} SI{% else %} NO {% endif %}</td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagos.codigoPagoPk }}" /></td>
                 </tr>
                 {% endfor %}
             </table>
-        
+
         {{ knp_pagination_render(arPagos) }}
-        
+
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_utilidades_programaciones_pago_archivo_lista') }}" style="float:left">Volver</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_utilidades_programaciones_pago_banco_lista') }}" style="float:left">Volver</a>
             </div>
         </div>
         <div class="btn-toolbar" style="float:right">
             <div class="btn-group">
                 {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
-        </div>    
+        </div>
     </div>
        {{ form_rest(form) }}
-    {{ form_end(form) }}            
+    {{ form_end(form) }}
 {% endblock %}

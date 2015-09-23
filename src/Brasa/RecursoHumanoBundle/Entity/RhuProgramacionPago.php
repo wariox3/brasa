@@ -63,9 +63,9 @@ class RhuProgramacionPago
     private $estadoAnulado = 0;     
     
     /**
-     * @ORM\Column(name="archivoExportado", type="boolean")
+     * @ORM\Column(name="archivo_exportado_banco", type="boolean")
      */    
-    private $archivoExportado = 0;    
+    private $archivoExportadoBanco = 0;    
     
     /**     
      * @ORM\Column(name="verificar_pagos_adicionales", type="boolean")
@@ -150,7 +150,7 @@ class RhuProgramacionPago
      */
     protected $facturasDetallesProgramacionPagoRel;
 
-    
+   
     /**
      * Constructor
      */
@@ -244,6 +244,30 @@ class RhuProgramacionPago
     public function getFechaHasta()
     {
         return $this->fechaHasta;
+    }
+
+    /**
+     * Set fechaHastaReal
+     *
+     * @param \DateTime $fechaHastaReal
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setFechaHastaReal($fechaHastaReal)
+    {
+        $this->fechaHastaReal = $fechaHastaReal;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHastaReal
+     *
+     * @return \DateTime
+     */
+    public function getFechaHastaReal()
+    {
+        return $this->fechaHastaReal;
     }
 
     /**
@@ -367,27 +391,27 @@ class RhuProgramacionPago
     }
 
     /**
-     * Set archivoExportado
+     * Set archivoExportadoBanco
      *
-     * @param boolean $archivoExportado
+     * @param boolean $archivoExportadoBanco
      *
      * @return RhuProgramacionPago
      */
-    public function setArchivoExportado($archivoExportado)
+    public function setArchivoExportadoBanco($archivoExportadoBanco)
     {
-        $this->archivoExportado = $archivoExportado;
+        $this->archivoExportadoBanco = $archivoExportadoBanco;
 
         return $this;
     }
 
     /**
-     * Get archivoExportado
+     * Get archivoExportadoBanco
      *
      * @return boolean
      */
-    public function getArchivoExportado()
+    public function getArchivoExportadoBanco()
     {
-        return $this->archivoExportado;
+        return $this->archivoExportadoBanco;
     }
 
     /**
@@ -832,29 +856,5 @@ class RhuProgramacionPago
     public function getFacturasDetallesProgramacionPagoRel()
     {
         return $this->facturasDetallesProgramacionPagoRel;
-    }
-
-    /**
-     * Set fechaHastaReal
-     *
-     * @param \DateTime $fechaHastaReal
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setFechaHastaReal($fechaHastaReal)
-    {
-        $this->fechaHastaReal = $fechaHastaReal;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaHastaReal
-     *
-     * @return \DateTime
-     */
-    public function getFechaHastaReal()
-    {
-        return $this->fechaHastaReal;
     }
 }

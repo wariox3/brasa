@@ -1,8 +1,12 @@
 {% extends '::base.html.twig' %}
 {% block content %}
 <div class="container">
+    <script type="text/javascript">
+    $(document).ready(function() {
+            $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
+    </script>
     <div class="page-header">
-        <h3>Programaciones pago archivo banco</h3>
+        <h3>Programaciones pago banco</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}
@@ -14,7 +18,31 @@
                     <div class="col-sm-10">                  
                         {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                </div>                    
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label for="form_pagoTipoRel" class="col-sm-2 control-label">Tipo pago:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.pagoTipoRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label for="form_estadoGenerado" class="col-sm-2 control-label">Estado:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.estadoGenerado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }} 
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }} 
+                    </div>
+                </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -52,11 +80,11 @@
                 <td style="text-align: right">{{ arProgramacionPagoArchivo.vrNeto | number_format(2, '.', ',') }}</td>
                 <td>{% if arProgramacionPagoArchivo.empleadosGenerados == 1 %} {{ arProgramacionPagoArchivo.numeroEmpleados  }} {% else %} NO {% endif %}</td>
                 <td>{% if arProgramacionPagoArchivo.estadoPagado == 1 %} SI{% else %} NO {% endif %}</td>                               
-                <td>{% if arProgramacionPagoArchivo.archivoExportado == 1 %} SI{% else %} NO {% endif %}</td>                               
-                {% if  arProgramacionPagoArchivo.archivoExportado == 1%}
+                <td>{% if arProgramacionPagoArchivo.archivoExportadoBanco == 1 %} SI{% else %} NO {% endif %}</td>                               
+                {% if  arProgramacionPagoArchivo.archivoExportadoBanco == 1%}
                     <td style="text-align: center"><a href="" onclick="alert('Archivo Generado para esta programación de pago')"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 {% else %}
-                    <td style="text-align: center"><a href="{{ path('brs_rhu_utilidades_programaciones_pago_archivo_detalle', { 'codigoProgramacionPago':  arProgramacionPagoArchivo.codigoProgramacionPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
+                    <td style="text-align: center"><a href="{{ path('brs_rhu_utilidades_programaciones_pago_banco_detalle', { 'codigoProgramacionPago':  arProgramacionPagoArchivo.codigoProgramacionPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 {% endif %}    
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionPagoArchivo.codigoProgramacionPagoPk }}" /></td>
             </tr>
@@ -66,12 +94,14 @@
             <div class="btn-group">
                 {{ knp_pagination_render(arProgramacionPagoArchivo) }} 
             </div>
-        </div>                
+        </div>
+           
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
         </div>
+           
         {{ form_rest(form) }}
     {{ form_end(form) }}
 

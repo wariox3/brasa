@@ -5,28 +5,29 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 
-class UtilidadesGenerarArchivoPlanoController extends Controller
+class UtilidadesGenerarPagoBancoController extends Controller
 {
     
     public function GenerarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arPagosExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
+        $arPagosExportar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->findAll(); 
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arrayPropiedadesBancos = array(
-            'class' => 'BrasaGeneralBundle:GenBanco',
+            'class' => 'BrasaGeneralBundle:GenCuenta',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('b')                                        
-                ->orderBy('b.codigoBancoGeneralPk', 'ASC');},
-            'property' => 'cuenta',
+                return $er->createQueryBuilder('c')                                        
+                ->orderBy('c.nombre', 'ASC');},
+            'property' => 'nombre',
             'required' => true);                   
-        $arrayPropiedadesBancos['data'] = $em->getReference("BrasaGeneralBundle:GenConfiguracion", $arConfiguracionGeneral->getCodigoBancoGenFk());                                    
+        
         $form = $this->createFormBuilder()
-            ->add('BtnGenerarTxt', 'submit', array('label'  => 'Generar archivo',))
+            ->add('BtnGenerarTxt', 'submit', array('label'  => 'Generar archivo banco',))
             ->add('descripcion', 'text', array('data'  => '225PAGO NOMI '),array('required' => true))
-            ->add('bancosRel', 'entity', $arrayPropiedadesBancos) 
-            ->add('tipoCuenta', 'choice', array('choices' => array('D' => 'CORRIENTE', 'S' => 'AHORRO')))
+            ->add('cuentaRel', 'entity', $arrayPropiedadesBancos) 
             ->add('fechaTransmision', 'text', array('required' => true))
             ->add('secuencia', 'choice', array('choices' => array('A' => 'A', 'B' => 'B','C' => 'C', 'D' => 'D','E' => 'E', 'F' => 'F','G' => 'G', 'H' => 'H','I' => 'I', 'J' => 'J','K' => 'K', 'L' => 'L','M' => 'M', 'N' => 'N','O' => 'O', 'P' => 'P','Q' => 'Q', 'R' => 'R','S' => 'S', 'T' => 'T', 'U' => 'U', 'V' => 'V', 'W' => 'W', 'X' => 'X', 'Y' => 'Y', 'Z' => 'Z'),))
             ->add('fechaAplicacion', 'text', array('required' => true))
@@ -57,8 +58,10 @@ class UtilidadesGenerarArchivoPlanoController extends Controller
                             $strFechaCreacion = $controles['fechaTransmision'];
                             $strSecuencia = $controles['secuencia'];
                             $strFechaAplicacion = $controles['fechaAplicacion'];
-                            $strCuenta = $controles['bancosRel'];
-                            $strTipoCuenta = $controles['tipoCuenta'];
+                            $intCodigoCuenta = $controles['cuentaRel'];
+                            //$strTipoCuenta = $controles['tipoCuenta'];
+                            $arCuenta = new \Brasa\GeneralBundle\Entity\GenCuenta();
+                            $arCuenta = $em->getRepository('BrasaGeneralBundle:GenCuenta')->find($intCodigoCuenta);
                             $strNumeroRegistros = count($arPagoExportar);
                             $strNumeroRegistros = $this->RellenarNr($strNumeroRegistros, "0", 6, "I");
                             $strValorTotal = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->totalValorResgistrosPagoExportar();
@@ -66,7 +69,7 @@ class UtilidadesGenerarArchivoPlanoController extends Controller
                             //Fin encabezado
                             fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia .
                                   $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . 
-                                  $strValorTotal . $strCuenta . $strTipoCuenta . "\r\n");
+                                  $strValorTotal . $arCuenta->getCuenta() . $arCuenta->getTipo() . "\r\n");
                             //Inicio cuerpo
                             foreach ($arPagoExportar AS $arPagoExportar) {
                                     fputs($ar, "6" . $this->RellenarNr($arPagoExportar->getNumeroIdentificacion(), "0", 15, "I"));
@@ -102,10 +105,10 @@ class UtilidadesGenerarArchivoPlanoController extends Controller
                 
             }
         }
-
         
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/GenerarArchivosPagos/GenerarArchivoPlano:GenerarArchivoPlano.html.twig', array(
-                'form' => $form->createView() 
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/PagoBanco/GenerarArchivoBanco:GenerarArchivoBanco.html.twig', array(
+                'form' => $form->createView(),
+                'arPagosExportar' => $arPagosExportar,
                 ));
     }
     
