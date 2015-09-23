@@ -201,9 +201,9 @@ class RhuPago
     private $comentarios;    
     
     /**
-     * @ORM\Column(name="exportado_contabilidad", type="boolean")
+     * @ORM\Column(name="estado_contabilizado", type="boolean")
      */    
-    private $exportadoContabilidad = 0;        
+    private $estadoContabilizado = 0;        
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="pagosPagoTipoRel")
@@ -260,6 +260,7 @@ class RhuPago
      */
     protected $creditosPagosPagoRel;
     
+
 
     /**
      * Constructor
@@ -1148,27 +1149,27 @@ class RhuPago
     }
 
     /**
-     * Set exportadoContabilidad
+     * Set estadoContabilizado
      *
-     * @param boolean $exportadoContabilidad
+     * @param boolean $estadoContabilizado
      *
      * @return RhuPago
      */
-    public function setExportadoContabilidad($exportadoContabilidad)
+    public function setEstadoContabilizado($estadoContabilizado)
     {
-        $this->exportadoContabilidad = $exportadoContabilidad;
+        $this->estadoContabilizado = $estadoContabilizado;
 
         return $this;
     }
 
     /**
-     * Get exportadoContabilidad
+     * Get estadoContabilizado
      *
      * @return boolean
      */
-    public function getExportadoContabilidad()
+    public function getEstadoContabilizado()
     {
-        return $this->exportadoContabilidad;
+        return $this->estadoContabilizado;
     }
 
     /**
@@ -1459,29 +1460,5 @@ class RhuPago
     public function getCreditosPagosPagoRel()
     {
         return $this->creditosPagosPagoRel;
-    }
-
-    /**
-     * Set dias
-     *
-     * @param boolean $dias
-     *
-     * @return RhuPago
-     */
-    public function setDias($dias)
-    {
-        $this->dias = $dias;
-
-        return $this;
-    }
-
-    /**
-     * Get dias
-     *
-     * @return boolean
-     */
-    public function getDias()
-    {
-        return $this->dias;
     }
 }

@@ -56,7 +56,7 @@
                 <th>CREDITO</th>
                 <th>BASE</th>
                 <th>DETALLE</th>
-                <th></th>
+                <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arRegistros in arRegistros %}
             <tr>
@@ -81,6 +81,9 @@
             
         </div>                
         <div class="btn-toolbar" style="float: right">                 
+            <div class="btn-group">
+                {{ form_widget(form.BtnGenerarPlano, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                
+            </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnExportar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
