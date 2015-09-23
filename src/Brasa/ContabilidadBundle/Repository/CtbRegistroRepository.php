@@ -21,7 +21,9 @@ class CtbRegistroRepository extends EntityRepository
         if($numero != "") {
             $dql .= " AND r.numero = " . $numero;
         }        
-        
+        if($comprobante != "") {
+            $dql .= " AND r.codigoComprobanteContableFk = " . $comprobante;
+        }        
         return $dql;
     }           
     
