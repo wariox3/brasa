@@ -1261,13 +1261,5 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         return $dql;
     }
     
-    //total registros de la programacion de pago a exportar a txt
-    public function totalResgistrosProgramacionPago($codigoProgramacionPago) {
-        $em = $this->getEntityManager();
-        $dql   = "SELECT COUNT(c.codigoProgramacionPagoDetallePk) FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle c WHERE c.codigoProgramacionPagoFk = " . $codigoProgramacionPago ."AND c.vrNetoPagar > 0";
-        $query = $em->createQuery($dql);
-        $intRegistros = $query->getSingleScalarResult();
-        return $intRegistros;
-    }
 
 }

@@ -1,0 +1,79 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h3>Programaciones pago archivo banco</h3>
+    </div>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+            {{ form_errors(form) }}
+        <div class="panel panel-default">
+            <div class="panel-heading">Filtros de busqueda</div>
+            <div class="panel-body">                
+                <div class="form-group form-group-sm">  
+                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>                    
+                <div class="form-group form-group-sm">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
+                    </div>
+                </div>                                                    
+            </div>
+        </div> 
+        <table  class="table table-striped table-bordered  table-condensed table-hover">
+            <tr>
+                <th>ID</th>
+                <th>CÓDIGO</th>
+                <th>TIPO</th>
+                <th>CENTRO COSTOS</th>
+                <th>PERIODO</th>
+                <th>DESDE</th>
+                <th>HASTA</th>
+                <th>DIAS</th>
+                <th>NETO</th>
+                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">EMPLEADOS</p></th>
+                <th>PAGADO</th>
+                <th>ARCHIVO GENERADO</th>
+                <th style="text-align: center">DETALLE</th>
+                <th></th>
+            </tr>
+            {% for arProgramacionPagoArchivo in arProgramacionPagoArchivo %}
+            <tr>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPagoArchivo.codigoProgramacionPagoPk }}">{{ arProgramacionPagoArchivo.codigoProgramacionPagoPk }} </td>
+                <td>{{ arProgramacionPagoArchivo.codigoCentroCostoFk  }}</td>
+                <td><b>{{ arProgramacionPagoArchivo.pagoTipoRel.nombre  }}</b></td>
+                <td>{{ arProgramacionPagoArchivo.centroCostoRel.nombre  }}</td>
+                <td>{{ arProgramacionPagoArchivo.centroCostoRel.periodoPagoRel.nombre  }}</td>
+                <td>{{ arProgramacionPagoArchivo.fechaDesde |date("Y/m/d")  }}</td>
+                <td {% if arProgramacionPagoArchivo.estadoGenerado == 0 and date(arProgramacionPagoArchivo.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPagoArchivo.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{{ arProgramacionPagoArchivo.dias  }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoArchivo.vrNeto | number_format(2, '.', ',') }}</td>
+                <td>{% if arProgramacionPagoArchivo.empleadosGenerados == 1 %} {{ arProgramacionPagoArchivo.numeroEmpleados  }} {% else %} NO {% endif %}</td>
+                <td>{% if arProgramacionPagoArchivo.estadoPagado == 1 %} SI{% else %} NO {% endif %}</td>                               
+                <td>{% if arProgramacionPagoArchivo.archivoExportado == 1 %} SI{% else %} NO {% endif %}</td>                               
+                {% if  arProgramacionPagoArchivo.archivoExportado == 1%}
+                    <td style="text-align: center"><a href="" onclick="alert('Archivo Generado para esta programación de pago')"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
+                {% else %}
+                    <td style="text-align: center"><a href="{{ path('brs_rhu_utilidades_programaciones_pago_archivo_detalle', { 'codigoProgramacionPago':  arProgramacionPagoArchivo.codigoProgramacionPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
+                {% endif %}    
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionPagoArchivo.codigoProgramacionPagoPk }}" /></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="btn-toolbar" style="float: left">
+            <div class="btn-group">
+                {{ knp_pagination_render(arProgramacionPagoArchivo) }} 
+            </div>
+        </div>                
+        <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">
+                {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
+        </div>
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+
+</div>
+{% endblock %}

@@ -26,6 +26,7 @@
             <tr>
                 <th>ID</th>
                 <th>CÓDIGO</th>
+                <th>TIPO</th>
                 <th>CENTRO COSTOS</th>
                 <th>PERIODO</th>
                 <th>DESDE</th>
@@ -42,6 +43,7 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPagoArchivo.codigoProgramacionPagoPk }}">{{ arProgramacionPagoArchivo.codigoProgramacionPagoPk }} </td>
                 <td>{{ arProgramacionPagoArchivo.codigoCentroCostoFk  }}</td>
+                <td><b>{{ arProgramacionPagoArchivo.pagoTipoRel.nombre  }}</b></td>
                 <td>{{ arProgramacionPagoArchivo.centroCostoRel.nombre  }}</td>
                 <td>{{ arProgramacionPagoArchivo.centroCostoRel.periodoPagoRel.nombre  }}</td>
                 <td>{{ arProgramacionPagoArchivo.fechaDesde |date("Y/m/d")  }}</td>

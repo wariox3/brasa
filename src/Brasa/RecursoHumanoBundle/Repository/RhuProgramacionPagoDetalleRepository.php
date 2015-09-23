@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuProgramacionPagoDetalleRepository extends EntityRepository {
+    
     public function listaDQL($codigoProgramacionPago = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle pd WHERE pd.codigoProgramacionPagoDetallePk <> 0" ;
