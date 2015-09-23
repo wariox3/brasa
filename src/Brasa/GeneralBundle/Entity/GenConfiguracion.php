@@ -91,27 +91,8 @@ class GenConfiguracion
     /**
      * @ORM\Column(name="direccion_empresa", type="string", length=120, nullable=true)
      */    
-    private $direccionEmpresa;
-    
-    /**
-     * @ORM\Column(name="tipo_cuenta", type="string", length=20, nullable=true)
-     */    
-    private $tipoCuenta;
-    
-    /**
-     * @ORM\Column(name="codigo_banco_gen_fk", type="integer")
-     */
-    private $codigoBancoGenFk;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="GenBanco", inversedBy="configuracionesBancoRel")
-     * @ORM\JoinColumn(name="codigo_banco_gen_fk", referencedColumnName="codigo_banco_general_pk")
-     */
-    protected $bancosRel;
-    
-    
-
-
+    private $direccionEmpresa;    
+        
 
     /**
      * Get codigoConfiguracionPk
@@ -481,77 +462,5 @@ class GenConfiguracion
     public function getDireccionEmpresa()
     {
         return $this->direccionEmpresa;
-    }
-
-    /**
-     * Set tipoCuenta
-     *
-     * @param string $tipoCuenta
-     *
-     * @return GenConfiguracion
-     */
-    public function setTipoCuenta($tipoCuenta)
-    {
-        $this->tipoCuenta = $tipoCuenta;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuenta
-     *
-     * @return string
-     */
-    public function getTipoCuenta()
-    {
-        return $this->tipoCuenta;
-    }
-
-    /**
-     * Set codigoBancoGenFk
-     *
-     * @param integer $codigoBancoGenFk
-     *
-     * @return GenConfiguracion
-     */
-    public function setCodigoBancoGenFk($codigoBancoGenFk)
-    {
-        $this->codigoBancoGenFk = $codigoBancoGenFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoBancoGenFk
-     *
-     * @return integer
-     */
-    public function getCodigoBancoGenFk()
-    {
-        return $this->codigoBancoGenFk;
-    }
-
-    /**
-     * Set bancosRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenBanco $bancosRel
-     *
-     * @return GenConfiguracion
-     */
-    public function setBancosRel(\Brasa\GeneralBundle\Entity\GenBanco $bancosRel = null)
-    {
-        $this->bancosRel = $bancosRel;
-
-        return $this;
-    }
-
-    /**
-     * Get bancosRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenBanco
-     */
-    public function getBancosRel()
-    {
-        return $this->bancosRel;
     }
 }

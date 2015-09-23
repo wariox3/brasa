@@ -13,154 +13,49 @@ class GenBanco
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_banco_general_pk", type="integer")
+     * @ORM\Column(name="codigo_banco_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoBancoGeneralPk;
+    private $codigoBancoPk;
 
     /**
-     * @ORM\Column(name="cuenta", type="string", length=20)
+     * @ORM\Column(name="nombre", type="string", length=60)
      */
-    private $cuenta;    
+    private $nombre;    
     
-    /**
-     * @ORM\Column(name="codigo_banco_fk", type="integer")
-     */
-    private $codigoBancoFk;    
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuBanco", inversedBy="rhuBancosBancoRel")
-     * @ORM\JoinColumn(name="codigo_banco_fk", referencedColumnName="codigo_banco_pk")
-     */
-    protected $bancoRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="GenConfiguracion", mappedBy="bancosRel")
-     */
-    protected $configuracionesBancoRel;
-    
-    
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->configuracionesBancoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Get codigoBancoGeneralPk
+     * Get codigoBancoPk
      *
      * @return integer
      */
-    public function getCodigoBancoGeneralPk()
+    public function getCodigoBancoPk()
     {
-        return $this->codigoBancoGeneralPk;
+        return $this->codigoBancoPk;
     }
 
     /**
-     * Set cuenta
+     * Set nombre
      *
-     * @param string $cuenta
+     * @param string $nombre
      *
      * @return GenBanco
      */
-    public function setCuenta($cuenta)
+    public function setNombre($nombre)
     {
-        $this->cuenta = $cuenta;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get cuenta
+     * Get nombre
      *
      * @return string
      */
-    public function getCuenta()
+    public function getNombre()
     {
-        return $this->cuenta;
-    }
-
-    /**
-     * Set codigoBancoFk
-     *
-     * @param integer $codigoBancoFk
-     *
-     * @return GenBanco
-     */
-    public function setCodigoBancoFk($codigoBancoFk)
-    {
-        $this->codigoBancoFk = $codigoBancoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoBancoFk
-     *
-     * @return integer
-     */
-    public function getCodigoBancoFk()
-    {
-        return $this->codigoBancoFk;
-    }
-
-    /**
-     * Set bancoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuBanco $bancoRel
-     *
-     * @return GenBanco
-     */
-    public function setBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuBanco $bancoRel = null)
-    {
-        $this->bancoRel = $bancoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get bancoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuBanco
-     */
-    public function getBancoRel()
-    {
-        return $this->bancoRel;
-    }
-
-    /**
-     * Add configuracionesBancoRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesBancoRel
-     *
-     * @return GenBanco
-     */
-    public function addConfiguracionesBancoRel(\Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesBancoRel)
-    {
-        $this->configuracionesBancoRel[] = $configuracionesBancoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove configuracionesBancoRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesBancoRel
-     */
-    public function removeConfiguracionesBancoRel(\Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesBancoRel)
-    {
-        $this->configuracionesBancoRel->removeElement($configuracionesBancoRel);
-    }
-
-    /**
-     * Get configuracionesBancoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getConfiguracionesBancoRel()
-    {
-        return $this->configuracionesBancoRel;
+        return $this->nombre;
     }
 }
