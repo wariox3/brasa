@@ -26,20 +26,38 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
             if($form->get('BtnGenerar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoProgramacionPago) {
-                        
-                        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-                        foreach ($arPagos AS $arPagos){
-                            $arPagoExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
-                            $arPagoExportar->setNumeroIdentificacion($arPagos->getEmpleadoRel()->getNumeroIdentificacion());
-                            $arPagoExportar->setNombreCorto($arPagos->getEmpleadoRel()->getNombreCorto());
-                            $arPagoExportar->setCuenta($arPagos->getEmpleadoRel()->getCuenta());
-                            $arPagoExportar->setVrPago($arPagos->getVrNeto());
-                            $arPagoExportar->setSoporte($arPagos->getCodigoProgramacionPagoFk());
-                            $arPagoExportar->setTipo($arPagos->getCodigoPagoTipoFk());
-                            $em->persist($arPagoExportar);
-                            $em->flush();
+                        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+                        if ($arProgramacionPago->getArchivoExportado() == 0)    
+                        {
+                            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+                            foreach ($arPagos AS $arPagos){
+                                $arPagoExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
+                                $arPagoExportar->setNumeroIdentificacion($arPagos->getEmpleadoRel()->getNumeroIdentificacion());
+                                $arPagoExportar->setNombreCorto($arPagos->getEmpleadoRel()->getNombreCorto());
+                                $arPagoExportar->setCuenta($arPagos->getEmpleadoRel()->getCuenta());
+                                $arPagoExportar->setVrPago($arPagos->getVrNeto());
+                                $arPagoExportar->setSoporte($arPagos->getCodigoProgramacionPagoFk());
+                                $arPagoExportar->setTipo($arPagos->getCodigoPagoTipoFk());
+                                $em->persist($arPagoExportar);
+                                $em->flush();
+                            }
                         }
+                    }
+                }
+                $this->filtrarLista($form);
+                $this->listar();  
+            }
+            if($form->get('BtnCerrar')->isClicked()) {
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {
+                        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+                        $arProgramacionPago->setArchivoExportado(1);
+                        $em->persist($arProgramacionPago);
+                        $em->flush();
+                      
                     }
                 }
                 $this->filtrarLista($form);
@@ -83,9 +101,25 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
         }
+        $arrayPropiedadesTipo = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuPagoTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoPagoTipo')) {
+            $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoTipo", $session->get('filtroCodigoPagoTipo'));
+        }
         $form = $this->createFormBuilder()                        
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
+            ->add('centroCostoRel', 'entity', $arrayPropiedades) 
+            ->add('pagoTipoRel', 'entity', $arrayPropiedadesTipo)    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnCerrar', 'submit', array('label'  => 'Cerrar'))    
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
             ->getForm();        
         return $form;
@@ -95,7 +129,11 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
         $em = $this->getDoctrine()->getManager();                
         $session = $this->getRequest()->getSession();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaDQLArchivo(                    
-                    $session->get('filtroCodigoCentroCosto')
+                    $session->get('filtroCodigoCentroCosto'),
+                    $session->get('filtroCodigoPagoTipo'),
+                    $session->get('filtroEstadoGenerado'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
                     );  
     }         
     
@@ -103,7 +141,11 @@ class UtilidadesProgramacionesPagoArchivoController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);        
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
+        $session->set('filtroEstadoGenerado', $form->get('estadoGenerado')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
     
 }

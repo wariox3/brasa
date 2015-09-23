@@ -82,14 +82,16 @@ class UtilidadesGenerarArchivoPlanoController extends Controller
                                       header('Pragma: public');
                                       header('Content-Length: ' . filesize($strArchivo));
                                       readfile($strArchivo);
-
-                                
-                                $em->remove($arPagoExportar);
+                                $arPagoExportar2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->findAll();             
+                                foreach ($arPagoExportar2 AS $arPagoExportar2) {
+                                $em->remove($arPagoExportar2);
                                 $em->flush();
+                                }
                                 exit;      
                         }    
                     }
                 }
+                
             }
         }
 
