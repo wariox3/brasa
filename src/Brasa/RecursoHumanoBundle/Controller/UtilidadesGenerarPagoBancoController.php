@@ -48,8 +48,8 @@ class UtilidadesGenerarPagoBancoController extends Controller
                             $objMensaje->Mensaje("error", "Se require la fecha de aplicación", $this);
                         }else {                  
                             $strNombreArchivo = "PagoBanco" . date('YmdHis') . ".txt";
-                            //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;
-                            $strArchivo = "" . $strNombreArchivo;
+                            $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;
+                            //$strArchivo = "" . $strNombreArchivo;
                             $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
                             // Encabezado
                             $strNitEmpresa = $arConfiguracionGeneral->getNitEmpresa();
@@ -59,7 +59,6 @@ class UtilidadesGenerarPagoBancoController extends Controller
                             $strSecuencia = $controles['secuencia'];
                             $strFechaAplicacion = $controles['fechaAplicacion'];
                             $intCodigoCuenta = $controles['cuentaRel'];
-                            //$strTipoCuenta = $controles['tipoCuenta'];
                             $arCuenta = new \Brasa\GeneralBundle\Entity\GenCuenta();
                             $arCuenta = $em->getRepository('BrasaGeneralBundle:GenCuenta')->find($intCodigoCuenta);
                             $strNumeroRegistros = count($arPagoExportar);
