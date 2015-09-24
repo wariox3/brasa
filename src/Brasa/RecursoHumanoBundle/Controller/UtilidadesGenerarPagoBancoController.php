@@ -13,7 +13,7 @@ class UtilidadesGenerarPagoBancoController extends Controller
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPagosExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
-        $arPagosExportar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->findAll(); 
+        $arPagosExportar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->findBy(array(), array('centroCosto' => 'ASC')); 
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arrayPropiedadesBancos = array(
