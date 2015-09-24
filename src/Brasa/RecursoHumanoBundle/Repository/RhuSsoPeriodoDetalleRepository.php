@@ -93,10 +93,13 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $intDiasCotizarSalud = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
             $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
             $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad;
-            if($arAporte->getTipoCotizante() == '19') {
+            if($arAporte->getTipoCotizante() == '19' || $arAporte->getTipoCotizante() == '12') {
                 $intDiasCotizarPension = 0;
                 $intDiasCotizarCaja = 0;
             }            
+            if($arAporte->getTipoCotizante() == '12') {
+                $intDiasCotizarRiesgos = 0;
+            }             
             $arAporte->setDiasCotizadosPension($intDiasCotizarPension);
             $arAporte->setDiasCotizadosSalud($intDiasCotizarSalud);
             $arAporte->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
@@ -240,10 +243,13 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $arAporte->setRetiro($arPeriodoEmpleado->getRetiro());
                 }                
                 
-                if($arAporte->getTipoCotizante() == '19') {
+                if($arAporte->getTipoCotizante() == '19' || $arAporte->getTipoCotizante() == '12') {
                     $intDiasCotizarPension = 0;
                     $intDiasCotizarCaja = 0;
-                }            
+                }       
+                if($arAporte->getTipoCotizante() == '12') {
+                    $intDiasCotizarRiesgos = 0;
+                }                
                 $arAporte->setDiasCotizadosPension($intDiasCotizarPension);
                 $arAporte->setDiasCotizadosSalud($intDiasCotizarSalud);
                 $arAporte->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);

@@ -57,6 +57,11 @@ class RhuPago
      * @ORM\Column(name="fecha_desde_pago", type="date", nullable=true)
      */    
     private $fechaDesdePago;    
+
+    /**
+     * @ORM\Column(name="fecha_hasta_pago", type="date", nullable=true)
+     */    
+    private $fechaHastaPago;    
     
     /**
      * @ORM\Column(name="vr_salario", type="float")
@@ -1488,5 +1493,29 @@ class RhuPago
     public function getCreditosPagosPagoRel()
     {
         return $this->creditosPagosPagoRel;
+    }
+
+    /**
+     * Set fechaHastaPago
+     *
+     * @param \DateTime $fechaHastaPago
+     *
+     * @return RhuPago
+     */
+    public function setFechaHastaPago($fechaHastaPago)
+    {
+        $this->fechaHastaPago = $fechaHastaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHastaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaHastaPago()
+    {
+        return $this->fechaHastaPago;
     }
 }

@@ -219,32 +219,35 @@ class ContratosController extends Controller
                     $em->persist($arEmpleado);
 
                     //Generar liquidacion
-                    $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
-                    $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
-                    $arLiquidacion->setEmpleadoRel($arContrato->getEmpleadoRel());
-                    $arLiquidacion->setContratoRel($arContrato);
-                    if($arContrato->getFechaUltimoPagoCesantias() > $arContrato->getFechaDesde()) {
-                        $arLiquidacion->setFechaDesde($arContrato->getFechaUltimoPagoCesantias());
-                    } else {
-                        $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
+                    if($arContrato->getCodigoContratoTipoFk() != 4 && $arContrato->getCodigoContratoTipoFk() != 5) {
+                        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+                        $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
+                        $arLiquidacion->setEmpleadoRel($arContrato->getEmpleadoRel());
+                        $arLiquidacion->setContratoRel($arContrato);
+                        if($arContrato->getFechaUltimoPagoCesantias() > $arContrato->getFechaDesde()) {
+                            $arLiquidacion->setFechaDesde($arContrato->getFechaUltimoPagoCesantias());
+                        } else {
+                            $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
+                        }
+
+
+                        $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
+                        $arLiquidacion->setLiquidarCesantias(1);
+                        $arLiquidacion->setLiquidarPrima(1);
+                        $arLiquidacion->setLiquidarVacaciones(1);
+                        $em->persist($arLiquidacion);            
+                        //Verificar creditos
+                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());        
+                        foreach ($arCreditos as $arCredito) {
+                            $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
+                            $arLiquidacionDeduccion->setCreditoRel($arCredito);
+                            $arLiquidacionDeduccion->setLiquidacionRel($arLiquidacion);
+                            $arLiquidacionDeduccion->setVrDeduccion($arCredito->getSaldoTotal());
+                            $em->persist($arLiquidacionDeduccion);
+                        }                        
                     }
                     
-                    
-                    $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
-                    $arLiquidacion->setLiquidarCesantias(1);
-                    $arLiquidacion->setLiquidarPrima(1);
-                    $arLiquidacion->setLiquidarVacaciones(1);
-                    $em->persist($arLiquidacion);            
-                    //Verificar creditos
-                    $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                    $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());        
-                    foreach ($arCreditos as $arCredito) {
-                        $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
-                        $arLiquidacionDeduccion->setCreditoRel($arCredito);
-                        $arLiquidacionDeduccion->setLiquidacionRel($arLiquidacion);
-                        $arLiquidacionDeduccion->setVrDeduccion($arCredito->getSaldoTotal());
-                        $em->persist($arLiquidacionDeduccion);
-                    }
                     $em->flush();                                       
                     return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));                
             

@@ -80,6 +80,11 @@ class RhuProgramacionPagoDetalle
      */    
     private $fechaDesdePago;          
     
+    /**
+     * @ORM\Column(name="fecha_hasta_pago", type="date", nullable=true)
+     */    
+    private $fechaHastaPago;    
+    
     /**     
      * @ORM\Column(name="indefinido", type="boolean")
      */    
@@ -114,6 +119,21 @@ class RhuProgramacionPagoDetalle
      * @ORM\Column(name="vr_hora", type="float")
      */
     private $vrHora = 0;    
+
+    /**
+     * @ORM\Column(name="descuento_salud", type="boolean")
+     */
+    private $descuentoSalud = 1;    
+
+    /**
+     * @ORM\Column(name="descuento_pension", type="boolean")
+     */
+    private $descuentoPension = 1;        
+
+    /**
+     * @ORM\Column(name="pago_auxilio_transporte", type="boolean")
+     */
+    private $pagoAuxilioTransporte = 1;            
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
@@ -757,5 +777,125 @@ class RhuProgramacionPagoDetalle
     public function getVrHora()
     {
         return $this->vrHora;
+    }
+
+    /**
+     * Set fechaHastaPago
+     *
+     * @param \DateTime $fechaHastaPago
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setFechaHastaPago($fechaHastaPago)
+    {
+        $this->fechaHastaPago = $fechaHastaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHastaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaHastaPago()
+    {
+        return $this->fechaHastaPago;
+    }
+
+    /**
+     * Set descuentoSalud
+     *
+     * @param boolean $descuentoSalud
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDescuentoSalud($descuentoSalud)
+    {
+        $this->descuentoSalud = $descuentoSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get descuentoSalud
+     *
+     * @return boolean
+     */
+    public function getDescuentoSalud()
+    {
+        return $this->descuentoSalud;
+    }
+
+    /**
+     * Set descuentoPension
+     *
+     * @param boolean $descuentoPension
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDescuentoPension($descuentoPension)
+    {
+        $this->descuentoPension = $descuentoPension;
+
+        return $this;
+    }
+
+    /**
+     * Get descuentoPension
+     *
+     * @return boolean
+     */
+    public function getDescuentoPension()
+    {
+        return $this->descuentoPension;
+    }
+
+    /**
+     * Set pagoAuxilio
+     *
+     * @param boolean $pagoAuxilio
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setPagoAuxilio($pagoAuxilio)
+    {
+        $this->pagoAuxilio = $pagoAuxilio;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoAuxilio
+     *
+     * @return boolean
+     */
+    public function getPagoAuxilio()
+    {
+        return $this->pagoAuxilio;
+    }
+
+    /**
+     * Set pagoAuxilioTransporte
+     *
+     * @param boolean $pagoAuxilioTransporte
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setPagoAuxilioTransporte($pagoAuxilioTransporte)
+    {
+        $this->pagoAuxilioTransporte = $pagoAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoAuxilioTransporte
+     *
+     * @return boolean
+     */
+    public function getPagoAuxilioTransporte()
+    {
+        return $this->pagoAuxilioTransporte;
     }
 }
