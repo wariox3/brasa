@@ -28,9 +28,9 @@ class UtilidadesGenerarPagoBancoController extends Controller
             ->add('BtnGenerarTxt', 'submit', array('label'  => 'Generar archivo banco',))
             ->add('descripcion', 'text', array('data'  => '225PAGO NOMI '),array('required' => true))
             ->add('cuentaRel', 'entity', $arrayPropiedadesBancos) 
-            ->add('fechaTransmision', 'text', array('required' => true))
+            ->add('fechaTransmision', 'date', array('data' => new \DateTime('now')))
             ->add('secuencia', 'choice', array('choices' => array('A' => 'A', 'B' => 'B','C' => 'C', 'D' => 'D','E' => 'E', 'F' => 'F','G' => 'G', 'H' => 'H','I' => 'I', 'J' => 'J','K' => 'K', 'L' => 'L','M' => 'M', 'N' => 'N','O' => 'O', 'P' => 'P','Q' => 'Q', 'R' => 'R','S' => 'S', 'T' => 'T', 'U' => 'U', 'V' => 'V', 'W' => 'W', 'X' => 'X', 'Y' => 'Y', 'Z' => 'Z'),))
-            ->add('fechaAplicacion', 'text', array('required' => true))
+            ->add('fechaAplicacion', 'date', array('data' => new \DateTime('now')))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -41,30 +41,38 @@ class UtilidadesGenerarPagoBancoController extends Controller
                 if (count($arPagoExportar) == 0){
                     $objMensaje->Mensaje("error", "No hay registros a generar", $this);
                 } else {
-                    if ($controles['fechaTransmision'] == ""){
-                        $objMensaje->Mensaje("error", "Se requiere la fecha de transmisión", $this);
+                    if ($controles['fechaAplicacion'] < $controles['fechaTransmision']){
+                        $objMensaje->Mensaje("error", "La fecha de aplicación no puede ser menor a la fecha de trasmisión", $this);
                     } else {
                         if ($controles['fechaAplicacion'] == ""){
                             $objMensaje->Mensaje("error", "Se require la fecha de aplicación", $this);
                         }else {                  
                             $strNombreArchivo = "PagoBanco" . date('YmdHis') . ".txt";
-                            $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;
-                            //$strArchivo = "" . $strNombreArchivo;
+                            //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;
+                            $strArchivo = "" . $strNombreArchivo;
                             $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
                             // Encabezado
                             $strNitEmpresa = $arConfiguracionGeneral->getNitEmpresa();
                             $strNombreEmpresa = $arConfiguracionGeneral->getNombreEmpresa();
                             $strTipoPagoSecuencia = $controles['descripcion'];
-                            $strFechaCreacion = $controles['fechaTransmision'];
+                            $strFechaCreacion = $form->get('fechaTransmision')->getData();
+                            $strAnioCreacion = $strFechaCreacion->format('y');
+                            $strmesCreacion = $strFechaCreacion->format('m');
+                            $strdiaCreacion = $strFechaCreacion->format('d');
+                            $strFechaCreacion = $strAnioCreacion.$strmesCreacion.$strdiaCreacion;
                             $strSecuencia = $controles['secuencia'];
-                            $strFechaAplicacion = $controles['fechaAplicacion'];
+                            $strFechaAplicacion = $form->get('fechaAplicacion')->getData();
+                            $strAnioAplicacion = $strFechaAplicacion->format('y');
+                            $strmesAplicacion = $strFechaAplicacion->format('m');
+                            $strdiaAplicacion = $strFechaAplicacion->format('d');
+                            $strFechaAplicacion = $strAnioAplicacion.$strmesAplicacion.$strdiaAplicacion;
                             $intCodigoCuenta = $controles['cuentaRel'];
                             $arCuenta = new \Brasa\GeneralBundle\Entity\GenCuenta();
                             $arCuenta = $em->getRepository('BrasaGeneralBundle:GenCuenta')->find($intCodigoCuenta);
                             $strNumeroRegistros = count($arPagoExportar);
                             $strNumeroRegistros = $this->RellenarNr($strNumeroRegistros, "0", 6, "I");
                             $strValorTotal = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->totalValorResgistrosPagoExportar();
-                            $strValorTotal = $this->RellenarNr($strValorTotal, "0", 24, "I");
+                            $strValorTotal = $this->RellenarNr(round($strValorTotal), "0", 24, "I");
                             //Fin encabezado
                             fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia .
                                   $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . 
@@ -97,11 +105,10 @@ class UtilidadesGenerarPagoBancoController extends Controller
                                 $em->remove($arPagoExportar2);
                                 $em->flush();
                                 }
-                                exit;      
-                        }    
+                                exit;            
+                        }  
                     }
                 }
-                
             }
         }
         

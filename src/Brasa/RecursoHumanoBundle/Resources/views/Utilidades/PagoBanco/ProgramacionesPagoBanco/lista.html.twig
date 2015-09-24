@@ -63,7 +63,7 @@
                 <th>NETO</th>
                 <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">EMPLEADOS</p></th>
                 <th>PAGADO</th>
-                <th>ARCHIVO GENERADO</th>
+                <th>ARCHIVO EXPORTADO</th>
                 <th style="text-align: center">DETALLE</th>
                 <th></th>
             </tr>
@@ -77,7 +77,7 @@
                 <td>{{ arProgramacionPagoArchivo.fechaDesde |date("Y/m/d")  }}</td>
                 <td {% if arProgramacionPagoArchivo.estadoGenerado == 0 and date(arProgramacionPagoArchivo.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPagoArchivo.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{{ arProgramacionPagoArchivo.dias  }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoArchivo.vrNeto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoArchivo.vrNeto | number_format(0, '.', ',') }}</td>
                 <td>{% if arProgramacionPagoArchivo.empleadosGenerados == 1 %} {{ arProgramacionPagoArchivo.numeroEmpleados  }} {% else %} NO {% endif %}</td>
                 <td>{% if arProgramacionPagoArchivo.estadoPagado == 1 %} SI{% else %} NO {% endif %}</td>                               
                 <td>{% if arProgramacionPagoArchivo.archivoExportadoBanco == 1 %} SI{% else %} NO {% endif %}</td>                               

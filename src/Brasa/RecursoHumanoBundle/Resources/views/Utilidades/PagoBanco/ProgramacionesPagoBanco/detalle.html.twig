@@ -37,7 +37,7 @@
                         <td class="titulo">COMENTARIOS:</td>
                         <td class="td-in-well"></td>
                         <td class="titulo">NETO PAGAR:</td>
-                        <td class="td-in-well">{{ arProgramacionPago.vrNeto | number_format(2, '.', ',') }}</td>
+                        <td class="td-in-well">{{ arProgramacionPago.vrNeto | number_format(0, '.', ',') }}</td>
                     </tr>
                 </table>
             </div>
@@ -68,9 +68,9 @@
                     <td>{{ arPagos.diasPeriodo  }}</td>
                     <td>{{ arPagos.fechaDesde|date('Y/m/d')  }}</td>
                     <td>{{ arPagos.fechaHasta|date('Y/m/d')  }}</td>
-                    <td style="text-align: right">{{ arPagos.vrDevengado | number_format(2, '.', ',') }}</td>
-                    <td style="text-align: right">{{ arPagos.vrDeducciones | number_format(2, '.', ',') }}</td>
-                    <td style="text-align: right">{{ arPagos.vrNeto | number_format(2, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arPagos.vrDevengado | number_format(0, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arPagos.vrDeducciones | number_format(0, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arPagos.vrNeto | number_format(0, '.', ',') }}</td>
                     <td>{% if arPagos.archivoExportadoBanco == 1 %} SI{% else %} NO {% endif %}</td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagos.codigoPagoPk }}" /></td>
                 </tr>
