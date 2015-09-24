@@ -42,7 +42,9 @@ class UtilidadesProgramacionesPagoBancoController extends Controller
                                 $arPagoExportar->setVrPago($arPago->getVrNeto());
                                 $arPagoExportar->setSoporte($arPago->getCodigoProgramacionPagoFk());
                                 $arPagoExportar->setTipo($arPago->getCodigoPagoTipoFk());
-                                $arPagoActualizar->setArchivoExportadoBanco(1);
+                                $arPagoExportar->setCentroCosto($arPago->getCentroCostoRel()->getNombre());
+                                $arPagoExportar->setDetalle($arPago->getFechaDesde()->format('Y-m-d') . " Hasta " . $arPago->getFechaHasta()->format('Y-m-d'));
+                                $arPagoActualizar->setArchivoExportadoBanco(1);                                
                                 $em->persist($arPagoExportar);
                                 $em->persist($arPagoActualizar);
                             }
@@ -87,6 +89,8 @@ class UtilidadesProgramacionesPagoBancoController extends Controller
                         $arPagoExportar->setVrPago($arPago->getVrNeto());
                         $arPagoExportar->setSoporte($arPago->getCodigoProgramacionPagoFk());
                         $arPagoExportar->setTipo($arPago->getCodigoPagoTipoFk());
+                        $arPagoExportar->setCentroCosto($arPago->getCentroCostoRel()->getNombre());
+                        $arPagoExportar->setDetalle($arPago->getFechaDesde()->format('Y-m-d') . " Hasta " . $arPago->getFechaHasta()->format('Y-m-d'));
                         $em->persist($arPagoExportar);
                         $arPago->setArchivoExportadoBanco(1);
                         $em->persist($arPago);

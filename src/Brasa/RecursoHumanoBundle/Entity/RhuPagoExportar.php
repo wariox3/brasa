@@ -48,7 +48,15 @@ class RhuPagoExportar
      */    
     private $soporte;
 
+    /**
+     * @ORM\Column(name="centro_costo", type="string", length=80, nullable=true)
+     */    
+    private $centroCosto;
     
+    /**
+     * @ORM\Column(name="detalle", type="string", length=80, nullable=true)
+     */    
+    private $detalle;    
 
     /**
      * Get codigoPagoExportarPk
@@ -202,5 +210,53 @@ class RhuPagoExportar
     public function getSoporte()
     {
         return $this->soporte;
+    }
+
+    /**
+     * Set centroCosto
+     *
+     * @param string $centroCosto
+     *
+     * @return RhuPagoExportar
+     */
+    public function setCentroCosto($centroCosto)
+    {
+        $this->centroCosto = $centroCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCosto
+     *
+     * @return string
+     */
+    public function getCentroCosto()
+    {
+        return $this->centroCosto;
+    }
+
+    /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return RhuPagoExportar
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
     }
 }

@@ -56,19 +56,48 @@
                 <th>CÓDIGO PAGO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
+                <th>CENTRO COSTO</th>                
+                <th>DETALLE</th>
                 <th>CUENTA</th>
-                <th>PAGO</th>
+                <th>PAGO</th>                
             </tr>
-            {% for arPagosExportar in arPagosExportar %}
+            {% set centroCosto = ""  %}
+            {% set vrPago = 0  %}
+            {% set vrPagoTotal = 0  %}
+            {% for arPagosExportar in arPagosExportar %}                            
+                {% if centroCosto == "" %}                
+                    {% set centroCosto = arPagosExportar.centroCosto  %}                                        
+                {% endif %}  
+                {% if arPagosExportar.centroCosto != centroCosto %}                         
+                    {% set centroCosto = arPagosExportar.centroCosto  %}                                        
+                    <tr>
+                        <td colspan="7"></td>                        
+                        <td style="text-align: right">{{ vrPago | number_format(0, '.', ',') }}</td>
+                    </tr>                    
+                    {% set vrPago = 0  %}
+                {% endif %}                                
+                <tr>
+                    <td><input type="hidden" name="LblCodigo[]" value="{{ arPagosExportar.codigoPagoExportarPk }}">{{ arPagosExportar.codigoPagoExportarPk }} </td>
+                    <td>{{ arPagosExportar.soporte  }}</td>
+                    <td>{{ arPagosExportar.numeroIdentificacion  }}</td>
+                    <td>{{ arPagosExportar.nombreCorto  }}</td>
+                    <td>{{ arPagosExportar.centroCosto  }}</td>
+                    <td>{{ arPagosExportar.detalle  }}</td>
+                    <td>{{ arPagosExportar.cuenta }}</td>
+                    <td style="text-align: right">{{ arPagosExportar.vrPago | number_format(0, '.', ',') }}</td>
+                    {% set vrPago = vrPago + arPagosExportar.vrPago %}
+                    {% set vrPagoTotal = vrPagoTotal + arPagosExportar.vrPago %}
+                </tr>                                          
+            {% endfor %}                    
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arPagosExportar.codigoPagoExportarPk }}">{{ arPagosExportar.codigoPagoExportarPk }} </td>
-                <td>{{ arPagosExportar.soporte  }}</td>
-                <td><b>{{ arPagosExportar.numeroIdentificacion  }}</b></td>
-                <td>{{ arPagosExportar.nombreCorto  }}</td>
-                <td style="text-align: right">{{ arPagosExportar.cuenta | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagosExportar.vrPago | number_format(0, '.', ',') }}</td>
-            </tr>
-            {% endfor %}
+                <td colspan="7"></td>                        
+                <td style="text-align: right">{{ vrPago | number_format(0, '.', ',') }}</td>
+            </tr>                    
+            <tr>
+                <td colspan="6"></td>                        
+                <td><b>TOTAL</b></td>                        
+                <td style="text-align: right">{{ vrPagoTotal | number_format(0, '.', ',') }}</td>
+            </tr>                                
         </table>
         {{ form_rest(form) }}
         {{ form_end(form) }}
