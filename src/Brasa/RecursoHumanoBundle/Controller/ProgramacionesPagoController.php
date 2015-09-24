@@ -48,93 +48,9 @@ class ProgramacionesPagoController extends Controller
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagar($codigoProgramacionPago);
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
             }            
-            if($request->request->get('OpExcelProgramacionPagoDetalles')) {
-                $codigoProgramacionPago = $request->request->get('OpExcelProgramacionPagoDetalles');                
-                $em = $this->getDoctrine()->getManager();
-                $objPHPExcel = new \PHPExcel();
-                // Set document properties
-                $objPHPExcel->getProperties()->setCreator("EMPRESA")
-                    ->setLastModifiedBy("EMPRESA")
-                    ->setTitle("Office 2007 XLSX Test Document")
-                    ->setSubject("Office 2007 XLSX Test Document")
-                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-                    ->setKeywords("office 2007 openxml php")
-                    ->setCategory("Test result file");
-
-                $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo');
-
-                $i = 2;
-                
-                $arProgramacionesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                $arProgramacionesPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                foreach ($arProgramacionesPagos as $arProgramacionesPago) {
-                    $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arProgramacionesPago->getProgramacionPagoPk());
-                    $i++;
-                }
-
-                $objPHPExcel->getActiveSheet()->setTitle('DetalleProgramacionesPagos');
-                $objPHPExcel->setActiveSheetIndex(0);
-
-                // Redirect output to a client’s web browser (Excel2007)
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="DetalleProgramacionesPagos.xlsx"');
-                header('Cache-Control: max-age=0');
-                // If you're serving to IE 9, then the following may be needed
-                header('Cache-Control: max-age=1');
-                // If you're serving to IE over SSL, then the following may be needed
-                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header ('Pragma: public'); // HTTP/1.0
-                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-                $objWriter->save('php://output');
-                exit;
-            }
-            if($request->request->get('OpExcelPagos')) {
-                $codigoProgramacionPago = $request->request->get('OpExcelProgramacionPagoDetalles');                
-                $em = $this->getDoctrine()->getManager();
-                $objPHPExcel = new \PHPExcel();
-                // Set document properties
-                $objPHPExcel->getProperties()->setCreator("EMPRESA")
-                    ->setLastModifiedBy("EMPRESA")
-                    ->setTitle("Office 2007 XLSX Test Document")
-                    ->setSubject("Office 2007 XLSX Test Document")
-                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-                    ->setKeywords("office 2007 openxml php")
-                    ->setCategory("Test result file");
-
-                $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo');
-
-                $i = 2;
-                
-                $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-                foreach ($arPagoDetalles as $arPagoDetalle) {
-                    $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arPagoDetalle->getPagoPk());
-                    $i++;
-                }
-
-                $objPHPExcel->getActiveSheet()->setTitle('DetallePagos');
-                $objPHPExcel->setActiveSheetIndex(0);
-
-                // Redirect output to a client’s web browser (Excel2007)
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="DetallePagos.xlsx"');
-                header('Cache-Control: max-age=0');
-                // If you're serving to IE 9, then the following may be needed
-                header('Cache-Control: max-age=1');
-                // If you're serving to IE over SSL, then the following may be needed
-                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header ('Pragma: public'); // HTTP/1.0
-                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-                $objWriter->save('php://output');
-                exit;
+            if($request->request->get('OpExcelDetalle')) {
+                $codigoProgramacionPago = $request->request->get('OpExcelDetalle');                
+                $this->generarExcelDetalle($codigoProgramacionPago);
             }
             if($form->get('BtnEliminarPago')->isClicked()) {
                 if ($arrSeleccionados > 0 ){
@@ -463,7 +379,9 @@ class ProgramacionesPagoController extends Controller
     }
 
     private function generarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
+        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -483,10 +401,10 @@ class ProgramacionesPagoController extends Controller
         $arProgramacionesPagos = $query->getResult();
         foreach ($arProgramacionesPagos as $arProgramacionPago) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arProgramacionPago->getProgramacionPagoPk());
+                    ->setCellValue('A' . $i, 1);
             $i++;
         }
-
+            
         $objPHPExcel->getActiveSheet()->setTitle('PrograPago');
         $objPHPExcel->setActiveSheetIndex(0);
 
@@ -505,5 +423,129 @@ class ProgramacionesPagoController extends Controller
         $objWriter->save('php://output');
         exit;
     }
+    
+    private function generarExcelDetalle($codigoProgramacionPago) {
+        $em = $this->getDoctrine()->getManager();
+        ob_clean();
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
+        if($arProgramacionPago->getEstadoGenerado() == 1) {            
+            $objPHPExcel = new \PHPExcel();
+            // Set document properties
+            $objPHPExcel->getProperties()->setCreator("EMPRESA")
+                ->setLastModifiedBy("EMPRESA")
+                ->setTitle("Office 2007 XLSX Test Document")
+                ->setSubject("Office 2007 XLSX Test Document")
+                ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                ->setKeywords("office 2007 openxml php")
+                ->setCategory("Test result file");
 
+            $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A1', 'Codigo')
+                        ->setCellValue('B1', 'Identificación')
+                        ->setCellValue('C1', 'Nombre')
+                        ->setCellValue('D1', 'Desde')
+                        ->setCellValue('E1', 'Hasta')
+                        ->setCellValue('F1', 'Salario')
+                        ->setCellValue('G1', 'Devengado')
+                        ->setCellValue('H1', 'Deducciones')
+                        ->setCellValue('I1', 'Neto');
+
+            $i = 2;
+
+            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+            foreach ($arPagos as $arPago) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
+                        ->setCellValue('B' . $i, $arPago->getEmpleadoRel()->getNumeroIdentificacion())
+                        ->setCellValue('C' . $i, $arPago->getEmpleadoRel()->getNombreCorto())
+                        ->setCellValue('D' . $i, $arPago->getFechaDesde()->format('Y/m/d'))
+                        ->setCellValue('E' . $i, $arPago->getFechaHasta()->format('Y/m/d'))
+                        ->setCellValue('F' . $i, $arPago->getVrSalario())
+                        ->setCellValue('G' . $i, $arPago->getVrDevengado())
+                        ->setCellValue('H' . $i, $arPago->getVrDeducciones())
+                        ->setCellValue('I' . $i, $arPago->getVrNeto());
+                $i++;
+            }
+
+            $objPHPExcel->getActiveSheet()->setTitle('Pagos');
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Redirect output to a client’s web browser (Excel2007)
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Pagos.xlsx"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+            // If you're serving to IE over SSL, then the following may be needed
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header ('Pragma: public'); // HTTP/1.0
+            $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+            $objWriter->save('php://output');
+            exit;              
+        } else {    
+            $objPHPExcel = new \PHPExcel();
+            // Set document properties
+            $objPHPExcel->getProperties()->setCreator("EMPRESA")
+                ->setLastModifiedBy("EMPRESA")
+                ->setTitle("Office 2007 XLSX Test Document")
+                ->setSubject("Office 2007 XLSX Test Document")
+                ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                ->setKeywords("office 2007 openxml php")
+                ->setCategory("Test result file");
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A1', 'Codigo')
+                        ->setCellValue('B1', 'Identificación')
+                        ->setCellValue('C1', 'Nombre')
+                        ->setCellValue('D1', 'Desde')
+                        ->setCellValue('E1', 'Hasta')
+                        ->setCellValue('F1', 'Dias')
+                        ->setCellValue('G1', 'Salario')
+                        ->setCellValue('H1', 'Devengado')
+                        ->setCellValue('I1', 'Deducciones')
+                        ->setCellValue('J1', 'Neto');
+
+            $i = 2;
+
+            $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+            $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+            foreach ($arProgramacionPagoDetalle as $arProgramacionPagoDetalle) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A' . $i, $arProgramacionPagoDetalle->getCodigoProgramacionPagoDetallePk())
+                        ->setCellValue('B' . $i, $arProgramacionPagoDetalle->getEmpleadoRel()->getNumeroIdentificacion())
+                        ->setCellValue('C' . $i, $arProgramacionPagoDetalle->getEmpleadoRel()->getNombreCorto())
+                        ->setCellValue('D' . $i, $arProgramacionPagoDetalle->getFechaDesde()->format('Y/m/d'))
+                        ->setCellValue('E' . $i, $arProgramacionPagoDetalle->getFechaHasta()->format('Y/m/d'))
+                        ->setCellValue('F' . $i, $arProgramacionPagoDetalle->getDias())
+                        ->setCellValue('G' . $i, $arProgramacionPagoDetalle->getVrSalario())
+                        ->setCellValue('H' . $i, $arProgramacionPagoDetalle->getVrDevengado())
+                        ->setCellValue('I' . $i, $arProgramacionPagoDetalle->getVrDeducciones())
+                        ->setCellValue('J' . $i, $arProgramacionPagoDetalle->getVrNetoPagar());
+                $i++;
+            }
+
+            $objPHPExcel->getActiveSheet()->setTitle('ProgramacionPagoDetalle');
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Redirect output to a client’s web browser (Excel2007)
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="ProgramacionPagoDetalle.xlsx"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+            // If you're serving to IE over SSL, then the following may be needed
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header ('Pragma: public'); // HTTP/1.0
+            $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+            $objWriter->save('php://output');
+            exit;            
+        }     
+    }
 }
+

@@ -46,6 +46,10 @@ brs_rhu_utilidades_notificaciones_cierreprogramacionpago:
     path:     /rhu/utilidades/notificaciones/cierreprogramacionpago
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesNotificaciones:cierreProgramacionPago }    
     
+brs_rhu_utilidades_programacion_pago_comprobante_masivo:
+    path:     /rhu/utilidades/programacion/pago/comprobante/masivo
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProgramacionpagoComprobanteMasivo:lista }    
+    
 brs_rhu_pagos_adicionales_lista:
     path:     /rhu/pagos/adicionales/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:lista }     

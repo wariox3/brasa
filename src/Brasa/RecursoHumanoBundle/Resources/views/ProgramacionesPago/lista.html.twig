@@ -114,17 +114,7 @@
                     </div>
                     {% endif %}
                 </td> 
-                <td>
-                    {% if arProgramacionPago.estadoPagado == 0 %}
-                        {% if arProgramacionPago.estadoGenerado == 1 %}
-                            <button class="btn btn-default btn-xs" type="submit" name="OpExcelProgramacionPagoDetalles" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Excel</button> 
-                        {% else %}
-                            
-                        {% endif %}
-                    {% else %}
-                        <button class="btn btn-default btn-xs" type="submit" name="OpExcelPagos" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Excel</button> 
-                    {% endif %}
-                </td>
+                <td><button class="btn btn-default btn-xs" type="submit" name="OpExcelDetalle" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Excel</button> </td>               
                 {% if arProgramacionPago.codigoPagoTipoFk == 1 %}
                     <td style="text-align: center"><a href="{{ path('brs_rhu_programaciones_pago_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 {% else %}
@@ -159,3 +149,4 @@
 
 </div>
 {% endblock %}
+
