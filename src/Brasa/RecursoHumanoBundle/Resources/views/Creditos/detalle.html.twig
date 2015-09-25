@@ -9,7 +9,7 @@
         {{ form_errors(form) }}
         
         <div class="panel panel-default">
-            <div class="panel-heading">Informacion del credito</div>
+            <div class="panel-heading">Información del crédito</div>
             <div class="panel-body">
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
@@ -29,10 +29,10 @@
                         <td class="td-in-well" align="right">{{ arCreditos.vrCuota | number_format(2, '.', ',')}}</td>                                                
                     </tr>                    
                     <tr>
-                        <td class="titulo"></th>
-                        <td class="td-in-well" align="right"></td>
-                        <td class="titulo"></th>
-                        <td class="td-in-well" align="right"></td>
+                        <td class="titulo">NÚMERO CUENTA</td>
+                        <td class="td-in-well">{{ arCreditos.empleadoRel.cuenta }}</td>
+                        <td class="titulo">ENTIDAD BANCARIA</td>
+                        <td class="td-in-well">{{ arCreditos.empleadoRel.bancoRel.nombre}}</td>
                         <td class="titulo">SEGURO:</th>
                         <td class="td-label" align="right">{{ arCreditos.seguro | number_format(2, '.', ',')}}</td>
                     </tr>
