@@ -187,28 +187,18 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $floSuplementario = $arPeriodoEmpleado->getVrSuplementario();            
                 $floIbcIncapacidades = 0;
 
-                if($arPeriodoEmpleado->getVrSuplementario() > 0) {
-                    $arAporte->setVariacionTransitoriaSalario('X');
-                    $arAporte->setSuplementario($arPeriodoEmpleado->getVrSuplementario());
-                }
                 if($arPeriodoEmpleado->getDiasLicencia() > 0) {
                     $arAporte->setSuspensionTemporalContratoLicenciaServicios('X');
                     $arAporte->setDiasLicencia($arPeriodoEmpleado->getDiasLicencia());
                 }
-                if($arPeriodoEmpleado->getDiasIncapacidadGeneral() > 0) {
-                    $arAporte->setIncapacidadGeneral('X');
+                if($arPeriodoEmpleado->getDiasIncapacidadGeneral() > 0) {                    
                     $arAporte->setDiasIncapacidadGeneral($arPeriodoEmpleado->getDiasIncapacidadGeneral());
                     $floSalarioMesActual = $floSalario + $floSuplementario;   
                     $floSalarioMesAnterior = $this->ibcMesAnterior($arEmpleado->getCodigoEmpleadoPk(), $arPeriodoDetalle->getSsoPeriodoRel()->getMes(), $arPeriodoDetalle->getSsoPeriodoRel()->getAnio());
                     $floIbcIncapacidadGeneral = $this->liquidarIncapacidadGeneral($floSalarioMesActual, $floSalarioMesAnterior, $arPeriodoEmpleado->getDiasIncapacidadGeneral());                        
                     $floIbcIncapacidades += $floIbcIncapacidadGeneral;                
-                }
-                if($arPeriodoEmpleado->getDiasLicenciaMaternidad() > 0) {
-                    $arAporte->setLicenciaMaternidad('X');
-                    $arAporte->setDiasLicenciaMaternidad($arPeriodoEmpleado->getDiasLicenciaMaternidad());
                 }       
-                if($arPeriodoEmpleado->getDiasIncapacidadLaboral() > 0) {
-                    $arAporte->setIncapacidadAccidenteTrabajoEnfermedadProfesional($arPeriodoEmpleado->getDiasIncapacidadLaboral());
+                if($arPeriodoEmpleado->getDiasIncapacidadLaboral() > 0) {                    
                     $floSalarioMesActual = $floSalario + $floSuplementario;   
                     $floSalarioMesAnterior = $this->ibcMesAnterior($arEmpleado->getCodigoEmpleadoPk(), $arPeriodoDetalle->getSsoPeriodoRel()->getMes(), $arPeriodoDetalle->getSsoPeriodoRel()->getAnio());
                     $floIbcIncapacidadLaboral = $this->liquidarIncapacidadLaboral($floSalarioMesActual, $floSalarioMesAnterior, $arPeriodoEmpleado->getDiasIncapacidadLaboral());                        

@@ -35,7 +35,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $strNovedadRetiro = " ";
             $intDiasCotizar = 0;
             $fechaTerminaCotrato = $arContrato->getFechaHasta()->format('Y-m-d');
-            if($fechaTerminaCotrato == '-0001-11-30') {
+            if($arContrato->getIndefinido() == 1) {
                 $dateFechaHasta = $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta();
             } else {
                 if($arContrato->getFechaHasta() > $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()) {
@@ -93,7 +93,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $floSuplementario = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->tiempoSuplementario($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());            
             $arPeriodoEmpleadoActualizar->setVrSuplementario($floSuplementario);
             $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicencia($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 2);
-            $arPeriodoEmpleadoActualizar->setDiasLicencia($intDiasLicencia);
+            $arPeriodoEmpleadoActualizar->setDiasLicencia($intDiasLicencia);          
             $intDiasIncapacidadGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidad($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 28);
             $arPeriodoEmpleadoActualizar->setDiasIncapacidadGeneral($intDiasIncapacidadGeneral);
             $intDiasLicenciaMaternidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicencia($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 1);

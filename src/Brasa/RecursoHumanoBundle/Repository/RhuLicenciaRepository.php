@@ -33,9 +33,12 @@ class RhuLicenciaRepository extends EntityRepository {
     
     public function diasLicencia($fechaDesde, $fechaHasta, $codigoEmpleado, $tipo) {
         $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
         $dql = "SELECT licencia FROM BrasaRecursoHumanoBundle:RhuLicencia licencia "
-                . "WHERE (licencia.fechaDesde >= '" . $fechaDesde->format('Y-m-d') . "' OR licencia.fechaHasta = '0000-00-00') "
-                . "AND licencia.fechaDesde <='" . $fechaHasta->format('Y-m-d') . "' "
+                . "WHERE (((licencia.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (licencia.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (licencia.fechaDesde >= '$strFechaDesde' AND licencia.fechaDesde <= '$strFechaHasta') "
+                . "OR (licencia.fechaHasta >= '$strFechaHasta' AND licencia.fechaDesde <= '$strFechaDesde')) "
                 . "AND licencia.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
 
         if($tipo == 1) {
@@ -44,28 +47,22 @@ class RhuLicenciaRepository extends EntityRepository {
             $dql = $dql . "AND licencia.codigoPagoAdicionalSubtipoFk <> 48 AND licencia.codigoPagoAdicionalSubtipoFk <> 43";       
         }
         $objQuery = $em->createQuery($dql);  
-        $arLicencias = $objQuery->getResult();                
+        $arLicencias = $objQuery->getResult();         
         $intDiasLicencia = 0;
         foreach ($arLicencias as $arLicencia) {
-            $dateFechaDesde =  "";
-            $dateFechaHasta =  "";               
-            if($arLicencia->getFechaHasta() > $fechaHasta == true) {
-                $dateFechaHasta = $fechaHasta;
+            $intDiaInicio = 1;            
+            $intDiaFin = 30;
+            if($arLicencia->getFechaDesde() <  $fechaDesde) {
+                $intDiaInicio = 1;                
             } else {
-                $dateFechaHasta = $arLicencia->getFechaHasta();
+                $intDiaInicio = $arLicencia->getFechaDesde()->format('j');
             }
-
-            if($arLicencia->getFechaDesde() <  $fechaDesde == true) {
-                $dateFechaDesde = $fechaDesde;
+            if($arLicencia->getFechaHasta() > $fechaHasta) {
+                $intDiaFin = 30;                
             } else {
-                $dateFechaDesde = $arLicencia->getFechaDesde();
-            }
-
-            if($dateFechaDesde != "" && $dateFechaHasta != "") {
-                $intDias = $dateFechaDesde->diff($dateFechaHasta);
-                $intDias = $intDias->format('%a');
-                $intDiasLicencia += $intDias + 1;
-            }  
+                $intDiaFin = $arLicencia->getFechaHasta()->format('j');
+            }            
+            $intDiasLicencia += (($intDiaFin - $intDiaInicio)+1);
         }
         if($intDiasLicencia > 30) {
             $intDiasLicencia = 30;

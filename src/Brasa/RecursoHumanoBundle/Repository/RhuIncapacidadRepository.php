@@ -92,38 +92,35 @@ class RhuIncapacidadRepository extends EntityRepository {
     
     public function diasIncapacidad($fechaDesde, $fechaHasta, $codigoEmpleado, $tipo) {
         $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
         $dql = "SELECT incapacidad FROM BrasaRecursoHumanoBundle:RhuIncapacidad incapacidad "
-                . "WHERE (incapacidad.fechaDesde >= '" . $fechaDesde->format('Y-m-d') . "' OR incapacidad.fechaHasta = '0000-00-00') "
-                . "AND incapacidad.fechaDesde <='" . $fechaHasta->format('Y-m-d') . "' "
+                . "WHERE (((incapacidad.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (incapacidad.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (incapacidad.fechaDesde >= '$strFechaDesde' AND incapacidad.fechaDesde <= '$strFechaHasta') "
+                . "OR (incapacidad.fechaHasta >= '$strFechaHasta' AND incapacidad.fechaDesde <= '$strFechaDesde')) "
                 . "AND incapacidad.codigoEmpleadoFk = '" . $codigoEmpleado . "' "
-                . "AND incapacidad.codigoPagoAdicionalSubtipoFk = " . $tipo;       
+                . "AND incapacidad.codigoPagoAdicionalSubtipoFk = " . $tipo;
         $objQuery = $em->createQuery($dql);  
-        $arIncapacidades = $objQuery->getResult();                
+        $arIncapacidades = $objQuery->getResult();         
         $intDiasIncapacidad = 0;
         foreach ($arIncapacidades as $arIncapacidad) {
-            $dateFechaDesde =  "";
-            $dateFechaHasta =  "";               
-            if($arIncapacidad->getFechaHasta() > $fechaHasta == true) {
-                $dateFechaHasta = $fechaHasta;
+            $intDiaInicio = 1;            
+            $intDiaFin = 30;
+            if($arIncapacidad->getFechaDesde() <  $fechaDesde) {
+                $intDiaInicio = 1;                
             } else {
-                $dateFechaHasta = $arIncapacidad->getFechaHasta();
+                $intDiaInicio = $arIncapacidad->getFechaDesde()->format('j');
             }
-
-            if($arIncapacidad->getFechaDesde() <  $fechaDesde == true) {
-                $dateFechaDesde = $fechaDesde;
+            if($arIncapacidad->getFechaHasta() > $fechaHasta) {
+                $intDiaFin = 30;                
             } else {
-                $dateFechaDesde = $arIncapacidad->getFechaDesde();
-            }
-
-            if($dateFechaDesde != "" && $dateFechaHasta != "") {
-                $intDias = $dateFechaDesde->diff($dateFechaHasta);
-                $intDias = $intDias->format('%a');
-                $intDiasIncapacidad += $intDias + 1;
-            }  
+                $intDiaFin = $arIncapacidad->getFechaHasta()->format('j');
+            }            
+            $intDiasIncapacidad += (($intDiaFin - $intDiaInicio)+1);
         }
         if($intDiasIncapacidad > 30) {
             $intDiasIncapacidad = 30;
         }
-        return $intDiasIncapacidad;
+        return $intDiasIncapacidad;                     
     }                    
 }
