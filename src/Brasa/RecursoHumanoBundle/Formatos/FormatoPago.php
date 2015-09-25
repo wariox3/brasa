@@ -5,7 +5,7 @@ class FormatoPago extends \FPDF_FPDF {
     
     public static $codigoPago;
     
-    public function Generar($miThis, $codigoPago) {        
+    public function Generar($miThis, $codigoPago, $strRuta = "") {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
@@ -16,8 +16,12 @@ class FormatoPago extends \FPDF_FPDF {
         $pdf->SetFont('Times', '', 12);
         $pdf->SetFillColor(200, 200, 200);
         $this->Body($pdf);
-
-        $pdf->Output("Pago$codigoPago.pdf", 'D');        
+        if($strRuta == "") {
+            $pdf->Output("Pago$codigoPago.pdf", 'D');        
+        } else {
+            $pdf->Output($strRuta."Pago$codigoPago.pdf", 'F');        
+        }
+        
         
     } 
     
