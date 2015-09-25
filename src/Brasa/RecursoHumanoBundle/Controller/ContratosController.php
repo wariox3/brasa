@@ -188,17 +188,26 @@ class ContratosController extends Controller
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $arContrato->getCodigoEmpleadoFk()));
-        $intDato = 0;
+        $intCodigoLicenciaMaternidad = 48;
+        $intDatoIncapacidad = 0;
+        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+        $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $arContrato->getCodigoEmpleadoFk(), 'codigoPagoAdicionalSubtipoFk' => $intCodigoLicenciaMaternidad));
+        $intDatoLicencia = 0;
         if ($formContrato->isValid()) {
             $dateFechaHasta = $formContrato->get('fechaTerminacion')->getData();
             if($dateFechaHasta >= $arContrato->getFechaUltimoPago()) {                
                 foreach ($arIncapacidad as $arIncapacidad){
                     if ($arIncapacidad->getFechaHasta() > $dateFechaHasta){
-                        $intDato++;
+                        $intDatoIncapacidad++;
                     }
                 }
-                if ($intDato == 0){
-                    
+                if ($intDatoIncapacidad == 0){
+                    foreach ($arLicencia as $arLicencia){
+                    if ($arLicencia->getFechaHasta() > $dateFechaHasta){
+                        $intDatoLicencia++;
+                    }
+                }
+                if ($intDatoLicencia == 0){
                     $arContrato->setFechaHasta($dateFechaHasta);            
                     $arContrato->setIndefinido(0);
                     $arContrato->setEstadoActivo(0);
@@ -229,8 +238,6 @@ class ContratosController extends Controller
                         } else {
                             $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
                         }
-
-
                         $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
                         $arLiquidacion->setLiquidarCesantias(1);
                         $arLiquidacion->setLiquidarPrima(1);
@@ -250,15 +257,19 @@ class ContratosController extends Controller
                     
                     $em->flush();                                       
                     return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));                
-            
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede terminar el contrato, el empleado registra licencia de maternidad con fecha superior al retiro", $this);
+                    return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
+                }
             } else {
-                $objMensaje->Mensaje("error", "No se puede terminar el contrato, el empleado registra incapacidades con fecha supoerior al retiro", $this);
+                $objMensaje->Mensaje("error", "No se puede terminar el contrato, el empleado registra incapacidades con fecha superior al retiro", $this);
                 return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
             }
                 } else {
                 $objMensaje->Mensaje("error", "No puede terminar un contrato antes del ultimo pago, excepto con un permiso especial, consulte con el administrador del sistema", $this);
                 return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
             }
+        
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:terminar.html.twig', array(
             'arContrato' => $arContrato,

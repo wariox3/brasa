@@ -56,8 +56,7 @@ class FormatoContratoPracticante extends \FPDF_FPDF {
         $sustitucion8 .= number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion8 .= ")";
         $sustitucion9 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
-        //$sustitucion10 = "por definir"; dias a pagar
-        //$sustitucion11 = "por definir"; dias a pagar
+        $sustitucion10 = $arContrato->getCentroCostoRel()->getDiasPago();
         $sustitucion12 = $arContrato->getFechaDesde()->format('Y/m/d');
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $sustitucion12 = strftime("%d de %B de %Y", strtotime($sustitucion12)); 
@@ -79,8 +78,7 @@ class FormatoContratoPracticante extends \FPDF_FPDF {
         $patron7 = '/#7/';
         $patron8 = '/#8/';
         $patron9 = '/#9/';
-        //$patron10 = '/#a/'; dias a pagar
-        //$patron11 = '/#b/'; dias a pagar
+        $patron10 = '/#i/';
         $patron12 = '/#c/';
         $patron13 = '/#d/';
         $patron14 = '/#e/';
@@ -97,8 +95,7 @@ class FormatoContratoPracticante extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron7, $sustitucion7, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron8, $sustitucion8, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron9, $sustitucion9, $cadenaCambiada);
-        //$cadenaCambiada = preg_replace($patron10, $sustitucion10, $cadenaCambiada); dias a pagar
-        //$cadenaCambiada = preg_replace($patron11, $sustitucion11, $cadenaCambiada); dias a pagar
+        $cadenaCambiada = preg_replace($patron10, $sustitucion10, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron12, $sustitucion12, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron13, $sustitucion13, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron14, $sustitucion14, $cadenaCambiada);

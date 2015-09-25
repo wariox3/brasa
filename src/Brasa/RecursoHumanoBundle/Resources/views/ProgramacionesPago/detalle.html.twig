@@ -39,8 +39,8 @@
                 <tr>
                     <td class="titulo">CENTRO COSTOS:</td>
                     <td class="td-in-well">{{ arProgramacionPago.codigoCentroCostoFk }} - {{ arCentroCosto.nombre }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>                    
+                    <td class="titulo">DÍAS</td>
+                    <td class="td-in-well">{{ arProgramacionPago.dias }}</td>                    
                 </tr>
                 <tr>
                     <td class="titulo">PERIODO DESDE:</td>
@@ -98,6 +98,11 @@
                 </tr>
                 {% endfor %}
             </table>
+            <div class="btn-toolbar" style="float:left">
+                <div class="btn-group">
+                    <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
+                </div>
+            </div>
         </div>
         <div class="tab-pane" id="incapacidades">
             <br />
@@ -123,6 +128,11 @@
                 </tr>
                 {% endfor %}
             </table>
+            <div class="btn-toolbar" style="float:left">
+                <div class="btn-group">
+                    <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
+                </div>
+            </div>
         </div>
         <div class="tab-pane" id="licencias">
             <br />
@@ -148,6 +158,11 @@
                 </tr>
                 {% endfor %}
             </table>
+            <div class="btn-toolbar" style="float:left">
+                <div class="btn-group">
+                    <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
+                </div>
+            </div>
         </div>
         <div class="tab-pane active" id="empleados">
             <br />
@@ -217,9 +232,12 @@
                 {{ knp_pagination_render(arProgramacionPagoDetalles) }}
             </div>
             <div class="btn-group">
-                <a href="#" class="btn btn-default btn-sm">Empleados <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></a>
-
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
             </div>
+            <div class="btn-group">
+                <a href="#" class="btn btn-default btn-sm">Empleados <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></a>
+            </div>
+            
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
@@ -229,17 +247,12 @@
                 {{ form_widget(form.BtnEliminarEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>
-        </div>    
+        </div>
+            
+    <br /><br />
     </div>    
-    
 
     
-    <div class="btn-toolbar" style="float:left">
-        <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
-        </div>
-    </div>
-    <br /><br />
     {{ form_rest(form) }}
     {{ form_end(form) }}
 </div>

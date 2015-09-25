@@ -88,7 +88,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $douVrHoraSalarioMinimo = ($douVrSalarioMinimo / 30) / 8;
                         $douDevengado = 0;
                         $douIngresoBaseCotizacion = 0;
-
+                        
                         //Procesar vacaciones
                         $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->dias($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoProcesar->getFechaDesde(), $arProgramacionPagoProcesar->getFechaHasta());
                         $intHorasVacaciones = $intDiasVacaciones * 8;
@@ -1250,7 +1250,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
     }
     
     //listado de programaciones de pago pagadas para generar archivo txt bancolombia
-    public function listaDQLArchivo($codigoCentroCosto, $intTipo = "", $boolMostrarGenerados, $strFechaDesde = "", $strFechaHasta = "") {
+    public function listaDQLArchivoBanco($codigoCentroCosto, $intTipo = "", $boolMostrarGenerados, $strFechaDesde = "", $strFechaHasta = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT pp FROM BrasaRecursoHumanoBundle:RhuProgramacionPago pp WHERE pp.estadoPagado = 1 ";
         
@@ -1261,10 +1261,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $dql .= " AND pp.codigoPagoTipoFk =" . $intTipo;
         }
         if($boolMostrarGenerados == 1 ) {
-            $dql .= " AND pp.archivoExportado = 1";
+            $dql .= " AND pp.archivoExportadoBanco = 1";
         }
         if($boolMostrarGenerados == "0") {
-            $dql .= " AND pp.archivoExportado = 0";
+            $dql .= " AND pp.archivoExportadoBanco = 0";
         }
         if($strFechaDesde != "" ) {
             $dql .= " AND pp.fechaHasta >='" . date_format($strFechaDesde, ('Y-m-d')). "'";

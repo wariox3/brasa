@@ -87,6 +87,11 @@ class RhuConfiguracion
     private $porcentajeIva;
     
     /**
+     * @ORM\Column(name="codigo_retencion_fuente", type="integer")
+     */    
+    private $codigoRetencionFuente;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
@@ -477,5 +482,29 @@ class RhuConfiguracion
     public function getPorcentajeIva()
     {
         return $this->porcentajeIva;
+    }
+
+    /**
+     * Set codigoRetencionFuente
+     *
+     * @param integer $codigoRetencionFuente
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoRetencionFuente($codigoRetencionFuente)
+    {
+        $this->codigoRetencionFuente = $codigoRetencionFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRetencionFuente
+     *
+     * @return integer
+     */
+    public function getCodigoRetencionFuente()
+    {
+        return $this->codigoRetencionFuente;
     }
 }

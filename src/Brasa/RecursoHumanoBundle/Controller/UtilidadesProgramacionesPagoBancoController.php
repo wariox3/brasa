@@ -155,7 +155,7 @@ class UtilidadesProgramacionesPagoBancoController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();                
         $session = $this->getRequest()->getSession();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaDQLArchivo(                    
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaDQLArchivoBanco(                    
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroCodigoPagoTipo'),
                     $session->get('filtroEstadoGenerado'),

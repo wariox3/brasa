@@ -12,8 +12,8 @@ class ProgramacionesPagoController extends Controller
     var $strDqlLista = "";
     var $intNumero = 0;
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();        
-        $paginator  = $this->get('knp_paginator');        
+        $em = $this->getDoctrine()->getManager();
+        $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista();
         $form->handleRequest($request);
@@ -30,26 +30,26 @@ class ProgramacionesPagoController extends Controller
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
             }
             if($request->request->get('OpGenerar')) {
-                $codigoProgramacionPago = $request->request->get('OpGenerar');                
+                $codigoProgramacionPago = $request->request->get('OpGenerar');
                 $strResultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generar($codigoProgramacionPago);
                 if($strResultado == "") {
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
                 } else {
                     $objMensaje->Mensaje("error", $strResultado, $this);
-                }                                                
+                }
             }
             if($request->request->get('OpDeshacer')) {
-                $codigoProgramacionPago = $request->request->get('OpDeshacer');                
+                $codigoProgramacionPago = $request->request->get('OpDeshacer');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->deshacer($codigoProgramacionPago);
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
-            }            
+            }
             if($request->request->get('OpPagar')) {
-                $codigoProgramacionPago = $request->request->get('OpPagar');                
+                $codigoProgramacionPago = $request->request->get('OpPagar');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagar($codigoProgramacionPago);
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
-            }            
+            }
             if($request->request->get('OpExcelDetalle')) {
-                $codigoProgramacionPago = $request->request->get('OpExcelDetalle');                
+                $codigoProgramacionPago = $request->request->get('OpExcelDetalle');
                 $this->generarExcelDetalle($codigoProgramacionPago);
             }
             if($form->get('BtnEliminarPago')->isClicked()) {
@@ -58,7 +58,7 @@ class ProgramacionesPagoController extends Controller
                         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
                         if($arProgramacionPago->getEstadoPagado() == 0 && $arProgramacionPago->getEstadoGenerado() == 0) {
-                            $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);                            
+                            $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);
                         }
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
@@ -73,7 +73,7 @@ class ProgramacionesPagoController extends Controller
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form, $request);
                 $this->listar();
-            }            
+            }
 
         }
 
@@ -83,28 +83,28 @@ class ProgramacionesPagoController extends Controller
             'form' => $form->createView()));
     }
 
-    public function nuevoAction(Request $request) {        
-        $em = $this->getDoctrine()->getManager();        
-        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();        
+    public function nuevoAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago->setFechaDesde(new \DateTime('now'));
         $arProgramacionPago->setFechaHasta(new \DateTime('now'));
         $form = $this->createForm(new RhuProgramacionPagoType(), $arProgramacionPago);
         $form->handleRequest($request);
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
             $arProgramacionPago = $form->getData();
             $arProgramacionPago->setFechaHastaReal($arProgramacionPago->getFechaHasta());
             $arProgramacionPago->setNoGeneraPeriodo(1);
             $em->persist($arProgramacionPago);
-            $em->flush();                       
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                        
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:nuevo.html.twig', array(            
+        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:nuevo.html.twig', array(
             'form' => $form->createView()));
     }
-    
+
     public function detalleAction($codigoProgramacionPago, Request $request) {
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa');
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -122,10 +122,10 @@ class ProgramacionesPagoController extends Controller
                     $arProgramacionPago->setEmpleadosGenerados(1);
                     $em->persist($arProgramacionPago);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));                    
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 } else {
                     $objMensaje->Mensaje("error", "No puede generar empleados cuando la programacion esta generada", $this);
-                }                
+                }
             }
 
             if($form->get('BtnActualizarEmpleados')->isClicked()) {
@@ -147,7 +147,7 @@ class ProgramacionesPagoController extends Controller
                         }
                         $em->flush();
                         return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-                    }                    
+                    }
                 } else {
                     $objMensaje->Mensaje("error", "No puede actualizar empleados cuando la programacion esta generada", $this);
                 }
@@ -172,7 +172,7 @@ class ProgramacionesPagoController extends Controller
                         }
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));                    
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 } else {
                     $objMensaje->Mensaje("error", "No puede eliminar empleados cuando la programacion esta generada", $this);
                 }
@@ -180,7 +180,7 @@ class ProgramacionesPagoController extends Controller
         }
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPago->getCodigoCentroCostoFk());
-        
+
         if($arProgramacionPago->getEstadoGenerado() == 1) {
             $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
             $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
@@ -191,9 +191,9 @@ class ProgramacionesPagoController extends Controller
             $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
             $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->pendientesCentroCosto($arProgramacionPago->getCodigoCentroCostoFk());
             $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
-            $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->pendientesCentroCosto($arProgramacionPago->getCodigoCentroCostoFk());            
+            $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->pendientesCentroCosto($arProgramacionPago->getCodigoCentroCostoFk());
         }
-        
+
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));
         $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 500);
         $arProgramacionPagoDetalleSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
@@ -216,7 +216,7 @@ class ProgramacionesPagoController extends Controller
     }
 
     public function detallePrimaAction($codigoProgramacionPago, Request $request) {
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa');
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -251,7 +251,7 @@ class ProgramacionesPagoController extends Controller
                     ));
     }
 
-    public function agregarEmpleadoAction($codigoProgramacionPago, Request $request) {        
+    public function agregarEmpleadoAction($codigoProgramacionPago, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder()
             ->add('numeroIdentificacion', 'text', array('required' => true))
@@ -306,7 +306,7 @@ class ProgramacionesPagoController extends Controller
     }
 
     private function formularioLista() {
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $session = $this->get('session');
         $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
@@ -341,7 +341,7 @@ class ProgramacionesPagoController extends Controller
             ->add('pagoTipoRel', 'entity', $arrayPropiedadesTipo)
             ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'GENERADO', '0' => 'SIN GENERAR'), 'data' => $session->get('filtroEstadoGenerado')))
             ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PAGADOS', '0' => 'SIN PAGAR'), 'data' => $session->get('filtroEstadoPagado')))
-            ->add('fechaHasta', 'date', array('required' => true, 'widget' => 'single_text'))                
+            ->add('fechaHasta', 'date', array('required' => true, 'widget' => 'single_text'))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminarPago', 'submit', array('label'  => 'Eliminar',))
@@ -363,7 +363,7 @@ class ProgramacionesPagoController extends Controller
     }
 
     private function filtrarLista($form, Request $request) {
-        $session = $this->get('session');        
+        $session = $this->get('session');
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
@@ -374,14 +374,14 @@ class ProgramacionesPagoController extends Controller
         } else {
             $session->set('filtroFechaHasta', "");
         }
-            
-        
+
+
     }
 
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
-        
+
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -393,24 +393,59 @@ class ProgramacionesPagoController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Codigo');
-
+                    ->setCellValue('A1', 'Código')
+                    ->setCellValue('B1', 'Tipo')
+                    ->setCellValue('C1', 'Centro Costos')
+                    ->setCellValue('D1', 'Periodo')
+                    ->setCellValue('E1', 'Desde')
+                    ->setCellValue('F1', 'Hasta')
+                    ->setCellValue('G1', 'Días')
+                    ->setCellValue('H1', 'Empleados')
+                    ->setCellValue('I1', 'Estado Generado')
+                    ->setCellValue('J1', 'Estado Pagado')
+                    ->setCellValue('K1', 'Exportado Banco')
+                    ->setCellValue('L1', 'Neto');
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
         $arProgramacionesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionesPagos = $query->getResult();
         foreach ($arProgramacionesPagos as $arProgramacionPago) {
+            if ($arProgramacionPago->getEstadoGenerado() == 1){
+                $estadoGenerado = "SI";
+            } else {
+                $estadoGenerado = "NO";
+            }
+            if ($arProgramacionPago->getEstadoPagado() == 1){
+                $estadoPagado = "SI";
+            } else {
+                $estadoPagado = "NO";
+            }
+            if ($arProgramacionPago->getArchivoExportadoBanco() == 1){
+                $archivoExportado = "SI";
+            } else {
+                $archivoExportado = "NO";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, 1);
+                    ->setCellValue('A' . $i, $arProgramacionPago->getCodigoProgramacionPagoPk())
+                    ->setCellValue('B' . $i, $arProgramacionPago->getPagoTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arProgramacionPago->getCentroCostoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arProgramacionPago->getCentroCostoRel()->getPeriodoPagoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arProgramacionPago->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('F' . $i, $arProgramacionPago->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('G' . $i, $arProgramacionPago->getDias())
+                    ->setCellValue('H' . $i, $arProgramacionPago->getNumeroEmpleados())
+                    ->setCellValue('I' . $i, $estadoGenerado)
+                    ->setCellValue('J' . $i, $estadoPagado)
+                    ->setCellValue('K' . $i, $archivoExportado)
+                    ->setCellValue('L' . $i, $arProgramacionPago->getVrNeto());
             $i++;
         }
-            
-        $objPHPExcel->getActiveSheet()->setTitle('PrograPago');
+        $objPHPExcel->getActiveSheet()->setTitle('ProgramacionesPago');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="PrograPago.xlsx"');
+        header('Content-Disposition: attachment;filename="ProgramacionesPago.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -423,13 +458,13 @@ class ProgramacionesPagoController extends Controller
         $objWriter->save('php://output');
         exit;
     }
-    
+
     private function generarExcelDetalle($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
         ob_clean();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
-        if($arProgramacionPago->getEstadoGenerado() == 1) {            
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+        if($arProgramacionPago->getEstadoGenerado() == 1) {
             $objPHPExcel = new \PHPExcel();
             // Set document properties
             $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -485,8 +520,8 @@ class ProgramacionesPagoController extends Controller
             header ('Pragma: public'); // HTTP/1.0
             $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
             $objWriter->save('php://output');
-            exit;              
-        } else {    
+            exit;
+        } else {
             $objPHPExcel = new \PHPExcel();
             // Set document properties
             $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -544,8 +579,8 @@ class ProgramacionesPagoController extends Controller
             header ('Pragma: public'); // HTTP/1.0
             $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
             $objWriter->save('php://output');
-            exit;            
-        }     
+            exit;
+        }
     }
 }
 

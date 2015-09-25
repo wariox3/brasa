@@ -62,6 +62,7 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $sustitucion14 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion15 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
         $sustitucion16 = "";
+        $sustitucion17 = $arContrato->getCentroCostoRel()->getDiasPago();
         //contenido de la cadena
         $cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
@@ -80,6 +81,7 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $patron14 = '/#e/';
         $patron15 = '/#f/';
         $patron16 = '/#g/';
+        $patron17 = '/#h/';
         //reemplazar en la cadena
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
@@ -97,6 +99,7 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron14, $sustitucion14, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron17, $sustitucion17, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);        
    
     }

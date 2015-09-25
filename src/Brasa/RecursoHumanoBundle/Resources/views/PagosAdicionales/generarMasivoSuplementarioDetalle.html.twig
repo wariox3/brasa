@@ -26,7 +26,7 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>IDENTIFICACIÓN</th>
-                        <th>{{ knp_pagination_sortable(arEmpleados, 'NOMBRE', 'e.nombreCorto') }}</th>                                                                        
+                        <th>{{ knp_pagination_sortable(arEmpleados, 'NOMBRES', 'e.nombreCorto') }}</th>                                                                        
                         <th>{{ knp_pagination_sortable(arEmpleados, 'APELLIDO1', 'e.apellido1') }}</th>  
                         <th>{{ knp_pagination_sortable(arEmpleados, 'APELLIDO2', 'e.apellido2') }}</th> 
                         <th>SALARIO</th>
@@ -48,7 +48,7 @@
                             <span class="badge">{{ arEmpleados.codigoEmpleadoPk }}</span>
                         </td>
                         <td>{{ arEmpleados.numeroIdentificacion}}</td>
-                        <td>{{ arEmpleados.nombre1}}</td>
+                        <td>{{ arEmpleados.nombre1}} {{ arEmpleados.nombre2}}</td>
                         <td>{{ arEmpleados.apellido1 }}</td>
                         <td>{{ arEmpleados.apellido2 }}</td>
                         <td style="text-align: right">{{ arEmpleados.vrSalario | number_format(2, '.', ',') }}</td>

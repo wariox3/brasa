@@ -101,7 +101,12 @@ class RhuCentroCosto
     /**
      * @ORM\Column(name="fecha_ultimo_pago_cesantias", type="date", nullable=true)
      */    
-    private $fechaUltimoPagoCesantias;    
+    private $fechaUltimoPagoCesantias;
+    
+    /**
+     * @ORM\Column(name="dias_pago", type="string", length=8, nullable=true)
+     */    
+    private $diasPago;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
@@ -1336,5 +1341,29 @@ class RhuCentroCosto
     public function getFacturasDetallesCentroCostoRel()
     {
         return $this->facturasDetallesCentroCostoRel;
+    }
+
+    /**
+     * Set diasPago
+     *
+     * @param string $diasPago
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDiasPago($diasPago)
+    {
+        $this->diasPago = $diasPago;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPago
+     *
+     * @return string
+     */
+    public function getDiasPago()
+    {
+        return $this->diasPago;
     }
 }
