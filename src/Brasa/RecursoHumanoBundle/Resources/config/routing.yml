@@ -550,6 +550,10 @@ brs_rhu_consultas_proyeccion:
     path:     /rhu/consultas/proyeccion
     defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasProyeccion:lista }
     
+brs_rhu_consultas_procesos_disciplinarios:    
+    path:     /rhu/consultas/procesos/disciplinarios
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:ProcesosDisciplinarios }    
+    
 brs_rhu_pago_examen_lista:
     path:     /rhu/pago/examen/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:PagoExamen:lista}

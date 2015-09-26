@@ -179,16 +179,16 @@ class DisciplinarioController extends Controller
                     ->setCategory("Test result file");
 
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo_Credito')
-                            ->setCellValue('B1', 'Fecha')
-                            ->setCellValue('C1', 'C. Centro')
-                            ->setCellValue('D1', 'Identificacion')
-                            ->setCellValue('E1', 'Empleado')
-                            ->setCellValue('F1', 'Cargo')
-                            ->setCellValue('G1', 'Proceso')
-                            ->setCellValue('H1', 'Causal')
-                            ->setCellValue('I1', 'Descargos')
-                            ->setCellValue('J1', 'Fecha Suspension');
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'FECHA')
+                            ->setCellValue('C1', 'CENTRO COSTOS')
+                            ->setCellValue('D1', 'IDENTIFICACIÓN')
+                            ->setCellValue('E1', 'EMPLEADO')
+                            ->setCellValue('F1', 'CARGO')
+                            ->setCellValue('G1', 'PROCESO')
+                            ->setCellValue('H1', 'CAUSAL')
+                            ->setCellValue('I1', 'DESCARGOS')
+                            ->setCellValue('J1', 'FECHA SUSPENSIÓN');
 
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
@@ -196,7 +196,21 @@ class DisciplinarioController extends Controller
                 $arDisciplinarios = $query->getResult();
                 
                 foreach ($arDisciplinarios as $arDisciplinario) {
-                    
+                if ($arDisciplinario->getAsunto() == Null){
+                $asunto = "NO APLICA";
+                } else {
+                    $asunto = $arDisciplinario->getAsunto();
+                }
+                if ($arDisciplinario->getDescargos() == Null){
+                    $descargos = "NO APLICA";
+                } else {
+                    $descargos = $arDisciplinario->getDescargos();
+                }
+                if ($arDisciplinario->getSuspension() == Null){
+                    $suspension = "NO APLICA";
+                } else {
+                    $suspension = $arDisciplinario->getSuspension();
+                }    
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arDisciplinario->getCodigoDisciplinarioPk())
                             ->setCellValue('B' . $i, $arDisciplinario->getFecha()->format('Y/m/d'))
@@ -205,9 +219,9 @@ class DisciplinarioController extends Controller
                             ->setCellValue('E' . $i, $arDisciplinario->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('F' . $i, $arDisciplinario->getEmpleadoRel()->getCargoDescripcion())
                             ->setCellValue('G' . $i, $arDisciplinario->getDisciplinarioTipoRel()->getNombre())
-                            ->setCellValue('H' . $i, $arDisciplinario->getAsunto())
-                            ->setCellValue('I' . $i, $arDisciplinario->getDescargos())
-                            ->setCellValue('J' . $i, $arDisciplinario->getSuspension());
+                            ->setCellValue('H' . $i, $asunto)
+                            ->setCellValue('I' . $i, $descargos)
+                            ->setCellValue('J' . $i, $suspension);
                     $i++;
                 }
 

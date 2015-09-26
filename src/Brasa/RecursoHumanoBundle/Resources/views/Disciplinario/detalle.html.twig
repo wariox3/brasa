@@ -22,15 +22,15 @@
                     <td class="titulo">PROCESO:</td>
                     <td>{{ arDisciplinario.disciplinarioTipoRel.nombre }}</td>
                     <td class="titulo">CAUSAL</td>
-                    <td>{{ arDisciplinario.asunto }}</td>
+                    <td>{{ arDisciplinario.asunto|default('NO APLICA') }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">DESCARGOS:</td>
-                    <td colspan="3">{{ arDisciplinario.descargos }}</td>
+                    <td colspan="3">{{ arDisciplinario.descargos|default('NO APLICA') }}</td>
                     
                     
                     <td class="titulo">FECHA SUSPENSIÓN</td>
-                    <td>{{ arDisciplinario.suspension }}</td>
+                    <td>{{ arDisciplinario.suspension|default('NO APLICA') }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">EMPLEADO:</td>

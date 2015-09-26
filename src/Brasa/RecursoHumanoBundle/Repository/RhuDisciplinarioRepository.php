@@ -35,4 +35,22 @@ class RhuDisciplinarioRepository extends EntityRepository {
         $fechaAntigua = $query->getSingleScalarResult(); 
         return $fechaAntigua;
     }
+    
+    public function listaProcesosDisciplinariosDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd, e FROM BrasaRecursoHumanoBundle:RhuDisciplinario pd JOIN pd.empleadoRel e WHERE pd.codigoDisciplinarioPk <> 0";
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND pd.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND pd.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        return $dql;
+    }
 }
