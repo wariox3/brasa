@@ -76,7 +76,12 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $floSalarioMesAnterior = $this->ibcMesAnterior($arEmpleado->getCodigoEmpleadoPk(), $arPeriodoDetalle->getSsoPeriodoRel()->getMes(), $arPeriodoDetalle->getSsoPeriodoRel()->getAnio());
                 $floIbcIncapacidadLaboral = $this->liquidarIncapacidadLaboral($floSalarioMesActual, $floSalarioMesAnterior, $arPeriodoEmpleado->getDiasIncapacidadLaboral());                        
                 $floIbcIncapacidades += $floIbcIncapacidadLaboral;                                        
-            }                        
+            }          
+            if($arPeriodoEmpleado->getDiasVacaciones() > 0) {
+                $arAporte->setVacaciones('X');
+                $arAporte->setDiasVacaciones($arPeriodoEmpleado->getDiasVacaciones());
+            }            
+            
             $arAporte->setSalarioBasico($arPeriodoEmpleado->getVrSalario());            
             $arAporte->setCodigoEntidadPensionPertenece($arEmpleado->getEntidadPensionRel()->getCodigoInterface());
             $arAporte->setCodigoEntidadSaludPertenece($arEmpleado->getEntidadSaludRel()->getCodigoInterface());
@@ -86,7 +91,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $intDiasLicenciaNoRemunerada = $arPeriodoEmpleado->getDiasLicencia();
             $intDiasIncapacidades = $arPeriodoEmpleado->getDiasIncapacidadGeneral() + $arPeriodoEmpleado->getDiasIncapacidadLaboral();
             $intDiasLicenciaMaternidad = $arPeriodoEmpleado->getDiasLicenciaMaternidad();
-            $intDiasVacaciones = 0;
+            $intDiasVacaciones = $arPeriodoEmpleado->getDiasVacaciones();
             
             $intDiasCotizar = $arPeriodoEmpleado->getDias();
             $intDiasCotizarPension = $intDiasCotizar - $intDiasLicenciaNoRemunerada;

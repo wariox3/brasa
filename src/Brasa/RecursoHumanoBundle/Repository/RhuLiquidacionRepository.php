@@ -33,6 +33,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $boolPeriodoContinuo = $arLiquidacion->getContratoRel()->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo();
         $douIBCAdicional = 0;
         $dateFechaUltimoPago = $arLiquidacion->getContratoRel()->getFechaUltimoPago();                        
+        //Ibc de dias adicionales
         if($dateFechaUltimoPago != null) {
             $arLiquidacion->setFechaUltimoPago($dateFechaUltimoPago);
             if($arLiquidacion->getFechaUltimoPago() < $arLiquidacion->getFechaHasta()) {
@@ -92,6 +93,7 @@ class RhuLiquidacionRepository extends EntityRepository {
             $arLiquidacion->setVrCesantias($douCesantias);
             $arLiquidacion->setVrInteresesCesantias($douInteresesCesantias);                        
         }
+        //Liquidar primas
         if($arLiquidacion->getLiquidarPrima() == 1) {            
             $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas();
             $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
@@ -106,19 +108,19 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setDiasPrimas($intDiasPrima);
                 $arLiquidacion->setVrPrima($douPrima);            
             } else {
-                if($dateFechaDesde->format('md') != '0101') {
+                //if($dateFechaDesde->format('md') != '0101') {
                     $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 2;    
                     $douDeduccionPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
                     $arLiquidacion->setDiasPrimas($intDiasPrima * -1);
                     $arLiquidacion->setVrPrima(0); 
                     $arLiquidacion->setVrDeduccionPrima($douDeduccionPrima);                                       
-                } else {
+                /*} else {
                     $intDiasPrima = 0;
                     $douDeduccionPrima = 0;
                     $arLiquidacion->setDiasPrimas(0);
                     $arLiquidacion->setVrPrima(0);
                     $arLiquidacion->setVrDeduccionPrima(0);                                       
-                }
+                }*/
 
             }                                                                                
             $arLiquidacion->setFechaUltimoPagoPrimas($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas());

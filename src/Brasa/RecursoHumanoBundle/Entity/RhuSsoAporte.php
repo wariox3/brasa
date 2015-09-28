@@ -186,6 +186,11 @@ class RhuSsoAporte
      * @ORM\Column(name="vacaciones", type="string", length=1)
      */
     private $vacaciones = ' ';     
+
+    /**
+     * @ORM\Column(name="dias_vacaciones", type="integer")
+     */
+    private $diasVacaciones = 0;     
     
     /**
      * @ORM\Column(name="aporte_voluntario", type="string", length=1)
@@ -2119,5 +2124,29 @@ class RhuSsoAporte
     public function getAportesFondoSolidaridadPensionalSubsistencia()
     {
         return $this->aportesFondoSolidaridadPensionalSubsistencia;
+    }
+
+    /**
+     * Set diasVacaciones
+     *
+     * @param integer $diasVacaciones
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasVacaciones($diasVacaciones)
+    {
+        $this->diasVacaciones = $diasVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacaciones
+     *
+     * @return integer
+     */
+    public function getDiasVacaciones()
+    {
+        return $this->diasVacaciones;
     }
 }

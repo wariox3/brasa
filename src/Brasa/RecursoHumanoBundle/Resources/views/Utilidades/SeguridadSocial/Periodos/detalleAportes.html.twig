@@ -18,6 +18,7 @@
                 <th>SLN</th>
                 <th>IGE</th>
                 <th>LMA</th>
+                <th>VAC</th>
                 <th>IRP</th>
                 <th style="text-align: right">SALARIO</th>
                 <th style="text-align: right">SUPLE</th>
@@ -50,6 +51,7 @@
                 <td>{% if arSsoAportes.suspensionTemporalContratoLicenciaServicios == 'X' %}{{ arSsoAportes.suspensionTemporalContratoLicenciaServicios }}{{ arSsoAportes.diasLicencia }} {% endif %}</td>                
                 <td>{% if arSsoAportes.incapacidadGeneral == 'X' %}{{ arSsoAportes.incapacidadGeneral }}{{ arSsoAportes.diasIncapacidadGeneral }} {% endif %}</td>                
                 <td>{% if arSsoAportes.licenciaMaternidad == 'X' %}{{ arSsoAportes.licenciaMaternidad }}{{ arSsoAportes.diasLicenciaMaternidad }} {% endif %}</td>                
+                <td>{% if arSsoAportes.vacaciones == 'X' %}{{ arSsoAportes.vacaciones }}{{ arSsoAportes.diasVacaciones }} {% endif %}</td>                
                 <td>{% if arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional > 0 %}{{ arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional }} {% endif %}</td>                
                 <td style="text-align: right">{{ arSsoAportes.salarioBasico | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.suplementario | number_format(0, '.', ',') }}</td>

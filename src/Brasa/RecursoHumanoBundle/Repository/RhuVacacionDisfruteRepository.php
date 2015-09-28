@@ -58,5 +58,38 @@ class RhuVacacionDisfruteRepository extends EntityRepository {
         return $intDiasDevolver;
     }    
     
+    public function diasVacacionesDisfrute($fechaDesde, $fechaHasta, $codigoEmpleado) {
+        $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $dql = "SELECT vd FROM BrasaRecursoHumanoBundle:RhuVacacionDisfrute vd "
+                . "WHERE (((vd.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (vd.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (vd.fechaDesde >= '$strFechaDesde' AND vd.fechaDesde <= '$strFechaHasta') "
+                . "OR (vd.fechaHasta >= '$strFechaHasta' AND vd.fechaDesde <= '$strFechaDesde')) "
+                . "AND vd.codigoEmpleadoFk = '" . $codigoEmpleado . "'";
+        $objQuery = $em->createQuery($dql);  
+        $arVacacionesDisfrute = $objQuery->getResult();         
+        $intDiasVacaciones = 0;
+        foreach ($arVacacionesDisfrute as $arVacacionDisfrute) {
+            $intDiaInicio = 1;            
+            $intDiaFin = 30;
+            if($arVacacionDisfrute->getFechaDesde() <  $fechaDesde) {
+                $intDiaInicio = 1;                
+            } else {
+                $intDiaInicio = $arVacacionDisfrute->getFechaDesde()->format('j');
+            }
+            if($arVacacionDisfrute->getFechaHasta() > $fechaHasta) {
+                $intDiaFin = 30;                
+            } else {
+                $intDiaFin = $arVacacionDisfrute->getFechaHasta()->format('j');
+            }            
+            $intDiasVacaciones += (($intDiaFin - $intDiaInicio)+1);
+        }
+        if($intDiasVacaciones > 30) {
+            $intDiasVacaciones = 30;
+        }
+        return $intDiasVacaciones;                     
+    }                        
+    
 }
 

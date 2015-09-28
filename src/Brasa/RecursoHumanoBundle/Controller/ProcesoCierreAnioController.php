@@ -33,8 +33,7 @@ class ProcesoCierreAnioController extends Controller
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_proceso_cierre_anio_cerrar', array('codigoCierreAnio' => $codigoCierreAnio)))
             ->add('salarioMinimo', 'number')
-            ->add('auxilioTransporte', 'number')
-            ->add('fechaAplicacion', 'date', array('data' => new \DateTime('now')))
+            ->add('auxilioTransporte', 'number')            
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -42,8 +41,7 @@ class ProcesoCierreAnioController extends Controller
         $arCierreAnio = $em->getRepository('BrasaRecursoHumanoBundle:RhuCierreAnio')->find($codigoCierreAnio);
         if ($form->isValid()) {  
             $floSalarioMinimo = $form->get('salarioMinimo')->getData();
-            $floAuxilioTransporte = $form->get('auxilioTransporte')->getData();
-            $dateFechaAplicacion = $form->get('fechaAplicacion')->getData();
+            $floAuxilioTransporte = $form->get('auxilioTransporte')->getData();            
             $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
             $floSalarioMinimoAnterior = $arConfiguracion->getVrSalario();
@@ -52,9 +50,9 @@ class ProcesoCierreAnioController extends Controller
             $arCierreAnio = $em->getRepository('BrasaRecursoHumanoBundle:RhuCierreAnio')->find($codigoCierreAnio);
             $arCierreAnio->setEstadoCerrado(1);
             
-            $em->persist($arCierreAnio);
+           $em->persist($arCierreAnio);
             
-            
+            $strFechaCambio = $arConfiguracion->getAnioActual()."/12/30";
             $arContratoMinimos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
             $strDql = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c WHERE c.estadoActivo = 1 AND c.indefinido = 1 AND c.VrSalario <= " . $arConfiguracion->getVrSalario();
             $query = $em->createQuery($strDql);
@@ -63,7 +61,7 @@ class ProcesoCierreAnioController extends Controller
                 $arCambioSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
                 $arCambioSalario->setContratoRel($arContratoMinimo);
                 $arCambioSalario->setEmpleadoRel($arContratoMinimo->getEmpleadoRel());
-                $arCambioSalario->setFecha($dateFechaAplicacion);
+                $arCambioSalario->setFecha(date_create($strFechaCambio));
                 $arCambioSalario->setVrSalarioAnterior($floSalarioMinimoAnterior);
                 $arCambioSalario->setVrSalarioNuevo($floSalarioMinimo);
                 $arCambioSalario->setDetalle('ACTUALIZACION SALARIO MINIMO');

@@ -88,6 +88,11 @@ class RhuSsoPeriodoEmpleado
     private $diasIncapacidadLaboral = 0;    
 
     /**
+     * @ORM\Column(name="dias_vacaciones", type="integer")
+     */    
+    private $diasVacaciones = 0;    
+    
+    /**
      * @ORM\Column(name="tarifa_pension", type="float")
      */    
     private $tarifaPension = 0;    
@@ -640,5 +645,29 @@ class RhuSsoPeriodoEmpleado
     public function getTarifaRiesgos()
     {
         return $this->tarifaRiesgos;
+    }
+
+    /**
+     * Set diasVacaciones
+     *
+     * @param integer $diasVacaciones
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasVacaciones($diasVacaciones)
+    {
+        $this->diasVacaciones = $diasVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacaciones
+     *
+     * @return integer
+     */
+    public function getDiasVacaciones()
+    {
+        return $this->diasVacaciones;
     }
 }
