@@ -31,6 +31,16 @@ class RhuContenidoFormato
      * @ORM\Column(name="contenido", type="text", nullable=true)
      */    
     private $contenido; 
+    
+    /**
+     * @ORM\Column(name="codigo_contrato_tipo_fk", type="integer")
+     */    
+    private $codigoContratoTipoFk;
+    
+    /**
+     * @ORM\Column(name="codigo_disciplinario_tipo_fk", type="integer")
+     */    
+    private $codigoDisciplinarioTipoFk;
 
     /**
      * Get codigoContenidoFormatoPk
@@ -112,5 +122,53 @@ class RhuContenidoFormato
     public function getTitulo()
     {
         return $this->titulo;
+    }
+
+    /**
+     * Set codigoContratoTipoFk
+     *
+     * @param integer $codigoContratoTipoFk
+     *
+     * @return RhuContenidoFormato
+     */
+    public function setCodigoContratoTipoFk($codigoContratoTipoFk)
+    {
+        $this->codigoContratoTipoFk = $codigoContratoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoTipoFk()
+    {
+        return $this->codigoContratoTipoFk;
+    }
+
+    /**
+     * Set codigoDisciplinarioTipoFk
+     *
+     * @param integer $codigoDisciplinarioTipoFk
+     *
+     * @return RhuContenidoFormato
+     */
+    public function setCodigoDisciplinarioTipoFk($codigoDisciplinarioTipoFk)
+    {
+        $this->codigoDisciplinarioTipoFk = $codigoDisciplinarioTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDisciplinarioTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoDisciplinarioTipoFk()
+    {
+        return $this->codigoDisciplinarioTipoFk;
     }
 }

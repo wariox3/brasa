@@ -21,12 +21,7 @@ class RhuDisciplinarioTipo
      * @ORM\Column(name="nombre", type="string", length=50, nullable=true)
      */    
     private $nombre; 
-    
-    /**
-     * @ORM\Column(name="contenido", type="text", nullable=true)
-     */    
-    private $contenido;
-    
+       
     /**
      * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="disciplinarioTipoRel")
      */

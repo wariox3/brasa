@@ -48,8 +48,8 @@ class FormatoDisciplinarioDescargo extends \FPDF_FPDF {
     public function EncabezadoDetalles() {
         $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
         $arDisciplinario = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find(self::$codigoDisciplinario);        
-        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($arDisciplinario->getCodigoDisciplinarioTipoFk());        
+        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
+        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arDisciplinario->getCodigoDisciplinarioTipoFk());
         $this->SetFont('Arial','','9');
         $this->Text(10, 55, utf8_decode("MEDELLÍN - ANTIOQUIA ") .  $arDisciplinario->getFecha()->format('Y-m-d'));
         $this->SetFont('Arial','B','10');
@@ -62,8 +62,8 @@ class FormatoDisciplinarioDescargo extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 10);  
         $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
         $arDisciplinario = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find(self::$codigoDisciplinario);        
-        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($arDisciplinario->getCodigoDisciplinarioTipoFk());        
+        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
+        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arDisciplinario->getCodigoDisciplinarioTipoFk());
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arDisciplinario->getEmpleadoRel()->getNombreCorto();
         $sustitucion2 = $arDisciplinario->getEmpleadoRel()->getNumeroIdentificacion();

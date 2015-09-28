@@ -9,8 +9,7 @@ class RhuDisciplinarioTipoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                                                                                    
-            ->add('nombre', 'text', array('required' => true))                                
-            ->add('contenido', 'textarea', array('required' => true))                                
+            ->add('nombre', 'text', array('required' => true))                                                                
             ->add('guardar', 'submit');        
     }
  

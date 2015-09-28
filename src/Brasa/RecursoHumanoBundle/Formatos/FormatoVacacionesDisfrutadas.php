@@ -48,8 +48,8 @@ class FormatoVacacionesDisfrutadas extends \FPDF_FPDF {
     public function EncabezadoDetalles() {
         $arVacacionDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
         $arVacacionDisfrute = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->find(self::$codigoVacacionDisfrute);        
-        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find(4);        
+        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
+        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arDisciplinario->getCodigoDisciplinarioTipoFk());
         $this->SetFont('Arial','','9');
         $this->Text(10, 55, utf8_decode("MEDELLÍN - ANTIOQUIA ") . date('Y-m-d'));
         $this->SetFont('Arial','B','10');
@@ -64,8 +64,8 @@ class FormatoVacacionesDisfrutadas extends \FPDF_FPDF {
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);        
         $arVacacionDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
         $arVacacionDisfrute = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->find(self::$codigoVacacionDisfrute);        
-        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find(4);        
+        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
+        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arDisciplinario->getCodigoDisciplinarioTipoFk());
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         function nombreMes($mes){
             setlocale(LC_TIME, 'spanish');  
