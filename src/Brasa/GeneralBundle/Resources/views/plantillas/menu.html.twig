@@ -261,6 +261,17 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Utilidades <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Contabilidad</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Intercambio datos</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_ctb_utilidades_intercambio_datos_exportar') }}">Exportar</a></li>                                        
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>                        
+                        <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recursos humanos</a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
@@ -305,18 +316,6 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Contabilidad</a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Intercambio datos</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_ctb_utilidades_intercambio_datos_exportar') }}">Exportar</a></li>                                        
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>                        
-                        
                     </ul>
                 </li>
                 <li class="dropdown">

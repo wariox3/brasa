@@ -54,7 +54,6 @@ class DisciplinarioController extends Controller
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
-        $arTipoDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
         if($codigoDisciplinario != 0) {
             $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
             
@@ -91,17 +90,21 @@ class DisciplinarioController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) { 
             if($form->get('BtnImprimir')->isClicked()) {
-                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 1){
+                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 6){
                    $objFormatoDisciplinarioSuspencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioSuspension();
                    $objFormatoDisciplinarioSuspencion->Generar($this, $codigoDisciplinario); 
                 }   
-                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 2) {
+                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 7) {
                     $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioLlamadoAtencion();
                     $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
                 }   
-                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 3) {
+                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 8) {
                     $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioDescargo();
                     $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
+                }
+                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 9) {
+                    $objFormatoDisciplinarioVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioVacaciones();
+                    $objFormatoDisciplinarioVacaciones->Generar($this, $codigoDisciplinario);
                 }
             }
  
