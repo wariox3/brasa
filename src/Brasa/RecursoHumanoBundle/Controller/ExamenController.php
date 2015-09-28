@@ -177,6 +177,19 @@ class ExamenController extends Controller
         $session->set('filtroNombreExamen', $form->get('TxtNombre')->getData());
         $session->set('filtroAprobadoExamen', $form->get('estadoAprobado')->getData());
     }
+    
+    private function formularioFiltro() {
+        $session = $this->getRequest()->getSession();
+        $form = $this->createFormBuilder()
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionGrupo')))
+            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoSeleccionGrupo')))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->getForm();
+        return $form;
+    }
 
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
@@ -192,13 +205,40 @@ class ExamenController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIG0')
-                    ->setCellValue('B1', 'ENTIDAD')
-                    ->setCellValue('C1', 'CENTRO_COSTOS')
-                    ->setCellValue('D1', 'FECHA')
-                    ->setCellValue('E1', 'IDENTIFICACION')
-                    ->setCellValue('F1', 'NOMBRE')
-                    ->setCellValue('G1', 'TOTAL')
-                    ->setCellValue('H1', 'APROBADO');
+                    ->setCellValue('B1', 'IDENTIFICACION')
+                    ->setCellValue('C1', 'NOMBRES Y APELLIDOS')
+                    ->setCellValue('D1', 'EDAD')
+                    ->setCellValue('E1', 'SEXO')
+                    ->setCellValue('F1', 'CARGO')
+                    ->setCellValue('G1', 'CENTRO COSTOS')
+                    ->setCellValue('H1', 'ENTIDAD / LABORATORIO')
+                    ->setCellValue('I1', 'CIUDAD')
+                    ->setCellValue('J1', 'FECHA EXAMEN')
+                    ->setCellValue('K1', 'AÑO EXAMEN')
+                    ->setCellValue('L1', 'MES EXAMEN')
+                    ->setCellValue('M1', 'DIA EXAMEN')
+                    ->setCellValue('N1', 'TIPO EXAMEN')
+                    ->setCellValue('O1', 'TOTAL')
+                    ->setCellValue('P1', 'APROBADO')
+                    ->setCellValue('Q1', 'COMENTARIOS GENERALES')
+                    ->setCellValue('R1', 'EXAMEN 1')
+                    ->setCellValue('S1', 'ESTADO')
+                    ->setCellValue('T1', 'OBSERVACIONES')
+                    ->setCellValue('U1', 'EXAMEN 2')
+                    ->setCellValue('V1', 'ESTADO')
+                    ->setCellValue('W1', 'OBSERVACIONES')
+                    ->setCellValue('X1', 'EXAMEN 3')
+                    ->setCellValue('Y1', 'ESTADO')
+                    ->setCellValue('Z1', 'OBSERVACIONES')
+                    ->setCellValue('AA1', 'EXAMEN 4')
+                    ->setCellValue('AB1', 'ESTADO')
+                    ->setCellValue('AC1', 'OBSERVACIONES')
+                    ->setCellValue('AD1', 'EXAMEN 5')
+                    ->setCellValue('AE1', 'ESTADO')
+                    ->setCellValue('AF1', 'OBSERVACIONES')
+                    ->setCellValue('AG1', 'EXAMEN 6')
+                    ->setCellValue('AH1', 'ESTADO')
+                    ->setCellValue('AI1', 'OBSERVACIONES');
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlExamenLista'));
@@ -217,19 +257,53 @@ class ExamenController extends Controller
             } else {
                 $aprobado = "NO";
             }
-
+            //Calculo edad
+            $varFechaNacimientoAnio = $arExamen->getFechaNacimiento()->format('Y');
+            $varFechaNacimientoMes =  $arExamen->getFechaNacimiento()->format('m');
+            $varMesActual = date('m');
+            if ($varMesActual >= $varFechaNacimientoMes){
+                $varEdad = date('Y') - $varFechaNacimientoAnio;
+            } else {
+                $varEdad = date('Y') - $varFechaNacimientoAnio -1;
+            }
+            //Fin calculo edad
+            $arDetalleExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $arExamen->getCodigoExamenPk()));
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arExamen->getCodigoExamenPk())
-                    ->setCellValue('B' . $i, $strNombreEntidad)
-                    ->setCellValue('C' . $i, $strNombreCentroCosto)
-                    ->setCellValue('D' . $i, $arExamen->getFecha())
-                    ->setCellValue('E' . $i, $arExamen->getIdentificacion())
-                    ->setCellValue('F' . $i, $arExamen->getNombreCorto())
-                    ->setCellValue('H' . $i, $aprobado)
-                    ->setCellValue('G' . $i, $arExamen->getVrTotal());
-
+                    ->setCellValue('B' . $i, $arExamen->getIdentificacion())
+                    ->setCellValue('C' . $i, $arExamen->getNombreCorto())
+                    ->setCellValue('D' . $i, $varEdad)
+                    ->setCellValue('E' . $i, $arExamen->getCodigoSexoFk())
+                    ->setCellValue('F' . $i, $arExamen->getCargoDescripcion())
+                    ->setCellValue('G' . $i, $arExamen->getCentroCostoRel()->getNombre())
+                    ->setCellValue('H' . $i, $strNombreEntidad)
+                    ->setCellValue('I' . $i, $arExamen->getCiudadRel()->getNombre())
+                    ->setCellValue('J' . $i, $arExamen->getFecha())
+                    ->setCellValue('K' . $i, $arExamen->getFecha()->format('Y'))
+                    ->setCellValue('L' . $i, $arExamen->getFecha()->format('m'))
+                    ->setCellValue('M' . $i, $arExamen->getFecha()->format('d'))
+                    ->setCellValue('N' . $i, $arExamen->getExamenClaseRel()->getNombre())
+                    ->setCellValue('O' . $i, $arExamen->getVrTotal())
+                    ->setCellValue('P' . $i, $aprobado)
+                    ->setCellValue('Q' . $i, $arExamen->getComentarios());
+                    $array = array();
+                    foreach ($arDetalleExamen as $arDetalleExamen){
+                        $array = $arDetalleExamen->getCodigoExamenTipoFk();
+                        $array = $arDetalleExamen->getEstadoAprobado();
+                        $array = $arDetalleExamen->getComentarios();
+                    }
+                    foreach ($array as $array){
+                        $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('R' . $i, $array[0])
+                            ->setCellValue('S' . $i, $array)
+                            ->setCellValue('T' . $i, $array)
+                            ->setCellValue('U' . $i, $array)
+                            ->setCellValue('V' . $i, $array);
+                    }
+                        
             $i++;
         }
+        
         $objPHPExcel->getActiveSheet()->setTitle('Examen');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
@@ -248,17 +322,6 @@ class ExamenController extends Controller
         exit;
     }
 
-    private function formularioFiltro() {
-        $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionGrupo')))
-            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoSeleccionGrupo')))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->getForm();
-        return $form;
-    }
+    
 
 }

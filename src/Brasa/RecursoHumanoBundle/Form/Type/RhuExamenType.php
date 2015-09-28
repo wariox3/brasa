@@ -20,11 +20,18 @@ class RhuExamenType extends AbstractType
             ->add('centroCostoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'property' => 'nombre',
-            ))   
-            ->add('fecha', 'date')   
+            ))
+            ->add('ciudadRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCiudad',
+                'property' => 'nombre',
+            ))    
+            ->add('fecha', 'date')
+            ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))    
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('identificacion', 'number', array('required' => true))
             ->add('nombreCorto', 'text', array('required' => true))
+            ->add('fechaNacimiento', 'date')
+            ->add('cargoDescripcion', 'text', array('required' => true))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
     }

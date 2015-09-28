@@ -115,7 +115,7 @@ class RhuEmpleado
      * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
      */ 
     
-    private $fecha_nacimiento; 
+    private $fechaNacimiento; 
     
     /**
      * @ORM\Column(name="codigo_ciudad_nacimiento_fk", type="integer", nullable=true)
@@ -496,6 +496,7 @@ class RhuEmpleado
      */
     protected $proyeccionesEmpleadoRel;     
     
+    
     /**
      * Constructor
      */
@@ -520,6 +521,9 @@ class RhuEmpleado
         $this->empleadosDotacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->accidentesTrabajoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cambiosSalariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ibcsEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->proyeccionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -949,7 +953,7 @@ class RhuEmpleado
      */
     public function setFechaNacimiento($fechaNacimiento)
     {
-        $this->fecha_nacimiento = $fechaNacimiento;
+        $this->fechaNacimiento = $fechaNacimiento;
 
         return $this;
     }
@@ -961,7 +965,7 @@ class RhuEmpleado
      */
     public function getFechaNacimiento()
     {
-        return $this->fecha_nacimiento;
+        return $this->fechaNacimiento;
     }
 
     /**

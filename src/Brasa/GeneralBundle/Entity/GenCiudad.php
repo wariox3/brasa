@@ -97,6 +97,11 @@ class GenCiudad
     protected $rhuSeleccionesCiudadRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuExamen", mappedBy="ciudadRel")
+     */
+    protected $rhuExamenesCiudadRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia", mappedBy="ciudadRel")
      */
     protected $rhuSeleccionesReferenciasCiudadRel;    
@@ -919,5 +924,39 @@ class GenCiudad
     public function getCodigoDane()
     {
         return $this->codigoDane;
+    }
+
+    /**
+     * Add rhuExamenesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuExamenesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel)
+    {
+        $this->rhuExamenesCiudadRel[] = $rhuExamenesCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuExamenesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel
+     */
+    public function removeRhuExamenesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel)
+    {
+        $this->rhuExamenesCiudadRel->removeElement($rhuExamenesCiudadRel);
+    }
+
+    /**
+     * Get rhuExamenesCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuExamenesCiudadRel()
+    {
+        return $this->rhuExamenesCiudadRel;
     }
 }

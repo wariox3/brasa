@@ -56,11 +56,32 @@ class RhuExamen
      * @ORM\Column(name="identificacion", type="integer")
      */
     private $identificacion;  
+    
+    /**
+     * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
+     */    
+    private $codigoSexoFk;
+    
+    /**
+     * @ORM\Column(name="cargo_descripcion", type="string", length=60, nullable=true)
+     */    
+    private $cargoDescripcion;
 
     /**
      * @ORM\Column(name="vr_total", type="float")
      */
     private $vrTotal = 0;
+    
+    /**
+     * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
+     */    
+    private $codigoCiudadFk;
+    
+    /**
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
+     */ 
+    
+    private $fechaNacimiento;
     
     /**     
      * @ORM\Column(name="estado_pagado", type="boolean")
@@ -99,7 +120,14 @@ class RhuExamen
      * @ORM\OneToMany(targetEntity="RhuPagoExamenDetalle", mappedBy="examenRel")
      */
     protected $pagosExamenesDetallesExamenRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuExamenesCiudadRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadRel;
 
+    
     /**
      * Constructor
      */
@@ -240,6 +268,30 @@ class RhuExamen
     }
 
     /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuExamen
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
      * Set nombreCorto
      *
      * @param string $nombreCorto
@@ -312,6 +364,54 @@ class RhuExamen
     }
 
     /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
+    }
+
+    /**
+     * Set fechaNacimiento
+     *
+     * @param \DateTime $fechaNacimiento
+     *
+     * @return RhuExamen
+     */
+    public function setFechaNacimiento($fechaNacimiento)
+    {
+        $this->fechaNacimiento = $fechaNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaNacimiento
+     *
+     * @return \DateTime
+     */
+    public function getFechaNacimiento()
+    {
+        return $this->fechaNacimiento;
+    }
+
+    /**
      * Set estadoPagado
      *
      * @param boolean $estadoPagado
@@ -333,6 +433,30 @@ class RhuExamen
     public function getEstadoPagado()
     {
         return $this->estadoPagado;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuExamen
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 
     /**
@@ -476,50 +600,74 @@ class RhuExamen
     }
 
     /**
-     * Set comentarios
+     * Set ciudadRel
      *
-     * @param string $comentarios
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
      *
      * @return RhuExamen
      */
-    public function setComentarios($comentarios)
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
     {
-        $this->comentarios = $comentarios;
+        $this->ciudadRel = $ciudadRel;
 
         return $this;
     }
 
     /**
-     * Get comentarios
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
+    }
+
+    /**
+     * Set codigoSexoFk
+     *
+     * @param string $codigoSexoFk
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoSexoFk($codigoSexoFk)
+    {
+        $this->codigoSexoFk = $codigoSexoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSexoFk
      *
      * @return string
      */
-    public function getComentarios()
+    public function getCodigoSexoFk()
     {
-        return $this->comentarios;
+        return $this->codigoSexoFk;
     }
 
     /**
-     * Set estadoAutorizado
+     * Set cargoDescripcion
      *
-     * @param boolean $estadoAutorizado
+     * @param string $cargoDescripcion
      *
      * @return RhuExamen
      */
-    public function setEstadoAutorizado($estadoAutorizado)
+    public function setCargoDescripcion($cargoDescripcion)
     {
-        $this->estadoAutorizado = $estadoAutorizado;
+        $this->cargoDescripcion = $cargoDescripcion;
 
         return $this;
     }
 
     /**
-     * Get estadoAutorizado
+     * Get cargoDescripcion
      *
-     * @return boolean
+     * @return string
      */
-    public function getEstadoAutorizado()
+    public function getCargoDescripcion()
     {
-        return $this->estadoAutorizado;
+        return $this->cargoDescripcion;
     }
 }

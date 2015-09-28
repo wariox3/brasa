@@ -92,6 +92,7 @@ class RhuSeleccion
      */    
     private $barrio;
     
+    
     /**
      * @ORM\Column(name="codigo_rh_fk", type="integer", nullable=true)
      */    
@@ -115,7 +116,7 @@ class RhuSeleccion
     /**
      * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
      */    
-    private $fecha_nacimiento;
+    private $fechaNacimiento;
     
     /**
      * @ORM\Column(name="codigo_ciudad_nacimiento_fk", type="integer", nullable=true)
@@ -718,7 +719,7 @@ class RhuSeleccion
      */
     public function setFechaNacimiento($fechaNacimiento)
     {
-        $this->fecha_nacimiento = $fechaNacimiento;
+        $this->fechaNacimiento = $fechaNacimiento;
 
         return $this;
     }
@@ -730,7 +731,7 @@ class RhuSeleccion
      */
     public function getFechaNacimiento()
     {
-        return $this->fecha_nacimiento;
+        return $this->fechaNacimiento;
     }
 
     /**
