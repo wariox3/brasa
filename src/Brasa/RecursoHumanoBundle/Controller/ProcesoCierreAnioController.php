@@ -12,9 +12,17 @@ class ProcesoCierreAnioController extends Controller
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
+        $boolError = 0;
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->findBy(array('estadoAutorizado' => 0));
+        if(count($arLiquidacion) > 0) {
+            $objMensaje->Mensaje("error", "Hay liquidaciones sin autorizar y no se puede efectuar el cierre", $this);
+        }
+        
         $this->listar();
         if($form->isValid()) {
 
@@ -29,7 +37,7 @@ class ProcesoCierreAnioController extends Controller
     public function cerrarAction($codigoCierreAnio) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_proceso_cierre_anio_cerrar', array('codigoCierreAnio' => $codigoCierreAnio)))
             ->add('salarioMinimo', 'number')
@@ -38,7 +46,8 @@ class ProcesoCierreAnioController extends Controller
             ->getForm();
         $form->handleRequest($request);
         $arCierreAnio = new \Brasa\RecursoHumanoBundle\Entity\RhuCierreAnio();
-        $arCierreAnio = $em->getRepository('BrasaRecursoHumanoBundle:RhuCierreAnio')->find($codigoCierreAnio);
+        $arCierreAnio = $em->getRepository('BrasaRecursoHumanoBundle:RhuCierreAnio')->find($codigoCierreAnio);                
+        
         if ($form->isValid()) {  
             $floSalarioMinimo = $form->get('salarioMinimo')->getData();
             $floAuxilioTransporte = $form->get('auxilioTransporte')->getData();            
@@ -50,7 +59,7 @@ class ProcesoCierreAnioController extends Controller
             $arCierreAnio = $em->getRepository('BrasaRecursoHumanoBundle:RhuCierreAnio')->find($codigoCierreAnio);
             $arCierreAnio->setEstadoCerrado(1);
             
-           $em->persist($arCierreAnio);
+            $em->persist($arCierreAnio);
             
             $strFechaCambio = $arConfiguracion->getAnioActual()."/12/30";
             $arContratoMinimos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();

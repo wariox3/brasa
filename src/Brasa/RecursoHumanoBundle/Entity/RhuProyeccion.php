@@ -36,6 +36,36 @@ class RhuProyeccion
      * @ORM\Column(name="codigo_contrato_fk", type="integer", nullable=true)
      */    
     private $codigoContratoFk;        
+
+    /**
+     * @ORM\Column(name="dias", type="integer")
+     */
+    private $dias = 0;     
+
+    /**
+     * @ORM\Column(name="vr_salario", type="float")
+     */
+    private $vrSalario = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_vacaciones", type="float")
+     */
+    private $vrVacaciones = 0;         
+    
+    /**
+     * @ORM\Column(name="vr_primas", type="float")
+     */
+    private $vrPrimas = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_cesantias", type="float")
+     */
+    private $vrCesantias = 0;         
+    
+    /**
+     * @ORM\Column(name="vr_intereses_cesantias", type="float")
+     */
+    private $vrInteresesCesantias = 0;         
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="proyeccionesEmpleadoRel")
@@ -48,6 +78,8 @@ class RhuProyeccion
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
     protected $contratoRel;     
+
+
 
     /**
      * Get codigoProyeccionPk
@@ -156,6 +188,102 @@ class RhuProyeccion
     }
 
     /**
+     * Set vrVacaciones
+     *
+     * @param float $vrVacaciones
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrVacaciones($vrVacaciones)
+    {
+        $this->vrVacaciones = $vrVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrVacaciones
+     *
+     * @return float
+     */
+    public function getVrVacaciones()
+    {
+        return $this->vrVacaciones;
+    }
+
+    /**
+     * Set vrPrimas
+     *
+     * @param float $vrPrimas
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrPrimas($vrPrimas)
+    {
+        $this->vrPrimas = $vrPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrimas
+     *
+     * @return float
+     */
+    public function getVrPrimas()
+    {
+        return $this->vrPrimas;
+    }
+
+    /**
+     * Set vrCesantias
+     *
+     * @param float $vrCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrCesantias($vrCesantias)
+    {
+        $this->vrCesantias = $vrCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCesantias
+     *
+     * @return float
+     */
+    public function getVrCesantias()
+    {
+        return $this->vrCesantias;
+    }
+
+    /**
+     * Set vrInteresesCesantias
+     *
+     * @param float $vrInteresesCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrInteresesCesantias($vrInteresesCesantias)
+    {
+        $this->vrInteresesCesantias = $vrInteresesCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get vrInteresesCesantias
+     *
+     * @return float
+     */
+    public function getVrInteresesCesantias()
+    {
+        return $this->vrInteresesCesantias;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -201,5 +329,53 @@ class RhuProyeccion
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return RhuProyeccion
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
+    }
+
+    /**
+     * Set vrSalario
+     *
+     * @param float $vrSalario
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrSalario($vrSalario)
+    {
+        $this->vrSalario = $vrSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalario
+     *
+     * @return float
+     */
+    public function getVrSalario()
+    {
+        return $this->vrSalario;
     }
 }

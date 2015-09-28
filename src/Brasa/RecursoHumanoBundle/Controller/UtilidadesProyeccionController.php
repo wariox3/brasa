@@ -5,7 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 
-class ConsultasProyeccionController extends Controller
+class UtilidadesProyeccionController extends Controller
 {
     var $strDqlLista = "";
     
@@ -23,6 +23,42 @@ class ConsultasProyeccionController extends Controller
                 $this->listarCostosGeneral();
                 $this->generarExcel();
             }
+            if($form->get('BtnGenerar')->isClicked()) {                                 
+                $fechaDesde = $form->get('fechaDesde')->getData();
+                $fechaHasta = $form->get('fechaHasta')->getData();
+                if($fechaDesde != null && $fechaHasta != null) {
+                    $strSql = "DELETE FROM rhu_proyeccion WHERE 1";
+                    $em->getConnection()->executeQuery($strSql);                
+                    $douAuxilioTransporte = 74000;
+                    $intDias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($fechaDesde, $fechaHasta);
+                    $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                    $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('indefinido' => 1));
+                    foreach($arContratos as $arContrato) {
+                        $floSalarioPromedio = $arContrato->getVrSalarioPago();
+                        $floIbc = ($arContrato->getVrSalarioPago() / 30) * $intDias;
+                        $douBasePrestaciones = ($floIbc / $intDias) * 30;
+                        $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
+                        $douCesantias = ($douBasePrestacionesTotal * $intDias) / 360;          
+                        $floPorcentajeIntereses = (($intDias * 12) / 360)/100;   
+                        $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
+                        $douPrima = ($douBasePrestacionesTotal * $intDias) / 360;                         
+                        $douVacaciones = ($floSalarioPromedio * $intDias) / 720;                        
+                        $arProyeccion = new \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion();
+                        $arProyeccion->setContratoRel($arContrato);
+                        $arProyeccion->setEmpleadoRel($arContrato->getEmpleadoRel());
+                        $arProyeccion->setVrSalario($arContrato->getVrSalario());
+                        $arProyeccion->setVrCesantias($douCesantias);                        
+                        $arProyeccion->setVrInteresesCesantias($douInteresesCesantias);
+                        $arProyeccion->setVrPrimas($douPrima);
+                        $arProyeccion->setVrVacaciones($douVacaciones);
+                        $arProyeccion->setDias($intDias);
+                        $em->persist($arProyeccion);
+                    }                
+                    $em->flush();                    
+                }
+                return $this->redirect($this->generateUrl('brs_rhu_utilidades_proyeccion'));           
+            }            
+            
             if($form->get('BtnPDF')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listarCostosGeneral();
@@ -30,13 +66,13 @@ class ConsultasProyeccionController extends Controller
                 $objReporteCostos->Generar($this, $this->strSqlLista);
             }            
             if($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrarLista($form);
-                $this->listarCostosGeneral();
+                //$this->filtrarLista($form);
+                $this->listar();
             }
 
         }
         $arProyecciones = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaRecursoHumanoBundle:Consultas/Proyeccion:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/Proyeccion:lista.html.twig', array(
             'arProyecciones' => $arProyecciones,
             'form' => $form->createView()
             ));
@@ -74,6 +110,7 @@ class ConsultasProyeccionController extends Controller
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnPDF', 'submit', array('label'  => 'PDF',))
