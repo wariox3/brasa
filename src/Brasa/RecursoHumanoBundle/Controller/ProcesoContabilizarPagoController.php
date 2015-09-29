@@ -24,6 +24,7 @@ class ProcesoContabilizarPagoController extends Controller
                     $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();                    
                     $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(1);                           
                     foreach ($arrSeleccionados AS $codigo) {                                     
+                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigo);
                         if($arPago->getEstadoContabilizado() == 0) {
                             $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arPago->getEmpleadoRel()->getNumeroIdentificacion()));
@@ -49,7 +50,7 @@ class ProcesoContabilizarPagoController extends Controller
                                     //echo $arPagoDetalle->getCodigoPagoDetallePk() . "[" . $arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk() . "]" . "<br/>";
                                 }                              
                                 $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('21981847');                            
+                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('281505');                            
                                 $arRegistro->setComprobanteContableRel($arComprobanteContable);
                                 $arRegistro->setCentroCostosRel($arCentroCosto);
                                 $arRegistro->setCuentaRel($arCuenta);
@@ -61,6 +62,11 @@ class ProcesoContabilizarPagoController extends Controller
                                 $em->persist($arRegistro);  
                                 $arPago->setEstadoContabilizado(1);
                                 $em->persist($arPago);  
+                            } else {
+                                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
+                                $arTercero->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
+                                $arTercero->setNit($arPago->getEmpleadoRel()->getNumeroIdentificacion());
+                                $em->persist($arTercero);                                
                             }                                                    
                         }
                     }
