@@ -135,6 +135,11 @@ class RhuProgramacionPagoDetalle
      */
     private $pagoAuxilioTransporte = 1;            
     
+    /**     
+     * @ORM\Column(name="dias_vacaciones", type="integer")
+     */
+    private $diasVacaciones = 0;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
@@ -897,5 +902,29 @@ class RhuProgramacionPagoDetalle
     public function getPagoAuxilioTransporte()
     {
         return $this->pagoAuxilioTransporte;
+    }
+
+    /**
+     * Set diasVacaciones
+     *
+     * @param integer $diasVacaciones
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDiasVacaciones($diasVacaciones)
+    {
+        $this->diasVacaciones = $diasVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacaciones
+     *
+     * @return integer
+     */
+    public function getDiasVacaciones()
+    {
+        return $this->diasVacaciones;
     }
 }

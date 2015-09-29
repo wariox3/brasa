@@ -38,6 +38,13 @@ class ProgramacionesPagoController extends Controller
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
             }
+            if($request->request->get('OpLiquidar')) {
+                $codigoProgramacionPago = $request->request->get('OpLiquidar');
+                $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+                if($arProgramacionPago->getEstadoGenerado() == 1 && $arProgramacionPago->getEstadoPagado() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);                    
+                }                
+            }            
             if($request->request->get('OpDeshacer')) {
                 $codigoProgramacionPago = $request->request->get('OpDeshacer');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->deshacer($codigoProgramacionPago);

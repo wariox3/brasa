@@ -55,13 +55,7 @@ class RhuBanco
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="bancoRel")
      */
-    protected $empleadosBancoRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\GeneralBundle\Entity\GenBanco", mappedBy="bancoRel")
-     */
-    protected $rhuBancosBancoRel;
-
+    protected $empleadosBancoRel;    
     
     /**
      * Constructor
@@ -151,40 +145,6 @@ class RhuBanco
     public function getNumeroDigitos()
     {
         return $this->numeroDigitos;
-    }
-
-    /**
-     * Add empleadosBancoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosBancoRel
-     *
-     * @return RhuBanco
-     */
-    public function addEmpleadosBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosBancoRel)
-    {
-        $this->empleadosBancoRel[] = $empleadosBancoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove empleadosBancoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosBancoRel
-     */
-    public function removeEmpleadosBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosBancoRel)
-    {
-        $this->empleadosBancoRel->removeElement($empleadosBancoRel);
-    }
-
-    /**
-     * Get empleadosBancoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEmpleadosBancoRel()
-    {
-        return $this->empleadosBancoRel;
     }
 
     /**
@@ -284,36 +244,36 @@ class RhuBanco
     }
 
     /**
-     * Add rhuBancosBancoRel
+     * Add empleadosBancoRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenBanco $rhuBancosBancoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosBancoRel
      *
      * @return RhuBanco
      */
-    public function addRhuBancosBancoRel(\Brasa\GeneralBundle\Entity\GenBanco $rhuBancosBancoRel)
+    public function addEmpleadosBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosBancoRel)
     {
-        $this->rhuBancosBancoRel[] = $rhuBancosBancoRel;
+        $this->empleadosBancoRel[] = $empleadosBancoRel;
 
         return $this;
     }
 
     /**
-     * Remove rhuBancosBancoRel
+     * Remove empleadosBancoRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenBanco $rhuBancosBancoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosBancoRel
      */
-    public function removeRhuBancosBancoRel(\Brasa\GeneralBundle\Entity\GenBanco $rhuBancosBancoRel)
+    public function removeEmpleadosBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosBancoRel)
     {
-        $this->rhuBancosBancoRel->removeElement($rhuBancosBancoRel);
+        $this->empleadosBancoRel->removeElement($empleadosBancoRel);
     }
 
     /**
-     * Get rhuBancosBancoRel
+     * Get empleadosBancoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRhuBancosBancoRel()
+    public function getEmpleadosBancoRel()
     {
-        return $this->rhuBancosBancoRel;
+        return $this->empleadosBancoRel;
     }
 }

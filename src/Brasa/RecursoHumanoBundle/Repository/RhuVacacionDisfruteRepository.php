@@ -24,13 +24,17 @@ class RhuVacacionDisfruteRepository extends EntityRepository {
         return $dql;
     }    
     
-    public function dias($codigoEmpleado, $fechaDesde, $fechaHasta) {
+    public function dias($codigoEmpleado, $codigoContrato, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
-        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
-        $dql   = "SELECT v FROM BrasaRecursoHumanoBundle:RhuVacacionDisfrute v "
-                . "WHERE v.codigoEmpleadoFk = " . $codigoEmpleado
-                . " AND v.fechaDesde <= '" . $fechaHasta->format('Y-m-d') . "' "
-                . " AND v.fechaHasta >= '" . $fechaDesde->format('Y-m-d') . "' ";
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
+        $dql = "SELECT vd FROM BrasaRecursoHumanoBundle:RhuVacacionDisfrute vd "
+                . "WHERE (((vd.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (vd.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (vd.fechaDesde >= '$strFechaDesde' AND vd.fechaDesde <= '$strFechaHasta') "
+                . "OR (vd.fechaHasta >= '$strFechaHasta' AND vd.fechaDesde <= '$strFechaDesde')) "
+                . "AND vd.codigoEmpleadoFk = '" . $codigoEmpleado . "' AND vd.codigoContratoFk = " . $codigoContrato;
+        
         $query = $em->createQuery($dql);
         $arVacaciones = $query->getResult();
         $intDiasDevolver = 0;

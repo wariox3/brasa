@@ -57,7 +57,7 @@
                 <th>INCONSISTENCIAS</th>
                 <th>GENERADO</th>
                 <th>PAGADO</th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Enlaces relacionadas al pago">ENLACES</p></th>
+                <th></th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center">DETALLE</th>
                 <th></th>
@@ -101,18 +101,15 @@
                     {% endif %}
                 </td>                                
                 <td>
-                    {% if arProgramacionPago.estadoGenerado == 0 %}
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-xs">Enlaces</button>
-                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Adicionales al pago</a></li>
-                            <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank">Generar tiempo suplementario masivo</a></li>
-                        </ul>
-                    </div>
-                    {% endif %}
+                    {% if arProgramacionPago.estadoPagado == 0 %}
+                        {% if arProgramacionPago.estadoGenerado == 1 %}
+                            <button class="btn btn-default btn-xs" type="submit" name="OpLiquidar" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Liquidar</button> 
+                        {% else %}
+                            NO
+                        {% endif %}
+                    {% else %}
+                        SI
+                    {% endif %}                                        
                 </td> 
                 <td><button class="btn btn-default btn-xs" type="submit" name="OpExcelDetalle" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Excel</button> </td>               
                 {% if arProgramacionPago.codigoPagoTipoFk == 1 %}

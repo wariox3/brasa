@@ -89,7 +89,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $douIngresoBaseCotizacion = 0;
                         
                         //Procesar vacaciones
-                        $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->dias($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoProcesar->getFechaDesde(), $arProgramacionPagoProcesar->getFechaHasta());
+                        $intDiasVacaciones = $arProgramacionPagoDetalle->getDiasVacaciones();
                         $intHorasVacaciones = $intDiasVacaciones * 8;
                         if($intDiasVacaciones > 0) {
                             $intHorasLaboradas = $intHorasLaboradas - $intHorasVacaciones;
@@ -449,7 +449,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $em->persist($arProgramacionPagoProcesar);
                     $em->flush();
 
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
+                    //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarPagoDetalleSede($codigoProgramacionPago);
                     if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
                         $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 1);
@@ -526,7 +526,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arProgramacionPagoProcesar->setEstadoGenerado(1);                                
                     $em->persist($arProgramacionPagoProcesar);
                     $em->flush();
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
+                    //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
                 }
 
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) {
@@ -601,7 +601,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arProgramacionPagoProcesar->setEstadoGenerado(1);                                
                     $em->persist($arProgramacionPagoProcesar);
                     $em->flush();
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
+                    //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
                 }                
             } else {
                 $strMensaje = "No se puede generar programacion porque el año es mayor al ultimo año cerrado";
@@ -904,7 +904,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             }                                            
             $em->persist($arCentroCosto);
             $arProgramacionPagoProcesar->setEstadoPagado(1);
-            $em->persist($arProgramacionPagoProcesar);                    
+            $em->persist($arProgramacionPagoProcesar);
+            $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
         }            
         $em->flush();        
     }
@@ -1122,6 +1123,12 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arProgramacionPagoDetalle->setVrDeducciones($floDeducciones);
                 $floNeto = $floDevengado - $floDeducciones;
                 $arProgramacionPagoDetalle->setVrNetoPagar($floNeto);
+                //dias vacaciones
+                $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->dias($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
+                if($intDiasVacaciones > 0) {                                        
+                    $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
+                }                
+                
                 $em->persist($arProgramacionPagoDetalle);
                 if($floNeto < 0) {
                     $boolInconsistencias = 1;
@@ -1131,10 +1138,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $em->persist($arProgramacionPagoInconsistencia);
                 }
                 $intNumeroEmpleados++;
-                $floNetoTotal += $floNeto;
+                $floNetoTotal += $floNeto;                                
+                
             }
             $arProgramacionPago->setNumeroEmpleados($intNumeroEmpleados);
-            $arProgramacionPago->setVrNeto($floNetoTotal);
+            //$arProgramacionPago->setVrNeto($floNetoTotal);
             $arProgramacionPago->setInconsistencias($boolInconsistencias);
             $em->flush();            
         }
