@@ -242,6 +242,10 @@ brs_rhu_programaciones_pago_cargar_tiempo_sede:
     path:     /rhu/programaciones/pago/cargar/tiempo/sede/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarTiempoSedes:cargar }
 
+brs_rhu_programaciones_pago_cargar_adicionales_pago:
+    path:     /rhu/programaciones/pago/cargar/adicionales/pago/{codigoProgramacionPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarAdicionalesPago:cargar }
+
 brs_rhu_utilidades_generar_pago_banco:
     path:     /rhu/utilidades/generar/pago/banco
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesGenerarPagoBanco:Generar }    

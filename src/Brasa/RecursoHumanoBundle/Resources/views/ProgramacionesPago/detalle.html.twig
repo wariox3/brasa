@@ -103,6 +103,11 @@
                     <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
                 </div>
             </div>
+            <div class="btn-toolbar" style="float: right">
+                <div class="btn-group">
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_adicionales_pago', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar</a>
+                </div>
+            </div>                
         </div>
         <div class="tab-pane" id="incapacidades">
             <br />

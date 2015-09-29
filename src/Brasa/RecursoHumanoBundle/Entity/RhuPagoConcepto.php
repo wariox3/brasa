@@ -66,6 +66,16 @@ class RhuPagoConcepto
      * @ORM\Column(name="concepto_incapacidad", type="boolean")
      */    
     private $conceptoIncapacidad = 0;     
+
+    /**
+     * @ORM\Column(name="concepto_pension", type="boolean")
+     */    
+    private $conceptoPension = 0;    
+
+    /**
+     * @ORM\Column(name="concepto_salud", type="boolean")
+     */    
+    private $conceptoSalud = 0;        
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="pagoConceptoRel")
@@ -541,5 +551,53 @@ class RhuPagoConcepto
     public function getTipoCuenta()
     {
         return $this->tipoCuenta;
+    }
+
+    /**
+     * Set conceptoPension
+     *
+     * @param boolean $conceptoPension
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoPension($conceptoPension)
+    {
+        $this->conceptoPension = $conceptoPension;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoPension
+     *
+     * @return boolean
+     */
+    public function getConceptoPension()
+    {
+        return $this->conceptoPension;
+    }
+
+    /**
+     * Set conceptoSalud
+     *
+     * @param boolean $conceptoSalud
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoSalud($conceptoSalud)
+    {
+        $this->conceptoSalud = $conceptoSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoSalud
+     *
+     * @return boolean
+     */
+    public function getConceptoSalud()
+    {
+        return $this->conceptoSalud;
     }
 }
