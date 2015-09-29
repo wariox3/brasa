@@ -192,6 +192,7 @@ class ExamenController extends Controller
     }
 
     private function generarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -288,17 +289,19 @@ class ExamenController extends Controller
                     ->setCellValue('Q' . $i, $arExamen->getComentarios());
                     $array = array();
                     foreach ($arDetalleExamen as $arDetalleExamen){
-                        $array = $arDetalleExamen->getCodigoExamenTipoFk();
-                        $array = $arDetalleExamen->getEstadoAprobado();
-                        $array = $arDetalleExamen->getComentarios();
+                        $array[] = $arDetalleExamen->getCodigoExamenTipoFk();
+                        $array[] = $arDetalleExamen->getEstadoAprobado();
+                        $array[] = $arDetalleExamen->getComentarios();
                     }
-                    foreach ($array as $array){
+                    
+                    
+                    foreach ($array as $posicion=>$jugador){
                         $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('R' . $i, $array[0])
-                            ->setCellValue('S' . $i, $array)
-                            ->setCellValue('T' . $i, $array)
-                            ->setCellValue('U' . $i, $array)
-                            ->setCellValue('V' . $i, $array);
+                            ->setCellValue('R' . $i, $jugador)
+                            ->setCellValue('S' . $i, $jugador)
+                            ->setCellValue('T' . $i, $jugador)
+                            ->setCellValue('U' . $i, $jugador)
+                            ->setCellValue('V' . $i, $jugador);
                     }
                         
             $i++;

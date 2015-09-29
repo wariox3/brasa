@@ -25,7 +25,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
     public static $douOtrosIngresos;
     public static $duoTotalIngresos;
     
-    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$strCertifico1,$strCertifico2,$strCertifico3,$strCertifico4,$strCertifico5,$strCertifico6,$floIbc,$floPension,$floSalud,$floAuxilioTransporte,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos) {
+    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$strCertifico1,$strCertifico2,$strCertifico3,$strCertifico4,$strCertifico5,$strCertifico6,$floIbc,$floPension,$floSalud,$floAuxilioTransporte,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$strRuta = "") {
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
@@ -57,7 +57,13 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("CertificadoIngreso_$codigoEmpleado.pdf", 'D');        
+        //$pdf->Output("CertificadoIngreso_$codigoEmpleado.pdf", 'D');
+        
+        if($strRuta == "") {
+            $pdf->Output("CertificadoIngreso_$codigoEmpleado.pdf", 'D');        
+        } else {
+            $pdf->Output($strRuta."CertificadoIngreso_$codigoEmpleado.pdf", 'F');        
+        }
         
     } 
     
