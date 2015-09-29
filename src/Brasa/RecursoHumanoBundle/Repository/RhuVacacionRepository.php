@@ -78,7 +78,17 @@ class RhuVacacionRepository extends EntityRepository {
         $em->flush();
         
         return true;
-    }     
+    }    
+    
+    public function devuelveVacacionesFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(v.vrVacacion) as Vacaciones FROM BrasaRecursoHumanoBundle:RhuVacacion v "
+                . "WHERE v.codigoEmpleadoFk = " . $codigoEmpleado 
+                . "AND v.fechaDesdePeriodo >= '" . $fechaDesde . "' AND v.fechaHastaPeriodo <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
+    }
     
 }
 

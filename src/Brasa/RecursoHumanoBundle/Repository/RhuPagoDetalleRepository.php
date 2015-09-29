@@ -33,16 +33,33 @@ class RhuPagoDetalleRepository extends EntityRepository {
         $dql   = "SELECT SUM(pd.vrPago) as Retencion FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
                 . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
                 . "AND p.fechaDesde like '%" . $strFechaCertificado . "%' "
-                . "AND pd.codigoPagoConceptoFk = 5"
-                . "OR pd.codigoPagoConceptoFk = 15"
-                . "OR pd.codigoPagoConceptoFk = 17"
-                . "OR pd.codigoPagoConceptoFk = 19"
-                . "OR pd.codigoPagoConceptoFk = 22";
+                . "OR pd.codigoPagoConceptoFk = 15";
                 
                 
         $query = $em->createQuery($dql);
         $douOtrosIngresos = $query->getSingleScalarResult();
         return $douOtrosIngresos;
+    }
+    public function devuelvePrestacionalEmpleadoFecha($codigoEmpleado, $strFechaCertificado) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(pd.vrPago) as Prestacional FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
+                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
+                . "AND p.fechaDesde like '%" . $strFechaCertificado . "%' "
+                . "AND pd.codigoPagoConceptoFk = 1"
+                . "OR pd.codigoPagoConceptoFk = 5"
+                . "OR pd.codigoPagoConceptoFk = 16"
+                . "OR pd.codigoPagoConceptoFk = 17"
+                . "OR pd.codigoPagoConceptoFk = 18"
+                . "OR pd.codigoPagoConceptoFk = 20"
+                . "OR pd.codigoPagoConceptoFk = 22"
+                . "OR pd.codigoPagoConceptoFk = 23"
+                . "OR pd.codigoPagoConceptoFk = 25"
+                . "OR pd.codigoPagoConceptoFk = 28";
+                
+                
+        $query = $em->createQuery($dql);
+        $douPrestacional = $query->getSingleScalarResult();
+        return $douPrestacional;
     }
     
 }
