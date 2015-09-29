@@ -685,6 +685,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
      */
     public function liquidar($codigoProgramacionPago) {
         $em = $this->getEntityManager();
+        set_time_limit(0);
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -696,6 +697,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $arProgramacionPago->setVrNeto($douNeto);
         $em->persist($arProgramacionPago);
         $em->flush();
+        set_time_limit(90);
         return true;
     }
 
@@ -707,7 +709,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
      * @param integer	Codigo de la programacion de pago
      */
     public function pagar($codigoProgramacionPago) {       
-        $em = $this->getEntityManager();            
+        $em = $this->getEntityManager(); 
+        set_time_limit(0);
         $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
@@ -907,7 +910,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $em->persist($arProgramacionPagoProcesar);
             $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
         }            
-        $em->flush();        
+        $em->flush();   
+        set_time_limit(90);
     }
 
     /**
@@ -1011,6 +1015,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
 
     public function generarEmpleados($codigoProgramacionPago) {
         $em = $this->getEntityManager();
+        set_time_limit(0);
         $intNumeroEmpleados = 0;
         $floNetoTotal = 0;
         $boolInconsistencias = 0;
@@ -1270,6 +1275,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $arProgramacionPago->setNumeroEmpleados($intNumeroEmpleados);            
             $em->flush();           
         }        
+        set_time_limit(0);
         return true;
     }
     
