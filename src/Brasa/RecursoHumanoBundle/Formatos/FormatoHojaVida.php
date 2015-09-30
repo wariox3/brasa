@@ -298,9 +298,23 @@ class FormatoHojaVida extends \FPDF_FPDF {
     }
 
     public function Footer() {
-        $this->SetFont('Arial','B', 10); 
+        /*$this->SetFont('Arial','B', 10); 
         $this->Cell(30, 35, "Firma empresa" , 0, 0, 'L', 0);        
-        $this->Cell(30, 35, "Firma empleado" , 0, 0, 'L', 0);                
+        $this->Cell(30, 35, "Firma empleado" , 0, 0, 'L', 0); */
+        
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleado = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find(self::$codigoEmpleado);
+        $this->SetFont('Arial', 'B', 9);
+        $this->Text(10, 285, "FIRMA: _____________________________________________");
+        $this->Text(10, 289, $arEmpleado->getNombreCorto());
+        $this->Text(10, 294, "C.C.:     ______________________ de ____________________");
+        $this->Text(105, 285, "FIRMA: _____________________________________________");
+        $this->Text(105, 289, $arConfiguracion->getNombreEmpresa());
+        $this->Text(105, 294, "NIT: ". $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa());
+        $this->SetFont('Arial', '', 8);
+        $this->Text(185, 292, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 

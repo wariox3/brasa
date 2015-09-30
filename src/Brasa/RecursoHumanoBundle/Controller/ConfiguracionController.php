@@ -19,6 +19,8 @@ class ConfiguracionController extends Controller
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arConsecutivo = new \Brasa\RecursoHumanoBundle\Entity\RhuConsecutivo();
         $arConsecutivo = $em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->findAll();
+        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->findAll();
         $arrayPropiedadesConceptoAuxilioTransporte = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
             'query_builder' => function (EntityRepository $er) {
@@ -159,7 +161,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoEntidadRiesgoFk($codigoConceptoRiesgoProfesional);
             $arConfiguracion->setCodigoRetencionFuente($codigoConceptoRetencionFuente);
             $arrControles = $request->request->All();
-            $intIndice = 0;
+            $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
                         $arConsecutivo = new \Brasa\RecursoHumanoBundle\Entity\RhuConsecutivo();
                         $arConsecutivo = $em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->find($intCodigo);
@@ -169,15 +171,28 @@ class ConfiguracionController extends Controller
                                 $em->persist($arConsecutivo);
                             
                         }
-                        $intIndice++;
+                        $intIndiceConsecutivo++;
                     }
+            $intIndicePagoConceptoPago = 0;
+                    foreach ($arrControles['LblCodigoPagoConcepto'] as $intCodigoPagoConcepto) {
+                        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intCodigoPagoConcepto);
+                        if(count($arPagoConcepto) > 0) {                                            
+                                $intPagoConcepto = $arrControles['TxtCuenta'.$intCodigoPagoConcepto];
+                                $arPagoConcepto->setCodigoCuentaFk($intPagoConcepto);
+                                $em->persist($arPagoConcepto);
+                            
+                        }
+                        $intIndicePagoConceptoPago++;
+                    }        
             $em->persist($arConfiguracion);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_configuracion_nomina', array('codigoConfiguracionPk' => 1)));
         }
         return $this->render('BrasaRecursoHumanoBundle:Configuracion:Configuracion.html.twig', array(
             'formConfiguracion' => $formConfiguracion->createView(),
-            'arConsecutivo' => $arConsecutivo
+            'arConsecutivo' => $arConsecutivo,
+            'arPagoConcepto' => $arPagoConcepto
         ));
     }
     

@@ -48,7 +48,8 @@ class RhuContratoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoSubtipoCotizante',
                 'property' => 'nombre',
             ))                             
-            ->add('fechaDesde', 'date', array('required' => true)) 
+            ->add('fechaDesde', 'date', array('required' => true))
+            ->add('fechaHasta', 'date', array('required' => true))                
             ->add('horarioTrabajo', 'text', array('required' => false)) 
             ->add('vrSalario', 'number', array('required' => true))  
             ->add('numero', 'text', array('required' => true))                                           

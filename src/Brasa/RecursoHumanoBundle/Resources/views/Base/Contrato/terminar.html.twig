@@ -37,7 +37,13 @@
             <div class="col-sm-8">
                     {{ form_widget(formContrato.fechaTerminacion, { 'attr': {'class': 'form-control'} }) }}
             </div>
-        </div> 
+        </div>
+        <div class="form-group form-group-sm">
+            <label for="form_motivoRetiro" class="col-sm-4 control-label">Motivo Retiro:</label>
+            <div class="col-sm-8">
+                    {{ form_widget(formContrato.motivoRetiro, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+        </div>    
         <br />
         <blockquote>
           <p>Recuerde que no puede terminar un contrato antes de la fecha del ultimo pago.</p>

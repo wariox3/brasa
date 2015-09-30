@@ -25,7 +25,7 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
     public static $douOtrosIngresos;
     public static $duoTotalIngresos;
     
-    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$strCertifico1,$strCertifico2,$strCertifico3,$strCertifico4,$strCertifico5,$strCertifico6,$floPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$floVacaciones,$strRuta = "") {
+    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$strCertifico1,$strCertifico2,$strCertifico3,$strCertifico4,$strCertifico5,$strCertifico6,$floPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$floVacaciones,$strRuta) {
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;

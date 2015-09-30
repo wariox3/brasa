@@ -60,9 +60,10 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
                             $douOtrosIngresos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->devuelveOtrosIngresosEmpleadoFecha($codigoEmpleado, $strFechaCertificado);
                             $douOtrosIngresos = (float)$douOtrosIngresos;
                             $duoTotalIngresos = $floCesantias + $duoGestosRepresentacion + $douOtrosIngresos + $floPrestacional + $floVacaciones;
+                            $strRuta = "";
                             if ( $floPrestacional > 0){
                                 $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
-                                $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$floPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,"");  
+                                $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$floPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$floVacaciones,$strRuta);  
                             } else {
                                 $objMensaje->Mensaje("error", "Este empleado no registra información de ingresos  y retenciones para el año ". $strFechaCertificado."" , $this);                
                             }
@@ -78,18 +79,8 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
                             ->setParameter('fechaHasta', '%'.$controles['fechaCertificado'].'%')
                             ->getQuery()
                             ->getResult();
-                            $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-                                    $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                                    /*$strRutaGeneral = $arConfiguracion->getRutaTemporal();
-                                    if(!file_exists($strRutaGeneral)) {
-                                        mkdir($strRutaGeneral, 0777);
-                                    }
-                                    /*$strRuta = $strRutaGeneral . "CertificadoIngresoRetencion" . $empleadoCentroCosto->getCentroCostoRel()->getNombre() . $strFechaCertificado ."/";
-                                    if(!file_exists($strRuta)) {
-                                    mkdir($strRuta, 0777);
-                                    }*/
-                                    $strRutaGeneral = "C:\wamp\www\prueba";
-                                    $strRuta = "";
+                            
+                                   
                             foreach ($empleadosCentroCosto as $empleadoCentroCosto) {
                                 $codigoEmpleado = $empleadoCentroCosto->getCodigoEmpleadoFk();
                                 $strFechaExpedicion = $formCertificado->get('fechaExpedicion')->getData();
@@ -121,10 +112,22 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
                                 $douOtrosIngresos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->devuelveOtrosIngresosEmpleadoFecha($codigoEmpleado, $strFechaCertificado);
                                 $douOtrosIngresos = (float)$douOtrosIngresos;
                                 $duoTotalIngresos = $floCesantias + $duoGestosRepresentacion + $douOtrosIngresos + $floPrestacional + $floVacaciones;
+                                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                                    $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                                    $strRutaGeneral = $arConfiguracion->getRutaTemporal();
+                                    if(!file_exists($strRutaGeneral)) {
+                                        mkdir($strRutaGeneral, 0777);
+                                    }
+                                    $strRuta = $strRutaGeneral . "CertificadoIngresoRetencion" . $empleadoCentroCosto->getCentroCostoRel()->getNombre() . $strFechaCertificado ."/";
+                                    if(!file_exists($strRuta)) {
+                                    mkdir($strRuta, 0777);
+                                    }
+                                    //$strRutaGeneral = "C:\p";
+                                    //$strRuta = "C:\p";
                                 if ( $floPrestacional > 0){
                                     
                                     $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
-                                    $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$floPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$strRuta);  
+                                    $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$floPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$floVacaciones,$strRuta);  
                                     $strRutaZip = $strRutaGeneral . 'CertficadoIngresoRetencion' .$empleadoCentroCosto->getCentroCostoRel()->getNombre() . $strFechaCertificado . '.zip';                     
                                 }
                                 

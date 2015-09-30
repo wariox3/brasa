@@ -82,9 +82,10 @@ class CertificadoIngresoController extends Controller
                 $douOtrosIngresos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->devuelveOtrosIngresosEmpleadoFecha($codigoEmpleado, $strFechaCertificado);
                 $douOtrosIngresos = (float)$douOtrosIngresos;
                 $duoTotalIngresos = $floCesantias + $duoGestosRepresentacion + $douOtrosIngresos + $floPrestacional + $floVacaciones;
+                $strRuta = "";
                 if ( $floPrestacional > 0){
                     $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
-                    $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$floPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,"");  
+                    $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$floPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$floVacaciones,$strRuta);  
                 } else {
                     $objMensaje->Mensaje("error", "Este empleado no registra información de ingresos  y retenciones para el año ". $strFechaCertificado."" , $this);                
                 }

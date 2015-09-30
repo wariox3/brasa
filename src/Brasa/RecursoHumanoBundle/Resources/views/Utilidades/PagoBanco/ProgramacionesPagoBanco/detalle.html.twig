@@ -64,7 +64,7 @@
                     <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }} </td>
                     <td>{{ arPagos.empleadoRel.numeroIdentificacion  }}</td>
                     <td>{{ arPagos.empleadoRel.nombreCorto  }}</td>
-                    <td>{{ arPagos.empleadoRel.cuenta  }}</td>
+                    <td {% if arPagos.empleadoRel.cuenta == "" %} class="danger"> {% else %} <td>{{ arPagos.empleadoRel.cuenta }} {% endif %}</td>
                     <td>{{ arPagos.diasPeriodo  }}</td>
                     <td>{{ arPagos.fechaDesde|date('Y/m/d')  }}</td>
                     <td>{{ arPagos.fechaHasta|date('Y/m/d')  }}</td>

@@ -49,10 +49,10 @@ class UtilidadesGenerarPagoBancoController extends Controller
                         }else {                  
                             $strNombreArchivo = "PagoBanco" . date('YmdHis') . ".txt";
                             $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                            
-                            //$strArchivo = "C:/temporalplanos/" . $strNombreArchivo;
+                            //$strArchivo = "" . $strNombreArchivo;
                             $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
                             // Encabezado
-                            $strNitEmpresa = $arConfiguracionGeneral->getNitEmpresa();
+                            $strNitEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNitEmpresa(),"0",10,"I");
                             $strNombreEmpresa = $arConfiguracionGeneral->getNombreEmpresa();
                             $strTipoPagoSecuencia = $controles['descripcion'];
                             $strFechaCreacion = $form->get('fechaTransmision')->getData();
