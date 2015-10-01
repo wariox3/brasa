@@ -11,13 +11,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuPagoBancoRepository extends EntityRepository {        
     
-    public function listaDql($intNumero = 0) {        
-        $em = $this->getEntityManager();
-        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoPk <> 0";
-        if($intNumero != "" && $intNumero != 0) {
-            $dql .= " AND p.numero = " . $intNumero;
-        }   
-        $dql .= " ORDER BY p.codigoPagoPk DESC";
+    public function listaDQL() {                
+        $dql   = "SELECT pb FROM BrasaRecursoHumanoBundle:RhuPagoBanco pb WHERE pb.codigoPagoBancoPk <> 0";
+        /*if($strCodigoEntidadExamen != "") {
+            $dql .= " AND pe.codigoEntidadExamenFk = " . $strCodigoEntidadExamen;
+        } */    
+        
+        $dql .= " ORDER BY pb.codigoPagoBancoPk";
         return $dql;
     }                            
     

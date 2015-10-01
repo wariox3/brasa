@@ -576,7 +576,23 @@ brs_rhu_pago_examen_detalle:
     
 brs_rhu_pago_examen_detalle_nuevo:
     path:     /rhu/pago/examen/detalle/nuevo/{codigoPagoExamen}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagoExamen:detalleNuevo}    
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoExamen:detalleNuevo}
+    
+brs_rhu_pago_banco_lista:
+    path:     /rhu/pago/banco/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoBanco:lista}
+
+brs_rhu_pago_banco_nuevo:
+    path:     /rhu/pago/banco/nuevo/{codigoPagoBanco}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoBanco:nuevo}
+
+brs_rhu_pago_banco_detalle:
+    path:     /rhu/pago/banco/detalle/{codigoPagoBanco}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoBanco:detalle}
+    
+brs_rhu_pago_banco_detalle_nuevo:
+    path:     /rhu/pago/banco/detalle/nuevo/{codigoPagoBanco}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoBanco:detalleNuevo}    
     
 brs_rhu_disciplinario_lista:
     path:     /rhu/disciplinario/lista
