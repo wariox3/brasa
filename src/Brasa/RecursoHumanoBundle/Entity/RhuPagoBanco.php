@@ -49,6 +49,11 @@ class RhuPagoBanco
     protected $cuentaRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="pagoBancoRel")
+     */
+    protected $pagosBancosDetallesPagoBancoRel;     
+    
+    /**
      * Get codigoPagoBancoPk
      *
      * @return integer
@@ -200,5 +205,46 @@ class RhuPagoBanco
     public function getCuentaRel()
     {
         return $this->cuentaRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosBancosDetallesPagoBancoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add pagosBancosDetallesPagoBancoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesPagoBancoRel
+     *
+     * @return RhuPagoBanco
+     */
+    public function addPagosBancosDetallesPagoBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesPagoBancoRel)
+    {
+        $this->pagosBancosDetallesPagoBancoRel[] = $pagosBancosDetallesPagoBancoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosBancosDetallesPagoBancoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesPagoBancoRel
+     */
+    public function removePagosBancosDetallesPagoBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesPagoBancoRel)
+    {
+        $this->pagosBancosDetallesPagoBancoRel->removeElement($pagosBancosDetallesPagoBancoRel);
+    }
+
+    /**
+     * Get pagosBancosDetallesPagoBancoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosBancosDetallesPagoBancoRel()
+    {
+        return $this->pagosBancosDetallesPagoBancoRel;
     }
 }

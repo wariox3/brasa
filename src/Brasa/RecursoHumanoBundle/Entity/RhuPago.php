@@ -274,7 +274,10 @@ class RhuPago
      */
     protected $creditosPagosPagoRel;    
     
-    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="pagoRel")
+     */
+    protected $pagosBancosDetallePagoRel;    
 
     /**
      * Constructor
@@ -1546,5 +1549,39 @@ class RhuPago
     public function getCreditosPagosPagoRel()
     {
         return $this->creditosPagosPagoRel;
+    }
+
+    /**
+     * Add pagosBancosDetallePagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallePagoRel
+     *
+     * @return RhuPago
+     */
+    public function addPagosBancosDetallePagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallePagoRel)
+    {
+        $this->pagosBancosDetallePagoRel[] = $pagosBancosDetallePagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosBancosDetallePagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallePagoRel
+     */
+    public function removePagosBancosDetallePagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallePagoRel)
+    {
+        $this->pagosBancosDetallePagoRel->removeElement($pagosBancosDetallePagoRel);
+    }
+
+    /**
+     * Get pagosBancosDetallePagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosBancosDetallePagoRel()
+    {
+        return $this->pagosBancosDetallePagoRel;
     }
 }
