@@ -78,6 +78,16 @@ class RhuPagoConcepto
     private $conceptoSalud = 0;        
     
     /**
+     * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20)
+     */     
+    private $codigoCuentaFk;     
+
+    /**
+     * @ORM\Column(name="tipoCuenta", type="bigint")
+     */     
+    private $tipoCuenta = 1;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="pagoConceptoRel")
      */
     protected $pagosDetallesPagoConceptoRel;     
@@ -95,18 +105,17 @@ class RhuPagoConcepto
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicionalSubtipo", mappedBy="pagoConceptoRel")
      */
-    protected $pagosAdicionalesSubtiposPagoConceptoRel;     
+    protected $pagosAdicionalesSubtiposPagoConceptoRel;             
     
     /**
-     * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20)
-     */     
-    private $codigoCuentaFk;     
-
-    /**
-     * @ORM\Column(name="tipoCuenta", type="bigint")
-     */     
-    private $tipoCuenta = 1;
+     * @ORM\OneToMany(targetEntity="RhuLicenciaTipo", mappedBy="pagoConceptoRel")
+     */
+    protected $licenciasTiposPagoConceptoRel;         
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuIncapacidadTipo", mappedBy="pagoConceptoRel")
+     */
+    protected $incapacidadesTiposPagoConceptoRel;    
     
     /**
      * Constructor
@@ -117,6 +126,8 @@ class RhuPagoConcepto
         $this->pagosDetallesSedesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesSubtiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->licenciasTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incapacidadesTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -370,6 +381,102 @@ class RhuPagoConcepto
     }
 
     /**
+     * Set conceptoPension
+     *
+     * @param boolean $conceptoPension
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoPension($conceptoPension)
+    {
+        $this->conceptoPension = $conceptoPension;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoPension
+     *
+     * @return boolean
+     */
+    public function getConceptoPension()
+    {
+        return $this->conceptoPension;
+    }
+
+    /**
+     * Set conceptoSalud
+     *
+     * @param boolean $conceptoSalud
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoSalud($conceptoSalud)
+    {
+        $this->conceptoSalud = $conceptoSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoSalud
+     *
+     * @return boolean
+     */
+    public function getConceptoSalud()
+    {
+        return $this->conceptoSalud;
+    }
+
+    /**
+     * Set codigoCuentaFk
+     *
+     * @param string $codigoCuentaFk
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setCodigoCuentaFk($codigoCuentaFk)
+    {
+        $this->codigoCuentaFk = $codigoCuentaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaFk()
+    {
+        return $this->codigoCuentaFk;
+    }
+
+    /**
+     * Set tipoCuenta
+     *
+     * @param integer $tipoCuenta
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setTipoCuenta($tipoCuenta)
+    {
+        $this->tipoCuenta = $tipoCuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuenta
+     *
+     * @return integer
+     */
+    public function getTipoCuenta()
+    {
+        return $this->tipoCuenta;
+    }
+
+    /**
      * Add pagosDetallesPagoConceptoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoConceptoRel
@@ -506,98 +613,70 @@ class RhuPagoConcepto
     }
 
     /**
-     * Set codigoCuentaFk
+     * Add licenciasTiposPagoConceptoRel
      *
-     * @param string $codigoCuentaFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaTipo $licenciasTiposPagoConceptoRel
      *
      * @return RhuPagoConcepto
      */
-    public function setCodigoCuentaFk($codigoCuentaFk)
+    public function addLicenciasTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicenciaTipo $licenciasTiposPagoConceptoRel)
     {
-        $this->codigoCuentaFk = $codigoCuentaFk;
+        $this->licenciasTiposPagoConceptoRel[] = $licenciasTiposPagoConceptoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoCuentaFk
+     * Remove licenciasTiposPagoConceptoRel
      *
-     * @return string
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaTipo $licenciasTiposPagoConceptoRel
      */
-    public function getCodigoCuentaFk()
+    public function removeLicenciasTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicenciaTipo $licenciasTiposPagoConceptoRel)
     {
-        return $this->codigoCuentaFk;
+        $this->licenciasTiposPagoConceptoRel->removeElement($licenciasTiposPagoConceptoRel);
     }
 
     /**
-     * Set tipoCuenta
+     * Get licenciasTiposPagoConceptoRel
      *
-     * @param integer $tipoCuenta
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLicenciasTiposPagoConceptoRel()
+    {
+        return $this->licenciasTiposPagoConceptoRel;
+    }
+
+    /**
+     * Add incapacidadesTiposPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadesTiposPagoConceptoRel
      *
      * @return RhuPagoConcepto
      */
-    public function setTipoCuenta($tipoCuenta)
+    public function addIncapacidadesTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadesTiposPagoConceptoRel)
     {
-        $this->tipoCuenta = $tipoCuenta;
+        $this->incapacidadesTiposPagoConceptoRel[] = $incapacidadesTiposPagoConceptoRel;
 
         return $this;
     }
 
     /**
-     * Get tipoCuenta
+     * Remove incapacidadesTiposPagoConceptoRel
      *
-     * @return integer
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadesTiposPagoConceptoRel
      */
-    public function getTipoCuenta()
+    public function removeIncapacidadesTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadesTiposPagoConceptoRel)
     {
-        return $this->tipoCuenta;
+        $this->incapacidadesTiposPagoConceptoRel->removeElement($incapacidadesTiposPagoConceptoRel);
     }
 
     /**
-     * Set conceptoPension
+     * Get incapacidadesTiposPagoConceptoRel
      *
-     * @param boolean $conceptoPension
-     *
-     * @return RhuPagoConcepto
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setConceptoPension($conceptoPension)
+    public function getIncapacidadesTiposPagoConceptoRel()
     {
-        $this->conceptoPension = $conceptoPension;
-
-        return $this;
-    }
-
-    /**
-     * Get conceptoPension
-     *
-     * @return boolean
-     */
-    public function getConceptoPension()
-    {
-        return $this->conceptoPension;
-    }
-
-    /**
-     * Set conceptoSalud
-     *
-     * @param boolean $conceptoSalud
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setConceptoSalud($conceptoSalud)
-    {
-        $this->conceptoSalud = $conceptoSalud;
-
-        return $this;
-    }
-
-    /**
-     * Get conceptoSalud
-     *
-     * @return boolean
-     */
-    public function getConceptoSalud()
-    {
-        return $this->conceptoSalud;
+        return $this->incapacidadesTiposPagoConceptoRel;
     }
 }

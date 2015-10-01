@@ -27,27 +27,38 @@ class LicenciasController extends Controller
                     
         $form->handleRequest($request);
         if ($form->isValid()) {            
-            $arLicencia = $form->getData();                                       
-            if($codigoEmpleado != 0) { 
-                $arLicencia->setEmpleadoRel($arEmpleado);                
-            }
-            $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
-            $intDias = $intDias->format('%a');
-            $intDias = $intDias + 1;
-            
-            $arLicencia->setCantidad($intDias);
-            $arLicencia->setCantidadPendiente($intDias);
-            if ($arLicencia->getFechaDesde() > $arLicencia->getFechaHasta()){
-                $objMensaje->Mensaje("error", "La fecha desde no puede ser mayor a la fecha hasta!", $this);
-            } else {
-                $em->persist($arLicencia);
-                $em->flush();                        
-                if($form->get('guardarnuevo')->isClicked()) {
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_licencia', array('codigoCentroCosto' => $codigoCentroCosto)));
+            $arLicencia = $form->getData(); 
+            if($arLicencia->getFechaDesde() <= $arLicencia->getFechaHasta()) {
+                if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arLicencia->getFechaDesde(), $arLicencia->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {                    
+                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arLicencia->getFechaDesde(), $arLicencia->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {
+                        if($arEmpleado->getFechaContrato() <= $arLicencia->getFechaDesde()) {
+                            if($codigoEmpleado != 0) { 
+                                $arLicencia->setEmpleadoRel($arEmpleado);                
+                            }
+                            $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
+                            $intDias = $intDias->format('%a');
+                            $intDias = $intDias + 1;
+
+                            $arLicencia->setCantidad($intDias);                            
+                            $em->persist($arLicencia);
+                            $em->flush();                        
+                            if($form->get('guardarnuevo')->isClicked()) {
+                                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_licencia', array('codigoCentroCosto' => $codigoCentroCosto)));
+                            } else {
+                                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                            }                            
+                        } else {
+                            echo "La fecha de inicio del contrato es mayor a la licencia";
+                        }                        
+                    } else {
+                        echo "existe otra licencia en este rango de fechas";
+                    }                                           
                 } else {
-                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                }    
-            }
+                    echo "Hay incapacidades que se cruzan con la fecha de la licencia";
+                }
+            } else {
+                echo "La fecha desde debe ser inferior o igual a la fecha hasta";
+            }            
         }                
 
         return $this->render('BrasaRecursoHumanoBundle:Licencias:nuevo.html.twig', array(

@@ -40,8 +40,7 @@ class RhuPago
     /**
      * @ORM\Column(name="codigo_programacion_pago_fk", type="integer", nullable=true)
      */    
-    private $codigoProgramacionPagoFk; 
-    
+    private $codigoProgramacionPagoFk;     
     
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
@@ -268,9 +267,7 @@ class RhuPago
     /**
      * @ORM\OneToMany(targetEntity="RhuCreditoPago", mappedBy="pagoRel")
      */
-    protected $creditosPagosPagoRel;
-    
-
+    protected $creditosPagosPagoRel;    
     /**
      * Constructor
      */
@@ -483,6 +480,30 @@ class RhuPago
     public function getFechaDesdePago()
     {
         return $this->fechaDesdePago;
+    }
+
+    /**
+     * Set fechaHastaPago
+     *
+     * @param \DateTime $fechaHastaPago
+     *
+     * @return RhuPago
+     */
+    public function setFechaHastaPago($fechaHastaPago)
+    {
+        $this->fechaHastaPago = $fechaHastaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHastaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaHastaPago()
+    {
+        return $this->fechaHastaPago;
     }
 
     /**
@@ -1493,29 +1514,5 @@ class RhuPago
     public function getCreditosPagosPagoRel()
     {
         return $this->creditosPagosPagoRel;
-    }
-
-    /**
-     * Set fechaHastaPago
-     *
-     * @param \DateTime $fechaHastaPago
-     *
-     * @return RhuPago
-     */
-    public function setFechaHastaPago($fechaHastaPago)
-    {
-        $this->fechaHastaPago = $fechaHastaPago;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaHastaPago
-     *
-     * @return \DateTime
-     */
-    public function getFechaHastaPago()
-    {
-        return $this->fechaHastaPago;
     }
 }

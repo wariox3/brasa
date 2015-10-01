@@ -29,7 +29,24 @@ class RhuLicenciaRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arLicenciasPendientesEmpleado = $query->getResult();
         return $arLicenciasPendientesEmpleado;        
-    }
+    }        
+    
+    public function periodo($fechaDesde, $fechaHasta, $codigoEmpleado = "") {
+        $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $dql = "SELECT licencia FROM BrasaRecursoHumanoBundle:RhuLicencia licencia "
+                . "WHERE (((licencia.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (licencia.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (licencia.fechaDesde >= '$strFechaDesde' AND licencia.fechaDesde <= '$strFechaHasta') "
+                . "OR (licencia.fechaHasta >= '$strFechaHasta' AND licencia.fechaDesde <= '$strFechaDesde')) ";
+        if($codigoEmpleado != "") {
+            $dql = $dql . "AND licencia.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        }
+
+        $objQuery = $em->createQuery($dql);  
+        $arLicencias = $objQuery->getResult();         
+        return $arLicencias;
+    }                    
     
     public function diasLicencia($fechaDesde, $fechaHasta, $codigoEmpleado, $tipo) {
         $em = $this->getEntityManager();
@@ -42,9 +59,9 @@ class RhuLicenciaRepository extends EntityRepository {
                 . "AND licencia.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
 
         if($tipo == 1) {
-            $dql = $dql . "AND (licencia.codigoPagoAdicionalSubtipoFk = 48 OR licencia.codigoPagoAdicionalSubtipoFk = 43)";       
+            $dql = $dql . "AND (licencia.codigoLicenciaTipoFk = 3 OR licencia.codigoLicenciaTipoFk = 4)";       
         } else {
-            $dql = $dql . "AND licencia.codigoPagoAdicionalSubtipoFk <> 48 AND licencia.codigoPagoAdicionalSubtipoFk <> 43";       
+            $dql = $dql . "AND licencia.codigoLicenciaTipoFk <> 3 AND licencia.codigoLicenciaTipoFk <> 4";       
         }
         $objQuery = $em->createQuery($dql);  
         $arLicencias = $objQuery->getResult();         
@@ -69,4 +86,25 @@ class RhuLicenciaRepository extends EntityRepository {
         }
         return $intDiasLicencia;
     }                
+    
+    public function validarFecha($fechaDesde, $fechaHasta, $codigoEmpleado) {
+        $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $boolValidar = FALSE;
+        $dql = "SELECT licencia FROM BrasaRecursoHumanoBundle:RhuLicencia licencia "
+                . "WHERE (((licencia.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (licencia.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (licencia.fechaDesde >= '$strFechaDesde' AND licencia.fechaDesde <= '$strFechaHasta') "
+                . "OR (licencia.fechaHasta >= '$strFechaHasta' AND licencia.fechaDesde <= '$strFechaDesde')) "
+                . "AND licencia.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        $objQuery = $em->createQuery($dql);  
+        $arLicencias = $objQuery->getResult();         
+        if(count($arLicencias) > 0) {
+            $boolValidar = FALSE;
+        } else {
+            $boolValidar = TRUE;
+        }
+
+        return $boolValidar;                     
+    }                            
 }

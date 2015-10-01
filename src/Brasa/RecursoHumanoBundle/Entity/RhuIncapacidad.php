@@ -55,17 +55,7 @@ class RhuIncapacidad
     /**
      * @ORM\Column(name="cantidad", type="integer")
      */
-    private $cantidad = 0;                
-
-    /**
-     * @ORM\Column(name="cantidad_afectada", type="integer")
-     */
-    private $cantidad_afectada = 0;    
-    
-    /**
-     * @ORM\Column(name="cantidad_pendiente", type="integer")
-     */
-    private $cantidadPendiente = 0;    
+    private $cantidad = 0;                       
           
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -83,9 +73,9 @@ class RhuIncapacidad
     private $comentarios;     
     
     /**
-     * @ORM\Column(name="codigo_pago_adicional_subtipo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_incapacidad_tipo_fk", type="integer", nullable=true)
      */    
-    private $codigoPagoAdicionalSubtipoFk;
+    private $codigoIncapacidadTipoFk;
     
     /**     
      * @ORM\Column(name="estado_transcripcion", type="boolean")
@@ -116,12 +106,17 @@ class RhuIncapacidad
      * @ORM\Column(name="vr_saldo", type="float")
      */
     private $vrSaldo = 0;
+         
+    /**
+     * @ORM\Column(name="porcentaje_pago", type="float")
+     */
+    private $porcentajePago = 0;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuPagoAdicionalSubtipo", inversedBy="incapacidadesPagoAdicionalSubtipoRel")
-     * @ORM\JoinColumn(name="codigo_pago_adicional_subtipo_fk", referencedColumnName="codigo_pago_adicional_subtipo_pk")
+     * @ORM\ManyToOne(targetEntity="RhuIncapacidadTipo", inversedBy="incapacidadesIncapacidadTipoRel")
+     * @ORM\JoinColumn(name="codigo_incapacidad_tipo_fk", referencedColumnName="codigo_incapacidad_tipo_pk")
      */
-    protected $pagoAdicionalSubtipoRel;     
+    protected $incapacidadTipoRel;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="incapacidadesCentroCostoRel")
@@ -146,17 +141,11 @@ class RhuIncapacidad
      * @ORM\JoinColumn(name="codigo_incapacidad_diagnostico_fk", referencedColumnName="codigo_incapacidad_diagnostico_pk")
      */
     protected $incapacidadDiagnosticoRel; 
-
-    /**
-     * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="incapacidadRel")
-     */
-    protected $pagosDetallesIncapacidadRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuIncapacidadPagoDetalle", mappedBy="incapacidadRel")
      */
     protected $incapacidadesIncapacidadPagoRel;
-
       
     /**
      * Constructor
@@ -370,54 +359,6 @@ class RhuIncapacidad
     }
 
     /**
-     * Set cantidadAfectada
-     *
-     * @param integer $cantidadAfectada
-     *
-     * @return RhuIncapacidad
-     */
-    public function setCantidadAfectada($cantidadAfectada)
-    {
-        $this->cantidad_afectada = $cantidadAfectada;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadAfectada
-     *
-     * @return integer
-     */
-    public function getCantidadAfectada()
-    {
-        return $this->cantidad_afectada;
-    }
-
-    /**
-     * Set cantidadPendiente
-     *
-     * @param integer $cantidadPendiente
-     *
-     * @return RhuIncapacidad
-     */
-    public function setCantidadPendiente($cantidadPendiente)
-    {
-        $this->cantidadPendiente = $cantidadPendiente;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadPendiente
-     *
-     * @return integer
-     */
-    public function getCantidadPendiente()
-    {
-        return $this->cantidadPendiente;
-    }
-
-    /**
      * Set codigoCentroCostoFk
      *
      * @param integer $codigoCentroCostoFk
@@ -490,27 +431,27 @@ class RhuIncapacidad
     }
 
     /**
-     * Set codigoPagoAdicionalSubtipoFk
+     * Set codigoIncapacidadTipoFk
      *
-     * @param integer $codigoPagoAdicionalSubtipoFk
+     * @param integer $codigoIncapacidadTipoFk
      *
      * @return RhuIncapacidad
      */
-    public function setCodigoPagoAdicionalSubtipoFk($codigoPagoAdicionalSubtipoFk)
+    public function setCodigoIncapacidadTipoFk($codigoIncapacidadTipoFk)
     {
-        $this->codigoPagoAdicionalSubtipoFk = $codigoPagoAdicionalSubtipoFk;
+        $this->codigoIncapacidadTipoFk = $codigoIncapacidadTipoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoPagoAdicionalSubtipoFk
+     * Get codigoIncapacidadTipoFk
      *
      * @return integer
      */
-    public function getCodigoPagoAdicionalSubtipoFk()
+    public function getCodigoIncapacidadTipoFk()
     {
-        return $this->codigoPagoAdicionalSubtipoFk;
+        return $this->codigoIncapacidadTipoFk;
     }
 
     /**
@@ -658,27 +599,51 @@ class RhuIncapacidad
     }
 
     /**
-     * Set pagoAdicionalSubtipoRel
+     * Set porcentajePago
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel
+     * @param float $porcentajePago
      *
      * @return RhuIncapacidad
      */
-    public function setPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel = null)
+    public function setPorcentajePago($porcentajePago)
     {
-        $this->pagoAdicionalSubtipoRel = $pagoAdicionalSubtipoRel;
+        $this->porcentajePago = $porcentajePago;
 
         return $this;
     }
 
     /**
-     * Get pagoAdicionalSubtipoRel
+     * Get porcentajePago
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo
+     * @return float
      */
-    public function getPagoAdicionalSubtipoRel()
+    public function getPorcentajePago()
     {
-        return $this->pagoAdicionalSubtipoRel;
+        return $this->porcentajePago;
+    }
+
+    /**
+     * Set incapacidadTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadTipoRel
+     *
+     * @return RhuIncapacidad
+     */
+    public function setIncapacidadTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadTipoRel = null)
+    {
+        $this->incapacidadTipoRel = $incapacidadTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidadTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo
+     */
+    public function getIncapacidadTipoRel()
+    {
+        return $this->incapacidadTipoRel;
     }
 
     /**

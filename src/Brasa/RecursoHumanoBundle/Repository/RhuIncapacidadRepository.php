@@ -99,7 +99,7 @@ class RhuIncapacidadRepository extends EntityRepository {
                 . "OR (incapacidad.fechaDesde >= '$strFechaDesde' AND incapacidad.fechaDesde <= '$strFechaHasta') "
                 . "OR (incapacidad.fechaHasta >= '$strFechaHasta' AND incapacidad.fechaDesde <= '$strFechaDesde')) "
                 . "AND incapacidad.codigoEmpleadoFk = '" . $codigoEmpleado . "' "
-                . "AND incapacidad.codigoPagoAdicionalSubtipoFk = " . $tipo;
+                . "AND incapacidad.codigoIncapacidadTipoFk = " . $tipo;
         $objQuery = $em->createQuery($dql);  
         $arIncapacidades = $objQuery->getResult();         
         $intDiasIncapacidad = 0;
@@ -123,4 +123,43 @@ class RhuIncapacidadRepository extends EntityRepository {
         }
         return $intDiasIncapacidad;                     
     }                    
+
+    public function validarFecha($fechaDesde, $fechaHasta, $codigoEmpleado) {
+        $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $boolValidar = FALSE;
+        $dql = "SELECT incapacidad FROM BrasaRecursoHumanoBundle:RhuIncapacidad incapacidad "
+                . "WHERE (((incapacidad.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (incapacidad.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (incapacidad.fechaDesde >= '$strFechaDesde' AND incapacidad.fechaDesde <= '$strFechaHasta') "
+                . "OR (incapacidad.fechaHasta >= '$strFechaHasta' AND incapacidad.fechaDesde <= '$strFechaDesde')) "
+                . "AND incapacidad.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        $objQuery = $em->createQuery($dql);  
+        $arIncapacidades = $objQuery->getResult();         
+        if(count($arIncapacidades) > 0) {
+            $boolValidar = FALSE;
+        } else {
+            $boolValidar = TRUE;
+        }
+
+        return $boolValidar;                     
+    }      
+    
+    public function periodo($fechaDesde, $fechaHasta, $codigoEmpleado = "") {
+        $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $dql = "SELECT incapacidad FROM BrasaRecursoHumanoBundle:RhuIncapacidad incapacidad "
+                . "WHERE (((incapacidad.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (incapacidad.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (incapacidad.fechaDesde >= '$strFechaDesde' AND incapacidad.fechaDesde <= '$strFechaHasta') "
+                . "OR (incapacidad.fechaHasta >= '$strFechaHasta' AND incapacidad.fechaDesde <= '$strFechaDesde')) ";
+        if($codigoEmpleado != "") {
+            $dql = $dql . "AND incapacidad.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        }
+
+        $objQuery = $em->createQuery($dql);  
+        $arIncapacidades = $objQuery->getResult();         
+        return $arIncapacidades;
+    }    
+    
 }

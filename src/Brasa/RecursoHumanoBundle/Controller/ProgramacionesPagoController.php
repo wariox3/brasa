@@ -198,7 +198,7 @@ class ProgramacionesPagoController extends Controller
             $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
             $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->pendientesCentroCosto($arProgramacionPago->getCodigoCentroCostoFk());
             $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
-            $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->pendientesCentroCosto($arProgramacionPago->getCodigoCentroCostoFk());
+            $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                       
         }
 
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));
@@ -513,7 +513,40 @@ class ProgramacionesPagoController extends Controller
 
             $objPHPExcel->getActiveSheet()->setTitle('Pagos');
             $objPHPExcel->setActiveSheetIndex(0);
+            $objPHPExcel->createSheet(2)->setTitle('PagosDetalle')
+                    ->setCellValue('A1', 'Codigo')
+                    ->setCellValue('B1', 'Codigo')
+                    ->setCellValue('C1', 'VrPago')
+                    ->setCellValue('D1', 'Op')
+                    ->setCellValue('E1', 'Op')
+                    ->setCellValue('F1', 'VrHora')
+                    ->setCellValue('G1', 'VrDia')
+                    ->setCellValue('H1', 'VrTotal')
+                    ->setCellValue('I1', 'Horas')
+                    ->setCellValue('J1', 'Dias')
+                    ->setCellValue('K1', 'Porcentaje')                    
+                    ->setCellValue('L1', 'Ingreso base');
 
+            $i = 2;
+            $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+            $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->pagosDetallesProgramacionPago($codigoProgramacionPago);            
+            foreach ($arPagoDetalles as $arPagoDetalle) {
+                $objPHPExcel->setActiveSheetIndex(1)
+                        ->setCellValue('A' . $i, $arPagoDetalle->getCodigoPagoDetallePk())
+                        ->setCellValue('B' . $i, $arPagoDetalle->getPagoConceptoRel()->getNombre())
+                        ->setCellValue('C' . $i, $arPagoDetalle->getVrPago())
+                        ->setCellValue('D' . $i, $arPagoDetalle->getOperacion())
+                        ->setCellValue('E' . $i, $arPagoDetalle->getVrPagoOperado())
+                        ->setCellValue('F' . $i, $arPagoDetalle->getVrHora())
+                        ->setCellValue('G' . $i, $arPagoDetalle->getVrDia())
+                        ->setCellValue('H' . $i, $arPagoDetalle->getVrTotal())
+                        ->setCellValue('I' . $i, $arPagoDetalle->getNumeroHoras())
+                        ->setCellValue('J' . $i, $arPagoDetalle->getNumeroDias())
+                        ->setCellValue('K' . $i, $arPagoDetalle->getPorcentajeAplicado())
+                        ->setCellValue('L' . $i, $arPagoDetalle->getVrIngresoBaseCotizacion());
+                $i++;
+            }            
+            
             // Redirect output to a client’s web browser (Excel2007)
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="Pagos.xlsx"');

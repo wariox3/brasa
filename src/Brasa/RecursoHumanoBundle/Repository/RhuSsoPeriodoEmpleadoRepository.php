@@ -94,11 +94,11 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $arPeriodoEmpleadoActualizar->setVrSuplementario($floSuplementario);
             $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicencia($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 2);
             $arPeriodoEmpleadoActualizar->setDiasLicencia($intDiasLicencia);          
-            $intDiasIncapacidadGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidad($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 28);
+            $intDiasIncapacidadGeneral = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidad($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 1);
             $arPeriodoEmpleadoActualizar->setDiasIncapacidadGeneral($intDiasIncapacidadGeneral);
             $intDiasLicenciaMaternidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicencia($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 1);
             $arPeriodoEmpleadoActualizar->setDiasLicenciaMaternidad($intDiasLicenciaMaternidad);
-            $intDiasIncapacidadLaboral = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidad($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 29);
+            $intDiasIncapacidadLaboral = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidad($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), 2);
             $arPeriodoEmpleadoActualizar->setDiasIncapacidadLaboral($intDiasIncapacidadLaboral);                        
             $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->diasVacacionesDisfrute($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk());
             $arPeriodoEmpleadoActualizar->setDiasVacaciones($intDiasVacaciones);            

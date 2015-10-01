@@ -87,6 +87,9 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setCodigoEntidadSaludPertenece($arEmpleado->getEntidadSaludRel()->getCodigoInterface());
             $arAporte->setCodigoEntidadCajaPertenece($arEmpleado->getEntidadCajaRel()->getCodigoInterface());
             
+            if($arPeriodoEmpleado->getCodigoEmpleadoFk() == 776) {
+                echo "";
+            }            
             //Dias
             $intDiasLicenciaNoRemunerada = $arPeriodoEmpleado->getDiasLicencia();
             $intDiasIncapacidades = $arPeriodoEmpleado->getDiasIncapacidadGeneral() + $arPeriodoEmpleado->getDiasIncapacidadLaboral();

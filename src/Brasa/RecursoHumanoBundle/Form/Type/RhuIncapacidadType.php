@@ -19,13 +19,11 @@ class RhuIncapacidadType extends AbstractType
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
                 'required' => true))   
-            ->add('pagoAdicionalSubtipoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo',
+            ->add('incapacidadTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuIncapacidadTipo',
                 'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('st')
-                    ->where('st.codigoPagoAdicionalTipoFk = :codigoPagoTipo')
-                    ->setParameter('codigoPagoTipo', 6)
-                    ->orderBy('st.nombre', 'ASC');},
+                    return $er->createQueryBuilder('it')
+                    ->orderBy('it.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true)) 
             ->add('incapacidadDiagnosticoRel', 'entity', array(

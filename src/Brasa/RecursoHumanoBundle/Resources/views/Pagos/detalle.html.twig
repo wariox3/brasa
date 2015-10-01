@@ -102,8 +102,8 @@
                             <th style="text-align: right">VR. HORA</th>
                             <th style="text-align: right">VR. PAGO</th>
                             <th style="text-align: right">OP</th>
-                            <th style="text-align: right">VR. NETO</th>
-                            <th style="text-align: right">IBC</th>
+                            <th style="text-align: right">VR. NETO</th>                            
+                            <th style="text-align: right">ING. PRESTACIONAL</th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arPagoDetalles in arPagoDetalles %}
@@ -120,7 +120,7 @@
                             <td style="text-align: right">{{ arPagoDetalles.vrHora | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.vrPago | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.operacion | number_format(0, '.', ',') }}</td>
-                            <td style="text-align: right">{{ arPagoDetalles.vrPagoOperado | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPagoDetalles.vrPagoOperado | number_format(0, '.', ',') }}</td>                            
                             <td style="text-align: right">{{ arPagoDetalles.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoDetalles.codigoPagoDetallePk }}" /></td>
                         </tr>

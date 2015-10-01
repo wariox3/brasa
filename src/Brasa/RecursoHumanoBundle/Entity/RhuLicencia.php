@@ -18,6 +18,11 @@ class RhuLicencia
     private $codigoLicenciaPk;                    
     
     /**
+     * @ORM\Column(name="codigo_licencia_tipo_fk", type="integer")
+     */    
+    private $codigoLicenciaTipoFk;     
+    
+    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;    
@@ -40,17 +45,7 @@ class RhuLicencia
     /**
      * @ORM\Column(name="cantidad", type="float")
      */
-    private $cantidad = 0;
-    
-    /**
-     * @ORM\Column(name="cantidad_pendiente", type="float")
-     */
-    private $cantidadPendiente = 0;
-    
-    /**
-     * @ORM\Column(name="cantidad_afectada", type="float")
-     */
-    private $cantidadAfectada = 0;
+    private $cantidad = 0;   
         
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -65,23 +60,13 @@ class RhuLicencia
     /**     
      * @ORM\Column(name="afecta_transporte", type="boolean")
      */    
-    private $afectaTransporte = 0;     
-    
-    /**     
-     * @ORM\Column(name="estado_cerrada", type="boolean")
-     */    
-    private $estadoCerrada = 0;    
-    
+    private $afectaTransporte = 0;                
+
     /**
-     * @ORM\Column(name="codigo_pago_adicional_subtipo_fk", type="integer", nullable=true)
-     */    
-    private $codigoPagoAdicionalSubtipoFk;        
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuPagoAdicionalSubtipo", inversedBy="licenciasPagoAdicionalSubtipoRel")
-     * @ORM\JoinColumn(name="codigo_pago_adicional_subtipo_fk", referencedColumnName="codigo_pago_adicional_subtipo_pk")
+     * @ORM\ManyToOne(targetEntity="RhuLicenciaTipo", inversedBy="licenciasLicenciaTipoRel")
+     * @ORM\JoinColumn(name="codigo_licencia_tipo_fk", referencedColumnName="codigo_licencia_tipo_pk")
      */
-    protected $pagoAdicionalSubtipoRel;     
+    protected $licenciaTipoRel;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="licenciasCentroCostoRel")
@@ -95,10 +80,6 @@ class RhuLicencia
      */
     protected $empleadoRel;    
     
-    /**
-     * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="licenciaRel")
-     */
-    protected $pagosDetallesLicenciaRel;    
 
     /**
      * Get codigoLicenciaPk
@@ -108,6 +89,30 @@ class RhuLicencia
     public function getCodigoLicenciaPk()
     {
         return $this->codigoLicenciaPk;
+    }
+
+    /**
+     * Set codigoLicenciaTipoFk
+     *
+     * @param integer $codigoLicenciaTipoFk
+     *
+     * @return RhuLicencia
+     */
+    public function setCodigoLicenciaTipoFk($codigoLicenciaTipoFk)
+    {
+        $this->codigoLicenciaTipoFk = $codigoLicenciaTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoLicenciaTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoLicenciaTipoFk()
+    {
+        return $this->codigoLicenciaTipoFk;
     }
 
     /**
@@ -231,54 +236,6 @@ class RhuLicencia
     }
 
     /**
-     * Set cantidadPendiente
-     *
-     * @param float $cantidadPendiente
-     *
-     * @return RhuLicencia
-     */
-    public function setCantidadPendiente($cantidadPendiente)
-    {
-        $this->cantidadPendiente = $cantidadPendiente;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadPendiente
-     *
-     * @return float
-     */
-    public function getCantidadPendiente()
-    {
-        return $this->cantidadPendiente;
-    }
-
-    /**
-     * Set cantidadAfectada
-     *
-     * @param float $cantidadAfectada
-     *
-     * @return RhuLicencia
-     */
-    public function setCantidadAfectada($cantidadAfectada)
-    {
-        $this->cantidadAfectada = $cantidadAfectada;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadAfectada
-     *
-     * @return float
-     */
-    public function getCantidadAfectada()
-    {
-        return $this->cantidadAfectada;
-    }
-
-    /**
      * Set codigoCentroCostoFk
      *
      * @param integer $codigoCentroCostoFk
@@ -351,75 +308,27 @@ class RhuLicencia
     }
 
     /**
-     * Set estadoCerrada
+     * Set licenciaTipoRel
      *
-     * @param boolean $estadoCerrada
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaTipo $licenciaTipoRel
      *
      * @return RhuLicencia
      */
-    public function setEstadoCerrada($estadoCerrada)
+    public function setLicenciaTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicenciaTipo $licenciaTipoRel = null)
     {
-        $this->estadoCerrada = $estadoCerrada;
+        $this->licenciaTipoRel = $licenciaTipoRel;
 
         return $this;
     }
 
     /**
-     * Get estadoCerrada
+     * Get licenciaTipoRel
      *
-     * @return boolean
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaTipo
      */
-    public function getEstadoCerrada()
+    public function getLicenciaTipoRel()
     {
-        return $this->estadoCerrada;
-    }
-
-    /**
-     * Set codigoPagoAdicionalSubtipoFk
-     *
-     * @param integer $codigoPagoAdicionalSubtipoFk
-     *
-     * @return RhuLicencia
-     */
-    public function setCodigoPagoAdicionalSubtipoFk($codigoPagoAdicionalSubtipoFk)
-    {
-        $this->codigoPagoAdicionalSubtipoFk = $codigoPagoAdicionalSubtipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPagoAdicionalSubtipoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPagoAdicionalSubtipoFk()
-    {
-        return $this->codigoPagoAdicionalSubtipoFk;
-    }
-
-    /**
-     * Set pagoAdicionalSubtipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel
-     *
-     * @return RhuLicencia
-     */
-    public function setPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel = null)
-    {
-        $this->pagoAdicionalSubtipoRel = $pagoAdicionalSubtipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoAdicionalSubtipoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo
-     */
-    public function getPagoAdicionalSubtipoRel()
-    {
-        return $this->pagoAdicionalSubtipoRel;
+        return $this->licenciaTipoRel;
     }
 
     /**
@@ -468,46 +377,5 @@ class RhuLicencia
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->pagosDetallesLicenciaRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add pagosDetallesLicenciaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesLicenciaRel
-     *
-     * @return RhuLicencia
-     */
-    public function addPagosDetallesLicenciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesLicenciaRel)
-    {
-        $this->pagosDetallesLicenciaRel[] = $pagosDetallesLicenciaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove pagosDetallesLicenciaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesLicenciaRel
-     */
-    public function removePagosDetallesLicenciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesLicenciaRel)
-    {
-        $this->pagosDetallesLicenciaRel->removeElement($pagosDetallesLicenciaRel);
-    }
-
-    /**
-     * Get pagosDetallesLicenciaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPagosDetallesLicenciaRel()
-    {
-        return $this->pagosDetallesLicenciaRel;
     }
 }

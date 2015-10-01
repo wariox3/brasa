@@ -25,17 +25,7 @@ class RhuPagoDetalle
     /**
      * @ORM\Column(name="codigo_credito_fk", type="integer", nullable=true)
      */    
-    private $codigoCreditoFk;
-    
-    /**
-     * @ORM\Column(name="codigo_incapacidad_fk", type="integer", nullable=true)
-     */    
-    private $codigoIncapacidadFk;
-    
-    /**
-     * @ORM\Column(name="codigo_licencia_fk", type="integer", nullable=true)
-     */    
-    private $codigoLicenciaFk;    
+    private $codigoCreditoFk;         
     
     /**
      * @ORM\Column(name="vr_pago", type="float")
@@ -127,18 +117,6 @@ class RhuPagoDetalle
      */
     protected $creditoRel;
     
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuIncapacidad", inversedBy="pagosDetallesIncapacidadRel")
-     * @ORM\JoinColumn(name="codigo_incapacidad_fk", referencedColumnName="codigo_incapacidad_pk")
-     */
-    protected $incapacidadRel;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuLicencia", inversedBy="pagosDetallesLicenciaRel")
-     * @ORM\JoinColumn(name="codigo_licencia_fk", referencedColumnName="codigo_licencia_pk")
-     */
-    protected $licenciaRel;    
-    
 
 
     /**
@@ -197,54 +175,6 @@ class RhuPagoDetalle
     public function getCodigoCreditoFk()
     {
         return $this->codigoCreditoFk;
-    }
-
-    /**
-     * Set codigoIncapacidadFk
-     *
-     * @param integer $codigoIncapacidadFk
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setCodigoIncapacidadFk($codigoIncapacidadFk)
-    {
-        $this->codigoIncapacidadFk = $codigoIncapacidadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoIncapacidadFk
-     *
-     * @return integer
-     */
-    public function getCodigoIncapacidadFk()
-    {
-        return $this->codigoIncapacidadFk;
-    }
-
-    /**
-     * Set codigoLicenciaFk
-     *
-     * @param integer $codigoLicenciaFk
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setCodigoLicenciaFk($codigoLicenciaFk)
-    {
-        $this->codigoLicenciaFk = $codigoLicenciaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoLicenciaFk
-     *
-     * @return integer
-     */
-    public function getCodigoLicenciaFk()
-    {
-        return $this->codigoLicenciaFk;
     }
 
     /**
@@ -389,6 +319,30 @@ class RhuPagoDetalle
     public function getPorcentajeAplicado()
     {
         return $this->porcentajeAplicado;
+    }
+
+    /**
+     * Set numeroDias
+     *
+     * @param float $numeroDias
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setNumeroDias($numeroDias)
+    {
+        $this->numeroDias = $numeroDias;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroDias
+     *
+     * @return float
+     */
+    public function getNumeroDias()
+    {
+        return $this->numeroDias;
     }
 
     /**
@@ -629,77 +583,5 @@ class RhuPagoDetalle
     public function getCreditoRel()
     {
         return $this->creditoRel;
-    }
-
-    /**
-     * Set incapacidadRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadRel
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setIncapacidadRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadRel = null)
-    {
-        $this->incapacidadRel = $incapacidadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get incapacidadRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad
-     */
-    public function getIncapacidadRel()
-    {
-        return $this->incapacidadRel;
-    }
-
-    /**
-     * Set licenciaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciaRel
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setLicenciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciaRel = null)
-    {
-        $this->licenciaRel = $licenciaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get licenciaRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuLicencia
-     */
-    public function getLicenciaRel()
-    {
-        return $this->licenciaRel;
-    }
-
-    /**
-     * Set numeroDias
-     *
-     * @param float $numeroDias
-     *
-     * @return RhuPagoDetalle
-     */
-    public function setNumeroDias($numeroDias)
-    {
-        $this->numeroDias = $numeroDias;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroDias
-     *
-     * @return float
-     */
-    public function getNumeroDias()
-    {
-        return $this->numeroDias;
     }
 }

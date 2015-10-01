@@ -19,13 +19,11 @@ class RhuLicenciaType extends AbstractType
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
                 'required' => true))    
-            ->add('pagoAdicionalSubtipoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo',
+            ->add('licenciaTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuLicenciaTipo',
                 'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('st')
-                    ->where('st.codigoPagoAdicionalTipoFk = :codigoPagoTipo')
-                    ->setParameter('codigoPagoTipo', 5)
-                    ->orderBy('st.nombre', 'ASC');},
+                    return $er->createQueryBuilder('lt')
+                    ->orderBy('lt.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                            
             ->add('fechaDesde', 'date')                

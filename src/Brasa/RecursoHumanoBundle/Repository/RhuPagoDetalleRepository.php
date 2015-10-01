@@ -10,14 +10,16 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuPagoDetalleRepository extends EntityRepository {
-    /*public function pagosDetallesProgramacionPago($codigoProgramacionPago) {
+    
+    public function pagosDetallesProgramacionPago($codigoProgramacionPago) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
                 . "WHERE p.codigoProgramacionPagoFk = " . $codigoProgramacionPago;
         $query = $em->createQuery($dql);
         $arPagosDetalles = $query->getResult();                
         return $arPagosDetalles;
-    }*/
+    }
+    
     public function devuelveRetencionFuenteEmpleadoFecha($codigoEmpleado, $strFechaCertificado) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pd.vrPago) as Retencion FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "

@@ -75,62 +75,63 @@ class IncapacidadesController extends Controller
             $arIncapacidad->setFechaDesde(new \DateTime('now'));
             $arIncapacidad->setFechaHasta(new \DateTime('now'));    
             $arIncapacidad->setCentroCostoRel($arCentroCosto);            
-        }
-        
+        }        
 
-        $form = $this->createForm(new RhuIncapacidadType(), $arIncapacidad); 
-                    
+        $form = $this->createForm(new RhuIncapacidadType(), $arIncapacidad);                     
         $form->handleRequest($request);
         if ($form->isValid()) {
-            
             $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
-            $arrControles = $request->request->All();
+            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);            
             $arIncapacidad = $form->getData();                          
-            $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
-            $intDias = $intDias->format('%a');
-            $intDias = $intDias + 1;
-            
-            $arIncapacidad->setCantidad($intDias);
-            $arIncapacidad->setCantidadPendiente($intDias);
-           
+            if($arIncapacidad->getFechaDesde() <= $arIncapacidad->getFechaHasta()) {
+                if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {                    
+                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {
+                        $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
+                        $intDias = $intDias->format('%a');
+                        $intDias = $intDias + 1;
+                        $arIncapacidad->setCantidad($intDias);                        
+                        if($codigoEmpleado != 0) { 
+                            $arIncapacidad->setEmpleadoRel($arEmpleado);                
+                        }
+                        $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
+                        $floVrIncapacidad = 0;
+                        $douVrDia = $arEmpleado->getVrSalario() / 30;
+                        $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;
+                        $douPorcentajePago = $arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel()->getPorPorcentaje();
+                        $arIncapacidad->setPorcentajePago($douPorcentajePago);
+                        if($arIncapacidad->getIncapacidadTipoRel()->getCodigoIncapacidadTipoPk() == 1) {
+                            if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
+                                $floVrIncapacidad = $intDias * $douVrDia;                    
+                            }
+                            if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
+                                $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
+                            }
+                            if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
+                                $floVrIncapacidad = $intDias * $douVrDia;
+                                $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                    
+                            }
+                        } else {
+                            $floVrIncapacidad = $intDias * $douVrDia;
+                            $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                
+                        }     
+                        $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
+                        $arIncapacidad->setVrSaldo($floVrIncapacidad);
+                        $em->persist($arIncapacidad);
+                        $em->flush();
 
-            if($codigoEmpleado != 0) { 
-                $arIncapacidad->setEmpleadoRel($arEmpleado);                
-            }
-            $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
-            $floVrIncapacidad = 0;
-            $douVrDia = $arEmpleado->getVrSalario() / 30;
-            $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;
-            $intTipo = $arIncapacidad->getPagoAdicionalSubtipoRel()->getCodigoPagoAdicionalSubtipoPk();
-            if($intTipo == 28) {
-                if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
-                    $floVrIncapacidad = $intDias * $douVrDia;                    
-                }
-                if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
-                    $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
-                }
-                if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
-                    $floVrIncapacidad = $intDias * $douVrDia;
-                    $floVrIncapacidad = ($floVrIncapacidad * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;                    
-                }
-            } else {
-                $floVrIncapacidad = $intDias * $douVrDia;
-                $floVrIncapacidad = ($floVrIncapacidad * $arIncapacidad->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;                
-            }     
-            $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
-            $arIncapacidad->setVrSaldo($floVrIncapacidad);
-            if ($arIncapacidad->getFechaDesde() > $arIncapacidad->getFechaHasta()){
-                $objMensaje->Mensaje("error", "La fecha desde no puede ser mayor a la fecha hasta!", $this);
-            } else {
-                $em->persist($arIncapacidad);
-                $em->flush();
-            
-                if($form->get('guardarnuevo')->isClicked()) {                
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_incapacidad', array('codigoCentroCosto' => $codigoCentroCosto)));
+                        if($form->get('guardarnuevo')->isClicked()) {                
+                            return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_incapacidad', array('codigoCentroCosto' => $codigoCentroCosto)));
+                        } else {
+                            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                        }                        
+                    } else {
+                        echo "Existe una licencia en este periodo de fechas";
+                    }                                                           
                 } else {
-                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                }
+                    echo "Existe otra incapaciad del empleado en esta fecha";
+                }               
+            } else {
+                echo "La fecha desde debe ser inferior o igual a la fecha hasta de la incapacidad";
             }
             
         }                
