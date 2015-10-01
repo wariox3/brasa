@@ -50,7 +50,7 @@ class ProcesoContabilizarPagoController extends Controller
                                     //echo $arPagoDetalle->getCodigoPagoDetallePk() . "[" . $arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk() . "]" . "<br/>";
                                 }                              
                                 $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('281505');                            
+                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('250501');                            
                                 $arRegistro->setComprobanteContableRel($arComprobanteContable);
                                 $arRegistro->setCentroCostosRel($arCentroCosto);
                                 $arRegistro->setCuentaRel($arCuenta);

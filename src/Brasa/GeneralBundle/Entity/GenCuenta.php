@@ -44,6 +44,24 @@ class GenCuenta
      */
     protected $bancoRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar", mappedBy="cuentaRel")
+     */
+    protected $rhuPagosExportarCuentaRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco", mappedBy="cuentaRel")
+     */
+    protected $rhuPagosBancosCuentaRel;    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rhuPagosExportarCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuPagosBancosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoCuentaPk
@@ -77,6 +95,30 @@ class GenCuenta
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set cuenta
+     *
+     * @param string $cuenta
+     *
+     * @return GenCuenta
+     */
+    public function setCuenta($cuenta)
+    {
+        $this->cuenta = $cuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get cuenta
+     *
+     * @return string
+     */
+    public function getCuenta()
+    {
+        return $this->cuenta;
     }
 
     /**
@@ -152,26 +194,70 @@ class GenCuenta
     }
 
     /**
-     * Set cuenta
+     * Add rhuPagosExportarCuentaRel
      *
-     * @param string $cuenta
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar $rhuPagosExportarCuentaRel
      *
      * @return GenCuenta
      */
-    public function setCuenta($cuenta)
+    public function addRhuPagosExportarCuentaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar $rhuPagosExportarCuentaRel)
     {
-        $this->cuenta = $cuenta;
+        $this->rhuPagosExportarCuentaRel[] = $rhuPagosExportarCuentaRel;
 
         return $this;
     }
 
     /**
-     * Get cuenta
+     * Remove rhuPagosExportarCuentaRel
      *
-     * @return string
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar $rhuPagosExportarCuentaRel
      */
-    public function getCuenta()
+    public function removeRhuPagosExportarCuentaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar $rhuPagosExportarCuentaRel)
     {
-        return $this->cuenta;
+        $this->rhuPagosExportarCuentaRel->removeElement($rhuPagosExportarCuentaRel);
+    }
+
+    /**
+     * Get rhuPagosExportarCuentaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuPagosExportarCuentaRel()
+    {
+        return $this->rhuPagosExportarCuentaRel;
+    }
+
+    /**
+     * Add rhuPagosBancosCuentaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco $rhuPagosBancosCuentaRel
+     *
+     * @return GenCuenta
+     */
+    public function addRhuPagosBancosCuentaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco $rhuPagosBancosCuentaRel)
+    {
+        $this->rhuPagosBancosCuentaRel[] = $rhuPagosBancosCuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuPagosBancosCuentaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco $rhuPagosBancosCuentaRel
+     */
+    public function removeRhuPagosBancosCuentaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco $rhuPagosBancosCuentaRel)
+    {
+        $this->rhuPagosBancosCuentaRel->removeElement($rhuPagosBancosCuentaRel);
+    }
+
+    /**
+     * Get rhuPagosBancosCuentaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuPagosBancosCuentaRel()
+    {
+        return $this->rhuPagosBancosCuentaRel;
     }
 }

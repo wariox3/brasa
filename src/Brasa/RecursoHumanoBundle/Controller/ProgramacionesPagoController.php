@@ -491,8 +491,9 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('F1', 'Salario')
                         ->setCellValue('G1', 'Devengado')
                         ->setCellValue('H1', 'Deducciones')
-                        ->setCellValue('I1', 'Neto');
-
+                        ->setCellValue('I1', 'Neto')
+                        ->setCellValue('J1', 'IBP')
+                        ->setCellValue('K1', 'IBC');
             $i = 2;
 
             $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -507,7 +508,9 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('F' . $i, $arPago->getVrSalario())
                         ->setCellValue('G' . $i, $arPago->getVrDevengado())
                         ->setCellValue('H' . $i, $arPago->getVrDeducciones())
-                        ->setCellValue('I' . $i, $arPago->getVrNeto());
+                        ->setCellValue('I' . $i, $arPago->getVrNeto())
+                        ->setCellValue('J' . $i, $arPago->getVrIngresoBasePrestacion())
+                        ->setCellValue('K' . $i, $arPago->getVrIngresoBaseCotizacion());
                 $i++;
             }
 
@@ -525,7 +528,8 @@ class ProgramacionesPagoController extends Controller
                     ->setCellValue('I1', 'Horas')
                     ->setCellValue('J1', 'Dias')
                     ->setCellValue('K1', 'Porcentaje')                    
-                    ->setCellValue('L1', 'Ingreso base');
+                    ->setCellValue('L1', 'IBC')
+                    ->setCellValue('M1', 'IBP');
 
             $i = 2;
             $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
@@ -543,7 +547,8 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('I' . $i, $arPagoDetalle->getNumeroHoras())
                         ->setCellValue('J' . $i, $arPagoDetalle->getNumeroDias())
                         ->setCellValue('K' . $i, $arPagoDetalle->getPorcentajeAplicado())
-                        ->setCellValue('L' . $i, $arPagoDetalle->getVrIngresoBaseCotizacion());
+                        ->setCellValue('L' . $i, $arPagoDetalle->getVrIngresoBasePrestacion())
+                        ->setCellValue('M' . $i, $arPagoDetalle->getVrIngresoBaseCotizacion());
                 $i++;
             }            
             

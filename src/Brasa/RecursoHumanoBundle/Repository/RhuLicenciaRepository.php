@@ -107,4 +107,25 @@ class RhuLicenciaRepository extends EntityRepository {
 
         return $boolValidar;                     
     }                            
+    
+    /*
+     * Se usa para verificar si al cierre de un cotrato no hay licencias pendientes
+     */
+    public function validarCierreContrato($fechaHasta, $codigoEmpleado) {
+        $em = $this->getEntityManager();        
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $boolValidar = FALSE;
+        $dql = "SELECT licencia FROM BrasaRecursoHumanoBundle:RhuLicencia licencia "
+                . "WHERE  licencia.fechaHasta > '$strFechaHasta' "
+                . "AND licencia.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        $objQuery = $em->createQuery($dql);  
+        $arLicencias = $objQuery->getResult();         
+        if(count($arLicencias) > 0) {
+            $boolValidar = FALSE;
+        } else {
+            $boolValidar = TRUE;
+        }
+
+        return $boolValidar;                     
+    }     
 }

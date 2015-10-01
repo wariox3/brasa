@@ -108,24 +108,24 @@ class RhuLiquidacion
     private $fechaUltimoPago;    
 
     /**
-     * @ORM\Column(name="vr_ingreso_base_cotizacion", type="float")
+     * @ORM\Column(name="vr_ingreso_base_prestacion", type="float")
      */
-    private $VrIngresoBaseCotizacion = 0;     
+    private $VrIngresoBasePrestacion = 0;     
     
     /**
-     * @ORM\Column(name="vr_ingreso_base_cotizacion_adicional", type="float")
+     * @ORM\Column(name="vr_ingreso_base_prestacion_adicional", type="float")
      */
-    private $VrIngresoBaseCotizacionAdicional = 0;    
+    private $VrIngresoBasePrestacionAdicional = 0;    
 
     /**
-     * @ORM\Column(name="vr_ingreso_base_cotizacion_total", type="float")
+     * @ORM\Column(name="vr_ingreso_base_prestacion_total", type="float")
      */
-    private $VrIngresoBaseCotizacionTotal = 0;     
+    private $VrIngresoBasePrestacionTotal = 0;     
     
     /**
-     * @ORM\Column(name="dias_adicionales_ibc", type="integer")
+     * @ORM\Column(name="dias_adicionales_ibp", type="integer")
      */    
-    private $diasAdicionalesIBC = 0;            
+    private $diasAdicionalesIBP = 0;            
     
     /**
      * @ORM\Column(name="vr_base_prestaciones", type="float")
@@ -229,8 +229,6 @@ class RhuLiquidacion
      * @ORM\OneToMany(targetEntity="RhuLiquidacionDeduccion", mappedBy="liquidacionRel")
      */
     protected $liquidacionesDeduccionesLiquidacionRel;  
-
-
 
     /**
      * Constructor
@@ -491,6 +489,30 @@ class RhuLiquidacion
     }
 
     /**
+     * Set vrDeduccionPrima
+     *
+     * @param float $vrDeduccionPrima
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrDeduccionPrima($vrDeduccionPrima)
+    {
+        $this->VrDeduccionPrima = $vrDeduccionPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDeduccionPrima
+     *
+     * @return float
+     */
+    public function getVrDeduccionPrima()
+    {
+        return $this->VrDeduccionPrima;
+    }
+
+    /**
      * Set vrVacaciones
      *
      * @param float $vrVacaciones
@@ -659,99 +681,99 @@ class RhuLiquidacion
     }
 
     /**
-     * Set vrIngresoBaseCotizacion
+     * Set vrIngresoBasePrestacion
      *
-     * @param float $vrIngresoBaseCotizacion
+     * @param float $vrIngresoBasePrestacion
      *
      * @return RhuLiquidacion
      */
-    public function setVrIngresoBaseCotizacion($vrIngresoBaseCotizacion)
+    public function setVrIngresoBasePrestacion($vrIngresoBasePrestacion)
     {
-        $this->VrIngresoBaseCotizacion = $vrIngresoBaseCotizacion;
+        $this->VrIngresoBasePrestacion = $vrIngresoBasePrestacion;
 
         return $this;
     }
 
     /**
-     * Get vrIngresoBaseCotizacion
+     * Get vrIngresoBasePrestacion
      *
      * @return float
      */
-    public function getVrIngresoBaseCotizacion()
+    public function getVrIngresoBasePrestacion()
     {
-        return $this->VrIngresoBaseCotizacion;
+        return $this->VrIngresoBasePrestacion;
     }
 
     /**
-     * Set vrIngresoBaseCotizacionAdicional
+     * Set vrIngresoBasePrestacionAdicional
      *
-     * @param float $vrIngresoBaseCotizacionAdicional
+     * @param float $vrIngresoBasePrestacionAdicional
      *
      * @return RhuLiquidacion
      */
-    public function setVrIngresoBaseCotizacionAdicional($vrIngresoBaseCotizacionAdicional)
+    public function setVrIngresoBasePrestacionAdicional($vrIngresoBasePrestacionAdicional)
     {
-        $this->VrIngresoBaseCotizacionAdicional = $vrIngresoBaseCotizacionAdicional;
+        $this->VrIngresoBasePrestacionAdicional = $vrIngresoBasePrestacionAdicional;
 
         return $this;
     }
 
     /**
-     * Get vrIngresoBaseCotizacionAdicional
+     * Get vrIngresoBasePrestacionAdicional
      *
      * @return float
      */
-    public function getVrIngresoBaseCotizacionAdicional()
+    public function getVrIngresoBasePrestacionAdicional()
     {
-        return $this->VrIngresoBaseCotizacionAdicional;
+        return $this->VrIngresoBasePrestacionAdicional;
     }
 
     /**
-     * Set vrIngresoBaseCotizacionTotal
+     * Set vrIngresoBasePrestacionTotal
      *
-     * @param float $vrIngresoBaseCotizacionTotal
+     * @param float $vrIngresoBasePrestacionTotal
      *
      * @return RhuLiquidacion
      */
-    public function setVrIngresoBaseCotizacionTotal($vrIngresoBaseCotizacionTotal)
+    public function setVrIngresoBasePrestacionTotal($vrIngresoBasePrestacionTotal)
     {
-        $this->VrIngresoBaseCotizacionTotal = $vrIngresoBaseCotizacionTotal;
+        $this->VrIngresoBasePrestacionTotal = $vrIngresoBasePrestacionTotal;
 
         return $this;
     }
 
     /**
-     * Get vrIngresoBaseCotizacionTotal
+     * Get vrIngresoBasePrestacionTotal
      *
      * @return float
      */
-    public function getVrIngresoBaseCotizacionTotal()
+    public function getVrIngresoBasePrestacionTotal()
     {
-        return $this->VrIngresoBaseCotizacionTotal;
+        return $this->VrIngresoBasePrestacionTotal;
     }
 
     /**
-     * Set diasAdicionalesIBC
+     * Set diasAdicionalesIBP
      *
-     * @param integer $diasAdicionalesIBC
+     * @param integer $diasAdicionalesIBP
      *
      * @return RhuLiquidacion
      */
-    public function setDiasAdicionalesIBC($diasAdicionalesIBC)
+    public function setDiasAdicionalesIBP($diasAdicionalesIBP)
     {
-        $this->diasAdicionalesIBC = $diasAdicionalesIBC;
+        $this->diasAdicionalesIBP = $diasAdicionalesIBP;
 
         return $this;
     }
 
     /**
-     * Get diasAdicionalesIBC
+     * Get diasAdicionalesIBP
      *
      * @return integer
      */
-    public function getDiasAdicionalesIBC()
+    public function getDiasAdicionalesIBP()
     {
-        return $this->diasAdicionalesIBC;
+        return $this->diasAdicionalesIBP;
     }
 
     /**
@@ -848,6 +870,30 @@ class RhuLiquidacion
     public function getVrSalario()
     {
         return $this->VrSalario;
+    }
+
+    /**
+     * Set vrSalarioVacaciones
+     *
+     * @param float $vrSalarioVacaciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioVacaciones($vrSalarioVacaciones)
+    {
+        $this->VrSalarioVacaciones = $vrSalarioVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioVacaciones
+     *
+     * @return float
+     */
+    public function getVrSalarioVacaciones()
+    {
+        return $this->VrSalarioVacaciones;
     }
 
     /**
@@ -1019,6 +1065,102 @@ class RhuLiquidacion
     }
 
     /**
+     * Set vrDeducciones
+     *
+     * @param float $vrDeducciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrDeducciones($vrDeducciones)
+    {
+        $this->VrDeducciones = $vrDeducciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDeducciones
+     *
+     * @return float
+     */
+    public function getVrDeducciones()
+    {
+        return $this->VrDeducciones;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoGenerado
+     *
+     * @param boolean $estadoGenerado
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEstadoGenerado($estadoGenerado)
+    {
+        $this->estadoGenerado = $estadoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoGenerado()
+    {
+        return $this->estadoGenerado;
+    }
+
+    /**
+     * Set fechaInicioContrato
+     *
+     * @param \DateTime $fechaInicioContrato
+     *
+     * @return RhuLiquidacion
+     */
+    public function setFechaInicioContrato($fechaInicioContrato)
+    {
+        $this->fechaInicioContrato = $fechaInicioContrato;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioContrato
+     *
+     * @return \DateTime
+     */
+    public function getFechaInicioContrato()
+    {
+        return $this->fechaInicioContrato;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1122,149 +1264,5 @@ class RhuLiquidacion
     public function getLiquidacionesDeduccionesLiquidacionRel()
     {
         return $this->liquidacionesDeduccionesLiquidacionRel;
-    }
-
-    /**
-     * Set vrDeducciones
-     *
-     * @param float $vrDeducciones
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrDeducciones($vrDeducciones)
-    {
-        $this->VrDeducciones = $vrDeducciones;
-
-        return $this;
-    }
-
-    /**
-     * Get vrDeducciones
-     *
-     * @return float
-     */
-    public function getVrDeducciones()
-    {
-        return $this->VrDeducciones;
-    }
-
-    /**
-     * Set vrDeduccionPrima
-     *
-     * @param float $vrDeduccionPrima
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrDeduccionPrima($vrDeduccionPrima)
-    {
-        $this->VrDeduccionPrima = $vrDeduccionPrima;
-
-        return $this;
-    }
-
-    /**
-     * Get vrDeduccionPrima
-     *
-     * @return float
-     */
-    public function getVrDeduccionPrima()
-    {
-        return $this->VrDeduccionPrima;
-    }
-
-    /**
-     * Set estadoAutorizado
-     *
-     * @param boolean $estadoAutorizado
-     *
-     * @return RhuLiquidacion
-     */
-    public function setEstadoAutorizado($estadoAutorizado)
-    {
-        $this->estadoAutorizado = $estadoAutorizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAutorizado
-     *
-     * @return boolean
-     */
-    public function getEstadoAutorizado()
-    {
-        return $this->estadoAutorizado;
-    }
-
-    /**
-     * Set vrSalarioVacaciones
-     *
-     * @param float $vrSalarioVacaciones
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrSalarioVacaciones($vrSalarioVacaciones)
-    {
-        $this->VrSalarioVacaciones = $vrSalarioVacaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioVacaciones
-     *
-     * @return float
-     */
-    public function getVrSalarioVacaciones()
-    {
-        return $this->VrSalarioVacaciones;
-    }
-
-    /**
-     * Set estadoGenerado
-     *
-     * @param boolean $estadoGenerado
-     *
-     * @return RhuLiquidacion
-     */
-    public function setEstadoGenerado($estadoGenerado)
-    {
-        $this->estadoGenerado = $estadoGenerado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoGenerado
-     *
-     * @return boolean
-     */
-    public function getEstadoGenerado()
-    {
-        return $this->estadoGenerado;
-    }
-
-    /**
-     * Set fechaInicioContrato
-     *
-     * @param \DateTime $fechaInicioContrato
-     *
-     * @return RhuLiquidacion
-     */
-    public function setFechaInicioContrato($fechaInicioContrato)
-    {
-        $this->fechaInicioContrato = $fechaInicioContrato;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaInicioContrato
-     *
-     * @return \DateTime
-     */
-    public function getFechaInicioContrato()
-    {
-        return $this->fechaInicioContrato;
     }
 }

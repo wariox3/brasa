@@ -89,33 +89,35 @@ class ConsultasIngresosEmpleadoController extends Controller
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'IDENTIFICACION')
                     ->setCellValue('C1', 'EMPLEADO')
-                    ->setCellValue('D1', 'CODIGO CONTRATO')
-                    ->setCellValue('E1', 'IBC')
-                    ->setCellValue('F1', 'DESDE')
-                    ->setCellValue('G1', 'HASTA');
+                    ->setCellValue('D1', 'CODIGO CONTRATO')                    
+                    ->setCellValue('E1', 'DESDE')
+                    ->setCellValue('F1', 'HASTA')
+                    ->setCellValue('G1', 'IBC')
+                    ->setCellValue('H1', 'IBP');
 
         $i = 2;
-        $query = $em->createQuery($this->strSqlCostosIbcLista);
-        $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
-        $arIbc = $query->getResult();
-        foreach ($arIbc as $arIbc) {
+        $query = $em->createQuery($this->strDqlLista);
+        $arIngresosBase = new \Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase();
+        $arIngresosBase = $query->getResult();
+        foreach ($arIngresosBase as $arIngresoBase) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arIbc->getCodigoIbcPk())
-                    ->setCellValue('B' . $i, $arIbc->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arIbc->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arIbc->getCodigoContratoFk())
-                    ->setCellValue('E' . $i, $arIbc->getvrIngresoBaseCotizacion())
-                    ->setCellValue('F' . $i, $arIbc->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arIbc->getFechaDesde()->Format('Y-m-d'));
+                    ->setCellValue('A' . $i, $arIngresoBase->getCodigoIngresoBasePk())
+                    ->setCellValue('B' . $i, $arIngresoBase->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arIngresoBase->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('D' . $i, $arIngresoBase->getCodigoContratoFk())                    
+                    ->setCellValue('E' . $i, $arIngresoBase->getFechaDesde()->Format('Y-m-d'))
+                    ->setCellValue('F' . $i, $arIngresoBase->getFechaDesde()->Format('Y-m-d'))
+                    ->setCellValue('G' . $i, $arIngresoBase->getvrIngresoBaseCotizacion())
+                    ->setCellValue('H' . $i, $arIngresoBase->getvrIngresoBasePrestacion());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('CostosIbcc');
+        $objPHPExcel->getActiveSheet()->setTitle('IngresosEmpleado');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="CostosIbc.xlsx"');
+        header('Content-Disposition: attachment;filename="IngresosEmpleado.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

@@ -155,11 +155,7 @@ class BaseEmpleadoController extends Controller
                     foreach ($arrSeleccionados AS $codigoLicencia) {
                         $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
                         $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->find($codigoLicencia);
-                        if ($arLicencia->getEstadoCerrada()== 0){
-                            $em->remove($arLicencia);
-                        }else {
-                            $mensajeLicencia = "La licencia no se puede eliminar, ha sido cerrado el proceso de la licencia.";
-                        }
+                        $em->remove($arLicencia);
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));

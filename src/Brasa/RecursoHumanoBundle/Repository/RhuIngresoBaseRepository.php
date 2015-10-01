@@ -11,18 +11,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuIngresoBaseRepository extends EntityRepository {
     
-    public function devuelveIbcFecha($codigoEmpleado, $fechaDesde, $fechaHasta, $codigoContrato) {
+    public function devuelveIbpFecha($codigoEmpleado, $fechaDesde, $fechaHasta, $codigoContrato) {
             $em = $this->getEntityManager();
-            $dql   = "SELECT SUM(ibc.vrIngresoBaseCotizacion) as vrIngresoBaseCotizacion FROM BrasaRecursoHumanoBundle:RhuIbc ibc "
-                    . "WHERE ibc.codigoEmpleadoFk = " . $codigoEmpleado . " "
-                    . "AND ibc.codigoContratoFk = " . $codigoContrato . " "
-                    . "AND ibc.fechaDesde >= '" . $fechaDesde . "' AND ibc.fechaHasta <= '" . $fechaHasta . "'";
+            $dql   = "SELECT SUM(ib.vrIngresoBasePrestacion) as vrIngresoBasePrestacion FROM BrasaRecursoHumanoBundle:RhuIngresoBase ib "
+                    . "WHERE ib.codigoEmpleadoFk = " . $codigoEmpleado . " "
+                    . "AND ib.codigoContratoFk = " . $codigoContrato . " "
+                    . "AND ib.fechaDesde >= '" . $fechaDesde . "' AND ib.fechaHasta <= '" . $fechaHasta . "'";
             $query = $em->createQuery($dql);            
-            $floIbc = $query->getSingleScalarResult();
-            if(!$floIbc) {
-                $floIbc = 0;
+            $floIbp = $query->getSingleScalarResult();
+            if(!$floIbp) {
+                $floIbp = 0;
             } 
-            return $floIbc;
+            return $floIbp;
         }    
     
     public function listaDqlCostosIbc($strContrato = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        

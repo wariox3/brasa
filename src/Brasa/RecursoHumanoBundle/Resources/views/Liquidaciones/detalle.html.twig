@@ -27,24 +27,24 @@
                         <td class="td-in-well">{{ arLiquidacion.codigoLiquidacionPk }}</td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
-                        <td class="titulo">IBC:</td>
-                        <td align="right">$ {{ arLiquidacion.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
+                        <td class="titulo">IBP:</td>
+                        <td align="right">$ {{ arLiquidacion.vrIngresoBasePrestacion | number_format(0, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">FECHA INICIO:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaDesde|date("Y/m/d") }}</td>
                         <td class="titulo">DÍAS ADICIONALES:</td>
-                        <td align="right">{{ arLiquidacion.diasAdicionalesIBC }}</td>
-                        <td class="titulo">IBC DÍAS ADICIONALES:</td>
-                        <td align="right">{{ arLiquidacion.VrIngresoBaseCotizacionAdicional | number_format(0, '.', ',') }}</td>                   
+                        <td align="right">{{ arLiquidacion.diasAdicionalesIBP }}</td>
+                        <td class="titulo">IBP DÍAS ADICIONALES:</td>
+                        <td align="right">{{ arLiquidacion.VrIngresoBasePrestacionAdicional | number_format(0, '.', ',') }}</td>                   
                     </tr>    
                     <tr>
                         <td class="titulo">FECHA FIN:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaHasta|date("Y/m/d") }}</td>
                         <td class="titulo">PAGO PRIMAS:</td>
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoPrimas|date("Y/m/d") }}</td>
-                        <td class="titulo">IBC TOTAL:</td>
-                        <td align="right">$ {{ arLiquidacion.vrIngresoBaseCotizacionTotal | number_format(0, '.', ',') }}</td>                   
+                        <td class="titulo">IBP TOTAL:</td>
+                        <td align="right">$ {{ arLiquidacion.vrIngresoBasePrestacionTotal | number_format(0, '.', ',') }}</td>                   
                     </tr>                                 
                     <tr>
                         <td class="titulo">FECHA ÚLTIMO PAGO:</td>

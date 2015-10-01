@@ -53,7 +53,7 @@ class UtilidadesIntercambioDatosController extends Controller
                 
                 $ar = fopen($strArchivo, "a") or
                         die("Problemas en la creacion del archivo plano");                
-                fputs($ar, "Cuenta\tComprobante\tFecha\tDocumento\tDocumento Ref.\tNit\tDetalle\tTipo\tValor\tBase\tCentro de Costo\tTrans. Ext\tPlazo" . "\n");
+                //fputs($ar, "Cuenta\tComprobante\tFecha\tDocumento\tDocumento Ref.\tNit\tDetalle\tTipo\tValor\tBase\tCentro de Costo\tTrans. Ext\tPlazo" . "\n");
                 $arRegistrosExportar = $em->getRepository('BrasaContabilidadBundle:CtbRegistroExportar')->findAll();                                    
                 foreach ($arRegistrosExportar as $arRegistroExportar) {
                     $floValor = 0;
@@ -63,10 +63,10 @@ class UtilidadesIntercambioDatosController extends Controller
                         $floValor = $arRegistroExportar->getCredito();
                     }
                     fputs($ar, $arRegistroExportar->getCuenta() . "\t");
-                    fputs($ar, $arRegistroExportar->getComprobante() . "\t");
+                    fputs($ar, $this->RellenarNr($arRegistroExportar->getComprobante(), "0", 5) . "\t");
                     fputs($ar, $arRegistroExportar->getFecha()->format('m/d/Y') . "\t");
-                    fputs($ar, $arRegistroExportar->getNumero() . "\t");
-                    fputs($ar, $arRegistroExportar->getNumero() . "\t");
+                    fputs($ar, $this->RellenarNr($arRegistroExportar->getNumero(), "0", 9) . "\t");
+                    fputs($ar, $this->RellenarNr($arRegistroExportar->getNumero(), "0", 9) . "\t");
                     fputs($ar, $arRegistroExportar->getNit() . "\t");
                     fputs($ar, $arRegistroExportar->getDescripcionContable() . "\t");
                     fputs($ar, $arRegistroExportar->getTipo() . "\t");
@@ -79,8 +79,8 @@ class UtilidadesIntercambioDatosController extends Controller
                 }
                 fclose($ar);
 
-                $strSql = "TRUNCATE TABLE ctb_registro_exportar";           
-                $em->getConnection()->executeQuery($strSql);                    
+                //$strSql = "TRUNCATE TABLE ctb_registro_exportar";           
+                //$em->getConnection()->executeQuery($strSql);                    
                 
                 header('Content-Description: File Transfer');
                 header('Content-Type: text/csv; charset=ISO-8859-15');

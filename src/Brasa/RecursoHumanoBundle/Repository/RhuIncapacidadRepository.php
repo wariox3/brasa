@@ -162,4 +162,24 @@ class RhuIncapacidadRepository extends EntityRepository {
         return $arIncapacidades;
     }    
     
+    /*
+     * Se usa para verificar si al cierre de un cotrato no hay incapacidades pendientes
+     */
+    public function validarCierreContrato($fechaHasta, $codigoEmpleado) {
+        $em = $this->getEntityManager();        
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $boolValidar = FALSE;
+        $dql = "SELECT incapacidad FROM BrasaRecursoHumanoBundle:RhuIncapacidad incapacidad "
+                . "WHERE  incapacidad.fechaHasta > '$strFechaHasta' "
+                . "AND incapacidad.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        $objQuery = $em->createQuery($dql);  
+        $arIncapacidades = $objQuery->getResult();         
+        if(count($arIncapacidades) > 0) {
+            $boolValidar = FALSE;
+        } else {
+            $boolValidar = TRUE;
+        }
+
+        return $boolValidar;                     
+    }          
 }

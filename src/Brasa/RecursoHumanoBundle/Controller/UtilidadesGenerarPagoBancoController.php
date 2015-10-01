@@ -13,7 +13,7 @@ class UtilidadesGenerarPagoBancoController extends Controller
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPagosExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
-        $arPagosExportar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->findBy(array(), array('centroCosto' => 'ASC')); 
+        $arPagosExportar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->findBy(array('estadoPagado' => 0), array('centroCosto' => 'ASC')); 
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arrayPropiedadesBancos = array(
@@ -35,18 +35,12 @@ class UtilidadesGenerarPagoBancoController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             $controles = $request->request->get('form');
-            $arPagoExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
-            $arPagoExportar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->findAll(); 
-            if($form->get('BtnGenerarTxt')->isClicked()) {                
-                if (count($arPagoExportar) == 0){
-                    $objMensaje->Mensaje("error", "No hay registros a generar", $this);
-                } else {
-                    if ($controles['fechaAplicacion'] < $controles['fechaTransmision']){
-                        $objMensaje->Mensaje("error", "La fecha de aplicación no puede ser menor a la fecha de trasmisión", $this);
-                    } else {
-                        if ($controles['fechaAplicacion'] == ""){
-                            $objMensaje->Mensaje("error", "Se require la fecha de aplicación", $this);
-                        }else {                  
+            if($form->get('BtnGenerarTxt')->isClicked()) { 
+                if ($controles['fechaAplicacion'] < $controles['fechaTransmision']){
+                    if ($controles['fechaAplicacion'] != ""){                    
+                        $arPagosExportar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
+                        $arPagosExportar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->findBy(array('estadoPagado' => 0)); 
+                        if (count($arPagosExportar) > 0){
                             $strNombreArchivo = "PagoBanco" . date('YmdHis') . ".txt";
                             $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                            
                             //$strArchivo = "" . $strNombreArchivo;
@@ -55,59 +49,58 @@ class UtilidadesGenerarPagoBancoController extends Controller
                             $strNitEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNitEmpresa(),"0",10,"I");
                             $strNombreEmpresa = $arConfiguracionGeneral->getNombreEmpresa();
                             $strTipoPagoSecuencia = $controles['descripcion'];
-                            $strFechaCreacion = $form->get('fechaTransmision')->getData();
-                            $strAnioCreacion = $strFechaCreacion->format('y');
-                            $strmesCreacion = $strFechaCreacion->format('m');
-                            $strdiaCreacion = $strFechaCreacion->format('d');
-                            $strFechaCreacion = $strAnioCreacion.$strmesCreacion.$strdiaCreacion;
                             $strSecuencia = $controles['secuencia'];
+                            $strFechaCreacion = $form->get('fechaTransmision')->getData();
+                            $strFechaCreacion = $strFechaCreacion->format('ymd');                                                                                    
                             $strFechaAplicacion = $form->get('fechaAplicacion')->getData();
-                            $strAnioAplicacion = $strFechaAplicacion->format('y');
-                            $strmesAplicacion = $strFechaAplicacion->format('m');
-                            $strdiaAplicacion = $strFechaAplicacion->format('d');
-                            $strFechaAplicacion = $strAnioAplicacion.$strmesAplicacion.$strdiaAplicacion;
+                            $strFechaAplicacion = $strFechaAplicacion->format('ymd');
                             $intCodigoCuenta = $controles['cuentaRel'];
                             $arCuenta = new \Brasa\GeneralBundle\Entity\GenCuenta();
                             $arCuenta = $em->getRepository('BrasaGeneralBundle:GenCuenta')->find($intCodigoCuenta);
-                            $strNumeroRegistros = count($arPagoExportar);
+                            $strNumeroRegistros = count($arPagosExportar);
                             $strNumeroRegistros = $this->RellenarNr($strNumeroRegistros, "0", 6, "I");
                             $strValorTotal = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->totalValorResgistrosPagoExportar();
                             $strValorTotal = $this->RellenarNr(round($strValorTotal), "0", 24, "I");
                             //Fin encabezado
-                            fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia .
-                                  $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . 
-                                  $strValorTotal . $arCuenta->getCuenta() . $arCuenta->getTipo() . "\r\n");
+                            fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arCuenta->getCuenta() . $arCuenta->getTipo() . "\r\n");
                             //Inicio cuerpo
-                            foreach ($arPagoExportar AS $arPagoExportar) {
-                                    fputs($ar, "6" . $this->RellenarNr($arPagoExportar->getNumeroIdentificacion(), "0", 15, "I"));
-                                    $duoNombreCorto = substr($arPagoExportar->getNombreCorto(), 0, 18);
-                                    fputs($ar, $this->RellenarNr($duoNombreCorto,"0", 18, "I"));
-                                    fputs($ar, "005600078");
-                                    fputs($ar, $this->RellenarNr($arPagoExportar->getCuenta(), "0", 17, "I"));
-                                    fputs($ar, "S37");
-                                    $duoValorNetoPagar = round($arPagoExportar->getVrPago());
-                                    fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 10, "I")));
-                                    fputs($ar, " ");
-                                    fputs($ar, "\r\n");
-                                }
-                                //Fin cuerpo
-                                fclose($ar);                
-                                header('Content-Description: File Transfer');
-                                      header('Content-Type: text/csv; charset=ISO-8859-15');
-                                      header('Content-Disposition: attachment; filename='.basename($strArchivo));
-                                      header('Expires: 0');
-                                      header('Cache-Control: must-revalidate');
-                                      header('Pragma: public');
-                                      header('Content-Length: ' . filesize($strArchivo));
-                                      readfile($strArchivo);
-                                $arPagoExportar2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->findAll();             
-                                foreach ($arPagoExportar2 AS $arPagoExportar2) {
-                                $em->remove($arPagoExportar2);
-                                $em->flush();
-                                }
-                                exit;            
+                            foreach ($arPagosExportar AS $arPagoExportar) {
+                                fputs($ar, "6" . $this->RellenarNr($arPagoExportar->getNumeroIdentificacion(), "0", 15, "I"));
+                                $duoNombreCorto = substr($arPagoExportar->getNombreCorto(), 0, 18);
+                                fputs($ar, $this->RellenarNr($duoNombreCorto,"0", 18, "I"));
+                                fputs($ar, "005600078");
+                                fputs($ar, $this->RellenarNr($arPagoExportar->getCuenta(), "0", 17, "I"));
+                                fputs($ar, "S37");
+                                $duoValorNetoPagar = round($arPagoExportar->getVrPago());
+                                fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 10, "I")));
+                                fputs($ar, " ");
+                                fputs($ar, "\r\n");
+                                $arPagoExportarActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar();
+                                $arPagoExportarActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExportar')->find($arPagoExportar->getCodigoPagoExportarPk()); 
+                                $arPagoExportarActualizar->setCuentaRel($arCuenta);
+                                $arPagoExportarActualizar->setEstadoPagado(1);
+                                $em->persist($arPagoExportarActualizar);
+                            }
+                            $em->flush();
+                            //Fin cuerpo
+                            fclose($ar);                
+                            header('Content-Description: File Transfer');
+                            header('Content-Type: text/csv; charset=ISO-8859-15');
+                            header('Content-Disposition: attachment; filename='.basename($strArchivo));
+                            header('Expires: 0');
+                            header('Cache-Control: must-revalidate');
+                            header('Pragma: public');
+                            header('Content-Length: ' . filesize($strArchivo));
+                            readfile($strArchivo);
+                            exit;                              
+                    } else {
+                            $objMensaje->Mensaje("error", "No hay registros a generar", $this);                                                              
                         }  
-                    }
+                    } else {
+                        $objMensaje->Mensaje("error", "Se require la fecha de aplicación", $this);
+                    }                    
+                } else {
+                    $objMensaje->Mensaje("error", "La fecha de aplicación no puede ser menor a la fecha de trasmisión", $this);                    
                 }
             }
         }

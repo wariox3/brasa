@@ -101,7 +101,7 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 8);
         $this->Cell(38, 5, utf8_decode("DÍAS NÓMINA ADICIONAL:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
-        $this->Cell(30, 5, $arLiquidacion->getDiasAdicionalesIBC(), 1, 0, 'R', 1);
+        $this->Cell(30, 5, $arLiquidacion->getDiasAdicionalesIBP(), 1, 0, 'R', 1);
         //FILA 5
         $intY += 5;
         $this->SetFont('Arial', 'B', 8);
@@ -126,7 +126,7 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(272, 272, 272);
         $this->SetXY($intX, $intY);
-        $this->Cell(32, 5, number_format($arLiquidacion->getVrIngresoBaseCotizacionTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(32, 5, number_format($arLiquidacion->getVrIngresoBasePrestacionTotal(), 0, '.', ','), 1, 0, 'R', 1);
         $this->SetXY($intX, $intY + 6);
         $this->Cell(32, 5, number_format($arLiquidacion->getVrBasePrestaciones(), 0, '.', ','), 1, 0, 'R', 1);
         $this->SetXY($intX, $intY + 12);

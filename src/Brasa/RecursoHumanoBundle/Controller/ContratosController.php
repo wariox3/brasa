@@ -260,92 +260,70 @@ class ContratosController extends Controller
             ->getForm();
         $formContrato->handleRequest($request);        
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-        $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $arContrato->getCodigoEmpleadoFk()));
-        $intCodigoLicenciaMaternidad = 48;
-        $intDatoIncapacidad = 0;
-        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
-        $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $arContrato->getCodigoEmpleadoFk(), 'codigoPagoAdicionalSubtipoFk' => $intCodigoLicenciaMaternidad));
-        $intDatoLicencia = 0;
-        if ($formContrato->isValid()) {
-            $dateFechaHasta = $formContrato->get('fechaTerminacion')->getData();
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);        
+        if ($formContrato->isValid()) {            
+            $dateFechaHasta = $formContrato->get('fechaTerminacion')->getData();            
             if($dateFechaHasta >= $arContrato->getFechaUltimoPago()) {                
-                foreach ($arIncapacidad as $arIncapacidad){
-                    if ($arIncapacidad->getFechaHasta() > $dateFechaHasta){
-                        $intDatoIncapacidad++;
-                    }
-                }
-                if ($intDatoIncapacidad == 0){
-                    foreach ($arLicencia as $arLicencia){
-                    if ($arLicencia->getFechaHasta() > $dateFechaHasta){
-                        $intDatoLicencia++;
-                    }
-                }
-                if ($intDatoLicencia == 0){
-                    $arContrato->setFechaHasta($dateFechaHasta);            
-                    $arContrato->setIndefinido(0);
-                    $arContrato->setEstadoActivo(0);
-                    $arContrato->setEstadoLiquidado(1);
-                    $em->persist($arContrato);
+                if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
+                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
+                        $arContrato->setFechaHasta($dateFechaHasta);            
+                        $arContrato->setIndefinido(0);
+                        $arContrato->setEstadoActivo(0);
+                        $arContrato->setEstadoLiquidado(1);
+                        $em->persist($arContrato);
 
-                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());        
-                    $arEmpleado->setCodigoCentroCostoFk(NULL);
-                    $arEmpleado->setCodigoTipoTiempoFk(NULL);
-                    $arEmpleado->setVrSalario(0);
-                    $arEmpleado->setCodigoClasificacionRiesgoFk(NULL);
-                    $arEmpleado->setCodigoCargoFk(NULL);
-                    $arEmpleado->setCargoDescripcion(NULL);            
-                    $arEmpleado->setCodigoTipoPensionFk(NULL);  
-                    $arEmpleado->setCodigoTipoCotizanteFk(NULL);
-                    $arEmpleado->setCodigoSubtipoCotizanteFk(NULL);
-                    $em->persist($arEmpleado);
+                        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());        
+                        $arEmpleado->setCodigoCentroCostoFk(NULL);
+                        $arEmpleado->setCodigoTipoTiempoFk(NULL);
+                        $arEmpleado->setVrSalario(0);
+                        $arEmpleado->setCodigoClasificacionRiesgoFk(NULL);
+                        $arEmpleado->setCodigoCargoFk(NULL);
+                        $arEmpleado->setCargoDescripcion(NULL);            
+                        $arEmpleado->setCodigoTipoPensionFk(NULL);  
+                        $arEmpleado->setCodigoTipoCotizanteFk(NULL);
+                        $arEmpleado->setCodigoSubtipoCotizanteFk(NULL);
+                        $em->persist($arEmpleado);
 
-                    //Generar liquidacion
-                    if($arContrato->getCodigoContratoTipoFk() != 4 && $arContrato->getCodigoContratoTipoFk() != 5) {
-                        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
-                        $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
-                        $arLiquidacion->setEmpleadoRel($arContrato->getEmpleadoRel());
-                        $arLiquidacion->setContratoRel($arContrato);
-                        if($arContrato->getFechaUltimoPagoCesantias() > $arContrato->getFechaDesde()) {
-                            $arLiquidacion->setFechaDesde($arContrato->getFechaUltimoPagoCesantias());
-                        } else {
-                            $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
+                        //Generar liquidacion
+                        if($arContrato->getCodigoContratoTipoFk() != 4 && $arContrato->getCodigoContratoTipoFk() != 5) {
+                            $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+                            $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
+                            $arLiquidacion->setEmpleadoRel($arContrato->getEmpleadoRel());
+                            $arLiquidacion->setContratoRel($arContrato);
+                            if($arContrato->getFechaUltimoPagoCesantias() > $arContrato->getFechaDesde()) {
+                                $arLiquidacion->setFechaDesde($arContrato->getFechaUltimoPagoCesantias());
+                            } else {
+                                $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
+                            }
+                            $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
+                            $arLiquidacion->setLiquidarCesantias(1);
+                            $arLiquidacion->setLiquidarPrima(1);
+                            $arLiquidacion->setLiquidarVacaciones(1);
+                            $arLiquidacion->setComentarios($formContrato->get('motivoRetiro')->getData());
+                            $em->persist($arLiquidacion);            
+                            //Verificar creditos
+                            $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                            $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());        
+                            foreach ($arCreditos as $arCredito) {
+                                $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
+                                $arLiquidacionDeduccion->setCreditoRel($arCredito);
+                                $arLiquidacionDeduccion->setLiquidacionRel($arLiquidacion);
+                                $arLiquidacionDeduccion->setVrDeduccion($arCredito->getSaldoTotal());
+                                $em->persist($arLiquidacionDeduccion);
+                            }                        
                         }
-                        $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
-                        $arLiquidacion->setLiquidarCesantias(1);
-                        $arLiquidacion->setLiquidarPrima(1);
-                        $arLiquidacion->setLiquidarVacaciones(1);
-                        $arLiquidacion->setComentarios($formContrato->get('motivoRetiro')->getData());
-                        $em->persist($arLiquidacion);            
-                        //Verificar creditos
-                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());        
-                        foreach ($arCreditos as $arCredito) {
-                            $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
-                            $arLiquidacionDeduccion->setCreditoRel($arCredito);
-                            $arLiquidacionDeduccion->setLiquidacionRel($arLiquidacion);
-                            $arLiquidacionDeduccion->setVrDeduccion($arCredito->getSaldoTotal());
-                            $em->persist($arLiquidacionDeduccion);
-                        }                        
-                    }
-                    
-                    $em->flush();                                       
-                    return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));                
+                        $em->flush();                        
+                    } else {
+                        $objMensaje->Mensaje("error", "No puede terminar un contrato con licencias pendientes", $this);                
+                    }                                       
                 } else {
-                    $objMensaje->Mensaje("error", "No se puede terminar el contrato, el empleado registra licencia de maternidad con fecha superior al retiro", $this);
-                    return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
-                }
+                    $objMensaje->Mensaje("error", "No puede terminar un contrato con incapacidades pendientes", $this);                
+                }                
             } else {
-                $objMensaje->Mensaje("error", "No se puede terminar el contrato, el empleado registra incapacidades con fecha superior al retiro", $this);
-                return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
+                $objMensaje->Mensaje("error", "No puede terminar un contrato antes del ultimo pago, excepto con un permiso especial, consulte con el administrador del sistema", $this);                
             }
-                } else {
-                $objMensaje->Mensaje("error", "No puede terminar un contrato antes del ultimo pago, excepto con un permiso especial, consulte con el administrador del sistema", $this);
-                return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
-            }
-        
+            return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:terminar.html.twig', array(
             'arContrato' => $arContrato,
