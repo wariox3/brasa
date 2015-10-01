@@ -75,21 +75,21 @@
                 <td>{{ arPagos.fechaDesdePago |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
-                <td style="text-align: right">{{ arPagos.vrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrAuxilioTransporte | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrCesantias | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrEps | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrAuxilioTransporte | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrCesantias | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrEps | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrCosto | number_format(0, '.', ',') }}</td>
                 {% set douTotalIBC = douTotalIBC + arPagos.vrIngresoBaseCotizacion %}                
                 {% set douTotalSalud = douTotalSalud + arPagos.vrEps %}                
                 {% set douTotalCesantias = douTotalCesantias + arPagos.vrCesantias %}
             </tr>
             {% endfor %}
                 <td colspan="9"></td>
-                <td style="text-align: right">{{ douTotalIBC | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right"></td>
-                <td style="text-align: right">{{ douTotalCesantias | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ douTotalSalud | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalCesantias | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalSalud | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right"></td>            
         </table>
         <div class="btn-toolbar" style="float: left">

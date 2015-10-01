@@ -178,6 +178,11 @@ class RhuPago
      * @ORM\Column(name="vr_ingreso_base_cotizacion", type="float")
      */
     private $vrIngresoBaseCotizacion = 0;    
+
+    /**
+     * @ORM\Column(name="vr_ingreso_base_prestacion", type="float")
+     */
+    private $vrIngresoBasePrestacion = 0;        
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -268,6 +273,9 @@ class RhuPago
      * @ORM\OneToMany(targetEntity="RhuCreditoPago", mappedBy="pagoRel")
      */
     protected $creditosPagosPagoRel;    
+    
+    
+
     /**
      * Constructor
      */
@@ -1056,6 +1064,30 @@ class RhuPago
     public function getVrIngresoBaseCotizacion()
     {
         return $this->vrIngresoBaseCotizacion;
+    }
+
+    /**
+     * Set vrIngresoBasePrestacion
+     *
+     * @param float $vrIngresoBasePrestacion
+     *
+     * @return RhuPago
+     */
+    public function setVrIngresoBasePrestacion($vrIngresoBasePrestacion)
+    {
+        $this->vrIngresoBasePrestacion = $vrIngresoBasePrestacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBasePrestacion
+     *
+     * @return float
+     */
+    public function getVrIngresoBasePrestacion()
+    {
+        return $this->vrIngresoBasePrestacion;
     }
 
     /**

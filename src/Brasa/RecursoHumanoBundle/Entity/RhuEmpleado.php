@@ -487,9 +487,9 @@ class RhuEmpleado
     protected $cambiosSalariosEmpleadoRel;    
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuIbc", mappedBy="empleadoRel")
+     * @ORM\OneToMany(targetEntity="RhuIngresoBase", mappedBy="empleadoRel")
      */
-    protected $ibcsEmpleadoRel;     
+    protected $ingresosBasesEmpleadoRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="RhuProyeccion", mappedBy="empleadoRel")
@@ -522,7 +522,7 @@ class RhuEmpleado
         $this->accidentesTrabajoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cambiosSalariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ibcsEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ingresosBasesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyeccionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -2825,37 +2825,37 @@ class RhuEmpleado
     }
 
     /**
-     * Add ibcsEmpleadoRel
+     * Add ingresosBasesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase $ingresosBasesEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function addIbcsEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsEmpleadoRel)
+    public function addIngresosBasesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase $ingresosBasesEmpleadoRel)
     {
-        $this->ibcsEmpleadoRel[] = $ibcsEmpleadoRel;
+        $this->ingresosBasesEmpleadoRel[] = $ingresosBasesEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Remove ibcsEmpleadoRel
+     * Remove ingresosBasesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase $ingresosBasesEmpleadoRel
      */
-    public function removeIbcsEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsEmpleadoRel)
+    public function removeIngresosBasesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase $ingresosBasesEmpleadoRel)
     {
-        $this->ibcsEmpleadoRel->removeElement($ibcsEmpleadoRel);
+        $this->ingresosBasesEmpleadoRel->removeElement($ingresosBasesEmpleadoRel);
     }
 
     /**
-     * Get ibcsEmpleadoRel
+     * Get ingresosBasesEmpleadoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getIbcsEmpleadoRel()
+    public function getIngresosBasesEmpleadoRel()
     {
-        return $this->ibcsEmpleadoRel;
+        return $this->ingresosBasesEmpleadoRel;
     }
 
     /**

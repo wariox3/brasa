@@ -248,9 +248,9 @@ class RhuContrato
     protected $vacacionesDisfrutesContratoRel;         
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuIbc", mappedBy="contratoRel")
+     * @ORM\OneToMany(targetEntity="RhuIngresoBase", mappedBy="contratoRel")
      */
-    protected $ibcsContratoRel;     
+    protected $ingresosBasesContratoRel;     
 
     /**
      * @ORM\OneToMany(targetEntity="RhuContratoSede", mappedBy="contratoRel")
@@ -261,6 +261,7 @@ class RhuContrato
      * @ORM\OneToMany(targetEntity="RhuProyeccion", mappedBy="contratoRel")
      */
     protected $proyeccionesContratoRel; 
+    
 
     /**
      * Constructor
@@ -275,7 +276,7 @@ class RhuContrato
         $this->cambiosSalariosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vacacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vacacionesDisfrutesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ibcsContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ingresosBasesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosSedesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyeccionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -1427,37 +1428,37 @@ class RhuContrato
     }
 
     /**
-     * Add ibcsContratoRel
+     * Add ingresosBasesContratoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsContratoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase $ingresosBasesContratoRel
      *
      * @return RhuContrato
      */
-    public function addIbcsContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsContratoRel)
+    public function addIngresosBasesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase $ingresosBasesContratoRel)
     {
-        $this->ibcsContratoRel[] = $ibcsContratoRel;
+        $this->ingresosBasesContratoRel[] = $ingresosBasesContratoRel;
 
         return $this;
     }
 
     /**
-     * Remove ibcsContratoRel
+     * Remove ingresosBasesContratoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsContratoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase $ingresosBasesContratoRel
      */
-    public function removeIbcsContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIbc $ibcsContratoRel)
+    public function removeIngresosBasesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase $ingresosBasesContratoRel)
     {
-        $this->ibcsContratoRel->removeElement($ibcsContratoRel);
+        $this->ingresosBasesContratoRel->removeElement($ingresosBasesContratoRel);
     }
 
     /**
-     * Get ibcsContratoRel
+     * Get ingresosBasesContratoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getIbcsContratoRel()
+    public function getIngresosBasesContratoRel()
     {
-        return $this->ibcsContratoRel;
+        return $this->ingresosBasesContratoRel;
     }
 
     /**

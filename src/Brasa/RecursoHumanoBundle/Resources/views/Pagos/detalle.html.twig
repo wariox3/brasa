@@ -103,9 +103,12 @@
                             <th style="text-align: right">VR. PAGO</th>
                             <th style="text-align: right">OP</th>
                             <th style="text-align: right">VR. NETO</th>                            
-                            <th style="text-align: right">ING. PRESTACIONAL</th>
+                            <th style="text-align: right">IBP</th>
+                            <th style="text-align: right">IBC</th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
+                        {% set douTotalIBC = 0  %}
+                        {% set douTotalIBP = 0  %}
                         {% for arPagoDetalles in arPagoDetalles %}
                         <tr>
                             <td>
@@ -121,10 +124,17 @@
                             <td style="text-align: right">{{ arPagoDetalles.vrPago | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.operacion | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.vrPagoOperado | number_format(0, '.', ',') }}</td>                            
+                            <td style="text-align: right">{{ arPagoDetalles.vrIngresoBasePrestacion | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPagoDetalles.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoDetalles.codigoPagoDetallePk }}" /></td>
+                            {% set douTotalIBC = douTotalIBC + arPagoDetalles.vrIngresoBaseCotizacion %} 
+                            {% set douTotalIBP = douTotalIBP + arPagoDetalles.vrIngresoBasePrestacion %} 
                         </tr>
                         {% endfor %}
+                        <td colspan="10"></td>                        
+                        <td style="text-align: right">{{ douTotalIBP | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right"></td>                        
                     </table>
 
                     <!-- Botones Menu Items -->

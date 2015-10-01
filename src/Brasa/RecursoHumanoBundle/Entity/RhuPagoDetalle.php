@@ -86,6 +86,11 @@ class RhuPagoDetalle
      * @ORM\Column(name="vr_ingreso_base_cotizacion", type="float")
      */
     private $vrIngresoBaseCotizacion = 0;     
+
+    /**
+     * @ORM\Column(name="vr_ingreso_base_prestacion", type="float")
+     */
+    private $vrIngresoBasePrestacion = 0;    
     
     /**
      * @ORM\Column(name="codigo_programacion_pago_detalle_fk", type="integer", nullable=true)
@@ -583,5 +588,29 @@ class RhuPagoDetalle
     public function getCreditoRel()
     {
         return $this->creditoRel;
+    }
+
+    /**
+     * Set vrIngresoBasePrestacion
+     *
+     * @param float $vrIngresoBasePrestacion
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setVrIngresoBasePrestacion($vrIngresoBasePrestacion)
+    {
+        $this->vrIngresoBasePrestacion = $vrIngresoBasePrestacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBasePrestacion
+     *
+     * @return float
+     */
+    public function getVrIngresoBasePrestacion()
+    {
+        return $this->vrIngresoBasePrestacion;
     }
 }

@@ -27,6 +27,7 @@ class RhuPagoRepository extends EntityRepository {
         $douDevengado = 0;        
         $douNeto = 0;
         $douIngresoBaseCotizacion = 0;
+        $douIngresoBasePrestacion = 0;
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigoPago));         
         foreach ($arPagoDetalles as $arPagoDetalle) {
@@ -56,7 +57,8 @@ class RhuPagoRepository extends EntityRepository {
                 }                
             }
             
-            $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $arPagoDetalle->getVrIngresoBaseCotizacion();
+            $douIngresoBaseCotizacion += $arPagoDetalle->getVrIngresoBaseCotizacion();
+            $douIngresoBasePrestacion += $arPagoDetalle->getVrIngresoBasePrestacion();
             
         }
         
@@ -84,6 +86,7 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrCosto(0);
         $arPago->setVrTotalCobrar(0);        
         $arPago->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
+        $arPago->setVrIngresoBasePrestacion($douIngresoBasePrestacion);
         $em->persist($arPago);
         $em->flush();
         return $douNeto;

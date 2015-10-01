@@ -49,35 +49,7 @@ class ConsultasController extends Controller
             'arPagos' => $arPagos,
             'form' => $form->createView()
             ));
-    }
-    
-    public function costosIbcAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $paginator  = $this->get('knp_paginator');
-        $form = $this->formularioCostosIbcLista();
-        $form->handleRequest($request);
-        $this->listarCostosIbc();
-        if ($form->isValid())
-        {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnExcelCostosIbc')->isClicked()) {
-                $this->filtrarCostosIbcLista($form);
-                $this->listarCostosIbc();
-                $this->generarCostosIbcExcel();
-            }            
-            if($form->get('BtnFiltrarCostosIbc')->isClicked()) {
-                $this->filtrarCostosIbcLista($form);
-                $this->listarCostosIbc();
-            }
-
-        }
-        $arIbc = $paginator->paginate($em->createQuery($this->strSqlCostosIbcLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaRecursoHumanoBundle:Consultas/Costos:Ibc.html.twig', array(
-            'arIbc' => $arIbc,
-            'form' => $form->createView()
-            ));
-    }
+    }        
     
     public function creditosGeneralAction() {
         $em = $this->getDoctrine()->getManager();
@@ -345,19 +317,7 @@ class ConsultasController extends Controller
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()
             ));
-    }
-    
-    private function listarCostosIbc() {
-        $session = $this->getRequest()->getSession();
-        $em = $this->getDoctrine()->getManager();
-        $this->strSqlCostosIbcLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuIbc')->listaDqlCostosIbc(
-                    
-                    $session->get('filtroContrato'),
-                    $session->get('filtroIdentificacion'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
-                    );
-    }
+    }        
     
     private function listarCostosGeneral() {
         $session = $this->getRequest()->getSession();
@@ -490,22 +450,7 @@ class ConsultasController extends Controller
             ->add('BtnPDF', 'submit', array('label'  => 'PDF',))
             ->getForm();
         return $form;
-    }
-    
-    private function formularioCostosIbcLista() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        
-        $form = $this->createFormBuilder()
-            ->add('TxtContrato', 'text', array('label'  => 'Contrato','data' => $session->get('filtroContrato')))
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('BtnFiltrarCostosIbc', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnExcelCostosIbc', 'submit', array('label'  => 'Excel',))
-            ->getForm();
-        return $form;
-    }
+    }        
     
     private function formularioCreditosLista() {
         $em = $this->getDoctrine()->getManager();
@@ -803,17 +748,7 @@ class ConsultasController extends Controller
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
-    }
-    
-    private function filtrarCostosIbcLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $session->set('filtroContrato', $form->get('TxtContrato')->getData());
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
-    }
+    }        
     
     private function filtrarCreditoLista($form) {
         $session = $this->getRequest()->getSession();
