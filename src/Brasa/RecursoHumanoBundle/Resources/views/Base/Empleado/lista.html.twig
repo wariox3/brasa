@@ -47,7 +47,7 @@
                 <th>IDENTIFICACIÓN</th>
                 <th>{{ knp_pagination_sortable(arEmpleados, 'NOMBRE', 'e.nombreCorto') }}</th>                                                
                 <th>CENTRO COSTO</th>
-                <th>F. NACIMIENTO</th>
+                <th>CONTRATO</th>
                 <th>TELÉFONO</th>                
                 <th style="text-align: right">SALARIO</th>
                 <th>FECHA INICIO</th>
@@ -64,7 +64,7 @@
                 <td>{{ arEmpleados.numeroIdentificacion  }}</td>
                 <td>{{ arEmpleados.nombreCorto }}</td>
                 <td>{% if arEmpleados.centroCostoRel.nombre is defined %} {{ arEmpleados.centroCostoRel.nombre  }} {% endif %}</td>
-                <td>{{ arEmpleados.fechaNacimiento |date("Y/m/d")  }}</td>
+                <td>{{ arEmpleados.codigoContratoActivoFk  }}</td>
                 <td>{{ arEmpleados.telefono }}</td>                
                 <td style="text-align: right">{{ arEmpleados.VrSalario | number_format(0, '.', ',') }}</td>                            
                 <td>{% if arEmpleados.fechaContrato != "" %} {{ arEmpleados.fechaContrato|date('Y/m/d')  }} {% else %} SIN DEFINIR {% endif %}</td>

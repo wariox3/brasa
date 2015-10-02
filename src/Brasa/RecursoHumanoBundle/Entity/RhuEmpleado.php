@@ -196,6 +196,11 @@ class RhuEmpleado
     private $estadoActivo = 1;
     
     /**     
+     * @ORM\Column(name="estado_contrato_activo", type="boolean")
+     */    
+    private $estadoContratoActivo = 0;
+    
+    /**     
      * @ORM\Column(name="cabeza_hogar", type="boolean")
      */    
     private $cabezaHogar= 0;
@@ -276,6 +281,11 @@ class RhuEmpleado
      * @ORM\Column(name="codigo_subtipo_cotizante_fk", type="integer", nullable=true)
      */    
     private $codigoSubtipoCotizanteFk;            
+    
+    /**
+     * @ORM\Column(name="codigo_contrato_activo_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoActivoFk;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
@@ -497,6 +507,7 @@ class RhuEmpleado
     protected $proyeccionesEmpleadoRel;     
     
     
+
     /**
      * Constructor
      */
@@ -1329,6 +1340,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set estadoContratoActivo
+     *
+     * @param boolean $estadoContratoActivo
+     *
+     * @return RhuEmpleado
+     */
+    public function setEstadoContratoActivo($estadoContratoActivo)
+    {
+        $this->estadoContratoActivo = $estadoContratoActivo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContratoActivo
+     *
+     * @return boolean
+     */
+    public function getEstadoContratoActivo()
+    {
+        return $this->estadoContratoActivo;
+    }
+
+    /**
      * Set cabezaHogar
      *
      * @param boolean $cabezaHogar
@@ -1710,6 +1745,30 @@ class RhuEmpleado
     public function getCodigoSubtipoCotizanteFk()
     {
         return $this->codigoSubtipoCotizanteFk;
+    }
+
+    /**
+     * Set codigoContratoActivoFk
+     *
+     * @param integer $codigoContratoActivoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoContratoActivoFk($codigoContratoActivoFk)
+    {
+        $this->codigoContratoActivoFk = $codigoContratoActivoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoActivoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoActivoFk()
+    {
+        return $this->codigoContratoActivoFk;
     }
 
     /**

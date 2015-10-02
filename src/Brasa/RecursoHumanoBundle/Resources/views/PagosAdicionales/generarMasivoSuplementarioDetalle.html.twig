@@ -42,7 +42,7 @@
 
                     </tr>
                     {% for arEmpleados in arEmpleados %}
-                    <tr {% if arEmpleados.estadoActivo == 0 %}class="danger"{% endif %}>
+                    <tr {% if arEmpleados.estadoContratoActivo == 0 %}class="danger"{% endif %}>
                         <td>
                             <input type="hidden" name="LblCodigo[]" value="{{ arEmpleados.codigoEmpleadoPk }}">
                             <span class="badge">{{ arEmpleados.codigoEmpleadoPk }}</span>

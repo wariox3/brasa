@@ -195,8 +195,8 @@ class ProgramacionesPagoController extends Controller
         } else {
             $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
             $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPago->getCodigoCentroCostoFk(), 'pagoAplicado' => 0));
-            $arIncapcidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-            $arIncapcidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                       
+            $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+            $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                       
             $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
             $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                       
         }

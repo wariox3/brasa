@@ -21,7 +21,7 @@ class RhuEmpleadoRepository extends EntityRepository {
             $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }
         if($boolMostrarActivos == 1 ) {
-            $dql .= " AND e.estadoActivo = 1";
+            $dql .= " AND e.estadoContratoActivo = 1";
         }
         if($boolMostrarActivos == "0") {
             $dql .= " AND e.estadoActivo = 0";
