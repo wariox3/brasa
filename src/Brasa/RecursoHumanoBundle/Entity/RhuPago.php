@@ -203,6 +203,11 @@ class RhuPago
      * @ORM\Column(name="estado_pagado", type="boolean")
      */    
     private $estadoPagado = 0;                
+
+    /**
+     * @ORM\Column(name="estado_pagado_banco", type="boolean")
+     */    
+    private $estadoPagadoBanco = 0;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=500, nullable=true)
@@ -1583,5 +1588,29 @@ class RhuPago
     public function getPagosBancosDetallePagoRel()
     {
         return $this->pagosBancosDetallePagoRel;
+    }
+
+    /**
+     * Set estadoPagadoBanco
+     *
+     * @param boolean $estadoPagadoBanco
+     *
+     * @return RhuPago
+     */
+    public function setEstadoPagadoBanco($estadoPagadoBanco)
+    {
+        $this->estadoPagadoBanco = $estadoPagadoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagadoBanco
+     *
+     * @return boolean
+     */
+    public function getEstadoPagadoBanco()
+    {
+        return $this->estadoPagadoBanco;
     }
 }

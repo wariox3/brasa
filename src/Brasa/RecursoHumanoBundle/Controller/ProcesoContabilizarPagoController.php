@@ -39,6 +39,7 @@ class ProcesoContabilizarPagoController extends Controller
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arPago->getNumero());
+                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
                                     $arRegistro->setFecha($arPago->getFechaDesde());
                                     if($arPagoDetalle->getPagoConceptoRel()->getTipoCuenta() == 1) {
                                         $arRegistro->setDebito($arPagoDetalle->getVrPago());
@@ -56,6 +57,7 @@ class ProcesoContabilizarPagoController extends Controller
                                 $arRegistro->setCuentaRel($arCuenta);
                                 $arRegistro->setTerceroRel($arTercero);
                                 $arRegistro->setNumero($arPago->getNumero());
+                                $arRegistro->setNumeroReferencia($arPago->getNumero());
                                 $arRegistro->setFecha($arPago->getFechaDesde());
                                 $arRegistro->setCredito($arPago->getVrNeto() );                            
                                 $arRegistro->setDescripcionContable('NOMINA POR PAGAR');

@@ -245,18 +245,6 @@ brs_rhu_programaciones_pago_cargar_tiempo_sede:
 brs_rhu_programaciones_pago_cargar_adicionales_pago:
     path:     /rhu/programaciones/pago/cargar/adicionales/pago/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarAdicionalesPago:cargar }
-
-brs_rhu_utilidades_generar_pago_banco:
-    path:     /rhu/utilidades/generar/pago/banco
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesGenerarPagoBanco:Generar }    
-    
-brs_rhu_utilidades_programaciones_pago_banco_lista:
-    path:     /rhu/utilidades/programaciones/pago/banco/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProgramacionesPagoBanco:lista }     
-    
-brs_rhu_utilidades_programaciones_pago_banco_detalle:
-    path:     /rhu/utilidades/programaciones/pago/banco/detalle/{codigoProgramacionPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProgramacionesPagoBanco:detalle }
     
 brs_rhu_utilidades_medios_magneticos_informe:
     path:     /rhu/utilidades/mediosmagneticos/informe
@@ -621,4 +609,7 @@ brs_rhu_proceso_cierre_anio_cerrar:
 brs_rhu_proceso_contabilizar_pago:
     path:     /rhu/proceso/contabilizar/pago
     defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPago:lista }     
-    
+
+brs_rhu_proceso_contabilizar_pago_banco:
+    path:     /rhu/proceso/contabilizar/pago/banco
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPagoBanco:lista }         

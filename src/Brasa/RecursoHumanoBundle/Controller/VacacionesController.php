@@ -17,8 +17,7 @@ class VacacionesController extends Controller
         $form->handleRequest($request);
         $this->listar();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {    
                 if(count($arrSeleccionados) > 0) {

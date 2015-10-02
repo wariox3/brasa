@@ -310,7 +310,17 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="tarifa_caja", type="float")
      */
-    private $tarifaCaja = 0;    
+    private $tarifaCaja = 0;  
+    
+    /**
+     * @ORM\Column(name="tarifa_sena", type="float")
+     */
+    private $tarifaSena = 0;     
+    
+    /**
+     * @ORM\Column(name="tarifa_icbf", type="float")
+     */
+    private $tarifaIcbf = 0;     
     
     /**
      * @ORM\Column(name="cotizacion_pension", type="float")
@@ -330,7 +340,17 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="cotizacion_caja", type="float")
      */
-    private $cotizacionCaja = 0;    
+    private $cotizacionCaja = 0;
+    
+    /**
+     * @ORM\Column(name="cotizacion_sena", type="float")
+     */
+    private $cotizacionSena = 0;    
+    
+    /**
+     * @ORM\Column(name="cotizacion_icbf", type="float")
+     */
+    private $cotizacionIcbf = 0;    
     
     /**
      * @ORM\Column(name="aporte_voluntario_fondo_pensiones_obligatorias", type="string", length=9)
@@ -356,6 +376,8 @@ class RhuSsoAporte
      * @ORM\Column(name="aportes_fondo_solidaridad_pensional_subsistencia", type="float")
      */
     private $aportesFondoSolidaridadPensionalSubsistencia;      
+    
+   
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoAportesSsoPeriodoRel")
@@ -2148,5 +2170,101 @@ class RhuSsoAporte
     public function getDiasVacaciones()
     {
         return $this->diasVacaciones;
+    }
+
+    /**
+     * Set tarifaSena
+     *
+     * @param float $tarifaSena
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaSena($tarifaSena)
+    {
+        $this->tarifaSena = $tarifaSena;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaSena
+     *
+     * @return float
+     */
+    public function getTarifaSena()
+    {
+        return $this->tarifaSena;
+    }
+
+    /**
+     * Set tarifaIcbf
+     *
+     * @param float $tarifaIcbf
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaIcbf($tarifaIcbf)
+    {
+        $this->tarifaIcbf = $tarifaIcbf;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaIcbf
+     *
+     * @return float
+     */
+    public function getTarifaIcbf()
+    {
+        return $this->tarifaIcbf;
+    }
+
+    /**
+     * Set cotizacionSena
+     *
+     * @param float $cotizacionSena
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionSena($cotizacionSena)
+    {
+        $this->cotizacionSena = $cotizacionSena;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionSena
+     *
+     * @return float
+     */
+    public function getCotizacionSena()
+    {
+        return $this->cotizacionSena;
+    }
+
+    /**
+     * Set cotizacionIcbf
+     *
+     * @param float $cotizacionIcbf
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionIcbf($cotizacionIcbf)
+    {
+        $this->cotizacionIcbf = $cotizacionIcbf;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionIcbf
+     *
+     * @return float
+     */
+    public function getCotizacionIcbf()
+    {
+        return $this->cotizacionIcbf;
     }
 }

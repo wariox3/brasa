@@ -58,14 +58,14 @@ class RhuProgramacionPago
     private $estadoPagado = 0;    
     
     /**
-     * @ORM\Column(name="estado_anulado", type="boolean")
+     * @ORM\Column(name="estado_pagado_banco", type="boolean")
      */    
-    private $estadoAnulado = 0;     
+    private $estadoPagadoBanco = 0;    
     
     /**
-     * @ORM\Column(name="archivo_exportado_banco", type="boolean")
+     * @ORM\Column(name="estado_anulado", type="boolean")
      */    
-    private $archivoExportadoBanco = 0;    
+    private $estadoAnulado = 0;            
     
     /**     
      * @ORM\Column(name="verificar_pagos_adicionales", type="boolean")
@@ -149,8 +149,7 @@ class RhuProgramacionPago
      * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="programacionPagoRel")
      */
     protected $facturasDetallesProgramacionPagoRel;
-
-   
+  
     /**
      * Constructor
      */
@@ -367,6 +366,30 @@ class RhuProgramacionPago
     }
 
     /**
+     * Set estadoPagadoBanco
+     *
+     * @param boolean $estadoPagadoBanco
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setEstadoPagadoBanco($estadoPagadoBanco)
+    {
+        $this->estadoPagadoBanco = $estadoPagadoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagadoBanco
+     *
+     * @return boolean
+     */
+    public function getEstadoPagadoBanco()
+    {
+        return $this->estadoPagadoBanco;
+    }
+
+    /**
      * Set estadoAnulado
      *
      * @param boolean $estadoAnulado
@@ -388,30 +411,6 @@ class RhuProgramacionPago
     public function getEstadoAnulado()
     {
         return $this->estadoAnulado;
-    }
-
-    /**
-     * Set archivoExportadoBanco
-     *
-     * @param boolean $archivoExportadoBanco
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setArchivoExportadoBanco($archivoExportadoBanco)
-    {
-        $this->archivoExportadoBanco = $archivoExportadoBanco;
-
-        return $this;
-    }
-
-    /**
-     * Get archivoExportadoBanco
-     *
-     * @return boolean
-     */
-    public function getArchivoExportadoBanco()
-    {
-        return $this->archivoExportadoBanco;
     }
 
     /**

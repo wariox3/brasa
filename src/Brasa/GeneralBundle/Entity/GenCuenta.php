@@ -39,27 +39,27 @@ class GenCuenta
     private $codigoBancoFk;
     
     /**
+     * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20)
+     */
+    private $codigoCuentaFk;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="GenBanco", inversedBy="cuentasBancoRel")
      * @ORM\JoinColumn(name="codigo_banco_fk", referencedColumnName="codigo_banco_pk")
      */
-    protected $bancoRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar", mappedBy="cuentaRel")
-     */
-    protected $rhuPagosExportarCuentaRel;    
+    protected $bancoRel;        
 
     /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco", mappedBy="cuentaRel")
      */
     protected $rhuPagosBancosCuentaRel;    
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->rhuPagosExportarCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuPagosBancosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -170,6 +170,30 @@ class GenCuenta
     }
 
     /**
+     * Set codigoCuentaFk
+     *
+     * @param string $codigoCuentaFk
+     *
+     * @return GenCuenta
+     */
+    public function setCodigoCuentaFk($codigoCuentaFk)
+    {
+        $this->codigoCuentaFk = $codigoCuentaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaFk()
+    {
+        return $this->codigoCuentaFk;
+    }
+
+    /**
      * Set bancoRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenBanco $bancoRel
@@ -191,40 +215,6 @@ class GenCuenta
     public function getBancoRel()
     {
         return $this->bancoRel;
-    }
-
-    /**
-     * Add rhuPagosExportarCuentaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar $rhuPagosExportarCuentaRel
-     *
-     * @return GenCuenta
-     */
-    public function addRhuPagosExportarCuentaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar $rhuPagosExportarCuentaRel)
-    {
-        $this->rhuPagosExportarCuentaRel[] = $rhuPagosExportarCuentaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove rhuPagosExportarCuentaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar $rhuPagosExportarCuentaRel
-     */
-    public function removeRhuPagosExportarCuentaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoExportar $rhuPagosExportarCuentaRel)
-    {
-        $this->rhuPagosExportarCuentaRel->removeElement($rhuPagosExportarCuentaRel);
-    }
-
-    /**
-     * Get rhuPagosExportarCuentaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRhuPagosExportarCuentaRel()
-    {
-        return $this->rhuPagosExportarCuentaRel;
     }
 
     /**

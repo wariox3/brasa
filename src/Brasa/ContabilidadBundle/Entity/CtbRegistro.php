@@ -34,6 +34,11 @@ class CtbRegistro
     private $numero = 0; 
     
     /**
+     * @ORM\Column(name="numero_referencia", type="integer", nullable=true)
+     */    
+    private $numeroReferencia = 0;    
+    
+    /**
      * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20)
      */     
     private $codigoCuentaFk;      
@@ -469,5 +474,29 @@ class CtbRegistro
     public function getExportado()
     {
         return $this->exportado;
+    }
+
+    /**
+     * Set numeroReferencia
+     *
+     * @param integer $numeroReferencia
+     *
+     * @return CtbRegistro
+     */
+    public function setNumeroReferencia($numeroReferencia)
+    {
+        $this->numeroReferencia = $numeroReferencia;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroReferencia
+     *
+     * @return integer
+     */
+    public function getNumeroReferencia()
+    {
+        return $this->numeroReferencia;
     }
 }

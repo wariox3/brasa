@@ -43,6 +43,21 @@ class RhuPagoBanco
     private $codigoCuentaFk;
     
     /**
+     * @ORM\Column(name="vr_total_pago", type="float")
+     */
+    private $vrTotalPago = 0;     
+
+    /**
+     * @ORM\Column(name="numero_registros", type="integer")
+     */
+    private $numeroRegistros = 0;    
+    
+    /**
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */
+    private $estadoAutorizado = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCuenta", inversedBy="rhuPagosBancosCuentaRel")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
@@ -246,5 +261,77 @@ class RhuPagoBanco
     public function getPagosBancosDetallesPagoBancoRel()
     {
         return $this->pagosBancosDetallesPagoBancoRel;
+    }
+
+    /**
+     * Set vrTotalPago
+     *
+     * @param float $vrTotalPago
+     *
+     * @return RhuPagoBanco
+     */
+    public function setVrTotalPago($vrTotalPago)
+    {
+        $this->vrTotalPago = $vrTotalPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalPago
+     *
+     * @return float
+     */
+    public function getVrTotalPago()
+    {
+        return $this->vrTotalPago;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuPagoBanco
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set numeroRegistros
+     *
+     * @param integer $numeroRegistros
+     *
+     * @return RhuPagoBanco
+     */
+    public function setNumeroRegistros($numeroRegistros)
+    {
+        $this->numeroRegistros = $numeroRegistros;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroRegistros
+     *
+     * @return integer
+     */
+    public function getNumeroRegistros()
+    {
+        return $this->numeroRegistros;
     }
 }

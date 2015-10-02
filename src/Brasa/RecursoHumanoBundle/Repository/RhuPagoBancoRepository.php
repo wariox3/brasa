@@ -10,15 +10,31 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuPagoBancoRepository extends EntityRepository {        
-    
-    public function listaDQL() {                
+        
+    public function listaDQL($strFecha = "") {                
         $dql   = "SELECT pb FROM BrasaRecursoHumanoBundle:RhuPagoBanco pb WHERE pb.codigoPagoBancoPk <> 0";
-        /*if($strCodigoEntidadExamen != "") {
-            $dql .= " AND pe.codigoEntidadExamenFk = " . $strCodigoEntidadExamen;
-        } */    
+        if($strFecha != "") {
+            $dql .= " AND pb.fechaAplicacion = '" . $strFecha . "'";
+        }    
         
         $dql .= " ORDER BY pb.codigoPagoBancoPk";
         return $dql;
     }                            
+    
+    public function liquidar($codigoPagoBanco) {
+        $em = $this->getEntityManager();
+        $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);
+        $arPagoBancoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array('codigoPagoBancoFk' => $codigoPagoBanco));
+        $douTotal = 0;
+        $intNumeroRegistros = 0;
+        foreach ($arPagoBancoDetalles AS $arPagoBancoDetalle) {
+            $douTotal += $arPagoBancoDetalle->getVrPago();
+            $intNumeroRegistros++;
+        }
+        $arPagoBanco->setVrTotalPago($douTotal);
+        $arPagoBanco->setNumeroRegistros($intNumeroRegistros);
+        $em->persist($arPagoBanco);
+        $em->flush();
+    }     
     
 }

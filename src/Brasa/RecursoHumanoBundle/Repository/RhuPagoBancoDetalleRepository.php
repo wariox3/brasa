@@ -10,5 +10,9 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuPagoBancoDetalleRepository extends EntityRepository {                
-    
+    public function pendientesContabilizarDql() {        
+        $dql   = "SELECT pbd FROM BrasaRecursoHumanoBundle:RhuPagoBancoDetalle pbd WHERE pbd.estadoContabilizado = 0";       
+        $dql .= " ORDER BY pbd.codigoPagoBancoDetallePk DESC";
+        return $dql;
+    }                                
 }

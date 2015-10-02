@@ -28,6 +28,16 @@ class RhuPagoBancoDetalle
     private $codigoPagoFk;    
     
     /**
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
+     */         
+    private $numeroIdentificacion;    
+    
+    /**
+     * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
+     */    
+    private $nombreCorto;    
+    
+    /**
      * @ORM\Column(name="cuenta", type="string", length=20, nullable=true)
      */    
     private $cuenta;
@@ -36,6 +46,11 @@ class RhuPagoBancoDetalle
      * @ORM\Column(name="vr_pago", type="float")
      */
     private $vrPago = 0;     
+    
+    /**
+     * @ORM\Column(name="estado_contabilizado", type="boolean")
+     */
+    private $estadoContabilizado = 0;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoBanco", inversedBy="pagosBancosDetallePagoBancoRel")
@@ -201,5 +216,77 @@ class RhuPagoBancoDetalle
     public function getPagoRel()
     {
         return $this->pagoRel;
+    }
+
+    /**
+     * Set numeroIdentificacion
+     *
+     * @param string $numeroIdentificacion
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setNumeroIdentificacion($numeroIdentificacion)
+    {
+        $this->numeroIdentificacion = $numeroIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacion
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacion()
+    {
+        return $this->numeroIdentificacion;
+    }
+
+    /**
+     * Set nombreCorto
+     *
+     * @param string $nombreCorto
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setNombreCorto($nombreCorto)
+    {
+        $this->nombreCorto = $nombreCorto;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreCorto
+     *
+     * @return string
+     */
+    public function getNombreCorto()
+    {
+        return $this->nombreCorto;
+    }
+
+    /**
+     * Set estadoContabilizado
+     *
+     * @param boolean $estadoContabilizado
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setEstadoContabilizado($estadoContabilizado)
+    {
+        $this->estadoContabilizado = $estadoContabilizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContabilizado
+     *
+     * @return boolean
+     */
+    public function getEstadoContabilizado()
+    {
+        return $this->estadoContabilizado;
     }
 }
