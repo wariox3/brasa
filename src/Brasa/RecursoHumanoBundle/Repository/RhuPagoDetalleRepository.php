@@ -30,6 +30,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
         $douRetencion = $query->getSingleScalarResult();
         return $douRetencion;
     }
+    
     public function devuelveOtrosIngresosEmpleadoFecha($codigoEmpleado, $strFechaCertificado) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pd.vrPago) as Retencion FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
@@ -42,6 +43,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
         $douOtrosIngresos = $query->getSingleScalarResult();
         return $douOtrosIngresos;
     }
+    
     public function devuelvePrestacionalEmpleadoFecha($codigoEmpleado, $strFechaCertificado) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pd.vrPago) as Prestacional FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "

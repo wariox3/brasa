@@ -6,24 +6,97 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 class UtilidadesInformacionDaneController extends Controller
 {
-               
+
     public function InformeAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $fechaActual = date('Y-m-j');
+        $anioActual = date('Y');
+        $fechaPrimeraAnterior = strtotime ( '-1 year' , strtotime ( $fechaActual ) ) ;
+        $fechaPrimeraAnterior = date ( 'Y' , $fechaPrimeraAnterior );
+        $fechaSegundaAnterior = strtotime ( '-2 year' , strtotime ( $fechaActual ) ) ;
+        $fechaSegundaAnterior = date ( 'Y' , $fechaSegundaAnterior );
+        $fechaTerceraAnterior = strtotime ( '-3 year' , strtotime ( $fechaActual ) ) ;
+        $fechaTerceraAnterior = date ( 'Y' , $fechaTerceraAnterior );
         $form = $this->createFormBuilder()
             ->add('BtnGenerarArchivo', 'submit', array('label'  => 'Generar archivo',))
-            ->add('fechaProceso', 'choice', array('choices' => array('2014' => '2014', '2013' => '2013','2012' => '2012', '2011' => '2011','2010' => '2010')))
+            ->add('fechaProceso', 'choice', array('choices' => array($anioActual = date('Y') => $anioActual = date('Y'),$fechaPrimeraAnterior => $fechaPrimeraAnterior, $fechaSegundaAnterior => $fechaSegundaAnterior, $fechaTerceraAnterior => $fechaTerceraAnterior),))
             ->add('formatos', 'choice', array('choices' => array('mts' => 'Muestra trimestral de servicios MTS')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
-            
+            $controles = $request->request->get('form');
             if($form->get('BtnGenerarArchivo')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
-                 
+                $intContratoObraoLabor = 0;
+                $intContratoFijo = 0;
+                $intContratoIndefinido = 0;
+                $intContratoAprendiz = 0;
+                $intContratoPracticante = 0;
+                $intContratoObraoLaborBogota = 0;
+                $intContratoFijoBogota = 0;
+                $intContratoIndefinidoBogota = 0;
+                $intContratoAprendizBogota = 0;
+                $intContratoPracticanteBogota = 0;
+                if ($controles['fechaDesde'] <> null || $controles['fechaHasta'] <> null){
+                    $empleadosContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->createQueryBuilder('c')
+                            ->where('c.codigoContratoPk <> 0')
+                            ->andWhere('c.fechaDesde >= :fechaDesde')
+                            ->andWhere('c.fechaHasta <= :fechaHasta')
+                            ->setParameter('fechaDesde', $controles['fechaDesde'])
+                            ->setParameter('fechaHasta', $controles['fechaHasta'])
+                            ->getQuery()
+                            ->getResult();
+                } else {
+                    $empleadosContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->createQueryBuilder('c')
+                            ->where('c.codigoContratoPk <> 0')
+                            ->andWhere('c.fechaDesde LIKE :fechaDesde')
+                            ->andWhere('c.fechaHasta LIKE :fechaHasta')
+                            ->setParameter('fechaDesde', '%'.$controles['fechaProceso'].'%')
+                            ->setParameter('fechaHasta', '%'.$controles['fechaProceso'].'%')
+                            ->getQuery()
+                            ->getResult();
+                }
+
+                    foreach ($empleadosContratos as $empleadosContrato) {
+                        $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto;
+                        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($empleadosContrato->getCodigoCentroCostoFk());
+                            if ($empleadosContrato->getCodigoContratoTipoFk() == 1){
+                                $intContratoObraoLabor++;
+                                if ($arCentroCosto->getCodigoCiudadFk() == 2387){
+                                   $intContratoObraoLaborBogota++;
+                                }
+                            }
+                            if ($empleadosContrato->getCodigoContratoTipoFk() == 2){
+                                $intContratoFijo++;
+                                if ($arCentroCosto->getCodigoCiudadFk() == 2387){
+                                   $intContratoFijoBogota++;
+                                }
+                            }
+                            if ($empleadosContrato->getCodigoContratoTipoFk() == 3){
+                                $intContratoIndefinido++;
+                                if ($arCentroCosto->getCodigoCiudadFk() == 2387){
+                                   $intContratoIndefinidoBogota++;
+                                }
+                            }
+                            if ($empleadosContrato->getCodigoContratoTipoFk() == 4){
+                                $intContratoAprendiz++;
+                                if ($arCentroCosto->getCodigoCiudadFk() == 2387){
+                                   $intContratoAprendizBogota++;
+                                }
+                            }
+                            if ($empleadosContrato->getCodigoContratoTipoFk() == 5){
+                                $intContratoPracticante++;
+                                if ($arCentroCosto->getCodigoCiudadFk() == 2387){
+                                   $intContratoPracticanteBogota++;
+                                }
+                            }
+
+                    }
+
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")
                     ->setLastModifiedBy("EMPRESA")
                     ->setTitle("Office 2007 XLSX Test Document")
@@ -31,7 +104,7 @@ class UtilidadesInformacionDaneController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-                
+
                 $objPHPExcel->getActiveSheet()->mergeCells('A1:J1')->getStyle()->getAlignment()->setHorizontal('center');
                 $objPHPExcel->getActiveSheet()->mergeCells('A2:J2');
                 $objPHPExcel->getActiveSheet()->mergeCells('A3:J3');
@@ -48,59 +121,54 @@ class UtilidadesInformacionDaneController extends Controller
                     ->setCellValue('A6', 'Temporal suministrado por otras empresas')
                     ->setCellValue('A7', 'Personal Aprendiz o estudiantes por convenio ( Universitario, tecnologo o tecnico)')
                     ->setCellValue('A8', 'TOTAL')
-                    ->setCellValue('K1', 'Número de personas promedio trimestre TOTAL NACIONAL')                    
-                    ->setCellValue('K2', '0')
-                    ->setCellValue('K3', '0')                    
-                    ->setCellValue('K4', '0')
-                    ->setCellValue('K5', '0')
-                    ->setCellValue('K6', '0')
-                    ->setCellValue('K7', '0')
-                    ->setCellValue('K8', '0')
-                    ->setCellValue('L1', 'Número de personas promedio trimestre TOTAL BOGOTA')                    
-                    ->setCellValue('L2', '0')
-                    ->setCellValue('L3', '0')                    
-                    ->setCellValue('L4', '0')
-                    ->setCellValue('L5', '0')
-                    ->setCellValue('L6', '0')
-                    ->setCellValue('L7', '0')
-                    ->setCellValue('L8', '0');
-                
-                
-                
-                $objPHPExcel->getActiveSheet(0)->setTitle('Dane');
+                    ->setCellValue('K1', 'Número de personas promedio trimestre TOTAL NACIONAL')
+                    ->setCellValue('K2', 0)
+                    ->setCellValue('K3', $intContratoIndefinido)
+                    ->setCellValue('K4', $intContratoFijo)
+                    ->setCellValue('K5', $intContratoObraoLabor)
+                    ->setCellValue('K6', 0)
+                    ->setCellValue('K7', $intContratoAprendiz + $intContratoPracticante)
+                    ->setCellValue('K8', $intContratoIndefinido + $intContratoObraoLabor + $intContratoFijoBogota + $intContratoAprendiz + $intContratoPracticante)
+                    ->setCellValue('L1', 'Número de personas promedio trimestre TOTAL BOGOTA')
+                    ->setCellValue('L2', $intContratoFijoBogota)
+                    ->setCellValue('L3', $intContratoIndefinidoBogota)
+                    ->setCellValue('L4', 0)
+                    ->setCellValue('L5', $intContratoObraoLaborBogota)
+                    ->setCellValue('L6', 0)
+                    ->setCellValue('L7', $intContratoAprendizBogota + $intContratoPracticanteBogota)
+                    ->setCellValue('L8', $intContratoIndefinidoBogota + $intContratoObraoLaborBogota + $intContratoFijoBogota + $intContratoAprendizBogota + $intContratoPracticanteBogota);
+
+
+                $objPHPExcel->getActiveSheet(0)->setTitle('1. PERSONAL OCUPADO');
                 $objPHPExcel->setActiveSheetIndex(0);
-                
-                $objPHPExcel->createSheet(2)->setTitle('Dane2')
-                    ->setCellValue('A1', 'TIPO CONTRATACION')
-                    ->setCellValue('A2', 'Propietarios, socios y familiares (sin remuneracion fija)')
-                    ->setCellValue('A3', 'Personal permanente (contrato a termino indefinido)')
-                    ->setCellValue('A4', 'Temporal Contratado directamente por la Empresa')
-                    ->setCellValue('A5', 'Temporal en Mision en otras empresas (solo para empresas especializadas en suministro de personal')
-                    ->setCellValue('A6', 'Temporal suministrado por otras empresas')
-                    ->setCellValue('A7', 'Personal Aprendiz o estudiantes por convenio ( Universitario, tecnologo o tecnico)')
+                $arSalariosPrestaciones = "";
+                $objPHPExcel->createSheet(2)->setTitle('2. COSTOS Y GASTOS CAUSADOS')   
+                    ->setCellValue('A1', 'CONCEPTO')
+                    ->setCellValue('A2', 'Sueldo y salarios del personal permanente (en dinero y en especie, horas extras, dominicales, comisiones por ventas, viaticos permanentes)')
+                    ->setCellValue('A3', 'Prestaciones sociales, cotizaciones y aportes personal permanente')
+                    ->setCellValue('A4', 'Salarios y prestaciones, cotizaciones  y Aportes del personal temporal contratado directamente por la empresa')
+                    ->setCellValue('A5', 'Sueldos y prestaciones del personal temporal en mision (solo para empresas especializadas en suministro de personal)')
+                    ->setCellValue('A6', 'Valor causado por el personal contratado a traves de empresas de servicios temporales')
+                    ->setCellValue('A7', 'Gastos causados por el personal aprendiz o estudiante por convenio ( universitario, tecnologo o tecnico)')
                     ->setCellValue('A8', 'TOTAL')
-                    ->setCellValue('K1', 'Número de personas promedio trimestre TOTAL NACIONAL')                    
+                    ->setCellValue('K1', 'TOTAL NACIONAL')
                     ->setCellValue('K2', '0')
-                    ->setCellValue('K3', '0')                    
+                    ->setCellValue('K3', '0')
                     ->setCellValue('K4', '0')
                     ->setCellValue('K5', '0')
                     ->setCellValue('K6', '0')
                     ->setCellValue('K7', '0')
                     ->setCellValue('K8', '0')
-                    ->setCellValue('L1', 'Número de personas promedio trimestre TOTAL BOGOTA')                    
-                    ->setCellValue('L2', '0')
-                    ->setCellValue('L3', '0')                    
-                    ->setCellValue('L4', '0')
-                    ->setCellValue('L5', '0')
-                    ->setCellValue('L6', '0')
-                    ->setCellValue('L7', '0')
-                    ->setCellValue('L8', '0');
-                        
-                
-                
-                
-                
-                
+                    ->setCellValue('L1', 'TOTAL BOGOTA')
+                    ->setCellValue('L2', 0)
+                    ->setCellValue('L3', 0)
+                    ->setCellValue('L4', 0)
+                    ->setCellValue('L5', 0)
+                    ->setCellValue('L6', 0)
+                    ->setCellValue('L7', 0)
+                    ->setCellValue('L8', 0);
+
+
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="InformeDane.xlsx"');
@@ -116,13 +184,13 @@ class UtilidadesInformacionDaneController extends Controller
                 $objWriter->save('php://output');
                 exit;
             }
-            
-            
+
+
         }
-                
+
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/InformacionDane:Informe.html.twig', array(
-                'form' => $form->createView() 
+                'form' => $form->createView()
                 ));
-    }            
-    
+    }
+
 }
