@@ -141,7 +141,7 @@ class UtilidadesInformacionDaneController extends Controller
 
                 $objPHPExcel->getActiveSheet(0)->setTitle('1. PERSONAL OCUPADO');
                 $objPHPExcel->setActiveSheetIndex(0);
-                $arSalariosPrestaciones = "";
+                
                 $objPHPExcel->createSheet(2)->setTitle('2. COSTOS Y GASTOS CAUSADOS')   
                     ->setCellValue('A1', 'CONCEPTO')
                     ->setCellValue('A2', 'Sueldo y salarios del personal permanente (en dinero y en especie, horas extras, dominicales, comisiones por ventas, viaticos permanentes)')

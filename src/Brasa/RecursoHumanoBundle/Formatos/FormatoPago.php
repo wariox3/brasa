@@ -260,33 +260,8 @@ class FormatoPago extends \FPDF_FPDF {
                 }
             $pdf->Ln(8);
             $pdf->SetFont('Arial', 'B', 7);
-            // INFORMACION DE INCAPACIDADES
-            $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-            $arPagoDetalles = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => self::$codigoPago));
-                $pdf->Cell(193, 4, utf8_decode("INFORMACIÓN DE INCAPACIDADES"), 1, 0, 'L',true);
-                $pdf->Ln(4);
-                $pdf->Cell(32, 4, utf8_decode("CÓDIGO"), 1, 0, 'L',true);
-                $pdf->Cell(32, 4, "DESDE", 1, 0, 'L',true);
-                $pdf->Cell(32, 4, "HASTA", 1, 0, 'L',true);
-                $pdf->Cell(32, 4, "HORAS", 1, 0, 'L',true);
-                $pdf->Cell(32, 4, "VALOR HORA", 1, 0, 'L',true);
-                $pdf->Cell(33, 4, utf8_decode("NÚMERO EPS"), 1, 0, 'L',true);
-                $pdf->Ln();
-                $pdf->SetFont('Arial', '', 8);
-                foreach ($arPagoDetalles as $arPagoDetalles) {
-                    if ($arPagoDetalles->getCodigoIncapacidadFk() <> "" && $arPagoDetalles->getCodigoPagoConceptoFk() == $arConfiguracion->getCodigoIncapacidad()) { 
-                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-                        $arIncapacidad = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($arPagoDetalles->getCodigoIncapacidadFk());
-                        $pdf->Cell(32, 4, $arIncapacidad->getCodigoIncapacidadPk(), 1, 0, 'L');
-                        $pdf->Cell(32, 4, $arIncapacidad->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');
-                        $pdf->Cell(32, 4, $arIncapacidad->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');
-                        $pdf->Cell(32, 4, $arPagoDetalles->getNumeroHoras(), 1, 0, 'L');
-                        $pdf->Cell(32, 4, number_format($arPagoDetalles->getVrHora(), 0, '.', ','), 1, 0, 'R');
-                        $pdf->Cell(33, 4, $arIncapacidad->getNumeroEps(), 1, 0, 'L');
-                        $pdf->Ln();
-                    }
-                
-                }    
+           
+                    
     }
 
     public function Footer() {
