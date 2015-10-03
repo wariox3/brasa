@@ -289,35 +289,97 @@ class ConsultasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
         $form = $this->formularioEmpleadoLista();
         $form->handleRequest($request);
         $this->EmpleadoListar();
-        if ($form->isValid())
-        {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnExcelEmpleado')->isClicked()) {
+        if($form->isValid()) {
+            if($form->get('BtnFiltrar')->isClicked()) {                
+                $this->filtrarEmpleadoLista($form);
+                $this->EmpleadoListar();
+            }
+            
+            if($form->get('BtnPdf')->isClicked()) {
+                $this->filtrarEmpleadoLista($form);
+                $this->EmpleadoListar();
+                $objFormatoEmpleado = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEmpleado();
+                $objFormatoEmpleado->Generar($this, $this->strSqlEmpleadosLista);
+                
+            }
+
+            if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarEmpleadoLista($form);
                 $this->EmpleadoListar();
                 $this->generarEmpleadoExcel();
             }
-            if($form->get('BtnPDFEmpleado')->isClicked()) {
-                $this->filtrarEmpleadoLista($form);
-                $this->EmpleadoListar();
-                $objReporteEmpleado = new \Brasa\RecursoHumanoBundle\Reportes\ReporteEmpleado();
-                $objReporteEmpleado->Generar($this, $this->strSqlEmpleadosLista);
-            }            
-            if($form->get('BtnFiltrarEmpleado')->isClicked()) {
-                $this->filtrarEmpleadoLista($form);
-                $this->EmpleadoListar();
-            }
-
-        }
-        $arEmpleados = $paginator->paginate($em->createQuery($this->strSqlEmpleadosLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaRecursoHumanoBundle:Consultas/Empleados:Empleados.html.twig', array(
+        }         
+        $arEmpleados = $paginator->paginate($em->createQuery($this->strSqlEmpleadosLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaRecursoHumanoBundle:Consultas/Empleados:lista.html.twig', array(
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()
             ));
-    }        
+    }
+    
+    public function EmpleadodetalleAction($codigoEmpleado) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->createFormBuilder()
+            ->getForm();
+        $form->handleRequest($request);
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
+        $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+        $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arVacacionesDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
+        $arVacacionesDisfrute = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));        
+        $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+        $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+        $arDisciplinarios = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arEmpleadoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio();
+        $arEmpleadoEstudios = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arEmpleadoFamilia = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia();
+        $arEmpleadoFamilia = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoFamilia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arEmpleadoDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
+        $arEmpleadoDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        if($form->isValid()) {
+        }
+        $arPagosAdicionales = $paginator->paginate($arPagosAdicionales, $this->get('request')->query->get('page', 1),5);
+        $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('request')->query->get('page', 1),5);
+        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);
+        $arVacacionesDisfrute = $paginator->paginate($arVacacionesDisfrute, $this->get('request')->query->get('page', 1),5);
+        $arLicencias = $paginator->paginate($arLicencias, $this->get('request')->query->get('page', 1),5);
+        $arContratos = $paginator->paginate($arContratos, $this->get('request')->query->get('page', 1),5);
+        $arCreditos = $paginator->paginate($arCreditos, $this->get('request')->query->get('page', 1),5);
+        $arDisciplinarios = $paginator->paginate($arDisciplinarios, $this->get('request')->query->get('page', 1),5);
+        $arEmpleadoEstudios = $paginator->paginate($arEmpleadoEstudios, $this->get('request')->query->get('page', 1),6);
+        $arEmpleadoFamilia = $paginator->paginate($arEmpleadoFamilia, $this->get('request')->query->get('page', 1),8);
+        $arEmpleadoDotacion = $paginator->paginate($arEmpleadoDotacion, $this->get('request')->query->get('page', 1),8);
+        return $this->render('BrasaRecursoHumanoBundle:Consultas/Empleados:detalle.html.twig', array(
+                    'arEmpleado' => $arEmpleado,
+                    'arPagosAdicionales' => $arPagosAdicionales,
+                    'arIncapacidades' => $arIncapacidades,
+                    'arVacaciones' => $arVacaciones,
+                    'arVacacionesDisfrute' => $arVacacionesDisfrute,
+                    'arLicencias' => $arLicencias,
+                    'arContratos' => $arContratos,
+                    'arCreditos' => $arCreditos,
+                    'arDisciplinarios' => $arDisciplinarios,
+                    'arEmpleadoEstudios' => $arEmpleadoEstudios,
+                    'arEmpleadoFamilia' => $arEmpleadoFamilia,
+                    'arEmpleadoDotacion' => $arEmpleadoDotacion,
+                    'form' => $form->createView()
+                    ));
+    }
     
     private function listarCostosGeneral() {
         $session = $this->getRequest()->getSession();
@@ -366,18 +428,15 @@ class ConsultasController extends Controller
     }
     
     private function EmpleadoListar() {
-        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strSqlEmpleadosLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaEmpleadoDQL(
-                    $session->get('filtroCodigoCentroCosto'),    
-                    $session->get('filtroNombre'),
-                    $session->get('filtroIdentificacion'),    
-                    $session->get('filtroCodigoEntidadSalud'),
-                    $session->get('filtroCodigoEntidadPension'),
-                    $session->get('filtroCodigoEntidadCaja'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
-                    );
+        $session = $this->getRequest()->getSession();
+        $this->strSqlEmpleadosLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL(
+                $session->get('filtroEmpleadoNombre'), 
+                $session->get('filtroCodigoCentroCosto'),
+                $session->get('filtroEmpleadoActivo'),                
+                $session->get('filtroIdentificacion'),
+                ""                
+                );         
     }
     
     private function AportesListar() {
@@ -560,79 +619,30 @@ class ConsultasController extends Controller
     
     private function formularioEmpleadoLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = $this->getRequest()->getSession();        
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
+                    return $er->createQueryBuilder('cc')                                        
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false,
+                'required' => false,  
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'empty_value' => "TODOS",    
                 'data' => ""
-            );
+            );  
         if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
         }
-        
-        $arrayPropiedadesEntidadSalud = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('es')
-                    ->orderBy('es.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoEntidadSalud')) {
-            $arrayPropiedadesEntidadSalud['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadSalud", $session->get('filtroCodigoEntidadSalud'));
-        }
-        
-        $arrayPropiedadesEntidadPension = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('ep')
-                    ->orderBy('ep.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoEntidadPension')) {
-            $arrayPropiedadesEntidadPension['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadPension", $session->get('filtroCodigoEntidadPension'));
-        }
-        
-        $arrayPropiedadesEntidadCaja = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadCaja',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('ec')
-                    ->orderBy('ec.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoEntidadCaja')) {
-            $arrayPropiedadesEntidadCaja['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadCaja", $session->get('filtroCodigoEntidadCaja'));
-        }
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('entidadSaludRel', 'entity', $arrayPropiedadesEntidadSalud)
-            ->add('entidadPensionRel', 'entity', $arrayPropiedadesEntidadPension)
-            ->add('entidadCajaRel', 'entity', $arrayPropiedadesEntidadCaja)    
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))    
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))                    
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('BtnFiltrarEmpleado', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnExcelEmpleado', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPDFEmpleado', 'submit', array('label'  => 'PDF',))
-            ->getForm();
+        $form = $this->createFormBuilder()                        
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
+            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))                            
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->getForm();        
         return $form;
     }
     
@@ -775,14 +785,10 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);        
+        $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroCodigoEntidadSalud', $controles['entidadSaludRel']);
-        $session->set('filtroCodigoEntidadPension', $controles['entidadPensionRel']);
-        $session->set('filtroCodigoEntidadCaja', $controles['entidadCajaRel']);
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $session->set('filtroEmpleadoActivo', $form->get('estadoActivo')->getData());
     }
     
     private function filtrarIncapacidadesCobrarLista($form) {
@@ -1410,7 +1416,6 @@ class ConsultasController extends Controller
     
     private function generarEmpleadoExcel() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -1422,55 +1427,34 @@ class ConsultasController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'IDENTIFICACIÓN')
-                    ->setCellValue('C1', 'EMPLEADO')
-                    ->setCellValue('D1', 'TELEFONO')
-                    ->setCellValue('E1', 'CELULAR')
-                    ->setCellValue('F1', 'DIRECCION')
-                    ->setCellValue('G1', 'CIUDAD')
-                    ->setCellValue('H1', 'CORREO')
-                    ->setCellValue('I1', 'FECHA CONTRATO')
-                    ->setCellValue('J1', 'CARGO')
-                    ->setCellValue('K1', 'CENTRO COSTO')
-                    ->setCellValue('L1', 'EPS')
-                    ->setCellValue('M1', 'PENSION')
-                    ->setCellValue('N1', 'CAJA COMPENSACION');
+                    ->setCellValue('A1', 'Codigo')
+                    ->setCellValue('B1', 'Identificacion')
+                    ->setCellValue('C1', 'Nombre')
+                    ->setCellValue('D1', 'Telefono')
+                    ->setCellValue('E1', 'Celular')
+                    ->setCellValue('F1', 'Direccion');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlEmpleadosLista);
         $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleados = $query->getResult();
         foreach ($arEmpleados as $arEmpleado) {
-            if ($arEmpleado->getCodigoCentroCostoFk() == Null) {
-                $centroCosto = "Sin definir";
-            }else {
-                $centroCosto = $arEmpleado->getCentroCostoRel()->getNombre();
-            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
                     ->setCellValue('B' . $i, $arEmpleado->getNumeroIdentificacion())
                     ->setCellValue('C' . $i, $arEmpleado->getNombreCorto())
                     ->setCellValue('D' . $i, $arEmpleado->getTelefono())
                     ->setCellValue('E' . $i, $arEmpleado->getCelular())
-                    ->setCellValue('F' . $i, $arEmpleado->getDireccion())
-                    ->setCellValue('G' . $i, $arEmpleado->getCiudadRel()->getNombre())
-                    ->setCellValue('H' . $i, $arEmpleado->getCorreo())
-                    ->setCellValue('I' . $i, $arEmpleado->getFechaContrato())
-                    ->setCellValue('J' . $i, $arEmpleado->getCargoDescripcion())
-                    ->setCellValue('K' . $i, $centroCosto)
-                    ->setCellValue('L' . $i, $arEmpleado->getEntidadSaludRel()->getNombre())
-                    ->setCellValue('M' . $i, $arEmpleado->getEntidadPensionRel()->getNombre())
-                    ->setCellValue('N' . $i, $arEmpleado->getEntidadCajaRel()->getNombre());
+                    ->setCellValue('F' . $i, $arEmpleado->getDireccion());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('ReporteEmpleados');
+        $objPHPExcel->getActiveSheet()->setTitle('Empleados');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ReporteEmpleados.xlsx"');
+        header('Content-Disposition: attachment;filename="Empleados.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

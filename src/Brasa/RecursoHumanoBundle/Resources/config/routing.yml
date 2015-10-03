@@ -509,6 +509,10 @@ brs_rhu_ss_periodo_detalle_empleados:
 brs_rhu_consultas_empleado:    
     path:     /rhu/consultas/empleado
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:Empleado }
+    
+brs_rhu_consultas_empleado_detalle:    
+    path:     /rhu/consultas/empleado/detalle/{codigoEmpleado}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:EmpleadoDetalle }    
 
 brs_rhu_consultas_costos_general:    
     path:     /rhu/consultas/costos/general
