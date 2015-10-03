@@ -55,6 +55,7 @@ class RhuContratoType extends AbstractType
             ->add('numero', 'text', array('required' => true))                                           
             ->add('cargoDescripcion', 'text', array('required' => true))                                                                       
             ->add('comentarios', 'textarea', array('required' => false))
+            ->add('salarioIntegral', 'choice', array('choices' => array('0' => 'NO', '1' => 'SI')))
             ->add('guardar', 'submit');        
     }
  

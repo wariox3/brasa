@@ -28,7 +28,7 @@ class RhuPagoBancoDetalle
     private $codigoPagoFk;    
     
     /**
-     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
      */         
     private $numeroIdentificacion;    
     

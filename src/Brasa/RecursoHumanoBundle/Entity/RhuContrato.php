@@ -153,6 +153,11 @@ class RhuContrato
      */    
     private $codigoSubtipoCotizanteFk;     
     
+    /**     
+     * @ORM\Column(name="salario_integral", type="boolean")
+     */    
+    private $salarioIntegral = 0;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -1527,5 +1532,29 @@ class RhuContrato
     public function getProyeccionesContratoRel()
     {
         return $this->proyeccionesContratoRel;
+    }
+
+    /**
+     * Set salarioIntegral
+     *
+     * @param boolean $salarioIntegral
+     *
+     * @return RhuContrato
+     */
+    public function setSalarioIntegral($salarioIntegral)
+    {
+        $this->salarioIntegral = $salarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioIntegral
+     *
+     * @return boolean
+     */
+    public function getSalarioIntegral()
+    {
+        return $this->salarioIntegral;
     }
 }

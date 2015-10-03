@@ -115,6 +115,9 @@ class RhuIncapacidadRepository extends EntityRepository {
                 $intDiaFin = 30;                
             } else {
                 $intDiaFin = $arIncapacidad->getFechaHasta()->format('j');
+                if($intDiaFin == 31) {
+                    $intDiaFin = 30;
+                }
             }            
             $intDiasIncapacidad += (($intDiaFin - $intDiaInicio)+1);
         }

@@ -347,12 +347,19 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $douIngresoBaseCotizacion += $douPagoDetalle;                        
                         $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
                         $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
-                       
+                        /*if($arProgramacionPagoDetalle->getCodigoEmpleadoFk() == 507) {
+                            echo "hola";
+                        }*/
                         //Liquidar salud
                         if($arProgramacionPagoDetalle->getDescuentoSalud() == 1) {
                             $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoSalud);
                             $intDias = $intHorasLaboradas / 8;
-                            $douPagoDetalle = ($douIngresoBaseCotizacion * $arPagoConcepto->getPorPorcentaje())/100;                            
+                            if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
+                                $douPagoDetalle = (($douIngresoBaseCotizacion / 1.3) * $arPagoConcepto->getPorPorcentaje())/100;                                                                
+                            } else {
+                                $douPagoDetalle = ($douIngresoBaseCotizacion * $arPagoConcepto->getPorPorcentaje())/100;                                                            
+                            }
+                            
                             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                             $arPagoDetalle->setPagoRel($arPago);
                             $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
@@ -375,8 +382,12 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                     $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra(); //PORCENTAJE PENSION EXTRA DEL 5%
                                 }                                        
                             }
-
-                            $douPagoDetalle = ($douIngresoBasePrestacional * $douPorcentaje)/100;
+                            if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
+                                $douPagoDetalle = (($douIngresoBaseCotizacion / 1.3) * $douPorcentaje)/100;
+                            } else {
+                                $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;
+                            }
+                            
                             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                             $arPagoDetalle->setPagoRel($arPago);
                             $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
@@ -997,9 +1008,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                 $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
                 $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
-                $arProgramacionPagoDetalle->setContratoRel($arContrato);
+                $arProgramacionPagoDetalle->setContratoRel($arContrato);                
                 $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalarioPago());
                 $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
+                $arProgramacionPagoDetalle->setSalarioIntegral($arContrato->getSalarioIntegral());
                 if($arContrato->getCodigoContratoTipoFk() == 4 || $arContrato->getCodigoContratoTipoFk() == 5) {
                     $arProgramacionPagoDetalle->setDescuentoPension(0);
                     $arProgramacionPagoDetalle->setDescuentoSalud(0);

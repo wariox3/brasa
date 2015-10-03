@@ -86,6 +86,9 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
                 $strNovedadRetiro = "X";                    
             }
             $floSalario = $arContrato->getVrSalario();
+            if($arContrato->getSalarioIntegral() == 1) {
+                $arPeriodoEmpleadoActualizar->setSalarioIntegral('X');
+            }
             $arPeriodoEmpleadoActualizar->setVrSalario($floSalario);
             $arPeriodoEmpleadoActualizar->setDias($intDiasCotizar);
             $arPeriodoEmpleadoActualizar->setIngreso($strNovedadIngreso);

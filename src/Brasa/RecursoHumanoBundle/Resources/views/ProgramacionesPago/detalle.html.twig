@@ -123,7 +123,7 @@
                 {% for arIncapacidades in arIncapacidades %}
                 <tr>
                     <td><input type="hidden" name="LblCodigo[]" value="{{ arIncapacidades.codigoIncapacidadPk }}">{{ arIncapacidades.codigoIncapacidadPk }} </td>
-                    <td>{{ arIncapacidades.pagoAdicionalSubtipoRel.nombre  }}</td>
+                    <td>{{ arIncapacidades.incapacidadTipoRel.nombre  }}</td>
                     <td>{{ arIncapacidades.fechaDesde |date("Y/m/d")  }}</td>
                     <td>{{ arIncapacidades.fechaHasta |date("Y/m/d")  }}</td>
                     <td>{{ arIncapacidades.empleadoRel.nombreCorto  }}</td>

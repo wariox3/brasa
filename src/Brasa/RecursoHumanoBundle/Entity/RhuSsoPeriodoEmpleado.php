@@ -68,6 +68,11 @@ class RhuSsoPeriodoEmpleado
     private $retiro = ' ';    
     
     /**
+     * @ORM\Column(name="salario_integral", type="string", length=1)
+     */
+    private $salarioIntegral = ' ';    
+    
+    /**
      * @ORM\Column(name="dias_licencia", type="integer")
      */    
     private $diasLicencia = 0;    
@@ -131,6 +136,7 @@ class RhuSsoPeriodoEmpleado
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
     protected $contratoRel;     
+
 
 
     /**
@@ -312,6 +318,30 @@ class RhuSsoPeriodoEmpleado
     }
 
     /**
+     * Set vrSuplementario
+     *
+     * @param float $vrSuplementario
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setVrSuplementario($vrSuplementario)
+    {
+        $this->vrSuplementario = $vrSuplementario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSuplementario
+     *
+     * @return float
+     */
+    public function getVrSuplementario()
+    {
+        return $this->vrSuplementario;
+    }
+
+    /**
      * Set ingreso
      *
      * @param string $ingreso
@@ -357,6 +387,198 @@ class RhuSsoPeriodoEmpleado
     public function getRetiro()
     {
         return $this->retiro;
+    }
+
+    /**
+     * Set salarioIntegral
+     *
+     * @param string $salarioIntegral
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setSalarioIntegral($salarioIntegral)
+    {
+        $this->salarioIntegral = $salarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioIntegral
+     *
+     * @return string
+     */
+    public function getSalarioIntegral()
+    {
+        return $this->salarioIntegral;
+    }
+
+    /**
+     * Set diasLicencia
+     *
+     * @param integer $diasLicencia
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasLicencia($diasLicencia)
+    {
+        $this->diasLicencia = $diasLicencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicencia
+     *
+     * @return integer
+     */
+    public function getDiasLicencia()
+    {
+        return $this->diasLicencia;
+    }
+
+    /**
+     * Set diasIncapacidadGeneral
+     *
+     * @param integer $diasIncapacidadGeneral
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasIncapacidadGeneral($diasIncapacidadGeneral)
+    {
+        $this->diasIncapacidadGeneral = $diasIncapacidadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get diasIncapacidadGeneral
+     *
+     * @return integer
+     */
+    public function getDiasIncapacidadGeneral()
+    {
+        return $this->diasIncapacidadGeneral;
+    }
+
+    /**
+     * Set diasLicenciaMaternidad
+     *
+     * @param integer $diasLicenciaMaternidad
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasLicenciaMaternidad($diasLicenciaMaternidad)
+    {
+        $this->diasLicenciaMaternidad = $diasLicenciaMaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicenciaMaternidad
+     *
+     * @return integer
+     */
+    public function getDiasLicenciaMaternidad()
+    {
+        return $this->diasLicenciaMaternidad;
+    }
+
+    /**
+     * Set diasIncapacidadLaboral
+     *
+     * @param integer $diasIncapacidadLaboral
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasIncapacidadLaboral($diasIncapacidadLaboral)
+    {
+        $this->diasIncapacidadLaboral = $diasIncapacidadLaboral;
+
+        return $this;
+    }
+
+    /**
+     * Get diasIncapacidadLaboral
+     *
+     * @return integer
+     */
+    public function getDiasIncapacidadLaboral()
+    {
+        return $this->diasIncapacidadLaboral;
+    }
+
+    /**
+     * Set diasVacaciones
+     *
+     * @param integer $diasVacaciones
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setDiasVacaciones($diasVacaciones)
+    {
+        $this->diasVacaciones = $diasVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacaciones
+     *
+     * @return integer
+     */
+    public function getDiasVacaciones()
+    {
+        return $this->diasVacaciones;
+    }
+
+    /**
+     * Set tarifaPension
+     *
+     * @param float $tarifaPension
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setTarifaPension($tarifaPension)
+    {
+        $this->tarifaPension = $tarifaPension;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaPension
+     *
+     * @return float
+     */
+    public function getTarifaPension()
+    {
+        return $this->tarifaPension;
+    }
+
+    /**
+     * Set tarifaRiesgos
+     *
+     * @param float $tarifaRiesgos
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setTarifaRiesgos($tarifaRiesgos)
+    {
+        $this->tarifaRiesgos = $tarifaRiesgos;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaRiesgos
+     *
+     * @return float
+     */
+    public function getTarifaRiesgos()
+    {
+        return $this->tarifaRiesgos;
     }
 
     /**
@@ -477,197 +699,5 @@ class RhuSsoPeriodoEmpleado
     public function getContratoRel()
     {
         return $this->contratoRel;
-    }
-
-    /**
-     * Set vrSuplementario
-     *
-     * @param float $vrSuplementario
-     *
-     * @return RhuSsoPeriodoEmpleado
-     */
-    public function setVrSuplementario($vrSuplementario)
-    {
-        $this->vrSuplementario = $vrSuplementario;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSuplementario
-     *
-     * @return float
-     */
-    public function getVrSuplementario()
-    {
-        return $this->vrSuplementario;
-    }
-
-    /**
-     * Set diasLicencia
-     *
-     * @param integer $diasLicencia
-     *
-     * @return RhuSsoPeriodoEmpleado
-     */
-    public function setDiasLicencia($diasLicencia)
-    {
-        $this->diasLicencia = $diasLicencia;
-
-        return $this;
-    }
-
-    /**
-     * Get diasLicencia
-     *
-     * @return integer
-     */
-    public function getDiasLicencia()
-    {
-        return $this->diasLicencia;
-    }
-
-    /**
-     * Set diasIncapacidadGeneral
-     *
-     * @param integer $diasIncapacidadGeneral
-     *
-     * @return RhuSsoPeriodoEmpleado
-     */
-    public function setDiasIncapacidadGeneral($diasIncapacidadGeneral)
-    {
-        $this->diasIncapacidadGeneral = $diasIncapacidadGeneral;
-
-        return $this;
-    }
-
-    /**
-     * Get diasIncapacidadGeneral
-     *
-     * @return integer
-     */
-    public function getDiasIncapacidadGeneral()
-    {
-        return $this->diasIncapacidadGeneral;
-    }
-
-    /**
-     * Set diasLicenciaMaternidad
-     *
-     * @param integer $diasLicenciaMaternidad
-     *
-     * @return RhuSsoPeriodoEmpleado
-     */
-    public function setDiasLicenciaMaternidad($diasLicenciaMaternidad)
-    {
-        $this->diasLicenciaMaternidad = $diasLicenciaMaternidad;
-
-        return $this;
-    }
-
-    /**
-     * Get diasLicenciaMaternidad
-     *
-     * @return integer
-     */
-    public function getDiasLicenciaMaternidad()
-    {
-        return $this->diasLicenciaMaternidad;
-    }
-
-    /**
-     * Set diasIncapacidadLaboral
-     *
-     * @param integer $diasIncapacidadLaboral
-     *
-     * @return RhuSsoPeriodoEmpleado
-     */
-    public function setDiasIncapacidadLaboral($diasIncapacidadLaboral)
-    {
-        $this->diasIncapacidadLaboral = $diasIncapacidadLaboral;
-
-        return $this;
-    }
-
-    /**
-     * Get diasIncapacidadLaboral
-     *
-     * @return integer
-     */
-    public function getDiasIncapacidadLaboral()
-    {
-        return $this->diasIncapacidadLaboral;
-    }
-
-    /**
-     * Set tarifaPension
-     *
-     * @param float $tarifaPension
-     *
-     * @return RhuSsoPeriodoEmpleado
-     */
-    public function setTarifaPension($tarifaPension)
-    {
-        $this->tarifaPension = $tarifaPension;
-
-        return $this;
-    }
-
-    /**
-     * Get tarifaPension
-     *
-     * @return float
-     */
-    public function getTarifaPension()
-    {
-        return $this->tarifaPension;
-    }
-
-    /**
-     * Set tarifaRiesgos
-     *
-     * @param float $tarifaRiesgos
-     *
-     * @return RhuSsoPeriodoEmpleado
-     */
-    public function setTarifaRiesgos($tarifaRiesgos)
-    {
-        $this->tarifaRiesgos = $tarifaRiesgos;
-
-        return $this;
-    }
-
-    /**
-     * Get tarifaRiesgos
-     *
-     * @return float
-     */
-    public function getTarifaRiesgos()
-    {
-        return $this->tarifaRiesgos;
-    }
-
-    /**
-     * Set diasVacaciones
-     *
-     * @param integer $diasVacaciones
-     *
-     * @return RhuSsoPeriodoEmpleado
-     */
-    public function setDiasVacaciones($diasVacaciones)
-    {
-        $this->diasVacaciones = $diasVacaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get diasVacaciones
-     *
-     * @return integer
-     */
-    public function getDiasVacaciones()
-    {
-        return $this->diasVacaciones;
     }
 }

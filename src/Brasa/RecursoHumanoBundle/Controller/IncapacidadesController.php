@@ -86,7 +86,7 @@ class IncapacidadesController extends Controller
             if($arIncapacidad->getFechaDesde() <= $arIncapacidad->getFechaHasta()) {
                 if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {                    
                     if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {
-                        if($arIncapacidad->getFechaDesde() > $arEmpleado->getFechaContrato()) {
+                        if($arIncapacidad->getFechaDesde() >= $arEmpleado->getFechaContrato()) {
                             $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
                             $intDias = $intDias->format('%a');
                             $intDias = $intDias + 1;

@@ -139,6 +139,11 @@ class RhuProgramacionPagoDetalle
      * @ORM\Column(name="dias_vacaciones", type="integer")
      */
     private $diasVacaciones = 0;     
+
+    /**     
+     * @ORM\Column(name="salario_integral", type="boolean")
+     */
+    private $salarioIntegral = 0;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
@@ -926,5 +931,29 @@ class RhuProgramacionPagoDetalle
     public function getDiasVacaciones()
     {
         return $this->diasVacaciones;
+    }
+
+    /**
+     * Set salarioIntegral
+     *
+     * @param boolean $salarioIntegral
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setSalarioIntegral($salarioIntegral)
+    {
+        $this->salarioIntegral = $salarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioIntegral
+     *
+     * @return boolean
+     */
+    public function getSalarioIntegral()
+    {
+        return $this->salarioIntegral;
     }
 }

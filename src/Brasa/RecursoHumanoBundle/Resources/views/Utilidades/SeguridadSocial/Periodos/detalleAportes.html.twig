@@ -20,8 +20,9 @@
                 <th>LMA</th>
                 <th>VAC</th>
                 <th>IRP</th>
-                <th style="text-align: right">SALARIO</th>
+                <th style="text-align: right">SALARIO</th>                
                 <th style="text-align: right">SUPLE</th>
+                <th>S.I</th>
                 <th>D.P</th>
                 <th>D.S</th>
                 <th>D.R</th>
@@ -37,6 +38,8 @@
                 <th style="text-align: right">T.SN</th>
                 <th style="text-align: right">T.I</th>
                 <th style="text-align: right">C.P</th>
+                <th style="text-align: right">C.FSSO</th>
+                <th style="text-align: right">C.FSSU</th>
                 <th style="text-align: right">C.S</th>
                 <th style="text-align: right">C.R</th>
                 <th style="text-align: right">C.C</th>
@@ -59,6 +62,7 @@
                 <td>{% if arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional > 0 %}{{ arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional }} {% endif %}</td>                
                 <td style="text-align: right">{{ arSsoAportes.salarioBasico | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.suplementario | number_format(0, '.', ',') }}</td>
+                <td>{% if arSsoAportes.salarioIntegral == 'X' %}{{ arSsoAportes.salarioIntegral }} {% endif %}</td>                
                 <td>{{ arSsoAportes.diasCotizadosPension  }}</td>
                 <td>{{ arSsoAportes.diasCotizadosSalud  }}</td>
                 <td>{{ arSsoAportes.diasCotizadosRiesgosProfesionales  }}</td>
@@ -74,6 +78,8 @@
                 <td style="text-align: right">{{ arSsoAportes.tarifaSena | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.tarifaIcbf | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionPension | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSsoAportes.aportesFondoSolidaridadPensionalSolidaridad | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSsoAportes.aportesFondoSolidaridadPensionalSubsistencia | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionSalud | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionRiesgos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionCaja | number_format(0, '.', ',') }}</td>
