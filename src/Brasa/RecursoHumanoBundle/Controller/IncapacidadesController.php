@@ -86,44 +86,48 @@ class IncapacidadesController extends Controller
             if($arIncapacidad->getFechaDesde() <= $arIncapacidad->getFechaHasta()) {
                 if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {                    
                     if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {
-                        $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
-                        $intDias = $intDias->format('%a');
-                        $intDias = $intDias + 1;
-                        $arIncapacidad->setCantidad($intDias);                        
-                        if($codigoEmpleado != 0) { 
-                            $arIncapacidad->setEmpleadoRel($arEmpleado);                
-                        }
-                        $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
-                        $floVrIncapacidad = 0;
-                        $douVrDia = $arEmpleado->getVrSalario() / 30;
-                        $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;
-                        $douPorcentajePago = $arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel()->getPorPorcentaje();
-                        $arIncapacidad->setPorcentajePago($douPorcentajePago);
-                        if($arIncapacidad->getIncapacidadTipoRel()->getCodigoIncapacidadTipoPk() == 1) {
-                            if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
-                                $floVrIncapacidad = $intDias * $douVrDia;                    
+                        if($arIncapacidad->getFechaDesde() > $arEmpleado->getFechaContrato()) {
+                            $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
+                            $intDias = $intDias->format('%a');
+                            $intDias = $intDias + 1;
+                            $arIncapacidad->setCantidad($intDias);                        
+                            if($codigoEmpleado != 0) { 
+                                $arIncapacidad->setEmpleadoRel($arEmpleado);                
                             }
-                            if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
-                                $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
-                            }
-                            if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
+                            $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
+                            $floVrIncapacidad = 0;
+                            $douVrDia = $arEmpleado->getVrSalario() / 30;
+                            $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;
+                            $douPorcentajePago = $arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel()->getPorPorcentaje();
+                            $arIncapacidad->setPorcentajePago($douPorcentajePago);
+                            if($arIncapacidad->getIncapacidadTipoRel()->getCodigoIncapacidadTipoPk() == 1) {
+                                if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
+                                    $floVrIncapacidad = $intDias * $douVrDia;                    
+                                }
+                                if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
+                                    $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
+                                }
+                                if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
+                                    $floVrIncapacidad = $intDias * $douVrDia;
+                                    $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                    
+                                }
+                            } else {
                                 $floVrIncapacidad = $intDias * $douVrDia;
-                                $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                    
-                            }
-                        } else {
-                            $floVrIncapacidad = $intDias * $douVrDia;
-                            $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                
-                        }     
-                        $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
-                        $arIncapacidad->setVrSaldo($floVrIncapacidad);
-                        $em->persist($arIncapacidad);
-                        $em->flush();
+                                $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                
+                            }     
+                            $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
+                            $arIncapacidad->setVrSaldo($floVrIncapacidad);
+                            $em->persist($arIncapacidad);
+                            $em->flush();
 
-                        if($form->get('guardarnuevo')->isClicked()) {                
-                            return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_incapacidad', array('codigoCentroCosto' => $codigoCentroCosto)));
+                            if($form->get('guardarnuevo')->isClicked()) {                
+                                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_incapacidad', array('codigoCentroCosto' => $codigoCentroCosto)));
+                            } else {
+                                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                            }                             
                         } else {
-                            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                        }                        
+                            echo "No puede ingresar novedades antes de la fecha de inicio del contrato";
+                        }                  
                     } else {
                         echo "Existe una licencia en este periodo de fechas";
                     }                                                           
