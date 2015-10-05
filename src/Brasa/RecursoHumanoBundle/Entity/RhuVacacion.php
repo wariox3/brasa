@@ -41,6 +41,16 @@ class RhuVacacion
      * @ORM\Column(name="fecha_hasta_periodo", type="date")
      */    
     private $fechaHastaPeriodo;
+
+    /**
+     * @ORM\Column(name="fecha_desde_pago", type="date")
+     */    
+    private $fechaDesdePago;    
+    
+    /**
+     * @ORM\Column(name="fecha_hasta_pago", type="date")
+     */    
+    private $fechaHastaPago;    
     
     /**
      * @ORM\Column(name="vr_salud", type="float")
@@ -708,5 +718,53 @@ class RhuVacacion
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set fechaDesdePago
+     *
+     * @param \DateTime $fechaDesdePago
+     *
+     * @return RhuVacacion
+     */
+    public function setFechaDesdePago($fechaDesdePago)
+    {
+        $this->fechaDesdePago = $fechaDesdePago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdePago
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdePago()
+    {
+        return $this->fechaDesdePago;
+    }
+
+    /**
+     * Set fechaHastaPago
+     *
+     * @param \DateTime $fechaHastaPago
+     *
+     * @return RhuVacacion
+     */
+    public function setFechaHastaPago($fechaHastaPago)
+    {
+        $this->fechaHastaPago = $fechaHastaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHastaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaHastaPago()
+    {
+        return $this->fechaHastaPago;
     }
 }
