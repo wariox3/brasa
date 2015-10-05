@@ -39,8 +39,6 @@ class ConfiguracionGeneralController extends Controller
         if ($formConfiguracionGeneral->isValid()) {
             $controles = $request->request->get('form');                        
             
-            $ConceptoTipoCuenta = $controles['conceptoTipoCuenta'];
-            $NumeroCuenta = $controles['bancosRel'];
             $NitEmpresa = $formConfiguracionGeneral->get('nitEmpresa')->getData();
             $NumeroDv = $controles['digitoVerificacion'];
             $NombreEmpresa = $controles['nombreEmpresa'];
@@ -57,8 +55,6 @@ class ConfiguracionGeneralController extends Controller
             $NitVentasMostrador = $controles['nitVentasMostrador'];
             $RutaTemporal = $controles['rutaTemporal'];
             // guardar la tarea en la base de datos
-            $arConfiguracionGeneral->setTipoCuenta($ConceptoTipoCuenta);
-            $arConfiguracionGeneral->setCodigoBancoGenFk($NumeroCuenta);
             $arConfiguracionGeneral->setNitEmpresa($NitEmpresa);
             $arConfiguracionGeneral->setDigitoVerificacionEmpresa($NumeroDv);
             $arConfiguracionGeneral->setNombreEmpresa($NombreEmpresa);
