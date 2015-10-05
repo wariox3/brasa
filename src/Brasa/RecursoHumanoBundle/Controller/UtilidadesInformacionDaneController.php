@@ -41,6 +41,7 @@ class UtilidadesInformacionDaneController extends Controller
                 $intContratoIndefinidoBogota = 0;
                 $intContratoAprendizBogota = 0;
                 $intContratoPracticanteBogota = 0;
+                //TRIMESTRAL
                 if ($controles['fechaDesde'] <> null || $controles['fechaHasta'] <> null){
                     $empleadosContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->createQueryBuilder('c')
                             ->where('c.codigoContratoPk <> 0')
@@ -50,7 +51,13 @@ class UtilidadesInformacionDaneController extends Controller
                             ->setParameter('fechaHasta', $controles['fechaHasta'])
                             ->getQuery()
                             ->getResult();
-                } else {
+                    //devengado y prestaciones pagadas
+                    $salariosEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosDane($controles['fechaDesde'],$controles['fechaHasta'],"");
+                    //parafiscales
+                    $parafiscalesSsoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->devuelveCostosParafiscales($controles['fechaDesde'],$controles['fechaHasta'],"");
+                    //prestaciones liquidadas
+                    $prestacionesLiquidadasEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->devuelveCostosPrestacionesDane($controles['fechaDesde'],$controles['fechaHasta'],"");
+                } else { //ANUAL
                     $empleadosContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->createQueryBuilder('c')
                             ->where('c.codigoContratoPk <> 0')
                             ->andWhere('c.fechaDesde LIKE :fechaDesde')
@@ -59,8 +66,13 @@ class UtilidadesInformacionDaneController extends Controller
                             ->setParameter('fechaHasta', '%'.$controles['fechaProceso'].'%')
                             ->getQuery()
                             ->getResult();
+                    //devengado
+                    $salariosEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosDane("","",$controles['fechaProceso']);
+                    //parafiscales
+                    $parafiscalesSsoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->devuelveCostosParafiscales("","",$controles['fechaProceso']);
+                    //prestaciones liquidadas
+                    $prestacionesLiquidadasEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->devuelveCostosPrestacionesDane("","",$controles['fechaProceso']);
                 }
-
                     foreach ($empleadosContratos as $empleadosContrato) {
                         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto;
                         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($empleadosContrato->getCodigoCentroCostoFk());
@@ -94,9 +106,77 @@ class UtilidadesInformacionDaneController extends Controller
                                    $intContratoPracticanteBogota++;
                                 }
                             }
-
                     }
-
+                    //COSTOS Y GASTOS CAUSADOS
+                    //SALARIOS Y DEVENGADO
+                    $salarioEmpleadoObraLabor = 0;
+                    $salarioEmpleadoFijo = 0;
+                    $salarioEmpleadoIndefinido = 0;
+                    $salarioEmpleadoAprendiz = 0;
+                    $salarioEmpleadoPracticante = 0;
+                    foreach ($salariosEmpleados as $salariosEmpleado) {
+                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 1){
+                            $salarioEmpleadoObraLabor = $salarioEmpleadoObraLabor +  $salariosEmpleado->getVrDevengado();
+                        }
+                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 2){
+                            $salarioEmpleadoFijo = $salarioEmpleadoFijo +  $salariosEmpleado->getVrDevengado();
+                        }
+                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 3){
+                            $salarioEmpleadoIndefinido = $salarioEmpleadoIndefinido +  $salariosEmpleado->getVrDevengado();
+                        }
+                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 4){
+                            $salarioEmpleadoAprendiz = $salarioEmpleadoAprendiz +  $salariosEmpleado->getVrDevengado();
+                        }
+                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 5){
+                            $salarioEmpleadoPracticante = $salarioEmpleadoPracticante +  $salariosEmpleado->getVrDevengado();
+                        }
+                    }
+                    //PARAFISCALES Y SEGURIDAD SOCIAL
+                    $parafiscalesSsoEmpleadoObraLabor = 0;
+                    $parafiscalesSsoEmpleadoFijo = 0;
+                    $parafiscalesSsoEmpleadoIndefinido = 0;
+                    $parafiscalesSsoEmpleadoAprendiz = 0;
+                    $parafiscalesSsoEmpleadoPracticante = 0;
+                    foreach ($parafiscalesSsoEmpleados as $parafiscalesSsoEmpleado) {
+                        if ($parafiscalesSsoSsoEmpleado->getCodigoContratoTipoFk() == 1){
+                            $parafiscalesSsoSsoEmpleadoObraLabor = $parafiscalesSsoSsoEmpleadoObraLabor + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
+                        }
+                        if ($parafiscalesSsoEmpleado->getCodigoContratoTipoFk() == 2){
+                            $parafiscalesSsoEmpleadoFijo = $parafiscalesSsoEmpleadoFijo + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
+                        }
+                        if ($parafiscalesSsoEmpleado->getCodigoContratoTipoFk() == 3){
+                            $parafiscalesSsoEmpleadoIndefinido = $parafiscalesSsoEmpleadoIndefinido + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
+                        }
+                        if ($parafiscalesSsoEmpleado->getCodigoContratoTipoFk() == 4){
+                            $parafiscalesSsoEmpleadoAprendiz = $parafiscalesSsoEmpleadoAprendiz + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
+                        }
+                        if ($parafiscalesSsoEmpleado->getCodigoContratoTipoFk() == 5){
+                            $parafiscalesSsoEmpleadoPracticante = $parafiscalesSsoEmpleadoPracticante + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
+                        }
+                    }
+                    $prestacionesLiquidadasEmpleadosObraLabor = 0;
+                    $prestacionesLiquidadasEmpleadosFijo = 0;
+                    $prestacionesLiquidadasEmpleadosIndefinido = 0;
+                    $prestacionesLiquidadasEmpleadosAprendiz = 0;
+                    $prestacionesLiquidadasEmpleadosPracticante = 0;
+                    foreach ($prestacionesLiquidadasEmpleados as $prestacionesLiquidadasEmpleado) {
+                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 1){
+                            $prestacionesLiquidadasEmpleadosObraLabor = $prestacionesLiquidadasEmpleadosObraLabor + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
+                        }
+                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 2){
+                            $prestacionesLiquidadasEmpleadosFijo = $prestacionesLiquidadasEmpleadosFijo + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
+                        }
+                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 3){
+                            $prestacionesLiquidadasEmpleadosIndefinido = $prestacionesLiquidadasEmpleadosIndefinido + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
+                        }
+                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 4){
+                            $prestacionesLiquidadasEmpleadosAprendiz = $prestacionesLiquidadasEmpleadosAprendiz + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
+                        }
+                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 5){
+                            $prestacionesLiquidadasEmpleadosPracticante = $prestacionesLiquidadasEmpleadosPracticante + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
+                        }
+                    }
+                            
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")
                     ->setLastModifiedBy("EMPRESA")
                     ->setTitle("Office 2007 XLSX Test Document")

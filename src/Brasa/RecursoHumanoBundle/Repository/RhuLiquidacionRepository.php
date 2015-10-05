@@ -317,4 +317,18 @@ class RhuLiquidacionRepository extends EntityRepository {
         $intDias += 1;
         return $intDias;
     }
+    
+    //prestaciones liquidadas Dane
+    public function devuelveCostosPrestacionesDane($fechaDesde, $fechaHasta, $fechaProceso) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT l, c FROM BrasaRecursoHumanoBundle:RhuLiquidacion l JOIN l.contratoRel c WHERE l.codigoLiquidacionPk <> 0"
+                . "AND l.fechaDesde >= '" . $fechaDesde . "' AND l.fechaHasta <= '" . $fechaHasta . "'";
+                if ($fechaProceso != ""){
+                    $dql .= " AND l.fechaDesde LIKE '%".$fechaProceso. "%' AND l.fechaHasta LIKE '%".$fechaProceso. "%'";
+                }
+                
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
+    }
 }

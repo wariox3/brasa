@@ -14,6 +14,7 @@ class RhuSsoAporteRepository extends EntityRepository {
             $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuSsoAporte a WHERE a.codigoPeriodoDetalleFk = " . $codigoPeriodoDetalle;
             return $dql;
     }
+    
     public function listaAportesDQL($strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT ssoa, ssoap, e FROM BrasaRecursoHumanoBundle:RhuSsoAporte ssoa JOIN ssoa.ssoPeriodoRel ssoap JOIN ssoa.empleadoRel e WHERE ssoa.codigoAportePk <> 0 ";   
@@ -27,5 +28,24 @@ class RhuSsoAporteRepository extends EntityRepository {
             $dql .= " AND ssoap.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         return $dql;
+    }
+    
+    public function devuelveCostosParafiscales($fechaDesde = "", $fechaHasta = "", $fechaProceso = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT a, ap, c FROM BrasaRecursoHumanoBundle:RhuSsoAporte a JOIN a.ssoPeriodoRel ap JOIN a.contratoRel c WHERE a.codigoAportePk <> 0"
+                . "AND ap.fechaDesde >= '" . $fechaDesde . "' AND ap.fechaHasta <= '" . $fechaHasta . "'";
+                if ($fechaDesde != ""){
+                    $dql .= " AND ap.fechaDesde >= '".$fechaDesde. "' ";
+                }
+                if ($fechaHasta != ""){
+                    $dql .= " AND ap.fechaHasta <= '".$fechaHasta. "' ";
+                }
+                if ($fechaProceso != ""){
+                    $dql .= " AND ap.fechaDesde LIKE '%".$fechaProceso. "%' AND ap.fechaHasta LIKE '%".$fechaProceso. "%'";
+                }
+                
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
     }
 }

@@ -230,11 +230,14 @@ class RhuPagoRepository extends EntityRepository {
         return $floSuplementario;
     }  
     
-    public function devuelveCostosDane($fechaDesde, $fechaHasta) {
+    public function devuelveCostosDane($fechaDesde, $fechaHasta, $fechaProceso) {
         $em = $this->getEntityManager();
         $dql   = "SELECT p, c FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.contratoRel c WHERE p.codigoPagoPk <> 0"
-                . "WHERE c.codigoContratoTipoFk = 3 "
-                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
+                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaHastaPago <= '" . $fechaHasta . "'";
+                if ($fechaProceso != ""){
+                    $dql .= " AND p.fechaDesde LIKE '%".$fechaProceso. "%' AND p.fechaHasta LIKE '%".$fechaProceso. "%'";
+                }
+                
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();
         return $arrayResultado;
