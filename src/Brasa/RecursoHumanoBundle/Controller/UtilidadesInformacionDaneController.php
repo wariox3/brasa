@@ -46,7 +46,7 @@ class UtilidadesInformacionDaneController extends Controller
                     $empleadosContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->createQueryBuilder('c')
                             ->where('c.codigoContratoPk <> 0')
                             ->andWhere('c.fechaDesde >= :fechaDesde')
-                            ->andWhere('c.fechaHasta <= :fechaHasta')
+                            ->andWhere('c.fechaDesde <= :fechaHasta')
                             ->setParameter('fechaDesde', $controles['fechaDesde'])
                             ->setParameter('fechaHasta', $controles['fechaHasta'])
                             ->getQuery()
@@ -114,20 +114,25 @@ class UtilidadesInformacionDaneController extends Controller
                     $salarioEmpleadoIndefinido = 0;
                     $salarioEmpleadoAprendiz = 0;
                     $salarioEmpleadoPracticante = 0;
+                    $salarioEmpleadoObraLaborBogota = 0;
+                    $salarioEmpleadoFijoBogota = 0;
+                    $salarioEmpleadoIndefinidoBogota = 0;
+                    $salarioEmpleadoAprendizBogota = 0;
+                    $salarioEmpleadoPracticanteBogota = 0;
                     foreach ($salariosEmpleados as $salariosEmpleado) {
-                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 1){
+                        if ($salariosEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 1){
                             $salarioEmpleadoObraLabor = $salarioEmpleadoObraLabor +  $salariosEmpleado->getVrDevengado();
                         }
-                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 2){
+                        if ($salariosEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 2){
                             $salarioEmpleadoFijo = $salarioEmpleadoFijo +  $salariosEmpleado->getVrDevengado();
                         }
-                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 3){
+                        if ($salariosEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 3){
                             $salarioEmpleadoIndefinido = $salarioEmpleadoIndefinido +  $salariosEmpleado->getVrDevengado();
                         }
-                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 4){
+                        if ($salariosEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 4){
                             $salarioEmpleadoAprendiz = $salarioEmpleadoAprendiz +  $salariosEmpleado->getVrDevengado();
                         }
-                        if ($salariosEmpleado->getCodigoContratoTipoFk() == 5){
+                        if ($salariosEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 5){
                             $salarioEmpleadoPracticante = $salarioEmpleadoPracticante +  $salariosEmpleado->getVrDevengado();
                         }
                     }
@@ -138,42 +143,34 @@ class UtilidadesInformacionDaneController extends Controller
                     $parafiscalesSsoEmpleadoAprendiz = 0;
                     $parafiscalesSsoEmpleadoPracticante = 0;
                     foreach ($parafiscalesSsoEmpleados as $parafiscalesSsoEmpleado) {
-                        if ($parafiscalesSsoSsoEmpleado->getCodigoContratoTipoFk() == 1){
-                            $parafiscalesSsoSsoEmpleadoObraLabor = $parafiscalesSsoSsoEmpleadoObraLabor + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
+                        if ($parafiscalesSsoEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 1){
+                            $parafiscalesSsoEmpleadoObraLabor = $parafiscalesSsoEmpleadoObraLabor + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
                         }
-                        if ($parafiscalesSsoEmpleado->getCodigoContratoTipoFk() == 2){
+                        if ($parafiscalesSsoEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 2){
                             $parafiscalesSsoEmpleadoFijo = $parafiscalesSsoEmpleadoFijo + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
                         }
-                        if ($parafiscalesSsoEmpleado->getCodigoContratoTipoFk() == 3){
+                        if ($parafiscalesSsoEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 3){
                             $parafiscalesSsoEmpleadoIndefinido = $parafiscalesSsoEmpleadoIndefinido + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
                         }
-                        if ($parafiscalesSsoEmpleado->getCodigoContratoTipoFk() == 4){
+                        if ($parafiscalesSsoEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 4){
                             $parafiscalesSsoEmpleadoAprendiz = $parafiscalesSsoEmpleadoAprendiz + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
                         }
-                        if ($parafiscalesSsoEmpleado->getCodigoContratoTipoFk() == 5){
+                        if ($parafiscalesSsoEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 5){
                             $parafiscalesSsoEmpleadoPracticante = $parafiscalesSsoEmpleadoPracticante + $parafiscalesSsoEmpleado->getCotizacionCaja() + $parafiscalesSsoEmpleado->getCotizacionSena() + $parafiscalesSsoEmpleado->getCotizacionIcbf() + $parafiscalesSsoEmpleado->getCotizacionPension() + $parafiscalesSsoEmpleado->getCotizacionSalud();
                         }
                     }
                     $prestacionesLiquidadasEmpleadosObraLabor = 0;
                     $prestacionesLiquidadasEmpleadosFijo = 0;
                     $prestacionesLiquidadasEmpleadosIndefinido = 0;
-                    $prestacionesLiquidadasEmpleadosAprendiz = 0;
-                    $prestacionesLiquidadasEmpleadosPracticante = 0;
                     foreach ($prestacionesLiquidadasEmpleados as $prestacionesLiquidadasEmpleado) {
-                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 1){
+                        if ($prestacionesLiquidadasEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 1){
                             $prestacionesLiquidadasEmpleadosObraLabor = $prestacionesLiquidadasEmpleadosObraLabor + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
                         }
-                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 2){
+                        if ($prestacionesLiquidadasEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 2){
                             $prestacionesLiquidadasEmpleadosFijo = $prestacionesLiquidadasEmpleadosFijo + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
                         }
-                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 3){
+                        if ($prestacionesLiquidadasEmpleado->getContratoRel()->getCodigoContratoTipoFk() == 3){
                             $prestacionesLiquidadasEmpleadosIndefinido = $prestacionesLiquidadasEmpleadosIndefinido + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
-                        }
-                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 4){
-                            $prestacionesLiquidadasEmpleadosAprendiz = $prestacionesLiquidadasEmpleadosAprendiz + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
-                        }
-                        if ($prestacionesLiquidadasEmpleado->getCodigoContratoTipoFk() == 5){
-                            $prestacionesLiquidadasEmpleadosPracticante = $prestacionesLiquidadasEmpleadosPracticante + $prestacionesLiquidadasEmpleado->getVrCesantias() + $prestacionesLiquidadasEmpleado->getVrInteresesCesantias() + $prestacionesLiquidadasEmpleado->getVrPrima() + $prestacionesLiquidadasEmpleado->getVrVacaciones();
                         }
                     }
                             
@@ -232,13 +229,13 @@ class UtilidadesInformacionDaneController extends Controller
                     ->setCellValue('A7', 'Gastos causados por el personal aprendiz o estudiante por convenio ( universitario, tecnologo o tecnico)')
                     ->setCellValue('A8', 'TOTAL')
                     ->setCellValue('K1', 'TOTAL NACIONAL')
-                    ->setCellValue('K2', '0')
-                    ->setCellValue('K3', '0')
-                    ->setCellValue('K4', '0')
-                    ->setCellValue('K5', '0')
-                    ->setCellValue('K6', '0')
-                    ->setCellValue('K7', '0')
-                    ->setCellValue('K8', '0')
+                    ->setCellValue('K2', $salarioEmpleadoIndefinido)
+                    ->setCellValue('K3', $prestacionesLiquidadasEmpleadosIndefinido + $parafiscalesSsoEmpleadoIndefinido)
+                    ->setCellValue('K4', $salarioEmpleadoFijo + $parafiscalesSsoEmpleadoFijo + $prestacionesLiquidadasEmpleadosFijo)
+                    ->setCellValue('K5', $salarioEmpleadoObraLabor + $parafiscalesSsoEmpleadoObraLabor + $prestacionesLiquidadasEmpleadosObraLabor)
+                    ->setCellValue('K6', 0)
+                    ->setCellValue('K7', $salarioEmpleadoAprendiz + $salarioEmpleadoPracticante + $parafiscalesSsoEmpleadoAprendiz + $parafiscalesSsoEmpleadoPracticante)
+                    ->setCellValue('K8', $salarioEmpleadoIndefinido + $prestacionesLiquidadasEmpleadosIndefinido + $parafiscalesSsoEmpleadoIndefinido + $salarioEmpleadoFijo + $parafiscalesSsoEmpleadoFijo + $prestacionesLiquidadasEmpleadosFijo + $salarioEmpleadoObraLabor + $parafiscalesSsoEmpleadoObraLabor + $prestacionesLiquidadasEmpleadosObraLabor + $salarioEmpleadoAprendiz + $salarioEmpleadoPracticante + $parafiscalesSsoEmpleadoAprendiz + $parafiscalesSsoEmpleadoPracticante)
                     ->setCellValue('L1', 'TOTAL BOGOTA')
                     ->setCellValue('L2', 0)
                     ->setCellValue('L3', 0)

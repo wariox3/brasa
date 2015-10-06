@@ -322,7 +322,7 @@ class RhuLiquidacionRepository extends EntityRepository {
     public function devuelveCostosPrestacionesDane($fechaDesde, $fechaHasta, $fechaProceso) {
         $em = $this->getEntityManager();
         $dql   = "SELECT l, c FROM BrasaRecursoHumanoBundle:RhuLiquidacion l JOIN l.contratoRel c WHERE l.codigoLiquidacionPk <> 0"
-                . "AND l.fechaDesde >= '" . $fechaDesde . "' AND l.fechaHasta <= '" . $fechaHasta . "'";
+                . "AND l.fechaDesde >= '" . $fechaDesde . "' AND l.fechaDesde <= '" . $fechaHasta . "'";
                 if ($fechaProceso != ""){
                     $dql .= " AND l.fechaDesde LIKE '%".$fechaProceso. "%' AND l.fechaHasta LIKE '%".$fechaProceso. "%'";
                 }

@@ -33,13 +33,7 @@ class RhuSsoAporteRepository extends EntityRepository {
     public function devuelveCostosParafiscales($fechaDesde = "", $fechaHasta = "", $fechaProceso = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT a, ap, c FROM BrasaRecursoHumanoBundle:RhuSsoAporte a JOIN a.ssoPeriodoRel ap JOIN a.contratoRel c WHERE a.codigoAportePk <> 0"
-                . "AND ap.fechaDesde >= '" . $fechaDesde . "' AND ap.fechaHasta <= '" . $fechaHasta . "'";
-                if ($fechaDesde != ""){
-                    $dql .= " AND ap.fechaDesde >= '".$fechaDesde. "' ";
-                }
-                if ($fechaHasta != ""){
-                    $dql .= " AND ap.fechaHasta <= '".$fechaHasta. "' ";
-                }
+                . "AND ap.fechaDesde >= '" . $fechaDesde . "' AND ap.fechaDesde <= '" . $fechaHasta . "'";
                 if ($fechaProceso != ""){
                     $dql .= " AND ap.fechaDesde LIKE '%".$fechaProceso. "%' AND ap.fechaHasta LIKE '%".$fechaProceso. "%'";
                 }
