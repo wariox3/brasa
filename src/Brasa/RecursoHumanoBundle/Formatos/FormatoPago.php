@@ -37,17 +37,17 @@ class FormatoPago extends \FPDF_FPDF {
         $this->Image('imagenes/logos/logo.jpg', 12, 15, 35, 17);
         //INFORMACIÓN EMPRESA
         $this->Cell(150, 7, utf8_decode("COMPROBANTE PAGO ". $arPago->getPagoTipoRel()->getNombre().""), 0, 0, 'C', 1);
-        $this->SetXY(53, 18);
+        $this->SetXY(53, 22);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
-        $this->SetXY(53, 22);
+        $this->SetXY(53, 26);
         $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
-        $this->SetXY(53, 26);
+        $this->SetXY(53, 30);
         $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
-        $this->SetXY(53, 30);
+        $this->SetXY(53, 34);
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);
         //FILA 1

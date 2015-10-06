@@ -27,7 +27,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);
         //Logo
         $this->SetXY(53, 10);
-        $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
+        $this->Image('imagenes/logos/logo.jpg', 12, 13, 35, 17);
         //INFORMACIÓN EMPRESA
         $this->Cell(150, 7, utf8_decode("INFORMACIÓN DEL CRÉDITO"), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
