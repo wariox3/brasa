@@ -23,14 +23,30 @@ class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
     public function Header() {
         $arEmpleadoDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
         $arEmpleadoDotacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->find(self::$codigoEmpleadoDotacion);
-        $this->SetFillColor(236, 236, 236);        
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $this->SetFillColor(200, 200, 200);        
         $this->SetFont('Arial','B',10);
-        //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
-        $this->SetXY(10, 20);
-        $this->Cell(193, 10, utf8_decode("DOTACIÓN EMPLEADO ") , 1, 0, 'L', 1);
-        $this->SetFillColor(272, 272, 272);  
+        //Logo
+        $this->SetXY(53, 14);
+        $this->Image('imagenes/logos/logo.jpg', 12, 15, 35, 17);
+        //INFORMACIÓN EMPRESA
+        $this->Cell(150, 7, utf8_decode("DOTACIÓN EMPLEADO"), 0, 0, 'C', 1);
+        $this->SetXY(53, 22);
+        $this->SetFont('Arial','B',9);
+        $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 26);
+        $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 30);
+        $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 34);
+        $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
+        $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0); 
         //FILA 1
-        $this->SetXY(10, 30);
+        $this->SetXY(10, 40);
         $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',7);
         $this->Cell(23, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);                            
@@ -49,7 +65,7 @@ class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
         $this->Cell(50, 6, $arEmpleadoDotacion->getCodigoInternoReferencia() , 1, 0, 'L', 1);
         
         //FILA 2
-        $this->SetXY(10, 36);
+        $this->SetXY(10, 46);
         $this->SetFont('Arial','B',7);
         $this->SetFillColor(236, 236, 236);
         $this->Cell(23, 6, utf8_decode("IDENTIFICACIÓN:") , 1, 0, 'L', 1);
@@ -69,7 +85,7 @@ class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
         $this->SetFont('Arial','',6);
         $this->Cell(50, 6, utf8_decode($arEmpleadoDotacion->getCentroCostoRel()->getNombre()) , 1, 0, 'L', 1);
         //FILA 3
-        $this->SetXY(10, 42);
+        $this->SetXY(10, 51);
         $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',7);
         $this->Cell(23, 6, "COMENTARIOS:" , 1, 0, 'L', 1);
