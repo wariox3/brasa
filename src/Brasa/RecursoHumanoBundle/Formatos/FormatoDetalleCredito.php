@@ -186,7 +186,12 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $douTotal = 0;
         foreach ($arCreditoPagos as $arCreditoPago) { 
             $pdf->Cell(25, 4, $arCreditoPago->getCodigoPagoCreditoPk(), 1, 0, 'L');
-            $pdf->Cell(45, 4, $arCreditoPago->getCreditoTipoPagoRel()->getNombre(), 1, 0, 'L');
+            if ($arCreditoPago->getCodigoCreditoTipoPagoFk() == null){
+                $pdf->Cell(45, 4, "ABONO EXTERNO", 1, 0, 'L');
+            }
+            else {
+                $pdf->Cell(45, 4, $arCreditoPago->getCreditoTipoPagoRel()->getNombre(), 1, 0, 'L');
+            }
             if ($arCreditoPago->getCodigoPagoFk() != "") {
                 $pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaDesde()->format('Y/m/d'), 1, 0, 'R');
                 $pdf->Cell(30, 4, $arCreditoPago->getPagoRel()->getFechaHasta()->format('Y/m/d'), 1, 0, 'R');
