@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Form\Type;
- 
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -8,11 +8,11 @@ class RhuExamenType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder           
+        $builder
             ->add('examenClaseRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuExamenClase',
                 'property' => 'nombre',
-            ))                
+            ))
             ->add('entidadExamenRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
                 'property' => 'nombre',
@@ -24,18 +24,18 @@ class RhuExamenType extends AbstractType
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'property' => 'nombre',
-            ))    
+            ))
             ->add('fecha', 'date')
-            ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))    
+            ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('identificacion', 'number', array('required' => true))
             ->add('nombreCorto', 'text', array('required' => true))
-            ->add('fechaNacimiento', 'date')
+            ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('cargoDescripcion', 'text', array('required' => true))
             ->add('guardar', 'submit')
-            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
+            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
- 
+
     public function getName()
     {
         return 'form';
