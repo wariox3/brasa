@@ -37,7 +37,12 @@
             {%endfor%}
             </tr>            
     </table>
-    {{ knp_pagination_render(arBancos) }}
+    <div class="btn-group" style="float: left">
+        <div class="btn btn-default btn-sm">Bancos <span class="badge">{{ arBancos.getTotalItemCount }}</span></div>
+    </div>
+    <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+        {{ knp_pagination_render(arBancos) }}
+    </div>
     <div class="btn-toolbar" style="float: right">              
         <div class="btn-group">
             {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                

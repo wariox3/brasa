@@ -242,4 +242,24 @@ class RhuPagoRepository extends EntityRepository {
         $arrayResultado = $query->getResult();
         return $arrayResultado;
     }
+    
+    //consulta pago pendientes al banco
+    public function listaPagoPendientesBancoDql($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.estadoPagadoBanco = 0";
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
+        return $dql;
+    }                            
 }

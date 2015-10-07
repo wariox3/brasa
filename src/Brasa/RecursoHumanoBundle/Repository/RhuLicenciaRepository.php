@@ -11,6 +11,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuLicenciaRepository extends EntityRepository {
     
+    public function listaDQL($strCodigoCentroCosto = "", $strIdentificacion = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT l, e FROM BrasaRecursoHumanoBundle:RhuLicencia l JOIN l.empleadoRel e WHERE l.codigoLicenciaPk <> 0";      
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND l.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }                       
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        } 
+        //$dql .= " ORDER BY e.nombreCorto";
+        return $dql;
+    }                    
+    
     public function pendientesCentroCosto($strCodigoCentroCosto) {
         $em = $this->getEntityManager();                
         $dql   = "SELECT l FROM BrasaRecursoHumanoBundle:RhuLicencia l "
@@ -90,7 +103,7 @@ class RhuLicenciaRepository extends EntityRepository {
         return $intDiasLicencia;
     }                
     
-    public function validarFecha($fechaDesde, $fechaHasta, $codigoEmpleado) {
+    public function validarFecha($fechaDesde, $fechaHasta, $codigoEmpleado, $codigoLicencia = "") {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
         $strFechaHasta = $fechaHasta->format('Y-m-d');
@@ -100,6 +113,9 @@ class RhuLicenciaRepository extends EntityRepository {
                 . "OR (licencia.fechaDesde >= '$strFechaDesde' AND licencia.fechaDesde <= '$strFechaHasta') "
                 . "OR (licencia.fechaHasta >= '$strFechaHasta' AND licencia.fechaDesde <= '$strFechaDesde')) "
                 . "AND licencia.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        if($codigoLicencia != ""){
+           $dql = $dql. "AND licencia.codigoLicenciaPk <> " .$codigoLicencia;
+        }
         $objQuery = $em->createQuery($dql);  
         $arLicencias = $objQuery->getResult();         
         if(count($arLicencias) > 0) {

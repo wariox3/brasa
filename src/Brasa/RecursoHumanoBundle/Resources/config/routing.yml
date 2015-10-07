@@ -158,8 +158,12 @@ brs_rhu_accidente_trabajo_detalle:
     path:     /rhu/accidente/trabajo/detalle/{codigoAccidenteTrabajo}
     defaults: { _controller: BrasaRecursoHumanoBundle:AccidenteTrabajo:detalle }   
 
+brs_rhu_licencias_lista:
+    path:     /rhu/licencias/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:lista }
+
 brs_rhu_licencias_nuevo:
-    path:     /rhu/licencias/nuevo/{codigoCentroCosto}/{codigoEmpleado}
+    path:     /rhu/licencias/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoLicencia}
     defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:nuevo } 
     
 brs_rhu_base_empleado_dotacion_lista:
@@ -524,7 +528,11 @@ brs_rhu_consultas_costos_ingresos_empleado:
     
 brs_rhu_consultas_creditos_general:    
     path:     /rhu/consultas/creditos/general
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:creditosGeneral }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:creditosGeneral } 
+    
+brs_rhu_consultas_pago_pendientes_banco:    
+    path:     /rhu/consultas/pago/pendientes/banco
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:PagoPendientesBanco }    
 
 brs_rhu_consultas_servicios_cobrar:    
     path:     /rhu/consultas/servicios/cobrar

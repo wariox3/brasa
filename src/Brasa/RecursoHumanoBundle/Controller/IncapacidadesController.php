@@ -37,19 +37,16 @@ class IncapacidadesController extends Controller
             if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoEmpleado) {
-                        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-                        if($arEmpleado->getEstadoActivo() == 1) {
-                            $arEmpleado->setEstadoActivo(0);
-                        } else {
-                            $arEmpleado->setEstadoActivo(1);
-                        }
-                        $em->persist($arEmpleado);
+                    foreach ($arrSeleccionados AS $codigoIncapacidad) {
+                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+                        $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
+                        $em->remove($arIncapacidad);
                     }
                     $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_incapacidades_lista'));
                 }
             }
+            
         }
         $arIncapacidades = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Incapacidades:lista.html.twig', array(
@@ -84,8 +81,8 @@ class IncapacidadesController extends Controller
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);            
             $arIncapacidad = $form->getData();                          
             if($arIncapacidad->getFechaDesde() <= $arIncapacidad->getFechaHasta()) {
-                if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {                    
-                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk())) {
+                if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arIncapacidad->getCodigoIncapacidadPk())) {                    
+                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(),"")) {
                         if($arIncapacidad->getFechaDesde() >= $arEmpleado->getFechaContrato()) {
                             $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
                             $intDias = $intDias->format('%a');
@@ -214,13 +211,15 @@ class IncapacidadesController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'IDENTIFICACION')
-                    ->setCellValue('C1', 'NOMBRE')
-                    ->setCellValue('D1', 'CENTRO COSTO')
-                    ->setCellValue('E1', 'DESDE')
-                    ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'HORAS');
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'NÚMERO INCAPACIDAD')
+                    ->setCellValue('C1', 'NÚMERO EPS')
+                    ->setCellValue('D1', 'IDENTIFICACIÓN')
+                    ->setCellValue('E1', 'NOMBRE')
+                    ->setCellValue('F1', 'CENTRO COSTO')
+                    ->setCellValue('G1', 'DESDE')
+                    ->setCellValue('H1', 'HASTA')
+                    ->setCellValue('I1', 'DÍAS');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);        
@@ -228,16 +227,18 @@ class IncapacidadesController extends Controller
         foreach ($arIncapacidades as $arIncapacidad) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arIncapacidad->getCodigoIncapacidadPk())
-                    ->setCellValue('B' . $i, $arIncapacidad->getEmpleadoRel()->getnumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arIncapacidad->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arIncapacidad->getCentroCostoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arIncapacidad->getFechaDesde()->format('Y-m-d'))
-                    ->setCellValue('F' . $i, $arIncapacidad->getFechaHasta()->format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arIncapacidad->getCantidad());
+                    ->setCellValue('B' . $i, $arIncapacidad->getNumero())
+                    ->setCellValue('C' . $i, $arIncapacidad->getNumeroEps())
+                    ->setCellValue('D' . $i, $arIncapacidad->getEmpleadoRel()->getnumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arIncapacidad->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arIncapacidad->getCentroCostoRel()->getNombre())
+                    ->setCellValue('G' . $i, $arIncapacidad->getFechaDesde()->format('Y-m-d'))
+                    ->setCellValue('H' . $i, $arIncapacidad->getFechaHasta()->format('Y-m-d'))
+                    ->setCellValue('I' . $i, $arIncapacidad->getCantidad());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('incapacidades');
+        $objPHPExcel->getActiveSheet()->setTitle('Incapacidades');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)

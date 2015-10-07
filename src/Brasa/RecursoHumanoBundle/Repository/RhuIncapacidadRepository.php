@@ -150,7 +150,7 @@ class RhuIncapacidadRepository extends EntityRepository {
         return $intDiasIncapacidad;                     
     }                    
 
-    public function validarFecha($fechaDesde, $fechaHasta, $codigoEmpleado) {
+    public function validarFecha($fechaDesde, $fechaHasta, $codigoEmpleado, $codigoIncapacidad = "") {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
         $strFechaHasta = $fechaHasta->format('Y-m-d');
@@ -160,6 +160,9 @@ class RhuIncapacidadRepository extends EntityRepository {
                 . "OR (incapacidad.fechaDesde >= '$strFechaDesde' AND incapacidad.fechaDesde <= '$strFechaHasta') "
                 . "OR (incapacidad.fechaHasta >= '$strFechaHasta' AND incapacidad.fechaDesde <= '$strFechaDesde')) "
                 . "AND incapacidad.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        if($codigoIncapacidad != ""){
+           $dql = $dql. "AND incapacidad.codigoIncapacidadPk <> " .$codigoIncapacidad;
+        }
         $objQuery = $em->createQuery($dql);  
         $arIncapacidades = $objQuery->getResult();         
         if(count($arIncapacidades) > 0) {
