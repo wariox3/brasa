@@ -11,6 +11,7 @@ class ConsultasController extends Controller
     var $strSqlCreditoLista = "";
     var $strSqlServiciosPorCobrarLista = "";
     var $strSqlProgramacionesPagoLista = "";
+    var $strSqlIncapacidadesLista = "";
     var $strSqlIncapacidadesCobrarLista = "";
     var $strSqlAportesLista = "";
     var $strSqlVacacionesPagarLista = "";
@@ -150,6 +151,40 @@ class ConsultasController extends Controller
         $arServiciosPorCobrar = $paginator->paginate($em->createQuery($this->strSqlServiciosPorCobrarLista), $request->query->get('page', 1), 40);
         return $this->render('BrasaRecursoHumanoBundle:Consultas/Servicios:porCobrar.html.twig', array(
             'arServiciosPorCobrar' => $arServiciosPorCobrar,
+            'form' => $form->createView()
+            ));
+    }
+    
+    public function IncapacidadesAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioIncapacidadesLista();
+        $form->handleRequest($request);
+        $this->IncapacidadesListar();
+        if ($form->isValid())
+        {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if($form->get('BtnExcelIncapacidades')->isClicked()) {
+                $this->filtrarIncapacidadesLista($form);
+                $this->IncapacidadesListar();
+                $this->generarIncapacidadesExcel();
+            }
+            if($form->get('BtnPDFIncapacidades')->isClicked()) {
+                $this->filtrarIncapacidadesLista($form);
+                $this->IncapacidadesListar();
+                $objReporteIncapacidades = new \Brasa\RecursoHumanoBundle\Reportes\ReporteIncapacidades();
+                $objReporteIncapacidades->Generar($this, $this->strSqlIncapacidadesLista);
+            }            
+            if($form->get('BtnFiltrarIncapacidades')->isClicked()) {
+                $this->filtrarIncapacidadesLista($form);
+                $this->IncapacidadesListar();
+            }
+
+        }
+        $arIncapacidades = $paginator->paginate($em->createQuery($this->strSqlIncapacidadesLista), $request->query->get('page', 1), 40);
+        return $this->render('BrasaRecursoHumanoBundle:Consultas/Incapacidades:Incapacidades.html.twig', array(
+            'arIncapacidades' => $arIncapacidades,
             'form' => $form->createView()
             ));
     }
@@ -459,6 +494,18 @@ class ConsultasController extends Controller
                     );
     }
     
+    private function IncapacidadesListar() {
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strSqlIncapacidadesLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->listaIncapacidadesDQL(
+                    $session->get('filtroCodigoCentroCosto'),
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta'),
+                    $session->get('filtroCodigoEntidadSalud')
+                    );
+    }
+    
     private function IncapacidadesCobrarListar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
@@ -646,6 +693,52 @@ class ConsultasController extends Controller
         return $form;
     }
     
+    private function formularioIncapacidadesLista() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
+        
+        $arrayPropiedadesEntidadSalud = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('es')
+                    ->orderBy('es.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoEntidadSalud')) {
+            $arrayPropiedadesEntidadSalud['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadSalud", $session->get('filtroCodigoEntidadSalud'));
+        }
+        
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('entidadSaludRel', 'entity', $arrayPropiedadesEntidadSalud)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))    
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnFiltrarIncapacidades', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcelIncapacidades', 'submit', array('label'  => 'Excel',))
+            ->add('BtnPDFIncapacidades', 'submit', array('label'  => 'PDF',))
+            ->getForm();
+        return $form;
+    }
+    
     private function formularioIncapacidadesCobrarLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -789,6 +882,17 @@ class ConsultasController extends Controller
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroEmpleadoActivo', $form->get('estadoActivo')->getData());
+    }
+    
+    private function filtrarIncapacidadesLista($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $session->set('filtroCodigoEntidadSalud', $controles['entidadSaludRel']);
     }
     
     private function filtrarIncapacidadesCobrarLista($form) {
@@ -1240,6 +1344,89 @@ class ConsultasController extends Controller
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="ReporteProgramacionesPagos.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+    
+    private function generarIncapacidadesExcel() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'TIPO')
+                    ->setCellValue('C1', 'DIAGNOSTICO')
+                    ->setCellValue('D1', 'EPS')
+                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'EMPLEADO')
+                    ->setCellValue('G1', 'CENTRO COSTOS')
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'HASTA')
+                    ->setCellValue('J1', 'DÍAS')
+                    ->setCellValue('K1', 'PRORROGA')
+                    ->setCellValue('L1', 'TRANSCRIPCIÓN')
+                    ->setCellValue('M1', 'VR. INCAPACIDAD')
+                    ->setCellValue('N1', 'VR. PAGADO')
+                    ->setCellValue('O1', 'VR. SALDO');
+
+        $i = 2;
+        $query = $em->createQuery($this->strSqlIncapacidadesLista);
+        $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+        $arIncapacidades = $query->getResult();
+        foreach ($arIncapacidades as $arIncapacidad) {
+            if ($arIncapacidad->getEstadoProrroga() == 1){
+                $prorroga = "SI";
+            }else {
+                $prorroga = "NO"; 
+            }
+            if ($arIncapacidad->getEstadoTranscripcion() == 1){
+                $transcripcion = "SI";
+            }else {
+                $transcripcion = "NO"; 
+            }
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arIncapacidad->getCodigoIncapacidadPk())
+                    ->setCellValue('B' . $i, $arIncapacidad->getPagoAdicionalSubtipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arIncapacidad->getIncapacidadDiagnosticoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arIncapacidad->getEntidadSaludRel()->getNombre())
+                    ->setCellValue('E' . $i, $arIncapacidad->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arIncapacidad->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arIncapacidad->getCentroCostoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arIncapacidad->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('I' . $i, $arIncapacidad->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('J' . $i, $arIncapacidad->getCantidad())
+                    ->setCellValue('K' . $i, $prorroga)
+                    ->setCellValue('L' . $i, $transcripcion)
+                    ->setCellValue('M' . $i, $arIncapacidad->getVrIncapacidad())
+                    ->setCellValue('N' . $i, $arIncapacidad->getVrPagado())
+                    ->setCellValue('O' . $i, $arIncapacidad->getVrSaldo());
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('Incapacidades');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="ReporteIncapacidades.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
