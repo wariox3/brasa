@@ -155,8 +155,11 @@
                     {% endfor %}
                 </table>
 
-                <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arContratos) }}
+                <div class="btn-group" style="float: left">
+                    <div class="btn btn-default btn-sm">Contratos <span class="badge">{{ arContratos.getTotalItemCount }}</span></div>                        
+                </div>
+                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                    {{ knp_pagination_render(arContratos) }}       
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">

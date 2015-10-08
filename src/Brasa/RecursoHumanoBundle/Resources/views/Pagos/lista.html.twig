@@ -79,11 +79,11 @@
             {% endfor %}
         </table>
         <div class="btn-toolbar" style="float: left">
-            <div class="btn-group">
-                {{ knp_pagination_render(arPagos) }} 
+            <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Pagos <span class="badge">{{ arPagos.getTotalItemCount }}</span></div>                        
             </div>
-            <div class="btn-group">
-                <div class="btn btn-default btn-sm">Pagos <span class="badge">{{ arPagos.getTotalItemCount }}</span></div>        
+            <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arPagos) }}       
             </div>
         </div>                
         <div class="btn-toolbar" style="float: right">                 

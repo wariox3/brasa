@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         <div class="page-header">
-            <h3>Detalles del credito</h3>
+            <h3>Detalles del crédito</h3>
         </div>
 
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
@@ -13,7 +13,7 @@
             <div class="panel-body">
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
-                        <td class="titulo">CODIGO CREDITO:</th>
+                        <td class="titulo">CÓDIGO CRÉDITO:</th>
                         <td class="td-in-well">{{ arCreditos.codigoCreditoPk }}</td>
                         <td class="titulo">FECHA:</th>
                         <td class="td-in-well">{{ arCreditos.fecha |date("Y/m/d") }}</td>

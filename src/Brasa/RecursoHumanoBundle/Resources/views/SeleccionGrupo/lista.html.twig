@@ -7,7 +7,7 @@
 </script>    
 <div class="container">
     <div class="page-header">
-        <h3>Lista grupos seleccion</h3>
+        <h3>Lista grupos selección</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -61,10 +61,14 @@
             </tr>
             {% endfor %}
         </table>
-        {{ knp_pagination_render(arGrupos) }}
-
 
         <!-- Botones Menu Items -->
+        <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Grupos <span class="badge">{{ arGrupos.getTotalItemCount }}</span></div>                        
+        </div>
+        <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arGrupos) }}       
+        </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">                                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}

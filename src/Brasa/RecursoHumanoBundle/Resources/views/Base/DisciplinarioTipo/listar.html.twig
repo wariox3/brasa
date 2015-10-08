@@ -9,7 +9,6 @@
     {{ form_errors(form) }} 
     <table class="table table-striped table-bordered table-condensed table-hover">
         <tr>
-            
             <th>CÓDIGO</th>
             <th>{{ knp_pagination_sortable(arDisciplinarioTipos, 'NOMBRE', 'nit') }}</th> 
             <th></th>
@@ -25,7 +24,12 @@
             {%endfor%}
             </tr>            
     </table>
-    {{ knp_pagination_render(arDisciplinarioTipos) }}
+    <div class="btn-group" style="float: left">
+        <div class="btn btn-default btn-sm">Disciplinario tipos <span class="badge">{{ arDisciplinarioTipos.getTotalItemCount }}</span></div>                        
+    </div>
+    <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+        {{ knp_pagination_render(arDisciplinarioTipos) }}       
+    </div>
     <div class="btn-toolbar" style="float: right">              
         <div class='btn-group'>
             <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_disciplinario_tipo_nuevo', {'codigoDisciplinarioTipo': 0}) }}">Nuevo</a>

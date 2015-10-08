@@ -12,11 +12,11 @@
         </div>
         <br /> <br />
         <div class="panel panel-default">
-            <div class="panel-heading">Informacion contrato</div>
+            <div class="panel-heading">Información contrato</div>
             <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
-                    <td class="titulo">CODIGO:</td>
+                    <td class="titulo">CÓDIGO:</td>
                     <td class="td-in-well">{{ arContrato.codigoContratoPk }}</td>
                     <td class="titulo">TIPO:</td>
                     <td class="td-in-well">{{ arContrato.contratoTipoRel.nombre|default('SIN TIPO') }}</td>
@@ -40,7 +40,7 @@
                     <td class="td-in-well">{{ arContrato.cargoRel.nombre|default('SIN CARGO') }}</td>
                 </tr>                 
                 <tr>
-                    <td class="titulo">CLASIFICACION RIESGO:</td>
+                    <td class="titulo">CLASIFICACIÓN RIESGO:</td>
                     <td class="td-in-well">{{ arContrato.clasificacionRiesgoRel.nombre|default('SIN CENTRO COSTO') }}</td>
                     <td class="titulo">IDENTIFICACION</td>
                     <td class="td-in-well">{{ arContrato.empleadoRel.numeroIdentificacion }}</td>
@@ -48,7 +48,7 @@
                     <td class="td-in-well">{{ arContrato.cargoDescripcion }}</td>
                 </tr>
                 <tr>
-                    <td class="titulo">ULTIMO PAGO:</td>
+                    <td class="titulo">ÚLTIMO PAGO:</td>
                     <td>{{ arContrato.fechaUltimoPago|date("Y/m/d") }}</td>
                     <td class="titulo">EMPLEADO</td>
                     <td class="td-in-well">{{ arContrato.empleadoRel.nombreCorto }}</td>
@@ -56,7 +56,7 @@
                     <td class="td-in-well"></td>
                 </tr>                 
                 <tr>
-                    <td class="titulo">ULTIMA PRIMA:</td>
+                    <td class="titulo">ÚLTIMA PRIMA:</td>
                     <td>{{ arContrato.fechaUltimoPagoPrimas|date("Y/m/d") }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
@@ -64,7 +64,7 @@
                     <td class="td-in-well"></td>
                 </tr>                
                 <tr>
-                    <td class="titulo">ULTIMA CESANTIA:</td>
+                    <td class="titulo">ÚLTIMA CESANTIA:</td>
                     <td>{{ arContrato.fechaUltimoPagoCesantias|date("Y/m/d") }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
@@ -72,7 +72,7 @@
                     <td class="td-in-well"></td>
                 </tr>                
                 <tr>
-                    <td class="titulo">ULTIMA VACACION:</td>
+                    <td class="titulo">ÚLTIMA VACACIÓN:</td>
                     <td>{{ arContrato.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
@@ -96,7 +96,7 @@
                 <br />
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>CODIGO</th>
+                        <th>CÓDIGO</th>
                         <th>FECHA</th>
                         <th>ANTERIOR</th>
                         <th>NUEVO</th>
@@ -117,10 +117,11 @@
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoCambioSalario': 0 }) }}', 'AgregarCambioSalario', 600, 900)" >Nuevo</a>
                     </div>
                 </div>        
-                <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arCambiosSalario) }}
+                <div class="btn-group" style="float: left">
+                    <div class="btn btn-default btn-sm">Cambios salario <span class="badge">{{ arCambiosSalario.getTotalItemCount }}</span></div>                        
                 </div>
-                <div class="btn-toolbar" style="float: right">
+                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                    {{ knp_pagination_render(arCambiosSalario) }}       
                 </div>
             </div>
                     
@@ -129,10 +130,10 @@
                 <h4>Pago</h4>
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>CODIGO</th>
+                        <th>CÓDIGO</th>
                         <th>DESDE</th>
                         <th>HASTA</th>
-                        <th>DIAS</th>
+                        <th>DÍAS</th>
                         <th>VR. DEDUCCIONES</th>
                         <th>TOTAL</th>
                         <th></th>
@@ -149,8 +150,11 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arVacaciones) }}
+                <div class="btn-group" style="float: left">
+                    <div class="btn btn-default btn-sm">Vacaciones <span class="badge">{{ arVacaciones.getTotalItemCount }}</span></div>                        
+                </div>
+                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                    {{ knp_pagination_render(arVacaciones) }}       
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
@@ -180,8 +184,11 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arVacacionesDisfrute) }}
+                <div class="btn-group" style="float: left">
+                    <div class="btn btn-default btn-sm">Vacaciones disfrute<span class="badge">{{ arVacacionesDisfrute.getTotalItemCount }}</span></div>                        
+                </div>
+                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                    {{ knp_pagination_render(arVacacionesDisfrute) }}       
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">

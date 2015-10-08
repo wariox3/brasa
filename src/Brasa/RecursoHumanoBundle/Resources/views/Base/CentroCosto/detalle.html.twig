@@ -102,18 +102,18 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <div class="btn-group" style="float: left">
-                    <div class="btn btn-default btn-sm">Sedes <span class="badge">{{ arSedes.getTotalItemCount }}</span></div>
-                </div>
-                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                    {{ knp_pagination_render(arSedes) }}
-                </div>
             </div>
         </div>
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_centros_costos_lista') }}" style="float:left">Volver</a>
+            </div>
+            <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Sedes <span class="badge">{{ arSedes.getTotalItemCount }}</span></div>
+            </div>
+            <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arSedes) }}
             </div>
         </div>
 

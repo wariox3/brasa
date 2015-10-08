@@ -49,7 +49,6 @@
                     <td class="td-in-well"></td>                   
                 </tr>                
                 <tr>
-
                     <td class="titulo">PERIODO HASTA:</td>
                     <td class="td-in-well">{{ arProgramacionPago.fechaHasta |date("Y/m/d") }}</td>
                     <td class="titulo">NETO A PAGAR:</th>
@@ -106,12 +105,11 @@
         </table>
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float: left">
-            <div class="btn-group">
-                {{ knp_pagination_render(arProgramacionPagoDetalles) }}
+            <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Programación pago detalles <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></div>                        
             </div>
-            <div class="btn-group">
-                <a href="#" class="btn btn-default btn-sm">Empleados <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></a>
-
+            <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arProgramacionPagoDetalles) }}       
             </div>
         </div>
         <div class="btn-toolbar" style="float: right">

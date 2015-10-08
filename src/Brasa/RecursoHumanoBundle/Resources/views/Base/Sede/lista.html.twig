@@ -47,11 +47,13 @@
             {% endfor %}                        
         </table>                       
            
-        <div class="btn-toolbar" style="float: left">
-            {{ knp_pagination_render(arSedes) }} 
-        </div>
-
         <!-- Botones Menu Items -->
+        <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Sedes <span class="badge">{{ arSedes.getTotalItemCount }}</span></div>                        
+        </div>
+        <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arSedes) }}       
+        </div>
         <div class="btn-toolbar" style="float: right"> 
                 
             <div class="btn-group">

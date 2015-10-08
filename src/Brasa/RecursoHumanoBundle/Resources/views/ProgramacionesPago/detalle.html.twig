@@ -230,13 +230,13 @@
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">
-                {{ knp_pagination_render(arProgramacionPagoDetalles) }}
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
             </div>
-            <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
+            <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Programación pago detalles <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></div>                        
             </div>
-            <div class="btn-group">
-                <a href="#" class="btn btn-default btn-sm">Empleados <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></a>
+            <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arProgramacionPagoDetalles) }}       
             </div>
             
         </div>

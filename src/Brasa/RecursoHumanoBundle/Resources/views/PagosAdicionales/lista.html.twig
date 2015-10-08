@@ -14,7 +14,6 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th></th>                
-                
             </tr>
             {% for arProgramacionPagos in arProgramacionPagos %}
             <tr>
@@ -23,7 +22,6 @@
                 <td>{{ arProgramacionPagos.fechaDesde|date("Y/m/d")  }}</td> 
                 <td>{{ arProgramacionPagos.fechaHasta|date("Y/m/d")  }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPagos.codigoProgramacionPagoPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" title="Editar registrosssss"></a></td>
-                
             </tr>
             {% endfor %}
         </table>

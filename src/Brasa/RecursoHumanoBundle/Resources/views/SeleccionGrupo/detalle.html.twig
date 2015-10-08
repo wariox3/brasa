@@ -8,16 +8,16 @@
 </script>
 <div class="container">
     <div class="page-header">
-        <h3>Grupo de seleccion</h3>
+        <h3>Grupo de selección</h3>
     </div>
 
     <!-- Encabezado Movimiento -->
     <div class="panel panel-default">
-      <div class="panel-heading">Informacion grupo</div>
+      <div class="panel-heading">Información grupo</div>
       <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
-                    <td class="titulo">CODIGO:</td>
+                    <td class="titulo">CÓDIGO:</td>
                     <td class="td-in-well">{{ arGrupo.codigoSeleccionGrupoPk }}</td>
                     <td class="titulo">FECHA:</td>
                     <td class="td-in-well">{{ arGrupo.fecha | date('Y/m/d') }}</td>
@@ -94,9 +94,8 @@
             </div>
         </div>
     </div>            
-            
-            
-        {{ form_rest(form) }}
+                    
+    {{ form_rest(form) }}
     {{ form_end(form) }}
     <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_selecciongrupo_lista') }}">Volver</a>
 </div>

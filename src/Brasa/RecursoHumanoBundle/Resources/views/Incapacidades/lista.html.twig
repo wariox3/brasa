@@ -82,10 +82,14 @@
             </tr>
             {% endfor %}                        
         </table>                       
-        {{ knp_pagination_render(arIncapacidades) }}    
-
-
+        
         <!-- Botones Menu Items -->
+        <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Incapacidades <span class="badge">{{ arIncapacidades.getTotalItemCount }}</span></div>                        
+        </div>
+        <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arIncapacidades) }}       
+        </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">

@@ -4,12 +4,11 @@
         <div class="page-header">
             <h3>Detalles tipo crédito</h3>
         </div>
-
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         
         <div class="panel panel-default">
-            <div class="panel-heading">Informacion del tipo crédito</div>
+            <div class="panel-heading">Información del tipo crédito</div>
             <div class="panel-body">
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
@@ -60,8 +59,14 @@
         </table>
         
         </div>
-        {{ knp_pagination_render(arCreditosTiposEmpleados) }}
+        
         <!-- Botones Menu Items -->
+        <div class="btn-group" style="float: left">
+            <div class="btn btn-default btn-sm">Creditos tipos empleados <span class="badge">{{ arCreditosTiposEmpleados.getTotalItemCount }}</span></div>                        
+        </div>
+        <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+            {{ knp_pagination_render(arCreditosTiposEmpleados) }}       
+        </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}

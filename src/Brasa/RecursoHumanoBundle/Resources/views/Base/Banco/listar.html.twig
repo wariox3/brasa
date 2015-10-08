@@ -21,7 +21,6 @@
             <th></th>
             <th></th>
         </tr>
-        
             {%for arBancos in arBancos %}
                <tr>
                 <td>{{arBancos.codigoBancoPk}}</td>
@@ -40,8 +39,11 @@
     <div class="btn-group" style="float: left">
         <div class="btn btn-default btn-sm">Bancos <span class="badge">{{ arBancos.getTotalItemCount }}</span></div>
     </div>
+    <div class="btn-group" style="float: left">
+        <div class="btn btn-default btn-sm">Bancos <span class="badge">{{ arBancos.getTotalItemCount }}</span></div>                        
+    </div>
     <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-        {{ knp_pagination_render(arBancos) }}
+        {{ knp_pagination_render(arBancos) }}       
     </div>
     <div class="btn-toolbar" style="float: right">              
         <div class="btn-group">
