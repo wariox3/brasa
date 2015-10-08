@@ -5,21 +5,21 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class LiquidacionesController extends Controller
-{    
+{
     var $strSqlLista = "";
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();        
+        $session = $this->getRequest()->getSession();
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
         if($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');                       
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $this->listar();              
+                $this->listar();
             }
 
             if($form->get('BtnExcel')->isClicked()) {
@@ -27,16 +27,16 @@ class LiquidacionesController extends Controller
                 $this->listar();
                 $this->generarExcel();
             }
-        }          
-        
+        }
+
         $arLiquidaciones = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:lista.html.twig', array('arLiquidaciones' => $arLiquidaciones, 'form' => $form->createView()));
-    }               
-    
+    }
+
     public function detalleAction($codigoLiquidacion) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $request = $this->getRequest();        
+        $request = $this->getRequest();
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->add('BtnAutorizar', 'submit', array('label'  => 'Autorizar',))
@@ -46,7 +46,7 @@ class LiquidacionesController extends Controller
         $form->handleRequest($request);
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
-        if($form->isValid()) {           
+        if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arLiquidacion->getEstadoGenerado() == 1) {
                 $objFormatoLiquidacion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoLiquidacion();
@@ -61,26 +61,26 @@ class LiquidacionesController extends Controller
             if($form->get('BtnLiquidar')->isClicked()) {
                 if($arLiquidacion->getEstadoAutorizado() == 0) {
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
-                    return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
+                    return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
                 } else {
                     $objMensaje->Mensaje("error", "No puede reliquidar una liquidacion autorizada", $this);
                 }
 
-            }            
+            }
             if($form->get('BtnEliminarAdicional')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoLiquidacionAdicional) {
                         $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicional();
                         $arLiquidacionAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicional')->find($codigoLiquidacionAdicional);
-                        $em->remove($arLiquidacionAdicional);                        
+                        $em->remove($arLiquidacionAdicional);
                     }
                     $em->flush();
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarDeducciones($codigoLiquidacion);
-                }                
+                }
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
-                return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
-            }            
+                return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+            }
         }
         $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
         $arLiquidacionAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));
@@ -89,76 +89,76 @@ class LiquidacionesController extends Controller
                     'arLiquidacionAdicionales' => $arLiquidacionAdicionales,
                     'form' => $form->createView()
                     ));
-    }        
-    
-    public function detalleNuevoConceptoAction($codigoLiquidacion) {
+    }
+
+    public function detalleNuevoConceptoAction($codigoLiquidacion, $codigoConcepto) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);        
-        $form = $this->createFormBuilder()                            
+        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
+        $form = $this->createFormBuilder()
             ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
             ->getForm();
         $form->handleRequest($request);
-    
-        if($form->isValid()) {            
-            if($form->get('BtnAgregar')->isClicked()) {  
+
+        if($form->isValid()) {
+            if($form->get('BtnAgregar')->isClicked()) {
                 $arrControles = $request->request->All();
                 if (isset($arrControles['TxtValor'])) {
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
                         if($arrControles['TxtValor'][$intIndice] != "" && $arrControles['TxtValor'][$intIndice] != 0) {
-                            $arLiquidacionDeduccionConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto();
-                            $arLiquidacionDeduccionConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccionConcepto')->find($intCodigo);                                                                                    
-                            $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
-                            $arLiquidacionDeduccion->setLiquidacionDeduccionConceptoRel($arLiquidacionDeduccionConcepto);                            
-                            $arLiquidacionDeduccion->setLiquidacionRel($arLiquidacion);
+                            $arLiquidacionAdicionalConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
+                            $arLiquidacionAdicionalConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->find( $intCodigo);
+                            $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+                            $arLiquidacionAdicional->setLiquidacionAdicionalConceptoRel($arLiquidacionAdicionalConcepto);
+                            $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion);
                             $floValor = $arrControles['TxtValor'][$intIndice];
-                            $arLiquidacionDeduccion->setVrDeduccion($floValor);
-                            $em->persist($arLiquidacionDeduccion);                                
-                        }                        
+                            $arLiquidacionAdicional->setVrDeduccion($floValor);
+                            $em->persist($arLiquidacionAdicional);
+                        }
                         $intIndice++;
                     }
                     $em->flush();
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarDeducciones($codigoLiquidacion);
-                }                                                                                                                                      
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarAdicionales($codigoLiquidacion);
+                }
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
         }
         $arLiquidacionAdicionalesConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
-        $arLiquidacionAdicionalesConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->findAll();        
-        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:detalleNuevoConcepto.html.twig', array(            
+        $arLiquidacionAdicionalesConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->findBy(array('codigoLiquidacionAdicionalConceptoPk' => $codigoConcepto));
+        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:detalleNuevoConcepto.html.twig', array(
             'arLiquidacion' => $arLiquidacion,
             'arLiquidacionAdicionalesConceptos' => $arLiquidacionAdicionalesConceptos,
             'form' => $form->createView()));
-    }       
-    
+    }
+
     private function listar() {
         $session = $this->getRequest()->getSession();
-        $em = $this->getDoctrine()->getManager();                
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->listaDql(                
+        $em = $this->getDoctrine()->getManager();
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->listaDql(
                $session->get('filtroIdentificacion'),
-               $session->get('filtroGenerado')); 
-    }     
-    
+               $session->get('filtroGenerado'));
+    }
+
     private function formularioLista() {
-        $session = $this->getRequest()->getSession();        
-        $form = $this->createFormBuilder()                        
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+        $session = $this->getRequest()->getSession();
+        $form = $this->createFormBuilder()
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroGenerado')))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',)) 
-            ->getForm();        
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->getForm();
         return $form;
-    }            
-    
+    }
+
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroGenerado', $controles['estadoGenerado']);
-    }    
-    
+    }
+
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -180,7 +180,7 @@ class LiquidacionesController extends Controller
                     ->setCellValue('E1', 'CENTRO COSTOS')
                     ->setCellValue('F1', 'TIEMPO')
                     ->setCellValue('G1', 'DESDE')
-                    ->setCellValue('H1', 'HASTA')                    
+                    ->setCellValue('H1', 'HASTA')
                     ->setCellValue('I1', 'SALARIO')
                     ->setCellValue('J1', 'CARGO')
                     ->setCellValue('K1', 'CARGO DESCRIPCION')
@@ -190,7 +190,7 @@ class LiquidacionesController extends Controller
         $query = $em->createQuery($session->get('dqlContratoLista'));
         //$arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContratos = $query->getResult();
-        foreach ($arContratos as $arContrato) {            
+        foreach ($arContratos as $arContrato) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arContrato->getCodigoContratoPk())
                     ->setCellValue('B' . $i, $arContrato->getContratoTipoRel()->getNombre())
@@ -224,5 +224,5 @@ class LiquidacionesController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }        
+    }
 }

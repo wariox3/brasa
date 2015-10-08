@@ -181,7 +181,10 @@
                 <!-- Fin Botones Menu Items -->
                 <div class="btn-toolbar" style="float: right">                           
                     <div class="btn-group">                
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_liquidaciones_detalle_nuevo_concepto', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk}) }}', 'AgregarNuevoConcepto', 600, 900)">Agregar concepto</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_liquidaciones_detalle_nuevo_concepto', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk, 'codigoConcepto': 2}) }}', 'AgregarNuevoAdicional', 600, 900)">Agregar adicional</a>
+                    </div>
+                    <div class="btn-group">                
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_liquidaciones_detalle_nuevo_concepto', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk, 'codigoConcepto': 1}) }}', 'AgregarNuevoDescuento', 600, 900)">Agregar descuento</a>
                     </div>
                     <div class="btn-group">                
                         {{ form_widget(form.BtnEliminarAdicional, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
