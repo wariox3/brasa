@@ -35,7 +35,12 @@ class RhuLiquidacionAdicionales
     /**
      * @ORM\Column(name="vr_deduccion", type="float")
      */
-    private $vrDeduccion = 0;         
+    private $vrDeduccion = 0;
+    
+    /**
+     * @ORM\Column(name="vr_bonificacion", type="float")
+     */
+    private $vrBonificacion = 0;
     
     /**
      * @ORM\Column(name="detalle", type="string", length=250, nullable=true)
@@ -262,5 +267,29 @@ class RhuLiquidacionAdicionales
     public function getLiquidacionAdicionalConceptoRel()
     {
         return $this->liquidacionAdicionalConceptoRel;
+    }
+
+    /**
+     * Set vrBonificacion
+     *
+     * @param float $vrBonificacion
+     *
+     * @return RhuLiquidacionAdicionales
+     */
+    public function setVrBonificacion($vrBonificacion)
+    {
+        $this->vrBonificacion = $vrBonificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBonificacion
+     *
+     * @return float
+     */
+    public function getVrBonificacion()
+    {
+        return $this->vrBonificacion;
     }
 }

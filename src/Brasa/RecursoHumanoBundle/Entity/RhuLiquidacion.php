@@ -190,7 +190,12 @@ class RhuLiquidacion
     /**
      * @ORM\Column(name="vr_deducciones", type="float")
      */
-    private $VrDeducciones = 0;     
+    private $VrDeducciones = 0; 
+    
+    /**
+     * @ORM\Column(name="vr_bonificaciones", type="float")
+     */
+    private $VrBonificaciones = 0;
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -1265,5 +1270,29 @@ class RhuLiquidacion
     public function getLiquidacionesAdicionalesLiquidacionRel()
     {
         return $this->liquidacionesAdicionalesLiquidacionRel;
+    }
+
+    /**
+     * Set vrBonificaciones
+     *
+     * @param float $vrBonificaciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrBonificaciones($vrBonificaciones)
+    {
+        $this->VrBonificaciones = $vrBonificaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBonificaciones
+     *
+     * @return float
+     */
+    public function getVrBonificaciones()
+    {
+        return $this->VrBonificaciones;
     }
 }

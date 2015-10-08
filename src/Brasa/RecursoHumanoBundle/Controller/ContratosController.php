@@ -250,8 +250,11 @@ class ContratosController extends Controller
                             $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());        
                             foreach ($arCreditos as $arCredito) {
                                 $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+                                $arLiquidacionAdicionalConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
+                                $arLiquidacionAdicionalConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->find(1);
                                 $arLiquidacionAdicionales->setCreditoRel($arCredito);
                                 $arLiquidacionAdicionales->setLiquidacionRel($arLiquidacion);
+                                $arLiquidacionAdicionales->setLiquidacionAdicionalConceptoRel($arLiquidacionAdicionalConcepto);
                                 $arLiquidacionAdicionales->setVrDeduccion($arCredito->getSaldoTotal());
                                 $em->persist($arLiquidacionAdicionales);
                             }                        
