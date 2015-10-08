@@ -53,6 +53,7 @@ class PagosAdicionalesController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Retirar',))
             ->add('BtnConceptoPermanente', 'submit', array('label'  => 'Permanente',))
+            ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))                
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {

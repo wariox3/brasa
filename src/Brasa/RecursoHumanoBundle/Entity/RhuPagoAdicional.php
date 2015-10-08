@@ -51,6 +51,11 @@ class RhuPagoAdicional
      * @ORM\Column(name="permanente", type="boolean")
      */    
     private $permanente = 0;     
+
+    /**     
+     * @ORM\Column(name="aplica_dia_laborado", type="boolean")
+     */    
+    private $aplicaDiaLaborado = 0;         
     
     /**     
      * @ORM\Column(name="pagoAplicado", type="boolean")
@@ -525,5 +530,29 @@ class RhuPagoAdicional
     public function getPagoAdicionalSubtipoRel()
     {
         return $this->pagoAdicionalSubtipoRel;
+    }
+
+    /**
+     * Set aplicaDiaLaborado
+     *
+     * @param boolean $aplicaDiaLaborado
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setAplicaDiaLaborado($aplicaDiaLaborado)
+    {
+        $this->aplicaDiaLaborado = $aplicaDiaLaborado;
+
+        return $this;
+    }
+
+    /**
+     * Get aplicaDiaLaborado
+     *
+     * @return boolean
+     */
+    public function getAplicaDiaLaborado()
+    {
+        return $this->aplicaDiaLaborado;
     }
 }
