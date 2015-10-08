@@ -41,7 +41,7 @@ class LiquidacionesController extends Controller
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->add('BtnAutorizar', 'submit', array('label'  => 'Autorizar',))
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
-            ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
+            ->add('BtnEliminarAdicional', 'submit', array('label'  => 'Eliminar adicional',))
             ->getForm();
         $form->handleRequest($request);
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
@@ -67,13 +67,13 @@ class LiquidacionesController extends Controller
                 }
 
             }            
-            if($form->get('BtnEliminarDeduccion')->isClicked()) {
+            if($form->get('BtnEliminarAdicional')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoLiquidacionDeduccion) {
-                        $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
-                        $arLiquidacionDeduccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->find($codigoLiquidacionDeduccion);
-                        $em->remove($arLiquidacionDeduccion);                        
+                    foreach ($arrSeleccionados AS $codigoLiquidacionAdicional) {
+                        $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicional();
+                        $arLiquidacionAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicional')->find($codigoLiquidacionAdicional);
+                        $em->remove($arLiquidacionAdicional);                        
                     }
                     $em->flush();
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarDeducciones($codigoLiquidacion);
@@ -82,11 +82,11 @@ class LiquidacionesController extends Controller
                 return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));                                                
             }            
         }
-        $arLiquidacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
-        $arLiquidacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));
+        $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+        $arLiquidacionAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));
         return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:detalle.html.twig', array(
                     'arLiquidacion' => $arLiquidacion,
-                    'arLiquidacionDeducciones' => $arLiquidacionDeducciones,
+                    'arLiquidacionAdicionales' => $arLiquidacionAdicionales,
                     'form' => $form->createView()
                     ));
     }        
@@ -124,11 +124,11 @@ class LiquidacionesController extends Controller
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }
         }
-        $arLiquidacionDeduccionConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto();
-        $arLiquidacionDeduccionConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccionConcepto')->findAll();        
+        $arLiquidacionAdicionalesConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
+        $arLiquidacionAdicionalesConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->findAll();        
         return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:detalleNuevoConcepto.html.twig', array(            
             'arLiquidacion' => $arLiquidacion,
-            'arLiquidacionDeduccionConceptos' => $arLiquidacionDeduccionConceptos,
+            'arLiquidacionAdicionalesConceptos' => $arLiquidacionAdicionalesConceptos,
             'form' => $form->createView()));
     }       
     

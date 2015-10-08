@@ -10,10 +10,10 @@
                     <th style="text-align: right">VALOR</th>
                 </tr>
 
-                {% for arLiquidacionDeduccionConceptos in arLiquidacionDeduccionConceptos %}
+                {% for arLiquidacionAdicionalesConceptos in arLiquidacionAdicionalesConceptos %}
                     <tr>
-                        <td><input type="hidden" name="LblCodigo[]" value="{{ arLiquidacionDeduccionConceptos.codigoLiquidacionDeduccionConceptoPk }}">{{ arLiquidacionDeduccionConceptos.codigoLiquidacionDeduccionConceptoPk }}</td>
-                        <td>{{ arLiquidacionDeduccionConceptos.nombre}}</td>
+                        <td><input type="hidden" name="LblCodigo[]" value="{{ arLiquidacionAdicionalesConceptos.codigoLiquidacionAdicionalConceptoPk }}">{{ arLiquidacionAdicionalesConceptos.codigoLiquidacionAdicionalConceptoPk }}</td>
+                        <td>{{ arLiquidacionAdicionalesConceptos.nombre}}</td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtValor[]" value="0" size="15" style="text-align: right; width:150px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                     </tr>
                 {% endfor %}                 
