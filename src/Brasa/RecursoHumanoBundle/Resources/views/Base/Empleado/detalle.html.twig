@@ -155,12 +155,8 @@
                     {% endfor %}
                 </table>
 
-                <div class="btn-group" style="float: left">
-                    <div class="btn btn-default btn-sm">Contratos <span class="badge">{{ arContratos.getTotalItemCount }}</span></div>                        
-                </div>
-                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                    {{ knp_pagination_render(arContratos) }}       
-                </div>
+                {{ knp_pagination_render(arContratos) }}       
+                
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleado.codigoEmpleadoPk}) }}', 'NuevoContrato', 600, 900)" >Nuevo</a>{% endif %}

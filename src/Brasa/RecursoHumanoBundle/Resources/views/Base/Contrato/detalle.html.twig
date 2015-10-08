@@ -117,12 +117,9 @@
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoCambioSalario': 0 }) }}', 'AgregarCambioSalario', 600, 900)" >Nuevo</a>
                     </div>
                 </div>        
-                <div class="btn-group" style="float: left">
-                    <div class="btn btn-default btn-sm">Cambios salario <span class="badge">{{ arCambiosSalario.getTotalItemCount }}</span></div>                        
-                </div>
-                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                    {{ knp_pagination_render(arCambiosSalario) }}       
-                </div>
+                
+                {{ knp_pagination_render(arCambiosSalario) }}       
+                
             </div>
                     
             <div class="tab-pane" id="vacaciones">
@@ -150,12 +147,9 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <div class="btn-group" style="float: left">
-                    <div class="btn btn-default btn-sm">Vacaciones <span class="badge">{{ arVacaciones.getTotalItemCount }}</span></div>                        
-                </div>
-                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                    {{ knp_pagination_render(arVacaciones) }}       
-                </div>
+                
+                {{ knp_pagination_render(arVacaciones) }}       
+                
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a>
@@ -184,12 +178,7 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <div class="btn-group" style="float: left">
-                    <div class="btn btn-default btn-sm">Vacaciones disfrute<span class="badge">{{ arVacacionesDisfrute.getTotalItemCount }}</span></div>                        
-                </div>
-                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                    {{ knp_pagination_render(arVacacionesDisfrute) }}       
-                </div>
+                {{ knp_pagination_render(arVacacionesDisfrute) }}       
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_disfrute_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoVacacion': 0 }) }}', 'AgregarVacacion', 600, 900)" >Nuevo</a>

@@ -9,7 +9,6 @@
     {{ form_errors(form) }} 
     <table class="table table-striped table-bordered table-condensed table-hover">
         <tr>
-            
             <th>CÓDIGO</th>
             <th>{{ knp_pagination_sortable(arBancos, 'NOMBRE', 'codigo') }}</th>
             <th>NIT</th>
@@ -36,9 +35,6 @@
             {%endfor%}
             </tr>            
     </table>
-    <div class="btn-group" style="float: left">
-        <div class="btn btn-default btn-sm">Bancos <span class="badge">{{ arBancos.getTotalItemCount }}</span></div>
-    </div>
     <div class="btn-group" style="float: left">
         <div class="btn btn-default btn-sm">Bancos <span class="badge">{{ arBancos.getTotalItemCount }}</span></div>                        
     </div>
