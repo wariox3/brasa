@@ -249,11 +249,11 @@ class ContratosController extends Controller
                             $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                             $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());        
                             foreach ($arCreditos as $arCredito) {
-                                $arLiquidacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
-                                $arLiquidacionDeduccion->setCreditoRel($arCredito);
-                                $arLiquidacionDeduccion->setLiquidacionRel($arLiquidacion);
-                                $arLiquidacionDeduccion->setVrDeduccion($arCredito->getSaldoTotal());
-                                $em->persist($arLiquidacionDeduccion);
+                                $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+                                $arLiquidacionAdicionales->setCreditoRel($arCredito);
+                                $arLiquidacionAdicionales->setLiquidacionRel($arLiquidacion);
+                                $arLiquidacionAdicionales->setVrDeduccion($arCredito->getSaldoTotal());
+                                $em->persist($arLiquidacionAdicionales);
                             }                        
                         }
                         $em->flush();                        

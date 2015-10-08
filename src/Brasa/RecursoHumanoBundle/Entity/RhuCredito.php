@@ -133,9 +133,9 @@ class RhuCredito
     protected $creditoTipoPagoRel;
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuLiquidacionDeduccion", mappedBy="creditoRel")
+     * @ORM\OneToMany(targetEntity="RhuLiquidacionAdicionales", mappedBy="creditoRel")
      */
-    protected $liquidacionesDeduccionesCreditoRel;
+    protected $liquidacionesAdicionalesCreditoRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="creditoRel")
@@ -150,7 +150,7 @@ class RhuCredito
     {
         $this->creditosPagosCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosDetallesCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->liquidacionesDeduccionesCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidacionesAdicionalesCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->VacacionesCreditosCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -713,37 +713,37 @@ class RhuCredito
     }
 
     /**
-     * Add liquidacionesDeduccionesCreditoRel
+     * Add liquidacionesAdicionalesCreditoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesCreditoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesCreditoRel
      *
      * @return RhuCredito
      */
-    public function addLiquidacionesDeduccionesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesCreditoRel)
+    public function addLiquidacionesAdicionalesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesCreditoRel)
     {
-        $this->liquidacionesDeduccionesCreditoRel[] = $liquidacionesDeduccionesCreditoRel;
+        $this->liquidacionesAdicionalesCreditoRel[] = $liquidacionesAdicionalesCreditoRel;
 
         return $this;
     }
 
     /**
-     * Remove liquidacionesDeduccionesCreditoRel
+     * Remove liquidacionesAdicionalesCreditoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesCreditoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesCreditoRel
      */
-    public function removeLiquidacionesDeduccionesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion $liquidacionesDeduccionesCreditoRel)
+    public function removeLiquidacionesAdicionalesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesCreditoRel)
     {
-        $this->liquidacionesDeduccionesCreditoRel->removeElement($liquidacionesDeduccionesCreditoRel);
+        $this->liquidacionesAdicionalesCreditoRel->removeElement($liquidacionesAdicionalesCreditoRel);
     }
 
     /**
-     * Get liquidacionesDeduccionesCreditoRel
+     * Get liquidacionesAdicionalesCreditoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getLiquidacionesDeduccionesCreditoRel()
+    public function getLiquidacionesAdicionalesCreditoRel()
     {
-        return $this->liquidacionesDeduccionesCreditoRel;
+        return $this->liquidacionesAdicionalesCreditoRel;
     }
 
     /**

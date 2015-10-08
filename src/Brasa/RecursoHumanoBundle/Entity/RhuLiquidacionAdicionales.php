@@ -5,17 +5,17 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_liquidacion_deduccion")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuLiquidacionDeduccionRepository")
+ * @ORM\Table(name="rhu_liquidacion_adicionales")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuLiquidacionAdicionalesRepository")
  */
-class RhuLiquidacionDeduccion
+class RhuLiquidacionAdicionales
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_liquidacion_deduccion_pk", type="integer")
+     * @ORM\Column(name="codigo_liquidacion_adicional_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoLiquidacionDeduccionPk;
+    private $codigoLiquidacionAdicionalPk;
     
     /**
      * @ORM\Column(name="codigo_liquidacion_fk", type="integer", nullable=true)
@@ -28,9 +28,9 @@ class RhuLiquidacionDeduccion
     private $codigoCreditoFk;
     
     /**
-     * @ORM\Column(name="codigo_liquidacion_deduccion_concepto_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_liquidacion_adicional_concepto_fk", type="integer", nullable=true)
      */    
-    private $codigoLiquidacionDeduccionConceptoFk;    
+    private $codigoLiquidacionAdicionalConceptoFk;    
     
     /**
      * @ORM\Column(name="vr_deduccion", type="float")
@@ -43,33 +43,33 @@ class RhuLiquidacionDeduccion
     private $detalle;     
         
     /**
-     * @ORM\ManyToOne(targetEntity="RhuLiquidacion", inversedBy="liquidacionesDeduccionesLiquidacionRel")
+     * @ORM\ManyToOne(targetEntity="RhuLiquidacion", inversedBy="liquidacionesAdicionalesLiquidacionRel")
      * @ORM\JoinColumn(name="codigo_liquidacion_fk", referencedColumnName="codigo_liquidacion_pk")
      */
     protected $liquidacionRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuCredito", inversedBy="liquidacionesDeduccionesCreditoRel")
+     * @ORM\ManyToOne(targetEntity="RhuCredito", inversedBy="liquidacionesAdicionalesCreditoRel")
      * @ORM\JoinColumn(name="codigo_credito_fk", referencedColumnName="codigo_credito_pk")
      */
     protected $creditoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuLiquidacionDeduccionConcepto", inversedBy="liquidacionesDeduccionesLiquidacionDeduccionConceptoRel")
-     * @ORM\JoinColumn(name="codigo_liquidacion_deduccion_concepto_fk", referencedColumnName="codigo_liquidacion_deduccion_concepto_pk")
+     * @ORM\ManyToOne(targetEntity="RhuLiquidacionAdicionalesConcepto", inversedBy="liquidacionesAdicionalesLiquidacionAdicionalConceptoRel")
+     * @ORM\JoinColumn(name="codigo_liquidacion_adicional_concepto_fk", referencedColumnName="codigo_liquidacion_adicional_concepto_pk")
      */
-    protected $liquidacionDeduccionConceptoRel;    
+    protected $liquidacionAdicionalConceptoRel;    
 
 
 
     /**
-     * Get codigoLiquidacionDeduccionPk
+     * Get codigoLiquidacionAdicionalPk
      *
      * @return integer
      */
-    public function getCodigoLiquidacionDeduccionPk()
+    public function getCodigoLiquidacionAdicionalPk()
     {
-        return $this->codigoLiquidacionDeduccionPk;
+        return $this->codigoLiquidacionAdicionalPk;
     }
 
     /**
@@ -77,7 +77,7 @@ class RhuLiquidacionDeduccion
      *
      * @param integer $codigoLiquidacionFk
      *
-     * @return RhuLiquidacionDeduccion
+     * @return RhuLiquidacionAdicionales
      */
     public function setCodigoLiquidacionFk($codigoLiquidacionFk)
     {
@@ -101,7 +101,7 @@ class RhuLiquidacionDeduccion
      *
      * @param integer $codigoCreditoFk
      *
-     * @return RhuLiquidacionDeduccion
+     * @return RhuLiquidacionAdicionales
      */
     public function setCodigoCreditoFk($codigoCreditoFk)
     {
@@ -121,27 +121,27 @@ class RhuLiquidacionDeduccion
     }
 
     /**
-     * Set codigoLiquidacionDeduccionConceptoFk
+     * Set codigoLiquidacionAdicionalConceptoFk
      *
-     * @param integer $codigoLiquidacionDeduccionConceptoFk
+     * @param integer $codigoLiquidacionAdicionalConceptoFk
      *
-     * @return RhuLiquidacionDeduccion
+     * @return RhuLiquidacionAdicionales
      */
-    public function setCodigoLiquidacionDeduccionConceptoFk($codigoLiquidacionDeduccionConceptoFk)
+    public function setCodigoLiquidacionAdicionalConceptoFk($codigoLiquidacionAdicionalConceptoFk)
     {
-        $this->codigoLiquidacionDeduccionConceptoFk = $codigoLiquidacionDeduccionConceptoFk;
+        $this->codigoLiquidacionAdicionalConceptoFk = $codigoLiquidacionAdicionalConceptoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoLiquidacionDeduccionConceptoFk
+     * Get codigoLiquidacionAdicionalConceptoFk
      *
      * @return integer
      */
-    public function getCodigoLiquidacionDeduccionConceptoFk()
+    public function getCodigoLiquidacionAdicionalConceptoFk()
     {
-        return $this->codigoLiquidacionDeduccionConceptoFk;
+        return $this->codigoLiquidacionAdicionalConceptoFk;
     }
 
     /**
@@ -149,7 +149,7 @@ class RhuLiquidacionDeduccion
      *
      * @param float $vrDeduccion
      *
-     * @return RhuLiquidacionDeduccion
+     * @return RhuLiquidacionAdicionales
      */
     public function setVrDeduccion($vrDeduccion)
     {
@@ -173,7 +173,7 @@ class RhuLiquidacionDeduccion
      *
      * @param string $detalle
      *
-     * @return RhuLiquidacionDeduccion
+     * @return RhuLiquidacionAdicionales
      */
     public function setDetalle($detalle)
     {
@@ -197,7 +197,7 @@ class RhuLiquidacionDeduccion
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionRel
      *
-     * @return RhuLiquidacionDeduccion
+     * @return RhuLiquidacionAdicionales
      */
     public function setLiquidacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionRel = null)
     {
@@ -221,7 +221,7 @@ class RhuLiquidacionDeduccion
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditoRel
      *
-     * @return RhuLiquidacionDeduccion
+     * @return RhuLiquidacionAdicionales
      */
     public function setCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditoRel = null)
     {
@@ -241,26 +241,26 @@ class RhuLiquidacionDeduccion
     }
 
     /**
-     * Set liquidacionDeduccionConceptoRel
+     * Set liquidacionAdicionalConceptoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto $liquidacionDeduccionConceptoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto $liquidacionAdicionalConceptoRel
      *
-     * @return RhuLiquidacionDeduccion
+     * @return RhuLiquidacionAdicionales
      */
-    public function setLiquidacionDeduccionConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto $liquidacionDeduccionConceptoRel = null)
+    public function setLiquidacionAdicionalConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto $liquidacionAdicionalConceptoRel = null)
     {
-        $this->liquidacionDeduccionConceptoRel = $liquidacionDeduccionConceptoRel;
+        $this->liquidacionAdicionalConceptoRel = $liquidacionAdicionalConceptoRel;
 
         return $this;
     }
 
     /**
-     * Get liquidacionDeduccionConceptoRel
+     * Get liquidacionAdicionalConceptoRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccionConcepto
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto
      */
-    public function getLiquidacionDeduccionConceptoRel()
+    public function getLiquidacionAdicionalConceptoRel()
     {
-        return $this->liquidacionDeduccionConceptoRel;
+        return $this->liquidacionAdicionalConceptoRel;
     }
 }

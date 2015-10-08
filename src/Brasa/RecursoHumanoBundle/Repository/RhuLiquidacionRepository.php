@@ -60,7 +60,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $douCesantias = 0;
         $douInteresesCesantias = 0;
         $douPrima = 0;
-        $douDeduccionPrima = 0;
+        $douAdicionalesPrima = 0;
         $douVacaciones = 0;
         $douAuxilioTransporte = 0;
         if($intDiasLaborados > 0) {
@@ -110,10 +110,10 @@ class RhuLiquidacionRepository extends EntityRepository {
             } else {
                 //if($dateFechaDesde->format('md') != '0101') {
                     $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 2;    
-                    $douDeduccionPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
+                    $douAdicionalPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
                     $arLiquidacion->setDiasPrimas($intDiasPrima * -1);
                     $arLiquidacion->setVrPrima(0); 
-                    $arLiquidacion->setVrDeduccionPrima($douDeduccionPrima);                                       
+                    $arLiquidacion->setVrDeduccionPrima($douAdicionalPrima);                                       
                 /*} else {
                     $intDiasPrima = 0;
                     $douDeduccionPrima = 0;
@@ -155,19 +155,19 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setFechaUltimoPagoVacaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones());
             }
         }       
-        $floDeducciones = 0;
-        $arLiquidacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
-        $arLiquidacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));        
-        foreach ($arLiquidacionDeducciones as $arLiquidacionDeduccion) {
-            $floDeducciones += $arLiquidacionDeduccion->getVrDeduccion();
+        $floAdicionales = 0;
+        $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+        $arLiquidacionAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));        
+        foreach ($arLiquidacionAdicionales as $arLiquidacionAdicional) {
+            $floAdicionales += $arLiquidacionAdicional->getVrDeduccion();
         }
         $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones;
-        $douTotal = $douTotal - $floDeducciones - $douDeduccionPrima;
+        $douTotal = $douTotal - $floAdicionales - $douAdicionalesPrima;
         $arLiquidacion->setVrTotal($douTotal);
         $arLiquidacion->setVrSalario($douSalario);
         $arLiquidacion->setVrIngresoBasePrestacion($douIbp);
         $arLiquidacion->setVrIngresoBasePrestacionTotal($douIBCTotal); 
-        $arLiquidacion->setVrDeducciones($floDeducciones);        
+        $arLiquidacion->setVrDeducciones($floAdicionales);        
         $intDiasTotal = $arLiquidacion->getContratoRel()->getFechaDesde()->diff($arLiquidacion->getContratoRel()->getFechaHasta());
         $intDiasTotal = $intDiasTotal->format('%a');
         $arLiquidacion->setNumeroDias($intDiasLaborados);
@@ -177,20 +177,20 @@ class RhuLiquidacionRepository extends EntityRepository {
         return true;
     }    
     
-    public function liquidarDeducciones($codigoLiquidacion) {        
+    public function liquidarAdicionales($codigoLiquidacion) {        
         $em = $this->getEntityManager();        
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
-        $floDeducciones = 0;
-        $arLiquidacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionDeduccion();
-        $arLiquidacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionDeduccion')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));        
-        foreach ($arLiquidacionDeducciones as $arLiquidacionDeduccion) {
-            $floDeducciones += $arLiquidacionDeduccion->getVrDeduccion();
+        $floAdicionales = 0;
+        $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+        $arLiquidacionAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));        
+        foreach ($arLiquidacionAdicionales as $arLiquidacionAdicional) {
+            $floAdicionales += $arLiquidacionAdicional->getVrDeduccion();
         }
         $douTotal = $arLiquidacion->getVrCesantias() + $arLiquidacion->getVrInteresesCesantias() + $arLiquidacion->getVrPrima() + $arLiquidacion->getVrVacaciones();
-        $douTotal = $douTotal - ($floDeducciones + $arLiquidacion->getVrDeduccionPrima());
+        $douTotal = $douTotal - ($floAdicionales + $arLiquidacion->getVrDeduccionPrima());
         $arLiquidacion->setVrTotal($douTotal);                        
-        $arLiquidacion->setVrDeducciones($floDeducciones);
+        $arLiquidacion->setVrDeducciones($floAdicionales);
         $em->persist($arLiquidacion);
         $em->flush();
         return true;
