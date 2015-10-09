@@ -11,19 +11,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuCreditoRepository extends EntityRepository {
     
-    public function listaDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+    public function listaDQL($strIdentificacion = "", $strDesde = 0, $strHasta = 0) {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuCredito c JOIN c.empleadoRel e WHERE c.codigoCreditoPk <> 0 AND c.estadoPagado <> 1 AND c.aprobado <> 0";
-        if($strCodigoCentroCosto != "") {
-            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
-        }   
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuCredito c JOIN c.empleadoRel e WHERE c.codigoCreditoPk <> 0 AND c.estadoPagado <> 1 AND c.aprobado <> 0";   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
-        if ($strDesde != ""){
+        if($strDesde != "" || $strDesde != 0){
             $dql .= " AND c.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
         }
-        if($strHasta != "") {
+        if($strDesde != "" || $strDesde != 0) {
             $dql .= " AND c.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         
@@ -31,21 +28,18 @@ class RhuCreditoRepository extends EntityRepository {
         return $dql;
     }
     
-    public function listaCreditoDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+    public function listaCreditoDQL($strIdentificacion = "", $strDesde = 0, $strHasta = 0) {        
         $em = $this->getEntityManager();
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuCredito c JOIN c.empleadoRel e WHERE c.codigoCreditoPk <> 0";
-        
-        if($strCodigoCentroCosto != "") {
-            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
-        }   
-        if($strIdentificacion != "" ) {
+           
+        if($strIdentificacion != "") {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
-        if ($strDesde != ""){
-            $dql .= " AND c.fecha >='" . $strDesde . "'";
+        if ($strDesde != "" || $strDesde != 0){
+            $dql .= " AND c.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
         }
-        if($strHasta != "") {
-            $dql .= " AND c.fecha <='" . $strHasta . "'";
+        if($strHasta != "" || $strHasta != 0) {
+            $dql .= " AND c.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";

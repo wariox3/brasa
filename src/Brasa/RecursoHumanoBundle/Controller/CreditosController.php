@@ -144,7 +144,6 @@ class CreditosController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaCreditoDQL(
-                    $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
                     $session->get('filtroHasta')
@@ -154,27 +153,11 @@ class CreditosController extends Controller
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $arrayPropiedades = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }
-        $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->fechaAntiguaCredito();
         
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('fechaDesde', 'date', array('label'  => 'Desde', 'data' => new \DateTime($fechaAntigua))) 
-            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
@@ -190,10 +173,9 @@ class CreditosController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData()->format('Y-m-d'));
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData()->format('Y-m-d'));
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
     
     public function nuevoAction($codigoCredito, $codigoEmpleado) {
@@ -339,19 +321,18 @@ class CreditosController extends Controller
                     ->setCategory("Test result file");
 
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo_Credito')
-                            ->setCellValue('B1', 'Tipo_Credito')
-                            ->setCellValue('C1', 'Fecha_Credito')
-                            ->setCellValue('D1', 'Centro_Costo')
-                            ->setCellValue('E1', 'Empleado')
-                            ->setCellValue('F1', 'Valor_Credito')
-                            ->setCellValue('G1', 'Valor_Cuota')
-                            ->setCellValue('H1', 'Valor_Seguro')
-                            ->setCellValue('I1', 'Cuotas')
-                            ->setCellValue('J1', 'Cuota_Actual')
-                            ->setCellValue('K1', 'Pagado')
-                            ->setCellValue('L1', 'Aprobado')
-                            ->setCellValue('M1', 'Suspendido');
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'TIPO CRÉDITO')
+                            ->setCellValue('C1', 'FECHA')
+                            ->setCellValue('D1', 'EMPLEADO')
+                            ->setCellValue('E1', 'VALOR CRÉDITO')
+                            ->setCellValue('F1', 'VALOR CUOTA')
+                            ->setCellValue('G1', 'VALOR SEGURO')
+                            ->setCellValue('H1', 'CUOTAS')
+                            ->setCellValue('I1', 'CUOTA ACTUAL')
+                            ->setCellValue('J1', 'PAGADO')
+                            ->setCellValue('K1', 'APROBADO')
+                            ->setCellValue('L1', 'SUSPENDIDO');
 
                 $i = 2;
                 $query = $em->createQuery($this->strSqlLista);
@@ -387,16 +368,15 @@ class CreditosController extends Controller
                             ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
                             ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
                             ->setCellValue('C' . $i, $arCredito->getFecha())
-                            ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getCentroCostoRel()->getNombre())
-                            ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('F' . $i, $arCredito->getVrPagar())
-                            ->setCellValue('G' . $i, $arCredito->getVrCuota())
-                            ->setCellValue('H' . $i, $arCredito->getSeguro())
-                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotas())
-                            ->setCellValue('J' . $i, $arCredito->getNumeroCuotaActual())
-                            ->setCellValue('K' . $i, $Estado)
-                            ->setCellValue('L' . $i, $Aprobado)
-                            ->setCellValue('M' . $i, $Suspendido);
+                            ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('E' . $i, $arCredito->getVrPagar())
+                            ->setCellValue('F' . $i, $arCredito->getVrCuota())
+                            ->setCellValue('G' . $i, $arCredito->getSeguro())
+                            ->setCellValue('H' . $i, $arCredito->getNumeroCuotas())
+                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotaActual())
+                            ->setCellValue('J' . $i, $Estado)
+                            ->setCellValue('K' . $i, $Aprobado)
+                            ->setCellValue('L' . $i, $Suspendido);
                     $i++;
                 }
 

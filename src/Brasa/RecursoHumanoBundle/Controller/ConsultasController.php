@@ -479,7 +479,6 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlCreditoLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaDQL(
-                    $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
                     $session->get('filtroHasta')
@@ -637,24 +636,9 @@ class ConsultasController extends Controller
     private function formularioCreditosLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $arrayPropiedades = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }
-        $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->fechaAntigua();
+        
         
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
@@ -943,7 +927,6 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
@@ -1299,16 +1282,15 @@ class ConsultasController extends Controller
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'TIPO')
                     ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'CENTRO COSTOS')
-                    ->setCellValue('E1', 'IDENTIFICACION')
-                    ->setCellValue('F1', 'NOMBRE')
-                    ->setCellValue('G1', 'VR. CREDITO')
-                    ->setCellValue('H1', 'VR. CUOTA')
-                    ->setCellValue('I1', 'VR. SALDO')
-                    ->setCellValue('J1', 'CUOTAS')
-                    ->setCellValue('K1', 'CUOTA ACTUAL')
-                    ->setCellValue('L1', 'APROBADO')
-                    ->setCellValue('M1', 'SUSPENDIDO');
+                    ->setCellValue('D1', 'IDENTIFICACION')
+                    ->setCellValue('E1', 'NOMBRE')
+                    ->setCellValue('F1', 'VR. CREDITO')
+                    ->setCellValue('G1', 'VR. CUOTA')
+                    ->setCellValue('H1', 'VR. SALDO')
+                    ->setCellValue('I1', 'CUOTAS')
+                    ->setCellValue('J1', 'CUOTA ACTUAL')
+                    ->setCellValue('K1', 'APROBADO')
+                    ->setCellValue('L1', 'SUSPENDIDO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlCreditoLista);
@@ -1328,16 +1310,15 @@ class ConsultasController extends Controller
                     ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
                     ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
                     ->setCellValue('C' . $i, $arCredito->getFecha()->Format('Y-m-d'))
-                    ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getCentroCostoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('F' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $arCredito->getVrPagar())
-                    ->setCellValue('H' . $i, $arCredito->getVrCuota())
-                    ->setCellValue('I' . $i, $arCredito->getSaldo())
-                    ->setCellValue('J' . $i, $arCredito->getNumeroCuotas())
-                    ->setCellValue('K' . $i, $arCredito->getNumeroCuotaActual())
-                    ->setCellValue('L' . $i, $Aprobado)
-                    ->setCellValue('M' . $i, $Suspendido);
+                    ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arCredito->getVrPagar())
+                    ->setCellValue('G' . $i, $arCredito->getVrCuota())
+                    ->setCellValue('H' . $i, $arCredito->getSaldo())
+                    ->setCellValue('I' . $i, $arCredito->getNumeroCuotas())
+                    ->setCellValue('J' . $i, $arCredito->getNumeroCuotaActual())
+                    ->setCellValue('K' . $i, $Aprobado)
+                    ->setCellValue('L' . $i, $Suspendido);
             $i++;
         }
 

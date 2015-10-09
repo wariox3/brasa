@@ -193,7 +193,7 @@ class RhuLiquidacionRepository extends EntityRepository {
             $floAdicionales += $arLiquidacionAdicional->getVrBonificacion();
         }
         $douTotal = $arLiquidacion->getVrCesantias() + $arLiquidacion->getVrInteresesCesantias() + $arLiquidacion->getVrPrima() + $arLiquidacion->getVrVacaciones();
-        $douTotal = $douTotal - ($arLiquidacion->getVrDeduccionPrima() - $floDeducciones + $floAdicionales);
+        $douTotal = $douTotal - $arLiquidacion->getVrDeduccionPrima() - $floDeducciones + $floAdicionales;
         $arLiquidacion->setVrTotal($douTotal);                        
         $arLiquidacion->setVrDeducciones($floDeducciones);
         $arLiquidacion->setVrBonificaciones($floAdicionales);
