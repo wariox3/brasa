@@ -46,6 +46,7 @@
                         <th>CANTIDAD</th>
                         <th>VALOR</th>
                         <th>PERMANENTE</th>
+                        <th>APLICA DIA L.</th>
                         <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                     </tr>
                     {% for arPagosAdicionales in arPagosAdicionales %}
@@ -61,6 +62,7 @@
                         <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>                            
                         <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
                         <td>{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>                        
+                        <td>{% if arPagosAdicionales.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>                        
                         <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}" /></td>
                     </tr>
                     {% endfor %}

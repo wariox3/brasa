@@ -234,6 +234,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             }
                             if($arPagoAdicional->getPagoConceptoRel()->getComponeValor() == 1) {
                                 $douPagoDetalle = $arPagoAdicional->getValor();
+                                if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
+                                    $douPagoDetalle = $arPagoAdicional->getValor() * ($intHorasLaboradas / 8);
+                                }
                                 $arPagoDetalle->setVrDia($douVrDia);
                             }
                             $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());

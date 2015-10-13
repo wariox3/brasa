@@ -30,7 +30,6 @@ DELETE FROM rhu_programacion_pago;
 DELETE FROM rhu_liquidacion_adicionales;
 DELETE FROM rhu_liquidacion;
 DELETE FROM rhu_vacacion_credito;
-DELETE FROM rhu_vacacion_disfrute;
 DELETE FROM rhu_vacacion;
 DELETE FROM rhu_contrato_sede;
 DELETE FROM rhu_contrato;
