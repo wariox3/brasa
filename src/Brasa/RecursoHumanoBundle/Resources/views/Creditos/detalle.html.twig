@@ -17,13 +17,13 @@
                         <td class="td-in-well">{{ arCreditos.codigoCreditoPk }}</td>
                         <td class="titulo">FECHA:</th>
                         <td class="td-in-well">{{ arCreditos.fecha |date("Y/m/d") }}</td>
-                        <td class="titulo">TOTAL CREDITO:</th>
+                        <td class="titulo">TOTAL CRÉDITO:</th>
                         <td class="td-in-well" align="right">{{ arCreditos.vrPagar | number_format(2, '.', ',')}}</td>                        
                     </tr>
                     <tr>
                         <td class="titulo">EMPLEADO:</th>
                         <td class="td-in-well">{{ arCreditos.empleadoRel.nombreCorto }}</td>
-                        <td class="titulo">CREDITO:</th>
+                        <td class="titulo">CRÉDITO:</th>
                         <td class="td-in-well">{{ arCreditos.creditoTipoRel.nombre }}</td>
                         <td class="titulo">VALOR CUOTA:</th>
                         <td class="td-in-well" align="right">{{ arCreditos.vrCuota | number_format(2, '.', ',')}}</td>                                                
@@ -37,7 +37,7 @@
                         <td class="td-label" align="right">{{ arCreditos.seguro | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">NUMERO CUOTAS:</th>
+                        <td class="titulo">NÚMERO CUOTAS:</th>
                         <td class="td-in-well">{{ arCreditos.numeroCuotas }}</td>
                         <td class="titulo">CUOTA ACTUAL:</th>
                         <td class="td-in-well">{{ arCreditos.numeroCuotaActual }}</td>
@@ -45,8 +45,8 @@
                         <td class="td-in-well" align="right">{{ arCreditos.vrAbonos | number_format(2, '.', ',')}}</td>                        
                     </tr>
                     <tr>
-                        <td class="titulo"></th>
-                        <td class="td-in-well" align="right"></td>
+                        <td class="titulo">NÚMERO LIBRANZA</tD>
+                        <td class="td-in-well">{{ arCreditos.numeroLibranza}}</td>
                         <td class="titulo">PAGADO:</th>
                         <td> {% if arCreditos.estadoPagado == 1 %}SI{% else %} NO {% endif %}</td>
                         <td class="titulo">SALDO:</th>

@@ -25,7 +25,12 @@ class RhuContrato
     /**
      * @ORM\Column(name="codigo_clasificacion_riesgo_fk", type="integer")
      */    
-    private $codigoClasificacionRiesgoFk;    
+    private $codigoClasificacionRiesgoFk;
+    
+    /**
+     * @ORM\Column(name="codigo_motivo_terminacion_contrato_fk", type="integer", nullable=true)
+     */    
+    private $codigoMotivoTerminacionContratoFk;
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -213,6 +218,12 @@ class RhuContrato
     protected $ssoSubtipoCotizanteRel;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuMotivoTerminacionContrato", inversedBy="contratosMotivoTerminacionContratoRel")
+     * @ORM\JoinColumn(name="codigo_motivo_terminacion_contrato_fk", referencedColumnName="codigo_motivo_terminacion_contrato_pk")
+     */
+    protected $terminacionContratoRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="contratoRel")
      */
     protected $liquidacionesContratoRel; 
@@ -342,6 +353,30 @@ class RhuContrato
     public function getCodigoClasificacionRiesgoFk()
     {
         return $this->codigoClasificacionRiesgoFk;
+    }
+
+    /**
+     * Set codigoMotivoTerminacionContratoFk
+     *
+     * @param integer $codigoMotivoTerminacionContratoFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoMotivoTerminacionContratoFk($codigoMotivoTerminacionContratoFk)
+    {
+        $this->codigoMotivoTerminacionContratoFk = $codigoMotivoTerminacionContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoMotivoTerminacionContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoMotivoTerminacionContratoFk()
+    {
+        return $this->codigoMotivoTerminacionContratoFk;
     }
 
     /**
@@ -945,6 +980,30 @@ class RhuContrato
     }
 
     /**
+     * Set salarioIntegral
+     *
+     * @param boolean $salarioIntegral
+     *
+     * @return RhuContrato
+     */
+    public function setSalarioIntegral($salarioIntegral)
+    {
+        $this->salarioIntegral = $salarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioIntegral
+     *
+     * @return boolean
+     */
+    public function getSalarioIntegral()
+    {
+        return $this->salarioIntegral;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1158,6 +1217,30 @@ class RhuContrato
     public function getSsoSubtipoCotizanteRel()
     {
         return $this->ssoSubtipoCotizanteRel;
+    }
+
+    /**
+     * Set terminacionContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato $terminacionContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function setTerminacionContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato $terminacionContratoRel = null)
+    {
+        $this->terminacionContratoRel = $terminacionContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terminacionContratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato
+     */
+    public function getTerminacionContratoRel()
+    {
+        return $this->terminacionContratoRel;
     }
 
     /**
@@ -1532,29 +1615,5 @@ class RhuContrato
     public function getProyeccionesContratoRel()
     {
         return $this->proyeccionesContratoRel;
-    }
-
-    /**
-     * Set salarioIntegral
-     *
-     * @param boolean $salarioIntegral
-     *
-     * @return RhuContrato
-     */
-    public function setSalarioIntegral($salarioIntegral)
-    {
-        $this->salarioIntegral = $salarioIntegral;
-
-        return $this;
-    }
-
-    /**
-     * Get salarioIntegral
-     *
-     * @return boolean
-     */
-    public function getSalarioIntegral()
-    {
-        return $this->salarioIntegral;
     }
 }

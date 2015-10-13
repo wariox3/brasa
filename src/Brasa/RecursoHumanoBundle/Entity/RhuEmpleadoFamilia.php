@@ -33,6 +33,11 @@ class RhuEmpleadoFamilia
     private $nombres;
     
     /**
+     * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
+     */    
+    private $codigoSexoFk;
+    
+    /**
      * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
      */    
     private $codigoEntidadSaludFk;
@@ -378,5 +383,29 @@ class RhuEmpleadoFamilia
     public function getEntidadSaludRel()
     {
         return $this->entidadSaludRel;
+    }
+
+    /**
+     * Set codigoSexoFk
+     *
+     * @param string $codigoSexoFk
+     *
+     * @return RhuEmpleadoFamilia
+     */
+    public function setCodigoSexoFk($codigoSexoFk)
+    {
+        $this->codigoSexoFk = $codigoSexoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSexoFk
+     *
+     * @return string
+     */
+    public function getCodigoSexoFk()
+    {
+        return $this->codigoSexoFk;
     }
 }

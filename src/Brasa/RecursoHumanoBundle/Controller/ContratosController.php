@@ -8,32 +8,32 @@ class ContratosController extends Controller
 {
     var $fechaDesdeInicia;
     var $fechaHastaInicia;
-    
+
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();        
+        $session = $this->getRequest()->getSession();
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
         if($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');                       
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $this->listar();              
+                $this->listar();
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
                 $this->listar();
                 $this->generarExcel();
             }
-        }          
-        
+        }
+
         $arContratos = $paginator->paginate($em->createQuery($session->get('dqlContratoLista')), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:lista.html.twig', array('arContratos' => $arContratos, 'form' => $form->createView()));
-    }    
-    
+    }
+
     public function detalleAction($codigoContrato) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
@@ -45,7 +45,7 @@ class ContratosController extends Controller
         $form->handleRequest($request);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-        if($form->isValid()) {           
+        if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
                 if ($arContrato->getCodigoContratoTipoFk() == 1){
                     $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoObraLabor();
@@ -67,21 +67,21 @@ class ContratosController extends Controller
                     $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoPracticante();
                     $objFormatoContrato->Generar($this, $codigoContrato);
                 }
-                
+
             }
         }
         $arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
         $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->findBy(array('codigoContratoFk' => $codigoContrato));
         $arCambiosSalario = $paginator->paginate($arCambiosSalario, $this->get('request')->query->get('page', 1),5);
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
-        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('codigoContratoFk' => $codigoContrato));        
-        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);        
+        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('codigoContratoFk' => $codigoContrato));
+        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);
         $arVacacionesDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
-        $arVacacionesDisfrute = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->findBy(array('codigoContratoFk' => $codigoContrato));        
-        $arVacacionesDisfrute = $paginator->paginate($arVacacionesDisfrute, $this->get('request')->query->get('page', 1),5);        
+        $arVacacionesDisfrute = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->findBy(array('codigoContratoFk' => $codigoContrato));
+        $arVacacionesDisfrute = $paginator->paginate($arVacacionesDisfrute, $this->get('request')->query->get('page', 1),5);
         $arContratoSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede();
-        $arContratoSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoSede')->findBy(array('codigoContratoFk' => $codigoContrato));        
-        $arContratoSedes = $paginator->paginate($arContratoSedes, $this->get('request')->query->get('page', 1),5);                
+        $arContratoSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoSede')->findBy(array('codigoContratoFk' => $codigoContrato));
+        $arContratoSedes = $paginator->paginate($arContratoSedes, $this->get('request')->query->get('page', 1),5);
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:detalle.html.twig', array(
                     'arContrato' => $arContrato,
                     'arCambiosSalario' => $arCambiosSalario,
@@ -90,12 +90,12 @@ class ContratosController extends Controller
                     'arContratoSedes' => $arContratoSedes,
                     'form' => $form->createView()
                     ));
-    }    
-    
+    }
+
     public function nuevoAction($codigoContrato, $codigoEmpleado) {
-        $request = $this->getRequest();        
+        $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arUsuario = $this->get('security.context')->getToken()->getUser();                
+        $arUsuario = $this->get('security.context')->getToken()->getUser();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -113,35 +113,35 @@ class ContratosController extends Controller
             $arContrato->setVrSalario($douSalarioMinimo); //se Parametrizó con configuracion salario minimo
             $douValidarEmpleadoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->validarEmpleadoContrato($codigoEmpleado);
             if ($douValidarEmpleadoContrato >= 1){
-                $objMensaje->Mensaje("error", "El empleado tiene contrato abierto, no se puede generar otro contrato", $this);                
+                $objMensaje->Mensaje("error", "El empleado tiene contrato abierto, no se puede generar otro contrato", $this);
                 $intEstado = 1;
             }
-            
-        }        
+
+        }
         $form = $this->createForm(new RhuContratoType(), $arContrato);
         $form->handleRequest($request);
-        if ($form->isValid()) {                  
-            $arContrato = $form->getData();   
+        if ($form->isValid()) {
+            $arContrato = $form->getData();
             $boolValidarTipoContrato = TRUE;
             if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 4 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 12 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
                 $boolValidarTipoContrato = FALSE;
             }
             if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 5 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 19 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizanteFk() != 0)) {
                 $boolValidarTipoContrato = FALSE;
-            }            
-            
+            }
+
             if($boolValidarTipoContrato == TRUE) {
                 if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),1)) {
                     $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
                     $arContrato->setEmpleadoRel($arEmpleado);
                     $arContrato->setFechaHasta($form->get('fechaHasta')->getData());
                     $dateFechaUltimoPago = $arContrato->getFechaDesde()->format('Y-m-d');
-                    $dateFechaUltimoPago = date("Y-m-d", strtotime("$dateFechaUltimoPago -1 day")); 
+                    $dateFechaUltimoPago = date("Y-m-d", strtotime("$dateFechaUltimoPago -1 day"));
                     $dateFechaUltimoPago = date_create_from_format('Y-m-d H:i', $dateFechaUltimoPago . "00:00");
                     $arContrato->setFechaUltimoPago($dateFechaUltimoPago);
                     $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
                     $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
-                    $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());                
+                    $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
                     $arContrato->setFactor($arContrato->getTipoTiempoRel()->getFactor());
                     $arContrato->setFactorHorasDia($arContrato->getTipoTiempoRel()->getFactorHorasDia());
                     if($arContrato->getTipoTiempoRel()->getFactor() > 0) {
@@ -174,54 +174,61 @@ class ContratosController extends Controller
                     $arEmpleado->setCodigoContratoActivoFk($arContrato->getCodigoContratoPk());
                     $em->persist($arEmpleado);
                     $em->flush();
-                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                      
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 } else {
                     echo "La fecha de inicio del contrato debe ser mayor a la ultima fecha de pago del periodo " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d');
-                }                 
+                }
             } else {
                 echo "Verifique el tipo de contrato con el tipo y subtipo de cotizante a seguridad social";
-            }                       
+            }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevo.html.twig', array(
             'arContrato' => $arContrato,
-            'arEmpleado' => $arEmpleado,            
+            'arEmpleado' => $arEmpleado,
             'intEstado' => $intEstado,
             'form' => $form->createView()));
     }
-    
+
     public function terminarAction($codigoContrato) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $formContrato = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_contratos_terminar', array('codigoContrato' => $codigoContrato)))
-            ->add('fechaTerminacion', 'date', array('label'  => 'Terminacion', 'data' => new \DateTime('now')))                            
-            ->add('motivoRetiro', 'text', array('required' => true))
+            ->add('fechaTerminacion', 'date', array('label'  => 'Terminacion', 'data' => new \DateTime('now')))
+            ->add('terminacionContratoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato',
+                        'property' => 'motivo',
+            ))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
-        $formContrato->handleRequest($request);        
+        $formContrato->handleRequest($request);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);        
-        if ($formContrato->isValid()) {            
-            $dateFechaHasta = $formContrato->get('fechaTerminacion')->getData();            
-            if($dateFechaHasta >= $arContrato->getFechaUltimoPago()) {                
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+        if ($formContrato->isValid()) {
+            $dateFechaHasta = $formContrato->get('fechaTerminacion')->getData();
+            $arMotivoTerminacion = new \Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato();
+            $codigoMotivoContrato = $formContrato->get('terminacionContratoRel')->getData();
+            $arMotivoTerminacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato')->find($codigoMotivoContrato);
+            if($dateFechaHasta >= $arContrato->getFechaUltimoPago()) {
                 if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
                     if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
-                        $arContrato->setFechaHasta($dateFechaHasta);            
+                        $arContrato->setFechaHasta($dateFechaHasta);
                         $arContrato->setIndefinido(0);
                         $arContrato->setEstadoActivo(0);
                         $arContrato->setEstadoLiquidado(1);
+                        $arContrato->setTerminacionContratoRel($codigoMotivoContrato);
                         $em->persist($arContrato);
 
                         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());        
+                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
                         $arEmpleado->setCodigoCentroCostoFk(NULL);
                         $arEmpleado->setCodigoTipoTiempoFk(NULL);
                         $arEmpleado->setVrSalario(0);
                         $arEmpleado->setCodigoClasificacionRiesgoFk(NULL);
                         $arEmpleado->setCodigoCargoFk(NULL);
-                        $arEmpleado->setCargoDescripcion(NULL);            
-                        $arEmpleado->setCodigoTipoPensionFk(NULL);  
+                        $arEmpleado->setCargoDescripcion(NULL);
+                        $arEmpleado->setCodigoTipoPensionFk(NULL);
                         $arEmpleado->setCodigoTipoCotizanteFk(NULL);
                         $arEmpleado->setCodigoSubtipoCotizanteFk(NULL);
                         $arEmpleado->setEstadoContratoActivo(0);
@@ -234,6 +241,7 @@ class ContratosController extends Controller
                             $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
                             $arLiquidacion->setEmpleadoRel($arContrato->getEmpleadoRel());
                             $arLiquidacion->setContratoRel($arContrato);
+                            $arLiquidacion->setMotivoTerminacionRel($codigoMotivoContrato);
                             if($arContrato->getFechaUltimoPagoCesantias() > $arContrato->getFechaDesde()) {
                                 $arLiquidacion->setFechaDesde($arContrato->getFechaUltimoPagoCesantias());
                             } else {
@@ -243,11 +251,11 @@ class ContratosController extends Controller
                             $arLiquidacion->setLiquidarCesantias(1);
                             $arLiquidacion->setLiquidarPrima(1);
                             $arLiquidacion->setLiquidarVacaciones(1);
-                            $arLiquidacion->setComentarios($formContrato->get('motivoRetiro')->getData());
-                            $em->persist($arLiquidacion);            
+                            //$arLiquidacion->setComentarios($formContrato->get('motivoRetiro')->getData());
+                            $em->persist($arLiquidacion);
                             //Verificar creditos
                             $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                            $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());        
+                            $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());
                             foreach ($arCreditos as $arCredito) {
                                 $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
                                 $arLiquidacionAdicionalConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
@@ -257,17 +265,17 @@ class ContratosController extends Controller
                                 $arLiquidacionAdicionales->setLiquidacionAdicionalConceptoRel($arLiquidacionAdicionalConcepto);
                                 $arLiquidacionAdicionales->setVrDeduccion($arCredito->getSaldoTotal());
                                 $em->persist($arLiquidacionAdicionales);
-                            }                        
+                            }
                         }
-                        $em->flush();                        
+                        $em->flush();
                     } else {
-                        $objMensaje->Mensaje("error", "No puede terminar un contrato con licencias pendientes", $this);                
-                    }                                       
+                        $objMensaje->Mensaje("error", "No puede terminar un contrato con licencias pendientes", $this);
+                    }
                 } else {
-                    $objMensaje->Mensaje("error", "No puede terminar un contrato con incapacidades pendientes", $this);                
-                }                
+                    $objMensaje->Mensaje("error", "No puede terminar un contrato con incapacidades pendientes", $this);
+                }
             } else {
-                $objMensaje->Mensaje("error", "No puede terminar un contrato antes del ultimo pago, excepto con un permiso especial, consulte con el administrador del sistema", $this);                
+                $objMensaje->Mensaje("error", "No puede terminar un contrato antes del ultimo pago, excepto con un permiso especial, consulte con el administrador del sistema", $this);
             }
             return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
         }
@@ -275,14 +283,14 @@ class ContratosController extends Controller
             'arContrato' => $arContrato,
             'formContrato' => $formContrato->createView()
         ));
-    }   
-    
+    }
+
     public function detalleSedeNuevoAction($codigoContrato) {
-        $request = $this->getRequest();        
-        $em = $this->getDoctrine()->getManager();        
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();                    
-        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);        
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         $codigoCentroCosto = $arContrato->getCodigoCentroCostoFk();
         $form = $this->createFormBuilder()
             ->add('sedeRel', 'entity', array(
@@ -297,32 +305,32 @@ class ContratosController extends Controller
             ->add('guardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
-        
-        if ($form->isValid()) {                  
-            $arContratoSede = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede();              
+
+        if ($form->isValid()) {
+            $arContratoSede = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede();
             $arContratoSede->setContratoRel($arContrato);
             $arContratoSede->setSedeRel($form->get('sedeRel')->getData());
             $em->persist($arContratoSede);
             $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                                     
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevaSede.html.twig', array(
             'arContrato' => $arContrato,
             'form' => $form->createView()));
-    }    
-    
+    }
+
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $session->set('dqlContratoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(                
+        $session->set('dqlContratoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(
                 $session->get('filtroIdentificacion'),
                 $this->fechaDesdeInicia,
                 $this->fechaHastaInicia,
                 $session->get('filtroContratoActivo'),
                 $session->get('filtroCodigoCentroCosto')
-                ));  
-    }     
-    
+                ));
+    }
+
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -339,36 +347,36 @@ class ContratosController extends Controller
             );
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }        
+        }
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)    
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
-            ->add('fechaDesdeInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                            
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('fechaDesdeInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHastaInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',)) 
-            ->getForm();        
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->getForm();
         return $form;
-    }    
-    
+    }
+
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        if($controles['fechaDesdeInicia']) {            
-            $this->fechaDesdeInicia = $controles['fechaDesdeInicia'];            
+        if($controles['fechaDesdeInicia']) {
+            $this->fechaDesdeInicia = $controles['fechaDesdeInicia'];
         }
-        if($controles['fechaHastaInicia']) {            
-            $this->fechaHastaInicia = $controles['fechaHastaInicia'];            
-        }        
+        if($controles['fechaHastaInicia']) {
+            $this->fechaHastaInicia = $controles['fechaHastaInicia'];
+        }
         //$session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        
+
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-    }    
-    
+    }
+
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -389,7 +397,7 @@ class ContratosController extends Controller
                     ->setCellValue('E1', 'CENTRO COSTOS')
                     ->setCellValue('F1', 'TIEMPO')
                     ->setCellValue('G1', 'DESDE')
-                    ->setCellValue('H1', 'HASTA')                    
+                    ->setCellValue('H1', 'HASTA')
                     ->setCellValue('I1', 'SALARIO')
                     ->setCellValue('J1', 'CARGO')
                     ->setCellValue('K1', 'CARGO DESCRIPCION')
@@ -402,7 +410,7 @@ class ContratosController extends Controller
         $query = $em->createQuery($session->get('dqlContratoLista'));
         //$arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContratos = $query->getResult();
-        foreach ($arContratos as $arContrato) {            
+        foreach ($arContratos as $arContrato) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arContrato->getCodigoContratoPk())
                     ->setCellValue('B' . $i, $arContrato->getContratoTipoRel()->getNombre())
@@ -438,6 +446,6 @@ class ContratosController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }   
-     
+    }
+
 }

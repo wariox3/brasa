@@ -35,7 +35,12 @@ class RhuLiquidacion
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
      */    
-    private $codigoCentroCostoFk;         
+    private $codigoCentroCostoFk;
+    
+    /**
+     * @ORM\Column(name="codigo_motivo_terminacion_contrato_fk", type="integer", nullable=true)
+     */    
+    private $codigoMotivoTerminacionContratoFk;
     
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
@@ -229,13 +234,18 @@ class RhuLiquidacion
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
     protected $contratoRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuMotivoTerminacionContrato", inversedBy="liquidacionesMotivoTerminacionContratoRel")
+     * @ORM\JoinColumn(name="codigo_motivo_terminacion_contrato_fk", referencedColumnName="codigo_motivo_terminacion_contrato_pk")
+     */
+    protected $motivoTerminacionRel;
 
     /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacionAdicionales", mappedBy="liquidacionRel")
      */
     protected $liquidacionesAdicionalesLiquidacionRel;  
 
-    
     /**
      * Constructor
      */
@@ -348,6 +358,30 @@ class RhuLiquidacion
     public function getCodigoCentroCostoFk()
     {
         return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set codigoMotivoTerminacionContratoFk
+     *
+     * @param integer $codigoMotivoTerminacionContratoFk
+     *
+     * @return RhuLiquidacion
+     */
+    public function setCodigoMotivoTerminacionContratoFk($codigoMotivoTerminacionContratoFk)
+    {
+        $this->codigoMotivoTerminacionContratoFk = $codigoMotivoTerminacionContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoMotivoTerminacionContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoMotivoTerminacionContratoFk()
+    {
+        return $this->codigoMotivoTerminacionContratoFk;
     }
 
     /**
@@ -1095,6 +1129,30 @@ class RhuLiquidacion
     }
 
     /**
+     * Set vrBonificaciones
+     *
+     * @param float $vrBonificaciones
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrBonificaciones($vrBonificaciones)
+    {
+        $this->VrBonificaciones = $vrBonificaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBonificaciones
+     *
+     * @return float
+     */
+    public function getVrBonificaciones()
+    {
+        return $this->VrBonificaciones;
+    }
+
+    /**
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
@@ -1239,6 +1297,30 @@ class RhuLiquidacion
     }
 
     /**
+     * Set motivoTerminacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato $motivoTerminacionRel
+     *
+     * @return RhuLiquidacion
+     */
+    public function setMotivoTerminacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato $motivoTerminacionRel = null)
+    {
+        $this->motivoTerminacionRel = $motivoTerminacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get motivoTerminacionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato
+     */
+    public function getMotivoTerminacionRel()
+    {
+        return $this->motivoTerminacionRel;
+    }
+
+    /**
      * Add liquidacionesAdicionalesLiquidacionRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesLiquidacionRel
@@ -1270,29 +1352,5 @@ class RhuLiquidacion
     public function getLiquidacionesAdicionalesLiquidacionRel()
     {
         return $this->liquidacionesAdicionalesLiquidacionRel;
-    }
-
-    /**
-     * Set vrBonificaciones
-     *
-     * @param float $vrBonificaciones
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrBonificaciones($vrBonificaciones)
-    {
-        $this->VrBonificaciones = $vrBonificaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get vrBonificaciones
-     *
-     * @return float
-     */
-    public function getVrBonificaciones()
-    {
-        return $this->VrBonificaciones;
     }
 }

@@ -101,7 +101,12 @@ class RhuCredito
     /**
      * @ORM\Column(name="vr_abonos", type="float")
      */
-    private $vrAbonos = 0;    
+    private $vrAbonos = 0;
+    
+    /**
+     * @ORM\Column(name="nro_libranza", type="integer")
+     */
+    private $numeroLibranza;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="creditosEmpleadoRel")
@@ -778,5 +783,29 @@ class RhuCredito
     public function getVacacionesCreditosCreditoRel()
     {
         return $this->VacacionesCreditosCreditoRel;
+    }
+
+    /**
+     * Set numeroLibranza
+     *
+     * @param integer $numeroLibranza
+     *
+     * @return RhuCredito
+     */
+    public function setNumeroLibranza($numeroLibranza)
+    {
+        $this->numeroLibranza = $numeroLibranza;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroLibranza
+     *
+     * @return integer
+     */
+    public function getNumeroLibranza()
+    {
+        return $this->numeroLibranza;
     }
 }

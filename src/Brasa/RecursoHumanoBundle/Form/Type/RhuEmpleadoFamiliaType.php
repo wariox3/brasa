@@ -26,6 +26,7 @@ class RhuEmpleadoFamiliaType extends AbstractType
             ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
             ->add('ocupacion', 'text', array('required' => true))
             ->add('telefono', 'text', array('required' => true))
+            ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
