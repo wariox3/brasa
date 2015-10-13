@@ -38,3 +38,7 @@ brs_gen_buscar_tercero:
 brs_gen_buscar_ciudad:
     pattern:  /general/buscar/ciudad/{campoCodigo}/{campoNombre}/
     defaults: { _controller: BrasaGeneralBundle:Busquedas:buscarCiudad } 
+    
+brs_gen_borrar_bd:
+    pattern:  /general/borrar/bd/
+    defaults: { _controller: BrasaGeneralBundle:ConfiguracionGeneral:borrarBD } 

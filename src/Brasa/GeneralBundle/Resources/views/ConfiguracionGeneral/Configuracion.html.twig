@@ -102,6 +102,7 @@
 </div>
 </div>
     <div class="modal-footer">
+            <a class="btn btn-default btn-sm btn-danger" href="javascript:abrirVentana3('{{ path('brs_gen_borrar_bd') }}', 'BorrarBD', 500, 700)" >Borrar base datos</a>
             {{ form_widget(formConfiguracionGeneral.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>
     {{ form_end(formConfiguracionGeneral) }}

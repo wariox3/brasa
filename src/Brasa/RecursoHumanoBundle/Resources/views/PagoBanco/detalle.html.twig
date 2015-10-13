@@ -60,7 +60,8 @@
                     <ul class="dropdown-menu" role="menu">
                         {{ form_widget(form.BtnArchivoBancolombia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                                        
                     </ul>
-                </div>                
+                </div> 
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 7,  'numero': arPagoBanco.codigoPagoBancoPK }) }}', 'Archivos', 500, 700)" >Archivos</a>                    
             </div>
         </div>
 
