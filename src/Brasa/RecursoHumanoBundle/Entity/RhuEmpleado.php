@@ -417,12 +417,7 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="empleadoRel")
      */
-    protected $vacacionesEmpleadoRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuVacacionDisfrute", mappedBy="empleadoRel")
-     */
-    protected $vacacionesDisfruteEmpleadoRel;     
+    protected $vacacionesEmpleadoRel;           
     
     /**
      * @ORM\OneToMany(targetEntity="RhuLicencia", mappedBy="empleadoRel")
@@ -519,7 +514,6 @@ class RhuEmpleado
         $this->creditosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vacacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vacacionesDisfruteEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesPagosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -2381,40 +2375,6 @@ class RhuEmpleado
     public function getVacacionesEmpleadoRel()
     {
         return $this->vacacionesEmpleadoRel;
-    }
-
-    /**
-     * Add vacacionesDisfruteEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteEmpleadoRel)
-    {
-        $this->vacacionesDisfruteEmpleadoRel[] = $vacacionesDisfruteEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove vacacionesDisfruteEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteEmpleadoRel
-     */
-    public function removeVacacionesDisfruteEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteEmpleadoRel)
-    {
-        $this->vacacionesDisfruteEmpleadoRel->removeElement($vacacionesDisfruteEmpleadoRel);
-    }
-
-    /**
-     * Get vacacionesDisfruteEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVacacionesDisfruteEmpleadoRel()
-    {
-        return $this->vacacionesDisfruteEmpleadoRel;
     }
 
     /**

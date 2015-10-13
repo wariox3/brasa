@@ -123,10 +123,8 @@ class VacacionesController extends Controller
             $arVacacion->setFecha(new \DateTime('now'));                             
             $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
             $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(360, $fechaDesdePeriodo);                                               
-            $arVacacion->setFechaDesdePeriodo($fechaDesdePeriodo);                                                
-            $arVacacion->setFechaHastaPeriodo($fechaHastaPeriodo);
-            $arVacacion->setFechaDesdePago(new \DateTime('now'));
-            $arVacacion->setFechaHastaPago(new \DateTime('now'));            
+            $arVacacion->setFechaDesdeDisfrute(new \DateTime('now'));
+            $arVacacion->setFechaHastaDisfrute(new \DateTime('now'));            
             $arVacacion->setEmpleadoRel($arEmpleado);
             $arVacacion->setContratoRel($arContrato);
             $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
@@ -134,17 +132,20 @@ class VacacionesController extends Controller
         $form = $this->createForm(new RhuVacacionType(), $arVacacion);     
         $form->handleRequest($request);
         if ($form->isValid()) {                        
-            //$fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
-            //$fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(360, $fechaDesdePeriodo);                                                                                       
             $arVacacion = $form->getData();               
             $arVacacion->setEmpleadoRel($arEmpleado); 
-            $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());     
-            //$arVacacion->setFechaDesdePeriodo($fechaDesdePeriodo);
-            //$arVacacion->setFechaHastaPeriodo($fechaHastaPeriodo);
+            $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());                 
             $arVacacion->setContratoRel($arContrato);
-            $intDias = $arVacacion->getFechaDesdePago()->diff($arVacacion->getFechaHastaPago());
+            $intDias = ($arVacacion->getDiasDisfrutados() + $arVacacion->getDiasPagados()) * 24;
+            $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
+            $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta($intDias, $fechaDesdePeriodo);                                                                                       
+            
+            $arVacacion->setFechaDesdePeriodo($fechaDesdePeriodo);
+            $arVacacion->setFechaHastaPeriodo($fechaHastaPeriodo);
+            
+            $intDias = $arVacacion->getFechaDesdeDisfrute()->diff($arVacacion->getFechaHastaDisfrute());
             $intDias = $intDias->format('%a');
-            $intDiasDevolver = $intDias + 1;            
+            $intDiasDevolver = ($intDias + 1) + $arVacacion->getDiasPagados();            
             $arVacacion->setDiasVacaciones($intDiasDevolver);            
             $em->persist($arVacacion);
             //Calcular deducciones credito
@@ -159,11 +160,10 @@ class VacacionesController extends Controller
                 $em->persist($arVacacionCredito);            
                 $floVrDeducciones += $arCredito->getSaldoTotal();
             }
+              
+             
             $arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
             $arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContrato->getCodigoContratoPk());                    
-
-            //$fechaDesdePeriodo = $arContratoActualizar->getFechaUltimoPagoVacaciones();                                
-            //$fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(361, $fechaDesdePeriodo);                                                               
             $arContratoActualizar->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());                
             $em->persist($arContratoActualizar);                                     
             $em->flush();

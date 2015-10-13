@@ -9,29 +9,29 @@
     <h3>Nueva vacación</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Información general</div>
-        <div class="panel-body">            
+        <div class="panel-body">                
             <div class="form-group form-group-sm">
-                <label for="form_fechaDesdePeriodo" class="col-sm-3 control-label">Periodo desde:</label>
+                <label for="form_diasDisfrutados" class="col-sm-3 control-label">Dias disfrutados:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.fechaDesdePeriodo , { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.diasDisfrutados , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>            
+            <div class="form-group form-group-sm">
+                <label for="form_diasPagados" class="col-sm-3 control-label">Dias pagados:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.diasPagados , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label for="form_fechaDesdeDisfrute" class="col-sm-3 control-label">Desde:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.fechaDesdeDisfrute , { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_fechaHastaPeriodo" class="col-sm-3 control-label">Periodo hasta:</label>
+                <label for="form_fechaHastaDisfrute" class="col-sm-3 control-label">Hasta:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.fechaHastaPeriodo, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>     
-            <div class="form-group form-group-sm">
-                <label for="form_fechaDesdePago" class="col-sm-3 control-label">Pago desde:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.fechaDesdePago , { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_fechaHastaPago" class="col-sm-3 control-label">Pago hasta:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.fechaHastaPago, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.fechaHastaDisfrute, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>                     
             <div class="form-group">

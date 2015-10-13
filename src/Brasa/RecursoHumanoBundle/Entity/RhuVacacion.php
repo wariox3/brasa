@@ -43,14 +43,14 @@ class RhuVacacion
     private $fechaHastaPeriodo;
 
     /**
-     * @ORM\Column(name="fecha_desde_pago", type="date")
+     * @ORM\Column(name="fecha_desde_disfrute", type="date")
      */    
-    private $fechaDesdePago;    
+    private $fechaDesdeDisfrute;    
     
     /**
-     * @ORM\Column(name="fecha_hasta_pago", type="date")
+     * @ORM\Column(name="fecha_hasta_disfrute", type="date")
      */    
-    private $fechaHastaPago;    
+    private $fechaHastaDisfrute;    
     
     /**
      * @ORM\Column(name="vr_salud", type="float")
@@ -81,6 +81,16 @@ class RhuVacacion
      * @ORM\Column(name="dias_vacaciones", type="integer")
      */
     private $diasVacaciones = 0;   
+
+    /**
+     * @ORM\Column(name="dias_disfrutados", type="integer")
+     */
+    private $diasDisfrutados = 0;     
+    
+    /**
+     * @ORM\Column(name="dias_pagados", type="integer")
+     */
+    private $diasPagados = 0;     
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -140,6 +150,7 @@ class RhuVacacion
      */
     protected $VacacionesCreditosVacacionRel;
       
+
     /**
      * Constructor
      */
@@ -180,6 +191,30 @@ class RhuVacacion
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuVacacion
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
     }
 
     /**
@@ -252,6 +287,54 @@ class RhuVacacion
     public function getFechaHastaPeriodo()
     {
         return $this->fechaHastaPeriodo;
+    }
+
+    /**
+     * Set fechaDesdeDisfrute
+     *
+     * @param \DateTime $fechaDesdeDisfrute
+     *
+     * @return RhuVacacion
+     */
+    public function setFechaDesdeDisfrute($fechaDesdeDisfrute)
+    {
+        $this->fechaDesdeDisfrute = $fechaDesdeDisfrute;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdeDisfrute
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdeDisfrute()
+    {
+        return $this->fechaDesdeDisfrute;
+    }
+
+    /**
+     * Set fechaHastaDisfrute
+     *
+     * @param \DateTime $fechaHastaDisfrute
+     *
+     * @return RhuVacacion
+     */
+    public function setFechaHastaDisfrute($fechaHastaDisfrute)
+    {
+        $this->fechaHastaDisfrute = $fechaHastaDisfrute;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHastaDisfrute
+     *
+     * @return \DateTime
+     */
+    public function getFechaHastaDisfrute()
+    {
+        return $this->fechaHastaDisfrute;
     }
 
     /**
@@ -471,160 +554,6 @@ class RhuVacacion
     }
 
     /**
-     * Set estadoDisfrutadas
-     *
-     * @param boolean $estadoDisfrutadas
-     *
-     * @return RhuVacacion
-     */
-    public function setEstadoDisfrutadas($estadoDisfrutadas)
-    {
-        $this->estadoDisfrutadas = $estadoDisfrutadas;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoDisfrutadas
-     *
-     * @return boolean
-     */
-    public function getEstadoDisfrutadas()
-    {
-        return $this->estadoDisfrutadas;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuVacacion
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuVacacion
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
-     * Add vacacionesCreditosVacacionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel
-     *
-     * @return RhuVacacion
-     */
-    public function addVacacionesCreditosVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel)
-    {
-        $this->VacacionesCreditosVacacionRel[] = $vacacionesCreditosVacacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove vacacionesCreditosVacacionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel
-     */
-    public function removeVacacionesCreditosVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel)
-    {
-        $this->VacacionesCreditosVacacionRel->removeElement($vacacionesCreditosVacacionRel);
-    }
-
-    /**
-     * Get vacacionesCreditosVacacionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVacacionesCreditosVacacionRel()
-    {
-        return $this->VacacionesCreditosVacacionRel;
-    }
-
-    /**
-     * Set codigoContratoFk
-     *
-     * @param integer $codigoContratoFk
-     *
-     * @return RhuVacacion
-     */
-    public function setCodigoContratoFk($codigoContratoFk)
-    {
-        $this->codigoContratoFk = $codigoContratoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoContratoFk
-     *
-     * @return integer
-     */
-    public function getCodigoContratoFk()
-    {
-        return $this->codigoContratoFk;
-    }
-
-    /**
-     * Set contratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
-     *
-     * @return RhuVacacion
-     */
-    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
-    {
-        $this->contratoRel = $contratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get contratoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
-     */
-    public function getContratoRel()
-    {
-        return $this->contratoRel;
-    }
-
-    /**
      * Set vrSalarioActual
      *
      * @param float $vrSalarioActual
@@ -721,50 +650,156 @@ class RhuVacacion
     }
 
     /**
-     * Set fechaDesdePago
+     * Set centroCostoRel
      *
-     * @param \DateTime $fechaDesdePago
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
      *
      * @return RhuVacacion
      */
-    public function setFechaDesdePago($fechaDesdePago)
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
     {
-        $this->fechaDesdePago = $fechaDesdePago;
+        $this->centroCostoRel = $centroCostoRel;
 
         return $this;
     }
 
     /**
-     * Get fechaDesdePago
+     * Get centroCostoRel
      *
-     * @return \DateTime
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
      */
-    public function getFechaDesdePago()
+    public function getCentroCostoRel()
     {
-        return $this->fechaDesdePago;
+        return $this->centroCostoRel;
     }
 
     /**
-     * Set fechaHastaPago
+     * Set empleadoRel
      *
-     * @param \DateTime $fechaHastaPago
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
      *
      * @return RhuVacacion
      */
-    public function setFechaHastaPago($fechaHastaPago)
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
     {
-        $this->fechaHastaPago = $fechaHastaPago;
+        $this->empleadoRel = $empleadoRel;
 
         return $this;
     }
 
     /**
-     * Get fechaHastaPago
+     * Get empleadoRel
      *
-     * @return \DateTime
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
      */
-    public function getFechaHastaPago()
+    public function getEmpleadoRel()
     {
-        return $this->fechaHastaPago;
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuVacacion
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
+    }
+
+    /**
+     * Add vacacionesCreditosVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel
+     *
+     * @return RhuVacacion
+     */
+    public function addVacacionesCreditosVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel)
+    {
+        $this->VacacionesCreditosVacacionRel[] = $vacacionesCreditosVacacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesCreditosVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel
+     */
+    public function removeVacacionesCreditosVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel)
+    {
+        $this->VacacionesCreditosVacacionRel->removeElement($vacacionesCreditosVacacionRel);
+    }
+
+    /**
+     * Get vacacionesCreditosVacacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesCreditosVacacionRel()
+    {
+        return $this->VacacionesCreditosVacacionRel;
+    }
+
+    /**
+     * Set diasDisfrutados
+     *
+     * @param integer $diasDisfrutados
+     *
+     * @return RhuVacacion
+     */
+    public function setDiasDisfrutados($diasDisfrutados)
+    {
+        $this->diasDisfrutados = $diasDisfrutados;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDisfrutados
+     *
+     * @return integer
+     */
+    public function getDiasDisfrutados()
+    {
+        return $this->diasDisfrutados;
+    }
+
+    /**
+     * Set diasPagados
+     *
+     * @param integer $diasPagados
+     *
+     * @return RhuVacacion
+     */
+    public function setDiasPagados($diasPagados)
+    {
+        $this->diasPagados = $diasPagados;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPagados
+     *
+     * @return integer
+     */
+    public function getDiasPagados()
+    {
+        return $this->diasPagados;
     }
 }

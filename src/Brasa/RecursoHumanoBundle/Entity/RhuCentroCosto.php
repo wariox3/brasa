@@ -194,12 +194,7 @@ class RhuCentroCosto
     /**
      * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="centroCostoRel")
      */
-    protected $vacacionesCentroCostoRel;
-   
-    /**
-     * @ORM\OneToMany(targetEntity="RhuVacacionDisfrute", mappedBy="centroCostoRel")
-     */
-    protected $vacacionesDisfruteCentroCostoRel;    
+    protected $vacacionesCentroCostoRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacion", mappedBy="centroCostoRel")
@@ -215,6 +210,7 @@ class RhuCentroCosto
      * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="centroCostoRel")
      */
     protected $facturasDetallesCentroCostoRel;
+
 
     /**
      * Constructor
@@ -235,7 +231,6 @@ class RhuCentroCosto
         $this->examenesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vacacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vacacionesDisfruteCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dotacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->accidentesTrabajoCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -657,6 +652,30 @@ class RhuCentroCosto
     public function getFechaUltimoPagoCesantias()
     {
         return $this->fechaUltimoPagoCesantias;
+    }
+
+    /**
+     * Set diasPago
+     *
+     * @param string $diasPago
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDiasPago($diasPago)
+    {
+        $this->diasPago = $diasPago;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPago
+     *
+     * @return string
+     */
+    public function getDiasPago()
+    {
+        return $this->diasPago;
     }
 
     /**
@@ -1208,40 +1227,6 @@ class RhuCentroCosto
     }
 
     /**
-     * Add vacacionesDisfruteCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteCentroCostoRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function addVacacionesDisfruteCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteCentroCostoRel)
-    {
-        $this->vacacionesDisfruteCentroCostoRel[] = $vacacionesDisfruteCentroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove vacacionesDisfruteCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteCentroCostoRel
-     */
-    public function removeVacacionesDisfruteCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute $vacacionesDisfruteCentroCostoRel)
-    {
-        $this->vacacionesDisfruteCentroCostoRel->removeElement($vacacionesDisfruteCentroCostoRel);
-    }
-
-    /**
-     * Get vacacionesDisfruteCentroCostoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVacacionesDisfruteCentroCostoRel()
-    {
-        return $this->vacacionesDisfruteCentroCostoRel;
-    }
-
-    /**
      * Add dotacionesCentroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesCentroCostoRel
@@ -1341,29 +1326,5 @@ class RhuCentroCosto
     public function getFacturasDetallesCentroCostoRel()
     {
         return $this->facturasDetallesCentroCostoRel;
-    }
-
-    /**
-     * Set diasPago
-     *
-     * @param string $diasPago
-     *
-     * @return RhuCentroCosto
-     */
-    public function setDiasPago($diasPago)
-    {
-        $this->diasPago = $diasPago;
-
-        return $this;
-    }
-
-    /**
-     * Get diasPago
-     *
-     * @return string
-     */
-    public function getDiasPago()
-    {
-        return $this->diasPago;
     }
 }

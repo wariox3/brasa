@@ -8,11 +8,11 @@ class RhuVacacionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                        
-            ->add('fechaDesdePeriodo', 'date')
-            ->add('fechaHastaPeriodo', 'date')
-            ->add('fechaDesdePago', 'date')
-            ->add('fechaHastaPago', 'date')                
+        $builder
+            ->add('diasDisfrutados', 'number', array('required' => true))                 
+            ->add('diasPagados', 'number', array('required' => true))                 
+            ->add('fechaDesdeDisfrute', 'date')
+            ->add('fechaHastaDisfrute', 'date')                
             ->add('comentarios', 'textarea', array('required' => false))    
             ->add('guardar', 'submit');
     }
