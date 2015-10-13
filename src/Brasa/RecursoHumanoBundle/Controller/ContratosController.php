@@ -76,9 +76,6 @@ class ContratosController extends Controller
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('codigoContratoFk' => $codigoContrato));
         $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);
-        $arVacacionesDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
-        $arVacacionesDisfrute = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->findBy(array('codigoContratoFk' => $codigoContrato));
-        $arVacacionesDisfrute = $paginator->paginate($arVacacionesDisfrute, $this->get('request')->query->get('page', 1),5);
         $arContratoSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede();
         $arContratoSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoSede')->findBy(array('codigoContratoFk' => $codigoContrato));
         $arContratoSedes = $paginator->paginate($arContratoSedes, $this->get('request')->query->get('page', 1),5);
@@ -86,7 +83,6 @@ class ContratosController extends Controller
                     'arContrato' => $arContrato,
                     'arCambiosSalario' => $arCambiosSalario,
                     'arVacaciones' => $arVacaciones,
-                    'arVacacionesDisfrute' => $arVacacionesDisfrute,
                     'arContratoSedes' => $arContratoSedes,
                     'form' => $form->createView()
                     ));
