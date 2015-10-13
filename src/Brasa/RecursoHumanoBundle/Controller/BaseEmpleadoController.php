@@ -406,25 +406,152 @@ class BaseEmpleadoController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Codigo')
-                    ->setCellValue('B1', 'Identificacion')
-                    ->setCellValue('C1', 'Nombre')
-                    ->setCellValue('D1', 'Telefono')
-                    ->setCellValue('E1', 'Celular')
-                    ->setCellValue('F1', 'Direccion');
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'TIPO IDENTIFICACIÓN')
+                    ->setCellValue('C1', 'IDENTIFICACIÓN')
+                    ->setCellValue('D1', 'CIUDAD EXPEDICIÓN IDENTIFICACIÓN')
+                    ->setCellValue('E1', 'FECHA EXPEDICIÓN IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'LIBRETA MILITAR')
+                    ->setCellValue('G1', 'CENTRO COSTO')
+                    ->setCellValue('H1', 'NOMBRE')
+                    ->setCellValue('I1', 'TELÉFONO')
+                    ->setCellValue('J1', 'CELULAR')
+                    ->setCellValue('K1', 'DIRECCIÓN')
+                    ->setCellValue('L1', 'BARRIO')
+                    ->setCellValue('M1', 'CIUDAD RESIDENCIA')
+                    ->setCellValue('N1', 'RH')
+                    ->setCellValue('O1', 'SEXO')
+                    ->setCellValue('P1', 'CORREO')
+                    ->setCellValue('Q1', 'FECHA NACIMIENTO')
+                    ->setCellValue('R1', 'CIUDAD DE NACIMIENTO')
+                    ->setCellValue('S1', 'ESTADO CIVIL')
+                    ->setCellValue('T1', 'PADRE DE FAMILIA')
+                    ->setCellValue('U1', 'CABEZA DE HOGAR')
+                    ->setCellValue('V1', 'NIVEL DE ESTUDIO')
+                    ->setCellValue('W1', 'ENTIDAD SALUD')
+                    ->setCellValue('X1', 'ENTIDAD PENSION')
+                    ->setCellValue('Y1', 'ENTIDAD CAJA DE COMPESACIÓN')
+                    ->setCellValue('Z1', 'CLASIFICACIÓN DE RIESGO')
+                    ->setCellValue('AA1', 'CUENTA BANCARIA')
+                    ->setCellValue('AB1', 'BANCO')
+                    ->setCellValue('AC1', 'SALARIO')
+                    ->setCellValue('AD1', 'FECHA CONTRATO')
+                    ->setCellValue('AE1', 'FECHA FINALIZA CONTRATO')
+                    ->setCellValue('AF1', 'CARGO')
+                    ->setCellValue('AG1', 'DESCRIPCIÓN CARGO')
+                    ->setCellValue('AH1', 'TIPO PENSIÓN')
+                    ->setCellValue('AI1', 'TIPO COTIZANTE')
+                    ->setCellValue('AJ1', 'SUBTIPO COTIZANTE')
+                    ->setCellValue('AK1', 'ESTADO ACTIVO')
+                    ->setCellValue('AL1', 'ESTADO CONTRATO')
+                    ->setCellValue('AM1', 'CODIGO CONTRATO')
+                    ->setCellValue('AN1', 'TALLA CAMISA')
+                    ->setCellValue('AO1', 'TALLA JEANS')
+                    ->setCellValue('AP1', 'TALLA CALZADO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
         $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleados = $query->getResult();
         foreach ($arEmpleados as $arEmpleado) {
+            if ($arEmpleado->getCodigoCentroCostoFk() == null){
+                $centroCosto = "";
+            }else{
+                $centroCosto = $arEmpleado->getCentroCostoRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoClasificacionRiesgoFk() == null){
+                $clasificacionRiesgo = "";
+            }else{
+                $clasificacionRiesgo = $arEmpleado->getClasificacionRiesgoRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoCargoFk() == null){
+                $cargo = "";
+            }else{
+                $cargo = $arEmpleado->getCargoRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoTipoPensionFk() == null){
+                $tipoPension = "";
+            }else{
+                $tipoPension = $arEmpleado->getTipoPensionRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoTipoCotizanteFk() == null){
+                $tipoCotizante = "";
+            }else{
+                $tipoCotizante = $arEmpleado->getSsoTipoCotizanteRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoSubtipoCotizanteFk() == null){
+                $subtipoCotizante = "";
+            }else{
+                $subtipoCotizante = $arEmpleado->getSubtipoCotizacion()->getNombre();
+            }
+            if ($arEmpleado->getCodigoSexoFk() == "M"){
+                $sexo = "MASCULINO";
+            }else{
+                $sexo = "FEMENINO";
+            }
+            if ($arEmpleado->getPadreFamilia() == 0){
+                $padreFamilia = "NO";
+            }else{
+                $padreFamilia = "SI";
+            }
+            if ($arEmpleado->getCabezaHogar() == 0){
+                $cabezaHogar = "NO";
+            }else{
+                $cabezaHogar = "SI";
+            }
+            if ($arEmpleado->getEstadoActivo() == 0){
+                $estadoActivo = "NO";
+            }else{
+                $estadoActivo = "SI";
+            }
+            if ($arEmpleado->getEstadoContratoActivo() == 0){
+                $estadoContratoActivo = "NO VIGENTE";
+            }else{
+                $estadoContratoActivo = "VIGENTE";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
-                    ->setCellValue('B' . $i, $arEmpleado->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arEmpleado->getNombreCorto())
-                    ->setCellValue('D' . $i, $arEmpleado->getTelefono())
-                    ->setCellValue('E' . $i, $arEmpleado->getCelular())
-                    ->setCellValue('F' . $i, $arEmpleado->getDireccion());
+                    ->setCellValue('B' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
+                    ->setCellValue('C' . $i, $arEmpleado->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arEmpleado->getciudadExpedicionRel()->getNombre())
+                    ->setCellValue('E' . $i, $arEmpleado->getFechaExpedicionIdentificacion())
+                    ->setCellValue('F' . $i, $arEmpleado->getLibretaMilitar())
+                    ->setCellValue('G' . $i, $centroCosto)
+                    ->setCellValue('H' . $i, $arEmpleado->getNombreCorto())
+                    ->setCellValue('I' . $i, $arEmpleado->getTelefono())
+                    ->setCellValue('J' . $i, $arEmpleado->getCelular())
+                    ->setCellValue('K' . $i, $arEmpleado->getDireccion())
+                    ->setCellValue('L' . $i, $arEmpleado->getBarrio())
+                    ->setCellValue('M' . $i, $arEmpleado->getciudadRel()->getNombre())
+                    ->setCellValue('N' . $i, $arEmpleado->getRhRel()->getTipo())
+                    ->setCellValue('O' . $i, $sexo)
+                    ->setCellValue('P' . $i, $arEmpleado->getCorreo())
+                    ->setCellValue('Q' . $i, $arEmpleado->getFechaNacimiento())
+                    ->setCellValue('R' . $i, $arEmpleado->getCiudadNacimientoRel()->getNombre())
+                    ->setCellValue('S' . $i, $arEmpleado->getEstadoCivilRel()->getNombre())
+                    ->setCellValue('T' . $i, $padreFamilia)
+                    ->setCellValue('U' . $i, $cabezaHogar)
+                    ->setCellValue('V' . $i, $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre())
+                    ->setCellValue('W' . $i, $arEmpleado->getEntidadSaludRel()->getNombre())
+                    ->setCellValue('X' . $i, $arEmpleado->getEntidadPensionRel()->getNombre())
+                    ->setCellValue('Y' . $i, $arEmpleado->getEntidadCajaRel()->getNombre())
+                    ->setCellValue('Z' . $i, $clasificacionRiesgo)
+                    ->setCellValue('AA' . $i, $arEmpleado->getCuenta())
+                    ->setCellValue('AB' . $i, $arEmpleado->getBancoRel()->getNombre())
+                    ->setCellValue('AC' . $i, $arEmpleado->getVrSalario())
+                    ->setCellValue('AD' . $i, $arEmpleado->getFechaContrato())
+                    ->setCellValue('AE' . $i, $arEmpleado->getFechaFinalizaContrato())
+                    ->setCellValue('AF' . $i, $cargo)
+                    ->setCellValue('AG' . $i, $arEmpleado->getCargoDescripcion())
+                    ->setCellValue('AH' . $i, $tipoPension)
+                    ->setCellValue('AI' . $i, $tipoCotizante)
+                    ->setCellValue('AJ' . $i, $subtipoCotizante)
+                    ->setCellValue('AK' . $i, $estadoActivo)
+                    ->setCellValue('AL' . $i, $estadoContratoActivo)
+                    ->setCellValue('AM' . $i, $arEmpleado->getCodigoContratoActivoFk())
+                    ->setCellValue('AN' . $i, $arEmpleado->getCamisa())
+                    ->setCellValue('AO' . $i, $arEmpleado->getJeans())
+                    ->setCellValue('AP' . $i, $arEmpleado->getCalzado());
             $i++;
         }
 
