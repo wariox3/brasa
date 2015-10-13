@@ -180,44 +180,7 @@ class VacacionesController extends Controller
             'arEmpleado' => $arEmpleado,
             'arCreditosPendientes' => $arCreditosPendientes,
             'form' => $form->createView()));
-    }
-    
-    public function editarDisfrutadasAction($codigoVacacion) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
-        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);        
-        $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('brs_rhu_vacaciones_editar_disfrutadas', array('codigoVacacion' => $codigoVacacion)))
-            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => $arVacacion->getFechaHasta()))                            
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
-            ->getForm();
-        $form->handleRequest($request);        
-        
-        if ($form->isValid()) {
-            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $arVacacion->getCodigoEmpleadoFk(), 'estadoActivo' => 1));
-            foreach ($arContrato as $arContrato) {
-                $fechaUltimoPagoNomina = $arContrato->getFechaUltimoPago();
-            }
-            $fechaHasta = $form->get('fechaHasta')->getData();
-            if ($fechaHasta < $fechaUltimoPagoNomina){
-                $objMensaje->Mensaje("error", "La fecha a modificar no puede ser menor al último periodo de pago", $this);
-                echo "<script>alert(no pe puede);</script>";
-                return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));
-            }else {
-                $arVacacion->setFechaHasta($form->get('fechaHasta')->getData());
-                $em->persist($arVacacion);
-                $em->flush();            
-            return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));
-            }
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:editarDisfrutadas.html.twig', array(
-            'arVacacion' => $arVacacion,
-            'form' => $form->createView()
-        ));
-    } 
+    }        
     
     public function detalleAction($codigoVacacion) {
         $em = $this->getDoctrine()->getManager();
@@ -244,7 +207,7 @@ class VacacionesController extends Controller
                 }
             }            
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoDetalleVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleVacaciones();
+                $objFormatoDetalleVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoVacaciones();
                 $objFormatoDetalleVacaciones->Generar($this, $codigoVacacion);
             }
             if($form->get('BtnLiquidar')->isClicked()) {
@@ -282,9 +245,10 @@ class VacacionesController extends Controller
         $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);
         if($arVacacion->getEstadoAutorizado() == 1) {            
             $arrBotonLiquidar['disabled'] = true;
-            $arrBotonAutorizar['disabled'] = true;
+            $arrBotonAutorizar['disabled'] = true;            
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            

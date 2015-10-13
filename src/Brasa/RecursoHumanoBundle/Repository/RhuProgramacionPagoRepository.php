@@ -1102,7 +1102,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arProgramacionPagoDetalle->setVrNetoPagar($floNeto);
                 
                 //dias vacaciones
-                $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->dias($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
+                $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
                 if($intDiasVacaciones > 0) {                                        
                     $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
                 }                

@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoDetalleVacaciones extends \FPDF_FPDF {
+class FormatoVacaciones extends \FPDF_FPDF {
     public static $em;
     public static $codigoVacacion;
     
@@ -9,7 +9,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoVacacion = $codigoVacacion;
-        $pdf = new FormatoDetalleVacaciones();
+        $pdf = new FormatoVacaciones();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
@@ -86,7 +86,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->SetXY(10, $intY + 12);        
-        $this->Cell(31, 6, "DESDE:", 1, 0, 'L', 1);
+        $this->Cell(31, 6, "PERIODO DESDE:", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
         $this->Cell(63, 6, $arVacaciones->getFechaDesdePeriodo()->format('Y/m/d'), 1, 0, 'L', 1);
@@ -100,7 +100,7 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->SetXY(10, $intY + 18);        
-        $this->Cell(31, 6, "HASTA:", 1, 0, 'L', 1);
+        $this->Cell(31, 6, "PERIODO HASTA:", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
         $this->Cell(63, 6, $arVacaciones->getFechaHastaPeriodo()->format('Y/m/d'), 1, 0, 'L', 1);
@@ -115,10 +115,10 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->SetXY(10, $intY + 24);        
-        $this->Cell(31, 6, "", 1, 0, 'L', 1);
+        $this->Cell(31, 6, "DISFRUTE DESDE:", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(63, 6, '', 1, 0, 'L', 1);
+        $this->Cell(63, 6, $arVacaciones->getFechaDesdeDisfrute()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->Cell(26, 6, utf8_decode("SALARIO:"), 1, 0, 'L', 1);         
@@ -130,10 +130,10 @@ class FormatoDetalleVacaciones extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->SetXY(10, $intY + 30);        
-        $this->Cell(31, 6, "", 1, 0, 'L', 1);
+        $this->Cell(31, 6, "DISFRUTE HASTA", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(63, 6, '', 1, 0, 'L', 1);
+        $this->Cell(63, 6, $arVacaciones->getFechaHastaDisfrute()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->Cell(26, 6, utf8_decode("SALARIO BASE:"), 1, 0, 'L', 1);         

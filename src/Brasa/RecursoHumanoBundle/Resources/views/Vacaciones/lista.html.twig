@@ -35,9 +35,13 @@
                 <th>CENTRO COSTO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
-                <th>PERIODO DESDE</th>
-                <th>PERIODO HASTA</th>
-                <th>DÍAS VACACIONES</th>
+                <th>P. DESDE</th>
+                <th>P. HASTA</th>
+                <th>D. DESDE</th>
+                <th>D. HASTA</th>                
+                <th>DIAS</th>
+                <th>DIAS D.</th>
+                <th>DIAS P.</th>
                 <th style="text-align: right">VR. DEDUCCIONES</th>
                 <th style="text-align: right">VR. VACACIONES</th>
                 <th>PAGADO</th>
@@ -53,7 +57,11 @@
                 <td>{{ arVacaciones.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arVacaciones.fechaDesdePeriodo |date("Y/m/d")  }}</td>
                 <td>{{ arVacaciones.fechaHastaPeriodo |date("Y/m/d")  }}</td>
+                <td>{{ arVacaciones.fechaDesdeDisfrute |date("Y/m/d")  }}</td>
+                <td>{{ arVacaciones.fechaHastaDisfrute |date("Y/m/d")  }}</td>                
                 <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>
+                <td style="text-align: right">{{ arVacaciones.diasDisfrutados  }}</td>
+                <td style="text-align: right">{{ arVacaciones.diasPagados  }}</td>
                 <td style="text-align: right">{{ arVacaciones.vrDeduccion | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
                 <td>{% if arVacaciones.estadoPagado == 1 %} SI {% else %} NO {% endif %}</td>

@@ -382,14 +382,17 @@
             </div>
 
             <div class="tab-pane" id="vacaciones">
-                <br />
-                <h4>Pago</h4>
+                <br />                
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>{{ knp_pagination_sortable(arVacaciones, 'CÓDIGO', 'e.codigoVacacionPk') }}</th>
-                        <th>DESDE</th>
-                        <th>HASTA</th>
+                        <th>CÓDIGO</th>
+                        <th>P. DESDE</th>
+                        <th>P. HASTA</th>
+                        <th>D. DESDE</th>
+                        <th>D. HASTA</th>
                         <th>DIAS</th>
+                        <th>DIAS P.</th>
+                        <th>DIAS D.</th>
                         <th>VR. DEDUCCIONES</th>
                         <th>TOTAL</th>
                         <th></th>
@@ -399,9 +402,13 @@
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arVacaciones.codigoVacacionPk }}">{{ arVacaciones.codigoVacacionPk }} </td>
                             <td>{{ arVacaciones.fechaDesdePeriodo |date("Y/m/d")  }}</td>
                             <td>{{ arVacaciones.fechaHastaPeriodo |date("Y/m/d")  }}</td>
+                            <td>{{ arVacaciones.fechaDesdeDisfrute |date("Y/m/d")  }}</td>
+                            <td>{{ arVacaciones.fechaHastaDisfrute |date("Y/m/d")  }}</td>
                             <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>
+                            <td style="text-align: right">{{ arVacaciones.diasPagados  }}</td>
+                            <td style="text-align: right">{{ arVacaciones.diasDisfrutados  }}</td>
                             <td style="text-align: right">{{ arVacaciones.vrDeduccion | number_format(2, '.', ',') }}</td>
-                            <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>                            
                             <td><input type="checkbox" name="ChkSeleccionarVacacion[]" value="{{ arVacaciones.codigoVacacionPk }}" /></td>
                         </tr>
                     {% endfor %}
