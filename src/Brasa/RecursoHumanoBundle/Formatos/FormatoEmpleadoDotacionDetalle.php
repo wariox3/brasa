@@ -141,8 +141,20 @@ class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
 
     public function Footer() {
         
-        $this->SetFont('Arial','', 8);  
-        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arDotacionEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
+        $arDotacionEmpleado = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->find(self::$codigoEmpleadoDotacion);
+        $this->SetFont('Arial', 'B', 9);
+        
+        $this->Text(10, 240, "FIRMA: _____________________________________________");
+        $this->Text(10, 247, $arDotacionEmpleado->getEmpleadoRel()->getNombreCorto());
+        $this->Text(10, 254, "C.C.:     ______________________ de ____________________");
+        $this->Text(105, 240, "FIRMA: _____________________________________________");
+        $this->Text(105, 247, $arConfiguracion->getNombreEmpresa());
+        $this->Text(105, 254, "NIT: ". $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa());
+        $this->SetFont('Arial', '', 8);
+        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');;
     }    
 }
 

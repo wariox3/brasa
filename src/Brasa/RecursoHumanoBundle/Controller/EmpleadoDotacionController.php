@@ -147,14 +147,18 @@ class EmpleadoDotacionController extends Controller
                 $arEmpleadoDotacion->setEmpleadoRel($arEmpleado[0]);
                 $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
-                $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
-                $arEmpleadoDotacion->setCentroCostoRel($arCentroCosto);
-                $arEmpleadoDotacion->setFecha($form->get('fecha')->getData());
-                $arEmpleadoDotacion->setCodigoInternoReferencia($form->get('codigoInternoReferencia')->getData());
-                $arEmpleadoDotacion->setComentarios($form->get('comentarios')->getData());
-                $em->persist($arEmpleadoDotacion);
-                $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                if ($arEmpleadoFinal->getCodigoCentroCostoFk() == null){
+                    $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this);
+                } else {
+                    $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
+                    $arEmpleadoDotacion->setCentroCostoRel($arCentroCosto);
+                    $arEmpleadoDotacion->setFecha($form->get('fecha')->getData());
+                    $arEmpleadoDotacion->setCodigoInternoReferencia($form->get('codigoInternoReferencia')->getData());
+                    $arEmpleadoDotacion->setComentarios($form->get('comentarios')->getData());
+                    $em->persist($arEmpleadoDotacion);
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }
             }
         }
 
