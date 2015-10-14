@@ -46,16 +46,7 @@ class ConfiguracionController extends Controller
                 ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
             'property' => 'nombre',
             'required' => false);                   
-        $arrayPropiedadesConceptoSeguro['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoSeguro());                                    
-        
-        $arrayPropiedadesConceptoTiempoSuplementario = array(
-            'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
-            'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('cc')                                        
-                ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
-            'property' => 'nombre',
-            'required' => false);                   
-        $arrayPropiedadesConceptoTiempoSuplementario['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoTiempoSuplementario());                                    
+        $arrayPropiedadesConceptoSeguro['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoSeguro());                                            
         
         $arrayPropiedadesConceptoHoraDiurnaTrabajada = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
@@ -116,8 +107,7 @@ class ConfiguracionController extends Controller
             ->add('vrAuxilioTransporte', 'number', array('data' => $arConfiguracion->getVrAuxilioTransporte(), 'required' => true))
             ->add('vrSalario', 'number', array('data' => $arConfiguracion->getVrSalario(), 'required' => true))
             ->add('conceptoCredito', 'entity', $arrayPropiedadesConceptoCredito, array('required' => true))    
-            ->add('conceptoSeguro', 'entity', $arrayPropiedadesConceptoSeguro, array('required' => true))    
-            ->add('conceptoTiempoSuplementario', 'entity', $arrayPropiedadesConceptoTiempoSuplementario, array('required' => true))
+            ->add('conceptoSeguro', 'entity', $arrayPropiedadesConceptoSeguro, array('required' => true))                
             ->add('conceptoHoraDiurnaTrabajada', 'entity', $arrayPropiedadesConceptoHoraDiurnaTrabajada, array('required' => true))
             ->add('conceptoAportePension', 'entity', $arrayPropiedadesConceptoAportePension, array('required' => true))
             ->add('conceptoAporteSalud', 'entity', $arrayPropiedadesConceptoAporteSalud, array('required' => true))
@@ -137,8 +127,7 @@ class ConfiguracionController extends Controller
             $ValorSalario = $controles['vrSalario'];
             $codigoConceptoCredito = $controles['conceptoCredito'];
             $codigoConceptoIncapacidad = $controles['conceptoIncapacidad'];
-            $codigoConceptoSeguro = $controles['conceptoSeguro'];
-            $codigoConceptoTiempoSuplementario = $controles['conceptoTiempoSuplementario'];
+            $codigoConceptoSeguro = $controles['conceptoSeguro'];            
             $codigoConceptoHoraDiurnaTrabajada = $controles['conceptoHoraDiurnaTrabajada'];
             $codigoConceptoAportePension = $controles['conceptoAportePension'];
             $codigoConceptoAporteSalud = $controles['conceptoAporteSalud'];
@@ -153,8 +142,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setVrSalario($ValorSalario);
             $arConfiguracion->setCodigoCredito($codigoConceptoCredito);
             $arConfiguracion->setCodigoIncapacidad($codigoConceptoIncapacidad);
-            $arConfiguracion->setCodigoSeguro($codigoConceptoSeguro);
-            $arConfiguracion->setCodigoTiempoSuplementario($codigoConceptoTiempoSuplementario);
+            $arConfiguracion->setCodigoSeguro($codigoConceptoSeguro);            
             $arConfiguracion->setCodigoHoraDiurnaTrabajada($codigoConceptoHoraDiurnaTrabajada);
             $arConfiguracion->setCodigoAportePension($codigoConceptoAportePension);
             $arConfiguracion->setCodigoAporteSalud($codigoConceptoAporteSalud);
