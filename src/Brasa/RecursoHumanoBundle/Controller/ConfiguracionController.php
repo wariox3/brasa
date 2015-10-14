@@ -116,6 +116,7 @@ class ConfiguracionController extends Controller
             ->add('conceptoIncapacidad', 'entity', $arrayPropiedadesConceptoIncapacidad, array('required' => true))    
             ->add('porcentajeIva', 'number', array('data' => $arConfiguracion->getPorcentajeIva(), 'required' => true))
             ->add('conceptoRetencionFuente', 'entity', $arrayPropiedadesConceptoRetencionFuente, array('required' => true))        
+            ->add('porcentajeBonificacionNoPrestacional', 'number', array('data' => $arConfiguracion->getPorcentajeBonificacionNoPrestacional(), 'required' => true))                
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -134,6 +135,7 @@ class ConfiguracionController extends Controller
             $codigoConceptoRiesgoProfesional = $controles['conceptoRiesgoProfesional'];
             $codigoConceptoRetencionFuente = $controles['conceptoRetencionFuente'];
             $porcentajeIva = $controles['porcentajeIva'];
+            $porcentajeBonificacionNoPrestacional = $controles['porcentajeBonificacionNoPrestacional'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -148,6 +150,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoAporteSalud($codigoConceptoAporteSalud);
             $arConfiguracion->setCodigoEntidadRiesgoFk($codigoConceptoRiesgoProfesional);
             $arConfiguracion->setCodigoRetencionFuente($codigoConceptoRetencionFuente);
+            $arConfiguracion->setPorcentajeBonificacionNoPrestacional($porcentajeBonificacionNoPrestacional);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {

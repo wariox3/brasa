@@ -92,6 +92,12 @@ class RhuConfiguracion
     private $codigoRetencionFuente;
     
     /**
+     * @ORM\Column(name="porcentaje_bonificacion_no_prestacional", type="float")
+     */    
+    private $porcentajeBonificacionNoPrestacional = 40;    
+    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
@@ -506,5 +512,29 @@ class RhuConfiguracion
     public function getCodigoRetencionFuente()
     {
         return $this->codigoRetencionFuente;
+    }
+
+    /**
+     * Set porcentajeBonificacionNoPrestacional
+     *
+     * @param float $porcentajeBonificacionNoPrestacional
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPorcentajeBonificacionNoPrestacional($porcentajeBonificacionNoPrestacional)
+    {
+        $this->porcentajeBonificacionNoPrestacional = $porcentajeBonificacionNoPrestacional;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeBonificacionNoPrestacional
+     *
+     * @return float
+     */
+    public function getPorcentajeBonificacionNoPrestacional()
+    {
+        return $this->porcentajeBonificacionNoPrestacional;
     }
 }

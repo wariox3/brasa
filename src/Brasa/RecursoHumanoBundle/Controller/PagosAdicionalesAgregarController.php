@@ -60,6 +60,7 @@ class PagosAdicionalesAgregarController extends Controller
     public function valorAction($codigoProgramacionPago, $tipo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
         $codigoCentroCosto = $arProgramacionPago->getCodigoCentroCostoFk();
         $intTipoAdicional = $tipo;
@@ -91,18 +92,38 @@ class PagosAdicionalesAgregarController extends Controller
         if($form->isValid()) {            
             if($form->get('BtnAgregar')->isClicked()) {                
                 if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
+                    $boolError = FALSE;
+                    $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                     $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
-                    //$arPagoConcepto = $arPagoConcepto->getPagoConceptoRel();
-                    $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();                     
-                    $arPagoAdicional->setEmpleadoRel($form->get('empleadoRel')->getData());
-                    $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);                                   
-                    $arPagoAdicional->setValor($form->get('TxtValor')->getData());                    
-                    $arPagoAdicional->setDetalle($form->get('TxtDetalle')->getData());                    
-                    $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                    
-                    $em->persist($arPagoAdicional);                                                        
-                    $em->flush();                        
-                }                                                                                                                                       
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                    $arEmpleado = $form->get('empleadoRel')->getData();
+                    if($arPagoConcepto->getPrestacional() == 0) {
+                        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
+                        $floSalario = $arEmpleado->getVrSalario();
+                        $floVrDia = ($floSalario / 30);
+                        $floSalarioEmpleado = $floVrDia * $arProgramacionPago->getDias();
+                        $floBonificacionMaxima = $floSalarioEmpleado * ($arConfiguracion->getPorcentajeBonificacionNoPrestacional() / 100);
+                        $floBonificacionNoPrestacional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->bonificacionNoPrestacional($arEmpleado->getCodigoEmpleadoPk(), $codigoProgramacionPago);                                
+                        $floBonificacion = $form->get('TxtValor')->getData();
+                        $floBonificacionTotal = $floBonificacionNoPrestacional+ $floBonificacion;
+                        if($floBonificacionTotal > $floBonificacionMaxima) {
+                            echo "La bonificacion NO PRESTACIONAL no puede superar: " . $floBonificacionMaxima . " ya tiene bonificaciones por:" . $floBonificacionNoPrestacional;
+                            $boolError = TRUE;
+                        }                                                                        
+                    }
+                    if($boolError == FALSE) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();                     
+                        $arPagoAdicional->setEmpleadoRel($arEmpleado);
+                        $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);                                   
+                        $arPagoAdicional->setValor($form->get('TxtValor')->getData());                    
+                        $arPagoAdicional->setDetalle($form->get('TxtDetalle')->getData());                    
+                        $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                    
+                        $arPagoAdicional->setPrestacional($arPagoConcepto->getPrestacional());
+                        $em->persist($arPagoAdicional);                                                        
+                        $em->flush();                        
+                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                        
+                    }
+                }                                                                                                                                                       
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:agregarValor.html.twig', array(                        

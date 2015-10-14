@@ -58,6 +58,11 @@ class RhuPagoAdicional
      */    
     private $detalle;                         
     
+    /**     
+     * @ORM\Column(name="prestacional", type="boolean")
+     */    
+    private $prestacional = 0;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="pagosAdicionalesPagoConceptoRel")
      * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
@@ -350,5 +355,29 @@ class RhuPagoAdicional
     public function getProgramacionPagoRel()
     {
         return $this->programacionPagoRel;
+    }
+
+    /**
+     * Set prestacional
+     *
+     * @param boolean $prestacional
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setPrestacional($prestacional)
+    {
+        $this->prestacional = $prestacional;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacional
+     *
+     * @return boolean
+     */
+    public function getPrestacional()
+    {
+        return $this->prestacional;
     }
 }
