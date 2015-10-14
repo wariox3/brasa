@@ -118,9 +118,11 @@ class LiquidacionesController extends Controller
                             if ($codigoConcepto == 1){
                                 $floValor = $arrControles['TxtValor'][$intIndice];
                                 $arLiquidacionAdicional->setVrDeduccion($floValor);
+                                $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
                             }else {
                                 $floValor = $arrControles['TxtValor'][$intIndice];
                                 $arLiquidacionAdicional->setVrBonificacion($floValor);
+                                $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
                             }
                             
                             $em->persist($arLiquidacionAdicional);
@@ -165,7 +167,7 @@ class LiquidacionesController extends Controller
         $arrBotonEliminarAdicional = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => true);        
-        $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);        
+        $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;

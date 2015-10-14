@@ -28,7 +28,7 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetXY(53, 10);
         $this->Image('imagenes/logos/logo.jpg', 12, 13, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(143, 7, utf8_decode("PAGO LIQUIDACIÓN"), 0, 0, 'C', 1);
+        $this->Cell(143, 7, utf8_decode("COMPROBANTE PAGO DE PRESTACIONES SOCIALES"), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -95,9 +95,9 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetFont('Arial', '', 7);
         $this->Cell(20, 5, $arLiquidacion->getFechaHasta()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 8);
-        $this->Cell(35, 5, "", 1, 0, 'L', 1);
-        $this->SetFont('Arial', '', 7);
-        $this->Cell(27, 5, "", 1, 0, 'L', 1);
+        $this->Cell(35, 5, "BANCO:", 1, 0, 'L', 1);
+        $this->SetFont('Arial', '', 6.5);
+        $this->Cell(27, 5, utf8_decode($arLiquidacion->getEmpleadoRel()->getBancoRel()->getNombre()), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 8);
         $this->Cell(38, 5, utf8_decode("DÍAS NÓMINA ADICIONAL:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
@@ -108,7 +108,7 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetXY(10, $intY);
         $this->Cell(35, 5, utf8_decode("MOTIVO RETIRO:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
-        $this->Cell(150, 5, utf8_decode($arLiquidacion->getComentarios()), 1, 0, 'L', 1);
+        $this->Cell(150, 5, utf8_decode($arLiquidacion->getMotivoTerminacionRel()->getMotivo()), 1, 0, 'L', 1);
         //BLOQUE BASE LIQUIDACIÓN
         $intX = 123;
         $intY = 70;
@@ -233,11 +233,11 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('Arial', 'B', 8);
-        $header = array(utf8_decode('CÓDIGO'), 'TIPO', 'CONCEPTO', 'VALOR');
+        $this->SetFont('Arial', 'B', 7);
+        $header = array(utf8_decode('CÓDIGO'), 'TIPO', 'CONCEPTO', 'VALOR','OBSERVACIONES');
 
         //creamos la cabecera de la tabla.
-        $w = array(15, 73, 73, 24);
+        $w = array(12, 50, 50, 17,56);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -256,35 +256,37 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
         $arLiquidacionAdicionales = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->findBy(array('codigoLiquidacionFk' => self::$codigoLiquidacion));
         $pdf->SetX(10);
-        $pdf->SetFont('Arial', '', 8);
+        $pdf->SetFont('Arial', '', 7);
         foreach ($arLiquidacionAdicionales as $arLiquidacionAdicional) {
-            $pdf->Cell(15, 4, $arLiquidacionAdicional->getCodigoLiquidacionAdicionalPk(), 1, 0, 'L');
+            $pdf->Cell(12, 4, $arLiquidacionAdicional->getCodigoLiquidacionAdicionalPk(), 1, 0, 'L');
 
             if($arLiquidacionAdicional->getCodigoCreditoFk()) {
-                $pdf->Cell(73, 4, $arLiquidacionAdicional->getCreditoRel()->getCreditoTipoRel()->getNombre(), 1, 0, 'L');
+                $pdf->Cell(50, 4, $arLiquidacionAdicional->getCreditoRel()->getCreditoTipoRel()->getNombre(), 1, 0, 'L');
             } else {
                 if ($arLiquidacionAdicional->getCodigoLiquidacionAdicionalConceptoFk() == null){
-                    $pdf->Cell(73, 4, utf8_decode("BONIFICACIÓN"), 1, 0, 'L');
+                    $pdf->Cell(50, 4, utf8_decode("BONIFICACIÓN"), 1, 0, 'L');
                 }else{
-                    $pdf->Cell(73, 4, utf8_decode($arLiquidacionAdicional->getLiquidacionAdicionalConceptoRel()->getNombre()), 1, 0, 'L');
+                    $pdf->Cell(50, 4, utf8_decode($arLiquidacionAdicional->getLiquidacionAdicionalConceptoRel()->getNombre()), 1, 0, 'L');
                 }
             }    
             if ($arLiquidacionAdicional->getCodigoLiquidacionAdicionalConceptoFk() == null){
-                $pdf->Cell(73, 4, "DESCUENTO EMPRESA USUARIA", 1, 0, 'L');
+                $pdf->Cell(50, 4, "DESCUENTO EMPRESA USUARIA", 1, 0, 'L');
             }else{
-                $pdf->Cell(73, 4, utf8_decode($arLiquidacionAdicional->getLiquidacionAdicionalConceptoRel()->getNombre()), 1, 0, 'L');
+                $pdf->Cell(50, 4, utf8_decode($arLiquidacionAdicional->getLiquidacionAdicionalConceptoRel()->getNombre()), 1, 0, 'L');
             }
             if ($arLiquidacionAdicional->getCodigoLiquidacionAdicionalConceptoFk() == 1){
-                $pdf->Cell(24, 4, number_format($arLiquidacionAdicional->getVrDeduccion(), 0,'.',','), 1, 0, 'R');
+                $pdf->Cell(17, 4, number_format($arLiquidacionAdicional->getVrDeduccion(), 0,'.',','), 1, 0, 'R');
             }else {
-                $pdf->Cell(24, 4, number_format($arLiquidacionAdicional->getVrBonificacion(), 0,'.',','), 1, 0, 'R');
+                $pdf->Cell(17, 4, number_format($arLiquidacionAdicional->getVrBonificacion(), 0,'.',','), 1, 0, 'R');
             }
+            $pdf->SetFont('Arial', '', 6.5);
+            $pdf->Cell(56, 4, utf8_decode($arLiquidacionAdicional->getDetalle()), 1, 0, 'L');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
         $pdf->SetY(218);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(24, 4,utf8_decode("Con la entrega de esta Liquidación Final, expreso que la empresa se encuentra a Paz y Salvo por todo concepto prestacional y salarial"), 0, 0, 'L');
+        $pdf->Cell(24, 4,utf8_decode("Con la entrega de esta Liquidación Final, expreso que la EMPRESA se encuentra a Paz y Salvo por todo concepto prestacional y salarial."), 0, 0, 'L');
         
             $pdf->SetAutoPageBreak(1, 15);
     }

@@ -163,6 +163,7 @@
                         <th>TIPO</th>
                         <th>CONCEPTO</th>
                         <th style="text-align: right">VALOR</th>
+                        <th>OBSERVACIONES</th>
                         <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                     </tr>
                     {% for arLiquidacionAdicionales in arLiquidacionAdicionales %}
@@ -182,6 +183,7 @@
                         {% else %}
                             <td style="text-align: right">{{ arLiquidacionAdicionales.vrBonificacion | number_format(0, '.', ',') }}</td>
                         {% endif %}
+                        <td>{{ arLiquidacionAdicionales.detalle }}</td>
                         <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arLiquidacionAdicionales.codigoLiquidacionAdicionalPk }}" /></td>
                     </tr>
                     {% endfor %}
@@ -196,10 +198,18 @@
                 <!-- Fin Botones Menu Items -->
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_liquidaciones_detalle_nuevo_concepto', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk, 'codigoConcepto': 2}) }}', 'AgregarNuevoAdicional', 600, 900)">Agregar bonificación</a>
+                        {% if arLiquidacion.estadoAutorizado == 1 %}
+                            <a class="btn btn-default btn-sm" href="" disabled="true">Agregar bonificación</a>
+                        {% else %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_liquidaciones_detalle_nuevo_concepto', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk, 'codigoConcepto': 2}) }}', 'AgregarNuevoAdicional', 600, 900)">Agregar bonificación</a>
+                        {% endif %}    
                     </div>
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_liquidaciones_detalle_nuevo_concepto', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk, 'codigoConcepto': 1}) }}', 'AgregarNuevoDescuento', 600, 900)">Agregar descuento</a>
+                        {% if arLiquidacion.estadoAutorizado == 1 %}
+                            <a class="btn btn-default btn-sm" href="" disabled="true">Agregar descuento</a>
+                        {% else %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_liquidaciones_detalle_nuevo_concepto', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk, 'codigoConcepto': 1}) }}', 'AgregarNuevoDescuento', 600, 900)">Agregar descuento</a>
+                        {% endif %}
                     </div>
                     <div class="btn-group">
                         {{ form_widget(form.BtnEliminarAdicional, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}

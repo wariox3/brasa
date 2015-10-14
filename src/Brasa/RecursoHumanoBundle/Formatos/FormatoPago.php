@@ -62,8 +62,13 @@ class FormatoPago extends \FPDF_FPDF {
         $this->Cell(24, 6, "FECHA:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(69, 6, $arPago->getFechaHasta()->format('Y/m/d') , 1, 0, 'L', 1);
+        $this->Cell(24, 6, $arPago->getFechaHasta()->format('Y/m/d') , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',6.5);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(24, 6, "CUENTA:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(21, 6, $arPago->getEmpleadoRel()->getCuenta() , 1, 0, 'L', 1);
         //FILA 2
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',7);
@@ -80,10 +85,10 @@ class FormatoPago extends \FPDF_FPDF {
         $this->Cell(24, 6, $arPago->getEmpleadoRel()->getNumeroIdentificacion() , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',6.5);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(24, 6, "CUENTA:" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
+        $this->Cell(24, 6, "BANCO:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',6.5);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(21, 6, $arPago->getEmpleadoRel()->getCuenta() , 1, 0, 'L', 1);
+        $this->Cell(21, 6, utf8_decode($arPago->getEmpleadoRel()->getBancoRel()->getNombre()), 1, 0, 'L', 1);
         //FILA 3
         $this->SetXY(10, 50);
         $this->SetFont('Arial','B',6.5);

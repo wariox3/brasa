@@ -24,7 +24,7 @@ class FormatoPagoBanco extends \FPDF_FPDF {
         $this->SetFont('Arial','B',10);
         //Logo
         
-        $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
+        $this->Image('imagenes/logos/logo.jpg', 12, 13, 35, 17);
         //INFORMACIÓN EMPRESA
         $this->SetXY(50, 10);
         $this->Cell(150, 7, utf8_decode("PAGO BANCO"), 0, 0, 'C', 1);
@@ -46,16 +46,21 @@ class FormatoPagoBanco extends \FPDF_FPDF {
         $arPagoBanco = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find(self::$codigoPagoBanco);
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
+        //linea 1
         $this->SetXY(10, 40);
-        $this->SetFillColor(272, 272, 272); 
+        $this->SetFillColor(200, 200, 200); 
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
+        $this->SetFillColor(272, 272, 272); 
         $this->SetFont('Arial','',8);
         $this->Cell(30, 6, $arPagoBanco->getCodigoPagoBancoPk(), 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 6, ":" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
         $this->Cell(100, 6, utf8_decode(''), 1, 0, 'L', 1);
+        //linea 2
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 5, utf8_decode("NÚMERO SOPORTE:") , 1, 0, 'L', 1);

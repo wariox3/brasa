@@ -405,8 +405,7 @@ class ConsultasController extends Controller
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
-        $arVacacionesDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionDisfrute();
-        $arVacacionesDisfrute = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionDisfrute')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
@@ -426,7 +425,7 @@ class ConsultasController extends Controller
         $arPagosAdicionales = $paginator->paginate($arPagosAdicionales, $this->get('request')->query->get('page', 1),5);
         $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('request')->query->get('page', 1),5);
         $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);
-        $arVacacionesDisfrute = $paginator->paginate($arVacacionesDisfrute, $this->get('request')->query->get('page', 1),5);
+        
         $arLicencias = $paginator->paginate($arLicencias, $this->get('request')->query->get('page', 1),5);
         $arContratos = $paginator->paginate($arContratos, $this->get('request')->query->get('page', 1),5);
         $arCreditos = $paginator->paginate($arCreditos, $this->get('request')->query->get('page', 1),5);
@@ -439,7 +438,7 @@ class ConsultasController extends Controller
                     'arPagosAdicionales' => $arPagosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
                     'arVacaciones' => $arVacaciones,
-                    'arVacacionesDisfrute' => $arVacacionesDisfrute,
+                    
                     'arLicencias' => $arLicencias,
                     'arContratos' => $arContratos,
                     'arCreditos' => $arCreditos,

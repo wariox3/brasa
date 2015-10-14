@@ -15,8 +15,9 @@
             <div id="pagos" style="width: 100%"><br>
                 <table class="table table-striped table-bordered table-condensed table-hover">
                 <tr>            
-                    <th>CODIGO</th>
-                    <th>NUMERO</th>
+                    <th>CÓDIGO</th>
+                    <th>TIPO PAGO</th>
+                    <th>NÚMERO</th>
                     <th>EMPLEADO</th>            
                     <th>DESDE</th>
                     <th>HASTA</th>
@@ -26,6 +27,7 @@
                     {%for arPagos in arPagos %}
                        <tr>
                         <td>{{arPagos.codigoPagoPk }}</td>
+                        <td>{{arPagos.programacionPagoRel.pagoTipoRel.nombre }}</td>
                         <td>{{arPagos.numero }}</td>
                         <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
                         <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>                
@@ -42,7 +44,8 @@
                 <div id="programaciones" style="width: 100%"><br>
                 <table class="table table-striped table-bordered table-condensed table-hover">
                 <tr>            
-                    <th>CODIGO</th>           
+                    <th>CÓDIGO</th>
+                    <th>TIPO PAGO</th>
                     <th>DESDE</th>
                     <th>HASTA</th>
                     <th style="text-align: right">NETO</th>
@@ -51,6 +54,7 @@
                     {%for arProgramacionesPago in arProgramacionesPago %}
                        <tr>
                         <td>{{arProgramacionesPago.codigoProgramacionPagoPk }}</td>
+                        <td>{{arProgramacionesPago.pagoTipoRel.nombre }}</td>
                         <td>{{ arProgramacionesPago.fechaDesde |date("Y/m/d")  }}</td>
                         <td>{{ arProgramacionesPago.fechaHasta |date("Y/m/d")  }}</td>                                        
                         <td style="text-align: right">{{ arProgramacionesPago.vrNeto | number_format(2, '.', ',') }}</td>

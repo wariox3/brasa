@@ -35,7 +35,12 @@ class RhuCredito
     /**
      * @ORM\Column(name="fecha", type="date")
      */    
-    private $fecha;     
+    private $fecha;
+    
+    /**
+     * @ORM\Column(name="fecha_inicio", type="date")
+     */    
+    private $fechaInicio;
     
     /**
      * @ORM\Column(name="vr_pagar", type="float")
@@ -104,7 +109,7 @@ class RhuCredito
     private $vrAbonos = 0;
     
     /**
-     * @ORM\Column(name="nro_libranza", type="integer")
+     * @ORM\Column(name="nro_libranza", type="integer", nullable=true)
      */
     private $numeroLibranza;
     
@@ -578,6 +583,30 @@ class RhuCredito
     }
 
     /**
+     * Set numeroLibranza
+     *
+     * @param integer $numeroLibranza
+     *
+     * @return RhuCredito
+     */
+    public function setNumeroLibranza($numeroLibranza)
+    {
+        $this->numeroLibranza = $numeroLibranza;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroLibranza
+     *
+     * @return integer
+     */
+    public function getNumeroLibranza()
+    {
+        return $this->numeroLibranza;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -786,26 +815,26 @@ class RhuCredito
     }
 
     /**
-     * Set numeroLibranza
+     * Set fechaInicio
      *
-     * @param integer $numeroLibranza
+     * @param \DateTime $fechaInicio
      *
      * @return RhuCredito
      */
-    public function setNumeroLibranza($numeroLibranza)
+    public function setFechaInicio($fechaInicio)
     {
-        $this->numeroLibranza = $numeroLibranza;
+        $this->fechaInicio = $fechaInicio;
 
         return $this;
     }
 
     /**
-     * Get numeroLibranza
+     * Get fechaInicio
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getNumeroLibranza()
+    public function getFechaInicio()
     {
-        return $this->numeroLibranza;
+        return $this->fechaInicio;
     }
 }
