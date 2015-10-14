@@ -26,6 +26,11 @@ class RhuLicenciaTipo
      * @ORM\Column(name="afecta_salud", type="boolean")
      */    
     private $afectaSalud = 0;      
+
+    /**     
+     * @ORM\Column(name="ausentismo", type="boolean")
+     */    
+    private $ausentismo = 0;    
     
     /**
      * @ORM\Column(name="codigo_pago_concepto_fk", type="integer")
@@ -189,5 +194,29 @@ class RhuLicenciaTipo
     public function getAfectaSalud()
     {
         return $this->afectaSalud;
+    }
+
+    /**
+     * Set ausentismo
+     *
+     * @param boolean $ausentismo
+     *
+     * @return RhuLicenciaTipo
+     */
+    public function setAusentismo($ausentismo)
+    {
+        $this->ausentismo = $ausentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get ausentismo
+     *
+     * @return boolean
+     */
+    public function getAusentismo()
+    {
+        return $this->ausentismo;
     }
 }

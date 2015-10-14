@@ -14,6 +14,7 @@
         {{ form_errors(form) }}
         <div class="btn-group">
             {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         </div>
@@ -81,8 +82,8 @@
                     <tr>
                         <td class="titulo">CONTRATO:</td>
                         <td><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arLiquidacion.codigoContratoFk }) }}" target="_blanck" >{{ arLiquidacion.codigoContratoFk}}</a></td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">AUSENTISMO:</td>
+                        <td align="right">({{ arLiquidacion.diasCesantiasDescontar | number_format(0, '.', ',') }})</td>
                         <td class="titulo">INTERESES:</td>
                         <td align="right">$ {{ arLiquidacion.vrInteresesCesantias | number_format(0, '.', ',') }}</td>
                     </tr>
@@ -97,8 +98,8 @@
                     <tr>
                         <td class="titulo">CENTRO COSTOS:</td>
                         <td>{{ arLiquidacion.contratoRel.centroCostoRel.nombre}}</td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">AUSENTISMO:</td>
+                        <td align="right">({{ arLiquidacion.diasPrimasDescontar | number_format(0, '.', ',') }})</td>
                         <td class="titulo">SALARIO VACACIONES:</td>
                         <td align="right">$ {{ arLiquidacion.vrSalarioVacaciones | number_format(0, '.', ',') }}</td>
                     </tr>
@@ -113,8 +114,8 @@
                     <tr>
                         <td class="titulo"></td>
                         <td align="right"></td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">AUSENTISMO:</td>
+                        <td align="right">({{ arLiquidacion.diasVacacionesDescontar | number_format(0, '.', ',') }})</td>
                         <td class="titulo">DEDUCCIONES:</td>
                         <td align="right">$ {{ arLiquidacion.vrDeducciones | number_format(0, '.', ',') }}</td>
                     </tr>

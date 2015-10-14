@@ -93,15 +93,30 @@ class RhuLiquidacion
     private $diasCesantias = 0;    
 
     /**
+     * @ORM\Column(name="dias_cesantias_descontar", type="integer")
+     */    
+    private $diasCesantiasDescontar = 0;    
+    
+    /**
      * @ORM\Column(name="dias_vacaciones", type="integer")
      */    
     private $diasVacaciones = 0;        
+    
+    /**
+     * @ORM\Column(name="dias_vacaciones_descontar", type="integer")
+     */    
+    private $diasVacacionesDescontar = 0;     
     
     /**
      * @ORM\Column(name="dias_primas", type="integer")
      */    
     private $diasPrimas = 0;        
 
+    /**
+     * @ORM\Column(name="dias_primas_descontar", type="integer")
+     */    
+    private $diasPrimasDescontar = 0;    
+    
     /**
      * @ORM\Column(name="dias_laborados", type="integer")
      */    
@@ -1352,5 +1367,77 @@ class RhuLiquidacion
     public function getLiquidacionesAdicionalesLiquidacionRel()
     {
         return $this->liquidacionesAdicionalesLiquidacionRel;
+    }
+
+    /**
+     * Set diasCesantiasDescontar
+     *
+     * @param integer $diasCesantiasDescontar
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasCesantiasDescontar($diasCesantiasDescontar)
+    {
+        $this->diasCesantiasDescontar = $diasCesantiasDescontar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCesantiasDescontar
+     *
+     * @return integer
+     */
+    public function getDiasCesantiasDescontar()
+    {
+        return $this->diasCesantiasDescontar;
+    }
+
+    /**
+     * Set diasVacacionesDescontar
+     *
+     * @param integer $diasVacacionesDescontar
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasVacacionesDescontar($diasVacacionesDescontar)
+    {
+        $this->diasVacacionesDescontar = $diasVacacionesDescontar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacacionesDescontar
+     *
+     * @return integer
+     */
+    public function getDiasVacacionesDescontar()
+    {
+        return $this->diasVacacionesDescontar;
+    }
+
+    /**
+     * Set diasPrimasDescontar
+     *
+     * @param integer $diasPrimasDescontar
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasPrimasDescontar($diasPrimasDescontar)
+    {
+        $this->diasPrimasDescontar = $diasPrimasDescontar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPrimasDescontar
+     *
+     * @return integer
+     */
+    public function getDiasPrimasDescontar()
+    {
+        return $this->diasPrimasDescontar;
     }
 }

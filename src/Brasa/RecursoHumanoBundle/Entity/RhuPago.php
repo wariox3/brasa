@@ -100,6 +100,11 @@ class RhuPago
     private $vrAdicionalValor = 0;    
     
     /**
+     * @ORM\Column(name="vr_adicional_valor_no_prestacional", type="float")
+     */
+    private $vrAdicionalValorNoPrestasional = 0;     
+    
+    /**
      * @ORM\Column(name="vr_auxilio_transporte", type="float")
      */
     private $vrAuxilioTransporte = 0;    
@@ -223,6 +228,11 @@ class RhuPago
      * @ORM\Column(name="archivo_exportado_banco", type="boolean")
      */    
     private $archivoExportadoBanco = 0;
+    
+    /**
+     * @ORM\Column(name="dias_ausentismo", type="integer")
+     */
+    private $diasAusentismo = 0;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="pagosPagoTipoRel")
@@ -1612,5 +1622,53 @@ class RhuPago
     public function getEstadoPagadoBanco()
     {
         return $this->estadoPagadoBanco;
+    }
+
+    /**
+     * Set diasAusentismo
+     *
+     * @param integer $diasAusentismo
+     *
+     * @return RhuPago
+     */
+    public function setDiasAusentismo($diasAusentismo)
+    {
+        $this->diasAusentismo = $diasAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismo
+     *
+     * @return integer
+     */
+    public function getDiasAusentismo()
+    {
+        return $this->diasAusentismo;
+    }
+
+    /**
+     * Set vrAdicionalValorNoPrestasional
+     *
+     * @param float $vrAdicionalValorNoPrestasional
+     *
+     * @return RhuPago
+     */
+    public function setVrAdicionalValorNoPrestasional($vrAdicionalValorNoPrestasional)
+    {
+        $this->vrAdicionalValorNoPrestasional = $vrAdicionalValorNoPrestasional;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAdicionalValorNoPrestasional
+     *
+     * @return float
+     */
+    public function getVrAdicionalValorNoPrestasional()
+    {
+        return $this->vrAdicionalValorNoPrestasional;
     }
 }

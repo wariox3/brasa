@@ -37,15 +37,11 @@ class LiquidacionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $request = $this->getRequest();
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnAutorizar', 'submit', array('label'  => 'Autorizar',))
-            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
-            ->add('BtnEliminarAdicional', 'submit', array('label'  => 'Eliminar adicional',))
-            ->getForm();
-        $form->handleRequest($request);
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
+        $form = $this->formularioDetalle($arLiquidacion);
+        $form->handleRequest($request);
+
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arLiquidacion->getEstadoGenerado() == 1) {
@@ -57,7 +53,14 @@ class LiquidacionesController extends Controller
                 $arLiquidacion->setEstadoAutorizado(1);
                 $em->persist($arLiquidacion);
                 $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
             }
+            if($form->get('BtnDesAutorizar')->isClicked()) {
+                $arLiquidacion->setEstadoAutorizado(0);
+                $em->persist($arLiquidacion);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+            }            
             if($form->get('BtnLiquidar')->isClicked()) {
                 if($arLiquidacion->getEstadoAutorizado() == 0) {
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
@@ -157,6 +160,31 @@ class LiquidacionesController extends Controller
         return $form;
     }
 
+    private function formularioDetalle($ar) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
+        $arrBotonEliminarAdicional = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => true);        
+        $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);        
+        
+        if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;
+            $arrBotonEliminarAdicional['disabled'] = true;
+            $arrBotonLiquidar['disabled'] = true;
+            $arrBotonImprimir['disabled'] = false;
+        } else {            
+            $arrBotonDesAutorizar['disabled'] = true;
+        }
+        $form = $this->createFormBuilder()    
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)
+                    ->add('BtnEliminarAdicional', 'submit', $arrBotonEliminarAdicional)
+                    ->getForm();  
+        return $form;
+    }        
+    
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();

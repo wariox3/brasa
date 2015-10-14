@@ -58,7 +58,7 @@ class RhuPagoDetalle
     private $porcentajeAplicado = 0;    
     
     /**
-     * @ORM\Column(name="numero_dias", type="float")
+     * @ORM\Column(name="numero_dias", type="integer")
      */
     private $numeroDias = 0;     
     
@@ -96,6 +96,21 @@ class RhuPagoDetalle
      * @ORM\Column(name="codigo_programacion_pago_detalle_fk", type="integer", nullable=true)
      */    
     private $codigoProgramacionPagoDetalleFk;     
+    
+    /**
+     * @ORM\Column(name="dias_ausentismo", type="integer")
+     */
+    private $diasAusentismo = 0;     
+
+    /**
+     * @ORM\Column(name="adicional", type="boolean")
+     */
+    private $adicional = 0;    
+
+    /**
+     * @ORM\Column(name="prestacional", type="boolean")
+     */
+    private $prestacional = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPago", inversedBy="pagosDetallesPagoRel")
@@ -613,5 +628,77 @@ class RhuPagoDetalle
     public function getCreditoRel()
     {
         return $this->creditoRel;
+    }
+
+    /**
+     * Set diasAusentismo
+     *
+     * @param integer $diasAusentismo
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setDiasAusentismo($diasAusentismo)
+    {
+        $this->diasAusentismo = $diasAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismo
+     *
+     * @return integer
+     */
+    public function getDiasAusentismo()
+    {
+        return $this->diasAusentismo;
+    }
+
+    /**
+     * Set adicional
+     *
+     * @param boolean $adicional
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setAdicional($adicional)
+    {
+        $this->adicional = $adicional;
+
+        return $this;
+    }
+
+    /**
+     * Get adicional
+     *
+     * @return boolean
+     */
+    public function getAdicional()
+    {
+        return $this->adicional;
+    }
+
+    /**
+     * Set prestacional
+     *
+     * @param boolean $prestacional
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setPrestacional($prestacional)
+    {
+        $this->prestacional = $prestacional;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacional
+     *
+     * @return boolean
+     */
+    public function getPrestacional()
+    {
+        return $this->prestacional;
     }
 }

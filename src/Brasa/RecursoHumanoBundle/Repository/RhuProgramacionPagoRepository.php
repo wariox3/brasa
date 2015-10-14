@@ -199,7 +199,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 if($arLicencia->getLicenciaTipoRel()->getAfectaSalud() == 0) {
                                     $douIngresoBaseCotizacion += $douPagoDetalle;                                        
                                     $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
-                                }                                    
+                                }       
+                                if($arLicencia->getLicenciaTipoRel()->getAusentismo() == 1) {
+                                    $arPagoDetalle->setDiasAusentismo($intDias);
+                                }
                                 if($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion() == 0) {
                                     $douPagoDetalle = 0;
                                 }
@@ -225,6 +228,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                             $arPagoDetalle->setPagoRel($arPago);
                             $arPagoDetalle->setPagoConceptoRel($arPagoAdicional->getPagoConceptoRel());
+                            $arPagoDetalle->setAdicional(1);
                             if($arPagoAdicional->getPagoConceptoRel()->getComponePorcentaje() == 1) {
                                 $douVrHoraAdicional = ($douVrHora * $arPagoAdicional->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;
                                 $douPagoDetalle = $douVrHoraAdicional * $arPagoAdicional->getCantidad();
@@ -247,19 +251,13 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                             $em->persist($arPagoDetalle);
 
-                            //Aumentar los dias y las horas ordinarias
-                            if($arPagoAdicional->getPagoConceptoRel()->getComponeSalario() == 1) {
-                                $intHorasProcesarAdicionales = $arPagoAdicional->getCantidad();
-                                $intHorasLaboradas = $intHorasLaboradas + $intHorasProcesarAdicionales;
-                                $intDiasAdicionales = intval($intHorasProcesarAdicionales / 8);
-                                $intDiasTransporte = $intDiasTransporte - $intDiasAdicionales;
-                            }
                             if($arPagoAdicional->getPagoConceptoRel()->getPrestacional() == 1) {
                                 $douDevengado = $douDevengado + $douPagoDetalle;
                                 $douIngresoBasePrestacional += $douPagoDetalle;
                                 $douIngresoBaseCotizacion += $douPagoDetalle;
                                 $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
                                 $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                                $arPagoDetalle->setPrestacional(1);
                             }
                             if($arPagoAdicional->getPermanente() == 0) {
                                 $arPagoAdicionalActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();

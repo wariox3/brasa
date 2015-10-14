@@ -17,6 +17,7 @@ class RhuPagoRepository extends EntityRepository {
         $douAuxilioTransporte = 0;
         $douAdicionTiempo = 0;
         $douAdicionValor = 0;
+        $douAdicionValorNoPrestacional = 0;
         $douPension = 0;
         $douEps = 0;
         $douCaja = 0;
@@ -28,6 +29,7 @@ class RhuPagoRepository extends EntityRepository {
         $douNeto = 0;
         $douIngresoBaseCotizacion = 0;
         $douIngresoBasePrestacion = 0;
+        $intDiasAusentismo = 0;
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigoPago));         
         foreach ($arPagoDetalles as $arPagoDetalle) {
@@ -56,10 +58,14 @@ class RhuPagoRepository extends EntityRepository {
                     $douAdicionTiempo = $douAdicionTiempo + $arPagoDetalle->getVrPago();    
                 }                
             }
-            
+            if($arPagoDetalle->getAdicional() == 1) {
+                if($arPagoDetalle->getPrestacional() == 0) {
+                    $douAdicionValorNoPrestacional = $douAdicionValorNoPrestacional + $arPagoDetalle->getVrPago();
+                }
+            }
             $douIngresoBaseCotizacion += $arPagoDetalle->getVrIngresoBaseCotizacion();
             $douIngresoBasePrestacion += $arPagoDetalle->getVrIngresoBasePrestacion();
-            
+            $intDiasAusentismo += $arPagoDetalle->getDiasAusentismo();
         }
         
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();        
@@ -75,6 +81,7 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrAuxilioTransporteCotizacion(0);
         $arPago->setVrAdicionalTiempo($douAdicionTiempo);
         $arPago->setVrAdicionalValor($douAdicionValor);
+        $arPago->setVrAdicionalValorNoPrestasional($douAdicionValorNoPrestacional);
         $arPago->setVrArp(0);
         $arPago->setVrPension($douPension);
         $arPago->setVrEps($douEps);
@@ -87,6 +94,7 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrTotalCobrar(0);        
         $arPago->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
         $arPago->setVrIngresoBasePrestacion($douIngresoBasePrestacion);
+        $arPago->setDiasAusentismo($intDiasAusentismo);
         $em->persist($arPago);
         $em->flush();
         return $douNeto;
@@ -262,4 +270,16 @@ class RhuPagoRepository extends EntityRepository {
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
     }                            
+    
+    public function diasAusentismo($fechaDesde, $fechaHasta, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(p.diasAusentismo) as diasAusentismo FROM BrasaRecursoHumanoBundle:RhuPago p "
+                . "WHERE p.estadoPagado = 1 "
+                . "AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaHastaPago <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $intDiasAusentismo = $arrayResultado[0]['diasAusentismo'];
+        return $intDiasAusentismo;
+    }    
 }
