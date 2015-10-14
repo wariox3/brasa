@@ -20,7 +20,7 @@
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }} " target="_blank">Adicionales al pago</a></li>
                     <li class="divider"></li>
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arCentroCosto.codigoCentroCostoPk }) }}" target="_blank">Agregar tiempo suplementario (Masivo)</a></li>
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Agregar tiempo suplementario (Masivo)</a></li>
                 </ul>
             </div>
         </div>
@@ -74,8 +74,7 @@
             <table class="table table-striped table-bordered table-condensed">
                 <tr>
                     <th>CÓDIGO</th>
-                    <th>TIPO</th>
-                    <th>SUBTIPO</th>
+                    <th>CONCEPTO</th>                    
                     <th>DETALLE</th>
                     <th>EMPLEADO</th>
                     <th>CANTIDAD</th>
@@ -88,8 +87,7 @@
                         <input type="hidden" name="LblCodigoGuia[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}">
                         <span class="badge">{{ arPagosAdicionales.codigoPagoAdicionalPk }}</span>
                     </td>
-                    <td>{{ arPagosAdicionales.pagoAdicionalTipoRel.nombre}}</td>
-                    <td>{{ arPagosAdicionales.pagoAdicionalSubtipoRel.nombre }}</td>
+                    <td>{{ arPagosAdicionales.pagoConceptoRel.nombre}}</td>                    
                     <td>{{ arPagosAdicionales.detalle }}</td>
                     <td>{{ arPagosAdicionales.empleadoRel.nombreCorto }}</td>
                     <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>

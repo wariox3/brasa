@@ -223,14 +223,14 @@ class RhuProgramacionPagoRepository extends EntityRepository {
 
                         //Procesar los conceptos de pagos adicionales
                         $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 'pagoAplicado' => 0, 'codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk()));
+                        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->programacionPago($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getCodigoProgramacionPagoFk());
                         foreach ($arPagosAdicionales as $arPagoAdicional) {
                             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                             $arPagoDetalle->setPagoRel($arPago);
                             $arPagoDetalle->setPagoConceptoRel($arPagoAdicional->getPagoConceptoRel());
                             $arPagoDetalle->setAdicional(1);
                             if($arPagoAdicional->getPagoConceptoRel()->getComponePorcentaje() == 1) {
-                                $douVrHoraAdicional = ($douVrHora * $arPagoAdicional->getPagoAdicionalSubtipoRel()->getPorcentaje())/100;
+                                $douVrHoraAdicional = ($douVrHora * $arPagoAdicional->getPagoConceptoRel()->getPorPorcentaje())/100;
                                 $douPagoDetalle = $douVrHoraAdicional * $arPagoAdicional->getCantidad();
                                 $arPagoDetalle->setVrHora($douVrHoraAdicional);
                                 $arPagoDetalle->setVrDia($douVrDia);
@@ -247,10 +247,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $arPagoDetalle->setVrPago($douPagoDetalle);
                             $arPagoDetalle->setOperacion($arPagoAdicional->getPagoConceptoRel()->getOperacion());
                             $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoAdicional->getPagoConceptoRel()->getOperacion());
-                            $arPagoDetalle->setDetalle($arPagoAdicional->getPagoAdicionalSubtipoRel()->getDetalle());
-                            $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                            $em->persist($arPagoDetalle);
-
+                            $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
+                            $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                            
+                            
                             if($arPagoAdicional->getPagoConceptoRel()->getPrestacional() == 1) {
                                 $douDevengado = $douDevengado + $douPagoDetalle;
                                 $douIngresoBasePrestacional += $douPagoDetalle;
@@ -259,13 +258,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
                                 $arPagoDetalle->setPrestacional(1);
                             }
-                            if($arPagoAdicional->getPermanente() == 0) {
-                                $arPagoAdicionalActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicionalActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($arPagoAdicional->getCodigoPagoAdicionalPk());
-                                $arPagoAdicionalActualizar->setPagoAplicado(1);
-                                $arPagoAdicionalActualizar->setProgramacionPagoRel($arProgramacionPagoProcesar);
-                                $em->persist($arPagoAdicionalActualizar);
-                            }
+                            $em->persist($arPagoDetalle);                            
                         }
 
                         //Procesar creditos
@@ -603,16 +596,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-        //Devolver pagos adicionales
-        $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-        foreach ($arPagosAdicionales as $arPagoAdicional) {
-            $arPagoAdicionalActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-            $arPagoAdicionalActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($arPagoAdicional->getCodigoPagoAdicionalPk());
-            $arPagoAdicionalActualizar->setPagoAplicado(0);
-            $arPagoAdicionalActualizar->setProgramacionPagoRel(null);
-            $em->persist($arPagoAdicionalActualizar);
-        }
 
         //Eliminar pagos
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -943,17 +926,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $dql .= " AND pp.codigoCentroCostoFk =" . $codigoCentroCosto;
         }
         return $dql;
-    }
-    //Enviar los pagos adicionales con los permanentes
-    public function listaPagosAdicionalesyPermanentes($codigoProgramacionPago = "") {
-        $em = $this->getEntityManager();
-        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-        $centroCosto = $arProgramacionPago->getCodigoCentroCostoFk();
-        $dql   = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa WHERE pa.codigoProgramacionPagoFk = $codigoProgramacionPago and pa.pagoAplicado = 0  or  (pa.permanente = 1 and pa.codigoCentroCostoFk = $centroCosto)";
-        $query = $em->createQuery($dql);
-        $dql = $query->getResult();
-        return $dql;
-    }
+    }    
+    
     //listado nuevo por el cambio de centro de costo por programacion de pago
     public function listaGeneralPagoActivosDQL($strEstado = "") {
         $em = $this->getEntityManager();

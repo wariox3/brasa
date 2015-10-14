@@ -88,6 +88,11 @@ class RhuPagoConcepto
     private $tipoCuenta = 1;    
     
     /**
+     * @ORM\Column(name="tipo_adicional", type="smallint")
+     */    
+    private $tipoAdicional = 1;       
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="pagoConceptoRel")
      */
     protected $pagosDetallesPagoConceptoRel;     
@@ -100,12 +105,7 @@ class RhuPagoConcepto
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoAdicional", mappedBy="pagoConceptoRel")
      */
-    protected $pagosAdicionalesPagoConceptoRel;                
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuPagoAdicionalSubtipo", mappedBy="pagoConceptoRel")
-     */
-    protected $pagosAdicionalesSubtiposPagoConceptoRel;             
+    protected $pagosAdicionalesPagoConceptoRel;                                
     
     /**
      * @ORM\OneToMany(targetEntity="RhuLicenciaTipo", mappedBy="pagoConceptoRel")
@@ -125,7 +125,6 @@ class RhuPagoConcepto
         $this->pagosDetallesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosDetallesSedesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pagosAdicionalesSubtiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -477,6 +476,30 @@ class RhuPagoConcepto
     }
 
     /**
+     * Set tipoAdicional
+     *
+     * @param integer $tipoAdicional
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setTipoAdicional($tipoAdicional)
+    {
+        $this->tipoAdicional = $tipoAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoAdicional
+     *
+     * @return integer
+     */
+    public function getTipoAdicional()
+    {
+        return $this->tipoAdicional;
+    }
+
+    /**
      * Add pagosDetallesPagoConceptoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle $pagosDetallesPagoConceptoRel
@@ -576,40 +599,6 @@ class RhuPagoConcepto
     public function getPagosAdicionalesPagoConceptoRel()
     {
         return $this->pagosAdicionalesPagoConceptoRel;
-    }
-
-    /**
-     * Add pagosAdicionalesSubtiposPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagosAdicionalesSubtiposPagoConceptoRel
-     *
-     * @return RhuPagoConcepto
-     */
-    public function addPagosAdicionalesSubtiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagosAdicionalesSubtiposPagoConceptoRel)
-    {
-        $this->pagosAdicionalesSubtiposPagoConceptoRel[] = $pagosAdicionalesSubtiposPagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove pagosAdicionalesSubtiposPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagosAdicionalesSubtiposPagoConceptoRel
-     */
-    public function removePagosAdicionalesSubtiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagosAdicionalesSubtiposPagoConceptoRel)
-    {
-        $this->pagosAdicionalesSubtiposPagoConceptoRel->removeElement($pagosAdicionalesSubtiposPagoConceptoRel);
-    }
-
-    /**
-     * Get pagosAdicionalesSubtiposPagoConceptoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPagosAdicionalesSubtiposPagoConceptoRel()
-    {
-        return $this->pagosAdicionalesSubtiposPagoConceptoRel;
     }
 
     /**

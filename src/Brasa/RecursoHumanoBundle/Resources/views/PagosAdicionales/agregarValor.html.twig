@@ -1,7 +1,7 @@
 {% extends '::base_sin_menu.html.twig' %}
 {% block content %}
     <div class="container">
-        <p class="description"><h3 >Agregar {% filter lower %} {{ arPagoAdicionalTipo.nombre }} {% endfilter %}</h3></p>
+        <p class="description"><h3 >Agregar</h3></p>
         {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
             <div class="panel panel-default">
                 <div class="panel-heading">Datos empleado</div>
@@ -13,9 +13,9 @@
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
-                        <label for="subtipoRel" class="col-sm-2 control-label">Tipo:</label>
+                        <label for="pagoConceptoRel" class="col-sm-2 control-label">Tipo:</label>
                         <div class="col-sm-10">
-                                {{ form_widget(form.subtipoRel, { 'attr': {'class': 'form-control'} }) }}
+                                {{ form_widget(form.pagoConceptoRel, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                     </div>                        
                     <div class="form-group form-group-sm">
@@ -24,6 +24,12 @@
                                 {{ form_widget(form.TxtValor, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                     </div>                        
+                    <div class="form-group form-group-sm">
+                        <label for="TxtDetalle" class="col-sm-2 control-label">Detalle:</label>
+                        <div class="col-sm-10">
+                                {{ form_widget(form.TxtDetalle, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>                         
                 </div>
             </div>
 

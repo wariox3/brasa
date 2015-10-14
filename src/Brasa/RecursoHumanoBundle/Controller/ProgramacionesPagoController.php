@@ -189,12 +189,9 @@ class ProgramacionesPagoController extends Controller
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPago->getCodigoCentroCostoFk());
 
         if($arProgramacionPago->getEstadoGenerado() == 1) {
-            $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
             $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
             $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         } else {
-            $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-            $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoCentroCostoFk' => $arProgramacionPago->getCodigoCentroCostoFk(), 'pagoAplicado' => 0));
             $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
             $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                       
             $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
@@ -205,6 +202,8 @@ class ProgramacionesPagoController extends Controller
         $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 500);
         $arProgramacionPagoDetalleSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
         $arProgramacionPagoDetalleSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->findAll();
+        $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));        
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');

@@ -67,7 +67,7 @@ brs_rhu_pagos_adicionales_generarmasivo_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoLista }
 
 brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle:
-    path:     /rhu/pagos/adicionales/generarmasivo/suplementario/detalle/{codigoCentroCosto}
+    path:     /rhu/pagos/adicionales/generarmasivo/suplementario/detalle/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoSuplementarioDetalle }
 
 brs_rhu_pagos_adicionales_agregar_tiempo:

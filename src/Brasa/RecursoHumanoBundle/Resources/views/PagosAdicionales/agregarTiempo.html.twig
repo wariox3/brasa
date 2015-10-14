@@ -22,10 +22,10 @@
                     <th style="text-align: right">HORAS</th>
                 </tr>
 
-                {% for arPagosAdicionalesSubtipos in arPagosAdicionalesSubtipos %}
+                {% for arPagosConceptos in arPagosConceptos %}
                     <tr>
-                        <td><input type="hidden" name="LblCodigo[]" value="{{ arPagosAdicionalesSubtipos.codigoPagoAdicionalSubtipoPk }}">{{ arPagosAdicionalesSubtipos.codigoPagoAdicionalSubtipoPk }}</td>
-                        <td>{{ arPagosAdicionalesSubtipos.nombre}}</td>
+                        <td><input type="hidden" name="LblCodigo[]" value="{{ arPagosConceptos.codigoPagoConceptoPk }}">{{ arPagosConceptos.codigoPagoConceptoPk }}</td>
+                        <td>{{ arPagosConceptos.nombre}}</td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtHoras[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                     </tr>
                 {% endfor %}                 

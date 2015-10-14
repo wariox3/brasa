@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 
 class PagosAdicionalesController extends Controller
 {
+    var $strDqlLista = "";
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -47,6 +48,7 @@ class PagosAdicionalesController extends Controller
     public function detalleAction($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
@@ -104,9 +106,8 @@ class PagosAdicionalesController extends Controller
                 }
             }            
         }
-        //$arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        //$arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago, 'pagoAplicado' => 0));
-        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaPagosAdicionalesyPermanentes($codigoProgramacionPago);
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaDql($codigoProgramacionPago);        
+        $arPagosAdicionales = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:detalle.html.twig', array(
                     'arProgramacionPago' => $arProgramacionPago,
                     'arPagosAdicionales' => $arPagosAdicionales,
@@ -133,17 +134,14 @@ class PagosAdicionalesController extends Controller
             'form' => $form->createView()));
     }
 
-    public function generarMasivoSuplementarioDetalleAction($codigoCentroCosto) {
+    public function generarMasivoSuplementarioDetalleAction($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $objMensaje = $this->get('mensajes_brasa');
         $paginator  = $this->get('knp_paginator');
-
-        $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL('', $codigoCentroCosto, 1));
-        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);
-        $intCodigoPagoAdicionalTipo = 1;
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL('', $arProgramacionPago->getCodigoCentroCostoFk(), 1));
+        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);      
         $form = $this->createFormBuilder()
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
             ->getForm();
@@ -157,118 +155,100 @@ class PagosAdicionalesController extends Controller
                         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($intCodigo);
                         if(count($arEmpleado) > 0) {
                             if($arrControles['TxtRNFC'.$intCodigo] != "" && $arrControles['TxtRNFC'.$intCodigo] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(3);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(40);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtRNFC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtRNFNC'.$intCodigo] != "" && $arrControles['TxtRNFNC'.$intCodigo] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(4);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(41);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
+                                $arPagoAdicional->setEmpleadoRel($arEmpleado);                                
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtRNFNC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtHEFD'.$intCodigo] != "" && $arrControles['TxtHEFD'.$intCodigo] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(5);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(42);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEFD'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtHEFN'.$intCodigo] != "" && $arrControles['TxtHEFN'.$intCodigo] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(6);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(43);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
+                                $arPagoAdicional->setEmpleadoRel($arEmpleado); 
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEFN'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtHEOD'.$intCodigo] != "" && $arrControles['TxtHEOD'.$intCodigo] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(7);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(44);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEOD'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtHEON'.$intCodigo] != "" && $arrControles['TxtHEON'.$intCodigo] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(8);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(45);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEON'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtDC'.$intCodigo] != "" && $arrControles['TxtDC'.$intCodigo] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(9);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(46);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtDC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtDNC'.$intCodigo] != "" && $arrControles['TxtDNC'.$intCodigo] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(10);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(47);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtDNC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtRN'.$intCodigo] != "" && $arrControles['TxtRN'.$intCodigo] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(11);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(48);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtRN'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);
@@ -297,195 +277,17 @@ class PagosAdicionalesController extends Controller
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL('', $codigoCentroCosto, 1));
         $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);
-        $arPagoAdicionalSubtipoBonificacion = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-        $arPagoAdicionalSubtipoBonificacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->findBy(array('codigoPagoAdicionalTipoFk' => 1));
-        $arPagoAdicionalSubtipoComision = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-        $arPagoAdicionalSubtipoComision = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->findBy(array('codigoPagoAdicionalTipoFk' => 2));
-        $arPagoAdicionalSubtipoDescuento = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-        $arPagoAdicionalSubtipoDescuento = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->findBy(array('codigoPagoAdicionalTipoFk' => 4));        
-        $intCodigoPagoAdicionalTipo = 1;
         $form = $this->createFormBuilder()
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrControles = $request->request->All();
-            if($form->get('BtnGenerar')->isClicked()) {
-                    $intIndice = 0;
-                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($intCodigo);
-                        if(count($arEmpleado) > 0) {
-                            if($arrControles['TxtRNFC'][$intIndice] != "" && $arrControles['TxtRNFC'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(3);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtRNFC'][$intIndice];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtRNFNC'][$intIndice] != "" && $arrControles['TxtRNFNC'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(4);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtRNFNC'][$intIndice];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtHEFD'][$intIndice] != "" && $arrControles['TxtHEFD'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(5);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtHEFD'][$intIndice];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtHEFN'][$intIndice] != "" && $arrControles['TxtHEFN'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(6);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtHEFN'][$intIndice];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtHEOD'][$intIndice] != "" && $arrControles['TxtHEOD'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(7);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtHEOD'][$intIndice];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtHEON'][$intIndice] != "" && $arrControles['TxtHEON'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(8);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtHEON'][$intIndice];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtDC'][$intIndice] != "" && $arrControles['TxtDC'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(9);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtDC'][$intIndice];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtDNC'][$intIndice] != "" && $arrControles['TxtDNC'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(10);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtDNC'][$intIndice];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtRN'][$intIndice] != "" && $arrControles['TxtRN'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(11);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intHoras = $arrControles['TxtRN'][$intIndice];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtValorBonificacion'][$intIndice] != "" && $arrControles['TxtValorBonificacion'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find($arrControles['subtipoBonificacionRel'][$intIndice]);
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intValor = $arrControles['TxtValorBonificacion'][$intIndice];
-                                $arPagoAdicional->setValor($intValor);
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtValorComision'][$intIndice] != "" && $arrControles['TxtValorComision'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find($arrControles['subtipoComisionRel'][$intIndice]);
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intValor = $arrControles['TxtValorComision'][$intIndice];
-                                $arPagoAdicional->setValor($intValor);
-                                $em->persist($arPagoAdicional);
-                            }                            
-                            if($arrControles['TxtValorDescuento'][$intIndice] != "" && $arrControles['TxtValorDescuento'][$intIndice] != 0) {
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find($arrControles['subtipoDescuentoRel'][$intIndice]);
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arCentroCosto);
-                                $intValor = $arrControles['TxtValorDescuento'][$intIndice];
-                                $arPagoAdicional->setValor($intValor);
-                                $em->persist($arPagoAdicional);
-                            }
-                        }
-                        $intIndice++;
-                    }
-                    $em->flush();
-                    //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
 
-            }
         }
 
         return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoSuplementarioDetalle.html.twig', array(
             'arEmpleados' => $arEmpleados,
-            'arPagoAdicionalSubtipoBonificacion' => $arPagoAdicionalSubtipoBonificacion,
-            'arPagoAdicionalSubtipoComision' => $arPagoAdicionalSubtipoComision,
-            'arPagoAdicionalSubtipoDescuento' => $arPagoAdicionalSubtipoDescuento,
             'form' => $form->createView()
             ));
     }    

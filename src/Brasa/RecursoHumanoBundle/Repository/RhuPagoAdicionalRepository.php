@@ -10,5 +10,21 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuPagoAdicionalRepository extends EntityRepository {
-
+    
+    public function listaDql($codigoProgramacionPago) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa WHERE pa.codigoProgramacionPagoFk =  " . $codigoProgramacionPago;
+        $dql .= " ORDER BY pa.codigoProgramacionPagoFk DESC";
+        return $dql;
+    }    
+    
+    public function programacionPago($codigoEmpleado = "", $codigoProgramacionPago = "") {
+        $em = $this->getEntityManager();
+        $dql = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa "
+                . "WHERE (pa.codigoProgramacionPagoFk = $codigoProgramacionPago OR pa.permanente = 1) AND pa.codigoEmpleadoFk = $codigoEmpleado";
+        $objQuery = $em->createQuery($dql);  
+        $arPagosAdicionales = $objQuery->getResult();         
+        return $arPagosAdicionales;
+    } 
+        
 }

@@ -31,14 +31,13 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
                             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrayDetalle[0]));                                                                
                             if(count($arEmpleado) > 0) {
                                 //Recargo nocturno festivo compensado
-                                $arPagoAdicionalSubtipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo();
-                                $arPagoAdicionalSubtipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalSubtipo')->find(3);                                                                
+                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(40);                                                                
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoAdicionalSubtipo->getPagoConceptoRel());
-                                $arPagoAdicional->setPagoAdicionalTipoRel($arPagoAdicionalSubtipo->getPagoAdicionalTipoRel());
-                                $arPagoAdicional->setPagoAdicionalSubtipoRel($arPagoAdicionalSubtipo);
+                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                                 $arPagoAdicional->setEmpleadoRel($arEmpleado);
                                 $arPagoAdicional->setCentroCostoRel($arProgramacionPago->getCentroCostoRel());
+                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrayDetalle[1];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $em->persist($arPagoAdicional);                                

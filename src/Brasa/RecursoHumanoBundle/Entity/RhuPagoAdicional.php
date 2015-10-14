@@ -37,10 +37,6 @@ class RhuPagoAdicional
      */
     private $valor = 0;     
     
-    /**
-     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
-     */    
-    private $codigoCentroCostoFk; 
     
     /**
      * @ORM\Column(name="codigo_programacion_pago_fk", type="integer", nullable=true)
@@ -55,45 +51,12 @@ class RhuPagoAdicional
     /**     
      * @ORM\Column(name="aplica_dia_laborado", type="boolean")
      */    
-    private $aplicaDiaLaborado = 0;         
-    
-    /**     
-     * @ORM\Column(name="pagoAplicado", type="boolean")
-     */    
-    private $pagoAplicado = 0;    
+    private $aplicaDiaLaborado = 0;                 
     
     /**
      * @ORM\Column(name="detalle", type="string", length=250, nullable=true)
      */    
-    private $detalle;    
-    
-    /**
-     * @ORM\Column(name="codigo_pago_adicional_tipo_fk", type="integer", nullable=true)
-     */    
-    private $codigoPagoAdicionalTipoFk;
-    
-    /**
-     * @ORM\Column(name="codigo_pago_adicional_subtipo_fk", type="integer", nullable=true)
-     */    
-    private $codigoPagoAdicionalSubtipoFk;    
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuPagoAdicionalTipo", inversedBy="pagosAdicionalesPagoAdicionalTipoRel")
-     * @ORM\JoinColumn(name="codigo_pago_adicional_tipo_fk", referencedColumnName="codigo_pago_adicional_tipo_pk")
-     */
-    protected $pagoAdicionalTipoRel; 
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuPagoAdicionalSubtipo", inversedBy="pagosAdicionalesPagoAdicionalSubtipoRel")
-     * @ORM\JoinColumn(name="codigo_pago_adicional_subtipo_fk", referencedColumnName="codigo_pago_adicional_subtipo_pk")
-     */
-    protected $pagoAdicionalSubtipoRel;     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="pagosAdicionalesCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoRel;    
+    private $detalle;                         
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="pagosAdicionalesPagoConceptoRel")
@@ -113,6 +76,7 @@ class RhuPagoAdicional
      */
     protected $programacionPagoRel;    
     
+
 
     /**
      * Get codigoPagoAdicionalPk
@@ -175,7 +139,7 @@ class RhuPagoAdicional
     /**
      * Set cantidad
      *
-     * @param integer $cantidad
+     * @param float $cantidad
      *
      * @return RhuPagoAdicional
      */
@@ -189,7 +153,7 @@ class RhuPagoAdicional
     /**
      * Get cantidad
      *
-     * @return integer
+     * @return float
      */
     public function getCantidad()
     {
@@ -218,102 +182,6 @@ class RhuPagoAdicional
     public function getValor()
     {
         return $this->valor;
-    }
-
-    /**
-     * Set codigoCentroCostoFk
-     *
-     * @param integer $codigoCentroCostoFk
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
-    {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoFk()
-    {
-        return $this->codigoCentroCostoFk;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
-     * Set pagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
-    {
-        $this->pagoConceptoRel = $pagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoConceptoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
-     */
-    public function getPagoConceptoRel()
-    {
-        return $this->pagoConceptoRel;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
     }
 
     /**
@@ -365,51 +233,27 @@ class RhuPagoAdicional
     }
 
     /**
-     * Set pagoAplicado
+     * Set aplicaDiaLaborado
      *
-     * @param boolean $pagoAplicado
+     * @param boolean $aplicaDiaLaborado
      *
      * @return RhuPagoAdicional
      */
-    public function setPagoAplicado($pagoAplicado)
+    public function setAplicaDiaLaborado($aplicaDiaLaborado)
     {
-        $this->pagoAplicado = $pagoAplicado;
+        $this->aplicaDiaLaborado = $aplicaDiaLaborado;
 
         return $this;
     }
 
     /**
-     * Get pagoAplicado
+     * Get aplicaDiaLaborado
      *
      * @return boolean
      */
-    public function getPagoAplicado()
+    public function getAplicaDiaLaborado()
     {
-        return $this->pagoAplicado;
-    }
-
-    /**
-     * Set programacionPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
-    {
-        $this->programacionPagoRel = $programacionPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get programacionPagoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
-     */
-    public function getProgramacionPagoRel()
-    {
-        return $this->programacionPagoRel;
+        return $this->aplicaDiaLaborado;
     }
 
     /**
@@ -437,122 +281,74 @@ class RhuPagoAdicional
     }
 
     /**
-     * Set codigoPagoAdicionalTipoFk
+     * Set pagoConceptoRel
      *
-     * @param integer $codigoPagoAdicionalTipoFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
      *
      * @return RhuPagoAdicional
      */
-    public function setCodigoPagoAdicionalTipoFk($codigoPagoAdicionalTipoFk)
+    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
     {
-        $this->codigoPagoAdicionalTipoFk = $codigoPagoAdicionalTipoFk;
+        $this->pagoConceptoRel = $pagoConceptoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoPagoAdicionalTipoFk
+     * Get pagoConceptoRel
      *
-     * @return integer
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
      */
-    public function getCodigoPagoAdicionalTipoFk()
+    public function getPagoConceptoRel()
     {
-        return $this->codigoPagoAdicionalTipoFk;
+        return $this->pagoConceptoRel;
     }
 
     /**
-     * Set codigoPagoAdicionalSubtipoFk
+     * Set empleadoRel
      *
-     * @param integer $codigoPagoAdicionalSubtipoFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
      *
      * @return RhuPagoAdicional
      */
-    public function setCodigoPagoAdicionalSubtipoFk($codigoPagoAdicionalSubtipoFk)
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
     {
-        $this->codigoPagoAdicionalSubtipoFk = $codigoPagoAdicionalSubtipoFk;
+        $this->empleadoRel = $empleadoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoPagoAdicionalSubtipoFk
+     * Get empleadoRel
      *
-     * @return integer
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
      */
-    public function getCodigoPagoAdicionalSubtipoFk()
+    public function getEmpleadoRel()
     {
-        return $this->codigoPagoAdicionalSubtipoFk;
+        return $this->empleadoRel;
     }
 
     /**
-     * Set pagoAdicionalTipoRel
+     * Set programacionPagoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalTipo $pagoAdicionalTipoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
      *
      * @return RhuPagoAdicional
      */
-    public function setPagoAdicionalTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalTipo $pagoAdicionalTipoRel = null)
+    public function setProgramacionPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel = null)
     {
-        $this->pagoAdicionalTipoRel = $pagoAdicionalTipoRel;
+        $this->programacionPagoRel = $programacionPagoRel;
 
         return $this;
     }
 
     /**
-     * Get pagoAdicionalTipoRel
+     * Get programacionPagoRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalTipo
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago
      */
-    public function getPagoAdicionalTipoRel()
+    public function getProgramacionPagoRel()
     {
-        return $this->pagoAdicionalTipoRel;
-    }
-
-    /**
-     * Set pagoAdicionalSubtipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setPagoAdicionalSubtipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo $pagoAdicionalSubtipoRel = null)
-    {
-        $this->pagoAdicionalSubtipoRel = $pagoAdicionalSubtipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoAdicionalSubtipoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalSubtipo
-     */
-    public function getPagoAdicionalSubtipoRel()
-    {
-        return $this->pagoAdicionalSubtipoRel;
-    }
-
-    /**
-     * Set aplicaDiaLaborado
-     *
-     * @param boolean $aplicaDiaLaborado
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setAplicaDiaLaborado($aplicaDiaLaborado)
-    {
-        $this->aplicaDiaLaborado = $aplicaDiaLaborado;
-
-        return $this;
-    }
-
-    /**
-     * Get aplicaDiaLaborado
-     *
-     * @return boolean
-     */
-    public function getAplicaDiaLaborado()
-    {
-        return $this->aplicaDiaLaborado;
+        return $this->programacionPagoRel;
     }
 }
