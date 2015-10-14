@@ -98,6 +98,22 @@ brs_rhu_incapacidades_nuevo:
     path:     /rhu/incapacidades/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoIncapacidad}
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:nuevo }
     
+brs_rhu_liquidacion_adicional_concepto_lista:
+    path:     /rhu/liquidacion/adicional/concepto/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:LiquidacionAdicionalesConcepto:lista }    
+
+brs_rhu_liquidacion_adicional_concepto_nuevo:
+    path:     /rhu/liquidacion/adicional/concepto/nuevo/{codigoAdicionalConcepto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:LiquidacionAdicionalesConcepto:nuevo } 
+    
+brs_rhu_pago_concepto_lista:
+    path:     /rhu/pago/concepto/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoConcepto:lista }    
+
+brs_rhu_pago_concepto_nuevo:
+    path:     /rhu/pago/concepto/nuevo/{codigoPagoConcepto}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoConcepto:nuevo }    
+    
 brs_rhu_incapacidades_pagos_nuevo:
     path:     /rhu/incapacidades/pagos/nuevo/{codigoIncapacidadPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagoIncapacidad:nuevo }    

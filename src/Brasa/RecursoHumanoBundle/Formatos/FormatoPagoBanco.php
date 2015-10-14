@@ -56,19 +56,23 @@ class FormatoPagoBanco extends \FPDF_FPDF {
         $this->Cell(30, 6, $arPagoBanco->getCodigoPagoBancoPk(), 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 6, ":" , 1, 0, 'L', 1);
+        $this->Cell(30, 6, "BANCO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272); 
-        $this->Cell(100, 6, utf8_decode(''), 1, 0, 'L', 1);
+        $this->Cell(100, 6, utf8_decode($arPagoBanco->getCuentaRel()->getBancoRel()->getNombre()), 1, 0, 'L', 1);
         //linea 2
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 5, utf8_decode("NÚMERO SOPORTE:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272);
         $this->Cell(30, 5, '' , 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 5, "TOTAL:" , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
         $this->Cell(100, 5, number_format($arPagoBanco->getVrTotalPago(), 0, '.', ',') , 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->EncabezadoDetalles();
@@ -77,7 +81,7 @@ class FormatoPagoBanco extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(12);
-        $header = array(utf8_decode('CÓDIGO'), utf8_decode('IDENTIFICACIÓN'), 'NOMBRE', 'VR PAGO');
+        $header = array(utf8_decode('CÓDIGO'),'TIPO PAGO', utf8_decode('IDENTIFICACIÓN'), 'NOMBRE', 'VR PAGO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -85,7 +89,7 @@ class FormatoPagoBanco extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 25, 130, 15);
+        $w = array(20, 25,25, 105, 15);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -108,8 +112,9 @@ class FormatoPagoBanco extends \FPDF_FPDF {
         $var = 0;
         foreach ($arPagoBancoDetalles as $arPagoBancoDetalle) {            
             $pdf->Cell(20, 4, $arPagoBancoDetalle->getCodigoPagoBancoDetallePk(), 1, 0, 'L');
+            $pdf->Cell(25, 4, $arPagoBancoDetalle->getPagoRel()->getProgramacionPagoRel()->getPagoTipoRel()->getNombre(), 1, 0, 'L');
             $pdf->Cell(25, 4, $arPagoBancoDetalle->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(130, 4, utf8_decode($arPagoBancoDetalle->getNombreCorto()), 1, 0, 'L');
+            $pdf->Cell(105, 4, utf8_decode($arPagoBancoDetalle->getNombreCorto()), 1, 0, 'L');
             $pdf->Cell(15, 4, number_format($arPagoBancoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');
             $var += $arPagoBancoDetalle->getVrPago();
             $pdf->Ln();
