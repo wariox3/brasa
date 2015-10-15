@@ -6,25 +6,6 @@
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
     {{ form_errors(form) }}
-
-    <div class="btn-toolbar" style="float:left">
-        <div class="btn-group">                   
-            {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 500, 700)" >Inconsistencias</a>                                    
-            <!-- Split button -->
-            <div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm">Utilidades</button>
-                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }} " target="_blank">Adicionales al pago</a></li>
-                    <li class="divider"></li>
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Agregar tiempo suplementario (Masivo)</a></li>
-                </ul>
-            </div>
-        </div>
-    </div> <br /> <br /> <br /> 
     
     <div class="panel panel-default">
       <div class="panel-heading">Detalle programación de pago</div>
@@ -60,7 +41,27 @@
                 </tr>
             </table>
       </div>
-    </div>                   
+    </div>   
+    <div class="btn-toolbar" style="float:left">
+        <div class="btn-group">                   
+            {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 500, 700)" >Inconsistencias</a>                                    
+            <!-- Split button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-sm">Utilidades</button>
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }} " target="_blank">Agregar adicionales al pago</a></li>                    
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Agregar tiempo suplementario (Masivo)</a></li>
+                    <li class="divider"></li>                    
+                    <li><a href="{{ path('brs_rhu_utilidades_programacion_pago_comprobante_masivo', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Descargar comprobantes (Masivo .pdf)</a></li>                    
+                </ul>
+            </div>
+        </div>
+    </div><br /> <br /><br />                
+                
     <ul class="nav nav-tabs">
             <li  class="active"><a href="#empleados" data-toggle="tab">Empleados</a></li>
             <li><a href="#adicionalesPago" data-toggle="tab">Adicionales al pago</a></li>
@@ -103,7 +104,9 @@
             </div>
             <div class="btn-toolbar" style="float: right">
                 <div class="btn-group">
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_adicionales_pago', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar</a>
+                    {% if arProgramacionPago.estadoGenerado == 0 %}                    
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_adicionales_pago', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar</a>
+                    {% endif %}
                 </div>
             </div>                
         </div>
@@ -178,10 +181,8 @@
                 <th>DEVENGADO</th>
                 <th>DEDUCCIONES</th>
                 <th>NETO</th>
-                <th>HORAS</th>
-                <th>H. REAL</th>
-                <th>DÍAS</th>
-                <th>D. REAL</th>
+                <th>HORAS</th>                
+                <th>DÍAS</th>                
                 <th>FAC</th>
                 <th></th>
                 <th></th>
@@ -202,10 +203,8 @@
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDevengado | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDeducciones | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrNetoPagar | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right"><input class="input-grid" type="text" name="TxtHorasPeriodoReales[]" value="{{ arProgramacionPagoDetalles.horasPeriodoReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(0, '.', ',') }}</td>               
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.dias | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiasReales[]" value="{{ arProgramacionPagoDetalles.diasReales }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.factorDia | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arProgramacionPagoDetalles.codigoEmpleadoFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionarEmpleado[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}" /></td>
@@ -240,9 +239,10 @@
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_agregar_empleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>
-                {{ form_widget(form.BtnActualizarEmpleados, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}
+                {% if arProgramacionPago.estadoGenerado == 0 %}
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_agregar_empleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>                
+                {% endif %}
                 {{ form_widget(form.BtnEliminarEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>

@@ -116,11 +116,7 @@ class ProgramacionesPagoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-        $form = $this->createFormBuilder()
-            ->add('BtnGenerarEmpleados', 'submit', array('label'  => 'Generar empleados',))
-            ->add('BtnActualizarEmpleados', 'submit', array('label'  => 'Actualizar',))
-            ->add('BtnEliminarEmpleados', 'submit', array('label'  => 'Eliminar',))
-            ->getForm();
+        $form = $this->formularioDetalle($arProgramacionPago);
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnGenerarEmpleados')->isClicked()) {
@@ -135,30 +131,7 @@ class ProgramacionesPagoController extends Controller
                 }
             }
 
-            if($form->get('BtnActualizarEmpleados')->isClicked()) {
-                if($arProgramacionPago->getEstadoGenerado() == 0) {
-                    $arrControles = $request->request->All();
-                    $arEmpleadosDetalleProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findby(array('codigoProgramacionPagoFk' =>$codigoProgramacionPago));
-                    $duoRegistrosDetalleEmpleados = count($arEmpleadosDetalleProgramacionPago);
-                    $intIndice = 0;
-                    if ($duoRegistrosDetalleEmpleados != 0){
-                        foreach ($arrControles['LblCodigoDetalle'] as $intCodigo) {
-                           if($arrControles['TxtHorasPeriodoReales'][$intIndice] != "") {
-                               $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-                               $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
-                               $arProgramacionPagoDetalle->setHorasPeriodoReales($arrControles['TxtHorasPeriodoReales'][$intIndice]);
-                               $arProgramacionPagoDetalle->setDiasReales($arrControles['TxtDiasReales'][$intIndice]);
-                               $em->persist($arProgramacionPagoDetalle);
-                           }
-                           $intIndice++;
-                        }
-                        $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-                    }
-                } else {
-                    $objMensaje->Mensaje("error", "No puede actualizar empleados cuando la programacion esta generada", $this);
-                }
-            }
+
             if($form->get('BtnEliminarEmpleados')->isClicked()) {
                 if($arProgramacionPago->getEstadoGenerado() == 0) {
                     $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
@@ -355,6 +328,23 @@ class ProgramacionesPagoController extends Controller
         return $form;
     }
 
+    private function formularioDetalle($arProgramacionPago) {
+
+        //$arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        
+        $arrBotonGenerarEmpleados = array('label' => 'Anlisar contratos', 'disabled' => false);
+        $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);        
+        if($arProgramacionPago->getEstadoGenerado() == 1) {            
+            $arrBotonGenerarEmpleados['disabled'] = true;         
+            $arrBotonEliminarEmpleados['disabled'] = true;         
+        }
+        $form = $this->createFormBuilder()    
+                    ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
+                    ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)            
+                    ->getForm();  
+        return $form;
+    }    
+    
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->get('session');
