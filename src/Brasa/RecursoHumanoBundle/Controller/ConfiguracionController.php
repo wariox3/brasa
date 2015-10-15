@@ -164,18 +164,7 @@ class ConfiguracionController extends Controller
                         }
                         $intIndiceConsecutivo++;
                     }
-            $intIndicePagoConceptoPago = 0;
-                    foreach ($arrControles['LblCodigoPagoConcepto'] as $intCodigoPagoConcepto) {
-                        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intCodigoPagoConcepto);
-                        if(count($arPagoConcepto) > 0) {                                            
-                                $intPagoConcepto = $arrControles['TxtCuenta'.$intCodigoPagoConcepto];
-                                $arPagoConcepto->setCodigoCuentaFk($intPagoConcepto);
-                                $em->persist($arPagoConcepto);
-                            
-                        }
-                        $intIndicePagoConceptoPago++;
-                    }        
+                    
             $em->persist($arConfiguracion);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_configuracion_nomina', array('codigoConfiguracionPk' => 1)));

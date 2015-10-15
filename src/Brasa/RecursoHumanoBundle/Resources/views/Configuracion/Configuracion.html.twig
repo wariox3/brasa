@@ -15,7 +15,6 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#configuracion" data-toggle="tab">Configuración</a></li>
             <li><a href="#consecutivo" data-toggle="tab">Consecutivo</a></li>
-            <li><a href="#pagoConcepto" data-toggle="tab">Pago Concepto</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="configuracion">
@@ -136,57 +135,7 @@
                     </div>            
                 </div> 
             </div>
-            <div class="tab-pane" id="pagoConcepto">
-                <div id="consecutivo" style="width: 100%">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Información pago concepto</div>
-                            <div class="panel-body">
-                                <table class="table table-striped table-bordered table-condensed table-hover">
-                                    <tr>
-                                        <th>CÓDIGO</th>
-                                        <th>CONCEPTO</th>
-                                        <th>COMPONE SALARIO</th>
-                                        <th>COMPONE PORCENTAJE</th>
-                                        <th>COMPONE VALOR</th>
-                                        <th>POR PORCENTAJE</th>
-                                        <th>PRESTACIONAL</th>
-                                        <th>OPERACIÓN</th>
-                                        <th>CONCEPTO ADICIÓN</th>
-                                        <th>CONCEPTO INCAPACIDAD</th>
-                                        <th>CONCEPTO AUXILIO TRANSPORTE</th>
-                                        <th>CÓDIGO CUENTA</th>
-                                        <th>TIPO CUENTA</th>
-                                        <th>CONCEPTO PENSIÓN</th>
-                                        <th>CONCEPTO SALUD</th>
-                                    </tr>
-                                    {% for arPagoConcepto in arPagoConcepto %}
-                                    <tr>
-                                        
-                                        <td>
-                                            <input type="hidden" name="LblCodigoPagoConcepto[]" value="{{ arPagoConcepto.codigoPagoConceptoPk }}">
-                                            <span class="badge">{{ arPagoConcepto.codigoPagoConceptoPk }}</span>
-                                        </td>
-                                        <td>{{ arPagoConcepto.nombre }}</td>
-                                        <td>{{ arPagoConcepto.componeSalario }}</td>
-                                        <td>{{ arPagoConcepto.componePorcentaje }}</td>
-                                        <td>{{ arPagoConcepto.componeValor }}</td>
-                                        <td>{{ arPagoConcepto.porPorcentaje }}</td>
-                                        <td>{{ arPagoConcepto.prestacional }}</td>
-                                        <td>{{ arPagoConcepto.operacion }}</td>
-                                        <td>{{ arPagoConcepto.conceptoAdicion }}</td>
-                                        <td>{{ arPagoConcepto.conceptoIncapacidad }}</td>
-                                        <td>{{ arPagoConcepto.conceptoAuxilioTransporte }}</td>
-                                        <td style="text-align: left"><input class="input-grid" type="text" name="TxtCuenta{{ arPagoConcepto.codigoPagoConceptoPk }}" value="{{ arPagoConcepto.codigoCuentaFK }}" size="5" style="text-align: right; width:70px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                                        <td>{{ arPagoConcepto.tipoCuenta }}</td>
-                                        <td>{{ arPagoConcepto.conceptoPension }}</td>
-                                        <td>{{ arPagoConcepto.conceptoSalud }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </table>
-                            </div>
-                    </div>            
-                </div> 
-            </div>                                
+                                           
             <div class="modal-footer">      
                 {{ form_widget(formConfiguracion.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
             </div>                    

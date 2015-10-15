@@ -70,23 +70,67 @@ class PagoConceptoController extends Controller
                 $arPagoConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->findAll();
                 
                 foreach ($arPagoConceptos as $arPagoConcepto) {
-                        
+                    if($arPagoConcepto->getComponeSalario() == 1){
+                       $componeSalario = "SI";
+                    }else{
+                       $componeSalario = "NO"; 
+                    }
+                    if($arPagoConcepto->getComponePorcentaje() == 1){
+                       $componePorcentaje = "SI";
+                    }else{
+                       $componePorcentaje = "NO"; 
+                    }
+                    if($arPagoConcepto->getComponeValor() == 1){
+                       $componeValor = "SI";
+                    }else{
+                       $componeValor = "NO"; 
+                    }
+                    if($arPagoConcepto->getPrestacional() == 1){
+                       $prestacional = "SI";
+                    }else{
+                       $prestacional = "NO"; 
+                    }
+                    if($arPagoConcepto->getConceptoAdicion() == 1){
+                       $conceptoAdicion = "SI";
+                    }else{
+                       $conceptoAdicion = "NO"; 
+                    }
+                    if($arPagoConcepto->getConceptoIncapacidad() == 1){
+                       $conceptoIncapacidad = "SI";
+                    }else{
+                       $conceptoIncapacidad = "NO"; 
+                    }
+                    if($arPagoConcepto->getConceptoAuxilioTransporte() == 1){
+                       $conceptoAuxTransporte = "SI";
+                    }else{
+                       $conceptoAuxTransporte = "NO"; 
+                    }
+                    if($arPagoConcepto->getConceptoPension() == 1){
+                       $conceptoPension = "SI";
+                    }else{
+                       $conceptoPension = "NO"; 
+                    }
+                    if($arPagoConcepto->getConceptoSalud() == 1){
+                       $conceptoSalud = "SI";
+                    }else{
+                       $conceptoSalud = "NO"; 
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arPagoConcepto->getCodigoPagoConceptoPk())
                             ->setCellValue('B' . $i, $arPagoConcepto->getNombre())
-                            ->setCellValue('C' . $i, $arPagoConcepto->getComponeSalario())
-                            ->setCellValue('D' . $i, $arPagoConcepto->getComponePorcentaje())
-                            ->setCellValue('E' . $i, $arPagoConcepto->getComponeValor())
+                            ->setCellValue('C' . $i, $componeSalario)
+                            ->setCellValue('D' . $i, $componePorcentaje)
+                            ->setCellValue('E' . $i, $componeValor)
                             ->setCellValue('F' . $i, $arPagoConcepto->getPorPorcentaje())
-                            ->setCellValue('G' . $i, $arPagoConcepto->getPrestacional())
+                            ->setCellValue('G' . $i, $prestacional)
                             ->setCellValue('H' . $i, $arPagoConcepto->getOperacion())
-                            ->setCellValue('I' . $i, $arPagoConcepto->getConceptoAdicion())
-                            ->setCellValue('J' . $i, $arPagoConcepto->getConceptoIncapacidad())
-                            ->setCellValue('K' . $i, $arPagoConcepto->getConceptoAuxilioTransporte())
+                            ->setCellValue('I' . $i, $conceptoAdicion)
+                            ->setCellValue('J' . $i, $conceptoIncapacidad)
+                            ->setCellValue('K' . $i, $conceptoAuxTransporte)
                             ->setCellValue('L' . $i, $arPagoConcepto->getCodigoCuentaFk())
                             ->setCellValue('M' . $i, $arPagoConcepto->getTipoCuenta())
-                            ->setCellValue('N' . $i, $arPagoConcepto->getConceptoPension())
-                            ->setCellValue('O' . $i, $arPagoConcepto->getConceptoSalud())
+                            ->setCellValue('N' . $i, $conceptoPension)
+                            ->setCellValue('O' . $i, $conceptoSalud)
                             ->setCellValue('P' . $i, $arPagoConcepto->getTipoAdicional());
                     $i++;
                 }
