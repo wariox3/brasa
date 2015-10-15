@@ -5,7 +5,7 @@
         <h3>Lista periodos</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
-        {{ form_errors(form) }}                        
+        {{ form_errors(form) }}
         <table  class="table table-striped table-bordered table-condensed table-hover">            
             <tr>
                 <th>CÓDIGO</th>
@@ -28,6 +28,7 @@
                 <td>{{ arSsoPeriodos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSsoPeriodos.fechaHasta |date("Y/m/d")  }}</td>
                 <td {% if arSsoPeriodos.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodos.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>                                
+                <td {% if arSsoPeriodos.estadoCerrado == 1 %}class="success"{% endif %}>{% if arSsoPeriodos.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>
                     {% if arSsoPeriodos.estadoGenerado == 0 %}
                         <button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSsoPeriodos.codigoPeriodoPk }}">Generar</button> 
@@ -42,7 +43,8 @@
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoPeriodos.codigoPeriodoPk }}" /></td>
             </tr>
             {% endfor %}                        
-        </table>                       
+        </table>
+        
         {{ knp_pagination_render(arSsoPeriodos) }}    
 
 

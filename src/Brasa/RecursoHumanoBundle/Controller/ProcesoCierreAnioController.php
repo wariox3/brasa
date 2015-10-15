@@ -17,10 +17,12 @@ class ProcesoCierreAnioController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $boolError = 0;
+        $arrInconsistencias = array();
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->findBy(array('estadoAutorizado' => 0));
         if(count($arLiquidacion) > 0) {
-            $objMensaje->Mensaje("error", "Hay liquidaciones sin autorizar y no se puede efectuar el cierre", $this);
+            //$objMensaje->Mensaje("error", "Hay liquidaciones sin autorizar y no se puede efectuar el cierre", $this);
+            $arrInconsistencias = array("Hay liquidaciones sin autorizar y no se puede efectuar el cierre");
         }
         
         $this->listar();
@@ -31,6 +33,7 @@ class ProcesoCierreAnioController extends Controller
         $arCierresAnios = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:Procesos/CierreAnio:lista.html.twig', array(
             'arCierresAnios' => $arCierresAnios,
+            'arrInconsistencias' => $arrInconsistencias,
             'form' => $form->createView()));
     }
 
