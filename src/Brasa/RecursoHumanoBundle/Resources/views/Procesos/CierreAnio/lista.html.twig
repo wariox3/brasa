@@ -10,11 +10,12 @@
             <tr>
                 <th>INCONSISTENCIAS</th>
             </tr>
-            
+            {% set foo = 1 %}
             {% for arrInconsistencias in arrInconsistencias %}
             <tr>
                 <td>{{ arrInconsistencias  }}</td>
             </tr>
+            {% set foo = 2 %}               
             {% endfor %}                        
         </table>
         <table  class="table table-striped table-bordered table-condensed table-hover">
@@ -27,11 +28,11 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCierresAnios.codigoCierreAnioPk }}">{{ arCierresAnios.codigoCierreAnioPk }} </td>
                 <td>{{ arCierresAnios.anio  }}</td>
-                {% if arrInconsistencias != "" %}
-                    <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_proceso_cierre_anio_cerrar', { 'codigoCierreAnio': arCierresAnios.codigoCierreAnioPk}) }}" style="float:left">Cerrar</a></td>                                                
+                {% if foo == 1 %}
+                    <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_proceso_cierre_anio_cerrar', { 'codigoCierreAnio': arCierresAnios.codigoCierreAnioPk}) }}" style="float:left">Cerrar</a></td>                                                                                                
                 {% else %}
-                    <td style="text-align: center"></td>                                                
-                {% endif%}    
+                    <td style="text-align: center"></td>
+                {% endif %}    
             </tr>
             {% endfor %}
         </table>

@@ -30,7 +30,12 @@ class RhuSsoPeriodoDetalle
     /**     
      * @ORM\Column(name="estado_generado", type="boolean")
      */    
-    private $estadoGenerado = 0;     
+    private $estadoGenerado = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosDetallesSsoPeriodoRel")
@@ -257,5 +262,29 @@ class RhuSsoPeriodoDetalle
     public function getSsoPeriodosEmpleadosSsoPeriodoDetalleRel()
     {
         return $this->ssoPeriodosEmpleadosSsoPeriodoDetalleRel;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 }

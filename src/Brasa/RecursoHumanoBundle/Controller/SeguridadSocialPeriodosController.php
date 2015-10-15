@@ -17,6 +17,7 @@ class SeguridadSocialPeriodosController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $session = $this->getRequest()->getSession();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         $this->listar();
@@ -31,7 +32,25 @@ class SeguridadSocialPeriodosController extends Controller
             }*/
             if($request->request->get('OpCerrar')) {
                 $codigoPeriodo = $request->request->get('OpCerrar');
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->cerrar($codigoPeriodo);
+                //$em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->cerrar($codigoPeriodo);
+                $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+                $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+                $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+                if ($arPeriodo->getEstadoGenerado() == 0){
+                    $objMensaje->Mensaje("error", "Debe generar periodo para poder cerrarlo", $this);
+                } else {
+                    $arPeriodoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+                    $arPeriodoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->findBy(array('codigoPeriodoFk' => $codigoPeriodo, 'estadoCerrado' => 0));
+                    $intTotal = count($arPeriodoDetalles);
+                    if ($intTotal > 0){
+                        $objMensaje->Mensaje("error", "Hay periodos de sucursales sin cerrar", $this);
+                    }else{
+                        $arPeriodo->setEstadoCerrado(1);
+                        $em->persist($arPeriodo);
+                        $em->flush();
+                    }
+                    
+                }
             }
         }
         $arSsoPeriodos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
@@ -56,6 +75,19 @@ class SeguridadSocialPeriodosController extends Controller
             if($request->request->get('OpDesgenerar')) {
                 $codigoPeriodoDetalle = $request->request->get('OpDesgenerar');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->desgenerar($codigoPeriodoDetalle);
+            }
+            if($request->request->get('OpCerrar')) {
+                $codigoPeriodo = $request->request->get('OpCerrar');
+                $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+                $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodo);
+                $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+                if ($arPeriodoDetalle->getEstadoGenerado() == 0){
+                    $objMensaje->Mensaje("error", "Debe generar periodo de la sucursal para poder cerrarlo", $this);
+                } else {
+                    $arPeriodoDetalle->setEstadoCerrado(1);
+                    $em->persist($arPeriodoDetalle);
+                    $em->flush();
+                }
             }
             if($request->request->get('OpGenerarArchivo')) {
                 $codigoPeriodoDetalle = $request->request->get('OpGenerarArchivo');

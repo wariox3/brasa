@@ -28,10 +28,11 @@ class RhuCierreAnio
     private $estadoCerrado = 0; 
     
     /**
-     * @ORM\Column(name="fecha_aplicacion", type="date")
+     * @ORM\Column(name="fecha_aplicacion", type="date", nullable=true)
      */    
     private $fechaAplicacion;
     
+
 
     /**
      * Get codigoCierreAnioPk

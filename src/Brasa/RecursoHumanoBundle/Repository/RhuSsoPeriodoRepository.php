@@ -69,13 +69,4 @@ class RhuSsoPeriodoRepository extends EntityRepository {
         return true;
     }  */  
     
-    public function cerrar($codigoPeriodo) {
-        $em = $this->getEntityManager();  
-        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
-        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
-        $arPeriodo->setEstadoCerrado(1);
-        $em->persist($arPeriodo);
-        $em->flush();
-        return true;
-    }
 }
