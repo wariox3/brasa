@@ -153,7 +153,7 @@ class FormatoPago extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('CONCEPTO', 'DETALLE', 'HORAS', 'VR. HORA', '%', 'DEDUCCION', 'DEVENGADO');
+        $header = array('CONCEPTO', 'DETALLE', 'HORAS', 'VR. HORA', '%', 'DEVENGADO', 'DEDUCCION');
         $this->SetFillColor(200, 200, 200);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -191,16 +191,16 @@ class FormatoPago extends \FPDF_FPDF {
             $pdf->Cell(11, 4, number_format($arPagoDetalle->getNumeroHoras(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(14, 4, number_format($arPagoDetalle->getVrHora(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(9, 4, number_format($arPagoDetalle->getPorcentajeAplicado(), 0, '.', ','), 1, 0, 'R');
-            if($arPagoDetalle->getOperacion() == -1) {
-                $pdf->Cell(18, 4, "-".number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
-            } else {
-                $pdf->Cell(18, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
-            }            
             if($arPagoDetalle->getOperacion() == 1) {
                 $pdf->Cell(18, 4, number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
             } else {
                 $pdf->Cell(18, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
-            }            
+            }
+            if($arPagoDetalle->getOperacion() == -1) {
+                $pdf->Cell(18, 4, "-".number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
+            } else {
+                $pdf->Cell(18, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
+            }
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
@@ -211,12 +211,12 @@ class FormatoPago extends \FPDF_FPDF {
             $pdf->Cell(143, 4, "", 0, 0, 'R');
             $pdf->SetFont('Arial', 'B', 7);
             $this->SetFillColor(200, 200, 200);
-            $pdf->Cell(30, 4, "TOTAL DEDUCCIONES:", 1, 0, 'R',true);
-            $pdf->Cell(20, 4, "-".number_format($arPago->getVrDeducciones(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Ln();
-            $pdf->Cell(143, 4, "", 0, 0, 'R');
             $pdf->Cell(30, 4, "TOTAL DEVENGADO:", 1, 0, 'R',true);
             $pdf->Cell(20, 4, number_format($arPago->getVrDevengado(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Ln();
+            $pdf->Cell(143, 4, "", 0, 0, 'R');
+            $pdf->Cell(30, 4, "TOTAL DEDUCCIONES:", 1, 0, 'R',true);
+            $pdf->Cell(20, 4, "-".number_format($arPago->getVrDeducciones(), 0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->Cell(143, 4, "", 0, 0, 'R');
             $pdf->Cell(30, 4, "NETO PAGAR", 1, 0, 'R',true);

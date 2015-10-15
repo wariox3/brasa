@@ -161,7 +161,22 @@ class RhuContrato
     /**     
      * @ORM\Column(name="salario_integral", type="boolean")
      */    
-    private $salarioIntegral = 0;    
+    private $salarioIntegral = 0;  
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadSaludFk;    
+
+    /**
+     * @ORM\Column(name="codigo_entidad_pension_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadPensionFk;
+
+/**
+     * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadCajaFk;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
@@ -224,6 +239,24 @@ class RhuContrato
     protected $terminacionContratoRel;
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadSalud", inversedBy="contratosEntidadSaludRel")
+     * @ORM\JoinColumn(name="codigo_entidad_salud_fk", referencedColumnName="codigo_entidad_salud_pk")
+     */
+    protected $entidadSaludRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadPension", inversedBy="contratosEntidadPensionRel")
+     * @ORM\JoinColumn(name="codigo_entidad_pension_fk", referencedColumnName="codigo_entidad_pension_pk")
+     */
+    protected $entidadPensionRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadCaja", inversedBy="contratosEntidadCajaRel")
+     * @ORM\JoinColumn(name="codigo_entidad_caja_fk", referencedColumnName="codigo_entidad_caja_pk")
+     */
+    protected $entidadCajaRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="contratoRel")
      */
     protected $liquidacionesContratoRel; 
@@ -273,7 +306,6 @@ class RhuContrato
      */
     protected $proyeccionesContratoRel; 
     
-
 
     /**
      * Constructor
@@ -999,6 +1031,78 @@ class RhuContrato
     }
 
     /**
+     * Set codigoEntidadSaludFk
+     *
+     * @param integer $codigoEntidadSaludFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoEntidadSaludFk($codigoEntidadSaludFk)
+    {
+        $this->codigoEntidadSaludFk = $codigoEntidadSaludFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadSaludFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadSaludFk()
+    {
+        return $this->codigoEntidadSaludFk;
+    }
+
+    /**
+     * Set codigoEntidadPensionFk
+     *
+     * @param integer $codigoEntidadPensionFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoEntidadPensionFk($codigoEntidadPensionFk)
+    {
+        $this->codigoEntidadPensionFk = $codigoEntidadPensionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadPensionFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadPensionFk()
+    {
+        return $this->codigoEntidadPensionFk;
+    }
+
+    /**
+     * Set codigoEntidadCajaFk
+     *
+     * @param integer $codigoEntidadCajaFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoEntidadCajaFk($codigoEntidadCajaFk)
+    {
+        $this->codigoEntidadCajaFk = $codigoEntidadCajaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadCajaFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadCajaFk()
+    {
+        return $this->codigoEntidadCajaFk;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1236,6 +1340,78 @@ class RhuContrato
     public function getTerminacionContratoRel()
     {
         return $this->terminacionContratoRel;
+    }
+
+    /**
+     * Set entidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel
+     *
+     * @return RhuContrato
+     */
+    public function setEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel = null)
+    {
+        $this->entidadSaludRel = $entidadSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadSaludRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud
+     */
+    public function getEntidadSaludRel()
+    {
+        return $this->entidadSaludRel;
+    }
+
+    /**
+     * Set entidadPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension $entidadPensionRel
+     *
+     * @return RhuContrato
+     */
+    public function setEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension $entidadPensionRel = null)
+    {
+        $this->entidadPensionRel = $entidadPensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadPensionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension
+     */
+    public function getEntidadPensionRel()
+    {
+        return $this->entidadPensionRel;
+    }
+
+    /**
+     * Set entidadCajaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel
+     *
+     * @return RhuContrato
+     */
+    public function setEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel = null)
+    {
+        $this->entidadCajaRel = $entidadCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCajaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja
+     */
+    public function getEntidadCajaRel()
+    {
+        return $this->entidadCajaRel;
     }
 
     /**

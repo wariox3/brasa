@@ -95,7 +95,6 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#contrato" data-toggle="tab">Contratos</a></li>
             <li><a href="#credito" data-toggle="tab">Créditos</a></li>
-            <li><a href="#pagosAdicionales" data-toggle="tab">Pagos Adicionales</a></li>
             <li><a href="#incapacidades" data-toggle="tab">Incapacidades</a></li>
             <li><a href="#licencias" data-toggle="tab">Licencias</a></li>
             <li><a href="#procesosDisciplinarios" data-toggle="tab">Procesos disciplinarios</a></li>
@@ -183,34 +182,6 @@
                 </table>
                 <div class="btn-toolbar" style="float: left">
                     {{ knp_pagination_render(arCreditos) }}
-                </div>
-            </div>
-
-            <div class="tab-pane" id="pagosAdicionales">
-                <br />
-                <table class="table table-striped table-bordered table-condensed">
-                    <tr>
-                        <th>{{ knp_pagination_sortable(arPagosAdicionales, 'CÓDIGO', 'e.codigoPagoAdicionalPk') }}</th>
-                        <th>NÚMERO</th>
-                        <th>CONCEPTO</th>
-                        <th>CANT</th>
-                        <th>VALOR</th>
-                    </tr>
-                    {% for arPagosAdicionales in arPagosAdicionales %}
-                        <tr>
-                            <td>
-                                <input type="hidden" name="LblCodigoGuia[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}">
-                                <span class="badge">{{ arPagosAdicionales.codigoPagoAdicionalPk }}</span>
-                            </td>
-                            <td>{{ arPagosAdicionales.codigoPagoAdicionalPk}}</td>
-                            <td>{{ arPagosAdicionales.pagoConceptoRel.nombre }}</td>
-                            <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(2, '.', ',') }}</td>
-                            <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arPagosAdicionales) }}
                 </div>
             </div>
 

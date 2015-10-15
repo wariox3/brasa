@@ -47,7 +47,25 @@ class RhuContratoType extends AbstractType
             ->add('ssoSubtipoCotizanteRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoSubtipoCotizante',
                 'property' => 'nombre',
-            ))                             
+            ))
+            ->add('entidadSaludRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('es')
+                    ->orderBy('es.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))
+            ->add('entidadPensionRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
+                'property' => 'nombre',
+            ))
+            ->add('entidadCajaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadCaja',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ec')
+                    ->orderBy('ec.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('fechaDesde', 'date', array('required' => true))
             ->add('fechaHasta', 'date', array('required' => true))                
             ->add('horarioTrabajo', 'text', array('required' => false)) 

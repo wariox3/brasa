@@ -14,19 +14,19 @@ class RhuPagoConceptoType extends AbstractType
     {
         $builder
             ->add('nombre', 'text', array('required' => true))
-            ->add('componeSalario', 'text', array('required' => false))
-            ->add('componePorcentaje', 'text', array('required' => false))
-            ->add('componeValor', 'text', array('required' => false))
+            ->add('componeSalario', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('componePorcentaje', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('componeValor', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('porPorcentaje', 'number', array('required' => true))
-            ->add('prestacional', 'text', array('required' => false))
+            ->add('prestacional', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('operacion', 'number', array('required' => true))
-            ->add('conceptoAdicion', 'text', array('required' => false))
-            ->add('conceptoIncapacidad', 'text', array('required' => false))
-            ->add('conceptoAuxilioTransporte', 'text', array('required' => false))
+            ->add('conceptoAdicion', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('conceptoIncapacidad', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('conceptoAuxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('codigoCuentaFk', 'number', array('required' => true))
             ->add('tipoCuenta', 'number', array('required' => true))    
-            ->add('conceptoPension', 'text', array('required' => false))
-            ->add('conceptoSalud', 'text', array('required' => false))
+            ->add('conceptoPension', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('conceptoSalud', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('tipoAdicional', 'number', array('required' => true))
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }

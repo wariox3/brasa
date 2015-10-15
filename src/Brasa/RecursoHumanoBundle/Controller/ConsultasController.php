@@ -399,13 +399,10 @@ class ConsultasController extends Controller
         $form->handleRequest($request);
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
-        
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
@@ -422,10 +419,8 @@ class ConsultasController extends Controller
         $arEmpleadoDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         if($form->isValid()) {
         }
-        $arPagosAdicionales = $paginator->paginate($arPagosAdicionales, $this->get('request')->query->get('page', 1),5);
         $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('request')->query->get('page', 1),5);
         $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);
-        
         $arLicencias = $paginator->paginate($arLicencias, $this->get('request')->query->get('page', 1),5);
         $arContratos = $paginator->paginate($arContratos, $this->get('request')->query->get('page', 1),5);
         $arCreditos = $paginator->paginate($arCreditos, $this->get('request')->query->get('page', 1),5);
@@ -435,10 +430,8 @@ class ConsultasController extends Controller
         $arEmpleadoDotacion = $paginator->paginate($arEmpleadoDotacion, $this->get('request')->query->get('page', 1),8);
         return $this->render('BrasaRecursoHumanoBundle:Consultas/Empleados:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
-                    'arPagosAdicionales' => $arPagosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
                     'arVacaciones' => $arVacaciones,
-                    
                     'arLicencias' => $arLicencias,
                     'arContratos' => $arContratos,
                     'arCreditos' => $arCreditos,

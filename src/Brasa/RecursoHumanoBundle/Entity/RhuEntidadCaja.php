@@ -48,9 +48,15 @@ class RhuEntidadCaja
     protected $empleadosEntidadCajaRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="entidadCajaRel")
+     */
+    protected $contratoEntidadCajaRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuEmpleadoFamilia", mappedBy="entidadCajaRel")
      */
     protected $empleadosFamiliasEntidadCajaRel;
+    
     
     /**
      * Constructor
@@ -58,6 +64,7 @@ class RhuEntidadCaja
     public function __construct()
     {
         $this->empleadosEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratoEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -223,6 +230,40 @@ class RhuEntidadCaja
     public function getEmpleadosEntidadCajaRel()
     {
         return $this->empleadosEntidadCajaRel;
+    }
+
+    /**
+     * Add contratoEntidadCajaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadCajaRel
+     *
+     * @return RhuEntidadCaja
+     */
+    public function addContratoEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadCajaRel)
+    {
+        $this->contratoEntidadCajaRel[] = $contratoEntidadCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratoEntidadCajaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadCajaRel
+     */
+    public function removeContratoEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadCajaRel)
+    {
+        $this->contratoEntidadCajaRel->removeElement($contratoEntidadCajaRel);
+    }
+
+    /**
+     * Get contratoEntidadCajaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratoEntidadCajaRel()
+    {
+        return $this->contratoEntidadCajaRel;
     }
 
     /**

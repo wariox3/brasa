@@ -79,8 +79,6 @@ class BaseEmpleadoController extends Controller
         $form->handleRequest($request);
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
@@ -217,7 +215,6 @@ class BaseEmpleadoController extends Controller
                 $objFormatoHojaVida->Generar($this, $codigoEmpleado);
             }
         }
-        $arPagosAdicionales = $paginator->paginate($arPagosAdicionales, $this->get('request')->query->get('page', 1),5);
         $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('request')->query->get('page', 1),5);
         $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);        
         $arLicencias = $paginator->paginate($arLicencias, $this->get('request')->query->get('page', 1),5);
@@ -229,7 +226,6 @@ class BaseEmpleadoController extends Controller
         $arEmpleadoDotacion = $paginator->paginate($arEmpleadoDotacion, $this->get('request')->query->get('page', 1),8);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
-                    'arPagosAdicionales' => $arPagosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
                     'arVacaciones' => $arVacaciones,
                     'arLicencias' => $arLicencias,

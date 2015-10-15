@@ -45,14 +45,21 @@ class RhuEntidadPension
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="entidadPensionRel")
      */
-    protected $empleadosEntidadPensionRel;    
+    protected $empleadosEntidadPensionRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="entidadPensionRel")
+     */
+    protected $contratosEntidadPensionRel;
 
-     /**
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->empleadosEntidadPensionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosEntidadPensionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -217,5 +224,39 @@ class RhuEntidadPension
     public function getEmpleadosEntidadPensionRel()
     {
         return $this->empleadosEntidadPensionRel;
+    }
+
+    /**
+     * Add contratosEntidadPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadPensionRel
+     *
+     * @return RhuEntidadPension
+     */
+    public function addContratosEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadPensionRel)
+    {
+        $this->contratosEntidadPensionRel[] = $contratosEntidadPensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosEntidadPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadPensionRel
+     */
+    public function removeContratosEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadPensionRel)
+    {
+        $this->contratosEntidadPensionRel->removeElement($contratosEntidadPensionRel);
+    }
+
+    /**
+     * Get contratosEntidadPensionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosEntidadPensionRel()
+    {
+        return $this->contratosEntidadPensionRel;
     }
 }

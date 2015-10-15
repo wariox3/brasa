@@ -17,13 +17,13 @@
             <th>POR PORCENTAJE</th>
             <th>PRESTACIONAL</th>
             <th>OPERACIÓN</th>
-            <th>CONCEPTO ADICCIÓN</th>
-            <th>CONCEPTO INCAPACIDAD</th>
-            <th>CONCEPTO AUXILIO TRANSPORTE</th>
+            <th>ADICIÓN</th>
+            <th>INCAPACIDAD</th>
+            <th>AUXILIO TRANSPORTE</th>
             <th>CÓDIGO CUENTA</th>
             <th>TIPO CUENTA</th>
-            <th>CONCEPTO PENSIÓN</th>
-            <th>CONCEPTO SALUD</th>
+            <th>PENSIÓN</th>
+            <th>SALUD</th>
             <th>TIPO ADICIONAL</th>
             <th></th>
             <th></th>
@@ -32,19 +32,19 @@
                <tr>
                 <td>{{arPagoConceptos.codigoPagoConceptoPk}}</td>
                 <td>{{arPagoConceptos.nombre}}</td>
-                <td>{{arPagoConceptos.componeSalario}}</td>
-                <td>{{arPagoConceptos.componePorcentaje}}</td>
-                <td>{{arPagoConceptos.componeValor}}</td>
+                <td>{% if arPagoConceptos.componeSalario == 1%} SI {% else %}NO{% endif%}</td>
+                <td>{% if arPagoConceptos.componePorcentaje == 1%} SI {% else %}NO{% endif%}</td>
+                <td>{% if arPagoConceptos.componeValor == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.porPorcentaje}}</td>
-                <td>{{arPagoConceptos.prestacional}}</td>
+                <td>{% if arPagoConceptos.prestacional == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.operacion}}</td>
-                <td>{{arPagoConceptos.conceptoAdicion}}</td>
-                <td>{{arPagoConceptos.conceptoIncapacidad}}</td>
-                <td>{{arPagoConceptos.conceptoAuxilioTransporte}}</td>
+                <td>{% if arPagoConceptos.conceptoAdicion == 1%} SI {% else %}NO{% endif%}</td>
+                <td>{% if arPagoConceptos.conceptoIncapacidad == 1%} SI {% else %}NO{% endif%}</td>
+                <td>{% if arPagoConceptos.conceptoAuxilioTransporte == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.codigoCuentaFK}}</td>
                 <td>{{arPagoConceptos.TipoCuenta}}</td>
-                <td>{{arPagoConceptos.conceptoPension}}</td>
-                <td>{{arPagoConceptos.conceptoSalud}}</td>
+                <td>{% if arPagoConceptos.conceptoPension == 1%} SI {% else %}NO{% endif%}</td>
+                <td>{% if arPagoConceptos.conceptoSalud == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.TipoAdicional}}</td>
                 <td><a href="{{ path('brs_rhu_pago_concepto_nuevo',{'codigoPagoConcepto': arPagoConceptos.codigoPagoConceptoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoConceptos.codigoPagoConceptoPk }}" /></td>

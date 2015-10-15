@@ -168,6 +168,9 @@ class ContratosController extends Controller
                     $arEmpleado->setSsoSubtipoCotizanteRel($arContrato->getSsoSubtipoCotizanteRel());
                     $arEmpleado->setEstadoContratoActivo(1);
                     $arEmpleado->setCodigoContratoActivoFk($arContrato->getCodigoContratoPk());
+                    $arEmpleado->setEntidadPensionRel($arContrato->getEntidadPensionRel());
+                    $arEmpleado->setEntidadSaludRel($arContrato->getEntidadSaludRel());
+                    $arEmpleado->setEntidadCajaRel($arContrato->getEntidadCajaRel());
                     $em->persist($arEmpleado);
                     $em->flush();
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
@@ -227,6 +230,9 @@ class ContratosController extends Controller
                         $arEmpleado->setCodigoTipoPensionFk(NULL);
                         $arEmpleado->setCodigoTipoCotizanteFk(NULL);
                         $arEmpleado->setCodigoSubtipoCotizanteFk(NULL);
+                        $arEmpleado->setCodigoEntidadSaludFk(NULL);
+                        $arEmpleado->setCodigoEntidadPensionFk(NULL);
+                        $arEmpleado->setCodigoEntidadCajaFk(NULL);
                         $arEmpleado->setEstadoContratoActivo(0);
                         $arEmpleado->setCodigoContratoActivoFk(NULL);
                         $em->persist($arEmpleado);
