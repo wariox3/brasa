@@ -23,6 +23,16 @@
                         {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
                 </div>     
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtComprobante" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.TxtComprobante, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <label for="form_TxtNumeroReferencia" class="col-sm-2 control-label">Numero referencia:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.TxtNumeroReferencia, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div>                     
                 <div class="form-group form-group-sm">
                     <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
                     <div class="col-sm-4">
@@ -64,7 +74,7 @@
                 <td>{{ arRegistros.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arRegistros.codigoComprobanteContableFk  }}</td>
                 <td>{{ arRegistros.codigoCuentaFk  }}</td>
-                <td>{{ arRegistros.codigoTerceroFk  }}</td>
+                <td>{{ arRegistros.terceroRel.nombreCorto  }}</td>
                 <td style="text-align: right">{{ arRegistros.debito | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arRegistros.credito | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arRegistros.base | number_format(0, '.', ',') }}</td>

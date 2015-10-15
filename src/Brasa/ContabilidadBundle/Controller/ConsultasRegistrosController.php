@@ -9,6 +9,7 @@ class ConsultasRegistrosController extends Controller
 {
     var $strDqlLista = "";
     var $strNumero = "";
+    var $strNumeroReferencia = "";
     var $strComprobante = "";
     var $strDesde = "";
     var $strHasta = "";
@@ -42,7 +43,7 @@ class ConsultasRegistrosController extends Controller
     
     private function listar() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDql("", $this->strNumero, $this->strComprobante);
+        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDql("", $this->strNumero, $this->strNumeroReferencia, $this->strComprobante);
     }       
     
     private function formularioLista() {
@@ -50,6 +51,7 @@ class ConsultasRegistrosController extends Controller
         $form = $this->createFormBuilder()
             ->add('TxtComprobante', 'text', array('label'  => 'Comprobante'))
             ->add('TxtNumero', 'text', array('label'  => 'Numero'))
+            ->add('TxtNumeroReferencia', 'text', array('label'  => 'Numero referencia'))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -60,6 +62,7 @@ class ConsultasRegistrosController extends Controller
 
     private function filtrar($form) {        
         $this->strNumero = $form->get('TxtNumero')->getData();
+        $this->strNumeroReferencia = $form->get('TxtNumeroReferencia')->getData();
         $this->strComprobante = $form->get('TxtComprobante')->getData();
         $this->strDesde = $form->get('fechaDesde')->getData();
         $this->strHasta = $form->get('fechaHasta')->getData();

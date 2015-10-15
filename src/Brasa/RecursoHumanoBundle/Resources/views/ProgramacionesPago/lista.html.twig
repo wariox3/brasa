@@ -53,8 +53,8 @@
                 <th>HASTA</th>
                 <th>DIAS</th>
                 <th>NETO</th>
-                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">CONTRATOS</p></th>
-                <th>INCONSISTENCIAS</th>
+                <th>N.C</th>
+                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">CONTRATOS</p></th>                
                 <th>GENERADO</th>
                 <th>PAGADO</th>
                 <th></th>
@@ -71,9 +71,13 @@
                 <td>{{ arProgramacionPago.fechaDesde |date("Y/m/d")  }}</td>
                 <td {% if (arProgramacionPago.estadoGenerado == 0 or arProgramacionPago.estadoPagado == 0) and date(arProgramacionPago.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPago.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{{ arProgramacionPago.dias  }}</td>
-                <td style="text-align: right">{{ arProgramacionPago.vrNeto | number_format(2, '.', ',') }}</td>
-                <td>{% if arProgramacionPago.empleadosGenerados == 1 %} SI ({{ arProgramacionPago.numeroEmpleados  }}) {% else %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarEmpleados" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}" >Analizar</button>{% endif %}</td>
-                <td>{% if arProgramacionPago.inconsistencias == 1 %} SI (<a href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 600, 900)" >Ver</a>){% else %} NO {% endif %}</td>                
+                <td style="text-align: right">{{ arProgramacionPago.vrNeto | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">
+                    {{ arProgramacionPago.numeroEmpleados | number_format(0, '.', ',') }}
+                    {% if arProgramacionPago.inconsistencias == 1 %} SI (<a href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 600, 900)" >Inconsistencias</a>{% endif %}
+                </td>
+                <td>{% if arProgramacionPago.estadoGenerado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpGenerarEmpleados" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}" >Analizar</button>{% endif %}</td>
+                                
                 <td>
                     {% if arProgramacionPago.estadoGenerado == 0 %}
                         {% if arProgramacionPago.empleadosGenerados == 1 %}

@@ -510,7 +510,7 @@ class ProgramacionesPagoController extends Controller
                     ->setCellValue('B1', 'Codigo')
                     ->setCellValue('C1', 'VrPago')
                     ->setCellValue('D1', 'Op')
-                    ->setCellValue('E1', 'Op')
+                    ->setCellValue('E1', 'VrPagoOperado')
                     ->setCellValue('F1', 'VrHora')
                     ->setCellValue('G1', 'VrDia')
                     ->setCellValue('H1', 'VrTotal')

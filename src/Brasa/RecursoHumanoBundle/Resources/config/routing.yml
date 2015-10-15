@@ -50,6 +50,10 @@ brs_rhu_utilidades_programacion_pago_comprobante_masivo:
     path:     /rhu/utilidades/programacion/pago/comprobante/masivo/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProgramacionpagoComprobanteMasivo:lista } 
     
+brs_rhu_utilidades_programacion_pago_comprobante_masivo_correo:
+    path:     /rhu/utilidades/programacion/pago/comprobante/masivo/correo/{codigoProgramacionPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProgramacionPagoComprobanteMasivoCorreo:lista }     
+    
 brs_rhu_utilidades_certificado_ingreso_retencion:
     path:     /rhu/utilidades/certificado/ingreso/retencion
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCertificadoIngresoRetencion:Certificado }     
