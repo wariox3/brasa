@@ -396,30 +396,36 @@
 
             <div class="tab-pane" id="estudios">
                 <br />
-                                    <table class="table table-striped table-bordered table-condensed">
-                                        <tr>
-                                            <th>{{ knp_pagination_sortable(arEmpleadoEstudios, 'CÓDIGO', 'e.codigoEmpleadoEstudioPk') }}</th>
-                                            <th>ESTUDIO</th>
-                                            <th>INSTITUCIÓN</th>
-                                            <th>AÑOS APROBADOS</th>
-                                            <th>CIUDAD</th>
-                                            <th>TÍTULO OBTENIDO</th>
-                                            <th style="text-align: center"></th>
-                                            <th></th>
-                                        </tr>
-                                        {% for arEmpleadoEstudios in arEmpleadoEstudios %}
-                                            <tr>
-                                                <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }}">{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }} </td>
-                                                <td>{{ arEmpleadoEstudios.empleadoEstudioTipoRel.nombre  }}</td>
-                                                <td>{{ arEmpleadoEstudios.institucion  }}</td>
-                                                <td>{{ arEmpleadoEstudios.aprobados  }}</td>
-                                                <td>{{ arEmpleadoEstudios.ciudadRel.nombre  }}</td>
-                                                <td>{{ arEmpleadoEstudios.titulo  }}</td>
-                                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_estudio_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': arEmpleadoEstudios.codigoEmpleadoEstudioPk }) }}', 'AgregarEstudio', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
-                                                <td><input type="checkbox" name="ChkSeleccionarEmpleadoEstudio[]" value="{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }}" /></td>
-                                            </tr>
-                                        {% endfor %}
-                                    </table>
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>{{ knp_pagination_sortable(arEmpleadoEstudios, 'CÓDIGO', 'e.codigoEmpleadoEstudioPk') }}</th>
+                        <th>ESTUDIO</th>
+                        <th>INSTITUCIÓN</th>                        
+                        <th>CIUDAD</th>
+                        <th>TÍTULO OBTENIDO</th>
+                        <th>VENCIMIENTO</th>
+                        <th style="text-align: center"></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for arEmpleadoEstudios in arEmpleadoEstudios %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }}">{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }} </td>
+                            <td>{{ arEmpleadoEstudios.empleadoEstudioTipoRel.nombre  }}</td>
+                            <td>{{ arEmpleadoEstudios.institucion  }}</td>                            
+                            <td>{{ arEmpleadoEstudios.ciudadRel.nombre  }}</td>
+                            <td>{{ arEmpleadoEstudios.titulo  }}</td>
+                            {% if arEmpleadoEstudios.validarVencimiento == 1 %}
+                                <td>{{ arEmpleadoEstudios.fechaVencimiento |date("Y/m/d")  }}</td>
+                            {% else %}
+                                <td>NO REQUIERE</td>
+                            {% endif %}
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 9,  'numero': arEmpleadoEstudios.codigoEmpleadoEstudioPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>                            
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_estudio_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': arEmpleadoEstudios.codigoEmpleadoEstudioPk }) }}', 'AgregarEstudio', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td><input type="checkbox" name="ChkSeleccionarEmpleadoEstudio[]" value="{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }}" /></td>
+                        </tr>
+                    {% endfor %}
+                </table>
                 <div class="btn-toolbar" style="float: left">
                     {{ knp_pagination_render(arEmpleadoEstudios) }}
                 </div>

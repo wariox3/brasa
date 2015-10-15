@@ -522,6 +522,10 @@ brs_rhu_consultas_empleado_detalle:
     path:     /rhu/consultas/empleado/detalle/{codigoEmpleado}
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:EmpleadoDetalle }    
 
+brs_rhu_consultas_empleado_estudios_vencimiento:    
+    path:     /rhu/consultas/empleado/estudios/vencimiento
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasEmpleadoEstudiosVencimiento:lista }
+
 brs_rhu_consultas_costos_general:    
     path:     /rhu/consultas/costos/general
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:costosGeneral }

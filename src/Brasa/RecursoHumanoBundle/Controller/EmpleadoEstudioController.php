@@ -17,6 +17,8 @@ class EmpleadoEstudioController extends Controller
         $arEmpleadoEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio();
         if($codigoEmpleadoEstudio != 0) {
             $arEmpleadoEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEmpleadoEstudio);
+        } else {
+            $arEmpleadoEstudio->setFechaVencimiento(new \DateTime('now'));
         }            
         
         $form = $this->createForm(new RhuEmpleadoEstudioType, $arEmpleadoEstudio);

@@ -32,11 +32,7 @@ class RhuEmpleadoEstudio
      */    
     private $institucion;
     
-    /**
-     * @ORM\Column(name="aprovados", type="string", length=100, nullable=true)
-     */    
-    private $aprobados;
-    
+  
     /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
      */    
@@ -46,6 +42,22 @@ class RhuEmpleadoEstudio
      * @ORM\Column(name="titulo", type="string", length=120, nullable=true)
      */    
     private $titulo;
+    
+    /**
+     * @ORM\Column(name="fecha_vencimiento", type="date", nullable=true)
+     */     
+    
+    private $fechaVencimiento;     
+    
+    /**     
+     * @ORM\Column(name="validar_vencimiento", type="boolean")
+     */    
+    private $validarVencimiento = 0;        
+    
+    /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="empleadosEstudiosEmpleadoRel")
@@ -150,30 +162,6 @@ class RhuEmpleadoEstudio
     }
 
     /**
-     * Set aprobados
-     *
-     * @param string $aprobados
-     *
-     * @return RhuEmpleadoEstudio
-     */
-    public function setAprobados($aprobados)
-    {
-        $this->aprobados = $aprobados;
-
-        return $this;
-    }
-
-    /**
-     * Get aprobados
-     *
-     * @return string
-     */
-    public function getAprobados()
-    {
-        return $this->aprobados;
-    }
-
-    /**
      * Set codigoCiudadFk
      *
      * @param integer $codigoCiudadFk
@@ -219,6 +207,54 @@ class RhuEmpleadoEstudio
     public function getTitulo()
     {
         return $this->titulo;
+    }
+
+    /**
+     * Set fechaVencimiento
+     *
+     * @param \DateTime $fechaVencimiento
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setFechaVencimiento($fechaVencimiento)
+    {
+        $this->fechaVencimiento = $fechaVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimiento
+     *
+     * @return \DateTime
+     */
+    public function getFechaVencimiento()
+    {
+        return $this->fechaVencimiento;
+    }
+
+    /**
+     * Set validarVencimiento
+     *
+     * @param boolean $validarVencimiento
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setValidarVencimiento($validarVencimiento)
+    {
+        $this->validarVencimiento = $validarVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get validarVencimiento
+     *
+     * @return boolean
+     */
+    public function getValidarVencimiento()
+    {
+        return $this->validarVencimiento;
     }
 
     /**
@@ -291,5 +327,29 @@ class RhuEmpleadoEstudio
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 }

@@ -167,13 +167,17 @@
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Costos</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_consultas_costos_general') }}">General</a></li>
-                                        <li><a href="{{ path('brs_rhu_consultas_costos_ingresos_empleado') }}">Ingresos empleado</a></li>
+                                        <li><a href="{{ path('brs_rhu_consultas_costos_general') }}">General</a></li>                                        
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="{{ path('brs_rhu_consultas_empleado') }}">Empleados</a>
-                                </li>
+                                    <a tabindex="-1" href="#">Empleados</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_rhu_consultas_empleado') }}">General</a></li>
+                                        <li><a href="{{ path('brs_rhu_consultas_costos_ingresos_empleado') }}">Ingresos</a></li>                                        
+                                        <li><a href="{{ path('brs_rhu_consultas_empleado_estudios_vencimiento') }}">Estudios vencimiento</a></li>                                        
+                                    </ul>
+                                </li>                                
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Creditos</a>
                                     <ul class="dropdown-menu">

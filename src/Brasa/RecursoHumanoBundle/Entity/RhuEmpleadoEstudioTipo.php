@@ -22,6 +22,11 @@ class RhuEmpleadoEstudioTipo
      */    
     private $nombre;          
     
+    /**     
+     * @ORM\Column(name="validar_vencimiento", type="boolean")
+     */    
+    private $validarVencimiento = 0;        
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="empleadoEstudioTipoRel")
      */
@@ -143,5 +148,29 @@ class RhuEmpleadoEstudioTipo
     public function getEmpleadosEmpleadoEstudioTipoRel()
     {
         return $this->empleadosEmpleadoEstudioTipoRel;
+    }
+
+    /**
+     * Set validarVencimiento
+     *
+     * @param boolean $validarVencimiento
+     *
+     * @return RhuEmpleadoEstudioTipo
+     */
+    public function setValidarVencimiento($validarVencimiento)
+    {
+        $this->validarVencimiento = $validarVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get validarVencimiento
+     *
+     * @return boolean
+     */
+    public function getValidarVencimiento()
+    {
+        return $this->validarVencimiento;
     }
 }

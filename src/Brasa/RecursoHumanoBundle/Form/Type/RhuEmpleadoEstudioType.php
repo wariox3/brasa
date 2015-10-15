@@ -14,8 +14,7 @@ class RhuEmpleadoEstudioType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo',
                 'property' => 'nombre',
             ))               
-            ->add('institucion', 'text', array('required' => true))
-            ->add('aprobados', 'text', array('required' => true))
+            ->add('institucion', 'text', array('required' => true))            
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
@@ -23,7 +22,10 @@ class RhuEmpleadoEstudioType extends AbstractType
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
+            ->add('fechaVencimiento', 'date')      
+            ->add('validarVencimiento', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                            
             ->add('titulo', 'text', array('required' => true))
+            ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
