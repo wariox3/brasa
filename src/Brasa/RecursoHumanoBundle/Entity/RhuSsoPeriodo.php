@@ -50,7 +50,12 @@ class RhuSsoPeriodo
     /**     
      * @ORM\Column(name="estado_generado", type="boolean")
      */    
-    private $estadoGenerado = 0;     
+    private $estadoGenerado = 0; 
+    
+    /**     
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = 0;
 
     /**
      * @ORM\Column(name="fecha_pago", type="date", nullable=true)
@@ -382,5 +387,29 @@ class RhuSsoPeriodo
     public function getFechaPago()
     {
         return $this->fechaPago;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuSsoPeriodo
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 }

@@ -25,9 +25,13 @@ class SeguridadSocialPeriodosController extends Controller
                 $codigoPeriodo = $request->request->get('OpGenerar');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->generar($codigoPeriodo);
             }
-            if($request->request->get('OpDesgenerar')) {
+            /*if($request->request->get('OpDesgenerar')) {
                 $codigoPeriodo = $request->request->get('OpDesgenerar');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->desgenerar($codigoPeriodo);
+            }*/
+            if($request->request->get('OpCerrar')) {
+                $codigoPeriodo = $request->request->get('OpCerrar');
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->cerrar($codigoPeriodo);
             }
         }
         $arSsoPeriodos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);

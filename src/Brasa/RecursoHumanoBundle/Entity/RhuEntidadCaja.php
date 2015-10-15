@@ -50,7 +50,7 @@ class RhuEntidadCaja
     /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="entidadCajaRel")
      */
-    protected $contratoEntidadCajaRel;
+    protected $contratosEntidadCajaRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleadoFamilia", mappedBy="entidadCajaRel")
@@ -64,7 +64,7 @@ class RhuEntidadCaja
     public function __construct()
     {
         $this->empleadosEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contratoEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -233,37 +233,37 @@ class RhuEntidadCaja
     }
 
     /**
-     * Add contratoEntidadCajaRel
+     * Add contratosEntidadCajaRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadCajaRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadCajaRel
      *
      * @return RhuEntidadCaja
      */
-    public function addContratoEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadCajaRel)
+    public function addContratosEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadCajaRel)
     {
-        $this->contratoEntidadCajaRel[] = $contratoEntidadCajaRel;
+        $this->contratosEntidadCajaRel[] = $contratosEntidadCajaRel;
 
         return $this;
     }
 
     /**
-     * Remove contratoEntidadCajaRel
+     * Remove contratosEntidadCajaRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadCajaRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadCajaRel
      */
-    public function removeContratoEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadCajaRel)
+    public function removeContratosEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadCajaRel)
     {
-        $this->contratoEntidadCajaRel->removeElement($contratoEntidadCajaRel);
+        $this->contratosEntidadCajaRel->removeElement($contratosEntidadCajaRel);
     }
 
     /**
-     * Get contratoEntidadCajaRel
+     * Get contratosEntidadCajaRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getContratoEntidadCajaRel()
+    public function getContratosEntidadCajaRel()
     {
-        return $this->contratoEntidadCajaRel;
+        return $this->contratosEntidadCajaRel;
     }
 
     /**

@@ -55,7 +55,7 @@ class RhuSsoPeriodoRepository extends EntityRepository {
         return true;
     }
     
-    public function desgenerar($codigoPeriodo) {
+    /*public function desgenerar($codigoPeriodo) {
         $em = $this->getEntityManager();
         $strSql = "DELETE FROM rhu_sso_periodo_empleado WHERE codigo_periodo_fk = " . $codigoPeriodo;
         $em->getConnection()->executeQuery($strSql); 
@@ -67,5 +67,15 @@ class RhuSsoPeriodoRepository extends EntityRepository {
         $em->persist($arPeriodo);
         $em->flush();
         return true;
-    }    
+    }  */  
+    
+    public function cerrar($codigoPeriodo) {
+        $em = $this->getEntityManager();  
+        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+        $arPeriodo->setEstadoCerrado(1);
+        $em->persist($arPeriodo);
+        $em->flush();
+        return true;
+    }
 }

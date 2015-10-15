@@ -50,7 +50,7 @@ class RhuEntidadSalud
     /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="entidadSaludRel")
      */
-    protected $contratoEntidadSaludRel;
+    protected $contratosEntidadSaludRel;
 
     /**
      * @ORM\OneToMany(targetEntity="RhuEmpleadoFamilia", mappedBy="entidadSaludRel")
@@ -74,7 +74,7 @@ class RhuEntidadSalud
     public function __construct()
     {
         $this->empleadosEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contratoEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesPagosEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -245,37 +245,37 @@ class RhuEntidadSalud
     }
 
     /**
-     * Add contratoEntidadSaludRel
+     * Add contratosEntidadSaludRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadSaludRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadSaludRel
      *
      * @return RhuEntidadSalud
      */
-    public function addContratoEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadSaludRel)
+    public function addContratosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadSaludRel)
     {
-        $this->contratoEntidadSaludRel[] = $contratoEntidadSaludRel;
+        $this->contratosEntidadSaludRel[] = $contratosEntidadSaludRel;
 
         return $this;
     }
 
     /**
-     * Remove contratoEntidadSaludRel
+     * Remove contratosEntidadSaludRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadSaludRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadSaludRel
      */
-    public function removeContratoEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoEntidadSaludRel)
+    public function removeContratosEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosEntidadSaludRel)
     {
-        $this->contratoEntidadSaludRel->removeElement($contratoEntidadSaludRel);
+        $this->contratosEntidadSaludRel->removeElement($contratosEntidadSaludRel);
     }
 
     /**
-     * Get contratoEntidadSaludRel
+     * Get contratosEntidadSaludRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getContratoEntidadSaludRel()
+    public function getContratosEntidadSaludRel()
     {
-        return $this->contratoEntidadSaludRel;
+        return $this->contratosEntidadSaludRel;
     }
 
     /**
