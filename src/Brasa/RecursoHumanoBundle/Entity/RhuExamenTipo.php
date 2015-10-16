@@ -26,7 +26,11 @@ class RhuExamenTipo
      * @ORM\OneToMany(targetEntity="RhuExamenDetalle", mappedBy="examenTipoRel")
      */
     protected $examenesDetallesExamenTipoRel;
-      
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoExamen", mappedBy="examenTipoRel")
+     */
+    protected $empleadosExamenesExamenTipoRel;    
    
     /**
      * Constructor
@@ -34,6 +38,7 @@ class RhuExamenTipo
     public function __construct()
     {
         $this->examenesDetallesExamenTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosExamenesExamenTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -102,5 +107,39 @@ class RhuExamenTipo
     public function getExamenesDetallesExamenTipoRel()
     {
         return $this->examenesDetallesExamenTipoRel;
+    }
+
+    /**
+     * Add empleadosExamenesExamenTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen $empleadosExamenesExamenTipoRel
+     *
+     * @return RhuExamenTipo
+     */
+    public function addEmpleadosExamenesExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen $empleadosExamenesExamenTipoRel)
+    {
+        $this->empleadosExamenesExamenTipoRel[] = $empleadosExamenesExamenTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosExamenesExamenTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen $empleadosExamenesExamenTipoRel
+     */
+    public function removeEmpleadosExamenesExamenTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen $empleadosExamenesExamenTipoRel)
+    {
+        $this->empleadosExamenesExamenTipoRel->removeElement($empleadosExamenesExamenTipoRel);
+    }
+
+    /**
+     * Get empleadosExamenesExamenTipoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosExamenesExamenTipoRel()
+    {
+        return $this->empleadosExamenesExamenTipoRel;
     }
 }

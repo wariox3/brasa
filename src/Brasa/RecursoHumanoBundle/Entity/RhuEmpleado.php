@@ -460,7 +460,12 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="empleadoRel")
      */
     protected $empleadosEstudiosEmpleadoRel;
-   
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoExamen", mappedBy="empleadoRel")
+     */
+    protected $empleadosExamenesEmpleadoRel;    
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="empleadoRel")
      */
@@ -501,7 +506,6 @@ class RhuEmpleado
      */
     protected $proyeccionesEmpleadoRel;     
     
-    
 
     /**
      * Constructor
@@ -521,6 +525,7 @@ class RhuEmpleado
         $this->disciplinariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosEstudiosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosExamenesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoPeriodosEmpleadosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoAportesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosDotacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -2637,6 +2642,40 @@ class RhuEmpleado
     public function getEmpleadosEstudiosEmpleadoRel()
     {
         return $this->empleadosEstudiosEmpleadoRel;
+    }
+
+    /**
+     * Add empleadosExamenesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen $empleadosExamenesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addEmpleadosExamenesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen $empleadosExamenesEmpleadoRel)
+    {
+        $this->empleadosExamenesEmpleadoRel[] = $empleadosExamenesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosExamenesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen $empleadosExamenesEmpleadoRel
+     */
+    public function removeEmpleadosExamenesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen $empleadosExamenesEmpleadoRel)
+    {
+        $this->empleadosExamenesEmpleadoRel->removeElement($empleadosExamenesEmpleadoRel);
+    }
+
+    /**
+     * Get empleadosExamenesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosExamenesEmpleadoRel()
+    {
+        return $this->empleadosExamenesEmpleadoRel;
     }
 
     /**
