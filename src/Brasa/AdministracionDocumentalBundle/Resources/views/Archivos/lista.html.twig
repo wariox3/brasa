@@ -12,16 +12,16 @@
                         <th>ID</th>
                         <th>NUMERO</th>
                         <th>NOMBRE</th>
-                        <th></th>
+                        <th>ARCHIVO</th>
                         <th></th>
                     </tr>
                     {% for arArchivos in arArchivos %}
                     <tr>
                         <td><input type="hidden" name="LblCodigo[]" value="{{ arArchivos.codigoArchivoPk }}">{{ arArchivos.codigoArchivoPk }} </td>
                         <td>{{ arArchivos.numero  }}</td>
+                        <td>{{ arArchivos.descripcion  }}</td>
                         <td>{{ arArchivos.nombre  }}</td>
-                        <td style="text-align: center"><a href="{{ path('brs_ad_archivos_descargar', { 'codigoArchivo': arArchivos.codigoArchivoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_181_download_alt.png') }}" width=22 height=22></a></td>
-                        <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arArchivos.codigoArchivoPk }}" /></td>
+                        <td style="text-align: center"><a href="{{ path('brs_ad_archivos_descargar', { 'codigoArchivo': arArchivos.codigoArchivoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_181_download_alt.png') }}" width=22 height=22></a></td>                        
                     </tr>
                     {% endfor %}
                 </table>

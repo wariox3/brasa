@@ -25,6 +25,8 @@ class ArchivosController extends Controller
         $objMensaje = $this->get('mensajes_brasa'); 
         $form = $this->createFormBuilder()
             ->add('attachment', 'file')
+            ->add('descripcion', 'text', array('required' => true))
+            ->add('comentarios', 'textarea', array('required' => false)) 
             ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
             ->getForm();
         $form->handleRequest($request);
@@ -39,6 +41,8 @@ class ArchivosController extends Controller
                     $arArchivo->setTipo($objArchivo->getClientMimeType());
                     $arArchivo->setDocumentoRel($em->getRepository('BrasaAdministracionDocumentalBundle:AdDocumento')->find($codigoDocumento));               
                     $arArchivo->setNumero($numero);
+                    $arArchivo->setDescripcion($form->get('descripcion')->getData());
+                    $arArchivo->setComentarios($form->get('comentarios')->getData());
                     $arDirectorio = $em->getRepository('BrasaAdministracionDocumentalBundle:AdDirectorio')->devolverDirectorio();
                     $arArchivo->setDirectorioRel($arDirectorio);                    
                     $em->persist($arArchivo);

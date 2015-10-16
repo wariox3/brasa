@@ -345,6 +345,22 @@ class BaseEmpleadoController extends Controller
             'form' => $form->createView()));
     }    
     
+    public function cargarFotoAction($codigoEmpleado) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->formularioCargarFoto();
+        $form->handleRequest($request);
+        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+        if($form->isValid()) {                        
+            if($form->get('BtnCargar')->isClicked()) {
+                if($form->get('TxtIdentificacion')->getData() != "") {
+                    $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('numeroIdentificacion' => $form->get('TxtIdentificacion')->getData()));
+                }
+            }
+        }                  
+        return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:cargarFoto.html.twig', array('form' => $form->createView()));
+    }        
+    
     private function formularioEnlazar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
@@ -354,6 +370,16 @@ class BaseEmpleadoController extends Controller
             ->getForm();        
         return $form;
     }        
+    
+    private function formularioCargarFoto() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();        
+        $form = $this->createFormBuilder()                        
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))                            
+            ->add('BtnCargar', 'submit', array('label'  => 'Filtrar'))
+            ->getForm();        
+        return $form;
+    }            
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();

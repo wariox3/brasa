@@ -33,6 +33,7 @@ class ConfiguracionGeneralController extends Controller
             ->add('fechaUltimoCierre', 'date', array('data' => $arConfiguracionGeneral->getFechaUltimoCierre(), 'required' => true))
             ->add('nitVentasMostrador', 'text', array('data' => $arConfiguracionGeneral->getNitVentasMostrador(), 'required' => true))    
             ->add('rutaTemporal', 'text', array('data' => $arConfiguracionGeneral->getRutaTemporal(), 'required' => true))    
+            ->add('rutaAlmacenamiento', 'text', array('data' => $arConfiguracionGeneral->getRutaAlmacenamiento(), 'required' => true))    
             ->add('guardar', 'submit', array('label' => 'Actualizar'))            
             ->getForm();
         $formConfiguracionGeneral->handleRequest($request);
@@ -54,6 +55,7 @@ class ConfiguracionGeneralController extends Controller
                 $FechaUltimoCierre = $formConfiguracionGeneral->get('fechaUltimoCierre')->getData();
                 $NitVentasMostrador = $controles['nitVentasMostrador'];
                 $RutaTemporal = $controles['rutaTemporal'];
+                $RutaAlmacenamiento = $controles['rutaAlmacenamiento'];
                 // guardar la tarea en la base de datos
                 $arConfiguracionGeneral->setNitEmpresa($NitEmpresa);
                 $arConfiguracionGeneral->setDigitoVerificacionEmpresa($NumeroDv);
@@ -70,6 +72,7 @@ class ConfiguracionGeneralController extends Controller
                 $arConfiguracionGeneral->setFechaUltimoCierre($FechaUltimoCierre);
                 $arConfiguracionGeneral->setNitVentasMostrador($NitVentasMostrador);
                 $arConfiguracionGeneral->setRutaTemporal($RutaTemporal);
+                $arConfiguracionGeneral->setRutaAlmacenamiento($RutaAlmacenamiento);
                 $em->persist($arConfiguracionGeneral);
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_gen_configuracion_general', array('codigoConfiguracionPk' => 1)));                

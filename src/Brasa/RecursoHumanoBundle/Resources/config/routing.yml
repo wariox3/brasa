@@ -298,6 +298,10 @@ brs_rhu_base_empleados_nuevo_enlazar:
     path:     /rhu/base/empleados/nuevo/enlazar/
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:enlazar }         
     
+brs_rhu_base_empleados_cargar_foto:
+    path:     /rhu/base/empleados/cargar/foto/{codigoEmpleado}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:cargarFoto }     
+    
 brs_rhu_base_empleado_estudio_nuevo:
     path:     /rhu/base/empleadoEstudio/nuevo/{codigoEmpleado}/{codigoEmpleadoEstudio}
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoEstudio:nuevo }   

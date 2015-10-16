@@ -53,6 +53,16 @@ class AdArchivo
     private $tamano = 0;               
     
     /**
+     * @ORM\Column(name="descripcion", type="string", length=100, nullable=true)
+     */    
+    private $descripcion;      
+    
+    /**
+     * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
+     */    
+    private $comentarios;      
+    
+    /**
      * @ORM\ManyToOne(targetEntity="AdDocumento", inversedBy="archivosDocumentoRel")
      * @ORM\JoinColumn(name="codigo_documento_fk", referencedColumnName="codigo_documento_pk")
      */
@@ -289,5 +299,53 @@ class AdArchivo
     public function getDirectorioRel()
     {
         return $this->directorioRel;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return AdArchivo
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return AdArchivo
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 }
