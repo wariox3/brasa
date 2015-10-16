@@ -58,16 +58,16 @@
                 <tr>
                     <td class="titulo">ÚLTIMA PRIMA:</td>
                     <td>{{ arContrato.fechaUltimoPagoPrimas|date("Y/m/d") }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">ENTIDAD PENSIÓN</td>
+                    <td class="td-in-well">{{ arContrato.entidadPensionRel.nombre|default('SIN CONTRATO') }}</td>
+                    <td class="titulo">ENTIDAD SALUD</td>
+                    <td class="td-in-well">{{ arContrato.entidadSaludRel.nombre|default('SIN CONTRATO') }}</td>
                 </tr>                
                 <tr>
                     <td class="titulo">ÚLTIMA CESANTIA:</td>
                     <td>{{ arContrato.fechaUltimoPagoCesantias|date("Y/m/d") }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">ENTIDAD CAJA</td>
+                    <td class="td-in-well">{{ arContrato.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
                 </tr>                

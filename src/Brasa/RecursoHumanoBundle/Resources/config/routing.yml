@@ -102,6 +102,14 @@ brs_rhu_incapacidades_nuevo:
     path:     /rhu/incapacidades/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoIncapacidad}
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:nuevo }
     
+brs_rhu_base_empleado_estudio_tipo_lista:
+    path:     /rhu/empleado/estudio/tipo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoEstudioTipo:lista }    
+
+brs_rhu_base_empleado_estudio_tipo_nuevo:
+    path:     /rhu/empleado/estudio/tipo/nuevo/{codigoTipoEstudio}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoEstudioTipo:nuevo }    
+    
 brs_rhu_liquidacion_adicional_concepto_lista:
     path:     /rhu/liquidacion/adicional/concepto/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:LiquidacionAdicionalesConcepto:lista }    
