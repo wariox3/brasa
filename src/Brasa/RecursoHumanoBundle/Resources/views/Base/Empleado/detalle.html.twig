@@ -7,6 +7,24 @@
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
 
+        <div class="btn-group">
+            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 3,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-sm">Utilidades</button>
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">                    
+                    <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleados_cargar_foto', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarFoto', 600, 900)" >Agregar foto empleado</a></li>
+                </ul>
+            </div>            
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_certificadoIngreso_generar', { 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'Certificado', 600, 1000)" >Generar certificado de ingresos y retenciones</a>
+        </div>
+        <br /> <br />        
+        
         <div class="panel panel-default">
             <div class="panel-heading">Información empleado</div>
             <div class="panel-body">
@@ -87,27 +105,17 @@
                         <td class="titulo" >COMENTARIOS: </td>
                         <td class="td-in-well" colspan="7">{{ arEmpleado.comentarios }}</td>
                     </tr>
+                    {% if strRutaFoto != '' %} 
+                    <tr>
+                        <td class="titulo" ></td>
+                        <td class="td-in-well" colspan="7">
+                            <img src="{{ strRutaFoto }}" width=22 height=22>                            
+                        </td>
+                    </tr>                 
+                    {% endif %}
                 </table>
             </div>
-        </div>
-        <div class="btn-group">
-            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 3,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
-            <div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm">Utilidades</button>
-                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="{{ path('brs_rhu_base_empleados_cargar_foto', { 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }} " target="_blank">Agregar foto empleado</a></li>                              
-                    <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleados_cargar_foto', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'AgregarFoto', 600, 900)" >Agregar foto empleado</a></li>
-                </ul>
-            </div>            
-        </div>
-        <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_certificadoIngreso_generar', { 'codigoEmpleado': arEmpleado.codigoEmpleadoPk }) }}', 'Certificado', 600, 1000)" >Generar certificado de ingresos y retenciones</a>
-        </div>
-        <br /> <br /><br />                    
+        </div>                   
                     
         <a name="marcador"></a>
         <ul class="nav nav-tabs">

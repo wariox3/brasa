@@ -30,6 +30,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Line(10, 5, 10, 26);
         $this->Line(10, 26, 60, 26);
         $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
+
         $this->SetXY(50, 5);
         $this->SetFont('Arial','b',12);
         $this->Cell(100, 21, "HOJA DE VIDA EMPRESARIAL" , 1, 0, 'C', 1);
@@ -47,7 +48,16 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(9, 7, "" , 1, 0, 'C', 1);
         
         $this->SetXY(164, 35);
-        $this->Cell(35, 45, "foto" , 1, 0, 'C', 1);
+        $this->Cell(35, 45, 'foto', 1, 0, 'C', 1);
+        if($arEmpleado->getRutaFoto() != "") {
+            $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+            $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+            $strRuta = $arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados/" . $arEmpleado->getRutaFoto();        
+            if(file_exists($strRuta)){
+                $this->Image($strRuta, 167, 40, 30, 35);            
+            }            
+        }
+        
         $this->SetXY(25, 20);
         $this->Cell(30, 35, "FECHA DE INGRESO" , 0, 0, 'L', 0);
         $this->Cell(100, 35, "______________________________________________________________" , 0, 0, 'C', 0);

@@ -288,6 +288,11 @@ class RhuEmpleado
     private $codigoContratoActivoFk;     
     
     /**
+     * @ORM\Column(name="ruta_foto", type="string", length=250, nullable=true)
+     */    
+    private $rutaFoto;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
@@ -2948,5 +2953,29 @@ class RhuEmpleado
     public function getProyeccionesEmpleadoRel()
     {
         return $this->proyeccionesEmpleadoRel;
+    }
+
+    /**
+     * Set rutaFoto
+     *
+     * @param string $rutaFoto
+     *
+     * @return RhuEmpleado
+     */
+    public function setRutaFoto($rutaFoto)
+    {
+        $this->rutaFoto = $rutaFoto;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaFoto
+     *
+     * @return string
+     */
+    public function getRutaFoto()
+    {
+        return $this->rutaFoto;
     }
 }

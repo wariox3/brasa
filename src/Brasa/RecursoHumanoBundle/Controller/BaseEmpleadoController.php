@@ -241,6 +241,14 @@ class BaseEmpleadoController extends Controller
         $arEmpleadoExamenes = $paginator->paginate($arEmpleadoExamenes, $this->get('request')->query->get('page', 1),6);
         $arEmpleadoFamilia = $paginator->paginate($arEmpleadoFamilia, $this->get('request')->query->get('page', 1),8);
         $arEmpleadoDotacion = $paginator->paginate($arEmpleadoDotacion, $this->get('request')->query->get('page', 1),8);
+        
+        $strRutaFoto = "";
+        if($arEmpleado->getRutaFoto() != "") {
+            $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+            $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+            $strRutaFoto = $arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados/" . $arEmpleado->getRutaFoto();                    
+        }
+
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
                     'arIncapacidades' => $arIncapacidades,
@@ -253,6 +261,7 @@ class BaseEmpleadoController extends Controller
                     'arEmpleadoExamenes' => $arEmpleadoExamenes,
                     'arEmpleadoFamilia' => $arEmpleadoFamilia,
                     'arEmpleadoDotacion' => $arEmpleadoDotacion,
+                    'strRutaFoto' => $strRutaFoto,           
                     'form' => $form->createView()
                     ));
     }
@@ -353,9 +362,22 @@ class BaseEmpleadoController extends Controller
         $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
         if($form->isValid()) {                        
             if($form->get('BtnCargar')->isClicked()) {
-                if($form->get('TxtIdentificacion')->getData() != "") {
-                    $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('numeroIdentificacion' => $form->get('TxtIdentificacion')->getData()));
+                $objArchivo = $form['attachment']->getData();
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);                
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                $strRuta = $arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados/" . $objArchivo->getClientOriginalName();
+                if(!file_exists($strRuta)) {
+                    $form['attachment']->getData()->move($arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados", $objArchivo->getClientOriginalName());
+                    $arEmpleado->setRutaFoto($objArchivo->getClientOriginalName());
+                    $em->persist($arEmpleado);
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                    
+                } else {
+                    echo "El archivo " . $strRuta . " ya existe";
                 }
+                                           
             }
         }                  
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:cargarFoto.html.twig', array('form' => $form->createView()));
@@ -374,9 +396,9 @@ class BaseEmpleadoController extends Controller
     private function formularioCargarFoto() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
-        $form = $this->createFormBuilder()                        
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))                            
-            ->add('BtnCargar', 'submit', array('label'  => 'Filtrar'))
+        $form = $this->createFormBuilder()                
+            ->add('attachment', 'file')            
+            ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
             ->getForm();        
         return $form;
     }            
