@@ -240,15 +240,7 @@ class BaseEmpleadoController extends Controller
         $arEmpleadoEstudios = $paginator->paginate($arEmpleadoEstudios, $this->get('request')->query->get('page', 1),6);
         $arEmpleadoExamenes = $paginator->paginate($arEmpleadoExamenes, $this->get('request')->query->get('page', 1),6);
         $arEmpleadoFamilia = $paginator->paginate($arEmpleadoFamilia, $this->get('request')->query->get('page', 1),8);
-        $arEmpleadoDotacion = $paginator->paginate($arEmpleadoDotacion, $this->get('request')->query->get('page', 1),8);
-        
-        $strRutaFoto = "";
-        if($arEmpleado->getRutaFoto() != "") {
-            $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-            $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-            $strRutaFoto = $arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados/" . $arEmpleado->getRutaFoto();                    
-        }
-
+        $arEmpleadoDotacion = $paginator->paginate($arEmpleadoDotacion, $this->get('request')->query->get('page', 1),8);       
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
                     'arIncapacidades' => $arIncapacidades,
@@ -260,8 +252,7 @@ class BaseEmpleadoController extends Controller
                     'arEmpleadoEstudios' => $arEmpleadoEstudios,
                     'arEmpleadoExamenes' => $arEmpleadoExamenes,
                     'arEmpleadoFamilia' => $arEmpleadoFamilia,
-                    'arEmpleadoDotacion' => $arEmpleadoDotacion,
-                    'strRutaFoto' => $strRutaFoto,           
+                    'arEmpleadoDotacion' => $arEmpleadoDotacion,                   
                     'form' => $form->createView()
                     ));
     }
