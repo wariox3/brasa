@@ -482,9 +482,9 @@ class RhuEmpleado
     protected $ssoAportesEmpleadoRel; 
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacion", mappedBy="empleadoRel")
+     * @ORM\OneToMany(targetEntity="RhuDotacion", mappedBy="empleadoRel")
      */
-    protected $empleadosDotacionesEmpleadoRel;
+    protected $dotacionesEmpleadoRel;
     
      /**
      * @ORM\OneToMany(targetEntity="RhuAccidenteTrabajo", mappedBy="empleadoRel")
@@ -533,7 +533,7 @@ class RhuEmpleado
         $this->empleadosExamenesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoPeriodosEmpleadosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoAportesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->empleadosDotacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dotacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->accidentesTrabajoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cambiosSalariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1776,6 +1776,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set rutaFoto
+     *
+     * @param string $rutaFoto
+     *
+     * @return RhuEmpleado
+     */
+    public function setRutaFoto($rutaFoto)
+    {
+        $this->rutaFoto = $rutaFoto;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaFoto
+     *
+     * @return string
+     */
+    public function getRutaFoto()
+    {
+        return $this->rutaFoto;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -2752,37 +2776,37 @@ class RhuEmpleado
     }
 
     /**
-     * Add empleadosDotacionesEmpleadoRel
+     * Add dotacionesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function addEmpleadosDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoRel)
+    public function addDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel)
     {
-        $this->empleadosDotacionesEmpleadoRel[] = $empleadosDotacionesEmpleadoRel;
+        $this->dotacionesEmpleadoRel[] = $dotacionesEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Remove empleadosDotacionesEmpleadoRel
+     * Remove dotacionesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel
      */
-    public function removeEmpleadosDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoRel)
+    public function removeDotacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesEmpleadoRel)
     {
-        $this->empleadosDotacionesEmpleadoRel->removeElement($empleadosDotacionesEmpleadoRel);
+        $this->dotacionesEmpleadoRel->removeElement($dotacionesEmpleadoRel);
     }
 
     /**
-     * Get empleadosDotacionesEmpleadoRel
+     * Get dotacionesEmpleadoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEmpleadosDotacionesEmpleadoRel()
+    public function getDotacionesEmpleadoRel()
     {
-        return $this->empleadosDotacionesEmpleadoRel;
+        return $this->dotacionesEmpleadoRel;
     }
 
     /**
@@ -2953,29 +2977,5 @@ class RhuEmpleado
     public function getProyeccionesEmpleadoRel()
     {
         return $this->proyeccionesEmpleadoRel;
-    }
-
-    /**
-     * Set rutaFoto
-     *
-     * @param string $rutaFoto
-     *
-     * @return RhuEmpleado
-     */
-    public function setRutaFoto($rutaFoto)
-    {
-        $this->rutaFoto = $rutaFoto;
-
-        return $this;
-    }
-
-    /**
-     * Get rutaFoto
-     *
-     * @return string
-     */
-    public function getRutaFoto()
-    {
-        return $this->rutaFoto;
     }
 }

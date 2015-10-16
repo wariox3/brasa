@@ -5,22 +5,22 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_empleado_dotacion_detalle")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuEmpleadoDotacionDetalleRepository")
+ * @ORM\Table(name="rhu_dotacion_detalle")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuDotacionDetalleRepository")
  */
-class RhuEmpleadoDotacionDetalle
+class RhuDotacionDetalle
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_empleado_dotacion_detalle_pk", type="integer")
+     * @ORM\Column(name="codigo_dotacion_detalle_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoEmpleadoDotacionDetallePk;                    
+    private $codigoDotacionDetallePk;                    
     
     /**
-     * @ORM\Column(name="codigo_empleado_dotacion_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_dotacion_fk", type="integer", nullable=true)
      */    
-    private $codigoEmpleadoDotacionFk;
+    private $codigoDotacionFk;
     
     /**
      * @ORM\Column(name="codigo_dotacion_elemento_fk", type="integer", nullable=true)
@@ -48,10 +48,10 @@ class RhuEmpleadoDotacionDetalle
     private $lote;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleadoDotacion", inversedBy="empleadosDotacionesDetallesEmpleadoDotacionRel")
-     * @ORM\JoinColumn(name="codigo_empleado_dotacion_fk", referencedColumnName="codigo_empleado_dotacion_pk")
+     * @ORM\ManyToOne(targetEntity="RhuDotacion", inversedBy="dotacionesDetallesDotacionRel")
+     * @ORM\JoinColumn(name="codigo_dotacion_fk", referencedColumnName="codigo_dotacion_pk")
      */
-    protected $empleadoDotacionRel;
+    protected $dotacionRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuDotacionElemento", inversedBy="elementosDotacionesDetalleDotacionElementoRel")
@@ -60,38 +60,39 @@ class RhuEmpleadoDotacionDetalle
     protected $dotacionElementoRel;
     
 
+
     /**
-     * Get codigoEmpleadoDotacionDetallePk
+     * Get codigoDotacionDetallePk
      *
      * @return integer
      */
-    public function getCodigoEmpleadoDotacionDetallePk()
+    public function getCodigoDotacionDetallePk()
     {
-        return $this->codigoEmpleadoDotacionDetallePk;
+        return $this->codigoDotacionDetallePk;
     }
 
     /**
-     * Set codigoEmpleadoDotacionFk
+     * Set codigoDotacionFk
      *
-     * @param integer $codigoEmpleadoDotacionFk
+     * @param integer $codigoDotacionFk
      *
-     * @return RhuEmpleadoDotacionDetalle
+     * @return RhuDotacionDetalle
      */
-    public function setCodigoEmpleadoDotacionFk($codigoEmpleadoDotacionFk)
+    public function setCodigoDotacionFk($codigoDotacionFk)
     {
-        $this->codigoEmpleadoDotacionFk = $codigoEmpleadoDotacionFk;
+        $this->codigoDotacionFk = $codigoDotacionFk;
 
         return $this;
     }
 
     /**
-     * Get codigoEmpleadoDotacionFk
+     * Get codigoDotacionFk
      *
      * @return integer
      */
-    public function getCodigoEmpleadoDotacionFk()
+    public function getCodigoDotacionFk()
     {
-        return $this->codigoEmpleadoDotacionFk;
+        return $this->codigoDotacionFk;
     }
 
     /**
@@ -99,7 +100,7 @@ class RhuEmpleadoDotacionDetalle
      *
      * @param integer $codigoDotacionElementoFk
      *
-     * @return RhuEmpleadoDotacionDetalle
+     * @return RhuDotacionDetalle
      */
     public function setCodigoDotacionElementoFk($codigoDotacionElementoFk)
     {
@@ -123,7 +124,7 @@ class RhuEmpleadoDotacionDetalle
      *
      * @param integer $cantidadAsignada
      *
-     * @return RhuEmpleadoDotacionDetalle
+     * @return RhuDotacionDetalle
      */
     public function setCantidadAsignada($cantidadAsignada)
     {
@@ -147,7 +148,7 @@ class RhuEmpleadoDotacionDetalle
      *
      * @param integer $cantidadDevuelta
      *
-     * @return RhuEmpleadoDotacionDetalle
+     * @return RhuDotacionDetalle
      */
     public function setCantidadDevuelta($cantidadDevuelta)
     {
@@ -171,7 +172,7 @@ class RhuEmpleadoDotacionDetalle
      *
      * @param string $serie
      *
-     * @return RhuEmpleadoDotacionDetalle
+     * @return RhuDotacionDetalle
      */
     public function setSerie($serie)
     {
@@ -195,7 +196,7 @@ class RhuEmpleadoDotacionDetalle
      *
      * @param string $lote
      *
-     * @return RhuEmpleadoDotacionDetalle
+     * @return RhuDotacionDetalle
      */
     public function setLote($lote)
     {
@@ -215,27 +216,27 @@ class RhuEmpleadoDotacionDetalle
     }
 
     /**
-     * Set empleadoDotacionRel
+     * Set dotacionRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadoDotacionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionRel
      *
-     * @return RhuEmpleadoDotacionDetalle
+     * @return RhuDotacionDetalle
      */
-    public function setEmpleadoDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadoDotacionRel = null)
+    public function setDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionRel = null)
     {
-        $this->empleadoDotacionRel = $empleadoDotacionRel;
+        $this->dotacionRel = $dotacionRel;
 
         return $this;
     }
 
     /**
-     * Get empleadoDotacionRel
+     * Get dotacionRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuDotacion
      */
-    public function getEmpleadoDotacionRel()
+    public function getDotacionRel()
     {
-        return $this->empleadoDotacionRel;
+        return $this->dotacionRel;
     }
 
     /**
@@ -243,7 +244,7 @@ class RhuEmpleadoDotacionDetalle
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento $dotacionElementoRel
      *
-     * @return RhuEmpleadoDotacionDetalle
+     * @return RhuDotacionDetalle
      */
     public function setDotacionElementoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento $dotacionElementoRel = null)
     {

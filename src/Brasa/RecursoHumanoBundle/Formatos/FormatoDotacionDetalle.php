@@ -1,28 +1,28 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
+class FormatoDotacionDetalle extends \FPDF_FPDF {
     public static $em;
     
-    public static $codigoEmpleadoDotacion;
+    public static $codigoDotacion;
     
-    public function Generar($miThis, $codigoEmpleadoDotacion) {        
+    public function Generar($miThis, $codigoDotacion) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
-        self::$codigoEmpleadoDotacion = $codigoEmpleadoDotacion;
-        $pdf = new FormatoEmpleadoDotacionDetalle();
+        self::$codigoDotacion = $codigoDotacion;
+        $pdf = new FormatoDotacionDetalle();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("DotacionEmpleado.pdf", 'D');        
+        $pdf->Output("Dotacion.pdf", 'D');        
         
     } 
     
     public function Header() {
-        $arEmpleadoDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
-        $arEmpleadoDotacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->find(self::$codigoEmpleadoDotacion);
+        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
+        $arDotacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find(self::$codigoDotacion);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $this->SetFillColor(200, 200, 200);        
@@ -52,17 +52,17 @@ class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
         $this->Cell(23, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
-        $this->Cell(22, 6, $arEmpleadoDotacion->getCodigoEmpleadoDotacionPk() , 1, 0, 'L', 1);
+        $this->Cell(22, 6, $arDotacion->getCodigoDotacionPk() , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',7);
         $this->Cell(18, 6, utf8_decode("FECHA:") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
-        $this->Cell(50, 6, $arEmpleadoDotacion->getFecha()->Format('Y/m/d') , 1, 0, 'L', 1);
+        $this->Cell(50, 6, $arDotacion->getFecha()->Format('Y/m/d') , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',6);
         $this->Cell(30, 6, utf8_decode("N° INTERNO REFERENCIA:") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
-        $this->Cell(50, 6, $arEmpleadoDotacion->getCodigoInternoReferencia() , 1, 0, 'L', 1);
+        $this->Cell(50, 6, $arDotacion->getCodigoInternoReferencia() , 1, 0, 'L', 1);
         
         //FILA 2
         $this->SetXY(10, 46);
@@ -71,19 +71,19 @@ class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
         $this->Cell(23, 6, utf8_decode("IDENTIFICACIÓN:") , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
-        $this->Cell(22, 6, $arEmpleadoDotacion->getEmpleadoRel()->getNumeroIdentificacion() , 1, 0, 'L', 1);
+        $this->Cell(22, 6, $arDotacion->getEmpleadoRel()->getNumeroIdentificacion() , 1, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',7);
         $this->Cell(18, 6, utf8_decode("EMPLEADO:") , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',6.5);
-        $this->Cell(50, 6, utf8_decode($arEmpleadoDotacion->getEmpleadoRel()->getNombreCorto()) , 1, 0, 'L', 1);
+        $this->Cell(50, 6, utf8_decode($arDotacion->getEmpleadoRel()->getNombreCorto()) , 1, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',7);
         $this->Cell(30, 6, utf8_decode("CENTRO COSTOS:") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',6);
-        $this->Cell(50, 6, utf8_decode($arEmpleadoDotacion->getCentroCostoRel()->getNombre()) , 1, 0, 'L', 1);
+        $this->Cell(50, 6, utf8_decode($arDotacion->getCentroCostoRel()->getNombre()) , 1, 0, 'L', 1);
         //FILA 3
         $this->SetXY(10, 51);
         $this->SetFillColor(236, 236, 236);
@@ -91,7 +91,7 @@ class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
         $this->Cell(23, 6, "COMENTARIOS:" , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',6);
-        $this->Cell(170, 6, utf8_decode($arEmpleadoDotacion->getComentarios()) , 1, 0, 'L', 1);        
+        $this->Cell(170, 6, utf8_decode($arDotacion->getComentarios()) , 1, 0, 'L', 1);        
         $this->EncabezadoDetalles();
         
     }
@@ -123,16 +123,16 @@ class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
     public function Body($pdf) {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 8);
-        $arEmpleadoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle();
-        $arEmpleadoDotacionDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacionDetalle')->findBy(array('codigoEmpleadoDotacionFk' => self::$codigoEmpleadoDotacion));
-        foreach ($arEmpleadoDotacionDetalle as $arEmpleadoDotacionDetalle) {            
+        $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+        $arDotacionDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->findBy(array('codigoDotacionFk' => self::$codigoDotacion));
+        foreach ($arDotacionDetalle as $arDotacionDetalle) {            
             $pdf->SetFont('Arial', '', 8);
-            $pdf->Cell(15, 4, $arEmpleadoDotacionDetalle->getCodigoEmpleadoDotacionDetallePk(), 1, 0, 'L');
-            $pdf->Cell(58, 4, $arEmpleadoDotacionDetalle->getDotacionElementoRel()->getDotacion(), 1, 0, 'L');
-            $pdf->Cell(30, 4, $arEmpleadoDotacionDetalle->getCantidadAsignada(), 1, 0, 'R');
-            $pdf->Cell(30, 4, $arEmpleadoDotacionDetalle->getCantidadDevuelta(), 1, 0, 'R');
-            $pdf->Cell(30, 4, $arEmpleadoDotacionDetalle->getSerie(), 1, 0, 'R');
-            $pdf->Cell(30, 4, $arEmpleadoDotacionDetalle->getLote(), 1, 0, 'R');            
+            $pdf->Cell(15, 4, $arDotacionDetalle->getCodigoDotacionDetallePk(), 1, 0, 'L');
+            $pdf->Cell(58, 4, $arDotacionDetalle->getDotacionElementoRel()->getDotacion(), 1, 0, 'L');
+            $pdf->Cell(30, 4, $arDotacionDetalle->getCantidadAsignada(), 1, 0, 'R');
+            $pdf->Cell(30, 4, $arDotacionDetalle->getCantidadDevuelta(), 1, 0, 'R');
+            $pdf->Cell(30, 4, $arDotacionDetalle->getSerie(), 1, 0, 'R');
+            $pdf->Cell(30, 4, $arDotacionDetalle->getLote(), 1, 0, 'R');            
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
@@ -143,12 +143,12 @@ class FormatoEmpleadoDotacionDetalle extends \FPDF_FPDF {
         
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $arDotacionEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion();
-        $arDotacionEmpleado = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoDotacion')->find(self::$codigoEmpleadoDotacion);
+        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
+        $arDotacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find(self::$codigoDotacion);
         $this->SetFont('Arial', 'B', 9);
         
         $this->Text(10, 240, "FIRMA: _____________________________________________");
-        $this->Text(10, 247, $arDotacionEmpleado->getEmpleadoRel()->getNombreCorto());
+        $this->Text(10, 247, $arDotacion->getEmpleadoRel()->getNombreCorto());
         $this->Text(10, 254, "C.C.:     ______________________ de ____________________");
         $this->Text(105, 240, "FIRMA: _____________________________________________");
         $this->Text(105, 247, $arConfiguracion->getNombreEmpresa());

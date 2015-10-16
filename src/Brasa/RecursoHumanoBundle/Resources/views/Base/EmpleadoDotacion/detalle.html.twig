@@ -10,7 +10,7 @@
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                     {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 8,  'numero': arEmpleadoDotaciones.codigoEmpleadoDotacionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 8,  'numero': arDotaciones.codigoDotacionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
             </div>
         </div>
         <br /><br />
@@ -20,23 +20,23 @@
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
                         <td class="titulo">CODIGO:</td>
-                        <td class="td-in-well">{{ arEmpleadoDotaciones.codigoEmpleadoDotacionPk }}</td>
+                        <td class="td-in-well">{{ arDotaciones.codigoDotacionPk }}</td>
                         <td class="titulo">FECHA:</th>
-                        <td class="td-in-well">{{ arEmpleadoDotaciones.fecha |date("Y/m/d") }}</td>
+                        <td class="td-in-well">{{ arDotaciones.fecha |date("Y/m/d") }}</td>
                         <td class="titulo">NÚMERO INTERNO REFERENCIA:</th>
-                        <td class="td-in-well" align="right">{{ arEmpleadoDotaciones.codigoInternoReferencia}}</td>                        
+                        <td class="td-in-well" align="right">{{ arDotaciones.codigoInternoReferencia}}</td>                        
                     </tr>
                     <tr>
                         <td class="titulo">IDENTIFICACIÓN:</td>
-                        <td class="td-in-well">{{ arEmpleadoDotaciones.empleadoRel.numeroIdentificacion }}</td>
+                        <td class="td-in-well">{{ arDotaciones.empleadoRel.numeroIdentificacion }}</td>
                         <td class="titulo">EMPLEADO:</td>
-                        <td class="td-in-well">{{ arEmpleadoDotaciones.empleadoRel.nombreCorto }}</td>
+                        <td class="td-in-well">{{ arDotaciones.empleadoRel.nombreCorto }}</td>
                         <td class="titulo">CENTRO COSTOS:</th>
-                        <td class="td-in-well" align="right">{{ arEmpleadoDotaciones.centroCostoRel.nombre}}</td>                                                
+                        <td class="td-in-well" align="right">{{ arDotaciones.centroCostoRel.nombre}}</td>                                                
                     </tr>                    
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
-                        <td class="td-in-well" colspan="7">{{ arEmpleadoDotaciones.comentarios }}</td>
+                        <td class="td-in-well" colspan="7">{{ arDotaciones.comentarios }}</td>
                     </tr>                    
                 </table>
             </div>
@@ -52,30 +52,30 @@
                     <th>LOTE</th>
                     <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                 </tr>
-                {% for arEmpleadoDotacionDetalles in arEmpleadoDotacionDetalles %}
+                {% for arDotacionDetalles in arDotacionDetalles %}
                 <tr>
                     <td>
-                        <input type="hidden" name="LblCodigoGuia[]" value="{{ arEmpleadoDotacionDetalles.codigoEmpleadoDotacionDetallePk }}">
-                        <span class="badge">{{ arEmpleadoDotacionDetalles.codigoEmpleadoDotacionDetallePk }}</span>
+                        <input type="hidden" name="LblCodigoGuia[]" value="{{ arDotacionDetalles.codigoDotacionDetallePk }}">
+                        <span class="badge">{{ arDotacionDetalles.codigoDotacionDetallePk }}</span>
                     </td>
-                    <td>{{ arEmpleadoDotacionDetalles.dotacionElementoRel.dotacion }}</td>
-                    <td>{{ arEmpleadoDotacionDetalles.cantidadAsignada }}</td>
-                    <td>{{ arEmpleadoDotacionDetalles.cantidadDevuelta }}</td>
-                    <td>{{ arEmpleadoDotacionDetalles.serie }}</td>
-                    <td>{{ arEmpleadoDotacionDetalles.lote }}</td>
-                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEmpleadoDotacionDetalles.codigoEmpleadoDotacionDetallePk }}" /></td>
+                    <td>{{ arDotacionDetalles.dotacionElementoRel.dotacion }}</td>
+                    <td>{{ arDotacionDetalles.cantidadAsignada }}</td>
+                    <td>{{ arDotacionDetalles.cantidadDevuelta }}</td>
+                    <td>{{ arDotacionDetalles.serie }}</td>
+                    <td>{{ arDotacionDetalles.lote }}</td>
+                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDotacionDetalles.codigoDotacionDetallePk }}" /></td>
                 </tr>
                 {% endfor %}
             </table>
         </div> 
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleado_dotacion_lista') }}" style="float:left">Volver</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_dotacion_lista') }}" style="float:left">Volver</a>
             </div>
         </div>  
         <div class="btn-toolbar" style="float: right">                           
             <div class="btn-group">                
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_dotacion_detalle_nuevo', {'codigoEmpleadoDotacion': arEmpleadoDotaciones.codigoEmpleadoDotacionPk}) }}', 'AgregarNuevo', 600, 900)">Agregar dotación elemento</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_nuevo', {'codigoDotacion': arDotaciones.codigoDotacionPk}) }}', 'AgregarNuevo', 600, 900)">Agregar dotación elemento</a>
             </div>
             <div class="btn-group">                
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                

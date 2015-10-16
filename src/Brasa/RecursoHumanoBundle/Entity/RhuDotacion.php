@@ -5,17 +5,17 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_empleado_dotacion")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuEmpleadoDotacionRepository")
+ * @ORM\Table(name="rhu_dotacion")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuDotacionRepository")
  */
-class RhuEmpleadoDotacion
+class RhuDotacion
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_empleado_dotacion_pk", type="integer")
+     * @ORM\Column(name="codigo_dotacion_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoEmpleadoDotacionPk;                    
+    private $codigoDotacionPk;                    
     
     /**
      * @ORM\Column(name="numero_interno_referencia", type="integer", nullable=true)
@@ -31,6 +31,11 @@ class RhuEmpleadoDotacion
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
     private $codigoCentroCostoFk;
+    
+    /**
+     * @ORM\Column(name="tipo_proceso", type="integer", nullable=true)
+     */    
+    private $tipoProceso;
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -49,15 +54,15 @@ class RhuEmpleadoDotacion
     protected $centroCostoRel;            
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="empleadosDotacionesEmpleadoRel")
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="dotacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacionDetalle", mappedBy="empleadoDotacionRel")
+     * @ORM\OneToMany(targetEntity="RhuDotacionDetalle", mappedBy="dotacionRel")
      */
-    protected $empleadosDotacionesDetallesEmpleadoDotacionRel;
+    protected $dotacionesDetallesDotacionRel;
     
     
     /**
@@ -65,17 +70,17 @@ class RhuEmpleadoDotacion
      */
     public function __construct()
     {
-        $this->empleadosDotacionesEmpleadoDotacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dotacionesDetallesDotacionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get codigoEmpleadoDotacionPk
+     * Get codigoDotacionPk
      *
      * @return integer
      */
-    public function getCodigoEmpleadoDotacionPk()
+    public function getCodigoDotacionPk()
     {
-        return $this->codigoEmpleadoDotacionPk;
+        return $this->codigoDotacionPk;
     }
 
     /**
@@ -83,7 +88,7 @@ class RhuEmpleadoDotacion
      *
      * @param integer $codigoInternoReferencia
      *
-     * @return RhuEmpleadoDotacion
+     * @return RhuDotacion
      */
     public function setCodigoInternoReferencia($codigoInternoReferencia)
     {
@@ -107,7 +112,7 @@ class RhuEmpleadoDotacion
      *
      * @param integer $codigoEmpleadoFk
      *
-     * @return RhuEmpleadoDotacion
+     * @return RhuDotacion
      */
     public function setCodigoEmpleadoFk($codigoEmpleadoFk)
     {
@@ -131,7 +136,7 @@ class RhuEmpleadoDotacion
      *
      * @param integer $codigoCentroCostoFk
      *
-     * @return RhuEmpleadoDotacion
+     * @return RhuDotacion
      */
     public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
@@ -155,7 +160,7 @@ class RhuEmpleadoDotacion
      *
      * @param \DateTime $fecha
      *
-     * @return RhuEmpleadoDotacion
+     * @return RhuDotacion
      */
     public function setFecha($fecha)
     {
@@ -179,7 +184,7 @@ class RhuEmpleadoDotacion
      *
      * @param string $comentarios
      *
-     * @return RhuEmpleadoDotacion
+     * @return RhuDotacion
      */
     public function setComentarios($comentarios)
     {
@@ -203,7 +208,7 @@ class RhuEmpleadoDotacion
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
      *
-     * @return RhuEmpleadoDotacion
+     * @return RhuDotacion
      */
     public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
     {
@@ -227,7 +232,7 @@ class RhuEmpleadoDotacion
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
      *
-     * @return RhuEmpleadoDotacion
+     * @return RhuDotacion
      */
     public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
     {
@@ -247,70 +252,60 @@ class RhuEmpleadoDotacion
     }
 
     /**
-     * Add empleadosDotacionesEmpleadoDotacionRel
+     * Add dotacionesDetallesDotacionRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoDotacionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle $dotacionesDetallesDotacionRel
      *
-     * @return RhuEmpleadoDotacion
+     * @return RhuDotacion
      */
-    public function addEmpleadosDotacionesEmpleadoDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoDotacionRel)
+    public function addDotacionesDetallesDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle $dotacionesDetallesDotacionRel)
     {
-        $this->empleadosDotacionesEmpleadoDotacionRel[] = $empleadosDotacionesEmpleadoDotacionRel;
+        $this->dotacionesDetallesDotacionRel[] = $dotacionesDetallesDotacionRel;
 
         return $this;
     }
 
     /**
-     * Remove empleadosDotacionesEmpleadoDotacionRel
+     * Remove dotacionesDetallesDotacionRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoDotacionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle $dotacionesDetallesDotacionRel
      */
-    public function removeEmpleadosDotacionesEmpleadoDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $empleadosDotacionesEmpleadoDotacionRel)
+    public function removeDotacionesDetallesDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle $dotacionesDetallesDotacionRel)
     {
-        $this->empleadosDotacionesEmpleadoDotacionRel->removeElement($empleadosDotacionesEmpleadoDotacionRel);
+        $this->dotacionesDetallesDotacionRel->removeElement($dotacionesDetallesDotacionRel);
     }
 
     /**
-     * Get empleadosDotacionesEmpleadoDotacionRel
+     * Get dotacionesDetallesDotacionRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEmpleadosDotacionesEmpleadoDotacionRel()
+    public function getDotacionesDetallesDotacionRel()
     {
-        return $this->empleadosDotacionesEmpleadoDotacionRel;
+        return $this->dotacionesDetallesDotacionRel;
     }
 
     /**
-     * Add empleadosDotacionesDetallesEmpleadoDotacionRel
+     * Set tipoProceso
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $empleadosDotacionesDetallesEmpleadoDotacionRel
+     * @param integer $tipoProceso
      *
-     * @return RhuEmpleadoDotacion
+     * @return RhuDotacion
      */
-    public function addEmpleadosDotacionesDetallesEmpleadoDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $empleadosDotacionesDetallesEmpleadoDotacionRel)
+    public function setTipoProceso($tipoProceso)
     {
-        $this->empleadosDotacionesDetallesEmpleadoDotacionRel[] = $empleadosDotacionesDetallesEmpleadoDotacionRel;
+        $this->tipoProceso = $tipoProceso;
 
         return $this;
     }
 
     /**
-     * Remove empleadosDotacionesDetallesEmpleadoDotacionRel
+     * Get tipoProceso
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $empleadosDotacionesDetallesEmpleadoDotacionRel
+     * @return integer
      */
-    public function removeEmpleadosDotacionesDetallesEmpleadoDotacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $empleadosDotacionesDetallesEmpleadoDotacionRel)
+    public function getTipoProceso()
     {
-        $this->empleadosDotacionesDetallesEmpleadoDotacionRel->removeElement($empleadosDotacionesDetallesEmpleadoDotacionRel);
-    }
-
-    /**
-     * Get empleadosDotacionesDetallesEmpleadoDotacionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEmpleadosDotacionesDetallesEmpleadoDotacionRel()
-    {
-        return $this->empleadosDotacionesDetallesEmpleadoDotacionRel;
+        return $this->tipoProceso;
     }
 }

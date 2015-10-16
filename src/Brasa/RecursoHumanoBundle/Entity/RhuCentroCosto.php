@@ -192,7 +192,7 @@ class RhuCentroCosto
     protected $vacacionesCentroCostoRel;     
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacion", mappedBy="centroCostoRel")
+     * @ORM\OneToMany(targetEntity="RhuDotacion", mappedBy="centroCostoRel")
      */
     protected $dotacionesCentroCostoRel;
     
@@ -205,7 +205,6 @@ class RhuCentroCosto
      * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="centroCostoRel")
      */
     protected $facturasDetallesCentroCostoRel;
-
 
 
     /**
@@ -1190,11 +1189,11 @@ class RhuCentroCosto
     /**
      * Add dotacionesCentroCostoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesCentroCostoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesCentroCostoRel
      *
      * @return RhuCentroCosto
      */
-    public function addDotacionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesCentroCostoRel)
+    public function addDotacionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesCentroCostoRel)
     {
         $this->dotacionesCentroCostoRel[] = $dotacionesCentroCostoRel;
 
@@ -1204,9 +1203,9 @@ class RhuCentroCosto
     /**
      * Remove dotacionesCentroCostoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesCentroCostoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesCentroCostoRel
      */
-    public function removeDotacionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacion $dotacionesCentroCostoRel)
+    public function removeDotacionesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacion $dotacionesCentroCostoRel)
     {
         $this->dotacionesCentroCostoRel->removeElement($dotacionesCentroCostoRel);
     }

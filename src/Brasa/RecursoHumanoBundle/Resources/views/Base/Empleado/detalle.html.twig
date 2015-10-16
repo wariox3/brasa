@@ -498,30 +498,30 @@
                 <br />
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>{{ knp_pagination_sortable(arEmpleadoDotacion, 'CÓDIGO', 'e.codigoEmpleadoDotacionPk') }}</th>
+                        <th>{{ knp_pagination_sortable(arDotacion, 'CÓDIGO', 'e.codigoEmpleadoDotacionPk') }}</th>
                         <th>FECHA</th>
                         <th>NÚMERO INTERNO REFERENCIA</th>
                         <th>COMENTARIOS</th>
                         <th style="text-align: center"></th>
                         <th></th>
                     </tr>
-                    {% for arEmpleadoDotacion in arEmpleadoDotacion%}
+                    {% for arDotacion in arDotacion%}
                         <tr>
-                            <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoDotacion.codigoEmpleadoDotacionPk }}">{{ arEmpleadoDotacion.codigoEmpleadoDotacionPk }} </td>
-                            <td>{{ arEmpleadoDotacion.fecha | date('Y/m/d')  }}</td>
-                            <td>{{ arEmpleadoDotacion.codigoInternoReferencia  }}</td>
-                            <td>{{ arEmpleadoDotacion.comentarios  }}</td>
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_dotacion_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoDotacion': arEmpleadoDotacion.codigoEmpleadoDotacionPk }) }}', 'AgregarDotacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
-                            <td><input type="checkbox" name="ChkSeleccionarEmpleadoDotacion[]" value="{{ arEmpleadoDotacion.codigoEmpleadoDotacionPk }}" /></td>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arDotacion.codigoDotacionPk }}">{{ arDotacion.codigoDotacionPk }} </td>
+                            <td>{{ arDotacion.fecha | date('Y/m/d')  }}</td>
+                            <td>{{ arDotacion.codigoInternoReferencia  }}</td>
+                            <td>{{ arDotacion.comentarios  }}</td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDotacion': arDotacion.codigoDotacionPk }) }}', 'AgregarDotacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td><input type="checkbox" name="ChkSeleccionarDotacion[]" value="{{ arDotacion.codigoDotacionPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arEmpleadoDotacion) }}
+                    {{ knp_pagination_render(arDotacion) }}
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_dotacion_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoDotacion': 0 }) }}', 'AgregarDotacion', 600, 900)" >Nuevo</a> {% endif %}
+                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoDotacion': 0 }) }}', 'AgregarDotacion', 600, 900)" >Nuevo</a> {% endif %}
                     </div>
                     <div class="btn-group">
                         {{ form_widget(form.BtnEliminarDotacion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}

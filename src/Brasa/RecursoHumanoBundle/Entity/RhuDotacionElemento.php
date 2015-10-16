@@ -23,7 +23,7 @@ class RhuDotacionElemento
     private $dotacion;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleadoDotacionDetalle", mappedBy="dotacionElementoRel")
+     * @ORM\OneToMany(targetEntity="RhuDotacionDetalle", mappedBy="dotacionElementoRel")
      */
     protected $elementosDotacionesDetalleDotacionElementoRel;
     
@@ -73,11 +73,11 @@ class RhuDotacionElemento
     /**
      * Add elementosDotacionesDetalleDotacionElementoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $elementosDotacionesDetalleDotacionElementoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle $elementosDotacionesDetalleDotacionElementoRel
      *
      * @return RhuDotacionElemento
      */
-    public function addElementosDotacionesDetalleDotacionElementoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $elementosDotacionesDetalleDotacionElementoRel)
+    public function addElementosDotacionesDetalleDotacionElementoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle $elementosDotacionesDetalleDotacionElementoRel)
     {
         $this->elementosDotacionesDetalleDotacionElementoRel[] = $elementosDotacionesDetalleDotacionElementoRel;
 
@@ -87,9 +87,9 @@ class RhuDotacionElemento
     /**
      * Remove elementosDotacionesDetalleDotacionElementoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $elementosDotacionesDetalleDotacionElementoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle $elementosDotacionesDetalleDotacionElementoRel
      */
-    public function removeElementosDotacionesDetalleDotacionElementoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoDotacionDetalle $elementosDotacionesDetalleDotacionElementoRel)
+    public function removeElementosDotacionesDetalleDotacionElementoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle $elementosDotacionesDetalleDotacionElementoRel)
     {
         $this->elementosDotacionesDetalleDotacionElementoRel->removeElement($elementosDotacionesDetalleDotacionElementoRel);
     }

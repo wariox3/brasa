@@ -54,17 +54,17 @@ class BaseEmpleadoEstudioTipoController extends Controller
                 foreach ($arTipoEstudios as $arTipoEstudio) {
                       
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arTipoEstudio->getCodigoEmpleadoEstudioTipoPk())
+                            ->setCellValue('A' . $i, $arTipoEstudio->getEmpleadoEstudioTipoPk())
                             ->setCellValue('B' . $i, $arTipoEstudio->getNombre());
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('TiposEstudios');
+                $objPHPExcel->getActiveSheet()->setTitle('TipoEstudios');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="TiposEstudios.xlsx"');
+                header('Content-Disposition: attachment;filename="TipoEstudios.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
@@ -93,23 +93,23 @@ class BaseEmpleadoEstudioTipoController extends Controller
     public function nuevoAction($codigoTipoEstudio) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuBanco();
-        if ($codigoBancoPk != 0)
+        $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
+        if ($codigoTipoEstudio != 0)
         {
-            $arBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuBanco')->find($codigoBancoPk);
+            $arTipoEstudios = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->find($codigoTipoEstudio);
         }    
-        $formBanco = $this->createForm(new RhuBancoType(), $arBanco);
-        $formBanco->handleRequest($request);
-        if ($formBanco->isValid())
+        $form = $this->createForm(new RhuEmpleadoEstudioTipoType(), $arTipoEstudios);
+        $form->handleRequest($request);
+        if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arBanco = $formBanco->getData();
-            $em->persist($arBanco);
+            $arTipoEstudios = $form->getData();
+            $em->persist($arTipoEstudios);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_banco_listar'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_empleado_estudio_tipo_lista'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/Banco:nuevo.html.twig', array(
-            'formBanco' => $formBanco->createView(),
+        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoEstudioTipo:nuevo.html.twig', array(
+            'form' => $form->createView(),
         ));
     }
     
