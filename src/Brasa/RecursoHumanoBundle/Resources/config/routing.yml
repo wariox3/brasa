@@ -198,6 +198,10 @@ brs_rhu_dotacion_detalle_nuevo:
    path:     /rhu/base/empleado/dotacion/detalle/nuevo/{codigoDotacion}
    defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:detalleNuevo }
    
+brs_rhu_dotacion_detalle_devolucion:
+   path:     /rhu/base/empleado/dotacion/detalle/devolucion/{codigoDotacion}
+   defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:detalleDevolucion }   
+   
 brs_rhu_dotacion_detalle_editar:
    path:     /rhu/base/empleadoDotacion/detalle/editar/{codigoDotacionDetalle}
    defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:editarElemento }       

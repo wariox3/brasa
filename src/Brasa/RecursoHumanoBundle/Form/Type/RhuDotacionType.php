@@ -11,7 +11,10 @@ class RhuDotacionType extends AbstractType
     {        
         $builder                                
             ->add('fecha', 'date')
-            ->add('tipoProceso', 'choice', array('choices' => array('1' => 'NUEVO', '2' => 'DEVOLUCIÓN')))        
+            ->add('dotacionTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuDotacionTipo',
+                        'property' => 'nombre',
+            ))
             ->add('codigoInternoReferencia', 'number', array('required' => true))
             ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit')

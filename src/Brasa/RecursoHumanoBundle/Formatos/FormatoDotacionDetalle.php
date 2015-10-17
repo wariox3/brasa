@@ -53,11 +53,13 @@ class FormatoDotacionDetalle extends \FPDF_FPDF {
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
         $this->Cell(22, 6, $arDotacion->getCodigoDotacionPk() , 1, 0, 'L', 1);
+        $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',7);
         $this->Cell(18, 6, utf8_decode("FECHA:") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
         $this->Cell(50, 6, $arDotacion->getFecha()->Format('Y/m/d') , 1, 0, 'L', 1);
+        $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',6);
         $this->Cell(30, 6, utf8_decode("N° INTERNO REFERENCIA:") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
@@ -91,14 +93,20 @@ class FormatoDotacionDetalle extends \FPDF_FPDF {
         $this->Cell(23, 6, "COMENTARIOS:" , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',6);
-        $this->Cell(170, 6, utf8_decode($arDotacion->getComentarios()) , 1, 0, 'L', 1);        
+        $this->Cell(90, 6, utf8_decode($arDotacion->getComentarios()) , 1, 0, 'L', 1);
+        $this->SetFillColor(236, 236, 236);
+        $this->SetFont('Arial','B',7);
+        $this->Cell(30, 6, utf8_decode("TIPO DOTACIÓN:") , 1, 0, 'L', 1);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetFont('Arial','',7);
+        $this->Cell(50, 6, utf8_decode($arDotacion->getDotacionTipoRel()->getNombre()) , 1, 0, 'L', 1);
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(10);
-        $header = array(utf8_decode('CÓDIGO'), utf8_decode('ELEMENTO DOTACIÓN'), 'CANTIDAD ASIGANADA', 'CANTIDAD DEVUELTA', 'SERIE', 'LOTE');
+        $header = array(utf8_decode('CÓDIGO'), utf8_decode('ELEMENTO DOTACIÓN'), 'CANTIDAD ASIGNADA', 'CANTIDAD DEVUELTA', 'SERIE', 'LOTE');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);

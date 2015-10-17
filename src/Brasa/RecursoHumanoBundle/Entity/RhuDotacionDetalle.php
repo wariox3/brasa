@@ -28,14 +28,24 @@ class RhuDotacionDetalle
     private $codigoDotacionElementoFk;
     
     /**
-     * @ORM\Column(name="cantidad_asignada", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_dotacion_detalle_enlace_fk", type="integer", nullable=true)
      */    
-    private $cantidadAsignada;
+    private $codigoDotacionDetalleEnlaceFk;
     
     /**
-     * @ORM\Column(name="cantidad_devuelta", type="integer", nullable=false)
+     * @ORM\Column(name="cantidad_asignada", type="integer", nullable=true)
      */    
-    private $cantidadDevuelta;
+    private $cantidadAsignada = 0;
+    
+    /**
+     * @ORM\Column(name="cantidad_devuelta", type="integer", nullable=true)
+     */    
+    private $cantidadDevuelta = 0;
+    
+    /**
+     * @ORM\Column(name="cantidad_pendiente", type="integer", nullable=true)
+     */    
+    private $cantidadPendiente = 0;
     
     /**
      * @ORM\Column(name="serie", type="string", nullable=false)
@@ -120,6 +130,30 @@ class RhuDotacionDetalle
     }
 
     /**
+     * Set codigoDotacionDetalleEnlaceFk
+     *
+     * @param integer $codigoDotacionDetalleEnlaceFk
+     *
+     * @return RhuDotacionDetalle
+     */
+    public function setCodigoDotacionDetalleEnlaceFk($codigoDotacionDetalleEnlaceFk)
+    {
+        $this->codigoDotacionDetalleEnlaceFk = $codigoDotacionDetalleEnlaceFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDotacionDetalleEnlaceFk
+     *
+     * @return integer
+     */
+    public function getCodigoDotacionDetalleEnlaceFk()
+    {
+        return $this->codigoDotacionDetalleEnlaceFk;
+    }
+
+    /**
      * Set cantidadAsignada
      *
      * @param integer $cantidadAsignada
@@ -165,6 +199,30 @@ class RhuDotacionDetalle
     public function getCantidadDevuelta()
     {
         return $this->cantidadDevuelta;
+    }
+
+    /**
+     * Set cantidadPendiente
+     *
+     * @param integer $cantidadPendiente
+     *
+     * @return RhuDotacionDetalle
+     */
+    public function setCantidadPendiente($cantidadPendiente)
+    {
+        $this->cantidadPendiente = $cantidadPendiente;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadPendiente
+     *
+     * @return integer
+     */
+    public function getCantidadPendiente()
+    {
+        return $this->cantidadPendiente;
     }
 
     /**

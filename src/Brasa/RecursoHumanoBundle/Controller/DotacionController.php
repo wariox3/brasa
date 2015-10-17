@@ -131,7 +131,10 @@ class DotacionController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
             ->add('numeroIdentificacion', 'text', array('required' => true))
-            ->add('tipoProceso', 'choice', array('choices' => array('1' => 'NUEVO', '2' => 'DEVOLUCIÓN')))
+            ->add('dotacionTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuDotacionTipo',
+                        'property' => 'nombre',
+            ))
             ->add('fecha', 'date', array('data' => new \DateTime('now')))
             ->add('codigoInternoReferencia', 'number', array('required' => true))
             ->add('comentarios', 'textarea', array('required' => false))
@@ -156,6 +159,7 @@ class DotacionController extends Controller
                     $arDotacion->setFecha($form->get('fecha')->getData());
                     $arDotacion->setCodigoInternoReferencia($form->get('codigoInternoReferencia')->getData());
                     $arDotacion->setComentarios($form->get('comentarios')->getData());
+                    $arDotacion->setDotacionTipoRel($form->get('dotacionTipoRel')->getData());
                     $em->persist($arDotacion);
                     $em->flush();
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
@@ -171,9 +175,11 @@ class DotacionController extends Controller
     public function detalleAction($codigoDotacion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnCerrar', 'submit', array('label'  => 'Cerrar',))
             ->getForm();
         $form->handleRequest($request);
         $arDotaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
@@ -183,7 +189,7 @@ class DotacionController extends Controller
                 $objFormatoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDotacionDetalle();
                 $objFormatoDotacionDetalle->Generar($this, $codigoDotacion);
             }
-
+            
             if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
@@ -196,6 +202,21 @@ class DotacionController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));
             }
+            if($form->get('BtnCerrar')->isClicked()) {
+                $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arDotaciones->getCodigoEmpleadoFk());
+                $intRegistros = count($arDotacionDetalle);
+                if ($intRegistros > 0){
+                    $objMensaje->Mensaje("error", "No se puede cerrar, el empleado tiene devoluciones pendientes", $this);
+                }else{
+                    $arCerrarDotaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->findBy(array('codigoEmpleadoFk' => $arDotaciones->getCodigoEmpleadoFk()));
+                    foreach ($arCerrarDotaciones as $arCerrarDotacion) {
+                        $arCerrarDotacion->setEstadoCerrado(1);
+                        $em->persist($arCerrarDotacion);
+                    }
+                    $em->flush();
+                }
+            }
+            
         }
         $arDotacionDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
         $arDotacionDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->FindBy(array('codigoDotacionFk' => $codigoDotacion));
@@ -228,11 +249,11 @@ class DotacionController extends Controller
                             $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($intCodigo);
                             $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
                             $arDotacionDetalle->setDotacionRel($arDotacion);
-
                             $arDotacionDetalle->setDotacionElementoRel($arDotacionElemento);
                             $intCantidad = $arrControles['TxtCantidad'][$intIndice];
                             $arDotacionDetalle->setCantidadAsignada($intCantidad);
                             $arDotacionDetalle->setCantidadDevuelta(0);
+                            $arDotacionDetalle->setCantidadPendiente($intCantidad);
                             $intLote = $arrControles['TxtLote'][$intIndice];
                             $intSerie = $arrControles['TxtSerie'][$intIndice];
                             $arDotacionDetalle->setSerie($intSerie);
@@ -249,6 +270,53 @@ class DotacionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:detallenuevo.html.twig', array(
             'arDotacion' => $arDotacion,
             'arDotacionElementos' => $arDotacionElementos,
+            'form' => $form->createView()));
+    }
+    
+    public function detalleDevolucionAction($codigoDotacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
+        $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
+        $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+        $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arDotacion->getCodigoEmpleadoFk());
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arrControles = $request->request->All();
+            if ($form->get('BtnGuardar')->isClicked()) {
+                if (isset($arrControles['TxtCantidad'])) {
+                    $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        if($arrControles['TxtCantidad'][$intIndice] > 0 ){
+                            $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                            $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($intCodigo);
+                            $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
+                            $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($arDotacionDetalle->getCodigoDotacionElementoFk());
+                            $arDotacionDetalleDevolucion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                            $arDotacionDetalleDevolucion->setDotacionRel($arDotacion);
+                            $arDotacionDetalleDevolucion->setDotacionElementoRel($arDotacionElemento);
+                            $intCantidad = $arrControles['TxtCantidad'][$intIndice];
+                            $arDotacionDetalleDevolucion->setCantidadAsignada($intCantidad);
+                            $arDotacionDetalleDevolucion->setSerie($arDotacionDetalle->getSerie());
+                            $arDotacionDetalleDevolucion->setLote($arDotacionDetalle->getLote());
+                            $em->persist($arDotacionDetalleDevolucion);
+                            $arDotacionDetalle->setCantidadDevuelta($arDotacionDetalle->getCantidadDevuelta() + $intCantidad);
+                            $arDotacionDetalle->setCantidadPendiente($arDotacionDetalle->getCantidadAsignada() - $arDotacionDetalle->getCantidadDevuelta());
+                            $em->persist($arDotacionDetalle);
+                        }
+                        $intIndice++;
+                    }
+                }
+                $em->flush();
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:detalleDevolucion.html.twig', array(
+            'arDotacion' => $arDotacion,
+            'arDotacionDetalle' => $arDotacionDetalle,
             'form' => $form->createView()));
     }
 

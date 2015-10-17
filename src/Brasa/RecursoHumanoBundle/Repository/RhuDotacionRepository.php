@@ -21,5 +21,17 @@ class RhuDotacionRepository extends EntityRepository {
         }
         $dql .= " ORDER BY d.fecha";
         return $dql;
-    }       
+    } 
+    
+    public function dotacionDevolucion($codigoEmpleado = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT dd, d FROM BrasaRecursoHumanoBundle:RhuDotacionDetalle dd JOIN dd.dotacionRel d "
+                . "WHERE (dd.cantidadAsignada - dd.cantidadDevuelta) > 0 "
+                . "AND d.codigoDotacionTipoFk = 1"
+                . "AND d.estadoCerrado = 0"
+                . "AND d.codigoEmpleadoFk = " . $codigoEmpleado;
+        $query = $em->createQuery($dql);
+        $arDotacionDetalle = $query->getResult();
+        return $arDotacionDetalle;
+    }
 }

@@ -33,14 +33,19 @@ class RhuDotacion
     private $codigoCentroCostoFk;
     
     /**
-     * @ORM\Column(name="tipo_proceso", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_dotacion_tipo_fk", type="integer", nullable=true)
      */    
-    private $tipoProceso;
+    private $codigoDotacionTipoFk;
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;
+    
+    /**     
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = 0;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -58,6 +63,12 @@ class RhuDotacion
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuDotacionTipo", inversedBy="dotacionesDotacionTipoRel")
+     * @ORM\JoinColumn(name="codigo_dotacion_tipo_fk", referencedColumnName="codigo_dotacion_tipo_pk")
+     */
+    protected $dotacionTipoRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuDotacionDetalle", mappedBy="dotacionRel")
@@ -156,6 +167,30 @@ class RhuDotacion
     }
 
     /**
+     * Set codigoDotacionTipoFk
+     *
+     * @param integer $codigoDotacionTipoFk
+     *
+     * @return RhuDotacion
+     */
+    public function setCodigoDotacionTipoFk($codigoDotacionTipoFk)
+    {
+        $this->codigoDotacionTipoFk = $codigoDotacionTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDotacionTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoDotacionTipoFk()
+    {
+        return $this->codigoDotacionTipoFk;
+    }
+
+    /**
      * Set fecha
      *
      * @param \DateTime $fecha
@@ -177,6 +212,30 @@ class RhuDotacion
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuDotacion
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 
     /**
@@ -252,6 +311,30 @@ class RhuDotacion
     }
 
     /**
+     * Set dotacionTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionTipo $dotacionTipoRel
+     *
+     * @return RhuDotacion
+     */
+    public function setDotacionTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionTipo $dotacionTipoRel = null)
+    {
+        $this->dotacionTipoRel = $dotacionTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get dotacionTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuDotacionTipo
+     */
+    public function getDotacionTipoRel()
+    {
+        return $this->dotacionTipoRel;
+    }
+
+    /**
      * Add dotacionesDetallesDotacionRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle $dotacionesDetallesDotacionRel
@@ -283,29 +366,5 @@ class RhuDotacion
     public function getDotacionesDetallesDotacionRel()
     {
         return $this->dotacionesDetallesDotacionRel;
-    }
-
-    /**
-     * Set tipoProceso
-     *
-     * @param integer $tipoProceso
-     *
-     * @return RhuDotacion
-     */
-    public function setTipoProceso($tipoProceso)
-    {
-        $this->tipoProceso = $tipoProceso;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoProceso
-     *
-     * @return integer
-     */
-    public function getTipoProceso()
-    {
-        return $this->tipoProceso;
     }
 }

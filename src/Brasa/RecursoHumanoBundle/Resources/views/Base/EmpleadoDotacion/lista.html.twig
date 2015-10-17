@@ -37,10 +37,12 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arDotaciones, 'CODIGO', 'd.codigoDotacionPk') }}</th>
                 <th>FECHA</th>
+                <th>TIPO DOTACIÓN</th>
                 <th>CENTRO CENTRO</th>                
                 <th>IDENTIFICACIÓN</th>
                 <th>{{ knp_pagination_sortable(arDotaciones, 'EMPLEADO', 'e.nombreCorto') }}</th>                
                 <th>NÚMERO INTERNO REFERENCIA</th>
+                <th>ESTADO</th>
                 <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
@@ -49,10 +51,12 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arDotaciones.codigoDotacionPk }}">{{ arDotaciones.codigoDotacionPk }} </td>
                 <td>{{ arDotaciones.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arDotaciones.dotacionTipoRel.nombre | default('')  }}</td>
                 <td>{{ arDotaciones.empleadoRel.centroCostoRel.nombre | default('')  }}</td>
                 <td>{{ arDotaciones.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arDotaciones.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arDotaciones.codigoInternoReferencia  }}</td>
+                <td>{% if arDotaciones.estadoCerrado == 1%} CERRADO {% else %} ABIERTO {% endif %}</td>
                 <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_nuevo', {'codigoEmpleado':  arDotaciones.codigoEmpleadoFk, 'codigoDotacion': arDotaciones.codigoDotacionPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_dotacion_detalle', { 'codigoDotacion': arDotaciones.codigoDotacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDotaciones.codigoDotacionPk }}" /></td>

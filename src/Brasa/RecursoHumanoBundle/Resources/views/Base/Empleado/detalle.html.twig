@@ -500,6 +500,7 @@
                     <tr>
                         <th>{{ knp_pagination_sortable(arDotacion, 'CÓDIGO', 'e.codigoEmpleadoDotacionPk') }}</th>
                         <th>FECHA</th>
+                        <th>TIPO DOTACIÓN</th>
                         <th>NÚMERO INTERNO REFERENCIA</th>
                         <th>COMENTARIOS</th>
                         <th style="text-align: center"></th>
@@ -509,6 +510,7 @@
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arDotacion.codigoDotacionPk }}">{{ arDotacion.codigoDotacionPk }} </td>
                             <td>{{ arDotacion.fecha | date('Y/m/d')  }}</td>
+                            <td>{{ arDotacion.dotacionTipoRel.nombre  }}</td>
                             <td>{{ arDotacion.codigoInternoReferencia  }}</td>
                             <td>{{ arDotacion.comentarios  }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDotacion': arDotacion.codigoDotacionPk }) }}', 'AgregarDotacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
