@@ -11,21 +11,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuProyeccionRepository extends EntityRepository {   
     
-    public function listaDql($codigoContrato = "", $strFechaDesde = "", $strFechaHasta = "") {        
+    public function listaDql($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
             $em = $this->getEntityManager();
-            $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuProyeccion p WHERE p.codigoProyeccionPk <> 0";
+            $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuProyeccion p JOIN p.contratoRel c JOIN p.empleadoRel e WHERE p.codigoProyeccionPk <> 0";
             
-            if($codigoContrato != "") {
-                $dql .= " AND p.codigoContratoFk = " . $codigoContrato;
+            if($strCodigoCentroCosto != "") {
+                $dql .= " AND c.codigoCentroCostoFk = " . $strCodigoCentroCosto;
             }   
-
-            if ($strFechaDesde != ""){
-                $dql .= " AND p.fechaDesde >='" . $strFechaDesde . "'";
+            if($strIdentificacion != "") {
+                $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
             }
-            if($strFechaHasta != "") {
-                $dql .= " AND p.fechaHasta <='" . $strFechaHasta . "'";
+            if ($strDesde != ""){
+                $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            }
+            if($strHasta != "") {
+                $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')). "'";
             }
             //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
             return $dql;
-        }             
+        }
+        
+        
 }

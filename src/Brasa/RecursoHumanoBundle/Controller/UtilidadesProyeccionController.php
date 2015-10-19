@@ -20,7 +20,6 @@ class UtilidadesProyeccionController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
-                $this->listarCostosGeneral();
                 $this->generarExcel();
             }
             if($form->get('BtnGenerar')->isClicked()) {                                 
@@ -28,11 +27,20 @@ class UtilidadesProyeccionController extends Controller
                 $fechaHasta = $form->get('fechaHasta')->getData();
                 if($fechaDesde != null && $fechaHasta != null) {
                     $strSql = "DELETE FROM rhu_proyeccion WHERE 1";
-                    $em->getConnection()->executeQuery($strSql);                
-                    $douAuxilioTransporte = 74000;
+                    $em->getConnection()->executeQuery($strSql); 
+                    $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                    $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                    $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
+                    //$douAuxilioTransporte = 74000;
                     $intDias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($fechaDesde, $fechaHasta);
                     $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                    $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('indefinido' => 1));
+                    $centroCosto = $form->get('centroCostoRel')->getData();
+                    if ($centroCosto == ""){
+                        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('indefinido' => 1));
+                    }else{
+                        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('indefinido' => 1, 'codigoCentroCostoFk' => $centroCosto));
+                    }
+                    
                     foreach($arContratos as $arContrato) {
                         $floSalarioPromedio = $arContrato->getVrSalarioPago();
                         $floIbc = ($arContrato->getVrSalarioPago() / 30) * $intDias;
@@ -52,6 +60,8 @@ class UtilidadesProyeccionController extends Controller
                         $arProyeccion->setVrPrimas($douPrima);
                         $arProyeccion->setVrVacaciones($douVacaciones);
                         $arProyeccion->setDias($intDias);
+                        $arProyeccion->setFechaDesde($fechaDesde);
+                        $arProyeccion->setFechaHasta($fechaHasta);
                         $em->persist($arProyeccion);
                     }                
                     $em->flush();                    
@@ -59,14 +69,14 @@ class UtilidadesProyeccionController extends Controller
                 return $this->redirect($this->generateUrl('brs_rhu_utilidades_proyeccion'));           
             }            
             
-            if($form->get('BtnPDF')->isClicked()) {
+            /*if($form->get('BtnPDF')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listarCostosGeneral();
                 $objReporteCostos = new \Brasa\RecursoHumanoBundle\Reportes\ReporteCostos();
-                $objReporteCostos->Generar($this, $this->strSqlLista);
-            }            
+                $objReporteCostos->Generar($this, $this->strDqlLista);
+            }*/            
             if($form->get('BtnFiltrar')->isClicked()) {
-                //$this->filtrarLista($form);
+                $this->filtrarLista($form);
                 $this->listar();
             }
 
@@ -82,9 +92,10 @@ class UtilidadesProyeccionController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProyeccion')->listaDql(                                        
-                    "",
-                    "",
-                    ""
+                    $session->get('filtroCodigoCentroCosto'),
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
                     );
     }    
 
@@ -113,7 +124,6 @@ class UtilidadesProyeccionController extends Controller
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPDF', 'submit', array('label'  => 'PDF',))
             ->getForm();
         return $form;
     }        
@@ -143,75 +153,46 @@ class UtilidadesProyeccionController extends Controller
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'DESDE')
-                    ->setCellValue('C1', 'HASTA')
-                    ->setCellValue('D1', 'IDENTIFICACION')
-                    ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'CENTRO COSTOS')
-                    ->setCellValue('G1', 'BASICO')
-                    ->setCellValue('H1', 'TIEMPO EXTRA')
-                    ->setCellValue('I1', 'VALORES ADICIONALES')
-                    ->setCellValue('J1', 'AUX. TRANSPORTE')
-                    ->setCellValue('K1', 'ARP')
-                    ->setCellValue('L1', 'EPS')
-                    ->setCellValue('M1', 'PENSION')
-                    ->setCellValue('N1', 'CAJA')
-                    ->setCellValue('O1', 'ICBF')
-                    ->setCellValue('P1', 'SENA')
-                    ->setCellValue('Q1', 'CESANTIAS')
-                    ->setCellValue('R1', 'VACACIONES')
-                    ->setCellValue('S1', 'ADMON')
-                    ->setCellValue('T1', 'COSTO')
-                    ->setCellValue('U1', 'TOTAL')
-                    ->setCellValue('W1', 'NETO')
-                    ->setCellValue('X1', 'IBC')
-                    ->setCellValue('Y1', 'AUX. TRANSPORTE COTIZACION')
-                    ->setCellValue('Z1', 'DIAS PERIODO')
-                    ->setCellValue('AA1', 'SALARIO PERIODO')
-                    ->setCellValue('AB1', 'SALARIO EMPLEADO');
-
+                    ->setCellValue('B1', 'IDENTIFICACIÓN')
+                    ->setCellValue('C1', 'EMPLEADO')
+                    ->setCellValue('D1', 'CONTRATO')
+                    ->setCellValue('E1', 'CENTRO COSTO')
+                    ->setCellValue('F1', 'DESDE')
+                    ->setCellValue('G1', 'HASTA')
+                    ->setCellValue('H1', 'SALARIO')
+                    ->setCellValue('I1', 'DÍAS')
+                    ->setCellValue('J1', 'VACACIONES')
+                    ->setCellValue('K1', 'PRIMAS')
+                    ->setCellValue('L1', 'CESANTIAS')
+                    ->setCellValue('M1', 'INTERESES CESANTIAS');
         $i = 2;
-        $query = $em->createQuery($this->strSqlLista);
-        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPagos = $query->getResult();
-        foreach ($arPagos as $arPago) {
+        $query = $em->createQuery($this->strDqlLista);
+        $arProyecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion();
+        $arProyecciones = $query->getResult();
+        foreach ($arProyecciones as $arProyeccion) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
-                    ->setCellValue('B' . $i, $arPago->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('C' . $i, $arPago->getFechaHasta()->Format('Y-m-d'))
-                    ->setCellValue('D' . $i, $arPago->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arPago->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arPago->getCentroCostoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arPago->getVrSalario())
-                    ->setCellValue('H' . $i, $arPago->getVrAdicionalTiempo())
-                    ->setCellValue('I' . $i, $arPago->getVrAdicionalValor())
-                    ->setCellValue('J' . $i, $arPago->getVrAuxilioTransporte())
-                    ->setCellValue('K' . $i, $arPago->getVrArp())
-                    ->setCellValue('L' . $i, $arPago->getVrEps())
-                    ->setCellValue('M' . $i, $arPago->getVrPension())
-                    ->setCellValue('N' . $i, $arPago->getVrCaja())
-                    ->setCellValue('O' . $i, $arPago->getVrIcbf())
-                    ->setCellValue('P' . $i, $arPago->getVrSena())
-                    ->setCellValue('Q' . $i, $arPago->getVrCesantias())
-                    ->setCellValue('R' . $i, $arPago->getVrVacaciones())
-                    ->setCellValue('S' . $i, $arPago->getVrAdministracion())
-                    ->setCellValue('T' . $i, $arPago->getVrCosto())
-                    ->setCellValue('U' . $i, $arPago->getVrTotalCobrar())
-                    ->setCellValue('W' . $i, $arPago->getVrNeto())
-                    ->setCellValue('X' . $i, $arPago->getVrIngresoBaseCotizacion())
-                    ->setCellValue('Y' . $i, $arPago->getVrAuxilioTransporteCotizacion())
-                    ->setCellValue('Z' . $i, $arPago->getDiasPeriodo())
-                    ->setCellValue('AA' . $i, $arPago->getVrSalarioPeriodo())
-                    ->setCellValue('AB' . $i, $arPago->getVrSalarioEmpleado());
+                    ->setCellValue('A' . $i, $arProyeccion->getCodigoProyeccionPk())
+                    ->setCellValue('B' . $i, $arProyeccion->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arProyeccion->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('D' . $i, $arProyeccion->getCodigoContratoFk())
+                    ->setCellValue('E' . $i, $arProyeccion->getContratoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arProyeccion->getFechaDesde()->Format('Y-m-d'))
+                    ->setCellValue('G' . $i, $arProyeccion->getFechaHasta()->Format('Y-m-d'))
+                    ->setCellValue('H' . $i, $arProyeccion->getVrSalario())
+                    ->setCellValue('I' . $i, $arProyeccion->getDias())
+                    ->setCellValue('J' . $i, $arProyeccion->getVrVacaciones())
+                    ->setCellValue('K' . $i, $arProyeccion->getVrPrimas())
+                    ->setCellValue('L' . $i, $arProyeccion->getVrCesantias())
+                    ->setCellValue('M' . $i, $arProyeccion->getVrInteresesCesantias());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('costos');
+        $objPHPExcel->getActiveSheet()->setTitle('Proyeccion');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Costos.xlsx"');
+        header('Content-Disposition: attachment;filename="Proyeccion.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
