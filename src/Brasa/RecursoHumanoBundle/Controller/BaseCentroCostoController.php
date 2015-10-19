@@ -106,7 +106,9 @@ class BaseCentroCostoController extends Controller
                         $em->persist($arCentroCosto);
                         $em->flush();
                         if($request->request->get('ChkGenerarPeriodo')) {
-                            $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($arCentroCosto->getCodigoCentroCostoPk(), 1);
+                            if($codigoCentroCosto == 0) {
+                                $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($arCentroCosto->getCodigoCentroCostoPk(), 1);                                
+                            }                            
                         }
                         if($form->get('guardarnuevo')->isClicked()) {
                             return $this->redirect($this->generateUrl('brs_rhu_base_centros_costos_nuevo', array('codigoCentroCosto' => 0)));
