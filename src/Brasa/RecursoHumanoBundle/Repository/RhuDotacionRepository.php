@@ -10,8 +10,8 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuDotacionRepository extends EntityRepository {
-    
-    public function listaDQL($strIdentificacion = "", $codigoCentroCosto = "") {        
+
+    public function listaDQL($strIdentificacion = "", $codigoCentroCosto = "") {
         $dql   = "SELECT d, e FROM BrasaRecursoHumanoBundle:RhuDotacion d JOIN d.empleadoRel e WHERE d.codigoDotacionPk <> 0";
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
@@ -21,9 +21,9 @@ class RhuDotacionRepository extends EntityRepository {
         }
         $dql .= " ORDER BY d.fecha";
         return $dql;
-    } 
-    
-    public function dotacionDevolucion($codigoEmpleado = "") {        
+    }
+
+    public function dotacionDevolucion($codigoEmpleado = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT dd, d FROM BrasaRecursoHumanoBundle:RhuDotacionDetalle dd JOIN dd.dotacionRel d "
                 . "WHERE (dd.cantidadAsignada - dd.cantidadDevuelta) > 0 "
@@ -33,5 +33,23 @@ class RhuDotacionRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arDotacionDetalle = $query->getResult();
         return $arDotacionDetalle;
+    }
+
+    public function listaDotacionesPendientesDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT d, dd, e FROM BrasaRecursoHumanoBundle:RhuDotacion d JOIN d.dotacionesDetallesDotacionRel dd JOIN d.empleadoRel e WHERE d.codigoDotacionPk <> 0 AND (dd.cantidadAsignada - dd.cantidadDevuelta) > 0 AND  d.codigoDotacionTipoFk = 1";
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND d.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND d.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND d.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        return $dql;
     }
 }

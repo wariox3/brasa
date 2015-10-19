@@ -58,11 +58,11 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arDotacionesPendientes.codigoDotacionPk }}">{{ arDotacionesPendientes.codigoDotacionPk }} </td>
                 <td>{{ arDotacionesPendientes.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arDotacionesPendientes.dotacionTipo.nombre  }}</td>
+                <td>{{ arDotacionesPendientes.dotacionTipoRel.nombre  }}</td>
                 <td>{{ arDotacionesPendientes.centroCostoRel.nombre  }}</td>
                 <td>{{ arDotacionesPendientes.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arDotacionesPendientes.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arDotacionesPendientes.numeroInternoReferencia  }}</td>
+                <td>{{ arDotacionesPendientes.codigoInternoReferencia  }}</td>
             </tr>
             {% endfor %}
         </table>

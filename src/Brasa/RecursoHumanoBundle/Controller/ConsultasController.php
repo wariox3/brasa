@@ -1851,57 +1851,37 @@ class ConsultasController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'FECHA')
-                    ->setCellValue('C1', 'CENTRO COSTOS')
-                    ->setCellValue('D1', 'IDENTIFICACIÓN')
-                    ->setCellValue('E1', 'EMPLEADO')
-                    ->setCellValue('F1', 'CARGO')
-                    ->setCellValue('G1', 'PROCESO')
-                    ->setCellValue('H1', 'CAUSAL')
-                    ->setCellValue('I1', 'DESCARGOS')
-                    ->setCellValue('J1', 'FECHA SUSPENSIÓN');
+                    ->setCellValue('C1', 'TIPO DOTACIÓN')    
+                    ->setCellValue('D1', 'CENTRO COSTOS')
+                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'EMPLEADO')
+                    ->setCellValue('G1', 'NÚMERO INTERNO REFERENCIA');
 
         $i = 2;
-        $query = $em->createQuery($this->strSqlProcesosDisciplinariosLista);
-        $arProcesosDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
-        $arProcesosDisciplinarios = $query->getResult();
-        foreach ($arProcesosDisciplinarios as $arProcesoDisciplinario) {
-            if ($arProcesoDisciplinario->getAsunto() == Null){
-                $asunto = "NO APLICA";
-            } else {
-                $asunto = $arProcesoDisciplinario->getAsunto();
-            }
-            if ($arProcesoDisciplinario->getDescargos() == Null){
-                $descargos = "NO APLICA";
-            } else {
-                $descargos = $arProcesoDisciplinario->getDescargos();
-            }
-            if ($arProcesoDisciplinario->getSuspension() == Null){
-                $suspension = "NO APLICA";
-            } else {
-                $suspension = $arProcesoDisciplinario->getSuspension();
-            }
+        $query = $em->createQuery($this->strSqlDotacionesPendientesLista);
+        $arDotacionesPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
+        $arDotacionesPendientes = $query->getResult();
+        foreach ($arDotacionesPendientes as $arDotacionPendiente) {
+            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arProcesoDisciplinario->getCodigoDisciplinarioPk())
-                    ->setCellValue('B' . $i, $arProcesoDisciplinario->getFecha()->format('Y/m/d'))
-                    ->setCellValue('C' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getCentroCostoRel()->getNombre())
-                    ->setCellValue('D' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getCargoDescripcion())
-                    ->setCellValue('G' . $i, $arProcesoDisciplinario->getDisciplinarioTipoRel()->getNombre())
-                    ->setCellValue('H' . $i, $asunto)
-                    ->setCellValue('I' . $i, $descargos)
-                    ->setCellValue('J' . $i, $suspension);
+                    ->setCellValue('A' . $i, $arDotacionPendiente->getCodigoDotacionPk())
+                    ->setCellValue('B' . $i, $arDotacionPendiente->getFecha()->format('Y/m/d'))
+                    ->setCellValue('C' . $i, $arDotacionPendiente->getDotacionTipoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arDotacionPendiente->getCentroCostoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arDotacionPendiente->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arDotacionPendiente->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arDotacionPendiente->getCodigoInternoReferencia());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('ProcesosDisciplinarios');
+        $objPHPExcel->getActiveSheet()->setTitle('DotacionesPendientes');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ReporteProcesosDisciplinarios.xlsx"');
+        header('Content-Disposition: attachment;filename="ReporteDotacionesPendientes.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
