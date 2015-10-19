@@ -18,8 +18,8 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arDotacionElementos.codigoDotacionElementoPk }}">{{ arDotacionElementos.codigoDotacionElementoPk }}</td>
                 <td>{{arDotacionElementos.dotacion}}</td>
                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
-                <td style="text-align: right"><input class="input-grid" type="text" name="TxtSerie[]"  size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
-                <td style="text-align: right"><input class="input-grid" type="text" name="TxtLote[]"  size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtSerie[]"  size="15" style="text-align: right; width:120px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtLote[]"  size="15" style="text-align: right; width:120px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
             {%endfor%}
             </tr>            
     </table>    

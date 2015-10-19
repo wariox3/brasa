@@ -8,16 +8,13 @@
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">
-                    {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                    {% if arDotaciones.estadoCerrado == 1 %}
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 8,  'numero': arDotaciones.codigoDotacionPk }) }}', 'Archivos', 500, 700)" disabled="disabled">Archivos</a>
-                    {% else %}
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 8,  'numero': arDotaciones.codigoDotacionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
-                    {% endif%}
-                    {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            <div class="btn-group">                
+                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 8,  'numero': arDotacion.codigoDotacionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
             </div>
-        </div>
+        </div>            
         <br /><br />
         <div class="panel panel-default">
             <div class="panel-heading">Información de la dotación</div>
@@ -25,25 +22,25 @@
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
                         <td class="titulo">CODIGO:</td>
-                        <td class="td-in-well">{{ arDotaciones.codigoDotacionPk }}</td>
+                        <td class="td-in-well">{{ arDotacion.codigoDotacionPk }}</td>
                         <td class="titulo">FECHA:</th>
-                        <td class="td-in-well">{{ arDotaciones.fecha |date("Y/m/d") }}</td>
+                        <td class="td-in-well">{{ arDotacion.fecha |date("Y/m/d") }}</td>
                         <td class="titulo">NÚMERO INTERNO REFERENCIA:</th>
-                        <td class="td-in-well" align="right">{{ arDotaciones.codigoInternoReferencia}}</td>                        
+                        <td class="td-in-well" align="right">{{ arDotacion.codigoInternoReferencia}}</td>                        
                     </tr>
                     <tr>
                         <td class="titulo">IDENTIFICACIÓN:</td>
-                        <td class="td-in-well">{{ arDotaciones.empleadoRel.numeroIdentificacion }}</td>
+                        <td class="td-in-well">{{ arDotacion.empleadoRel.numeroIdentificacion }}</td>
                         <td class="titulo">EMPLEADO:</td>
-                        <td class="td-in-well">{{ arDotaciones.empleadoRel.nombreCorto }}</td>
+                        <td class="td-in-well">{{ arDotacion.empleadoRel.nombreCorto }}</td>
                         <td class="titulo">CENTRO COSTOS:</td>
-                        <td class="td-in-well">{{ arDotaciones.centroCostoRel.nombre}}</td>                                                
+                        <td class="td-in-well">{{ arDotacion.centroCostoRel.nombre}}</td>                                                
                     </tr>                    
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
-                        <td class="td-in-well" colspan="3">{{ arDotaciones.comentarios }}</td>
+                        <td class="td-in-well" colspan="3">{{ arDotacion.comentarios }}</td>
                         <td class="titulo">TIPO DOTACIÓN:</td>
-                        <td class="td-in-well">{{ arDotaciones.dotacionTipoRel.nombre}}</td>                                                
+                        <td class="td-in-well">{{ arDotacion.dotacionTipoRel.nombre}}</td>                                                
                     </tr>                    
                 </table>
             </div>
@@ -53,11 +50,11 @@
                 <tr>
                     <th>CÓDIGO</th>
                     <th>ELEMENTO DOTACIÓN</th>
-                    <th>CANTIDAD ASIGNADA</th>
-                    <th>CANTIDAD DEVUELTA</th>
-                    <th>CANTIDAD PENDIENTE</th>
+                    <th>CANTIDAD</th>
+                    <th>DEVUELTA</th>
                     <th>SERIE</th>
                     <th>LOTE</th>
+                    <th>ENLACE</th>
                     <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                 </tr>
                 {% for arDotacionDetalles in arDotacionDetalles %}
@@ -68,10 +65,10 @@
                     </td>
                     <td>{{ arDotacionDetalles.dotacionElementoRel.dotacion }}</td>
                     <td>{{ arDotacionDetalles.cantidadAsignada }}</td>
-                    <td>{{ arDotacionDetalles.cantidadDevuelta }}</td>
-                    <td>{{ arDotacionDetalles.cantidadPendiente }}</td>
+                    <td>{{ arDotacionDetalles.cantidadDevuelta }}</td>                                        
                     <td>{{ arDotacionDetalles.serie }}</td>
                     <td>{{ arDotacionDetalles.lote }}</td>
+                    <td>{{ arDotacionDetalles.codigoDotacionDetalleEnlaceFk }}</td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDotacionDetalles.codigoDotacionDetallePk }}" /></td>
                 </tr>
                 {% endfor %}
@@ -84,22 +81,24 @@
         </div>  
         <div class="btn-toolbar" style="float: right">                           
             <div class="btn-group">                
-                {% if arDotaciones.codigoDotacionTipoFk == 1%}
-                    {% if arDotaciones.estadoCerrado == 1 %}
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_nuevo', {'codigoDotacion': arDotaciones.codigoDotacionPk}) }}', 'AgregarNuevo', 600, 900)" disabled="disabled">Agregar dotación elemento</a>
-                    {% else %}
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_nuevo', {'codigoDotacion': arDotaciones.codigoDotacionPk}) }}', 'AgregarNuevo', 600, 900)">Agregar dotación elemento</a>
+                {% if arDotacion.estadoAutorizado == 0 %}                
+                    {% if arDotacion.codigoDotacionTipoFk == 1%}
+                        {% if arDotacion.estadoCerrado == 1 %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_nuevo', {'codigoDotacion': arDotacion.codigoDotacionPk}) }}', 'AgregarNuevo', 600, 900)" disabled="disabled">Agregar dotación elemento</a>
+                        {% else %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_nuevo', {'codigoDotacion': arDotacion.codigoDotacionPk}) }}', 'AgregarNuevo', 600, 900)">Agregar dotación elemento</a>
+                        {% endif%}
+                    {% else%}
+                        {% if arDotacion.estadoCerrado == 1 %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_devolucion', {'codigoDotacion': arDotacion.codigoDotacionPk}) }}', 'AgregarDevolucion', 600, 900)" disabled="disabled">Devolución dotación elemento</a>
+                        {% else %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_devolucion', {'codigoDotacion': arDotacion.codigoDotacionPk}) }}', 'AgregarDevolucion', 600, 900)">Devolución dotación elemento</a>
+                        {% endif%}
                     {% endif%}
-                {% else%}
-                    {% if arDotaciones.estadoCerrado == 1 %}
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_devolucion', {'codigoDotacion': arDotaciones.codigoDotacionPk}) }}', 'AgregarDevolucion', 600, 900)" disabled="disabled">Devolución dotación elemento</a>
-                    {% else %}
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_devolucion', {'codigoDotacion': arDotaciones.codigoDotacionPk}) }}', 'AgregarDevolucion', 600, 900)">Devolución dotación elemento</a>
-                    {% endif%}
-                {% endif%}
+                {% endif%}                    
             </div>
             <div class="btn-group">                
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
+                {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
             </div>
         </div>             
         {{ form_rest(form) }}

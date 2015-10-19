@@ -252,7 +252,7 @@ class FormatoHojaVida extends \FPDF_FPDF {
                $this->SetFont('Arial','',6);
                $this->Cell(68, 6, utf8_decode($arEmpleadoEstudios->getInstitucion()), 1, 0, 'L', 1);
                $this->SetFont('Arial','',8);
-               $this->Cell(12, 6, $arEmpleadoEstudios->getAprobados(), 1, 0, 'L', 1);
+               $this->Cell(12, 6, '', 1, 0, 'L', 1);
                $this->SetFont('Arial','',6);
                $this->Cell(35, 6, utf8_decode($arEmpleadoEstudios->getCiudadRel()->getNombre()), 1, 0, 'L', 1);
                $this->Cell(68, 6, utf8_decode($arEmpleadoEstudios->getTitulo()), 1, 0, 'L', 1);

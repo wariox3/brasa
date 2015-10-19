@@ -50,50 +50,6 @@ class DotacionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:lista.html.twig', array('arDotaciones' => $arDotaciones, 'form' => $form->createView()));
     }
 
-    private function listar() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $this->strListaDql = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->listaDQL(
-                $session->get('filtroIdentificacion'),
-                $session->get('filtroCodigoCentroCosto')
-                );
-    }
-
-    private function formularioFiltro() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $arrayPropiedades = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->getForm();
-        return $form;
-    }
-
-    private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-    }
-
     public function nuevoAction($codigoEmpleado, $codigoDotacion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -176,26 +132,44 @@ class DotacionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnCerrar', 'submit', array('label'  => 'Cerrar',))
-            ->getForm();
+        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
+        $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
+        $form = $this->formularioDetalle($arDotacion);
         $form->handleRequest($request);
-        $arDotaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
-        $arDotaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
         if($form->isValid()) {
+            if($form->get('BtnAutorizar')->isClicked()) {            
+                if($arDotacion->getEstadoAutorizado() == 0) {
+                    $arDotacion->setEstadoAutorizado(1);
+                    $em->persist($arDotacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));                                                
+                }
+            }
+            if($form->get('BtnDesAutorizar')->isClicked()) {            
+                if($arDotacion->getEstadoAutorizado() == 1) {
+                    $arDotacion->setEstadoAutorizado(0);
+                    $em->persist($arDotacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));                                                
+                }
+            }            
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDotacionDetalle();
                 $objFormatoDotacionDetalle->Generar($this, $codigoDotacion);
             }
             
-            if($form->get('BtnEliminar')->isClicked()) {
+            if($form->get('BtnEliminarDetalle')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoDotacionPk) {
                         $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
                         $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($codigoDotacionPk);
+                        if($arDotacionDetalle->getCodigoDotacionDetalleEnlaceFk()) {
+                            $arDotacionDetalleEnlace = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                            $arDotacionDetalleEnlace = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($arDotacionDetalle->getCodigoDotacionDetalleEnlaceFk());                            
+                            $arDotacionDetalleEnlace->setCantidadDevuelta($arDotacionDetalleEnlace->getCantidadDevuelta() - $arDotacionDetalle->getCantidadAsignada());
+                            $em->persist($arDotacionDetalleEnlace);
+                        }
                         $em->remove($arDotacionDetalle);
                     }
                     $em->flush();
@@ -217,11 +191,12 @@ class DotacionController extends Controller
                 }
             }
             
+            
         }
         $arDotacionDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
         $arDotacionDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->FindBy(array('codigoDotacionFk' => $codigoDotacion));
         return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:detalle.html.twig', array(
-                    'arDotaciones' => $arDotaciones,
+                    'arDotacion' => $arDotacion,
                     'arDotacionDetalles' => $arDotacionDetalles,
                     'form' => $form->createView()
                     ));
@@ -302,9 +277,9 @@ class DotacionController extends Controller
                             $arDotacionDetalleDevolucion->setCantidadAsignada($intCantidad);
                             $arDotacionDetalleDevolucion->setSerie($arDotacionDetalle->getSerie());
                             $arDotacionDetalleDevolucion->setLote($arDotacionDetalle->getLote());
+                            $arDotacionDetalleDevolucion->setCodigoDotacionDetalleEnlaceFk($arDotacionDetalle->getCodigoDotacionDetallePk());
                             $em->persist($arDotacionDetalleDevolucion);
-                            $arDotacionDetalle->setCantidadDevuelta($arDotacionDetalle->getCantidadDevuelta() + $intCantidad);
-                            $arDotacionDetalle->setCantidadPendiente($arDotacionDetalle->getCantidadAsignada() - $arDotacionDetalle->getCantidadDevuelta());
+                            $arDotacionDetalle->setCantidadDevuelta($arDotacionDetalle->getCantidadDevuelta() + $intCantidad);                            
                             $em->persist($arDotacionDetalle);
                         }
                         $intIndice++;
@@ -320,6 +295,71 @@ class DotacionController extends Controller
             'form' => $form->createView()));
     }
 
+    private function listar() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $this->strListaDql = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->listaDQL(
+                $session->get('filtroIdentificacion'),
+                $session->get('filtroCodigoCentroCosto')
+                );
+    }
+
+    private function formularioFiltro() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->getForm();
+        return $form;
+    }
+
+    private function filtrar ($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+    }    
+    
+    private function formularioDetalle($arVacacion) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
+        $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);        
+        if($arVacacion->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;            
+            $arrBotonEliminarDetalle['disabled'] = true;            
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;
+        }
+        $form = $this->createFormBuilder()    
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
+                    ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)                                
+                    ->getForm();  
+        return $form;
+    }     
+    
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();

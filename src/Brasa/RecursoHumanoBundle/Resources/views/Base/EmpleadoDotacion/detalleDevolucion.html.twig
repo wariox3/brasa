@@ -8,17 +8,17 @@
         <tr>
             <th>CÓDIGO</th>
             <th>ELEMENTO DOTACIÓN</th>
-            <th>CANTIDAD SOLICITADA</th>
-            <th>CANTIDAD PENDIENTE</th>
-            <th>CANTIDAD DEVUELTA</th>
+            <th>CANTIDAD</th>
+            <th>PENDIENTE</th>
+            <th>DEVOLVER</th>
         </tr>
         
             {%for arDotacionDetalle in arDotacionDetalle %}
                <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arDotacionDetalle.codigoDotacionDetallePk }}">{{ arDotacionDetalle.codigoDotacionDetallePk }}</td>
                 <td>{{arDotacionDetalle.dotacionElementoRel.dotacion}}</td>
-                <td>{{arDotacionDetalle.CantidadAsignada}}</td>
-                <td>{{arDotacionDetalle.CantidadPendiente}}</td>
+                <td style="text-align: right">{{arDotacionDetalle.CantidadAsignada}}</td>
+                <td style="text-align: right">{{arDotacionDetalle.CantidadAsignada - arDotacionDetalle.CantidadDevuelta}}</td>
                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
             {%endfor%}
             </tr>            

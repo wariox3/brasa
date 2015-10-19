@@ -40,12 +40,7 @@ class RhuDotacionDetalle
     /**
      * @ORM\Column(name="cantidad_devuelta", type="integer", nullable=true)
      */    
-    private $cantidadDevuelta = 0;
-    
-    /**
-     * @ORM\Column(name="cantidad_pendiente", type="integer", nullable=true)
-     */    
-    private $cantidadPendiente = 0;
+    private $cantidadDevuelta = 0;   
     
     /**
      * @ORM\Column(name="serie", type="string", nullable=false)
@@ -55,7 +50,7 @@ class RhuDotacionDetalle
     /**
      * @ORM\Column(name="lote", type="string", nullable=false)
      */
-    private $lote;
+    private $lote;         
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuDotacion", inversedBy="dotacionesDetallesDotacionRel")
@@ -68,8 +63,7 @@ class RhuDotacionDetalle
      * @ORM\JoinColumn(name="codigo_dotacion_elemento_fk", referencedColumnName="codigo_dotacion_elemento_pk")
      */
     protected $dotacionElementoRel;
-    
-
+   
 
     /**
      * Get codigoDotacionDetallePk
@@ -199,30 +193,6 @@ class RhuDotacionDetalle
     public function getCantidadDevuelta()
     {
         return $this->cantidadDevuelta;
-    }
-
-    /**
-     * Set cantidadPendiente
-     *
-     * @param integer $cantidadPendiente
-     *
-     * @return RhuDotacionDetalle
-     */
-    public function setCantidadPendiente($cantidadPendiente)
-    {
-        $this->cantidadPendiente = $cantidadPendiente;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadPendiente
-     *
-     * @return integer
-     */
-    public function getCantidadPendiente()
-    {
-        return $this->cantidadPendiente;
     }
 
     /**

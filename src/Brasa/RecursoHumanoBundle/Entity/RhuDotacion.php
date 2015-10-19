@@ -46,6 +46,11 @@ class RhuDotacion
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
     private $estadoCerrado = 0;
+
+    /**     
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */    
+    private $estadoAutorizado = 0;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -366,5 +371,29 @@ class RhuDotacion
     public function getDotacionesDetallesDotacionRel()
     {
         return $this->dotacionesDetallesDotacionRel;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuDotacion
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 }
