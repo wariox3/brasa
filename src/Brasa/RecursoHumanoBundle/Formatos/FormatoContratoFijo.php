@@ -62,7 +62,7 @@ class FormatoContratoFijo extends \FPDF_FPDF {
         $aniohasta = substr($sustitucion13, 0,-6);
         $meshasta = substr($sustitucion13, -5,-3);
         $anioresta = $aniohasta - $aniodesde;
-        $mesresta = $meshasta - $mesdesde + ($anioresta * 12);
+        $mesresta = $meshasta - $mesdesde + 1 +($anioresta * 12);
         $sustitucion12 = $mesresta;
         $sustitucion14 = $arContrato->getFechaDesde()->format('Y/m/d');
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");

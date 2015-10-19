@@ -332,7 +332,7 @@ class ProgramacionesPagoController extends Controller
 
         //$arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         
-        $arrBotonGenerarEmpleados = array('label' => 'Anlisar contratos', 'disabled' => false);
+        $arrBotonGenerarEmpleados = array('label' => 'Anlizar contratos', 'disabled' => false);
         $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);        
         if($arProgramacionPago->getEstadoGenerado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;         

@@ -312,13 +312,27 @@ class BaseEmpleadoController extends Controller
                 }
             }
             if($boolErrores == 0) {
-                $em->persist($arEmpleado);
-                $em->flush();                         
-                if($form->get('guardarnuevo')->isClicked()) {
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0, 'codigoSeleccion' => 0)));
-                } else {
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_lista'));
-                }                
+                //Calculo edad
+                    $varFechaNacimientoAnio = $arEmpleado->getFechaNacimiento()->format('Y');
+                    $varFechaNacimientoMes = $arEmpleado->getFechaNacimiento()->format('m');
+                    $varMesActual = date('m');
+                    if ($varMesActual >= $varFechaNacimientoMes){
+                        $varEdad = date('Y') - $varFechaNacimientoAnio;
+                    } else {
+                        $varEdad = date('Y') - $varFechaNacimientoAnio -1;
+                    }
+                //Fin calculo edad
+                if ($varEdad < 16){
+                    $objMensaje->Mensaje("error", "El empleado debe ser mayor de 15 años!", $this);
+                }else{
+                    $em->persist($arEmpleado);
+                    $em->flush();                         
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0, 'codigoSeleccion' => 0)));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_rhu_base_empleados_lista'));
+                    }
+                }                     
             }
         }
 

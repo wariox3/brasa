@@ -53,7 +53,7 @@ class PagosAdicionalesController extends Controller
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $form = $this->createFormBuilder()
-            ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Retirar',))
+            ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnConceptoPermanente', 'submit', array('label'  => 'Permanente',))
             ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))                
             ->getForm();
