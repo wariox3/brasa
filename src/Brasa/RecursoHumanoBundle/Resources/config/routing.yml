@@ -600,7 +600,7 @@ brs_rhu_consultas_procesos_disciplinarios:
     
 brs_rhu_consultas_dotacion_pendiente:    
     path:     /rhu/consultas/dotacion/pendiente
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:DotacionPendiente }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:DotacionesPendientes }    
     
 brs_rhu_pago_examen_lista:
     path:     /rhu/pago/examen/lista

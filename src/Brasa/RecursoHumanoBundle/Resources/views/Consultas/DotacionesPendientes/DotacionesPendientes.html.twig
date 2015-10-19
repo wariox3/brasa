@@ -6,7 +6,7 @@
             $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
     </script>
     <div class="page-header">
-        <h3>Consulta procesos disciplinarios</h3>
+        <h3>Consulta dotaciones pendientes</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}
@@ -39,7 +39,7 @@
                 </div>
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
-                        {{ form_widget(form.BtnFiltrarProcesosDisciplinarios, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
+                        {{ form_widget(form.BtnFiltrarDotacionesPendientes, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
                     </div>
                 </div>
             </div>
@@ -48,39 +48,33 @@
             <tr>
                 <th>CÓDIGO</th>
                 <th>FECHA</th>
-                <th>CENTRO COSTOS</th>
+                <th>TIPO DOTACIÓN</th>
+                <th>CENTRO COSTO</th>
                 <th>IDENTIFICACIÓN</th>
-                <th>NOMBRE</th>
-                <th>CARGO</th>
-                <th>PROCESO</th>
-                <th>CAUSAL</th>
-                <th>DESCARGOS</th>
-                <th>FECHA DE SUSPENSIÓN</th>
+                <th>EMPLEADO</th>
+                <th>NÚMERO INTERNO REFERENCIA</th>
             </tr>
-            {% for arProcesosDisciplinarios in arProcesosDisciplinarios %}
+            {% for arDotacionesPendientes in arDotacionesPendientes %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arProcesosDisciplinarios.codigoDisciplinarioPk }}">{{ arProcesosDisciplinarios.codigoDisciplinarioPk }} </td>
-                <td>{{ arProcesosDisciplinarios.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arProcesosDisciplinarios.empleadoRel.centroCostoRel.nombre  }}</td>
-                <td>{{ arProcesosDisciplinarios.empleadoRel.numeroIdentificacion  }}</td>
-                <td>{{ arProcesosDisciplinarios.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arProcesosDisciplinarios.empleadoRel.cargoDescripcion  }}</td>
-                <td>{{ arProcesosDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
-                <td>{{ arProcesosDisciplinarios.asunto|default('NO APLICA')  }}</td>
-                <td>{{ arProcesosDisciplinarios.descargos|default('NO APLICA')  }}</td>
-                <td>{{ arProcesosDisciplinarios.suspension|default('NO APLICA')  }}</td>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arDotacionesPendientes.codigoDotacionPk }}">{{ arDotacionesPendientes.codigoDotacionPk }} </td>
+                <td>{{ arDotacionesPendientes.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arDotacionesPendientes.dotacionTipo.nombre  }}</td>
+                <td>{{ arDotacionesPendientes.centroCostoRel.nombre  }}</td>
+                <td>{{ arDotacionesPendientes.empleadoRel.numeroIdentificacion  }}</td>
+                <td>{{ arDotacionesPendientes.empleadoRel.nombreCorto  }}</td>
+                <td>{{ arDotacionesPendientes.numeroInternoReferencia  }}</td>
             </tr>
             {% endfor %}
         </table>
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">
-                {{ knp_pagination_render(arProcesosDisciplinarios) }}
+                {{ knp_pagination_render(arDotacionesPendientes) }}
             </div>
 
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                {{ form_widget(form.BtnExcelProcesosDisciplinarios, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnExcelDotacionesPendientes, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
         </div>
 
