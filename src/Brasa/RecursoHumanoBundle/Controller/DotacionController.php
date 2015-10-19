@@ -19,6 +19,7 @@ class DotacionController extends Controller
         $session = $this->getRequest()->getSession();
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $this->listar();
         if($form->isValid()) {
             $arrSelecionados = $request->request->get('ChkSeleccionar');
@@ -27,7 +28,17 @@ class DotacionController extends Controller
                     foreach ($arrSelecionados AS $codigoDotacion) {
                         $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
                         $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
-                        $em->remove($arDotacion);
+                        if ($arDotacion->getEstadoAutorizado() == 1){
+                            $objMensaje->Mensaje("error", "La dotación ". $codigoDotacion ." ya fue autorizada, no se pude eliminar", $this);
+                        }else{
+                            $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->validarDotacionesDQL($codigoDotacion);
+                            if ($arDotacion){
+                                $objMensaje->Mensaje("error", "", $vista);
+                            }else{
+                                $em->remove($arDotacion);
+                            }
+                        }
+                        
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_dotacion_lista'));

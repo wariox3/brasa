@@ -52,4 +52,13 @@ class RhuDotacionRepository extends EntityRepository {
         }
         return $dql;
     }
+    
+    public function validarDotacionesDQL($strCodigoDotacion = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT dd, d FROM BrasaRecursoHumanoBundle:RhuDotacionDetalle dd JOIN dd.dotacionRel d "
+                . "WHERE d.codigoEmpleadoFk = " . $strCodigoDotacion;
+        $query = $em->createQuery($dql);
+        $arDotacionRegistros = $query->getResult();
+        return $arDotacionRegistros;
+    }
 }
