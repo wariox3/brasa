@@ -48,21 +48,31 @@
             <tr>
                 <th>CÓDIGO</th>
                 <th>FECHA</th>
-                <th>TIPO DOTACIÓN</th>
+                <th>CÓDIGO DOTACIÓN</th>
                 <th>CENTRO COSTO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
+                <th>ELEMENTO DOTACIÓN</th>
+                <th>CANTIDAD SOLICITADA</th>
+                <th>CANTIDAD PENDIENTE</th>
                 <th>NÚMERO INTERNO REFERENCIA</th>
+                <th>SERIE</th>
+                <th>LOTE</th>
             </tr>
             {% for arDotacionesPendientes in arDotacionesPendientes %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arDotacionesPendientes.codigoDotacionPk }}">{{ arDotacionesPendientes.codigoDotacionPk }} </td>
-                <td>{{ arDotacionesPendientes.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arDotacionesPendientes.dotacionTipoRel.nombre  }}</td>
-                <td>{{ arDotacionesPendientes.centroCostoRel.nombre  }}</td>
-                <td>{{ arDotacionesPendientes.empleadoRel.numeroIdentificacion  }}</td>
-                <td>{{ arDotacionesPendientes.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arDotacionesPendientes.codigoInternoReferencia  }}</td>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arDotacionesPendientes.codigoDotacionDetallePk }}">{{ arDotacionesPendientes.codigoDotacionDetallePk }} </td>
+                <td>{{ arDotacionesPendientes.dotacionRel.fecha |date("Y/m/d") }}</td>
+                <td>{{ arDotacionesPendientes.dotacionRel.codigoDotacionPk }}</td>
+                <td>{{ arDotacionesPendientes.dotacionRel.centroCostoRel.nombre }}</td>
+                <td>{{ arDotacionesPendientes.dotacionRel.empleadoRel.numeroIdentificacion }}</td>
+                <td>{{ arDotacionesPendientes.dotacionRel.empleadoRel.nombreCorto }}</td>
+                <td>{{ arDotacionesPendientes.dotacionElementoRel.dotacion }}</td>
+                <td style="text-align: right">{{ arDotacionesPendientes.cantidadAsignada }}</td>
+                <td style="text-align: right">{{ arDotacionesPendientes.cantidadAsignada - arDotacionesPendientes.cantidadDevuelta}}</td>
+                <td style="text-align: right">{{ arDotacionesPendientes.dotacionRel.codigoInternoReferencia }}</td>
+                <td style="text-align: right">{{ arDotacionesPendientes.serie }}</td>
+                <td style="text-align: right">{{ arDotacionesPendientes.lote }}</td>
             </tr>
             {% endfor %}
         </table>

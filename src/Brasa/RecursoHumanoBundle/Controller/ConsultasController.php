@@ -1853,26 +1853,36 @@ class ConsultasController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'FECHA')
-                    ->setCellValue('C1', 'TIPO DOTACIÓN')    
-                    ->setCellValue('D1', 'CENTRO COSTOS')
+                    ->setCellValue('C1', 'CÓDIGO DOTACIÓN')    
+                    ->setCellValue('D1', 'CENTRO COSTO')
                     ->setCellValue('E1', 'IDENTIFICACIÓN')
                     ->setCellValue('F1', 'EMPLEADO')
-                    ->setCellValue('G1', 'NÚMERO INTERNO REFERENCIA');
+                    ->setCellValue('G1', 'ELEMENTO DOTACIÓN')
+                    ->setCellValue('H1', 'CANTIDAD SOLICITADA')
+                    ->setCellValue('I1', 'CANTIDAD PENDIENTE')
+                    ->setCellValue('J1', 'NÚMERO INTERNO REFERENCIA')
+                    ->setCellValue('K1', 'SERIE')
+                    ->setCellValue('L1', 'LOTE');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlDotacionesPendientesLista);
-        $arDotacionesPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
+        $arDotacionesPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
         $arDotacionesPendientes = $query->getResult();
         foreach ($arDotacionesPendientes as $arDotacionPendiente) {
             
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arDotacionPendiente->getCodigoDotacionPk())
-                    ->setCellValue('B' . $i, $arDotacionPendiente->getFecha()->format('Y/m/d'))
-                    ->setCellValue('C' . $i, $arDotacionPendiente->getDotacionTipoRel()->getNombre())
-                    ->setCellValue('D' . $i, $arDotacionPendiente->getCentroCostoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arDotacionPendiente->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('F' . $i, $arDotacionPendiente->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $arDotacionPendiente->getCodigoInternoReferencia());
+                    ->setCellValue('A' . $i, $arDotacionPendiente->getCodigoDotacionDetallePk())
+                    ->setCellValue('B' . $i, $arDotacionPendiente->getDotacionRel()->getFecha()->format('Y/m/d'))
+                    ->setCellValue('C' . $i, $arDotacionPendiente->getDotacionRel()->getCodigoDotacionPk())
+                    ->setCellValue('D' . $i, $arDotacionPendiente->getDotacionRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arDotacionPendiente->getDotacionRel()->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arDotacionPendiente->getDotacionRel()->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arDotacionPendiente->getDotacionElementoRel()->getDotacion())
+                    ->setCellValue('H' . $i, $arDotacionPendiente->getCantidadAsignada())
+                    ->setCellValue('I' . $i, $arDotacionPendiente->getCantidadAsignada() - $arDotacionPendiente->getCantidadDevuelta())
+                    ->setCellValue('J' . $i, $arDotacionPendiente->getDotacionRel()->getCodigoInternoReferencia())
+                    ->setCellValue('K' . $i, $arDotacionPendiente->getSerie())
+                    ->setCellValue('L' . $i, $arDotacionPendiente->getLote());
             $i++;
         }
 

@@ -37,7 +37,7 @@ class RhuDotacionRepository extends EntityRepository {
 
     public function listaDotacionesPendientesDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {
         $em = $this->getEntityManager();
-        $dql   = "SELECT d, dd, e FROM BrasaRecursoHumanoBundle:RhuDotacion d JOIN d.dotacionesDetallesDotacionRel dd JOIN d.empleadoRel e WHERE d.codigoDotacionPk <> 0 AND (dd.cantidadAsignada - dd.cantidadDevuelta) > 0 AND  d.codigoDotacionTipoFk = 1";
+        $dql   = "SELECT dd, d, e FROM BrasaRecursoHumanoBundle:RhuDotacionDetalle dd JOIN dd.dotacionRel d JOIN d.empleadoRel e WHERE (dd.cantidadAsignada - dd.cantidadDevuelta) > 0 AND  d.codigoDotacionTipoFk = 1";
         if($strCodigoCentroCosto != "") {
             $dql .= " AND d.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }
@@ -56,7 +56,7 @@ class RhuDotacionRepository extends EntityRepository {
     public function validarDotacionesDQL($strCodigoDotacion = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT dd, d FROM BrasaRecursoHumanoBundle:RhuDotacionDetalle dd JOIN dd.dotacionRel d "
-                . "WHERE d.codigoEmpleadoFk = " . $strCodigoDotacion;
+                . "WHERE dd.codigoDotacionFk = " . $strCodigoDotacion;
         $query = $em->createQuery($dql);
         $arDotacionRegistros = $query->getResult();
         return $arDotacionRegistros;

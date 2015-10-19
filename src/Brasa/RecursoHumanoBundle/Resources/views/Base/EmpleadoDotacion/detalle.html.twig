@@ -64,11 +64,11 @@
                         <span class="badge">{{ arDotacionDetalles.codigoDotacionDetallePk }}</span>
                     </td>
                     <td>{{ arDotacionDetalles.dotacionElementoRel.dotacion }}</td>
-                    <td>{{ arDotacionDetalles.cantidadAsignada }}</td>
-                    <td>{{ arDotacionDetalles.cantidadDevuelta }}</td>                                        
-                    <td>{{ arDotacionDetalles.serie }}</td>
-                    <td>{{ arDotacionDetalles.lote }}</td>
-                    <td>{{ arDotacionDetalles.codigoDotacionDetalleEnlaceFk }}</td>
+                    <td style="text-align: right">{{ arDotacionDetalles.cantidadAsignada }}</td>
+                    <td style="text-align: right">{{ arDotacionDetalles.cantidadDevuelta }}</td>                                        
+                    <td style="text-align: right">{{ arDotacionDetalles.serie }}</td>
+                    <td style="text-align: right">{{ arDotacionDetalles.lote }}</td>
+                    <td style="text-align: right">{{ arDotacionDetalles.codigoDotacionDetalleEnlaceFk }}</td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDotacionDetalles.codigoDotacionDetallePk }}" /></td>
                 </tr>
                 {% endfor %}

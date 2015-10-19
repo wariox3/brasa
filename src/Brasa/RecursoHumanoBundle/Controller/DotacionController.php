@@ -31,9 +31,9 @@ class DotacionController extends Controller
                         if ($arDotacion->getEstadoAutorizado() == 1){
                             $objMensaje->Mensaje("error", "La dotación ". $codigoDotacion ." ya fue autorizada, no se pude eliminar", $this);
                         }else{
-                            $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->validarDotacionesDQL($codigoDotacion);
-                            if ($arDotacion){
-                                $objMensaje->Mensaje("error", "", $vista);
+                            $arRegistros = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->validarDotacionesDQL($codigoDotacion);
+                            if ($arRegistros){
+                                $objMensaje->Mensaje("error", "La dotación ". $codigoDotacion ." contiene registros asignados", $this);
                             }else{
                                 $em->remove($arDotacion);
                             }
