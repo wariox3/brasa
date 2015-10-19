@@ -669,3 +669,7 @@ brs_rhu_proceso_contabilizar_pago:
 brs_rhu_proceso_contabilizar_pago_banco:
     path:     /rhu/proceso/contabilizar/pago/banco
     defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPagoBanco:lista }         
+    
+buscar_empleado:
+    pattern:  /buscar/empleado/
+    defaults: { _controller: BrasaGeneralBundle:Busquedas:buscarEmpleado }    

@@ -68,4 +68,19 @@ class RhuEmpleadoRepository extends EntityRepository {
         $dql .= " ORDER BY e.nombreCorto";
         return $dql;
     }
+    
+    public function buscarNombre($strNombre) {        
+        $em = $this->getEntityManager();
+        $query = $em->createQueryBuilder()
+                ->select('e')
+                ->from('BrasaRecursoHumanoBundle:RhuEmpleado', 'e')
+                ->where($em->createQueryBuilder()->expr()->like('e.nombreCorto', $em->createQueryBuilder()->expr()->literal('%' . $strNombre . '%')))
+                ->orWhere($em->createQueryBuilder()->expr()->like('e.numeroIdentificacion', $em->createQueryBuilder()->expr()->literal('%' . $strNombre . '%')))
+                ->setMaxResults(10)
+                ->getQuery();
+        $arResultado = $query->getResult();
+        $query->getSQL();
+        return $arResultado;
+    }
+    
 }
