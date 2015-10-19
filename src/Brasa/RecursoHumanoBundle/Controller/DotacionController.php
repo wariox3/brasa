@@ -228,7 +228,6 @@ class DotacionController extends Controller
                             $intCantidad = $arrControles['TxtCantidad'][$intIndice];
                             $arDotacionDetalle->setCantidadAsignada($intCantidad);
                             $arDotacionDetalle->setCantidadDevuelta(0);
-                            $arDotacionDetalle->setCantidadPendiente($intCantidad);
                             $intLote = $arrControles['TxtLote'][$intIndice];
                             $intSerie = $arrControles['TxtSerie'][$intIndice];
                             $arDotacionDetalle->setSerie($intSerie);

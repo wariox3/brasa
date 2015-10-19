@@ -596,7 +596,11 @@ brs_rhu_utilidades_proyeccion:
     
 brs_rhu_consultas_procesos_disciplinarios:    
     path:     /rhu/consultas/procesos/disciplinarios
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:ProcesosDisciplinarios }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:ProcesosDisciplinarios } 
+    
+brs_rhu_consultas_dotacion_pendiente:    
+    path:     /rhu/consultas/dotacion/pendiente
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:DotacionPendiente }    
     
 brs_rhu_pago_examen_lista:
     path:     /rhu/pago/examen/lista

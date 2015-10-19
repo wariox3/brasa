@@ -18,6 +18,7 @@ class ConsultasController extends Controller
     var $strSqlCostosIbcLista = "";
     var $strSqlPagoPendientesBancoLista = "";
     var $strSqlEmpleadosLista = "";
+    var $strSqlDotacionesPendientesLista = "";
     var $strSqlProcesosDisciplinariosLista = "";
     public function costosGeneralAction() {
         $em = $this->getDoctrine()->getManager();
@@ -389,6 +390,35 @@ class ConsultasController extends Controller
             'form' => $form->createView()
             ));
     }
+    
+    public function DotacionesPendientesAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioDotacionesPendientesLista();
+        $form->handleRequest($request);
+        $this->DotacionesPendientesListar();
+        if ($form->isValid())
+        {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if($form->get('BtnExcelDotacionesPendientes')->isClicked()) {
+                $this->filtrarDotacionesPendientesLista($form);
+                $this->DotacionesPendientesListar();
+                $this->generarDotacionesPendientesExcel();
+            }
+            
+            if($form->get('BtnFiltrarDotacionesPendientes')->isClicked()) {
+                $this->filtrarDotacionesPendientesLista($form);
+                $this->DotacionesPendientesListar();
+            }
+
+        }
+        $arDotacionesPendientes = $paginator->paginate($em->createQuery($this->strSqlDotacionesPendientesLista), $request->query->get('page', 1), 50);
+        return $this->render('BrasaRecursoHumanoBundle:Consultas/DotacionesPendientes:DotacionesPendientes.html.twig', array(
+            'arDotacionesPendientes' => $arDotacionesPendientes,
+            'form' => $form->createView()
+            ));
+    }
 
     public function EmpleadodetalleAction($codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
@@ -560,6 +590,17 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlProcesosDisciplinariosLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->listaProcesosDisciplinariosDQL(
+                    $session->get('filtroCodigoCentroCosto'),
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
+                    );
+    }
+    
+    private function DotacionesPendientesListar() {
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strSqlDotacionesPendientesLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->listaDotacionesPendientesDQL(
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
@@ -866,6 +907,35 @@ class ConsultasController extends Controller
             ->getForm();
         return $form;
     }
+    
+    private function formularioDotacionesPendientesLista() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnFiltrarDotacionesPendientes', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcelDotacionesPendientes', 'submit', array('label'  => 'Excel',))
+            ->getForm();
+        return $form;
+    }
 
     private function formularioVacacionesPagarLista() {
         $em = $this->getDoctrine()->getManager();
@@ -968,6 +1038,16 @@ class ConsultasController extends Controller
     }
 
     private function filtrarProcesosDisciplinariosLista($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+    }
+    
+    private function filtrarDotacionesPendientesLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
@@ -1680,6 +1760,84 @@ class ConsultasController extends Controller
     }
 
     private function generarProcesosDisciplinariosExcel() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'FECHA')
+                    ->setCellValue('C1', 'CENTRO COSTOS')
+                    ->setCellValue('D1', 'IDENTIFICACIÓN')
+                    ->setCellValue('E1', 'EMPLEADO')
+                    ->setCellValue('F1', 'CARGO')
+                    ->setCellValue('G1', 'PROCESO')
+                    ->setCellValue('H1', 'CAUSAL')
+                    ->setCellValue('I1', 'DESCARGOS')
+                    ->setCellValue('J1', 'FECHA SUSPENSIÓN');
+
+        $i = 2;
+        $query = $em->createQuery($this->strSqlProcesosDisciplinariosLista);
+        $arProcesosDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+        $arProcesosDisciplinarios = $query->getResult();
+        foreach ($arProcesosDisciplinarios as $arProcesoDisciplinario) {
+            if ($arProcesoDisciplinario->getAsunto() == Null){
+                $asunto = "NO APLICA";
+            } else {
+                $asunto = $arProcesoDisciplinario->getAsunto();
+            }
+            if ($arProcesoDisciplinario->getDescargos() == Null){
+                $descargos = "NO APLICA";
+            } else {
+                $descargos = $arProcesoDisciplinario->getDescargos();
+            }
+            if ($arProcesoDisciplinario->getSuspension() == Null){
+                $suspension = "NO APLICA";
+            } else {
+                $suspension = $arProcesoDisciplinario->getSuspension();
+            }
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arProcesoDisciplinario->getCodigoDisciplinarioPk())
+                    ->setCellValue('B' . $i, $arProcesoDisciplinario->getFecha()->format('Y/m/d'))
+                    ->setCellValue('C' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getCargoDescripcion())
+                    ->setCellValue('G' . $i, $arProcesoDisciplinario->getDisciplinarioTipoRel()->getNombre())
+                    ->setCellValue('H' . $i, $asunto)
+                    ->setCellValue('I' . $i, $descargos)
+                    ->setCellValue('J' . $i, $suspension);
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('ProcesosDisciplinarios');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="ReporteProcesosDisciplinarios.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+    
+    private function generarDotacionesPendientesExcel() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
