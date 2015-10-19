@@ -25,17 +25,17 @@ class RhuSupervigilanciaParafiscales
     /**
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
      */    
-    private $fechaHasta;     
-    
-    /**
-     * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
-     */    
-    private $codigoEmpleadoFk;             
+    private $fechaHasta;                      
 
     /**
      * @ORM\Column(name="mes", type="integer")
      */
     private $mes = 0;    
+
+    /**
+     * @ORM\Column(name="cargo", type="string", length=80, nullable=true)
+     */    
+    private $cargo;     
     
     /**
      * @ORM\Column(name="empleados", type="integer")
@@ -76,12 +76,6 @@ class RhuSupervigilanciaParafiscales
      * @ORM\Column(name="vr_ccf", type="float")
      */
     private $vrCcf = 0;         
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="supervigilanciasParafiscalesEmpleadoRel")
-     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
-     */
-    protected $empleadoRel;
     
 
 
@@ -141,30 +135,6 @@ class RhuSupervigilanciaParafiscales
     public function getFechaHasta()
     {
         return $this->fechaHasta;
-    }
-
-    /**
-     * Set codigoEmpleadoFk
-     *
-     * @param integer $codigoEmpleadoFk
-     *
-     * @return RhuSupervigilanciaParafiscales
-     */
-    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
-    {
-        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoEmpleadoFk
-     *
-     * @return integer
-     */
-    public function getCodigoEmpleadoFk()
-    {
-        return $this->codigoEmpleadoFk;
     }
 
     /**
@@ -384,26 +354,26 @@ class RhuSupervigilanciaParafiscales
     }
 
     /**
-     * Set empleadoRel
+     * Set cargo
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     * @param string $cargo
      *
      * @return RhuSupervigilanciaParafiscales
      */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    public function setCargo($cargo)
     {
-        $this->empleadoRel = $empleadoRel;
+        $this->cargo = $cargo;
 
         return $this;
     }
 
     /**
-     * Get empleadoRel
+     * Get cargo
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     * @return string
      */
-    public function getEmpleadoRel()
+    public function getCargo()
     {
-        return $this->empleadoRel;
+        return $this->cargo;
     }
 }

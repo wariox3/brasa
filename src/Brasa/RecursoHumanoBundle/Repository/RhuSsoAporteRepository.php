@@ -42,4 +42,15 @@ class RhuSsoAporteRepository extends EntityRepository {
         $arrayResultado = $query->getResult();
         return $arrayResultado;
     }
+    
+    //Esta funcion se utiliza en la utilidad de supervigilancia - parafiscales         
+    public function parafiscalesSupervigilancia($fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT a.mes, c.nombre, COUNT(a.codigoAportePk) as numeroEmpleados, SUM(a.cotizacionSalud) as eps, SUM(a.cotizacionPension) as pension, SUM(a.cotizacionRiesgos) as arl, SUM(a.cotizacionCaja) as ccf, SUM(a.cotizacionSena) as sena, SUM(a.cotizacionIcbf) as icbf FROM BrasaRecursoHumanoBundle:RhuSsoAporte a JOIN a.empleadoRel e JOIN a.cargoRel c "
+                . "WHERE a.fechaDesde >= '" . $fechaDesde . "' AND a.fechaHasta <= '" . $fechaHasta . "' "
+                . "GROUP BY a.mes, a.codigoCargoFk";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
+    }    
 }

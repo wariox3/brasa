@@ -13,7 +13,7 @@ class RhuSupervigilanciaParafiscalesRepository extends EntityRepository {
     
     public function listaDql() {        
             $em = $this->getEntityManager();
-            $dql   = "SELECT sp FROM BrasaRecursoHumanoBundle:RhuSupervigilanciaParafiscales sp WHERE p.codigoSupervigilanciaParafiscalesPk <> 0";            
+            $dql   = "SELECT sp FROM BrasaRecursoHumanoBundle:RhuSupervigilanciaParafiscales sp WHERE sp.codigoSupervigilanciaParafiscalesPk <> 0";            
             return $dql;
         }             
 }

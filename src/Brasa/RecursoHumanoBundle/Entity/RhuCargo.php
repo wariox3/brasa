@@ -33,6 +33,11 @@ class RhuCargo
     protected $empleadosCargoRel;   
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="cargoRel")
+     */
+    protected $ssoAportesCargoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -141,5 +146,39 @@ class RhuCargo
     public function getEmpleadosCargoRel()
     {
         return $this->empleadosCargoRel;
+    }
+
+    /**
+     * Add ssoAportesCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addSsoAportesCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesCargoRel)
+    {
+        $this->ssoAportesCargoRel[] = $ssoAportesCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoAportesCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesCargoRel
+     */
+    public function removeSsoAportesCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesCargoRel)
+    {
+        $this->ssoAportesCargoRel->removeElement($ssoAportesCargoRel);
+    }
+
+    /**
+     * Get ssoAportesCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoAportesCargoRel()
+    {
+        return $this->ssoAportesCargoRel;
     }
 }

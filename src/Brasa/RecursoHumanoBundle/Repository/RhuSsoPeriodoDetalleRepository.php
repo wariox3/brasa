@@ -20,6 +20,8 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         $em = $this->getEntityManager();        
         $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
         $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);        
+        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($arPeriodoDetalle->getCodigoPeriodoFk());
         $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
         $i = 1;
         $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
@@ -27,12 +29,18 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         foreach ($arPeriodoEmpleados as $arPeriodoEmpleado) {
             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPeriodoEmpleado->getCodigoEmpleadoFk());        
+            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arPeriodoEmpleado->getCodigoContratoFk());        
             $arAporte = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
             $arAporte->setSsoPeriodoRel($arPeriodoEmpleado->getSsoPeriodoRel());
             $arAporte->setSsoPeriodoDetalleRel($arPeriodoDetalle);
             $arAporte->setSsoSucursalRel($arPeriodoEmpleado->getSsoSucursalRel());
             $arAporte->setEmpleadoRel($arPeriodoEmpleado->getEmpleadoRel());
             $arAporte->setContratoRel($arPeriodoEmpleado->getContratoRel());
+            $arAporte->setAnio($arPeriodo->getAnioPago());
+            $arAporte->setMes($arPeriodo->getMesPago());
+            $arAporte->setFechaDesde($arPeriodo->getFechaDesde());
+            $arAporte->setFechaHasta($arPeriodo->getFechaHasta());
             $arAporte->setTipoRegistro(2);
             $arAporte->setSecuencia($i);
             $arAporte->setTipoDocumento($arEmpleado->getTipoIdentificacionRel()->getCodigoInterface());
@@ -48,7 +56,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setSegundoApellido($arEmpleado->getApellido2());
             $arAporte->setIngreso($arPeriodoEmpleado->getIngreso());
             $arAporte->setRetiro($arPeriodoEmpleado->getRetiro());            
-
+            $arAporte->setCargoRel($arContrato->getCargoRel());
             //Parametros generales
             $floSalario = $arPeriodoEmpleado->getVrSalario();
             if($arPeriodoEmpleado->getSalarioIntegral() == 'X') {

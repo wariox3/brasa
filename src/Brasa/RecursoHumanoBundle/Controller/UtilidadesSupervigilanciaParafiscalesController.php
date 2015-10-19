@@ -24,39 +24,28 @@ class UtilidadesSupervigilanciaParafiscalesController extends Controller
                 $this->generarExcel();
             }
             if($form->get('BtnGenerar')->isClicked()) {                                 
-                $fechaDesde = $form->get('fechaDesde')->getData();
-                $fechaHasta = $form->get('fechaHasta')->getData();
+                $fechaDesde = $form->get('fechaDesde')->getData()->format('Y-m-d');
+                $fechaHasta = $form->get('fechaHasta')->getData()->format('Y-m-d');
                 if($fechaDesde != null && $fechaHasta != null) {
-                    $strSql = "DELETE FROM rhu_proyeccion WHERE 1";
-                    $em->getConnection()->executeQuery($strSql);                
-                    $douAuxilioTransporte = 74000;
-                    $intDias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($fechaDesde, $fechaHasta);
-                    $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                    $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('indefinido' => 1));
-                    foreach($arContratos as $arContrato) {
-                        $floSalarioPromedio = $arContrato->getVrSalarioPago();
-                        $floIbc = ($arContrato->getVrSalarioPago() / 30) * $intDias;
-                        $douBasePrestaciones = ($floIbc / $intDias) * 30;
-                        $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
-                        $douCesantias = ($douBasePrestacionesTotal * $intDias) / 360;          
-                        $floPorcentajeIntereses = (($intDias * 12) / 360)/100;   
-                        $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
-                        $douPrima = ($douBasePrestacionesTotal * $intDias) / 360;                         
-                        $douVacaciones = ($floSalarioPromedio * $intDias) / 720;                        
-                        $arProyeccion = new \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion();
-                        $arProyeccion->setContratoRel($arContrato);
-                        $arProyeccion->setEmpleadoRel($arContrato->getEmpleadoRel());
-                        $arProyeccion->setVrSalario($arContrato->getVrSalario());
-                        $arProyeccion->setVrCesantias($douCesantias);                        
-                        $arProyeccion->setVrInteresesCesantias($douInteresesCesantias);
-                        $arProyeccion->setVrPrimas($douPrima);
-                        $arProyeccion->setVrVacaciones($douVacaciones);
-                        $arProyeccion->setDias($intDias);
-                        $em->persist($arProyeccion);
-                    }                
-                    $em->flush();                    
+                    $strSql = "DELETE FROM rhu_supervigilancia_parafiscales WHERE 1";
+                    $em->getConnection()->executeQuery($strSql);    
+                    $arrAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->parafiscalesSupervigilancia($fechaDesde, $fechaHasta);
+                    foreach ($arrAportes as $arAporte) {
+                        $arSupervigilanciaParafiscales = new \Brasa\RecursoHumanoBundle\Entity\RhuSupervigilanciaParafiscales();
+                        $arSupervigilanciaParafiscales->setMes($arAporte['mes']);
+                        $arSupervigilanciaParafiscales->setEmpleados($arAporte['numeroEmpleados']);
+                        $arSupervigilanciaParafiscales->setCargo($arAporte['nombre']);
+                        $arSupervigilanciaParafiscales->setVrEps($arAporte['eps']);
+                        $arSupervigilanciaParafiscales->setVrPension($arAporte['pension']);
+                        $arSupervigilanciaParafiscales->setVrArl($arAporte['arl']);
+                        $arSupervigilanciaParafiscales->setVrCcf($arAporte['ccf']);
+                        $arSupervigilanciaParafiscales->setVrSena($arAporte['sena']);
+                        $arSupervigilanciaParafiscales->setVrIcbf($arAporte['icbf']);
+                        $em->persist($arSupervigilanciaParafiscales);
+                    }
+                    $em->flush();
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_utilidades_proyeccion'));           
+                //return $this->redirect($this->generateUrl('brs_rhu_utilidades_supervigilancia_parafiscales'));           
             }            
             
             if($form->get('BtnPDF')->isClicked()) {
@@ -71,8 +60,9 @@ class UtilidadesSupervigilanciaParafiscalesController extends Controller
             }
 
         }    
-        $arProyecciones = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);        
+        $arSupervigilanciaParafiscales = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);        
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/Supervigilancia:parafiscales.html.twig', array(
+            'arSupervigilanciaParafiscales' => $arSupervigilanciaParafiscales,
             'form' => $form->createView()
             ));
     }        
@@ -80,11 +70,7 @@ class UtilidadesSupervigilanciaParafiscalesController extends Controller
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProyeccion')->listaDql(                                        
-                    "",
-                    "",
-                    ""
-                    );
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSupervigilanciaParafiscales')->listaDql();
     }    
 
     private function formularioLista() {
@@ -111,8 +97,7 @@ class UtilidadesSupervigilanciaParafiscalesController extends Controller
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPDF', 'submit', array('label'  => 'PDF',))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
             ->getForm();
         return $form;
     }        

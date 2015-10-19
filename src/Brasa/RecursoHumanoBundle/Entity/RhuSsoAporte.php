@@ -43,6 +43,27 @@ class RhuSsoAporte
     private $codigoContratoFk;  
     
     /**
+     * @ORM\Column(name="anio", type="integer")
+     */
+    private $anio = 0;
+    
+    /**
+     * @ORM\Column(name="mes", type="integer")
+     */
+    private $mes = 0;
+    
+    /**
+     * @ORM\Column(name="fecha_desde", type="date", nullable=true)
+     */    
+    private $fechaDesde;    
+    
+    /**
+     * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
+     */    
+    private $fechaHasta;    
+    
+    
+    /**
      * @ORM\Column(name="tipo_registro", type="bigint")
      */    
     private $tipoRegistro;    
@@ -377,7 +398,10 @@ class RhuSsoAporte
      */
     private $aportesFondoSolidaridadPensionalSubsistencia;      
     
-   
+    /**
+     * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCargoFk;           
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoAportesSsoPeriodoRel")
@@ -409,6 +433,12 @@ class RhuSsoAporte
      */
     protected $contratoRel;          
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="ssoAportesCargoRel")
+     * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
+     */
+    protected $cargoRel;     
+    
 
     /**
      * Get codigoAportePk
@@ -2266,5 +2296,149 @@ class RhuSsoAporte
     public function getCotizacionIcbf()
     {
         return $this->cotizacionIcbf;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return RhuSsoAporte
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
+    }
+
+    /**
+     * Set fechaDesde
+     *
+     * @param \DateTime $fechaDesde
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaDesde($fechaDesde)
+    {
+        $this->fechaDesde = $fechaDesde;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesde
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesde()
+    {
+        return $this->fechaDesde;
+    }
+
+    /**
+     * Set fechaHasta
+     *
+     * @param \DateTime $fechaHasta
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaHasta($fechaHasta)
+    {
+        $this->fechaHasta = $fechaHasta;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHasta
+     *
+     * @return \DateTime
+     */
+    public function getFechaHasta()
+    {
+        return $this->fechaHasta;
+    }
+
+    /**
+     * Set codigoCargoFk
+     *
+     * @param integer $codigoCargoFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoCargoFk($codigoCargoFk)
+    {
+        $this->codigoCargoFk = $codigoCargoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCargoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCargoFk()
+    {
+        return $this->codigoCargoFk;
+    }
+
+    /**
+     * Set cargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
+    {
+        $this->cargoRel = $cargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargo
+     */
+    public function getCargoRel()
+    {
+        return $this->cargoRel;
     }
 }
