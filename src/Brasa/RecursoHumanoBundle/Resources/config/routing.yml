@@ -57,6 +57,10 @@ brs_rhu_utilidades_programacion_pago_comprobante_masivo_correo:
 brs_rhu_utilidades_certificado_ingreso_retencion:
     path:     /rhu/utilidades/certificado/ingreso/retencion
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCertificadoIngresoRetencion:Certificado }     
+
+brs_rhu_utilidades_supervigilancia_parafiscales:
+    path:     /rhu/utilidades/supervigilancia/parafiscales
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesSupervigilanciaParafiscales:lista }         
     
 brs_rhu_pagos_adicionales_lista:
     path:     /rhu/pagos/adicionales/lista

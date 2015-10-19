@@ -108,6 +108,21 @@ class RhuSsoPeriodoEmpleado
     private $tarifaRiesgos = 0;    
     
     /**
+     * @ORM\Column(name="codigo_entidad_pension_pertenece", type="string", length=6, nullable=true)
+     */
+    private $codigoEntidadPensionPertenece;    
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_salud_pertenece", type="string", length=6, nullable=true)
+     */
+    private $codigoEntidadSaludPertenece;    
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_caja_pertenece", type="string", length=6, nullable=true)
+     */
+    private $codigoEntidadCajaPertenece;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosEmpleadosSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
@@ -136,6 +151,7 @@ class RhuSsoPeriodoEmpleado
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
     protected $contratoRel;     
+
 
 
 
@@ -579,6 +595,78 @@ class RhuSsoPeriodoEmpleado
     public function getTarifaRiesgos()
     {
         return $this->tarifaRiesgos;
+    }
+
+    /**
+     * Set codigoEntidadPensionPertenece
+     *
+     * @param string $codigoEntidadPensionPertenece
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setCodigoEntidadPensionPertenece($codigoEntidadPensionPertenece)
+    {
+        $this->codigoEntidadPensionPertenece = $codigoEntidadPensionPertenece;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadPensionPertenece
+     *
+     * @return string
+     */
+    public function getCodigoEntidadPensionPertenece()
+    {
+        return $this->codigoEntidadPensionPertenece;
+    }
+
+    /**
+     * Set codigoEntidadSaludPertenece
+     *
+     * @param string $codigoEntidadSaludPertenece
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setCodigoEntidadSaludPertenece($codigoEntidadSaludPertenece)
+    {
+        $this->codigoEntidadSaludPertenece = $codigoEntidadSaludPertenece;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadSaludPertenece
+     *
+     * @return string
+     */
+    public function getCodigoEntidadSaludPertenece()
+    {
+        return $this->codigoEntidadSaludPertenece;
+    }
+
+    /**
+     * Set codigoEntidadCajaPertenece
+     *
+     * @param string $codigoEntidadCajaPertenece
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setCodigoEntidadCajaPertenece($codigoEntidadCajaPertenece)
+    {
+        $this->codigoEntidadCajaPertenece = $codigoEntidadCajaPertenece;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadCajaPertenece
+     *
+     * @return string
+     */
+    public function getCodigoEntidadCajaPertenece()
+    {
+        return $this->codigoEntidadCajaPertenece;
     }
 
     /**

@@ -510,6 +510,11 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuProyeccion", mappedBy="empleadoRel")
      */
     protected $proyeccionesEmpleadoRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSupervigilanciaParafiscales", mappedBy="empleadoRel")
+     */
+    protected $supervigilanciasParafiscalesEmpleadoRel;      
     
 
     /**
@@ -2977,5 +2982,39 @@ class RhuEmpleado
     public function getProyeccionesEmpleadoRel()
     {
         return $this->proyeccionesEmpleadoRel;
+    }
+
+    /**
+     * Add supervigilanciasParafiscalesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSupervigilanciaParafiscales $supervigilanciasParafiscalesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addSupervigilanciasParafiscalesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSupervigilanciaParafiscales $supervigilanciasParafiscalesEmpleadoRel)
+    {
+        $this->supervigilanciasParafiscalesEmpleadoRel[] = $supervigilanciasParafiscalesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove supervigilanciasParafiscalesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSupervigilanciaParafiscales $supervigilanciasParafiscalesEmpleadoRel
+     */
+    public function removeSupervigilanciasParafiscalesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSupervigilanciaParafiscales $supervigilanciasParafiscalesEmpleadoRel)
+    {
+        $this->supervigilanciasParafiscalesEmpleadoRel->removeElement($supervigilanciasParafiscalesEmpleadoRel);
+    }
+
+    /**
+     * Get supervigilanciasParafiscalesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSupervigilanciasParafiscalesEmpleadoRel()
+    {
+        return $this->supervigilanciasParafiscalesEmpleadoRel;
     }
 }
