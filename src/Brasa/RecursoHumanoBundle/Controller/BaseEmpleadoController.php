@@ -231,6 +231,12 @@ class BaseEmpleadoController extends Controller
                 $objFormatoHojaVida->Generar($this, $codigoEmpleado);
             }
         }
+        $strRutaImagen = "";
+        if($arEmpleado->getRutaFoto() != "") {
+            $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+            $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+            $strRutaImagen = "/almacenamiento/imagenes/empleados/" . $arEmpleado->getRutaFoto();
+        }
         $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('request')->query->get('page', 1),5);
         $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);        
         $arLicencias = $paginator->paginate($arLicencias, $this->get('request')->query->get('page', 1),5);
@@ -252,7 +258,8 @@ class BaseEmpleadoController extends Controller
                     'arEmpleadoEstudios' => $arEmpleadoEstudios,
                     'arEmpleadoExamenes' => $arEmpleadoExamenes,
                     'arEmpleadoFamilia' => $arEmpleadoFamilia,
-                    'arDotacion' => $arDotacion,                   
+                    'arDotacion' => $arDotacion,   
+                    'strRutaImagen' => $strRutaImagen,
                     'form' => $form->createView()
                     ));
     }

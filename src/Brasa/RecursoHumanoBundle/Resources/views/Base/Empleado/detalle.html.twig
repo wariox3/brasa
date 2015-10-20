@@ -105,6 +105,12 @@
                         <td class="titulo" >COMENTARIOS: </td>
                         <td class="td-in-well" colspan="7">{{ arEmpleado.comentarios }}</td>
                     </tr>
+                    {% if strRutaImagen != '' %}
+                    <tr>
+                        <td class="titulo" ><img src="{{ strRutaImagen }}" width=150 height=150></a></td>
+                        <td class="td-in-well" colspan="7"></td>
+                    </tr>                    
+                    {% endif %}
                 </table>
             </div>
         </div>                   
