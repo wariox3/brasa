@@ -157,7 +157,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
                 $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                                                        
                 $intDiasVacaciones = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                                
-                $intDiasVacacionesLiquidar = $intDiasVacaciones - $intDiasAusentismo;
+                $intDiasVacacionesLiquidar = $intDiasVacaciones;
                 $douVacaciones = ($floSalarioPromedio * $intDiasVacacionesLiquidar) / 720;
                 $arLiquidacion->setVrSalarioVacaciones($floSalarioPromedio);
                 $arLiquidacion->setDiasVacaciones($intDiasVacaciones);

@@ -29,18 +29,45 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
                         if($arrayDetalle[0] != "") {
                             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrayDetalle[0]));                                                                
-                            if(count($arEmpleado) > 0) {
+                            if(count($arEmpleado) > 0) {                                
                                 //Recargo nocturno festivo compensado
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(40);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setCentroCostoRel($arProgramacionPago->getCentroCostoRel());
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
-                                $intHoras = $arrayDetalle[1];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $em->persist($arPagoAdicional);                                
+                                if($arrayDetalle[1] > 0) {
+                                    $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                    $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(40);                                                                
+                                    $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                                    $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
+                                    $arPagoAdicional->setEmpleadoRel($arEmpleado);                                
+                                    $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
+                                    $intHoras = $arrayDetalle[1];
+                                    $arPagoAdicional->setCantidad($intHoras);
+                                    $em->persist($arPagoAdicional);                                                                    
+                                }
+                                
+                                //Recargo nocturno festivo no compensado
+                                if($arrayDetalle[2] > 0) {
+                                    $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                    $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(41);                                                                
+                                    $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                                    $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
+                                    $arPagoAdicional->setEmpleadoRel($arEmpleado);                                
+                                    $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
+                                    $intHoras = $arrayDetalle[2];
+                                    $arPagoAdicional->setCantidad($intHoras);
+                                    $em->persist($arPagoAdicional);                                                                    
+                                }
+                                
+                                //HORAS EXTRAS FESTIVAS DIURNAS
+                                if($arrayDetalle[3] > 0) {
+                                    $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                    $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(42);                                                                
+                                    $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                                    $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
+                                    $arPagoAdicional->setEmpleadoRel($arEmpleado);                                
+                                    $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
+                                    $intHoras = $arrayDetalle[3];
+                                    $arPagoAdicional->setCantidad($intHoras);
+                                    $em->persist($arPagoAdicional);                                                                    
+                                }                                
                             }
                         }
                     }

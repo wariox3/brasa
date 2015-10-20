@@ -51,7 +51,7 @@ class RhuVacacionRepository extends EntityRepository {
         } else {
             $floSalarioPromedio = $floSalario;
         }        
-        $floTotalVacacionBruto = $floSalarioPromedio / 30 * $intDias;        
+        $floTotalVacacionBruto = $floSalarioPromedio / 30 * $intDias;                        
         $douSalud = ($floSalario * 2) / 100;
         $arVacacion->setVrSalud($douSalud);
         if ($floTotalVacacionBruto >= ($arConfiguracion->getVrSalario() * 4)){

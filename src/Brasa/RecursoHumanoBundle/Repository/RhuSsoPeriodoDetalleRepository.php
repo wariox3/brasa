@@ -243,9 +243,9 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $floIbcIncapacidades += $floIbcIncapacidadLaboral;                                        
                 }                        
                 $arAporte->setSalarioBasico($floSalario);            
-                $arAporte->setCodigoEntidadPensionPertenece($arEmpleado->getEntidadPensionRel()->getCodigoInterface());
-                $arAporte->setCodigoEntidadSaludPertenece($arEmpleado->getEntidadSaludRel()->getCodigoInterface());
-                $arAporte->setCodigoEntidadCajaPertenece($arEmpleado->getEntidadCajaRel()->getCodigoInterface());
+                $arAporte->setCodigoEntidadPensionPertenece($arPeriodoEmpleado->getCodigoEntidadPensionPertenece());
+                $arAporte->setCodigoEntidadSaludPertenece($arPeriodoEmpleado->getCodigoEntidadSaludPertenece());
+                $arAporte->setCodigoEntidadCajaPertenece($arPeriodoEmpleado->getCodigoEntidadCajaPertenece());
 
                 //Dias
                 $intDiasLicenciaNoRemunerada = $arPeriodoEmpleado->getDiasLicencia();

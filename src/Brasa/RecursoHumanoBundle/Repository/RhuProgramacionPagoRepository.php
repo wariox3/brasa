@@ -103,6 +103,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                             $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                             $arPagoDetalle->setNumeroHoras($intHorasVacaciones);
+                            $arPagoDetalle->setNumeroDias($intHorasVacaciones / 8);
                             $arPagoDetalle->setVrIngresoBasePrestacion($douIngresoBaseCotizacionVacaciones);
                             $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionVacaciones);
                             $em->persist($arPagoDetalle);                                         
