@@ -236,26 +236,22 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(204, 5, utf8_decode("INFORMACIÓN ACADEMICA"), 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 90);
-        $this->Cell(21, 6, "ESTUDIOS", 1, 0, 'C', 1);
-        $this->Cell(68, 6, utf8_decode("INSTITUCIÓN"), 1, 0, 'C', 1);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(12, 6, utf8_decode("AÑOS AP"), 1, 0, 'C', 1);
+        $this->Cell(48, 6, "ESTUDIOS", 1, 0, 'C', 1);
+        $this->Cell(61, 6, utf8_decode("INSTITUCIÓN"), 1, 0, 'C', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(35, 6, "CUIDAD", 1, 0, 'C', 1);
-        $this->Cell(68, 6, "TITULO OBTENIDO", 1, 0, 'C', 1);
+        $this->Cell(34, 6, "CUIDAD", 1, 0, 'C', 1);
+        $this->Cell(61, 6, "TITULO OBTENIDO", 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 96);
         $rango = 96;
         foreach ($arEmpleadoEstudios as $arEmpleadoEstudios){
-        $this->SetXY($intX, $intY + $rango);
-        $this->SetFont('Arial','B',7);
-               $this->Cell(21, 6, $arEmpleadoEstudios->getEmpleadoEstudioTipoRel()->getNombre(), 1, 0, 'L', 1);
+               $this->SetXY($intX, $intY + $rango);
                $this->SetFont('Arial','',6);
-               $this->Cell(68, 6, utf8_decode($arEmpleadoEstudios->getInstitucion()), 1, 0, 'L', 1);
-               $this->SetFont('Arial','',8);
-               $this->Cell(12, 6, '', 1, 0, 'L', 1);
+               $this->Cell(48, 6, $arEmpleadoEstudios->getEmpleadoEstudioTipoRel()->getNombre(), 1, 0, 'L', 1);
                $this->SetFont('Arial','',6);
-               $this->Cell(35, 6, utf8_decode($arEmpleadoEstudios->getCiudadRel()->getNombre()), 1, 0, 'L', 1);
-               $this->Cell(68, 6, utf8_decode($arEmpleadoEstudios->getTitulo()), 1, 0, 'L', 1);
+               $this->Cell(61, 6, utf8_decode($arEmpleadoEstudios->getInstitucion()), 1, 0, 'C', 1);
+               $this->SetFont('Arial','',6);
+               $this->Cell(34, 6, utf8_decode($arEmpleadoEstudios->getCiudadRel()->getNombre()), 1, 0, 'C', 1);
+               $this->Cell(61, 6, utf8_decode($arEmpleadoEstudios->getTitulo()), 1, 0, 'C', 1);
                $this->Ln();
                $rango = $rango + 6;
         }

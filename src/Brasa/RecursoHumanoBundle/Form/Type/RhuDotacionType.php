@@ -15,7 +15,7 @@ class RhuDotacionType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuDotacionTipo',
                         'property' => 'nombre',
             ))
-            ->add('codigoInternoReferencia', 'number', array('required' => true))
+            ->add('codigoInternoReferencia', 'number', array('required' => false))
             ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        

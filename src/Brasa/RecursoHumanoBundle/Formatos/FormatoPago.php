@@ -158,10 +158,10 @@ class FormatoPago extends \FPDF_FPDF {
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('', 'B', 7);
+        $this->SetFont('', 'B', 6.8);
 
         //creamos la cabecera de la tabla.
-        $w = array(40, 83, 11, 14, 9, 18, 18);
+        $w = array(49, 80, 10, 13, 7, 17, 17);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -184,22 +184,23 @@ class FormatoPago extends \FPDF_FPDF {
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         foreach ($arPagoDetalle as $arPagoDetalle) {            
-            $pdf->SetFont('Arial', '', 6);
-            $pdf->Cell(40, 4, $arPagoDetalle->getPagoConceptoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(83, 4, utf8_decode($arPagoDetalle->getDetalle()), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 5.4);
+            $pdf->Cell(49, 4, utf8_decode($arPagoDetalle->getPagoConceptoRel()->getNombre()), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 5.5);
+            $pdf->Cell(80, 4, utf8_decode($arPagoDetalle->getDetalle()), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(11, 4, number_format($arPagoDetalle->getNumeroHoras(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(14, 4, number_format($arPagoDetalle->getVrHora(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(9, 4, number_format($arPagoDetalle->getPorcentajeAplicado(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(10, 4, number_format($arPagoDetalle->getNumeroHoras(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arPagoDetalle->getVrHora(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(7, 4, number_format($arPagoDetalle->getPorcentajeAplicado(), 0, '.', ','), 1, 0, 'R');
             if($arPagoDetalle->getOperacion() == 1) {
-                $pdf->Cell(18, 4, number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
+                $pdf->Cell(17, 4, number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
             } else {
-                $pdf->Cell(18, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
+                $pdf->Cell(17, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
             }
             if($arPagoDetalle->getOperacion() == -1) {
-                $pdf->Cell(18, 4, "-".number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
+                $pdf->Cell(17, 4, "-".number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
             } else {
-                $pdf->Cell(18, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
+                $pdf->Cell(17, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
             }
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
