@@ -27,7 +27,7 @@
                     <div class="form-group form-group-sm">
                         <label for="TxtDetalle" class="col-sm-2 control-label">Detalle:</label>
                         <div class="col-sm-10">
-                                {{ form_widget(form.TxtDetalle, { 'attr': {'class': 'form-control'} }) }}
+                                {{ form_widget(form.TxtDetalle, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                         </div>
                     </div>                         
                 </div>

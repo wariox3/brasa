@@ -13,6 +13,7 @@ class RhuSeleccionType extends AbstractType
             ->add('seleccionTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionTipo',
                 'property' => 'nombre',
+                'required' => true
             ))
             ->add('seleccionGrupoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionGrupo',
@@ -26,6 +27,7 @@ class RhuSeleccionType extends AbstractType
             ->add('tipoIdentificacionRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuTipoIdentificacion',
                 'property' => 'nombre',
+                'required' => true
             ))
             ->add('centroCostoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
@@ -37,10 +39,12 @@ class RhuSeleccionType extends AbstractType
             ->add('estadoCivilRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEstadoCivil',
                 'property' => 'nombre',
+                'required' => true
             ))
             ->add('rhRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuRh',
                 'property' => 'tipo',
+                'required' => true
             ))                
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',

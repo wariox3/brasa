@@ -15,7 +15,7 @@
             <div class="form-group form-group-sm">
                 <label for="form_causal" class="col-sm-4 control-label">Institución:</label>
                 <div class="col-sm-8">
-                        {{ form_widget(form.institucion, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.institucion, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
@@ -27,7 +27,7 @@
             <div class="form-group form-group-sm">
                 <label for="form_comentarios" class="col-sm-4 control-label">Titulo obtenido:</label>
                 <div class="col-sm-8">
-                            {{ form_widget(form.titulo, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.titulo, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
             </div> 
             <div class="form-group form-group-sm">
@@ -45,7 +45,7 @@
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-4 control-label">Comentarios:</label>
                 <div class="col-sm-8">
-                            {{ form_widget(form.comentarios, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.comentarios, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
             </div>                
         </div>

@@ -22,7 +22,7 @@
         <div class="form-group form-group-sm">
             <label for="form_detalle" class="col-sm-5 control-label">Detalle:</label>
             <div class="col-sm-7">
-                    {{ form_widget(form.detalle, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.detalle, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
             </div>
         </div>    
     

@@ -41,7 +41,7 @@
         <div class="form-group form-group-sm">
             <label for="form_motivoRetiro" class="col-sm-4 control-label">Motivo retiro:</label>
             <div class="col-sm-8">
-                    {{ form_widget(formContrato.terminacionContratoRel, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(formContrato.terminacionContratoRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
             </div>
         </div>    
         <br />
