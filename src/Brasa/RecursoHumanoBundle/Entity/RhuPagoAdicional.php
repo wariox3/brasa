@@ -26,6 +26,11 @@ class RhuPagoAdicional
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
     private $codigoEmpleadoFk;       
+
+    /**
+     * @ORM\Column(name="tipo_adicional", type="integer", nullable=true)
+     */    
+    private $tipoAdicional;    
     
     /**
      * @ORM\Column(name="cantidad", type="float")
@@ -81,7 +86,6 @@ class RhuPagoAdicional
      */
     protected $programacionPagoRel;    
     
-
 
     /**
      * Get codigoPagoAdicionalPk
@@ -139,6 +143,30 @@ class RhuPagoAdicional
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set tipoAdicional
+     *
+     * @param integer $tipoAdicional
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setTipoAdicional($tipoAdicional)
+    {
+        $this->tipoAdicional = $tipoAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoAdicional
+     *
+     * @return integer
+     */
+    public function getTipoAdicional()
+    {
+        return $this->tipoAdicional;
     }
 
     /**
@@ -286,6 +314,30 @@ class RhuPagoAdicional
     }
 
     /**
+     * Set prestacional
+     *
+     * @param boolean $prestacional
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setPrestacional($prestacional)
+    {
+        $this->prestacional = $prestacional;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacional
+     *
+     * @return boolean
+     */
+    public function getPrestacional()
+    {
+        return $this->prestacional;
+    }
+
+    /**
      * Set pagoConceptoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
@@ -355,29 +407,5 @@ class RhuPagoAdicional
     public function getProgramacionPagoRel()
     {
         return $this->programacionPagoRel;
-    }
-
-    /**
-     * Set prestacional
-     *
-     * @param boolean $prestacional
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setPrestacional($prestacional)
-    {
-        $this->prestacional = $prestacional;
-
-        return $this;
-    }
-
-    /**
-     * Get prestacional
-     *
-     * @return boolean
-     */
-    public function getPrestacional()
-    {
-        return $this->prestacional;
     }
 }

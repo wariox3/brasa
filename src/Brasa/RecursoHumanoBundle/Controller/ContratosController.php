@@ -175,7 +175,7 @@ class ContratosController extends Controller
                     $em->flush();
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 } else {
-                    echo "La fecha de inicio del contrato debe ser mayor a la ultima fecha de pago del periodo " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d');
+                    echo "La fecha de inicio del contrato debe ser mayor a la ultima fecha de pago del centro de costos " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d');
                 }
             } else {
                 echo "Verifique el tipo de contrato con el tipo y subtipo de cotizante a seguridad social";

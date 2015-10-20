@@ -42,6 +42,7 @@ class PagosAdicionalesAgregarController extends Controller
                             $intHoras = $arrControles['TxtHoras'][$intIndice];
                             $arPagoAdicional->setCantidad($intHoras);
                             $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                            
+                            $arPagoAdicional->setTipoAdicional(4);
                             $em->persist($arPagoAdicional);                                
                         }                        
                         $intIndice++;
@@ -84,7 +85,7 @@ class PagosAdicionalesAgregarController extends Controller
                 'property' => 'nombre',
                 'required' => true))
             ->add('TxtValor', 'number', array('required' => true))                             
-            ->add('TxtDetalle', 'text', array('required' => true))                             
+            ->add('TxtDetalle', 'text', array('required' => false))                             
             ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
             ->getForm();
         $form->handleRequest($request);
@@ -96,7 +97,7 @@ class PagosAdicionalesAgregarController extends Controller
                     $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                     $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
                     $arEmpleado = $form->get('empleadoRel')->getData();
-                    if($arPagoConcepto->getPrestacional() == 0) {
+                    if($arPagoConcepto->getPrestacional() == 0 && $tipo == 1) {
                         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
                         $floSalario = $arEmpleado->getVrSalario();
@@ -119,6 +120,7 @@ class PagosAdicionalesAgregarController extends Controller
                         $arPagoAdicional->setDetalle($form->get('TxtDetalle')->getData());                    
                         $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                    
                         $arPagoAdicional->setPrestacional($arPagoConcepto->getPrestacional());
+                        $arPagoAdicional->setTipoAdicional($tipo);
                         $em->persist($arPagoAdicional);                                                        
                         $em->flush();                        
                         echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                        
