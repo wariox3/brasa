@@ -560,7 +560,7 @@
                                 <td>NO REQUIERE</td>
                             {% endif %}
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 10,  'numero': arEmpleadoExamenes.codigoEmpleadoExamenPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>                            
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_examen_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': arEmpleadoExamenes.codigoEmpleadoExamenPk }) }}', 'AgregarEstudio', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_examen_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoExamen': arEmpleadoExamenes.codigoEmpleadoExamenPk }) }}', 'AgregarEstudio', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarEmpleadoExamen[]" value="{{ arEmpleadoExamenes.codigoEmpleadoExamenPk }}" /></td>
                         </tr>
                     {% endfor %}
