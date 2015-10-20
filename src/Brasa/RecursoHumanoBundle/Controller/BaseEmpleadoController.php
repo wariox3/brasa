@@ -387,6 +387,9 @@ class BaseEmpleadoController extends Controller
                     $em->flush();
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                    
                 } else {
+                    $arEmpleado->setRutaFoto($objArchivo->getClientOriginalName());
+                    $em->persist($arEmpleado);
+                    $em->flush();                    
                     echo "El archivo " . $strRuta . " ya existe";
                 }
                                            
