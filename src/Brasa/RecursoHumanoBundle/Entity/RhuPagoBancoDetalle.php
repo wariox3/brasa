@@ -53,7 +53,7 @@ class RhuPagoBancoDetalle
     private $estadoContabilizado = 0;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuPagoBanco", inversedBy="pagosBancosDetallePagoBancoRel")
+     * @ORM\ManyToOne(targetEntity="RhuPagoBanco", inversedBy="pagosBancosDetallesPagoBancoRel")
      * @ORM\JoinColumn(name="codigo_pago_banco_fk", referencedColumnName="codigo_pago_banco_pk")
      */
     protected $pagoBancoRel;    
@@ -63,6 +63,8 @@ class RhuPagoBancoDetalle
      * @ORM\JoinColumn(name="codigo_pago_fk", referencedColumnName="codigo_pago_pk")
      */
     protected $pagoRel;        
+
+
 
     /**
      * Get codigoPagoBancoDetallePk
@@ -99,78 +101,6 @@ class RhuPagoBancoDetalle
     }
 
     /**
-     * Set cuenta
-     *
-     * @param string $cuenta
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setCuenta($cuenta)
-    {
-        $this->cuenta = $cuenta;
-
-        return $this;
-    }
-
-    /**
-     * Get cuenta
-     *
-     * @return string
-     */
-    public function getCuenta()
-    {
-        return $this->cuenta;
-    }
-
-    /**
-     * Set vrPago
-     *
-     * @param float $vrPago
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setVrPago($vrPago)
-    {
-        $this->vrPago = $vrPago;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPago
-     *
-     * @return float
-     */
-    public function getVrPago()
-    {
-        return $this->vrPago;
-    }
-
-    /**
-     * Set pagoBancoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco $pagoBancoRel
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setPagoBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco $pagoBancoRel = null)
-    {
-        $this->pagoBancoRel = $pagoBancoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoBancoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco
-     */
-    public function getPagoBancoRel()
-    {
-        return $this->pagoBancoRel;
-    }
-
-    /**
      * Set codigoPagoFk
      *
      * @param integer $codigoPagoFk
@@ -192,30 +122,6 @@ class RhuPagoBancoDetalle
     public function getCodigoPagoFk()
     {
         return $this->codigoPagoFk;
-    }
-
-    /**
-     * Set pagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
-    {
-        $this->pagoRel = $pagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
-     */
-    public function getPagoRel()
-    {
-        return $this->pagoRel;
     }
 
     /**
@@ -267,6 +173,54 @@ class RhuPagoBancoDetalle
     }
 
     /**
+     * Set cuenta
+     *
+     * @param string $cuenta
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCuenta($cuenta)
+    {
+        $this->cuenta = $cuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get cuenta
+     *
+     * @return string
+     */
+    public function getCuenta()
+    {
+        return $this->cuenta;
+    }
+
+    /**
+     * Set vrPago
+     *
+     * @param float $vrPago
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setVrPago($vrPago)
+    {
+        $this->vrPago = $vrPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPago
+     *
+     * @return float
+     */
+    public function getVrPago()
+    {
+        return $this->vrPago;
+    }
+
+    /**
      * Set estadoContabilizado
      *
      * @param boolean $estadoContabilizado
@@ -288,5 +242,53 @@ class RhuPagoBancoDetalle
     public function getEstadoContabilizado()
     {
         return $this->estadoContabilizado;
+    }
+
+    /**
+     * Set pagoBancoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco $pagoBancoRel
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setPagoBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco $pagoBancoRel = null)
+    {
+        $this->pagoBancoRel = $pagoBancoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoBancoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco
+     */
+    public function getPagoBancoRel()
+    {
+        return $this->pagoBancoRel;
+    }
+
+    /**
+     * Set pagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagoRel = null)
+    {
+        $this->pagoRel = $pagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPago
+     */
+    public function getPagoRel()
+    {
+        return $this->pagoRel;
     }
 }

@@ -674,6 +674,19 @@ brs_rhu_proceso_contabilizar_pago_banco:
     path:     /rhu/proceso/contabilizar/pago/banco
     defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPagoBanco:lista }         
     
+brs_rhu_requisito_nuevo:
+    path:     /rhu/requisito/nuevo/{codigoEmpleado}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:nuevo }    
+    
+brs_rhu_requisito_lista:
+    path:     /rhu/requisito/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:lista }
+
+brs_rhu_requisito_detalle:
+    path:     /rhu/requisito/detalle/{codigoRequisito}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:detalle }     
+    
+    
 buscar_empleado:
     pattern:  /buscar/empleado/
     defaults: { _controller: BrasaGeneralBundle:Busquedas:buscarEmpleado }    

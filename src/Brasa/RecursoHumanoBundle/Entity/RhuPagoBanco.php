@@ -68,6 +68,15 @@ class RhuPagoBanco
      */
     protected $pagosBancosDetallesPagoBancoRel;     
     
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosBancosDetallesPagoBancoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoPagoBancoPk
      *
@@ -199,6 +208,78 @@ class RhuPagoBanco
     }
 
     /**
+     * Set vrTotalPago
+     *
+     * @param float $vrTotalPago
+     *
+     * @return RhuPagoBanco
+     */
+    public function setVrTotalPago($vrTotalPago)
+    {
+        $this->vrTotalPago = $vrTotalPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalPago
+     *
+     * @return float
+     */
+    public function getVrTotalPago()
+    {
+        return $this->vrTotalPago;
+    }
+
+    /**
+     * Set numeroRegistros
+     *
+     * @param integer $numeroRegistros
+     *
+     * @return RhuPagoBanco
+     */
+    public function setNumeroRegistros($numeroRegistros)
+    {
+        $this->numeroRegistros = $numeroRegistros;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroRegistros
+     *
+     * @return integer
+     */
+    public function getNumeroRegistros()
+    {
+        return $this->numeroRegistros;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuPagoBanco
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
      * Set cuentaRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenCuenta $cuentaRel
@@ -220,13 +301,6 @@ class RhuPagoBanco
     public function getCuentaRel()
     {
         return $this->cuentaRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->pagosBancosDetallesPagoBancoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -261,77 +335,5 @@ class RhuPagoBanco
     public function getPagosBancosDetallesPagoBancoRel()
     {
         return $this->pagosBancosDetallesPagoBancoRel;
-    }
-
-    /**
-     * Set vrTotalPago
-     *
-     * @param float $vrTotalPago
-     *
-     * @return RhuPagoBanco
-     */
-    public function setVrTotalPago($vrTotalPago)
-    {
-        $this->vrTotalPago = $vrTotalPago;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalPago
-     *
-     * @return float
-     */
-    public function getVrTotalPago()
-    {
-        return $this->vrTotalPago;
-    }
-
-    /**
-     * Set estadoAutorizado
-     *
-     * @param boolean $estadoAutorizado
-     *
-     * @return RhuPagoBanco
-     */
-    public function setEstadoAutorizado($estadoAutorizado)
-    {
-        $this->estadoAutorizado = $estadoAutorizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAutorizado
-     *
-     * @return boolean
-     */
-    public function getEstadoAutorizado()
-    {
-        return $this->estadoAutorizado;
-    }
-
-    /**
-     * Set numeroRegistros
-     *
-     * @param integer $numeroRegistros
-     *
-     * @return RhuPagoBanco
-     */
-    public function setNumeroRegistros($numeroRegistros)
-    {
-        $this->numeroRegistros = $numeroRegistros;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroRegistros
-     *
-     * @return integer
-     */
-    public function getNumeroRegistros()
-    {
-        return $this->numeroRegistros;
     }
 }

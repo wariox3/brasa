@@ -510,7 +510,12 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuProyeccion", mappedBy="empleadoRel")
      */
     protected $proyeccionesEmpleadoRel;         
-    
+   
+    /**
+     * @ORM\OneToMany(targetEntity="RhuRequisito", mappedBy="empleadoRel")
+     */
+    protected $requisitosEmpleadoRel;     
+
 
     /**
      * Constructor
@@ -539,6 +544,7 @@ class RhuEmpleado
         $this->cambiosSalariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ingresosBasesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyeccionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->requisitosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -2977,5 +2983,39 @@ class RhuEmpleado
     public function getProyeccionesEmpleadoRel()
     {
         return $this->proyeccionesEmpleadoRel;
+    }
+
+    /**
+     * Add requisitosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addRequisitosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosEmpleadoRel)
+    {
+        $this->requisitosEmpleadoRel[] = $requisitosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove requisitosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosEmpleadoRel
+     */
+    public function removeRequisitosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosEmpleadoRel)
+    {
+        $this->requisitosEmpleadoRel->removeElement($requisitosEmpleadoRel);
+    }
+
+    /**
+     * Get requisitosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRequisitosEmpleadoRel()
+    {
+        return $this->requisitosEmpleadoRel;
     }
 }
