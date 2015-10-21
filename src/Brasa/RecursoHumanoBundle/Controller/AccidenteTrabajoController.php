@@ -186,11 +186,12 @@ class AccidenteTrabajoController extends Controller
             $identificacion = $request->request->get('TxtIdentificacion');
             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $identificacion, 'estadoActivo' => 1));
-            $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-            $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
-            if (count($arEmpleadoFinal) == 0){
+            
+            if (count($arEmpleado) == 0){
                 $objMensaje->Mensaje("error", "No existe el número de identificación", $this);
             }else {
+                $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
                 if ($arEmpleadoFinal->getCodigoCentroCostoFk() == ""){
                     $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this);
                 }else {

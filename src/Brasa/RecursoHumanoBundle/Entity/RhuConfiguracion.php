@@ -92,6 +92,11 @@ class RhuConfiguracion
     private $codigoRetencionFuente;
     
     /**
+     * @ORM\Column(name="edad_minima_empleado", type="integer")
+     */    
+    private $edadMinimaEmpleado;
+    
+    /**
      * @ORM\Column(name="porcentaje_bonificacion_no_prestacional", type="float")
      */    
     private $porcentajeBonificacionNoPrestacional = 40;    
@@ -104,7 +109,6 @@ class RhuConfiguracion
     protected $entidadRiesgoProfesionalRel;
 
 
-    
 
     /**
      * Set codigoConfiguracionPk
@@ -395,30 +399,6 @@ class RhuConfiguracion
     }
 
     /**
-     * Set entidadRiesgoProfesionalRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
-     *
-     * @return RhuConfiguracion
-     */
-    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
-    {
-        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadRiesgoProfesionalRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
-     */
-    public function getEntidadRiesgoProfesionalRel()
-    {
-        return $this->entidadRiesgoProfesionalRel;
-    }
-
-    /**
      * Set codigoIncapacidad
      *
      * @param integer $codigoIncapacidad
@@ -515,6 +495,30 @@ class RhuConfiguracion
     }
 
     /**
+     * Set edadMinimaEmpleado
+     *
+     * @param integer $edadMinimaEmpleado
+     *
+     * @return RhuConfiguracion
+     */
+    public function setEdadMinimaEmpleado($edadMinimaEmpleado)
+    {
+        $this->edadMinimaEmpleado = $edadMinimaEmpleado;
+
+        return $this;
+    }
+
+    /**
+     * Get edadMinimaEmpleado
+     *
+     * @return integer
+     */
+    public function getEdadMinimaEmpleado()
+    {
+        return $this->edadMinimaEmpleado;
+    }
+
+    /**
      * Set porcentajeBonificacionNoPrestacional
      *
      * @param float $porcentajeBonificacionNoPrestacional
@@ -536,5 +540,29 @@ class RhuConfiguracion
     public function getPorcentajeBonificacionNoPrestacional()
     {
         return $this->porcentajeBonificacionNoPrestacional;
+    }
+
+    /**
+     * Set entidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
+     *
+     * @return RhuConfiguracion
+     */
+    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
+    {
+        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadRiesgoProfesionalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
+     */
+    public function getEntidadRiesgoProfesionalRel()
+    {
+        return $this->entidadRiesgoProfesionalRel;
     }
 }

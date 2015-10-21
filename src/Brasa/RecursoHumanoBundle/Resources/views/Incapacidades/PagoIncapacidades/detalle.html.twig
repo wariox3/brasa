@@ -10,7 +10,16 @@
         <div class="page-header">
             <h3>Detalle pago Incapacidades</h3>
         </div>
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">                
+                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
+        </div>
 
+        <br /><br />
         <!-- Encabezado Movimiento -->
         <div class="panel panel-default">
             <div class="panel-heading">Información pago incapacidades</div>
@@ -37,16 +46,7 @@
         </div>
 
         <!-- Fin Encabezado Movimiento -->
-        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
-        {{ form_errors(form) }}
-        <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">                
-                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            </div>
-        </div>
-
-        <br /><br />
+        
         <ul class="nav nav-tabs">
             <li class="active"><a href="#incapacidades" data-toggle="tab">Incapacidades</a></li>
         </ul>

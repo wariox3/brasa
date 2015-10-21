@@ -7,6 +7,8 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenDetalleType;
 class ExamenController extends Controller
 {
+    var $strListaDql = "";
+    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -35,7 +37,8 @@ class ExamenController extends Controller
                 $this->generarExcel();
             }
         }
-        $arExamenes = $paginator->paginate($em->createQuery($session->get('dqlExamenLista')), $request->query->get('page', 1), 20);
+        
+        $arExamenes = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Examen:lista.html.twig', array('arExamenes' => $arExamenes, 'form' => $form->createView()));
     }
 
@@ -67,24 +70,36 @@ class ExamenController extends Controller
             'form' => $form->createView()));
     }
 
-    public function detalleAction($codigoExamen, Request $request) {
-        $em = $this->getDoctrine()->getManager();        
+    public function detalleAction($codigoExamen) {
+        $em = $this->getDoctrine()->getManager(); 
+        $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
-        $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);        
-        $form = $this->createFormBuilder()
-            ->add('BtnAutorizar', 'submit', array('label'  => 'Autorizar'))
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
-            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
-            ->getForm();        
+        $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+        $form = $this->formularioDetalle($arExamen);
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnAutorizar')->isClicked()) {                                
+            /*if($form->get('BtnAutorizar')->isClicked()) {                                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->autorizar($codigoExamen);
                 return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));           
-            }            
+            }*/
+            if($form->get('BtnAutorizar')->isClicked()) {            
+                if($arExamen->getEstadoAutorizado() == 0) {
+                    $arExamen->setEstadoAutorizado(1);
+                    $em->persist($arExamen);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                
+                }
+            }
+            if($form->get('BtnDesAutorizar')->isClicked()) {            
+                if($arExamen->getEstadoAutorizado() == 1) {
+                    $arExamen->setEstadoAutorizado(0);
+                    $em->persist($arExamen);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                
+                }
+            }
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arExamen->getEstadoAutorizado() == 1) {
                     $objExamen = new \Brasa\RecursoHumanoBundle\Formatos\FormatoExamen();
@@ -169,25 +184,73 @@ class ExamenController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $session->set('dqlExamenLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->listaDQL($session->get('filtroNombreExamen'), $session->get('filtroAprobadoExamen')));
+        $em = $this->getDoctrine()->getManager();
+        $this->strListaDql =  $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->listaDQL(
+                $session->get('filtroCodigoCentroCosto'),
+                $session->get('filtroIdentificacion'),
+                $session->get('filtroAprobadoExamen')
+                );
     }
 
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
-        $session->set('filtroNombreExamen', $form->get('TxtNombre')->getData());
+        $request = $this->getRequest(); 
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroAprobadoExamen', $form->get('estadoAprobado')->getData());
     }
     
     private function formularioFiltro() {
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionGrupo')))
-            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoSeleccionGrupo')))
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoExamen')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
+        return $form;
+    }
+    
+    private function formularioDetalle($arExamen) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
+        $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => false);
+        if($arExamen->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;            
+            $arrBotonEliminarDetalle['disabled'] = true;
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;
+            $arrBotonAprobar['disabled'] = true;
+        }
+        $form = $this->createFormBuilder()    
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
+                    ->add('BtnEliminar', 'submit', $arrBotonEliminarDetalle)
+                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)
+                    ->getForm();  
         return $form;
     }
 
@@ -242,8 +305,11 @@ class ExamenController extends Controller
                     ->setCellValue('AI1', 'OBSERVACIONES');
 
         $i = 2;
-        $query = $em->createQuery($session->get('dqlExamenLista'));
-        $arExamenes = $query->getResult();
+        
+        $query = $em->createQuery($this->strListaDql);
+                $arExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
+                $arExamenes = $query->getResult();
+                
         foreach ($arExamenes as $arExamen) {
             $strNombreCentroCosto = "";
             if($arExamen->getCentroCostoRel()) {

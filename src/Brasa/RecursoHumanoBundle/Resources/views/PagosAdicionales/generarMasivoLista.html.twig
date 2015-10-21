@@ -39,7 +39,7 @@ $(function () {
                 <td {% if arProgramacionPago.verificarPagosAdicionales == 1 %}class="success"{% endif %}>{% if arProgramacionPago.verificarPagosAdicionales == 1 %} SI {% else %} NO {% endif %}</td>
                 <td {% if arProgramacionPago.verificarIncapacidades == 1 %}class="success"{% endif %}>{% if arProgramacionPago.verificarIncapacidades == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Ver</a></td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoCentroCosto': arProgramacionPago.codigoCentroCostoFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
             </tr>
             {% endfor %}
         </table>

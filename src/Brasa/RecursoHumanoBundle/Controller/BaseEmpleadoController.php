@@ -267,6 +267,8 @@ class BaseEmpleadoController extends Controller
     public function nuevoAction($codigoEmpleado, $codigoSeleccion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion;
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if($codigoEmpleado != 0) {
@@ -329,8 +331,9 @@ class BaseEmpleadoController extends Controller
                         $varEdad = date('Y') - $varFechaNacimientoAnio -1;
                     }
                 //Fin calculo edad
-                if ($varEdad < 16){
-                    $objMensaje->Mensaje("error", "El empleado debe ser mayor de 15 años!", $this);
+                $intEdadEmpleado = $arConfiguracion->getEdadMinimaEmpleado();    
+                if ($varEdad < $intEdadEmpleado){
+                    $objMensaje->Mensaje("error", "El empleado debe ser mayor de " .$intEdadEmpleado. " años!", $this);
                 }else{
                     $em->persist($arEmpleado);
                     $em->flush();                         

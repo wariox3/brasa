@@ -349,12 +349,12 @@ class DotacionController extends Controller
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
     }    
     
-    private function formularioDetalle($arVacacion) {
+    private function formularioDetalle($arDotacion) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);        
-        if($arVacacion->getEstadoAutorizado() == 1) {            
+        if($arDotacion->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
             $arrBotonEliminarDetalle['disabled'] = true;            
         } else {

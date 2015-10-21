@@ -6,7 +6,26 @@
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
     {{ form_errors(form) }}
-    
+    <div class="btn-toolbar" style="float:left">
+        <div class="btn-group">                   
+            {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 500, 700)" >Inconsistencias</a>                                    
+            <!-- Split button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-sm">Utilidades</button>
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }} " target="_blank">Agregar adicionales al pago</a></li>                    
+                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Agregar tiempo suplementario (Masivo)</a></li>
+                    <li class="divider"></li>                    
+                    <li><a href="{{ path('brs_rhu_utilidades_programacion_pago_comprobante_masivo', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Descargar comprobantes (Masivo .pdf)</a></li>                    
+                    <li><a href="{{ path('brs_rhu_utilidades_programacion_pago_comprobante_masivo_correo', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Enviar comprobantes (Masivo correo)</a></li>                    
+                </ul>
+            </div>
+        </div>
+    </div><br /> <br />
     <div class="panel panel-default">
       <div class="panel-heading">Detalle programación de pago</div>
       <div class="panel-body">
@@ -41,27 +60,7 @@
                 </tr>
             </table>
       </div>
-    </div>   
-    <div class="btn-toolbar" style="float:left">
-        <div class="btn-group">                   
-            {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 500, 700)" >Inconsistencias</a>                                    
-            <!-- Split button -->
-            <div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm">Utilidades</button>
-                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }} " target="_blank">Agregar adicionales al pago</a></li>                    
-                    <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Agregar tiempo suplementario (Masivo)</a></li>
-                    <li class="divider"></li>                    
-                    <li><a href="{{ path('brs_rhu_utilidades_programacion_pago_comprobante_masivo', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Descargar comprobantes (Masivo .pdf)</a></li>                    
-                    <li><a href="{{ path('brs_rhu_utilidades_programacion_pago_comprobante_masivo_correo', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Enviar comprobantes (Masivo correo)</a></li>                    
-                </ul>
-            </div>
-        </div>
-    </div><br /> <br /><br />                
+    </div>                   
                 
     <ul class="nav nav-tabs">
             <li  class="active"><a href="#empleados" data-toggle="tab">Empleados</a></li>

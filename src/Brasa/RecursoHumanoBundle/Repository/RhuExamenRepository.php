@@ -6,18 +6,21 @@ use Doctrine\ORM\EntityRepository;
 
 class RhuExamenRepository extends EntityRepository {
 
-    public function listaDQL($strNombre = "", $boolAprobado = "") {
+    public function listaDQL($codigoCentroCosto = "", $strIdentificacion = "", $boolAprobado = "") {
         $em = $this->getEntityManager();
-        $dql   = "SELECT sg FROM BrasaRecursoHumanoBundle:RhuExamen sg WHERE sg.codigoExamenPk <> 0";
-        if($strNombre != "" ) {
-            $dql .= " AND sg.nombreCorto LIKE '%" . $strNombre . "%'";
+        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuExamen e WHERE e.codigoExamenPk <> 0";
+        if($codigoCentroCosto != "" ) {
+            $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.identificacion LIKE '%" . $strIdentificacion . "%'";
         }
         if($boolAprobado == 1 ) {
-            $dql .= " AND sg.estadoAprobado = 1";
+            $dql .= " AND e.estadoAprobado = 1";
         } elseif($boolAprobado == 0) {
-            $dql .= " AND sg.estadoAprobado = 0";
+            $dql .= " AND e.estadoAprobado = 0";
         }
-        $dql .= " ORDER BY sg.codigoExamenPk";
+        $dql .= " ORDER BY e.codigoExamenPk";
         return $dql;
     }
 

@@ -25,7 +25,7 @@ class ArchivosController extends Controller
         $objMensaje = $this->get('mensajes_brasa'); 
         $form = $this->createFormBuilder()
             ->add('attachment', 'file')
-            ->add('descripcion', 'text', array('required' => true))
+            ->add('descripcion', 'text', array('required' => false))
             ->add('comentarios', 'textarea', array('required' => false)) 
             ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
             ->getForm();
