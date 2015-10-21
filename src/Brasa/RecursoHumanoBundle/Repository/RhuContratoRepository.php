@@ -104,6 +104,21 @@ class RhuContratoRepository extends EntityRepository {
         return $dql;
     }
     
+    //lista contratos con las fecha de vencimiento, no aplica para los contratos a termino indefinido
+    public function listaContratosFechaTerminacionDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strHasta = "") {        
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoLiquidado = 0 AND c.estadoActivo = 1 AND c.codigoContratoTipoFk <> 3";
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND c.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND c.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        return $dql;
+    }
+    
     public function numtoletras($xcifra) {
     $em = $this->getEntityManager();
         $xarray = array(0 => "Cero",

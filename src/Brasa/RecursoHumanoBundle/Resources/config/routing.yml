@@ -592,7 +592,11 @@ brs_rhu_consultas_sso_aportes:
     
 brs_rhu_consultas_contrato_vacaciones_pagar:    
     path:     /rhu/consultas/contrato/vacaciones/pagar
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:VacacionesPagar }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:VacacionesPagar }
+    
+brs_rhu_consultas_contrato_fecha_terminacion:    
+    path:     /rhu/consultas/contrato/fecha/terminacion
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:FechaTerminacion }    
 
 brs_rhu_utilidades_proyeccion:    
     path:     /rhu/utilidades/proyeccion

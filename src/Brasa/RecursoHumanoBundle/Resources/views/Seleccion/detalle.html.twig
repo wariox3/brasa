@@ -10,7 +10,10 @@
     <div class="page-header">
         <h3>Proceso selección</h3>
     </div>
-
+    <div class="btn-group">
+        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
+    </div>
+    <br /> <br />    
     <!-- Encabezado Movimiento -->
     <div class="panel panel-default">
       <div class="panel-heading">Información selección</div>
@@ -66,12 +69,8 @@
     <!-- Fin Encabezado Movimiento -->
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
-        <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
-            </div>
-        </div>
-    <br /><br />
+        
+    
     <ul class="nav nav-tabs">
         <li class="active"><a href="#referencias" data-toggle="tab">Referencias</a></li>
         <li><a href="#pruebas" data-toggle="tab">Pruebas</a></li>
