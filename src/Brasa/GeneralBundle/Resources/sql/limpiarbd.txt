@@ -1,3 +1,5 @@
+DELETE FROM rhu_requisito_detalle;
+DELETE FROM rhu_requisito;
 DELETE FROM rhu_supervigilancia_parafiscales;
 DELETE FROM rhu_empleado_examen;
 DELETE FROM ad_archivo;
