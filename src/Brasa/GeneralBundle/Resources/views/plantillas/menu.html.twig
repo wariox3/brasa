@@ -55,30 +55,46 @@
                                 <li><a href="{{ path('brs_rhu_base_centros_costos_lista') }}">Centros de costo</a></li>
                                 <li><a href="{{ path('brs_rhu_base_empleados_lista') }}">Empleados</a></li>
                                 <li><a href="{{ path('brs_rhu_base_contratos_lista') }}">Contratos</a></li>
-                                <li><a href="{{ path('brs_rhu_base_salud_listar') }}">Salud</a></li>
-                                <li><a href="{{ path('brs_rhu_base_pension_listar') }}">Pension</a></li>
-                                <li><a href="{{ path('brs_rhu_base_caja_listar') }}">Caja compensación</a></li>
-                                <li><a href="{{ path('brs_rhu_base_creditotipo_listar') }}">Tipos crédito</a></li>
-                                <li><a href="{{ path('brs_rhu_base_entidadexamen_listar') }}">Entidad examen</a></li>
-                                <li><a href="{{ path('brs_rhu_base_examentipo_listar') }}">Tipos examen</a></li>
-                                <li><a href="{{ path('brs_rhu_base_banco_listar') }}">Bancos</a></li>
-                                <li><a href="{{ path('brs_rhu_base_sede_listar') }}">Sedes</a></li>
-                                <li><a href="{{ path('brs_rhu_base_cargo_listar') }}">Cargos</a></li>
-                                <li><a href="{{ path('brs_rhu_base_clasificacion_listar') }}">Clasificación de riesgos</a></li>
-                                <li><a href="{{ path('brs_rhu_base_riesgoProfesional_listar') }}">Riesgos profesionales</a></li>
-                                <li><a href="{{ path('brs_rhu_base_contenido_formato_lista') }}">Contenidos formatos</a></li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">General</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_rhu_base_empleado_estudio_tipo_lista') }}">Tipo estudio</a></li>                                        
+                                        <li><a href="{{ path('brs_rhu_base_contenido_formato_lista') }}">Formatos</a></li>
+                                        <li><a href="{{ path('brs_rhu_base_licenciatipo_listar') }}">Tipo licencia</a></li>                                                                                
+                                    </ul>
+                                </li>                                
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Contratacion</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_rhu_base_cargo_listar') }}">Cargos</a></li>   
+                                        <li><a href="{{ path('brs_rhu_base_requisito_cargo_lista') }}">Requisitos por cargos</a></li>                                                                                                                        
+                                        <li><a href="{{ path('brs_rhu_base_banco_listar') }}">Bancos</a></li>                                    
+                                    </ul>
+                                </li>                                                                
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Seguridad social</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_base_ssosucursal_listar') }}">Sucursales</a></li>
+                                        <li><a href="{{ path('brs_rhu_base_ssosucursal_listar') }}">Sucursales aportes</a></li>
+                                        <li><a href="{{ path('brs_rhu_base_salud_listar') }}">Salud</a></li>
+                                        <li><a href="{{ path('brs_rhu_base_pension_listar') }}">Pension</a></li>
+                                        <li><a href="{{ path('brs_rhu_base_caja_listar') }}">Caja compensación</a></li>                                        
                                     </ul>
                                 </li>
-                                <li><a href="{{ path('brs_rhu_base_dotacionElemento_lista') }}">Elementos dotación</a></li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Salud ocupacional</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_rhu_base_clasificacion_listar') }}">Clasificación de riesgos</a></li>
+                                        <li><a href="{{ path('brs_rhu_base_riesgoProfesional_listar') }}">Riesgos profesionales</a></li>                                
+                                        <li><a href="{{ path('brs_rhu_base_dotacionElemento_lista') }}">Elementos dotación</a></li>                                        
+                                    </ul>
+                                </li>                                
+                                <li><a href="{{ path('brs_rhu_base_creditotipo_listar') }}">Tipos crédito</a></li>
+                                <li><a href="{{ path('brs_rhu_base_entidadexamen_listar') }}">Entidad examen</a></li>
+                                <li><a href="{{ path('brs_rhu_base_examentipo_listar') }}">Tipos examen</a></li>                                
+                                <li><a href="{{ path('brs_rhu_base_sede_listar') }}">Sedes</a></li>                                
                                 <li><a href="{{ path('brs_rhu_base_disciplinario_tipo_lista') }}">Tipos proceso disciplinario</a></li>
-                                <li><a href="{{ path('brs_rhu_liquidacion_adicional_concepto_lista') }}">Liquidación adicional concepto</a></li>
-                                <li><a href="{{ path('brs_rhu_pago_concepto_lista') }}">Pago conceptos</a></li>
-                                <li><a href="{{ path('brs_rhu_base_empleado_estudio_tipo_lista') }}">Tipo estudio</a></li>
-                                <li><a href="{{ path('brs_rhu_base_licenciatipo_listar') }}">Tipo licencia</a></li>
+                                <li><a href="{{ path('brs_rhu_liquidacion_adicional_concepto_lista') }}">Conceptos adicionales liquidacion</a></li>
+                                <li><a href="{{ path('brs_rhu_pago_concepto_lista') }}">Conceptos del pago</a></li>                                                                
                             </ul>
                         </li>
                     </ul>

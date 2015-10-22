@@ -27,6 +27,21 @@ class RhuRequisitoDetalle
      */    
     private $codigoRequisitoConceptoFk;    
     
+    /**     
+     * @ORM\Column(name="estado_pendiente", type="boolean")
+     */    
+    private $estadoPendiente = 1;    
+
+    /**     
+     * @ORM\Column(name="estado_entregado", type="boolean")
+     */    
+    private $estadoEntregado = 0;        
+
+    /**     
+     * @ORM\Column(name="estado_no_aplica", type="boolean")
+     */    
+    private $estadoNoAplica = 0;            
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuRequisito", inversedBy="requisitosDetallesRequisitoRel")
      * @ORM\JoinColumn(name="codigo_requisito_fk", referencedColumnName="codigo_requisito_pk")
@@ -144,5 +159,77 @@ class RhuRequisitoDetalle
     public function getRequisitoConceptoRel()
     {
         return $this->requisitoConceptoRel;
+    }
+
+    /**
+     * Set estadoPendiente
+     *
+     * @param boolean $estadoPendiente
+     *
+     * @return RhuRequisitoDetalle
+     */
+    public function setEstadoPendiente($estadoPendiente)
+    {
+        $this->estadoPendiente = $estadoPendiente;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPendiente
+     *
+     * @return boolean
+     */
+    public function getEstadoPendiente()
+    {
+        return $this->estadoPendiente;
+    }
+
+    /**
+     * Set estadoEntregado
+     *
+     * @param boolean $estadoEntregado
+     *
+     * @return RhuRequisitoDetalle
+     */
+    public function setEstadoEntregado($estadoEntregado)
+    {
+        $this->estadoEntregado = $estadoEntregado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoEntregado
+     *
+     * @return boolean
+     */
+    public function getEstadoEntregado()
+    {
+        return $this->estadoEntregado;
+    }
+
+    /**
+     * Set estadoNoAplica
+     *
+     * @param boolean $estadoNoAplica
+     *
+     * @return RhuRequisitoDetalle
+     */
+    public function setEstadoNoAplica($estadoNoAplica)
+    {
+        $this->estadoNoAplica = $estadoNoAplica;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoNoAplica
+     *
+     * @return boolean
+     */
+    public function getEstadoNoAplica()
+    {
+        return $this->estadoNoAplica;
     }
 }

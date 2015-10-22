@@ -498,6 +498,14 @@ brs_rhu_base_pension_nuevo:
    path:     /rhu/base/pension/nuevo/{codigoEntidadPensionPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BasePension:nuevo }    
 
+brs_rhu_base_requisito_cargo_lista:
+   path:     /rhu/base/requisito/cargo/lista
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:lista }
+   
+brs_rhu_base_requisito_cargo_nuevo:
+   path:     /rhu/base/requisito/cargo/nuevo/{codigoRequisito}/{codigoCargo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:nuevo }
+
 brs_rhu_seleccion_lista:
     path:     /rhu/seleccion/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:lista }         

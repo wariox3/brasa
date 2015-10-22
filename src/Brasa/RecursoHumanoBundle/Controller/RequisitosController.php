@@ -38,19 +38,57 @@ class RequisitosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
         $request = $this->getRequest();        
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->getForm();
-        $form->handleRequest($request);
         $arRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisito();
-        $arRequisito = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisito')->find($codigoRequisito);
+        $arRequisito = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisito')->find($codigoRequisito);        
+        $form = $this->formularioDetalle($arRequisito);
+        $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
-                if ($arRequisito->getCodigoContratoTipoFk() == 1){
-                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoObraLabor();
-                    $objFormatoContrato->Generar($this, $codigoRequisito);
-                }
+                $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoRequisitos();
+                $objFormato->Generar($this, $codigoRequisito);
             }
+            if($form->get('BtnDetalleEntregado')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoRequisitoDetallePk) {
+                        $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
+                        $arRequisitoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->find($codigoRequisitoDetallePk);
+                        if($arRequisitoDetalle->getEstadoNoAplica() == 0) {
+                            if($arRequisitoDetalle->getEstadoEntregado() == 1) {
+                                $arRequisitoDetalle->setEstadoEntregado(0);
+                                $arRequisitoDetalle->setEstadoPendiente(1);
+                            } else {
+                                $arRequisitoDetalle->setEstadoEntregado(1);
+                                $arRequisitoDetalle->setEstadoPendiente(0);
+                            }
+                            $em->persist($arRequisitoDetalle);
+                        }
+                    }
+                    $em->flush();
+                }
+                return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
+            } 
+            if($form->get('BtnDetalleNoAplica')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoRequisitoDetallePk) {
+                        $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
+                        $arRequisitoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->find($codigoRequisitoDetallePk);
+                        if($arRequisitoDetalle->getEstadoEntregado() == 0) {
+                            if($arRequisitoDetalle->getEstadoNoAplica() == 1) {
+                                $arRequisitoDetalle->setEstadoNoAplica(0);
+                                $arRequisitoDetalle->setEstadoPendiente(1);
+                            } else {
+                                $arRequisitoDetalle->setEstadoNoAplica(1);
+                                $arRequisitoDetalle->setEstadoPendiente(0);
+                            }
+                            $em->persist($arRequisitoDetalle);
+                        }
+                    }
+                    $em->flush();
+                }
+                return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
+            }            
         }
         $arRequisitosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
         $arRequisitosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->findBy(array('codigoRequisitoFk' => $codigoRequisito));
@@ -107,6 +145,18 @@ class RequisitosController extends Controller
         return $form;
     }
 
+    private function formularioDetalle($ar) {
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
+        $arrBotonDetalleEntregado = array('label' => 'Entregado', 'disabled' => false);        
+        $arrBotonDetalleNoAplica = array('label' => 'No aplica', 'disabled' => false);        
+        $form = $this->createFormBuilder()    
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
+                    ->add('BtnDetalleEntregado', 'submit', $arrBotonDetalleEntregado)                                
+                    ->add('BtnDetalleNoAplica', 'submit', $arrBotonDetalleNoAplica)                                
+                    ->getForm();  
+        return $form;
+    }    
+    
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();

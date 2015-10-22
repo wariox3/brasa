@@ -7,8 +7,7 @@
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="btn-group">
-            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 4,  'numero': arRequisito.codigoRequisitoPk }) }}', 'Archivos', 500, 700)" >Documentos</a>                        
+            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
         </div>
         <br /> <br />
         <div class="panel panel-default">
@@ -40,11 +39,19 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>CONCEPTO</th>
+                        <th>ENTREGADO</th>
+                        <th>NO APLICA</th>
+                        <th>PENDIENTE</th>
+                        <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                     </tr>
                     {% for arRequisitosDetalles in arRequisitosDetalles %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisitosDetalles.codigoRequisitoDetallePk }}">{{ arRequisitosDetalles.codigoRequisitoDetallePk }} </td>
                             <td>{{ arRequisitosDetalles.requisitoConceptoRel.nombre }}</a></td>
+                            <td>{% if arRequisitosDetalles.estadoEntregado == 1%} SI {% else %} NO {% endif %}</td>
+                            <td>{% if arRequisitosDetalles.estadoNoAplica == 1%} SI {% else %} NO {% endif %}</td>
+                            <td>{% if arRequisitosDetalles.estadoPendiente == 1%} SI {% else %} NO {% endif %}</td>
+                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisitosDetalles.codigoRequisitoDetallePk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -52,6 +59,11 @@
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', {'codigoContrato': arRequisito.codigoRequisitoPk, 'codigoCambioSalario': 0 }) }}', 'AgregarCambioSalario', 600, 900)" >Nuevo</a>
                     </div>
+                    <div class="btn-group">                
+                        {{ form_widget(form.BtnDetalleEntregado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                        {{ form_widget(form.BtnDetalleNoAplica, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                        
+                    </div>                    
                 </div>        
                 
                 {{ knp_pagination_render(arRequisitosDetalles) }}       

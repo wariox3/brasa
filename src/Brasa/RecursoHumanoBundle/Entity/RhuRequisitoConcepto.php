@@ -28,6 +28,11 @@ class RhuRequisitoConcepto
     protected $requisitosDetallesRequisitoConceptoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuRequisitoCargo", mappedBy="requisitoConceptoRel")
+     */
+    protected $requisitosCargosRequisitoConceptoRel;     
+    
+    /**
      * Get codigoRequisitoConceptoPk
      *
      * @return integer
@@ -100,5 +105,39 @@ class RhuRequisitoConcepto
     public function getRequisitosDetallesRequisitoConceptoRel()
     {
         return $this->requisitosDetallesRequisitoConceptoRel;
+    }
+
+    /**
+     * Add requisitosCargosRequisitoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo $requisitosCargosRequisitoConceptoRel
+     *
+     * @return RhuRequisitoConcepto
+     */
+    public function addRequisitosCargosRequisitoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo $requisitosCargosRequisitoConceptoRel)
+    {
+        $this->requisitosCargosRequisitoConceptoRel[] = $requisitosCargosRequisitoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove requisitosCargosRequisitoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo $requisitosCargosRequisitoConceptoRel
+     */
+    public function removeRequisitosCargosRequisitoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo $requisitosCargosRequisitoConceptoRel)
+    {
+        $this->requisitosCargosRequisitoConceptoRel->removeElement($requisitosCargosRequisitoConceptoRel);
+    }
+
+    /**
+     * Get requisitosCargosRequisitoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRequisitosCargosRequisitoConceptoRel()
+    {
+        return $this->requisitosCargosRequisitoConceptoRel;
     }
 }

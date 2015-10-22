@@ -36,6 +36,11 @@ class RhuCargo
      * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="cargoRel")
      */
     protected $ssoAportesCargoRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuRequisitoCargo", mappedBy="cargoRel")
+     */
+    protected $requisitosCargosCargoRel;    
     
     /**
      * Constructor
@@ -44,6 +49,8 @@ class RhuCargo
     {
         $this->contratosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoAportesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->requisitosCargosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -180,5 +187,39 @@ class RhuCargo
     public function getSsoAportesCargoRel()
     {
         return $this->ssoAportesCargoRel;
+    }
+
+    /**
+     * Add requisitosCargosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo $requisitosCargosCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addRequisitosCargosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo $requisitosCargosCargoRel)
+    {
+        $this->requisitosCargosCargoRel[] = $requisitosCargosCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove requisitosCargosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo $requisitosCargosCargoRel
+     */
+    public function removeRequisitosCargosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo $requisitosCargosCargoRel)
+    {
+        $this->requisitosCargosCargoRel->removeElement($requisitosCargosCargoRel);
+    }
+
+    /**
+     * Get requisitosCargosCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRequisitosCargosCargoRel()
+    {
+        return $this->requisitosCargosCargoRel;
     }
 }
