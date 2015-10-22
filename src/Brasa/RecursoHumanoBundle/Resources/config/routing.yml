@@ -717,7 +717,18 @@ brs_rhu_requisito_lista:
 brs_rhu_requisito_detalle:
     path:     /rhu/requisito/detalle/{codigoRequisito}
     defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:detalle }     
+
+brs_rhu_capacitacion_nuevo:
+    path:     /rhu/capacitacion/nuevo/{codigoCapacitacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:nuevo }    
     
+brs_rhu_capacitacion_lista:
+    path:     /rhu/capacitacion/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:lista }
+
+brs_rhu_capacitacion_detalle:
+    path:     /rhu/capacitacion/detalle/{codigoCapacitacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalle }    
     
 buscar_empleado:
     pattern:  /buscar/empleado/
