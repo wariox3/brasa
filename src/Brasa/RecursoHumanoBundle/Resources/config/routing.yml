@@ -574,6 +574,10 @@ brs_rhu_consultas_empleado_examenes_vencimiento:
     path:     /rhu/consultas/empleado/examanes/vencimiento
     defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasEmpleadoExamenesVencimiento:lista }
 
+brs_rhu_consultas_empleado_requisitos_pendientes:    
+    path:     /rhu/consultas/empleado/requisitos/pendientes
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasEmpleadoRequisitosPendientes:lista }
+
 brs_rhu_consultas_costos_general:    
     path:     /rhu/consultas/costos/general
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:costosGeneral }

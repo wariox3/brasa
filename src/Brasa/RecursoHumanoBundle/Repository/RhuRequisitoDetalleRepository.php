@@ -11,5 +11,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuRequisitoDetalleRepository extends EntityRepository {
     
-    
+    public function listaDql($strIdentificacion = "", $strFecha = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT rd, r FROM BrasaRecursoHumanoBundle:RhuRequisitoDetalle rd JOIN rd.requisitoRel r WHERE rd.estadoPendiente = 1";
+   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND r.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
+        return $dql;
+    }     
 }
