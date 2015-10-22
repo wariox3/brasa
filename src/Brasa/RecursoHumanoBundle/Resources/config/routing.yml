@@ -505,6 +505,14 @@ brs_rhu_base_requisito_cargo_lista:
 brs_rhu_base_requisito_cargo_nuevo:
    path:     /rhu/base/requisito/cargo/nuevo/{codigoRequisitoCargo}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:nuevo }
+   
+brs_rhu_base_requisito_concepto_lista:
+   path:     /rhu/base/requisito/concepto/lista
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoConcepto:lista }
+   
+brs_rhu_base_requisito_concepto_nuevo:
+   path:     /rhu/base/requisito/concepto/nuevo/{codigoRequisitoConcepto}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoConcepto:nuevo }   
 
 brs_rhu_seleccion_lista:
     path:     /rhu/seleccion/lista

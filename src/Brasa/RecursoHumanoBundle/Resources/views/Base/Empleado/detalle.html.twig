@@ -520,7 +520,7 @@
                             <td>{{ arDotacion.dotacionTipoRel.nombre  }}</td>
                             <td>{{ arDotacion.codigoInternoReferencia  }}</td>
                             <td>{{ arDotacion.comentarios  }}</td>
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_nuevo', {'codigoEmpleado':  arDotacion.codigoEmpleadoFk, 'codigoDotacion': arDotacion.codigoDotacionPk }) }}', 'AgregarDotacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDotacion': arDotacion.codigoDotacionPk }) }}', 'AgregarDotacion', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td style="text-align: center"><a href="{{ path('brs_rhu_dotacion_detalle', { 'codigoDotacion': arDotacion.codigoDotacionPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                            
                             <td><input type="checkbox" name="ChkSeleccionarDotacion[]" value="{{ arDotacion.codigoDotacionPk }}" /></td>
                         </tr>

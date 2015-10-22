@@ -11,5 +11,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuRequisitoConceptoRepository extends EntityRepository {
     
-    
+    public function listaDql() {                
+        $dql   = "SELECT rc FROM BrasaRecursoHumanoBundle:RhuRequisitoConcepto rc";        
+        return $dql;
+    }
 }
