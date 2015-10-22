@@ -47,7 +47,7 @@ class RhuContratoRepository extends EntityRepository {
         } else {
             return 0;
         }        
-    }                    
+    }
     
     public function contratosInicioFecha($fechaDesde = "", $fechaHasta = "") {        
         $em = $this->getEntityManager();

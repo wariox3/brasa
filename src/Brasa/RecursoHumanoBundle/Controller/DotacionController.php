@@ -71,7 +71,7 @@ class DotacionController extends Controller
             $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
         }
         $arDotacion->setFecha(new \DateTime('now'));
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());
+        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arDotacion->getCodigoCentroCostoFk());
         $arDotacion->setCentroCostoRel($arCentroCosto);
         $form = $this->createForm(new RhuDotacionType, $arDotacion);
         $form->handleRequest($request);
@@ -102,6 +102,10 @@ class DotacionController extends Controller
                 'class' => 'BrasaRecursoHumanoBundle:RhuDotacionTipo',
                         'property' => 'nombre',
             ))
+            ->add('centroCostoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                        'property' => 'nombre',
+            ))    
             ->add('fecha', 'date', array('data' => new \DateTime('now')))
             ->add('codigoInternoReferencia', 'number', array('required' => true))
             ->add('comentarios', 'textarea', array('required' => false))
@@ -118,11 +122,10 @@ class DotacionController extends Controller
                 $arDotacion->setEmpleadoRel($arEmpleado[0]);
                 $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
-                if ($arEmpleadoFinal->getCodigoCentroCostoFk() == null){
-                    $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this);
-                } else {
-                    $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
-                    $arDotacion->setCentroCostoRel($arCentroCosto);
+                $intTipoDotacion = $form->get('dotacionTipoRel')->getData();
+                $arDotacionTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionTipo')->find($intTipoDotacion);
+                if ($arDotacionTipo->getCodigoDotacionTipoPk() == 2){
+                    $arDotacion->setCentroCostoRel($form->get('centroCostoRel')->getData());
                     $arDotacion->setFecha($form->get('fecha')->getData());
                     $arDotacion->setCodigoInternoReferencia($form->get('codigoInternoReferencia')->getData());
                     $arDotacion->setComentarios($form->get('comentarios')->getData());
@@ -130,6 +133,20 @@ class DotacionController extends Controller
                     $em->persist($arDotacion);
                     $em->flush();
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }else{
+                    if ($arEmpleadoFinal->getCodigoCentroCostoFk() == null){
+                        $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this);
+                    } else {
+                        //$arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
+                        $arDotacion->setCentroCostoRel($form->get('centroCostoRel')->getData());
+                        $arDotacion->setFecha($form->get('fecha')->getData());
+                        $arDotacion->setCodigoInternoReferencia($form->get('codigoInternoReferencia')->getData());
+                        $arDotacion->setComentarios($form->get('comentarios')->getData());
+                        $arDotacion->setDotacionTipoRel($form->get('dotacionTipoRel')->getData());
+                        $em->persist($arDotacion);
+                        $em->flush();
+                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                    }
                 }
             }
         }
@@ -201,8 +218,7 @@ class DotacionController extends Controller
                     $em->flush();
                 }
             }
-            
-            
+
         }
         $arDotacionDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
         $arDotacionDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->FindBy(array('codigoDotacionFk' => $codigoDotacion));
@@ -400,7 +416,7 @@ class DotacionController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arDotacion->getCodigoDotacionPk())
                             ->setCellValue('B' . $i, $arDotacion->getFecha()->format('Y/m/d'))
-                            ->setCellValue('C' . $i, $arDotacion->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                            ->setCellValue('C' . $i, $arDotacion->getCentroCostoRel()->getNombre())
                             ->setCellValue('D' . $i, $arDotacion->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('E' . $i, $arDotacion->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('F' . $i, $arDotacion->getCodigoInternoReferencia());

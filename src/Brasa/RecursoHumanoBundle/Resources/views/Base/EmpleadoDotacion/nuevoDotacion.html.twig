@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends '::base_sin_menu.html.twig' %}
 {% block content %}
 <div class="container">    
     <script type="text/javascript">
@@ -55,6 +55,12 @@
                 <label for="form_dotacionTipoRel" class="col-sm-4 control-label">Tipo dotación:</label>
                 <div class="col-sm-8">
                     {{ form_widget(form.dotacionTipoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_centroCostoRel" class="col-sm-4 control-label">Centro costo:</label>
+                <div class="col-sm-8">
+                    {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>    
             <div class="form-group form-group-sm">
