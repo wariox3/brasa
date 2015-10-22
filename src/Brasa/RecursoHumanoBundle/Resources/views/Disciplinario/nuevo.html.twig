@@ -42,6 +42,26 @@
             {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
             {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>
+    <table  class="table table-striped table-bordered table-condensed table-hover">
+            <tr>
+                <th>CÓDIGO</th>
+                <th>FECHA</th>
+                <th>PROCESO</th>
+                <th>CAUSAL</th>
+                <th>DESCARGOS</th>
+                <th>FECHA DE SUSPENSIÓN</th>
+            </tr>
+            {% for arDisciplinarios in arDisciplinarios %}
+            <tr>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}">{{ arDisciplinarios.codigoDisciplinarioPk }} </td>
+                <td>{{ arDisciplinarios.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>                                
+                <td>{{ arDisciplinarios.asunto|default('NO APLICA')  }}</td>
+                <td>{{ arDisciplinarios.descargos|default('NO APLICA')  }}</td>
+                <td>{{ arDisciplinarios.suspension|default('NO APLICA')  }}</td>
+            </tr>
+            {% endfor %}
+        </table>
     {{ form_end(form) }}
 </div>
 {% endblock %}

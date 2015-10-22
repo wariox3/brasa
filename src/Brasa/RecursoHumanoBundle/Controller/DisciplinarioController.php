@@ -72,9 +72,10 @@ class DisciplinarioController extends Controller
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
         }
-
+        $arDisciplinarios = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         return $this->render('BrasaRecursoHumanoBundle:Disciplinario:nuevo.html.twig', array(
             'arDisciplinario' => $arDisciplinario,
+            'arDisciplinarios' => $arDisciplinarios,
             'form' => $form->createView()));
     }
     

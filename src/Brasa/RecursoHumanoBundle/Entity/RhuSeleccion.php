@@ -232,7 +232,12 @@ class RhuSeleccion
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionPrueba", mappedBy="seleccionRel")
      */
-    protected $seleccionesPruebasSeleccionRel;    
+    protected $seleccionesPruebasSeleccionRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionVisita", mappedBy="seleccionRel")
+     */
+    protected $seleccionesVisitasSeleccionRel;
    
 
     /**
@@ -242,6 +247,7 @@ class RhuSeleccion
     {
         $this->seleccionesReferenciasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesPruebasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesVisitasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1256,5 +1262,39 @@ class RhuSeleccion
     public function getSeleccionesPruebasSeleccionRel()
     {
         return $this->seleccionesPruebasSeleccionRel;
+    }
+
+    /**
+     * Add seleccionesVisitasSeleccionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita $seleccionesVisitasSeleccionRel
+     *
+     * @return RhuSeleccion
+     */
+    public function addSeleccionesVisitasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita $seleccionesVisitasSeleccionRel)
+    {
+        $this->seleccionesVisitasSeleccionRel[] = $seleccionesVisitasSeleccionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesVisitasSeleccionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita $seleccionesVisitasSeleccionRel
+     */
+    public function removeSeleccionesVisitasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita $seleccionesVisitasSeleccionRel)
+    {
+        $this->seleccionesVisitasSeleccionRel->removeElement($seleccionesVisitasSeleccionRel);
+    }
+
+    /**
+     * Get seleccionesVisitasSeleccionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesVisitasSeleccionRel()
+    {
+        return $this->seleccionesVisitasSeleccionRel;
     }
 }
