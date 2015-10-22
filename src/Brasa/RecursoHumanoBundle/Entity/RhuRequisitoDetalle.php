@@ -90,30 +90,6 @@ class RhuRequisitoDetalle
     }
 
     /**
-     * Set requisitoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitoRel
-     *
-     * @return RhuRequisitoDetalle
-     */
-    public function setRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitoRel = null)
-    {
-        $this->requisitoRel = $requisitoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get requisitoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuRequisito
-     */
-    public function getRequisitoRel()
-    {
-        return $this->requisitoRel;
-    }
-
-    /**
      * Set codigoRequisitoConceptoFk
      *
      * @param integer $codigoRequisitoConceptoFk
@@ -135,30 +111,6 @@ class RhuRequisitoDetalle
     public function getCodigoRequisitoConceptoFk()
     {
         return $this->codigoRequisitoConceptoFk;
-    }
-
-    /**
-     * Set requisitoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto $requisitoConceptoRel
-     *
-     * @return RhuRequisitoDetalle
-     */
-    public function setRequisitoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto $requisitoConceptoRel = null)
-    {
-        $this->requisitoConceptoRel = $requisitoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get requisitoConceptoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto
-     */
-    public function getRequisitoConceptoRel()
-    {
-        return $this->requisitoConceptoRel;
     }
 
     /**
@@ -231,5 +183,53 @@ class RhuRequisitoDetalle
     public function getEstadoNoAplica()
     {
         return $this->estadoNoAplica;
+    }
+
+    /**
+     * Set requisitoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitoRel
+     *
+     * @return RhuRequisitoDetalle
+     */
+    public function setRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitoRel = null)
+    {
+        $this->requisitoRel = $requisitoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get requisitoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuRequisito
+     */
+    public function getRequisitoRel()
+    {
+        return $this->requisitoRel;
+    }
+
+    /**
+     * Set requisitoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto $requisitoConceptoRel
+     *
+     * @return RhuRequisitoDetalle
+     */
+    public function setRequisitoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto $requisitoConceptoRel = null)
+    {
+        $this->requisitoConceptoRel = $requisitoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get requisitoConceptoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto
+     */
+    public function getRequisitoConceptoRel()
+    {
+        return $this->requisitoConceptoRel;
     }
 }

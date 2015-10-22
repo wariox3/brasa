@@ -64,7 +64,7 @@ class FormatoRequisitos extends \FPDF_FPDF {
         $this->Cell(30, 6, utf8_decode("EMPLEADO:") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
-        $this->Cell(50, 6, $arRequisito->getEmpleadoRel()->getNombreCorto() , 1, 0, 'L', 1);        
+        $this->Cell(50, 6, $arRequisito->getNombreCorto() , 1, 0, 'L', 1);        
 
         $this->EncabezadoDetalles();
         
@@ -135,7 +135,7 @@ class FormatoRequisitos extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 9);
         
         $this->Text(10, 240, "FIRMA: _____________________________________________");
-        $this->Text(10, 247, $arRequisito->getEmpleadoRel()->getNombreCorto());
+        $this->Text(10, 247, $arRequisito->getNombreCorto());
         $this->Text(10, 254, "C.C.:     ______________________ de ____________________");
         $this->Text(105, 240, "FIRMA: _____________________________________________");
         $this->Text(105, 247, $arConfiguracion->getNombreEmpresa());

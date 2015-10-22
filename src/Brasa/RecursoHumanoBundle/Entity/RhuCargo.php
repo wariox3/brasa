@@ -41,6 +41,11 @@ class RhuCargo
      * @ORM\OneToMany(targetEntity="RhuRequisitoCargo", mappedBy="cargoRel")
      */
     protected $requisitosCargosCargoRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuRequisito", mappedBy="cargoRel")
+     */
+    protected $requisitosCargoRel;    
     
     /**
      * Constructor
@@ -221,5 +226,39 @@ class RhuCargo
     public function getRequisitosCargosCargoRel()
     {
         return $this->requisitosCargosCargoRel;
+    }
+
+    /**
+     * Add requisitosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addRequisitosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosCargoRel)
+    {
+        $this->requisitosCargoRel[] = $requisitosCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove requisitosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosCargoRel
+     */
+    public function removeRequisitosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosCargoRel)
+    {
+        $this->requisitosCargoRel->removeElement($requisitosCargoRel);
+    }
+
+    /**
+     * Get requisitosCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRequisitosCargoRel()
+    {
+        return $this->requisitosCargoRel;
     }
 }

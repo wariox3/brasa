@@ -26,6 +26,18 @@ class RequisitosController extends Controller
                 $this->listar();
                 $this->generarExcel();
             }
+            
+            if($form->get('BtnEliminar')->isClicked()) {                           
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoRequisito) {
+                        $arRequisito = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisito')->find($codigoRequisito);                        
+                        $em->remove($arRequisito);
+                        $em->flush();
+                    }
+                }                
+            }            
+            
         }
 
         $arRequisitos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
@@ -100,26 +112,22 @@ class RequisitosController extends Controller
                     ));
     }
 
-    public function nuevoAction($codigoEmpleado) {
+    public function nuevoAction($codigoRequisito) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisito();                       
         $arRequisito->setFecha(new \DateTime('now'));        
         $form = $this->createForm(new RhuRequisitoType(), $arRequisito);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arRequisito = $form->getData();
-            $arRequisito->setEmpleadoRel($arEmpleado);                   
-            $em->persist($arRequisito);
-            
-            $arRequisitosConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
-            $arRequisitosConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findAll();
-            foreach ($arRequisitosConceptos as $arRequisitoConcepto) {
+            $arRequisito = $form->getData();                
+            $em->persist($arRequisito);            
+            $arRequisitosCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo();
+            $arRequisitosCargos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->findBy(array('codigoCargoFk'=> $form->get('cargoRel')->getData()));
+            foreach ($arRequisitosCargos as $arRequisitoCargo) {
                 $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
                 $arRequisitoDetalle->setRequisitoRel($arRequisito);
-                $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoConcepto);
+                $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoCargo->getRequisitoConceptoRel());
                 $em->persist($arRequisitoDetalle);
             }
             $em->flush();
@@ -140,6 +148,7 @@ class RequisitosController extends Controller
         $form = $this->createFormBuilder()
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+                ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
         return $form;

@@ -5,7 +5,25 @@
     <h3>Requisitos</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Información general</div>
-        <div class="panel-body">                     
+        <div class="panel-body">      
+            <div class="form-group form-group-sm">
+                <label for="form_cargoRel" class="col-sm-3 control-label">Cargo:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.cargoRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>            
+            <div class="form-group form-group-sm">
+                <label for="form_numeroIdentificacion" class="col-sm-3 control-label">Identificacion:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.numeroIdentificacion, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label for="form_nombreCorto" class="col-sm-3 control-label">Nombre corto:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.nombreCorto, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">

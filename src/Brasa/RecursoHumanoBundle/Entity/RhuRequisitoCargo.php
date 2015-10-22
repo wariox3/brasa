@@ -19,14 +19,14 @@ class RhuRequisitoCargo
     private $codigoRequisitoCargoPk;    
     
     /**
-     * @ORM\Column(name="codigo_requisito_concepto_pk", type="integer")
+     * @ORM\Column(name="codigo_requisito_concepto_fk", type="integer")
      */
-    private $codigoRequisitoConceptoPk;                    
+    private $codigoRequisitoConceptoFk;                    
 
     /**
-     * @ORM\Column(name="codigo_cargo_pk", type="integer")
+     * @ORM\Column(name="codigo_cargo_fk", type="integer")
      */
-    private $codigoCargoPk; 
+    private $codigoCargoFk; 
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuRequisitoConcepto", inversedBy="requisitosCargosRequisitoConceptoRel")
@@ -53,51 +53,51 @@ class RhuRequisitoCargo
     }
 
     /**
-     * Set codigoRequisitoConceptoPk
+     * Set codigoRequisitoConceptoFk
      *
-     * @param integer $codigoRequisitoConceptoPk
+     * @param integer $codigoRequisitoConceptoFk
      *
      * @return RhuRequisitoCargo
      */
-    public function setCodigoRequisitoConceptoPk($codigoRequisitoConceptoPk)
+    public function setCodigoRequisitoConceptoFk($codigoRequisitoConceptoFk)
     {
-        $this->codigoRequisitoConceptoPk = $codigoRequisitoConceptoPk;
+        $this->codigoRequisitoConceptoFk = $codigoRequisitoConceptoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoRequisitoConceptoPk
+     * Get codigoRequisitoConceptoFk
      *
      * @return integer
      */
-    public function getCodigoRequisitoConceptoPk()
+    public function getCodigoRequisitoConceptoFk()
     {
-        return $this->codigoRequisitoConceptoPk;
+        return $this->codigoRequisitoConceptoFk;
     }
 
     /**
-     * Set codigoCargoPk
+     * Set codigoCargoFk
      *
-     * @param integer $codigoCargoPk
+     * @param integer $codigoCargoFk
      *
      * @return RhuRequisitoCargo
      */
-    public function setCodigoCargoPk($codigoCargoPk)
+    public function setCodigoCargoFk($codigoCargoFk)
     {
-        $this->codigoCargoPk = $codigoCargoPk;
+        $this->codigoCargoFk = $codigoCargoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoCargoPk
+     * Get codigoCargoFk
      *
      * @return integer
      */
-    public function getCodigoCargoPk()
+    public function getCodigoCargoFk()
     {
-        return $this->codigoCargoPk;
+        return $this->codigoCargoFk;
     }
 
     /**

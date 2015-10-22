@@ -503,7 +503,7 @@ brs_rhu_base_requisito_cargo_lista:
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:lista }
    
 brs_rhu_base_requisito_cargo_nuevo:
-   path:     /rhu/base/requisito/cargo/nuevo/{codigoRequisito}/{codigoCargo}
+   path:     /rhu/base/requisito/cargo/nuevo/{codigoRequisitoCargo}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:nuevo }
 
 brs_rhu_seleccion_lista:
@@ -695,7 +695,7 @@ brs_rhu_proceso_contabilizar_pago_banco:
     defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPagoBanco:lista }         
     
 brs_rhu_requisito_nuevo:
-    path:     /rhu/requisito/nuevo/{codigoEmpleado}
+    path:     /rhu/requisito/nuevo/{codigoRequisito}
     defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:nuevo }    
     
 brs_rhu_requisito_lista:

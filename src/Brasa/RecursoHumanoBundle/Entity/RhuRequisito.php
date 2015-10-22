@@ -18,7 +18,7 @@ class RhuRequisito
     private $codigoRequisitoPk;        
     
     /**
-     * @ORM\Column(name="codigo_empleado_fk", type="integer")
+     * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
     private $codigoEmpleadoFk;        
     
@@ -26,6 +26,21 @@ class RhuRequisito
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;             
+    
+    /**
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
+     */         
+    private $numeroIdentificacion;
+    
+    /**
+     * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
+     */    
+    private $nombreCorto; 
+    
+    /**
+     * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCargoFk;        
     
     /**     
      * @ORM\Column(name="estado_aceptado", type="boolean")
@@ -44,7 +59,13 @@ class RhuRequisito
     protected $empleadoRel;    
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuRequisitoDetalle", mappedBy="requisitoRel")
+     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="requisitosCargoRel")
+     * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
+     */
+    protected $cargoRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuRequisitoDetalle", mappedBy="requisitoRel", cascade={"persist", "remove"})
      */
     protected $requisitosDetallesRequisitoRel;
 
@@ -112,6 +133,78 @@ class RhuRequisito
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set numeroIdentificacion
+     *
+     * @param string $numeroIdentificacion
+     *
+     * @return RhuRequisito
+     */
+    public function setNumeroIdentificacion($numeroIdentificacion)
+    {
+        $this->numeroIdentificacion = $numeroIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacion
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacion()
+    {
+        return $this->numeroIdentificacion;
+    }
+
+    /**
+     * Set nombreCorto
+     *
+     * @param string $nombreCorto
+     *
+     * @return RhuRequisito
+     */
+    public function setNombreCorto($nombreCorto)
+    {
+        $this->nombreCorto = $nombreCorto;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreCorto
+     *
+     * @return string
+     */
+    public function getNombreCorto()
+    {
+        return $this->nombreCorto;
+    }
+
+    /**
+     * Set codigoCargoFk
+     *
+     * @param integer $codigoCargoFk
+     *
+     * @return RhuRequisito
+     */
+    public function setCodigoCargoFk($codigoCargoFk)
+    {
+        $this->codigoCargoFk = $codigoCargoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCargoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCargoFk()
+    {
+        return $this->codigoCargoFk;
     }
 
     /**
@@ -184,6 +277,30 @@ class RhuRequisito
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set cargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
+     *
+     * @return RhuRequisito
+     */
+    public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
+    {
+        $this->cargoRel = $cargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargo
+     */
+    public function getCargoRel()
+    {
+        return $this->cargoRel;
     }
 
     /**
