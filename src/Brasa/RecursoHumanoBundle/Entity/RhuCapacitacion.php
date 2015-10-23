@@ -27,6 +27,19 @@ class RhuCapacitacion
      */    
     private $comentarios;           
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCapacitacionDetalle", mappedBy="capacitacionRel", cascade={"persist", "remove"})
+     */
+    protected $capacitacionesDetallesCapacitacionRel;    
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->capacitacionesDetallesCapacitacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoCapacitacionPk
@@ -84,5 +97,39 @@ class RhuCapacitacion
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Add capacitacionesDetallesCapacitacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetallesCapacitacionRel
+     *
+     * @return RhuCapacitacion
+     */
+    public function addCapacitacionesDetallesCapacitacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetallesCapacitacionRel)
+    {
+        $this->capacitacionesDetallesCapacitacionRel[] = $capacitacionesDetallesCapacitacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove capacitacionesDetallesCapacitacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetallesCapacitacionRel
+     */
+    public function removeCapacitacionesDetallesCapacitacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetallesCapacitacionRel)
+    {
+        $this->capacitacionesDetallesCapacitacionRel->removeElement($capacitacionesDetallesCapacitacionRel);
+    }
+
+    /**
+     * Get capacitacionesDetallesCapacitacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCapacitacionesDetallesCapacitacionRel()
+    {
+        return $this->capacitacionesDetallesCapacitacionRel;
     }
 }
