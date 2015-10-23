@@ -49,6 +49,7 @@
                 <th>{{ knp_pagination_sortable(arCreditos, 'CÓDIGO', 'c.codigoCreditoPk') }}</th>
                 <th>TIPO</th>
                 <th>FECHA INICIO</th>
+                <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
                 <th style="text-align: right">VR. CREDITO</th>
                 <th style="text-align: right">VR. CUOTA</th>
@@ -67,6 +68,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCreditos.codigoCreditoPk }}">{{ arCreditos.codigoCreditoPk }} </td>
                 <td>{{ arCreditos.creditoTipoRel.nombre  }}</td>
                 <td>{{ arCreditos.fechaInicio |date("Y/m/d")  }}</td>
+                <td>{{ arCreditos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arCreditos.empleadoRel.nombreCorto  }}</td>
                 <td style="text-align: right">{{ arCreditos.VrPagar | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>
@@ -98,6 +100,9 @@
             <div class="btn-group">
                 {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cargar_creditos' ) }}', 'CargarCredito', 600, 900)" >Importar TXT</a>
             </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnSuspender, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}

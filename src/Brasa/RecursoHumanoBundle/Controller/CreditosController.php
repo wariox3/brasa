@@ -7,7 +7,7 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoType;
 use Doctrine\ORM\EntityRepository;
 
 class CreditosController extends Controller
-{    
+{
     var $strSqlLista = "";
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -20,7 +20,7 @@ class CreditosController extends Controller
         if ($form->isValid())
         {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if ($form->get('BtnEliminar')->isClicked()) {    
+            if ($form->get('BtnEliminar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCredito) {
                         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
@@ -28,7 +28,7 @@ class CreditosController extends Controller
                         if ($arCreditos->getaprobado() == 1 or $arCreditos->getEstadoPagado() == 1) {
                             $mensaje = "No se puede Eliminar el registro, por que el credito ya esta aprobado o cancelado!";
                         }
-                        else {    
+                        else {
                             $em->remove($arCreditos);
                             $em->flush();
                         }
@@ -37,7 +37,7 @@ class CreditosController extends Controller
                 $this->filtrarLista($form);
                 $this->listar();
             }
-            
+
             if($form->get('BtnAprobar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCredito) {
@@ -49,9 +49,9 @@ class CreditosController extends Controller
                     }
                 }
                 $this->filtrarLista($form);
-                $this->listar();  
+                $this->listar();
             }
-            
+
             if($form->get('BtnDesaprobar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCredito) {
@@ -63,9 +63,9 @@ class CreditosController extends Controller
                     }
                 }
                 $this->filtrarLista($form);
-                $this->listar();  
+                $this->listar();
             }
-            
+
             if($form->get('BtnSuspender')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCredito) {
@@ -81,9 +81,9 @@ class CreditosController extends Controller
                     }
                 }
                 $this->filtrarLista($form);
-                $this->listar();   
+                $this->listar();
             }
-            
+
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
@@ -100,27 +100,27 @@ class CreditosController extends Controller
                 $this->listar();
             }
         }
-        $arCreditos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                        
+        $arCreditos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Creditos:lista.html.twig', array(
             'arCreditos' => $arCreditos,
             'mensaje' => $mensaje,
             'form' => $form->createView()
             ));
-    } 
-    
+    }
+
     public function refinanciarAction($codigoCredito) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $formCredito = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_creditos_refinanciar', array('codigoCredito' => $codigoCredito)))
-            ->add('numeroCuotas', 'text', array('label'  => 'Numero cuotas'))                            
+            ->add('numeroCuotas', 'text', array('label'  => 'Numero cuotas'))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
-        $formCredito->handleRequest($request);        
+        $formCredito->handleRequest($request);
         $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);                
+        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
         if ($formCredito->isValid()) {
-            $intCuotas = $formCredito->get('numeroCuotas')->getData();            
+            $intCuotas = $formCredito->get('numeroCuotas')->getData();
             $douVrCuota = $arCredito->getSaldoTotal() / $intCuotas;
             $arCredito->setVrCuota($douVrCuota);
             $arCredito->setNumeroCuotaActual(0);
@@ -138,8 +138,8 @@ class CreditosController extends Controller
             'formCredito' => $formCredito->createView(),
             'errores' => $strErrores
         ));
-    }       
-    
+    }
+
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
@@ -149,11 +149,11 @@ class CreditosController extends Controller
                     $session->get('filtroHasta')
                     );
     }
-    
+
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        
+
         $form = $this->createFormBuilder()
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
@@ -164,11 +164,11 @@ class CreditosController extends Controller
             ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
             ->add('BtnDesaprobar', 'submit', array('label'  => 'Desaprobar',))
             ->add('BtnSuspender', 'submit', array('label'  => 'Suspender / No suspender',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))    
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->getForm();
         return $form;
-    } 
-    
+    }
+
     private function filtrarLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
@@ -177,24 +177,27 @@ class CreditosController extends Controller
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
-    
+
     public function nuevoAction($codigoCredito, $codigoEmpleado) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $mensaje = 0;
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito(); 
+        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         if($codigoCredito != 0) {
-            $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);    
+            $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+            $PeriodoPago = $arCredito->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
+            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arCredito->getCodigoCentroCostoFk());
         } else {
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
             $arCredito->setFechaInicio(new \DateTime('now'));
+            $PeriodoPago = $arEmpleado->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
+            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());
         }
-        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        $PeriodoPago = $arEmpleado->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
-        $form = $this->createForm(new RhuCreditoType(), $arCredito);       
+
+        $form = $this->createForm(new RhuCreditoType(), $arCredito);
         $form->handleRequest($request);
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
             if ($form->get('vrPagar')->getData() == 0 || $form->get('numeroCuotas')->getData() == 0){
                 $mensaje = "El total a pagar y/o las cuotas no pueden estar en cero";
             } else {
@@ -205,33 +208,34 @@ class CreditosController extends Controller
                 $vrSaltoTotal = $douVrPagar;
                 $douVrCuota = $douVrPagar / $intCuotas;
                 $arCredito->setVrCuota($douVrCuota);
-                $arSeleccion = $request->request->get('ChkSeleccionar');  
+                $arSeleccion = $request->request->get('ChkSeleccionar');
                 $arCredito->setFecha(new \DateTime('now'));
                 $arCredito->setSaldo($vrSaltoTotal);
                 $arCredito->setSaldoTotal($vrSaltoTotal);
                 $arCredito->setNumeroCuotaActual(0);
                 $arCredito->setEmpleadoRel($arEmpleado);
+                $arCredito->setCentroCostoRel($arCentroCosto);
                 $em->persist($arCredito);
-                $em->flush();                            
+                $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>opener.location.reload();</script>";
-                echo "<script languaje='javascript' type='text/javascript'>window.close();</script>"; 
+                echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";
             }
-                            
-        }                
-        
+
+        }
+
             return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevo.html.twig', array(
             'arCredito' => $arCredito,
             'PeriodoPago' => $PeriodoPago,
             'mensaje' => $mensaje,
             'form' => $form->createView()));
-        
-        
+
+
     }
-    
+
     public function detalleAction($codigoCreditoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $form = $this->createFormBuilder()    
+        $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
@@ -241,7 +245,7 @@ class CreditosController extends Controller
         $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
         $arCreditoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => $codigoCreditoFk));
         if($form->isValid()) {
-                      
+
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoDetalleCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleCredito();
                 $objFormatoDetalleCredito->Generar($this, $codigoCreditoFk);
@@ -253,7 +257,7 @@ class CreditosController extends Controller
                     'form' => $form->createView()
                     ));
     }
-    
+
     public function nuevoDetalleAction($codigoCreditoPk) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -264,33 +268,33 @@ class CreditosController extends Controller
         $form = $this->createFormBuilder()
             ->add('creditoRel', 'text', array('data' => $codigoCreditoPk, 'attr' => array('readonly' => 'readonly')))
             ->add('vrCuota', 'text', array('data' => round($arCredito->getVrCuota(),2), 'attr' => array('readonly' => 'readonly')))
-            ->add('saldo', 'text', array('data' => round($arCredito->getSaldo(),2), 'attr' => array('readonly' => 'readonly')))    
-            ->add('saldoTotal', 'text', array('data' => round($arCredito->getSaldoTotal(),2), 'attr' => array('readonly' => 'readonly')))        
+            ->add('saldo', 'text', array('data' => round($arCredito->getSaldo(),2), 'attr' => array('readonly' => 'readonly')))
+            ->add('saldoTotal', 'text', array('data' => round($arCredito->getSaldoTotal(),2), 'attr' => array('readonly' => 'readonly')))
             ->add('vrAbono','text')
-            ->add('tipoPago','hidden', array('data' => 'ABONO'))    
-            ->add('save', 'submit', array('label' => 'Guardar'))    
+            ->add('tipoPago','hidden', array('data' => 'ABONO'))
+            ->add('save', 'submit', array('label' => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
             $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
             $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
             $saldoA = $arCredito->getSaldo();
             $Abono = $form->get('vrAbono')->getData();
-            
+
             if ($Abono > $arCredito->getSaldoTotal()){
                 $mensaje = "El abono no puede ser superior al saldo!";
-            } else {    
+            } else {
                 $arCredito->setSaldo($saldoA - $Abono);
                 $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());
                 if ($arCredito->getSaldo() <= 0){
-                   $arCredito->setEstadoPagado(1); 
+                   $arCredito->setEstadoPagado(1);
                 }
                 $nroACuotas = $arCredito->getNumeroCuotaActual();
                 $seguro = $arCredito->getSeguro();
                 $arCredito->setNumeroCuotaActual($nroACuotas + 1);
                 $arPagoCredito->setCreditoRel($arCredito);
                 $arPagoCredito->setvrCuota($form->get('vrAbono')->getData());
-                $arPagoCredito->setfechaPago(new \ DateTime("now"));    
+                $arPagoCredito->setfechaPago(new \ DateTime("now"));
                 $arPagoCredito->setCodigoCreditoTipoPagoFk(2);
                 $arPagoCredito->setCreditoRel($arCredito);
                 $em->persist($arPagoCredito);
@@ -298,16 +302,90 @@ class CreditosController extends Controller
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>opener.location.reload();</script>";
                 echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";
-            }    
-                
-        }                
+            }
+
+        }
         return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevoDetalle.html.twig', array(
             'arPagoCredito' => $arPagoCredito,
             'arCredito' => $arCredito,
             'mensaje' => $mensaje,
             'form' => $form->createView()));
     }
-    
+
+    public function cargarAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $form = $this->createFormBuilder()
+            ->add('attachment', 'file')
+            ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
+            ->getForm();
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+            if($form->get('BtnCargar')->isClicked()) {
+                $form['attachment']->getData()->move("/var/www/temporal", "carga.txt");
+                $fp = fopen("/var/www/temporal/carga.txt", "r");
+                $empleadoSinContrato = "";
+                $empleadoNoExiste = "";
+                while(!feof($fp)) {
+                    $linea = fgets($fp);
+                    if($linea){
+                        $arrayDetalle = explode(";", $linea);
+                        if($arrayDetalle[0] != "") {
+                            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrayDetalle[0]));
+                            if(count($arEmpleado) > 0) {
+                                $arEmpleadoValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrayDetalle[0], 'codigoCentroCostoFk' => null));
+                                if (count($arEmpleadoValidar) > 0){
+                                    $empleadoSinContrato = "El numero de identificación " .$arrayDetalle[0]. " No tiene contrato";
+                                }else{
+                                    //Créditos
+                                    $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                                    $arCreditoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
+                                    $arCreditoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->find($arrayDetalle[1]);
+                                    $arCreditoTipoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago();
+                                    $arCreditoTipoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipoPago')->find($arrayDetalle[4]);
+                                    $arCredito->setEmpleadoRel($arEmpleado);
+                                    $arCredito->setCreditoTipoRel($arCreditoTipo);
+                                    $arCredito->setCreditoTipoPagoRel($arCreditoTipoPago);
+                                    $intVrCredito = $arrayDetalle[2];
+                                    $arCredito->setVrPagar($intVrCredito);
+                                    $intCuotas = $arrayDetalle[3];
+                                    $arCredito->setNumeroCuotas($intCuotas);
+                                    $arCredito->setVrCuota($intVrCredito / $intCuotas);
+                                    $dateFecha = $arrayDetalle[5];
+                                    $dateFecha = new \DateTime($dateFecha);
+                                    $arCredito->setFecha(new \DateTime('now'));
+                                    $arCredito->setFechaInicio($dateFecha);
+                                    $intVrSeguro = $arrayDetalle[6];
+                                    $arCredito->setSeguro($intVrSeguro);
+                                    $em->persist($arCredito);
+                                }
+                            }else{
+                                $empleadoNoExiste = "El numero de identificación " .$arrayDetalle[0]. " No existe";
+                            }
+                        }
+                    }
+                }
+                fclose($fp);
+                if ($empleadoNoExiste <> ""){
+                    $objMensaje->Mensaje("error", "" .$empleadoNoExiste. "", $this);
+                }else{
+                    if($empleadoSinContrato <> ""){
+                        $objMensaje->Mensaje("error", "" .$empleadoSinContrato. "", $this);                        
+                    }else{
+                        $em->flush();
+                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                        
+                    }
+                }
+            }
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Creditos:cargarCredito.html.twig', array(
+            'form' => $form->createView()
+            ));
+    }
+
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -325,21 +403,22 @@ class CreditosController extends Controller
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'TIPO CRÉDITO')
                             ->setCellValue('C1', 'FECHA')
-                            ->setCellValue('D1', 'EMPLEADO')
-                            ->setCellValue('E1', 'VALOR CRÉDITO')
-                            ->setCellValue('F1', 'VALOR CUOTA')
-                            ->setCellValue('G1', 'VALOR SEGURO')
-                            ->setCellValue('H1', 'CUOTAS')
-                            ->setCellValue('I1', 'CUOTA ACTUAL')
-                            ->setCellValue('J1', 'PAGADO')
-                            ->setCellValue('K1', 'APROBADO')
-                            ->setCellValue('L1', 'SUSPENDIDO');
+                            ->setCellValue('D1', 'IDENTIFICACIÓN')
+                            ->setCellValue('E1', 'EMPLEADO')
+                            ->setCellValue('F1', 'VALOR CRÉDITO')
+                            ->setCellValue('G1', 'VALOR CUOTA')
+                            ->setCellValue('H1', 'VALOR SEGURO')
+                            ->setCellValue('I1', 'CUOTAS')
+                            ->setCellValue('J1', 'CUOTA ACTUAL')
+                            ->setCellValue('K1', 'PAGADO')
+                            ->setCellValue('L1', 'APROBADO')
+                            ->setCellValue('M1', 'SUSPENDIDO');
 
                 $i = 2;
                 $query = $em->createQuery($this->strSqlLista);
                 $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                 $arCreditos = $query->getResult();
-                
+
                 foreach ($arCreditos as $arCredito) {
                     if ($arCredito->getEstadoPagado() == 1)
                     {
@@ -347,7 +426,7 @@ class CreditosController extends Controller
                     }
                     else
                     {
-                        $Estado = "NO"; 
+                        $Estado = "NO";
                     }
                     if ($arCredito->getAprobado() == 1)
                     {
@@ -355,7 +434,7 @@ class CreditosController extends Controller
                     }
                     else
                     {
-                        $Aprobado = "NO"; 
+                        $Aprobado = "NO";
                     }
                     if ($arCredito->getEstadoSuspendido() == 1)
                     {
@@ -363,21 +442,22 @@ class CreditosController extends Controller
                     }
                     else
                     {
-                        $Suspendido = "NO"; 
+                        $Suspendido = "NO";
                     }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
                             ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
                             ->setCellValue('C' . $i, $arCredito->getFecha())
-                            ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('E' . $i, $arCredito->getVrPagar())
-                            ->setCellValue('F' . $i, $arCredito->getVrCuota())
-                            ->setCellValue('G' . $i, $arCredito->getSeguro())
-                            ->setCellValue('H' . $i, $arCredito->getNumeroCuotas())
-                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotaActual())
-                            ->setCellValue('J' . $i, $Estado)
-                            ->setCellValue('K' . $i, $Aprobado)
-                            ->setCellValue('L' . $i, $Suspendido);
+                            ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNumeroIdentificacion())
+                            ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('F' . $i, $arCredito->getVrPagar())
+                            ->setCellValue('G' . $i, $arCredito->getVrCuota())
+                            ->setCellValue('H' . $i, $arCredito->getSeguro())
+                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotas())
+                            ->setCellValue('J' . $i, $arCredito->getNumeroCuotaActual())
+                            ->setCellValue('K' . $i, $Estado)
+                            ->setCellValue('L' . $i, $Aprobado)
+                            ->setCellValue('M' . $i, $Suspendido);
                     $i++;
                 }
 
@@ -399,5 +479,5 @@ class CreditosController extends Controller
                 $objWriter->save('php://output');
                 exit;
             }
-    
+
 }

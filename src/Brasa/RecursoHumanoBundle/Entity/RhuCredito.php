@@ -30,7 +30,12 @@ class RhuCredito
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
-    private $codigoEmpleadoFk;        
+    private $codigoEmpleadoFk;
+    
+    /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoFk;
     
     /**
      * @ORM\Column(name="fecha", type="date")
@@ -141,6 +146,12 @@ class RhuCredito
      * @ORM\JoinColumn(name="codigo_credito_tipo_pago_fk", referencedColumnName="codigo_credito_tipo_pago_pk")
      */
     protected $creditoTipoPagoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="creditosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;
 
     /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacionAdicionales", mappedBy="creditoRel")
@@ -247,6 +258,30 @@ class RhuCredito
     }
 
     /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return RhuCredito
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
      * Set fecha
      *
      * @param \DateTime $fecha
@@ -268,6 +303,30 @@ class RhuCredito
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set fechaInicio
+     *
+     * @param \DateTime $fechaInicio
+     *
+     * @return RhuCredito
+     */
+    public function setFechaInicio($fechaInicio)
+    {
+        $this->fechaInicio = $fechaInicio;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicio
+     *
+     * @return \DateTime
+     */
+    public function getFechaInicio()
+    {
+        return $this->fechaInicio;
     }
 
     /**
@@ -747,6 +806,30 @@ class RhuCredito
     }
 
     /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuCredito
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
+    }
+
+    /**
      * Add liquidacionesAdicionalesCreditoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesCreditoRel
@@ -812,29 +895,5 @@ class RhuCredito
     public function getVacacionesCreditosCreditoRel()
     {
         return $this->VacacionesCreditosCreditoRel;
-    }
-
-    /**
-     * Set fechaInicio
-     *
-     * @param \DateTime $fechaInicio
-     *
-     * @return RhuCredito
-     */
-    public function setFechaInicio($fechaInicio)
-    {
-        $this->fechaInicio = $fechaInicio;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaInicio
-     *
-     * @return \DateTime
-     */
-    public function getFechaInicio()
-    {
-        return $this->fechaInicio;
     }
 }

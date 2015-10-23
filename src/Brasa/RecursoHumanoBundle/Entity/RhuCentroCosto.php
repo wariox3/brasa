@@ -205,7 +205,11 @@ class RhuCentroCosto
      * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="centroCostoRel")
      */
     protected $facturasDetallesCentroCostoRel;
-
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCredito", mappedBy="centroCostoRel")
+     */
+    protected $creditosCentroCostoRel;
 
     /**
      * Constructor
@@ -228,6 +232,7 @@ class RhuCentroCosto
         $this->dotacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->accidentesTrabajoCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->creditosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1286,5 +1291,39 @@ class RhuCentroCosto
     public function getFacturasDetallesCentroCostoRel()
     {
         return $this->facturasDetallesCentroCostoRel;
+    }
+
+    /**
+     * Add creditosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditosCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addCreditosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditosCentroCostoRel)
+    {
+        $this->creditosCentroCostoRel[] = $creditosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditosCentroCostoRel
+     */
+    public function removeCreditosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCredito $creditosCentroCostoRel)
+    {
+        $this->creditosCentroCostoRel->removeElement($creditosCentroCostoRel);
+    }
+
+    /**
+     * Get creditosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditosCentroCostoRel()
+    {
+        return $this->creditosCentroCostoRel;
     }
 }
