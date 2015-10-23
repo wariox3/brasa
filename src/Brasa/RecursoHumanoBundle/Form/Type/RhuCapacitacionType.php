@@ -8,8 +8,13 @@ class RhuCapacitacionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                 
+        $builder            
+            ->add('capacitacionTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCapacitacionTipo',
+                        'property' => 'nombre',
+            ))                          
             ->add('fecha', 'date')            
+            ->add('tema', 'text', array('required' => false))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit');        
     }

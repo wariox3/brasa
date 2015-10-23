@@ -39,6 +39,7 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>CONCEPTO</th>
+                        <th>TIPO</th>
                         <th>ENTREGADO</th>
                         <th>NO APLICA</th>
                         <th>PENDIENTE</th>
@@ -47,7 +48,8 @@
                     {% for arRequisitosDetalles in arRequisitosDetalles %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisitosDetalles.codigoRequisitoDetallePk }}">{{ arRequisitosDetalles.codigoRequisitoDetallePk }} </td>
-                            <td>{{ arRequisitosDetalles.requisitoConceptoRel.nombre }}</a></td>
+                            <td>{{ arRequisitosDetalles.requisitoConceptoRel.nombre }}</td>
+                            <td>{{ arRequisitosDetalles.tipo }}</td>
                             <td>{% if arRequisitosDetalles.estadoEntregado == 1%} SI {% else %} NO {% endif %}</td>
                             <td>{% if arRequisitosDetalles.estadoNoAplica == 1%} SI {% else %} NO {% endif %}</td>
                             <td>{% if arRequisitosDetalles.estadoPendiente == 1%} SI {% else %} NO {% endif %}</td>

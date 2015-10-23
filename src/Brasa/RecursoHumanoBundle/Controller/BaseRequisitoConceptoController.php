@@ -13,6 +13,7 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuRequisitoConceptoType;
 class BaseRequisitoConceptoController extends Controller
 {
     var $strDqlLista = "";
+    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario

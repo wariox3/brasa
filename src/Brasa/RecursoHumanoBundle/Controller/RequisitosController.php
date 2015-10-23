@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 class RequisitosController extends Controller
 {
     var $strDqlLista = "";
+    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -122,14 +123,26 @@ class RequisitosController extends Controller
         if ($form->isValid()) {
             $arRequisito = $form->getData();                
             $em->persist($arRequisito);            
+            $arRequisitosConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
+            $arRequisitosConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findBy(array('general' => 1));
+            foreach ($arRequisitosConceptos as $arRequisitoConcepto) {
+                $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
+                $arRequisitoDetalle->setRequisitoRel($arRequisito);
+                $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoConcepto);
+                $arRequisitoDetalle->setTipo('GENERAL');
+                $em->persist($arRequisitoDetalle);
+            }
+            
             $arRequisitosCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo();
             $arRequisitosCargos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->findBy(array('codigoCargoFk'=> $form->get('cargoRel')->getData()));
             foreach ($arRequisitosCargos as $arRequisitoCargo) {
                 $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
                 $arRequisitoDetalle->setRequisitoRel($arRequisito);
                 $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoCargo->getRequisitoConceptoRel());
+                $arRequisitoDetalle->setTipo('CARGO');                
                 $em->persist($arRequisitoDetalle);
             }
+            
             $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
@@ -170,17 +183,6 @@ class RequisitosController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        if($controles['fechaDesdeInicia']) {
-            $this->fechaDesdeInicia = $controles['fechaDesdeInicia'];
-        }
-        if($controles['fechaHastaInicia']) {
-            $this->fechaHastaInicia = $controles['fechaHastaInicia'];
-        }
-        //$session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }
 
     private function generarExcel() {
@@ -197,50 +199,26 @@ class RequisitosController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'NUMERO')
-                    ->setCellValue('E1', 'CENTRO COSTOS')
-                    ->setCellValue('F1', 'TIEMPO')
-                    ->setCellValue('G1', 'DESDE')
-                    ->setCellValue('H1', 'HASTA')
-                    ->setCellValue('I1', 'SALARIO')
-                    ->setCellValue('J1', 'CARGO')
-                    ->setCellValue('K1', 'CARGO DESCRIPCION')
-                    ->setCellValue('L1', 'CLA. RIESGO')
-                    ->setCellValue('M1', 'ULT. PAGO')
-                    ->setCellValue('N1', 'ULT. PAGO PRIMAS')
-                    ->setCellValue('O1', 'ULT. PAGO CESANTIAS')
-                    ->setCellValue('P1', 'ULT. PAGO VACACIONES');
+                    ->setCellValue('B1', 'IDENTIFICACION')
+                    ->setCellValue('C1', 'EMPLEADO')
+                    ->setCellValue('D1', 'CARGO');
         $i = 2;
-        $query = $em->createQuery($session->get('dqlContratoLista'));
+        $query = $em->createQuery($this->strDqlLista);
         //$arRequisitos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisito();
         $arRequisitos = $query->getResult();
         foreach ($arRequisitos as $arRequisito) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arRequisito->getCodigoContratoPk())
-                    ->setCellValue('B' . $i, $arRequisito->getContratoTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arRequisito->getFecha()->Format('Y-m-d'))
-                    ->setCellValue('D' . $i, $arRequisito->getNumero())
-                    ->setCellValue('E' . $i, $arRequisito->getCentroCostoRel()->getNombre())
-                    ->setCellValue('F' . $i, $arRequisito->getTipoTiempoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arRequisito->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arRequisito->getFechaHasta()->Format('Y-m-d'))
-                    ->setCellValue('I' . $i, $arRequisito->getVrSalario())
-                    ->setCellValue('J' . $i, $arRequisito->getCargoRel()->getNombre())
-                    ->setCellValue('K' . $i, $arRequisito->getCargoDescripcion())
-                    ->setCellValue('L' . $i, $arRequisito->getClasificacionRiesgoRel()->getNombre())
-                    ->setCellValue('M' . $i, $arRequisito->getFechaUltimoPago()->Format('Y-m-d'))
-                    ->setCellValue('N' . $i, $arRequisito->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
-                    ->setCellValue('O' . $i, $arRequisito->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
-                    ->setCellValue('P' . $i, $arRequisito->getFechaUltimoPagoVacaciones()->Format('Y-m-d'));
+                    ->setCellValue('A' . $i, $arRequisito->getCodigoRequisitoPk())
+                    ->setCellValue('B' . $i, $arRequisito->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arRequisito->getNombreCorto())
+                    ->setCellValue('D' . $i, $arRequisito->getCargoRel()->getNombre());
             $i++;
         }
-        $objPHPExcel->getActiveSheet()->setTitle('contratos');
+        $objPHPExcel->getActiveSheet()->setTitle('requisitos');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Contratos.xlsx"');
+        header('Content-Disposition: attachment;filename="Requisitos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

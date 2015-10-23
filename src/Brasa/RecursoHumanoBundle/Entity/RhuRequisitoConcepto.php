@@ -22,6 +22,11 @@ class RhuRequisitoConcepto
      */    
     private $nombre;    
     
+    /**     
+     * @ORM\Column(name="general", type="boolean")
+     */    
+    private $general = 0;     
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuRequisitoDetalle", mappedBy="requisitoConceptoRel")
      */
@@ -139,5 +144,29 @@ class RhuRequisitoConcepto
     public function getRequisitosCargosRequisitoConceptoRel()
     {
         return $this->requisitosCargosRequisitoConceptoRel;
+    }
+
+    /**
+     * Set general
+     *
+     * @param boolean $general
+     *
+     * @return RhuRequisitoConcepto
+     */
+    public function setGeneral($general)
+    {
+        $this->general = $general;
+
+        return $this;
+    }
+
+    /**
+     * Get general
+     *
+     * @return boolean
+     */
+    public function getGeneral()
+    {
+        return $this->general;
     }
 }

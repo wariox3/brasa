@@ -74,7 +74,8 @@ class ConsultasEmpleadoRequisitosPendientesController extends Controller
                     ->setCellValue('B1', 'REQUISITO')
                     ->setCellValue('C1', 'IDENTIFICACION')
                     ->setCellValue('D1', 'EMPLEADO')
-                    ->setCellValue('E1', 'CONCEPTO');
+                    ->setCellValue('E1', 'CONCEPTO')
+                    ->setCellValue('F1', 'TIPO');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -86,7 +87,8 @@ class ConsultasEmpleadoRequisitosPendientesController extends Controller
                     ->setCellValue('B' . $i, $arRequisitoDetalle->getCodigoRequisitoFk())                    
                     ->setCellValue('C' . $i, $arRequisitoDetalle->getRequisitoRel()->getNumeroIdentificacion())
                     ->setCellValue('D' . $i, $arRequisitoDetalle->getRequisitoRel()->getNombreCorto())
-                    ->setCellValue('E' . $i, $arRequisitoDetalle->getRequisitoConceptoRel()->getNombre());
+                    ->setCellValue('E' . $i, $arRequisitoDetalle->getRequisitoConceptoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arRequisitoDetalle->getTipo());
             $i++;
         }
 

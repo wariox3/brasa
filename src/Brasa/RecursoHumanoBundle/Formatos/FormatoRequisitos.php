@@ -72,7 +72,7 @@ class FormatoRequisitos extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(10);
-        $header = array(utf8_decode('CÓDIGO'), utf8_decode('CONCEPTO'), 'ENTREGADO', 'APLICA', 'ESTADO');
+        $header = array(utf8_decode('CÓDIGO'), utf8_decode('CONCEPTO'), 'TIPO', 'ENTREGADO', 'APLICA', 'ESTADO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -80,7 +80,7 @@ class FormatoRequisitos extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(15, 110, 20, 20, 20);
+        $w = array(15, 107, 20, 20, 10, 20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -102,16 +102,17 @@ class FormatoRequisitos extends \FPDF_FPDF {
         foreach ($arRequisitoDetalle as $arRequisitoDetalle) {            
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(15, 4, $arRequisitoDetalle->getCodigoRequisitoDetallePk(), 1, 0, 'L');
-            $pdf->Cell(110, 4, $arRequisitoDetalle->getRequisitoConceptoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(107, 4, $arRequisitoDetalle->getRequisitoConceptoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arRequisitoDetalle->getTipo(), 1, 0, 'L');
             if($arRequisitoDetalle->getEstadoEntregado() == 1) {
                 $pdf->Cell(20, 4, 'SI', 1, 0, 'L');
             } else {
                 $pdf->Cell(20, 4, 'NO', 1, 0, 'L');
             }
             if($arRequisitoDetalle->getEstadoNoAplica() == 1) {
-                $pdf->Cell(20, 4, 'NO', 1, 0, 'L');
+                $pdf->Cell(10, 4, 'NO', 1, 0, 'L');
             } else {
-                $pdf->Cell(20, 4, 'SI', 1, 0, 'L');
+                $pdf->Cell(10, 4, 'SI', 1, 0, 'L');
             }            
             if($arRequisitoDetalle->getEstadoPendiente() == 1) {
                 $pdf->Cell(20, 4, 'PENDIENTE', 1, 0, 'L');

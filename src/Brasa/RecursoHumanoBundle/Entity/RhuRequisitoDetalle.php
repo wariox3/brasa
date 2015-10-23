@@ -43,6 +43,11 @@ class RhuRequisitoDetalle
     private $estadoNoAplica = 0;            
     
     /**
+     * @ORM\Column(name="tipo", type="string", length=20, nullable=true)
+     */    
+    private $tipo;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuRequisito", inversedBy="requisitosDetallesRequisitoRel")
      * @ORM\JoinColumn(name="codigo_requisito_fk", referencedColumnName="codigo_requisito_pk")
      */
@@ -231,5 +236,29 @@ class RhuRequisitoDetalle
     public function getRequisitoConceptoRel()
     {
         return $this->requisitoConceptoRel;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return RhuRequisitoDetalle
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
     }
 }

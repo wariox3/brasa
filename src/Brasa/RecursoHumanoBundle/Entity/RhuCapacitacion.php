@@ -18,20 +18,35 @@ class RhuCapacitacion
     private $codigoCapacitacionPk;                    
     
     /**
+     * @ORM\Column(name="codigo_capacitacion_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCapacitacionTipoFk;     
+    
+    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;             
-        
+
+    /**
+     * @ORM\Column(name="tema", type="string", length=150, nullable=true)
+     */    
+    private $tema;     
+    
     /**
      * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
      */    
     private $comentarios;           
 
     /**
+     * @ORM\ManyToOne(targetEntity="RhuCapacitacionTipo", inversedBy="capacitacionesCapacitacionTipoRel")
+     * @ORM\JoinColumn(name="codigo_capacitacion_tipo_fk", referencedColumnName="codigo_capacitacion_tipo_pk")
+     */
+    protected $capacitacionTipoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuCapacitacionDetalle", mappedBy="capacitacionRel", cascade={"persist", "remove"})
      */
     protected $capacitacionesDetallesCapacitacionRel;    
-
 
     /**
      * Constructor
@@ -49,6 +64,30 @@ class RhuCapacitacion
     public function getCodigoCapacitacionPk()
     {
         return $this->codigoCapacitacionPk;
+    }
+
+    /**
+     * Set codigoCapacitacionTipoFk
+     *
+     * @param integer $codigoCapacitacionTipoFk
+     *
+     * @return RhuCapacitacion
+     */
+    public function setCodigoCapacitacionTipoFk($codigoCapacitacionTipoFk)
+    {
+        $this->codigoCapacitacionTipoFk = $codigoCapacitacionTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCapacitacionTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCapacitacionTipoFk()
+    {
+        return $this->codigoCapacitacionTipoFk;
     }
 
     /**
@@ -100,6 +139,30 @@ class RhuCapacitacion
     }
 
     /**
+     * Set capacitacionTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionTipo $capacitacionTipoRel
+     *
+     * @return RhuCapacitacion
+     */
+    public function setCapacitacionTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionTipo $capacitacionTipoRel = null)
+    {
+        $this->capacitacionTipoRel = $capacitacionTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get capacitacionTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionTipo
+     */
+    public function getCapacitacionTipoRel()
+    {
+        return $this->capacitacionTipoRel;
+    }
+
+    /**
      * Add capacitacionesDetallesCapacitacionRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetallesCapacitacionRel
@@ -131,5 +194,29 @@ class RhuCapacitacion
     public function getCapacitacionesDetallesCapacitacionRel()
     {
         return $this->capacitacionesDetallesCapacitacionRel;
+    }
+
+    /**
+     * Set tema
+     *
+     * @param string $tema
+     *
+     * @return RhuCapacitacion
+     */
+    public function setTema($tema)
+    {
+        $this->tema = $tema;
+
+        return $this;
+    }
+
+    /**
+     * Get tema
+     *
+     * @return string
+     */
+    public function getTema()
+    {
+        return $this->tema;
     }
 }

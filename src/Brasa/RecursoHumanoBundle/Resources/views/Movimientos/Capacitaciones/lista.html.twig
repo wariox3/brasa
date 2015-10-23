@@ -35,12 +35,18 @@
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th>CÓDIGO</th>
+                        <th>FECHA</th>
+                        <th>TIPO</th>
+                        <th>TEMA</th>
                         <th></th>
                         <th></th>
                     </tr>
                     {% for arCapacitaciones in arCapacitaciones %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arCapacitaciones.codigoCapacitacionPk }}">{{ arCapacitaciones.codigoCapacitacionPk }} </td>
+                            <td>{{ arCapacitaciones.fecha |date("Y/m/d")  }}</td>
+                            <td>{{ arCapacitaciones.capacitacionTipoRel.nombre  }}</td>
+                            <td>{{ arCapacitaciones.tema  }}</td>
                             <td style="text-align: center"><a href="{{ path('brs_rhu_capacitacion_detalle', { 'codigoCapacitacion': arCapacitaciones.codigoCapacitacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>                
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCapacitaciones.codigoCapacitacionPk }}" /></td>
                         </tr>

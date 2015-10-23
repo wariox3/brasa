@@ -10,7 +10,8 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <tr>
             <th>CÓDIGO</th>
-            <th>NOMBRE</th>  
+            <th>NOMBRE</th>
+            <th>GENERAL</th>
             <th></th>
             <th></th>
         </tr>
@@ -18,6 +19,7 @@
                <tr>
                 <td>{{arRequisitosConceptos.codigoRequisitoConceptoPk}}</td>
                 <td>{{arRequisitosConceptos.nombre}}</td>
+                <td>{% if arRequisitosConceptos.general == 1 %} SI {% else %} NO {% endif %}</td>
                 <td><a href="{{ path('brs_rhu_base_requisito_concepto_nuevo',{'codigoRequisitoConcepto': arRequisitosConceptos.codigoRequisitoConceptoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisitosConceptos.codigoRequisitoConceptoPk }}" /></td>
             {%endfor%}
