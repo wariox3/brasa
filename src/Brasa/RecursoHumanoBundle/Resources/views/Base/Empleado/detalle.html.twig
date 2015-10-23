@@ -351,7 +351,7 @@
                                 <td>{{ arDisciplinarios.empleadoRel.cargoDescripcion  }}</td>
                                 <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
                                 <td>{{ arDisciplinarios.asunto  }}</td>
-                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arEmpleado.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arDisciplinarios.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                                 <td><input type="checkbox" name="ChkSeleccionarDisciplinario[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}" /></td>
                             </tr>
                         {% endfor %}

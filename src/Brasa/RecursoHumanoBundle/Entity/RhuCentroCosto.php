@@ -210,7 +210,13 @@ class RhuCentroCosto
      * @ORM\OneToMany(targetEntity="RhuCredito", mappedBy="centroCostoRel")
      */
     protected $creditosCentroCostoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="centroCostoRel")
+     */
+    protected $disciplinariosCentroCostoRel;
 
+    
     /**
      * Constructor
      */
@@ -233,6 +239,7 @@ class RhuCentroCosto
         $this->accidentesTrabajoCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->disciplinariosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1325,5 +1332,39 @@ class RhuCentroCosto
     public function getCreditosCentroCostoRel()
     {
         return $this->creditosCentroCostoRel;
+    }
+
+    /**
+     * Add disciplinariosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addDisciplinariosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosCentroCostoRel)
+    {
+        $this->disciplinariosCentroCostoRel[] = $disciplinariosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove disciplinariosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosCentroCostoRel
+     */
+    public function removeDisciplinariosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosCentroCostoRel)
+    {
+        $this->disciplinariosCentroCostoRel->removeElement($disciplinariosCentroCostoRel);
+    }
+
+    /**
+     * Get disciplinariosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisciplinariosCentroCostoRel()
+    {
+        return $this->disciplinariosCentroCostoRel;
     }
 }

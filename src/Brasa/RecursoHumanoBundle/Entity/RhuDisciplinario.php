@@ -54,6 +54,11 @@ class RhuDisciplinario
     private $descargos;
     
     /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
+     */    
+    private $codigoCentroCostoFk;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="disciplinariosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -64,6 +69,12 @@ class RhuDisciplinario
      * @ORM\JoinColumn(name="codigo_disciplinario_tipo_fk", referencedColumnName="codigo_disciplinario_tipo_pk")
      */
     protected $disciplinarioTipoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="disciplinariosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;
 
 
 
@@ -198,6 +209,78 @@ class RhuDisciplinario
     }
 
     /**
+     * Set suspension
+     *
+     * @param string $suspension
+     *
+     * @return RhuDisciplinario
+     */
+    public function setSuspension($suspension)
+    {
+        $this->suspension = $suspension;
+
+        return $this;
+    }
+
+    /**
+     * Get suspension
+     *
+     * @return string
+     */
+    public function getSuspension()
+    {
+        return $this->suspension;
+    }
+
+    /**
+     * Set descargos
+     *
+     * @param string $descargos
+     *
+     * @return RhuDisciplinario
+     */
+    public function setDescargos($descargos)
+    {
+        $this->descargos = $descargos;
+
+        return $this;
+    }
+
+    /**
+     * Get descargos
+     *
+     * @return string
+     */
+    public function getDescargos()
+    {
+        return $this->descargos;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return RhuDisciplinario
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -246,50 +329,26 @@ class RhuDisciplinario
     }
 
     /**
-     * Set suspension
+     * Set centroCostoRel
      *
-     * @param string $suspension
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
      *
      * @return RhuDisciplinario
      */
-    public function setSuspension($suspension)
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
     {
-        $this->suspension = $suspension;
+        $this->centroCostoRel = $centroCostoRel;
 
         return $this;
     }
 
     /**
-     * Get suspension
+     * Get centroCostoRel
      *
-     * @return string
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
      */
-    public function getSuspension()
+    public function getCentroCostoRel()
     {
-        return $this->suspension;
-    }
-
-    /**
-     * Set descargos
-     *
-     * @param string $descargos
-     *
-     * @return RhuDisciplinario
-     */
-    public function setDescargos($descargos)
-    {
-        $this->descargos = $descargos;
-
-        return $this;
-    }
-
-    /**
-     * Get descargos
-     *
-     * @return string
-     */
-    public function getDescargos()
-    {
-        return $this->descargos;
+        return $this->centroCostoRel;
     }
 }

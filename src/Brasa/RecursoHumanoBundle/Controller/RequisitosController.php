@@ -56,7 +56,7 @@ class RequisitosController extends Controller
         $form = $this->formularioDetalle($arRequisito);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnImprimir')->isClicked()) {
+            if($form->get('BtnImprimir')->isClicked()) {             
                 $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoRequisitos();
                 $objFormato->Generar($this, $codigoRequisito);
             }

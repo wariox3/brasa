@@ -56,7 +56,9 @@ class DisciplinarioController extends Controller
         $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
         if($codigoDisciplinario != 0) {
             $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
-            
+            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arDisciplinario->getCodigoCentroCostoFk());
+        }else{
+            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());
         }         
         $form = $this->createForm(new RhuDisciplinarioType, $arDisciplinario);
         $form->handleRequest($request);
@@ -64,6 +66,7 @@ class DisciplinarioController extends Controller
             $arDisciplinario = $form->getData();            
             $arDisciplinario->setFecha(new \DateTime('now'));
             $arDisciplinario->setEmpleadoRel($arEmpleado);
+            $arDisciplinario->setCentroCostoRel($arCentroCosto);
             $em->persist($arDisciplinario);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {

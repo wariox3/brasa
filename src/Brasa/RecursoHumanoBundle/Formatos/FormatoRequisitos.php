@@ -2,10 +2,10 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoRequisitos extends \FPDF_FPDF {
     public static $em;
-    
+
     public static $codigoRequisito;
-    
-    public function Generar($miThis, $codigoRequisito) {        
+
+    public function Generar($miThis, $codigoRequisito) {
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
@@ -16,71 +16,62 @@ class FormatoRequisitos extends \FPDF_FPDF {
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("Requisito.pdf", 'D');        
-        
-    } 
-    
+        $pdf->Output("Requisito.pdf", 'D');
+
+    }
+
     public function Header() {
         $arRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisito();
         $arRequisito = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuRequisito')->find(self::$codigoRequisito);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $this->SetFillColor(200, 200, 200);        
+        $this->SetFillColor(200, 200, 200);
+        $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','B',10);
-        //Logo
-        $this->SetXY(53, 14);
-        $this->Image('imagenes/logos/logo.jpg', 12, 15, 35, 17);
-        //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("VERIFICACION REQUISITOS"), 0, 0, 'C', 1);
-        $this->SetXY(53, 22);
-        $this->SetFont('Arial','B',9);
-        $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
-        $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
-        $this->SetXY(53, 26);
-        $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
-        $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
-        $this->SetXY(53, 30);
-        $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
-        $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
-        $this->SetXY(53, 34);
-        $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
-        $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0); 
-        //FILA 1
-        $this->SetXY(10, 40);
+        $this->SetXY(10, 10);
+        $this->Line(10, 10, 60, 10);
+        $this->Line(10, 10, 10, 50);
+        $this->Line(10, 50, 60, 50);
+        $this->Cell(0, 0, $this->Image('imagenes/logos/logo.jpg' , 15 ,20, 40 , 20,'JPG'), 0, 0, 'C', 0); //cuadro para el logo
+        $this->SetXY(60, 10);
+        $this->Cell(90, 10, utf8_decode("PROCESO GESTIÓN HUMANA"), 1, 0, 'C', 1); //cuardo mitad arriba
+        $this->SetXY(60, 20);
         $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(23, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);                            
-        $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',8);
-        $this->Cell(22, 6, $arRequisito->getCodigoRequisitoPk() , 1, 0, 'L', 1);
-        $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(18, 6, utf8_decode("FECHA:") , 1, 0, 'L', 1);                            
-        $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',8);
-        $this->Cell(50, 6, $arRequisito->getFecha()->Format('Y/m/d') , 1, 0, 'L', 1);
-        $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',6);
-        $this->Cell(30, 6, utf8_decode("EMPLEADO:") , 1, 0, 'L', 1);                            
-        $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',8);
-        $this->Cell(50, 6, $arRequisito->getNombreCorto() , 1, 0, 'L', 1);        
-
-        $this->EncabezadoDetalles();
+        $this->Cell(90, 20, utf8_decode("PROCESOS DE RÉGIMEN DISCIPLINARIO"), 1, 0, 'C', 1); //cuardo mitad medio
+        $this->SetFillColor(272, 272, 272);
+        $this->SetXY(60, 40);
+        $this->Cell(90, 10, utf8_decode("Régimen Organizacional Interno "), 1, 0, 'C', 1); //cuardo mitad abajo
+        $this->SetXY(150, 10);
+        $this->Cell(53, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
+        $this->SetXY(150, 20);
+        $this->Cell(53, 20, utf8_decode("Código FOR-GH-16.02"), 1, 0, 'C', 1); //cuadro derecho mitad 1
+        $this->SetXY(150, 40);
+        $this->Cell(53, 5, utf8_decode("Versión 02"), 1, 0, 'C', 1); //cuadro derecho abajo 1
+        $this->SetXY(150, 45);
+        $this->Cell(53, 5, "Fecha Marzo de 2014 ", 1, 0, 'C', 1); //cuadro derecho abajo 2
         
+        //fecha de impresión
+        $this->SetXY(10, 60);
+        $this->SetFont('Arial','',10);
+        $fechaImpresion = date('Y-m-d');
+        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
+        $fechaImpresion = strftime("%d de %B de %Y", strtotime($fechaImpresion));
+        $this->Cell(53, 5, utf8_decode('Medellín, '.$fechaImpresion.''), 0, 0, 'L', 1); //cuadro derecho abajo 2
+        $this->EncabezadoDetalles();
+
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(10);
         $header = array(utf8_decode('CÓDIGO'), utf8_decode('CONCEPTO'), 'TIPO', 'ENTREGADO', 'APLICA', 'ESTADO');
-        $this->SetFillColor(236, 236, 236);
+        $this->SetFillColor(200, 200, 200);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('', 'B', 7);
+        $this->SetFont('', 'B', 8);
 
         //creamos la cabecera de la tabla.
-        $w = array(15, 107, 20, 20, 10, 20);
+        $w = array(15, 103, 21, 21, 12, 21);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -99,42 +90,61 @@ class FormatoRequisitos extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 8);
         $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
         $arRequisitoDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->findBy(array('codigoRequisitoFk' => self::$codigoRequisito));
-        foreach ($arRequisitoDetalle as $arRequisitoDetalle) {            
+        foreach ($arRequisitoDetalle as $arRequisitoDetalle) {
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(15, 4, $arRequisitoDetalle->getCodigoRequisitoDetallePk(), 1, 0, 'L');
-            $pdf->Cell(107, 4, $arRequisitoDetalle->getRequisitoConceptoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(20, 4, $arRequisitoDetalle->getTipo(), 1, 0, 'L');
+            $pdf->Cell(103, 4, utf8_decode($arRequisitoDetalle->getRequisitoConceptoRel()->getNombre()), 1, 0, 'L');
+            $pdf->Cell(21, 4, $arRequisitoDetalle->getTipo(), 1, 0, 'L');
             if($arRequisitoDetalle->getEstadoEntregado() == 1) {
-                $pdf->Cell(20, 4, 'SI', 1, 0, 'L');
+                $pdf->Cell(21, 4, 'SI', 1, 0, 'L');
             } else {
-                $pdf->Cell(20, 4, 'NO', 1, 0, 'L');
+                $pdf->Cell(21, 4, 'NO', 1, 0, 'L');
             }
             if($arRequisitoDetalle->getEstadoNoAplica() == 1) {
-                $pdf->Cell(10, 4, 'NO', 1, 0, 'L');
+                $pdf->Cell(12, 4, 'NO', 1, 0, 'L');
             } else {
-                $pdf->Cell(10, 4, 'SI', 1, 0, 'L');
-            }            
+                $pdf->Cell(12, 4, 'SI', 1, 0, 'L');
+            }
             if($arRequisitoDetalle->getEstadoPendiente() == 1) {
-                $pdf->Cell(20, 4, 'PENDIENTE', 1, 0, 'L');
+                $pdf->Cell(21, 4, 'PENDIENTE', 1, 0, 'L');
             } else {
-                $pdf->Cell(20, 4, 'CERRADO', 1, 0, 'L');
-            }            
+                $pdf->Cell(21, 4, 'CERRADO', 1, 0, 'L');
+            }
 
-            
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
-             
+        $pdf->Ln(12);
+        $pdf->SetFont('Arial', '', 10);
+        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
+        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(12);
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        
+        //se reemplaza el contenido de la tabla tipo de proceso disciplinario
+        $sustitucion1 = $arRequisitoDetalle->getRequisitoRel()->getNombreCorto();
+        $sustitucion2 = $arRequisitoDetalle->getRequisitoRel()->getNumeroIdentificacion();
+        $sustitucion3 = $arConfiguracion->getNombreEmpresa();
+
+        $cadena = $arContenidoFormato->getContenido();
+        $patron1 = '/#1/';
+        $patron2 = '/#2/';
+        $patron3 = '/#3/';
+        $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
+        $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
+        $pdf->MultiCell(0,5, $cadenaCambiada);
+
     }
 
     public function Footer() {
-        
+
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisito();
         $arRequisito = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuRequisito')->find(self::$codigoRequisito);
         $this->SetFont('Arial', 'B', 9);
-        
+
         $this->Text(10, 240, "FIRMA: _____________________________________________");
         $this->Text(10, 247, $arRequisito->getNombreCorto());
         $this->Text(10, 254, "C.C.:     ______________________ de ____________________");
@@ -143,7 +153,7 @@ class FormatoRequisitos extends \FPDF_FPDF {
         $this->Text(105, 254, "NIT: ". $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa());
         $this->SetFont('Arial', '', 8);
         $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');;
-    }    
+    }
 }
 
 ?>
