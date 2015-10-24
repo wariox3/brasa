@@ -1884,7 +1884,7 @@ class ConsultasController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arProcesoDisciplinario->getCodigoDisciplinarioPk())
                     ->setCellValue('B' . $i, $arProcesoDisciplinario->getFecha()->format('Y/m/d'))
-                    ->setCellValue('C' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arProcesoDisciplinario->getCentroCostoRel()->getNombre())
                     ->setCellValue('D' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
                     ->setCellValue('E' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('F' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getCargoDescripcion())

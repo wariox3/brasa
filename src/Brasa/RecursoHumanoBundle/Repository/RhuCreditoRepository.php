@@ -18,11 +18,11 @@ class RhuCreditoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if($strDesde != "" || $strDesde != 0){
-            $dateFecha = new \DateTime($strDesde);
-            //$dql .= " AND c.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
-            $dql .= " AND c.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $strDesde = new \DateTime($strDesde);
+            $dql .= " AND c.fecha >='" . $strDesde->format('Y-m-d') . "'";
         }
-        if($strDesde != "" || $strDesde != 0) {
+        if($strHasta != "" || $strHasta != 0) {
+            $strHasta = new \DateTime($strHasta);
             $dql .= " AND c.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         
