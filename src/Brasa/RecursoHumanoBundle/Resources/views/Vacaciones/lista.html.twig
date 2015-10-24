@@ -65,7 +65,7 @@
                 <td style="text-align: right">{{ arVacaciones.vrDeduccion | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
                 <td>{% if arVacaciones.estadoPagado == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoContrato': 0, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}', 'Editar vacacion', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_vacaciones_nuevo', {'codigoContrato': arVacaciones.codigoContratoFk, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}', 'Editar vacacion', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
                 
                 <td><a href="{{ path('brs_rhu_vacaciones_detalle', { 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arVacaciones.codigoVacacionPk }}" /></td>

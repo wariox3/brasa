@@ -11,13 +11,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuCreditoRepository extends EntityRepository {
     
-    public function listaDQL($strIdentificacion = "", $strDesde = 0, $strHasta = 0) {        
+    public function listaDQL($strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuCredito c JOIN c.empleadoRel e WHERE c.codigoCreditoPk <> 0 AND c.estadoPagado <> 1 AND c.aprobado <> 0";   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if($strDesde != "" || $strDesde != 0){
+            $dateFecha = new \DateTime($strDesde);
+            //$dql .= " AND c.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
             $dql .= " AND c.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
         }
         if($strDesde != "" || $strDesde != 0) {

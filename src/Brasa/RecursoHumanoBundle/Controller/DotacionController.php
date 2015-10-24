@@ -69,10 +69,13 @@ class DotacionController extends Controller
         $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
         if($codigoDotacion != 0) {
             $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
+            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arDotacion->getCodigoCentroCostoFk());
+        }else{
+            $arDotacion->setFecha(new \DateTime('now'));
+            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());
+            $arDotacion->setCentroCostoRel($arCentroCosto);
         }
-        $arDotacion->setFecha(new \DateTime('now'));
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());
-        $arDotacion->setCentroCostoRel($arCentroCosto);
+        
         $form = $this->createForm(new RhuDotacionType, $arDotacion);
         $form->handleRequest($request);
         if ($form->isValid()) {

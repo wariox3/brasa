@@ -221,7 +221,7 @@ class DisciplinarioController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arDisciplinario->getCodigoDisciplinarioPk())
                             ->setCellValue('B' . $i, $arDisciplinario->getFecha()->format('Y/m/d'))
-                            ->setCellValue('C' . $i, $arDisciplinario->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                            ->setCellValue('C' . $i, $arDisciplinario->getCentroCostoRel()->getNombre())
                             ->setCellValue('D' . $i, $arDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('E' . $i, $arDisciplinario->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('F' . $i, $arDisciplinario->getEmpleadoRel()->getCargoDescripcion())

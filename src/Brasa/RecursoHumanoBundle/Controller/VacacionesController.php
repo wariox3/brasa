@@ -300,6 +300,7 @@ class VacacionesController extends Controller
     
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
+        ob_clean();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -340,8 +341,8 @@ class VacacionesController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arVacacion->getCodigoVacacionPk())
                             ->setCellValue('B' . $i, $arVacacion->getCentroCostoRel()->getNombre())
-                            ->setCellValue('C' . $i, $arVacacion->getFechaDesde())
-                            ->setCellValue('D' . $i, $arVacacion->getFechaHasta())
+                            ->setCellValue('C' . $i, $arVacacion->getFechaDesdeDisfrute())
+                            ->setCellValue('D' . $i, $arVacacion->getFechaHastaDisfrute())
                             ->setCellValue('E' . $i, $arVacacion->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('F' . $i, $arVacacion->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('G' . $i, $arVacacion->getDiasVacaciones())

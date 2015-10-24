@@ -185,11 +185,12 @@ class LicenciasController extends Controller
                     ->setCellValue('G1', 'DÍAS');
 
         $i = 2;
+        $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $query = $em->createQuery($this->strSqlLista);        
         $arLicencias = $query->getResult();
         foreach ($arLicencias as $arLicencia) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arLicencia->getCodigoIncapacidadPk())
+                    ->setCellValue('A' . $i, $arLicencia->getCodigoLicenciaPk())
                     ->setCellValue('B' . $i, $arLicencia->getEmpleadoRel()->getnumeroIdentificacion())
                     ->setCellValue('C' . $i, $arLicencia->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('D' . $i, $arLicencia->getCentroCostoRel()->getNombre())
