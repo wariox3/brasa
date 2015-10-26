@@ -7,6 +7,8 @@
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="btn-group">
+            {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
+            {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
         </div>
         <br /> <br />
@@ -59,7 +61,11 @@
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', {'codigoContrato': arRequisito.codigoRequisitoPk, 'codigoCambioSalario': 0 }) }}', 'AgregarCambioSalario', 600, 900)" >Nuevo</a>
+                        {% if  arRequisito.estadoAceptado == 1 %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', {'codigoContrato': arRequisito.codigoRequisitoPk, 'codigoCambioSalario': 0 }) }}', 'AgregarCambioSalario', 600, 900)" disabled="disabled">Nuevo</a>
+                        {% else %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', {'codigoContrato': arRequisito.codigoRequisitoPk, 'codigoCambioSalario': 0 }) }}', 'AgregarCambioSalario', 600, 900)" >Nuevo</a>
+                        {% endif %}                             
                     </div>
                     <div class="btn-group">                
                         {{ form_widget(form.BtnDetalleEntregado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
