@@ -516,6 +516,10 @@ class RhuEmpleado
      */
     protected $requisitosEmpleadoRel;     
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCapacitacionDetalle", mappedBy="empleadoRel")
+     */
+    protected $capacitacionesDetalleEmpleadoRel;     
 
     /**
      * Constructor
@@ -3017,5 +3021,39 @@ class RhuEmpleado
     public function getRequisitosEmpleadoRel()
     {
         return $this->requisitosEmpleadoRel;
+    }
+
+    /**
+     * Add capacitacionesDetalleEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetalleEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addCapacitacionesDetalleEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetalleEmpleadoRel)
+    {
+        $this->capacitacionesDetalleEmpleadoRel[] = $capacitacionesDetalleEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove capacitacionesDetalleEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetalleEmpleadoRel
+     */
+    public function removeCapacitacionesDetalleEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetalleEmpleadoRel)
+    {
+        $this->capacitacionesDetalleEmpleadoRel->removeElement($capacitacionesDetalleEmpleadoRel);
+    }
+
+    /**
+     * Get capacitacionesDetalleEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCapacitacionesDetalleEmpleadoRel()
+    {
+        return $this->capacitacionesDetalleEmpleadoRel;
     }
 }
