@@ -63,7 +63,7 @@
                 <td>{{ arExamenes.fecha | date("Y/m/d")}}</td>
                 <td>{{ arExamenes.identificacion }}</td>
                 <td>{{ arExamenes.nombreCorto }}</td>
-                <td style="text-align: right">{{ arExamenes.vrTotal | number_format(2, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arExamenes.vrTotal | number_format(0, '.', ',') }}</td>                
                 <td>{% if arExamenes.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
                 {% if arExamenes.estadoAprobado == 0%}
                 <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_nuevo', { 'codigoExamen': arExamenes.codigoExamenPk }) }}', 'AgregarExamen', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>    

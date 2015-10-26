@@ -726,6 +726,10 @@ brs_rhu_requisito_detalle:
     path:     /rhu/requisito/detalle/{codigoRequisito}
     defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:detalle }     
 
+brs_rhu_requisito_detalle_nuevo:
+    path:     /rhu/requisito/detalle/nuevo/{codigoRequisito}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:detalleNuevo }     
+
 brs_rhu_capacitacion_nuevo:
     path:     /rhu/capacitacion/nuevo/{codigoCapacitacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:nuevo }    

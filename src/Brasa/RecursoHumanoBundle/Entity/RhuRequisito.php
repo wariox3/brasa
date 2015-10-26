@@ -43,9 +43,14 @@ class RhuRequisito
     private $codigoCargoFk;        
     
     /**     
-     * @ORM\Column(name="estado_aceptado", type="boolean")
+     * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAceptado = 0;       
+    private $estadoAutorizado = 0;       
+    
+    /**     
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = 0;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -68,6 +73,7 @@ class RhuRequisito
      * @ORM\OneToMany(targetEntity="RhuRequisitoDetalle", mappedBy="requisitoRel", cascade={"persist", "remove"})
      */
     protected $requisitosDetallesRequisitoRel;
+
 
     /**
      * Constructor
@@ -208,27 +214,51 @@ class RhuRequisito
     }
 
     /**
-     * Set estadoAceptado
+     * Set estadoAutorizado
      *
-     * @param boolean $estadoAceptado
+     * @param boolean $estadoAutorizado
      *
      * @return RhuRequisito
      */
-    public function setEstadoAceptado($estadoAceptado)
+    public function setEstadoAutorizado($estadoAutorizado)
     {
-        $this->estadoAceptado = $estadoAceptado;
+        $this->estadoAutorizado = $estadoAutorizado;
 
         return $this;
     }
 
     /**
-     * Get estadoAceptado
+     * Get estadoAutorizado
      *
      * @return boolean
      */
-    public function getEstadoAceptado()
+    public function getEstadoAutorizado()
     {
-        return $this->estadoAceptado;
+        return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuRequisito
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 
     /**

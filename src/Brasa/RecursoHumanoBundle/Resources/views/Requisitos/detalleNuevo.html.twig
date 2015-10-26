@@ -8,7 +8,7 @@
                     <th>CÓDIGO</th>
                     <th>NOMBRE</th>
                     <th>GENERAL</th>
-                    <th></th>                    
+                    <th>CANT</th>                    
                 </tr>
 
                 {% for arRequisitoConceptos in arRequisitoConceptos %}
@@ -16,7 +16,8 @@
                         <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisitoConceptos.codigoRequisitoConceptoPk }}">{{ arRequisitoConceptos.codigoRequisitoConceptoPk }}</td>
                         <td>{{ arRequisitoConceptos.nombre }}</td>
                         <td>{% if arRequisitoConceptos.general == 1%}SI {% else %} NO{% endif %}</td>
-                        <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisitoConceptos.codigoRequisitoConceptoPk }}" /></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        
                     </tr>
                 {% endfor %}                 
             </table>

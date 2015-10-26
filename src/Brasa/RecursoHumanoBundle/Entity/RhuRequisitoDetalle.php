@@ -47,6 +47,16 @@ class RhuRequisitoDetalle
      */    
     private $tipo;    
     
+    /**     
+     * @ORM\Column(name="cantidad", type="integer")
+     */    
+    private $cantidad = 0;     
+
+    /**     
+     * @ORM\Column(name="cantidad_pendiente", type="integer")
+     */    
+    private $cantidadPendiente = 0;         
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuRequisito", inversedBy="requisitosDetallesRequisitoRel")
      * @ORM\JoinColumn(name="codigo_requisito_fk", referencedColumnName="codigo_requisito_pk")
@@ -260,5 +270,53 @@ class RhuRequisitoDetalle
     public function getTipo()
     {
         return $this->tipo;
+    }
+
+    /**
+     * Set cantidad
+     *
+     * @param integer $cantidad
+     *
+     * @return RhuRequisitoDetalle
+     */
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidad
+     *
+     * @return integer
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
+    }
+
+    /**
+     * Set cantidadPendiente
+     *
+     * @param integer $cantidadPendiente
+     *
+     * @return RhuRequisitoDetalle
+     */
+    public function setCantidadPendiente($cantidadPendiente)
+    {
+        $this->cantidadPendiente = $cantidadPendiente;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadPendiente
+     *
+     * @return integer
+     */
+    public function getCantidadPendiente()
+    {
+        return $this->cantidadPendiente;
     }
 }

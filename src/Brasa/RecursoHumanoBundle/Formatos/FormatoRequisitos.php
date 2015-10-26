@@ -34,13 +34,13 @@ class FormatoRequisitos extends \FPDF_FPDF {
         $this->Line(10, 50, 60, 50);
         $this->Cell(0, 0, $this->Image('imagenes/logos/logo.jpg' , 15 ,20, 40 , 20,'JPG'), 0, 0, 'C', 0); //cuadro para el logo
         $this->SetXY(60, 10);
-        $this->Cell(90, 10, utf8_decode("PROCESO GESTIÓN HUMANA"), 1, 0, 'C', 1); //cuardo mitad arriba
+        $this->Cell(90, 10, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad arriba
         $this->SetXY(60, 20);
         $this->SetFillColor(236, 236, 236);
-        $this->Cell(90, 20, utf8_decode("PROCESOS DE RÉGIMEN DISCIPLINARIO"), 1, 0, 'C', 1); //cuardo mitad medio
+        $this->Cell(90, 20, utf8_decode("LISTA DE REQUISITOS DE INGRESO"), 1, 0, 'C', 1); //cuardo mitad medio
         $this->SetFillColor(272, 272, 272);
         $this->SetXY(60, 40);
-        $this->Cell(90, 10, utf8_decode("Régimen Organizacional Interno "), 1, 0, 'C', 1); //cuardo mitad abajo
+        $this->Cell(90, 10, utf8_decode(" "), 1, 0, 'C', 1); //cuardo mitad abajo
         $this->SetXY(150, 10);
         $this->Cell(53, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
         $this->SetXY(150, 20);

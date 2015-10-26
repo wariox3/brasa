@@ -76,6 +76,14 @@ class RequisitosController extends Controller
                 $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoRequisitos();
                 $objFormato->Generar($this, $codigoRequisito);
             }
+            if($form->get('BtnCerrar')->isClicked()) {
+                if($arRequisito->getEstadoAutorizado() == 1) {
+                    $arRequisito->setEstadoCerrado(1);
+                    $em->persist($arRequisito);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
+                }
+            }            
             if($form->get('BtnDetalleEntregado')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
@@ -118,6 +126,18 @@ class RequisitosController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
             }
+            if($form->get('BtnEliminarDetalle')->isClicked()) {  
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoRequisitoDetalle) {
+                        $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
+                        $arRequisitoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->find($codigoRequisitoDetalle);                        
+                        $em->remove($arRequisitoDetalle);                        
+                    }
+                    $em->flush();                    
+                } 
+                return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
+            }            
         }
         $arRequisitosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
         $arRequisitosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->findBy(array('codigoRequisitoFk' => $codigoRequisito));
@@ -138,27 +158,33 @@ class RequisitosController extends Controller
             ->getForm();
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            if ($form->get('BtnAgregar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoRequisitoConcepto) {
+        if ($form->isValid()) {            
+            if($form->get('BtnAgregar')->isClicked()) {
+                $arrControles = $request->request->All();
+                if (isset($arrControles['TxtCantidad'])) {
+                    $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {                        
                         $arRequisitoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
-                        $arRequisitoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->find($codigoRequisitoConcepto);
-                        $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
-                        $arRequisitoDetalle->setRequisitoRel($arRequisito);
-                        $arRequisitoDetalle->setRequisitoConceptoRelRel($arRequisitoConcepto);
-                        $arRequisitoDetalle->setEstadoPendiente(1);
-                        $arRequisitoDetalle->setEstadoEntregado(0);
-                        $em->persist($arRequisitoDetalle);
+                        $arRequisitoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->find($intCodigo);                                                                
+                        if($arrControles['TxtCantidad'][$intIndice] != "" && $arrControles['TxtCantidad'][$intIndice] != 0) {
+                            $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();                            
+                            $arRequisitoDetalle->setRequisitoRel($arRequisito);
+                            $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoConcepto);                                                      
+                            $intCantidad = $arrControles['TxtCantidad'][$intIndice];
+                            $arRequisitoDetalle->setCantidad($intCantidad);
+                            $arRequisitoDetalle->setCantidadPendiente($intCantidad);
+                            $arRequisitoDetalle->setTipo('PERSONALIZADO');
+                            $em->persist($arRequisitoDetalle);                                
+                        }                        
+                        $intIndice++;
                     }
-                    $em->flush();
-                }
+                }                
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
         $arRequisitoConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
-        $arRequisitoConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('estadoActivo' => 1));
+        $arRequisitoConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findAll();
         return $this->render('BrasaRecursoHumanoBundle:Requisitos:detalleNuevo.html.twig', array(
             'arRequisito' => $arRequisito,
             'arRequisitoConceptos' => $arRequisitoConceptos,
@@ -223,23 +249,33 @@ class RequisitosController extends Controller
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => false);        
         $arrBotonDetalleEntregado = array('label' => 'Entregado', 'disabled' => false);
         $arrBotonDetalleNoAplica = array('label' => 'No aplica', 'disabled' => false);
+        $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
 
-        if($arRequisito->getEstadoAceptado() == 1) {
+        if($arRequisito->getEstadoAutorizado() == 1) {
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonDetalleEntregado['disabled'] = true;
             $arrBotonDetalleNoAplica['disabled'] = true;
+            $arrBotonEliminarDetalle['disabled'] = true;
+            if($arRequisito->getEstadoCerrado() == 1) {
+                $arrBotonDesAutorizar['disabled'] = true;
+                $arrBotonCerrar['disabled'] = true;
+            }
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
+            $arrBotonCerrar['disabled'] = true;
         }
         $form = $this->createFormBuilder()
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnCerrar', 'submit', $arrBotonCerrar)
                     ->add('BtnDetalleEntregado', 'submit', $arrBotonDetalleEntregado)
                     ->add('BtnDetalleNoAplica', 'submit', $arrBotonDetalleNoAplica)
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
+                    ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->getForm();
         return $form;
 
