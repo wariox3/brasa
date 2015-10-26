@@ -596,7 +596,11 @@ brs_rhu_consultas_costos_general:
     
 brs_rhu_consultas_costos_ingresos_empleado:    
     path:     /rhu/consultas/costos/ingresos/empleado
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasIngresosEmpleado:lista }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasIngresosEmpleado:lista }
+    
+brs_rhu_consultas_pagos_deducciones_empleado:    
+    path:     /rhu/consultas/pagos/deducciones/empleado
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasPagosDeduccionesEmpleado:lista }    
     
 brs_rhu_consultas_creditos_general:    
     path:     /rhu/consultas/creditos/general

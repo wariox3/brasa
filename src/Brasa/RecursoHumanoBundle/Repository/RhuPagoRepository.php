@@ -169,6 +169,27 @@ class RhuPagoRepository extends EntityRepository {
         return $dql;
     }                            
     
+    public function listaDqlPagosDeducciones($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoTipoFk = 1 AND p.estadoPagado = 1";
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $strDesde = new \DateTime($strDesde);
+            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $strHasta = new \DateTime($strHasta);
+            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
+        return $dql;
+    }                            
+    
     public function generarPagoDetalleSede ($codigoPago) {
         $em = $this->getEntityManager();
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
