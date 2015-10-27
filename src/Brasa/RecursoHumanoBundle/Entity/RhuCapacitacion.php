@@ -54,11 +54,17 @@ class RhuCapacitacion
     protected $capacitacionesDetallesCapacitacionRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuCapacitacionNota", mappedBy="capacitacionRel", cascade={"persist", "remove"})
+     */
+    protected $capacitacionesNotasCapacitacionRel;        
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->capacitacionesDetallesCapacitacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->capacitacionesNotasCapacitacionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -120,6 +126,30 @@ class RhuCapacitacion
     }
 
     /**
+     * Set tema
+     *
+     * @param string $tema
+     *
+     * @return RhuCapacitacion
+     */
+    public function setTema($tema)
+    {
+        $this->tema = $tema;
+
+        return $this;
+    }
+
+    /**
+     * Get tema
+     *
+     * @return string
+     */
+    public function getTema()
+    {
+        return $this->tema;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -141,6 +171,30 @@ class RhuCapacitacion
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuCapacitacion
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 
     /**
@@ -202,50 +256,36 @@ class RhuCapacitacion
     }
 
     /**
-     * Set tema
+     * Add capacitacionesNotasCapacitacionRel
      *
-     * @param string $tema
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota $capacitacionesNotasCapacitacionRel
      *
      * @return RhuCapacitacion
      */
-    public function setTema($tema)
+    public function addCapacitacionesNotasCapacitacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota $capacitacionesNotasCapacitacionRel)
     {
-        $this->tema = $tema;
+        $this->capacitacionesNotasCapacitacionRel[] = $capacitacionesNotasCapacitacionRel;
 
         return $this;
     }
 
     /**
-     * Get tema
+     * Remove capacitacionesNotasCapacitacionRel
      *
-     * @return string
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota $capacitacionesNotasCapacitacionRel
      */
-    public function getTema()
+    public function removeCapacitacionesNotasCapacitacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota $capacitacionesNotasCapacitacionRel)
     {
-        return $this->tema;
+        $this->capacitacionesNotasCapacitacionRel->removeElement($capacitacionesNotasCapacitacionRel);
     }
 
     /**
-     * Set estadoAutorizado
+     * Get capacitacionesNotasCapacitacionRel
      *
-     * @param boolean $estadoAutorizado
-     *
-     * @return RhuCapacitacion
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setEstadoAutorizado($estadoAutorizado)
+    public function getCapacitacionesNotasCapacitacionRel()
     {
-        $this->estadoAutorizado = $estadoAutorizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAutorizado
-     *
-     * @return boolean
-     */
-    public function getEstadoAutorizado()
-    {
-        return $this->estadoAutorizado;
+        return $this->capacitacionesNotasCapacitacionRel;
     }
 }

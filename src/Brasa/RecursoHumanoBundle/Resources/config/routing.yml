@@ -744,7 +744,15 @@ brs_rhu_capacitacion_detalle:
     
 brs_rhu_capacitacion_detalle_nuevo:
     path:     /rhu/capacitacion/detalle/nuevo/{codigoCapacitacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalleNuevo }     
+    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalleNuevo }
+
+brs_rhu_capacitacion_detalle_nuevo_nota:
+    path:     /rhu/capacitacion/detalle/nuevo/nota/{codigoCapacitacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalleNuevoNota }    
+    
+brs_rhu_capacitacion_detalle_nuevo_empleado:
+    path:     /rhu/capacitacion/detalle/nuevo/empleado/{codigoCapacitacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalleNuevoEmpleado }     
     
 buscar_empleado:
     pattern:  /buscar/empleado/

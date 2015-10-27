@@ -511,15 +511,6 @@ class RhuEmpleado
      */
     protected $proyeccionesEmpleadoRel;         
    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuRequisito", mappedBy="empleadoRel")
-     */
-    protected $requisitosEmpleadoRel;     
-
-    /**
-     * @ORM\OneToMany(targetEntity="RhuCapacitacionDetalle", mappedBy="empleadoRel")
-     */
-    protected $capacitacionesDetalleEmpleadoRel;     
 
     /**
      * Constructor
@@ -548,7 +539,6 @@ class RhuEmpleado
         $this->cambiosSalariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ingresosBasesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyeccionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->requisitosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -2987,73 +2977,5 @@ class RhuEmpleado
     public function getProyeccionesEmpleadoRel()
     {
         return $this->proyeccionesEmpleadoRel;
-    }
-
-    /**
-     * Add requisitosEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addRequisitosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosEmpleadoRel)
-    {
-        $this->requisitosEmpleadoRel[] = $requisitosEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove requisitosEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosEmpleadoRel
-     */
-    public function removeRequisitosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuRequisito $requisitosEmpleadoRel)
-    {
-        $this->requisitosEmpleadoRel->removeElement($requisitosEmpleadoRel);
-    }
-
-    /**
-     * Get requisitosEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRequisitosEmpleadoRel()
-    {
-        return $this->requisitosEmpleadoRel;
-    }
-
-    /**
-     * Add capacitacionesDetalleEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetalleEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addCapacitacionesDetalleEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetalleEmpleadoRel)
-    {
-        $this->capacitacionesDetalleEmpleadoRel[] = $capacitacionesDetalleEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove capacitacionesDetalleEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetalleEmpleadoRel
-     */
-    public function removeCapacitacionesDetalleEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetalleEmpleadoRel)
-    {
-        $this->capacitacionesDetalleEmpleadoRel->removeElement($capacitacionesDetalleEmpleadoRel);
-    }
-
-    /**
-     * Get capacitacionesDetalleEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCapacitacionesDetalleEmpleadoRel()
-    {
-        return $this->capacitacionesDetalleEmpleadoRel;
     }
 }

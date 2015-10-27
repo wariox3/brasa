@@ -15,12 +15,7 @@ class RhuRequisito
      * @ORM\Column(name="codigo_requisito_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoRequisitoPk;        
-    
-    /**
-     * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
-     */    
-    private $codigoEmpleadoFk;        
+    private $codigoRequisitoPk;                  
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -55,13 +50,7 @@ class RhuRequisito
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;       
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="requisitosEmpleadoRel")
-     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
-     */
-    protected $empleadoRel;    
+    private $comentarios;             
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="requisitosCargoRel")
@@ -73,7 +62,6 @@ class RhuRequisito
      * @ORM\OneToMany(targetEntity="RhuRequisitoDetalle", mappedBy="requisitoRel", cascade={"persist", "remove"})
      */
     protected $requisitosDetallesRequisitoRel;
-
 
     /**
      * Constructor
@@ -91,30 +79,6 @@ class RhuRequisito
     public function getCodigoRequisitoPk()
     {
         return $this->codigoRequisitoPk;
-    }
-
-    /**
-     * Set codigoEmpleadoFk
-     *
-     * @param integer $codigoEmpleadoFk
-     *
-     * @return RhuRequisito
-     */
-    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
-    {
-        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoEmpleadoFk
-     *
-     * @return integer
-     */
-    public function getCodigoEmpleadoFk()
-    {
-        return $this->codigoEmpleadoFk;
     }
 
     /**
@@ -283,30 +247,6 @@ class RhuRequisito
     public function getComentarios()
     {
         return $this->comentarios;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuRequisito
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
     }
 
     /**

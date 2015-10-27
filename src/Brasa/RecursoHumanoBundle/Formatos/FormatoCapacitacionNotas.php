@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoCapacitacion extends \FPDF_FPDF {
+class FormatoCapacitacionNotas extends \FPDF_FPDF {
     public static $em;
 
     public static $codigoCapacitacion;
@@ -10,13 +10,13 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoCapacitacion = $codigoCapacitacion;
-        $pdf = new FormatoCapacitacion();
+        $pdf = new FormatoCapacitacionNotas();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("ActaCapacitacion.pdf", 'D');
+        $pdf->Output("ActaCapacitacionNotas.pdf", 'D');
 
     }
 
@@ -37,7 +37,7 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $this->Cell(90, 10, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad arriba
         $this->SetXY(60, 20);
         $this->SetFillColor(236, 236, 236);
-        $this->Cell(90, 20, utf8_decode("ACTA DE CAPACITACION"), 1, 0, 'C', 1); //cuardo mitad medio
+        $this->Cell(90, 20, utf8_decode("TEMAS DE LA CAPACITACION"), 1, 0, 'C', 1); //cuardo mitad medio
         $this->SetFillColor(272, 272, 272);
         $this->SetXY(60, 40);
         $this->Cell(90, 10, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad abajo
@@ -55,7 +55,7 @@ class FormatoCapacitacion extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(10);
-        $header = array(utf8_decode('N'), utf8_decode('CARGO'), 'NOMBRE', 'ASISTIO', 'FIRMA');
+        $header = array(utf8_decode('NOTA'));
         $this->SetFillColor(200, 200, 200);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -63,7 +63,7 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $this->SetFont('', 'B', 8);
 
         //creamos la cabecera de la tabla.
-        $w = array(10, 30, 80, 20, 52);
+        $w = array(150);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -80,15 +80,11 @@ class FormatoCapacitacion extends \FPDF_FPDF {
     public function Body($pdf) {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 8);
-        $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
-        $arCapacitacionDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->findBy(array('codigoCapacitacionFk' => self::$codigoCapacitacion));
-        foreach ($arCapacitacionDetalle as $arCapacitacionDetalle) {
-            $pdf->SetFont('Arial', '', 8);
-            $pdf->Cell(10, 8, '1', 1, 0, 'L');
-            $pdf->Cell(30, 8, '', 1, 0, 'L');
-            $pdf->Cell(80, 8, $arCapacitacionDetalle->getNombreCorto(), 1, 0, 'L');
-            $pdf->Cell(20, 8, '', 1, 0, 'L');
-            $pdf->Cell(52, 8, '', 1, 0, 'L');
+        $arCapacitacionNotas = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota();
+        $arCapacitacionNotas = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionNota')->findBy(array('codigoCapacitacionFk' => self::$codigoCapacitacion));
+        foreach ($arCapacitacionNotas as $arCapacitacionNotas) {
+            $pdf->SetFont('Arial', '', 8);            
+            $pdf->MultiCell(0,5, $arCapacitacionNotas->getNota());
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }

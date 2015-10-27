@@ -3,6 +3,8 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCapacitacionType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuCapacitacionDetalleType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuCapacitacionNotaType;
 use Doctrine\ORM\EntityRepository;
 class CapacitacionesController extends Controller
 {
@@ -59,6 +61,10 @@ class CapacitacionesController extends Controller
                 $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCapacitacion();
                 $objFormato->Generar($this, $codigoCapacitacion);
             }
+            if($form->get('BtnImprimirNotas')->isClicked()) {
+                $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCapacitacionNotas();
+                $objFormato->Generar($this, $codigoCapacitacion);
+            }            
             if($form->get('BtnAutorizar')->isClicked()) {
                 $arCapacitacion->setEstadoAutorizado(1);
                 $em->persist($arCapacitacion);
@@ -82,19 +88,53 @@ class CapacitacionesController extends Controller
                     $em->flush();                    
                 } 
                 return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
-            }           
+            }  
+            if($form->get('BtnEliminarNota')->isClicked()) {  
+                $arrSeleccionados = $request->request->get('ChkSeleccionarNota');                                                   
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoCapacitacionNota) {
+                        $arCapacitacionNota = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota();
+                        $arCapacitacionNota = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionNota')->find($codigoCapacitacionNota);                        
+                        $em->remove($arCapacitacionNota);                        
+                    }
+                    $em->flush();                    
+                } 
+                return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+            }             
         }
         $arCapacitacionesDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
         $arCapacitacionesDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->findBy(array('codigoCapacitacionFk' => $codigoCapacitacion));
         $arCapacitacionesDetalles = $paginator->paginate($arCapacitacionesDetalles, $this->get('request')->query->get('page', 1),50);
+        $arCapacitacionesNotas = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota();
+        $arCapacitacionesNotas = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionNota')->findBy(array('codigoCapacitacionFk' => $codigoCapacitacion));
+        $arCapacitacionesNotas = $paginator->paginate($arCapacitacionesNotas, $this->get('request')->query->get('page', 1),50);
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Capacitaciones:detalle.html.twig', array(
                         'arCapacitacionesDetalles' => $arCapacitacionesDetalles,        
+                        'arCapacitacionesNotas' => $arCapacitacionesNotas,        
                         'arCapacitacion' => $arCapacitacion,
                         'form' => $form->createView()
                     ));
     }
 
     public function detalleNuevoAction($codigoCapacitacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arCapacitacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find($codigoCapacitacion);
+        $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
+        $form = $this->createForm(new RhuCapacitacionDetalleType(), $arCapacitacionDetalle);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arCapacitacionDetalle = $form->getData();
+            $arCapacitacionDetalle->setCapacitacionRel($arCapacitacion);
+            $em->persist($arCapacitacionDetalle);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }        
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Capacitaciones:detalleNuevo.html.twig', array(
+            'form' => $form->createView()));
+    }    
+    
+    public function detalleNuevoEmpleadoAction($codigoCapacitacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arCapacitacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find($codigoCapacitacion);
@@ -112,7 +152,8 @@ class CapacitacionesController extends Controller
                         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);                                
                         $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
                         $arCapacitacionDetalle->setCapacitacionRel($arCapacitacion);
-                        $arCapacitacionDetalle->setEmpleadoRel($arEmpleado);                        
+                        $arCapacitacionDetalle->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());                        
+                        $arCapacitacionDetalle->setNombreCorto($arEmpleado->getNombreCorto());                        
                         $em->persist($arCapacitacionDetalle);
                     }
                     $em->flush();
@@ -122,11 +163,29 @@ class CapacitacionesController extends Controller
         }
         $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
         $arEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('estadoActivo' => 1));
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Capacitaciones:detalleNuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Capacitaciones:detalleNuevoEmpleado.html.twig', array(
             'arCapacitacion' => $arCapacitacion,
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()));
     }    
+    
+    public function detalleNuevoNotaAction($codigoCapacitacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arCapacitacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find($codigoCapacitacion);
+        $arCapacitacionNota = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota();
+        $form = $this->createForm(new RhuCapacitacionNotaType(), $arCapacitacionNota);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arCapacitacionDetalle = $form->getData();
+            $arCapacitacionDetalle->setCapacitacionRel($arCapacitacion);
+            $em->persist($arCapacitacionDetalle);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }        
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Capacitaciones:detalleNuevoNota.html.twig', array(
+            'form' => $form->createView()));
+    }        
     
     public function nuevoAction($codigoCapacitacion) {
         $request = $this->getRequest();
@@ -166,20 +225,26 @@ class CapacitacionesController extends Controller
     private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
-        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => true);                        
+        $arrBotonImprimir = array('label' => 'Imprimir asistencia', 'disabled' => true);                        
+        $arrBotonImprimirNotas = array('label' => 'Imprimir notas', 'disabled' => true);                        
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);                      
+        $arrBotonEliminarNota = array('label' => 'Eliminar', 'disabled' => false);                      
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminarDetalle['disabled'] = true;            
+            $arrBotonEliminarNota['disabled'] = true;            
             $arrBotonImprimir['disabled'] = false;
+            $arrBotonImprimirNotas['disabled'] = false;
         } else {            
             $arrBotonDesAutorizar['disabled'] = true;
         }                        
         $form = $this->createFormBuilder()    
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)                                         
+                    ->add('BtnImprimirNotas', 'submit', $arrBotonImprimirNotas)                                         
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)                                         
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                                                             
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)                                         
+                    ->add('BtnEliminarNota', 'submit', $arrBotonEliminarNota)                                         
                     ->getForm();  
         return $form;
     }    

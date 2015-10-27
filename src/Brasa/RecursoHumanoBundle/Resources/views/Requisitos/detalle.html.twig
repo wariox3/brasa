@@ -51,15 +51,25 @@
                         <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                     </tr>
                     {% for arRequisitosDetalles in arRequisitosDetalles %}
-                        <tr>
-                            <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisitosDetalles.codigoRequisitoDetallePk }}">{{ arRequisitosDetalles.codigoRequisitoDetallePk }} </td>
+                        <tr>                            
+                            <td>
+                                <input type="hidden" name="LblCodigo[]" value="{{ arRequisitosDetalles.codigoRequisitoDetallePk }}">
+                                <span class="badge">{{ arRequisitosDetalles.codigoRequisitoDetallePk }}</span>
+                            </td>
                             <td>{{ arRequisitosDetalles.requisitoConceptoRel.nombre }}</td>
                             <td>{{ arRequisitosDetalles.tipo }}</td>
                             <td>{% if arRequisitosDetalles.estadoEntregado == 1%} SI {% else %} NO {% endif %}</td>
                             <td>{% if arRequisitosDetalles.estadoNoAplica == 1%} SI {% else %} NO {% endif %}</td>
                             <td>{% if arRequisitosDetalles.estadoPendiente == 1%} SI {% else %} NO {% endif %}</td>
-                            <td style="text-align: right">{{ arRequisitosDetalles.cantidad | number_format(0, '.', ',') }}</td>
-                            <td style="text-align: right">{{ arRequisitosDetalles.cantidadPendiente | number_format(0, '.', ',') }}</td>
+                            {% if arRequisito.estadoCerrado == 0 %}
+                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arRequisitosDetalles.codigoRequisitoDetallePk }}" value="{{ arRequisitosDetalles.cantidad }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadPendiente{{ arRequisitosDetalles.codigoRequisitoDetallePk }}" value="{{ arRequisitosDetalles.cantidadPendiente }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            {% else %}
+                                <td style="text-align: right">{{ arRequisitosDetalles.cantidad | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arRequisitosDetalles.cantidadPendiente | number_format(0, '.', ',') }}</td>
+                            {% endif %}                            
+                            
+                            
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisitosDetalles.codigoRequisitoDetallePk }}" /></td>
                         </tr>
                     {% endfor %}
@@ -73,6 +83,7 @@
                     <div class="btn-group">                
                         {{ form_widget(form.BtnDetalleEntregado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                         {{ form_widget(form.BtnDetalleNoAplica, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                        {{ form_widget(form.BtnActualizarDetalle, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}               
                         {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}               
                     </div>                    
                 </div>        

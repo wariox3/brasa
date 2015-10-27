@@ -29,18 +29,22 @@
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th>CÓDIGO</th>
+                        <th>FECHA</th>
                         <th>IDENTIFICACION</th>
                         <th>EMPLEADO</th>
                         <th>CARGO</th>
+                        <th>CERRADO</th>
                         <th></th>
                         <th></th>
                     </tr>
                     {% for arRequisitos in arRequisitos %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisitos.codigoRequisitoPk }}">{{ arRequisitos.codigoRequisitoPk }} </td>
+                            <td>{{ arRequisitos.fecha |date("Y/m/d")  }}</td>
                             <td>{{ arRequisitos.numeroIdentificacion }}</a></td>
                             <td>{{ arRequisitos.nombreCorto }}</a></td>
                             <td>{{ arRequisitos.cargoRel.nombre }}</a></td>
+                            <td>{%if arRequisitos.estadoCerrado == 1%} SI {%else%} NO {%endif%}</td>
                             <td style="text-align: center"><a href="{{ path('brs_rhu_requisito_detalle', { 'codigoRequisito': arRequisitos.codigoRequisitoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>                
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisitos.codigoRequisitoPk }}" /></td>
                         </tr>

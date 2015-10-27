@@ -57,16 +57,16 @@ class RequisitosController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
-                if($arRequisito->getEstadoAceptado() == 0) {
-                    $arRequisito->setEstadoAceptado(1);
+                if($arRequisito->getEstadoAutorizado() == 0) {
+                    $arRequisito->setEstadoAutorizado(1);
                     $em->persist($arRequisito);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
                 }
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {
-                if($arRequisito->getEstadoAceptado() == 1) {
-                    $arRequisito->setEstadoAceptado(0);
+                if($arRequisito->getEstadoAutorizado() == 1) {
+                    $arRequisito->setEstadoAutorizado(0);
                     $em->persist($arRequisito);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
@@ -137,6 +137,22 @@ class RequisitosController extends Controller
                     $em->flush();                    
                 } 
                 return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
+            } 
+            if ($form->get('BtnActualizarDetalle')->isClicked()) {
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                    if($arrControles['TxtCantidad'.$intCodigo] != "" && $arrControles['TxtCantidadPendiente'.$intCodigo] != 0) {
+                        $intCantidad = $arrControles['TxtCantidad'.$intCodigo];
+                        $intCantidadPendiente = $arrControles['TxtCantidadPendiente'.$intCodigo];
+                        $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
+                        $arRequisitoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->find($intCodigo);
+                        $arRequisitoDetalle->setCantidad($intCantidad);
+                        $arRequisitoDetalle->setCantidadPendiente($intCantidadPendiente);
+                        $em->persist($arRequisitoDetalle);
+                    }
+                }                
+                $em->flush();
             }            
         }
         $arRequisitosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
@@ -208,6 +224,8 @@ class RequisitosController extends Controller
                 $arRequisitoDetalle->setRequisitoRel($arRequisito);
                 $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoConcepto);
                 $arRequisitoDetalle->setTipo('GENERAL');
+                $arRequisitoDetalle->setCantidad(1);
+                $arRequisitoDetalle->setCantidadPendiente(1);
                 $em->persist($arRequisitoDetalle);
             }
 
@@ -218,6 +236,8 @@ class RequisitosController extends Controller
                 $arRequisitoDetalle->setRequisitoRel($arRequisito);
                 $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoCargo->getRequisitoConceptoRel());
                 $arRequisitoDetalle->setTipo('CARGO');
+                $arRequisitoDetalle->setCantidad(1);
+                $arRequisitoDetalle->setCantidadPendiente(1);                
                 $em->persist($arRequisitoDetalle);
             }
 
@@ -252,6 +272,7 @@ class RequisitosController extends Controller
         $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => false);        
         $arrBotonDetalleEntregado = array('label' => 'Entregado', 'disabled' => false);
         $arrBotonDetalleNoAplica = array('label' => 'No aplica', 'disabled' => false);
+        $arrBotonActualizarDetalle = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
 
         if($arRequisito->getEstadoAutorizado() == 1) {
@@ -259,6 +280,7 @@ class RequisitosController extends Controller
             $arrBotonDetalleEntregado['disabled'] = true;
             $arrBotonDetalleNoAplica['disabled'] = true;
             $arrBotonEliminarDetalle['disabled'] = true;
+            $arrBotonActualizarDetalle['disabled'] = true;
             if($arRequisito->getEstadoCerrado() == 1) {
                 $arrBotonDesAutorizar['disabled'] = true;
                 $arrBotonCerrar['disabled'] = true;
@@ -276,6 +298,7 @@ class RequisitosController extends Controller
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
+                    ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)
                     ->getForm();
         return $form;
 

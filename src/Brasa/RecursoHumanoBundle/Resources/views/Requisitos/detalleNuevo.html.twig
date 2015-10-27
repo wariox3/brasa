@@ -16,8 +16,7 @@
                         <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisitoConceptos.codigoRequisitoConceptoPk }}">{{ arRequisitoConceptos.codigoRequisitoConceptoPk }}</td>
                         <td>{{ arRequisitoConceptos.nombre }}</td>
                         <td>{% if arRequisitoConceptos.general == 1%}SI {% else %} NO{% endif %}</td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad[]" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                     </tr>
                 {% endfor %}                 
             </table>
