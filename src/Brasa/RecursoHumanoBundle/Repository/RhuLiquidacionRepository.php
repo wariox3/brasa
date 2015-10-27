@@ -213,9 +213,9 @@ class RhuLiquidacionRepository extends EntityRepository {
         return true;
     }        
     
-    public function devuelveCesantiasFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
+    public function devuelvePrestacionesSocialesFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT SUM(l.VrCesantias) as Cesantias FROM BrasaRecursoHumanoBundle:RhuLiquidacion l "
+        $dql   = "SELECT SUM(l.VrCesantias) as CesantiaseIntereses, SUM(l.VrInteresesCesantias) as InteresesCesantias,SUM(l.VrPrima) as Prima, SUM(l.VrVacaciones) as Vacaciones FROM BrasaRecursoHumanoBundle:RhuLiquidacion l "
                 . "WHERE l.codigoEmpleadoFk = " . $codigoEmpleado 
                 . "AND l.fechaDesde >= '" . $fechaDesde . "' AND l.fechaDesde <= '" . $fechaHasta . "'";
         $query = $em->createQuery($dql);

@@ -69,6 +69,7 @@
             {% set douTotalSalud = 0  %}
             {% set douTotalDevengado = 0  %}
             {% set douTotalDeducciones = 0  %}
+            {% set douTotalNoPrestacional = 0  %}
             {% for arPagosDeduccionesEmpleados in arPagosDeduccionesEmpleados %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arPagosDeduccionesEmpleados.codigoPagoPk }}">{{ arPagosDeduccionesEmpleados.codigoPagoPk }} </td>
@@ -86,7 +87,7 @@
                 <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrEps | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrDevengado | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrDeducciones | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrAdicionalValorNoPrestacional | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrAdicionalValorNoPrestasional | number_format(0, '.', ',') }}</td>
                 
                 {% set douTotalIBC = douTotalIBC + arPagosDeduccionesEmpleados.vrIngresoBaseCotizacion %}
                 {% set douTotalAuxTransporte = douTotalAuxTransporte + arPagosDeduccionesEmpleados.vrAuxilioTransporte %}
@@ -94,6 +95,7 @@
                 {% set douTotalSalud = douTotalSalud + arPagosDeduccionesEmpleados.vrEps %}                
                 {% set douTotalDevengado = douTotalDevengado + arPagosDeduccionesEmpleados.vrDevengado %}
                 {% set douTotalDeducciones = douTotalDeducciones + arPagosDeduccionesEmpleados.vrDeducciones %}
+                {% set douTotalNoPrestacional = douTotalNoPrestacional + arPagosDeduccionesEmpleados.vrAdicionalValorNoPrestasional %}
             </tr>
             {% endfor %}
                 <td colspan="9"></td>
@@ -103,6 +105,7 @@
                 <td style="text-align: right">{{ douTotalSalud | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ douTotalDevengado | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ douTotalDeducciones | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalNoPrestacional | number_format(0, '.', ',') }}</td>
         </table>
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">

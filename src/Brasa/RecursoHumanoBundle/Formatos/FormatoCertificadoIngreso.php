@@ -13,19 +13,18 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
     public static $strCertifico4;
     public static $strCertifico5;
     public static $strCertifico6;
-    public static $floPrestacional;
+    public static $totalPrestacional;
     public static $floPension;
     public static $floSalud;
     public static $datFechaInicio;
     public static $datFechaFin; 
-    public static $floCesantias;
-    public static $floVacaciones;
+    public static $totalCesantiaseIntereses;
     public static $douRetencion; 
     public static $duoGestosRepresentacion;
     public static $douOtrosIngresos;
     public static $duoTotalIngresos;
     
-    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$strCertifico1,$strCertifico2,$strCertifico3,$strCertifico4,$strCertifico5,$strCertifico6,$floPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$floCesantias,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$floVacaciones,$strRuta) {
+    public function Generar($miThis, $codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$strCertifico1,$strCertifico2,$strCertifico3,$strCertifico4,$strCertifico5,$strCertifico6,$totalPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$totalCesantiaseIntereses,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$strRuta) {
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
@@ -40,13 +39,12 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         self::$strCertifico4 = $strCertifico4;
         self::$strCertifico5 = $strCertifico5;
         self::$strCertifico6 = $strCertifico6;
-        self::$floPrestacional = $floPrestacional;
+        self::$totalPrestacional = $totalPrestacional;
         self::$floPension = $floPension;
         self::$floSalud = $floSalud;
         self::$datFechaInicio = $datFechaInicio;
         self::$datFechaFin = $datFechaFin;
-        self::$floCesantias = $floCesantias;
-        self::$floVacaciones = $floVacaciones;
+        self::$totalCesantiaseIntereses = $totalCesantiaseIntereses;
         self::$douRetencion = $douRetencion;
         self::$duoGestosRepresentacion = $duoGestosRepresentacion;
         self::$douOtrosIngresos = $douOtrosIngresos;
@@ -204,11 +202,11 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         $this->SetFont('Arial','',8);
         $this->Cell(158, 6, utf8_decode("Pagos al empleado (No incluye valores de las casillas 38 a 41)") , 1, 0, 'L', 1);
         $this->Cell(8, 6, utf8_decode("37.") , 1, 0, 'C', 1);
-        $this->Cell(34, 6, round(self::$floPrestacional + self::$floVacaciones) , 1, 0, 'R', 1);
+        $this->Cell(34, 6, round(self::$totalPrestacional) , 1, 0, 'R', 1);
         $this->SetXY(5, 102);
         $this->Cell(158, 6, utf8_decode("Cesantías e intereses de cesantías efectivamente pagadas en el periodo") , 1, 0, 'L', 1);
         $this->Cell(8, 6, utf8_decode("38.") , 1, 0, 'C', 1);
-        $this->Cell(34, 6, round(self::$floCesantias) , 1, 0, 'R', 1);
+        $this->Cell(34, 6, round(self::$totalCesantiaseIntereses) , 1, 0, 'R', 1);
         $this->SetXY(5, 108);
         $this->Cell(158, 6, utf8_decode("Gastos de representación") , 1, 0, 'L', 1);
         $this->Cell(8, 6, utf8_decode("39.") , 1, 0, 'C', 1);

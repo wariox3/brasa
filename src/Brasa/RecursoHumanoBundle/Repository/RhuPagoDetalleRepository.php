@@ -31,39 +31,14 @@ class RhuPagoDetalleRepository extends EntityRepository {
         return $douRetencion;
     }
     
-    public function devuelveOtrosIngresosEmpleadoFecha($codigoEmpleado, $strFechaCertificado) {
+    public function devuelveInteresesCesantiasFechaCertificadoIngreso($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT SUM(pd.vrPago) as Retencion FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
-                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
-                . "AND p.fechaDesde like '%" . $strFechaCertificado . "%' "
-                . "OR pd.codigoPagoConceptoFk = 15";
-                
-                
+        $dql   = "SELECT SUM(pd.vrPago) as Neto FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
+                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " AND p.estadoPagado = 1 AND p.codigoPagoTipoFk = 3"
+                . "AND p.fechaDesde >= '" . $fechaDesde . "' AND p.fechaDesde <= '" . $fechaHasta . "'"
+                . "AND pd.codigoPagoConceptoFk = 30 ";
         $query = $em->createQuery($dql);
-        $douOtrosIngresos = $query->getSingleScalarResult();
-        return $douOtrosIngresos;
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
     }
-    
-    public function devuelvePrestacionalEmpleadoFecha($codigoEmpleado, $strFechaCertificado) {
-        $em = $this->getEntityManager();
-        $dql   = "SELECT SUM(pd.vrPago) as Prestacional FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
-                . "WHERE p.codigoEmpleadoFk = " . $codigoEmpleado . " "
-                . "AND p.fechaDesde like '%" . $strFechaCertificado . "%' "
-                . "AND pd.codigoPagoConceptoFk = 1"
-                . "OR pd.codigoPagoConceptoFk = 5"
-                . "OR pd.codigoPagoConceptoFk = 16"
-                . "OR pd.codigoPagoConceptoFk = 17"
-                . "OR pd.codigoPagoConceptoFk = 18"
-                . "OR pd.codigoPagoConceptoFk = 20"
-                . "OR pd.codigoPagoConceptoFk = 22"
-                . "OR pd.codigoPagoConceptoFk = 23"
-                . "OR pd.codigoPagoConceptoFk = 25"
-                . "OR pd.codigoPagoConceptoFk = 28";
-                
-                
-        $query = $em->createQuery($dql);
-        $douPrestacional = $query->getSingleScalarResult();
-        return $douPrestacional;
-    }
-    
 }
