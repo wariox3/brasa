@@ -120,7 +120,15 @@ brs_rhu_base_empleado_estudio_tipo_lista:
 
 brs_rhu_base_empleado_estudio_tipo_nuevo:
     path:     /rhu/empleado/estudio/tipo/nuevo/{codigoTipoEstudio}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoEstudioTipo:nuevo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoEstudioTipo:nuevo } 
+    
+brs_rhu_base_capacitacion_tipo_lista:
+    path:     /rhu/capacitacion/tipo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCapacitacionTipo:lista }    
+
+brs_rhu_base_capacitacion_tipo_nuevo:
+    path:     /rhu/capacitacion/tipo/nuevo/{codigoTipoCapacitacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCapacitacionTipo:nuevo }    
     
 brs_rhu_liquidacion_adicional_concepto_lista:
     path:     /rhu/liquidacion/adicional/concepto/lista
