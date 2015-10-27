@@ -51,7 +51,6 @@ class CertificadoIngresoController extends Controller
         $formCertificado->handleRequest($request);
         if ($formCertificado->isValid()) {
             if($formCertificado->get('BtnGenerar')->isClicked()) {
-                
                 $controles = $request->request->get('form');
                 $strFechaExpedicion = $formCertificado->get('fechaExpedicion')->getData();
                 $strLugarExpedicion = $controles['LugarExpedicion'];

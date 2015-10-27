@@ -158,11 +158,11 @@ class RhuPagoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $strDesde = new \DateTime($strDesde);
+           // $strDesde = new \DateTime($strDesde);
             $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
         }
         if($strHasta != "") {
-            $strHasta = new \DateTime($strHasta);
+            //$strHasta = new \DateTime($strHasta);
             $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
@@ -179,11 +179,11 @@ class RhuPagoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $strDesde = new \DateTime($strDesde);
+            //$strDesde = new \DateTime($strDesde);
             $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
         }
         if($strHasta != "") {
-            $strHasta = new \DateTime($strHasta);
+            //$strHasta = new \DateTime($strHasta);
             $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";

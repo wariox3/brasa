@@ -309,12 +309,12 @@ class ConsultasController extends Controller
                 $this->AportesListar();
                 $this->generarAportesExcel();
             }
-            if($form->get('BtnPDFAportes')->isClicked()) {
+            /*if($form->get('BtnPDFAportes')->isClicked()) {
                 $this->filtrarAportesLista($form);
                 $this->AportesListar();
                 $objReporteAportes = new \Brasa\RecursoHumanoBundle\Reportes\ReporteAportes();
                 $objReporteAportes->Generar($this, $this->strSqlAportesLista);
-            }
+            }*/
             if($form->get('BtnFiltrarAportes')->isClicked()) {
                 $this->filtrarAportesLista($form);
                 $this->AportesListar();

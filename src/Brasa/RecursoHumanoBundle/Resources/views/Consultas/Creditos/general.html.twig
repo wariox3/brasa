@@ -42,7 +42,7 @@
             <tr>
                 <th>CÓDIGO</th>
                 <th>TIPO</th>
-                <th>FECHA</th>
+                <th>FECHA INICIO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
                 <th style="text-align: right">VR. CREDITO</th>
@@ -59,7 +59,7 @@
                 
                 <td>{{ arCreditos.codigoCreditoPk  }}</td>
                 <td>{{ arCreditos.creditoTipoRel.nombre  }}</td>
-                <td>{{ arCreditos.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arCreditos.fechaInicio |date("Y/m/d")  }}</td>
                 <td>{{ arCreditos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arCreditos.empleadoRel.nombreCorto  }}</td>
                 <td style="text-align: right">{{ arCreditos.vrPagar | number_format(2, '.', ',') }}</td>
