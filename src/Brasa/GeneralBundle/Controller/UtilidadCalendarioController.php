@@ -13,7 +13,7 @@ class UtilidadCalendarioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario        
         return $this->render('BrasaGeneralBundle:Utilidades/Calendario:calendario.html.twig', array(
-            'fechaActual' => '2015-10-29'
+            'fechaActual' => '2015-02-10'
         ));
     }   
         

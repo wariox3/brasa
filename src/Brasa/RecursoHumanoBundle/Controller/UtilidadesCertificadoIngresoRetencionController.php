@@ -92,7 +92,7 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
                             if(!file_exists($strRutaGeneral)) {
                                 mkdir($strRutaGeneral, 0777);
                             } 
-                            $strRuta = $strRutaGeneral . "Cert/";
+                            $strRuta = $strRutaGeneral . "CertificadoIngresoRetencion/";
                             if(!file_exists($strRuta)) {
                                 mkdir($strRuta, 0777);
                              }
@@ -146,7 +146,7 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
                                 }
                                 
                             }
-                            $strRutaZip = $strRutaGeneral . 'CertficadoIngresoRetencion' .$empleadoCentroCosto->getCentroCostoRel()->getNombre() . $strFechaCertificado . '.zip';                     
+                            $strRutaZip = $strRutaGeneral . 'Certificado.zip';                     
                             $this->comprimir($strRuta, $strRutaZip);                                                
                                     $dir = opendir($strRuta);                
                                     while ($current = readdir($dir)){
@@ -155,19 +155,21 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
                                         }                    
                                     } 
                                     rmdir($strRuta);
-
+                                    
+                                    
                                     // Generate response
-                                    $response = new Response();
-
+                                    $response = new Response();                                                                        
                                     // Set headers
                                     $response->headers->set('Cache-Control', 'private');
                                     $response->headers->set('Content-type', 'application/zip');
                                     $response->headers->set('Content-Transfer-Encoding', 'binary');                
-                                    $response->headers->set('Content-Disposition', 'attachment; filename="CertificadosIngresosretenciones' . $empleadoCentroCosto->getCentroCostoRel()->getNombre() . $strFechaCertificado . '.zip";');
+                                    $response->headers->set('Content-Disposition', 'attachment; filename="Certificado.zip"');
                                     //$response->headers->set('Content-length', '');        
                                     $response->sendHeaders();
                                     $response->setContent(readfile($strRutaZip));    
-                                    unlink($strRutaZip);
+                                    unlink($strRutaZip);     
+                                    
+                                    
                     }
                     
                 }    

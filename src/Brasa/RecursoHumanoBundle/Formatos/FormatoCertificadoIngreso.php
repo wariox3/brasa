@@ -58,9 +58,9 @@ class FormatoCertificadoIngreso extends \FPDF_FPDF {
         //$pdf->Output("CertificadoIngreso_$codigoEmpleado.pdf", 'D');
         
         if($strRuta == "") {
-            $pdf->Output("CertificadoIngreso_$codigoEmpleado.pdf", 'D');        
+            $pdf->Output("certificado$codigoEmpleado.pdf", 'D');        
         } else {
-            $pdf->Output($strRuta."CertificadoIngreso_$codigoEmpleado.pdf", 'F');        
+            $pdf->Output($strRuta."certificado$codigoEmpleado.pdf", 'F');        
         }
         
     } 
