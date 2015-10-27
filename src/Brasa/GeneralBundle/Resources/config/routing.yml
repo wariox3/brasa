@@ -29,6 +29,10 @@ brs_gen_base_cuentas_nuevo:
 brs_gen_configuracion_general:
     path:     /gen/configuracion/general/{codigoConfiguracionPk}
     defaults: { _controller: BrasaGeneralBundle:ConfiguracionGeneral:configuracion }    
+
+brs_gen_utilidad_calendario:
+    path:     /gen/utilidades/calendario/
+    defaults: { _controller: BrasaGeneralBundle:UtilidadCalendario:ver }    
     
 #Utilidades    
 brs_gen_buscar_tercero:
