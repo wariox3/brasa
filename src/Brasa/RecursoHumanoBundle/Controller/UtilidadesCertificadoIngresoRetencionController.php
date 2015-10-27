@@ -86,8 +86,16 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
                             ->setParameter('fechaHasta', '%'.$controles['fechaCertificado'].'%')
                             ->getQuery()
                             ->getResult();
-                            
-                                   
+                            $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                            $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                            $strRutaGeneral = $arConfiguracion->getRutaTemporal();
+                            if(!file_exists($strRutaGeneral)) {
+                                mkdir($strRutaGeneral, 0777);
+                            } 
+                            $strRuta = $strRutaGeneral . "Cert/";
+                            if(!file_exists($strRuta)) {
+                                mkdir($strRuta, 0777);
+                             }
                             foreach ($empleadosCentroCosto as $empleadoCentroCosto) {
                                 $codigoEmpleado = $empleadoCentroCosto->getCodigoEmpleadoFk();
                                 $strFechaExpedicion = $formCertificado->get('fechaExpedicion')->getData();
@@ -126,26 +134,19 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
                                 $totalCesantiaseIntereses = $floInteresesCesantiasPagadas + $floCesantiaseInteresesLiquidadas;
                                 $totalPrestacional = $floPrestacional + $floPrimasPagadas + $floAuxTransporte + $floPrimaLiquidadas + $floVacacionesLiquidadas + $floVacacionesPagadas;
                                 $duoTotalIngresos = $duoGestosRepresentacion + $douOtrosIngresos + $totalPrestacional + $totalCesantiaseIntereses;
-                                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-                                    $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                                    $strRutaGeneral = $arConfiguracion->getRutaTemporal();
-                                    if(!file_exists($strRutaGeneral)) {
-                                        mkdir($strRutaGeneral, 0777);
-                                    }
-                                    $strRuta = $strRutaGeneral . "CertificadoIngresoRetencion" . $empleadoCentroCosto->getCentroCostoRel()->getNombre() . $strFechaCertificado ."/";
-                                    if(!file_exists($strRuta)) {
-                                    mkdir($strRuta, 0777);
-                                    }
+                                
+                                
                                     //$strRutaGeneral = "C:\p";
                                     //$strRuta = "C:\p";
                                 if ( $floPrestacional > 0){
                                     
                                     $objFormatoCertificadoIngreso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCertificadoIngreso();
                                     $objFormatoCertificadoIngreso->Generar($this,$codigoEmpleado,$strFechaExpedicion,$strLugarExpedicion,$strFechaCertificado,$strAfc,$stCertifico1,$stCertifico2,$stCertifico3,$stCertifico4,$stCertifico5,$stCertifico6,$totalPrestacional,$floPension,$floSalud,$datFechaInicio,$datFechaFin,$totalCesantiaseIntereses,$douRetencion,$duoGestosRepresentacion,$douOtrosIngresos,$duoTotalIngresos,$strRuta);  
-                                    $strRutaZip = $strRutaGeneral . 'CertficadoIngresoRetencion' .$empleadoCentroCosto->getCentroCostoRel()->getNombre() . $strFechaCertificado . '.zip';                     
+                                    
                                 }
                                 
                             }
+                            $strRutaZip = $strRutaGeneral . 'CertficadoIngresoRetencion' .$empleadoCentroCosto->getCentroCostoRel()->getNombre() . $strFechaCertificado . '.zip';                     
                             $this->comprimir($strRuta, $strRutaZip);                                                
                                     $dir = opendir($strRuta);                
                                     while ($current = readdir($dir)){
@@ -225,7 +226,7 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
         return $formCertificado;
     }                 
     
-    function comprimir($ruta, $zip_salida, $handle = false, $recursivo = false) {
+    function comprimir($ruta, $zip_salida, $handle = false, $recursivo = false, $archivo = "") {
 
         /* Declara el handle del objeto */
         if (!$handle) {
@@ -239,14 +240,20 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
         if (is_dir($ruta)) {
             /* Aseguramos que sea un directorio sin carácteres corruptos */
             $ruta = dirname($ruta . '/arch.ext');
-            $handle->addEmptyDir($ruta); /* Agrega el directorio comprimido */
-            foreach (glob($ruta . '/*') as $url) { /* Procesa cada directorio o archivo dentro de el */
-                $this->comprimir($url, $zip_salida, $handle, true); /* Comprime el subdirectorio o archivo */
-            }
+            $handle->addEmptyDir($ruta); /* Agrega el directorio comprimido */            
+            $dir = opendir($ruta);            
+            while ($current = readdir($dir)){
+                if( $current != "." && $current != "..") {
+                    $this->comprimir($ruta . "/" . $current, $zip_salida, $handle, true, $current); /* Comprime el subdirectorio o archivo */
+                }
+            }            
+            //foreach (glob($ruta . '/*') as $url) { /* Procesa cada directorio o archivo dentro de el */
+                //$this->comprimir($url, $zip_salida, $handle, true); /* Comprime el subdirectorio o archivo */
+            //}
 
             /* Procesa archivo */
         } else {
-            $handle->addFile($ruta);
+            $handle->addFile($ruta, $archivo);
         }
 
         /* Finaliza el ZIP si no se está ejecutando una acción recursiva en progreso */
