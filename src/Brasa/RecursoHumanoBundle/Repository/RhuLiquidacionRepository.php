@@ -28,7 +28,7 @@ class RhuLiquidacionRepository extends EntityRepository {
     public function liquidar($codigoLiquidacion) {        
         $em = $this->getEntityManager();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
-        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();        
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
         $boolPeriodoContinuo = $arLiquidacion->getContratoRel()->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo();
         $douIBCAdicional = 0;
@@ -51,12 +51,14 @@ class RhuLiquidacionRepository extends EntityRepository {
             $fechaDesdePrestacional = $arLiquidacion->getContratoRel()->getFechaDesde();
         }       
         
-        $douIbp = $em->getRepository('BrasaRecursoHumanoBundle:RhuIngresoBase')->devuelveIbpFecha($arLiquidacion->getCodigoEmpleadoFk(), $fechaDesdePrestacional->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());        
-        
+        $douIbp = $em->getRepository('BrasaRecursoHumanoBundle:RhuIngresoBase')->devuelveIbpFecha($arLiquidacion->getCodigoEmpleadoFk(), $fechaDesdePrestacional->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                
         $douIBCTotal = $douIbp + $douIBCAdicional;
+        $douIbp = $em->getRepository('BrasaRecursoHumanoBundle:RhuIngresoBase')->devuelveIbpFecha($arLiquidacion->getCodigoEmpleadoFk(), $arLiquidacion->getFechaUltimoPagoPrimas()->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                
+        $douIBCTotalPrimas = $douIbp + $douIBCAdicional;
         $intDiasLaborados = $this->diasPrestaciones($fechaDesdePrestacional, $arLiquidacion->getContratoRel()->getFechaHasta());
         $douSalario = $arLiquidacion->getContratoRel()->getVrSalarioPago();
-        $douBasePrestacionesTotal = 0;        
+        $douBasePrestacionesTotal = 0;
+        $douBasePrestacionesTotalPrimas = 0;
         $douCesantias = 0;
         $douInteresesCesantias = 0;
         $douPrima = 0;
@@ -67,8 +69,10 @@ class RhuLiquidacionRepository extends EntityRepository {
             if($boolPeriodoContinuo == 1) {
                 $intDiasContinuos = $this->diasContinuos($fechaDesdePrestacional, $arLiquidacion->getContratoRel()->getFechaHasta());
                 $douBasePrestaciones = ($douIBCTotal / $intDiasContinuos) * 30;
+                $douBasePrestacionesPrimas = ($douIBCTotalPrimas / $intDiasContinuos) * 30;
             } else {
                 $douBasePrestaciones = ($douIBCTotal / $intDiasLaborados) * 30;
+                $douBasePrestacionesPrimas = ($douIBCTotalPrimas / $intDiasLaborados) * 30;
             }
                
             if($douSalario <= $arConfiguracion->getVrSalario() * 2) {
@@ -76,6 +80,7 @@ class RhuLiquidacionRepository extends EntityRepository {
             }
             
             $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
+            $douBasePrestacionesTotalPrimas = $douBasePrestacionesPrimas + $douAuxilioTransporte;
             $arLiquidacion->setVrBasePrestaciones($douBasePrestaciones);
             $arLiquidacion->setVrAuxilioTransporte($douAuxilioTransporte);
             $arLiquidacion->setVrBasePrestacionesTotal($douBasePrestacionesTotal);            
@@ -109,14 +114,14 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $intDiasPrimaLiquidar = $intDiasPrimaLiquidar - 1;
                 }
                 
-                $douPrima = ($douBasePrestacionesTotal * $intDiasPrimaLiquidar) / 360;                
+                $douPrima = ($douBasePrestacionesTotalPrimas * $intDiasPrimaLiquidar) / 360;                
                 $arLiquidacion->setDiasPrimas($intDiasPrima);
                 $arLiquidacion->setDiasPrimasDescontar($intDiasAusentismo);
                 $arLiquidacion->setVrPrima($douPrima);            
             } else {
                 //if($dateFechaDesde->format('md') != '0101') {
                     $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 2;    
-                    $douAdicionalPrima = ($douBasePrestacionesTotal * $intDiasPrima) / 360;                
+                    $douAdicionalPrima = ($douBasePrestacionesTotalPrimas * $intDiasPrima) / 360;                
                     $arLiquidacion->setDiasPrimas($intDiasPrima * -1);
                     $arLiquidacion->setVrPrima(0); 
                     $arLiquidacion->setVrDeduccionPrima($douAdicionalPrima);                                       
