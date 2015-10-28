@@ -123,7 +123,9 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setDiasCotizadosSalud($intDiasCotizarSalud);
             $arAporte->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
             $arAporte->setDiasCotizadosCajaCompensacion($intDiasCotizarCaja);                                  
-            
+            if($arPeriodoEmpleado->getCodigoEmpleadoFk() == 855) {
+                echo "hola";
+            }
             //Ibc
             $floIbcBrutoPension = (($intDiasCotizarPension - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;
             $floIbcBrutoSalud = (($intDiasCotizarSalud - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;                    

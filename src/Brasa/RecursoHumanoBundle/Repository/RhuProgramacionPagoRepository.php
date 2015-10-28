@@ -733,16 +733,16 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $arPagoDetalle->getVrIngresoBaseCotizacion();                            
                     $douIngresoBasePrestacion = $douIngresoBasePrestacion + $arPagoDetalle->getVrIngresoBasePrestacion();                                                
                 }
-                $douSalarioBasico = $arPagoProcesar->getVrSalarioEmpleado();
+                $douSalarioBasico = ($arPagoProcesar->getVrSalarioEmpleado() * 30) / $arProgramacionPagoProcesar->getDias();
                 $douSalarioPeriodo = $arPagoProcesar->getVrSalarioPeriodo();
-                $douSalarioSeguridadSocial = $douSalarioPeriodo + $douAdicionTiempo + $douAdicionValor;
+                $douIBS = $douSalarioBasico + $douAdicionTiempo + $douAdicionValor;
                 $douDiaAuxilioTransporte = 74000 / 30;
                 $douAuxilioTransporteCotizacion = $arPagoProcesar->getDiasPeriodo() * $douDiaAuxilioTransporte;
-                $douArp = ($douSalarioSeguridadSocial * $arPagoProcesar->getContratoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
-                $douPension = ($douIngresoBaseCotizacion * $arPagoProcesar->getContratoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
+                $douArp = ($douIBS * $arPagoProcesar->getContratoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
+                $douPension = ($douIBS * $arPagoProcesar->getContratoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
                 $douSalud = 0;
-                $douCaja = ($douSalarioSeguridadSocial * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
-                $douCesantias = (($douSalarioSeguridadSocial + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
+                $douCaja = ($douIBS * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
+                $douCesantias = (($douIBS + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
                 $douVacaciones = ($douSalarioPeriodo * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
                 $douTotalEjercicio = $douSalario+$douAdicionTiempo+$douAdicionValor+$douAuxilioTransporte+$douArp+$douPension+$douSalud+$douCaja+$douCesantias+$douVacaciones;
                 if($arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion() != 0 ) {

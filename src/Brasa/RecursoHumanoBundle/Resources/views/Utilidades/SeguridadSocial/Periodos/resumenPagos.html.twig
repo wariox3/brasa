@@ -1,76 +1,49 @@
-{% extends '::base.html.twig' %}
+{% extends '::base_sin_menu.html.twig' %}
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h3>Lista periodos detalle</h3>
+        <h3>Resumen pagos</h3>
     </div>
-    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
-        {{ form_errors(form) }}
-        <table  class="table table-striped table-bordered table-condensed table-hover">
+         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>CÓDIGO</th>
-                <th>SUCURSAL</th>
-                <th>GENERADO</th>
-                <th>CERRADO</th>
+                <th>NUMERO</th>
+                <th>TIPO</th>                                                                
+                <th>P. DESDE</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
-                <th>MES</th>
-                <th>MES PAGO</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>DIAS</th>
+                <th>IBP</th>
+                <th>IBC</th>
+                <th>PENSION</th>
+                <th>SALUD</th>
             </tr>
-            {% for arSsoPeriodoDetalles in arSsoPeriodoDetalles %}
-            <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }} </td>
-                <td>{{ arSsoPeriodoDetalles.SsoSucursalRel.nombre  }}</td>
-                <td {% if arSsoPeriodoDetalles.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>
-                <td {% if arSsoPeriodoDetalles.estadoCerrado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaDesde |date("Y/m/d")  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.mes  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.mesPago  }}</td>
-                <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarArchivo" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Archivo plano</button>  {% endif %}</td>
-                <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarExcel" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Excel</button>  {% endif %}</td>
-                <td>
-                    {% if arSsoPeriodoDetalles.estadoGenerado == 0 %}
-                        <button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Generar</button>
-                    {% else %}
-                        {% if  arSsoPeriodoDetalles.estadoCerrado == 0 %}
-                            <button class="btn btn-danger btn-xs" type="submit" name="OpDesgenerar" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Desgenerar</button>
-                        {% else %}
-                            <button class="btn btn-danger btn-xs" type="submit" name="OpDesgenerar" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}" disabled="disabled">Desgenerar</button>
-                        {% endif %}    
-                    {% endif %}
-                </td>
-                <td>
-                    {% if arSsoPeriodoDetalles.estadoCerrado == 0 %}
-                        <button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Cerrar</button>
-                    {% endif %}
-                </td>
-                <td style="text-align: center">{% if arSsoPeriodoDetalles.estadoGenerado == 1 %}<a href="{{ path('brs_rhu_ss_periodo_detalle_aportes', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a>{% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_ss_periodo_detalle_empleados', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" ></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}" /></td>
+            {% set douTotalIBP = 0  %}  
+            {% set douTotalIBC = 0  %}              
+            {% set douTotalPension = 0  %}            
+            {% set douTotalSalud = 0  %}            
+            {% for arPagos in arPagos %}
+            <tr>                
+                <td>{{ arPagos.numero  }}</td>
+                <td>{{ arPagos.pagoTipoRel.nombre  }}</td>
+                <td>{{ arPagos.fechaDesdePago |date("Y/m/d")  }}</td>
+                <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
+                <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
+                <td style="text-align: right">{{ arPagos.diasPeriodo | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrIngresoBasePrestacion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrPension | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrEps | number_format(0, '.', ',') }}</td>
             </tr>
+            {% set douTotalIBP = douTotalIBP + arPagos.vrIngresoBasePrestacion %}    
+            {% set douTotalIBC = douTotalIBC + arPagos.vrIngresoBaseCotizacion %}            
+            {% set douTotalPension = douTotalPension + arPagos.vrPension %}                
+            {% set douTotalSalud = douTotalSalud + arPagos.vrEps %}                            
             {% endfor %}
+            <td colspan="6"></td>
+            <td style="text-align: right">{{ douTotalIBP | number_format(0, '.', ',') }}</td>
+            <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>
+            <td style="text-align: right">{{ douTotalPension | number_format(0, '.', ',') }}</td>
+            <td style="text-align: right">{{ douTotalSalud | number_format(0, '.', ',') }}</td>
         </table>
-        {{ knp_pagination_render(arSsoPeriodoDetalles) }}
-
-
-        <!-- Botones Menu Items -->
-        <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_ss_periodo_lista') }}" style="float:left">Volver</a>
-            </div>
-        </div>
-
-        <!-- Fin Botones Menu Items -->
-        {{ form_rest(form) }}
-    {{ form_end(form) }}
-
 </div>
 {% endblock %}
