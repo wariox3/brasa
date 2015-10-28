@@ -12,7 +12,7 @@
 <script>
 
 	$(document).ready(function() {
-		var currentLangCode = 'en';
+		var currentLangCode = 'es';
 
 		// build the language selector's options
 		$.each($.fullCalendar.langs, function(langCode) {
@@ -46,7 +46,8 @@
 				weekNumbers: true,
 				editable: true,
 				eventLimit: true, // allow "more" link when too many events
-				events: [
+                                events: [{{arrayEventos | raw}}]
+				/*events: [
 					{
 						title: 'All Day Event',
 						start: '2015-02-01'
@@ -101,7 +102,7 @@
 						url: 'http://google.com/',
 						start: '2015-02-28'
 					}
-				]
+				]*/
 			});
 		}
 
@@ -132,6 +133,7 @@
 	</div>        
         <br />
         <div id='calendar'></div>
+        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_gen_evento_nuevo') }}', 'NuevoEvento', 600, 900)" >Nuevo</a>
     </div>
 
 {% endblock %}

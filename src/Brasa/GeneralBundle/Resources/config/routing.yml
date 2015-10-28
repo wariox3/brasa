@@ -33,6 +33,10 @@ brs_gen_configuracion_general:
 brs_gen_utilidad_calendario:
     path:     /gen/utilidades/calendario/
     defaults: { _controller: BrasaGeneralBundle:UtilidadCalendario:ver }    
+
+brs_gen_evento_nuevo:
+    path:     /gen/evento/nuevo/
+    defaults: { _controller: BrasaGeneralBundle:Evento:nuevo }      
     
 #Utilidades    
 brs_gen_buscar_tercero:

@@ -25,7 +25,7 @@ class GenEvento
     /**
      * @ORM\Column(name="hora", type="time", nullable=false)
      */    
-    private $time;    
+    private $hora;    
 
     /**
      * @ORM\Column(name="asunto", type="string", length=80, nullable=true)
@@ -73,27 +73,27 @@ class GenEvento
     }
 
     /**
-     * Set time
+     * Set hora
      *
-     * @param \DateTime $time
+     * @param \DateTime $hora
      *
      * @return GenEvento
      */
-    public function setTime($time)
+    public function setHora($hora)
     {
-        $this->time = $time;
+        $this->hora = $hora;
 
         return $this;
     }
 
     /**
-     * Get time
+     * Get hora
      *
      * @return \DateTime
      */
-    public function getTime()
+    public function getHora()
     {
-        return $this->time;
+        return $this->hora;
     }
 
     /**
