@@ -67,7 +67,15 @@ class RhuEntidadSalud
      */
     protected $incapacidadesEntidadSaludRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuTrasladoSalud", mappedBy="entidadSaludAnteriorRel")
+     */
+    protected $trasladosSaludEntidadSaludAnteriorRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuTrasladoSalud", mappedBy="entidadSaludNuevaRel")
+     */
+    protected $trasladosSaludEntidadSaludNuevaRel;
     /**
      * Constructor
      */
@@ -78,6 +86,8 @@ class RhuEntidadSalud
         $this->empleadosFamiliasEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesPagosEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesEntidadSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trasladosSaludEntidadSaludAnteriorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trasladosSaludEntidadSaludNuevaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -378,5 +388,73 @@ class RhuEntidadSalud
     public function getIncapacidadesEntidadSaludRel()
     {
         return $this->incapacidadesEntidadSaludRel;
+    }
+
+    /**
+     * Add trasladosSaludEntidadSaludAnteriorRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEntidadSaludAnteriorRel
+     *
+     * @return RhuEntidadSalud
+     */
+    public function addTrasladosSaludEntidadSaludAnteriorRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEntidadSaludAnteriorRel)
+    {
+        $this->trasladosSaludEntidadSaludAnteriorRel[] = $trasladosSaludEntidadSaludAnteriorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove trasladosSaludEntidadSaludAnteriorRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEntidadSaludAnteriorRel
+     */
+    public function removeTrasladosSaludEntidadSaludAnteriorRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEntidadSaludAnteriorRel)
+    {
+        $this->trasladosSaludEntidadSaludAnteriorRel->removeElement($trasladosSaludEntidadSaludAnteriorRel);
+    }
+
+    /**
+     * Get trasladosSaludEntidadSaludAnteriorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTrasladosSaludEntidadSaludAnteriorRel()
+    {
+        return $this->trasladosSaludEntidadSaludAnteriorRel;
+    }
+
+    /**
+     * Add trasladosSaludEntidadSaludNuevaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEntidadSaludNuevaRel
+     *
+     * @return RhuEntidadSalud
+     */
+    public function addTrasladosSaludEntidadSaludNuevaRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEntidadSaludNuevaRel)
+    {
+        $this->trasladosSaludEntidadSaludNuevaRel[] = $trasladosSaludEntidadSaludNuevaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove trasladosSaludEntidadSaludNuevaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEntidadSaludNuevaRel
+     */
+    public function removeTrasladosSaludEntidadSaludNuevaRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEntidadSaludNuevaRel)
+    {
+        $this->trasladosSaludEntidadSaludNuevaRel->removeElement($trasladosSaludEntidadSaludNuevaRel);
+    }
+
+    /**
+     * Get trasladosSaludEntidadSaludNuevaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTrasladosSaludEntidadSaludNuevaRel()
+    {
+        return $this->trasladosSaludEntidadSaludNuevaRel;
     }
 }

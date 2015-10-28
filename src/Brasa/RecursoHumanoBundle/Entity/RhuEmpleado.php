@@ -509,9 +509,17 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="RhuProyeccion", mappedBy="empleadoRel")
      */
-    protected $proyeccionesEmpleadoRel;         
-   
-
+    protected $proyeccionesEmpleadoRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuTrasladoPension", mappedBy="empleadoRel")
+     */
+    protected $trasladosPensionesEmpleadoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuTrasladoSalud", mappedBy="empleadoRel")
+     */
+    protected $trasladosSaludEmpleadoRel;
     /**
      * Constructor
      */
@@ -539,6 +547,8 @@ class RhuEmpleado
         $this->cambiosSalariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ingresosBasesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyeccionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trasladosPensionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trasladosSaludEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -2977,5 +2987,73 @@ class RhuEmpleado
     public function getProyeccionesEmpleadoRel()
     {
         return $this->proyeccionesEmpleadoRel;
+    }
+
+    /**
+     * Add trasladosPensionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addTrasladosPensionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEmpleadoRel)
+    {
+        $this->trasladosPensionesEmpleadoRel[] = $trasladosPensionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove trasladosPensionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEmpleadoRel
+     */
+    public function removeTrasladosPensionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEmpleadoRel)
+    {
+        $this->trasladosPensionesEmpleadoRel->removeElement($trasladosPensionesEmpleadoRel);
+    }
+
+    /**
+     * Get trasladosPensionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTrasladosPensionesEmpleadoRel()
+    {
+        return $this->trasladosPensionesEmpleadoRel;
+    }
+
+    /**
+     * Add trasladosSaludEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addTrasladosSaludEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEmpleadoRel)
+    {
+        $this->trasladosSaludEmpleadoRel[] = $trasladosSaludEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove trasladosSaludEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEmpleadoRel
+     */
+    public function removeTrasladosSaludEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludEmpleadoRel)
+    {
+        $this->trasladosSaludEmpleadoRel->removeElement($trasladosSaludEmpleadoRel);
+    }
+
+    /**
+     * Get trasladosSaludEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTrasladosSaludEmpleadoRel()
+    {
+        return $this->trasladosSaludEmpleadoRel;
     }
 }

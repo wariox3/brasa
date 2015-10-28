@@ -52,7 +52,15 @@ class RhuEntidadPension
      */
     protected $contratosEntidadPensionRel;
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuTrasladoPension", mappedBy="entidadPensionAnteriorRel")
+     */
+    protected $trasladosPensionesEntidadPensionAnteriorRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuTrasladoPension", mappedBy="entidadPensionNuevaRel")
+     */
+    protected $trasladosPensionesEntidadPensionNuevaRel;
     /**
      * Constructor
      */
@@ -60,6 +68,8 @@ class RhuEntidadPension
     {
         $this->empleadosEntidadPensionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosEntidadPensionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trasladosPensionesEntidadPensionAnteriorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trasladosPensionesEntidadPensionNuevaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -258,5 +268,73 @@ class RhuEntidadPension
     public function getContratosEntidadPensionRel()
     {
         return $this->contratosEntidadPensionRel;
+    }
+
+    /**
+     * Add trasladosPensionesEntidadPensionAnteriorRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEntidadPensionAnteriorRel
+     *
+     * @return RhuEntidadPension
+     */
+    public function addTrasladosPensionesEntidadPensionAnteriorRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEntidadPensionAnteriorRel)
+    {
+        $this->trasladosPensionesEntidadPensionAnteriorRel[] = $trasladosPensionesEntidadPensionAnteriorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove trasladosPensionesEntidadPensionAnteriorRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEntidadPensionAnteriorRel
+     */
+    public function removeTrasladosPensionesEntidadPensionAnteriorRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEntidadPensionAnteriorRel)
+    {
+        $this->trasladosPensionesEntidadPensionAnteriorRel->removeElement($trasladosPensionesEntidadPensionAnteriorRel);
+    }
+
+    /**
+     * Get trasladosPensionesEntidadPensionAnteriorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTrasladosPensionesEntidadPensionAnteriorRel()
+    {
+        return $this->trasladosPensionesEntidadPensionAnteriorRel;
+    }
+
+    /**
+     * Add trasladosPensionesEntidadPensionNuevaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEntidadPensionNuevaRel
+     *
+     * @return RhuEntidadPension
+     */
+    public function addTrasladosPensionesEntidadPensionNuevaRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEntidadPensionNuevaRel)
+    {
+        $this->trasladosPensionesEntidadPensionNuevaRel[] = $trasladosPensionesEntidadPensionNuevaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove trasladosPensionesEntidadPensionNuevaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEntidadPensionNuevaRel
+     */
+    public function removeTrasladosPensionesEntidadPensionNuevaRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesEntidadPensionNuevaRel)
+    {
+        $this->trasladosPensionesEntidadPensionNuevaRel->removeElement($trasladosPensionesEntidadPensionNuevaRel);
+    }
+
+    /**
+     * Get trasladosPensionesEntidadPensionNuevaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTrasladosPensionesEntidadPensionNuevaRel()
+    {
+        return $this->trasladosPensionesEntidadPensionNuevaRel;
     }
 }

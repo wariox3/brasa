@@ -378,6 +378,14 @@ brs_rhu_contratos_sedes_nuevo:
     path:     /rhu/contratos/sedes/nuevo/{codigoContrato}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:detalleSedeNuevo }
     
+brs_rhu_traslado_pension_nuevo:
+    path:     /rhu/traslado/pension/nuevo/{codigoContrato}/{codigoTrasladoPension}
+    defaults: { _controller: BrasaRecursoHumanoBundle:TrasladoPension:nuevo } 
+    
+brs_rhu_traslado_salud_nuevo:
+    path:     /rhu/traslado/salud/nuevo/{codigoContrato}/{codigoTrasladoSalud}
+    defaults: { _controller: BrasaRecursoHumanoBundle:TrasladoSalud:nuevo }    
+    
 brs_rhu_cambio_salario_nuevo:
     path:     /rhu/cambiosalario/nuevo/{codigoContrato}/{codigoCambioSalario}
     defaults: { _controller: BrasaRecursoHumanoBundle:CambioSalario:nuevo }    

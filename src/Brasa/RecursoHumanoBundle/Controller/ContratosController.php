@@ -79,11 +79,17 @@ class ContratosController extends Controller
         $arContratoSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede();
         $arContratoSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoSede')->findBy(array('codigoContratoFk' => $codigoContrato));
         $arContratoSedes = $paginator->paginate($arContratoSedes, $this->get('request')->query->get('page', 1),5);
+        $arTrasladoPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoPension')->findBy(array('codigoContratoFk' => $codigoContrato));
+        $arTrasladoPension = $paginator->paginate($arTrasladoPension, $this->get('request')->query->get('page', 1),10);
+        $arTrasladoSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoSalud')->findBy(array('codigoContratoFk' => $codigoContrato));
+        $arTrasladoSalud = $paginator->paginate($arTrasladoSalud, $this->get('request')->query->get('page', 1),10);
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:detalle.html.twig', array(
                     'arContrato' => $arContrato,
                     'arCambiosSalario' => $arCambiosSalario,
                     'arVacaciones' => $arVacaciones,
                     'arContratoSedes' => $arContratoSedes,
+                    'arTrasladoPension' => $arTrasladoPension,
+                    'arTrasladoSalud' => $arTrasladoSalud,
                     'form' => $form->createView()
                     ));
     }

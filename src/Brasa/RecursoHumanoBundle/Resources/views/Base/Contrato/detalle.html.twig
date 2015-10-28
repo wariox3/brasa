@@ -90,6 +90,7 @@
             <li class="active"><a href="#cambiosalario" data-toggle="tab">Cambio salario</a></li>
             <li><a href="#vacaciones" data-toggle="tab">Vacaciones</a></li>
             <li><a href="#sedes" data-toggle="tab">Sedes</a></li>
+            <li><a href="#traslados" data-toggle="tab">Traslados</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="cambiosalario">
@@ -185,7 +186,65 @@
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_sedes_nuevo', {'codigoContrato': arContrato.codigoContratoPk }) }}', 'AgregarSede', 600, 900)" >Nuevo</a>
                     </div>
                 </div>
-            </div>                    
+            </div>
+            <div class="tab-pane" id="traslados">
+                <br />
+                <div class="panel-heading">Información traslado pensión</div>
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>CÓDIGO</th>
+                        <th>FECHA</th>
+                        <th>ANTERIOR</th>
+                        <th>NUEVO</th>
+                        <th>DETALLE</th>
+                    </tr>
+                    {% for arTrasladoPension in arTrasladoPension %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arTrasladoPension.codigoTrasladoPensionPk }}">{{ arTrasladoPension.codigoTrasladoPensionPk }} </td>
+                            <td>{{ arTrasladoPension.fecha|date('Y-m-d') }}</td>
+                            <td>{{ arTrasladoPension.entidadPensionAnteriorRel.nombre }}</td>
+                            <td>{{ arTrasladoPension.entidadPensionNuevaRel.nombre }}</td>
+                            <td>{{ arTrasladoPension.detalle }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arTrasladoPension) }}
+                </div>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_traslado_pension_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoTrasladoPension': 0 }) }}', 'AgregarTrasladoPension', 600, 900)" >Nuevo</a>
+                    </div>
+                </div>
+                <br /><br />
+                <div class="panel-heading">Información traslado salud</div>
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>CÓDIGO</th>
+                        <th>FECHA</th>
+                        <th>ANTERIOR</th>
+                        <th>NUEVO</th>
+                        <th>DETALLE</th>
+                    </tr>
+                    {% for arTrasladoSalud in arTrasladoSalud %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arTrasladoSalud.codigoTrasladoSaludPk }}">{{ arTrasladoSalud.codigoTrasladoSaludPk }} </td>
+                            <td>{{ arTrasladoSalud.fecha|date('Y-m-d') }}</td>
+                            <td>{{ arTrasladoSalud.entidadSaludAnteriorRel.nombre }}</td>
+                            <td>{{ arTrasladoSalud.entidadSaludNuevaRel.nombre }}</td>
+                            <td>{{ arTrasladoSalud.detalle }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arTrasladoSalud) }}
+                </div>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_traslado_salud_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoTrasladoSalud': 0 }) }}', 'AgregarTrasladoSalud', 600, 900)" >Nuevo</a>
+                    </div>
+                </div>    
+            </div>        
         </div>
         
         <div class="btn-toolbar" style="float:left">

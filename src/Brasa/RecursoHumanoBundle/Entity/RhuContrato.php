@@ -307,6 +307,15 @@ class RhuContrato
     protected $proyeccionesContratoRel; 
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuTrasladoPension", mappedBy="contratoRel")
+     */
+    protected $trasladosPensionesContratoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuTrasladoSalud", mappedBy="contratoRel")
+     */
+    protected $trasladosSaludContratoRel;
+    /**
      * Constructor
      */
     public function __construct()
@@ -321,6 +330,8 @@ class RhuContrato
         $this->ingresosBasesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosSedesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyeccionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trasladosPensionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trasladosSaludContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1751,5 +1762,73 @@ class RhuContrato
     public function getProyeccionesContratoRel()
     {
         return $this->proyeccionesContratoRel;
+    }
+
+    /**
+     * Add trasladosPensionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addTrasladosPensionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesContratoRel)
+    {
+        $this->trasladosPensionesContratoRel[] = $trasladosPensionesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove trasladosPensionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesContratoRel
+     */
+    public function removeTrasladosPensionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension $trasladosPensionesContratoRel)
+    {
+        $this->trasladosPensionesContratoRel->removeElement($trasladosPensionesContratoRel);
+    }
+
+    /**
+     * Get trasladosPensionesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTrasladosPensionesContratoRel()
+    {
+        return $this->trasladosPensionesContratoRel;
+    }
+
+    /**
+     * Add trasladosSaludContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addTrasladosSaludContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludContratoRel)
+    {
+        $this->trasladosSaludContratoRel[] = $trasladosSaludContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove trasladosSaludContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludContratoRel
+     */
+    public function removeTrasladosSaludContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud $trasladosSaludContratoRel)
+    {
+        $this->trasladosSaludContratoRel->removeElement($trasladosSaludContratoRel);
+    }
+
+    /**
+     * Get trasladosSaludContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTrasladosSaludContratoRel()
+    {
+        return $this->trasladosSaludContratoRel;
     }
 }
