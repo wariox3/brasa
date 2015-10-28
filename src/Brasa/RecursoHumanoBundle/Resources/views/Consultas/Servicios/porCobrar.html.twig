@@ -52,16 +52,24 @@
                 <th>EMPLEADO</th>                
                 <th>DESDE</th>
                 <th>HASTA</th>
-                <th style="text-align: right">VR. SALARIO</th>
-                <th style="text-align: right">VR. ARP</th>
-                <th style="text-align: right">VR. EPS</th>
-                <th style="text-align: right">VR. PENSIÓN</th>
-                <th style="text-align: right">VR. AUX TRANSPORTE</th>
-                <th style="text-align: right">VR. NETO</th>
-                <th style="text-align: right">VR. TOTAL COBRAR</th>
+                <th>DIAS</th>
+                <th>SALARIO</th>
+                <th>SALARIO P</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Tiempo suplementario pagado">T. ADIC</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Valores adicionales pagados">V. ADIC</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Auxilio transporte">AUX. T</p></th>
+                <th>ARP</th>
+                <th>EPS</th>
+                <th>PENSIÓN</th>
+                <th>CAJA</th>
+                <th>SENA</th>
+                <th>ICBF</th>
+                <th>NETO</th>
+                <th>TOTAL</th>
             </tr>
             {% set douTotalNeto = 0  %}
             {% set douTotalCobrar = 0  %}
+            {% set douTotalPension = 0  %}
             {% for arServiciosPorCobrar in arServiciosPorCobrar %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arServiciosPorCobrar.codigoServicioCobrarPk }}">{{ arServiciosPorCobrar.codigoServicioCobrarPk }} </td>
@@ -70,30 +78,30 @@
                 <td>{{ arServiciosPorCobrar.empleadoRel.nombreCorto  }}</td>                
                 <td>{{ arServiciosPorCobrar.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arServiciosPorCobrar.fechaHasta |date("Y/m/d")  }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrSalario | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrArp | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrEps | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrPension | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrAuxilioTransporte | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrNeto | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServiciosPorCobrar.vrTotalCobrar | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.diasPeriodo | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrSalario | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrSalarioPeriodo | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrAdicionalTiempo | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrAdicionalValor | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrAuxilioTransporte | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrArp | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrEps | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrPension | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrCaja | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrSena | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrIcbf | number_format(0, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrNeto | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrTotalCobrar | number_format(0, '.', ',') }}</td>
                 {% set douTotalNeto = douTotalNeto + arServiciosPorCobrar.vrNeto %}
                 {% set douTotalCobrar = douTotalCobrar + arServiciosPorCobrar.vrTotalCobrar %}
+                {% set douTotalPension = douTotalPension + arServiciosPorCobrar.vrPension %}
             </tr>
             {% endfor %}
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>                
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="text-align: right">{{ douTotalNeto | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ douTotalCobrar | number_format(2, '.', ',') }}</td>
+                <td colspan="14"></td>
+                <td style="text-align: right">{{ douTotalPension | number_format(0, '.', ',') }}</td>
+                <td colspan="3"></td>
+                <td style="text-align: right">{{ douTotalNeto | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalCobrar | number_format(0, '.', ',') }}</td>
         </table>
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">

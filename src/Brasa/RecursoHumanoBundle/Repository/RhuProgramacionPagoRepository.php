@@ -733,16 +733,18 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $arPagoDetalle->getVrIngresoBaseCotizacion();                            
                     $douIngresoBasePrestacion = $douIngresoBasePrestacion + $arPagoDetalle->getVrIngresoBasePrestacion();                                                
                 }
+                $douSalarioBasico = $arPagoProcesar->getVrSalarioEmpleado();
                 $douSalarioPeriodo = $arPagoProcesar->getVrSalarioPeriodo();
                 $douSalarioSeguridadSocial = $douSalarioPeriodo + $douAdicionTiempo + $douAdicionValor;
                 $douDiaAuxilioTransporte = 74000 / 30;
                 $douAuxilioTransporteCotizacion = $arPagoProcesar->getDiasPeriodo() * $douDiaAuxilioTransporte;
                 $douArp = ($douSalarioSeguridadSocial * $arPagoProcesar->getContratoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
-                $douPension = ($douSalarioSeguridadSocial * $arPagoProcesar->getContratoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
+                $douPension = ($douIngresoBaseCotizacion * $arPagoProcesar->getContratoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
+                $douSalud = 0;
                 $douCaja = ($douSalarioSeguridadSocial * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
                 $douCesantias = (($douSalarioSeguridadSocial + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
                 $douVacaciones = ($douSalarioPeriodo * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
-                $douTotalEjercicio = $douSalario+$douAdicionTiempo+$douAdicionValor+$douAuxilioTransporte+$douArp+$douPension+$douCaja+$douCesantias+$douVacaciones;
+                $douTotalEjercicio = $douSalario+$douAdicionTiempo+$douAdicionValor+$douAuxilioTransporte+$douArp+$douPension+$douSalud+$douCaja+$douCesantias+$douVacaciones;
                 if($arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion() != 0 ) {
                     $douAdministracion = ($douTotalEjercicio * $arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion()) / 100;            
                 } else {
@@ -759,13 +761,16 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arServicioCobrar->setVrDeducciones($douDeducciones);
                 $douNeto = $douDevengado - $douDeducciones;
                 $arServicioCobrar->setVrNeto($douNeto);
-                $arServicioCobrar->setVrSalario($douSalario);
+                $arServicioCobrar->setDiasPeriodo($arPagoProcesar->getDiasPeriodo());
+                $arServicioCobrar->setVrSalario($douSalarioBasico);
+                $arServicioCobrar->setVrSalarioPeriodo($douSalarioPeriodo);                
                 $arServicioCobrar->setVrAuxilioTransporte($douAuxilioTransporte);
                 $arServicioCobrar->setVrAuxilioTransporteCotizacion($douAuxilioTransporteCotizacion);
                 $arServicioCobrar->setVrAdicionalTiempo($douAdicionTiempo);
                 $arServicioCobrar->setVrAdicionalValor($douAdicionValor);
                 $arServicioCobrar->setVrArp($douArp);
                 $arServicioCobrar->setVrPension($douPension);
+                $arServicioCobrar->setVrEps($douSalud);
                 $arServicioCobrar->setVrCaja($douCaja);
                 $arServicioCobrar->setVrCesantias($douCesantias);
                 $arServicioCobrar->setVrVacaciones($douVacaciones);

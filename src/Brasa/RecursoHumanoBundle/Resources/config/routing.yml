@@ -582,6 +582,10 @@ brs_rhu_ss_periodo_detalle_aportes:
     path:     /rhu/seguridadsocial/periodo/detalle/aportes/{codigoPeriodoDetalle}
     defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalleAportes }
 
+brs_rhu_ss_resumen_pago:
+    path:     /rhu/seguridadsocial/resumen/pago/{codigoPeriodoDetalle}/{codigoEmpleado}
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:resumenPagos }
+
 brs_rhu_ss_periodo_detalle_empleados:
     path:     /rhu/seguridadsocial/periodo/detalle/empleados/{codigoPeriodoDetalle}
     defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalleEmpleados }     

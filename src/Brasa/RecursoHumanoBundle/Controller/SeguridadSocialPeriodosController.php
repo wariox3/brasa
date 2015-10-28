@@ -429,6 +429,23 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
 
+    public function resumenPagosAction($codigoPeriodoDetalle, $codigoEmpleado) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);        
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
+
+        $arPagos = $paginator->paginate($em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaConsultaPagosDQL("", $arEmpleado->getNumeroIdentificacion(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), "","")), $request->query->get('page', 1), 50);
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:empleados.html.twig', array(
+            'arPeriodoDetalle' => $arPeriodoDetalle,
+            'arPagos' => $arPagos,
+            ));
+    }
+    
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->listaDQL();

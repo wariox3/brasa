@@ -133,7 +133,7 @@ class RhuPagoRepository extends EntityRepository {
             $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
         }
         if($strHasta != "") {
-            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         if($strPago != "") {
             $dql .= " AND p.codigoPagoPk ='" . $strPago . "'";

@@ -47,8 +47,8 @@
             </tr>
             {% for arSsoAportes in arSsoAportes %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoAportes.codigoAportePk }}">{{ arSsoAportes.codigoAportePk }} </td>
-                <td>{{ arSsoAportes.empleadoRel.numeroIdentificacion  }}</td>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoAportes.codigoAportePk }}">{{ arSsoAportes.codigoAportePk }} </td>                
+                <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_ss_resumen_pago', {'codigoPeriodoDetalle': arPeriodoDetalle.codigoPeriodoDetallePK, 'codigoEmpleado': arSsoAportes.codigoEmpleadoFK}) }}', 'resumenPagos', 600, 900)">{{ arSsoAportes.empleadoRel.numeroIdentificacion  }}</a></td> 
                 <td>{{ arSsoAportes.codigoContratoFk  }}</td>                
                 <td>{{ arSsoAportes.ingreso  }}</td>
                 <td>{{ arSsoAportes.retiro  }}</td>
