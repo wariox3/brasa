@@ -4,13 +4,13 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoEstudioTipoType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoInformacionInternaTipoType;
 
 /**
- * RhuBaseEmpleadoEstudioTipo controller.
+ * BaseEmpleadoInformacionInternaTipo  Controller.
  *
  */
-class BaseEmpleadoEstudioTipoController extends Controller
+class BaseEmpleadoInformacionInternaTipoController extends Controller
 {
 
     public function listaAction() {
@@ -22,14 +22,14 @@ class BaseEmpleadoEstudioTipoController extends Controller
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
-        $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
+        $arEmpleadoInformacionInternaTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInternaTipo();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoTipoEstudio) {
-                    $arTipoEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
-                    $arTipoEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->find($codigoTipoEstudio);
-                    $em->remove($arTipoEstudio);
+                foreach ($arrSeleccionados AS $codigoEmpleadoInformacionInternaTipo) {
+                    $arEmpleadoInformacionInternaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInternaTipo();
+                    $arEmpleadoInformacionInternaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoInformacionInternaTipo')->find($codigoEmpleadoInformacionInternaTipo);
+                    $em->remove($arEmpleadoInformacionInternaTipo);
                     $em->flush();
                 }
             }
@@ -38,36 +38,36 @@ class BaseEmpleadoEstudioTipoController extends Controller
                 $this->generarExcel();
             }
         }
-        $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->findAll();
-        $arTipoEstudios = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arEmpleadoInformacionInternaTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInternaTipo();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoInformacionInternaTipo')->findAll();
+        $arEmpleadoInformacionInternaTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoEstudioTipo:listar.html.twig', array(
-                    'arTipoEstudios' => $arTipoEstudios,
+        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoInformacionInternaTipo:listar.html.twig', array(
+                    'arEmpleadoInformacionInternaTipos' => $arEmpleadoInformacionInternaTipos,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoTipoEstudio) {
+    public function nuevoAction($codigoInformacionInternaTipo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
-        if ($codigoTipoEstudio != 0)
+        $arEmpleadoInformacionInternaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInternaTipo();
+        if ($codigoInformacionInternaTipo != 0)
         {
-            $arTipoEstudios = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->find($codigoTipoEstudio);
+            $arEmpleadoInformacionInternaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoInformacionInternaTipo')->find($codigoInformacionInternaTipo);
         }    
-        $form = $this->createForm(new RhuEmpleadoEstudioTipoType(), $arTipoEstudios);
+        $form = $this->createForm(new RhuEmpleadoInformacionInternaTipoType(), $arEmpleadoInformacionInternaTipo);
         $form->handleRequest($request);
         if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arTipoEstudios = $form->getData();
-            $em->persist($arTipoEstudios);
+            $arEmpleadoInformacionInternaTipo = $form->getData();
+            $em->persist($arEmpleadoInformacionInternaTipo);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_empleado_estudio_tipo_lista'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_empleado_informacion_interna_tipo_lista'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoEstudioTipo:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoInformacionInternaTipo:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -85,25 +85,25 @@ class BaseEmpleadoEstudioTipoController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Código')
-                    ->setCellValue('B1', 'Estudio');
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'INFORMACIÓN INTERNA TIPO');
         $i = 2;
-        $arTipoEstudios = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->findAll();
+        $arEmpleadoInformacionInternaTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoInformacionInternaTipo')->findAll();
 
-        foreach ($arTipoEstudios as $arTipoEstudio) {
+        foreach ($arEmpleadoInformacionInternaTipos as $arEmpleadoInformacionInternaTipo) {
 
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arTipoEstudio->getEmpleadoEstudioTipoPk())
-                    ->setCellValue('B' . $i, $arTipoEstudio->getNombre());
+                    ->setCellValue('A' . $i, $arEmpleadoInformacionInternaTipo->getCodigoEmpleadoInformacionInternaTipoPk())
+                    ->setCellValue('B' . $i, $arEmpleadoInformacionInternaTipo->getNombre());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('TipoEstudios');
+        $objPHPExcel->getActiveSheet()->setTitle('InformacionInternaTipo');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="TipoEstudios.xlsx"');
+        header('Content-Disposition: attachment;filename="InformacionInternaTipo.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

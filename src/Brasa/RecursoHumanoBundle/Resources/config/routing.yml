@@ -122,6 +122,22 @@ brs_rhu_base_empleado_estudio_tipo_nuevo:
     path:     /rhu/empleado/estudio/tipo/nuevo/{codigoTipoEstudio}
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoEstudioTipo:nuevo } 
     
+brs_rhu_base_empleado_informacion_interna_tipo_lista:
+    path:     /rhu/empleado/informacion/interna/tipo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoInformacionInternaTipo:lista }    
+
+brs_rhu_base_empleado_informacion_interna_tipo_nuevo:
+    path:     /rhu/empleado/informacion/interna/tipo/nuevo/{codigoInformacionInternaTipo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoInformacionInternaTipo:nuevo }
+    
+brs_rhu_base_empleado_informacion_interna_lista:
+    path:     /rhu/empleado/informacion/interna/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoInformacionInterna:lista }    
+
+brs_rhu_base_empleado_informacion_interna_nuevo:
+    path:     /rhu/empleado/informacion/interna/nuevo/{codigoInformacionInterna}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoInformacionInterna:nuevo }
+    
 brs_rhu_base_capacitacion_tipo_lista:
     path:     /rhu/capacitacion/tipo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseCapacitacionTipo:lista }    

@@ -290,7 +290,12 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="ruta_foto", type="string", length=250, nullable=true)
      */    
-    private $rutaFoto;    
+    private $rutaFoto;
+    
+    /**
+     * @ORM\Column(name="empleado_informacion_interna", type="boolean", nullable=true)
+     */    
+    private $empleadoInformacionInterna = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
@@ -520,6 +525,11 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuTrasladoSalud", mappedBy="empleadoRel")
      */
     protected $trasladosSaludEmpleadoRel;
+    
+     /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoInformacionInterna", mappedBy="empleadoRel")
+     */
+    protected $empleadosInformacionesInternasEmpleadoRel;
     /**
      * Constructor
      */
@@ -549,6 +559,7 @@ class RhuEmpleado
         $this->proyeccionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->trasladosPensionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->trasladosSaludEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosInformacionesInternasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1810,6 +1821,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set empleadoInformacionInterna
+     *
+     * @param boolean $empleadoInformacionInterna
+     *
+     * @return RhuEmpleado
+     */
+    public function setEmpleadoInformacionInterna($empleadoInformacionInterna)
+    {
+        $this->empleadoInformacionInterna = $empleadoInformacionInterna;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoInformacionInterna
+     *
+     * @return boolean
+     */
+    public function getEmpleadoInformacionInterna()
+    {
+        return $this->empleadoInformacionInterna;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -3055,5 +3090,39 @@ class RhuEmpleado
     public function getTrasladosSaludEmpleadoRel()
     {
         return $this->trasladosSaludEmpleadoRel;
+    }
+
+    /**
+     * Add empleadosInformacionesInternasEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInterna $empleadosInformacionesInternasEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addEmpleadosInformacionesInternasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInterna $empleadosInformacionesInternasEmpleadoRel)
+    {
+        $this->empleadosInformacionesInternasEmpleadoRel[] = $empleadosInformacionesInternasEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosInformacionesInternasEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInterna $empleadosInformacionesInternasEmpleadoRel
+     */
+    public function removeEmpleadosInformacionesInternasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInterna $empleadosInformacionesInternasEmpleadoRel)
+    {
+        $this->empleadosInformacionesInternasEmpleadoRel->removeElement($empleadosInformacionesInternasEmpleadoRel);
+    }
+
+    /**
+     * Get empleadosInformacionesInternasEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosInformacionesInternasEmpleadoRel()
+    {
+        return $this->empleadosInformacionesInternasEmpleadoRel;
     }
 }

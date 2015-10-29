@@ -118,6 +118,10 @@ class ContratosController extends Controller
                 $objMensaje->Mensaje("error", "El empleado tiene contrato abierto, no se puede generar otro contrato", $this);
                 $intEstado = 1;
             }
+            if ($arEmpleado->getEmpleadoInformacionInterna() == 1){
+               $objMensaje->Mensaje("error", "El empleado esta bloqueado por información interna", $this); 
+               $intEstado = 2;
+            }
 
         }
         $form = $this->createForm(new RhuContratoType(), $arContrato);
@@ -173,6 +177,7 @@ class ContratosController extends Controller
                     $arEmpleado->setSsoTipoCotizanteRel($arContrato->getSsoTipoCotizanteRel());
                     $arEmpleado->setSsoSubtipoCotizanteRel($arContrato->getSsoSubtipoCotizanteRel());
                     $arEmpleado->setEstadoContratoActivo(1);
+                    $arEmpleado->setEstadoActivo(1);
                     $arEmpleado->setCodigoContratoActivoFk($arContrato->getCodigoContratoPk());
                     $arEmpleado->setEntidadPensionRel($arContrato->getEntidadPensionRel());
                     $arEmpleado->setEntidadSaludRel($arContrato->getEntidadSaludRel());

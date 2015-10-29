@@ -7,7 +7,12 @@
         {% set div = 'none' %}
     {% else %}
         {% set div = 'show' %}
-    {% endif %}    
+    {% endif %}
+    {% if intEstado == 2 %}
+        {% set div = 'none' %}
+    {% else %}
+        {% set div = 'show' %}
+    {% endif %}
     <div style="display: {{div}};">
     <div class="panel panel-default">
         <div class="panel-heading">Información general</div>
