@@ -1,4 +1,5 @@
-{% extends '::base.html.twig' %}
+{% extends '::base.html.twig' %} 
+{% block title %}Servicios por cobrar - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     <script type="text/javascript">
@@ -54,16 +55,20 @@
                 <th>HASTA</th>
                 <th>DIAS</th>
                 <th>SALARIO</th>
-                <th>SALARIO P</th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Tiempo suplementario pagado">T. ADIC</p></th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Valores adicionales pagados">V. ADIC</p></th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Auxilio transporte">AUX. T</p></th>
+                <th>SALARIO.P</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Tiempo suplementario pagado">T.ADIC</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Valores adicionales pagados">V.ADIC</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Auxilio transporte ">AUX.T</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Auxilio transporte">AUX.T.C</p></th>
                 <th>ARP</th>
                 <th>EPS</th>
                 <th>PENSIÓN</th>
                 <th>CAJA</th>
                 <th>SENA</th>
                 <th>ICBF</th>
+                <th>CES/INT</th>
+                <th>VAC</th>
+                <th>ADMON</th>
                 <th>NETO</th>
                 <th>TOTAL</th>
             </tr>
@@ -84,12 +89,16 @@
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrAdicionalTiempo | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrAdicionalValor | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrAuxilioTransporte | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrAuxilioTransporteCotizacion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrArp | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrEps | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrPension | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrCaja | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrSena | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrIcbf | number_format(0, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrCesantias | number_format(0, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrVacaciones | number_format(0, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arServiciosPorCobrar.vrAdministracion | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrNeto | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServiciosPorCobrar.vrTotalCobrar | number_format(0, '.', ',') }}</td>
                 {% set douTotalNeto = douTotalNeto + arServiciosPorCobrar.vrNeto %}
@@ -97,9 +106,9 @@
                 {% set douTotalPension = douTotalPension + arServiciosPorCobrar.vrPension %}
             </tr>
             {% endfor %}
-                <td colspan="14"></td>
+                <td colspan="15"></td>
                 <td style="text-align: right">{{ douTotalPension | number_format(0, '.', ',') }}</td>
-                <td colspan="3"></td>
+                <td colspan="6"></td>
                 <td style="text-align: right">{{ douTotalNeto | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ douTotalCobrar | number_format(0, '.', ',') }}</td>
         </table>

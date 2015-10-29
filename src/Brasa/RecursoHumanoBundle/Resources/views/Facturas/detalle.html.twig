@@ -1,4 +1,5 @@
 {% extends '::base.html.twig' %}
+{% block title %}Factura detalle - Soga App{% endblock %}
 {% block content %}
 <script>
     $('#myTab a').click(function(e) {
@@ -121,6 +122,8 @@
         <div class="btn-toolbar" style="float:right">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_facturas_agregar_servicio_cobrar', {'codigoFactura': arFactura.codigoFacturaPk}) }}', 'nuevoDetalleServicio', 600, 1000)" >Nuevo</a>
+            </div>
+            <div class="btn-group">
                 {{ form_widget(form.BtnRetirarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                        
             </div>
         </div>                    

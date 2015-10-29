@@ -733,9 +733,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $arPagoDetalle->getVrIngresoBaseCotizacion();                            
                     $douIngresoBasePrestacion = $douIngresoBasePrestacion + $arPagoDetalle->getVrIngresoBasePrestacion();                                                
                 }
-                $douSalarioBasico = ($arPagoProcesar->getVrSalarioEmpleado() * 30) / $arProgramacionPagoProcesar->getDias();
-                $douSalarioPeriodo = $arPagoProcesar->getVrSalarioPeriodo();
-                $douIBS = $douSalarioBasico + $douAdicionTiempo + $douAdicionValor;
+                if($arPagoProcesar->getCodigoEmpleadoFk() == 855) {
+                    echo "hola";
+                }
+                $douSalarioPeriodo = $arPagoProcesar->getVrSalarioPeriodo();                
+                $douIBS = $douSalarioPeriodo + $douAdicionTiempo + $douAdicionValor;
                 $douDiaAuxilioTransporte = 74000 / 30;
                 $douAuxilioTransporteCotizacion = $arPagoProcesar->getDiasPeriodo() * $douDiaAuxilioTransporte;
                 $douArp = ($douIBS * $arPagoProcesar->getContratoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
@@ -762,8 +764,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $douNeto = $douDevengado - $douDeducciones;
                 $arServicioCobrar->setVrNeto($douNeto);
                 $arServicioCobrar->setDiasPeriodo($arPagoProcesar->getDiasPeriodo());
-                $arServicioCobrar->setVrSalario($douSalarioBasico);
+                $arServicioCobrar->setVrSalario($arPagoProcesar->getVrSalarioEmpleado());
                 $arServicioCobrar->setVrSalarioPeriodo($douSalarioPeriodo);                
+                
                 $arServicioCobrar->setVrAuxilioTransporte($douAuxilioTransporte);
                 $arServicioCobrar->setVrAuxilioTransporteCotizacion($douAuxilioTransporteCotizacion);
                 $arServicioCobrar->setVrAdicionalTiempo($douAdicionTiempo);

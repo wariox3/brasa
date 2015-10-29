@@ -52,8 +52,8 @@ class RhuServicioCobrar
      * Es el salario corerspondiente a los dias * VrDia
      * @ORM\Column(name="vr_salario_periodo", type="float")
      */
-    private $vrSalarioPeriodo = 0;    
-
+    private $vrSalarioPeriodo = 0;        
+    
     /**
      * Es el salario que tenia el empleado cuando se genero el pago
      * @ORM\Column(name="vr_salario_empleado", type="float")

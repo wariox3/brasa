@@ -57,13 +57,11 @@ class FacturasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $arFactura = new \Brasa\RecursoHumanoBundle\Entity\RhuFactura();
-        if ($codigoFactura != 0)
-        {
+        if ($codigoFactura != 0) {
             $arFactura = $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->find($codigoFactura);
         }
-        else{
-           $arFactura->setFecha(new \DateTime('now'));
-           
+        else {
+           $arFactura->setFecha(new \DateTime('now'));           
         }
         $form = $this->createForm(new RhuFacturaType(), $arFactura);       
         $form->handleRequest($request);
@@ -79,7 +77,7 @@ class FacturasController extends Controller
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_rhu_facturas_nuevo', array('codigoFactura' => 0)));
             } else {
-                return $this->redirect($this->generateUrl('brs_rhu_facturas_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_facturas_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
             }    
             
         }                
@@ -120,10 +118,6 @@ class FacturasController extends Controller
                 $objFormatoFactura = new \Brasa\RecursoHumanoBundle\Formatos\FormatoFactura();
                 $objFormatoFactura->Generar($this, $codigoFactura);
             }       
-            if($form->get('BtnReliquidar')->isClicked()) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuFactura')->liquidar($codigoFactura);
-                return $this->redirect($this->generateUrl('brs_rhu_facturas_detalle', array('codigoFactura' => $codigoFactura)));
-            }            
         }
         $arFacturaDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuFacturaDetalle();
         $arFacturaDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));        
