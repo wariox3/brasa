@@ -10,7 +10,7 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoInformacionInternaType;
  * BaseEmpleadoInformacionInterna  Controller.
  *
  */
-class BaseEmpleadoInformacionInternaController extends Controller
+class EmpleadoInformacionInternaController extends Controller
 {
 
     public function listaAction() {
@@ -42,7 +42,7 @@ class BaseEmpleadoInformacionInternaController extends Controller
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoInformacionInterna')->findAll();
         $arEmpleadoInformacionInterna = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoInformacionInterna:listar.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:EmpleadoInformacionInterna:listar.html.twig', array(
                     'arEmpleadoInformacionInterna' => $arEmpleadoInformacionInterna,
                     'form'=> $form->createView()
            
@@ -60,14 +60,14 @@ class BaseEmpleadoInformacionInternaController extends Controller
                         'property' => 'nombre',
             ))    
             ->add('fecha', 'date', array('data' => new \DateTime('now')))
-            ->add('comentarios', 'textarea', array('required' => false))
+            ->add('comentarios', 'textarea', array('required' => true))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arInformacionInterna = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInterna();
             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $form->get('numeroIdentificacion')->getData(), 'estadoActivo' => 1));
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $form->get('numeroIdentificacion')->getData()));
             if (count($arEmpleado) == 0){
                 $objMensaje->Mensaje("error", "No existe el número de identificación", $this);
             }else {
@@ -88,11 +88,11 @@ class BaseEmpleadoInformacionInternaController extends Controller
                 }
                 $em->persist($arEmpleadoFinal);
                 $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_base_empleado_informacion_interna_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_empleado_informacion_interna_lista'));
             }
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoInformacionInterna:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:EmpleadoInformacionInterna:nuevo.html.twig', array(
 
             'form' => $form->createView()));
     }

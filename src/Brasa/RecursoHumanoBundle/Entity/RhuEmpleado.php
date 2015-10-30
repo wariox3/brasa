@@ -530,6 +530,14 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuEmpleadoInformacionInterna", mappedBy="empleadoRel")
      */
     protected $empleadosInformacionesInternasEmpleadoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDesempeno", mappedBy="empleadoRel")
+     */
+    protected $DesempenosEmpleadoRel;
+    
+    
+    
     /**
      * Constructor
      */
@@ -560,6 +568,7 @@ class RhuEmpleado
         $this->trasladosPensionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->trasladosSaludEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosInformacionesInternasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->DesempenosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -3124,5 +3133,39 @@ class RhuEmpleado
     public function getEmpleadosInformacionesInternasEmpleadoRel()
     {
         return $this->empleadosInformacionesInternasEmpleadoRel;
+    }
+
+    /**
+     * Add desempenosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addDesempenosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosEmpleadoRel)
+    {
+        $this->DesempenosEmpleadoRel[] = $desempenosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove desempenosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosEmpleadoRel
+     */
+    public function removeDesempenosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosEmpleadoRel)
+    {
+        $this->DesempenosEmpleadoRel->removeElement($desempenosEmpleadoRel);
+    }
+
+    /**
+     * Get desempenosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDesempenosEmpleadoRel()
+    {
+        return $this->DesempenosEmpleadoRel;
     }
 }

@@ -40,7 +40,15 @@ brs_rhu_base_ssosucursal_listar:
    
 brs_rhu_base_ssosucursal_nuevo:
    path:     /rhu/base/ssosucursal/nuevo/{codigoSucursalPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSsoSucursal:nuevo }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSsoSucursal:nuevo }
+   
+brs_rhu_empleado_informacion_interna_lista:
+    path:     /rhu/empleado/informacion/interna/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoInformacionInterna:lista }    
+
+brs_rhu_empleado_informacion_interna_nuevo:
+    path:     /rhu/empleado/informacion/interna/nuevo/{codigoInformacionInterna}
+    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoInformacionInterna:nuevo }   
 
 brs_rhu_utilidades_pagos_generar_periodo:
     path:     /rhu/utilidades/pagos/generar/periodo

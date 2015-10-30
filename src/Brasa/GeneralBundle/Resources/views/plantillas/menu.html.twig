@@ -59,10 +59,9 @@
                                     <a tabindex="-1" href="#">General</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_rhu_base_empleado_estudio_tipo_lista') }}">Tipo estudio</a></li>
-                                        <li><a href="{{ path('brs_rhu_base_contenido_formato_lista') }}">Formatos</a></li>
+                                        <li><a href="{{ path('brs_rhu_base_contenido_formato_lista') }}">Tipos formatos</a></li>
                                         <li><a href="{{ path('brs_rhu_base_licenciatipo_listar') }}">Tipo licencia</a></li>
                                         <li><a href="{{ path('brs_rhu_base_capacitacion_tipo_lista') }}">Tipo capacitación</a></li>
-                                        <li><a href="{{ path('brs_rhu_base_empleado_informacion_interna_lista') }}">Información interna</a></li>
                                         <li><a href="{{ path('brs_rhu_base_empleado_informacion_interna_tipo_lista') }}">Tipo información interna</a></li>
                                     </ul>
                                 </li>
@@ -565,6 +564,12 @@
                                     <a tabindex="-1" href="#">Capacitaciones</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_rhu_capacitacion_lista') }}">Lista</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Información interna empleados</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_rhu_empleado_informacion_interna_lista') }}">Lista</a></li>
                                     </ul>
                                 </li>
                             </ul>
