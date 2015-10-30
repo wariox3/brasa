@@ -158,6 +158,11 @@ class RhuSeleccion
      * @ORM\Column(name="referencias_verificadas", type="boolean")
      */    
     private $referenciasVerificadas = 0;    
+
+    /**     
+     * @ORM\Column(name="estado_cobrado", type="boolean")
+     */    
+    private $estadoCobrado = 0;    
     
     /**
      * @ORM\Column(name="fecha_entrevista", type="datetime", nullable=true)
@@ -168,6 +173,16 @@ class RhuSeleccion
      * @ORM\Column(name="fecha_pruebas", type="datetime", nullable=true)
      */    
     private $fecha_pruebas;    
+    
+    /**
+     * @ORM\Column(name="vr_servicio", type="float")
+     */
+    private $vrServicio = 0;     
+    
+    /**
+     * @ORM\Column(name="codigo_factura_fk", type="integer", nullable=true)
+     */    
+    private $codigoFacturaFk;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionTipo", inversedBy="seleccionesSeleccionTipoRel")
@@ -223,6 +238,12 @@ class RhuSeleccion
      * @ORM\JoinColumn(name="codigo_seleccion_grupo_fk", referencedColumnName="codigo_seleccion_grupo_pk")
      */
     protected $seleccionGrupoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuFactura", inversedBy="seleccionesFacturaRel")
+     * @ORM\JoinColumn(name="codigo_factura_fk", referencedColumnName="codigo_factura_pk")
+     */
+    protected $facturaRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionReferencia", mappedBy="seleccionRel")
@@ -1296,5 +1317,101 @@ class RhuSeleccion
     public function getSeleccionesVisitasSeleccionRel()
     {
         return $this->seleccionesVisitasSeleccionRel;
+    }
+
+    /**
+     * Set estadoCobrado
+     *
+     * @param boolean $estadoCobrado
+     *
+     * @return RhuSeleccion
+     */
+    public function setEstadoCobrado($estadoCobrado)
+    {
+        $this->estadoCobrado = $estadoCobrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCobrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCobrado()
+    {
+        return $this->estadoCobrado;
+    }
+
+    /**
+     * Set vrServicio
+     *
+     * @param float $vrServicio
+     *
+     * @return RhuSeleccion
+     */
+    public function setVrServicio($vrServicio)
+    {
+        $this->vrServicio = $vrServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrServicio
+     *
+     * @return float
+     */
+    public function getVrServicio()
+    {
+        return $this->vrServicio;
+    }
+
+    /**
+     * Set codigoFacturaFk
+     *
+     * @param integer $codigoFacturaFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoFacturaFk($codigoFacturaFk)
+    {
+        $this->codigoFacturaFk = $codigoFacturaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaFk
+     *
+     * @return integer
+     */
+    public function getCodigoFacturaFk()
+    {
+        return $this->codigoFacturaFk;
+    }
+
+    /**
+     * Set facturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel = null)
+    {
+        $this->facturaRel = $facturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuFactura
+     */
+    public function getFacturaRel()
+    {
+        return $this->facturaRel;
     }
 }

@@ -131,4 +131,10 @@ class RhuSeleccionRepository extends EntityRepository {
         }        
     }             
     
+    public function pendienteCobrar($codigoCentroCosto) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT s FROM BrasaRecursoHumanoBundle:RhuSeleccion s WHERE s.estadoCobrado = 0 "
+                . " AND s.codigoCentroCostoFk = " . $codigoCentroCosto;
+        return $dql;
+    }        
 }

@@ -78,6 +78,16 @@ class RhuFactura
     private $VrIva = 0;    
     
     /**
+     * @ORM\Column(name="vr_seleccion", type="float")
+     */
+    private $VrSeleccion = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_examen", type="float")
+     */
+    private $VrExamen = 0;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;    
@@ -113,6 +123,11 @@ class RhuFactura
      * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="facturaRel")
      */
     protected $examenesFacturaRel;     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="facturaRel")
+     */
+    protected $seleccionesFacturaRel;     
     
     /**
      * Constructor
@@ -606,5 +621,87 @@ class RhuFactura
     public function getExamenesFacturaRel()
     {
         return $this->examenesFacturaRel;
+    }
+
+    /**
+     * Add seleccionesFacturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesFacturaRel
+     *
+     * @return RhuFactura
+     */
+    public function addSeleccionesFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesFacturaRel)
+    {
+        $this->seleccionesFacturaRel[] = $seleccionesFacturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesFacturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesFacturaRel
+     */
+    public function removeSeleccionesFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesFacturaRel)
+    {
+        $this->seleccionesFacturaRel->removeElement($seleccionesFacturaRel);
+    }
+
+    /**
+     * Get seleccionesFacturaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesFacturaRel()
+    {
+        return $this->seleccionesFacturaRel;
+    }
+
+    /**
+     * Set vrSeleccion
+     *
+     * @param float $vrSeleccion
+     *
+     * @return RhuFactura
+     */
+    public function setVrSeleccion($vrSeleccion)
+    {
+        $this->VrSeleccion = $vrSeleccion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSeleccion
+     *
+     * @return float
+     */
+    public function getVrSeleccion()
+    {
+        return $this->VrSeleccion;
+    }
+
+    /**
+     * Set vrExamen
+     *
+     * @param float $vrExamen
+     *
+     * @return RhuFactura
+     */
+    public function setVrExamen($vrExamen)
+    {
+        $this->VrExamen = $vrExamen;
+
+        return $this;
+    }
+
+    /**
+     * Get vrExamen
+     *
+     * @return float
+     */
+    public function getVrExamen()
+    {
+        return $this->VrExamen;
     }
 }

@@ -49,6 +49,18 @@ class RhuFacturaRepository extends EntityRepository {
             $douAdministracion += $arFacturaDetalle->getVrAdministracion();
             $douIngresoMision += $arFacturaDetalle->getVrCosto();
         }
+        $floTotalExamenes = 0;
+        $floTotalSelecciones = 0;
+        $arExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arExamenes = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->findBy(array('codigoFacturaFk' => $codigoFactura));                
+        foreach ($arExamenes as $arExamen) {
+            $floTotalExamenes += $arExamen->getVrTotal();
+        }
+        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+        $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('codigoFacturaFk' => $codigoFactura));                                
+        foreach ($arSelecciones as $arSeleccion) {
+            $floTotalSelecciones += $arSeleccion->getVrServicio();
+        }        
         
         $douTotalBruto = $douIngresoMision + $douAdministracion;
         $douBaseAIU = (($douTotalBruto)*10)/100;
@@ -69,6 +81,8 @@ class RhuFacturaRepository extends EntityRepository {
         $arFactura->setVrRetencionCree($douRetencionCREE);
         $arFactura->setVrIva($douIva);
         $arFactura->setVrRetencionIva($douRetencionIva);    
+        $arFactura->setVrSeleccion($floTotalSelecciones);
+        $arFactura->setVrExamen($floTotalExamenes);
         $douRetenciones = $douRetencionIva + $douRetencionFuente;
         $arFactura->setVrNeto($douTotalBruto+$douIva-$douRetenciones);
         $em->persist($arFactura);

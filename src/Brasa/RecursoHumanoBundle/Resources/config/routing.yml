@@ -434,6 +434,10 @@ brs_rhu_facturas_detalle_nuevo_examen:
     path:     /rhu/facturas/detalle/nuevo/examen/{codigoFactura}
     defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalleNuevoExamen }
 
+brs_rhu_facturas_detalle_nuevo_seleccion:
+    path:     /rhu/facturas/detalle/nuevo/seleccion/{codigoFactura}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalleNuevoSeleccion }
+
 brs_rhu_base_salud_listar:
    path:     /rhu/base/salud/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:listar }
