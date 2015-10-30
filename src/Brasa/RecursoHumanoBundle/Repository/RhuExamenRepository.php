@@ -94,5 +94,12 @@ class RhuExamenRepository extends EntityRepository {
         $douNumeroDetalleExamen = $query->getSingleScalarResult();
         return $douNumeroDetalleExamen;
     }
+    
+    public function pendienteCobrar($codigoCentroCosto) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuExamen e WHERE e.estadoCobrado = 0 "
+                . " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
+        return $dql;
+    }    
 
 }

@@ -109,6 +109,10 @@ class RhuFactura
      */
     protected $facturasDetallesFacturaRel;                
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="facturaRel")
+     */
+    protected $examenesFacturaRel;     
     
     /**
      * Constructor
@@ -568,5 +572,39 @@ class RhuFactura
     public function getFacturasDetallesFacturaRel()
     {
         return $this->facturasDetallesFacturaRel;
+    }
+
+    /**
+     * Add examenesFacturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesFacturaRel
+     *
+     * @return RhuFactura
+     */
+    public function addExamenesFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesFacturaRel)
+    {
+        $this->examenesFacturaRel[] = $examenesFacturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove examenesFacturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesFacturaRel
+     */
+    public function removeExamenesFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesFacturaRel)
+    {
+        $this->examenesFacturaRel->removeElement($examenesFacturaRel);
+    }
+
+    /**
+     * Get examenesFacturaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExamenesFacturaRel()
+    {
+        return $this->examenesFacturaRel;
     }
 }

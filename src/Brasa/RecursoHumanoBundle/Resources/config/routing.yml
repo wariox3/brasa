@@ -418,9 +418,13 @@ brs_rhu_facturas_detalle:
     path:     /rhu/facturas/detalle/{codigoFactura}
     defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalle }    
 
-brs_rhu_facturas_agregar_servicio_cobrar:
-    path:     /rhu/facturas/agregarserviciocobrar/{codigoFactura}
-    defaults: { _controller: BrasaRecursoHumanoBundle:FacturasAgregarServicioCobrar:lista }        
+brs_rhu_facturas_detalle_nuevo_servicio:
+    path:     /rhu/facturas/detalle/nuevo/servicio/{codigoFactura}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalleNuevoServicio }        
+
+brs_rhu_facturas_detalle_nuevo_examen:
+    path:     /rhu/facturas/detalle/nuevo/examen/{codigoFactura}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalleNuevoExamen }
 
 brs_rhu_base_salud_listar:
    path:     /rhu/base/salud/listar

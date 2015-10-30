@@ -33,6 +33,11 @@ class RhuExamen
     private $codigoEntidadExamenFk;
     
     /**
+     * @ORM\Column(name="codigo_factura_fk", type="integer", nullable=true)
+     */    
+    private $codigoFacturaFk;    
+    
+    /**
      * @ORM\Column(name="fecha", type="date")
      */    
     private $fecha;            
@@ -87,6 +92,11 @@ class RhuExamen
      * @ORM\Column(name="estado_pagado", type="boolean")
      */    
     private $estadoPagado = 0;
+
+    /**     
+     * @ORM\Column(name="estado_cobrado", type="boolean")
+     */    
+    private $estadoCobrado = 0;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -110,6 +120,12 @@ class RhuExamen
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     protected $centroCostoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuFactura", inversedBy="examenesFacturaRel")
+     * @ORM\JoinColumn(name="codigo_factura_fk", referencedColumnName="codigo_factura_pk")
+     */
+    protected $facturaRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuExamenDetalle", mappedBy="examenRel")
@@ -217,6 +233,30 @@ class RhuExamen
     public function getCodigoEntidadExamenFk()
     {
         return $this->codigoEntidadExamenFk;
+    }
+
+    /**
+     * Set codigoFacturaFk
+     *
+     * @param integer $codigoFacturaFk
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoFacturaFk($codigoFacturaFk)
+    {
+        $this->codigoFacturaFk = $codigoFacturaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaFk
+     *
+     * @return integer
+     */
+    public function getCodigoFacturaFk()
+    {
+        return $this->codigoFacturaFk;
     }
 
     /**
@@ -340,6 +380,54 @@ class RhuExamen
     }
 
     /**
+     * Set codigoSexoFk
+     *
+     * @param string $codigoSexoFk
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoSexoFk($codigoSexoFk)
+    {
+        $this->codigoSexoFk = $codigoSexoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSexoFk
+     *
+     * @return string
+     */
+    public function getCodigoSexoFk()
+    {
+        return $this->codigoSexoFk;
+    }
+
+    /**
+     * Set cargoDescripcion
+     *
+     * @param string $cargoDescripcion
+     *
+     * @return RhuExamen
+     */
+    public function setCargoDescripcion($cargoDescripcion)
+    {
+        $this->cargoDescripcion = $cargoDescripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoDescripcion
+     *
+     * @return string
+     */
+    public function getCargoDescripcion()
+    {
+        return $this->cargoDescripcion;
+    }
+
+    /**
      * Set vrTotal
      *
      * @param float $vrTotal
@@ -433,6 +521,30 @@ class RhuExamen
     public function getEstadoPagado()
     {
         return $this->estadoPagado;
+    }
+
+    /**
+     * Set estadoCobrado
+     *
+     * @param boolean $estadoCobrado
+     *
+     * @return RhuExamen
+     */
+    public function setEstadoCobrado($estadoCobrado)
+    {
+        $this->estadoCobrado = $estadoCobrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCobrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCobrado()
+    {
+        return $this->estadoCobrado;
     }
 
     /**
@@ -532,6 +644,30 @@ class RhuExamen
     }
 
     /**
+     * Set facturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel
+     *
+     * @return RhuExamen
+     */
+    public function setFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel = null)
+    {
+        $this->facturaRel = $facturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuFactura
+     */
+    public function getFacturaRel()
+    {
+        return $this->facturaRel;
+    }
+
+    /**
      * Add examenesExamenDetalleRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesExamenDetalleRel
@@ -621,53 +757,5 @@ class RhuExamen
     public function getCiudadRel()
     {
         return $this->ciudadRel;
-    }
-
-    /**
-     * Set codigoSexoFk
-     *
-     * @param string $codigoSexoFk
-     *
-     * @return RhuExamen
-     */
-    public function setCodigoSexoFk($codigoSexoFk)
-    {
-        $this->codigoSexoFk = $codigoSexoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSexoFk
-     *
-     * @return string
-     */
-    public function getCodigoSexoFk()
-    {
-        return $this->codigoSexoFk;
-    }
-
-    /**
-     * Set cargoDescripcion
-     *
-     * @param string $cargoDescripcion
-     *
-     * @return RhuExamen
-     */
-    public function setCargoDescripcion($cargoDescripcion)
-    {
-        $this->cargoDescripcion = $cargoDescripcion;
-
-        return $this;
-    }
-
-    /**
-     * Get cargoDescripcion
-     *
-     * @return string
-     */
-    public function getCargoDescripcion()
-    {
-        return $this->cargoDescripcion;
     }
 }

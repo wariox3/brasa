@@ -29,19 +29,19 @@
                         <td><input type="hidden" name="LblCodigo[]" value="{{ arServiciosCobrar.codigoServicioCobrarPk }}">{{ arServiciosCobrar.codigoServicioCobrarPk }}</td>  
                         <td>{{ arServiciosCobrar.programacionPagoRel.fechaDesde |date("Y/m/d")  }}-{{ arServiciosCobrar.programacionPagoRel.fechaHasta |date("Y/m/d")  }}</td>
                         <td>{{ arServiciosCobrar.empleadoRel.nombreCorto }}</td>                        
-                        <td style="text-align: right">{{ arServiciosCobrar.VrSalario | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrAdicionalTiempo | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrAdicionalValor | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrAuxilioTransporte | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrArp | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrEps | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrPension | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrCaja | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrCesantias | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrVacaciones | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrAdministracion | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrCosto | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right">{{ arServiciosCobrar.VrTotalCobrar | number_format(2, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrSalario | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrAdicionalTiempo | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrAdicionalValor | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrAuxilioTransporte | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrArp | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrEps | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrPension | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrCaja | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrCesantias | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrVacaciones | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrAdministracion | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrCosto | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arServiciosCobrar.VrTotalCobrar | number_format(0, '.', ',') }}</td>
                         <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServiciosCobrar.codigoServicioCobrarPk }}" /></td>
                     </tr>
                 {% endfor %}                                
