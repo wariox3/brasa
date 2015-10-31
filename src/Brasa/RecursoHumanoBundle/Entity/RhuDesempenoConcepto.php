@@ -23,7 +23,7 @@ class RhuDesempenoConcepto
     private $codigoDesempenoConceptoTipoFk;
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=80, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=350, nullable=true)
      */    
     private $nombre;         
     
@@ -37,7 +37,6 @@ class RhuDesempenoConcepto
      * @ORM\JoinColumn(name="codigo_desempeno_concepto_tipo_fk", referencedColumnName="codigo_desempeno_concepto_tipo_pk")
      */
     protected $desempenoConceptoTipoRel;
-    
     
     
     /**

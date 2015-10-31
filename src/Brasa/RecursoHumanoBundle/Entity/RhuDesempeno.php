@@ -38,6 +38,11 @@ class RhuDesempeno
     private $jefeEvalua;
     
     /**
+     * @ORM\Column(name="dependencia_evalua", type="string", length=80, nullable=true)
+     */    
+    private $dependenciaEvalua;
+    
+    /**
      * @ORM\Column(name="cargo_jefe_evalua", type="string", length=80, nullable=true)
      */    
     private $cargoJefeEvalua;
@@ -91,6 +96,16 @@ class RhuDesempeno
      * @ORM\Column(name="total_desempeno", type="float")
      */
     private $totalDesempeno = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */    
+    private $estadoAutorizado = 0;       
+    
+    /**     
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="desempenosCargoRel")
@@ -569,5 +584,77 @@ class RhuDesempeno
     public function getDesempenosDetallesDesempenoRel()
     {
         return $this->desempenosDetallesDesempenoRel;
+    }
+
+    /**
+     * Set dependenciaEvalua
+     *
+     * @param string $dependenciaEvalua
+     *
+     * @return RhuDesempeno
+     */
+    public function setDependenciaEvalua($dependenciaEvalua)
+    {
+        $this->dependenciaEvalua = $dependenciaEvalua;
+
+        return $this;
+    }
+
+    /**
+     * Get dependenciaEvalua
+     *
+     * @return string
+     */
+    public function getDependenciaEvalua()
+    {
+        return $this->dependenciaEvalua;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuDesempeno
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuDesempeno
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 }

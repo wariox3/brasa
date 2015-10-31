@@ -18,6 +18,22 @@ brs_rhu_base_creditotipo_listar:
    path:     /rhu/base/creditotipo/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:listar }
    
+brs_rhu_base_desempeno_concepto_tipo_listar:
+   path:     /rhu/base/desempeno/concepto/tipo/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConceptoTipo:listar }
+   
+brs_rhu_base_desempeno_concepto_tipo_nuevo:
+   path:     /rhu/base/desempeno/concepto/tipo/nuevo/{codigoDesempenoConceptoTipo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConceptoTipo:nuevo }
+   
+brs_rhu_base_desempeno_concepto_listar:
+   path:     /rhu/base/desempeno/concepto/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConcepto:listar }
+   
+brs_rhu_base_desempeno_concepto_nuevo:
+   path:     /rhu/base/desempeno/concepto/nuevo/{codigoDesempenoConcepto}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConcepto:nuevo }   
+   
 brs_rhu_base_creditotipo_nuevo:
    path:     /rhu/base/creditotipo/nuevo/{codigoCreditoTipoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:nuevo }
@@ -788,7 +804,15 @@ brs_rhu_desempeno_nuevo:
     
 brs_rhu_desempeno_lista:
     path:     /rhu/desempeno/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:lista }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:lista }
+    
+brs_rhu_desempeno_detalle:
+    path:     /rhu/desempeno/detalle/{codigoDesempeno}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:detalle }
+    
+brs_rhu_desempeno_detalle_nuevo:
+    path:     /rhu/desempeno/detalle/nuevo/{codigoDesempeno}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:detalleNuevo }    
 
 brs_rhu_capacitacion_nuevo:
     path:     /rhu/capacitacion/nuevo/{codigoCapacitacion}

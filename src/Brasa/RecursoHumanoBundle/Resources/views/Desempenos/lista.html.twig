@@ -6,7 +6,7 @@
             $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
     </script>
     <div class="page-header">
-        <h3>Lista requisitos</h3>
+        <h3>Lista gestión de desempeños</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}                
@@ -30,36 +30,37 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>FECHA</th>
-                        <th>IDENTIFICACION</th>
+                        <th>IDENTIFICACIÓN</th>
                         <th>EMPLEADO</th>
                         <th>CARGO</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>
                     {% for arDesempenos in arDesempenos %}
                         <tr>
-                            <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisitos.codigoRequisitoPk }}">{{ arRequisitos.codigoRequisitoPk }} </td>
-                            <td>{{ arRequisitos.fecha |date("Y/m/d")  }}</td>
-                            <td>{{ arRequisitos.numeroIdentificacion }}</a></td>
-                            <td>{{ arRequisitos.nombreCorto }}</a></td>
-                            <td>{{ arRequisitos.cargoRel.nombre }}</a></td>
-                            <td>{%if arRequisitos.estadoCerrado == 1%} SI {%else%} NO {%endif%}</td>
-                            <td style="text-align: center"><a href="{{ path('brs_rhu_requisito_detalle', { 'codigoRequisito': arRequisitos.codigoRequisitoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>                
-                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisitos.codigoRequisitoPk }}" /></td>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arDesempenos.codigoDesempenoPk }}">{{ arDesempenos.codigoDesempenoPk }} </td>
+                            <td>{{ arDesempenos.fecha |date("Y/m/d")  }}</td>
+                            <td>{{ arDesempenos.empleadoRel.numeroIdentificacion }}</td>
+                            <td>{{ arDesempenos.empleadoRel.nombreCorto }}</td>
+                            <td>{{ arDesempenos.cargoRel.nombre }}</td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_desempeno_nuevo', { 'codigoDesempeno': arDesempenos.codigoDesempenoPk}) }}', 'AgregarDesempeño', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                            <td style="text-align: center"><a href="{{ path('brs_rhu_desempeno_detalle', { 'codigoDesempeno': arDesempenos.codigoDesempenoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>                
+                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDesempenos.codigoDesempenoPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>                       
 
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
-            <div class="btn btn-default btn-sm">Requisitos <span class="badge">{{ arRequisitos.getTotalItemCount }}</span></div>                        
+            <div class="btn btn-default btn-sm">Desempeños <span class="badge">{{ arDesempenos.getTotalItemCount }}</span></div>                        
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-            {{ knp_pagination_render(arRequisitos) }}       
+            {{ knp_pagination_render(arDesempenos) }}       
         </div>
         <div class="btn-toolbar" style="float: right">                           
             <div class="btn-group">                
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_requisito_nuevo', { 'codigoRequisito': 0}) }}', 'AgregarRequisito', 600, 900)">Nuevo</a>            
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_desempeno_nuevo', { 'codigoDesempeno': 0}) }}', 'AgregarDesempeño', 600, 900)">Nuevo</a>            
             </div>
             <div class="btn-group">                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
