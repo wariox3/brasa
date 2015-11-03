@@ -1,0 +1,3 @@
+brasa_turno_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: BrasaTurnoBundle:Default:index }

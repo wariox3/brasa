@@ -1,3 +1,7 @@
+brasa_turno:
+    resource: "@BrasaTurnoBundle/Resources/config/routing.yml"
+    prefix:   /
+
 brasa_administracion_documental:
     resource: "@BrasaAdministracionDocumentalBundle/Resources/config/routing.yml"
     prefix:   /
