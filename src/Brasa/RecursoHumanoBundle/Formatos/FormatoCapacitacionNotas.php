@@ -92,19 +92,6 @@ class FormatoCapacitacionNotas extends \FPDF_FPDF {
     }
 
     public function Footer() {
-
-        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $arCapacitacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion();
-        $arCapacitacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find(self::$codigoCapacitacion);
-        $this->SetFont('Arial', 'B', 9);
-
-        $this->Text(10, 240, "FIRMA: _____________________________________________");
-        $this->Text(10, 247, '');
-        $this->Text(10, 254, "C.C.:     ______________________ de ____________________");
-        $this->Text(105, 240, "FIRMA: _____________________________________________");
-        $this->Text(105, 247, $arConfiguracion->getNombreEmpresa());
-        $this->Text(105, 254, "NIT: ". $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa());
         $this->SetFont('Arial', '', 8);
         $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');;
     }
