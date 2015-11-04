@@ -75,6 +75,11 @@ class RhuDesempeno
     /**
      * @ORM\Column(name="urbanidad", type="float")
      */
+    private $urbanidad = 0;
+    
+    /**
+     * @ORM\Column(name="valores", type="float")
+     */
     private $valores = 0;
     
     /**
@@ -88,9 +93,19 @@ class RhuDesempeno
     private $orientacionResultados = 0;
     
     /**
-     * @ORM\Column(name="construccion_matenimiento_relaciones", type="float")
+     * @ORM\Column(name="construccion_mantenimiento_relaciones", type="float")
      */
     private $construccionMantenimientoRelaciones = 0;
+    
+    /**
+     * @ORM\Column(name="subtotal1", type="float")
+     */
+    private $subTotal1 = 0;
+    
+    /**
+     * @ORM\Column(name="subtotal2", type="float")
+     */
+    private $subTotal2 = 0;
     
     /**
      * @ORM\Column(name="total_desempeno", type="float")
@@ -241,6 +256,30 @@ class RhuDesempeno
     }
 
     /**
+     * Set dependenciaEvalua
+     *
+     * @param string $dependenciaEvalua
+     *
+     * @return RhuDesempeno
+     */
+    public function setDependenciaEvalua($dependenciaEvalua)
+    {
+        $this->dependenciaEvalua = $dependenciaEvalua;
+
+        return $this;
+    }
+
+    /**
+     * Get dependenciaEvalua
+     *
+     * @return string
+     */
+    public function getDependenciaEvalua()
+    {
+        return $this->dependenciaEvalua;
+    }
+
+    /**
      * Set cargoJefeEvalua
      *
      * @param string $cargoJefeEvalua
@@ -385,6 +424,30 @@ class RhuDesempeno
     }
 
     /**
+     * Set urbanidad
+     *
+     * @param float $urbanidad
+     *
+     * @return RhuDesempeno
+     */
+    public function setUrbanidad($urbanidad)
+    {
+        $this->urbanidad = $urbanidad;
+
+        return $this;
+    }
+
+    /**
+     * Get urbanidad
+     *
+     * @return float
+     */
+    public function getUrbanidad()
+    {
+        return $this->urbanidad;
+    }
+
+    /**
      * Set valores
      *
      * @param float $valores
@@ -481,6 +544,54 @@ class RhuDesempeno
     }
 
     /**
+     * Set subTotal1
+     *
+     * @param float $subTotal1
+     *
+     * @return RhuDesempeno
+     */
+    public function setSubTotal1($subTotal1)
+    {
+        $this->subTotal1 = $subTotal1;
+
+        return $this;
+    }
+
+    /**
+     * Get subTotal1
+     *
+     * @return float
+     */
+    public function getSubTotal1()
+    {
+        return $this->subTotal1;
+    }
+
+    /**
+     * Set subTotal2
+     *
+     * @param float $subTotal2
+     *
+     * @return RhuDesempeno
+     */
+    public function setSubTotal2($subTotal2)
+    {
+        $this->subTotal2 = $subTotal2;
+
+        return $this;
+    }
+
+    /**
+     * Get subTotal2
+     *
+     * @return float
+     */
+    public function getSubTotal2()
+    {
+        return $this->subTotal2;
+    }
+
+    /**
      * Set totalDesempeno
      *
      * @param float $totalDesempeno
@@ -502,6 +613,54 @@ class RhuDesempeno
     public function getTotalDesempeno()
     {
         return $this->totalDesempeno;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuDesempeno
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuDesempeno
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 
     /**
@@ -584,77 +743,5 @@ class RhuDesempeno
     public function getDesempenosDetallesDesempenoRel()
     {
         return $this->desempenosDetallesDesempenoRel;
-    }
-
-    /**
-     * Set dependenciaEvalua
-     *
-     * @param string $dependenciaEvalua
-     *
-     * @return RhuDesempeno
-     */
-    public function setDependenciaEvalua($dependenciaEvalua)
-    {
-        $this->dependenciaEvalua = $dependenciaEvalua;
-
-        return $this;
-    }
-
-    /**
-     * Get dependenciaEvalua
-     *
-     * @return string
-     */
-    public function getDependenciaEvalua()
-    {
-        return $this->dependenciaEvalua;
-    }
-
-    /**
-     * Set estadoAutorizado
-     *
-     * @param boolean $estadoAutorizado
-     *
-     * @return RhuDesempeno
-     */
-    public function setEstadoAutorizado($estadoAutorizado)
-    {
-        $this->estadoAutorizado = $estadoAutorizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAutorizado
-     *
-     * @return boolean
-     */
-    public function getEstadoAutorizado()
-    {
-        return $this->estadoAutorizado;
-    }
-
-    /**
-     * Set estadoCerrado
-     *
-     * @param boolean $estadoCerrado
-     *
-     * @return RhuDesempeno
-     */
-    public function setEstadoCerrado($estadoCerrado)
-    {
-        $this->estadoCerrado = $estadoCerrado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCerrado
-     *
-     * @return boolean
-     */
-    public function getEstadoCerrado()
-    {
-        return $this->estadoCerrado;
     }
 }

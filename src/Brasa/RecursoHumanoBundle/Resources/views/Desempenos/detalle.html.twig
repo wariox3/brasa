@@ -24,9 +24,38 @@
                     <td class="td-in-well">{{ arDesempeno.fecha|date("Y/m/d") }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                </tr>                 
+                </tr>
                 <tr>
-                    <td colspan="8">COMENTARIOS: </td>
+                    <td class="titulo">CÓDIGO EMPLEADO:</td>
+                    <td class="td-in-well">{{ arDesempeno.codigoEmpleadoFk }}</td>
+                    <td class="titulo">IDENTIFICACIÓN:</td>
+                    <td class="td-in-well">{{ arDesempeno.empleadoRel.numeroIdentificacion }}</td>
+                    <td class="titulo">EMPLEADO</td>
+                    <td class="td-in-well">{{ arDesempeno.empleadoRel.nombreCorto }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">DEPENDENCIA DEL EVALUADO:</td>
+                    <td class="td-in-well">{{ arDesempeno.dependenciaEvaluado }}</td>
+                    <td class="titulo">CARGO EVALUADO:</td>
+                    <td class="td-in-well">{{ arDesempeno.cargoRel.nombre }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                </tr>
+                <tr>
+                    <td class="titulo">JEFE QUE EVALUA:</td>
+                    <td class="td-in-well">{{ arDesempeno.jefeEvalua }}</td>
+                    <td class="titulo">CARGO JEFE QUE EVALUA:</td>
+                    <td class="td-in-well">{{ arDesempeno.cargoJefeEvalua }}</td>
+                    <td class="titulo">DEPENDENCIA DEL QUE EVALUA</td>
+                    <td class="td-in-well">{{ arDesempeno.dependenciaEvalua }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo">ESTADO AUTORIZADO:</td>
+                    <td class="td-in-well">{% if arDesempeno.estadoAutorizado == 1%} SI {% else %} NO {% endif %}</td>
+                    <td class="titulo">ESTADO CERRADO:</td>
+                    <td class="td-in-well">{% if arDesempeno.estadoCerrado == 1%} SI {% else %} NO {% endif %}</td>
                 </tr>
             </table>
             </div>
@@ -42,13 +71,16 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>CONCEPTO</th>
-                        <th>SIEMPRE</th>
-                        <th>CASI SIEMPRE</th>
-                        <th>ALGUNAS VECES</th>
-                        <th>CASI NUNCA</th>
-                        <th>NUNCA</th>
+                        <th>TIPO CONCEPTO</th>
+                        <th>SIEMPRE 100%</th>
+                        <th>CASI SIEMPRE 75%</th>
+                        <th>ALGUNAS VECES 50%</th>
+                        <th>CASI NUNCA 25%</th>
+                        <th>NUNCA 5%</th>
                         <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                     </tr>
+                    {% set douSubtotal1 = 0  %}
+                    {% set douSubtotal2 = 0  %}
                     {% for arDesempenosDetalles in arDesempenosDetalles %}
                         <tr>                            
                             <td>
@@ -56,6 +88,7 @@
                                 <span class="badge">{{ arDesempenosDetalles.codigoDesempenoDetallePk }}</span>
                             </td>
                             <td>{{ arDesempenosDetalles.desempenoConceptoRel.nombre }}</td>
+                            <td>{{ arDesempenosDetalles.desempenoConceptoRel.desempenoConceptoTipoRel.nombre }}</td>
                             {% if arDesempeno.estadoCerrado == 0 %}
                                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtSiempre{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{{ arDesempenosDetalles.siempre }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtCasiSiempre{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{{ arDesempenosDetalles.casiSiempre }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
@@ -68,13 +101,82 @@
                                 <td style="text-align: right">{{ arDesempenosDetalles.algunasVeces | number_format(0, '.', ',') }}</td>
                                 <td style="text-align: right">{{ arDesempenosDetalles.casiNunca | number_format(0, '.', ',') }}</td>
                                 <td style="text-align: right">{{ arDesempenosDetalles.nunca | number_format(0, '.', ',') }}</td>
-                            {% endif %}                            
-                            
+                            {% endif %}
                             
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th colspan="2">OBSERVACIONES</th>
+                    </tr>    
+                    <tr>    
+                        <td>{{arDesempeno.observaciones}}</td>
+                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo_observacion', { 'codigoDesempeno': arDesempeno.codigoDesempenoPk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                    </tr>
+                </table>
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th colspan="2">QUE ASPECTOS MEJORARÍA DE SU COLABORADOR</th>
+                    </tr>    
+                    <tr>    
+                        <td>{{arDesempeno.aspectosMejorar}}</td>
+                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo_aspectosMejorar', { 'codigoDesempeno': arDesempeno.codigoDesempenoPk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                    </tr>
+                </table>
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th colspan="2">RESULTADOS</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left" colspan="2">ÁREAS EVALUADAS</th>
+                    </tr>
+                    <tr>
+                        <td>ÁREA PROFESIONAL</td>
+                        <td style="text-align: right">{{ arDesempeno.areaProfesional }}</td>
+                    </tr>
+                    <tr>
+                        <td>COMPROMISO</td>
+                        <td style="text-align: right">{{ arDesempeno.compromiso }}</td>
+                    </tr>
+                    <tr>
+                        <td>URBANIDAD</td>
+                        <td style="text-align: right">{{ arDesempeno.urbanidad }}</td>
+                    </tr>
+                    <tr>
+                        <td>VALORES</td>
+                        <td style="text-align: right">{{ arDesempeno.valores }}</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: right">SUBTOTAL</th>
+                        <td style="text-align: right">{{ arDesempeno.subtotal1 }}</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left" colspan="2">COMPETENCIAS</th>
+                    </tr>
+                    <tr>
+                        <td>ORIENTACIÓN AL CLIENTE</td>
+                        <td style="text-align: right">{{ arDesempeno.orientacionCliente }}</td>
+                    </tr>
+                    <tr>    
+                        <td>ORIENTACIÓN A LOS RESULTADOS</td>
+                        <td style="text-align: right">{{ arDesempeno.OrientacionResultados }}</td>
+                    </tr>
+                    <tr>    
+                        <td>CONSTRUCCIÓN Y MANTENIMIENTO DE RELACIONES</td>
+                        <td style="text-align: right">{{ arDesempeno.construccionMantenimientoRelaciones }}</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: right">SUBTOTAL</th>
+                        <td style="text-align: right">{{ arDesempeno.subtotal2 }}</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: right">TOTAL DESEMPEÑO</th>
+                        <th style="text-align: right">{{ arDesempeno.TotalDesempeno }}</th>
+                    </tr>
+                </table>        
+                
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
                         {% if  arDesempeno.estadoAutorizado == 0 %}                                                    
