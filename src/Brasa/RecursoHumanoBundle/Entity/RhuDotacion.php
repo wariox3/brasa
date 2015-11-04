@@ -41,6 +41,11 @@ class RhuDotacion
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;
+
+    /**
+     * @ORM\Column(name="fecha_entrega", type="date", nullable=true)
+     */    
+    private $fechaEntrega;    
     
     /**     
      * @ORM\Column(name="estado_cerrado", type="boolean")
@@ -395,5 +400,29 @@ class RhuDotacion
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set fechaEntrega
+     *
+     * @param \DateTime $fechaEntrega
+     *
+     * @return RhuDotacion
+     */
+    public function setFechaEntrega($fechaEntrega)
+    {
+        $this->fechaEntrega = $fechaEntrega;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEntrega
+     *
+     * @return \DateTime
+     */
+    public function getFechaEntrega()
+    {
+        return $this->fechaEntrega;
     }
 }

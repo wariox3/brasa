@@ -58,108 +58,42 @@ class DotacionController extends Controller
         }
 
         $arDotaciones = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:lista.html.twig', array('arDotaciones' => $arDotaciones, 'form' => $form->createView()));
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:lista.html.twig', array('arDotaciones' => $arDotaciones, 'form' => $form->createView()));
     }
 
-    public function nuevoAction($codigoEmpleado, $codigoDotacion = 0) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
-        if($codigoDotacion != 0) {
-            $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
-            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arDotacion->getCodigoCentroCostoFk());
-        }else{
-            $arDotacion->setFecha(new \DateTime('now'));
-            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());
-            $arDotacion->setCentroCostoRel($arCentroCosto);
-        }
-        
-        $form = $this->createForm(new RhuDotacionType, $arDotacion);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arDotacion = $form->getData();
-            $arDotacion->setEmpleadoRel($arEmpleado);
-            $em->persist($arDotacion);
-            $em->flush();
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_dotacion_nuevo', array('codigoEmpleado' => $codigoEmpleado, 'codigoDotacion' => 0 )));
-            } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
-        }
-
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:nuevo.html.twig', array(
-            'arDotacion' => $arDotacion,
-            'form' => $form->createView()));
-    }
-
-    public function nuevoDotacionAction() {
+    public function nuevoAction($codigoDotacion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $form = $this->createFormBuilder()
-            ->add('numeroIdentificacion', 'text', array('required' => true))
-            ->add('dotacionTipoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuDotacionTipo',
-                        'property' => 'nombre',
-            ))
-            ->add('centroCostoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                        'property' => 'nombre',
-            ))    
-            ->add('fecha', 'date', array('data' => new \DateTime('now')))
-            ->add('codigoInternoReferencia', 'number', array('required' => true))
-            ->add('comentarios', 'textarea', array('required' => false))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
-            ->getForm();
+        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();    
+        if($codigoDotacion != 0) {
+            $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
+        } else {
+            $arDotacion->setFechaEntrega(new \DateTime('now'));
+        }
+        $form = $this->createForm(new RhuDotacionType, $arDotacion);        
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
-            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $form->get('numeroIdentificacion')->getData(), 'estadoActivo' => 1));
-            if (count($arEmpleado) == 0){
-                $objMensaje->Mensaje("error", "No existe el número de identificación", $this);
-            }else {
-                $arDotacion->setEmpleadoRel($arEmpleado[0]);
-                $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
-                $intTipoDotacion = $form->get('dotacionTipoRel')->getData();
-                $arDotacionTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionTipo')->find($intTipoDotacion);
-                if ($arDotacionTipo->getCodigoDotacionTipoPk() == 2){
-                    $arContratosEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $arEmpleado[0]));
-                    if (count($arContratosEmpleado) > 0){
-                        $arDotacion->setCentroCostoRel($form->get('centroCostoRel')->getData());
-                        $arDotacion->setFecha($form->get('fecha')->getData());
-                        $arDotacion->setCodigoInternoReferencia($form->get('codigoInternoReferencia')->getData());
-                        $arDotacion->setComentarios($form->get('comentarios')->getData());
-                        $arDotacion->setDotacionTipoRel($form->get('dotacionTipoRel')->getData());
-                        $em->persist($arDotacion);
-                        $em->flush();
-                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                    }else{
-                        $objMensaje->Mensaje("error", "Este número de identificación no ha tenido ningún contrato con la empresa", $this);
-                    }
-                }else{
-                    if ($arEmpleadoFinal->getCodigoCentroCostoFk() == null){
-                        $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this);
+        if ($form->isValid()) {            
+            $arrControles = $request->request->All();
+            $arDotacion = $form->getData();
+            if($arrControles['txtNumeroIdentificacion'] != '') {
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                if(count($arEmpleado) > 0) {
+                    $arDotacion->setEmpleadoRel($arEmpleado);
+                    $arDotacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                    $em->persist($arDotacion);
+                    $em->flush();
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_rhu_dotacion_nuevo', array('codigoEmpleado' => $codigoEmpleado, 'codigoDotacion' => 0 )));
                     } else {
-                        $arDotacion->setCentroCostoRel($form->get('centroCostoRel')->getData());
-                        $arDotacion->setFecha($form->get('fecha')->getData());
-                        $arDotacion->setCodigoInternoReferencia($form->get('codigoInternoReferencia')->getData());
-                        $arDotacion->setComentarios($form->get('comentarios')->getData());
-                        $arDotacion->setDotacionTipoRel($form->get('dotacionTipoRel')->getData());
-                        $em->persist($arDotacion);
-                        $em->flush();
-                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                    }
-                }
+                        return $this->redirect($this->generateUrl('brs_rhu_dotacion_lista'));
+                    }                    
+                }                
             }
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:nuevoDotacion.html.twig', array(
-
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:nuevo.html.twig', array(
             'form' => $form->createView()));
     }
 

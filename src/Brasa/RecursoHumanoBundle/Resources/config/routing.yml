@@ -251,12 +251,8 @@ brs_rhu_dotacion_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:lista}    
     
 brs_rhu_dotacion_nuevo:
-    path:     /rhu/base/empleado/dotacion/nuevo/{codigoEmpleado}/{codigoDotacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:nuevo }
-    
-brs_rhu_dotacion_nuevo_dotacion:
-    path:     /rhu/base/empleado/dotacion/nuevo/dotacion
-    defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:nuevoDotacion }    
+    path:     /rhu/base/empleado/dotacion/nuevo/{codigoDotacion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:nuevo }    
     
 brs_rhu_dotacion_detalle:
     path:     /rhu/base/empleado/dotacion/detalle/{codigoDotacion}
@@ -850,6 +846,6 @@ brs_rhu_capacitacion_detalle_nuevo_empleado:
     path:     /rhu/capacitacion/detalle/nuevo/empleado/{codigoCapacitacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalleNuevoEmpleado }     
     
-buscar_empleado:
-    pattern:  /buscar/empleado/
-    defaults: { _controller: BrasaGeneralBundle:Busquedas:buscarEmpleado }    
+brs_rhu_buscar_empleado:
+    pattern:  /rhu/buscar/empleado
+    defaults: { _controller: BrasaRecursoHumanoBundle:BuscarEmpleado:lista }    

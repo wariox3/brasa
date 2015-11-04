@@ -57,7 +57,7 @@
                 <td>{{ arDotaciones.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arDotaciones.codigoInternoReferencia  }}</td>
                 <td>{% if arDotaciones.estadoAutorizado == 1%} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_nuevo', {'codigoEmpleado':  arDotaciones.codigoEmpleadoFk, 'codigoDotacion': arDotaciones.codigoDotacionPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_dotacion_nuevo', {'codigoEmpleado':  arDotaciones.codigoEmpleadoFk, 'codigoDotacion': arDotaciones.codigoDotacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_dotacion_detalle', { 'codigoDotacion': arDotaciones.codigoDotacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDotaciones.codigoDotacionPk }}" /></td>
             </tr>
@@ -76,8 +76,7 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_nuevo_dotacion') }}', 'AgregarContrato', 600, 900)">Nuevo</a>
-                <!-- <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_dotacion_nuevo_dotacion') }}">Nuevo</a> -->
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_dotacion_nuevo', {'codigoDotacion': 0}) }}">Nuevo</a>                
             </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
