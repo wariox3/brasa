@@ -387,7 +387,7 @@
                     </tr>
                     {% for arEmpleadoDotacion in arEmpleadoDotacion%}
                         <tr>
-                            <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoDotacion.codigoEmpleadoDotacionPk }}">{{ arEmpleadoDotacion.codigoEmpleadoDotacionPk }} </td>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoDotacion.codigoDotacionPk }}">{{ arEmpleadoDotacion.codigoDotacionPk }} </td>
                             <td>{{ arEmpleadoDotacion.fecha | date('Y/m/d')  }}</td>
                             <td>{{ arEmpleadoDotacion.codigoInternoReferencia  }}</td>
                             <td>{{ arEmpleadoDotacion.comentarios }}</td>

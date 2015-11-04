@@ -35,12 +35,18 @@ class DesempenosController extends Controller
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoDesempeno) {
+                        $arDesempeno = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno();
                         $arDesempeno = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempeno')->find($codigoDesempeno);
+                        $arDesempenoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
                         $arDesempenoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->findBy(array('codigoDesempenoFk' => $codigoDesempeno));
                         foreach ($arDesempenoDetalles AS $arDesempenoDetalle) {
-                            $em->remove($arDesempenoDetalle);
+                            if ($arDesempenoDetalle->getDesempenoRel()->getEstadoAutorizado() == 0){
+                                $em->remove($arDesempenoDetalle);
+                            }
                         }
-                        $em->remove($arDesempeno);
+                        if ($arDesempeno->getEstadoAutorizado() == 0){
+                            $em->remove($arDesempeno);
+                        }
                         $em->flush();
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_desempeno_lista'));
@@ -114,6 +120,7 @@ class DesempenosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arDesempeno = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno();
         $arDesempeno = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempeno')->find($codigoDesempeno);
         $form = $this->formularioDetalle($arDesempeno);
@@ -131,10 +138,14 @@ class DesempenosController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if($arDesempeno->getEstadoAutorizado() == 0) {
-                    $arDesempeno->setEstadoAutorizado(1);
-                    $em->persist($arDesempeno);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_desempeno_detalle', array('codigoDesempeno' => $codigoDesempeno)));
+                    if ($arDesempeno->getTotalDesempeno() != 0 || $arDesempeno->getSubTotal1() != 0 || $arDesempeno->getSubTotal2() != 0){
+                        $arDesempeno->setEstadoAutorizado(1);
+                        $em->persist($arDesempeno);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_desempeno_detalle', array('codigoDesempeno' => $codigoDesempeno)));
+                    }else{
+                        $objMensaje->Mensaje("error", "No se puede autorizar sin ser evaluado el empleado", $this);
+                    }
                 }
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {
@@ -164,7 +175,7 @@ class DesempenosController extends Controller
                     foreach ($arrSeleccionados as $codigoDesempenoDetalle) {
                         $arDesempenoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
                         $arDesempenoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->find($codigoDesempenoDetalle);                        
-                        $em->remove($arDesempenoDetalle);                        
+                        $em->remove($arDesempenoDetalle);
                     }
                     $em->flush();                    
                 } 
@@ -362,13 +373,45 @@ class DesempenosController extends Controller
             }            
         }
         $arDesempenosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
-        $arDesempenosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->findBy(array('codigoDesempenoFk' => $codigoDesempeno));
+        $arDesempenosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->ordenarPreguntasTipo($codigoDesempeno);
         $arDesempenosDetalles = $paginator->paginate($arDesempenosDetalles, $this->get('request')->query->get('page', 1),100);
         return $this->render('BrasaRecursoHumanoBundle:Desempenos:detalle.html.twig', array(
                         'arDesempenosDetalles' => $arDesempenosDetalles,
                         'arDesempeno' => $arDesempeno,
                         'form' => $form->createView()
                     ));
+    }
+    
+    public function detalleNuevoAction($codigoDesempeno) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arDesempenoConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConcepto')->findAll();
+        $arDesempeno = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno();
+        $arDesempeno = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempeno')->find($codigoDesempeno);
+        $form = $this->createFormBuilder()
+            ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnAgregar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoDesempenoConcepto) {
+                        $arDesempenoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConcepto')->find($codigoDesempenoConcepto);
+                        $arDesempenoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
+                        $arDesempenoDetalle->setDesempenoConceptoRel($arDesempenoConcepto);
+                        $arDesempenoDetalle->setDesempenoRel($arDesempeno);
+                        $em->persist($arDesempenoDetalle);
+                    }
+                    $em->flush();
+                }
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Desempenos:detalleNuevo.html.twig', array(
+            'arDesempenoConceptos' => $arDesempenoConceptos,
+            'arDesempeno' => $arDesempeno,
+            'form' => $form->createView()));
     }
     
     public function detalleNuevoObservacionAction($codigoDesempeno) {
@@ -478,17 +521,24 @@ class DesempenosController extends Controller
                     ->setCellValue('B1', 'FECHA')
                     ->setCellValue('C1', 'IDENTIFICACIÓN')
                     ->setCellValue('D1', 'EMPLEADO')
-                    ->setCellValue('E1', 'CARGO');
+                    ->setCellValue('E1', 'CARGO')
+                    ->setCellValue('F1', 'AUTORIZADO');
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
         $arDesempenos = $query->getResult();
         foreach ($arDesempenos as $arDesempeno) {
+            if ($arDesempeno->getEstadoAutorizado() == 1){
+                $autorizado = "SI";
+            }else{
+                $autorizado = "NO";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arDesempeno->getCodigoDesempenoPk())
                     ->setCellValue('B' . $i, $arDesempeno->getFecha()->format('Y-m-d'))
                     ->setCellValue('C' . $i, $arDesempeno->getEmpleadoRel()->getNumeroIdentificacion())
                     ->setCellValue('D' . $i, $arDesempeno->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('E' . $i, $arDesempeno->getCargoRel()->getNombre());
+                    ->setCellValue('E' . $i, $arDesempeno->getCargoRel()->getNombre())
+                    ->setCellValue('F' . $i, $autorizado);
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('Desempenos');

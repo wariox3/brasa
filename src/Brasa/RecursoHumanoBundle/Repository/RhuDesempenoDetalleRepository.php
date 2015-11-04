@@ -10,5 +10,15 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuDesempenoDetalleRepository extends EntityRepository {
+    
+    public function ordenarPreguntasTipo($codigoDesempeno) {
+        $em = $this->getEntityManager();
+        
+        $dql   = "SELECT dd, dc FROM BrasaRecursoHumanoBundle:RhuDesempenoDetalle dd JOIN dd.desempenoConceptoRel dc "
+                . "WHERE dd.codigoDesempenoFk = " . $codigoDesempeno . " ORDER BY dc.codigoDesempenoConceptoTipoFk";
+        $query = $em->createQuery($dql);
+        $ordenarPreguntasTipo = $query->getResult();
+        return $ordenarPreguntasTipo;
+    }
        
 }

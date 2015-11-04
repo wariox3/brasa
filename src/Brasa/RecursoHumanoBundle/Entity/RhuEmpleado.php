@@ -534,7 +534,7 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="RhuDesempeno", mappedBy="empleadoRel")
      */
-    protected $DesempenosEmpleadoRel;
+    protected $desempenosEmpleadoRel;
     
     
     
@@ -568,7 +568,7 @@ class RhuEmpleado
         $this->trasladosPensionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->trasladosSaludEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosInformacionesInternasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->DesempenosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->desempenosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -3144,7 +3144,7 @@ class RhuEmpleado
      */
     public function addDesempenosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosEmpleadoRel)
     {
-        $this->DesempenosEmpleadoRel[] = $desempenosEmpleadoRel;
+        $this->desempenosEmpleadoRel[] = $desempenosEmpleadoRel;
 
         return $this;
     }
@@ -3156,7 +3156,7 @@ class RhuEmpleado
      */
     public function removeDesempenosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosEmpleadoRel)
     {
-        $this->DesempenosEmpleadoRel->removeElement($desempenosEmpleadoRel);
+        $this->desempenosEmpleadoRel->removeElement($desempenosEmpleadoRel);
     }
 
     /**
@@ -3166,6 +3166,6 @@ class RhuEmpleado
      */
     public function getDesempenosEmpleadoRel()
     {
-        return $this->DesempenosEmpleadoRel;
+        return $this->desempenosEmpleadoRel;
     }
 }
