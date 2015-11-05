@@ -32,7 +32,7 @@ class PagoIncapacidadController extends Controller
             }            
         }                      
         $arIncapacidadPagos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                
-        return $this->render('BrasaRecursoHumanoBundle:Incapacidades/PagoIncapacidades:lista.html.twig', array('arIncapacidadPagos' => $arIncapacidadPagos, 'form' => $form->createView()));
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades/PagoIncapacidades:lista.html.twig', array('arIncapacidadPagos' => $arIncapacidadPagos, 'form' => $form->createView()));
     } 
     
     public function nuevoAction($codigoIncapacidadPago) {
@@ -56,7 +56,7 @@ class PagoIncapacidadController extends Controller
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Incapacidades/PagoIncapacidades:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades/PagoIncapacidades:nuevo.html.twig', array(
             'arIncapacidadPagos' => $arIncapacidadPagos,
             'form' => $form->createView()));
     }
@@ -120,7 +120,7 @@ class PagoIncapacidadController extends Controller
         $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);
         $arIncapacidadPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
         $arIncapacidadPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->findBy(array ('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
-        return $this->render('BrasaRecursoHumanoBundle:Incapacidades/PagoIncapacidades:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades/PagoIncapacidades:detalle.html.twig', array(
                     'arIncapacidadPago' => $arIncapacidadPago,
                     'arIncapacidadPagoDetalle' => $arIncapacidadPagoDetalle,
                     'form' => $form->createView()
@@ -158,7 +158,7 @@ class PagoIncapacidadController extends Controller
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        return $this->render('BrasaRecursoHumanoBundle:Incapacidades/PagoIncapacidades:detalleNuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades/PagoIncapacidades:detalleNuevo.html.twig', array(
             'arIncapacidades' => $arIncapacidades,
             'form' => $form->createView()));
     }    

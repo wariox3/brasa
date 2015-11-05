@@ -18,17 +18,17 @@ class BaseEmpleadoController extends Controller
         $form->handleRequest($request);
         $this->listar();
         if($form->isValid()) {
-            if($form->get('BtnFiltrar')->isClicked()) {                
+            if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
             }
-            
+
             if($form->get('BtnPdf')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
                 $objFormatoEmpleado = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEmpleado();
                 $objFormatoEmpleado->Generar($this, $this->strSqlLista);
-                
+
             }
 
             if($form->get('BtnExcel')->isClicked()) {
@@ -53,7 +53,7 @@ class BaseEmpleadoController extends Controller
                     $em->flush();
                 }
             }
-        }         
+        }
         $arEmpleados = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:lista.html.twig', array(
             'arEmpleados' => $arEmpleados,
@@ -66,8 +66,7 @@ class BaseEmpleadoController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()
-            ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))                        
-            ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))            
+            ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))
             ->add('BtnEliminarDisciplinario', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoEstudio', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoExamen', 'submit', array('label'  => 'Eliminar',))
@@ -111,8 +110,8 @@ class BaseEmpleadoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
-            }                        
-            
+            }
+
             if($form->get('BtnEliminarCredito')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarCredito');
                 if(count($arrSeleccionados) > 0) {
@@ -131,7 +130,7 @@ class BaseEmpleadoController extends Controller
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
-            }  
+            }
             if($form->get('BtnRetirarLicencia')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarLicencia');
                 $mensajeLicencia = 0;
@@ -145,7 +144,7 @@ class BaseEmpleadoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
             }
-            
+
             if($form->get('BtnEliminarDisciplinario')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarDisciplinario');
                 if(count($arrSeleccionados) > 0) {
@@ -158,7 +157,7 @@ class BaseEmpleadoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
             }
-            
+
             if($form->get('BtnEliminarEmpleadoEstudio')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleadoEstudio');
                 if(count($arrSeleccionados) > 0) {
@@ -171,7 +170,7 @@ class BaseEmpleadoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
             }
-            
+
             if($form->get('BtnEliminarEmpleadoExamen')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleadoExamen');
                 if(count($arrSeleccionados) > 0) {
@@ -183,8 +182,8 @@ class BaseEmpleadoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
-            }            
-            
+            }
+
             if($form->get('BtnEliminarEmpleadoFamilia')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleadoFamilia');
                 if(count($arrSeleccionados) > 0) {
@@ -196,8 +195,8 @@ class BaseEmpleadoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
-            }            
-            
+            }
+
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoHojaVida = new \Brasa\RecursoHumanoBundle\Formatos\FormatoHojaVida();
                 $objFormatoHojaVida->Generar($this, $codigoEmpleado);
@@ -210,7 +209,7 @@ class BaseEmpleadoController extends Controller
             $strRutaImagen = "/almacenamiento/imagenes/empleados/" . $arEmpleado->getRutaFoto();
         }
         $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('request')->query->get('page', 1),5);
-        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);        
+        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);
         $arLicencias = $paginator->paginate($arLicencias, $this->get('request')->query->get('page', 1),5);
         $arContratos = $paginator->paginate($arContratos, $this->get('request')->query->get('page', 1),5);
         $arCreditos = $paginator->paginate($arCreditos, $this->get('request')->query->get('page', 1),5);
@@ -218,7 +217,7 @@ class BaseEmpleadoController extends Controller
         $arEmpleadoEstudios = $paginator->paginate($arEmpleadoEstudios, $this->get('request')->query->get('page', 1),6);
         $arEmpleadoExamenes = $paginator->paginate($arEmpleadoExamenes, $this->get('request')->query->get('page', 1),6);
         $arEmpleadoFamilia = $paginator->paginate($arEmpleadoFamilia, $this->get('request')->query->get('page', 1),8);
-        $arDotacion = $paginator->paginate($arDotacion, $this->get('request')->query->get('page', 1),8);       
+        $arDotacion = $paginator->paginate($arDotacion, $this->get('request')->query->get('page', 1),8);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
                     'arIncapacidades' => $arIncapacidades,
@@ -230,7 +229,7 @@ class BaseEmpleadoController extends Controller
                     'arEmpleadoEstudios' => $arEmpleadoEstudios,
                     'arEmpleadoExamenes' => $arEmpleadoExamenes,
                     'arEmpleadoFamilia' => $arEmpleadoFamilia,
-                    'arDotacion' => $arDotacion,   
+                    'arDotacion' => $arDotacion,
                     'strRutaImagen' => $strRutaImagen,
                     'form' => $form->createView()
                     ));
@@ -269,7 +268,7 @@ class BaseEmpleadoController extends Controller
             }
             $arEmpleado->setVrSalario(0); //Parametrizar con configuracion salario minimo
             if($request->request->get('ChkCabezaHogar')){
-               $arEmpleado->setCabezaHogar(1); 
+               $arEmpleado->setCabezaHogar(1);
             }
         }
         $form = $this->createForm(new RhuEmpleadoType(), $arEmpleado);
@@ -278,14 +277,14 @@ class BaseEmpleadoController extends Controller
             $boolErrores = 0;
             $arrControles = $request->request->All();
             $arEmpleado = $form->getData();
-            $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());            
+            $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());
             if ($arEmpleado->getLibretaMilitar() <> 0){
                 $arEmpleado->setLibretaMilitar($arEmpleado->getNumeroIdentificacion());
             }
             else {
                 $arEmpleado->setLibretaMilitar("");
             }
-            
+
             if($arEmpleado->getCuenta() != "") {
                 if (strlen($arEmpleado->getCuenta()) != $arEmpleado->getBancoRel()->getNumeroDigitos()){
                     $objMensaje->Mensaje("error", "El numero de digitos son (". $arEmpleado->getBancoRel()->getNumeroDigitos() .") para el banco ". $arEmpleado->getBancoRel()->getNombre(), $this);
@@ -303,18 +302,18 @@ class BaseEmpleadoController extends Controller
                         $varEdad = date('Y') - $varFechaNacimientoAnio -1;
                     }
                 //Fin calculo edad
-                $intEdadEmpleado = $arConfiguracion->getEdadMinimaEmpleado();    
+                $intEdadEmpleado = $arConfiguracion->getEdadMinimaEmpleado();
                 if ($varEdad < $intEdadEmpleado){
                     $objMensaje->Mensaje("error", "El empleado debe ser mayor de " .$intEdadEmpleado. " años!", $this);
                 }else{
                     $em->persist($arEmpleado);
-                    $em->flush();                         
+                    $em->flush();
                     if($form->get('guardarnuevo')->isClicked()) {
                         return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0, 'codigoSeleccion' => 0)));
                     } else {
                         return $this->redirect($this->generateUrl('brs_rhu_base_empleados_lista'));
                     }
-                }                     
+                }
             }
         }
 
@@ -322,36 +321,36 @@ class BaseEmpleadoController extends Controller
             'arEmpleado' => $arEmpleado,
             'form' => $form->createView()));
     }
-  
+
     public function enlazarAction() {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $form = $this->formularioEnlazar();
         $form->handleRequest($request);
         $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
-        if($form->isValid()) {                        
+        if($form->isValid()) {
             if($form->get('BtnFiltrar')->isClicked()) {
                 if($form->get('TxtIdentificacion')->getData() != "") {
                     $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('numeroIdentificacion' => $form->get('TxtIdentificacion')->getData()));
                 }
             }
-        }                  
+        }
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:enlazar.html.twig', array(
             'arSelecciones' => $arSelecciones,
             'form' => $form->createView()));
-    }    
-    
+    }
+
     public function cargarFotoAction($codigoEmpleado) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $form = $this->formularioCargarFoto();
         $form->handleRequest($request);
         $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
-        if($form->isValid()) {                        
+        if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
                 $objArchivo = $form['attachment']->getData();
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);                
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
                 $strRuta = $arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados/" . $objArchivo->getClientOriginalName();
@@ -360,91 +359,91 @@ class BaseEmpleadoController extends Controller
                     $arEmpleado->setRutaFoto($objArchivo->getClientOriginalName());
                     $em->persist($arEmpleado);
                     $em->flush();
-                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                    
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 } else {
                     $arEmpleado->setRutaFoto($objArchivo->getClientOriginalName());
                     $em->persist($arEmpleado);
-                    $em->flush();                    
+                    $em->flush();
                     echo "El archivo " . $strRuta . " ya existe";
                 }
-                                           
+
             }
-        }                  
+        }
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:cargarFoto.html.twig', array('form' => $form->createView()));
-    }        
-    
+    }
+
     private function formularioEnlazar() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
-        $form = $this->createFormBuilder()                        
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))                            
+        $session = $this->getRequest()->getSession();
+        $form = $this->createFormBuilder()
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->getForm();        
+            ->getForm();
         return $form;
-    }        
-    
+    }
+
     private function formularioCargarFoto() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
-        $form = $this->createFormBuilder()                
-            ->add('attachment', 'file')            
+        $session = $this->getRequest()->getSession();
+        $form = $this->createFormBuilder()
+            ->add('attachment', 'file')
             ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
-            ->getForm();        
+            ->getForm();
         return $form;
-    }            
-    
+    }
+
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
+        $session = $this->getRequest()->getSession();
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')                                        
+                    return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false,  
+                'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",    
+                'empty_value' => "TODOS",
                 'data' => ""
-            );  
+            );
         if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
-        $form = $this->createFormBuilder()                        
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
-            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))                            
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnInactivar', 'submit', array('label'  => 'Activar / Inactivar',))
-            ->getForm();        
+            ->getForm();
         return $form;
-    }  
-    
+    }
+
     private function filtrarLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);        
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroEmpleadoActivo', $form->get('estadoActivo')->getData());
-    }    
-    
+    }
+
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL(
-                $session->get('filtroEmpleadoNombre'), 
+                $session->get('filtroEmpleadoNombre'),
                 $session->get('filtroCodigoCentroCosto'),
-                $session->get('filtroEmpleadoActivo'),                
+                $session->get('filtroEmpleadoActivo'),
                 $session->get('filtroIdentificacion'),
-                ""                
-                );         
-    }   
-    
+                ""
+                );
+    }
+
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
@@ -624,6 +623,6 @@ class BaseEmpleadoController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }    
-    
+    }
+
 }

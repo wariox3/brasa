@@ -83,6 +83,7 @@ class DotacionController extends Controller
                     $arDotacion->setEmpleadoRel($arEmpleado);
                     if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
                         $arDotacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                        $arDotacion->setFecha(new \DateTime('now'));
                         $em->persist($arDotacion);
                         $em->flush();
                         if($form->get('guardarnuevo')->isClicked()) {

@@ -105,6 +105,9 @@
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cargar_creditos' ) }}', 'CargarCredito', 600, 900)" >Importar TXT</a>
             </div>
             <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_creditos_nuevo', {'codigoCredito': 0}) }}">Nuevo</a>                
+            </div>
+            <div class="btn-group">
                 {{ form_widget(form.BtnSuspender, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesaprobar, { 'attr': {'class': 'btn btn-warning btn-sm'} }) }}
                 {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}

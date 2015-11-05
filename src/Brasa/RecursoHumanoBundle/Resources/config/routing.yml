@@ -283,7 +283,7 @@ brs_rhu_creditos_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:lista }       
 
 brs_rhu_creditos_nuevo:
-    path:     /rhu/creditos/nuevo/{codigoCredito}/{codigoEmpleado}
+    path:     /rhu/creditos/nuevo/{codigoCredito}
     defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:nuevo }          
 
 brs_rhu_creditos_refinanciar:

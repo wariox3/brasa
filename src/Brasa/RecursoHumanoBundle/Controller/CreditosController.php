@@ -101,7 +101,7 @@ class CreditosController extends Controller
             }
         }
         $arCreditos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Creditos:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:lista.html.twig', array(
             'arCreditos' => $arCreditos,
             'mensaje' => $mensaje,
             'form' => $form->createView()
@@ -133,7 +133,7 @@ class CreditosController extends Controller
         if($arCredito->getVrCuotaTemporal() > 0) {
             $strErrores = "No se puede refinanciar el credito porque tiene periodos generados pendientes por pagar.";
         }
-        return $this->render('BrasaRecursoHumanoBundle:Creditos:refinanciar.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:refinanciar.html.twig', array(
             'arCredito' => $arCredito,
             'formCredito' => $formCredito->createView(),
             'errores' => $strErrores
@@ -178,58 +178,60 @@ class CreditosController extends Controller
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
-    public function nuevoAction($codigoCredito, $codigoEmpleado) {
+    public function nuevoAction($codigoCredito = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $mensaje = 0;
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();    
         if($codigoCredito != 0) {
             $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
-            $PeriodoPago = $arCredito->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
-            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arCredito->getCodigoCentroCostoFk());
         } else {
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
             $arCredito->setFechaInicio(new \DateTime('now'));
-            $PeriodoPago = $arEmpleado->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
-            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());
         }
-
-        $form = $this->createForm(new RhuCreditoType(), $arCredito);
+        $form = $this->createForm(new RhuCreditoType, $arCredito);         
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->get('vrPagar')->getData() == 0 || $form->get('numeroCuotas')->getData() == 0){
-                $mensaje = "El total a pagar y/o las cuotas no pueden estar en cero";
+                $objMensaje->Mensaje("error", "El total a pagar y/o las cuotas no pueden estar en cero", $this);
             } else {
+                $arrControles = $request->request->All();
                 $arCredito = $form->getData();
-                $douVrPagar = $form->get('vrPagar')->getData();
-                $intCuotas = $form->get('numeroCuotas')->getData();
-                $vrSeguro = $form->get('seguro')->getData();
-                $vrSaltoTotal = $douVrPagar;
-                $douVrCuota = $douVrPagar / $intCuotas;
-                $arCredito->setVrCuota($douVrCuota);
-                $arSeleccion = $request->request->get('ChkSeleccionar');
-                $arCredito->setFecha(new \DateTime('now'));
-                $arCredito->setSaldo($vrSaltoTotal);
-                $arCredito->setSaldoTotal($vrSaltoTotal);
-                $arCredito->setNumeroCuotaActual(0);
-                $arCredito->setEmpleadoRel($arEmpleado);
-                $arCredito->setCentroCostoRel($arCentroCosto);
-                $em->persist($arCredito);
-                $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>opener.location.reload();</script>";
-                echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";
-            }
-
+                if($arrControles['txtNumeroIdentificacion'] != '') {
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                    if(count($arEmpleado) > 0) {
+                        $arCredito->setEmpleadoRel($arEmpleado);
+                        if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
+                            $arCredito->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                            $arCredito->setFecha(new \DateTime('now'));
+                            $douVrPagar = $form->get('vrPagar')->getData();
+                            $intCuotas = $form->get('numeroCuotas')->getData();
+                            $vrSeguro = $form->get('seguro')->getData();
+                            $vrSaltoTotal = $douVrPagar;
+                            $douVrCuota = $douVrPagar / $intCuotas;
+                            $arCredito->setVrCuota($douVrCuota);
+                            $arCredito->setSaldo($vrSaltoTotal);
+                            $arCredito->setSaldoTotal($vrSaltoTotal);
+                            $em->persist($arCredito);
+                            $em->flush();
+                            if($form->get('guardarnuevo')->isClicked()) {
+                                return $this->redirect($this->generateUrl('brs_rhu_credito_nuevo', array('codigoCredito' => 0 )));
+                            } else {
+                                return $this->redirect($this->generateUrl('brs_rhu_creditos_lista'));
+                            }                        
+                        } else {
+                            $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                        }                    
+                    } else {
+                        $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                    }                
+                }
+            }    
         }
 
-            return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:nuevo.html.twig', array(
             'arCredito' => $arCredito,
-            'PeriodoPago' => $PeriodoPago,
-            'mensaje' => $mensaje,
             'form' => $form->createView()));
-
-
     }
 
     public function detalleAction($codigoCreditoPk) {
@@ -251,7 +253,7 @@ class CreditosController extends Controller
                 $objFormatoDetalleCredito->Generar($this, $codigoCreditoFk);
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Creditos:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:detalle.html.twig', array(
                     'arCreditoPago' => $arCreditoPago,
                     'arCreditos' => $arCreditos,
                     'form' => $form->createView()
@@ -305,7 +307,7 @@ class CreditosController extends Controller
             }
 
         }
-        return $this->render('BrasaRecursoHumanoBundle:Creditos:nuevoDetalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:nuevoDetalle.html.twig', array(
             'arPagoCredito' => $arPagoCredito,
             'arCredito' => $arCredito,
             'mensaje' => $mensaje,
@@ -381,7 +383,7 @@ class CreditosController extends Controller
                 }
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Creditos:cargarCredito.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:cargarCredito.html.twig', array(
             'form' => $form->createView()
             ));
     }
