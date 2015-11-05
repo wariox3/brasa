@@ -70,7 +70,7 @@
                 <td>{{ arIncapacidades.numeroEps }}</td>
                 <td>{{ arIncapacidades.empleadoRel.numeroIdentificacion }}</td>
                 <td>{{ arIncapacidades.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arIncapacidades.centroCostoRel.nombre  }}</td>
+                <td>{{ arIncapacidades.centroCostoRel.nombre |default('')  }}</td>
                 <td>{{ arIncapacidades.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arIncapacidades.fechaHasta |date("Y/m/d")  }}</td>                                                
                 <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(0, '.', ',') }}</td>                                            
