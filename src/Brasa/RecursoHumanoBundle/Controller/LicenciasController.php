@@ -26,13 +26,6 @@ class LicenciasController extends Controller
                 $this->listar();
                 $this->generarExcel();
             }
-            
-            if($form->get('BtnPdf')->isClicked()) {
-                $this->filtrarLista($form);
-                $this->listar();
-                $objFormatoLicencias = new \Brasa\RecursoHumanoBundle\Formatos\FormatoLicencia();
-                $objFormatoLicencias->Generar($this, $this->strSqlLista);
-            }
 
             if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -137,7 +130,6 @@ class LicenciasController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->getForm();        
