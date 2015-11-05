@@ -49,29 +49,23 @@ class IncapacidadesController extends Controller
             
         }
         $arIncapacidades = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Incapacidades:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades:lista.html.twig', array(
             'arIncapacidades' => $arIncapacidades,
             'form' => $form->createView()
             ));
     }    
     
-    public function nuevoAction($codigoCentroCosto, $codigoEmpleado, $codigoIncapacidad = 0) {
+    public function nuevoAction($codigoIncapacidad = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        if($codigoEmpleado != 0) {            
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        } 
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
         $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();       
         if($codigoIncapacidad != 0) {
             $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
         } else {
             $arIncapacidad->setFecha(new \DateTime('now'));
             $arIncapacidad->setFechaDesde(new \DateTime('now'));
-            $arIncapacidad->setFechaHasta(new \DateTime('now'));    
-            $arIncapacidad->setCentroCostoRel($arCentroCosto);            
+            $arIncapacidad->setFechaHasta(new \DateTime('now'));                
         }        
 
         $form = $this->createForm(new RhuIncapacidadType(), $arIncapacidad);                     
@@ -137,9 +131,8 @@ class IncapacidadesController extends Controller
             
         }                
 
-        return $this->render('BrasaRecursoHumanoBundle:Incapacidades:nuevo.html.twig', array(
-            'arCentroCosto' => $arCentroCosto,
-            'arEmpleado' => $arEmpleado,
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades:nuevo.html.twig', array(
+            'arIncapacidad' => $arIncapacidad,
             'form' => $form->createView()));
     }
 

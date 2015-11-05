@@ -143,7 +143,7 @@ brs_rhu_incapacidades_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:lista }    
 
 brs_rhu_incapacidades_nuevo:
-    path:     /rhu/incapacidades/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoIncapacidad}
+    path:     /rhu/incapacidades/nuevo/{codigoIncapacidad}
     defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:nuevo }
     
 brs_rhu_base_empleado_estudio_tipo_lista:

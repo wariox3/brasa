@@ -69,8 +69,7 @@ class BaseEmpleadoController extends Controller
             ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))
             ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnEliminarDotacion', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnEliminarDisciplinario', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoEstudio', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoExamen', 'submit', array('label'  => 'Eliminar',))
@@ -211,20 +210,7 @@ class BaseEmpleadoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
                 }
-            }
-            
-            if($form->get('BtnEliminarDotacion')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarDotacion');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoEmpleadoDotacion) {
-                        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
-                        $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
-                        $em->remove($arDotacion);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }
+            }            
             
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoHojaVida = new \Brasa\RecursoHumanoBundle\Formatos\FormatoHojaVida();
