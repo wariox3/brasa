@@ -41,8 +41,8 @@
                 <th>CENTRO CENTRO</th>                
                 <th>IDENTIFICACIÓN</th>
                 <th>{{ knp_pagination_sortable(arDotaciones, 'EMPLEADO', 'e.nombreCorto') }}</th>                
-                <th>NÚMERO INTERNO REFERENCIA</th>
-                <th>ESTADO AUTORIZADO</th>
+                <th>NÚMERO REFERENCIA</th>
+                <th>AUTORIZADO</th>
                 <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
@@ -66,7 +66,7 @@
 
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
-            <div class="btn btn-default btn-sm">Empleado dotaciones <span class="badge">{{ arDotaciones.getTotalItemCount }}</span></div>                        
+            <div class="btn btn-default btn-sm">Dotaciones <span class="badge">{{ arDotaciones.getTotalItemCount }}</span></div>                        
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
             {{ knp_pagination_render(arDotaciones) }}       

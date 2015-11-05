@@ -71,7 +71,7 @@ class DotacionController extends Controller
         } else {
             $arDotacion->setFechaEntrega(new \DateTime('now'));
         }
-        $form = $this->createForm(new RhuDotacionType, $arDotacion);        
+        $form = $this->createForm(new RhuDotacionType, $arDotacion);         
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arrControles = $request->request->All();
@@ -81,19 +81,26 @@ class DotacionController extends Controller
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
                 if(count($arEmpleado) > 0) {
                     $arDotacion->setEmpleadoRel($arEmpleado);
-                    $arDotacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                    $em->persist($arDotacion);
-                    $em->flush();
-                    if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_rhu_dotacion_nuevo', array('codigoEmpleado' => $codigoEmpleado, 'codigoDotacion' => 0 )));
+                    if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
+                        $arDotacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                        $em->persist($arDotacion);
+                        $em->flush();
+                        if($form->get('guardarnuevo')->isClicked()) {
+                            return $this->redirect($this->generateUrl('brs_rhu_dotacion_nuevo', array('codigoDotacion' => 0 )));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_rhu_dotacion_lista'));
+                        }                        
                     } else {
-                        return $this->redirect($this->generateUrl('brs_rhu_dotacion_lista'));
+                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
                     }                    
+                } else {
+                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 }                
             }
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:nuevo.html.twig', array(
+            'arDotacion' => $arDotacion,
             'form' => $form->createView()));
     }
 
@@ -163,7 +170,7 @@ class DotacionController extends Controller
         }
         $arDotacionDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
         $arDotacionDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->FindBy(array('codigoDotacionFk' => $codigoDotacion));
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:detalle.html.twig', array(
                     'arDotacion' => $arDotacion,
                     'arDotacionDetalles' => $arDotacionDetalles,
                     'form' => $form->createView()
@@ -209,7 +216,7 @@ class DotacionController extends Controller
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:detallenuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:detallenuevo.html.twig', array(
             'arDotacion' => $arDotacion,
             'arDotacionElementos' => $arDotacionElementos,
             'form' => $form->createView()));
@@ -256,7 +263,7 @@ class DotacionController extends Controller
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoDotacion:detalleDevolucion.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:detalleDevolucion.html.twig', array(
             'arDotacion' => $arDotacion,
             'arDotacionDetalle' => $arDotacionDetalle,
             'form' => $form->createView()));

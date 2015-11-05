@@ -16,7 +16,7 @@ class RhuDotacionType extends AbstractType
             ))
             ->add('fechaEntrega', 'date')                
             ->add('codigoInternoReferencia', 'number', array('required' => false))
-            ->add('comentarios', 'textarea', array('required' => false))                
+            ->add('comentarios', 'textarea', array('required' => false))              
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
     }
