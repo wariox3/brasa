@@ -243,7 +243,7 @@ brs_rhu_licencias_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:lista }
 
 brs_rhu_licencias_nuevo:
-    path:     /rhu/licencias/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoLicencia}
+    path:     /rhu/licencias/nuevo/{codigoLicencia}
     defaults: { _controller: BrasaRecursoHumanoBundle:Licencias:nuevo } 
     
 brs_rhu_dotacion_lista:

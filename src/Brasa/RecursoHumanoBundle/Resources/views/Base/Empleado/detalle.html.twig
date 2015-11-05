@@ -252,8 +252,6 @@
                         <th>COBRAR</th>
                         <th>PRORROGA</th>
                         <th>VALOR</th>
-                        <th></th>
-                        <th></th>
                     </tr>
                     {% for arIncapacidades in arIncapacidades %}
                         <tr>
@@ -266,22 +264,12 @@
                             <td>{% if arIncapacidades.estadoTranscripcion == 1 %}SI {% else %}NO {% endif %}</td>
                             <td>{% if arIncapacidades.estadoCobrar == 1 %}SI {% else %}NO {% endif %}</td>
                             <td>{% if arIncapacidades.estadoProrroga == 1 %}SI {% else %}NO {% endif %}</td>
-                            <td style="text-align: right">{{ arIncapacidades.vrIncapacidad | number_format(0, '.', ',') }}</td>                            
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto':  arIncapacidades.codigoCentroCostoFk, 'codigoEmpleado':  arIncapacidades.codigoEmpleadoFk, 'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
-                            <td><input type="checkbox" name="ChkSeleccionarIncapacidad[]" value="{{ arIncapacidades.codigoIncapacidadPk }}" /></td>
+                            <td style="text-align: right">{{ arIncapacidades.vrIncapacidad | number_format(0, '.', ',') }}</td>                                                       
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
                     {{ knp_pagination_render(arIncapacidades) }}
-                </div>
-                <div class="btn-toolbar" style="float: right">
-                    <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %} <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Nuevo</a> {% endif %}
-                    </div>
-                    <div class="btn-group">
-                        {{ form_widget(form.BtnRetirarIncapacidad, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
-                    </div>
                 </div>
             </div>
 
@@ -296,8 +284,6 @@
                         <th>DÍAS</th>
                         <th>AUX TRANS</th>                        
                         <th>COMENTARIOS</th>
-                        <th></th>
-                        <th></th>
                     </tr>
                     {% for arLicencias in arLicencias %}
                         <tr>
@@ -308,21 +294,11 @@
                             <td style="text-align: right">{{ arLicencias.cantidad | number_format(0, '.', ',') }}</td>
                             <td>{% if arLicencias.afectaTransporte == 1 %} SI {% else %} NO {% endif %}</td>                            
                             <td>{{ arLicencias.comentarios }}</td>
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto':  arLicencias.codigoCentroCostoFk, 'codigoEmpleado':  arLicencias.codigoEmpleadoFk, 'codigoLicencia': arLicencias.codigoLicenciaPk }) }}', 'AgregarLicencia', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
-                            <td><input type="checkbox" name="ChkSeleccionarLicencia[]" value="{{ arLicencias.codigoLicenciaPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
                     {{ knp_pagination_render(arLicencias) }}
-                </div>
-                <div class="btn-toolbar" style="float: right">
-                    <div class="btn-group">
-                        {% if arEmpleado.codigoCentroCostoFk != "" %}<a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto': arEmpleado.codigoCentroCostoFk, 'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoLicencia': 0 }) }}', 'AgregarLicencia', 600, 900)" >Nuevo</a>{% endif %}
-                    </div>
-                    <div class="btn-group">
-                        {{ form_widget(form.BtnRetirarLicencia, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
-                    </div>
                 </div>
             </div>
 

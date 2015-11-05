@@ -66,9 +66,7 @@ class BaseEmpleadoController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()
-            ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))
-            ->add('BtnRetirarIncapacidad', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnRetirarLicencia', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))                        
             ->add('BtnEliminarCredito', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnEliminarDisciplinario', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoEstudio', 'submit', array('label'  => 'Eliminar',))
@@ -109,18 +107,6 @@ class BaseEmpleadoController extends Controller
                         $arContratos->setEstadoActivo(0);
                         $em->persist($arContratos);
                         $em->flush();
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }
-            if($form->get('BtnRetirarIncapacidad')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarIncapacidad');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoIncapacidad) {
-                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-                        $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
-                        $em->remove($arIncapacidad);
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));

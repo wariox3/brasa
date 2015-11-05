@@ -73,11 +73,11 @@
                 <td>{{ arIncapacidades.centroCostoRel.nombre  }}</td>
                 <td>{{ arIncapacidades.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arIncapacidades.fechaHasta |date("Y/m/d")  }}</td>                                                
-                <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(2, '.', ',') }}</td>                                            
+                <td style="text-align: right">{{ arIncapacidades.cantidad | number_format(0, '.', ',') }}</td>                                            
                 <td>{% if arIncapacidades.estadoCobrar == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arIncapacidades.estadoProrroga == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{% if arIncapacidades.estadoTranscripcion == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arIncapacidades.codigoCentroCostoFk, 'codigoEmpleado': arIncapacidades.codigoEmpleadoFk, 'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}', 'AgregarIncapacidad', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                               
+                <td>{% if arIncapacidades.estadoTranscripcion == 1 %} SI {% else %} NO {% endif %}</td>                
+                <td style="text-align: center"><a href="{{ path('brs_rhu_incapacidades_nuevo', {'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arIncapacidades.codigoIncapacidadPk }}" /></td>
             </tr>
             {% endfor %}                        

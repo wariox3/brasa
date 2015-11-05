@@ -71,64 +71,71 @@ class IncapacidadesController extends Controller
         $form = $this->createForm(new RhuIncapacidadType(), $arIncapacidad);                     
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);            
             $arIncapacidad = $form->getData();                          
-            if($arIncapacidad->getFechaDesde() <= $arIncapacidad->getFechaHasta()) {
-                if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arIncapacidad->getCodigoIncapacidadPk())) {                    
-                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(),"")) {
-                        if($arIncapacidad->getFechaDesde() >= $arEmpleado->getFechaContrato()) {
-                            $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
-                            $intDias = $intDias->format('%a');
-                            $intDias = $intDias + 1;
-                            $arIncapacidad->setCantidad($intDias);                        
-                            if($codigoEmpleado != 0) { 
-                                $arIncapacidad->setEmpleadoRel($arEmpleado);                
-                            }
-                            $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
-                            $floVrIncapacidad = 0;
-                            $douVrDia = $arEmpleado->getVrSalario() / 30;
-                            $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;
-                            $douPorcentajePago = $arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel()->getPorPorcentaje();
-                            $arIncapacidad->setPorcentajePago($douPorcentajePago);
-                            if($arIncapacidad->getIncapacidadTipoRel()->getCodigoIncapacidadTipoPk() == 1) {
-                                if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
-                                    $floVrIncapacidad = $intDias * $douVrDia;                    
-                                }
-                                if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
-                                    $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
-                                }
-                                if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
-                                    $floVrIncapacidad = $intDias * $douVrDia;
-                                    $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                    
-                                }
-                            } else {
-                                $floVrIncapacidad = $intDias * $douVrDia;
-                                $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                
-                            }     
-                            $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
-                            $arIncapacidad->setVrSaldo($floVrIncapacidad);
-                            $em->persist($arIncapacidad);
-                            $em->flush();
+            $arrControles = $request->request->All();
+            if($arrControles['txtNumeroIdentificacion'] != '') {
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
+                if(count($arEmpleado) > 0) {
+                    $arIncapacidad->setEmpleadoRel($arEmpleado);
+                    $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                    $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);                        
+                    if($arIncapacidad->getFechaDesde() <= $arIncapacidad->getFechaHasta()) {
+                        if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arIncapacidad->getCodigoIncapacidadPk())) {                    
+                            if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(),"")) {
+                                if($arIncapacidad->getFechaDesde() >= $arEmpleado->getFechaContrato()) {
+                                    $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
+                                    $intDias = $intDias->format('%a');
+                                    $intDias = $intDias + 1;
+                                    $arIncapacidad->setCantidad($intDias);                                                                                                                                    
+                                    $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
+                                    $floVrIncapacidad = 0;
+                                    $douVrDia = $arEmpleado->getVrSalario() / 30;
+                                    $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;
+                                    $douPorcentajePago = $arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel()->getPorPorcentaje();
+                                    $arIncapacidad->setPorcentajePago($douPorcentajePago);
+                                    if($arIncapacidad->getIncapacidadTipoRel()->getCodigoIncapacidadTipoPk() == 1) {
+                                        if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
+                                            $floVrIncapacidad = $intDias * $douVrDia;                    
+                                        }
+                                        if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
+                                            $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
+                                        }
+                                        if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
+                                            $floVrIncapacidad = $intDias * $douVrDia;
+                                            $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                    
+                                        }
+                                    } else {
+                                        $floVrIncapacidad = $intDias * $douVrDia;
+                                        $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                
+                                    }     
+                                    $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
+                                    $arIncapacidad->setVrSaldo($floVrIncapacidad);
+                                    $arIncapacidad->setCentroCostoRel($arEmpleado->getCentroCostoRel());                                                    
+                                    $em->persist($arIncapacidad);
+                                    $em->flush();
 
-                            if($form->get('guardarnuevo')->isClicked()) {                
-                                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_incapacidad', array('codigoCentroCosto' => $codigoCentroCosto)));
+                                    if($form->get('guardarnuevo')->isClicked()) {                                                        
+                                        return $this->redirect($this->generateUrl('brs_rhu_incapacidades_nuevo', array('codigoIncapacidad' => 0)));                                        
+                                    } else {
+                                        return $this->redirect($this->generateUrl('brs_rhu_incapacidades_lista'));
+                                    }                             
+                                } else {                                    
+                                    $objMensaje->Mensaje("error", "No puede ingresar novedades antes de la fecha de inicio del contrato", $this);
+                                }                  
                             } else {
-                                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                            }                             
+                                $objMensaje->Mensaje("error", "Existe una licencia en este periodo de fechas", $this);
+                            }                                                           
                         } else {
-                            echo "No puede ingresar novedades antes de la fecha de inicio del contrato";
-                        }                  
+                            $objMensaje->Mensaje("error", "Existe otra incapaciad del empleado en esta fecha", $this);
+                        }               
                     } else {
-                        echo "Existe una licencia en este periodo de fechas";
-                    }                                                           
+                        $objMensaje->Mensaje("error", "La fecha desde debe ser inferior o igual a la fecha hasta de la incapacidad", $this);
+                    }                    
                 } else {
-                    echo "Existe otra incapaciad del empleado en esta fecha";
-                }               
-            } else {
-                echo "La fecha desde debe ser inferior o igual a la fecha hasta de la incapacidad";
-            }
-            
+                    $objMensaje->Mensaje("error", "El empleado no existe", $this);                                    
+                }
+            }            
         }                
 
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades:nuevo.html.twig', array(

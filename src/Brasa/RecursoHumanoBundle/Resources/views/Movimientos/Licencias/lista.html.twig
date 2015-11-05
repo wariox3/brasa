@@ -45,11 +45,11 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arLicencias.codigoLicenciaPk }}">{{ arLicencias.codigoLicenciaPk }} </td>
                 <td>{{ arLicencias.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arLicencias.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arLicencias.centroCostoRel.nombre  }}</td>
+                <td>{{ arLicencias.centroCostoRel.nombre | default('') }}</td>
                 <td>{{ arLicencias.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arLicencias.fechaHasta |date("Y/m/d")  }}</td>                                                
                 <td style="text-align: right">{{ arLicencias.cantidad | number_format(0, '.', ',') }}</td>                                            
-                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_licencias_nuevo', {'codigoCentroCosto': arLicencias.codigoCentroCostoFk, 'codigoEmpleado': arLicencias.codigoEmpleadoFk, 'codigoLicencia': arLicencias.codigoLicenciaPk }) }}', 'AgregarLicencia', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                               
+                <td style="text-align: center"><a href="{{ path('brs_rhu_licencias_nuevo', {'codigoLicencia': arLicencias.codigoLicenciaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arLicencias.codigoLicenciaPk }}" /></td>
             </tr>
             {% endfor %}                        
@@ -78,6 +78,9 @@
                 {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_licencias_nuevo', {'codigoLicencia': 0}) }}">Nuevo</a>                
+            </div>            
             <div class="btn-group">                
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
             </div>

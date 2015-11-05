@@ -9,16 +9,7 @@ class RhuLicenciaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {        
-        $builder              
-            ->add('empleadoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
-                'query_builder' => function (EntityRepository $er) use ($options) {
-                    return $er->createQueryBuilder('e')
-                    ->where('e.codigoCentroCostoFk = :centroCosto AND e.estadoActivo = 1')
-                    ->setParameter('centroCosto', $options['data']->getCentroCostoRel()->getCodigoCentroCostoPk())
-                    ->orderBy('e.nombreCorto', 'ASC');},
-                'property' => 'nombreCorto',
-                'required' => true))    
+        $builder                  
             ->add('licenciaTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuLicenciaTipo',
                 'query_builder' => function (EntityRepository $er)  {

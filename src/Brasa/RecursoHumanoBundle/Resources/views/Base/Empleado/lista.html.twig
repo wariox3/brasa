@@ -81,8 +81,7 @@
                         <ul class="dropdown-menu" role="menu">                            
                             <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': 0,  'codigoEmpleado': arEmpleados.codigoEmpleadoPk}) }}', 'AgregarContrato', 600, 900)" >Contrato</a></li>                                                                                                                         
                             {% if arEmpleados.centroCostoRel.nombre is defined %}
-                            <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': 0, 'codigoEmpleado': arEmpleados.codigoEmpleadoPk }) }}', 'AgregarCredito', 600, 900)" >Credito</a></li>                                                                            
-                            <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_nuevo', {'codigoCentroCosto': arEmpleados.codigoCentroCostoFk, 'codigoEmpleado': arEmpleados.codigoEmpleadoPk, 'codigoIncapacidad': 0 }) }}', 'AgregarIncapacidad', 600, 900)" >Incapacidad</a></li>
+                            <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': 0, 'codigoEmpleado': arEmpleados.codigoEmpleadoPk }) }}', 'AgregarCredito', 600, 900)" >Credito</a></li>                                                                                                        
                             <li><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto': 0, 'codigoEmpleado': arEmpleados.codigoEmpleadoPk, 'codigoDisciplinario': 0 }) }}', 'AgregarProcesoDisciplinario', 600, 900)" >Proceso disciplinario</a></li>
                         </ul>
                         {% endif%}

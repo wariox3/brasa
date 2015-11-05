@@ -48,72 +48,71 @@ class LicenciasController extends Controller
             }
         }
         $arLicencias = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Licencias:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Licencias:lista.html.twig', array(
             'arLicencias' => $arLicencias,
             'form' => $form->createView()
             ));
     }
     
-    public function nuevoAction($codigoCentroCosto, $codigoEmpleado, $codigoLicencia = 0) {
+    public function nuevoAction($codigoLicencia = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        if($codigoEmpleado != 0) {            
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
-        }
-        $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();        
         $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();       
         if($codigoLicencia != 0) {
             $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->find($codigoLicencia);
         } else {
-        $arLicencia->setAfectaTransporte(1);
-        $arLicencia->setFechaDesde(new \DateTime('now'));
-        $arLicencia->setFechaHasta(new \DateTime('now'));                
-        $arLicencia->setCentroCostoRel($arCentroCosto);   
+            $arLicencia->setAfectaTransporte(1);
+            $arLicencia->setFechaDesde(new \DateTime('now'));
+            $arLicencia->setFechaHasta(new \DateTime('now'));                  
         }
-        //$arLicencia->setEstadoCerrada(0);        
-        $form = $this->createForm(new RhuLicenciaType(), $arLicencia); 
-                    
+        $form = $this->createForm(new RhuLicenciaType(), $arLicencia);                     
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arLicencia = $form->getData(); 
-            if($arLicencia->getFechaDesde() <= $arLicencia->getFechaHasta()) {
-                if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arLicencia->getFechaDesde(), $arLicencia->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(),"")) {                    
-                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arLicencia->getFechaDesde(), $arLicencia->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arLicencia->getCodigoLicenciaPk())) {
-                        if($arEmpleado->getFechaContrato() <= $arLicencia->getFechaDesde()) {
-                            if($codigoEmpleado != 0) { 
-                                $arLicencia->setEmpleadoRel($arEmpleado);                
-                            }
-                            $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
-                            $intDias = $intDias->format('%a');
-                            $intDias = $intDias + 1;
-
-                            $arLicencia->setCantidad($intDias);                            
-                            $em->persist($arLicencia);
-                            $em->flush();                        
-                            if($form->get('guardarnuevo')->isClicked()) {
-                                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_licencia', array('codigoCentroCosto' => $codigoCentroCosto)));
-                            } else {
-                                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                            }                            
+            $arrControles = $request->request->All();
+            if($arrControles['txtNumeroIdentificacion'] != '') {
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
+                if(count($arEmpleado) > 0) {
+                    $arLicencia->setEmpleadoRel($arEmpleado);
+                    if($arLicencia->getFechaDesde() <= $arLicencia->getFechaHasta()) {
+                        if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arLicencia->getFechaDesde(), $arLicencia->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(),"")) {                    
+                            if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arLicencia->getFechaDesde(), $arLicencia->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arLicencia->getCodigoLicenciaPk())) {
+                                if($arEmpleado->getFechaContrato() <= $arLicencia->getFechaDesde()) {
+                                    $arLicencia->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                                    $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
+                                    $intDias = $intDias->format('%a');
+                                    $intDias = $intDias + 1;
+                                    
+                                    $arLicencia->setCantidad($intDias);                            
+                                    $em->persist($arLicencia);
+                                    $em->flush();                        
+                                    if($form->get('guardarnuevo')->isClicked()) {
+                                        return $this->redirect($this->generateUrl('brs_rhu_licencias_nuevo', array('codigoLicencia' => 0)));                                        
+                                    } else {
+                                        return $this->redirect($this->generateUrl('brs_rhu_licencias_lista'));
+                                    }                            
+                                } else {
+                                    $objMensaje->Mensaje("error", "La fecha de inicio del contrato es mayor a la licencia", $this); 
+                                }                        
+                            } else {                                
+                                $objMensaje->Mensaje("error", "Existe otra licencia en este rango de fechas", $this); 
+                            }                                           
                         } else {
-                            echo "La fecha de inicio del contrato es mayor a la licencia";
-                        }                        
-                    } else {
-                        echo "existe otra licencia en este rango de fechas";
-                    }                                           
+                            $objMensaje->Mensaje("error", "Hay incapacidades que se cruzan con la fecha de la licencia", $this); 
+                        }
+                    } else {                        
+                        $objMensaje->Mensaje("error", "La fecha desde debe ser inferior o igual a la fecha hasta", $this);
+                    }                     
                 } else {
-                    echo "Hay incapacidades que se cruzan con la fecha de la licencia";
-                }
-            } else {
-                echo "La fecha desde debe ser inferior o igual a la fecha hasta";
-            }            
+                    $objMensaje->Mensaje("error", "El empleado no existe", $this); 
+                }                
+            }           
         }                
 
-        return $this->render('BrasaRecursoHumanoBundle:Licencias:nuevo.html.twig', array(
-            'arCentroCosto' => $arCentroCosto,
-            'arEmpleado' => $arEmpleado,
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Licencias:nuevo.html.twig', array(            
+            'arLicencia' => $arLicencia,
             'form' => $form->createView()));
     }
     
