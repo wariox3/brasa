@@ -15,14 +15,14 @@ class RhuDisciplinarioRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
-        if($codigoCentroCosto != "" ) {
+        if($codigoCentroCosto != "" || $codigoCentroCosto != 0 ) {
             $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
         }
         if ($strDesde != ""){
-            $dql .= " AND d.fecha >='" . $strDesde . "'";
+            $dql .= " AND d.fecha >='" . date_format($strDesde, ('Y-m-d')) . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND d.fecha <='" . $strHasta . "'";
+            $dql .= " AND d.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         $dql .= " ORDER BY d.fecha";
         return $dql;

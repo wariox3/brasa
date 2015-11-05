@@ -19,7 +19,7 @@ class RhuCreditoRepository extends EntityRepository {
         }
         if($strDesde != "" || $strDesde != 0){
             //$strDesde = new \DateTime($strDesde);
-            $dql .= " AND c.fechaInicio >='" . $strDesde->format('Y-m-d') . "'";
+            $dql .= " AND c.fechaInicio >='" . date_format($strDesde, ('Y-m-d')) . "'";
         }
         if($strHasta != "" || $strHasta != 0) {
             //$strHasta = new \DateTime($strHasta);
@@ -30,18 +30,18 @@ class RhuCreditoRepository extends EntityRepository {
         return $dql;
     }
     
-    public function listaCreditoDQL($strIdentificacion = "", $strDesde = 0, $strHasta = 0) {        
+    public function listaCreditoDQL($strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuCredito c JOIN c.empleadoRel e WHERE c.codigoCreditoPk <> 0";
            
         if($strIdentificacion != "") {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
-        if ($strDesde != "" || $strDesde != 0){
-            $dql .= " AND c.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
+        if ($strDesde != "" ){
+            $dql .= " AND c.fechaInicio >='" . date_format($strDesde, ('Y-m-d')). "'";
         }
-        if($strHasta != "" || $strHasta != 0) {
-            $dql .= " AND c.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        if($strHasta != "" ) {
+            $dql .= " AND c.fechaInicio <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";

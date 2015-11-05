@@ -136,7 +136,7 @@ class DisciplinarioController extends Controller
                 $session->get('filtroIdentificacion'),
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
+                $session->get('filtroHasta')
                 );
     }
 
@@ -157,13 +157,12 @@ class DisciplinarioController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
-        $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->fechaAntigua();
 
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('fechaDesde', 'date', array('label'  => 'Desde', 'data' => new \DateTime($fechaAntigua)))
-            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
@@ -177,8 +176,8 @@ class DisciplinarioController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData()->format('Y-m-d'));
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData()->format('Y-m-d'));
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
     private function generarExcel() {
