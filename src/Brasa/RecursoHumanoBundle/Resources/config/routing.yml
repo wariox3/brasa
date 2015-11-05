@@ -763,7 +763,7 @@ brs_rhu_disciplinario_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:Disciplinario:lista }         
     
 brs_rhu_disciplinario_nuevo:
-    path:     /rhu/disciplinario/nuevo/{codigoCentroCosto}/{codigoEmpleado}/{codigoDisciplinario}
+    path:     /rhu/disciplinario/nuevo/{codigoDisciplinario}
     defaults: { _controller: BrasaRecursoHumanoBundle:Disciplinario:nuevo }     
 
 brs_rhu_disciplinario_detalle:

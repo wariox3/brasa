@@ -14,13 +14,13 @@ class DisciplinarioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();        
+        $session = $this->getRequest()->getSession();
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->listar();
         if($form->isValid()) {
-            $arrSelecionados = $request->request->get('ChkSeleccionar');                       
-            if($form->get('BtnEliminar')->isClicked()){    
+            $arrSelecionados = $request->request->get('ChkSeleccionar');
+            if($form->get('BtnEliminar')->isClicked()){
                 if(count($arrSelecionados) > 0) {
                     foreach ($arrSelecionados AS $codigoDisciplinario) {
                         $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
@@ -28,13 +28,13 @@ class DisciplinarioController extends Controller
                         $em->remove($arDisciplinario);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_disciplinario_lista'));                    
+                    return $this->redirect($this->generateUrl('brs_rhu_disciplinario_lista'));
                 }
             }
-            
+
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $this->listar();              
+                $this->listar();
             }
 
             if($form->get('BtnExcel')->isClicked()) {
@@ -42,66 +42,75 @@ class DisciplinarioController extends Controller
                 $this->listar();
                 $this->generarExcel();
             }
-        }          
-        
-        $arDisciplinarios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Disciplinario:lista.html.twig', array('arDisciplinarios' => $arDisciplinarios, 'form' => $form->createView()));
-    }   
+        }
 
-    public function nuevoAction($codigoCentroCosto, $codigoEmpleado, $codigoDisciplinario = 0) {
+        $arDisciplinarios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Disciplinario:lista.html.twig', array('arDisciplinarios' => $arDisciplinarios, 'form' => $form->createView()));
+    }
+
+    public function nuevoAction($codigoDisciplinario = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
         if($codigoDisciplinario != 0) {
             $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
-            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arDisciplinario->getCodigoCentroCostoFk());
-        }else{
-            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());
-        }         
+        } else {
+            $arDisciplinario->setFecha(new \DateTime('now'));
+        }
         $form = $this->createForm(new RhuDisciplinarioType, $arDisciplinario);
         $form->handleRequest($request);
-        if ($form->isValid()) {           
-            $arDisciplinario = $form->getData();            
-            $arDisciplinario->setFecha(new \DateTime('now'));
-            $arDisciplinario->setEmpleadoRel($arEmpleado);
-            $arDisciplinario->setCentroCostoRel($arCentroCosto);
-            $em->persist($arDisciplinario);
-            $em->flush();
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_disciplinario_nuevo', array('codigoCentroCosto' =>  $codigoCentroCosto, 'codigoEmpleado' => $codigoEmpleado, 'codigoDisciplinario' => 0 )));
-            } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        if ($form->isValid()) {
+            $arrControles = $request->request->All();
+            $arDisciplinario = $form->getData();
+            if($arrControles['txtNumeroIdentificacion'] != '') {
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                if(count($arEmpleado) > 0) {
+                    $arDisciplinario->setEmpleadoRel($arEmpleado);
+                    if($arEmpleado->getCodigoContratoActivoFk() != '') {
+                        $arDisciplinario->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                        $em->persist($arDisciplinario);
+                        $em->flush();
+                        if($form->get('guardarnuevo')->isClicked()) {
+                            return $this->redirect($this->generateUrl('brs_rhu_disciplinario_nuevo', array('codigoDisciplinario' => 0 )));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_rhu_disciplinario_lista'));
+                        }
+                    } else {
+                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                    }
+                } else {
+                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                }
             }
         }
-        $arDisciplinarios = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
-        return $this->render('BrasaRecursoHumanoBundle:Disciplinario:nuevo.html.twig', array(
+
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Disciplinario:nuevo.html.twig', array(
             'arDisciplinario' => $arDisciplinario,
-            'arDisciplinarios' => $arDisciplinarios,
             'form' => $form->createView()));
     }
-    
+
     public function detalleAction($codigoDisciplinario) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();    
-        $objMensaje = $this->get('mensajes_brasa');             
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');
         $arCodigoTipoProceso = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
         $arCodigoTipoProceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
-        if($form->isValid()) { 
+        if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
                 if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 6){
                    $objFormatoDisciplinarioSuspencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioSuspension();
-                   $objFormatoDisciplinarioSuspencion->Generar($this, $codigoDisciplinario); 
-                }   
+                   $objFormatoDisciplinarioSuspencion->Generar($this, $codigoDisciplinario);
+                }
                 if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 7) {
                     $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioLlamadoAtencion();
                     $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
-                }   
+                }
                 if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 8) {
                     $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioDescargo();
                     $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
@@ -111,67 +120,67 @@ class DisciplinarioController extends Controller
                     $objFormatoDisciplinarioVacaciones->Generar($this, $codigoDisciplinario);
                 }
             }
- 
-        }                
-        $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);        
-        return $this->render('BrasaRecursoHumanoBundle:Disciplinario:detalle.html.twig', array(
+
+        }
+        $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Disciplinario:detalle.html.twig', array(
                     'arDisciplinario' => $arDisciplinario,
                     'form' => $form->createView()
                     ));
-    }                
-    
+    }
+
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strListaDql = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->listaDQL(                
-                $session->get('filtroIdentificacion'),                                 
+        $this->strListaDql = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->listaDQL(
+                $session->get('filtroIdentificacion'),
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroDesde'),
                     $session->get('filtroHasta')
-                );  
-    }   
+                );
+    }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
+        $session = $this->getRequest()->getSession();
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')                                        
+                    return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false,  
+                'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",    
+                'empty_value' => "TODOS",
                 'data' => ""
-            );  
+            );
         if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
         $fechaAntigua = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->fechaAntigua();
-        
-        $form = $this->createFormBuilder()                        
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)                                                       
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
-            ->add('fechaDesde', 'date', array('label'  => 'Desde', 'data' => new \DateTime($fechaAntigua))) 
-            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))    
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
+
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('fechaDesde', 'date', array('label'  => 'Desde', 'data' => new \DateTime($fechaAntigua)))
+            ->add('fechaHasta', 'date', array('label'  => 'Hasta', 'data' => new \DateTime('now')))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->getForm();        
+            ->getForm();
         return $form;
-    }    
-    
+    }
+
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);                
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData()->format('Y-m-d'));
         $session->set('filtroHasta', $form->get('fechaHasta')->getData()->format('Y-m-d'));
-    }  
-    
+    }
+
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -201,7 +210,7 @@ class DisciplinarioController extends Controller
                 $query = $em->createQuery($this->strListaDql);
                 $arDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
                 $arDisciplinarios = $query->getResult();
-                
+
                 foreach ($arDisciplinarios as $arDisciplinario) {
                 if ($arDisciplinario->getAsunto() == Null){
                 $asunto = "NO APLICA";
@@ -217,7 +226,7 @@ class DisciplinarioController extends Controller
                     $suspension = "NO APLICA";
                 } else {
                     $suspension = $arDisciplinario->getSuspension();
-                }    
+                }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arDisciplinario->getCodigoDisciplinarioPk())
                             ->setCellValue('B' . $i, $arDisciplinario->getFecha()->format('Y/m/d'))
@@ -249,5 +258,5 @@ class DisciplinarioController extends Controller
                 $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
                 $objWriter->save('php://output');
                 exit;
-            }    
+            }
 }

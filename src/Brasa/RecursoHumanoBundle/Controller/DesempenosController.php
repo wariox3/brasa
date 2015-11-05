@@ -55,46 +55,34 @@ class DesempenosController extends Controller
         }
 
         $arDesempenos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Desempenos:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Desempenos:lista.html.twig', array(
             'arDesempenos' => $arDesempenos,
             'form' => $form->createView()));
     }
     
-    public function nuevoAction($codigoDesempeno) {
+    public function nuevoAction($codigoDesempeno = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arDesempeno = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno();
-        if ($codigoDesempeno != 0){
+        $arDesempeno = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno();    
+        if($codigoDesempeno != 0) {
             $arDesempeno = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempeno')->find($codigoDesempeno);
-        }else{
+        } else {
             $arDesempeno->setFecha(new \DateTime('now'));
         }
-        $form = $this->createForm(new RhuDesempenoType(), $arDesempeno);
+        $form = $this->createForm(new RhuDesempenoType, $arDesempeno);         
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            if ($codigoDesempeno != 0){
-                $arDesempeno = $form->getData();
-                $em->persist($arDesempeno);
-                $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }else{
-                $arrControles = $request->request->All();
+        if ($form->isValid()) {            
+            $arrControles = $request->request->All();
+            $arDesempeno = $form->getData();
+            if($arrControles['txtNumeroIdentificacion'] != '') {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $arrControles['numeroIdentificacion'], 'estadoActivo' => 1));
-                if (count($arEmpleado) == 0){
-                    $objMensaje->Mensaje("error", "No existe el número de identificación", $this);
-                } else {
-                    $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
-                    if ($arEmpleadoFinal->getEstadoContratoActivo() == 0){
-                        $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this);
-                    }else{
-                        $arDesempeno = $form->getData();
-                        $arDesempeno->setEmpleadoRel($arEmpleadoFinal);
-                        $arCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuCargo();
-                        $arCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCargo')->find($arEmpleadoFinal->getCodigoCargoFk());
-                        $arDesempeno->setCargoRel($arCargo);
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                if(count($arEmpleado) > 0) {
+                    $arDesempeno->setEmpleadoRel($arEmpleado);
+                    if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
+                        
+                        $arDesempeno->setCargoRel($arEmpleado->getCargoRel());
                         $em->persist($arDesempeno);
                         $arDesempenosConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConcepto();
                         $arDesempenosConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConcepto')->findAll();
@@ -105,14 +93,22 @@ class DesempenosController extends Controller
                             $em->persist($arDesempenoDetalle);
                         }
                         $em->flush();
-                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                    }
-                }
+                        if($form->get('guardarnuevo')->isClicked()) {
+                            return $this->redirect($this->generateUrl('brs_rhu_desempeno_nuevo', array('codigoDesempeno' => 0 )));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_rhu_desempeno_lista'));
+                        }                        
+                    } else {
+                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                    }                    
+                } else {
+                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                }                
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Desempenos:nuevo.html.twig', array(
+
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Desempenos:nuevo.html.twig', array(
             'arDesempeno' => $arDesempeno,
-            'codigoDesempeno' => $codigoDesempeno,
             'form' => $form->createView()));
     }
     
@@ -375,7 +371,7 @@ class DesempenosController extends Controller
         $arDesempenosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
         $arDesempenosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->ordenarPreguntasTipo($codigoDesempeno);
         $arDesempenosDetalles = $paginator->paginate($arDesempenosDetalles, $this->get('request')->query->get('page', 1),100);
-        return $this->render('BrasaRecursoHumanoBundle:Desempenos:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Desempenos:detalle.html.twig', array(
                         'arDesempenosDetalles' => $arDesempenosDetalles,
                         'arDesempeno' => $arDesempeno,
                         'form' => $form->createView()
@@ -408,7 +404,7 @@ class DesempenosController extends Controller
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        return $this->render('BrasaRecursoHumanoBundle:Desempenos:detalleNuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Desempenos:detalleNuevo.html.twig', array(
             'arDesempenoConceptos' => $arDesempenoConceptos,
             'arDesempeno' => $arDesempeno,
             'form' => $form->createView()));
@@ -427,7 +423,7 @@ class DesempenosController extends Controller
             $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        return $this->render('BrasaRecursoHumanoBundle:Desempenos:detalleNuevoObservacion.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Desempenos:detalleNuevoObservacion.html.twig', array(
             'form' => $form->createView()));
     }
     
@@ -444,7 +440,7 @@ class DesempenosController extends Controller
             $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        return $this->render('BrasaRecursoHumanoBundle:Desempenos:detalleNuevoAspectosMejorar.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Desempenos:detalleNuevoAspectosMejorar.html.twig', array(
             'form' => $form->createView()));
     }
 

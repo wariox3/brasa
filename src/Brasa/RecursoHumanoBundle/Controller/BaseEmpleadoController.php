@@ -67,7 +67,6 @@ class BaseEmpleadoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()
             ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))
-            ->add('BtnEliminarDisciplinario', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoEstudio', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoExamen', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoFamilia', 'submit', array('label'  => 'Eliminar',))
