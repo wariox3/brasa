@@ -85,7 +85,7 @@
                 <td>{% if arSeleccion.presentaPruebas == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arSeleccion.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arSeleccion.referenciasVerificadas == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{% if arSeleccion.estadoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arSeleccion.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_seleccion_detalle', { 'codigoSeleccion': arSeleccion.codigoSeleccionPk }) }}" target='_blank'><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 
             </tr>

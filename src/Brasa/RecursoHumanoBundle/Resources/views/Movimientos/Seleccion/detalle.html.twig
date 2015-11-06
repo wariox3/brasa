@@ -6,12 +6,26 @@
         $(this).tab('show');
     })
 </script>
+{{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+{{ form_errors(form) }}
 <div class="container">
     <div class="page-header">
         <h3>Proceso selección</h3>
     </div>
     <div class="btn-group">
-        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
+        {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+        {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+        {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+        {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+        {% if arSeleccion.estadoAutorizado == 0 %}
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" disabled="disabled">Archivos</a>
+        {% else %}
+            {% if arSeleccion.estadoCerrado == 1 %}
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" disabled="disabled">Archivos</a>
+            {% else %}    
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700) ">Archivos</a>
+            {% endif %}    
+        {% endif %}    
     </div>
     <br /> <br />    
     <!-- Encabezado Movimiento -->
@@ -67,8 +81,7 @@
     </div>
 
     <!-- Fin Encabezado Movimiento -->
-    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
-        {{ form_errors(form) }}
+    
     <ul class="nav nav-tabs">
         <li class="active"><a href="#referencias" data-toggle="tab">Referencias</a></li>
         <li><a href="#pruebas" data-toggle="tab">Pruebas</a></li>
@@ -111,7 +124,15 @@
                     <!-- Botones Menu Items -->
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionReferencia', 600, 900)" >Nuevo</a>
+                            {% if arSeleccion.estadoAutorizado == 0 %}
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionReferencia', 600, 900)" disabled="disabled">Nuevo</a>
+                            {% else %}
+                                {% if arSeleccion.estadoCerrado == 1 %}
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionReferencia', 600, 900)" disabled="disabled">Nuevo</a>
+                                {% else %}    
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionReferencia', 600, 900)" >Nuevo</a>
+                                {% endif %}    
+                            {% endif %}    
                         </div>
                         <div class="btn-group">
                             {{ form_widget(form.BtnVerificar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
@@ -151,7 +172,16 @@
                     <!-- Botones Menu Items -->
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionPrueba', 600, 900)" >Nuevo</a>
+                            {% if arSeleccion.estadoAutorizado == 0 %}
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionPrueba', 600, 900)" disabled="disabled">Nuevo</a>
+                            {% else %}
+                                {% if arSeleccion.estadoCerrado == 1 %}
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionPrueba', 600, 900)" disabled="disabled">Nuevo</a>
+                                {% else %}    
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionPrueba', 600, 900)" >Nuevo</a>
+                                {% endif %}    
+                                
+                            {% endif %}    
                         </div>
                         <div class="btn-group">
                             {{ form_widget(form.BtnEliminarPrueba, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
@@ -177,7 +207,7 @@
                                 <span class="badge">{{ arSeleccionVisita.codigoSeleccionVisitaPk }}</span>
                             </td>
                             <td>{{ arSeleccionVisita.fecha|date('Y-m-d') }}</td>
-                            <td>{{ arSeleccionVisita.comentarios }}</td>
+                            <td>{{ arSeleccionVisita.comentarios }}</td>    
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 11,  'numero': arSeleccionVisita.codigoSeleccionVisitaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>
                             <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSeleccionVisita.codigoSeleccionVisitaPk }}" /></td>
                         </tr>
@@ -186,7 +216,15 @@
                     <!-- Botones Menu Items -->
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" >Nuevo</a>
+                            {% if arSeleccion.estadoAutorizado == 0 %}
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" disabled="disabled">Nuevo</a>
+                            {% else %}
+                                {% if arSeleccion.estadoCerrado == 1 %}
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" disabled="disabled">Nuevo</a>
+                                {% else %}
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" >Nuevo</a>
+                                {% endif %}    
+                            {% endif %}    
                         </div>
                         <div class="btn-group">
                             {{ form_widget(form.BtnEliminarVisita, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}

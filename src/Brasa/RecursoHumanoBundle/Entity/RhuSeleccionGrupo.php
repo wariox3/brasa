@@ -35,7 +35,7 @@ class RhuSeleccionGrupo
     private $cantidadSolicitida;
     
     /**
-     * @ORM\Column(name="fecha_pruebas", type="datetime")
+     * @ORM\Column(name="fecha_pruebas", type="datetime", nullable=true)
      */ 
     
     private $fechaPruebas;         

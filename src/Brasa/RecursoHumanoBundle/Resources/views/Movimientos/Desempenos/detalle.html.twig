@@ -114,7 +114,7 @@
                     <tr>    
                         <td>{{arDesempeno.observaciones}}</td>
                         {% if arDesempeno.estadoAutorizado == 0%}
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo_observacion', { 'codigoDesempeno': arDesempeno.codigoDesempenoPk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_desempeno_detalle_nuevo_observacion', { 'codigoDesempeno': arDesempeno.codigoDesempenoPk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                         {% endif %}    
                     </tr>
                 </table>
@@ -125,7 +125,7 @@
                     <tr>    
                         <td>{{arDesempeno.aspectosMejorar}}</td>
                         {% if arDesempeno.estadoAutorizado == 0%}
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo_aspectosMejorar', { 'codigoDesempeno': arDesempeno.codigoDesempenoPk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_desempeno_detalle_nuevo_aspectosMejorar', { 'codigoDesempeno': arDesempeno.codigoDesempenoPk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                         {% endif %}
                     </tr>
                 </table>

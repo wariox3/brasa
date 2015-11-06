@@ -10,10 +10,16 @@ class RhuSeleccionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+                
             ->add('seleccionTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('s')
+                    ->orderBy('s.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true
+                'required' => false,
+                'empty_data' => 3,
+                'empty_value' => 'SELECCIÓN DE PERSONAL',            
             ))
             ->add('seleccionGrupoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionGrupo',
@@ -23,7 +29,7 @@ class RhuSeleccionType extends AbstractType
                     ->setParameter('estadoAbierto', 1)
                     ->orderBy('sg.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                            
+                'required' => false))
             ->add('tipoIdentificacionRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuTipoIdentificacion',
                 'property' => 'nombre',
@@ -35,7 +41,7 @@ class RhuSeleccionType extends AbstractType
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))     
+                'required' => true))
             ->add('estadoCivilRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEstadoCivil',
                 'property' => 'nombre',
@@ -45,7 +51,7 @@ class RhuSeleccionType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuRh',
                 'property' => 'tipo',
                 'required' => true
-            ))                
+            ))
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
@@ -59,26 +65,25 @@ class RhuSeleccionType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))               
+                'required' => true))
             ->add('ciudadNacimientoRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                
-            ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))                
-            ->add('fechaPruebas', 'datetime', array('required' => false))                 
+                'required' => true))
+            ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))
             ->add('nombre1', 'text', array('required' => true))
             ->add('nombre2', 'text', array('required' => false))
             ->add('apellido1', 'text', array('required' => true))
             ->add('apellido2', 'text', array('required' => false))
-            ->add('correo', 'text', array('required' => false))                            
+            ->add('correo', 'text', array('required' => false))
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
-            ->add('direccion', 'text', array('required' => false))                            
+            ->add('direccion', 'text', array('required' => false))
             ->add('numeroIdentificacion', 'text', array('required' => true))
-            ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))                            
+            ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

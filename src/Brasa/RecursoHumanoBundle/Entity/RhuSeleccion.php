@@ -15,251 +15,255 @@ class RhuSeleccion
      * @ORM\Column(name="codigo_seleccion_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoSeleccionPk;        
-    
+    private $codigoSeleccionPk;
+
     /**
-     * @ORM\Column(name="codigo_seleccion_grupo_fk", type="integer")
-     */    
+     * @ORM\Column(name="codigo_seleccion_grupo_fk", type="integer", nullable=true)
+     */
     private $codigoSeleccionGrupoFk;
-    
+
     /**
      * @ORM\Column(name="codigo_seleccion_tipo_fk", type="integer")
-     */    
-    private $codigoSeleccionTipoFk;     
-    
+     */
+    private $codigoSeleccionTipoFk;
+
     /**
      * @ORM\Column(name="fecha", type="datetime", nullable=true)
-     */    
-    private $fecha;     
-    
+     */
+    private $fecha;
+
     /**
      * @ORM\Column(name="codigo_tipo_identificacion_fk", type="string", length=1, nullable=true)
-     */    
-    private $codigoTipoIdentificacionFk;         
-    
+     */
+    private $codigoTipoIdentificacionFk;
+
     /**
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
-     */    
-    private $numeroIdentificacion;        
-    
+     */
+    private $numeroIdentificacion;
+
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
-     */    
-    private $nombreCorto;    
+     */
+    private $nombreCorto;
 
     /**
      * @ORM\Column(name="nombre1", type="string", length=30, nullable=true)
-     */    
-    private $nombre1;        
+     */
+    private $nombre1;
 
     /**
      * @ORM\Column(name="nombre2", type="string", length=30, nullable=true)
-     */    
-    private $nombre2;    
-    
+     */
+    private $nombre2;
+
     /**
      * @ORM\Column(name="apellido1", type="string", length=30, nullable=true)
-     */    
-    private $apellido1;    
+     */
+    private $apellido1;
 
     /**
      * @ORM\Column(name="apellido2", type="string", length=30, nullable=true)
-     */    
-    private $apellido2;    
-    
+     */
+    private $apellido2;
+
     /**
      * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
-     */    
-    private $telefono;    
-    
+     */
+    private $telefono;
+
     /**
      * @ORM\Column(name="celular", type="string", length=20, nullable=true)
-     */    
-    private $celular; 
-    
+     */
+    private $celular;
+
     /**
      * @ORM\Column(name="direccion", type="string", length=30, nullable=true)
-     */    
-    private $direccion;         
-    
+     */
+    private $direccion;
+
     /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
-     */    
-    private $codigoCiudadFk;    
-    
+     */
+    private $codigoCiudadFk;
+
     /**
      * @ORM\Column(name="barrio", type="string", length=100, nullable=true)
-     */    
+     */
     private $barrio;
-    
-    
+
+
     /**
      * @ORM\Column(name="codigo_rh_fk", type="integer", nullable=true)
-     */    
+     */
     private $codigoRhPk;
-    
+
      /**
      * @ORM\Column(name="codigo_estado_civil_fk", type="string", length=1, nullable=true)
-     */    
+     */
     private $codigoEstadoCivilFk;
-    
+
     /**
      * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
-     */    
-    private $codigoSexoFk;     
-    
+     */
+    private $codigoSexoFk;
+
     /**
      * @ORM\Column(name="correo", type="string", length=80, nullable=true)
-     */    
-    private $correo;     
-        
+     */
+    private $correo;
+
     /**
      * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
-     */    
+     */
     private $fechaNacimiento;
-    
+
     /**
      * @ORM\Column(name="codigo_ciudad_nacimiento_fk", type="integer", nullable=true)
-     */    
+     */
     private $codigoCiudadNacimientoFk;
-    
+
     /**
      * @ORM\Column(name="codigo_ciudad_expedicion_fk", type="integer", nullable=true)
-     */    
+     */
     private $codigoCiudadExpedicionFk;
-    
+
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
-     */    
-    private $codigoCentroCostoFk;                   
-        
+     */
+    private $codigoCentroCostoFk;
+
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
-     */    
-    private $comentarios;     
+     */
+    private $comentarios;
 
-    /**     
+    /**
      * @ORM\Column(name="estado_aprobado", type="boolean")
-     */    
-    private $estadoAprobado = 0;        
-    
-    /**     
-     * @ORM\Column(name="estado_abierto", type="boolean")
-     * @ORM\Column(type="integer", name="estado_abierto", options={"unsigned":true, "default":"1"})
-     */    
-    private $estadoAbierto = 1;    
-    
-    /**     
-     * @ORM\Column(name="presenta_pruebas", type="boolean")
-     */    
-    private $presentaPruebas = 0;
-    
-    /**     
-     * @ORM\Column(name="referencias_verificadas", type="boolean")
-     */    
-    private $referenciasVerificadas = 0;    
+     */
+    private $estadoAprobado = 0;
 
-    /**     
+    /**
+     * @ORM\Column(name="presenta_pruebas", type="boolean")
+     */
+    private $presentaPruebas = 0;
+
+    /**
+     * @ORM\Column(name="referencias_verificadas", type="boolean")
+     */
+    private $referenciasVerificadas = 0;
+
+    /**
      * @ORM\Column(name="estado_cobrado", type="boolean")
-     */    
-    private $estadoCobrado = 0;    
-    
+     */
+    private $estadoCobrado = 0;
+
     /**
      * @ORM\Column(name="fecha_entrevista", type="datetime", nullable=true)
-     */    
-    private $fecha_entrevista;    
-    
+     */
+    private $fecha_entrevista;
+
     /**
      * @ORM\Column(name="fecha_pruebas", type="datetime", nullable=true)
-     */    
-    private $fecha_pruebas;    
-    
+     */
+    private $fecha_pruebas;
+
     /**
      * @ORM\Column(name="vr_servicio", type="float")
      */
-    private $vrServicio = 0;     
-    
+    private $vrServicio = 0;
+
     /**
      * @ORM\Column(name="codigo_factura_fk", type="integer", nullable=true)
-     */    
-    private $codigoFacturaFk;    
-    
+     */
+    private $codigoFacturaFk;
+
+    /**
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */
+    private $estadoCerrado = 0;
+
+    /**
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */
+    private $estadoAutorizado = 0;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionTipo", inversedBy="seleccionesSeleccionTipoRel")
      * @ORM\JoinColumn(name="codigo_seleccion_tipo_fk", referencedColumnName="codigo_seleccion_tipo_pk")
      */
-    protected $seleccionTipoRel; 
-    
+    protected $seleccionTipoRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuTipoIdentificacion", inversedBy="seleccionesTipoIdentificacionRel")
      * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
      */
-    protected $tipoIdentificacionRel;     
-    
+    protected $tipoIdentificacionRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuEstadoCivil", inversedBy="seleccionesEstadoCivilRel")
      * @ORM\JoinColumn(name="codigo_estado_civil_fk", referencedColumnName="codigo_estado_civil_pk")
      */
-    protected $estadoCivilRel;     
-    
+    protected $estadoCivilRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="seleccionesCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $centroCostoRel;                              
+    protected $centroCostoRel;
 
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuSeleccionesCiudadRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadRel;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuSeleccionesCiudadNacimientoRel")
      * @ORM\JoinColumn(name="codigo_ciudad_nacimiento_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadNacimientoRel;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuSeleccionesCiudadExpedicionRel")
      * @ORM\JoinColumn(name="codigo_ciudad_expedicion_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadExpedicionRel;
-    
-    
+
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuRh", inversedBy="seleccionesRhRel")
      * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
      */
     protected $rhRel;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionGrupo", inversedBy="seleccionesSeleccionGrupoRel")
      * @ORM\JoinColumn(name="codigo_seleccion_grupo_fk", referencedColumnName="codigo_seleccion_grupo_pk")
      */
     protected $seleccionGrupoRel;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuFactura", inversedBy="seleccionesFacturaRel")
      * @ORM\JoinColumn(name="codigo_factura_fk", referencedColumnName="codigo_factura_pk")
      */
-    protected $facturaRel;    
-    
+    protected $facturaRel;
+
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionReferencia", mappedBy="seleccionRel")
      */
-    protected $seleccionesReferenciasSeleccionRel;     
+    protected $seleccionesReferenciasSeleccionRel;
 
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionPrueba", mappedBy="seleccionRel")
      */
-    protected $seleccionesPruebasSeleccionRel; 
-    
+    protected $seleccionesPruebasSeleccionRel;
+
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionVisita", mappedBy="seleccionRel")
      */
     protected $seleccionesVisitasSeleccionRel;
-   
+
 
     /**
      * Constructor
@@ -882,30 +886,6 @@ class RhuSeleccion
     }
 
     /**
-     * Set estadoAbierto
-     *
-     * @param boolean $estadoAbierto
-     *
-     * @return RhuSeleccion
-     */
-    public function setEstadoAbierto($estadoAbierto)
-    {
-        $this->estadoAbierto = $estadoAbierto;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAbierto
-     *
-     * @return boolean
-     */
-    public function getEstadoAbierto()
-    {
-        return $this->estadoAbierto;
-    }
-
-    /**
      * Set presentaPruebas
      *
      * @param boolean $presentaPruebas
@@ -954,6 +934,30 @@ class RhuSeleccion
     }
 
     /**
+     * Set estadoCobrado
+     *
+     * @param boolean $estadoCobrado
+     *
+     * @return RhuSeleccion
+     */
+    public function setEstadoCobrado($estadoCobrado)
+    {
+        $this->estadoCobrado = $estadoCobrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCobrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCobrado()
+    {
+        return $this->estadoCobrado;
+    }
+
+    /**
      * Set fechaEntrevista
      *
      * @param \DateTime $fechaEntrevista
@@ -999,6 +1003,102 @@ class RhuSeleccion
     public function getFechaPruebas()
     {
         return $this->fecha_pruebas;
+    }
+
+    /**
+     * Set vrServicio
+     *
+     * @param float $vrServicio
+     *
+     * @return RhuSeleccion
+     */
+    public function setVrServicio($vrServicio)
+    {
+        $this->vrServicio = $vrServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrServicio
+     *
+     * @return float
+     */
+    public function getVrServicio()
+    {
+        return $this->vrServicio;
+    }
+
+    /**
+     * Set codigoFacturaFk
+     *
+     * @param integer $codigoFacturaFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoFacturaFk($codigoFacturaFk)
+    {
+        $this->codigoFacturaFk = $codigoFacturaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaFk
+     *
+     * @return integer
+     */
+    public function getCodigoFacturaFk()
+    {
+        return $this->codigoFacturaFk;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuSeleccion
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuSeleccion
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 
     /**
@@ -1218,6 +1318,30 @@ class RhuSeleccion
     }
 
     /**
+     * Set facturaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel = null)
+    {
+        $this->facturaRel = $facturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuFactura
+     */
+    public function getFacturaRel()
+    {
+        return $this->facturaRel;
+    }
+
+    /**
      * Add seleccionesReferenciasSeleccionRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
@@ -1317,101 +1441,5 @@ class RhuSeleccion
     public function getSeleccionesVisitasSeleccionRel()
     {
         return $this->seleccionesVisitasSeleccionRel;
-    }
-
-    /**
-     * Set estadoCobrado
-     *
-     * @param boolean $estadoCobrado
-     *
-     * @return RhuSeleccion
-     */
-    public function setEstadoCobrado($estadoCobrado)
-    {
-        $this->estadoCobrado = $estadoCobrado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCobrado
-     *
-     * @return boolean
-     */
-    public function getEstadoCobrado()
-    {
-        return $this->estadoCobrado;
-    }
-
-    /**
-     * Set vrServicio
-     *
-     * @param float $vrServicio
-     *
-     * @return RhuSeleccion
-     */
-    public function setVrServicio($vrServicio)
-    {
-        $this->vrServicio = $vrServicio;
-
-        return $this;
-    }
-
-    /**
-     * Get vrServicio
-     *
-     * @return float
-     */
-    public function getVrServicio()
-    {
-        return $this->vrServicio;
-    }
-
-    /**
-     * Set codigoFacturaFk
-     *
-     * @param integer $codigoFacturaFk
-     *
-     * @return RhuSeleccion
-     */
-    public function setCodigoFacturaFk($codigoFacturaFk)
-    {
-        $this->codigoFacturaFk = $codigoFacturaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoFacturaFk
-     *
-     * @return integer
-     */
-    public function getCodigoFacturaFk()
-    {
-        return $this->codigoFacturaFk;
-    }
-
-    /**
-     * Set facturaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel = null)
-    {
-        $this->facturaRel = $facturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuFactura
-     */
-    public function getFacturaRel()
-    {
-        return $this->facturaRel;
     }
 }

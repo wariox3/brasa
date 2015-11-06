@@ -35,7 +35,7 @@ class SeleccionGrupoController extends Controller
             }            
         }                      
         $arGrupos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                
-        return $this->render('BrasaRecursoHumanoBundle:SeleccionGrupo:lista.html.twig', array('arGrupos' => $arGrupos, 'form' => $form->createView()));     
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/SeleccionGrupo:lista.html.twig', array('arGrupos' => $arGrupos, 'form' => $form->createView()));     
     } 
     
     public function nuevoAction($codigoSeleccionGrupo) {
@@ -60,7 +60,7 @@ class SeleccionGrupoController extends Controller
 
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:SeleccionGrupo:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/SeleccionGrupo:nuevo.html.twig', array(
             'arGrupo' => $arGrupo,
             'form' => $form->createView()));
     }
@@ -85,7 +85,7 @@ class SeleccionGrupoController extends Controller
         $arSeleccion = $query->getResult();
         $arGrupo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
         $arGrupo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find($codigoSeleccionGrupo);
-        return $this->render('BrasaRecursoHumanoBundle:SeleccionGrupo:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/SeleccionGrupo:detalle.html.twig', array(
                     'arSeleccion' => $arSeleccion,
                     'arGrupo' => $arGrupo,
                     'form' => $form->createView()

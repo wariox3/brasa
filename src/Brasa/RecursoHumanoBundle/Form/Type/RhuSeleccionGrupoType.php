@@ -16,7 +16,6 @@ class RhuSeleccionGrupoType extends AbstractType
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                 
-            ->add('fechaPruebas', 'date', array('data' => new \ DateTime('now')))
             ->add('nombre', 'text', array('required' => true))
             ->add('cantidadSolicitida', 'number', array('label' => 'Cantidad Solicitada', 'required' => true))                            
             ->add('guardar', 'submit')
