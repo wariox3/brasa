@@ -42,6 +42,11 @@ class RhuExamen
      */    
     private $fecha;            
     
+    /**
+     * @ORM\Column(name="fecha_vence", type="date")
+     */    
+    private $fechaVence;    
+    
     /**     
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
@@ -104,6 +109,16 @@ class RhuExamen
     private $comentarios;     
     
     /**
+     * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
+     */    
+    private $codigoEmpleadoFk;    
+    
+    /**     
+     * @ORM\Column(name="control", type="boolean")
+     */    
+    private $control = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuExamenClase", inversedBy="examenesExamenClaseRel")
      * @ORM\JoinColumn(name="codigo_examen_clase_fk", referencedColumnName="codigo_examen_clase_pk")
      */
@@ -128,6 +143,18 @@ class RhuExamen
     protected $facturaRel;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuExamenesCiudadRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="examenesEmpleadoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
+     */
+    protected $empleadoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuExamenDetalle", mappedBy="examenRel")
      */
     protected $examenesExamenDetalleRel;
@@ -136,13 +163,6 @@ class RhuExamen
      * @ORM\OneToMany(targetEntity="RhuPagoExamenDetalle", mappedBy="examenRel")
      */
     protected $pagosExamenesDetallesExamenRel;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuExamenesCiudadRel")
-     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
-     */
-    protected $ciudadRel;
-
     
     /**
      * Constructor
@@ -281,6 +301,30 @@ class RhuExamen
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set fechaVence
+     *
+     * @param \DateTime $fechaVence
+     *
+     * @return RhuExamen
+     */
+    public function setFechaVence($fechaVence)
+    {
+        $this->fechaVence = $fechaVence;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVence
+     *
+     * @return \DateTime
+     */
+    public function getFechaVence()
+    {
+        return $this->fechaVence;
     }
 
     /**
@@ -572,6 +616,30 @@ class RhuExamen
     }
 
     /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
+    }
+
+    /**
      * Set examenClaseRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenClase $examenClaseRel
@@ -668,6 +736,54 @@ class RhuExamen
     }
 
     /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return RhuExamen
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuExamen
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
      * Add examenesExamenDetalleRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle $examenesExamenDetalleRel
@@ -736,26 +852,26 @@ class RhuExamen
     }
 
     /**
-     * Set ciudadRel
+     * Set control
      *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     * @param boolean $control
      *
      * @return RhuExamen
      */
-    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    public function setControl($control)
     {
-        $this->ciudadRel = $ciudadRel;
+        $this->control = $control;
 
         return $this;
     }
 
     /**
-     * Get ciudadRel
+     * Get control
      *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     * @return boolean
      */
-    public function getCiudadRel()
+    public function getControl()
     {
-        return $this->ciudadRel;
+        return $this->control;
     }
 }

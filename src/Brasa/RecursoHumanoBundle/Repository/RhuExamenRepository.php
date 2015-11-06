@@ -58,33 +58,25 @@ class RhuExamenRepository extends EntityRepository {
         }
     }
 
-    public function aprobarExamen($arrSeleccionados) {
-        $em = $this->getEntityManager();
-        $var = 0;
-        if(count($arrSeleccionados) > 0) {
-            foreach ($arrSeleccionados AS $codigoExamen) {
-                $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
-                $arExamenDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
-                $arExamenDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $codigoExamen));
-                foreach ($arExamenDetalles as $arExamenDetalle){
-                    if ($arExamenDetalle->getEstadoAprobado()== 1){
-                        $var += 1;
-                    }
-                }
-                $var2 = count($arExamenDetalles);
-                if ($var != 0 or $var2 != 0){
-                    if ($var2 == $var){
-                        $arExamen->setEstadoAprobado(1);
-
-                    }
-                    else{
-                        $arExamen->setEstadoAprobado(0);
-                    }
-                     $em->persist($arExamen);
-                }
+    public function aprobarExamen($codigoExamen) {
+        $em = $this->getEntityManager();        
+        $strRespuesta = '';
+        $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);        
+        if($arExamen->getEstadoAprobado() == 0 && $arExamen->getEstadoAutorizado() == 1) {
+            $arExamenDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+            $arExamenDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $codigoExamen, 'estadoAprobado' => 0));
+            if(count($arExamenDetalles) <= 0) {
+                $arExamen->setEstadoAprobado(1);
+                $em->persist($arExamen);
+                $em->flush();
+            } else {
+                $strRespuesta = "Todos los detalles del examen deben estar aprobados";
             }
-            $em->flush();
+        } else {
+            $strRespuesta = "El examen ya esta aprobado o no esta autorizado";
         }
+        return $strRespuesta;
     }
 
     public function devuelveNumeroDetalleExamen($codigoSeleccionGrupo) {
@@ -107,4 +99,5 @@ class RhuExamenRepository extends EntityRepository {
         $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuExamen e WHERE e.estadoCobrado = 0 ";
         return $dql;
     }
+        
 }

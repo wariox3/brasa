@@ -536,8 +536,11 @@ class RhuEmpleado
      */
     protected $desempenosEmpleadoRel;
     
-    
-    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="empleadoRel")
+     */
+    protected $examenesEmpleadoRel;    
+       
     /**
      * Constructor
      */
@@ -569,6 +572,7 @@ class RhuEmpleado
         $this->trasladosSaludEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosInformacionesInternasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->desempenosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->examenesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -3167,5 +3171,39 @@ class RhuEmpleado
     public function getDesempenosEmpleadoRel()
     {
         return $this->desempenosEmpleadoRel;
+    }
+
+    /**
+     * Add examenesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addExamenesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesEmpleadoRel)
+    {
+        $this->examenesEmpleadoRel[] = $examenesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove examenesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesEmpleadoRel
+     */
+    public function removeExamenesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesEmpleadoRel)
+    {
+        $this->examenesEmpleadoRel->removeElement($examenesEmpleadoRel);
+    }
+
+    /**
+     * Get examenesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExamenesEmpleadoRel()
+    {
+        return $this->examenesEmpleadoRel;
     }
 }

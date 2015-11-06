@@ -34,12 +34,12 @@ brs_rhu_base_desempeno_concepto_nuevo:
    path:     /rhu/base/desempeno/concepto/nuevo/{codigoDesempenoConcepto}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConcepto:nuevo }
    
-brs_rhu_examen_detalle_nuevo_observacion:
-   path:     /rhu/examen/detalle/nuevo/comentario/{codigoDesempeno}
+brs_rhu_desempeno_detalle_nuevo_observacion:
+   path:     /rhu/desempeno/detalle/nuevo/comentario/{codigoDesempeno}
    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:detalleNuevoObservacion }
    
-brs_rhu_examen_detalle_nuevo_aspectosMejorar:
-   path:     /rhu/examen/detalle/nuevo/aspectosMejorar/{codigoDesempeno}
+brs_rhu_desempeno_detalle_nuevo_aspectosMejorar:
+   path:     /rhu/desempeno/detalle/nuevo/aspectosMejorar/{codigoDesempeno}
    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:detalleNuevoAspectosMejorar }   
    
 brs_rhu_base_creditotipo_nuevo:
@@ -525,6 +525,10 @@ brs_rhu_examen_listar:
 brs_rhu_examen_nuevo:
    path:     /rhu/examen/nuevo/{codigoExamen}
    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:nuevo }
+
+brs_rhu_examen_nuevo_control:
+   path:     /rhu/examen/nuevo/control/{codigoExamen}
+   defaults: { _controller: BrasaRecursoHumanoBundle:Examen:nuevoControl }   
    
 brs_rhu_examen_detalle:
    path:     /rhu/examen/detalle/{codigoExamen}

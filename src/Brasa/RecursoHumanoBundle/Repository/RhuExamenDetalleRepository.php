@@ -38,4 +38,10 @@ class RhuExamenDetalleRepository extends EntityRepository {
         }
             $em->flush();       
     }
+    
+    public function numeroRegistros($codigoExamen) {
+        $em = $this->getEntityManager();
+        $arExamenDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $codigoExamen));
+        return count($arExamenDetalles);
+    }    
 }
