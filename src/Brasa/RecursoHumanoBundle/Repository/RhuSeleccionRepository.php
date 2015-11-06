@@ -110,7 +110,6 @@ class RhuSeleccionRepository extends EntityRepository {
                 $arExamenClase = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenClase')->find(1);
                 $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
                 $arExamen->setFecha(new \ DateTime("now"));
-                $arExamen->setFechaVence(new \ DateTime("now"));
                 $arExamen->setCentroCostoRel($arSeleccion->getCentroCostoRel());
                 $arExamen->setCiudadRel($arSeleccion->getCiudadRel());
                 $arExamen->setIdentificacion($arSeleccion->getNumeroIdentificacion());
@@ -128,6 +127,7 @@ class RhuSeleccionRepository extends EntityRepository {
                     $arExamenDetalle->setExamenTipoRel($arExamenTipo);
                     $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenTipo->getCodigoExamenTipoPk());
                     $arExamenDetalle->setVrPrecio($floPrecio); 
+                    $arExamenDetalle->setFechaVence(new \DateTime('now'));
                     $em->persist($arExamenDetalle);
                 }
                 $em->persist($arSeleccion);
