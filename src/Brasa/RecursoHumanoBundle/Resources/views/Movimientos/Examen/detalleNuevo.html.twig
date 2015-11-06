@@ -9,6 +9,7 @@
             
             <th>CÓDIGO</th>
             <th>NOMBRE</th> 
+            <th>INGRESO</th>
             <th></th>
         </tr>
         
@@ -16,6 +17,7 @@
                <tr>
                 <td>{{arExamenTipos.codigoExamenTipoPk}}</td>
                 <td>{{arExamenTipos.nombre}}</td>
+                <td>{% if arExamenTipos.ingreso == 1 %} SI {% else %} NO {% endif %}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenTipos.codigoExamenTipoPk }}" /></td>
             {%endfor%}
             </tr>            

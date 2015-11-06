@@ -9,7 +9,8 @@ class RhuExamenTipoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                                                                                    
-            ->add('nombre', 'text', array('required' => true))                                
+            ->add('nombre', 'text', array('required' => true))  
+            ->add('ingreso', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                
             ->add('guardar', 'submit');        
     }
  

@@ -51,6 +51,18 @@ class ExamenController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arExamen = $form->getData();
+            if($arExamen->getExamenClaseRel()->getCodigoExamenClasePk() == 1 && $codigoExamen == 0) {
+                $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
+                $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findBy(array('ingreso' => 1));
+                foreach ($arExamenTipos as $arExamenTipo) {                    
+                    $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+                    $arExamenDetalle->setExamenRel($arExamen);
+                    $arExamenDetalle->setExamenTipoRel($arExamenTipo);
+                    $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenTipo->getCodigoExamenTipoPk());
+                    $arExamenDetalle->setVrPrecio($floPrecio);                                        
+                    $em->persist($arExamenDetalle);                    
+                }
+            }
             $em->persist($arExamen);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
