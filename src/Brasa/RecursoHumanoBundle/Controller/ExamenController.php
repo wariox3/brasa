@@ -14,7 +14,6 @@ class ExamenController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->listar();
@@ -133,8 +132,9 @@ class ExamenController extends Controller
                         return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                                        
                     } else {
                         $objMensaje->Mensaje('error', 'Debe adicionar detalles al examen', $this);
-                    }
+                    }                    
                 }
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
                 if($arExamen->getEstadoAutorizado() == 1) {
@@ -161,7 +161,7 @@ class ExamenController extends Controller
                     $objMensaje->Mensaje("error", "No puede imprimir una orden de examen sin estar autorizada", $this);
                 }
             }
-            if($form->get('BtnEliminar')->isClicked()) {
+            if($form->get('BtnEliminarDetalle')->isClicked()) {
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
                 return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
@@ -291,15 +291,14 @@ class ExamenController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoExamen')))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
     
-    private function formularioDetalle($arExamen) {
+    private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => false);
@@ -307,7 +306,7 @@ class ExamenController extends Controller
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonActualizarDetalle = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonAprobarDetalle = array('label' => 'Aprobar', 'disabled' => false);
-        if($arExamen->getEstadoAutorizado() == 1) {            
+        if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
             $arrBotonEliminarDetalle['disabled'] = true;
             $arrBotonActualizarDetalle['disabled'] = true;
@@ -317,12 +316,16 @@ class ExamenController extends Controller
             $arrBotonImprimir['disabled'] = true;
             $arrBotonAprobar['disabled'] = true;
         }
+        if($ar->getEstadoAprobado() == 1) {
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonAprobarDetalle['disabled'] = true;
+        }        
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
-                    ->add('BtnEliminar', 'submit', $arrBotonEliminarDetalle)
+                    ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)    
                     ->add('BtnAprobarDetalle', 'submit', $arrBotonAprobarDetalle)                                
                     ->getForm();  

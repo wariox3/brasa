@@ -20,4 +20,9 @@ class RhuPagoExamenDetalleRepository extends EntityRepository {
         $em->flush();       
     }    
     
+    public function numeroRegistros($codigoPagoExamen) {
+        $em = $this->getEntityManager();
+        $arPagoExamenDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->findBy(array('codigoPagoExamenFk' => $codigoPagoExamen));
+        return count($arPagoExamenDetalles);
+    }    
 }

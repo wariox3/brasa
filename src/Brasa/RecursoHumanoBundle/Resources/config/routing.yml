@@ -599,7 +599,7 @@ brs_rhu_seleccion_nuevo:
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:nuevo } 
 
 brs_rhu_seleccion_agregar_referencia:
-    path:     /rhu/seleccion/agregar/referencia/{codigoSeleccion}
+    path:     /rhu/seleccion/agregar/referencia/{codigoSeleccion}/{codigoSeleccionReferencia}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarReferencia } 
 
 brs_rhu_seleccion_agregar_prueba:

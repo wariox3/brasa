@@ -83,7 +83,7 @@ class SeleccionController extends Controller
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_rhu_seleccion_nuevo', array('codigoSeleccion' => 0)));
             } else {
-                return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista', array('codigoSeleccion' => $codigoSeleccion)));
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $arSeleccion->getCodigoSeleccionPk())));
             }
         }
 
@@ -135,6 +135,7 @@ class SeleccionController extends Controller
             }
             
             if ($form->get('BtnEliminarReferencia')->isClicked()){
+                $arrSeleccionados = $request->request->get('ChkSeleccionarReferencia');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $id) {
                         $arSeleccionReferencias = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia();
@@ -167,7 +168,8 @@ class SeleccionController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
                 }
             }
-            if($form->get('BtnVerificar')->isClicked()) {
+            if($form->get('BtnDetalleVerificarReferencia')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarReferencia');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoSeleccionReferencia) {
                         $arSeleccionReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->find($codigoSeleccionReferencia);
@@ -192,12 +194,15 @@ class SeleccionController extends Controller
                     ));
     }
 
-    public function agregarReferenciaAction($codigoSeleccion) {
+    public function agregarReferenciaAction($codigoSeleccion, $codigoSeleccionReferencia) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
         $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
         $arSeleccionReferencia = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia();
+        if($codigoSeleccionReferencia != 0) {
+            $arSeleccionReferencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->find($codigoSeleccionReferencia);
+        }
         $form = $this->createForm(new RhuSeleccionReferenciaType(), $arSeleccionReferencia);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -306,39 +311,39 @@ class SeleccionController extends Controller
         return $form;
     }
     
-    private function formularioDetalle($arSeleccion) {
+    private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonEliminarReferencia = array('label' => 'Eliminar referencia', 'disabled' => false);        
         $arrBotonEliminarPrueba = array('label' => 'Eliminar prueba', 'disabled' => false);
         $arrBotonEliminarVisita = array('label' => 'Eliminar visita', 'disabled' => false);
-        $arrBotonVerificar = array('label' => 'Verificar', 'disabled' => false);
+        $arrBotonDetalleVerificarReferencia = array('label' => 'Verificar', 'disabled' => false);
         $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => false);
         $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => false);
-        if($arSeleccion->getEstadoAutorizado() == 1) {            
-            $arrBotonAutorizar['disabled'] = true;            
+        if($ar->getEstadoAutorizado() == 0) {                        
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonAprobar['disabled'] = true;
+            $arrBotonCerrar['disabled'] = true;                                    
+            $arrBotonEliminarVisita['disabled'] = true;
         } else {
+            $arrBotonDetalleVerificarReferencia['disabled'] = true;
+            $arrBotonAutorizar['disabled'] = true;                                 
+            $arrBotonEliminarReferencia['disabled'] = true;
+            $arrBotonEliminarPrueba['disabled'] = true;
+        }
+        /*if ($ar->getEstadoCerrado() == 1){
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = true;
             $arrBotonCerrar['disabled'] = true;
-            $arrBotonVerificar['disabled'] = true;
+            $arrBotonDetalleVerificarReferencia['disabled'] = true;
             $arrBotonEliminarPrueba['disabled'] = true;
             $arrBotonEliminarReferencia['disabled'] = true;
             $arrBotonEliminarVisita['disabled'] = true;
-        }
-        if ($arSeleccion->getEstadoCerrado() == 1){
-            $arrBotonDesAutorizar['disabled'] = true;
-            $arrBotonAprobar['disabled'] = true;
-            $arrBotonCerrar['disabled'] = true;
-            $arrBotonVerificar['disabled'] = true;
-            $arrBotonEliminarPrueba['disabled'] = true;
-            $arrBotonEliminarReferencia['disabled'] = true;
-            $arrBotonEliminarVisita['disabled'] = true;
-        }
+        }*/
         $form = $this->createFormBuilder()
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar) 
                     ->add('BtnCerrar', 'submit', $arrBotonCerrar) 
-                    ->add('BtnVerificar', 'submit', $arrBotonVerificar) 
+                    ->add('BtnDetalleVerificarReferencia', 'submit', $arrBotonDetalleVerificarReferencia) 
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
                     ->add('BtnEliminarReferencia', 'submit', $arrBotonEliminarReferencia) 

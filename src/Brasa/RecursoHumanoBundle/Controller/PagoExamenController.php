@@ -32,7 +32,7 @@ class PagoExamenController extends Controller
             }            
         }                      
         $arPagoExamenes = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                
-        return $this->render('BrasaRecursoHumanoBundle:Examen/PagoExamen:lista.html.twig', array('arPagoExamenes' => $arPagoExamenes, 'form' => $form->createView()));
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoExamen:lista.html.twig', array('arPagoExamenes' => $arPagoExamenes, 'form' => $form->createView()));
     } 
     
     public function nuevoAction($codigoPagoExamen) {
@@ -49,12 +49,12 @@ class PagoExamenController extends Controller
             $em->persist($arPagoExamen);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_pago_examen_nuevo', array('codigoPagoExamen' => 0)));
+                return $this->redirect($this->generateUrl('brs_rhu_pago_examen_nuevo', array('codigoPagoExamen' => 0 )));
             } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
-            }
+                return $this->redirect($this->generateUrl('brs_rhu_pago_examen_detalle', array('codigoPagoExamen' => $arPagoExamen->getCodigoPagoExamenPk())));
+            }            
         }
-        return $this->render('BrasaRecursoHumanoBundle:Examen/PagoExamen:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoExamen:nuevo.html.twig', array(
             'arPagoExamen' => $arPagoExamen,
             'form' => $form->createView()));
     }
@@ -63,26 +63,47 @@ class PagoExamenController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
         $objMensaje = $this->get('mensajes_brasa');                     
-        $form = $this->formularioDetalle();
+        $arPagoExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen();
+        $arPagoExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->find($codigoPagoExamen);        
+        $form = $this->formularioDetalle($arPagoExamen);
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
+            if($form->get('BtnAutorizar')->isClicked()) {            
+                if($arPagoExamen->getEstadoAutorizado() == 0) {
+                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->numeroRegistros($codigoPagoExamen) > 0) {
+                        $arPagoExamen->setEstadoAutorizado(1);
+                        $em->persist($arPagoExamen);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_pago_examen_detalle', array('codigoPagoExamen' => $codigoPagoExamen)));                                                                        
+                    } else {
+                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al pago de examen', $this);
+                    }
+                }
+                return $this->redirect($this->generateUrl('brs_rhu_pago_examen_detalle', array('codigoPagoExamen' => $codigoPagoExamen)));                                                
+            }
+            if($form->get('BtnDesAutorizar')->isClicked()) {            
+                if($arPagoExamen->getEstadoAutorizado() == 1) {
+                    $arPagoExamen->setEstadoAutorizado(0);
+                    $em->persist($arPagoExamen);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pago_examen_detalle', array('codigoPagoExamen' => $codigoPagoExamen)));                                                
+                }
+            }            
+            
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoExamenDetalle();
                 $objFormatoPagoExamenDetalle->Generar($this, $codigoPagoExamen);
             }
-            if($form->get('BtnEliminar')->isClicked()) {                
+            if($form->get('BtnEliminarDetalle')->isClicked()) {                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->liquidar($codigoPagoExamen);
                 return $this->redirect($this->generateUrl('brs_rhu_pago_examen_detalle', array('codigoPagoExamen' => $codigoPagoExamen)));           
             }
-        }        
-        
-        $arPagoExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamen();
-        $arPagoExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->find($codigoPagoExamen);
+        }                
         $arPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle();
         $arPagoExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->findBy(array ('codigoPagoExamenFk' => $codigoPagoExamen));
-        return $this->render('BrasaRecursoHumanoBundle:Examen/PagoExamen:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoExamen:detalle.html.twig', array(
                     'arPagoExamen' => $arPagoExamen,
                     'arPagoExamenDetalle' => $arPagoExamenDetalle,
                     'form' => $form->createView()
@@ -120,7 +141,7 @@ class PagoExamenController extends Controller
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        return $this->render('BrasaRecursoHumanoBundle:Examen/PagoExamen:detalleNuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoExamen:detalleNuevo.html.twig', array(
             'arExamenes' => $arExamenes,
             'form' => $form->createView()));
     }    
@@ -213,12 +234,25 @@ class PagoExamenController extends Controller
             ->getForm();        
         return $form;
     }   
-    
-    private function formularioDetalle() {        
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->getForm();        
+       
+    private function formularioDetalle($ar) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);        
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
+        $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);                
+        if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;            
+            $arrBotonEliminarDetalle['disabled'] = true;
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;            
+        }
+        $form = $this->createFormBuilder()    
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
+                    ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
+                    ->getForm();  
         return $form;
     }    
         

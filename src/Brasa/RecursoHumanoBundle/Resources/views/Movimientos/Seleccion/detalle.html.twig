@@ -22,12 +22,12 @@
         {% else %}
             {% if arSeleccion.estadoCerrado == 1 %}
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" disabled="disabled">Archivos</a>
-            {% else %}    
+            {% else %}
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700) ">Archivos</a>
-            {% endif %}    
-        {% endif %}    
+            {% endif %}
+        {% endif %}
     </div>
-    <br /> <br />    
+    <br /> <br />
     <!-- Encabezado Movimiento -->
     <div class="panel panel-default">
       <div class="panel-heading">Información selección</div>
@@ -81,7 +81,7 @@
     </div>
 
     <!-- Fin Encabezado Movimiento -->
-    
+
     <ul class="nav nav-tabs">
         <li class="active"><a href="#referencias" data-toggle="tab">Referencias</a></li>
         <li><a href="#pruebas" data-toggle="tab">Pruebas</a></li>
@@ -101,6 +101,7 @@
                             <th>DIRECCION</th>
                             <th>CIUDAD</th>
                             <th>VERIFICADA</th>
+                            <th></th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arSeleccionReferencias in arSeleccionReferencias %}
@@ -108,7 +109,7 @@
                             <td>
                                 <input type="hidden" name="LblCodigo[]" value="{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}">
                                 <span class="badge">{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}</span>
-                            </td>                            
+                            </td>
                             <td>{{ arSeleccionReferencias.seleccionTipoReferenciaRel.nombre }}</td>
                             <td>{{ arSeleccionReferencias.nombreCorto }}</td>
                             <td>{{ arSeleccionReferencias.celular }}</td>
@@ -116,7 +117,8 @@
                             <td>{{ arSeleccionReferencias.direccion }}</td>
                             <td>{{ arSeleccionReferencias.ciudadRel.nombre }}</td>
                             <td {% if arSeleccionReferencias.estadoVerificada == 1 %}class="success"{% endif %}>{% if arSeleccionReferencias.estadoVerificada == 1 %} SI {% else %} NO {% endif %}</td>
-                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}" /></td>
+                            <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionReferencia': arSeleccionReferencias.codigoSeleccionReferenciaPk }) }}', 'AgregarSeleccionReferencia', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td><input type="checkbox" name="ChkSeleccionarReferencia[]" value="{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}" /></td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -125,17 +127,11 @@
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
                             {% if arSeleccion.estadoAutorizado == 0 %}
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionReferencia', 600, 900)" disabled="disabled">Nuevo</a>
-                            {% else %}
-                                {% if arSeleccion.estadoCerrado == 1 %}
-                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionReferencia', 600, 900)" disabled="disabled">Nuevo</a>
-                                {% else %}    
-                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionReferencia', 600, 900)" >Nuevo</a>
-                                {% endif %}    
-                            {% endif %}    
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionReferencia': 0}) }}', 'AgregarSeleccionReferencia', 600, 900)">Nuevo</a>
+                            {% endif %}
                         </div>
                         <div class="btn-group">
-                            {{ form_widget(form.BtnVerificar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                            {{ form_widget(form.BtnDetalleVerificarReferencia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                             {{ form_widget(form.BtnEliminarReferencia, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                         </div>
                     </div>
@@ -164,7 +160,7 @@
                             <td>{{ arSeleccionPruebas.resultado }}</td>
                             <td>{{ arSeleccionPruebas.comentarios }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 2,  'numero': arSeleccionPruebas.codigoSeleccionPruebaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>
-                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSeleccionPruebas.codigoSeleccionPruebaPk }}" /></td>
+                            <td><input type="checkbox" name="ChkSeleccionarPrueba[]" value="{{ arSeleccionPruebas.codigoSeleccionPruebaPk }}" /></td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -173,15 +169,8 @@
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
                             {% if arSeleccion.estadoAutorizado == 0 %}
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionPrueba', 600, 900)" disabled="disabled">Nuevo</a>
-                            {% else %}
-                                {% if arSeleccion.estadoCerrado == 1 %}
-                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionPrueba', 600, 900)" disabled="disabled">Nuevo</a>
-                                {% else %}    
-                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionPrueba', 600, 900)" >Nuevo</a>
-                                {% endif %}    
-                                
-                            {% endif %}    
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionPrueba', 600, 900)">Nuevo</a>
+                            {% endif %}
                         </div>
                         <div class="btn-group">
                             {{ form_widget(form.BtnEliminarPrueba, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
@@ -207,9 +196,9 @@
                                 <span class="badge">{{ arSeleccionVisita.codigoSeleccionVisitaPk }}</span>
                             </td>
                             <td>{{ arSeleccionVisita.fecha|date('Y-m-d') }}</td>
-                            <td>{{ arSeleccionVisita.comentarios }}</td>    
+                            <td>{{ arSeleccionVisita.comentarios }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 11,  'numero': arSeleccionVisita.codigoSeleccionVisitaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>
-                            <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSeleccionVisita.codigoSeleccionVisitaPk }}" /></td>
+                            <td align="center"><input type="checkbox" name="ChkSeleccionarVisita[]" value="{{ arSeleccionVisita.codigoSeleccionVisitaPk }}" /></td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -223,8 +212,8 @@
                                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" disabled="disabled">Nuevo</a>
                                 {% else %}
                                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" >Nuevo</a>
-                                {% endif %}    
-                            {% endif %}    
+                                {% endif %}
+                            {% endif %}
                         </div>
                         <div class="btn-group">
                             {{ form_widget(form.BtnEliminarVisita, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
@@ -232,7 +221,7 @@
                     </div>
                     <!-- Fin Botones Menu Items -->
                 </div>
-        </div>                
+        </div>
     </div>
 
     {{ form_rest(form) }}
