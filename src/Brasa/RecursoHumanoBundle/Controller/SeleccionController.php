@@ -324,12 +324,12 @@ class SeleccionController extends Controller
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = true;
             $arrBotonCerrar['disabled'] = true;                                    
-            $arrBotonEliminarVisita['disabled'] = true;
         } else {
             $arrBotonDetalleVerificarReferencia['disabled'] = true;
             $arrBotonAutorizar['disabled'] = true;                                 
             $arrBotonEliminarReferencia['disabled'] = true;
             $arrBotonEliminarPrueba['disabled'] = true;
+            $arrBotonEliminarVisita['disabled'] = true;
         }
         /*if ($ar->getEstadoCerrado() == 1){
             $arrBotonDesAutorizar['disabled'] = true;

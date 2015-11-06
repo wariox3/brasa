@@ -18,13 +18,7 @@
         {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         {% if arSeleccion.estadoAutorizado == 0 %}
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" disabled="disabled">Archivos</a>
-        {% else %}
-            {% if arSeleccion.estadoCerrado == 1 %}
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" disabled="disabled">Archivos</a>
-            {% else %}
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700) ">Archivos</a>
-            {% endif %}
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
         {% endif %}
     </div>
     <br /> <br />
@@ -206,13 +200,7 @@
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
                             {% if arSeleccion.estadoAutorizado == 0 %}
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" disabled="disabled">Nuevo</a>
-                            {% else %}
-                                {% if arSeleccion.estadoCerrado == 1 %}
-                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" disabled="disabled">Nuevo</a>
-                                {% else %}
-                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" >Nuevo</a>
-                                {% endif %}
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" >Nuevo</a>
                             {% endif %}
                         </div>
                         <div class="btn-group">
