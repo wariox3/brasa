@@ -99,7 +99,12 @@ class RhuConfiguracion
     /**
      * @ORM\Column(name="porcentaje_bonificacion_no_prestacional", type="float")
      */    
-    private $porcentajeBonificacionNoPrestacional = 40;    
+    private $porcentajeBonificacionNoPrestacional = 40; 
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_Examen_ingreso", type="integer")
+     */    
+    private $codigoEntidadExamenIngreso;
     
     
     /**
@@ -564,5 +569,29 @@ class RhuConfiguracion
     public function getEntidadRiesgoProfesionalRel()
     {
         return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set codigoEntidadExamenIngreso
+     *
+     * @param integer $codigoEntidadExamenIngreso
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoEntidadExamenIngreso($codigoEntidadExamenIngreso)
+    {
+        $this->codigoEntidadExamenIngreso = $codigoEntidadExamenIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadExamenIngreso
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadExamenIngreso()
+    {
+        return $this->codigoEntidadExamenIngreso;
     }
 }

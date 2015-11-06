@@ -102,6 +102,10 @@ class RhuSeleccionRepository extends EntityRepository {
                 $arSeleccion->setPresentaPruebas(1);
 
                 //Se inserta la seleccion aprobada en la entidad examen
+                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $arEntidadExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
+                $arEntidadExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->find($arConfiguracion->getCodigoEntidadExamenIngreso());
                 $arExamenClase = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenClase();
                 $arExamenClase = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenClase')->find(1);
                 $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
@@ -114,9 +118,21 @@ class RhuSeleccionRepository extends EntityRepository {
                 $arExamen->setCodigoSexoFk($arSeleccion->getCodigoSexoFk());
                 $arExamen->setNombreCorto($arSeleccion->getNombreCorto());
                 $arExamen->setExamenClaseRel($arExamenClase);
+                $arExamen->setEntidadExamenRel($arEntidadExamen);
                 $em->persist($arExamen);
+                $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
+                $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findBy(array('ingreso' => 1));
+                foreach ($arExamenTipos as $arExamenTipo) {
+                    $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+                    $arExamenDetalle->setExamenRel($arExamen);
+                    $arExamenDetalle->setExamenTipoRel($arExamenTipo);
+                    $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenTipo->getCodigoExamenTipoPk());
+                    $arExamenDetalle->setVrPrecio($floPrecio); 
+                    $em->persist($arExamenDetalle);
+                }
                 $em->persist($arSeleccion);
                 $em->flush();
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($arExamen->getCodigoExamenPk());
             }else{
                 $strRespuesta = "Todas las referencias deben estar verificadas";
             }

@@ -102,6 +102,15 @@ class ConfiguracionController extends Controller
             'required' => false);                   
         $arrayPropiedadesConceptoRetencionFuente['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoRetencionFuente());
         
+        $arrayPropiedadesConceptoEntidadExamenIngreso = array(
+            'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('ee')                                        
+                ->orderBy('ee.codigoEntidadExamenPk', 'ASC');},
+            'property' => 'nombre',
+            'required' => false);                   
+        $arrayPropiedadesConceptoEntidadExamenIngreso['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadExamen", $arConfiguracion->getCodigoEntidadExamenIngreso());
+        
         $formConfiguracion = $this->createFormBuilder() 
             ->add('conceptoAuxilioTransporte', 'entity', $arrayPropiedadesConceptoAuxilioTransporte)    
             ->add('vrAuxilioTransporte', 'number', array('data' => $arConfiguracion->getVrAuxilioTransporte(), 'required' => true))
@@ -118,6 +127,7 @@ class ConfiguracionController extends Controller
             ->add('conceptoRetencionFuente', 'entity', $arrayPropiedadesConceptoRetencionFuente, array('required' => true))        
             ->add('porcentajeBonificacionNoPrestacional', 'number', array('data' => $arConfiguracion->getPorcentajeBonificacionNoPrestacional(), 'required' => true))
             ->add('edadMinimaEmpleado', 'number', array('data' => $arConfiguracion->getEdadMinimaEmpleado(), 'required' => true))    
+            ->add('entidadExamenIngreso', 'entity', $arrayPropiedadesConceptoEntidadExamenIngreso, array('required' => true))        
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -138,6 +148,7 @@ class ConfiguracionController extends Controller
             $porcentajeIva = $controles['porcentajeIva'];
             $porcentajeBonificacionNoPrestacional = $controles['porcentajeBonificacionNoPrestacional'];
             $edadMinimaEmpleado = $controles['edadMinimaEmpleado'];
+            $entidadExamenIngreso = $controles['entidadExamenIngreso'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -154,6 +165,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoRetencionFuente($codigoConceptoRetencionFuente);
             $arConfiguracion->setPorcentajeBonificacionNoPrestacional($porcentajeBonificacionNoPrestacional);
             $arConfiguracion->setEdadMinimaEmpleado($edadMinimaEmpleado);
+            $arConfiguracion->setCodigoEntidadExamenIngreso($entidadExamenIngreso);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
