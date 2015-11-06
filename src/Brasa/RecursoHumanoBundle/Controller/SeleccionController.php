@@ -120,13 +120,12 @@ class SeleccionController extends Controller
             }
             
             if($form->get('BtnAprobar')->isClicked()){
-                $aprobar = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->estadoAprobadoSelecciones($codigoSeleccion);
-                if ($aprobar == 1){
-                    $objMensaje->Mensaje("error", "No se puede aprobar sin verificar todas las referencias", $this);
+                $strRespuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->estadoAprobadoSelecciones($codigoSeleccion);
+                if ($strRespuesta == ''){
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));                                                                    
                 }else{
-                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));                                                
-                }
-                
+                    $objMensaje->Mensaje('error', $strRespuesta, $this);
+                }                
             }
 
             if($form->get('BtnCerrar')->isClicked()){
@@ -147,6 +146,7 @@ class SeleccionController extends Controller
                 }
             }
             if ($form->get('BtnEliminarPrueba')->isClicked()){
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPrueba');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $id) {
                         $arSeleccionPruebas = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba();
@@ -223,12 +223,15 @@ class SeleccionController extends Controller
             ));
     }
 
-    public function agregarPruebaAction($codigoSeleccion) {
+    public function agregarPruebaAction($codigoSeleccion, $codigoSeleccionPrueba) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
         $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
         $arSeleccionPrueba = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba();
+        if($codigoSeleccionPrueba != 0) {
+            $arSeleccionPrueba = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionPrueba')->find($codigoSeleccionPrueba);
+        }        
         $form = $this->createForm(new RhuSeleccionPruebaType(), $arSeleccionPrueba);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -331,15 +334,13 @@ class SeleccionController extends Controller
             $arrBotonEliminarPrueba['disabled'] = true;
             $arrBotonEliminarVisita['disabled'] = true;
         }
-        /*if ($ar->getEstadoCerrado() == 1){
+        if($ar->getEstadoAprobado() == 1) {                        
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = true;
+        }        
+        if ($ar->getEstadoCerrado() == 1){
             $arrBotonCerrar['disabled'] = true;
-            $arrBotonDetalleVerificarReferencia['disabled'] = true;
-            $arrBotonEliminarPrueba['disabled'] = true;
-            $arrBotonEliminarReferencia['disabled'] = true;
-            $arrBotonEliminarVisita['disabled'] = true;
-        }*/
+        }
         $form = $this->createFormBuilder()
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar) 
                     ->add('BtnCerrar', 'submit', $arrBotonCerrar) 

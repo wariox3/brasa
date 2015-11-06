@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 class RhuSeleccionRepository extends EntityRepository {
+    
     public function listaDQL($strNombre = "", $strIdentificacion = "", $boolAbierto = 2, $boolAprobado = 2, $codigoCentroCosto = "") {
         $dql   = "SELECT s FROM BrasaRecursoHumanoBundle:RhuSeleccion s WHERE s.codigoSeleccionPk <> 0";
         if($strNombre != "" ) {
@@ -91,11 +92,11 @@ class RhuSeleccionRepository extends EntityRepository {
 
     public function estadoAprobadoSelecciones($codigoSeleccion) {
         $em = $this->getEntityManager();
-        $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
-        $mensaje = 0;
+        $strRespuesta = '';
+        $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);       
         if ($arSeleccion->getEstadoAprobado() == 0){
-            $referenciasVerificadas = $this->devuelveNumeroReferenciasSinVerificar($codigoSeleccion);
-            if ($referenciasVerificadas == 0){
+            $intReferenciasVerificadas = $this->devuelveNumeroReferenciasSinVerificar($codigoSeleccion);
+            if ($intReferenciasVerificadas == 0){
                 $arSeleccion->setReferenciasVerificadas(1);
                 $arSeleccion->setEstadoAprobado(1);
                 $arSeleccion->setPresentaPruebas(1);
@@ -105,6 +106,7 @@ class RhuSeleccionRepository extends EntityRepository {
                 $arExamenClase = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenClase')->find(1);
                 $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
                 $arExamen->setFecha(new \ DateTime("now"));
+                $arExamen->setFechaVence(new \ DateTime("now"));
                 $arExamen->setCentroCostoRel($arSeleccion->getCentroCostoRel());
                 $arExamen->setCiudadRel($arSeleccion->getCiudadRel());
                 $arExamen->setIdentificacion($arSeleccion->getNumeroIdentificacion());
@@ -116,14 +118,12 @@ class RhuSeleccionRepository extends EntityRepository {
                 $em->persist($arSeleccion);
                 $em->flush();
             }else{
-                $mensaje = 1;
+                $strRespuesta = "Todas las referencias deben estar verificadas";
             }
+        } else {
+            $strRespuesta = "El proceso de seleccion debe estar sin aprobar";
         }
-        if ($mensaje == 1){
-            return $mensaje;
-        }else {
-            return 0;
-        }
+        return $strRespuesta;
     }
 
     public function cerrarSeleccion($codigoSeleccion) {

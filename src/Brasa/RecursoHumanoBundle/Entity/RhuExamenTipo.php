@@ -22,6 +22,14 @@ class RhuExamenTipo
      */    
     private $nombre;            
     
+    /**     
+     * Aplica para cuando se crea el examen de ingreso automaticamente
+     * cree un examen con estos tipos
+     * 
+     * @ORM\Column(name="general", type="boolean")
+     */    
+    private $general = 0;     
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuExamenDetalle", mappedBy="examenTipoRel")
      */
@@ -141,5 +149,29 @@ class RhuExamenTipo
     public function getEmpleadosExamenesExamenTipoRel()
     {
         return $this->empleadosExamenesExamenTipoRel;
+    }
+
+    /**
+     * Set general
+     *
+     * @param boolean $general
+     *
+     * @return RhuExamenTipo
+     */
+    public function setGeneral($general)
+    {
+        $this->general = $general;
+
+        return $this;
+    }
+
+    /**
+     * Get general
+     *
+     * @return boolean
+     */
+    public function getGeneral()
+    {
+        return $this->general;
     }
 }

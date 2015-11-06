@@ -16,10 +16,8 @@
         {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-        {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-        {% if arSeleccion.estadoAutorizado == 0 %}
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
-        {% endif %}
+        {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}        
+        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>        
     </div>
     <br /> <br />
     <!-- Encabezado Movimiento -->
@@ -142,6 +140,7 @@
                             <th>RESULTADO</th>
                             <th>COMENTARIOS</th>
                             <th></th>
+                            <th></th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arSeleccionPruebas in arSeleccionPruebas %}
@@ -153,6 +152,7 @@
                             <td>{{ arSeleccionPruebas.seleccionPruebaTipoRel.nombre }}</td>
                             <td>{{ arSeleccionPruebas.resultado }}</td>
                             <td>{{ arSeleccionPruebas.comentarios }}</td>
+                            <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionPrueba': arSeleccionPruebas.codigoSeleccionPruebaPk }) }}', 'AgregarSeleccionPrueba', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 2,  'numero': arSeleccionPruebas.codigoSeleccionPruebaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarPrueba[]" value="{{ arSeleccionPruebas.codigoSeleccionPruebaPk }}" /></td>
                         </tr>
@@ -163,7 +163,7 @@
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
                             {% if arSeleccion.estadoAutorizado == 0 %}
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionPrueba', 600, 900)">Nuevo</a>
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionPrueba': 0 }) }}', 'AgregarSeleccionPrueba', 600, 900)">Nuevo</a>
                             {% endif %}
                         </div>
                         <div class="btn-group">

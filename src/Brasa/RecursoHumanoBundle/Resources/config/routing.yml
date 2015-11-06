@@ -603,7 +603,7 @@ brs_rhu_seleccion_agregar_referencia:
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarReferencia } 
 
 brs_rhu_seleccion_agregar_prueba:
-    path:     /rhu/seleccion/agregar/prueba/{codigoSeleccion}
+    path:     /rhu/seleccion/agregar/prueba/{codigoSeleccion}/{codigoSeleccionPrueba}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarPrueba }
     
 brs_rhu_seleccion_agregar_visita:
