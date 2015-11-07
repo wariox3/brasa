@@ -158,6 +158,7 @@ class SeleccionController extends Controller
                 }
             }
             if ($form->get('BtnEliminarVisita')->isClicked()){
+                $arrSeleccionados = $request->request->get('ChkSeleccionarVisita');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $id) {
                         $arSeleccionVisita = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita();
@@ -249,12 +250,15 @@ class SeleccionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Seleccion:agregarPrueba.html.twig', array('form' => $form->createView()));
     }
 
-    public function agregarVisitaAction($codigoSeleccion) {
+    public function agregarVisitaAction($codigoSeleccion, $codigoSeleccionVisita) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
         $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
         $arSeleccionVisita = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita();
+        if($codigoSeleccionVisita != 0) {
+            $arSeleccionVisita = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionVisita')->find($codigoSeleccionVisita);
+        }
         $form = $this->createForm(new RhuSeleccionVisitaType(), $arSeleccionVisita);
         $form->handleRequest($request);
         if ($form->isValid()) {

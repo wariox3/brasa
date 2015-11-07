@@ -54,16 +54,32 @@
                     <td class="td-in-well">{{ arSeleccion.estadoCivilRel.nombre }}</td>
                     <td class="titulo">SEXO:</td>
                     <td class="td-in-well"{% if arSeleccion.codigoSexoFk == "M" %}> MASCULINO {% else %} FEMENINO {% endif%}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">CORREO:</td>
+                    <td class="td-in-well">{{ arSeleccion.correo }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">FECHA NACIMIENTO:</td>
                     <td class="td-in-well">{{ arSeleccion.fechaNacimiento|date("Y/m/d") }}</td>
                     <td class="titulo">FECHA PRUEBAS:</td>
                     <td class="td-in-well">{{ arSeleccion.fechaPruebas|date("Y/m/d H:i") }}</td>
-                    <td class="titulo">CORREO:</td>
-                    <td class="td-in-well">{{ arSeleccion.correo }}</td>
+                    <td class="titulo">ESTADO AUTORIZADO:</td>
+                    <td class="td-in-well">{% if arSeleccion.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo">ESTADO APROBADO:</td>
+                    <td class="td-in-well">{% if arSeleccion.estadoAprobado == 1%}SI{% else %}NO{% endif %}</td>
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo">ESTADO CERRADO:</td>
+                    <td class="td-in-well">{% if arSeleccion.estadoCerrado == 1%}SI{% else %}NO{% endif %}</td>
                 </tr>
                 <tr>
                     <td class="titulo" colspan="8">COMENTARIOS: {{ arSeleccion.comentarios }}</td>
@@ -109,7 +125,7 @@
                             <td>{{ arSeleccionReferencias.direccion }}</td>
                             <td>{{ arSeleccionReferencias.ciudadRel.nombre }}</td>
                             <td {% if arSeleccionReferencias.estadoVerificada == 1 %}class="success"{% endif %}>{% if arSeleccionReferencias.estadoVerificada == 1 %} SI {% else %} NO {% endif %}</td>
-                            <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionReferencia': arSeleccionReferencias.codigoSeleccionReferenciaPk }) }}', 'AgregarSeleccionReferencia', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td>{% if arSeleccion.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_referencia', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionReferencia': arSeleccionReferencias.codigoSeleccionReferenciaPk }) }}', 'AgregarSeleccionReferencia', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a>{% endif %}</td>
                             <td><input type="checkbox" name="ChkSeleccionarReferencia[]" value="{{ arSeleccionReferencias.codigoSeleccionReferenciaPk }}" /></td>
                         </tr>
                         {% endfor %}
@@ -152,7 +168,7 @@
                             <td>{{ arSeleccionPruebas.seleccionPruebaTipoRel.nombre }}</td>
                             <td>{{ arSeleccionPruebas.resultado }}</td>
                             <td>{{ arSeleccionPruebas.comentarios }}</td>
-                            <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionPrueba': arSeleccionPruebas.codigoSeleccionPruebaPk }) }}', 'AgregarSeleccionPrueba', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td>{% if arSeleccion.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionPrueba': arSeleccionPruebas.codigoSeleccionPruebaPk }) }}', 'AgregarSeleccionPrueba', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a>{% endif %}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 2,  'numero': arSeleccionPruebas.codigoSeleccionPruebaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarPrueba[]" value="{{ arSeleccionPruebas.codigoSeleccionPruebaPk }}" /></td>
                         </tr>
@@ -181,6 +197,7 @@
                             <th>FECHA/HORA</th>
                             <th>COMENTARIOS</th>
                             <th></th>
+                            <th></th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arSeleccionVisita in arSeleccionVisita %}
@@ -192,6 +209,8 @@
                             <td>{{ arSeleccionVisita.fecha|date('Y-m-d') }}</td>
                             <td>{{ arSeleccionVisita.comentarios }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 11,  'numero': arSeleccionVisita.codigoSeleccionVisitaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>
+                            <td>{% if arSeleccion.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionVisita': arSeleccionVisita.codigoSeleccionVisitaPk }) }}', 'AgregarSeleccionVisita', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a>{% endif %}</td>
+                                
                             <td align="center"><input type="checkbox" name="ChkSeleccionarVisita[]" value="{{ arSeleccionVisita.codigoSeleccionVisitaPk }}" /></td>
                         </tr>
                         {% endfor %}
@@ -200,7 +219,7 @@
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
                             {% if arSeleccion.estadoAutorizado == 0 %}
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}', 'AgregarSeleccionVisita', 600, 900)" >Nuevo</a>
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionVisita': 0}) }}', 'AgregarSeleccionVisita', 600, 900)" >Nuevo</a>
                             {% endif %}
                         </div>
                         <div class="btn-group">
