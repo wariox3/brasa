@@ -174,7 +174,12 @@ class SeleccionController extends Controller
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoSeleccionReferencia) {
                         $arSeleccionReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->find($codigoSeleccionReferencia);
-                        $arSeleccionReferencias->setEstadoVerificada(1);
+                        if ($arSeleccionReferencias->getEstadoVerificada() == 1){
+                            $arSeleccionReferencias->setEstadoVerificada(0);
+                        }else{
+                            $arSeleccionReferencias->setEstadoVerificada(1);
+                        }
+                        
                         $em->persist($arSeleccionReferencias);
                     }
                     $em->flush();
