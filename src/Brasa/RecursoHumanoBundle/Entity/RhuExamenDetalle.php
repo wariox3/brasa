@@ -38,6 +38,16 @@ class RhuExamenDetalle
     private $vrPrecio;
     
     /**
+     * @ORM\Column(name="fecha_vence", type="date")
+     */    
+    private $fechaVence;    
+    
+    /**     
+     * @ORM\Column(name="validar_vencimiento", type="boolean")
+     */    
+    private $validarVencimiento = 0;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;     
@@ -231,5 +241,53 @@ class RhuExamenDetalle
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set fechaVence
+     *
+     * @param \DateTime $fechaVence
+     *
+     * @return RhuExamenDetalle
+     */
+    public function setFechaVence($fechaVence)
+    {
+        $this->fechaVence = $fechaVence;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVence
+     *
+     * @return \DateTime
+     */
+    public function getFechaVence()
+    {
+        return $this->fechaVence;
+    }
+
+    /**
+     * Set validarVencimiento
+     *
+     * @param boolean $validarVencimiento
+     *
+     * @return RhuExamenDetalle
+     */
+    public function setValidarVencimiento($validarVencimiento)
+    {
+        $this->validarVencimiento = $validarVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get validarVencimiento
+     *
+     * @return boolean
+     */
+    public function getValidarVencimiento()
+    {
+        return $this->validarVencimiento;
     }
 }

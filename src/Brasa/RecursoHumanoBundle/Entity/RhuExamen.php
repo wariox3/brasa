@@ -40,12 +40,7 @@ class RhuExamen
     /**
      * @ORM\Column(name="fecha", type="date")
      */    
-    private $fecha;            
-    
-    /**
-     * @ORM\Column(name="fecha_vence", type="date")
-     */    
-    private $fechaVence;    
+    private $fecha;                   
     
     /**     
      * @ORM\Column(name="estado_aprobado", type="boolean")

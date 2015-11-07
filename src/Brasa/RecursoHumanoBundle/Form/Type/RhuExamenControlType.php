@@ -17,8 +17,7 @@ class RhuExamenControlType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
                 'property' => 'nombre',
             ))
-            ->add('fecha', 'date')
-            ->add('fechaVence', 'date')
+            ->add('fecha', 'date')            
             ->add('comentarios', 'textarea', array('required' => false))            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

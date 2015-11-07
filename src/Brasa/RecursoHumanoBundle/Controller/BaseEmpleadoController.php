@@ -89,8 +89,8 @@ class BaseEmpleadoController extends Controller
         $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arEmpleadoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio();
         $arEmpleadoEstudios = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
-        $arEmpleadoExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen();
-        $arEmpleadoExamenes = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoExamen')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arExamenes = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado, 'control' => 1 ));
         $arEmpleadoFamilia = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoFamilia();
         $arEmpleadoFamilia = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoFamilia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
@@ -170,19 +170,6 @@ class BaseEmpleadoController extends Controller
                 }
             }
 
-            if($form->get('BtnEliminarEmpleadoExamen')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleadoExamen');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoEmpleadoExamen) {
-                        $arEmpleadoExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoExamen();
-                        $arEmpleadoExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoExamen')->find($codigoEmpleadoExamen);
-                        $em->remove($arEmpleadoExamen);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }
-
             if($form->get('BtnEliminarEmpleadoFamilia')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleadoFamilia');
                 if(count($arrSeleccionados) > 0) {
@@ -214,7 +201,7 @@ class BaseEmpleadoController extends Controller
         $arCreditos = $paginator->paginate($arCreditos, $this->get('request')->query->get('page', 1),5);
         $arDisciplinarios = $paginator->paginate($arDisciplinarios, $this->get('request')->query->get('page', 1),5);
         $arEmpleadoEstudios = $paginator->paginate($arEmpleadoEstudios, $this->get('request')->query->get('page', 1),6);
-        $arEmpleadoExamenes = $paginator->paginate($arEmpleadoExamenes, $this->get('request')->query->get('page', 1),6);
+        $arExamenes = $paginator->paginate($arExamenes, $this->get('request')->query->get('page', 1),6);
         $arEmpleadoFamilia = $paginator->paginate($arEmpleadoFamilia, $this->get('request')->query->get('page', 1),8);
         $arDotacion = $paginator->paginate($arDotacion, $this->get('request')->query->get('page', 1),8);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
@@ -226,7 +213,7 @@ class BaseEmpleadoController extends Controller
                     'arCreditos' => $arCreditos,
                     'arDisciplinarios' => $arDisciplinarios,
                     'arEmpleadoEstudios' => $arEmpleadoEstudios,
-                    'arEmpleadoExamenes' => $arEmpleadoExamenes,
+                    'arExamenes' => $arExamenes,
                     'arEmpleadoFamilia' => $arEmpleadoFamilia,
                     'arDotacion' => $arDotacion,
                     'strRutaImagen' => $strRutaImagen,

@@ -5,7 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 
-class ConsultasEmpleadoExamenesVencimientoController extends Controller
+class ConsultasExamenesVencimientoController extends Controller
 {
     var $strDqlLista = "";        
     var $strFecha = "";
@@ -33,7 +33,7 @@ class ConsultasEmpleadoExamenesVencimientoController extends Controller
 
         }
         $arEmpleadosExamanes = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaRecursoHumanoBundle:Consultas/EmpleadoExamenesVencimiento:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Consultas/ExamenesVencimiento:lista.html.twig', array(
             'arEmpleadoExamenes' => $arEmpleadosExamanes,
             'form' => $form->createView()
             ));
@@ -41,7 +41,7 @@ class ConsultasEmpleadoExamenesVencimientoController extends Controller
     
     private function listar() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoExamen')->listaDql($this->strNumeroIdentificacion, $this->strFecha);
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->listaDql($this->strNumeroIdentificacion, $this->strFecha);
     }       
     
     private function formularioLista() {

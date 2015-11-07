@@ -82,7 +82,7 @@ class FacturasController extends Controller
             
         }                
 
-        return $this->render('BrasaRecursoHumanoBundle:Facturas:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Facturas:nuevo.html.twig', array(
             'arFactura' => $arFactura,
             'form' => $form->createView()));
     }    

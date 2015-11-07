@@ -25,8 +25,7 @@ class RhuExamenType extends AbstractType
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'property' => 'nombre',
             ))
-            ->add('fecha', 'date')
-            ->add('fechaVence', 'date')
+            ->add('fecha', 'date')            
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('identificacion', 'number', array('required' => true))

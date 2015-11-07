@@ -44,8 +44,7 @@ class ExamenController extends Controller
         if($codigoExamen != 0) {
             $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
         }else{
-            $arExamen->setFecha(new \DateTime('now'));
-            $arExamen->setFechaVence(new \DateTime('now'));
+            $arExamen->setFecha(new \DateTime('now'));            
         }        
         $form = $this->createForm(new RhuExamenType, $arExamen);
         $form->handleRequest($request);
@@ -60,11 +59,14 @@ class ExamenController extends Controller
                     $arExamenDetalle->setExamenTipoRel($arExamenTipo);
                     $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenTipo->getCodigoExamenTipoPk());
                     $arExamenDetalle->setVrPrecio($floPrecio);                                        
+                    $arExamenDetalle->setFechaVence(new \DateTime('now'));
                     $em->persist($arExamenDetalle);                    
-                }
+                }                
             }
             $em->persist($arExamen);
             $em->flush();
+            $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($arExamen->getCodigoExamenPk());
+            
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_rhu_examen_nuevo', array('codigoExamen' => 0 )));
             } else {
@@ -84,8 +86,7 @@ class ExamenController extends Controller
         if($codigoExamen != 0) {
             $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
         }else{
-            $arExamen->setFecha(new \DateTime('now'));
-            $arExamen->setFechaVence(new \DateTime('now'));
+            $arExamen->setFecha(new \DateTime('now'));            
         }        
         $form = $this->createForm(new RhuExamenControlType, $arExamen);
         $form->handleRequest($request);
@@ -229,6 +230,7 @@ class ExamenController extends Controller
                         $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
                         $arExamenDetalle->setExamenTipoRel($arExamenTipo);
                         $arExamenDetalle->setExamenRel($arExamen);
+                        $arExamenDetalle->setFechaVence(new \DateTime('now'));
                         $douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
                         $arExamenDetalle->setVrPrecio($douPrecio);
                         $em->persist($arExamenDetalle);
@@ -331,6 +333,7 @@ class ExamenController extends Controller
         if($ar->getEstadoAprobado() == 1) {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonAprobarDetalle['disabled'] = true;
+            $arrBotonAprobar['disabled'] = true;
         }        
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            

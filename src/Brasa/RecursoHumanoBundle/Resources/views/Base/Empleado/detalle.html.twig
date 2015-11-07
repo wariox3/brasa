@@ -484,36 +484,18 @@
                     <tr>
                         <th>{{ knp_pagination_sortable(arEmpleadoEstudios, 'CÓDIGO', 'e.codigoEmpleadoEstudioPk') }}</th>
                         <th>EXAMEN</th>
-                        <th>VENCIMIENTO</th>
-                        <th style="text-align: center"></th>
-                        <th></th>
-                        <th></th>
+                        <th>VENCIMIENTO</th>                                                
                     </tr>
-                    {% for arEmpleadoExamenes in arEmpleadoExamenes %}
+                    {% for arExamenes in arExamenes %}
                         <tr>
-                            <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoExamenes.codigoEmpleadoExamenPk }}">{{ arEmpleadoExamenes.codigoEmpleadoExamenPk }} </td>
-                            <td>{{ arEmpleadoExamenes.examenTipoRel.nombre  }}</td>
-                            {% if arEmpleadoExamenes.validarVencimiento == 1 %}
-                                <td>{{ arEmpleadoExamenes.fechaVencimiento |date("Y/m/d")  }}</td>
-                            {% else %}
-                                <td>NO REQUIERE</td>
-                            {% endif %}
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 10,  'numero': arEmpleadoExamenes.codigoEmpleadoExamenPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>                            
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_examen_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoExamen': arEmpleadoExamenes.codigoEmpleadoExamenPk }) }}', 'AgregarEstudio', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
-                            <td><input type="checkbox" name="ChkSeleccionarEmpleadoExamen[]" value="{{ arEmpleadoExamenes.codigoEmpleadoExamenPk }}" /></td>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arExamenes.codigoExamenPk }}">{{ arExamenes.codigoExamenPk }} </td>                            
+                            <td>{{ arExamenes.examenClaseRel.nombre }}</td>                                                        
+                            <td>{{ arExamenes.fechaVence |date("Y/m/d")  }}</td>                                                        
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: left">
-                    {{ knp_pagination_render(arEmpleadoExamenes) }}
-                </div>
-                <div class="btn-toolbar" style="float: right">
-                    <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_examen_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoExamen': 0 }) }}', 'AgregarProcesoEstudio', 600, 900)" >Nuevo</a>
-                    </div>
-                    <div class="btn-group">
-                        {{ form_widget(form.BtnEliminarEmpleadoExamen, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
-                    </div>
+                    {{ knp_pagination_render(arExamenes) }}
                 </div>
             </div>                    
                     

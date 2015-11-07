@@ -377,10 +377,6 @@ brs_rhu_base_empleados_cargar_foto:
 brs_rhu_base_empleado_estudio_nuevo:
     path:     /rhu/base/empleadoEstudio/nuevo/{codigoEmpleado}/{codigoEmpleadoEstudio}
     defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoEstudio:nuevo }   
-
-brs_rhu_base_empleado_examen_nuevo:
-    path:     /rhu/base/empleado/examen/nuevo/{codigoEmpleado}/{codigoEmpleadoExamen}
-    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoExamen:nuevo }     
     
 brs_rhu_base_empleado_familia_nuevo:
     path:     /rhu/base/empleadoFamilia/nuevo/{codigoEmpleado}/{codigoEmpleadoFamilia}
@@ -658,9 +654,9 @@ brs_rhu_consultas_empleado_estudios_vencimiento:
     path:     /rhu/consultas/empleado/estudios/vencimiento
     defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasEmpleadoEstudiosVencimiento:lista }
 
-brs_rhu_consultas_empleado_examenes_vencimiento:    
-    path:     /rhu/consultas/empleado/examanes/vencimiento
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasEmpleadoExamenesVencimiento:lista }
+brs_rhu_consultas_examenes_vencimiento:    
+    path:     /rhu/consultas/examanes/vencimiento
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasExamenesVencimiento:lista }
 
 brs_rhu_consultas_empleado_requisitos_pendientes:    
     path:     /rhu/consultas/empleado/requisitos/pendientes
