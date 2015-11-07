@@ -60,7 +60,7 @@
         </div>
         <div class="btn-toolbar" style="float: right">                           
             <div class="btn-group">                
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_requisito_nuevo', { 'codigoRequisito': 0}) }}', 'AgregarRequisito', 600, 900)">Nuevo</a>            
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_requisito_nuevo', { 'codigoRequisito': 0}) }}">Nuevo</a>            
             </div>
             <div class="btn-group">                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                

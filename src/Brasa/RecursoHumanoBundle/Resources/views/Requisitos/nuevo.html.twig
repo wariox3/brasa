@@ -1,4 +1,4 @@
-{% extends '::base_sin_menu.html.twig' %}
+{% extends '::base.html.twig' %}
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
@@ -33,7 +33,8 @@
         </div>
     </div>
            
-    <div class="modal-footer">              
+    <div class="modal-footer">
+        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_requisito_lista') }}">Cancelar</a>
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}            
     </div>    
     {{ form_end(form) }}    

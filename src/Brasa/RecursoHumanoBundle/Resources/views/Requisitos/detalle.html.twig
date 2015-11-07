@@ -24,7 +24,31 @@
                     <td class="td-in-well">{{ arRequisito.fecha|date("Y/m/d") }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                </tr>                 
+                </tr>
+                <tr>
+                    <td class="titulo">IDENTIFICACIÓN:</td>
+                    <td class="td-in-well">{{ arRequisito.numeroIdentificacion }}</td>
+                    <td class="titulo">EMPLEADO:</td>
+                    <td class="td-in-well">{{ arRequisito.nombreCorto }}</td>
+                    <td class="titulo">CARGO</td>
+                    <td class="td-in-well">{{ arRequisito.cargoRel.nombre }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo">ESTADO AUTORIZADO</td>
+                    <td class="td-in-well">{% if arRequisito.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo">ESTADO CERRADO</td>
+                    <td class="td-in-well">{% if arRequisito.estadoCerrado == 1 %}SI{% else %}NO{% endif %}</td>
+                </tr>
                 <tr>
                     <td colspan="8">COMENTARIOS: {{ arRequisito.comentarios }}</td>
                 </tr>

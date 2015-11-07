@@ -242,7 +242,8 @@ class RequisitosController extends Controller
             }
 
             $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $arRequisito->getCodigoRequisitoPk())));
+            //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
         return $this->render('BrasaRecursoHumanoBundle:Requisitos:nuevo.html.twig', array(
             'arRequisito' => $arRequisito,
