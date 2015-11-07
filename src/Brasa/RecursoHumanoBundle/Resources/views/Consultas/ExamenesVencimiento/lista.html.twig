@@ -35,32 +35,32 @@
         </div> 
             <table class="table table-striped table-bordered table-condensed">
                 <tr>
-                    <th>{{ knp_pagination_sortable(arEmpleadoExamenes, 'CÓDIGO', 'e.codigoEmpleadoExamenPk') }}</th>
+                    <th>{{ knp_pagination_sortable(arExamenesDetalles, 'CÓDIGO', 'e.codigoExamenDetallePk') }}</th>
                     <th>EXAMEN</th>
                     <th>VENCIMIENTO</th>
                     <th>IDENTIFICACION</th>
                     <th>EMPLEADO</th>
                 </tr>
-                {% for arEmpleadoExamenes in arEmpleadoExamenes %}
+                {% for arExamenesDetalles in arExamenesDetalles %}
                     <tr>
-                        <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoExamenes.codigoEmpleadoExamenPk }}">{{ arEmpleadoExamenes.codigoEmpleadoExamenPk }} </td>
-                        <td>{{ arEmpleadoExamenes.examenTipoRel.nombre  }}</td>
-                        {% if arEmpleadoExamenes.validarVencimiento == 1 %}
-                            <td>{{ arEmpleadoExamenes.fechaVencimiento |date("Y/m/d")  }}</td>
+                        <td><input type="hidden" name="LblCodigo[]" value="{{ arExamenesDetalles.codigoExamenDetallePk }}">{{ arExamenesDetalles.codigoExamenDetallePk }} </td>
+                        <td>{{ arExamenesDetalles.examenTipoRel.nombre  }}</td>
+                        {% if arExamenesDetalles.validarVencimiento == 1 %}
+                            <td>{{ arExamenesDetalles.fechaVence |date("Y/m/d")  }}</td>
                         {% else %}
                             <td>NO REQUIERE</td>
                         {% endif %}
-                        <td>{{ arEmpleadoExamenes.empleadoRel.numeroIdentificacion  }}</td>
-                        <td>{{ arEmpleadoExamenes.empleadoRel.nombreCorto  }}</td>
+                        <td>{{ arExamenesDetalles.examenRel.identificacion  }}</td>
+                        <td>{{ arExamenesDetalles.examenRel.nombreCorto  }}</td>
                     </tr>
                 {% endfor %}
             </table>
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">
-                {{ knp_pagination_render(arEmpleadoExamenes) }} 
+                {{ knp_pagination_render(arExamenesDetalles) }} 
             </div>
             <div class="btn-group">
-                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arEmpleadoExamenes.getTotalItemCount }}</span></div>        
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arExamenesDetalles.getTotalItemCount }}</span></div>        
             </div>
         </div>                
         <div class="btn-toolbar" style="float: right">                 

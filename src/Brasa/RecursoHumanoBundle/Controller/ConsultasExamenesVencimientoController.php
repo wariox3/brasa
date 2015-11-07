@@ -32,9 +32,9 @@ class ConsultasExamenesVencimientoController extends Controller
             }
 
         }
-        $arEmpleadosExamanes = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
+        $arExamenesDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
         return $this->render('BrasaRecursoHumanoBundle:Consultas/ExamenesVencimiento:lista.html.twig', array(
-            'arEmpleadoExamenes' => $arEmpleadosExamanes,
+            'arExamenesDetalles' => $arExamenesDetalles,
             'form' => $form->createView()
             ));
     }        

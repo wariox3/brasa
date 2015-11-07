@@ -43,5 +43,17 @@ class RhuExamenDetalleRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arExamenDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $codigoExamen));
         return count($arExamenDetalles);
-    }    
+    }  
+    
+    public function listaDql($strIdentificacion = "", $strFecha = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ed, e FROM BrasaRecursoHumanoBundle:RhuExamenDetalle ed JOIN ed.examenRel e WHERE ed.validarVencimiento = 1";
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.identificacion = '" . $strIdentificacion . "'";
+        }        
+        if($strFecha != "" ) {
+            $dql .= " AND ed.fechaVence <= '" . $strFecha . "'";
+        }        
+        return $dql;
+    }     
 }

@@ -95,11 +95,18 @@
                 <td>{{ arExamenDetalle.examenTipoRel.nombre|default('ERROR')}}</td>
                 {% if arExamen.estadoAutorizado == 0 %}
                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.vrPrecio  }}" size="20" style="text-align: right; width:85px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtVence{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.fechaVence | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                    
+                    <td>
+                        <select name="cboValidarVencimiento{{ arExamenDetalle.codigoExamenDetallePk }}">
+                            <option value="0" {% if arExamenDetalle.validarVencimiento == 0 %} selected="true" {% endif %}>NO</option>
+                            <option value="1" {% if arExamenDetalle.validarVencimiento == 1 %} selected="true" {% endif %}>SI</option>                        
+                        </select>
+                    </td>                    
                 {% else %}
                     <td class="td-in-well" align="right">{{ arExamenDetalle.vrPrecio | number_format(0, '.', ',') }}</td>
-                {% endif %}                 
-                <td>{{ arExamenDetalle.fechaVence | date("Y/m/d")}}</td>                
-                <td>{% if arExamenDetalle.validarVencimiento == 1 %} SI {% else %} NO {% endif %}</td>
+                    <td>{{ arExamenDetalle.fechaVence | date("Y/m/d")}}</td>                
+                    <td>{% if arExamenDetalle.validarVencimiento == 1 %} SI {% else %} NO {% endif %}</td>
+                {% endif %}                                                 
                 <td>{% if arExamenDetalle.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arExamenDetalle.comentarios}}</td>
                 <td style="text-align: center">
