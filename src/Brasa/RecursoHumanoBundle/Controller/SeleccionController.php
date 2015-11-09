@@ -217,7 +217,7 @@ class SeleccionController extends Controller
             $em->persist($arSeleccionReferencia);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_referencia', array('codigoSeleccion' => $codigoSeleccion)));
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_referencia', array('codigoSeleccion' => $codigoSeleccion, 'codigoSeleccionReferencia' => 0)));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
@@ -246,7 +246,7 @@ class SeleccionController extends Controller
             $em->persist($arSeleccionPrueba);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_prueba', array('codigoSeleccion' => $codigoSeleccion)));
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_prueba', array('codigoSeleccion' => $codigoSeleccion, 'codigoSeleccionPrueba' => 0)));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
@@ -272,7 +272,7 @@ class SeleccionController extends Controller
             $em->persist($arSeleccionVisita);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_visita', array('codigoSeleccion' => $codigoSeleccion)));
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_visita', array('codigoSeleccion' => $codigoSeleccion, 'codigoSeleccionVisita' => 0)));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
