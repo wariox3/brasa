@@ -45,7 +45,13 @@ class RhuCargo
     /**
      * @ORM\OneToMany(targetEntity="RhuRequisito", mappedBy="cargoRel")
      */
-    protected $requisitosCargoRel;    
+    protected $requisitosCargoRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDesempeno", mappedBy="cargoRel")
+     */
+    protected $desempenosCargoRel;
+    
     
     /**
      * Constructor
@@ -56,6 +62,8 @@ class RhuCargo
         $this->empleadosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoAportesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->requisitosCargosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->requisitosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->desempenosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -260,5 +268,39 @@ class RhuCargo
     public function getRequisitosCargoRel()
     {
         return $this->requisitosCargoRel;
+    }
+
+    /**
+     * Add desempenosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addDesempenosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosCargoRel)
+    {
+        $this->desempenosCargoRel[] = $desempenosCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove desempenosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosCargoRel
+     */
+    public function removeDesempenosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDesempeno $desempenosCargoRel)
+    {
+        $this->desempenosCargoRel->removeElement($desempenosCargoRel);
+    }
+
+    /**
+     * Get desempenosCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDesempenosCargoRel()
+    {
+        return $this->desempenosCargoRel;
     }
 }

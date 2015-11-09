@@ -140,7 +140,6 @@ class RhuDesempeno
     protected $desempenosDetallesDesempenoRel;
 
     
-    
     /**
      * Constructor
      */
