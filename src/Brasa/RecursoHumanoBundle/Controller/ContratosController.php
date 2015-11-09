@@ -281,6 +281,7 @@ class ContratosController extends Controller
                             }
                         }
                         $em->flush();
+                        //$em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($arLiquidacion->getCodigoLiquidacionPk());
                     } else {
                         $objMensaje->Mensaje("error", "No puede terminar un contrato con licencias pendientes", $this);
                     }

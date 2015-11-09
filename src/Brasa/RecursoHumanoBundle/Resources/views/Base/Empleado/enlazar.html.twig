@@ -46,7 +46,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arSelecciones.codigoSeleccionPk }}">{{ arSelecciones.codigoSeleccionPk }} </td>
                 <td>{{ arSelecciones.fecha |date("Y/m/d H:i")  }}</td>
                 <td>{{ arSelecciones.seleccionTipoRel.nombre  }}</td>
-                <td>{{ arSelecciones.seleccionGrupoRel.nombre  }}</td>
+                <td>{{ arSelecciones.seleccionGrupoRel.nombre |default('')  }}</td>
                 <td>{{ arSelecciones.numeroIdentificacion  }}</td>
                 <td>{{ arSelecciones.nombreCorto  }}</td>
                 <td>{{ arSelecciones.centroCostoRel.nombre  }}</td>
