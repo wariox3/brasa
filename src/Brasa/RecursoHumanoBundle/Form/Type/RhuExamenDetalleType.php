@@ -8,7 +8,9 @@ class RhuExamenDetalleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder         
+        $builder                    
+            ->add('fechaVence', 'date') 
+            ->add('validarVencimiento', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                                                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit');
     }

@@ -183,6 +183,10 @@ class ExamenController extends Controller
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
             }
+            if($form->get('BtnCerrarDetalle')->isClicked()) {
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->cerrarDetallesSeleccionados($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
+            }            
             if ($form->get('BtnActualizarDetalle')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
@@ -322,6 +326,7 @@ class ExamenController extends Controller
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonActualizarDetalle = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonAprobarDetalle = array('label' => 'Aprobar', 'disabled' => false);
+        $arrBotonCerrarDetalle = array('label' => 'Cerrar', 'disabled' => true);
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
             $arrBotonEliminarDetalle['disabled'] = true;
@@ -336,6 +341,7 @@ class ExamenController extends Controller
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonAprobarDetalle['disabled'] = true;
             $arrBotonAprobar['disabled'] = true;
+            $arrBotonCerrarDetalle['disabled'] = false;
         }        
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
@@ -345,6 +351,7 @@ class ExamenController extends Controller
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)    
                     ->add('BtnAprobarDetalle', 'submit', $arrBotonAprobarDetalle)                                
+                    ->add('BtnCerrarDetalle', 'submit', $arrBotonCerrarDetalle)                                
                     ->getForm();  
         return $form;
     }

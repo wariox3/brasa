@@ -40,6 +40,7 @@
                     <th>VENCIMIENTO</th>
                     <th>IDENTIFICACION</th>
                     <th>EMPLEADO</th>
+                    <th></th>
                 </tr>
                 {% for arExamenesDetalles in arExamenesDetalles %}
                     <tr>
@@ -52,6 +53,7 @@
                         {% endif %}
                         <td>{{ arExamenesDetalles.examenRel.identificacion  }}</td>
                         <td>{{ arExamenesDetalles.examenRel.nombreCorto  }}</td>
+                        <td style="text-align: center"><a href="{{ path('brs_rhu_examen_detalle', { 'codigoExamen': arExamenesDetalles.codigoExamenFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
                     </tr>
                 {% endfor %}
             </table>

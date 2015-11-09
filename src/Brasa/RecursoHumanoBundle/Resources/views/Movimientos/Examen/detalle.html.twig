@@ -13,15 +13,15 @@
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
     {{ form_errors(form) }}
     <div class="btn-toolbar" style="float:left">
-        <div class="btn-group">                
-            {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                
-            {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                
-            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                            
-            {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                                        
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 6,  'numero': arExamen.codigoExamenPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                                        
+        <div class="btn-group">
+            {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 6,  'numero': arExamen.codigoExamenPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
         </div>
     </div>
-    <br /><br />        
+    <br /><br />
     <!-- Encabezado Movimiento -->
     <div class="panel panel-default">
       <div class="panel-heading">Información exámen</div>
@@ -50,7 +50,7 @@
                     <td class="td-in-well"></td>
                     <td class="titulo">AUTORIZADO:</td>
                     <td class="td-in-well" {% if arExamen.estadoAutorizado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
-                </tr>                
+                </tr>
                 <tr>
                     <td class="titulo">CLASE:</td>
                     <td class="td-in-well">{{ arExamen.examenClaseRel.nombre }}</td>
@@ -62,13 +62,13 @@
                     <td> {% if arExamen.control == 1 %}SI{% else %}NO{% endif %}</td>
                     <td class="titulo" ></td>
                     <td align="right"></td>
-                </tr>                
+                </tr>
             </table>
       </div>
     </div>
 
     <!-- Fin Encabezado Movimiento -->
-            
+
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tipos" data-toggle="tab">Detalle</a></li>
     </ul>
@@ -81,38 +81,40 @@
             <tr>
                 <th>CODIGO</th>
                 <th>EXAMEN</th>
-                <th style="text-align: right">PRECIO</th>                
+                <th style="text-align: right">PRECIO</th>
                 <th>VENCE</th>
                 <th>VALIDAR</th>
-                <th>APROBADO</th>                                                
-                <th>COMENTARIOS</th>    
+                <th>APROBADO</th>
+                <th>CERRADO</th>
+                <th>COMENTARIOS</th>
                 <th></th>
                 <th></th>
             </tr>
             {% for arExamenDetalle in arExamenDetalle %}
             <tr>
-                <td>{{ arExamenDetalle.codigoExamenDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}"></td>                
+                <td>{{ arExamenDetalle.codigoExamenDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}"></td>
                 <td>{{ arExamenDetalle.examenTipoRel.nombre|default('ERROR')}}</td>
                 {% if arExamen.estadoAutorizado == 0 %}
                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.vrPrecio  }}" size="20" style="text-align: right; width:85px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtVence{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.fechaVence | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                    
+                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtVence{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.fechaVence | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>
                     <td>
                         <select name="cboValidarVencimiento{{ arExamenDetalle.codigoExamenDetallePk }}">
                             <option value="0" {% if arExamenDetalle.validarVencimiento == 0 %} selected="true" {% endif %}>NO</option>
-                            <option value="1" {% if arExamenDetalle.validarVencimiento == 1 %} selected="true" {% endif %}>SI</option>                        
+                            <option value="1" {% if arExamenDetalle.validarVencimiento == 1 %} selected="true" {% endif %}>SI</option>
                         </select>
-                    </td>                    
+                    </td>
                 {% else %}
                     <td class="td-in-well" align="right">{{ arExamenDetalle.vrPrecio | number_format(0, '.', ',') }}</td>
-                    <td>{{ arExamenDetalle.fechaVence | date("Y/m/d")}}</td>                
+                    <td>{{ arExamenDetalle.fechaVence | date("Y/m/d")}}</td>
                     <td>{% if arExamenDetalle.validarVencimiento == 1 %} SI {% else %} NO {% endif %}</td>
-                {% endif %}                                                 
+                {% endif %}
                 <td>{% if arExamenDetalle.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arExamenDetalle.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arExamenDetalle.comentarios}}</td>
                 <td style="text-align: center">
                     {% if arExamen.estadoAutorizado == 1 and arExamen.estadoAprobado == 0 %}
                         <a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo_comentario', { 'codigoExamenDetalle': arExamenDetalle.codigoExamenDetallePk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a>
-                    {% endif %}                    
+                    {% endif %}
                 </td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}" /></td>
             </tr>
@@ -120,23 +122,24 @@
         </table>
             </div>
         </div>
-        <div class="btn-toolbar" style="float: right">              
+        <div class="btn-toolbar" style="float: right">
         {% if arExamen.estadoAutorizado == 0 %}
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo', {'codigoExamen': arExamen.codigoExamenPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo</a>
             </div>
         {% endif %}
         <div class="btn-group">
-            {{ form_widget(form.BtnActualizarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                        
-        </div>        
-        <div class="btn-group">
-            {{ form_widget(form.BtnAprobarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                            
-            {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                           
+            {{ form_widget(form.BtnActualizarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         </div>
-    </div> 
-    </div>            
-            
-            
+        <div class="btn-group">
+            {{ form_widget(form.BtnCerrarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnAprobarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+        </div>
+    </div>
+    </div>
+
+
         {{ form_rest(form) }}
     {{ form_end(form) }}
     <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_examen_listar') }}">Volver</a>

@@ -39,6 +39,20 @@ class RhuExamenDetalleRepository extends EntityRepository {
             $em->flush();       
     }
     
+    public function cerrarDetallesSeleccionados($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigoExamenDetalle) {                
+                $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->find($codigoExamenDetalle);
+                if ($arExamenDetalle->getEstadoCerrado()== 0){
+                    $arExamenDetalle->setEstadoCerrado(1);
+                    $em->persist($arExamenDetalle);
+                }
+            }                                            
+        }
+            $em->flush();       
+    }
+    
     public function numeroRegistros($codigoExamen) {
         $em = $this->getEntityManager();
         $arExamenDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $codigoExamen));
@@ -47,7 +61,7 @@ class RhuExamenDetalleRepository extends EntityRepository {
     
     public function listaDql($strIdentificacion = "", $strFecha = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT ed, e FROM BrasaRecursoHumanoBundle:RhuExamenDetalle ed JOIN ed.examenRel e WHERE ed.validarVencimiento = 1";
+        $dql   = "SELECT ed, e FROM BrasaRecursoHumanoBundle:RhuExamenDetalle ed JOIN ed.examenRel e WHERE ed.validarVencimiento = 1 AND ed.estadoCerrado = 0";
         if($strIdentificacion != "" ) {
             $dql .= " AND e.identificacion = '" . $strIdentificacion . "'";
         }        

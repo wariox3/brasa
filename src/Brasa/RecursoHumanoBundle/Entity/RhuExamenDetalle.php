@@ -31,6 +31,11 @@ class RhuExamenDetalle
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
     private $estadoAprobado = 0;
+
+    /**     
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = 0;    
     
     /**     
      * @ORM\Column(name="vr_precio", type="float")
@@ -289,5 +294,29 @@ class RhuExamenDetalle
     public function getValidarVencimiento()
     {
         return $this->validarVencimiento;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuExamenDetalle
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 }
