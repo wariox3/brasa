@@ -50,7 +50,11 @@ class RhuExamenRepository extends EntityRepository {
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoExamen) {
                 $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
-                if($em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->devuelveNumeroDetalleExamen($codigoExamen) <= 0){
+                $arSeleccionExamenDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $codigoExamen));
+                if ($arSeleccion->getEstadoAutorizado() == 0 ){
+                    foreach ($arSeleccionExamenDetalles as $arSeleccionExamenDetalle){
+                        $em->remove($arSeleccionExamenDetalle);
+                    }
                     $em->remove($arSeleccion);
                 }
             }
