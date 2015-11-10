@@ -1,4 +1,5 @@
 {% extends '::base.html.twig' %}
+{% block title %}Proceso disciplinario detalle - Soga App{% endblock %}
 {% block content %}
 <script>
     $('#myTab a').click(function(e) {
@@ -14,6 +15,8 @@
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
+                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 5,  'numero': arDisciplinario.codigoDisciplinarioPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
             </div>
@@ -34,18 +37,18 @@
                 </tr>
                 <tr>
                     <td class="titulo">DESCARGOS:</td>
-                    <td colspan="3">{{ arDisciplinario.descargos|default('NO APLICA') }}</td>
-                    
-                    
+                    <td>{{ arDisciplinario.descargos|default('NO APLICA') }}</td>
                     <td class="titulo">FECHA SUSPENSIÓN</td>
                     <td>{{ arDisciplinario.suspension|default('NO APLICA') }}</td>
+                    <td class="titulo">AUTORIZADO:</td>
+                    <td>{% if arDisciplinario.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
                 </tr>
                 <tr>
                     <td class="titulo">EMPLEADO:</td>
                     <td>{{ arDisciplinario.empleadoRel.nombreCorto }}</td>
                     <td class="titulo">IDENTIFICACIÓN:</td>
                     <td>{{ arDisciplinario.empleadoRel.numeroIdentificacion }}</td>
-                    <td class="titulo">FECHA</td>
+                    <td class="titulo">FECHA CREACIÓN</td>
                     <td>{{ arDisciplinario.fecha | date('Y/m/d') }}</td>
                 </tr>
                 <tr>

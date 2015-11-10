@@ -95,27 +95,41 @@ class DisciplinarioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arCodigoTipoProceso = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
-        $arCodigoTipoProceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->getForm();
+        $arProcesoDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+        $arProcesoDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
+        $form = $this->formularioDetalle($arProcesoDisciplinario);
         $form->handleRequest($request);
         if($form->isValid()) {
+            if($form->get('BtnAutorizar')->isClicked()) {            
+                if($arProcesoDisciplinario->getEstadoAutorizado() == 0) {
+                    $arProcesoDisciplinario->setEstadoAutorizado(1);
+                    $em->persist($arProcesoDisciplinario);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
+                }
+            }
+            if($form->get('BtnDesAutorizar')->isClicked()) {            
+                if($arProcesoDisciplinario->getEstadoAutorizado() == 1) {
+                    $arProcesoDisciplinario->setEstadoAutorizado(0);
+                    $em->persist($arDotacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
+                }
+            }
             if($form->get('BtnImprimir')->isClicked()) {
-                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 6){
+                if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 6){
                    $objFormatoDisciplinarioSuspencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioSuspension();
                    $objFormatoDisciplinarioSuspencion->Generar($this, $codigoDisciplinario);
                 }
-                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 7) {
+                if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 7) {
                     $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioLlamadoAtencion();
                     $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
                 }
-                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 8) {
+                if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 8) {
                     $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioDescargo();
                     $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
                 }
-                if ($arCodigoTipoProceso->getCodigoDisciplinarioTipoFk() == 9) {
+                if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 9) {
                     $objFormatoDisciplinarioVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioVacaciones();
                     $objFormatoDisciplinarioVacaciones->Generar($this, $codigoDisciplinario);
                 }
@@ -178,6 +192,24 @@ class DisciplinarioController extends Controller
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+    }
+    
+    private function formularioDetalle($ar) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);               
+        if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;                        
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;
+        }
+        $form = $this->createFormBuilder()    
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)                                            
+                    ->getForm();  
+        return $form;
     }
 
     private function generarExcel() {

@@ -53,6 +53,11 @@ class RhuDisciplinario
      */    
     private $descargos;
     
+    /**     
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */    
+    private $estadoAutorizado = 0;
+    
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
      */    
@@ -75,6 +80,7 @@ class RhuDisciplinario
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     protected $centroCostoRel;
+
 
 
 
@@ -254,6 +260,30 @@ class RhuDisciplinario
     public function getDescargos()
     {
         return $this->descargos;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuDisciplinario
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 
     /**
