@@ -32,9 +32,9 @@ class AccidenteTrabajoController extends Controller
                         else {
                             $em->remove($arAccidentesTrabajo);
                             $em->flush();
-                            return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
                         }
                     }
+                    return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
                 }
                 $this->filtrarLista($form);
                 $this->listar();
@@ -76,7 +76,7 @@ class AccidenteTrabajoController extends Controller
             }
         }
         $arAccidentesTrabajo = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:AccidentesTrabajo:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/AccidentesTrabajo:lista.html.twig', array(
             'arAccidentesTrabajo' => $arAccidentesTrabajo,
             'form' => $form->createView()
             ));
@@ -97,7 +97,7 @@ class AccidenteTrabajoController extends Controller
             
             
         }
-        return $this->render('BrasaRecursoHumanoBundle:AccidentesTrabajo:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/AccidentesTrabajo:detalle.html.twig', array(
                     'arAccidenteTrabajo' => $arAccidenteTrabajo,
                     'form' => $form->createView()
                     ));
@@ -156,64 +156,50 @@ class AccidenteTrabajoController extends Controller
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
-    public function nuevoAction($codigoAccidenteTrabajo) {
+    public function nuevoAction($codigoAccidenteTrabajo = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
-        $arEntidadRiesgo = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
-        $arEntidadRiesgo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracion->getCodigoEntidadRiesgoFk());
-        $arAccidenteTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
-        if ($codigoAccidenteTrabajo != 0)
-        {
+        $arAccidenteTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();    
+        if($codigoAccidenteTrabajo != 0) {
             $arAccidenteTrabajo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAccidenteTrabajo')->find($codigoAccidenteTrabajo);
-        }
-        else {
-            /*$arAccidenteTrabajo->getFechaAccidente(new \DateTime('now'));
-            $arAccidenteTrabajo->getFechaEnviaInvestigacion(new \DateTime('now'));
-            $arAccidenteTrabajo->getFechaIncapacidadDesde(new \DateTime('now'));
-            $arAccidenteTrabajo->getFechaIncapacidadHasta(new \DateTime('now'));
-            $arAccidenteTrabajo->getFechaVerificacion1(new \DateTime('now'));
-            $arAccidenteTrabajo->getFechaVerificacion2(new \DateTime('now'));
-            $arAccidenteTrabajo->getFechaVerificacion3(new \DateTime('now'));
-            $arAccidenteTrabajo->getFechaVerificacion(new \DateTime('now'));*/
-        }
-        $form = $this->createForm(new RhuAccidenteTrabajoType(), $arAccidenteTrabajo);
+        } 
+        $form = $this->createForm(new RhuAccidenteTrabajoType, $arAccidenteTrabajo);         
         $form->handleRequest($request);
-        if ($form->isValid()) {           
+        if ($form->isValid()) {            
+            $arrControles = $request->request->All();
             $arAccidenteTrabajo = $form->getData();
-            $identificacion = $request->request->get('TxtIdentificacion');
-            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $identificacion, 'estadoActivo' => 1));
-            
-            if (count($arEmpleado) == 0){
-                $objMensaje->Mensaje("error", "No existe el número de identificación", $this);
-            }else {
-                $arEmpleadoFinal = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleadoFinal = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado[0]);
-                if ($arEmpleadoFinal->getCodigoCentroCostoFk() == ""){
-                    $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this);
-                }else {
-                    $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-                    $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleadoFinal->getCentroCostoRel());
-
-                    $arAccidenteTrabajo->setCentroCostoRel($arCentroCosto);
-                    $arAccidenteTrabajo->setEmpleadoRel($arEmpleadoFinal);
-                    $arAccidenteTrabajo->setEntidadRiesgoProfesionalRel($arEntidadRiesgo);
-                    $em->persist($arAccidenteTrabajo);
-                    $em->flush();
-                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                }
-            
+            if($arrControles['txtNumeroIdentificacion'] != '') {
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $arEntidadRiesgo = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                $arEntidadRiesgo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracion->getCodigoEntidadRiesgoFk());
+                if(count($arEmpleado) > 0) {
+                    $arAccidenteTrabajo->setEmpleadoRel($arEmpleado);
+                    if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
+                        $arAccidenteTrabajo->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                        $arAccidenteTrabajo->setEntidadRiesgoProfesionalRel(($arEntidadRiesgo));
+                        $em->persist($arAccidenteTrabajo);
+                        $em->flush();
+                        if($form->get('guardarnuevo')->isClicked()) {
+                            return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_nuevo', array('codigoAccidenteTrabajo' => 0 )));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
+                        }                        
+                    } else {
+                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                    }                    
+                } else {
+                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                }                
             }
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:AccidentesTrabajo:nuevo.html.twig', array(
-            'form' => $form->createView(),
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/AccidentesTrabajo:nuevo.html.twig', array(
             'arAccidenteTrabajo' => $arAccidenteTrabajo,
-            'codigoAccidenteTrabajo' => $codigoAccidenteTrabajo,
-        ));
+            'form' => $form->createView()));
     }
 
     private function generarExcel() {
@@ -229,17 +215,108 @@ class AccidenteTrabajoController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ;
+            ->setCellValue('A1', 'CÓDIGO')
+	    ->setCellValue('B1', 'IDENTIFICACIÓN')
+            ->setCellValue('C1', 'EMPLEADO')
+            ->setCellValue('D1', 'CARGO')
+            ->setCellValue('E1', 'CENTRO COSTO')
+            ->setCellValue('F1', 'FECHA ACCIDENTE')
+            ->setCellValue('G1', 'CIUDAD ACCIDENTE')
+            ->setCellValue('H1', 'INCAPACIDAD DESDE')
+            ->setCellValue('I1', 'INCAPACIDAD HASTA')
+            ->setCellValue('J1', 'DÍAS')
+            ->setCellValue('K1', 'TIPO ACCIDENTE TRABAJO')
+            ->setCellValue('L1', 'FECHA ENVÍA INVESTIGACIÓN')
+            ->setCellValue('M1', 'CIE10')
+            ->setCellValue('N1', 'DIAGNÓSTICO')
+            ->setCellValue('O1', 'NATURALEZA DE LA LESIÓN')
+            ->setCellValue('P1', 'PARTE DEL CUERPO AFECTADA')
+            ->setCellValue('Q1', 'AGENTE')
+            ->setCellValue('R1', 'MECANISMO DEL ACCIDENTE')
+            ->setCellValue('S1', 'LUGAR DEL ACCIDENTE')
+            ->setCellValue('T1', 'DESCRIPCIÓN DEL ACCIDENTE')
+            ->setCellValue('U1', 'ACTO INSEGURO')
+            ->setCellValue('V1', 'CONDICIÓN INSEGURA')
+            ->setCellValue('W1', 'FACTOR PERSONAL')
+            ->setCellValue('X1', 'FACTOR TRABAJO')
+            ->setCellValue('Y1', 'PLAN ACCIÓN 1')
+            ->setCellValue('Z1', 'TIPO CONTROL 1')
+            ->setCellValue('AA1', 'FECHA VERIFICACIÓN 1')
+            ->setCellValue('AB1', 'AREA RESPONSABLE')    
+            ->setCellValue('AC1', 'PLAN ACCIÓN 2')
+            ->setCellValue('AD1', 'TIPO CONTROL 2')    
+            ->setCellValue('AE1', 'FECHA VERIFICACIÓN 2')    
+            ->setCellValue('AF1', 'AREA RESPONSABLE')    
+            ->setCellValue('AG1', 'PLAN ACCIÓN 3')
+            ->setCellValue('AH1', 'TIPO CONTROL 3')    
+            ->setCellValue('AI1', 'FECHA VERIFICACIÓN 3')
+            ->setCellValue('AJ1', 'AREA RESPONSABLE')
+            ->setCellValue('AK1', 'PARTICIPANTE DE LA INVESTIGACIÓN 1')
+            ->setCellValue('AL1', 'CARGO PARTICIPANTE 1')
+            ->setCellValue('AM1', 'PARTICIPANTE DE LA INVESTIGACIÓN 2')
+            ->setCellValue('AN1', 'CARGO PARTICIPANTE 2')
+            ->setCellValue('AO1', 'PARTICIPANTE DE LA INVESTIGACIÓN 3')
+            ->setCellValue('AP1', 'CARGO PARTICIPANTE 3')    
+            ->setCellValue('AQ1', 'REPRESENTANTE LEGAL')
+            ->setCellValue('AR1', 'CARGO REPRESENTATE LEGAL')
+            ->setCellValue('AS1', 'LICENCIA')
+            ->setCellValue('AT1', 'RESPONSABLE')    
+            ->setCellValue('AU1', 'FECHA VERIFICACIÓN');
                     
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
+        $arAccidentesTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
         $arAccidentesTrabajo = $query->getResult();
         foreach ($arAccidentesTrabajo as $arAccidenteTrabajo) {
             
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arAccidenteTrabajo->getDias())
-                    ;
+                    ->setCellValue('A' . $i, $arAccidenteTrabajo->getCodigoAccidenteTrabajoPk())		    
+                    ->setCellValue('B' . $i, $arAccidenteTrabajo->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arAccidenteTrabajo->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('D' . $i, $arAccidenteTrabajo->getEmpleadoRel()->getCargoDescripcion())
+                    ->setCellValue('E' . $i, $arAccidenteTrabajo->getCentroCostoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arAccidenteTrabajo->getFechaAccidente())
+                    ->setCellValue('G' . $i, $arAccidenteTrabajo->getCiudadRel()->getNombre())
+                    ->setCellValue('H' . $i, $arAccidenteTrabajo->getFechaIncapacidadDesde())
+                    ->setCellValue('I' . $i, $arAccidenteTrabajo->getFechaIncapacidadHasta())
+                    ->setCellValue('J' . $i, $arAccidenteTrabajo->getDias())
+                    ->setCellValue('K' . $i, $arAccidenteTrabajo->getTipoAccidenteRel()->getNombre())
+                    ->setCellValue('L' . $i, $arAccidenteTrabajo->getFechaEnviaInvestigacion())
+                    ->setCellValue('M' . $i, $arAccidenteTrabajo->getCie10())
+                    ->setCellValue('N' . $i, $arAccidenteTrabajo->getDiagnostico())
+                    ->setCellValue('O' . $i, $arAccidenteTrabajo->getNaturalezaLesion())
+                    ->setCellValue('P' . $i, $arAccidenteTrabajo->getCuerpoAfectado())
+                    ->setCellValue('Q' . $i, $arAccidenteTrabajo->getAgente())
+                    ->setCellValue('R' . $i, $arAccidenteTrabajo->getMecanismoAccidente())
+                    ->setCellValue('S' . $i, $arAccidenteTrabajo->getLugarAccidente())
+                    ->setCellValue('T' . $i, $arAccidenteTrabajo->getDescripcionAccidente())
+                    ->setCellValue('U' . $i, $arAccidenteTrabajo->getActoInseguro())
+                    ->setCellValue('V' . $i, $arAccidenteTrabajo->getCondicionInsegura())
+                    ->setCellValue('W' . $i, $arAccidenteTrabajo->getFactorPersonal())
+                    ->setCellValue('X' . $i, $arAccidenteTrabajo->getFactorTrabajo())
+                    ->setCellValue('Y' . $i, $arAccidenteTrabajo->getPlanAccion1())
+                    ->setCellValue('Z' . $i, $arAccidenteTrabajo->gettipoControlUnoRel()->getNombre())
+                    ->setCellValue('AA' . $i, $arAccidenteTrabajo->getFechaVerificacion1())
+                    ->setCellValue('AB' . $i, $arAccidenteTrabajo->getAreaResponsable1())
+                    ->setCellValue('AC' . $i, $arAccidenteTrabajo->getPlanAccion1())
+                    ->setCellValue('AD' . $i, $arAccidenteTrabajo->gettipoControlDosRel()->getNombre())
+                    ->setCellValue('AE' . $i, $arAccidenteTrabajo->getFechaVerificacion2())
+                    ->setCellValue('AF' . $i, $arAccidenteTrabajo->getAreaResponsable2())
+                    ->setCellValue('AG' . $i, $arAccidenteTrabajo->getPlanAccion3())
+                    ->setCellValue('AH' . $i, $arAccidenteTrabajo->gettipoControlTresRel()->getNombre())
+                    ->setCellValue('AI' . $i, $arAccidenteTrabajo->getFechaVerificacion3())
+                    ->setCellValue('AJ' . $i, $arAccidenteTrabajo->getAreaResponsable3())
+                    ->setCellValue('AK' . $i, $arAccidenteTrabajo->getParticipanteInvestigacion1())
+                    ->setCellValue('AL' . $i, $arAccidenteTrabajo->getCargoParticipanteInvestigacion1())
+                    ->setCellValue('AM' . $i, $arAccidenteTrabajo->getParticipanteInvestigacion2())
+                    ->setCellValue('AN' . $i, $arAccidenteTrabajo->getCargoParticipanteInvestigacion2())
+                    ->setCellValue('AO' . $i, $arAccidenteTrabajo->getParticipanteInvestigacion3())
+                    ->setCellValue('AP' . $i, $arAccidenteTrabajo->getCargoParticipanteInvestigacion3())
+                    ->setCellValue('AQ' . $i, $arAccidenteTrabajo->getRepresentanteLegal())
+                    ->setCellValue('AR' . $i, $arAccidenteTrabajo->getCargoRepresentanteLegal())
+                    ->setCellValue('AS' . $i, $arAccidenteTrabajo->getLicencia())
+                    ->setCellValue('AT' . $i, $arAccidenteTrabajo->getResponsableVerificacion())
+                    ->setCellValue('AU' . $i, $arAccidenteTrabajo->getFechaVerificacion());            
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('Accidentes');

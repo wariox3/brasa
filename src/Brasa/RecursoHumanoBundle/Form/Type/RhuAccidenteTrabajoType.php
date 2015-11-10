@@ -71,7 +71,8 @@ class RhuAccidenteTrabajoType extends AbstractType
             ->add('licencia', 'text', array('required' => false))
             ->add('fechaVerificacion', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('responsableVerificacion', 'text', array('required' => false))                
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'));
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
     }
 
     public function getName()
