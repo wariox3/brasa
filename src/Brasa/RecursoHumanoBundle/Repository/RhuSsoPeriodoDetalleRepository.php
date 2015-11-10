@@ -123,9 +123,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $arAporte->setDiasCotizadosSalud($intDiasCotizarSalud);
             $arAporte->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
             $arAporte->setDiasCotizadosCajaCompensacion($intDiasCotizarCaja);                                  
-            if($arPeriodoEmpleado->getCodigoEmpleadoFk() == 855) {
-                echo "hola";
-            }
+            
             //Ibc
             $floIbcBrutoPension = (($intDiasCotizarPension - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;
             $floIbcBrutoSalud = (($intDiasCotizarSalud - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;                    
@@ -318,8 +316,8 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
 
                 $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension);            
                 if($floSalario >= (644350 * 4)) {
-                    $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
-                    $floCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
+                    $floCotizacionFSPSolidaridad = 0;
+                    $floCotizacionFSPSubsistencia = 0;
                 }
                 $floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
                 $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud);

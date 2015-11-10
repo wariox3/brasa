@@ -1,0 +1,146 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+<div class="container">
+    <div class="page-header">
+        <h3>Detalle pedido</h3>
+    </div>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+    {{ form_errors(form) }}
+    <div class="btn-toolbar" style="float:left">
+        <div class="btn-group">
+            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+        </div>
+    </div>
+    <br /><br />
+    <!-- Encabezado Movimiento -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Información exámen</div>
+      <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="titulo">CODIGO:</td>
+                    <td class="td-in-well">{{ arPedido.codigoPedidoPk }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo" >HORAS:</td>
+                    <td align="right">{{ arPedido.horas | number_format(0, '.', ',')}}</td>
+                </tr>                
+            </table>
+      </div>
+    </div>
+
+    <!-- Fin Encabezado Movimiento -->
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tipos" data-toggle="tab">Detalle</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tipos">
+                <!-- Menu Encabezado Movimiento -->
+            <div id="detalles" style="width: 100%"><br>
+            <table class="table table-striped table-bordered table-condensed">
+            <tr>
+                <th>COD</th>
+                <th>CANT</th>
+                <th>LU</th>
+                <th>MA</th>
+                <th>MI</th>
+                <th>JU</th>
+                <th>VI</th>
+                <th>SA</th>
+                <th>DO</th>
+                <th>FE</th>
+                <th></th>
+            </tr>
+            {% for arPedidoDetalle in arPedidoDetalle %}
+                <tr>
+                    <td>{{ arPedidoDetalle.codigoPedidoDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}"></td>
+                    {% if arPedido.estadoAutorizado == 0 %}
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="5" style="width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                    <td>
+                        <select name="cboLunes{{ arPedidoDetalle.codigoPedidoDetallePk }}">
+                            <option value="0" {% if arPedidoDetalle.lunes == 0 %} selected="true" {% endif %}>NO</option>
+                            <option value="1" {% if arPedidoDetalle.lunes == 1 %} selected="true" {% endif %}>SI</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="cboMartes{{ arPedidoDetalle.codigoPedidoDetallePk }}">
+                            <option value="0" {% if arPedidoDetalle.martes == 0 %} selected="true" {% endif %}>NO</option>
+                            <option value="1" {% if arPedidoDetalle.martes == 1 %} selected="true" {% endif %}>SI</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="cboMiercoles{{ arPedidoDetalle.codigoPedidoDetallePk }}">
+                            <option value="0" {% if arPedidoDetalle.miercoles == 0 %} selected="true" {% endif %}>NO</option>
+                            <option value="1" {% if arPedidoDetalle.miercoles == 1 %} selected="true" {% endif %}>SI</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="cboJueves{{ arPedidoDetalle.codigoPedidoDetallePk }}">
+                            <option value="0" {% if arPedidoDetalle.jueves == 0 %} selected="true" {% endif %}>NO</option>
+                            <option value="1" {% if arPedidoDetalle.jueves == 1 %} selected="true" {% endif %}>SI</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="cboViernes{{ arPedidoDetalle.codigoPedidoDetallePk }}">
+                            <option value="0" {% if arPedidoDetalle.viernes == 0 %} selected="true" {% endif %}>NO</option>
+                            <option value="1" {% if arPedidoDetalle.viernes == 1 %} selected="true" {% endif %}>SI</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="cboSabado{{ arPedidoDetalle.codigoPedidoDetallePk }}">
+                            <option value="0" {% if arPedidoDetalle.sabado == 0 %} selected="true" {% endif %}>NO</option>
+                            <option value="1" {% if arPedidoDetalle.sabado == 1 %} selected="true" {% endif %}>SI</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="cboDomingo{{ arPedidoDetalle.codigoPedidoDetallePk }}">
+                            <option value="0" {% if arPedidoDetalle.domingo == 0 %} selected="true" {% endif %}>NO</option>
+                            <option value="1" {% if arPedidoDetalle.domingo == 1 %} selected="true" {% endif %}>SI</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="cboFestivo{{ arPedidoDetalle.codigoPedidoDetallePk }}">
+                            <option value="0" {% if arPedidoDetalle.festivo == 0 %} selected="true" {% endif %}>NO</option>
+                            <option value="1" {% if arPedidoDetalle.festivo == 1 %} selected="true" {% endif %}>SI</option>
+                        </select>
+                    </td>                    
+                    {% else %}
+                        <td>{{ arPedidoDetalle.cantidad  }}</td>
+                    {% endif %}
+                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
+                </tr>
+            {% endfor %}
+        </table>
+            </div>
+        </div>
+        <div class="btn-toolbar" style="float: right">
+        <div class="btn-group">
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+        </div>
+        <div class="btn-group">
+            {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+        </div>        
+        <div class="btn-group">
+            {{ form_widget(form.BtnDetalleEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+        </div>
+    </div>
+    </div>
+
+
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+    <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_examen_listar') }}">Volver</a>
+</div>
+{% endblock %}

@@ -68,7 +68,6 @@ class BaseEmpleadoController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))
             ->add('BtnEliminarEmpleadoEstudio', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnEliminarEmpleadoExamen', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoFamilia', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
@@ -105,52 +104,6 @@ class BaseEmpleadoController extends Controller
                         $arContratos->setEstadoActivo(0);
                         $em->persist($arContratos);
                         $em->flush();
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }
-
-            if($form->get('BtnEliminarCredito')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarCredito');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoCredito) {
-                        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
-                        if ($arCredito->getAprobado() == 1 or $arCredito->getEstadoPagado() == 1)
-                        {
-                            $mensaje = "No se puede Eliminar el registro, por que el credito ya esta aprobado o cancelado!";
-                        }
-                        else
-                        {
-                            $em->remove($arCredito);
-                            $em->flush();
-                        }
-                    }
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }
-            if($form->get('BtnRetirarLicencia')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarLicencia');
-                $mensajeLicencia = 0;
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoLicencia) {
-                        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
-                        $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->find($codigoLicencia);
-                        $em->remove($arLicencia);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }
-
-            if($form->get('BtnEliminarDisciplinario')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarDisciplinario');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoDisciplinario) {
-                        $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
-                        $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
-                        $em->remove($arDisciplinario);
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));

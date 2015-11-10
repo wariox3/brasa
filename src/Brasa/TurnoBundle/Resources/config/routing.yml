@@ -1,3 +1,43 @@
-brasa_turno_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: BrasaTurnoBundle:Default:index }
+brs_tur_base_turno_lista:
+    path:     /tur/base/turno/lista
+    defaults: { _controller: BrasaTurnoBundle:BaseTurno:lista }     
+    
+brs_tur_base_turno_detalle:
+    path:     /tur/base/turno/detalle/{codigoTurno}
+    defaults: { _controller: BrasaTurnoBundle:BaseTurno:detalle }    
+    
+brs_tur_base_turno_nuevo:
+    path:     /tur/base/turno/nuevo/{codigoTurno}
+    defaults: { _controller: BrasaTurnoBundle:BaseTurno:nuevo }
+
+brs_tur_programacion_lista:
+   path:     /tur/programacion/lista
+   defaults: { _controller: BrasaTurnoBundle:Programacion:lista } 
+   
+brs_tur_programacion_nuevo:
+   path:     /tur/programacion/nuevo/{codigoProgramacion}
+   defaults: { _controller: BrasaTurnoBundle:Programacion:nuevo }
+
+brs_tur_programacion_detalle:
+   path:     /tur/programacion/detalle/{codigoProgramacion}
+   defaults: { _controller: BrasaTurnoBundle:Programacion:detalle }
+   
+brs_tur_programacion_detalle_nuevo:
+   path:     /tur/programacion/detalle/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}
+   defaults: { _controller: BrasaTurnoBundle:Programacion:detalleNuevo }   
+   
+brs_tur_pedido_lista:
+   path:     /tur/pedido/lista
+   defaults: { _controller: BrasaTurnoBundle:Pedido:lista } 
+   
+brs_tur_pedido_nuevo:
+   path:     /tur/pedido/nuevo/{codigoPedido}
+   defaults: { _controller: BrasaTurnoBundle:Pedido:nuevo }
+
+brs_tur_pedido_detalle:
+   path:     /tur/pedido/detalle/{codigoPedido}
+   defaults: { _controller: BrasaTurnoBundle:Pedido:detalle }
+   
+brs_tur_pedido_detalle_nuevo:
+   path:     /tur/pedido/detalle/nuevo/{codigoPedido}/{codigoPedidoDetalle}
+   defaults: { _controller: BrasaTurnoBundle:Pedido:detalleNuevo }     

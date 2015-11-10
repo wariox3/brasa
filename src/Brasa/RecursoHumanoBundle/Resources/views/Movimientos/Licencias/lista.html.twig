@@ -31,6 +31,7 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">            
             <tr>
                 <th>{{ knp_pagination_sortable(arLicencias, 'CÓDIGO', 'l.codigoLicenciaPk') }}</th>
+                <th>NOMBRE</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>                                                
                 <th>CENTRO COSTO</th>
@@ -43,6 +44,7 @@
             {% for arLicencias in arLicencias %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arLicencias.codigoLicenciaPk }}">{{ arLicencias.codigoLicenciaPk }} </td>
+                <td>{{ arLicencias.licenciaTipoRel.nombre  }}</td>
                 <td>{{ arLicencias.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arLicencias.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arLicencias.centroCostoRel.nombre | default('') }}</td>
