@@ -42,7 +42,7 @@ class RequisitosController extends Controller
         }
 
         $arRequisitos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Requisitos:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Requisitos:lista.html.twig', array(
             'arRequisitos' => $arRequisitos,
             'form' => $form->createView()));
     }
@@ -158,7 +158,7 @@ class RequisitosController extends Controller
         $arRequisitosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
         $arRequisitosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->findBy(array('codigoRequisitoFk' => $codigoRequisito));
         $arRequisitosDetalles = $paginator->paginate($arRequisitosDetalles, $this->get('request')->query->get('page', 1),50);
-        return $this->render('BrasaRecursoHumanoBundle:Requisitos:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Requisitos:detalle.html.twig', array(
                         'arRequisitosDetalles' => $arRequisitosDetalles,
                         'arRequisito' => $arRequisito,
                         'form' => $form->createView()
@@ -201,7 +201,7 @@ class RequisitosController extends Controller
         }
         $arRequisitoConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
         $arRequisitoConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findAll();
-        return $this->render('BrasaRecursoHumanoBundle:Requisitos:detalleNuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Requisitos:detalleNuevo.html.twig', array(
             'arRequisito' => $arRequisito,
             'arRequisitoConceptos' => $arRequisitoConceptos,
             'form' => $form->createView()));
@@ -245,7 +245,7 @@ class RequisitosController extends Controller
             return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $arRequisito->getCodigoRequisitoPk())));
             //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        return $this->render('BrasaRecursoHumanoBundle:Requisitos:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Requisitos:nuevo.html.twig', array(
             'arRequisito' => $arRequisito,
             'form' => $form->createView()));
     }
