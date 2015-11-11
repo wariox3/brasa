@@ -40,7 +40,7 @@ class PagosAdicionalesController extends Controller
             }
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:lista.html.twig', array(
             'arProgramacionPagos' => $arProgramacionPagos,
             'form' => $form->createView()));
     }
@@ -108,7 +108,7 @@ class PagosAdicionalesController extends Controller
         }
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaDql($codigoProgramacionPago);        
         $arPagosAdicionales = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
-        return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:detalle.html.twig', array(
                     'arProgramacionPago' => $arProgramacionPago,
                     'arPagosAdicionales' => $arPagosAdicionales,
                     'form' => $form->createView()
@@ -129,7 +129,7 @@ class PagosAdicionalesController extends Controller
         $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
 
 
-        return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoLista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:generarMasivoLista.html.twig', array(
             'arProgramacionPago' => $arProgramacionPago,
             'form' => $form->createView()));
     }
@@ -261,7 +261,7 @@ class PagosAdicionalesController extends Controller
             }
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoSuplementarioDetalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:generarMasivoSuplementarioDetalle.html.twig', array(
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()
             ));
@@ -286,7 +286,7 @@ class PagosAdicionalesController extends Controller
 
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoSuplementarioDetalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:generarMasivoSuplementarioDetalle.html.twig', array(
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()
             ));

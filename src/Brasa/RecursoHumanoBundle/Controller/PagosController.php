@@ -36,7 +36,7 @@ class PagosController extends Controller
         }       
                 
         $arPagos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
-        return $this->render('BrasaRecursoHumanoBundle:Pagos:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Pagos:lista.html.twig', array(
             'arPagos' => $arPagos,
             'form' => $form->createView()));
     }       
@@ -61,7 +61,7 @@ class PagosController extends Controller
             }
         }        
         
-        return $this->render('BrasaRecursoHumanoBundle:Pagos:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Pagos:detalle.html.twig', array(
                     'arPago' => $arPago,
                     'arPagoDetalles' => $arPagoDetalles,                    
                     'arPagoDetallesSede' => $arPagoDetallesSede,                    

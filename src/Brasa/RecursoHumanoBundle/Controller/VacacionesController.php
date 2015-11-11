@@ -55,7 +55,7 @@ class VacacionesController extends Controller
             }
         }
         $arVacaciones = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                        
-        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Vacaciones:lista.html.twig', array(
             'arVacaciones' => $arVacaciones,
             'form' => $form->createView()
             ));
@@ -176,7 +176,7 @@ class VacacionesController extends Controller
         }                
         $arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());
-        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Vacaciones:nuevo.html.twig', array(
             'arEmpleado' => $arEmpleado,
             'arCreditosPendientes' => $arCreditosPendientes,
             'form' => $form->createView()));
@@ -231,35 +231,14 @@ class VacacionesController extends Controller
         }
         $arVacacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
         $arVacacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->FindBy(array('codigoVacacionFk' => $codigoVacacion));        
-        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Vacaciones:detalle.html.twig', array(
                     'arVacaciones' => $arVacacion,
                     'arVacacionDeducciones' => $arVacacionDeducciones,
                     'form' => $form->createView()
                     ));
     }
     
-    private function formularioDetalle($arVacacion) {
-        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
-        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
-        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
-        $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);
-        if($arVacacion->getEstadoAutorizado() == 1) {            
-            $arrBotonLiquidar['disabled'] = true;
-            $arrBotonAutorizar['disabled'] = true;            
-        } else {
-            $arrBotonDesAutorizar['disabled'] = true;
-            $arrBotonImprimir['disabled'] = true;
-        }
-        $form = $this->createFormBuilder()    
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
-                    ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)
-                    ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
-                    ->getForm();  
-        return $form;
-    }    
-    
+       
     public function detalleNuevoAction($codigoVacacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        
@@ -292,11 +271,33 @@ class VacacionesController extends Controller
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        return $this->render('BrasaRecursoHumanoBundle:Vacaciones:detallenuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Vacaciones:detallenuevo.html.twig', array(
             'arCreditos' => $arCreditos,
             'arVacacion' => $arVacacion,
             'form' => $form->createView()));
     }
+    
+    private function formularioDetalle($arVacacion) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);
+        if($arVacacion->getEstadoAutorizado() == 1) {            
+            $arrBotonLiquidar['disabled'] = true;
+            $arrBotonAutorizar['disabled'] = true;            
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;
+        }
+        $form = $this->createFormBuilder()    
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
+                    ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)
+                    ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
+                    ->getForm();  
+        return $form;
+    } 
     
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();

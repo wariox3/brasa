@@ -85,7 +85,7 @@ class ProgramacionesPagoController extends Controller
         }
 
         $arProgramacionPago = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:lista.html.twig', array(
             'arProgramacionPago' => $arProgramacionPago,
             'form' => $form->createView()));
     }
@@ -106,7 +106,7 @@ class ProgramacionesPagoController extends Controller
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:nuevo.html.twig', array(
             'form' => $form->createView()));
     }
 
@@ -182,7 +182,7 @@ class ProgramacionesPagoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:detalle.html.twig', array(
                     'arCentroCosto' => $arCentroCosto,
                     'arPagosAdicionales' => $arPagosAdicionales,
                     'arIncapacidades' => $arIncapacidades,
@@ -222,7 +222,7 @@ class ProgramacionesPagoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:detallePrima.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:detallePrima.html.twig', array(
                     'arCentroCosto' => $arCentroCosto,
                     'arProgramacionPagoDetalles' => $arProgramacionPagoDetalles,
                     'arProgramacionPago' => $arProgramacionPago,
@@ -270,7 +270,7 @@ class ProgramacionesPagoController extends Controller
 
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:agregarEmpleado.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:agregarEmpleado.html.twig', array(
             'form' => $form->createView()));
     }
 
@@ -279,7 +279,7 @@ class ProgramacionesPagoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPagoInconsistencias = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia();
         $arProgramacionPagoInconsistencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoInconsistencia')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:inconsistencias.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:inconsistencias.html.twig', array(
             'arProgramacionPagoInconsistencias' => $arProgramacionPagoInconsistencias
             ));
     }

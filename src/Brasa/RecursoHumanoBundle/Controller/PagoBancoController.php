@@ -39,7 +39,7 @@ class PagoBancoController extends Controller
             }            
         }                      
         $arPagoBancos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                
-        return $this->render('BrasaRecursoHumanoBundle:PagoBanco/:lista.html.twig', array('arPagoBancos' => $arPagoBancos, 'form' => $form->createView()));
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco/:lista.html.twig', array('arPagoBancos' => $arPagoBancos, 'form' => $form->createView()));
     } 
     
     public function nuevoAction($codigoPagoBanco) {
@@ -61,7 +61,7 @@ class PagoBancoController extends Controller
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:PagoBanco:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:nuevo.html.twig', array(
             'arPagoBanco' => $arPagoBanco,
             'form' => $form->createView()));
     }
@@ -116,7 +116,7 @@ class PagoBancoController extends Controller
         }        
         $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
         $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $codigoPagoBanco));
-        return $this->render('BrasaRecursoHumanoBundle:PagoBanco:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:detalle.html.twig', array(
                     'arPagoBanco' => $arPagoBanco,        
                     'arPagoBancoDetalle' => $arPagoBancoDetalle,
                     'form' => $form->createView()
@@ -191,7 +191,7 @@ class PagoBancoController extends Controller
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        return $this->render('BrasaRecursoHumanoBundle:PagoBanco:detalleNuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:detalleNuevo.html.twig', array(
             'arPagos' => $arPagos,
             'arProgramacionesPago' => $arProgramacionesPago,
             'form' => $form->createView()));

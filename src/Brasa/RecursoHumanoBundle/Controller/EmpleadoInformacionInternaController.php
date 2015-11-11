@@ -42,7 +42,7 @@ class EmpleadoInformacionInternaController extends Controller
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoInformacionInterna')->findAll();
         $arEmpleadoInformacionInterna = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
-        return $this->render('BrasaRecursoHumanoBundle:EmpleadoInformacionInterna:listar.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/EmpleadoInformacionInterna:listar.html.twig', array(
                     'arEmpleadoInformacionInterna' => $arEmpleadoInformacionInterna,
                     'form'=> $form->createView()
            
@@ -92,7 +92,7 @@ class EmpleadoInformacionInternaController extends Controller
             }
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:EmpleadoInformacionInterna:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/EmpleadoInformacionInterna:nuevo.html.twig', array(
 
             'form' => $form->createView()));
     }

@@ -52,7 +52,7 @@ class PagosAdicionalesAgregarController extends Controller
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:agregarTiempo.html.twig', array(            
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:agregarTiempo.html.twig', array(            
             'arPagosConceptos' => $arPagosConceptos,
             'arProgramacionCentroCosto' => $arProgramacionPago,
             'form' => $form->createView()));
@@ -128,7 +128,7 @@ class PagosAdicionalesAgregarController extends Controller
                 }                                                                                                                                                       
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:PagosAdicionales:agregarValor.html.twig', array(                        
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:agregarValor.html.twig', array(                        
             'form' => $form->createView()));
     }    
 }

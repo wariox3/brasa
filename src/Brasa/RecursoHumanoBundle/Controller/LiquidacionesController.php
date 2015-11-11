@@ -30,7 +30,7 @@ class LiquidacionesController extends Controller
         }
 
         $arLiquidaciones = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:lista.html.twig', array('arLiquidaciones' => $arLiquidaciones, 'form' => $form->createView()));
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:lista.html.twig', array('arLiquidaciones' => $arLiquidaciones, 'form' => $form->createView()));
     }
 
     public function detalleAction($codigoLiquidacion) {
@@ -94,7 +94,7 @@ class LiquidacionesController extends Controller
         }
         $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
         $arLiquidacionAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->FindBy(array('codigoLiquidacionFk' => $codigoLiquidacion));
-        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:detalle.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalle.html.twig', array(
                     'arLiquidacion' => $arLiquidacion,
                     'arLiquidacionAdicionales' => $arLiquidacionAdicionales,
                     'form' => $form->createView()
@@ -144,7 +144,7 @@ class LiquidacionesController extends Controller
         }
         $arLiquidacionAdicionalesConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
         $arLiquidacionAdicionalesConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->findBy(array('codigoLiquidacionAdicionalConceptoPk' => $codigoConcepto));
-        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones:detalleNuevoConcepto.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalleNuevoConcepto.html.twig', array(
             'arLiquidacion' => $arLiquidacion,
             'arLiquidacionAdicionalesConceptos' => $arLiquidacionAdicionalesConceptos,
             'form' => $form->createView()));
