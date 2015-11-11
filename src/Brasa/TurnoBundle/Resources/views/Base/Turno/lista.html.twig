@@ -39,11 +39,13 @@
                 <th>NOMBRE</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arTurnos in arTurnos %}
             <tr>                
                 <td>{{ arTurnos.codigoTurnoPk  }}</td>                               
                 <td>{{ arTurnos.nombre }}</td>
+                <td style="text-align: center"><a href="{{ path('brs_tur_base_turno_nuevo', {'codigoTurno': arTurnos.codigoTurnoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_programacion_detalle', { 'codigoProgramacion': arTurnos.codigoTurnoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arTurnos.codigoTurnoPk }}" /></td>
             </tr>

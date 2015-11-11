@@ -37,9 +37,32 @@ class TurTurno
     private $horas;    
 
     /**
+     * @ORM\Column(name="horas_diurnas", type="integer")
+     */    
+    private $horasDiurnas = 0;     
+    
+    /**
+     * @ORM\Column(name="horas_nocturnas", type="integer")
+     */    
+    private $horasNoturnas = 0;    
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;       
+
+    /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="turnoRel")
+     */
+    protected $pedidosDetallesTurnoRel;     
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pedidosDetallesTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set codigoTurnoPk
@@ -183,5 +206,87 @@ class TurTurno
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Add pedidosDetallesTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesTurnoRel
+     *
+     * @return TurTurno
+     */
+    public function addPedidosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesTurnoRel)
+    {
+        $this->pedidosDetallesTurnoRel[] = $pedidosDetallesTurnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesTurnoRel
+     */
+    public function removePedidosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesTurnoRel)
+    {
+        $this->pedidosDetallesTurnoRel->removeElement($pedidosDetallesTurnoRel);
+    }
+
+    /**
+     * Get pedidosDetallesTurnoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesTurnoRel()
+    {
+        return $this->pedidosDetallesTurnoRel;
+    }
+
+    /**
+     * Set horasDiurnas
+     *
+     * @param integer $horasDiurnas
+     *
+     * @return TurTurno
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNoturnas
+     *
+     * @param integer $horasNoturnas
+     *
+     * @return TurTurno
+     */
+    public function setHorasNoturnas($horasNoturnas)
+    {
+        $this->horasNoturnas = $horasNoturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNoturnas
+     *
+     * @return integer
+     */
+    public function getHorasNoturnas()
+    {
+        return $this->horasNoturnas;
     }
 }

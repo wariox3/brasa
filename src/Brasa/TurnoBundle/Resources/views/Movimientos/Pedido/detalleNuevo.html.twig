@@ -7,6 +7,12 @@
         <div class="panel-heading">Informacion general</div>
         <div class="panel-body"> 
             <div class="form-group form-group-sm">
+                <label for="form_turnoRel" class="col-sm-3 control-label">Turno:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.turnoRel, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>             
+            <div class="form-group form-group-sm">
                 <label for="form_fechaDesde" class="col-sm-3 control-label">Desde:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.fechaDesde, { 'attr': {'class': 'form-control'} }) }}                        

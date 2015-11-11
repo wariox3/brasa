@@ -3,12 +3,20 @@ namespace Brasa\TurnoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Doctrine\ORM\EntityRepository;
 
 class TurPedidoDetalleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('turnoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurTurno',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('t')
+                    ->orderBy('t.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('fechaDesde', 'date')
             ->add('fechaHasta', 'date')
             ->add('cantidad', 'number')

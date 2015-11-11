@@ -23,6 +23,11 @@ class TurPedidoDetalle
     private $codigoPedidoFk;
     
     /**
+     * @ORM\Column(name="codigo_turno_fk", type="string", length=5)
+     */    
+    private $codigoTurnoFk;    
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fecha_desde;     
@@ -36,6 +41,16 @@ class TurPedidoDetalle
      * @ORM\Column(name="horas", type="integer")
      */    
     private $horas = 0;    
+
+    /**
+     * @ORM\Column(name="horas_diurnas", type="integer")
+     */    
+    private $horasDiurnas = 0;     
+    
+    /**
+     * @ORM\Column(name="horas_nocturnas", type="integer")
+     */    
+    private $horasNoturnas = 0;     
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -88,6 +103,12 @@ class TurPedidoDetalle
      */
     protected $pedidoRel;       
 
+    /**
+     * @ORM\ManyToOne(targetEntity="TurTurno", inversedBy="pedidosDetallesTurnoRel")
+     * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
+     */
+    protected $turnoRel;      
+    
     /**
      * Get codigoPedidoDetallePk
      *
@@ -432,5 +453,101 @@ class TurPedidoDetalle
     public function getViernes()
     {
         return $this->viernes;
+    }
+
+    /**
+     * Set codigoTurnoFk
+     *
+     * @param string $codigoTurnoFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoTurnoFk($codigoTurnoFk)
+    {
+        $this->codigoTurnoFk = $codigoTurnoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFk()
+    {
+        return $this->codigoTurnoFk;
+    }
+
+    /**
+     * Set turnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setTurnoRel(\Brasa\TurnoBundle\Entity\TurTurno $turnoRel = null)
+    {
+        $this->turnoRel = $turnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get turnoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurTurno
+     */
+    public function getTurnoRel()
+    {
+        return $this->turnoRel;
+    }
+
+    /**
+     * Set horasDiurnas
+     *
+     * @param integer $horasDiurnas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNoturnas
+     *
+     * @param integer $horasNoturnas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasNoturnas($horasNoturnas)
+    {
+        $this->horasNoturnas = $horasNoturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNoturnas
+     *
+     * @return integer
+     */
+    public function getHorasNoturnas()
+    {
+        return $this->horasNoturnas;
     }
 }

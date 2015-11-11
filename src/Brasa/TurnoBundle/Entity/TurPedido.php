@@ -33,6 +33,16 @@ class TurPedido
     private $horas = 0;    
     
     /**
+     * @ORM\Column(name="horas_diurnas", type="integer")
+     */    
+    private $horasDiurnas = 0;     
+    
+    /**
+     * @ORM\Column(name="horas_nocturnas", type="integer")
+     */    
+    private $horasNoturnas = 0;    
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;     
@@ -188,5 +198,53 @@ class TurPedido
     public function getPedidosDetallesPedidoRel()
     {
         return $this->pedidosDetallesPedidoRel;
+    }
+
+    /**
+     * Set horasDiurnas
+     *
+     * @param integer $horasDiurnas
+     *
+     * @return TurPedido
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNoturnas
+     *
+     * @param integer $horasNoturnas
+     *
+     * @return TurPedido
+     */
+    public function setHorasNoturnas($horasNoturnas)
+    {
+        $this->horasNoturnas = $horasNoturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNoturnas
+     *
+     * @return integer
+     */
+    public function getHorasNoturnas()
+    {
+        return $this->horasNoturnas;
     }
 }
