@@ -4,10 +4,10 @@ namespace Brasa\TurnoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class TurPedidoRepository extends EntityRepository {
+class TurClienteRepository extends EntityRepository {
     
     public function listaDQL() {
-        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.codigoPedidoPk <> 0";
+        $dql   = "SELECT c FROM BrasaTurnoBundle:TurCliente c WHERE c.codigoClientePk <> 0";
         return $dql;
     }
     

@@ -41,7 +41,7 @@ class BaseTurnoController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
-        if($codigoTurno != 0) {
+        if($codigoTurno != '') {
             $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
         }        
         $form = $this->createForm(new TurTurnoType, $arTurno);

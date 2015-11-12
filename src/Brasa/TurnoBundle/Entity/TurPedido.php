@@ -18,6 +18,11 @@ class TurPedido
     private $codigoPedidoPk;    
     
     /**
+     * @ORM\Column(name="codigo_cliente_fk", type="integer")
+     */    
+    private $codigoClienteFk;    
+    
+    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;    
@@ -26,6 +31,11 @@ class TurPedido
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
     private $estadoAutorizado = 0;     
+    
+    /**
+     * @ORM\Column(name="cantidad", type="integer")
+     */    
+    private $cantidad = 0;    
     
     /**
      * @ORM\Column(name="horas", type="integer")
@@ -40,12 +50,23 @@ class TurPedido
     /**
      * @ORM\Column(name="horas_nocturnas", type="integer")
      */    
-    private $horasNoturnas = 0;    
+    private $horasNocturnas = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_total", type="float")
+     */
+    private $vrTotal = 0;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="pedidosClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="pedidoRel", cascade={"persist", "remove"})
@@ -143,6 +164,54 @@ class TurPedido
     }
 
     /**
+     * Set horasDiurnas
+     *
+     * @param integer $horasDiurnas
+     *
+     * @return TurPedido
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNocturnas
+     *
+     * @param integer $horasNocturnas
+     *
+     * @return TurPedido
+     */
+    public function setHorasNocturnas($horasNocturnas)
+    {
+        $this->horasNocturnas = $horasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnas()
+    {
+        return $this->horasNocturnas;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -201,50 +270,98 @@ class TurPedido
     }
 
     /**
-     * Set horasDiurnas
+     * Set cantidad
      *
-     * @param integer $horasDiurnas
+     * @param integer $cantidad
      *
      * @return TurPedido
      */
-    public function setHorasDiurnas($horasDiurnas)
+    public function setCantidad($cantidad)
     {
-        $this->horasDiurnas = $horasDiurnas;
+        $this->cantidad = $cantidad;
 
         return $this;
     }
 
     /**
-     * Get horasDiurnas
+     * Get cantidad
      *
      * @return integer
      */
-    public function getHorasDiurnas()
+    public function getCantidad()
     {
-        return $this->horasDiurnas;
+        return $this->cantidad;
     }
 
     /**
-     * Set horasNoturnas
+     * Set vrTotal
      *
-     * @param integer $horasNoturnas
+     * @param float $vrTotal
      *
      * @return TurPedido
      */
-    public function setHorasNoturnas($horasNoturnas)
+    public function setVrTotal($vrTotal)
     {
-        $this->horasNoturnas = $horasNoturnas;
+        $this->vrTotal = $vrTotal;
 
         return $this;
     }
 
     /**
-     * Get horasNoturnas
+     * Get vrTotal
+     *
+     * @return float
+     */
+    public function getVrTotal()
+    {
+        return $this->vrTotal;
+    }
+
+    /**
+     * Set codigoClienteFk
+     *
+     * @param integer $codigoClienteFk
+     *
+     * @return TurPedido
+     */
+    public function setCodigoClienteFk($codigoClienteFk)
+    {
+        $this->codigoClienteFk = $codigoClienteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteFk
      *
      * @return integer
      */
-    public function getHorasNoturnas()
+    public function getCodigoClienteFk()
     {
-        return $this->horasNoturnas;
+        return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     *
+     * @return TurPedido
+     */
+    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
     }
 }

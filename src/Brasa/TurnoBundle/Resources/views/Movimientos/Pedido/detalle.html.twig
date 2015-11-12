@@ -32,8 +32,26 @@
                 <tr>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
+                    <td class="titulo" >HORAS DIURNAS:</td>
+                    <td align="right">{{ arPedido.horasDiurnas | number_format(0, '.', ',')}}</td>
+                </tr> 
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo" >HORAS NOCTURNAS:</td>
+                    <td align="right">{{ arPedido.horasNocturnas | number_format(0, '.', ',')}}</td>
+                </tr>                 
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
                     <td class="titulo" >HORAS:</td>
                     <td align="right">{{ arPedido.horas | number_format(0, '.', ',')}}</td>
+                </tr>                
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo" >VALOR:</td>
+                    <td align="right">{{ arPedido.vrTotal | number_format(0, '.', ',')}}</td>
                 </tr>                
             </table>
       </div>
@@ -65,6 +83,10 @@
                 <th>DO</th>
                 <th>FE</th>
                 <th>HORAS</th>
+                <th>H.D</th>
+                <th>H.N</th>
+                <th>DIAS</th>
+                <th>VALOR</th>
                 <th></th>
             </tr>
             {% for arPedidoDetalle in arPedidoDetalle %}
@@ -127,6 +149,10 @@
                         <td>{{ arPedidoDetalle.cantidad  }}</td>
                     {% endif %}
                     <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arPedidoDetalle.vrTotal | number_format(0, '.', ',') }}</td> 
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
                 </tr>
             {% endfor %}

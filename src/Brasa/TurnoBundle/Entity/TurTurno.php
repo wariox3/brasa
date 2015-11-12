@@ -34,7 +34,7 @@ class TurTurno
     /**
      * @ORM\Column(name="horas", type="integer")
      */    
-    private $horas;    
+    private $horas = 0;    
 
     /**
      * @ORM\Column(name="horas_diurnas", type="integer")
@@ -44,7 +44,7 @@ class TurTurno
     /**
      * @ORM\Column(name="horas_nocturnas", type="integer")
      */    
-    private $horasNoturnas = 0;    
+    private $horasNocturnas = 0;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -185,6 +185,54 @@ class TurTurno
     }
 
     /**
+     * Set horasDiurnas
+     *
+     * @param integer $horasDiurnas
+     *
+     * @return TurTurno
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNocturnas
+     *
+     * @param integer $horasNocturnas
+     *
+     * @return TurTurno
+     */
+    public function setHorasNocturnas($horasNocturnas)
+    {
+        $this->horasNocturnas = $horasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnas()
+    {
+        return $this->horasNocturnas;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -240,53 +288,5 @@ class TurTurno
     public function getPedidosDetallesTurnoRel()
     {
         return $this->pedidosDetallesTurnoRel;
-    }
-
-    /**
-     * Set horasDiurnas
-     *
-     * @param integer $horasDiurnas
-     *
-     * @return TurTurno
-     */
-    public function setHorasDiurnas($horasDiurnas)
-    {
-        $this->horasDiurnas = $horasDiurnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasDiurnas
-     *
-     * @return integer
-     */
-    public function getHorasDiurnas()
-    {
-        return $this->horasDiurnas;
-    }
-
-    /**
-     * Set horasNoturnas
-     *
-     * @param integer $horasNoturnas
-     *
-     * @return TurTurno
-     */
-    public function setHorasNoturnas($horasNoturnas)
-    {
-        $this->horasNoturnas = $horasNoturnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasNoturnas
-     *
-     * @return integer
-     */
-    public function getHorasNoturnas()
-    {
-        return $this->horasNoturnas;
     }
 }

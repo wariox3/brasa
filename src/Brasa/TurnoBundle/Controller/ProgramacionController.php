@@ -4,7 +4,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurProgramacionType;
-use Brasa\TurnoBundle\Form\Type\TurProgramacionDetalleType;
 class ProgramacionController extends Controller
 {
     var $strListaDql = "";
@@ -74,7 +73,7 @@ class ProgramacionController extends Controller
         $form = $this->formularioDetalle($arProgramacion);
         $form->handleRequest($request);
         if($form->isValid()) {            
-            if ($form->get('BtnDetalleActualizar')->isClicked()) {
+            if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {                
@@ -178,6 +177,12 @@ class ProgramacionController extends Controller
                 $em->flush();
                 $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
                 return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+            }     
+            if($form->get('BtnDetalleEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
+                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }            
         }
 
@@ -195,26 +200,35 @@ class ProgramacionController extends Controller
         $em = $this->getDoctrine()->getManager();        
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
-        $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-        if($codigoProgramacionDetalle != 0) {
-            $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigoProgramacionDetalle);
-        }       
-        $form = $this->createForm(new TurProgramacionDetalleType, $arProgramacionDetalle);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arProgramacionDetalle = $form->getData();            
-            $arProgramacionDetalle->setProgramacionRel($arProgramacion);
-            $em->persist($arProgramacionDetalle);
-            $em->flush();            
-            
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle_nuevo', array('codigoProgramacion' => $codigoProgramacion, 'codigoProgramacionDetalle' => 0 )));
-            } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {                    
+                        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);
+                        $intCantidad = $arPedidoDetalle->getCantidad();
+                        for ($i = 1; $i <= $intCantidad; $i++) {
+                            $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                            $arProgramacionDetalle->setProgramacionRel($arProgramacion);
+                            $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                            $em->persist($arProgramacionDetalle);
+                        }
+                    }
+                    $em->flush();
+                }
+                $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
             }            
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                           
         }
+        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesCliente($arProgramacion->getCodigoClienteFk());
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
             'arProgramacion' => $arProgramacion,
+            'arPedidosDetalle' => $arPedidosDetalle,
             'form' => $form->createView()));
     }   
     

@@ -38,6 +38,11 @@ class TurPedidoDetalle
     private $fecha_hasta;     
     
     /**
+     * @ORM\Column(name="dias", type="integer")
+     */    
+    private $dias = 0; 
+    
+    /**
      * @ORM\Column(name="horas", type="integer")
      */    
     private $horas = 0;    
@@ -50,12 +55,17 @@ class TurPedidoDetalle
     /**
      * @ORM\Column(name="horas_nocturnas", type="integer")
      */    
-    private $horasNoturnas = 0;     
+    private $horasNocturnas = 0;     
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
      */    
     private $cantidad = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_total", type="float")
+     */
+    private $vrTotal = 0; 
     
     /**     
      * @ORM\Column(name="lunes", type="boolean")
@@ -110,6 +120,11 @@ class TurPedidoDetalle
     protected $turnoRel;      
     
     /**
+     * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="pedidoDetalleRel")
+     */
+    protected $programacionesDetallesPedidoDetalleRel; 
+
+    /**
      * Get codigoPedidoDetallePk
      *
      * @return integer
@@ -141,6 +156,30 @@ class TurPedidoDetalle
     public function getCodigoPedidoFk()
     {
         return $this->codigoPedidoFk;
+    }
+
+    /**
+     * Set codigoTurnoFk
+     *
+     * @param string $codigoTurnoFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoTurnoFk($codigoTurnoFk)
+    {
+        $this->codigoTurnoFk = $codigoTurnoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFk()
+    {
+        return $this->codigoTurnoFk;
     }
 
     /**
@@ -213,6 +252,54 @@ class TurPedidoDetalle
     public function getHoras()
     {
         return $this->horas;
+    }
+
+    /**
+     * Set horasDiurnas
+     *
+     * @param integer $horasDiurnas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNocturnas
+     *
+     * @param integer $horasNocturnas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasNocturnas($horasNocturnas)
+    {
+        $this->horasNocturnas = $horasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnas()
+    {
+        return $this->horasNocturnas;
     }
 
     /**
@@ -336,6 +423,30 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set viernes
+     *
+     * @param boolean $viernes
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setViernes($viernes)
+    {
+        $this->viernes = $viernes;
+
+        return $this;
+    }
+
+    /**
+     * Get viernes
+     *
+     * @return boolean
+     */
+    public function getViernes()
+    {
+        return $this->viernes;
+    }
+
+    /**
      * Set sabado
      *
      * @param boolean $sabado
@@ -432,54 +543,6 @@ class TurPedidoDetalle
     }
 
     /**
-     * Set viernes
-     *
-     * @param boolean $viernes
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setViernes($viernes)
-    {
-        $this->viernes = $viernes;
-
-        return $this;
-    }
-
-    /**
-     * Get viernes
-     *
-     * @return boolean
-     */
-    public function getViernes()
-    {
-        return $this->viernes;
-    }
-
-    /**
-     * Set codigoTurnoFk
-     *
-     * @param string $codigoTurnoFk
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setCodigoTurnoFk($codigoTurnoFk)
-    {
-        $this->codigoTurnoFk = $codigoTurnoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFk()
-    {
-        return $this->codigoTurnoFk;
-    }
-
-    /**
      * Set turnoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
@@ -504,50 +567,91 @@ class TurPedidoDetalle
     }
 
     /**
-     * Set horasDiurnas
+     * Set dias
      *
-     * @param integer $horasDiurnas
+     * @param integer $dias
      *
      * @return TurPedidoDetalle
      */
-    public function setHorasDiurnas($horasDiurnas)
+    public function setDias($dias)
     {
-        $this->horasDiurnas = $horasDiurnas;
+        $this->dias = $dias;
 
         return $this;
     }
 
     /**
-     * Get horasDiurnas
+     * Get dias
      *
      * @return integer
      */
-    public function getHorasDiurnas()
+    public function getDias()
     {
-        return $this->horasDiurnas;
+        return $this->dias;
     }
 
     /**
-     * Set horasNoturnas
+     * Set vrTotal
      *
-     * @param integer $horasNoturnas
+     * @param float $vrTotal
      *
      * @return TurPedidoDetalle
      */
-    public function setHorasNoturnas($horasNoturnas)
+    public function setVrTotal($vrTotal)
     {
-        $this->horasNoturnas = $horasNoturnas;
+        $this->vrTotal = $vrTotal;
 
         return $this;
     }
 
     /**
-     * Get horasNoturnas
+     * Get vrTotal
      *
-     * @return integer
+     * @return float
      */
-    public function getHorasNoturnas()
+    public function getVrTotal()
     {
-        return $this->horasNoturnas;
+        return $this->vrTotal;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->programacionesDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add programacionesDetallesPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPedidoDetalleRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function addProgramacionesDetallesPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPedidoDetalleRel)
+    {
+        $this->programacionesDetallesPedidoDetalleRel[] = $programacionesDetallesPedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesDetallesPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPedidoDetalleRel
+     */
+    public function removeProgramacionesDetallesPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPedidoDetalleRel)
+    {
+        $this->programacionesDetallesPedidoDetalleRel->removeElement($programacionesDetallesPedidoDetalleRel);
+    }
+
+    /**
+     * Get programacionesDetallesPedidoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesDetallesPedidoDetalleRel()
+    {
+        return $this->programacionesDetallesPedidoDetalleRel;
     }
 }

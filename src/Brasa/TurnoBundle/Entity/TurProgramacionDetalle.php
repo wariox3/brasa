@@ -23,6 +23,16 @@ class TurProgramacionDetalle
     private $codigoProgramacionFk;
 
     /**
+     * @ORM\Column(name="codigo_pedido_detalle_fk", type="integer", nullable=true)
+     */    
+    private $codigoPedidoDetalleFk;    
+
+    /**
+     * @ORM\Column(name="codigo_recurso_fk", type="integer", nullable=true)
+     */    
+    private $codigoRecursoFk;    
+    
+    /**
      * @ORM\Column(name="dia_1", type="string", length=5, nullable=true)
      */    
     private $dia1;    
@@ -178,9 +188,9 @@ class TurProgramacionDetalle
     private $dia31;    
     
     /**
-     * @ORM\Column(name="horas", type="string", length=5, nullable=true)
+     * @ORM\Column(name="horas", type="integer")
      */    
-    private $horas;    
+    private $horas = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurProgramacion", inversedBy="programacionesDetallesProgramacionRel")
@@ -188,7 +198,18 @@ class TurProgramacionDetalle
      */
     protected $programacionRel;    
     
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPedidoDetalle", inversedBy="programacionesDetallesPedidoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_pedido_detalle_fk", referencedColumnName="codigo_pedido_detalle_pk")
+     */
+    protected $pedidoDetalleRel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="TurRecurso", inversedBy="programacionesDetallesRecursoRel")
+     * @ORM\JoinColumn(name="codigo_recurso_fk", referencedColumnName="codigo_recurso_pk")
+     */
+    protected $recursoRel;    
+    
 
 
     /**
@@ -223,6 +244,54 @@ class TurProgramacionDetalle
     public function getCodigoProgramacionFk()
     {
         return $this->codigoProgramacionFk;
+    }
+
+    /**
+     * Set codigoPedidoDetalleFk
+     *
+     * @param integer $codigoPedidoDetalleFk
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setCodigoPedidoDetalleFk($codigoPedidoDetalleFk)
+    {
+        $this->codigoPedidoDetalleFk = $codigoPedidoDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPedidoDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoPedidoDetalleFk()
+    {
+        return $this->codigoPedidoDetalleFk;
+    }
+
+    /**
+     * Set codigoRecursoFk
+     *
+     * @param integer $codigoRecursoFk
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setCodigoRecursoFk($codigoRecursoFk)
+    {
+        $this->codigoRecursoFk = $codigoRecursoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRecursoFk
+     *
+     * @return integer
+     */
+    public function getCodigoRecursoFk()
+    {
+        return $this->codigoRecursoFk;
     }
 
     /**
@@ -972,7 +1041,7 @@ class TurProgramacionDetalle
     /**
      * Set horas
      *
-     * @param string $horas
+     * @param integer $horas
      *
      * @return TurProgramacionDetalle
      */
@@ -986,7 +1055,7 @@ class TurProgramacionDetalle
     /**
      * Get horas
      *
-     * @return string
+     * @return integer
      */
     public function getHoras()
     {
@@ -1015,5 +1084,53 @@ class TurProgramacionDetalle
     public function getProgramacionRel()
     {
         return $this->programacionRel;
+    }
+
+    /**
+     * Set pedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel = null)
+    {
+        $this->pedidoDetalleRel = $pedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalle
+     */
+    public function getPedidoDetalleRel()
+    {
+        return $this->pedidoDetalleRel;
+    }
+
+    /**
+     * Set recursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursoRel
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setRecursoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursoRel = null)
+    {
+        $this->recursoRel = $recursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get recursoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurRecurso
+     */
+    public function getRecursoRel()
+    {
+        return $this->recursoRel;
     }
 }
