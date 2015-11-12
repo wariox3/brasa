@@ -1,8 +1,9 @@
 {% extends '::base.html.twig' %}
+{% block title %}Contabilizar pagos bancos - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h3>Contabilizar pagos</h3>
+        <h3>Contabilizar pago bancos</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}

@@ -1,5 +1,5 @@
 
-{% block stylesheets %}            
+{% block stylesheets %}   
 <link href="{{ asset('bootstrap-3.3.2-dist/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
 <link href="{{ asset('css/signin.css') }}" type="text/css" rel="stylesheet" />
 {% endblock %}                 
@@ -12,12 +12,12 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Inicio de sesion Soga!</title>
+        <title>Inicio de sesión Soga!</title>
     </head>
     <body>
         <div class="container">
             <form class="form-signin" role="form" action="{{ path('login_check') }}" method="post">
-                <h2 class="form-signin-heading">Inicio sesion</h2>
+                <h2 class="form-signin-heading">Inicio sesión</h2>
                 
                 <input type="text" class="form-control" placeholder="Nombre usuario" id="username" name="_username" required autofocus>
                 <input type="password" class="form-control" placeholder="clave" id="password" name="_password" required>                

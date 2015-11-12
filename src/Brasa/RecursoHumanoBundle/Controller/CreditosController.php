@@ -351,6 +351,7 @@ class CreditosController extends Controller
                                     $arCredito->setEmpleadoRel($arEmpleado);
                                     $arCredito->setCreditoTipoRel($arCreditoTipo);
                                     $arCredito->setCreditoTipoPagoRel($arCreditoTipoPago);
+                                    $arCredito->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                                     $intVrCredito = $arrayDetalle[2];
                                     $arCredito->setVrPagar($intVrCredito);
                                     $intCuotas = $arrayDetalle[3];

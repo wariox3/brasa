@@ -314,5 +314,20 @@ class RhuPagoRepository extends EntityRepository {
         $arrayResultado = $query->getResult();
         $intDiasAusentismo = $arrayResultado[0]['diasAusentismo'];
         return $intDiasAusentismo;
-    }    
+    }  
+    
+    public function listaDqlPagosPeriodoAportes($strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoTipoFk = 1 AND p.estadoPagado = 1";
+        
+        if ($strDesde != ""){
+            $dql .= " AND p.fechaDesdePago >='" . $strDesde->format('Y-m-d'). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND p.fechaHastaPago <='" . $strHasta->format('Y-m-d') . "'";
+        }
+
+        return $dql;
+    }
+    
 }

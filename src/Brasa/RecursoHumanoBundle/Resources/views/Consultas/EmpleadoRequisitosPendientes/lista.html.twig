@@ -1,4 +1,5 @@
 {% extends '::base.html.twig' %}
+{% block title %}Consulta requisitos empleados - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     <script type="text/javascript">
@@ -6,7 +7,7 @@
             $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
     </script>
     <div class="page-header">
-        <h3>Consulta vencimiento estudios empleados</h3>
+        <h3>Consulta requisitos pendientes empleados</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}

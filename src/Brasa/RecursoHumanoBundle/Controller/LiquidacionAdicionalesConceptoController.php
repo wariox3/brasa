@@ -86,7 +86,7 @@ class LiquidacionAdicionalesConceptoController extends Controller
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->findAll();
         $arLiquidacionesAdicionalConceptos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
-        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones/LiquidacionesAdicionalConcepto:listar.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/LiquidacionesAdicionalConcepto:listar.html.twig', array(
                     'arLiquidacionesAdicionalConceptos' => $arLiquidacionesAdicionalConceptos,
                     'form'=> $form->createView()
            
@@ -111,7 +111,7 @@ class LiquidacionAdicionalesConceptoController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_liquidacion_adicional_concepto_lista'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Liquidaciones/LiquidacionesAdicionalConcepto:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/LiquidacionesAdicionalConcepto:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }

@@ -1,9 +1,9 @@
 {% extends '::base.html.twig' %}
- 
+{% block title %}Exámenes tipo lista - Soga App{% endblock %}  
 {% block content %}
     <div class="container">
     <div class="page-header">    
-        <h3>Listado tipos de examenes</h3>
+        <h3>Listado tipos de exámenes</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
     {{ form_errors(form) }} 

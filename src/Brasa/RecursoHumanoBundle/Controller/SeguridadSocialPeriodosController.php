@@ -369,10 +369,21 @@ class SeguridadSocialPeriodosController extends Controller
                 $objWriter->save('php://output');
                 exit;
             }
+            
+            if($request->request->get('OpGenerarPagosExcel')) {
+                $this->generarPagosPeriodoExcel($codigoPeriodo);
+            }
+            if($request->request->get('OpGenerarPagosDetalleExcel')) {
+                $this->generarPagosDetallePeriodoExcel($codigoPeriodo);
+            }
+            if($request->request->get('OpGenerarAportesExcel')) {
+                $this->generarAportesPeriodoExcel($codigoPeriodo);
+            }
         }
         $arSsoPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlListaDetalle), $request->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:detalle.html.twig', array(
             'arSsoPeriodoDetalles' => $arSsoPeriodoDetalles,
+            'codigoPeriodo' => $codigoPeriodo,
             'form' => $form->createView()));
     }
 
@@ -481,5 +492,352 @@ class SeguridadSocialPeriodosController extends Controller
 
         return (string) $Nro;
     }
+    
+    private function generarPagosPeriodoExcel($codigoPeriodo) {
+        $em = $this->getDoctrine()->getManager();        
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'NÚMERO')
+                    ->setCellValue('C1', 'TIPO')
+                    ->setCellValue('D1', 'IDENTIFICACIÓN')
+                    ->setCellValue('E1', 'EMPLEADO')
+                    ->setCellValue('F1', 'CENTRO COSTO')
+                    ->setCellValue('G1', 'PERIODO PAGO')
+                    ->setCellValue('H1', 'FECHA PAGO DESDE')
+                    ->setCellValue('I1', 'FECHA PAGO HASTA')
+                    ->setCellValue('J1', 'DÍAS PERIODO')
+                    ->setCellValue('K1', 'VR SALARIO EMPLEADO')
+                    ->setCellValue('L1', 'VR SALARIO PERIODO')
+                    ->setCellValue('M1', 'VR AUX TRANSPORTE')
+                    ->setCellValue('N1', 'VR EPS')
+                    ->setCellValue('O1', 'VR PENSIÓN')
+                    ->setCellValue('P1', 'VR DEDUCCIONES')    
+                    ->setCellValue('Q1', 'VR DEVENGADO')
+                    ->setCellValue('R1', 'VR INGRESO BASE COTIZACIÓN')
+                    ->setCellValue('S1', 'VR INGRESO BASE PRESTACIONAL')
+                    ->setCellValue('T1', 'VE NETO PAGAR');
+
+        $i = 2;
+        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+        $dateFechaPeriodo = $arPeriodo->getFechaDesde()->format('Y-m-d'). ' - ' . $arPeriodo->getFechaHasta()->format('Y-m-d');
+        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDqlPagosPeriodoAportes($arPeriodo->getFechaDesde(),$arPeriodo->getFechaHasta());
+        $query = $em->createQuery($arPagos);
+        $arPagos = $query->getResult();
+        foreach ($arPagos as $arPago) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
+                    ->setCellValue('B' . $i, $arPago->getNumero())
+                    ->setCellValue('C' . $i, $arPago->getPagoTipoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arPago->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arPago->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arPago->getCentroCostoRel()->getNombre())
+                    ->setCellValue('G' . $i, $arPago->getFechaDesde()->format('Y-m-d'). " - " .$arPago->getFechaHasta()->format('Y-m-d'))
+                    ->setCellValue('H' . $i, $arPago->getFechaDesdePago()->format('Y-m-d'))
+                    ->setCellValue('I' . $i, $arPago->getFechaHastaPago()->format('Y-m-d'))
+                    ->setCellValue('J' . $i, $arPago->getDiasPeriodo())
+                    ->setCellValue('K' . $i, $arPago->getVrSalarioEmpleado())
+                    ->setCellValue('L' . $i, $arPago->getVrSalarioPeriodo())
+                    ->setCellValue('M' . $i, $arPago->getVrAuxilioTransporte())
+                    ->setCellValue('N' . $i, $arPago->getVrEps())
+                    ->setCellValue('O' . $i, $arPago->getVrPension())
+                    ->setCellValue('P' . $i, $arPago->getVrDeducciones())
+                    ->setCellValue('Q' . $i, $arPago->getVrDevengado())
+                    ->setCellValue('R' . $i, $arPago->getVrIngresoBaseCotizacion())
+                    ->setCellValue('S' . $i, $arPago->getVrIngresoBasePrestacion())
+                    ->setCellValue('T' . $i, $arPago->getVrNeto());
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('Pagos '.$dateFechaPeriodo);
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Pagos '.$dateFechaPeriodo.'.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+    
+    private function generarPagosDetallePeriodoExcel($codigoPeriodo) {
+        $em = $this->getDoctrine()->getManager();        
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CÓDIGO DETALLE')
+                    ->setCellValue('B1', 'CÓDIGO PAGO')
+                    ->setCellValue('C1', 'CONCEPTO PAGO')
+                    ->setCellValue('D1', 'IDENTIFICACIÓN')
+                    ->setCellValue('E1', 'EMPLEADO')
+                    ->setCellValue('F1', 'CENTRO COSTO')
+                    ->setCellValue('G1', 'FECHA PAGO DESDE')
+                    ->setCellValue('H1', 'FECHA PAGO HASTA')
+                    ->setCellValue('I1', 'VR PAGO')
+                    ->setCellValue('J1', 'VR HORA')
+                    ->setCellValue('K1', 'VR DÍA')
+                    ->setCellValue('L1', 'NÚMERO HORAS')
+                    ->setCellValue('M1', 'NÚMERO DÍAS')
+                    ->setCellValue('N1', 'PORCENTAJE APLICADO')
+                    ->setCellValue('O1', 'VR INGRESO BASE COTIZACIÓN')    
+                    ->setCellValue('P1', 'CÓDIGO PROGRAMACION PAGO DETALLE')
+                    ->setCellValue('Q1', 'CÓDIGO CRÉDITO')
+                    ->setCellValue('R1', 'VR INGRESO BASE PRESTACIONAL')
+                    ->setCellValue('S1', 'DÍAS AUSENTIMO');
+
+        $i = 2;
+        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+        $dateFechaPeriodo = $arPeriodo->getFechaDesde()->format('Y-m-d'). ' - ' . $arPeriodo->getFechaHasta()->format('Y-m-d');
+        $arPagosDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+        $arPagosDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDqlPagosDetallePeriodoAportes($arPeriodo->getFechaDesde(),$arPeriodo->getFechaHasta());
+        
+        foreach ($arPagosDetalle as $arPagoDetalle) {
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arPagoDetalle->getCodigoPagoDetallePk())
+                    ->setCellValue('B' . $i, $arPagoDetalle->getCodigoPagoFk())
+                    ->setCellValue('C' . $i, $arPagoDetalle->getPagoConceptoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arPagoDetalle->getPagoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('G' . $i, $arPagoDetalle->getPagoRel()->getFechaDesdePago())
+                    ->setCellValue('H' . $i, $arPagoDetalle->getPagoRel()->getFechaHastaPago())
+                    ->setCellValue('I' . $i, $arPagoDetalle->getVrPago())
+                    ->setCellValue('J' . $i, $arPagoDetalle->getVrHora())
+                    ->setCellValue('K' . $i, $arPagoDetalle->getVrDia())
+                    ->setCellValue('L' . $i, $arPagoDetalle->getNumeroHoras())
+                    ->setCellValue('M' . $i, $arPagoDetalle->getNumeroDias())
+                    ->setCellValue('N' . $i, $arPagoDetalle->getPorcentajeAplicado())
+                    ->setCellValue('O' . $i, $arPagoDetalle->getVrIngresoBaseCotizacion())
+                    ->setCellValue('P' . $i, $arPagoDetalle->getCodigoProgramacionPagoDetalleFk())
+                    ->setCellValue('Q' . $i, $arPagoDetalle->getCodigoCreditoFk())
+                    ->setCellValue('R' . $i, $arPagoDetalle->getVrIngresoBasePrestacion())
+                    ->setCellValue('S' . $i, $arPagoDetalle->getDiasAusentismo());
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('detalles'.$dateFechaPeriodo);
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="detalle '.$dateFechaPeriodo.'.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+    
+    private function generarAportesPeriodoExcel($codigoPeriodo) {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'SUCURSAL')
+                    ->setCellValue('C1', 'IDENTIFICACIÓN')
+                    ->setCellValue('D1', 'EMPLEADO')
+                    ->setCellValue('E1', 'SECUENCIA')
+                    ->setCellValue('F1', 'TIPO DOCUMENTO')
+                    ->setCellValue('G1', 'TIPO COTIZANTE')
+                    ->setCellValue('H1', 'SUBTIPO COTIZANTE')
+                    ->setCellValue('I1', 'DEPARTAMENTO')
+                    ->setCellValue('J1', 'MUNICIPIO')
+                    ->setCellValue('K1', 'INGRESO')
+                    ->setCellValue('L1', 'RETIRO')
+                    ->setCellValue('M1', 'TRANSLADO DESDE OTRA EPS')
+                    ->setCellValue('N1', 'TRANSLADO A OTRA EPS')
+                    ->setCellValue('O1', 'TRANSLADO DESDE OTRA PENSIÓN')
+                    ->setCellValue('P1', 'TRANSLADO A OTRA PENSIÓN')
+                    ->setCellValue('Q1', 'VARIACIÓN PERMANENTE SALARIO')
+                    ->setCellValue('R1', 'CORRECCIONES')
+                    ->setCellValue('S1', 'VARIACIÓN TRANSITORIA SALARIO')
+                    ->setCellValue('T1', 'SUSPENCIÓN TEMPORAL CONTRATO LICENCIA SERVICIOS')
+                    ->setCellValue('U1', 'DÍAS LICENCIAS')
+                    ->setCellValue('V1', 'SALARIO BÁSICO')
+                    ->setCellValue('W1', 'SALARIO MES ANTERIOR')
+                    ->setCellValue('X1', 'SALARIO INTEGRAL')
+                    ->setCellValue('Y1', 'SUPLEMENTARIO')
+                    ->setCellValue('Z1', 'INCAPACIDAD GENERAL')
+                    ->setCellValue('AA1', 'DÍAS INCAPACIDAD GENERAL')
+                    ->setCellValue('AB1', 'LICENCIA MATERNIDAD')
+                    ->setCellValue('AC1', 'DÍAS LICENCIAS MATERNIDAD')
+                    ->setCellValue('AD1', 'VACACIONES')
+                    ->setCellValue('AE1', 'APORTE VOLUNTARIO')
+                    ->setCellValue('AF1', 'VARIACIÓN CENTRO TRABAJO')
+                    ->setCellValue('AG1', 'INCAPACIDAD ACCIDENTE TRABAJO ENFERMEDAD PROFESIONAL')
+                    ->setCellValue('AH1', 'ENTIDAD PENSIÓN')
+                    ->setCellValue('AI1', 'ENTIDAD PENSIÓN TRASLADA')
+                    ->setCellValue('AJ1', 'ENTIDAD SALUD')
+                    ->setCellValue('AK1', 'ENTIDAD SALUD TRASLADA')
+                    ->setCellValue('AL1', 'CAJA COMPENSACIÓN')
+                    ->setCellValue('AM1', 'DÍAS COTIZADOS PENSIÓN')
+                    ->setCellValue('AN1', 'DÍAS COTIZADOS SALUD')
+                    ->setCellValue('AO1', 'DIAS COTIZADOS RIESGOS PROFESIONALES')
+                    ->setCellValue('AP1', 'DIAS COTIZADOS CAJAS COMPENSACIÓN')
+                    ->setCellValue('AQ1', 'IBC PENSIÓN')
+                    ->setCellValue('AR1', 'IBC SALUD')
+                    ->setCellValue('AS1', 'IBC RIESGOS PROFESIONALES')
+                    ->setCellValue('AT1', 'IBC CAJA COMPENSACIÓN')
+                    ->setCellValue('AU1', 'TARIFA PENSIÓN')
+                    ->setCellValue('AV1', 'TARIFA SALUD')
+                    ->setCellValue('AW1', 'TARIFA RIESGOS PROFESIONALES')
+                    ->setCellValue('AX1', 'TARIFA CAJA COMPENSACIÓN')
+                    ->setCellValue('AY1', 'COTIZACIÓN PENSIÓN')
+                    ->setCellValue('AZ1', 'COTIZACIÓN SALUD')
+                    ->setCellValue('BA1', 'COTIZACIÓN RIESGOS PROFESIONALES')
+                    ->setCellValue('BB1', 'COTIZACION CAJA COMPENSACIÓN')
+                    ->setCellValue('BC1', 'APORTE VOLUNTARIO FONDO PENSIONES OBLIGATORIAS')
+                    ->setCellValue('BD1', 'COTIZACIÓN VOLUNTARIO FONDO PENSIONES OBLIGATORIAS')
+                    ->setCellValue('BE1', 'TOTAL COTIZACIÓN')
+                    ->setCellValue('BF1', 'APORTES FONDO SOLIDARIDAD PENSIONAL SOLIDARIDAD');
+        $i = 2;
+        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+        $dateFechaPeriodo = $arPeriodo->getFechaDesde()->format('Y-m-d'). ' - ' . $arPeriodo->getFechaHasta()->format('Y-m-d');
+        $arAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
+        $arAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
+
+        foreach ($arAportes as $arAporte) {
+        $arEntidadPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
+        $arEntidadPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->findBy(array('codigoInterface' =>$arAporte->getCodigoEntidadPensionPertenece()));
+        $arEntidadPensionPertenece = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
+        $arEntidadPensionPertenece = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->find($arEntidadPension[0]);
+
+        $arEntidadSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
+        $arEntidadSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->findBy(array('codigoInterface' =>$arAporte->getCodigoEntidadSaludPertenece()));
+        $arEntidadSaludPertenece = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
+        $arEntidadSaludPertenece = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($arEntidadSalud[0]);
+
+        $arEntidadCaja = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
+        $arEntidadCaja = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->findBy(array('codigoInterface' =>$arAporte->getCodigoEntidadCajaPertenece()));
+        $arEntidadCajaPertenece = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
+        $arEntidadCajaPertenece = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->find($arEntidadCaja[0]);
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arAporte->getCodigoAportePk())
+                    ->setCellValue('B' . $i, $arAporte->getSsoSucursalRel()->getNombre())
+                    ->setCellValue('C' . $i, $arAporte->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arAporte->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arAporte->getSecuencia())
+                    ->setCellValue('F' . $i, $arAporte->getEmpleadoRel()->getTipoIdentificacionRel()->getNombre())
+                    ->setCellValue('G' . $i, $arAporte->getContratoRel()->getSsoTipoCotizanteRel()->getNombre())
+                    ->setCellValue('H' . $i, $arAporte->getContratoRel()->getSsoSubtipoCotizanteRel()->getNombre())
+                    ->setCellValue('I' . $i, $arAporte->getEmpleadoRel()->getCiudadRel()->getDepartamentoRel()->getNombre())
+                    ->setCellValue('J' . $i, $arAporte->getEmpleadoRel()->getCiudadRel()->getNombre())
+                    ->setCellValue('K' . $i, $arAporte->getIngreso())
+                    ->setCellValue('L' . $i, $arAporte->getRetiro())
+                    ->setCellValue('M' . $i, $arAporte->getTrasladoDesdeOtraEps())
+                    ->setCellValue('N' . $i, $arAporte->getTrasladoAOtraEps())
+                    ->setCellValue('O' . $i, $arAporte->getTrasladoDesdeOtraPension())
+                    ->setCellValue('P' . $i, $arAporte->getTrasladoAOtraPension())
+                    ->setCellValue('Q' . $i, $arAporte->getVariacionPermanenteSalario())
+                    ->setCellValue('R' . $i, $arAporte->getCorrecciones())
+                    ->setCellValue('S' . $i, $arAporte->getVariacionTransitoriaSalario())
+                    ->setCellValue('T' . $i, $arAporte->getSuspensionTemporalContratoLicenciaServicios())
+                    ->setCellValue('U' . $i, $arAporte->getDiasLicencia())
+                    ->setCellValue('V' . $i, $arAporte->getSalarioBasico())
+                    ->setCellValue('W' . $i, $arAporte->getSalarioMesAnterior())
+                    ->setCellValue('X' . $i, $arAporte->getSalarioIntegral())
+                    ->setCellValue('Y' . $i, $arAporte->getSuplementario())
+                    ->setCellValue('Z' . $i, $arAporte->getIncapacidadGeneral())
+                    ->setCellValue('AA' . $i, $arAporte->getDiasIncapacidadGeneral())
+                    ->setCellValue('AB' . $i, $arAporte->getLicenciaMaternidad())
+                    ->setCellValue('AC' . $i, $arAporte->getDiasLicenciaMaternidad())
+                    ->setCellValue('AD' . $i, $arAporte->getVacaciones())
+                    ->setCellValue('AE' . $i, $arAporte->getAporteVoluntario())
+                    ->setCellValue('AF' . $i, $arAporte->getVariacionCentrosTrabajo())
+                    ->setCellValue('AG' . $i, $arAporte->getIncapacidadAccidenteTrabajoEnfermedadProfesional())
+                    ->setCellValue('AH' . $i, $arEntidadPensionPertenece->getNombre())
+                    ->setCellValue('AI' . $i, $arAporte->getCodigoEntidadPensionTraslada())
+                    ->setCellValue('AJ' . $i, $arEntidadSaludPertenece->getNombre())
+                    ->setCellValue('AK' . $i, $arAporte->getCodigoEntidadSaludTraslada())
+                    ->setCellValue('AL' . $i, $arEntidadCajaPertenece->getNombre())
+                    ->setCellValue('AM' . $i, $arAporte->getDiasCotizadosPension())
+                    ->setCellValue('AN' . $i, $arAporte->getDiasCotizadosSalud())
+                    ->setCellValue('AO' . $i, $arAporte->getDiasCotizadosRiesgosProfesionales())
+                    ->setCellValue('AP' . $i, $arAporte->getDiasCotizadosCajaCompensacion())
+                    ->setCellValue('AQ' . $i, $arAporte->getIbcPension())
+                    ->setCellValue('AR' . $i, $arAporte->getIbcSalud())
+                    ->setCellValue('AS' . $i, $arAporte->getIbcRiesgosProfesionales())
+                    ->setCellValue('AT' . $i, $arAporte->getIbcCaja())
+                    ->setCellValue('AU' . $i, $arAporte->getTarifaPension())
+                    ->setCellValue('AV' . $i, $arAporte->getTarifaSalud())
+                    ->setCellValue('AW' . $i, $arAporte->getTarifaRiesgos())
+                    ->setCellValue('AX' . $i, $arAporte->getTarifaCaja())
+                    ->setCellValue('AY' . $i, $arAporte->getCotizacionPension())
+                    ->setCellValue('AZ' . $i, $arAporte->getCotizacionSalud())
+                    ->setCellValue('BA' . $i, $arAporte->getCotizacionRiesgos())
+                    ->setCellValue('BB' . $i, $arAporte->getCotizacionCaja())
+                    ->setCellValue('BC' . $i, $arAporte->getAporteVoluntarioFondoPensionesObligatorias())
+                    ->setCellValue('BD' . $i, $arAporte->getCotizacionVoluntarioFondoPensionesObligatorias())
+                    ->setCellValue('BE' . $i, $arAporte->getTotalCotizacion())
+                    ->setCellValue('BF' . $i, $arAporte->getAportesFondoSolidaridadPensionalSolidaridad())
+                    ;
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('Aportes'.$dateFechaPeriodo);
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Aportes '.$dateFechaPeriodo.'.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+    
 
 }

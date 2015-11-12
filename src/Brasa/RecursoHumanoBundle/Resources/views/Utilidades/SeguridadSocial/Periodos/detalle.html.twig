@@ -1,4 +1,5 @@
 {% extends '::base.html.twig' %}
+{% block title %}Seguridad social detalle periodos - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     <div class="page-header">
@@ -67,6 +68,13 @@
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_ss_periodo_lista') }}" style="float:left">Volver</a>
             </div>
         </div>
+        <div class="btn-toolbar" style="float:right">
+            <div class="btn-group">
+                <button class="btn btn-default btn-xs" type="submit" name="OpGenerarPagosExcel" value="{{ codigoPeriodo }}">Excel pagos periodo</button>
+                <button class="btn btn-default btn-xs" type="submit" name="OpGenerarPagosDetalleExcel" value="{{ codigoPeriodo }}">Excel pago detalles periodo</button>
+                <button class="btn btn-default btn-xs" type="submit" name="OpGenerarAportesExcel" value="{{ codigoPeriodo }}">Excel aportes periodo</button>
+            </div>
+        </div>    
 
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}

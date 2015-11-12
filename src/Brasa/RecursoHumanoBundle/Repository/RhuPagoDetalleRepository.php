@@ -41,4 +41,20 @@ class RhuPagoDetalleRepository extends EntityRepository {
         $arrayResultado = $query->getResult();
         return $arrayResultado;
     }
+    
+    public function listaDqlPagosDetallePeriodoAportes($strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p, e, pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN p.empleadoRel e WHERE p.codigoPagoTipoFk = 1 AND p.estadoPagado = 1";
+        
+        if ($strDesde != ""){
+            $dql .= " AND p.fechaDesdePago >='" . $strDesde->format('Y-m-d'). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND p.fechaHastaPago <='" . $strHasta->format('Y-m-d') . "'";
+        }
+
+        $query = $em->createQuery($dql);
+        $arPagosDetalles = $query->getResult();                
+        return $arPagosDetalles;
+    }
 }
