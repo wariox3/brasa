@@ -107,80 +107,102 @@ class VacacionesController extends Controller
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
     }
     
-    public function nuevoAction($codigoContrato, $codigoVacacion = 0) {
+    public function nuevoAction($codigoVacacion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();       
-        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);        
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();                
-        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());        
-
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arEmpleado = "";
+        $arrayInformacion = array();
         if($codigoVacacion != 0) {
             $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
         } else {
-            $arVacacion->setFecha(new \DateTime('now'));                             
-            $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
-            $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(360, $fechaDesdePeriodo);                                               
+            $arVacacion->setFecha(new \DateTime('now'));
             $arVacacion->setFechaDesdeDisfrute(new \DateTime('now'));
-            $arVacacion->setFechaHastaDisfrute(new \DateTime('now'));            
-            $arVacacion->setEmpleadoRel($arEmpleado);
-            $arVacacion->setContratoRel($arContrato);
-            $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+            $arVacacion->setFechaHastaDisfrute(new \DateTime('now'));
         }
-        $form = $this->createForm(new RhuVacacionType(), $arVacacion);     
+        $form = $this->createForm(new RhuVacacionType, $arVacacion);         
         $form->handleRequest($request);
-        if ($form->isValid()) {                        
-            $arVacacion = $form->getData();               
-            $arVacacion->setEmpleadoRel($arEmpleado); 
-            $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());                 
-            $arVacacion->setContratoRel($arContrato);
-            $intDias = ($arVacacion->getDiasDisfrutados() + $arVacacion->getDiasPagados()) * 24;
-            $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
-            $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta($intDias, $fechaDesdePeriodo);                                                                                       
-            
-            $arVacacion->setFechaDesdePeriodo($fechaDesdePeriodo);
-            $arVacacion->setFechaHastaPeriodo($fechaHastaPeriodo);
-            
-            $intDias = $arVacacion->getFechaDesdeDisfrute()->diff($arVacacion->getFechaHastaDisfrute());
-            $intDias = $intDias->format('%a');
-            $intDiasDevolver = ($intDias + 1) + $arVacacion->getDiasPagados();            
-            $arVacacion->setDiasVacaciones($intDiasDevolver);            
-            $em->persist($arVacacion);
-            //Calcular deducciones credito
-            $floVrDeducciones = 0;
-            $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-            $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());
-            foreach ($arCreditos as $arCredito) {
-                $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-                $arVacacionCredito->setCreditoRel($arCredito);
-                $arVacacionCredito->setVacacionRel($arVacacion);
-                $arVacacionCredito->setVrDeduccion($arCredito->getSaldoTotal());
-                $em->persist($arVacacionCredito);            
-                $floVrDeducciones += $arCredito->getSaldoTotal();
+
+        if ($form->isValid()) { 
+            $arrControles = $request->request->All();
+            $arVacacion = $form->getData();
+            if($form->get('guardar')->isClicked()) {
+                if($arrControles['txtNumeroIdentificacion'] != '') {
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                    if(count($arEmpleado) > 0) {
+                        $arVacacion->setEmpleadoRel($arEmpleado);
+                        if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
+                            $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                            $arVacacion->setContratoRel($arContrato);
+                            $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
+                            $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(360, $fechaDesdePeriodo);
+                            $intDias = ($arVacacion->getDiasDisfrutados() + $arVacacion->getDiasPagados()) * 24;
+                            $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();
+                            $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta($intDias, $fechaDesdePeriodo);
+                            $arVacacion->setFechaDesdePeriodo($fechaDesdePeriodo);
+                            $arVacacion->setFechaHastaPeriodo($fechaHastaPeriodo);
+                            $intDias = $arVacacion->getFechaDesdeDisfrute()->diff($arVacacion->getFechaHastaDisfrute());
+                            $intDias = $intDias->format('%a');
+                            $intDiasDevolver = ($intDias + 1) + $arVacacion->getDiasPagados();            
+                            $arVacacion->setDiasVacaciones($intDiasDevolver);            
+                            $em->persist($arVacacion);
+                            //Calcular deducciones credito
+                            $floVrDeducciones = 0;
+                            $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                            $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
+                            foreach ($arCreditos as $arCredito) {
+                                $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
+                                $arVacacionCredito->setCreditoRel($arCredito);
+                                $arVacacionCredito->setVacacionRel($arVacacion);
+                                $arVacacionCredito->setVrDeduccion($arCredito->getSaldoTotal());
+                                $em->persist($arVacacionCredito);            
+                                $floVrDeducciones += $arCredito->getSaldoTotal();
+                            }
+
+                            $arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                            $arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContrato->getCodigoContratoPk());                    
+                            $arContratoActualizar->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());                
+                            $em->persist($arContratoActualizar);                                     
+                            $em->flush();
+                            $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());
+
+                            return $this->redirect($this->generateUrl('brs_rhu_vacaciones_lista'));                       
+                        } else {
+                            $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                        }                    
+                    } else {
+                        $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                    }                
+                }
             }
-              
-             
-            $arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContrato->getCodigoContratoPk());                    
-            $arContratoActualizar->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());                
-            $em->persist($arContratoActualizar);                                     
-            $em->flush();
+            if($form->get('ver')->isClicked()) {
+                if($arrControles['txtNumeroIdentificacion'] != '') {
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                    if(count($arEmpleado) > 0) {
+                        $arrayInformacion = $arEmpleado->getNombreCorto();
+                    }else {
+                        $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                    } 
+                } else {
+                        $objMensaje->Mensaje("error", "Digite el número de identificacion", $this);
+                    }
+            }
+        }    
 
-            $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());
-
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";  
-            
-             
-        }                
-        $arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());
+        //$arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        //$arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Vacaciones:nuevo.html.twig', array(
+            'arVacacion' => $arVacacion,
             'arEmpleado' => $arEmpleado,
-            'arCreditosPendientes' => $arCreditosPendientes,
+            //'arCreditosPendientes' => $arCreditosPendientes,
             'form' => $form->createView()));
-    }        
+    } 
+      
     
     public function detalleAction($codigoVacacion) {
         $em = $this->getDoctrine()->getManager();
@@ -238,7 +260,6 @@ class VacacionesController extends Controller
                     ));
     }
     
-       
     public function detalleNuevoAction($codigoVacacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        

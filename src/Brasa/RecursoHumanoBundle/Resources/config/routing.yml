@@ -215,7 +215,7 @@ brs_rhu_vacaciones_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:lista }    
 
 brs_rhu_vacaciones_nuevo:
-    path:     /rhu/vacaciones/nuevo/{codigoContrato}/{codigoVacacion}
+    path:     /rhu/vacaciones/nuevo/{codigoVacacion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Vacaciones:nuevo }
     
 brs_rhu_vacaciones_detalle:
@@ -848,4 +848,5 @@ brs_rhu_capacitacion_detalle_nuevo_empleado:
     
 brs_rhu_buscar_empleado:
     pattern:  /rhu/buscar/empleado
-    defaults: { _controller: BrasaRecursoHumanoBundle:BuscarEmpleado:lista }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:BuscarEmpleado:lista }
+       

@@ -14,6 +14,7 @@ class RhuVacacionType extends AbstractType
             ->add('fechaDesdeDisfrute', 'date')
             ->add('fechaHastaDisfrute', 'date')                
             ->add('comentarios', 'textarea', array('required' => false))    
+            ->add('ver', 'submit')
             ->add('guardar', 'submit');
     }
  
