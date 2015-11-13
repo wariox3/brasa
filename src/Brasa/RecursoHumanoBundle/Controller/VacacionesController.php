@@ -111,9 +111,7 @@ class VacacionesController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
-        $arEmpleado = "";
-        $arrayInformacion = array();
+        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();        
         if($codigoVacacion != 0) {
             $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
         } else {
@@ -121,9 +119,10 @@ class VacacionesController extends Controller
             $arVacacion->setFechaDesdeDisfrute(new \DateTime('now'));
             $arVacacion->setFechaHastaDisfrute(new \DateTime('now'));
         }
+        $arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $form = $this->createForm(new RhuVacacionType, $arVacacion);         
         $form->handleRequest($request);
-
         if ($form->isValid()) { 
             $arrControles = $request->request->All();
             $arVacacion = $form->getData();
@@ -184,7 +183,9 @@ class VacacionesController extends Controller
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
                     if(count($arEmpleado) > 0) {
-                        $arrayInformacion = $arEmpleado->getNombreCorto();
+                        $arVacacion->setEmpleadoRel($arEmpleado);
+                        $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
                     }else {
                         $objMensaje->Mensaje("error", "El empleado no existe", $this);
                     } 
@@ -192,17 +193,13 @@ class VacacionesController extends Controller
                         $objMensaje->Mensaje("error", "Digite el número de identificacion", $this);
                     }
             }
-        }    
-
-        //$arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        //$arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
+        }                    
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Vacaciones:nuevo.html.twig', array(
             'arVacacion' => $arVacacion,
-            'arEmpleado' => $arEmpleado,
-            //'arCreditosPendientes' => $arCreditosPendientes,
+            'arCreditosPendientes' => $arCreditosPendientes,
+            'arContrato' => $arContrato,
             'form' => $form->createView()));
-    } 
-      
+    }       
     
     public function detalleAction($codigoVacacion) {
         $em = $this->getDoctrine()->getManager();

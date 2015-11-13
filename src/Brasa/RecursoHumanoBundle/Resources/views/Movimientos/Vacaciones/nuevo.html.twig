@@ -64,7 +64,23 @@
                 
         </div>
     </div>
-        
+    <table class="table table-striped table-bordered table-condensed">
+        <tr>
+            <th>CÓDIGO</th>
+            <th>TIPO</th>
+            <th style="text-align: right">VALOR</th>            
+        </tr>
+        {% for arCreditosPendientes in arCreditosPendientes %}
+        <tr>
+            <td>
+                <input type="hidden" name="LblCodigoGuia[]" value="{{ arCreditosPendientes.codigoCreditoPk }}">
+                <span class="badge">{{ arCreditosPendientes.codigoCreditoPk }}</span>
+            </td>
+            <td>{{ arCreditosPendientes.creditoTipoRel.nombre }}</td>           
+            <td style="text-align: right">{{ arCreditosPendientes.saldoTotal | number_format(2, '.', ',') }}</td>            
+        </tr>
+        {% endfor %}
+    </table>        
     <div class="modal-footer">
         <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_vacaciones_lista') }}">Cancelar</a>        
         {{ form_widget(form.ver, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}

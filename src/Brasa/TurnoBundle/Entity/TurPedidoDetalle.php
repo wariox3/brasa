@@ -28,6 +28,11 @@ class TurPedidoDetalle
     private $codigoTurnoFk;    
     
     /**
+     * @ORM\Column(name="codigo_modalidad_servicio_fk", type="integer")
+     */    
+    private $codigoModalidadServicioFk;    
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fecha_desde;     
@@ -118,6 +123,12 @@ class TurPedidoDetalle
      * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
      */
     protected $turnoRel;      
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurModalidadServicio", inversedBy="pedidosDetallesModalidadServicioRel")
+     * @ORM\JoinColumn(name="codigo_modalidad_servicio_fk", referencedColumnName="codigo_modalidad_servicio_pk")
+     */
+    protected $modalidadServicioRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="pedidoDetalleRel")
@@ -653,5 +664,53 @@ class TurPedidoDetalle
     public function getProgramacionesDetallesPedidoDetalleRel()
     {
         return $this->programacionesDetallesPedidoDetalleRel;
+    }
+
+    /**
+     * Set codigoModalidadServicioFk
+     *
+     * @param integer $codigoModalidadServicioFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoModalidadServicioFk($codigoModalidadServicioFk)
+    {
+        $this->codigoModalidadServicioFk = $codigoModalidadServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoModalidadServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoModalidadServicioFk()
+    {
+        return $this->codigoModalidadServicioFk;
+    }
+
+    /**
+     * Set modalidadServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel = null)
+    {
+        $this->modalidadServicioRel = $modalidadServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidadServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurModalidadServicio
+     */
+    public function getModalidadServicioRel()
+    {
+        return $this->modalidadServicioRel;
     }
 }

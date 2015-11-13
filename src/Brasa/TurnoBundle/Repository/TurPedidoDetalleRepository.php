@@ -15,4 +15,16 @@ class TurPedidoDetalleRepository extends EntityRepository {
         return $arResultado;                
     }
     
+    public function eliminarSeleccionados($arrSeleccionados) {        
+        if(count($arrSeleccionados) > 0) {
+            $em = $this->getEntityManager();
+            foreach ($arrSeleccionados AS $codigo) {                
+                $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                
+                $em->remove($arPedidoDetalle);                  
+            }                                         
+            $em->flush();       
+        }
+        
+    }        
+    
 }

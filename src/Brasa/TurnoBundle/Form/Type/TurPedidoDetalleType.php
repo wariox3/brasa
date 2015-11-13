@@ -17,6 +17,13 @@ class TurPedidoDetalleType extends AbstractType
                     ->orderBy('t.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                
+            ->add('modalidadServicioRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurModalidadServicio',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ms')
+                    ->orderBy('ms.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('fechaDesde', 'date')
             ->add('fechaHasta', 'date')
             ->add('cantidad', 'number')

@@ -23,6 +23,11 @@ class TurCliente
     private $nombreCorto;    
     
     /**
+     * @ORM\Column(name="codigo_sector_fk", type="integer")
+     */    
+    private $codigoSectorFk;    
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;     
@@ -31,6 +36,12 @@ class TurCliente
      * @ORM\OneToMany(targetEntity="TurPedido", mappedBy="clienteRel")
      */
     protected $pedidosClienteRel;  
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="clientesSectorRel")
+     * @ORM\JoinColumn(name="codigo_sector_fk", referencedColumnName="codigo_sector_pk")
+     */
+    protected $sectorRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacion", mappedBy="clienteRel")
@@ -170,5 +181,53 @@ class TurCliente
     public function getProgramacionesClienteRel()
     {
         return $this->programacionesClienteRel;
+    }
+
+    /**
+     * Set codigoSectorFk
+     *
+     * @param integer $codigoSectorFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoSectorFk($codigoSectorFk)
+    {
+        $this->codigoSectorFk = $codigoSectorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSectorFk
+     *
+     * @return integer
+     */
+    public function getCodigoSectorFk()
+    {
+        return $this->codigoSectorFk;
+    }
+
+    /**
+     * Set sectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
+     *
+     * @return TurCliente
+     */
+    public function setSectorRel(\Brasa\TurnoBundle\Entity\TurSector $sectorRel = null)
+    {
+        $this->sectorRel = $sectorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sectorRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSector
+     */
+    public function getSectorRel()
+    {
+        return $this->sectorRel;
     }
 }

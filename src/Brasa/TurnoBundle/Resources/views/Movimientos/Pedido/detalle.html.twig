@@ -30,8 +30,8 @@
                     <td class="td-in-well"></td>
                 </tr>
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">CLIENTE:</td>
+                    <td class="td-in-well">{{ arPedido.clienteRel.nombreCorto }}</td>
                     <td class="titulo" >HORAS DIURNAS:</td>
                     <td align="right">{{ arPedido.horasDiurnas | number_format(0, '.', ',')}}</td>
                 </tr> 
@@ -71,6 +71,7 @@
             <tr>
                 <th>COD</th>
                 <th>TURNO</th>
+                <th>MODALIDAD</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>CANT</th>
@@ -93,6 +94,7 @@
                 <tr>
                     <td>{{ arPedidoDetalle.codigoPedidoDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}"></td>
                     <td>{{ arPedidoDetalle.turnoRel.nombre  }}</td>                    
+                    <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    
                     {% if arPedido.estadoAutorizado == 0 %}                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.fechaDesde | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.fechaHasta | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                                                

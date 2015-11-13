@@ -97,6 +97,12 @@ class PedidoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
                 return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
             }
+            if($form->get('BtnDetalleEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->eliminarSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
+                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+            }            
         }
 
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
