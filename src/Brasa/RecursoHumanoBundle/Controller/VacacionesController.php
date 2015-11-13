@@ -184,8 +184,12 @@ class VacacionesController extends Controller
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
                     if(count($arEmpleado) > 0) {
                         $arVacacion->setEmpleadoRel($arEmpleado);
-                        $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
-                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                        if($arEmpleado->getCodigoContratoActivoFk() != '') {
+                            $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
+                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                        }else {
+                            $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                        }     
                     }else {
                         $objMensaje->Mensaje("error", "El empleado no existe", $this);
                     } 
