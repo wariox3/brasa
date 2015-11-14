@@ -34,6 +34,7 @@ class ConfiguracionGeneralController extends Controller
             ->add('nitVentasMostrador', 'text', array('data' => $arConfiguracionGeneral->getNitVentasMostrador(), 'required' => true))    
             ->add('rutaTemporal', 'text', array('data' => $arConfiguracionGeneral->getRutaTemporal(), 'required' => true))    
             ->add('rutaAlmacenamiento', 'text', array('data' => $arConfiguracionGeneral->getRutaAlmacenamiento(), 'required' => true))                
+            ->add('rutaDirectorio', 'text', array('data' => $arConfiguracionGeneral->getRutaDirectorio(), 'required' => true))                                
             ->add('guardar', 'submit', array('label' => 'Actualizar'))            
             ->getForm();
         $formConfiguracionGeneral->handleRequest($request);
@@ -56,6 +57,7 @@ class ConfiguracionGeneralController extends Controller
                 $NitVentasMostrador = $controles['nitVentasMostrador'];
                 $RutaTemporal = $controles['rutaTemporal'];
                 $RutaAlmacenamiento = $controles['rutaAlmacenamiento'];
+                $RutaDirectorio = $controles['rutaDirectorio'];
                 // guardar la tarea en la base de datos
                 $arConfiguracionGeneral->setNitEmpresa($NitEmpresa);
                 $arConfiguracionGeneral->setDigitoVerificacionEmpresa($NumeroDv);
@@ -73,6 +75,7 @@ class ConfiguracionGeneralController extends Controller
                 $arConfiguracionGeneral->setNitVentasMostrador($NitVentasMostrador);
                 $arConfiguracionGeneral->setRutaTemporal($RutaTemporal);
                 $arConfiguracionGeneral->setRutaAlmacenamiento($RutaAlmacenamiento);
+                $arConfiguracionGeneral->setRutaDirectorio($RutaDirectorio);
                 $em->persist($arConfiguracionGeneral);
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_gen_configuracion_general', array('codigoConfiguracionPk' => 1)));                

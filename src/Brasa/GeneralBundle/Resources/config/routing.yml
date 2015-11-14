@@ -49,4 +49,12 @@ brs_gen_buscar_ciudad:
     
 brs_gen_borrar_bd:
     pattern:  /general/borrar/bd/
-    defaults: { _controller: BrasaGeneralBundle:ConfiguracionGeneral:borrarBD } 
+    defaults: { _controller: BrasaGeneralBundle:ConfiguracionGeneral:borrarBD }
+    
+brs_gen_directorio:
+    pattern:  /general/directorio/
+    defaults: { _controller: BrasaGeneralBundle:Directorio:Directorio }
+    
+brs_gen_directorio_archivo:
+    pattern:  /general/directorio/archivo/{codigoDirectorio}
+    defaults: { _controller: BrasaGeneralBundle:Directorio:Archivo }    

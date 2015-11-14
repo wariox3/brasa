@@ -96,7 +96,12 @@ class GenConfiguracion
     /**
      * @ORM\Column(name="direccion_empresa", type="string", length=120, nullable=true)
      */    
-    private $direccionEmpresa;    
+    private $direccionEmpresa;  
+    
+    /**
+     * @ORM\Column(name="ruta_directorio", type="string", length=500, nullable=true)
+     */      
+    private $rutaDirectorio;
         
 
     /**
@@ -491,5 +496,29 @@ class GenConfiguracion
     public function getRutaAlmacenamiento()
     {
         return $this->rutaAlmacenamiento;
+    }
+
+    /**
+     * Set rutaDirectorio
+     *
+     * @param string $rutaDirectorio
+     *
+     * @return GenConfiguracion
+     */
+    public function setRutaDirectorio($rutaDirectorio)
+    {
+        $this->rutaDirectorio = $rutaDirectorio;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaDirectorio
+     *
+     * @return string
+     */
+    public function getRutaDirectorio()
+    {
+        return $this->rutaDirectorio;
     }
 }
