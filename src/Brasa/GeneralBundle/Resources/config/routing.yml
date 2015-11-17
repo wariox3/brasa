@@ -58,3 +58,16 @@ brs_gen_directorio:
 brs_gen_directorio_nuevo:
     pattern:  /general/directorio/nuevo/{codigoDirectorio}
     defaults: { _controller: BrasaGeneralBundle:Directorio:nuevo }    
+
+brs_gen_directorio_archivos:
+    pattern:  /general/directorio/archivos/{codigoDirectorio}
+    defaults: { _controller: BrasaGeneralBundle:Directorio:detalle }
+    
+brs_gen_directorio_cargar_archivo:
+    pattern:  /general/directorio/cargar/archivo/{codigoDirectorio}
+    defaults: { _controller: BrasaGeneralBundle:Directorio:cargarArchivo } 
+    
+brs_gen_directorio_descargar_archivo:
+    pattern:  /general/directorio/descargar/archivo/{codigoDirectorioArchivo}
+    defaults: { _controller: BrasaGeneralBundle:Directorio:descargarArchivo }    
+    

@@ -95,6 +95,7 @@ class BaseCargoController extends Controller
            
         ));
     }
+    
     public function nuevoAction($codigoCargoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

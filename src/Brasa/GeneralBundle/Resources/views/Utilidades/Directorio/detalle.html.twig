@@ -1,56 +1,49 @@
-{% extends 'zikmontFrontEndBundle::layout_app.html.twig' %}
-{% block title %}Tercero detalle - Soga App{% endblock %}
+{% extends '::base.html.twig' %}
+{% block title %}Directorio archivos - Soga App{% endblock %} 
 {% block content %}
-
-    <div class="left_articles">
-
-        <form id="FrmBusqueda" action="{{ path('maestros_general_terceros_detalle', { 'codigoTerceroPk': arTercero.codigoTerceroPk }) }}" method="POST" novalidate>
-            <div class="page-header">
-                <h2>Detalle de Tercero</h2>
-            </div>
-
-        </form>
-        <h4>Direcciones de envio</h4>
-        <table  class="table table-striped table-bordered table-condensed">
-            <tr>
-                <th>Codigo</th>
-                <th>Nombre</th>
-                <th>Direccion</th>
-                <th>Barrio</th>
-                <th>Ciudad</th>
-                <th>Departamento</th>
-                <th>Contacto</th>
-                <th>Telefono</th>
-                <th>Email</th>
-                <th></th>
-            </tr>
-
-            {% for direccion in arTercerosDirecciones %}
+    <div class="container">
+        <div class="page-header">
+            <h3>Directorio {{ arDirectorio.nombre }}</h3>
+        </div>
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        
+            <table class="table table-striped table-bordered table-condensed">
                 <tr>
-                    <td>{{ direccion.codigoDireccionPk }}</td>
-                    <td>{{ direccion.nombreDireccion }}</td>
-                    <td>{{ direccion.direccion }}</td>
-                    <td>{{ direccion.barrio }}</td>
-                    <td>{{ direccion.ciudadesRel.nombre }}</td>
-                    <td>{{ direccion.ciudadesRel.departamentosRel.nombre }}</td>                    
-                    <td>{{ direccion.contacto }}</td>
-                    <td>{{ direccion.telefono }}</td>
-                    <td>{{ direccion.email }}</td>
-                    <td style="text-align: center"><a id="{{ path('maestros_general_terceros_direccion_nueva', { 'codigoTerceroPk':  arTercero.codigoTerceroPk,  'codigoDireccionPk':  direccion.codigoDireccionPk}) }}" ><img src="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                    <th>CÓDIGO</th>
+                    <th>NOMBRE</th>
+                    <th>TIPO ARCHIVO</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </table>
+                {% for arDirectorioArchivos in arDirectorioArchivos %}
+                <tr>
+                    <td>
+                        <input type="hidden" name="LblCodigoGuia[]" value="{{ arDirectorioArchivos.codigoDirectorioArchivoPk }}">
+                        <span class="badge">{{ arDirectorioArchivos.codigoDirectorioArchivoPk }}</span>
+                    </td>
+                    <td>{{ arDirectorioArchivos.nombre }}</td>
+                    <td>{{ arDirectorioArchivos.archivo }}</td>
+                    <td style="text-align: center"><a href="{{ path('brs_gen_directorio_descargar_archivo', { 'codigoDirectorioArchivo': arDirectorioArchivos.codigoDirectorioArchivoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_181_download_alt.png') }}" width=22 height=22></a></td>                        
+                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDirectorioArchivos.codigoDirectorioArchivoPk }}" /></td>
+                </tr>
+                {% endfor %}
+            </table>
+         
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-            <a class="btn btn-mini" href="{{ path('maestros_general_terceros_lista') }}" style="float:left">Volver</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_gen_directorio') }}" style="float:left">Volver</a>
             </div>
-        </div>
-        <!-- Botones Menu Items -->
-        <div class="btn-toolbar" style="float: right">
-            <div class="btn-group">
-                <a class="btn btn-mini" id="{{ path('maestros_general_terceros_direccion_nueva', { 'codigoTerceroPk': arTercero.codigoTerceroPk, 'codigoDireccionPk': 0 }) }}" >Nuevo</a>
-                <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpEliminar" >Eliminar</button>
+        </div>  
+        <div class="btn-toolbar" style="float: right">                           
+            <div class="btn-group">                
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_gen_directorio_cargar_archivo', { 'codigoDirectorio': arDirectorio.codigoDirectorioPk }) }}', 'Archivos', 500, 700)" >Cargar archivos</a>
             </div>
-        </div>
-        </div>
+            <div class="btn-group">                
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
+            </div>
+        </div>             
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

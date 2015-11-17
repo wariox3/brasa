@@ -10,9 +10,9 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <tr>
             <th>CÓDIGO</th>
-            <th></th>
             <th>RUTA</th>
             <th>{{ knp_pagination_sortable(arDirectorios, 'NOMBRE', 'codigo') }}</th> 
+            <th></th>
             <th></th>
             <th></th>
         </tr>
@@ -20,10 +20,10 @@
             {%for arDirectorios in arDirectorios %}
                <tr>
                 <td>{{arDirectorios.codigoDirectorioPk}}</td>
-                <td><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20 title="Carpeta"></td>
                 <td>{{arDirectorios.ruta}}</td>
                 <td>{{arDirectorios.nombre}}</td>
                 <td><a href="{{ path('brs_gen_directorio_nuevo',{'codigoDirectorio': arDirectorios.codigoDirectorioPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_gen_directorio_archivos', { 'codigoDirectorio': arDirectorios.codigoDirectorioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=22 height=22 title="Detalle del registro"></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDirectorios.codigoDirectorioPk }}" /></td>
             {%endfor%}
             </tr>            

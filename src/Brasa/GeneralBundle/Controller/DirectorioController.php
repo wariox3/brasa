@@ -6,8 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\GeneralBundle\Form\Type\GenDirectorioType;
 
-
-
 class DirectorioController extends Controller
 {
     public function listaAction() {
@@ -26,8 +24,11 @@ class DirectorioController extends Controller
                 foreach ($arrSeleccionados AS $codigoDirectorio) {
                     $arDirectorio = new \Brasa\GeneralBundle\Entity\GenDirectorio();
                     $arDirectorio = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorio);
-                    $em->remove($arDirectorio);
-                    $em->flush();
+                    $arDirectorioArchivo = $em->getRepository('BrasaGeneralBundle:GenDirectorioArchivo')->findBy(array('codigoDirectorioFk' => $codigoDirectorio));
+                    if (count($arDirectorioArchivo) == 0){
+                        $em->remove($arDirectorio);
+                        $em->flush();
+                    }
                 }
             }
         if($form->get('BtnExcel')->isClicked()) {
@@ -70,8 +71,95 @@ class DirectorioController extends Controller
         ));
     }
     
-    public function generarExcel(){
+    public function detalleAction($codigoDirectorio) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $form = $this->createFormBuilder()
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->getForm();
+        $form->handleRequest($request);
+        $arDirectorio = new \Brasa\GeneralBundle\Entity\GenDirectorio();
+        $arDirectorio = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorio);
+        $arDirectorioArchivos = new \Brasa\GeneralBundle\Entity\GenDirectorioArchivo();
+        $arDirectorioArchivos = $em->getRepository('BrasaGeneralBundle:GenDirectorioArchivo')->findBy(array('codigoDirectorioFk' => $codigoDirectorio));
+        if($form->isValid()) {
+            if($form->get('BtnEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoDirectorioArchivo) {
+                        $arDirectorioArchivo = new \Brasa\GeneralBundle\Entity\GenDirectorioArchivo();
+                        $arDirectorioArchivo = $em->getRepository('BrasaGeneralBundle:GenDirectorioArchivo')->find($codigoDirectorioArchivo);
+                        $em->remove($arDirectorioArchivo);
+                        $em->flush();
+                    }
+                }
+                return $this->redirect($this->generateUrl('brs_gen_directorio_archivos', array('codigoDirectorio' => $arDirectorio->getCodigoDirectorioPk())));
+            }
+        }
+        return $this->render('BrasaGeneralBundle:Utilidades/Directorio:detalle.html.twig', array(
+                    'arDirectorio' => $arDirectorio,
+                    'arDirectorioArchivos' => $arDirectorioArchivos,
+                    'form' => $form->createView()
+                    ));
+    }
+    
+    public function cargarArchivoAction($codigoDirectorio) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa'); 
+        $form = $this->createFormBuilder()
+            ->add('attachment', 'file') 
+            ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnCargar')->isClicked()) {                
+                $objArchivo = $form['attachment']->getData();
+                $arDirectorio = new \Brasa\GeneralBundle\Entity\GenDirectorio();
+                $arDirectorio = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorio);
+                $arArchivo = new \Brasa\GeneralBundle\Entity\GenDirectorioArchivo();                    
+                $arArchivo->setNombre($objArchivo->getClientOriginalName());
+                $arArchivo->setArchivo($objArchivo->getClientMimeType());                               
+                $arArchivo->setDirectorioRel($em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorio));               
+                                   
+                $em->persist($arArchivo);
+                $em->flush();
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                $strDestino = $arConfiguracion->getRutaDirectorio() . $arDirectorio->getRuta();
+                $strArchivo = $arArchivo->getCodigoDirectorioArchivoPk() . "_" . $objArchivo->getClientOriginalName();
+                $form['attachment']->getData()->move($strDestino, $strArchivo);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                
+            }                                   
+        }         
+        return $this->render('BrasaGeneralBundle:Utilidades/Directorio:cargar.html.twig', array(
+            'form' => $form->createView()
+            ));
+    }
+    
+    public function descargarArchivoAction($codigoDirectorioArchivo) {
+        $em = $this->getDoctrine()->getManager();
+        $arArchivo = new \Brasa\GeneralBundle\Entity\GenDirectorioArchivo();
+        $arArchivo = $em->getRepository('BrasaGeneralBundle:GenDirectorioArchivo')->find($codigoDirectorioArchivo);
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $strRuta = $arConfiguracion->getRutaDirectorio() . $arArchivo->getDirectorioRel()->getRuta(). $codigoDirectorioArchivo. "_" .$arArchivo->getNombre();
+        // Generate response
+        $response = new Response();
         
+        // Set headers
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type', $arArchivo->getArchivo());
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $arArchivo->getNombre() . '";');
+        //$response->headers->set('Content-length', $arArchivo->getTamano());        
+        $response->sendHeaders();
+        $response->setContent(readfile($strRuta));        
+              
+    }
+    
+    public function generarExcel(){
+        $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
                 // Set document properties
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -83,30 +171,29 @@ class DirectorioController extends Controller
                     ->setCategory("Test result file");
 
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Nit')
-                            ->setCellValue('C1', 'Digito Verificacion')
-                            ->setCellValue('D1', 'Nombre');
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'RUTA')
+                            ->setCellValue('C1', 'NOMBRE');
 
                 $i = 2;
-                $arTerceros = $em->getRepository('BrasaGeneralBundle:GenTercero')->findAll();
+                $arDirectorios = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->findAll();
                 
-                foreach ($arTerceros as $arTerceros) {
+                foreach ($arDirectorios as $arDirectorio) {
                         
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arTerceros->getCodigoTerceroPk())
-                            ->setCellValue('B' . $i, $arTerceros->getNit())
-                            ->setCellValue('C' . $i, $arTerceros->getDigitoVerificacion())
-                            ->setCellValue('D' . $i, $arTerceros->getNombreCorto());
+                            ->setCellValue('A' . $i, $arDirectorio->getCodigoDirectorioPk())
+                            ->setCellValue('B' . $i, $arDirectorio->getRuta())
+                            ->setCellValue('C' . $i, $arDirectorio->getNombre())
+                            ;
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('Terceros');
+                $objPHPExcel->getActiveSheet()->setTitle('Directorio');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Terceros.xlsx"');
+                header('Content-Disposition: attachment;filename="Directorio.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
