@@ -97,8 +97,8 @@
                     <tr>
                         <td class="titulo">CAJA COMPENSACIÓN:</td>
                         <td class="td-in-well">{{ arEmpleado.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">TIPO CUENTA</td>
+                        <td class="td-in-well">{% if arEmpleado.tipocuenta == "S" %}AHORRO{% else %}{% if arEmpleado.tipoCuenta == "D" %}CORRIENTE{% else %}SIN TIPO CUENTA{% endif%}{% endif %}</td>
                         <td class="titulo">AUXILIO TRANSPORTE</td>
                         <td class="td-in-well">{% if arEmpleado.auxilioTransporte == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>

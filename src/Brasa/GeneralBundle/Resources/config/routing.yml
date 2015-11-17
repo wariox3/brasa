@@ -53,8 +53,8 @@ brs_gen_borrar_bd:
     
 brs_gen_directorio:
     pattern:  /general/directorio/
-    defaults: { _controller: BrasaGeneralBundle:Directorio:Directorio }
+    defaults: { _controller: BrasaGeneralBundle:Directorio:lista }
     
-brs_gen_directorio_archivo:
-    pattern:  /general/directorio/archivo/{codigoDirectorio}
-    defaults: { _controller: BrasaGeneralBundle:Directorio:Archivo }    
+brs_gen_directorio_nuevo:
+    pattern:  /general/directorio/nuevo/{codigoDirectorio}
+    defaults: { _controller: BrasaGeneralBundle:Directorio:nuevo }    

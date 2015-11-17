@@ -131,7 +131,12 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="cuenta", type="string", length=80, nullable=true)
      */    
-    private $cuenta;    
+    private $cuenta;
+    
+    /**
+     * @ORM\Column(name="tipo_cuenta", type="string", length=5, nullable=true)
+     */    
+    private $tipoCuenta;
     
     /**
      * @ORM\Column(name="codigo_banco_fk", type="integer", nullable=true)
@@ -536,6 +541,7 @@ class RhuEmpleado
      */
     protected $examenesEmpleadoRel;    
        
+    
     /**
      * Constructor
      */
@@ -1081,6 +1087,30 @@ class RhuEmpleado
     public function getCuenta()
     {
         return $this->cuenta;
+    }
+
+    /**
+     * Set tipoCuenta
+     *
+     * @param string $tipoCuenta
+     *
+     * @return RhuEmpleado
+     */
+    public function setTipoCuenta($tipoCuenta)
+    {
+        $this->tipoCuenta = $tipoCuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuenta
+     *
+     * @return string
+     */
+    public function getTipoCuenta()
+    {
+        return $this->tipoCuenta;
     }
 
     /**

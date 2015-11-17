@@ -1,0 +1,56 @@
+{% extends 'zikmontFrontEndBundle::layout_app.html.twig' %}
+{% block title %}Tercero detalle - Soga App{% endblock %}
+{% block content %}
+
+    <div class="left_articles">
+
+        <form id="FrmBusqueda" action="{{ path('maestros_general_terceros_detalle', { 'codigoTerceroPk': arTercero.codigoTerceroPk }) }}" method="POST" novalidate>
+            <div class="page-header">
+                <h2>Detalle de Tercero</h2>
+            </div>
+
+        </form>
+        <h4>Direcciones de envio</h4>
+        <table  class="table table-striped table-bordered table-condensed">
+            <tr>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Barrio</th>
+                <th>Ciudad</th>
+                <th>Departamento</th>
+                <th>Contacto</th>
+                <th>Telefono</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+
+            {% for direccion in arTercerosDirecciones %}
+                <tr>
+                    <td>{{ direccion.codigoDireccionPk }}</td>
+                    <td>{{ direccion.nombreDireccion }}</td>
+                    <td>{{ direccion.direccion }}</td>
+                    <td>{{ direccion.barrio }}</td>
+                    <td>{{ direccion.ciudadesRel.nombre }}</td>
+                    <td>{{ direccion.ciudadesRel.departamentosRel.nombre }}</td>                    
+                    <td>{{ direccion.contacto }}</td>
+                    <td>{{ direccion.telefono }}</td>
+                    <td>{{ direccion.email }}</td>
+                    <td style="text-align: center"><a id="{{ path('maestros_general_terceros_direccion_nueva', { 'codigoTerceroPk':  arTercero.codigoTerceroPk,  'codigoDireccionPk':  direccion.codigoDireccionPk}) }}" ><img src="{{ asset('bundles/zikmont/imagenes/tema1/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+            <a class="btn btn-mini" href="{{ path('maestros_general_terceros_lista') }}" style="float:left">Volver</a>
+            </div>
+        </div>
+        <!-- Botones Menu Items -->
+        <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">
+                <a class="btn btn-mini" id="{{ path('maestros_general_terceros_direccion_nueva', { 'codigoTerceroPk': arTercero.codigoTerceroPk, 'codigoDireccionPk': 0 }) }}" >Nuevo</a>
+                <button class="btn btn-danger btn-mini" type="submit" name="OpSubmit" value="OpEliminar" >Eliminar</button>
+            </div>
+        </div>
+        </div>
+{% endblock %}
