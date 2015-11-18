@@ -5,17 +5,17 @@ namespace Brasa\GeneralBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="gen_directorio_archivo")
- * @ORM\Entity(repositoryClass="Brasa\GeneralBundle\Repository\GenDirectorioArchivoRepository")
+ * @ORM\Table(name="gen_archivo")
+ * @ORM\Entity(repositoryClass="Brasa\GeneralBundle\Repository\GenArchivoRepository")
  */
-class GenDirectorioArchivo
+class GenArchivo
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_directorio_archivo_pk", type="integer")
+     * @ORM\Column(name="codigo_archivo_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoDirectorioArchivoPk;
+    private $codigoArchivoPk;
     
     /**
      * @ORM\Column(name="nombre", type="string", length=100)
@@ -23,7 +23,7 @@ class GenDirectorioArchivo
     private $nombre;
     
     /**
-     * @ORM\Column(name="codigo_directorio_fk", type="integer")
+     * @ORM\Column(name="codigo_directorio_fk", type="integer", nullable=true)
      */
     private $codigoDirectorioFk;
 
@@ -33,20 +33,21 @@ class GenDirectorioArchivo
     private $archivo;
    
     /**
-     * @ORM\ManyToOne(targetEntity="GenDirectorio", inversedBy="directoriosDirectorioArchivoRel")
+     * @ORM\ManyToOne(targetEntity="GenDirectorio", inversedBy="directoriosArchivoRel")
      * @ORM\JoinColumn(name="codigo_directorio_fk", referencedColumnName="codigo_directorio_pk")
      */
     protected $directorioRel;    
     
 
+
     /**
-     * Get codigoDirectorioArchivoPk
+     * Get codigoArchivoPk
      *
      * @return integer
      */
-    public function getCodigoDirectorioArchivoPk()
+    public function getCodigoArchivoPk()
     {
-        return $this->codigoDirectorioArchivoPk;
+        return $this->codigoArchivoPk;
     }
 
     /**
@@ -54,7 +55,7 @@ class GenDirectorioArchivo
      *
      * @param string $nombre
      *
-     * @return GenDirectorioArchivo
+     * @return GenArchivo
      */
     public function setNombre($nombre)
     {
@@ -78,7 +79,7 @@ class GenDirectorioArchivo
      *
      * @param integer $codigoDirectorioFk
      *
-     * @return GenDirectorioArchivo
+     * @return GenArchivo
      */
     public function setCodigoDirectorioFk($codigoDirectorioFk)
     {
@@ -102,7 +103,7 @@ class GenDirectorioArchivo
      *
      * @param string $archivo
      *
-     * @return GenDirectorioArchivo
+     * @return GenArchivo
      */
     public function setArchivo($archivo)
     {
@@ -126,7 +127,7 @@ class GenDirectorioArchivo
      *
      * @param \Brasa\GeneralBundle\Entity\GenDirectorio $directorioRel
      *
-     * @return GenDirectorioArchivo
+     * @return GenArchivo
      */
     public function setDirectorioRel(\Brasa\GeneralBundle\Entity\GenDirectorio $directorioRel = null)
     {

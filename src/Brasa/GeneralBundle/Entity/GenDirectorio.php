@@ -17,6 +17,11 @@ class GenDirectorio
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoDirectorioPk;
+    
+    /**
+     * @ORM\Column(name="codigo_directorio_padre", type="integer", nullable=true)
+     */
+    private $codigoDirectorioPadre;
 
     /**
      * @ORM\Column(name="ruta", type="string", length=500)
@@ -29,9 +34,9 @@ class GenDirectorio
     private $nombre;
     
     /**
-     * @ORM\OneToMany(targetEntity="GenDirectorioArchivo", mappedBy="directorioRel")
+     * @ORM\OneToMany(targetEntity="GenArchivo", mappedBy="directorioRel")
      */
-    protected $directoriosDirectorioArchivoRel;
+    protected $directoriosArchivoRel;
 
     
     /**
@@ -39,7 +44,7 @@ class GenDirectorio
      */
     public function __construct()
     {
-        $this->directoriosDirectorioArchivoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->directoriosArchivoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -50,6 +55,30 @@ class GenDirectorio
     public function getCodigoDirectorioPk()
     {
         return $this->codigoDirectorioPk;
+    }
+
+    /**
+     * Set codigoDirectorioPadre
+     *
+     * @param integer $codigoDirectorioPadre
+     *
+     * @return GenDirectorio
+     */
+    public function setCodigoDirectorioPadre($codigoDirectorioPadre)
+    {
+        $this->codigoDirectorioPadre = $codigoDirectorioPadre;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDirectorioPadre
+     *
+     * @return integer
+     */
+    public function getCodigoDirectorioPadre()
+    {
+        return $this->codigoDirectorioPadre;
     }
 
     /**
@@ -101,36 +130,36 @@ class GenDirectorio
     }
 
     /**
-     * Add directoriosDirectorioArchivoRel
+     * Add directoriosArchivoRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenDirectorioArchivo $directoriosDirectorioArchivoRel
+     * @param \Brasa\GeneralBundle\Entity\GenArchivo $directoriosArchivoRel
      *
      * @return GenDirectorio
      */
-    public function addDirectoriosDirectorioArchivoRel(\Brasa\GeneralBundle\Entity\GenDirectorioArchivo $directoriosDirectorioArchivoRel)
+    public function addDirectoriosArchivoRel(\Brasa\GeneralBundle\Entity\GenArchivo $directoriosArchivoRel)
     {
-        $this->directoriosDirectorioArchivoRel[] = $directoriosDirectorioArchivoRel;
+        $this->directoriosArchivoRel[] = $directoriosArchivoRel;
 
         return $this;
     }
 
     /**
-     * Remove directoriosDirectorioArchivoRel
+     * Remove directoriosArchivoRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenDirectorioArchivo $directoriosDirectorioArchivoRel
+     * @param \Brasa\GeneralBundle\Entity\GenArchivo $directoriosArchivoRel
      */
-    public function removeDirectoriosDirectorioArchivoRel(\Brasa\GeneralBundle\Entity\GenDirectorioArchivo $directoriosDirectorioArchivoRel)
+    public function removeDirectoriosArchivoRel(\Brasa\GeneralBundle\Entity\GenArchivo $directoriosArchivoRel)
     {
-        $this->directoriosDirectorioArchivoRel->removeElement($directoriosDirectorioArchivoRel);
+        $this->directoriosArchivoRel->removeElement($directoriosArchivoRel);
     }
 
     /**
-     * Get directoriosDirectorioArchivoRel
+     * Get directoriosArchivoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDirectoriosDirectorioArchivoRel()
+    public function getDirectoriosArchivoRel()
     {
-        return $this->directoriosDirectorioArchivoRel;
+        return $this->directoriosArchivoRel;
     }
 }

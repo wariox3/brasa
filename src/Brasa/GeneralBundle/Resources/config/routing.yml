@@ -50,24 +50,22 @@ brs_gen_buscar_ciudad:
 brs_gen_borrar_bd:
     pattern:  /general/borrar/bd/
     defaults: { _controller: BrasaGeneralBundle:ConfiguracionGeneral:borrarBD }
-    
-brs_gen_directorio:
-    pattern:  /general/directorio/
+
+#//Gestor de archivos 
+
+brs_gen_utilidad_gestorarchivo:
+    pattern:  /general/utilidad/gestorarchivo/{codigoDirectorioPadre}
     defaults: { _controller: BrasaGeneralBundle:Directorio:lista }
     
-brs_gen_directorio_nuevo:
-    pattern:  /general/directorio/nuevo/{codigoDirectorio}
-    defaults: { _controller: BrasaGeneralBundle:Directorio:nuevo }    
-
-brs_gen_directorio_archivos:
-    pattern:  /general/directorio/archivos/{codigoDirectorio}
-    defaults: { _controller: BrasaGeneralBundle:Directorio:detalle }
+brs_gen_utilidad_gestorarchivo_directorio_nuevo:
+    pattern:  /general/utilidad/gestorarchivo/directorio/nuevo/{codigoDirectorio}/{codigoDirectorioPadre}
+    defaults: { _controller: BrasaGeneralBundle:Directorio:nuevoDirectorio }    
     
-brs_gen_directorio_cargar_archivo:
-    pattern:  /general/directorio/cargar/archivo/{codigoDirectorio}
+brs_gen_utilidad_gestorarchivo_cargar_archivo:
+    pattern:  /general/utilidad/gestorarchivo/cargar/archivo/{codigoDirectorioPadre}
     defaults: { _controller: BrasaGeneralBundle:Directorio:cargarArchivo } 
     
-brs_gen_directorio_descargar_archivo:
-    pattern:  /general/directorio/descargar/archivo/{codigoDirectorioArchivo}
+brs_gen_utilidad_gestorarchivo_descargar_archivo:
+    pattern:  /general/utilidad/gestorarchivo/descargar/archivo/{codigoArchivo}
     defaults: { _controller: BrasaGeneralBundle:Directorio:descargarArchivo }    
     

@@ -5,10 +5,11 @@ namespace Brasa\GeneralBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\GeneralBundle\Form\Type\GenDirectorioType;
+use Symfony\Component\HttpFoundation\Response;
 
 class DirectorioController extends Controller
 {
-    public function listaAction() {
+    public function listaAction($codigoDirectorioPadre = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
@@ -31,22 +32,28 @@ class DirectorioController extends Controller
                     }
                 }
             }
-        if($form->get('BtnExcel')->isClicked()) {
-                $this->generarExcel();
+            if($form->get('BtnExcel')->isClicked()) {
+                    $this->generarExcel();
+            }
+            if($form->get('BtnCargar')->isClicked()) {
+                    $this->cargarArchivo($codigoDirectorioPadre);
             }
         }
         
-        $query = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->findAll();
-        $arDirectorios = $paginator->paginate($query, $this->get('request')->query->get('page', 1),25);
-
+        $queryDirectorios = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->findBy(array('codigoDirectorioPadre' => $codigoDirectorioPadre));
+        $arDirectorios = $paginator->paginate($queryDirectorios, $this->get('request')->query->get('page', 1),500);
+        $queryArchivos = $em->getRepository('BrasaGeneralBundle:GenArchivo')->findBy(array('codigoDirectorioFk' => $codigoDirectorioPadre));
+        $arArchivos = $paginator->paginate($queryArchivos, $this->get('request')->query->get('page', 1),500);
         return $this->render('BrasaGeneralBundle:Utilidades/Directorio:lista.html.twig', array(
                     'arDirectorios' => $arDirectorios,
+                    'codigoDirectorioPadre' => $codigoDirectorioPadre,
+                    'arArchivos' => $arArchivos,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoDirectorio) {
+    public function nuevoDirectorioAction($codigoDirectorio,$codigoDirectorioPadre) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $arDirectorio = new \Brasa\GeneralBundle\Entity\GenDirectorio();
@@ -61,49 +68,19 @@ class DirectorioController extends Controller
             // guardar la tarea en la base de datos
             $arDirectorio = $form->getData();
             $ruta = $arDirectorio->getNombre()."/";
-            $arDirectorio->setRuta($ruta);
+            $arDirectorio->setRuta(strtolower($ruta));
+            $arDirectorio->setCodigoDirectorioPadre($codigoDirectorioPadre);
             $em->persist($arDirectorio);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_gen_directorio'));
+            return $this->redirect($this->generateUrl('brs_gen_utilidad_gestorarchivo', array('codigoDirectorioPadre' => $codigoDirectorioPadre)));
         }
         return $this->render('BrasaGeneralBundle:Utilidades/Directorio:nuevo.html.twig', array(
             'form' => $form->createView(),
+            'codigoDirectorioPadre' => $codigoDirectorioPadre,
         ));
     }
     
-    public function detalleAction($codigoDirectorio) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $form = $this->createFormBuilder()
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->getForm();
-        $form->handleRequest($request);
-        $arDirectorio = new \Brasa\GeneralBundle\Entity\GenDirectorio();
-        $arDirectorio = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorio);
-        $arDirectorioArchivos = new \Brasa\GeneralBundle\Entity\GenDirectorioArchivo();
-        $arDirectorioArchivos = $em->getRepository('BrasaGeneralBundle:GenDirectorioArchivo')->findBy(array('codigoDirectorioFk' => $codigoDirectorio));
-        if($form->isValid()) {
-            if($form->get('BtnEliminar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoDirectorioArchivo) {
-                        $arDirectorioArchivo = new \Brasa\GeneralBundle\Entity\GenDirectorioArchivo();
-                        $arDirectorioArchivo = $em->getRepository('BrasaGeneralBundle:GenDirectorioArchivo')->find($codigoDirectorioArchivo);
-                        $em->remove($arDirectorioArchivo);
-                        $em->flush();
-                    }
-                }
-                return $this->redirect($this->generateUrl('brs_gen_directorio_archivos', array('codigoDirectorio' => $arDirectorio->getCodigoDirectorioPk())));
-            }
-        }
-        return $this->render('BrasaGeneralBundle:Utilidades/Directorio:detalle.html.twig', array(
-                    'arDirectorio' => $arDirectorio,
-                    'arDirectorioArchivos' => $arDirectorioArchivos,
-                    'form' => $form->createView()
-                    ));
-    }
-    
-    public function cargarArchivoAction($codigoDirectorio) {
+    public function cargarArchivoAction($codigoDirectorioPadre) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa'); 
@@ -116,18 +93,18 @@ class DirectorioController extends Controller
             if($form->get('BtnCargar')->isClicked()) {                
                 $objArchivo = $form['attachment']->getData();
                 $arDirectorio = new \Brasa\GeneralBundle\Entity\GenDirectorio();
-                $arDirectorio = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorio);
-                $arArchivo = new \Brasa\GeneralBundle\Entity\GenDirectorioArchivo();                    
+                $arDirectorio = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorioPadre);
+                $arArchivo = new \Brasa\GeneralBundle\Entity\GenArchivo();                    
                 $arArchivo->setNombre($objArchivo->getClientOriginalName());
                 $arArchivo->setArchivo($objArchivo->getClientMimeType());                               
-                $arArchivo->setDirectorioRel($em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorio));               
+                $arArchivo->setDirectorioRel($arDirectorio);               
                                    
                 $em->persist($arArchivo);
                 $em->flush();
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
                 $strDestino = $arConfiguracion->getRutaDirectorio() . $arDirectorio->getRuta();
-                $strArchivo = $arArchivo->getCodigoDirectorioArchivoPk() . "_" . $objArchivo->getClientOriginalName();
+                $strArchivo = $arArchivo->getCodigoArchivoPk() . "_" . $objArchivo->getClientOriginalName();
                 $form['attachment']->getData()->move($strDestino, $strArchivo);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 
