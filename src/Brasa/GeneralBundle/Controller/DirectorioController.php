@@ -43,6 +43,15 @@ class DirectorioController extends Controller
                         $arArchivo = $em->getRepository('BrasaGeneralBundle:GenArchivo')->find($codigoArchivo);
                         $em->remove($arArchivo);
                         $em->flush();
+                        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                        $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                        $rutadirectorio = $arArchivo->getCodigoDirectorioFk();
+                        if ($rutadirectorio == null){
+                            $strRuta = $arConfiguracion->getRutaDirectorio() . $codigoArchivo. "_" .$arArchivo->getNombre();
+                        }else{
+                            $strRuta = $arConfiguracion->getRutaDirectorio() . $arArchivo->getDirectorioRel()->getRuta(). $codigoArchivo. "_" .$arArchivo->getNombre();
+                        }
+                        unlink($strRuta);
                     }
                     return $this->redirect($this->generateUrl('brs_gen_utilidad_gestorarchivo', array('codigoDirectorioPadre' => $codigoDirectorioPadre)));
                 }
@@ -58,12 +67,24 @@ class DirectorioController extends Controller
         }
         $queryArchivos = $em->getRepository('BrasaGeneralBundle:GenArchivo')->findBy(array('codigoDirectorioFk' => $codigo));
         $arArchivos = $paginator->paginate($queryArchivos, $this->get('request')->query->get('page', 1),500);
+        $breadCrumb = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->agruparordenardirectorios($codigoDirectorioPadre);
+
+        
+        $codigoDirectorioPadreAux = $codigoDirectorioPadre;
+        while ($codigoDirectorioPadreAux != null && $codigoDirectorioPadreAux != 0) {
+            $arDirectorio = new \Brasa\GeneralBundle\Entity\GenDirectorio();
+            $arDirectorio = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorioPadreAux);            
+            $codigoDirectorioPadreAux = $arDirectorio->getCodigoDirectorioPadre();
+            $arrBreadCrumb[] = array('directorio' => $arDirectorio->getNombre(), 'codigo' => $arDirectorio->getCodigoDirectorioPk());
+        }
+        $arrBreadCrumb[] = array('directorio' => 'INICIO', 'codigo' => 0);
+        $arrBreadCrumb = array_reverse($arrBreadCrumb);
         return $this->render('BrasaGeneralBundle:Utilidades/Directorio:lista.html.twig', array(
                     'arDirectorios' => $arDirectorios,
                     'codigoDirectorioPadre' => $codigoDirectorioPadre,
                     'arArchivos' => $arArchivos,
+                    'breadCrumb' => $arrBreadCrumb,
                     'form'=> $form->createView()
-           
         ));
     }
     
@@ -140,7 +161,13 @@ class DirectorioController extends Controller
         $arArchivo = $em->getRepository('BrasaGeneralBundle:GenArchivo')->find($codigoArchivo);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $strRuta = $arConfiguracion->getRutaDirectorio() . $arArchivo->getDirectorioRel()->getRuta(). $codigoArchivo. "_" .$arArchivo->getNombre();
+        $rutadirectorio = $arArchivo->getCodigoDirectorioFk();
+        if ($rutadirectorio == null){
+            $strRuta = $arConfiguracion->getRutaDirectorio() . $codigoArchivo. "_" .$arArchivo->getNombre();
+        }else{
+            $strRuta = $arConfiguracion->getRutaDirectorio() . $arArchivo->getDirectorioRel()->getRuta(). $codigoArchivo. "_" .$arArchivo->getNombre();
+        }
+        
         // Generate response
         $response = new Response();
         
