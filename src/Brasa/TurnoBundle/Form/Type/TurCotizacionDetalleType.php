@@ -5,7 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
 
-class TurPedidoDetalleType extends AbstractType
+class TurCotizacionDetalleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -14,34 +14,36 @@ class TurPedidoDetalleType extends AbstractType
                 'class' => 'BrasaTurnoBundle:TurTurno',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('t')
+                    ->where('t.servicio = :servicio ')
+                    ->setParameter('servicio', 1)
                     ->orderBy('t.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                
+                'required' => true))
             ->add('modalidadServicioRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurModalidadServicio',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ms')
                     ->orderBy('ms.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                             
+                'required' => true))
             ->add('periodoRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurPeriodo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('p')
                     ->orderBy('p.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                                                         
+                'required' => true))
             ->add('fechaDesde', 'date')
             ->add('fechaHasta', 'date')
             ->add('cantidad', 'number')
-            ->add('lunes', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                
-            ->add('martes', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                
-            ->add('miercoles', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                
-            ->add('jueves', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                                
-            ->add('viernes', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                                                
-            ->add('sabado', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                                                
-            ->add('domingo', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                                                
-            ->add('festivo', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                                                
+            ->add('lunes', 'checkbox', array('required'  => false))
+            ->add('martes', 'checkbox', array('required'  => false))
+            ->add('miercoles', 'checkbox', array('required'  => false))
+            ->add('jueves', 'checkbox', array('required'  => false))
+            ->add('viernes', 'checkbox', array('required'  => false))
+            ->add('sabado', 'checkbox', array('required'  => false))
+            ->add('domingo', 'checkbox', array('required'  => false))
+            ->add('festivo', 'checkbox', array('required'  => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

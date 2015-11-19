@@ -30,12 +30,7 @@ class TurCliente
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;     
-    
-    /**
-     * @ORM\OneToMany(targetEntity="TurPedido", mappedBy="clienteRel")
-     */
-    protected $pedidosClienteRel;  
+    private $comentarios;        
     
     /**
      * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="clientesSectorRel")
@@ -44,9 +39,20 @@ class TurCliente
     protected $sectorRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TurPedido", mappedBy="clienteRel")
+     */
+    protected $pedidosClienteRel;  
+
+    /**
+     * @ORM\OneToMany(targetEntity="TurCotizacion", mappedBy="clienteRel")
+     */
+    protected $cotizacionesClienteRel;         
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurProgramacion", mappedBy="clienteRel")
      */
     protected $programacionesClienteRel;     
+
 
     /**
      * Constructor
@@ -54,6 +60,7 @@ class TurCliente
     public function __construct()
     {
         $this->pedidosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cotizacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -92,6 +99,30 @@ class TurCliente
     }
 
     /**
+     * Set codigoSectorFk
+     *
+     * @param integer $codigoSectorFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoSectorFk($codigoSectorFk)
+    {
+        $this->codigoSectorFk = $codigoSectorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSectorFk
+     *
+     * @return integer
+     */
+    public function getCodigoSectorFk()
+    {
+        return $this->codigoSectorFk;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -113,6 +144,30 @@ class TurCliente
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set sectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
+     *
+     * @return TurCliente
+     */
+    public function setSectorRel(\Brasa\TurnoBundle\Entity\TurSector $sectorRel = null)
+    {
+        $this->sectorRel = $sectorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sectorRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSector
+     */
+    public function getSectorRel()
+    {
+        return $this->sectorRel;
     }
 
     /**
@@ -150,6 +205,40 @@ class TurCliente
     }
 
     /**
+     * Add cotizacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addCotizacionesClienteRel(\Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesClienteRel)
+    {
+        $this->cotizacionesClienteRel[] = $cotizacionesClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cotizacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesClienteRel
+     */
+    public function removeCotizacionesClienteRel(\Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesClienteRel)
+    {
+        $this->cotizacionesClienteRel->removeElement($cotizacionesClienteRel);
+    }
+
+    /**
+     * Get cotizacionesClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCotizacionesClienteRel()
+    {
+        return $this->cotizacionesClienteRel;
+    }
+
+    /**
      * Add programacionesClienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurProgramacion $programacionesClienteRel
@@ -181,53 +270,5 @@ class TurCliente
     public function getProgramacionesClienteRel()
     {
         return $this->programacionesClienteRel;
-    }
-
-    /**
-     * Set codigoSectorFk
-     *
-     * @param integer $codigoSectorFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoSectorFk($codigoSectorFk)
-    {
-        $this->codigoSectorFk = $codigoSectorFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSectorFk
-     *
-     * @return integer
-     */
-    public function getCodigoSectorFk()
-    {
-        return $this->codigoSectorFk;
-    }
-
-    /**
-     * Set sectorRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
-     *
-     * @return TurCliente
-     */
-    public function setSectorRel(\Brasa\TurnoBundle\Entity\TurSector $sectorRel = null)
-    {
-        $this->sectorRel = $sectorRel;
-
-        return $this;
-    }
-
-    /**
-     * Get sectorRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurSector
-     */
-    public function getSectorRel()
-    {
-        return $this->sectorRel;
     }
 }

@@ -32,62 +32,98 @@ class TurPedidoRepository extends EntityRepository {
             $intDiasSabados = 0;
             $intDiasDominicales = 0;
             $intDiasFestivos = 0;
-            $fecha = $arPedidoDetalle->getFechaDesde()->format('Y-m-j');
-            for($i = 0; $i < $intDias; $i++) {
-                $nuevafecha = strtotime ( '+'.$i.' day' , strtotime ( $fecha ) ) ;
-                $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
-                $dateNuevaFecha = date_create($nuevafecha);
-                $diaSemana = $dateNuevaFecha->format('N');
-                if($diaSemana == 1) {
-                    $intDiasOrdinarios += 1; 
-                    if($arPedidoDetalle->getLunes() == 1) {                   
-                        $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
-                        $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
-                    }
+            if($arPedidoDetalle->getCodigoPeriodoFk() == 1) {                
+                if($arPedidoDetalle->getLunes() == 1) {
+                    $intDiasOrdinarios += 4;
                 }
-                if($diaSemana == 2) {
-                    $intDiasOrdinarios += 1; 
-                    if($arPedidoDetalle->getMartes() == 1) {                   
-                        $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
-                        $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
-                    }
-                }                
-                if($diaSemana == 3) {
-                    $intDiasOrdinarios += 1; 
-                    if($arPedidoDetalle->getMiercoles() == 1) {                   
-                        $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
-                        $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
-                    }
-                }    
-                if($diaSemana == 4) {
-                    $intDiasOrdinarios += 1; 
-                    if($arPedidoDetalle->getJueves() == 1) {                   
-                        $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
-                        $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
-                    }
-                }                
-                if($diaSemana == 5) {
-                    $intDiasOrdinarios += 1; 
-                    if($arPedidoDetalle->getViernes() == 1) {                   
-                        $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
-                        $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
-                    }
-                }                
-                if($diaSemana == 6) {
-                   $intDiasSabados += 1; 
-                    if($arPedidoDetalle->getSabado() == 1) {                   
-                        $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
-                        $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
-                    }                   
+                if($arPedidoDetalle->getMartes() == 1) {
+                    $intDiasOrdinarios += 4;
                 }
-                if($diaSemana == 7) {
-                   $intDiasDominicales += 1; 
-                    if($arPedidoDetalle->getDomingo() == 1) {                   
-                        $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
-                        $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
-                    }                   
+                if($arPedidoDetalle->getMiercoles() == 1) {
+                    $intDiasOrdinarios += 4;
+                }
+                if($arPedidoDetalle->getJueves() == 1) {
+                    $intDiasOrdinarios += 4;
+                }
+                if($arPedidoDetalle->getViernes() == 1) {
+                    $intDiasOrdinarios += 4;
+                }
+                if($arPedidoDetalle->getSabado() == 1) {
+                    $intDiasSabados = 4;    
+                }
+                if($arPedidoDetalle->getDomingo() == 1) {
+                    $intDiasDominicales = 4;    
                 }                
-            }                                    
+                if($arPedidoDetalle->getFestivo() == 1) {
+                    $intDiasFestivos = 2;    
+                }                               
+                $intTotalDias = $intDiasOrdinarios + $intDiasSabados + $intDiasDominicales + $intDiasFestivos;
+                $intHorasRealesDiurnas = $arPedidoDetalle->getTurnoRel()->getHorasDiurnas() * $intTotalDias;
+                $intHorasRealesNocturnas = $arPedidoDetalle->getTurnoRel()->getHorasNocturnas() * $intTotalDias;                            
+            } else {
+                $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arPedidoDetalle->getFechaDesde()->format('Y-m-d'), $arPedidoDetalle->getFechaHasta()->format('Y-m-d'));
+                $fecha = $arPedidoDetalle->getFechaDesde()->format('Y-m-j');
+                for($i = 0; $i < $intDias; $i++) {
+                    $nuevafecha = strtotime ( '+'.$i.' day' , strtotime ( $fecha ) ) ;
+                    $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+                    $dateNuevaFecha = date_create($nuevafecha);
+                    $diaSemana = $dateNuevaFecha->format('N');
+                    if($this->festivo($arFestivos, $dateNuevaFecha) == 1) {
+                        $intDiasFestivos += 1;
+                    } else {
+                        if($diaSemana == 1) {
+                            $intDiasOrdinarios += 1; 
+                            if($arPedidoDetalle->getLunes() == 1) {                   
+                                $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
+                                $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
+                            }
+                        } 
+                        if($diaSemana == 2) {
+                            $intDiasOrdinarios += 1; 
+                            if($arPedidoDetalle->getMartes() == 1) {                   
+                                $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
+                                $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
+                            }
+                        }                
+                        if($diaSemana == 3) {
+                            $intDiasOrdinarios += 1; 
+                            if($arPedidoDetalle->getMiercoles() == 1) {                   
+                                $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
+                                $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
+                            }
+                        }    
+                        if($diaSemana == 4) {
+                            $intDiasOrdinarios += 1; 
+                            if($arPedidoDetalle->getJueves() == 1) {                   
+                                $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
+                                $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
+                            }
+                        }                
+                        if($diaSemana == 5) {
+                            $intDiasOrdinarios += 1; 
+                            if($arPedidoDetalle->getViernes() == 1) {                   
+                                $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
+                                $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
+                            }
+                        }                
+                        if($diaSemana == 6) {
+                           $intDiasSabados += 1; 
+                            if($arPedidoDetalle->getSabado() == 1) {                   
+                                $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
+                                $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
+                            }                   
+                        }
+                        if($diaSemana == 7) {
+                           $intDiasDominicales += 1; 
+                            if($arPedidoDetalle->getDomingo() == 1) {                   
+                                $intHorasRealesDiurnas +=  $arPedidoDetalle->getTurnoRel()->getHorasDiurnas();
+                                $intHorasRealesNocturnas +=  $arPedidoDetalle->getTurnoRel()->getHorasNocturnas();                        
+                            }                   
+                        }                    
+                    }                                
+                }                
+            }
+                                    
             
             $douHoras = ($intHorasRealesDiurnas + $intHorasRealesNocturnas ) * $arPedidoDetalle->getCantidad();            
             $arPedidoDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        
@@ -95,11 +131,11 @@ class TurPedidoRepository extends EntityRepository {
             $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
             $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1); 
             $floValorBaseServicio = $arConfiguracionNomina->getVrSalario() * $arPedido->getClienteRel()->getSectorRel()->getPorcentaje();
-            
-            $floServicio = ($floValorBaseServicio + ( $floValorBaseServicio * $arPedidoDetalle->getModalidadServicioRel()->getPorcentaje() / 100)) / 24;            
-            $floServicio = $floServicio * $arPedidoDetalle->getTurnoRel()->getHoras();
-            $floServicio = $floServicio * $arPedidoDetalle->getCantidad();
-            $arPedidoDetalleActualizar->setVrTotal($floServicio);
+            $floValorBaseServicioMes = $floValorBaseServicio + ($floValorBaseServicio * $arPedidoDetalle->getModalidadServicioRel()->getPorcentaje() / 100);                        
+            $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;            
+            $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  
+            $floVrServicio = (($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna)) * $arPedidoDetalle->getCantidad();                        
+            $arPedidoDetalleActualizar->setVrTotal($floVrServicio);
             $arPedidoDetalleActualizar->setHoras($douHoras);
             $arPedidoDetalleActualizar->setHorasDiurnas($intHorasRealesDiurnas);
             $arPedidoDetalleActualizar->setHorasNocturnas($intHorasRealesNocturnas);
@@ -109,7 +145,7 @@ class TurPedidoRepository extends EntityRepository {
             $douTotalHoras += $douHoras;
             $douTotalHorasDiurnas += $intHorasRealesDiurnas;
             $douTotalHorasNocturnas += $intHorasRealesNocturnas;
-            $douTotalServicio += $floServicio;
+            $douTotalServicio += $floVrServicio;
             $intCantidad++;
         }
         $arPedido->setHoras($douTotalHoras);
@@ -121,9 +157,14 @@ class TurPedidoRepository extends EntityRepository {
         return true;
     }
     
-    public function devolverVariableProporcionalidad($timeDesde, $timeHasta) {
-        $floVariableProporcionalidad = 0;
-        
-        return $floVariableProporcionalidad;
+    public function festivo($arFestivos, $dateFecha) {
+        $boolFestivo = 0;
+        foreach ($arFestivos as $arFestivo) {
+            if($arFestivo['fecha'] == $dateFecha) {
+                $boolFestivo = 1;
+            }
+        }
+        return $boolFestivo;
     }    
+    
 }

@@ -5,8 +5,21 @@
     <h3>Nuevo detalle programacion</h3>
     <table class="table table-striped table-bordered table-condensed table-hover">
         <tr>            
-            <th>CODIGO</th>            
-            <th>CANTIDAD</th>
+            <th>CODIGO</th>  
+            <th>TURNO</th>
+            <th>MODALIDAD</th>
+            <th>PERIODO</th>
+            <th>DESDE</th>
+            <th>HASTA</th>            
+            <th>LUN</th>
+            <th>MAR</th>
+            <th>MIE</th>
+            <th>JUE</th>
+            <th>VIE</th>
+            <th>SAB</th>
+            <th>DOM</th>
+            <th>FES</th>
+            <th>CANT</th>
             <th>HORAS</th>            
             <th>DIURNAS</th>            
             <th>NOCTURNAS</th>            
@@ -15,7 +28,20 @@
         </tr>        
             {%for arPedidosDetalle in arPedidosDetalle %}
                <tr>
-                <td>{{arPedidosDetalle.codigoPedidoDetallePk}}</td>                
+                <td>{{ arPedidosDetalle.codigoPedidoDetallePk}}</td>   
+                <td>{{ arPedidosDetalle.turnoRel.nombre  }}</td>                    
+                <td>{{ arPedidosDetalle.modalidadServicioRel.nombre  }}</td>                    
+                <td>{{ arPedidosDetalle.periodoRel.nombre  }}</td>  
+                <td>{{ arPedidosDetalle.fechaDesde | date("Y/m/d")}}</td>
+                <td>{{ arPedidosDetalle.fechaHasta | date("Y/m/d")}}</td>                
+                <td>{% if arPedidosDetalle.lunes == 1%} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arPedidosDetalle.martes == 1%} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arPedidosDetalle.miercoles == 1%} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arPedidosDetalle.jueves == 1%} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arPedidosDetalle.viernes == 1%} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arPedidosDetalle.sabado == 1%} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arPedidosDetalle.domingo == 1%} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arPedidosDetalle.festivo == 1%} SI {% else %} NO {% endif %}</td> 
                 <td style="text-align: right">{{ arPedidosDetalle.cantidad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidosDetalle.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidosDetalle.horasDiurnas | number_format(0, '.', ',') }}</td>

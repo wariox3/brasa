@@ -25,6 +25,22 @@ brs_tur_programacion_detalle:
 brs_tur_programacion_detalle_nuevo:
    path:     /tur/programacion/detalle/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}
    defaults: { _controller: BrasaTurnoBundle:Programacion:detalleNuevo }   
+
+brs_tur_cotizacion_lista:
+   path:     /tur/cotizacion/lista
+   defaults: { _controller: BrasaTurnoBundle:Cotizacion:lista } 
+   
+brs_tur_cotizacion_nuevo:
+   path:     /tur/cotizacion/nuevo/{codigoCotizacion}
+   defaults: { _controller: BrasaTurnoBundle:Cotizacion:nuevo }
+
+brs_tur_cotizacion_detalle:
+   path:     /tur/cotizacion/detalle/{codigoCotizacion}
+   defaults: { _controller: BrasaTurnoBundle:Cotizacion:detalle }
+   
+brs_tur_cotizacion_detalle_nuevo:
+   path:     /tur/cotizacion/detalle/nuevo/{codigoCotizacion}/{codigoCotizacionDetalle}
+   defaults: { _controller: BrasaTurnoBundle:Cotizacion:detalleNuevo }    
    
 brs_tur_pedido_lista:
    path:     /tur/pedido/lista

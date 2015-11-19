@@ -47,6 +47,11 @@ class TurTurno
     private $horasNocturnas = 0;    
     
     /**
+     * @ORM\Column(name="servicio", type="boolean")
+     */    
+    private $servicio = 0;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;       
@@ -55,6 +60,11 @@ class TurTurno
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="turnoRel")
      */
     protected $pedidosDetallesTurnoRel;     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="turnoRel")
+     */
+    protected $cotizacionesDetallesTurnoRel;     
     
     /**
      * Constructor
@@ -288,5 +298,63 @@ class TurTurno
     public function getPedidosDetallesTurnoRel()
     {
         return $this->pedidosDetallesTurnoRel;
+    }
+
+    /**
+     * Add cotizacionesDetallesTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesTurnoRel
+     *
+     * @return TurTurno
+     */
+    public function addCotizacionesDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesTurnoRel)
+    {
+        $this->cotizacionesDetallesTurnoRel[] = $cotizacionesDetallesTurnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cotizacionesDetallesTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesTurnoRel
+     */
+    public function removeCotizacionesDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesTurnoRel)
+    {
+        $this->cotizacionesDetallesTurnoRel->removeElement($cotizacionesDetallesTurnoRel);
+    }
+
+    /**
+     * Get cotizacionesDetallesTurnoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCotizacionesDetallesTurnoRel()
+    {
+        return $this->cotizacionesDetallesTurnoRel;
+    }
+
+    /**
+     * Set servicio
+     *
+     * @param boolean $servicio
+     *
+     * @return TurTurno
+     */
+    public function setServicio($servicio)
+    {
+        $this->servicio = $servicio;
+
+        return $this;
+    }
+
+    /**
+     * Get servicio
+     *
+     * @return boolean
+     */
+    public function getServicio()
+    {
+        return $this->servicio;
     }
 }

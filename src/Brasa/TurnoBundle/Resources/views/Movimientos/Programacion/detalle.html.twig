@@ -54,39 +54,11 @@
                 <th>COD</th>
                 <th>RECURSO</th>
                 <th>P.D</th>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
-                <th>4</th>
-                <th>5</th>
-                <th>6</th>
-                <th>7</th>
-                <th>8</th>
-                <th>9</th>
-                <th>10</th>
-                <th>11</th>
-                <th>12</th>
-                <th>13</th>
-                <th>14</th>
-                <th>15</th>
-                <th>16</th>
-                <th>17</th>
-                <th>18</th>
-                <th>19</th>
-                <th>20</th>
-                <th>21</th>
-                <th>22</th>
-                <th>23</th>
-                <th>24</th>
-                <th>25</th>
-                <th>26</th>
-                <th>27</th>
-                <th>28</th>
-                <th>29</th>
-                <th>30</th>
-                <th>31</th>
+                {% for arrDiaSemana in arrDiaSemana %}
+                    <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
+                {% endfor %}
                 <th>HORAS</th>
-                <th></th>
+                <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arProgramacionDetalle in arProgramacionDetalle %}
                 <tr>
@@ -94,37 +66,37 @@
                     <td>{{ arProgramacionDetalle.codigoRecursoFk }}</td> 
                     <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk }}</td> 
                     {% if arProgramacion.estadoAutorizado == 0 %}
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia1{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia1  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia2{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia2  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia3{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia3  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia4{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia4  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia5{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia5  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia6{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia6  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia7{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia7  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia8{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia8  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia9{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia9  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia10{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia10  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia11{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia11  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia12{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia12  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia13{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia13  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia14{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia14  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia15{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia15  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia16{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia16  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia17{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia17  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia18{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia18  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia19{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia19  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia20{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia20  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia21{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia21  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia22{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia22  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia23{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia23  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia24{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia24  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia25{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia25  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia26{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia26  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia27{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia27  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia28{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia28  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia29{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia29 }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia30{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia30  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia31{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia31  }}" size="5" style="width:20px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia1{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia1  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia2{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia2  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia3{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia3  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia4{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia4  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia5{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia5  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia6{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia6  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia7{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia7  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia8{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia8  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia9{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia9  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia10{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia10  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia11{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia11  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia12{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia12  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia13{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia13  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia14{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia14  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia15{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia15  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia16{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia16  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia17{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia17  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia18{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia18  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia19{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia19  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia20{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia20  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia21{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia21  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia22{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia22  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia23{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia23  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia24{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia24  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia25{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia25  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia26{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia26  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia27{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia27  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia28{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia28  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia29{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia29 }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia30{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia30  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia31{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia31  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                     {% else %}
                         <td>{{ arProgramacionDetalle.dia1  }}</td>
                         <td>{{ arProgramacionDetalle.dia2  }}</td>
