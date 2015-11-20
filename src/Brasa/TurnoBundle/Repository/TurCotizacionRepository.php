@@ -133,7 +133,7 @@ class TurCotizacionRepository extends EntityRepository {
             $arCotizacionDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($arCotizacionDetalle->getCodigoCotizacionDetallePk());                         
             $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
             $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1); 
-            $floValorBaseServicio = $arConfiguracionNomina->getVrSalario() * $arCotizacion->getClienteRel()->getSectorRel()->getPorcentaje();
+            $floValorBaseServicio = $arConfiguracionNomina->getVrSalario() * $arCotizacion->getSectorRel()->getPorcentaje();
             $floValorBaseServicioMes = $floValorBaseServicio + ($floValorBaseServicio * $arCotizacionDetalle->getModalidadServicioRel()->getPorcentaje() / 100);                        
             $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;            
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  

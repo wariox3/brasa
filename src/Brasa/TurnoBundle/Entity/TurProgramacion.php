@@ -15,12 +15,7 @@ class TurProgramacion
      * @ORM\Column(name="codigo_programacion_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoProgramacionPk;    
-    
-    /**
-     * @ORM\Column(name="codigo_cliente_fk", type="integer")
-     */    
-    private $codigoClienteFk;     
+    private $codigoProgramacionPk;             
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -40,19 +35,21 @@ class TurProgramacion
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="programacionesClienteRel")
-     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
-     */
-    protected $clienteRel;    
+    private $comentarios;             
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="programacionRel", cascade={"persist", "remove"})
      */
     protected $programacionesDetallesProgramacionRel; 
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->programacionesDetallesProgramacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoProgramacionPk
      *
@@ -85,71 +82,6 @@ class TurProgramacion
     public function getFecha()
     {
         return $this->fecha;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->programacionesDetallesProgramacionRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add programacionesDetallesProgramacionRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesProgramacionRel
-     *
-     * @return TurProgramacion
-     */
-    public function addProgramacionesDetallesProgramacionRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesProgramacionRel)
-    {
-        $this->programacionesDetallesProgramacionRel[] = $programacionesDetallesProgramacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove programacionesDetallesProgramacionRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesProgramacionRel
-     */
-    public function removeProgramacionesDetallesProgramacionRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesProgramacionRel)
-    {
-        $this->programacionesDetallesProgramacionRel->removeElement($programacionesDetallesProgramacionRel);
-    }
-
-    /**
-     * Get programacionesDetallesProgramacionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProgramacionesDetallesProgramacionRel()
-    {
-        return $this->programacionesDetallesProgramacionRel;
-    }
-
-    /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     *
-     * @return TurProgramacion
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
     }
 
     /**
@@ -201,50 +133,60 @@ class TurProgramacion
     }
 
     /**
-     * Set codigoClienteFk
+     * Set comentarios
      *
-     * @param integer $codigoClienteFk
+     * @param string $comentarios
      *
      * @return TurProgramacion
      */
-    public function setCodigoClienteFk($codigoClienteFk)
+    public function setComentarios($comentarios)
     {
-        $this->codigoClienteFk = $codigoClienteFk;
+        $this->comentarios = $comentarios;
 
         return $this;
     }
 
     /**
-     * Get codigoClienteFk
+     * Get comentarios
      *
-     * @return integer
+     * @return string
      */
-    public function getCodigoClienteFk()
+    public function getComentarios()
     {
-        return $this->codigoClienteFk;
+        return $this->comentarios;
     }
 
     /**
-     * Set clienteRel
+     * Add programacionesDetallesProgramacionRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesProgramacionRel
      *
      * @return TurProgramacion
      */
-    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    public function addProgramacionesDetallesProgramacionRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesProgramacionRel)
     {
-        $this->clienteRel = $clienteRel;
+        $this->programacionesDetallesProgramacionRel[] = $programacionesDetallesProgramacionRel;
 
         return $this;
     }
 
     /**
-     * Get clienteRel
+     * Remove programacionesDetallesProgramacionRel
      *
-     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesProgramacionRel
      */
-    public function getClienteRel()
+    public function removeProgramacionesDetallesProgramacionRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesProgramacionRel)
     {
-        return $this->clienteRel;
+        $this->programacionesDetallesProgramacionRel->removeElement($programacionesDetallesProgramacionRel);
+    }
+
+    /**
+     * Get programacionesDetallesProgramacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesDetallesProgramacionRel()
+    {
+        return $this->programacionesDetallesProgramacionRel;
     }
 }

@@ -15,12 +15,7 @@ class TurPedido
      * @ORM\Column(name="codigo_pedido_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoPedidoPk;    
-    
-    /**
-     * @ORM\Column(name="codigo_cliente_fk", type="integer")
-     */    
-    private $codigoClienteFk;    
+    private $codigoPedidoPk;           
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -60,18 +55,13 @@ class TurPedido
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="pedidosClienteRel")
-     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
-     */
-    protected $clienteRel;    
+    private $comentarios;         
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="pedidoRel", cascade={"persist", "remove"})
      */
     protected $pedidosDetallesPedidoRel; 
+
 
     /**
      * Constructor
@@ -137,6 +127,30 @@ class TurPedido
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set cantidad
+     *
+     * @param integer $cantidad
+     *
+     * @return TurPedido
+     */
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidad
+     *
+     * @return integer
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
     }
 
     /**
@@ -212,6 +226,30 @@ class TurPedido
     }
 
     /**
+     * Set vrTotal
+     *
+     * @param float $vrTotal
+     *
+     * @return TurPedido
+     */
+    public function setVrTotal($vrTotal)
+    {
+        $this->vrTotal = $vrTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotal
+     *
+     * @return float
+     */
+    public function getVrTotal()
+    {
+        return $this->vrTotal;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -267,101 +305,5 @@ class TurPedido
     public function getPedidosDetallesPedidoRel()
     {
         return $this->pedidosDetallesPedidoRel;
-    }
-
-    /**
-     * Set cantidad
-     *
-     * @param integer $cantidad
-     *
-     * @return TurPedido
-     */
-    public function setCantidad($cantidad)
-    {
-        $this->cantidad = $cantidad;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidad
-     *
-     * @return integer
-     */
-    public function getCantidad()
-    {
-        return $this->cantidad;
-    }
-
-    /**
-     * Set vrTotal
-     *
-     * @param float $vrTotal
-     *
-     * @return TurPedido
-     */
-    public function setVrTotal($vrTotal)
-    {
-        $this->vrTotal = $vrTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotal
-     *
-     * @return float
-     */
-    public function getVrTotal()
-    {
-        return $this->vrTotal;
-    }
-
-    /**
-     * Set codigoClienteFk
-     *
-     * @param integer $codigoClienteFk
-     *
-     * @return TurPedido
-     */
-    public function setCodigoClienteFk($codigoClienteFk)
-    {
-        $this->codigoClienteFk = $codigoClienteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoClienteFk
-     *
-     * @return integer
-     */
-    public function getCodigoClienteFk()
-    {
-        return $this->codigoClienteFk;
-    }
-
-    /**
-     * Set clienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
-     *
-     * @return TurPedido
-     */
-    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
-    {
-        $this->clienteRel = $clienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get clienteRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurCliente
-     */
-    public function getClienteRel()
-    {
-        return $this->clienteRel;
     }
 }

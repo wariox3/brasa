@@ -230,7 +230,11 @@ class GenTercero
      */
     protected $rhuFacturasTerceroRel;    
 
-   
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCotizacion", mappedBy="terceroRel")
+     */
+    protected $turCotizacionesTerceroRel;
+    
     /**
      * Constructor
      */
@@ -1307,5 +1311,39 @@ class GenTercero
     public function getRhuFacturasTerceroRel()
     {
         return $this->rhuFacturasTerceroRel;
+    }
+
+    /**
+     * Add turCotizacionesTerceroRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacion $turCotizacionesTerceroRel
+     *
+     * @return GenTercero
+     */
+    public function addTurCotizacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurCotizacion $turCotizacionesTerceroRel)
+    {
+        $this->turCotizacionesTerceroRel[] = $turCotizacionesTerceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turCotizacionesTerceroRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacion $turCotizacionesTerceroRel
+     */
+    public function removeTurCotizacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurCotizacion $turCotizacionesTerceroRel)
+    {
+        $this->turCotizacionesTerceroRel->removeElement($turCotizacionesTerceroRel);
+    }
+
+    /**
+     * Get turCotizacionesTerceroRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurCotizacionesTerceroRel()
+    {
+        return $this->turCotizacionesTerceroRel;
     }
 }

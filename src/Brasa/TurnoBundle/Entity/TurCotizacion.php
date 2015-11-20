@@ -15,17 +15,27 @@ class TurCotizacion
      * @ORM\Column(name="codigo_cotizacion_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoCotizacionPk;    
-    
-    /**
-     * @ORM\Column(name="codigo_cliente_fk", type="integer")
-     */    
-    private $codigoClienteFk;    
+    private $codigoCotizacionPk;         
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;    
+
+    /**
+     * @ORM\Column(name="fecha_vence", type="date", nullable=true)
+     */    
+    private $fechaVence;    
+    
+    /**
+     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
+     */    
+    private $codigoTerceroFk;    
+
+    /**
+     * @ORM\Column(name="codigo_sector_fk", type="integer", nullable=true)
+     */    
+    private $codigoSectorFk;    
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -60,19 +70,24 @@ class TurCotizacion
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;     
+    private $comentarios;            
     
     /**
-     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="cotizacionesClienteRel")
-     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="turCotizacionesTerceroRel")
+     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
      */
-    protected $clienteRel;    
+    protected $terceroRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="cotizacionesSectorRel")
+     * @ORM\JoinColumn(name="codigo_sector_fk", referencedColumnName="codigo_sector_pk")
+     */
+    protected $sectorRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="cotizacionRel", cascade={"persist", "remove"})
      */
     protected $cotizacionesDetallesCotizacionRel; 
-
 
     /**
      * Constructor
@@ -90,30 +105,6 @@ class TurCotizacion
     public function getCodigoCotizacionPk()
     {
         return $this->codigoCotizacionPk;
-    }
-
-    /**
-     * Set codigoClienteFk
-     *
-     * @param integer $codigoClienteFk
-     *
-     * @return TurCotizacion
-     */
-    public function setCodigoClienteFk($codigoClienteFk)
-    {
-        $this->codigoClienteFk = $codigoClienteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoClienteFk
-     *
-     * @return integer
-     */
-    public function getCodigoClienteFk()
-    {
-        return $this->codigoClienteFk;
     }
 
     /**
@@ -138,6 +129,54 @@ class TurCotizacion
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set codigoTerceroFk
+     *
+     * @param integer $codigoTerceroFk
+     *
+     * @return TurCotizacion
+     */
+    public function setCodigoTerceroFk($codigoTerceroFk)
+    {
+        $this->codigoTerceroFk = $codigoTerceroFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTerceroFk
+     *
+     * @return integer
+     */
+    public function getCodigoTerceroFk()
+    {
+        return $this->codigoTerceroFk;
+    }
+
+    /**
+     * Set codigoSectorFk
+     *
+     * @param integer $codigoSectorFk
+     *
+     * @return TurCotizacion
+     */
+    public function setCodigoSectorFk($codigoSectorFk)
+    {
+        $this->codigoSectorFk = $codigoSectorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSectorFk
+     *
+     * @return integer
+     */
+    public function getCodigoSectorFk()
+    {
+        return $this->codigoSectorFk;
     }
 
     /**
@@ -309,27 +348,51 @@ class TurCotizacion
     }
 
     /**
-     * Set clienteRel
+     * Set terceroRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
      *
      * @return TurCotizacion
      */
-    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
     {
-        $this->clienteRel = $clienteRel;
+        $this->terceroRel = $terceroRel;
 
         return $this;
     }
 
     /**
-     * Get clienteRel
+     * Get terceroRel
      *
-     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     * @return \Brasa\GeneralBundle\Entity\GenTercero
      */
-    public function getClienteRel()
+    public function getTerceroRel()
     {
-        return $this->clienteRel;
+        return $this->terceroRel;
+    }
+
+    /**
+     * Set sectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
+     *
+     * @return TurCotizacion
+     */
+    public function setSectorRel(\Brasa\TurnoBundle\Entity\TurSector $sectorRel = null)
+    {
+        $this->sectorRel = $sectorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sectorRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSector
+     */
+    public function getSectorRel()
+    {
+        return $this->sectorRel;
     }
 
     /**
@@ -364,5 +427,29 @@ class TurCotizacion
     public function getCotizacionesDetallesCotizacionRel()
     {
         return $this->cotizacionesDetallesCotizacionRel;
+    }
+
+    /**
+     * Set fechaVence
+     *
+     * @param \DateTime $fechaVence
+     *
+     * @return TurCotizacion
+     */
+    public function setFechaVence($fechaVence)
+    {
+        $this->fechaVence = $fechaVence;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVence
+     *
+     * @return \DateTime
+     */
+    public function getFechaVence()
+    {
+        return $this->fechaVence;
     }
 }

@@ -40,8 +40,8 @@ brs_gen_evento_nuevo:
     
 #Utilidades    
 brs_gen_buscar_tercero:
-    pattern:  /general/buscar/tercero/{campoCodigo}/{campoNombre}/
-    defaults: { _controller: BrasaGeneralBundle:Busquedas:buscarTercero }     
+    pattern:  /general/buscar/tercero/{campoCodigo}/{campoNombre}
+    defaults: { _controller: BrasaGeneralBundle:BuscarTercero:lista }     
 
 brs_gen_buscar_ciudad:
     pattern:  /general/buscar/ciudad/{campoCodigo}/{campoNombre}/

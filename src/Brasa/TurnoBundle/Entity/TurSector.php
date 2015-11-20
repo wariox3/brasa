@@ -30,19 +30,20 @@ class TurSector
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios; 
-    
+    private $comentarios;     
+
     /**
-     * @ORM\OneToMany(targetEntity="TurCliente", mappedBy="sectorRel")
+     * @ORM\OneToMany(targetEntity="TurCotizacion", mappedBy="sectorRel")
      */
-    protected $clientesSectorRel;     
+    protected $cotizacionesSectorRel;     
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->clientesSectorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cotizacionesSectorRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -128,36 +129,36 @@ class TurSector
     }
 
     /**
-     * Add clientesSectorRel
+     * Add cotizacionesSectorRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCliente $clientesSectorRel
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesSectorRel
      *
      * @return TurSector
      */
-    public function addClientesSectorRel(\Brasa\TurnoBundle\Entity\TurCliente $clientesSectorRel)
+    public function addCotizacionesSectorRel(\Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesSectorRel)
     {
-        $this->clientesSectorRel[] = $clientesSectorRel;
+        $this->cotizacionesSectorRel[] = $cotizacionesSectorRel;
 
         return $this;
     }
 
     /**
-     * Remove clientesSectorRel
+     * Remove cotizacionesSectorRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCliente $clientesSectorRel
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesSectorRel
      */
-    public function removeClientesSectorRel(\Brasa\TurnoBundle\Entity\TurCliente $clientesSectorRel)
+    public function removeCotizacionesSectorRel(\Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesSectorRel)
     {
-        $this->clientesSectorRel->removeElement($clientesSectorRel);
+        $this->cotizacionesSectorRel->removeElement($cotizacionesSectorRel);
     }
 
     /**
-     * Get clientesSectorRel
+     * Get cotizacionesSectorRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getClientesSectorRel()
+    public function getCotizacionesSectorRel()
     {
-        return $this->clientesSectorRel;
+        return $this->cotizacionesSectorRel;
     }
 }

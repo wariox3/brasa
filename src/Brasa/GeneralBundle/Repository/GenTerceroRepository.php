@@ -12,4 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class GenTerceroRepository extends EntityRepository
 {
+    public function ListaDQL($strNombre = "", $strNit = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT t FROM BrasaGeneralBundle:GenTercero t WHERE t.codigoTerceroPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND t.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strNit != "" ) {
+            $dql .= " AND t.nit LIKE '%" . $strNit . "%'";
+        }
+        $dql .= " ORDER BY t.nombreCorto";
+        return $dql;
+    }    
 }

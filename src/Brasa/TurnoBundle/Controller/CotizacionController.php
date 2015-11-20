@@ -43,23 +43,36 @@ class CotizacionController extends Controller
     public function nuevoAction($codigoCotizacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
         $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
         if($codigoCotizacion != 0) {
             $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigoCotizacion);
         }else{
             $arCotizacion->setFecha(new \DateTime('now'));
+            $arCotizacion->setFechaVence(new \DateTime('now'));
         }
         $form = $this->createForm(new TurCotizacionType, $arCotizacion);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arCotizacion = $form->getData();
-            $em->persist($arCotizacion);
-            $em->flush();
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {
+                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
+                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arTercero) > 0) {
+                    $arCotizacion->setTerceroRel($arTercero);
+                    $em->persist($arCotizacion);
+                    $em->flush();
 
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_nuevo', array('codigoCotizacion' => 0 )));
-            } else {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $arCotizacion->getCodigoCotizacionPk())));
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_tur_cotizacion_nuevo', array('codigoCotizacion' => 0 )));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $arCotizacion->getCodigoCotizacionPk())));
+                    }                       
+                } else {
+                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
+                }                
+             
             }
         }
         return $this->render('BrasaTurnoBundle:Movimientos/Cotizacion:nuevo.html.twig', array(
@@ -76,7 +89,27 @@ class CotizacionController extends Controller
         $form = $this->formularioDetalle($arCotizacion);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if ($form->get('BtnDetalleActualizar')->isClicked()) {
+            if($form->get('BtnAutorizar')->isClicked()) {            
+                if($arCotizacion->getEstadoAutorizado() == 0) {
+                    if($em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->numeroRegistros($codigoCotizacion) > 0) {
+                        $arCotizacion->setEstadoAutorizado(1);
+                        $em->persist($arCotizacion);
+                        $em->flush();                        
+                    } else {
+                        $objMensaje->Mensaje('error', 'Debe adicionar detalles a la cotizacion', $this);
+                    }                    
+                }
+                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
+            }
+            if($form->get('BtnDesAutorizar')->isClicked()) {            
+                if($arCotizacion->getEstadoAutorizado() == 1) {
+                    $arCotizacion->setEstadoAutorizado(0);
+                    $em->persist($arCotizacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
+                }
+            }            
+            if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {
@@ -137,6 +170,14 @@ class CotizacionController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->eliminarSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
                 return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
+            }            
+            if($form->get('BtnImprimir')->isClicked()) {
+                if($arCotizacion->getEstadoAutorizado() == 1) {
+                    $objCotizacion = new \Brasa\TurnoBundle\Formatos\FormatoCotizacion();
+                    $objCotizacion->Generar($this, $codigoCotizacion);
+                } else {
+                    $objMensaje->Mensaje("error", "No puede imprimir una cotizacion sin estar autorizada", $this);
+                }
             }            
         }
 
@@ -253,7 +294,7 @@ class CotizacionController extends Controller
         foreach ($arCotizaciones as $arCotizacion) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCotizacion->getCodigoCotizacionPk())
-                    ->setCellValue('B' . $i, $arCotizacion->getClienteRel()->getNombreCorto());
+                    ->setCellValue('B' . $i, $arCotizacion->getTerceroRel()->getNombreCorto());
 
             $i++;
         }
