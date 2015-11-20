@@ -12,13 +12,4 @@ use Doctrine\ORM\EntityRepository;
  */
 class GenDirectorioRepository extends EntityRepository {
     
-    public function agruparordenardirectorios($codigoDirectorioPadre) {        
-        $em = $this->getEntityManager();
-        $dql   = "SELECT d FROM BrasaGeneralBundle:GenDirectorio d "
-                . " WHERE d.codigoDirectorioPk <= ". $codigoDirectorioPadre;
-                //. " GROUP BY d.codigoDirectorioPadre";
-        $query = $em->createQuery($dql);        
-        $breadCrumb = $query->getResult();
-        return $breadCrumb;
-    }
 }

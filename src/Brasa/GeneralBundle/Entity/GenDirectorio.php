@@ -19,9 +19,9 @@ class GenDirectorio
     private $codigoDirectorioPk;
     
     /**
-     * @ORM\Column(name="codigo_directorio_padre", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_directorio_padre_fk", type="integer", nullable=true)
      */
-    private $codigoDirectorioPadre;
+    private $codigoDirectorioPadreFk;
 
     /**
      * @ORM\Column(name="ruta", type="string", length=500)
@@ -58,27 +58,27 @@ class GenDirectorio
     }
 
     /**
-     * Set codigoDirectorioPadre
+     * Set codigoDirectorioPadreFk
      *
-     * @param integer $codigoDirectorioPadre
+     * @param integer $codigoDirectorioPadreFk
      *
      * @return GenDirectorio
      */
-    public function setCodigoDirectorioPadre($codigoDirectorioPadre)
+    public function setCodigoDirectorioPadreFk($codigoDirectorioPadreFk)
     {
-        $this->codigoDirectorioPadre = $codigoDirectorioPadre;
+        $this->codigoDirectorioPadreFk = $codigoDirectorioPadreFk;
 
         return $this;
     }
 
     /**
-     * Get codigoDirectorioPadre
+     * Get codigoDirectorioPadreFk
      *
      * @return integer
      */
-    public function getCodigoDirectorioPadre()
+    public function getCodigoDirectorioPadreFk()
     {
-        return $this->codigoDirectorioPadre;
+        return $this->codigoDirectorioPadreFk;
     }
 
     /**

@@ -58,7 +58,7 @@ class DirectorioController extends Controller
             }
         }
         
-        $queryDirectorios = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->findBy(array('codigoDirectorioPadre' => $codigoDirectorioPadre));
+        $queryDirectorios = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->findBy(array('codigoDirectorioPadreFk' => $codigoDirectorioPadre));
         $arDirectorios = $paginator->paginate($queryDirectorios, $this->get('request')->query->get('page', 1),500);
         if ($codigoDirectorioPadre == 0){
             $codigo = null;
@@ -66,15 +66,13 @@ class DirectorioController extends Controller
             $codigo = $codigoDirectorioPadre;
         }
         $queryArchivos = $em->getRepository('BrasaGeneralBundle:GenArchivo')->findBy(array('codigoDirectorioFk' => $codigo));
-        $arArchivos = $paginator->paginate($queryArchivos, $this->get('request')->query->get('page', 1),500);
-        $breadCrumb = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->agruparordenardirectorios($codigoDirectorioPadre);
-
+        $arArchivos = $paginator->paginate($queryArchivos, $this->get('request')->query->get('page', 1),500);        
         
         $codigoDirectorioPadreAux = $codigoDirectorioPadre;
         while ($codigoDirectorioPadreAux != null && $codigoDirectorioPadreAux != 0) {
             $arDirectorio = new \Brasa\GeneralBundle\Entity\GenDirectorio();
             $arDirectorio = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorioPadreAux);            
-            $codigoDirectorioPadreAux = $arDirectorio->getCodigoDirectorioPadre();
+            $codigoDirectorioPadreAux = $arDirectorio->getCodigoDirectorioPadreFk();
             $arrBreadCrumb[] = array('directorio' => $arDirectorio->getNombre(), 'codigo' => $arDirectorio->getCodigoDirectorioPk());
         }
         $arrBreadCrumb[] = array('directorio' => 'INICIO', 'codigo' => 0);
@@ -104,7 +102,7 @@ class DirectorioController extends Controller
             $arDirectorio = $form->getData();
             $ruta = $arDirectorio->getNombre()."/";
             $arDirectorio->setRuta(strtolower($ruta));
-            $arDirectorio->setCodigoDirectorioPadre($codigoDirectorioPadre);
+            $arDirectorio->setCodigoDirectorioPadreFk($codigoDirectorioPadre);
             $em->persist($arDirectorio);
             $em->flush();
             //return $this->redirect($this->generateUrl('brs_gen_utilidad_gestorarchivo', array('codigoDirectorioPadre' => $codigoDirectorioPadre)));

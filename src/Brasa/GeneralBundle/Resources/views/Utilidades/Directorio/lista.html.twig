@@ -34,7 +34,7 @@
                 </td>
                 <td>{{arDirectorios.ruta}}</td>
                 <td>{{arDirectorios.nombre}}</td>
-                <td style="text-align: center"><a href="{{ path('brs_gen_utilidad_gestorarchivo_directorio_nuevo',{'codigoDirectorio': arDirectorios.codigoDirectorioPk, 'codigoDirectorioPadre': arDirectorios.codigoDirectorioPadre })}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_gen_utilidad_gestorarchivo_directorio_nuevo',{'codigoDirectorio': arDirectorios.codigoDirectorioPk, 'codigoDirectorioPadre': arDirectorios.codigoDirectorioPadreFk })}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_gen_utilidad_gestorarchivo', { 'codigoDirectorioPadre': arDirectorios.codigoDirectorioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=22 height=22 title="Detalle del registro"></a></td>                
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarDirectorio[]" value="{{ arDirectorios.codigoDirectorioPk }}" /></td>
             {%endfor%}
@@ -66,11 +66,7 @@
         {% endfor %}
     </table>
     {{ knp_pagination_render(arArchivos) }}
-    <div class="btn-toolbar" style="float: left">
-        <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="{{ path('brs_gen_utilidad_gestorarchivo', { 'codigoDirectorioPadre': 0 }) }}" >Volver inicio</a>
-        </div>
-    </div>    
+        
     <div class="btn-toolbar" style="float: right">              
         <div class="btn-group">
             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_gen_utilidad_gestorarchivo_cargar_archivo', { 'codigoDirectorioPadre': codigoDirectorioPadre  }) }}', 'Archivos', 400, 800)" >Cargar archivo</a>
