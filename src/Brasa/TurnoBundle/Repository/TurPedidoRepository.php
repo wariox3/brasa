@@ -130,7 +130,7 @@ class TurPedidoRepository extends EntityRepository {
             $arPedidoDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arPedidoDetalle->getCodigoPedidoDetallePk());                         
             $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
             $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1); 
-            $floValorBaseServicio = $arConfiguracionNomina->getVrSalario() * $arPedido->getClienteRel()->getSectorRel()->getPorcentaje();
+            $floValorBaseServicio = $arConfiguracionNomina->getVrSalario() * $arPedido->getSectorRel()->getPorcentaje();
             $floValorBaseServicioMes = $floValorBaseServicio + ($floValorBaseServicio * $arPedidoDetalle->getModalidadServicioRel()->getPorcentaje() / 100);                        
             $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;            
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  
@@ -166,5 +166,15 @@ class TurPedidoRepository extends EntityRepository {
         }
         return $boolFestivo;
     }    
-    
+
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigo);
+                $em->remove($arPedido);
+            }
+            $em->flush();
+        }
+    }     
 }

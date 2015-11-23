@@ -9,13 +9,13 @@ class TurPedidoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('clienteRel', 'entity', array(
-                'class' => 'BrasaTurnoBundle:TurCliente',
+            ->add('sectorRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurSector',
                 'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('c')
-                    ->orderBy('c.nombreCorto', 'ASC');},
-                'property' => 'nombreCorto',
-                'required' => true))                
+                    return $er->createQueryBuilder('s')
+                    ->orderBy('s.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))               
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

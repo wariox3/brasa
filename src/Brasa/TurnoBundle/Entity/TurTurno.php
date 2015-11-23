@@ -49,7 +49,12 @@ class TurTurno
     /**
      * @ORM\Column(name="servicio", type="boolean")
      */    
-    private $servicio = 0;     
+    private $servicio = false;     
+
+    /**
+     * @ORM\Column(name="programacion", type="boolean")
+     */    
+    private $programacion = false;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -356,5 +361,29 @@ class TurTurno
     public function getServicio()
     {
         return $this->servicio;
+    }
+
+    /**
+     * Set programacion
+     *
+     * @param boolean $programacion
+     *
+     * @return TurTurno
+     */
+    public function setProgramacion($programacion)
+    {
+        $this->programacion = $programacion;
+
+        return $this;
+    }
+
+    /**
+     * Get programacion
+     *
+     * @return boolean
+     */
+    public function getProgramacion()
+    {
+        return $this->programacion;
     }
 }

@@ -1,22 +1,22 @@
 <?php
 namespace Brasa\TurnoBundle\Formatos;
-class FormatoCotizacion extends \FPDF_FPDF {
+class FormatoPedido extends \FPDF_FPDF {
     public static $em;
     
-    public static $codigoCotizacion;
+    public static $codigoPedido;
     
-    public function Generar($miThis, $codigoCotizacion) {        
+    public function Generar($miThis, $codigoPedido) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
-        self::$codigoCotizacion = $codigoCotizacion;
-        $pdf = new FormatoCotizacion();
+        self::$codigoPedido = $codigoPedido;
+        $pdf = new FormatoPedido();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("Cotizacion$codigoCotizacion.pdf", 'D');        
+        $pdf->Output("Pedido$codigoPedido.pdf", 'D');        
         
     } 
     
@@ -29,7 +29,7 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $this->SetXY(53, 10);
         $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("COTIZACION"), 0, 0, 'C', 1);
+        $this->Cell(150, 7, utf8_decode("PEDIDO"), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -44,11 +44,11 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
         
-        $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
-        $arCotizacion = self::$em->getRepository('BrasaTurnoBundle:TurCotizacion')->find(self::$codigoCotizacion);        
+        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $arPedido = self::$em->getRepository('BrasaTurnoBundle:TurPedido')->find(self::$codigoPedido);        
         
-        $arCotizacionDetalles = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
-        $arCotizacionDetalles = self::$em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array('codigoCotizacionFk' => self::$codigoCotizacion));
+        $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalles = self::$em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => self::$codigoPedido));
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
         
@@ -58,37 +58,37 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "NUMERO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getCodigoCotizacionPk(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arPedido->getCodigoPedidoPk(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "FECHA:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arCotizacion->getFecha()->format('Y/m/d'), 1, 0, 'L', 1);       
+        $this->Cell(65, 4, $arPedido->getFecha()->format('Y/m/d'), 1, 0, 'L', 1);       
 
         $this->SetXY(10, $intY + 4);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "NIT:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getNit(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arPedido->getTerceroRel()->getNit(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 4, "VENCE:" , 1, 0, 'L', 1);
+        $this->Cell(30, 4, "" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arCotizacion->getFechaVence()->format('Y/m/d'), 1, 0, 'L', 1);               
+        $this->Cell(65, 4, '', 1, 0, 'L', 1);               
         
         $this->SetXY(10, $intY + 8);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "CLIENTE:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getNombreCorto(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arPedido->getTerceroRel()->getNombreCorto(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CONTACTO:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getContactoCliente(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arPedido->getTerceroRel()->getContactoCliente(), 1, 0, 'L', 1);
         
         $this->SetXY(10, $intY + 12);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "DIRECCION:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getDireccion(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arPedido->getTerceroRel()->getDireccion(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CARGO:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -108,17 +108,17 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "TELEFONO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getTelefono(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arPedido->getTerceroRel()->getTelefono(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CELULAR:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getCelular(), 1, 0, 'L', 1);                
+        $this->Cell(65, 4, $arPedido->getTerceroRel()->getCelular(), 1, 0, 'L', 1);                
         
         $this->SetXY(10, $intY + 24);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "EMAIL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getEmail(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arPedido->getTerceroRel()->getEmail(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, '' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -153,62 +153,62 @@ class FormatoCotizacion extends \FPDF_FPDF {
     }
 
     public function Body($pdf) {
-        $arCotizacionDetalles = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
-        $arCotizacionDetalles = self::$em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array('codigoCotizacionFk' => self::$codigoCotizacion));
+        $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalles = self::$em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => self::$codigoPedido));
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
-        foreach ($arCotizacionDetalles as $arCotizacionDetalle) {            
-            $pdf->Cell(10, 4, $arCotizacionDetalle->getCodigoCotizacionDetallePk(), 1, 0, 'L');
-            $pdf->Cell(30, 4, $arCotizacionDetalle->getTurnoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(20, 4, $arCotizacionDetalle->getModalidadServicioRel()->getNombre(), 1, 0, 'L');                
-            $pdf->Cell(10, 4, $arCotizacionDetalle->getPeriodoRel()->getNombre(), 1, 0, 'L');                
-            $pdf->Cell(15, 4, $arCotizacionDetalle->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');                
-            $pdf->Cell(15, 4, $arCotizacionDetalle->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');                                  
-            $pdf->Cell(10, 4, number_format($arCotizacionDetalle->getCantidad(), 0, '.', ','), 1, 0, 'R');                
-            if($arCotizacionDetalle->getLunes() == 1) {
+        foreach ($arPedidoDetalles as $arPedidoDetalle) {            
+            $pdf->Cell(10, 4, $arPedidoDetalle->getCodigoPedidoDetallePk(), 1, 0, 'L');
+            $pdf->Cell(30, 4, $arPedidoDetalle->getTurnoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arPedidoDetalle->getModalidadServicioRel()->getNombre(), 1, 0, 'L');                
+            $pdf->Cell(10, 4, $arPedidoDetalle->getPeriodoRel()->getNombre(), 1, 0, 'L');                
+            $pdf->Cell(15, 4, $arPedidoDetalle->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');                
+            $pdf->Cell(15, 4, $arPedidoDetalle->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');                                  
+            $pdf->Cell(10, 4, number_format($arPedidoDetalle->getCantidad(), 0, '.', ','), 1, 0, 'R');                
+            if($arPedidoDetalle->getLunes() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  
             } else {
                 $pdf->Cell(5, 4, 'NO', 1, 0, 'L');                                  
             }
-            if($arCotizacionDetalle->getMartes() == 1) {
+            if($arPedidoDetalle->getMartes() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  
             } else {
                 $pdf->Cell(5, 4, 'NO', 1, 0, 'L');                                  
             }
-            if($arCotizacionDetalle->getMiercoles() == 1) {
+            if($arPedidoDetalle->getMiercoles() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  
             } else {
                 $pdf->Cell(5, 4, 'NO', 1, 0, 'L');                                  
             }
-            if($arCotizacionDetalle->getJueves() == 1) {
+            if($arPedidoDetalle->getJueves() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  
             } else {
                 $pdf->Cell(5, 4, 'NO', 1, 0, 'L');                                  
             }
-            if($arCotizacionDetalle->getViernes() == 1) {
+            if($arPedidoDetalle->getViernes() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  
             } else {
                 $pdf->Cell(5, 4, 'NO', 1, 0, 'L');                                  
             }
-            if($arCotizacionDetalle->getSabado() == 1) {
+            if($arPedidoDetalle->getSabado() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  
             } else {
                 $pdf->Cell(5, 4, 'NO', 1, 0, 'L');                                  
             }
-            if($arCotizacionDetalle->getDomingo() == 1) {
+            if($arPedidoDetalle->getDomingo() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  
             } else {
                 $pdf->Cell(5, 4, 'NO', 1, 0, 'L');                                  
             }
-            if($arCotizacionDetalle->getFestivo() == 1) {
+            if($arPedidoDetalle->getFestivo() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  
             } else {
                 $pdf->Cell(5, 4, 'NO', 1, 0, 'L');                                  
             }            
-            $pdf->Cell(8, 4, $arCotizacionDetalle->getHoras(), 1, 0, 'R');                                  
-            $pdf->Cell(8, 4, $arCotizacionDetalle->getHorasDiurnas(), 1, 0, 'R');                                  
-            $pdf->Cell(8, 4, $arCotizacionDetalle->getHorasNocturnas(), 1, 0, 'R');                                  
-            $pdf->Cell(15, 4, number_format($arCotizacionDetalle->getVrTotal(), 0, '.', ','), 1, 0, 'R');                
+            $pdf->Cell(8, 4, $arPedidoDetalle->getHoras(), 1, 0, 'R');                                  
+            $pdf->Cell(8, 4, $arPedidoDetalle->getHorasDiurnas(), 1, 0, 'R');                                  
+            $pdf->Cell(8, 4, $arPedidoDetalle->getHorasNocturnas(), 1, 0, 'R');                                  
+            $pdf->Cell(15, 4, number_format($arPedidoDetalle->getVrTotal(), 0, '.', ','), 1, 0, 'R');                
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }

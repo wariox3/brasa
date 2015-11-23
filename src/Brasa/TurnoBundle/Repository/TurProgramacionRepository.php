@@ -6,10 +6,13 @@ use Doctrine\ORM\EntityRepository;
 
 class TurProgramacionRepository extends EntityRepository {
     
-    public function listaDQL() {
+    public function listaDQL($codigoProgramacion) {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurProgramacion p WHERE p.codigoProgramacionPk <> 0";
+        if($codigoProgramacion != "") {
+            $dql = $dql . " AND p.codigoProgramacionPk = " . $codigoProgramacion;
+        }
         return $dql;
-    }
+    }    
     
     public function liquidar($codigoProgramacion) {        
         $em = $this->getEntityManager();        
@@ -217,4 +220,15 @@ class TurProgramacionRepository extends EntityRepository {
         $em->flush();
         return true;
     }        
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigo);
+                $em->remove($arProgramacion);
+            }
+            $em->flush();
+        }
+    }         
 }

@@ -8,7 +8,8 @@ use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
 class PedidoController extends Controller
 {
     var $strListaDql = "";
-
+    var $codigoPedido = "";
+    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -16,18 +17,20 @@ class PedidoController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if ($form->get('BtnEliminar')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurPedido')->eliminarExamen($arrSeleccionados);
+        if ($form->isValid()) {            
+            if ($form->get('BtnEliminar')->isClicked()) {                
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_pedido_lista'));                 
+                
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $this->listar();
+                $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
-                $this->listar();
+                $this->lista();
                 $this->generarExcel();
             }
         }
@@ -50,15 +53,25 @@ class PedidoController extends Controller
         $form = $this->createForm(new TurPedidoType, $arPedido);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arPedido = $form->getData();
-            $em->persist($arPedido);
-            $em->flush();
+            $arPedido = $form->getData();            
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {
+                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
+                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arTercero) > 0) {
+                    $arPedido->setTerceroRel($arTercero);
+                    $em->persist($arPedido);
+                    $em->flush();
 
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_pedido_nuevo', array('codigoPedido' => 0 )));
-            } else {
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $arPedido->getCodigoPedidoPk())));
-            }
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_tur_pedido_nuevo', array('codigoPedido' => 0 )));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $arPedido->getCodigoPedidoPk())));
+                    }                       
+                } else {
+                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
+                }                             
+            }            
         }
         return $this->render('BrasaTurnoBundle:Movimientos/Pedido:nuevo.html.twig', array(
             'arPedido' => $arPedido,
@@ -74,7 +87,35 @@ class PedidoController extends Controller
         $form = $this->formularioDetalle($arPedido);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if ($form->get('BtnDetalleActualizar')->isClicked()) {
+            if($form->get('BtnAutorizar')->isClicked()) {            
+                if($arPedido->getEstadoAutorizado() == 0) {
+                    if($em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->numeroRegistros($codigoPedido) > 0) {
+                        $arPedido->setEstadoAutorizado(1);
+                        $em->persist($arPedido);
+                        $em->flush();                        
+                    } else {
+                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al pedido', $this);
+                    }                    
+                }
+                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+            }    
+            if($form->get('BtnDesAutorizar')->isClicked()) {            
+                if($arPedido->getEstadoAutorizado() == 1) {
+                    $arPedido->setEstadoAutorizado(0);
+                    $em->persist($arPedido);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                }
+            }   
+            if($form->get('BtnAprobar')->isClicked()) {            
+                if($arPedido->getEstadoAutorizado() == 1) {
+                    $arPedido->setEstadoAprobado(1);
+                    $em->persist($arPedido);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                }
+            }            
+            if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {
@@ -83,14 +124,47 @@ class PedidoController extends Controller
                     $arPedidoDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
                     $arPedidoDetalle->setFechaDesde(date_create($arrControles['TxtFechaDesde'.$intCodigo]));
                     $arPedidoDetalle->setFechaHasta(date_create($arrControles['TxtFechaHasta'.$intCodigo]));
-                    $arPedidoDetalle->setLunes($arrControles['cboLunes'.$intCodigo]);
-                    $arPedidoDetalle->setMartes($arrControles['cboMartes'.$intCodigo]);
-                    $arPedidoDetalle->setMiercoles($arrControles['cboMiercoles'.$intCodigo]);
-                    $arPedidoDetalle->setJueves($arrControles['cboJueves'.$intCodigo]);
-                    $arPedidoDetalle->setViernes($arrControles['cboViernes'.$intCodigo]);
-                    $arPedidoDetalle->setSabado($arrControles['cboSabado'.$intCodigo]);
-                    $arPedidoDetalle->setDomingo($arrControles['cboDomingo'.$intCodigo]);
-                    $arPedidoDetalle->setFestivo($arrControles['cboFestivo'.$intCodigo]);
+                    
+                    if(isset($arrControles['chkLunes'.$intCodigo])) {
+                        $arPedidoDetalle->setLunes(1);
+                    } else {
+                        $arPedidoDetalle->setLunes(0);
+                    }
+                    if(isset($arrControles['chkMartes'.$intCodigo])) {
+                        $arPedidoDetalle->setMartes(1);
+                    } else {
+                        $arPedidoDetalle->setMartes(0);
+                    }
+                    if(isset($arrControles['chkMiercoles'.$intCodigo])) {
+                        $arPedidoDetalle->setMiercoles(1);
+                    } else {
+                        $arPedidoDetalle->setMiercoles(0);
+                    }
+                    if(isset($arrControles['chkJueves'.$intCodigo])) {
+                        $arPedidoDetalle->setJueves(1);
+                    } else {
+                        $arPedidoDetalle->setJueves(0);
+                    }
+                    if(isset($arrControles['chkViernes'.$intCodigo])) {
+                        $arPedidoDetalle->setViernes(1);
+                    } else {
+                        $arPedidoDetalle->setViernes(0);
+                    }
+                    if(isset($arrControles['chkSabado'.$intCodigo])) {
+                        $arPedidoDetalle->setSabado(1);
+                    } else {
+                        $arPedidoDetalle->setSabado(0);
+                    }
+                    if(isset($arrControles['chkDomingo'.$intCodigo])) {
+                        $arPedidoDetalle->setDomingo(1);
+                    } else {
+                        $arPedidoDetalle->setDomingo(0);
+                    }
+                    if(isset($arrControles['chkFestivo'.$intCodigo])) {
+                        $arPedidoDetalle->setFestivo(1);
+                    } else {
+                        $arPedidoDetalle->setFestivo(0);
+                    }                    
                     $em->persist($arPedidoDetalle);
                 }
                 $em->flush();
@@ -102,6 +176,14 @@ class PedidoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->eliminarSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
                 return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+            }
+            if($form->get('BtnImprimir')->isClicked()) {
+                if($arPedido->getEstadoAutorizado() == 1) {
+                    $objPedido = new \Brasa\TurnoBundle\Formatos\FormatoPedido();
+                    $objPedido->Generar($this, $codigoPedido);
+                } else {
+                    $objMensaje->Mensaje("error", "No puede imprimir una cotizacion sin estar autorizada", $this);
+                }
             }            
         }
 
@@ -147,24 +229,18 @@ class PedidoController extends Controller
 
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL($this->codigoPedido);
     }
 
-    private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroAprobadoExamen', $form->get('estadoAprobado')->getData());
+    private function filtrar ($form) {                
+        $this->codigoPedido = $form->get('TxtCodigo')->getData();
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoExamen')))
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido))            
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -172,14 +248,31 @@ class PedidoController extends Controller
         return $form;
     }
 
-    private function formularioDetalle($ar) {
+    private function formularioDetalle($ar) {        
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
+        $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => true);        
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        if($ar->getEstadoAutorizado() == 1) {
+        
+        if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;            
+            $arrBotonAprobar['disabled'] = false;            
+            $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonImprimir['disabled'] = true;
         }
+        if($ar->getEstadoAprobado() == 1) {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonAprobar['disabled'] = true;            
+        } 
         $form = $this->createFormBuilder()
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
+                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)                 
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
@@ -189,8 +282,7 @@ class PedidoController extends Controller
 
     private function generarExcel() {
         ob_clean();
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -202,115 +294,26 @@ class PedidoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIG0')
-                    ->setCellValue('B1', 'IDENTIFICACION')
-                    ->setCellValue('C1', 'NOMBRES Y APELLIDOS')
-                    ->setCellValue('D1', 'EDAD')
-                    ->setCellValue('E1', 'SEXO')
-                    ->setCellValue('F1', 'CARGO')
-                    ->setCellValue('G1', 'CENTRO COSTOS')
-                    ->setCellValue('H1', 'ENTIDAD / LABORATORIO')
-                    ->setCellValue('I1', 'CIUDAD')
-                    ->setCellValue('J1', 'FECHA EXAMEN')
-                    ->setCellValue('K1', 'AÑO EXAMEN')
-                    ->setCellValue('L1', 'MES EXAMEN')
-                    ->setCellValue('M1', 'DIA EXAMEN')
-                    ->setCellValue('N1', 'TIPO EXAMEN')
-                    ->setCellValue('O1', 'TOTAL')
-                    ->setCellValue('P1', 'APROBADO')
-                    ->setCellValue('Q1', 'COMENTARIOS GENERALES')
-                    ->setCellValue('R1', 'EXAMEN 1')
-                    ->setCellValue('S1', 'ESTADO')
-                    ->setCellValue('T1', 'OBSERVACIONES')
-                    ->setCellValue('U1', 'EXAMEN 2')
-                    ->setCellValue('V1', 'ESTADO')
-                    ->setCellValue('W1', 'OBSERVACIONES')
-                    ->setCellValue('X1', 'EXAMEN 3')
-                    ->setCellValue('Y1', 'ESTADO')
-                    ->setCellValue('Z1', 'OBSERVACIONES')
-                    ->setCellValue('AA1', 'EXAMEN 4')
-                    ->setCellValue('AB1', 'ESTADO')
-                    ->setCellValue('AC1', 'OBSERVACIONES')
-                    ->setCellValue('AD1', 'EXAMEN 5')
-                    ->setCellValue('AE1', 'ESTADO')
-                    ->setCellValue('AF1', 'OBSERVACIONES')
-                    ->setCellValue('AG1', 'EXAMEN 6')
-                    ->setCellValue('AH1', 'ESTADO')
-                    ->setCellValue('AI1', 'OBSERVACIONES');
+                    ->setCellValue('B1', 'CLIENTE');
 
         $i = 2;
-
         $query = $em->createQuery($this->strListaDql);
-                $arPedidos = new \Brasa\TurnoBundle\Entity\RhuDotacion();
-                $arPedidos = $query->getResult();
+        $arPedidos = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $arPedidos = $query->getResult();
 
-        foreach ($arPedidos as $arPedido) {
-            $strNombreCentroCosto = "";
-            if($arPedido->getCentroCostoRel()) {
-                $strNombreCentroCosto = $arPedido->getCentroCostoRel()->getNombre();
-            }
-            $strNombreEntidad = "SIN ENTIDAD";
-            if($arPedido->getEntidadExamenRel()) {
-                $strNombreEntidad = $arPedido->getEntidadExamenRel()->getNombre();
-            }
-            if ($arPedido->getEstadoAprobado() == 1){
-                $aprobado = "SI";
-            } else {
-                $aprobado = "NO";
-            }
-            //Calculo edad
-            $varFechaNacimientoAnio = $arPedido->getFechaNacimiento()->format('Y');
-            $varFechaNacimientoMes =  $arPedido->getFechaNacimiento()->format('m');
-            $varMesActual = date('m');
-            if ($varMesActual >= $varFechaNacimientoMes){
-                $varEdad = date('Y') - $varFechaNacimientoAnio;
-            } else {
-                $varEdad = date('Y') - $varFechaNacimientoAnio -1;
-            }
-            //Fin calculo edad
-            $arDetalleExamen = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoExamenFk' => $arPedido->getCodigoExamenPk()));
+        foreach ($arPedidos as $arPedido) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPedido->getCodigoExamenPk())
-                    ->setCellValue('B' . $i, $arPedido->getIdentificacion())
-                    ->setCellValue('C' . $i, $arPedido->getNombreCorto())
-                    ->setCellValue('D' . $i, $varEdad)
-                    ->setCellValue('E' . $i, $arPedido->getCodigoSexoFk())
-                    ->setCellValue('F' . $i, $arPedido->getCargoDescripcion())
-                    ->setCellValue('G' . $i, $arPedido->getCentroCostoRel()->getNombre())
-                    ->setCellValue('H' . $i, $strNombreEntidad)
-                    ->setCellValue('I' . $i, $arPedido->getCiudadRel()->getNombre())
-                    ->setCellValue('J' . $i, $arPedido->getFecha())
-                    ->setCellValue('K' . $i, $arPedido->getFecha()->format('Y'))
-                    ->setCellValue('L' . $i, $arPedido->getFecha()->format('m'))
-                    ->setCellValue('M' . $i, $arPedido->getFecha()->format('d'))
-                    ->setCellValue('N' . $i, $arPedido->getExamenClaseRel()->getNombre())
-                    ->setCellValue('O' . $i, $arPedido->getVrTotal())
-                    ->setCellValue('P' . $i, $aprobado)
-                    ->setCellValue('Q' . $i, $arPedido->getComentarios());
-                    $array = array();
-                    foreach ($arDetalleExamen as $arDetalleExamen){
-                        $array[] = $arDetalleExamen->getCodigoExamenTipoFk();
-                        $array[] = $arDetalleExamen->getEstadoAprobado();
-                        $array[] = $arDetalleExamen->getComentarios();
-                    }
-
-
-                    foreach ($array as $posicion=>$jugador){
-                        $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('R' . $i, $jugador)
-                            ->setCellValue('S' . $i, $jugador)
-                            ->setCellValue('T' . $i, $jugador)
-                            ->setCellValue('U' . $i, $jugador)
-                            ->setCellValue('V' . $i, $jugador);
-                    }
+                    ->setCellValue('A' . $i, $arPedido->getCodigoPedidoPk())
+                    ->setCellValue('B' . $i, $arPedido->getTerceroRel()->getNombreCorto());
 
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Examen');
+        $objPHPExcel->getActiveSheet()->setTitle('Pedidos');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Examenes.xlsx"');
+        header('Content-Disposition: attachment;filename="Pedidos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

@@ -22,10 +22,25 @@ class TurPedido
      */    
     private $fecha;    
     
+    /**
+     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
+     */    
+    private $codigoTerceroFk;    
+    
+    /**
+     * @ORM\Column(name="codigo_sector_fk", type="integer", nullable=true)
+     */    
+    private $codigoSectorFk;    
+    
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;     
+    private $estadoAutorizado = false;     
+    
+    /**     
+     * @ORM\Column(name="estado_aprobado", type="boolean")
+     */    
+    private $estadoAprobado = false;     
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -56,6 +71,18 @@ class TurPedido
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;         
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="turPedidosTerceroRel")
+     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
+     */
+    protected $terceroRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="pedidosSectorRel")
+     * @ORM\JoinColumn(name="codigo_sector_fk", referencedColumnName="codigo_sector_pk")
+     */
+    protected $sectorRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="pedidoRel", cascade={"persist", "remove"})
@@ -106,6 +133,54 @@ class TurPedido
     }
 
     /**
+     * Set codigoTerceroFk
+     *
+     * @param integer $codigoTerceroFk
+     *
+     * @return TurPedido
+     */
+    public function setCodigoTerceroFk($codigoTerceroFk)
+    {
+        $this->codigoTerceroFk = $codigoTerceroFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTerceroFk
+     *
+     * @return integer
+     */
+    public function getCodigoTerceroFk()
+    {
+        return $this->codigoTerceroFk;
+    }
+
+    /**
+     * Set codigoSectorFk
+     *
+     * @param integer $codigoSectorFk
+     *
+     * @return TurPedido
+     */
+    public function setCodigoSectorFk($codigoSectorFk)
+    {
+        $this->codigoSectorFk = $codigoSectorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSectorFk
+     *
+     * @return integer
+     */
+    public function getCodigoSectorFk()
+    {
+        return $this->codigoSectorFk;
+    }
+
+    /**
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
@@ -127,6 +202,30 @@ class TurPedido
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoAprobado
+     *
+     * @param boolean $estadoAprobado
+     *
+     * @return TurPedido
+     */
+    public function setEstadoAprobado($estadoAprobado)
+    {
+        $this->estadoAprobado = $estadoAprobado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAprobado
+     *
+     * @return boolean
+     */
+    public function getEstadoAprobado()
+    {
+        return $this->estadoAprobado;
     }
 
     /**
@@ -271,6 +370,54 @@ class TurPedido
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set terceroRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     *
+     * @return TurPedido
+     */
+    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    {
+        $this->terceroRel = $terceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     */
+    public function getTerceroRel()
+    {
+        return $this->terceroRel;
+    }
+
+    /**
+     * Set sectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
+     *
+     * @return TurPedido
+     */
+    public function setSectorRel(\Brasa\TurnoBundle\Entity\TurSector $sectorRel = null)
+    {
+        $this->sectorRel = $sectorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sectorRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSector
+     */
+    public function getSectorRel()
+    {
+        return $this->sectorRel;
     }
 
     /**

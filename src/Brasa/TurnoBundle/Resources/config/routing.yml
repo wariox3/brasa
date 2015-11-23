@@ -57,3 +57,7 @@ brs_tur_pedido_detalle:
 brs_tur_pedido_detalle_nuevo:
    path:     /tur/pedido/detalle/nuevo/{codigoPedido}/{codigoPedidoDetalle}
    defaults: { _controller: BrasaTurnoBundle:Pedido:detalleNuevo }     
+   
+brs_tur_buscar_recurso:
+    pattern:  /turno/buscar/recurso/{campoCodigo}
+    defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:lista }    

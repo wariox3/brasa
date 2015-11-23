@@ -14,7 +14,10 @@
     {{ form_errors(form) }}
     <div class="btn-toolbar" style="float:left">
         <div class="btn-group">
+            {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         </div>
     </div>
     <br /><br />
@@ -31,19 +34,19 @@
                 </tr>
                 <tr>
                     <td class="titulo">CLIENTE:</td>
-                    <td class="td-in-well">{{ arPedido.clienteRel.nombreCorto }}</td>
+                    <td class="td-in-well">{{ arPedido.terceroRel.nombreCorto }}</td>
                     <td class="titulo" >HORAS DIURNAS:</td>
                     <td align="right">{{ arPedido.horasDiurnas | number_format(0, '.', ',')}}</td>
                 </tr> 
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">SECTOR:</td>
+                    <td class="td-in-well">{{ arPedido.sectorRel.nombre }}</td>
                     <td class="titulo" >HORAS NOCTURNAS:</td>
                     <td align="right">{{ arPedido.horasNocturnas | number_format(0, '.', ',')}}</td>
                 </tr>                 
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">FECHA:</td>
+                    <td class="td-in-well">{{ arPedido.fecha |date("Y/m/d") }}</td>
                     <td class="titulo" >HORAS:</td>
                     <td align="right">{{ arPedido.horas | number_format(0, '.', ',')}}</td>
                 </tr>                
@@ -90,6 +93,7 @@
                 <th>DIAS</th>
                 <th>VALOR</th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arPedidoDetalle in arPedidoDetalle %}
                 <tr>
@@ -101,62 +105,33 @@
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.fechaDesde | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.fechaHasta | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                                                
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="5" style="width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td>
-                            <select name="cboLunes{{ arPedidoDetalle.codigoPedidoDetallePk }}">
-                                <option value="0" {% if arPedidoDetalle.lunes == 0 %} selected="true" {% endif %}>NO</option>
-                                <option value="1" {% if arPedidoDetalle.lunes == 1 %} selected="true" {% endif %}>SI</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="cboMartes{{ arPedidoDetalle.codigoPedidoDetallePk }}">
-                                <option value="0" {% if arPedidoDetalle.martes == 0 %} selected="true" {% endif %}>NO</option>
-                                <option value="1" {% if arPedidoDetalle.martes == 1 %} selected="true" {% endif %}>SI</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="cboMiercoles{{ arPedidoDetalle.codigoPedidoDetallePk }}">
-                                <option value="0" {% if arPedidoDetalle.miercoles == 0 %} selected="true" {% endif %}>NO</option>
-                                <option value="1" {% if arPedidoDetalle.miercoles == 1 %} selected="true" {% endif %}>SI</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="cboJueves{{ arPedidoDetalle.codigoPedidoDetallePk }}">
-                                <option value="0" {% if arPedidoDetalle.jueves == 0 %} selected="true" {% endif %}>NO</option>
-                                <option value="1" {% if arPedidoDetalle.jueves == 1 %} selected="true" {% endif %}>SI</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="cboViernes{{ arPedidoDetalle.codigoPedidoDetallePk }}">
-                                <option value="0" {% if arPedidoDetalle.viernes == 0 %} selected="true" {% endif %}>NO</option>
-                                <option value="1" {% if arPedidoDetalle.viernes == 1 %} selected="true" {% endif %}>SI</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="cboSabado{{ arPedidoDetalle.codigoPedidoDetallePk }}">
-                                <option value="0" {% if arPedidoDetalle.sabado == 0 %} selected="true" {% endif %}>NO</option>
-                                <option value="1" {% if arPedidoDetalle.sabado == 1 %} selected="true" {% endif %}>SI</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="cboDomingo{{ arPedidoDetalle.codigoPedidoDetallePk }}">
-                                <option value="0" {% if arPedidoDetalle.domingo == 0 %} selected="true" {% endif %}>NO</option>
-                                <option value="1" {% if arPedidoDetalle.domingo == 1 %} selected="true" {% endif %}>SI</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="cboFestivo{{ arPedidoDetalle.codigoPedidoDetallePk }}">
-                                <option value="0" {% if arPedidoDetalle.festivo == 0 %} selected="true" {% endif %}>NO</option>
-                                <option value="1" {% if arPedidoDetalle.festivo == 1 %} selected="true" {% endif %}>SI</option>
-                            </select>
-                        </td>                    
-                    {% else %}
+                        <td><input type="checkbox" name="chkLunes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.lunes == 1 %} checked="true" {% endif %}></td>
+                        <td><input type="checkbox" name="chkMartes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.martes == 1 %} checked="true" {% endif %}></td>
+                        <td><input type="checkbox" name="chkMiercoles{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
+                        <td><input type="checkbox" name="chkJueves{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.jueves == 1 %} checked="true" {% endif %}></td>
+                        <td><input type="checkbox" name="chkViernes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.viernes == 1 %} checked="true" {% endif %}></td>
+                        <td><input type="checkbox" name="chkSabado{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.sabado == 1 %} checked="true" {% endif %}></td>
+                        <td><input type="checkbox" name="chkDomingo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.domingo == 1 %} checked="true" {% endif %}></td>
+                        <td><input type="checkbox" name="chkFestivo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
+                    {% else %}                        
+                        <td>{{ arPedidoDetalle.fechaDesde | date('Y/m/d') }}</td>    
+                        <td>{{ arPedidoDetalle.fechaHasta | date('Y/m/d') }}</td>    
                         <td>{{ arPedidoDetalle.cantidad  }}</td>
+                        <td>{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
+                        <td>{% if arPedidoDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
+                        <td>{% if arPedidoDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
+                        <td>{% if arPedidoDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
+                        <td>{% if arPedidoDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
+                        <td>{% if arPedidoDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
+                        <td>{% if arPedidoDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
+                        <td>{% if arPedidoDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>
                     {% endif %}
                     <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidoDetalle.vrTotal | number_format(0, '.', ',') }}</td> 
+                    <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
                 </tr>
             {% endfor %}
@@ -164,9 +139,11 @@
             </div>
         </div>
         <div class="btn-toolbar" style="float: right">
-        <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
-        </div>
+        {% if arPedido.estadoAutorizado == 0 %}
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+            </div>
+        {% endif %}            
         <div class="btn-group">
             {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         </div>        

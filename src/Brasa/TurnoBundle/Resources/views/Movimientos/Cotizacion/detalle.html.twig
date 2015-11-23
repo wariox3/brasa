@@ -17,6 +17,7 @@
             {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         </div>
     </div>
     <br /><br />
@@ -130,7 +131,7 @@
                     <td style="text-align: right">{{ arCotizacionDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCotizacionDetalle.dias | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCotizacionDetalle.vrTotal | number_format(0, '.', ',') }}</td> 
-                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_cotizacion_detalle_nuevo', {'codigoCotizacion': arCotizacion.codigoCotizacionPk, 'codigoCotizacionDetalle': arCotizacionDetalle.codigoCotizacionDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                    <td>{% if arCotizacion.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_cotizacion_detalle_nuevo', {'codigoCotizacion': arCotizacion.codigoCotizacionPk, 'codigoCotizacionDetalle': arCotizacionDetalle.codigoCotizacionDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" /></td>
                 </tr>
             {% endfor %}
@@ -138,9 +139,11 @@
             </div>
         </div>
         <div class="btn-toolbar" style="float: right">
-        <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_cotizacion_detalle_nuevo', {'codigoCotizacion': arCotizacion.codigoCotizacionPk, 'codigoCotizacionDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
-        </div>
+        {% if arCotizacion.estadoAutorizado == 0 %}
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_cotizacion_detalle_nuevo', {'codigoCotizacion': arCotizacion.codigoCotizacionPk, 'codigoCotizacionDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+            </div>
+        {% endif %}       
         <div class="btn-group">
             {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         </div>        

@@ -6,10 +6,10 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPedidoDetalleRepository extends EntityRepository {
 
-    public function pendientesCliente($codigoCliente) {
+    public function pendientesCliente($codigoTercero) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "
-                . "WHERE p.codigoClienteFk = " . $codigoCliente;
+                . "WHERE p.codigoTerceroFk = " . $codigoTercero;
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
         return $arResultado;                
@@ -26,5 +26,11 @@ class TurPedidoDetalleRepository extends EntityRepository {
         }
         
     }        
+    
+    public function numeroRegistros($codigo) {
+        $em = $this->getEntityManager();
+        $arDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigo));
+        return count($arDetalles);
+    }          
     
 }

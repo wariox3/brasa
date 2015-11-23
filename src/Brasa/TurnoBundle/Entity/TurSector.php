@@ -37,6 +37,10 @@ class TurSector
      */
     protected $cotizacionesSectorRel;     
     
+    /**
+     * @ORM\OneToMany(targetEntity="TurPedido", mappedBy="sectorRel")
+     */
+    protected $pedidosSectorRel;    
 
     /**
      * Constructor
@@ -160,5 +164,39 @@ class TurSector
     public function getCotizacionesSectorRel()
     {
         return $this->cotizacionesSectorRel;
+    }
+
+    /**
+     * Add pedidosSectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedido $pedidosSectorRel
+     *
+     * @return TurSector
+     */
+    public function addPedidosSectorRel(\Brasa\TurnoBundle\Entity\TurPedido $pedidosSectorRel)
+    {
+        $this->pedidosSectorRel[] = $pedidosSectorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosSectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedido $pedidosSectorRel
+     */
+    public function removePedidosSectorRel(\Brasa\TurnoBundle\Entity\TurPedido $pedidosSectorRel)
+    {
+        $this->pedidosSectorRel->removeElement($pedidosSectorRel);
+    }
+
+    /**
+     * Get pedidosSectorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosSectorRel()
+    {
+        return $this->pedidosSectorRel;
     }
 }

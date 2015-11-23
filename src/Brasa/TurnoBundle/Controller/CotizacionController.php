@@ -108,6 +108,14 @@ class CotizacionController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
                 }
+            }   
+            if($form->get('BtnAprobar')->isClicked()) {            
+                if($arCotizacion->getEstadoAutorizado() == 1) {
+                    $arCotizacion->setEstadoAprobado(1);
+                    $em->persist($arCotizacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
+                }
             }            
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
@@ -246,6 +254,7 @@ class CotizacionController extends Controller
 
     private function formularioDetalle($ar) {        
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
+        $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => true);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
@@ -253,16 +262,21 @@ class CotizacionController extends Controller
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
+            $arrBotonAprobar['disabled'] = false;            
             $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonImprimir['disabled'] = true;
         }
-        
+        if($ar->getEstadoAprobado() == 1) {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonAprobar['disabled'] = true;            
+        } 
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
+                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)                 
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)

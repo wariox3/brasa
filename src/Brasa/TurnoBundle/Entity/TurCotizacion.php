@@ -40,7 +40,12 @@ class TurCotizacion
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;     
+    private $estadoAutorizado = false;     
+
+    /**     
+     * @ORM\Column(name="estado_aprobado", type="boolean")
+     */    
+    private $estadoAprobado = false;    
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -89,6 +94,7 @@ class TurCotizacion
      */
     protected $cotizacionesDetallesCotizacionRel; 
 
+
     /**
      * Constructor
      */
@@ -129,6 +135,30 @@ class TurCotizacion
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set fechaVence
+     *
+     * @param \DateTime $fechaVence
+     *
+     * @return TurCotizacion
+     */
+    public function setFechaVence($fechaVence)
+    {
+        $this->fechaVence = $fechaVence;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVence
+     *
+     * @return \DateTime
+     */
+    public function getFechaVence()
+    {
+        return $this->fechaVence;
     }
 
     /**
@@ -201,6 +231,30 @@ class TurCotizacion
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoAprobado
+     *
+     * @param boolean $estadoAprobado
+     *
+     * @return TurCotizacion
+     */
+    public function setEstadoAprobado($estadoAprobado)
+    {
+        $this->estadoAprobado = $estadoAprobado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAprobado
+     *
+     * @return boolean
+     */
+    public function getEstadoAprobado()
+    {
+        return $this->estadoAprobado;
     }
 
     /**
@@ -427,29 +481,5 @@ class TurCotizacion
     public function getCotizacionesDetallesCotizacionRel()
     {
         return $this->cotizacionesDetallesCotizacionRel;
-    }
-
-    /**
-     * Set fechaVence
-     *
-     * @param \DateTime $fechaVence
-     *
-     * @return TurCotizacion
-     */
-    public function setFechaVence($fechaVence)
-    {
-        $this->fechaVence = $fechaVence;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaVence
-     *
-     * @return \DateTime
-     */
-    public function getFechaVence()
-    {
-        return $this->fechaVence;
     }
 }

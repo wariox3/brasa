@@ -80,42 +80,42 @@ class TurPedidoDetalle
     /**     
      * @ORM\Column(name="lunes", type="boolean")
      */    
-    private $lunes = 0;    
+    private $lunes = false;    
     
     /**     
      * @ORM\Column(name="martes", type="boolean")
      */    
-    private $martes = 0;        
+    private $martes = false;        
     
     /**     
      * @ORM\Column(name="miercoles", type="boolean")
      */    
-    private $miercoles = 0;        
+    private $miercoles = false;        
     
     /**     
      * @ORM\Column(name="jueves", type="boolean")
      */    
-    private $jueves = 0;        
+    private $jueves = false;        
     
     /**     
      * @ORM\Column(name="viernes", type="boolean")
      */    
-    private $viernes = 0;    
+    private $viernes = false;    
     
     /**     
      * @ORM\Column(name="sabado", type="boolean")
      */    
-    private $sabado = 0;        
+    private $sabado = false;        
     
     /**     
      * @ORM\Column(name="domingo", type="boolean")
      */    
-    private $domingo = 0;        
+    private $domingo = false;        
     
     /**     
      * @ORM\Column(name="festivo", type="boolean")
      */    
-    private $festivo = 0;        
+    private $festivo = false;        
     
     /**
      * @ORM\ManyToOne(targetEntity="TurPedido", inversedBy="pedidosDetallesPedidoRel")
@@ -145,6 +145,15 @@ class TurPedidoDetalle
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="pedidoDetalleRel")
      */
     protected $programacionesDetallesPedidoDetalleRel; 
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->programacionesDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoPedidoDetallePk
@@ -205,6 +214,54 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set codigoModalidadServicioFk
+     *
+     * @param integer $codigoModalidadServicioFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoModalidadServicioFk($codigoModalidadServicioFk)
+    {
+        $this->codigoModalidadServicioFk = $codigoModalidadServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoModalidadServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoModalidadServicioFk()
+    {
+        return $this->codigoModalidadServicioFk;
+    }
+
+    /**
+     * Set codigoPeriodoFk
+     *
+     * @param integer $codigoPeriodoFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoPeriodoFk($codigoPeriodoFk)
+    {
+        $this->codigoPeriodoFk = $codigoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPeriodoFk()
+    {
+        return $this->codigoPeriodoFk;
+    }
+
+    /**
      * Set fechaDesde
      *
      * @param \DateTime $fechaDesde
@@ -250,6 +307,30 @@ class TurPedidoDetalle
     public function getFechaHasta()
     {
         return $this->fecha_hasta;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
     }
 
     /**
@@ -346,6 +427,30 @@ class TurPedidoDetalle
     public function getCantidad()
     {
         return $this->cantidad;
+    }
+
+    /**
+     * Set vrTotal
+     *
+     * @param float $vrTotal
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrTotal($vrTotal)
+    {
+        $this->vrTotal = $vrTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotal
+     *
+     * @return float
+     */
+    public function getVrTotal()
+    {
+        return $this->vrTotal;
     }
 
     /**
@@ -589,58 +694,51 @@ class TurPedidoDetalle
     }
 
     /**
-     * Set dias
+     * Set modalidadServicioRel
      *
-     * @param integer $dias
+     * @param \Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel
      *
      * @return TurPedidoDetalle
      */
-    public function setDias($dias)
+    public function setModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel = null)
     {
-        $this->dias = $dias;
+        $this->modalidadServicioRel = $modalidadServicioRel;
 
         return $this;
     }
 
     /**
-     * Get dias
+     * Get modalidadServicioRel
      *
-     * @return integer
+     * @return \Brasa\TurnoBundle\Entity\TurModalidadServicio
      */
-    public function getDias()
+    public function getModalidadServicioRel()
     {
-        return $this->dias;
+        return $this->modalidadServicioRel;
     }
 
     /**
-     * Set vrTotal
+     * Set periodoRel
      *
-     * @param float $vrTotal
+     * @param \Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel
      *
      * @return TurPedidoDetalle
      */
-    public function setVrTotal($vrTotal)
+    public function setPeriodoRel(\Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel = null)
     {
-        $this->vrTotal = $vrTotal;
+        $this->periodoRel = $periodoRel;
 
         return $this;
     }
 
     /**
-     * Get vrTotal
+     * Get periodoRel
      *
-     * @return float
+     * @return \Brasa\TurnoBundle\Entity\TurPeriodo
      */
-    public function getVrTotal()
+    public function getPeriodoRel()
     {
-        return $this->vrTotal;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->programacionesDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->periodoRel;
     }
 
     /**
@@ -675,101 +773,5 @@ class TurPedidoDetalle
     public function getProgramacionesDetallesPedidoDetalleRel()
     {
         return $this->programacionesDetallesPedidoDetalleRel;
-    }
-
-    /**
-     * Set codigoModalidadServicioFk
-     *
-     * @param integer $codigoModalidadServicioFk
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setCodigoModalidadServicioFk($codigoModalidadServicioFk)
-    {
-        $this->codigoModalidadServicioFk = $codigoModalidadServicioFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoModalidadServicioFk
-     *
-     * @return integer
-     */
-    public function getCodigoModalidadServicioFk()
-    {
-        return $this->codigoModalidadServicioFk;
-    }
-
-    /**
-     * Set modalidadServicioRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel = null)
-    {
-        $this->modalidadServicioRel = $modalidadServicioRel;
-
-        return $this;
-    }
-
-    /**
-     * Get modalidadServicioRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurModalidadServicio
-     */
-    public function getModalidadServicioRel()
-    {
-        return $this->modalidadServicioRel;
-    }
-
-    /**
-     * Set codigoPeriodoFk
-     *
-     * @param integer $codigoPeriodoFk
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setCodigoPeriodoFk($codigoPeriodoFk)
-    {
-        $this->codigoPeriodoFk = $codigoPeriodoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPeriodoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPeriodoFk()
-    {
-        return $this->codigoPeriodoFk;
-    }
-
-    /**
-     * Set periodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setPeriodoRel(\Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel = null)
-    {
-        $this->periodoRel = $periodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get periodoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPeriodo
-     */
-    public function getPeriodoRel()
-    {
-        return $this->periodoRel;
     }
 }

@@ -15,5 +15,11 @@ class TurProgramacionDetalleRepository extends EntityRepository {
             $em->flush();       
         }
         
-    }    
+    }  
+    
+    public function numeroRegistros($codigo) {
+        $em = $this->getEntityManager();
+        $arDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => $codigo));
+        return count($arDetalles);
+    }              
 }

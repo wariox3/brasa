@@ -22,10 +22,20 @@ class TurProgramacion
      */    
     private $fecha;    
     
+    /**
+     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
+     */    
+    private $codigoTerceroFk;     
+    
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;     
+    private $estadoAutorizado = false;        
+
+    /**     
+     * @ORM\Column(name="estado_aprobado", type="boolean")
+     */    
+    private $estadoAprobado = false;    
     
     /**
      * @ORM\Column(name="horas", type="integer")
@@ -36,6 +46,12 @@ class TurProgramacion
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;             
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="turProgramacionesTerceroRel")
+     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
+     */
+    protected $terceroRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="programacionRel", cascade={"persist", "remove"})
@@ -188,5 +204,77 @@ class TurProgramacion
     public function getProgramacionesDetallesProgramacionRel()
     {
         return $this->programacionesDetallesProgramacionRel;
+    }
+
+    /**
+     * Set codigoTerceroFk
+     *
+     * @param integer $codigoTerceroFk
+     *
+     * @return TurProgramacion
+     */
+    public function setCodigoTerceroFk($codigoTerceroFk)
+    {
+        $this->codigoTerceroFk = $codigoTerceroFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTerceroFk
+     *
+     * @return integer
+     */
+    public function getCodigoTerceroFk()
+    {
+        return $this->codigoTerceroFk;
+    }
+
+    /**
+     * Set terceroRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     *
+     * @return TurProgramacion
+     */
+    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    {
+        $this->terceroRel = $terceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     */
+    public function getTerceroRel()
+    {
+        return $this->terceroRel;
+    }
+
+    /**
+     * Set estadoAprobado
+     *
+     * @param boolean $estadoAprobado
+     *
+     * @return TurProgramacion
+     */
+    public function setEstadoAprobado($estadoAprobado)
+    {
+        $this->estadoAprobado = $estadoAprobado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAprobado
+     *
+     * @return boolean
+     */
+    public function getEstadoAprobado()
+    {
+        return $this->estadoAprobado;
     }
 }
