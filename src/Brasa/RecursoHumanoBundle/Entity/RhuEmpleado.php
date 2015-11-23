@@ -22,7 +22,7 @@ class RhuEmpleado
     private $codigoEmpleadoPk;
     
     /**
-     * @ORM\Column(name="codigo_tipo_identificacion_fk", type="string", length=1, nullable=true)
+     * @ORM\Column(name="codigo_tipo_identificacion_fk", type="integer")
      */    
     private $codigoTipoIdentificacionFk;     
     
@@ -315,7 +315,7 @@ class RhuEmpleado
     protected $empleadoEstudioTipoRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuTipoIdentificacion", inversedBy="empleadosTipoIdentificacionRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="rhuEmpleadosTipoIdentificacionRel")
      * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
      */
     protected $tipoIdentificacionRel;     
@@ -588,7 +588,7 @@ class RhuEmpleado
     /**
      * Set codigoTipoIdentificacionFk
      *
-     * @param string $codigoTipoIdentificacionFk
+     * @param integer $codigoTipoIdentificacionFk
      *
      * @return RhuEmpleado
      */
@@ -602,7 +602,7 @@ class RhuEmpleado
     /**
      * Get codigoTipoIdentificacionFk
      *
-     * @return string
+     * @return integer
      */
     public function getCodigoTipoIdentificacionFk()
     {
@@ -1932,11 +1932,11 @@ class RhuEmpleado
     /**
      * Set tipoIdentificacionRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel
+     * @param \Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel
      *
      * @return RhuEmpleado
      */
-    public function setTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel = null)
+    public function setTipoIdentificacionRel(\Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel = null)
     {
         $this->tipoIdentificacionRel = $tipoIdentificacionRel;
 
@@ -1946,7 +1946,7 @@ class RhuEmpleado
     /**
      * Get tipoIdentificacionRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion
+     * @return \Brasa\GeneralBundle\Entity\GenTipoIdentificacion
      */
     public function getTipoIdentificacionRel()
     {

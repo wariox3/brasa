@@ -146,7 +146,12 @@ class GenCiudad
      */
     protected $rhuaccidentesTrabajoCiudadRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\ContabilidadBundle\Entity\CtbTercero", mappedBy="ciudadRel")
+     */
+    protected $ctbTercerosCiudadRel;
     
+   
     /**
      * Constructor
      */
@@ -160,6 +165,8 @@ class GenCiudad
         $this->despachosCiudadDestinoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puntosOperacionCiudadOrigenRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuSeleccionesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuExamenesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuSeleccionesReferenciasCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuCentroCostosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuSeleccionesCiudadNacimientoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuSeleccionesCiudadExpedicionRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -168,6 +175,7 @@ class GenCiudad
         $this->rhuEmpleadosCiudadExpedicionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuEmpleadosEstudiosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuaccidentesTrabajoCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ctbTercerosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -274,6 +282,30 @@ class GenCiudad
     public function getCodigoInterface()
     {
         return $this->codigoInterface;
+    }
+
+    /**
+     * Set codigoDane
+     *
+     * @param string $codigoDane
+     *
+     * @return GenCiudad
+     */
+    public function setCodigoDane($codigoDane)
+    {
+        $this->codigoDane = $codigoDane;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDane
+     *
+     * @return string
+     */
+    public function getCodigoDane()
+    {
+        return $this->codigoDane;
     }
 
     /**
@@ -597,6 +629,74 @@ class GenCiudad
     }
 
     /**
+     * Add rhuExamenesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuExamenesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel)
+    {
+        $this->rhuExamenesCiudadRel[] = $rhuExamenesCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuExamenesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel
+     */
+    public function removeRhuExamenesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel)
+    {
+        $this->rhuExamenesCiudadRel->removeElement($rhuExamenesCiudadRel);
+    }
+
+    /**
+     * Get rhuExamenesCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuExamenesCiudadRel()
+    {
+        return $this->rhuExamenesCiudadRel;
+    }
+
+    /**
+     * Add rhuSeleccionesReferenciasCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuSeleccionesReferenciasCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel)
+    {
+        $this->rhuSeleccionesReferenciasCiudadRel[] = $rhuSeleccionesReferenciasCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuSeleccionesReferenciasCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel
+     */
+    public function removeRhuSeleccionesReferenciasCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel)
+    {
+        $this->rhuSeleccionesReferenciasCiudadRel->removeElement($rhuSeleccionesReferenciasCiudadRel);
+    }
+
+    /**
+     * Get rhuSeleccionesReferenciasCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuSeleccionesReferenciasCiudadRel()
+    {
+        return $this->rhuSeleccionesReferenciasCiudadRel;
+    }
+
+    /**
      * Add rhuCentroCostosCiudadRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $rhuCentroCostosCiudadRel
@@ -869,94 +969,36 @@ class GenCiudad
     }
 
     /**
-     * Add rhuSeleccionesReferenciasCiudadRel
+     * Add ctbTercerosCiudadRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbTercero $ctbTercerosCiudadRel
      *
      * @return GenCiudad
      */
-    public function addRhuSeleccionesReferenciasCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel)
+    public function addCtbTercerosCiudadRel(\Brasa\ContabilidadBundle\Entity\CtbTercero $ctbTercerosCiudadRel)
     {
-        $this->rhuSeleccionesReferenciasCiudadRel[] = $rhuSeleccionesReferenciasCiudadRel;
+        $this->ctbTercerosCiudadRel[] = $ctbTercerosCiudadRel;
 
         return $this;
     }
 
     /**
-     * Remove rhuSeleccionesReferenciasCiudadRel
+     * Remove ctbTercerosCiudadRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbTercero $ctbTercerosCiudadRel
      */
-    public function removeRhuSeleccionesReferenciasCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $rhuSeleccionesReferenciasCiudadRel)
+    public function removeCtbTercerosCiudadRel(\Brasa\ContabilidadBundle\Entity\CtbTercero $ctbTercerosCiudadRel)
     {
-        $this->rhuSeleccionesReferenciasCiudadRel->removeElement($rhuSeleccionesReferenciasCiudadRel);
+        $this->ctbTercerosCiudadRel->removeElement($ctbTercerosCiudadRel);
     }
 
     /**
-     * Get rhuSeleccionesReferenciasCiudadRel
+     * Get ctbTercerosCiudadRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRhuSeleccionesReferenciasCiudadRel()
+    public function getCtbTercerosCiudadRel()
     {
-        return $this->rhuSeleccionesReferenciasCiudadRel;
-    }
-
-    /**
-     * Set codigoDane
-     *
-     * @param string $codigoDane
-     *
-     * @return GenCiudad
-     */
-    public function setCodigoDane($codigoDane)
-    {
-        $this->codigoDane = $codigoDane;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoDane
-     *
-     * @return string
-     */
-    public function getCodigoDane()
-    {
-        return $this->codigoDane;
-    }
-
-    /**
-     * Add rhuExamenesCiudadRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel
-     *
-     * @return GenCiudad
-     */
-    public function addRhuExamenesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel)
-    {
-        $this->rhuExamenesCiudadRel[] = $rhuExamenesCiudadRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove rhuExamenesCiudadRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel
-     */
-    public function removeRhuExamenesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $rhuExamenesCiudadRel)
-    {
-        $this->rhuExamenesCiudadRel->removeElement($rhuExamenesCiudadRel);
-    }
-
-    /**
-     * Get rhuExamenesCiudadRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRhuExamenesCiudadRel()
-    {
-        return $this->rhuExamenesCiudadRel;
+        return $this->ctbTercerosCiudadRel;
     }
 }

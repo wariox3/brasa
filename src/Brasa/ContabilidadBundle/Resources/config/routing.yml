@@ -8,4 +8,14 @@ brs_ctb_consultas_registros:
     
 brs_ctb_utilidades_intercambio_datos_exportar:
     path:     /ctb/utilidades/intercambio/datos/exportar
-    defaults: { _controller: BrasaContabilidadBundle:UtilidadesIntercambioDatos:exportar }    
+    defaults: { _controller: BrasaContabilidadBundle:UtilidadesIntercambioDatos:exportar }
+    
+# Base
+
+brs_ctb_base_terceros_lista:
+    path:     /ctb/base/terceros/lista
+    defaults: { _controller: BrasaContabilidadBundle:BaseTercero:lista }
+    
+brs_ctb_base_terceros_nuevo:
+    path:     /ctb/base/terceros/nuevo/{codigoTercero}
+    defaults: { _controller: BrasaContabilidadBundle:BaseTercero:nuevo }    

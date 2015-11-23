@@ -5,7 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_motivo_terminacion_cotrato")
+ * @ORM\Table(name="rhu_motivo_terminacion_contrato")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuMotivoTerminacionContratoRepository")
  */
 class RhuMotivoTerminacionContrato
