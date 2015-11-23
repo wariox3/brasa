@@ -13,7 +13,6 @@ class RhuSsoSubtipoCotizante
     /**
      * @ORM\Id
      * @ORM\Column(name="codigo_subtipo_cotizante_pk", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoSubtipoCotizantePk;   
     
@@ -32,6 +31,28 @@ class RhuSsoSubtipoCotizante
      */
     protected $contratosSsoSubtipoCotizanteRel;     
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->empleadosSsoSubtipoCotizanteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosSsoSubtipoCotizanteRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set codigoSubtipoCotizantePk
+     *
+     * @param integer $codigoSubtipoCotizantePk
+     *
+     * @return RhuSsoSubtipoCotizante
+     */
+    public function setCodigoSubtipoCotizantePk($codigoSubtipoCotizantePk)
+    {
+        $this->codigoSubtipoCotizantePk = $codigoSubtipoCotizantePk;
+
+        return $this;
+    }
 
     /**
      * Get codigoSubtipoCotizantePk
@@ -65,13 +86,6 @@ class RhuSsoSubtipoCotizante
     public function getNombre()
     {
         return $this->nombre;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->empleadosSsoSubtipoCotizanteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

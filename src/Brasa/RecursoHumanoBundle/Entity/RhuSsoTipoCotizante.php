@@ -13,7 +13,6 @@ class RhuSsoTipoCotizante
     /**
      * @ORM\Id
      * @ORM\Column(name="codigo_tipo_cotizante_pk", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoTipoCotizantePk;   
     
@@ -30,8 +29,30 @@ class RhuSsoTipoCotizante
     /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="ssoTipoCotizanteRel")
      */
-    protected $contratosSsoTipoCotizanteRel;      
-    
+    protected $contratosSsoTipoCotizanteRel;          
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->empleadosSsoTipoCotizanteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosSsoTipoCotizanteRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set codigoTipoCotizantePk
+     *
+     * @param integer $codigoTipoCotizantePk
+     *
+     * @return RhuSsoTipoCotizante
+     */
+    public function setCodigoTipoCotizantePk($codigoTipoCotizantePk)
+    {
+        $this->codigoTipoCotizantePk = $codigoTipoCotizantePk;
+
+        return $this;
+    }
+
     /**
      * Get codigoTipoCotizantePk
      *
@@ -64,13 +85,6 @@ class RhuSsoTipoCotizante
     public function getNombre()
     {
         return $this->nombre;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->empleadosSsoTipoCotizanteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
