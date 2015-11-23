@@ -12,9 +12,12 @@ class RhuEmpleadoType extends AbstractType
         $builder
 
             ->add('tipoIdentificacionRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuTipoIdentificacion',
+                'class' => 'BrasaGeneralBundle:GenTipoIdentificacion',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('ti')
+                    ->orderBy('ti.nombre', 'ASC');},
                 'property' => 'nombre',
-            ))
+                'required' => true))
             ->add('bancoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuBanco',
                 'query_builder' => function (EntityRepository $er)  {

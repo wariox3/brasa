@@ -33,7 +33,7 @@ class RhuSeleccion
     private $fecha;
 
     /**
-     * @ORM\Column(name="codigo_tipo_identificacion_fk", type="string", length=1, nullable=true)
+     * @ORM\Column(name="codigo_tipo_identificacion_fk", type="integer")
      */
     private $codigoTipoIdentificacionFk;
 
@@ -195,7 +195,7 @@ class RhuSeleccion
     protected $seleccionTipoRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuTipoIdentificacion", inversedBy="seleccionesTipoIdentificacionRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="rhuSeleccionesTipoIdentificacionRel")
      * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
      */
     protected $tipoIdentificacionRel;
@@ -265,6 +265,7 @@ class RhuSeleccion
     protected $seleccionesVisitasSeleccionRel;
 
 
+    
     /**
      * Constructor
      */
@@ -360,7 +361,7 @@ class RhuSeleccion
     /**
      * Set codigoTipoIdentificacionFk
      *
-     * @param string $codigoTipoIdentificacionFk
+     * @param integer $codigoTipoIdentificacionFk
      *
      * @return RhuSeleccion
      */
@@ -374,7 +375,7 @@ class RhuSeleccion
     /**
      * Get codigoTipoIdentificacionFk
      *
-     * @return string
+     * @return integer
      */
     public function getCodigoTipoIdentificacionFk()
     {
@@ -1128,11 +1129,11 @@ class RhuSeleccion
     /**
      * Set tipoIdentificacionRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel
+     * @param \Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel
      *
      * @return RhuSeleccion
      */
-    public function setTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion $tipoIdentificacionRel = null)
+    public function setTipoIdentificacionRel(\Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel = null)
     {
         $this->tipoIdentificacionRel = $tipoIdentificacionRel;
 
@@ -1142,7 +1143,7 @@ class RhuSeleccion
     /**
      * Get tipoIdentificacionRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoIdentificacion
+     * @return \Brasa\GeneralBundle\Entity\GenTipoIdentificacion
      */
     public function getTipoIdentificacionRel()
     {
