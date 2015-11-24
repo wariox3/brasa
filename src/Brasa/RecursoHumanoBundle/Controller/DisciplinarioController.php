@@ -126,8 +126,8 @@ class DisciplinarioController extends Controller
                     $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
                 }
                 if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 8) {
-                    $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioDescargo();
-                    $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
+                    $objFormatoDisciplinarioDescargo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioDescargo();
+                    $objFormatoDisciplinarioDescargo->Generar($this, $codigoDisciplinario);
                 }
                 if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 9) {
                     $objFormatoDisciplinarioVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioVacaciones();
