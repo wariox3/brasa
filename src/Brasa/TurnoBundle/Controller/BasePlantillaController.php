@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPlantillaType;
+use Brasa\TurnoBundle\Form\Type\TurPlantillaDetalleType;
 class BasePlantillaController extends Controller
 {
     var $strDqlLista = "";
@@ -78,30 +79,21 @@ class BasePlantillaController extends Controller
                         $arPlantilla->setEstadoAutorizado(1);
                         $em->persist($arPlantilla);
                         $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoPlantilla)));                                                                        
+                        return $this->redirect($this->generateUrl('brs_tur_base_plantilla_detalle', array('codigoPlantilla' => $codigoPlantilla)));                                                                        
                     } else {
                         $objMensaje->Mensaje('error', 'Debe adicionar detalles al examen', $this);
                     }                    
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoPlantilla)));                                                
+                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_detalle', array('codigoPlantilla' => $codigoPlantilla)));                                                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
                 if($arPlantilla->getEstadoAutorizado() == 1) {
                     $arPlantilla->setEstadoAutorizado(0);
                     $em->persist($arPlantilla);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoPlantilla)));                                                
+                    return $this->redirect($this->generateUrl('brs_tur_base_plantilla_detalle', array('codigoPlantilla' => $codigoPlantilla)));                                                
                 }
-            }
-            if ($form->get('BtnAprobar')->isClicked()) {                
-                $strRespuesta = $em->getRepository('BrasaTurnoBundle:TurPlantilla')->aprobarExamen($codigoPlantilla);
-                if($strRespuesta == ''){
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoPlantilla)));                                                
-                }else {
-                  $objMensaje->Mensaje('error', $strRespuesta, $this);
-                }                 
-            }      
-            
+            }                 
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arPlantilla->getEstadoAutorizado() == 1) {
                     $objExamen = new \Brasa\TurnoBundle\Formatos\FormatoExamen();
@@ -110,37 +102,178 @@ class BasePlantillaController extends Controller
                     $objMensaje->Mensaje("error", "No puede imprimir una orden de examen sin estar autorizada", $this);
                 }
             }
-            if($form->get('BtnEliminarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaTurnoBundle:TurPlantilla')->liquidar($codigoPlantilla);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoPlantilla)));
+            if($form->get('BtnDetalleEliminar')->isClicked()) {
+                $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->eliminarDetalles($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_detalle', array('codigoPlantilla' => $codigoPlantilla)));
             }
-            if($form->get('BtnAprobarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoPlantilla)));
-            }
-            if($form->get('BtnCerrarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->cerrarDetallesSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoPlantilla)));
-            }            
-            if ($form->get('BtnActualizarDetalle')->isClicked()) {
+            if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {                
-                    if($arrControles['TxtPrecio'.$intCodigo] != "" && $arrControles['TxtPrecio'.$intCodigo] != 0) {
-                        $arPlantillaDetalle = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
-                        $arPlantillaDetalle = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->find($intCodigo);                                        
-                        $floPrecio = $arrControles['TxtPrecio'.$intCodigo];
-                        $arPlantillaDetalle->setValidarVencimiento($arrControles['cboValidarVencimiento'.$intCodigo]);
-                        $arPlantillaDetalle->setFechaVence(date_create($arrControles['TxtVence'.$intCodigo]));
-                        $arPlantillaDetalle->setVrPrecio($floPrecio);
-                        $em->persist($arPlantillaDetalle);                        
+                    $arPlantillaDetalle = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
+                    $arPlantillaDetalle = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->find($intCodigo);                                                            
+                    
+                    if($arrControles['TxtDia1'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia1($arrControles['TxtDia1'.$intCodigo]);                                                
+                    } else {
+                        $arPlantillaDetalle->setDia1(null);                                                
                     }
+                    if($arrControles['TxtDia2'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia2($arrControles['TxtDia2'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia2(null);                                                
+                    }
+                    if($arrControles['TxtDia3'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia3($arrControles['TxtDia3'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia3(null);                                                
+                    }
+                    if($arrControles['TxtDia4'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia4($arrControles['TxtDia4'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia4(null);                                                
+                    }
+                    if($arrControles['TxtDia5'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia5($arrControles['TxtDia5'.$intCodigo]);                  
+                    }  else {
+                        $arPlantillaDetalle->setDia5(null);                                                
+                    }                   
+                    if($arrControles['TxtDia6'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia6($arrControles['TxtDia6'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia6(null);                                                
+                    }
+                    if($arrControles['TxtDia7'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia7($arrControles['TxtDia7'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia7(null);                                                
+                    }
+                    if($arrControles['TxtDia8'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia8($arrControles['TxtDia8'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia8(null);                                                
+                    }
+                    if($arrControles['TxtDia9'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia9($arrControles['TxtDia9'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia9(null);                                                
+                    }
+                    if($arrControles['TxtDia10'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia10($arrControles['TxtDia10'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia10(null);                                                
+                    }
+                    if($arrControles['TxtDia11'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia11($arrControles['TxtDia11'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia11(null);                                                
+                    }
+                    if($arrControles['TxtDia12'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia12($arrControles['TxtDia12'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia12(null);                                                
+                    }
+                    if($arrControles['TxtDia13'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia13($arrControles['TxtDia13'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia13(null);                                                
+                    }
+                    if($arrControles['TxtDia14'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia14($arrControles['TxtDia14'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia14(null);                                                
+                    }
+                    if($arrControles['TxtDia15'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia15($arrControles['TxtDia15'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia15(null);                                                
+                    }
+                    if($arrControles['TxtDia16'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia16($arrControles['TxtDia16'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia16(null);                                                
+                    }
+                    if($arrControles['TxtDia17'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia17($arrControles['TxtDia17'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia17(null);                                                
+                    }
+                    if($arrControles['TxtDia18'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia18($arrControles['TxtDia18'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia18(null);                                                
+                    }
+                    if($arrControles['TxtDia19'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia19($arrControles['TxtDia19'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia19(null);                                                
+                    }
+                    if($arrControles['TxtDia20'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia20($arrControles['TxtDia20'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia20(null);                                                
+                    }
+                    if($arrControles['TxtDia21'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia21($arrControles['TxtDia21'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia21(null);                                                
+                    }
+                    if($arrControles['TxtDia22'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia22($arrControles['TxtDia22'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia22(null);                                                
+                    }
+                    if($arrControles['TxtDia23'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia23($arrControles['TxtDia23'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia23(null);                                                
+                    }
+                    if($arrControles['TxtDia24'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia24($arrControles['TxtDia24'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia24(null);                                                
+                    }
+                    if($arrControles['TxtDia25'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia25($arrControles['TxtDia25'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia25(null);                                                
+                    }
+                    if($arrControles['TxtDia26'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia26($arrControles['TxtDia26'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia26(null);                                                
+                    }
+                    if($arrControles['TxtDia27'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia27($arrControles['TxtDia27'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia27(null);                                                
+                    }
+                    if($arrControles['TxtDia28'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia28($arrControles['TxtDia28'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia28(null);                                                
+                    }
+                    if($arrControles['TxtDia29'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia29($arrControles['TxtDia29'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia29(null);                                                
+                    }
+                    if($arrControles['TxtDia30'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia30($arrControles['TxtDia30'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia30(null);                                                
+                    }
+                    if($arrControles['TxtDia31'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setDia31($arrControles['TxtDia31'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia31(null);                                                
+                    }                   
+                    $em->persist($arPlantillaDetalle);
                 }
                 $em->flush();
-                $em->getRepository('BrasaTurnoBundle:TurPlantilla')->liquidar($codigoPlantilla);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoPlantilla)));
-            }            
+                
+                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_detalle', array('codigoPlantilla' => $codigoPlantilla)));
+            }     
         }
 
         $arPlantillaDetalle = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
@@ -160,23 +293,24 @@ class BasePlantillaController extends Controller
         $arPlantillaDetalle = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
         if($codigoPlantillaDetalle != 0) {
             $arPlantillaDetalle = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->find($codigoPlantillaDetalle);
-        }       
+        }
+        
         $form = $this->createForm(new TurPlantillaDetalleType, $arPlantillaDetalle);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arPlantillaDetalle = $form->getData();            
-            $arPlantillaDetalle->setProgramacionRel($arPlantilla);
+            $arPlantillaDetalle = $form->getData();
+            $arPlantillaDetalle->setPlantillaRel($arPlantilla);
             $em->persist($arPlantillaDetalle);
             $em->flush();            
             
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle_nuevo', array('codigoProgramacion' => $codigoPlantilla, 'codigoProgramacionDetalle' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_detalle_nuevo', array('codigoPlantilla' => $codigoPlantilla, 'codigoPlantillaDetalle' => 0 )));
             } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                           
             }            
-        }
-        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
-            'arPlantilla' => $arPlantilla,
+        }        
+        return $this->render('BrasaTurnoBundle:Base/Plantilla:detalleNuevo.html.twig', array(
+            'arPlantilla' => $arPlantilla,            
             'form' => $form->createView()));
     }   
     
@@ -206,15 +340,28 @@ class BasePlantillaController extends Controller
     }
     
     private function formularioDetalle($ar) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);                
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);        
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);        
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        $form = $this->createFormBuilder()    
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)    
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)            
-                    ->getForm();  
-        return $form;
+        if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;                        
+            $arrBotonDetalleEliminar['disabled'] = true;
+            $arrBotonDetalleActualizar['disabled'] = true;
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonImprimir['disabled'] = true;
+        }
+ 
+        $form = $this->createFormBuilder()
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                                     
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)                    
+                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->getForm();
+        return $form;                
     }
 
     private function generarExcel() {

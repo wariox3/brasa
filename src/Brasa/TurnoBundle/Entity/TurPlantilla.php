@@ -22,6 +22,11 @@ class TurPlantilla
      */    
     private $nombre;     
     
+    /**     
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */    
+    private $estadoAutorizado = false;    
+    
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
@@ -131,5 +136,29 @@ class TurPlantilla
     public function getPlantillasDetallesPlantillaRel()
     {
         return $this->plantillasDetallesPlantillaRel;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return TurPlantilla
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 }

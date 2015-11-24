@@ -34,6 +34,10 @@ brs_tur_base_plantilla_nuevo:
     path:     /tur/base/plantilla/nuevo/{codigoPlantilla}
     defaults: { _controller: BrasaTurnoBundle:BasePlantilla:nuevo }
 
+brs_tur_base_plantilla_detalle_nuevo:
+   path:     /tur/base/plantilla/detalle/nuevo/{codigoPlantilla}/{codigoPlantillaDetalle}
+   defaults: { _controller: BrasaTurnoBundle:BasePlantilla:detalleNuevo } 
+
 brs_tur_programacion_lista:
    path:     /tur/programacion/lista
    defaults: { _controller: BrasaTurnoBundle:Programacion:lista } 

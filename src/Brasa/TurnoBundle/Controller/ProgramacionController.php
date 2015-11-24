@@ -137,97 +137,159 @@ class ProgramacionController extends Controller
                     
                     if($arrControles['TxtDia1'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia1($arrControles['TxtDia1'.$intCodigo]);                                                
+                    } else {
+                        $arPlantillaDetalle->setDia1(null);                                                
                     }
                     if($arrControles['TxtDia2'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia2($arrControles['TxtDia2'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia2(null);                                                
                     }
                     if($arrControles['TxtDia3'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia3($arrControles['TxtDia3'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia3(null);                                                
                     }
                     if($arrControles['TxtDia4'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia4($arrControles['TxtDia4'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia4(null);                                                
                     }
                     if($arrControles['TxtDia5'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia5($arrControles['TxtDia5'.$intCodigo]);                  
-                    }                    
+                    } else {
+                        $arPlantillaDetalle->setDia5(null);                                                
+                    }                   
                     if($arrControles['TxtDia6'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia6($arrControles['TxtDia6'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia6(null);                                                
                     }
                     if($arrControles['TxtDia7'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia7($arrControles['TxtDia7'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia7(null);                                                
                     }
                     if($arrControles['TxtDia8'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia8($arrControles['TxtDia8'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia8(null);                                                
                     }
                     if($arrControles['TxtDia9'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia9($arrControles['TxtDia9'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia9(null);                                                
                     }
                     if($arrControles['TxtDia10'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia10($arrControles['TxtDia10'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia10(null);                                                
                     }
                     if($arrControles['TxtDia11'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia11($arrControles['TxtDia11'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia11(null);                                                
                     }
                     if($arrControles['TxtDia12'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia12($arrControles['TxtDia12'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia12(null);                                                
                     }
                     if($arrControles['TxtDia13'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia13($arrControles['TxtDia13'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia13(null);                                                
                     }
                     if($arrControles['TxtDia14'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia14($arrControles['TxtDia14'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia14(null);                                                
                     }
                     if($arrControles['TxtDia15'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia15($arrControles['TxtDia15'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia15(null);                                                
                     }
                     if($arrControles['TxtDia16'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia16($arrControles['TxtDia16'.$intCodigo]);                  
+                    } else {
+                        $arPlantillaDetalle->setDia16(null);                                                
                     }
                     if($arrControles['TxtDia17'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia17($arrControles['TxtDia17'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia17(null);                                                
                     }
                     if($arrControles['TxtDia18'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia18($arrControles['TxtDia18'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia18(null);                                                
                     }
                     if($arrControles['TxtDia19'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia19($arrControles['TxtDia19'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia19(null);                                                
                     }
                     if($arrControles['TxtDia20'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia20($arrControles['TxtDia20'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia20(null);                                                
                     }
                     if($arrControles['TxtDia21'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia21($arrControles['TxtDia21'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia21(null);                                                
                     }
                     if($arrControles['TxtDia22'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia22($arrControles['TxtDia22'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia22(null);                                                
                     }
                     if($arrControles['TxtDia23'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia23($arrControles['TxtDia23'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia23(null);                                                
                     }
                     if($arrControles['TxtDia24'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia24($arrControles['TxtDia24'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia24(null);                                                
                     }
                     if($arrControles['TxtDia25'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia25($arrControles['TxtDia25'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia25(null);                                                
                     }
                     if($arrControles['TxtDia26'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia26($arrControles['TxtDia26'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia26(null);                                                
                     }
                     if($arrControles['TxtDia27'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia27($arrControles['TxtDia27'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia27(null);                                                
                     }
                     if($arrControles['TxtDia28'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia28($arrControles['TxtDia28'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia28(null);                                                
                     }
                     if($arrControles['TxtDia29'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia29($arrControles['TxtDia29'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia29(null);                                                
                     }
                     if($arrControles['TxtDia30'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia30($arrControles['TxtDia30'.$intCodigo]);                 
+                    } else {
+                        $arPlantillaDetalle->setDia30(null);                                                
                     }
                     if($arrControles['TxtDia31'.$intCodigo] != '') {
                         $arProgramacionDetalle->setDia31($arrControles['TxtDia31'.$intCodigo]);                 
-                    }                    
+                    } else {
+                        $arPlantillaDetalle->setDia31(null);                                                
+                    }                   
                     $em->persist($arProgramacionDetalle);
                 }
                 $em->flush();
