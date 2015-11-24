@@ -3023,7 +3023,7 @@ CREATE TABLE `emp_users` (
   `nombre` VARCHAR(750) COLLATE utf8_spanish_ci DEFAULT NULL,
   `numero_identificacion` VARCHAR(60) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 INSERT INTO `emp_users` (`id`, `username`, `password`, `email`, `is_active`, `codigo_empleado_fk`, `roles`, `nombre`, `numero_identificacion`) VALUES('5','administrador','$2a$04$87ghqV5zf0CrVj7eSO/MQOAWYydhS./8R7GGHb5rRp7cI42RI0xj.','administrador@appsoga.com','1','0','ROLE_ADMIN','Mario Estrada',NULL);
 
