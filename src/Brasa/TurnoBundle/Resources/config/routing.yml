@@ -10,6 +10,30 @@ brs_tur_base_turno_nuevo:
     path:     /tur/base/turno/nuevo/{codigoTurno}
     defaults: { _controller: BrasaTurnoBundle:BaseTurno:nuevo }
 
+brs_tur_base_recurso_lista:
+    path:     /tur/base/recurso/lista
+    defaults: { _controller: BrasaTurnoBundle:BaseRecurso:lista }     
+    
+brs_tur_base_recurso_detalle:
+    path:     /tur/base/recurso/detalle/{codigoRecurso}
+    defaults: { _controller: BrasaTurnoBundle:BaseRecurso:detalle }    
+    
+brs_tur_base_recurso_nuevo:
+    path:     /tur/base/recurso/nuevo/{codigoRecurso}
+    defaults: { _controller: BrasaTurnoBundle:BaseRecurso:nuevo }
+
+brs_tur_base_plantilla_lista:
+    path:     /tur/base/plantilla/lista
+    defaults: { _controller: BrasaTurnoBundle:BasePlantilla:lista }     
+    
+brs_tur_base_plantilla_detalle:
+    path:     /tur/base/plantilla/detalle/{codigoPlantilla}
+    defaults: { _controller: BrasaTurnoBundle:BasePlantilla:detalle }    
+    
+brs_tur_base_plantilla_nuevo:
+    path:     /tur/base/plantilla/nuevo/{codigoPlantilla}
+    defaults: { _controller: BrasaTurnoBundle:BasePlantilla:nuevo }
+
 brs_tur_programacion_lista:
    path:     /tur/programacion/lista
    defaults: { _controller: BrasaTurnoBundle:Programacion:lista } 

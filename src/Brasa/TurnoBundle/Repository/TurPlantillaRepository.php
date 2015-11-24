@@ -6,10 +6,19 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPlantillaRepository extends EntityRepository {
     
-    public function listaDQL() {
-        $dql   = "SELECT p FROM BrasaTurnoBundle:TurProgramacion p WHERE p.codigoProgramacionPk <> 0";
+
+    public function ListaDql($strNombre = "", $strCodigo = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPlantilla p WHERE p.codigoPlantillaPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND p.nombre LIKE '%" . $strNombre . "%'";
+        }
+        if($strCodigo != "" ) {
+            $dql .= " AND p.codigoPlantillaPk LIKE '%" . $strCodigo . "%'";
+        }
+        $dql .= " ORDER BY p.nombre";
         return $dql;
-    }
+    }            
     
     public function liquidar($codigoProgramacion) {        
         $em = $this->getEntityManager();        
