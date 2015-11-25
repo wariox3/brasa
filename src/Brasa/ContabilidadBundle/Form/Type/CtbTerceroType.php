@@ -14,9 +14,15 @@ class CtbTerceroType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            
-            ->add('nit', 'number', array('required' => true))
-            ->add('digitoVerificacion', 'number', array('required' => true))        
+            ->add('tipoIdentificacionRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenTipoIdentificacion',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('ti')
+                    ->orderBy('ti.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))
+            ->add('digitoVerificacion', 'number', array('required' => false))
+            ->add('numeroIdentificacion', 'text', array('required' => true))
             ->add('nombre1', 'text', array('required' => true))
             ->add('nombre2', 'text', array('required' => false))
             ->add('apellido1', 'text', array('required' => true))    

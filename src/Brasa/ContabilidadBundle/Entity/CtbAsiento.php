@@ -16,12 +16,7 @@ class CtbAsiento
      * @ORM\Column(name="codigo_asiento_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */    
-    private $codigoAsientoPk;
-
-    /**
-     * @ORM\Column(name="codigo_asiento_tipo_fk", type="integer", nullable=true)
-     */     
-    private $codigoAsientoTipoFk;    
+    private $codigoAsientoPk;    
     
     /**
      * @ORM\Column(name="numero_asiento", type="integer", nullable=true)
@@ -44,9 +39,9 @@ class CtbAsiento
     private $fecha_creacion; 
     
     /**
-     * @ORM\Column(name="codigo_comprobante_contable_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_comprobante_fk", type="integer", nullable=true)
      */     
-    private $codigoComprobanteContableFk;          
+    private $codigoComprobanteFk;
     
     /**
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -74,33 +69,40 @@ class CtbAsiento
     private $estadoContabilizado = 0;     
     
     /**
-     * @ORM\Column(name="total_debe", type="float")
+     * @ORM\Column(name="total_debito", type="float")
      */
     private $totalDebito = 0;    
     
     /**
-     * @ORM\Column(name="total_haber", type="float")
+     * @ORM\Column(name="total_credito", type="float")
      */
     private $totalCredito = 0;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;             
+    private $comentarios;                 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CtbComprobante", inversedBy="asientosComprobanteRel")
+     * @ORM\JoinColumn(name="codigo_comprobante_fk", referencedColumnName="codigo_comprobante_pk")
+     */
+    protected $comprobanteRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbAsientoTipo", inversedBy="CtbAsiento")
-     * @ORM\JoinColumn(name="codigo_asiento_tipo_fk", referencedColumnName="codigo_asiento_tipo_pk")
+     * @ORM\OneToMany(targetEntity="CtbAsientoDetalle", mappedBy="asientoRel")
      */
-    protected $asientoTipoRel;    
+    protected $asientosDetallesAsientoRel;
 
+    
+    
     /**
-     * @ORM\ManyToOne(targetEntity="CtbComprobanteContable", inversedBy="CtbAsiento")
-     * @ORM\JoinColumn(name="codigo_comprobante_contable_fk", referencedColumnName="codigo_comprobante_contable_pk")
+     * Constructor
      */
-    protected $comprobanteContableRel;    
-   
-
+    public function __construct()
+    {
+        $this->asientosDetallesAsientoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoAsientoPk
@@ -110,30 +112,6 @@ class CtbAsiento
     public function getCodigoAsientoPk()
     {
         return $this->codigoAsientoPk;
-    }
-
-    /**
-     * Set codigoAsientoTipoFk
-     *
-     * @param integer $codigoAsientoTipoFk
-     *
-     * @return CtbAsiento
-     */
-    public function setCodigoAsientoTipoFk($codigoAsientoTipoFk)
-    {
-        $this->codigoAsientoTipoFk = $codigoAsientoTipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoAsientoTipoFk
-     *
-     * @return integer
-     */
-    public function getCodigoAsientoTipoFk()
-    {
-        return $this->codigoAsientoTipoFk;
     }
 
     /**
@@ -233,27 +211,27 @@ class CtbAsiento
     }
 
     /**
-     * Set codigoComprobanteContableFk
+     * Set codigoComprobanteFk
      *
-     * @param integer $codigoComprobanteContableFk
+     * @param integer $codigoComprobanteFk
      *
      * @return CtbAsiento
      */
-    public function setCodigoComprobanteContableFk($codigoComprobanteContableFk)
+    public function setCodigoComprobanteFk($codigoComprobanteFk)
     {
-        $this->codigoComprobanteContableFk = $codigoComprobanteContableFk;
+        $this->codigoComprobanteFk = $codigoComprobanteFk;
 
         return $this;
     }
 
     /**
-     * Get codigoComprobanteContableFk
+     * Get codigoComprobanteFk
      *
      * @return integer
      */
-    public function getCodigoComprobanteContableFk()
+    public function getCodigoComprobanteFk()
     {
-        return $this->codigoComprobanteContableFk;
+        return $this->codigoComprobanteFk;
     }
 
     /**
@@ -449,50 +427,60 @@ class CtbAsiento
     }
 
     /**
-     * Set asientoTipoRel
+     * Set comprobanteRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoTipo $asientoTipoRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbComprobante $comprobanteRel
      *
      * @return CtbAsiento
      */
-    public function setAsientoTipoRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoTipo $asientoTipoRel = null)
+    public function setComprobanteRel(\Brasa\ContabilidadBundle\Entity\CtbComprobante $comprobanteRel = null)
     {
-        $this->asientoTipoRel = $asientoTipoRel;
+        $this->comprobanteRel = $comprobanteRel;
 
         return $this;
     }
 
     /**
-     * Get asientoTipoRel
+     * Get comprobanteRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbAsientoTipo
+     * @return \Brasa\ContabilidadBundle\Entity\CtbComprobante
      */
-    public function getAsientoTipoRel()
+    public function getComprobanteRel()
     {
-        return $this->asientoTipoRel;
+        return $this->comprobanteRel;
     }
 
     /**
-     * Set comprobanteContableRel
+     * Add asientosDetallesAsientoRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbComprobanteContable $comprobanteContableRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesAsientoRel
      *
      * @return CtbAsiento
      */
-    public function setComprobanteContableRel(\Brasa\ContabilidadBundle\Entity\CtbComprobanteContable $comprobanteContableRel = null)
+    public function addAsientosDetallesAsientoRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesAsientoRel)
     {
-        $this->comprobanteContableRel = $comprobanteContableRel;
+        $this->asientosDetallesAsientoRel[] = $asientosDetallesAsientoRel;
 
         return $this;
     }
 
     /**
-     * Get comprobanteContableRel
+     * Remove asientosDetallesAsientoRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbComprobanteContable
+     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesAsientoRel
      */
-    public function getComprobanteContableRel()
+    public function removeAsientosDetallesAsientoRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesAsientoRel)
     {
-        return $this->comprobanteContableRel;
+        $this->asientosDetallesAsientoRel->removeElement($asientosDetallesAsientoRel);
+    }
+
+    /**
+     * Get asientosDetallesAsientoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAsientosDetallesAsientoRel()
+    {
+        return $this->asientosDetallesAsientoRel;
     }
 }

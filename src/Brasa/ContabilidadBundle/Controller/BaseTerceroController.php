@@ -82,21 +82,37 @@ class BaseTerceroController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Codigo')
-                    ->setCellValue('B1', 'Nit')
-                    ->setCellValue('C1', 'Digito Verificacion')
-                    ->setCellValue('D1', 'Nombre');
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'TIPO IDENTIFICACIÓN')
+                    ->setCellValue('C1', 'NÚMERO IDENTIFICACIÓN')
+                    ->setCellValue('D1', 'DIGITO VERIFICACIÓN')
+                    ->setCellValue('E1', 'NOMBRE')
+                    ->setCellValue('F1', 'RAZÓN SOCIAL')
+                    ->setCellValue('G1', 'CIUDAD')
+                    ->setCellValue('H1', 'DIRECCIÓN')
+                    ->setCellValue('I1', 'TELÉFONO')
+                    ->setCellValue('J1', 'CELULAR')
+                    ->setCellValue('K1', 'FAX')
+                    ->setCellValue('L1', 'EMAIL');
 
         $i = 2;
-        $arTerceros = $em->getRepository('BrasaContabilidadBundle:GenTercero')->findAll();
+        $arTerceros = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findAll();
 
         foreach ($arTerceros as $arTerceros) {
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arTerceros->getCodigoTerceroPk())
-                    ->setCellValue('B' . $i, $arTerceros->getNit())
-                    ->setCellValue('C' . $i, $arTerceros->getDigitoVerificacion())
-                    ->setCellValue('D' . $i, $arTerceros->getNombreCorto());
+                    ->setCellValue('B' . $i, $arTerceros->getTipoIdentificacionRel()->getNombre())
+                    ->setCellValue('C' . $i, $arTerceros->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arTerceros->getDigitoVerificacion())
+                    ->setCellValue('E' . $i, $arTerceros->getNombreCorto())
+                    ->setCellValue('F' . $i, $arTerceros->getRazonSocial())
+                    ->setCellValue('G' . $i, $arTerceros->getCiudadRel()->getNombre())
+                    ->setCellValue('H' . $i, $arTerceros->getDireccion())
+                    ->setCellValue('I' . $i, $arTerceros->getTelefono())
+                    ->setCellValue('J' . $i, $arTerceros->getCelular())
+                    ->setCellValue('K' . $i, $arTerceros->getFax())
+                    ->setCellValue('L' . $i, $arTerceros->getEmail());
             $i++;
         }
 

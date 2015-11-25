@@ -18,4 +18,12 @@ brs_ctb_base_terceros_lista:
     
 brs_ctb_base_terceros_nuevo:
     path:     /ctb/base/terceros/nuevo/{codigoTercero}
-    defaults: { _controller: BrasaContabilidadBundle:BaseTercero:nuevo }    
+    defaults: { _controller: BrasaContabilidadBundle:BaseTercero:nuevo } 
+    
+brs_ctb_base_comprobantes_lista:
+    path:     /ctb/base/comprobantes/lista
+    defaults: { _controller: BrasaContabilidadBundle:BaseComprobante:lista }
+    
+brs_ctb_base_comprobantes_nuevo:
+    path:     /ctb/base/comprobantes/nuevo/{codigoComprobante}
+    defaults: { _controller: BrasaContabilidadBundle:BaseComprobante:nuevo }    

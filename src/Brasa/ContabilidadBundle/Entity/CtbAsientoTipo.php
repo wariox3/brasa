@@ -34,11 +34,13 @@ class CtbAsientoTipo
     private $codigoComprobanteContableFk;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbComprobanteContable", inversedBy="CtbAsientoTipo")
-     * @ORM\JoinColumn(name="codigo_comprobante_contable_fk", referencedColumnName="codigo_comprobante_contable_pk")
+     * @ORM\ManyToOne(targetEntity="CtbComprobante", inversedBy="CtbAsientoTipo")
+     * @ORM\JoinColumn(name="codigo_comprobante_fk", referencedColumnName="codigo_comprobante_pk")
      */
-    protected $comprobanteContableRel;
+    protected $comprobanteRel;
 
+
+    
 
     /**
      * Get codigoAsientoTipoPk
@@ -123,26 +125,26 @@ class CtbAsientoTipo
     }
 
     /**
-     * Set comprobanteContableRel
+     * Set comprobanteRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbComprobanteContable $comprobanteContableRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbComprobante $comprobanteRel
      *
      * @return CtbAsientoTipo
      */
-    public function setComprobanteContableRel(\Brasa\ContabilidadBundle\Entity\CtbComprobanteContable $comprobanteContableRel = null)
+    public function setComprobanteRel(\Brasa\ContabilidadBundle\Entity\CtbComprobante $comprobanteRel = null)
     {
-        $this->comprobanteContableRel = $comprobanteContableRel;
+        $this->comprobanteRel = $comprobanteRel;
 
         return $this;
     }
 
     /**
-     * Get comprobanteContableRel
+     * Get comprobanteRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbComprobanteContable
+     * @return \Brasa\ContabilidadBundle\Entity\CtbComprobante
      */
-    public function getComprobanteContableRel()
+    public function getComprobanteRel()
     {
-        return $this->comprobanteContableRel;
+        return $this->comprobanteRel;
     }
 }

@@ -11,9 +11,15 @@
         <tr>
             
             <th>CÓDIGO</th>
-            <th>NIT</th>
+            <th>TIPO DE IDENTIFICACIÓN</th>
+            <th>IDENTIFICACIÓN</th>
             <th>DIGITO VERIFICACIÓN</th>
             <th>{{ knp_pagination_sortable(arTerceros, 'NOMBRE', 'codigo') }}</th> 
+            <th>RAZÓN SOCIAL</th>
+            <th>CIUDAD</th>
+            <th>DIRECCIÓN</th>
+            <th>TELÉFONO</th>
+            <th>EMAIL</th>
             <th></th>
             <th></th>
         </tr>
@@ -21,9 +27,15 @@
             {%for arTerceros in arTerceros %}
                <tr>
                 <td>{{arTerceros.codigoTerceroPk}}</td>
-                <td>{{arTerceros.nit}}</td>
+                <td>{{arTerceros.tipoIdentificacionRel.nombre}}</td>
+                <td>{{arTerceros.numeroIdentificacion}}</td>
                 <td>{{arTerceros.digitoVerificacion}}</td>
                 <td>{{arTerceros.nombreCorto}}</td>
+                <td>{{arTerceros.razonSocial}}</td>
+                <td>{{arTerceros.ciudadRel.nombre}}</td>
+                <td>{{arTerceros.direccion}}</td>
+                <td>{{arTerceros.telefono}}</td>
+                <td>{{arTerceros.email}}</td>
                 <td><a href="{{ path('brs_ctb_base_terceros_nuevo',{'codigoTercero': arTerceros.codigoTerceroPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arTerceros.codigoTerceroPk }}" /></td>
             {%endfor%}

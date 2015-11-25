@@ -106,7 +106,19 @@ class CtbTercero
      */
     protected $tipoIdentificacionRel;
 
+    /**
+     * @ORM\OneToMany(targetEntity="CtbAsientoDetalle", mappedBy="terceroRel")
+     */
+    protected $asientosDetallesTerceroRel;
     
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->asientosDetallesTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoTerceroPk
@@ -524,5 +536,39 @@ class CtbTercero
     public function getTipoIdentificacionRel()
     {
         return $this->tipoIdentificacionRel;
+    }
+
+    /**
+     * Add asientosDetallesTerceroRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesTerceroRel
+     *
+     * @return CtbTercero
+     */
+    public function addAsientosDetallesTerceroRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesTerceroRel)
+    {
+        $this->asientosDetallesTerceroRel[] = $asientosDetallesTerceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove asientosDetallesTerceroRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesTerceroRel
+     */
+    public function removeAsientosDetallesTerceroRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesTerceroRel)
+    {
+        $this->asientosDetallesTerceroRel->removeElement($asientosDetallesTerceroRel);
+    }
+
+    /**
+     * Get asientosDetallesTerceroRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAsientosDetallesTerceroRel()
+    {
+        return $this->asientosDetallesTerceroRel;
     }
 }

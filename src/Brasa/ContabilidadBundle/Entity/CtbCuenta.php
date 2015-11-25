@@ -46,8 +46,22 @@ class CtbCuenta
     /**
      * @ORM\Column(name="porcentaje_retencion", type="float")
      */    
-    private $porcentajeRetencion = 0;    
+    private $porcentajeRetencion = 0; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="CtbAsientoDetalle", mappedBy="cuentaRel")
+     */
+    protected $asientosDetallesCuentaRel;
 
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->asientosDetallesCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set codigoCuentaPk
@@ -215,5 +229,39 @@ class CtbCuenta
     public function getPorcentajeRetencion()
     {
         return $this->porcentajeRetencion;
+    }
+
+    /**
+     * Add asientosDetallesCuentaRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCuentaRel
+     *
+     * @return CtbCuenta
+     */
+    public function addAsientosDetallesCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCuentaRel)
+    {
+        $this->asientosDetallesCuentaRel[] = $asientosDetallesCuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove asientosDetallesCuentaRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCuentaRel
+     */
+    public function removeAsientosDetallesCuentaRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCuentaRel)
+    {
+        $this->asientosDetallesCuentaRel->removeElement($asientosDetallesCuentaRel);
+    }
+
+    /**
+     * Get asientosDetallesCuentaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAsientosDetallesCuentaRel()
+    {
+        return $this->asientosDetallesCuentaRel;
     }
 }

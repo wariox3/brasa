@@ -18,6 +18,11 @@ INSERT INTO `ctb_comprobante_contable` (`codigo_comprobante_contable_pk`, `nombr
 INSERT INTO `gen_banco` (`codigo_banco_pk`, `nombre`) VALUES('1','BANCOLOMBIA');
 INSERT INTO `gen_banco` (`codigo_banco_pk`, `nombre`) VALUES('2','DAVIVIENDA');
 
+INSERT INTO `gen_clasificacion_tributaria` (`codigo_clasificacion_tributaria_pk`, `nombre_clasificacion_tributaria`, `retencion_iva_ventas`, `retencion_cree`, `retencion_fuente`) values('1','RÉGIMEN COMÚN','0','0','0');
+INSERT INTO `gen_clasificacion_tributaria` (`codigo_clasificacion_tributaria_pk`, `nombre_clasificacion_tributaria`, `retencion_iva_ventas`, `retencion_cree`, `retencion_fuente`) values('2','RÉGIMEN SIMPLIFICADO','0','0','0');
+INSERT INTO `gen_clasificacion_tributaria` (`codigo_clasificacion_tributaria_pk`, `nombre_clasificacion_tributaria`, `retencion_iva_ventas`, `retencion_cree`, `retencion_fuente`) values('3','PERSONA NATURAL','0','0','0');
+INSERT INTO `gen_clasificacion_tributaria` (`codigo_clasificacion_tributaria_pk`, `nombre_clasificacion_tributaria`, `retencion_iva_ventas`, `retencion_cree`, `retencion_fuente`) values('4','PERSON JURIDICA','0','0','0');
+
 INSERT INTO `gen_barrio` (`codigo_barrio_pk`, `nombre`, `codigo_ciudad_fk`) VALUES('1','12 DE OCTUBRE',NULL);
 INSERT INTO `gen_barrio` (`codigo_barrio_pk`, `nombre`, `codigo_ciudad_fk`) VALUES('2','13 DE NOVIEMBRE',NULL);
 INSERT INTO `gen_barrio` (`codigo_barrio_pk`, `nombre`, `codigo_ciudad_fk`) VALUES('3','20 DE JULIO',NULL);

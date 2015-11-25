@@ -50,14 +50,14 @@ class CtbAsientoDetalle
     private $codigoTerceroFk;    
     
     /**
-     * @ORM\Column(name="codigo_centro_costos_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */     
     private $codigoCentroCostosFk;     
     
     /**
-     * @ORM\Column(name="descripcion_contable", type="string", length=80, nullable=true)
+     * @ORM\Column(name="descripcion", type="string", length=150, nullable=true)
      */    
-    private $descripcionContable;     
+    private $descripcion;     
     
     /**
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -65,29 +65,29 @@ class CtbAsientoDetalle
     private $estadoAutorizado = 0;           
 
         /**
-     * @ORM\ManyToOne(targetEntity="CtbAsiento", inversedBy="CtbAsientoDetalle")
+     * @ORM\ManyToOne(targetEntity="CtbAsiento", inversedBy="asientosDetallesAsientoRel")
      * @ORM\JoinColumn(name="codigo_asiento_fk", referencedColumnName="codigo_asiento_pk")
      */
     protected $asientoRel; 
 
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbAsientoDetalle")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="asientosDetallesCuentaRel")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
-    private $cuentaRel;        
+    private $cuentaRel; 
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCentroCosto", inversedBy="CtbAsientoDetalle")
-     * @ORM\JoinColumn(name="codigo_centro_costos_fk", referencedColumnName="codigo_centro_costos_pk")
+     * @ORM\ManyToOne(targetEntity="CtbTercero", inversedBy="asientosDetallesTerceroRel")
+     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
+     */
+    protected $terceroRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto", inversedBy="asientosDetallesCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     private $centroCostosRel; 
     
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="CtbAsientoDetalle")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;    
-
 
 
 
@@ -270,27 +270,27 @@ class CtbAsientoDetalle
     }
 
     /**
-     * Set descripcionContable
+     * Set descripcion
      *
-     * @param string $descripcionContable
+     * @param string $descripcion
      *
      * @return CtbAsientoDetalle
      */
-    public function setDescripcionContable($descripcionContable)
+    public function setDescripcion($descripcion)
     {
-        $this->descripcionContable = $descripcionContable;
+        $this->descripcion = $descripcion;
 
         return $this;
     }
 
     /**
-     * Get descripcionContable
+     * Get descripcion
      *
      * @return string
      */
-    public function getDescripcionContable()
+    public function getDescripcion()
     {
-        return $this->descripcionContable;
+        return $this->descripcion;
     }
 
     /**
@@ -366,37 +366,13 @@ class CtbAsientoDetalle
     }
 
     /**
-     * Set centroCostosRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostosRel
-     *
-     * @return CtbAsientoDetalle
-     */
-    public function setCentroCostosRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostosRel = null)
-    {
-        $this->centroCostosRel = $centroCostosRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostosRel
-     *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
-     */
-    public function getCentroCostosRel()
-    {
-        return $this->centroCostosRel;
-    }
-
-    /**
      * Set terceroRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbTercero $terceroRel
      *
      * @return CtbAsientoDetalle
      */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    public function setTerceroRel(\Brasa\ContabilidadBundle\Entity\CtbTercero $terceroRel = null)
     {
         $this->terceroRel = $terceroRel;
 
@@ -406,10 +382,34 @@ class CtbAsientoDetalle
     /**
      * Get terceroRel
      *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     * @return \Brasa\ContabilidadBundle\Entity\CtbTercero
      */
     public function getTerceroRel()
     {
         return $this->terceroRel;
+    }
+
+    /**
+     * Set centroCostosRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostosRel
+     *
+     * @return CtbAsientoDetalle
+     */
+    public function setCentroCostosRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostosRel = null)
+    {
+        $this->centroCostosRel = $centroCostosRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostosRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostosRel()
+    {
+        return $this->centroCostosRel;
     }
 }

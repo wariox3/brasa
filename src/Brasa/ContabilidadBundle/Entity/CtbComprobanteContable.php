@@ -23,19 +23,7 @@ class CtbComprobanteContable
      */    
     private $nombreComprobanteContable;      
     
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\InventarioBundle\Entity\InvDocumento", mappedBy="comprobanteContableRel")
-     */
-    protected $documentosRel;
-
     
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->documentosRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get codigoComprobanteContablePk
@@ -69,39 +57,5 @@ class CtbComprobanteContable
     public function getNombreComprobanteContable()
     {
         return $this->nombreComprobanteContable;
-    }
-
-    /**
-     * Add documentosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosRel
-     *
-     * @return CtbComprobanteContable
-     */
-    public function addDocumentosRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosRel)
-    {
-        $this->documentosRel[] = $documentosRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove documentosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosRel
-     */
-    public function removeDocumentosRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosRel)
-    {
-        $this->documentosRel->removeElement($documentosRel);
-    }
-
-    /**
-     * Get documentosRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDocumentosRel()
-    {
-        return $this->documentosRel;
     }
 }

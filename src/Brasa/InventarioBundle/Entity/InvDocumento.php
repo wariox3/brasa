@@ -223,11 +223,18 @@ class InvDocumento
 
   
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoDocumentoPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDocumentoPk()
     {
@@ -238,6 +245,7 @@ class InvDocumento
      * Set nombreDocumento
      *
      * @param string $nombreDocumento
+     *
      * @return InvDocumento
      */
     public function setNombreDocumento($nombreDocumento)
@@ -250,7 +258,7 @@ class InvDocumento
     /**
      * Get nombreDocumento
      *
-     * @return string 
+     * @return string
      */
     public function getNombreDocumento()
     {
@@ -261,6 +269,7 @@ class InvDocumento
      * Set codigoDocumentoTipoFk
      *
      * @param integer $codigoDocumentoTipoFk
+     *
      * @return InvDocumento
      */
     public function setCodigoDocumentoTipoFk($codigoDocumentoTipoFk)
@@ -273,7 +282,7 @@ class InvDocumento
     /**
      * Get codigoDocumentoTipoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDocumentoTipoFk()
     {
@@ -281,9 +290,706 @@ class InvDocumento
     }
 
     /**
+     * Set abreviatura
+     *
+     * @param string $abreviatura
+     *
+     * @return InvDocumento
+     */
+    public function setAbreviatura($abreviatura)
+    {
+        $this->abreviatura = $abreviatura;
+
+        return $this;
+    }
+
+    /**
+     * Get abreviatura
+     *
+     * @return string
+     */
+    public function getAbreviatura()
+    {
+        return $this->abreviatura;
+    }
+
+    /**
+     * Set codigoDocumentoSubtipoFk
+     *
+     * @param integer $codigoDocumentoSubtipoFk
+     *
+     * @return InvDocumento
+     */
+    public function setCodigoDocumentoSubtipoFk($codigoDocumentoSubtipoFk)
+    {
+        $this->codigoDocumentoSubtipoFk = $codigoDocumentoSubtipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDocumentoSubtipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoDocumentoSubtipoFk()
+    {
+        return $this->codigoDocumentoSubtipoFk;
+    }
+
+    /**
+     * Set codigoComprobanteContableFk
+     *
+     * @param integer $codigoComprobanteContableFk
+     *
+     * @return InvDocumento
+     */
+    public function setCodigoComprobanteContableFk($codigoComprobanteContableFk)
+    {
+        $this->codigoComprobanteContableFk = $codigoComprobanteContableFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoComprobanteContableFk
+     *
+     * @return integer
+     */
+    public function getCodigoComprobanteContableFk()
+    {
+        return $this->codigoComprobanteContableFk;
+    }
+
+    /**
+     * Set operacionInventario
+     *
+     * @param integer $operacionInventario
+     *
+     * @return InvDocumento
+     */
+    public function setOperacionInventario($operacionInventario)
+    {
+        $this->operacionInventario = $operacionInventario;
+
+        return $this;
+    }
+
+    /**
+     * Get operacionInventario
+     *
+     * @return integer
+     */
+    public function getOperacionInventario()
+    {
+        return $this->operacionInventario;
+    }
+
+    /**
+     * Set operacionComercial
+     *
+     * @param integer $operacionComercial
+     *
+     * @return InvDocumento
+     */
+    public function setOperacionComercial($operacionComercial)
+    {
+        $this->operacionComercial = $operacionComercial;
+
+        return $this;
+    }
+
+    /**
+     * Get operacionComercial
+     *
+     * @return integer
+     */
+    public function getOperacionComercial()
+    {
+        return $this->operacionComercial;
+    }
+
+    /**
+     * Set facturaPOS
+     *
+     * @param boolean $facturaPOS
+     *
+     * @return InvDocumento
+     */
+    public function setFacturaPOS($facturaPOS)
+    {
+        $this->facturaPOS = $facturaPOS;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaPOS
+     *
+     * @return boolean
+     */
+    public function getFacturaPOS()
+    {
+        return $this->facturaPOS;
+    }
+
+    /**
+     * Set generaCartera
+     *
+     * @param boolean $generaCartera
+     *
+     * @return InvDocumento
+     */
+    public function setGeneraCartera($generaCartera)
+    {
+        $this->generaCartera = $generaCartera;
+
+        return $this;
+    }
+
+    /**
+     * Get generaCartera
+     *
+     * @return boolean
+     */
+    public function getGeneraCartera()
+    {
+        return $this->generaCartera;
+    }
+
+    /**
+     * Set tipoAsientoCartera
+     *
+     * @param integer $tipoAsientoCartera
+     *
+     * @return InvDocumento
+     */
+    public function setTipoAsientoCartera($tipoAsientoCartera)
+    {
+        $this->tipoAsientoCartera = $tipoAsientoCartera;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoAsientoCartera
+     *
+     * @return integer
+     */
+    public function getTipoAsientoCartera()
+    {
+        return $this->tipoAsientoCartera;
+    }
+
+    /**
+     * Set generaTesoreria
+     *
+     * @param boolean $generaTesoreria
+     *
+     * @return InvDocumento
+     */
+    public function setGeneraTesoreria($generaTesoreria)
+    {
+        $this->generaTesoreria = $generaTesoreria;
+
+        return $this;
+    }
+
+    /**
+     * Get generaTesoreria
+     *
+     * @return boolean
+     */
+    public function getGeneraTesoreria()
+    {
+        return $this->generaTesoreria;
+    }
+
+    /**
+     * Set tipoAsientoTesoreria
+     *
+     * @param integer $tipoAsientoTesoreria
+     *
+     * @return InvDocumento
+     */
+    public function setTipoAsientoTesoreria($tipoAsientoTesoreria)
+    {
+        $this->tipoAsientoTesoreria = $tipoAsientoTesoreria;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoAsientoTesoreria
+     *
+     * @return integer
+     */
+    public function getTipoAsientoTesoreria()
+    {
+        return $this->tipoAsientoTesoreria;
+    }
+
+    /**
+     * Set tipoValor
+     *
+     * @param integer $tipoValor
+     *
+     * @return InvDocumento
+     */
+    public function setTipoValor($tipoValor)
+    {
+        $this->tipoValor = $tipoValor;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoValor
+     *
+     * @return integer
+     */
+    public function getTipoValor()
+    {
+        return $this->tipoValor;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return InvDocumento
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
+    }
+
+    /**
+     * Set tipoCuentaIngreso
+     *
+     * @param integer $tipoCuentaIngreso
+     *
+     * @return InvDocumento
+     */
+    public function setTipoCuentaIngreso($tipoCuentaIngreso)
+    {
+        $this->tipoCuentaIngreso = $tipoCuentaIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaIngreso
+     *
+     * @return integer
+     */
+    public function getTipoCuentaIngreso()
+    {
+        return $this->tipoCuentaIngreso;
+    }
+
+    /**
+     * Set tipoCuentaCosto
+     *
+     * @param integer $tipoCuentaCosto
+     *
+     * @return InvDocumento
+     */
+    public function setTipoCuentaCosto($tipoCuentaCosto)
+    {
+        $this->tipoCuentaCosto = $tipoCuentaCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaCosto
+     *
+     * @return integer
+     */
+    public function getTipoCuentaCosto()
+    {
+        return $this->tipoCuentaCosto;
+    }
+
+    /**
+     * Set tipoCuentaIva
+     *
+     * @param integer $tipoCuentaIva
+     *
+     * @return InvDocumento
+     */
+    public function setTipoCuentaIva($tipoCuentaIva)
+    {
+        $this->tipoCuentaIva = $tipoCuentaIva;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaIva
+     *
+     * @return integer
+     */
+    public function getTipoCuentaIva()
+    {
+        return $this->tipoCuentaIva;
+    }
+
+    /**
+     * Set codigoCuentaIvaFk
+     *
+     * @param string $codigoCuentaIvaFk
+     *
+     * @return InvDocumento
+     */
+    public function setCodigoCuentaIvaFk($codigoCuentaIvaFk)
+    {
+        $this->codigo_cuenta_iva_fk = $codigoCuentaIvaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaIvaFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaIvaFk()
+    {
+        return $this->codigo_cuenta_iva_fk;
+    }
+
+    /**
+     * Set tipoCuentaRetencionFuente
+     *
+     * @param integer $tipoCuentaRetencionFuente
+     *
+     * @return InvDocumento
+     */
+    public function setTipoCuentaRetencionFuente($tipoCuentaRetencionFuente)
+    {
+        $this->tipoCuentaRetencionFuente = $tipoCuentaRetencionFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaRetencionFuente
+     *
+     * @return integer
+     */
+    public function getTipoCuentaRetencionFuente()
+    {
+        return $this->tipoCuentaRetencionFuente;
+    }
+
+    /**
+     * Set codigoCuentaRetencionFuenteFk
+     *
+     * @param string $codigoCuentaRetencionFuenteFk
+     *
+     * @return InvDocumento
+     */
+    public function setCodigoCuentaRetencionFuenteFk($codigoCuentaRetencionFuenteFk)
+    {
+        $this->codigoCuentaRetencionFuenteFk = $codigoCuentaRetencionFuenteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaRetencionFuenteFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaRetencionFuenteFk()
+    {
+        return $this->codigoCuentaRetencionFuenteFk;
+    }
+
+    /**
+     * Set tipoCuentaRetencionCREE
+     *
+     * @param integer $tipoCuentaRetencionCREE
+     *
+     * @return InvDocumento
+     */
+    public function setTipoCuentaRetencionCREE($tipoCuentaRetencionCREE)
+    {
+        $this->tipoCuentaRetencionCREE = $tipoCuentaRetencionCREE;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaRetencionCREE
+     *
+     * @return integer
+     */
+    public function getTipoCuentaRetencionCREE()
+    {
+        return $this->tipoCuentaRetencionCREE;
+    }
+
+    /**
+     * Set codigoCuentaRetencionCREEFk
+     *
+     * @param string $codigoCuentaRetencionCREEFk
+     *
+     * @return InvDocumento
+     */
+    public function setCodigoCuentaRetencionCREEFk($codigoCuentaRetencionCREEFk)
+    {
+        $this->codigoCuentaRetencionCREEFk = $codigoCuentaRetencionCREEFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaRetencionCREEFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaRetencionCREEFk()
+    {
+        return $this->codigoCuentaRetencionCREEFk;
+    }
+
+    /**
+     * Set tipoCuentaRetencionIva
+     *
+     * @param integer $tipoCuentaRetencionIva
+     *
+     * @return InvDocumento
+     */
+    public function setTipoCuentaRetencionIva($tipoCuentaRetencionIva)
+    {
+        $this->tipoCuentaRetencionIva = $tipoCuentaRetencionIva;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaRetencionIva
+     *
+     * @return integer
+     */
+    public function getTipoCuentaRetencionIva()
+    {
+        return $this->tipoCuentaRetencionIva;
+    }
+
+    /**
+     * Set codigoCuentaRetencionIvaFk
+     *
+     * @param string $codigoCuentaRetencionIvaFk
+     *
+     * @return InvDocumento
+     */
+    public function setCodigoCuentaRetencionIvaFk($codigoCuentaRetencionIvaFk)
+    {
+        $this->codigoCuentaRetencionIvaFk = $codigoCuentaRetencionIvaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaRetencionIvaFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaRetencionIvaFk()
+    {
+        return $this->codigoCuentaRetencionIvaFk;
+    }
+
+    /**
+     * Set tipoCuentaTesoreria
+     *
+     * @param integer $tipoCuentaTesoreria
+     *
+     * @return InvDocumento
+     */
+    public function setTipoCuentaTesoreria($tipoCuentaTesoreria)
+    {
+        $this->tipoCuentaTesoreria = $tipoCuentaTesoreria;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaTesoreria
+     *
+     * @return integer
+     */
+    public function getTipoCuentaTesoreria()
+    {
+        return $this->tipoCuentaTesoreria;
+    }
+
+    /**
+     * Set codigoCuentaTesoreriaFk
+     *
+     * @param string $codigoCuentaTesoreriaFk
+     *
+     * @return InvDocumento
+     */
+    public function setCodigoCuentaTesoreriaFk($codigoCuentaTesoreriaFk)
+    {
+        $this->codigoCuentaTesoreriaFk = $codigoCuentaTesoreriaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaTesoreriaFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaTesoreriaFk()
+    {
+        return $this->codigoCuentaTesoreriaFk;
+    }
+
+    /**
+     * Set tipoCuentaCartera
+     *
+     * @param integer $tipoCuentaCartera
+     *
+     * @return InvDocumento
+     */
+    public function setTipoCuentaCartera($tipoCuentaCartera)
+    {
+        $this->tipoCuentaCartera = $tipoCuentaCartera;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaCartera
+     *
+     * @return integer
+     */
+    public function getTipoCuentaCartera()
+    {
+        return $this->tipoCuentaCartera;
+    }
+
+    /**
+     * Set codigoCuentaCarteraFk
+     *
+     * @param string $codigoCuentaCarteraFk
+     *
+     * @return InvDocumento
+     */
+    public function setCodigoCuentaCarteraFk($codigoCuentaCarteraFk)
+    {
+        $this->codigoCuentaCarteraFk = $codigoCuentaCarteraFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaCarteraFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaCarteraFk()
+    {
+        return $this->codigoCuentaCarteraFk;
+    }
+
+    /**
+     * Set asignarConsecutivoImpresion
+     *
+     * @param boolean $asignarConsecutivoImpresion
+     *
+     * @return InvDocumento
+     */
+    public function setAsignarConsecutivoImpresion($asignarConsecutivoImpresion)
+    {
+        $this->asignarConsecutivoImpresion = $asignarConsecutivoImpresion;
+
+        return $this;
+    }
+
+    /**
+     * Get asignarConsecutivoImpresion
+     *
+     * @return boolean
+     */
+    public function getAsignarConsecutivoImpresion()
+    {
+        return $this->asignarConsecutivoImpresion;
+    }
+
+    /**
+     * Set generaCostoPromedio
+     *
+     * @param boolean $generaCostoPromedio
+     *
+     * @return InvDocumento
+     */
+    public function setGeneraCostoPromedio($generaCostoPromedio)
+    {
+        $this->generaCostoPromedio = $generaCostoPromedio;
+
+        return $this;
+    }
+
+    /**
+     * Get generaCostoPromedio
+     *
+     * @return boolean
+     */
+    public function getGeneraCostoPromedio()
+    {
+        return $this->generaCostoPromedio;
+    }
+
+    /**
+     * Set tipoTercero
+     *
+     * @param integer $tipoTercero
+     *
+     * @return InvDocumento
+     */
+    public function setTipoTercero($tipoTercero)
+    {
+        $this->tipoTercero = $tipoTercero;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoTercero
+     *
+     * @return integer
+     */
+    public function getTipoTercero()
+    {
+        return $this->tipoTercero;
+    }
+
+    /**
      * Set documentoTipoRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvDocumentoTipo $documentoTipoRel
+     *
      * @return InvDocumento
      */
     public function setDocumentoTipoRel(\Brasa\InventarioBundle\Entity\InvDocumentoTipo $documentoTipoRel = null)
@@ -296,7 +1002,7 @@ class InvDocumento
     /**
      * Get documentoTipoRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvDocumentoTipo 
+     * @return \Brasa\InventarioBundle\Entity\InvDocumentoTipo
      */
     public function getDocumentoTipoRel()
     {
@@ -304,9 +1010,34 @@ class InvDocumento
     }
 
     /**
+     * Set documentoSubtipoRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvDocumentoSubtipo $documentoSubtipoRel
+     *
+     * @return InvDocumento
+     */
+    public function setDocumentoSubtipoRel(\Brasa\InventarioBundle\Entity\InvDocumentoSubtipo $documentoSubtipoRel = null)
+    {
+        $this->documentoSubtipoRel = $documentoSubtipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get documentoSubtipoRel
+     *
+     * @return \Brasa\InventarioBundle\Entity\InvDocumentoSubtipo
+     */
+    public function getDocumentoSubtipoRel()
+    {
+        return $this->documentoSubtipoRel;
+    }
+
+    /**
      * Add movimientosRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
+     *
      * @return InvDocumento
      */
     public function addMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
@@ -329,708 +1060,10 @@ class InvDocumento
     /**
      * Get movimientosRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMovimientosRel()
     {
         return $this->movimientosRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-
-    /**
-     * Set abreviatura
-     *
-     * @param string $abreviatura
-     * @return InvDocumento
-     */
-    public function setAbreviatura($abreviatura)
-    {
-        $this->abreviatura = $abreviatura;
-
-        return $this;
-    }
-
-    /**
-     * Get abreviatura
-     *
-     * @return string 
-     */
-    public function getAbreviatura()
-    {
-        return $this->abreviatura;
-    }
-
-    /**
-     * Set codigoDocumentoSubtipoFk
-     *
-     * @param integer $codigoDocumentoSubtipoFk
-     * @return InvDocumento
-     */
-    public function setCodigoDocumentoSubtipoFk($codigoDocumentoSubtipoFk)
-    {
-        $this->codigoDocumentoSubtipoFk = $codigoDocumentoSubtipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoDocumentoSubtipoFk
-     *
-     * @return integer 
-     */
-    public function getCodigoDocumentoSubtipoFk()
-    {
-        return $this->codigoDocumentoSubtipoFk;
-    }
-
-    /**
-     * Set codigoComprobanteContableFk
-     *
-     * @param integer $codigoComprobanteContableFk
-     * @return InvDocumento
-     */
-    public function setCodigoComprobanteContableFk($codigoComprobanteContableFk)
-    {
-        $this->codigoComprobanteContableFk = $codigoComprobanteContableFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoComprobanteContableFk
-     *
-     * @return integer 
-     */
-    public function getCodigoComprobanteContableFk()
-    {
-        return $this->codigoComprobanteContableFk;
-    }
-
-    /**
-     * Set operacionInventario
-     *
-     * @param integer $operacionInventario
-     * @return InvDocumento
-     */
-    public function setOperacionInventario($operacionInventario)
-    {
-        $this->operacionInventario = $operacionInventario;
-
-        return $this;
-    }
-
-    /**
-     * Get operacionInventario
-     *
-     * @return integer 
-     */
-    public function getOperacionInventario()
-    {
-        return $this->operacionInventario;
-    }
-
-    /**
-     * Set operacionComercial
-     *
-     * @param integer $operacionComercial
-     * @return InvDocumento
-     */
-    public function setOperacionComercial($operacionComercial)
-    {
-        $this->operacionComercial = $operacionComercial;
-
-        return $this;
-    }
-
-    /**
-     * Get operacionComercial
-     *
-     * @return integer 
-     */
-    public function getOperacionComercial()
-    {
-        return $this->operacionComercial;
-    }
-
-    /**
-     * Set facturaPOS
-     *
-     * @param boolean $facturaPOS
-     * @return InvDocumento
-     */
-    public function setFacturaPOS($facturaPOS)
-    {
-        $this->facturaPOS = $facturaPOS;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaPOS
-     *
-     * @return boolean 
-     */
-    public function getFacturaPOS()
-    {
-        return $this->facturaPOS;
-    }
-
-    /**
-     * Set generaCartera
-     *
-     * @param boolean $generaCartera
-     * @return InvDocumento
-     */
-    public function setGeneraCartera($generaCartera)
-    {
-        $this->generaCartera = $generaCartera;
-
-        return $this;
-    }
-
-    /**
-     * Get generaCartera
-     *
-     * @return boolean 
-     */
-    public function getGeneraCartera()
-    {
-        return $this->generaCartera;
-    }
-
-    /**
-     * Set tipoAsientoCartera
-     *
-     * @param integer $tipoAsientoCartera
-     * @return InvDocumento
-     */
-    public function setTipoAsientoCartera($tipoAsientoCartera)
-    {
-        $this->tipoAsientoCartera = $tipoAsientoCartera;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoAsientoCartera
-     *
-     * @return integer 
-     */
-    public function getTipoAsientoCartera()
-    {
-        return $this->tipoAsientoCartera;
-    }
-
-    /**
-     * Set generaTesoreria
-     *
-     * @param boolean $generaTesoreria
-     * @return InvDocumento
-     */
-    public function setGeneraTesoreria($generaTesoreria)
-    {
-        $this->generaTesoreria = $generaTesoreria;
-
-        return $this;
-    }
-
-    /**
-     * Get generaTesoreria
-     *
-     * @return boolean 
-     */
-    public function getGeneraTesoreria()
-    {
-        return $this->generaTesoreria;
-    }
-
-    /**
-     * Set tipoAsientoTesoreria
-     *
-     * @param integer $tipoAsientoTesoreria
-     * @return InvDocumento
-     */
-    public function setTipoAsientoTesoreria($tipoAsientoTesoreria)
-    {
-        $this->tipoAsientoTesoreria = $tipoAsientoTesoreria;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoAsientoTesoreria
-     *
-     * @return integer 
-     */
-    public function getTipoAsientoTesoreria()
-    {
-        return $this->tipoAsientoTesoreria;
-    }
-
-    /**
-     * Set tipoValor
-     *
-     * @param integer $tipoValor
-     * @return InvDocumento
-     */
-    public function setTipoValor($tipoValor)
-    {
-        $this->tipoValor = $tipoValor;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoValor
-     *
-     * @return integer 
-     */
-    public function getTipoValor()
-    {
-        return $this->tipoValor;
-    }
-
-    /**
-     * Set consecutivo
-     *
-     * @param integer $consecutivo
-     * @return InvDocumento
-     */
-    public function setConsecutivo($consecutivo)
-    {
-        $this->consecutivo = $consecutivo;
-
-        return $this;
-    }
-
-    /**
-     * Get consecutivo
-     *
-     * @return integer 
-     */
-    public function getConsecutivo()
-    {
-        return $this->consecutivo;
-    }
-
-    /**
-     * Set tipoCuentaIngreso
-     *
-     * @param integer $tipoCuentaIngreso
-     * @return InvDocumento
-     */
-    public function setTipoCuentaIngreso($tipoCuentaIngreso)
-    {
-        $this->tipoCuentaIngreso = $tipoCuentaIngreso;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaIngreso
-     *
-     * @return integer 
-     */
-    public function getTipoCuentaIngreso()
-    {
-        return $this->tipoCuentaIngreso;
-    }
-
-    /**
-     * Set tipoCuentaCosto
-     *
-     * @param integer $tipoCuentaCosto
-     * @return InvDocumento
-     */
-    public function setTipoCuentaCosto($tipoCuentaCosto)
-    {
-        $this->tipoCuentaCosto = $tipoCuentaCosto;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaCosto
-     *
-     * @return integer 
-     */
-    public function getTipoCuentaCosto()
-    {
-        return $this->tipoCuentaCosto;
-    }
-
-    /**
-     * Set tipoCuentaIva
-     *
-     * @param integer $tipoCuentaIva
-     * @return InvDocumento
-     */
-    public function setTipoCuentaIva($tipoCuentaIva)
-    {
-        $this->tipoCuentaIva = $tipoCuentaIva;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaIva
-     *
-     * @return integer 
-     */
-    public function getTipoCuentaIva()
-    {
-        return $this->tipoCuentaIva;
-    }
-
-    /**
-     * Set codigo_cuenta_iva_fk
-     *
-     * @param string $codigoCuentaIvaFk
-     * @return InvDocumento
-     */
-    public function setCodigoCuentaIvaFk($codigoCuentaIvaFk)
-    {
-        $this->codigo_cuenta_iva_fk = $codigoCuentaIvaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigo_cuenta_iva_fk
-     *
-     * @return string 
-     */
-    public function getCodigoCuentaIvaFk()
-    {
-        return $this->codigo_cuenta_iva_fk;
-    }
-
-    /**
-     * Set tipoCuentaRetencionFuente
-     *
-     * @param integer $tipoCuentaRetencionFuente
-     * @return InvDocumento
-     */
-    public function setTipoCuentaRetencionFuente($tipoCuentaRetencionFuente)
-    {
-        $this->tipoCuentaRetencionFuente = $tipoCuentaRetencionFuente;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaRetencionFuente
-     *
-     * @return integer 
-     */
-    public function getTipoCuentaRetencionFuente()
-    {
-        return $this->tipoCuentaRetencionFuente;
-    }
-
-    /**
-     * Set codigoCuentaRetencionFuenteFk
-     *
-     * @param string $codigoCuentaRetencionFuenteFk
-     * @return InvDocumento
-     */
-    public function setCodigoCuentaRetencionFuenteFk($codigoCuentaRetencionFuenteFk)
-    {
-        $this->codigoCuentaRetencionFuenteFk = $codigoCuentaRetencionFuenteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCuentaRetencionFuenteFk
-     *
-     * @return string 
-     */
-    public function getCodigoCuentaRetencionFuenteFk()
-    {
-        return $this->codigoCuentaRetencionFuenteFk;
-    }
-
-    /**
-     * Set tipoCuentaRetencionCREE
-     *
-     * @param integer $tipoCuentaRetencionCREE
-     * @return InvDocumento
-     */
-    public function setTipoCuentaRetencionCREE($tipoCuentaRetencionCREE)
-    {
-        $this->tipoCuentaRetencionCREE = $tipoCuentaRetencionCREE;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaRetencionCREE
-     *
-     * @return integer 
-     */
-    public function getTipoCuentaRetencionCREE()
-    {
-        return $this->tipoCuentaRetencionCREE;
-    }
-
-    /**
-     * Set codigoCuentaRetencionCREEFk
-     *
-     * @param string $codigoCuentaRetencionCREEFk
-     * @return InvDocumento
-     */
-    public function setCodigoCuentaRetencionCREEFk($codigoCuentaRetencionCREEFk)
-    {
-        $this->codigoCuentaRetencionCREEFk = $codigoCuentaRetencionCREEFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCuentaRetencionCREEFk
-     *
-     * @return string 
-     */
-    public function getCodigoCuentaRetencionCREEFk()
-    {
-        return $this->codigoCuentaRetencionCREEFk;
-    }
-
-    /**
-     * Set tipoCuentaRetencionIva
-     *
-     * @param integer $tipoCuentaRetencionIva
-     * @return InvDocumento
-     */
-    public function setTipoCuentaRetencionIva($tipoCuentaRetencionIva)
-    {
-        $this->tipoCuentaRetencionIva = $tipoCuentaRetencionIva;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaRetencionIva
-     *
-     * @return integer 
-     */
-    public function getTipoCuentaRetencionIva()
-    {
-        return $this->tipoCuentaRetencionIva;
-    }
-
-    /**
-     * Set codigoCuentaRetencionIvaFk
-     *
-     * @param string $codigoCuentaRetencionIvaFk
-     * @return InvDocumento
-     */
-    public function setCodigoCuentaRetencionIvaFk($codigoCuentaRetencionIvaFk)
-    {
-        $this->codigoCuentaRetencionIvaFk = $codigoCuentaRetencionIvaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCuentaRetencionIvaFk
-     *
-     * @return string 
-     */
-    public function getCodigoCuentaRetencionIvaFk()
-    {
-        return $this->codigoCuentaRetencionIvaFk;
-    }
-
-    /**
-     * Set tipoCuentaTesoreria
-     *
-     * @param integer $tipoCuentaTesoreria
-     * @return InvDocumento
-     */
-    public function setTipoCuentaTesoreria($tipoCuentaTesoreria)
-    {
-        $this->tipoCuentaTesoreria = $tipoCuentaTesoreria;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaTesoreria
-     *
-     * @return integer 
-     */
-    public function getTipoCuentaTesoreria()
-    {
-        return $this->tipoCuentaTesoreria;
-    }
-
-    /**
-     * Set codigoCuentaTesoreriaFk
-     *
-     * @param string $codigoCuentaTesoreriaFk
-     * @return InvDocumento
-     */
-    public function setCodigoCuentaTesoreriaFk($codigoCuentaTesoreriaFk)
-    {
-        $this->codigoCuentaTesoreriaFk = $codigoCuentaTesoreriaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCuentaTesoreriaFk
-     *
-     * @return string 
-     */
-    public function getCodigoCuentaTesoreriaFk()
-    {
-        return $this->codigoCuentaTesoreriaFk;
-    }
-
-    /**
-     * Set tipoCuentaCartera
-     *
-     * @param integer $tipoCuentaCartera
-     * @return InvDocumento
-     */
-    public function setTipoCuentaCartera($tipoCuentaCartera)
-    {
-        $this->tipoCuentaCartera = $tipoCuentaCartera;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaCartera
-     *
-     * @return integer 
-     */
-    public function getTipoCuentaCartera()
-    {
-        return $this->tipoCuentaCartera;
-    }
-
-    /**
-     * Set codigoCuentaCarteraFk
-     *
-     * @param string $codigoCuentaCarteraFk
-     * @return InvDocumento
-     */
-    public function setCodigoCuentaCarteraFk($codigoCuentaCarteraFk)
-    {
-        $this->codigoCuentaCarteraFk = $codigoCuentaCarteraFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCuentaCarteraFk
-     *
-     * @return string 
-     */
-    public function getCodigoCuentaCarteraFk()
-    {
-        return $this->codigoCuentaCarteraFk;
-    }
-
-    /**
-     * Set asignarConsecutivoImpresion
-     *
-     * @param boolean $asignarConsecutivoImpresion
-     * @return InvDocumento
-     */
-    public function setAsignarConsecutivoImpresion($asignarConsecutivoImpresion)
-    {
-        $this->asignarConsecutivoImpresion = $asignarConsecutivoImpresion;
-
-        return $this;
-    }
-
-    /**
-     * Get asignarConsecutivoImpresion
-     *
-     * @return boolean 
-     */
-    public function getAsignarConsecutivoImpresion()
-    {
-        return $this->asignarConsecutivoImpresion;
-    }
-
-    /**
-     * Set generaCostoPromedio
-     *
-     * @param boolean $generaCostoPromedio
-     * @return InvDocumento
-     */
-    public function setGeneraCostoPromedio($generaCostoPromedio)
-    {
-        $this->generaCostoPromedio = $generaCostoPromedio;
-
-        return $this;
-    }
-
-    /**
-     * Get generaCostoPromedio
-     *
-     * @return boolean 
-     */
-    public function getGeneraCostoPromedio()
-    {
-        return $this->generaCostoPromedio;
-    }
-
-    /**
-     * Set tipoTercero
-     *
-     * @param integer $tipoTercero
-     * @return InvDocumento
-     */
-    public function setTipoTercero($tipoTercero)
-    {
-        $this->tipoTercero = $tipoTercero;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoTercero
-     *
-     * @return integer 
-     */
-    public function getTipoTercero()
-    {
-        return $this->tipoTercero;
-    }
-
-    /**
-     * Set documentoSubtipoRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumentoSubtipo $documentoSubtipoRel
-     * @return InvDocumento
-     */
-    public function setDocumentoSubtipoRel(\Brasa\InventarioBundle\Entity\InvDocumentoSubtipo $documentoSubtipoRel = null)
-    {
-        $this->documentoSubtipoRel = $documentoSubtipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get documentoSubtipoRel
-     *
-     * @return \Brasa\InventarioBundle\Entity\InvDocumentoSubtipo 
-     */
-    public function getDocumentoSubtipoRel()
-    {
-        return $this->documentoSubtipoRel;
     }
 }
