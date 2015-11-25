@@ -2,7 +2,9 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoEmpleado extends \FPDF_FPDF {
     public static $em;
+    
     public static $strDql;
+    
     public function Generar($miThis, $dql) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
@@ -17,6 +19,7 @@ class FormatoEmpleado extends \FPDF_FPDF {
         $pdf->Output("Lista_empleados.pdf", 'D');        
         
     } 
+    
     public function Header() {
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',12);
@@ -26,6 +29,7 @@ class FormatoEmpleado extends \FPDF_FPDF {
         $this->EncabezadoDetalles();
         
     }
+    
     public function EncabezadoDetalles() {
         $this->Ln(8);
         $header = array('CODIGO', 'IDENTIFICACION', 'NOMBRE', 'CENTRO COSTOS', 'F. NACIMIENTO', 'TELEFONO', 'SALARIO', 'AUX.T', 'ACTIVO');
@@ -49,6 +53,7 @@ class FormatoEmpleado extends \FPDF_FPDF {
         $this->SetFont('');
         $this->Ln(4);
     }
+    
     public function Body($pdf) {
         $query = self::$em->createQuery(self::$strDql);
         $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
@@ -82,6 +87,7 @@ class FormatoEmpleado extends \FPDF_FPDF {
             $pdf->SetAutoPageBreak(true, 15);
         }        
     }
+    
     public function Footer() {
         $this->SetXY(245, 190);
         $this->Cell(30, 35, utf8_decode('   Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          

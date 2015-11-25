@@ -1,5 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
+
 class FormatoDesempenos extends \FPDF_FPDF {
     public static $em;
 

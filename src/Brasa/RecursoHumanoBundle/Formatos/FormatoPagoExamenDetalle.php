@@ -2,7 +2,9 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoPagoExamenDetalle extends \FPDF_FPDF {
     public static $em;
+    
     public static $codigoPagoExamen;
+    
     public function Generar($miThis, $codigoPagoExamen) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
@@ -17,6 +19,7 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         $pdf->Output("PagoExamenDetalle$codigoPagoExamen.pdf", 'D');        
         
     } 
+    
     public function Header() {
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);

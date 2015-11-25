@@ -102,7 +102,13 @@ class GenConfiguracion
      * @ORM\Column(name="ruta_directorio", type="string", length=500, nullable=true)
      */      
     private $rutaDirectorio;
+    
+    /**
+     * @ORM\Column(name="pagina_web", type="string", length=100, nullable=true)
+     */      
+    private $paginaWeb;
         
+
 
     /**
      * Get codigoConfiguracionPk
@@ -331,6 +337,30 @@ class GenConfiguracion
     }
 
     /**
+     * Set rutaAlmacenamiento
+     *
+     * @param string $rutaAlmacenamiento
+     *
+     * @return GenConfiguracion
+     */
+    public function setRutaAlmacenamiento($rutaAlmacenamiento)
+    {
+        $this->rutaAlmacenamiento = $rutaAlmacenamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaAlmacenamiento
+     *
+     * @return string
+     */
+    public function getRutaAlmacenamiento()
+    {
+        return $this->rutaAlmacenamiento;
+    }
+
+    /**
      * Set nitEmpresa
      *
      * @param string $nitEmpresa
@@ -475,30 +505,6 @@ class GenConfiguracion
     }
 
     /**
-     * Set rutaAlmacenamiento
-     *
-     * @param string $rutaAlmacenamiento
-     *
-     * @return GenConfiguracion
-     */
-    public function setRutaAlmacenamiento($rutaAlmacenamiento)
-    {
-        $this->rutaAlmacenamiento = $rutaAlmacenamiento;
-
-        return $this;
-    }
-
-    /**
-     * Get rutaAlmacenamiento
-     *
-     * @return string
-     */
-    public function getRutaAlmacenamiento()
-    {
-        return $this->rutaAlmacenamiento;
-    }
-
-    /**
      * Set rutaDirectorio
      *
      * @param string $rutaDirectorio
@@ -520,5 +526,29 @@ class GenConfiguracion
     public function getRutaDirectorio()
     {
         return $this->rutaDirectorio;
+    }
+
+    /**
+     * Set paginaWeb
+     *
+     * @param string $paginaWeb
+     *
+     * @return GenConfiguracion
+     */
+    public function setPaginaWeb($paginaWeb)
+    {
+        $this->paginaWeb = $paginaWeb;
+
+        return $this;
+    }
+
+    /**
+     * Get paginaWeb
+     *
+     * @return string
+     */
+    public function getPaginaWeb()
+    {
+        return $this->paginaWeb;
     }
 }

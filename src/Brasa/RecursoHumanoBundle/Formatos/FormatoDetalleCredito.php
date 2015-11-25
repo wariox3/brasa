@@ -2,7 +2,9 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoDetalleCredito extends \FPDF_FPDF {
     public static $em;
+    
     public static $codigoCredito;
+    
     public function Generar($miThis, $codigoCredito) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
@@ -17,6 +19,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $pdf->Output("DetalleCredito_$codigoCredito.pdf", 'D');        
         
     } 
+    
     public function Header() {
         $arDetallePago = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arDetallePago = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find(self::$codigoCredito);

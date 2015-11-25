@@ -2,6 +2,7 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoListaPagos extends \FPDF_FPDF {
     public static $em;
+    
     public static $strDql;
    
     public function Generar($miThis, $dql) {        
@@ -18,6 +19,7 @@ class FormatoListaPagos extends \FPDF_FPDF {
         $pdf->Output("Lista_pagos.pdf", 'D');        
         
     } 
+    
     public function Header() {
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPagos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findAll();

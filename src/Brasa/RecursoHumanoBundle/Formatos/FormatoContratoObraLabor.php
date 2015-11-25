@@ -2,6 +2,7 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoContratoObraLabor extends \FPDF_FPDF {
     public static $em;
+    
     public static $codigoContrato;
     
     public function Generar($miThis, $codigoContrato) {        

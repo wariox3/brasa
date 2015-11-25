@@ -35,6 +35,7 @@ class ConfiguracionGeneralController extends Controller
             ->add('rutaTemporal', 'text', array('data' => $arConfiguracionGeneral->getRutaTemporal(), 'required' => true))    
             ->add('rutaAlmacenamiento', 'text', array('data' => $arConfiguracionGeneral->getRutaAlmacenamiento(), 'required' => true))                
             ->add('rutaDirectorio', 'text', array('data' => $arConfiguracionGeneral->getRutaDirectorio(), 'required' => true))                                
+            ->add('paginaWeb', 'text', array('data' => $arConfiguracionGeneral->getPaginaWeb(), 'required' => true))                                                
             ->add('guardar', 'submit', array('label' => 'Actualizar'))            
             ->getForm();
         $formConfiguracionGeneral->handleRequest($request);
@@ -58,6 +59,7 @@ class ConfiguracionGeneralController extends Controller
                 $RutaTemporal = $controles['rutaTemporal'];
                 $RutaAlmacenamiento = $controles['rutaAlmacenamiento'];
                 $RutaDirectorio = $controles['rutaDirectorio'];
+                $PaginaWeb = $controles['paginaWeb'];
                 // guardar la tarea en la base de datos
                 $arConfiguracionGeneral->setNitEmpresa($NitEmpresa);
                 $arConfiguracionGeneral->setDigitoVerificacionEmpresa($NumeroDv);
@@ -76,6 +78,7 @@ class ConfiguracionGeneralController extends Controller
                 $arConfiguracionGeneral->setRutaTemporal($RutaTemporal);
                 $arConfiguracionGeneral->setRutaAlmacenamiento($RutaAlmacenamiento);
                 $arConfiguracionGeneral->setRutaDirectorio($RutaDirectorio);
+                $arConfiguracionGeneral->setPaginaWeb($PaginaWeb);
                 $em->persist($arConfiguracionGeneral);
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_gen_configuracion_general', array('codigoConfiguracionPk' => 1)));                

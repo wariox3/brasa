@@ -2,7 +2,9 @@
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoSede extends \FPDF_FPDF {
     public static $em;
+    
     public static $strDql;
+    
     public function Generar($miThis, $dql) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
@@ -15,6 +17,7 @@ class FormatoSede extends \FPDF_FPDF {
         $this->Body($pdf);
         $pdf->Output("Lista_sedes.pdf", 'D');        
     } 
+    
     public function Header() {
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',12);
@@ -23,6 +26,7 @@ class FormatoSede extends \FPDF_FPDF {
         $this->Cell(193, 8, "LISTADO SEDES" , 1, 0, 'C', 1);
         $this->EncabezadoDetalles();
     }
+    
     public function EncabezadoDetalles() {
         $this->Ln(8);
         $header = array('CODIGO', 'CENTRO COSTO', 'NOMBRE');
@@ -44,6 +48,7 @@ class FormatoSede extends \FPDF_FPDF {
         $this->SetFont('');
         $this->Ln(4);
     }
+    
     public function Body($pdf) {
         $query = self::$em->createQuery(self::$strDql);
         $arSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuSede();
@@ -58,6 +63,7 @@ class FormatoSede extends \FPDF_FPDF {
             $pdf->SetAutoPageBreak(true, 15);
         }        
     }
+    
     public function Footer() {
         $this->SetXY(160, 270);
         $this->Cell(30, 35, utf8_decode('   Página ') . $this->PageNo() . ' de {nb}' , 0, 0, 'L', 0);          

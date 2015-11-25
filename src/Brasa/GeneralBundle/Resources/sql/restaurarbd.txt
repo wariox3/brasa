@@ -1394,6 +1394,14 @@ INSERT INTO `rhu_accidente_trabajo_tipo_control` (`codigo_accidente_trabajo_tipo
 
 INSERT INTO `rhu_banco` (`codigo_banco_pk`, `nombre`, `convenio_nomina`, `numero_digitos`, `codigo_general`, `nit`, `direccion`, `telefono`) values('1','BANCOLOMBIA','1','11','2323','890.903.93','CARRERA 20 N 40-20','3384244');
 
+insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('1','TERMINACIÓN DE CONTRATO');
+insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('2','RENUNCIA VOLUNTARIA');
+insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('3','MUTUO ACUERDO');
+insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('4','SIN JUSTA CAUSA');
+insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('5','CON JUSTA CAUSA');
+insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('6','JUBILACIÓN');
+insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('7','MUERTE');
+
 INSERT INTO `rhu_cargo` (`codigo_cargo_pk`, `nombre`) VALUES('1','ABOGADO');
 INSERT INTO `rhu_cargo` (`codigo_cargo_pk`, `nombre`) VALUES('2','ABOGADO ESPECIALISTA');
 INSERT INTO `rhu_cargo` (`codigo_cargo_pk`, `nombre`) VALUES('3','ABOGADO ESPECIALISTA SECTORIAL');
