@@ -136,8 +136,9 @@
                         <td>{{ arProgramacionDetalle.dia30  }}</td>
                         <td>{{ arProgramacionDetalle.dia31  }}</td>
                     {% endif %}
-                    <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk }}</td> 
+                     
                     <td style="text-align: right">{{ arProgramacionDetalle.horas | number_format(0, '.', ',') }}</td> 
+                    <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk }}</td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" /></td>
                 </tr>
             {% endfor %}

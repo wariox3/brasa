@@ -3,11 +3,9 @@ namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\TurnoBundle\Form\Type\TurProgramacionType;
-class ProgramacionController extends Controller
+class ProcesoGenerarSoportePagoController extends Controller
 {
     var $strListaDql = "";
-    var $codigoProgramacion = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -15,7 +13,7 @@ class ProgramacionController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
-        $this->lista();
+        //$this->lista();
         if ($form->isValid()) {
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');

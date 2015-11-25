@@ -89,3 +89,7 @@ brs_tur_pedido_detalle_nuevo:
 brs_tur_buscar_recurso:
     pattern:  /turno/buscar/recurso/{campoCodigo}
     defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:lista }    
+    
+brs_tur_proceso_generar_soporte_pago:
+    path:     /tur/proceso/generar/soporte/pago
+    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:lista }     
