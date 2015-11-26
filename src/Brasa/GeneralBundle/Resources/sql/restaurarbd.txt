@@ -2859,8 +2859,8 @@ INSERT INTO `rhu_pago_concepto` (`codigo_pago_concepto_pk`, `nombre`, `compone_s
 INSERT INTO `rhu_incapacidad_tipo` (`codigo_incapacidad_tipo_pk`, `codigo_pago_concepto_fk`, `nombre`) VALUES('1','16','ENFERMEDAD GENERAL');
 INSERT INTO `rhu_incapacidad_tipo` (`codigo_incapacidad_tipo_pk`, `codigo_pago_concepto_fk`, `nombre`) VALUES('2','34','ENFERMEDAD LABORAL');
 
-INSERT INTO `rhu_licencia_tipo` (`codigo_licencia_tipo_pk`, `nombre`, `codigo_pago_concepto_fk`, `afecta_salud`, `ausentismo`) VALUES('1','LICENCIA NO REMUNERADA','23','1','0');
-INSERT INTO `rhu_licencia_tipo` (`codigo_licencia_tipo_pk`, `nombre`, `codigo_pago_concepto_fk`, `afecta_salud`, `ausentismo`) VALUES('2','LICENCIA REMUNERADA','20','0','0');
+INSERT INTO `rhu_licencia_tipo` (`codigo_licencia_tipo_pk`, `nombre`, `codigo_pago_concepto_fk`, `afecta_salud`, `ausentismo`) VALUES('1','LICENCIA NO REMUNERADA','23','1','1');
+INSERT INTO `rhu_licencia_tipo` (`codigo_licencia_tipo_pk`, `nombre`, `codigo_pago_concepto_fk`, `afecta_salud`, `ausentismo`) VALUES('2','LICENCIA REMUNERADA','20','0','1');
 INSERT INTO `rhu_licencia_tipo` (`codigo_licencia_tipo_pk`, `nombre`, `codigo_pago_concepto_fk`, `afecta_salud`, `ausentismo`) VALUES('3','LICENCIA MATERNIDAD','32','0','0');
 INSERT INTO `rhu_licencia_tipo` (`codigo_licencia_tipo_pk`, `nombre`, `codigo_pago_concepto_fk`, `afecta_salud`, `ausentismo`) VALUES('4','LICENCIA PATERNIDAD','32','0','0');
 INSERT INTO `rhu_licencia_tipo` (`codigo_licencia_tipo_pk`, `nombre`, `codigo_pago_concepto_fk`, `afecta_salud`, `ausentismo`) VALUES('5','LICENCIA DE LUTO','33','0','0');

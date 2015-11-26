@@ -34,9 +34,9 @@ class CtbMovimientoDetalle
     private $codigoTerceroFk;
 
     /**
-     * @ORM\Column(name="codigo_centro_costos_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */     
-    private $codigoCentroCostosFk;              
+    private $codigoCentroCostoFk;              
 
     /**
      * @ORM\Column(name="codigo_cuenta_pagar_fk", type="integer", nullable=true)
@@ -98,7 +98,7 @@ class CtbMovimientoDetalle
   
     /**
      * @ORM\ManyToOne(targetEntity="CtbCentroCosto", inversedBy="CtbMovimientoDetalle")
-     * @ORM\JoinColumn(name="codigo_centro_costos_fk", referencedColumnName="codigo_centro_costos_pk")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     private $centroCostosRel;      
 
@@ -143,6 +143,8 @@ class CtbMovimientoDetalle
      * @ORM\JoinColumn(name="codigo_registro_tipo_fk", referencedColumnName="codigo_registro_tipo_pk")
      */
     private $registroTipoRel;    
+    
+
     
 
     /**
@@ -228,27 +230,27 @@ class CtbMovimientoDetalle
     }
 
     /**
-     * Set codigoCentroCostosFk
+     * Set codigoCentroCostoFk
      *
-     * @param integer $codigoCentroCostosFk
+     * @param integer $codigoCentroCostoFk
      *
      * @return CtbMovimientoDetalle
      */
-    public function setCodigoCentroCostosFk($codigoCentroCostosFk)
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
-        $this->codigoCentroCostosFk = $codigoCentroCostosFk;
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoCentroCostosFk
+     * Get codigoCentroCostoFk
      *
      * @return integer
      */
-    public function getCodigoCentroCostosFk()
+    public function getCodigoCentroCostoFk()
     {
-        return $this->codigoCentroCostosFk;
+        return $this->codigoCentroCostoFk;
     }
 
     /**

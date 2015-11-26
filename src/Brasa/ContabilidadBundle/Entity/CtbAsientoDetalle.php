@@ -52,7 +52,7 @@ class CtbAsientoDetalle
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */     
-    private $codigoCentroCostosFk;     
+    private $codigoCentroCostoFk;     
     
     /**
      * @ORM\Column(name="descripcion", type="string", length=150, nullable=true)
@@ -83,12 +83,12 @@ class CtbAsientoDetalle
     protected $terceroRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto", inversedBy="asientosDetallesCentroCostoRel")
+     * @ORM\ManyToOne(targetEntity="CtbCentroCosto", inversedBy="asientosDetallesCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    private $centroCostosRel; 
+    private $centroCostoRel; 
     
-
+    
 
 
     /**
@@ -246,27 +246,27 @@ class CtbAsientoDetalle
     }
 
     /**
-     * Set codigoCentroCostosFk
+     * Set codigoCentroCostoFk
      *
-     * @param integer $codigoCentroCostosFk
+     * @param integer $codigoCentroCostoFk
      *
      * @return CtbAsientoDetalle
      */
-    public function setCodigoCentroCostosFk($codigoCentroCostosFk)
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
-        $this->codigoCentroCostosFk = $codigoCentroCostosFk;
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoCentroCostosFk
+     * Get codigoCentroCostoFk
      *
      * @return integer
      */
-    public function getCodigoCentroCostosFk()
+    public function getCodigoCentroCostoFk()
     {
-        return $this->codigoCentroCostosFk;
+        return $this->codigoCentroCostoFk;
     }
 
     /**
@@ -390,26 +390,26 @@ class CtbAsientoDetalle
     }
 
     /**
-     * Set centroCostosRel
+     * Set centroCostoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostosRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoRel
      *
      * @return CtbAsientoDetalle
      */
-    public function setCentroCostosRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostosRel = null)
+    public function setCentroCostoRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoRel = null)
     {
-        $this->centroCostosRel = $centroCostosRel;
+        $this->centroCostoRel = $centroCostoRel;
 
         return $this;
     }
 
     /**
-     * Get centroCostosRel
+     * Get centroCostoRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
      */
-    public function getCentroCostosRel()
+    public function getCentroCostoRel()
     {
-        return $this->centroCostosRel;
+        return $this->centroCostoRel;
     }
 }

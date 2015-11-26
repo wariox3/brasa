@@ -49,9 +49,9 @@ class CtbRegistro
     private $codigoTerceroFk;
 
     /**
-     * @ORM\Column(name="codigo_centro_costos_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */     
-    private $codigoCentroCostosFk;                                          
+    private $codigoCentroCostoFk;                                          
     
     /**
      * @ORM\Column(name="debito", type="float")
@@ -87,9 +87,9 @@ class CtbRegistro
   
     /**
      * @ORM\ManyToOne(targetEntity="CtbCentroCosto", inversedBy="CtbRegistro")
-     * @ORM\JoinColumn(name="codigo_centro_costos_fk", referencedColumnName="codigo_centro_costos_pk")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    private $centroCostosRel;      
+    private $centroCostoRel;      
 
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="CtbRegistro")
@@ -104,7 +104,7 @@ class CtbRegistro
     protected $comprobanteContableRel;     
 
 
-
+    
 
     /**
      * Get codigoRegistroPk
@@ -189,6 +189,30 @@ class CtbRegistro
     }
 
     /**
+     * Set numeroReferencia
+     *
+     * @param integer $numeroReferencia
+     *
+     * @return CtbRegistro
+     */
+    public function setNumeroReferencia($numeroReferencia)
+    {
+        $this->numeroReferencia = $numeroReferencia;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroReferencia
+     *
+     * @return integer
+     */
+    public function getNumeroReferencia()
+    {
+        return $this->numeroReferencia;
+    }
+
+    /**
      * Set codigoCuentaFk
      *
      * @param string $codigoCuentaFk
@@ -237,27 +261,27 @@ class CtbRegistro
     }
 
     /**
-     * Set codigoCentroCostosFk
+     * Set codigoCentroCostoFk
      *
-     * @param integer $codigoCentroCostosFk
+     * @param integer $codigoCentroCostoFk
      *
      * @return CtbRegistro
      */
-    public function setCodigoCentroCostosFk($codigoCentroCostosFk)
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
-        $this->codigoCentroCostosFk = $codigoCentroCostosFk;
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoCentroCostosFk
+     * Get codigoCentroCostoFk
      *
      * @return integer
      */
-    public function getCodigoCentroCostosFk()
+    public function getCodigoCentroCostoFk()
     {
-        return $this->codigoCentroCostosFk;
+        return $this->codigoCentroCostoFk;
     }
 
     /**
@@ -357,6 +381,30 @@ class CtbRegistro
     }
 
     /**
+     * Set exportado
+     *
+     * @param boolean $exportado
+     *
+     * @return CtbRegistro
+     */
+    public function setExportado($exportado)
+    {
+        $this->exportado = $exportado;
+
+        return $this;
+    }
+
+    /**
+     * Get exportado
+     *
+     * @return boolean
+     */
+    public function getExportado()
+    {
+        return $this->exportado;
+    }
+
+    /**
      * Set cuentaRel
      *
      * @param \Brasa\ContabilidadBundle\Entity\CtbCuenta $cuentaRel
@@ -381,27 +429,27 @@ class CtbRegistro
     }
 
     /**
-     * Set centroCostosRel
+     * Set centroCostoRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostosRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoRel
      *
      * @return CtbRegistro
      */
-    public function setCentroCostosRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostosRel = null)
+    public function setCentroCostoRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoRel = null)
     {
-        $this->centroCostosRel = $centroCostosRel;
+        $this->centroCostoRel = $centroCostoRel;
 
         return $this;
     }
 
     /**
-     * Get centroCostosRel
+     * Get centroCostoRel
      *
      * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
      */
-    public function getCentroCostosRel()
+    public function getCentroCostoRel()
     {
-        return $this->centroCostosRel;
+        return $this->centroCostoRel;
     }
 
     /**
@@ -450,53 +498,5 @@ class CtbRegistro
     public function getComprobanteContableRel()
     {
         return $this->comprobanteContableRel;
-    }
-
-    /**
-     * Set exportado
-     *
-     * @param boolean $exportado
-     *
-     * @return CtbRegistro
-     */
-    public function setExportado($exportado)
-    {
-        $this->exportado = $exportado;
-
-        return $this;
-    }
-
-    /**
-     * Get exportado
-     *
-     * @return boolean
-     */
-    public function getExportado()
-    {
-        return $this->exportado;
-    }
-
-    /**
-     * Set numeroReferencia
-     *
-     * @param integer $numeroReferencia
-     *
-     * @return CtbRegistro
-     */
-    public function setNumeroReferencia($numeroReferencia)
-    {
-        $this->numeroReferencia = $numeroReferencia;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroReferencia
-     *
-     * @return integer
-     */
-    public function getNumeroReferencia()
-    {
-        return $this->numeroReferencia;
     }
 }

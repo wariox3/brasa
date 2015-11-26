@@ -2,11 +2,15 @@
 
 namespace Brasa\ContabilidadBundle\Entity;
 
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="ctb_cuenta")
  * @ORM\Entity(repositoryClass="Brasa\ContabilidadBundle\Repository\CtbCuentaRepository")
+ * @DoctrineAssert\UniqueEntity(fields={"codigoCuentaPk"},message="Ya existe el código de la cuenta")
  */
 class CtbCuenta
 {
@@ -18,7 +22,7 @@ class CtbCuenta
     private $codigoCuentaPk;
     
     /**
-     * @ORM\Column(name="nombre_cuenta", type="string", length=60)
+     * @ORM\Column(name="nombre_cuenta", type="string", length=120)
      */     
     private $nombreCuenta;     
     
@@ -27,7 +31,6 @@ class CtbCuenta
      */ 
     private $codigo_cuenta_padre_fk;    
 
-    
     /**
      * @ORM\Column(name="permite_movimientos", type="boolean")
      */    

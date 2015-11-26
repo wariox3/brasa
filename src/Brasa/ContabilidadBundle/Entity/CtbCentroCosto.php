@@ -13,49 +13,95 @@ class CtbCentroCosto
 {
     /** 
      * @ORM\Id
-     * @ORM\Column(name="codigo_centro_costos_pk", type="integer")
+     * @ORM\Column(name="codigo_centro_costo_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */    
-    private $codigoCentroCostosPk;
+    private $codigoCentroCostoPk;
     
     /**
-     * @ORM\Column(name="nombre_centro_costos", type="string", length=100, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=100, nullable=true)
      */    
-    private $nombreCentroCostos;      
+    private $nombre;      
     
-
-
     /**
-     * Get codigoCentroCostosPk
-     *
-     * @return integer
+     * @ORM\OneToMany(targetEntity="CtbAsientoDetalle", mappedBy="centroCostoRel")
      */
-    public function getCodigoCentroCostosPk()
+    protected $asientosDetallesCentroCostoRel;
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-        return $this->codigoCentroCostosPk;
+        $this->asientosDetallesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Set nombreCentroCostos
+     * Get codigoCentroCostoPk
      *
-     * @param string $nombreCentroCostos
+     * @return integer
+     */
+    public function getCodigoCentroCostoPk()
+    {
+        return $this->codigoCentroCostoPk;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
      *
      * @return CtbCentroCosto
      */
-    public function setNombreCentroCostos($nombreCentroCostos)
+    public function setNombre($nombre)
     {
-        $this->nombreCentroCostos = $nombreCentroCostos;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreCentroCostos
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreCentroCostos()
+    public function getNombre()
     {
-        return $this->nombreCentroCostos;
+        return $this->nombre;
+    }
+
+    /**
+     * Add asientosDetallesCentroCostoRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCentroCostoRel
+     *
+     * @return CtbCentroCosto
+     */
+    public function addAsientosDetallesCentroCostoRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCentroCostoRel)
+    {
+        $this->asientosDetallesCentroCostoRel[] = $asientosDetallesCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove asientosDetallesCentroCostoRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCentroCostoRel
+     */
+    public function removeAsientosDetallesCentroCostoRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCentroCostoRel)
+    {
+        $this->asientosDetallesCentroCostoRel->removeElement($asientosDetallesCentroCostoRel);
+    }
+
+    /**
+     * Get asientosDetallesCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAsientosDetallesCentroCostoRel()
+    {
+        return $this->asientosDetallesCentroCostoRel;
     }
 }

@@ -216,12 +216,6 @@ class RhuCentroCosto
      */
     protected $disciplinariosCentroCostoRel;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle", mappedBy="centroCostoRel")
-     */
-    protected $asientosDetallesCentroCostoRel;
-    
-    
     
     
     /**
@@ -247,7 +241,6 @@ class RhuCentroCosto
         $this->facturasDetallesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->disciplinariosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->asientosDetallesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1374,39 +1367,5 @@ class RhuCentroCosto
     public function getDisciplinariosCentroCostoRel()
     {
         return $this->disciplinariosCentroCostoRel;
-    }
-
-    /**
-     * Add asientosDetallesCentroCostoRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCentroCostoRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function addAsientosDetallesCentroCostoRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCentroCostoRel)
-    {
-        $this->asientosDetallesCentroCostoRel[] = $asientosDetallesCentroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove asientosDetallesCentroCostoRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCentroCostoRel
-     */
-    public function removeAsientosDetallesCentroCostoRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle $asientosDetallesCentroCostoRel)
-    {
-        $this->asientosDetallesCentroCostoRel->removeElement($asientosDetallesCentroCostoRel);
-    }
-
-    /**
-     * Get asientosDetallesCentroCostoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAsientosDetallesCentroCostoRel()
-    {
-        return $this->asientosDetallesCentroCostoRel;
     }
 }

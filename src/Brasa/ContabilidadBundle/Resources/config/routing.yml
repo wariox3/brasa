@@ -26,4 +26,12 @@ brs_ctb_base_comprobantes_lista:
     
 brs_ctb_base_comprobantes_nuevo:
     path:     /ctb/base/comprobantes/nuevo/{codigoComprobante}
-    defaults: { _controller: BrasaContabilidadBundle:BaseComprobante:nuevo }    
+    defaults: { _controller: BrasaContabilidadBundle:BaseComprobante:nuevo } 
+    
+brs_ctb_base_cuentas_lista:
+    path:     /ctb/base/cuentas/lista
+    defaults: { _controller: BrasaContabilidadBundle:BaseCuenta:lista }
+    
+brs_ctb_base_cuentas_nuevo:
+    path:     /ctb/base/cuentas/nuevo/{codigoCuenta}
+    defaults: { _controller: BrasaContabilidadBundle:BaseCuenta:nuevo }    
