@@ -35,3 +35,13 @@ brs_ctb_base_cuentas_lista:
 brs_ctb_base_cuentas_nuevo:
     path:     /ctb/base/cuentas/nuevo/{codigoCuenta}
     defaults: { _controller: BrasaContabilidadBundle:BaseCuenta:nuevo }    
+    
+# Movimientos
+
+brs_ctb_mov_asientos_lista:
+    path:     /ctb/movimientos/asientos/lista
+    defaults: { _controller: BrasaContabilidadBundle:Asiento:lista }
+    
+brs_ctb_mov_asientos_nuevo:
+    path:     /ctb/movimientos/asientos/nuevo/{codigoAsiento}
+    defaults: { _controller: BrasaContabilidadBundle:Asiento:nuevo }    

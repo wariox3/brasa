@@ -295,7 +295,7 @@ class CtbRegistroRepository extends EntityRepository
         $arRegistro->setFecha($arMovimiento->getFecha());
         $arRegistro->setNumero($arMovimiento->getNumeroMovimiento());
         $arRegistro->setTerceroRel($arMovimiento->getTerceroRel());
-        $arRegistro->setComprobanteContableRel($arMovimiento->getDocumentoRel()->getComprobanteContableRel()); 
+        $arRegistro->setComprobanteRel($arMovimiento->getDocumentoRel()->getComprobanteRel()); 
         return $arRegistro;        
     }
 
@@ -311,7 +311,7 @@ class CtbRegistroRepository extends EntityRepository
                 $arRegistro->setFecha($arMovimiento->getFecha());
                 $arRegistro->setNumero($arMovimiento->getNumeroMovimiento());
                 $arRegistro->setTerceroRel($arMovimientosDetalles->getTerceroRel());
-                $arRegistro->setComprobanteContableRel($arMovimiento->getComprobanteContableRel());                
+                $arRegistro->setComprobanteRel($arMovimiento->getComprobanteRel());                
                 $arRegistro->setCuentaRel($arMovimientosDetalles->getCuentaRel());
                 $arRegistro->setCentroCostosRel($arMovimientosDetalles->getCentroCostosRel());
                 $arRegistro->setTipoRegistro($arMovimientosDetalles->getTipoRegistro());
@@ -326,7 +326,7 @@ class CtbRegistroRepository extends EntityRepository
             $arRegistro->setFecha($arMovimiento->getFecha());
             $arRegistro->setNumero($arMovimiento->getNumeroMovimiento());
             $arRegistro->setTerceroRel($arMovimientosDetalles->getTerceroRel());
-            $arRegistro->setComprobanteContableRel($arMovimiento->getComprobanteContableRel());                
+            $arRegistro->setComprobanteRel($arMovimiento->getComprobanteRel());                
             $arRegistro->setCuentaRel($arMovimiento->getMovimientoConceptoRel()->getCuentaTotalRel());                                
             $arRegistro->setTipoRegistro($arMovimiento->getMovimientoConceptoRel()->getTipoRegistroTotal());
             $arRegistro->setValor($arMovimiento->getTotalNeto());

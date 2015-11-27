@@ -140,7 +140,7 @@ class DocumentosController extends Controller
             
             if ($request->request->get('CboComprobanteContable') != "") {                
                 $arComprobantesContables = $em->getRepository('BrasaContabilidadBundle:CtbComprobanteContable')->find($request->request->get('CboComprobanteContable'));   
-                $arDocumento->setComprobanteContableRel($arComprobantesContables);
+                $arDocumento->setComprobanteRel($arComprobantesContables);
             }            
             
             if(($request->request->get('ChkAgregarItem') == 'on') && $request->request->get('ChkAgregarItem'))

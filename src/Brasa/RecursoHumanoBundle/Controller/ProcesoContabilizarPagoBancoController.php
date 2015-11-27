@@ -32,7 +32,7 @@ class ProcesoContabilizarPagoBancoController extends Controller
                                 //La cuenta
                                 $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('250501');                            
-                                $arRegistro->setComprobanteContableRel($arComprobanteContable);
+                                $arRegistro->setComprobanteRel($arComprobanteContable);
                                 $arRegistro->setCentroCostosRel($arCentroCosto);
                                 $arRegistro->setCuentaRel($arCuenta);
                                 $arRegistro->setTerceroRel($arTercero);
@@ -47,7 +47,7 @@ class ProcesoContabilizarPagoBancoController extends Controller
                                 $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
                                 $codigoCuenta = $arPagoBancoDetalle->getPagoBancoRel()->getCuentaRel()->getCodigoCuentaFk();
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuenta);                            
-                                $arRegistro->setComprobanteContableRel($arComprobanteContable);
+                                $arRegistro->setComprobanteRel($arComprobanteContable);
                                 $arRegistro->setCentroCostosRel($arCentroCosto);
                                 $arRegistro->setCuentaRel($arCuenta);
                                 $arRegistro->setTerceroRel($arTercero);
