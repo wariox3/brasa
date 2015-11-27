@@ -1,3 +1,12 @@
+brs_tte_recogida_lista:
+   path:     /tte/recogida/lista
+   defaults: { _controller: BrasaTransporteBundle:Recogida:lista } 
+   
+brs_tte_recogida_nuevo:
+   path:     /tte/recogida/nuevo/{codigoRecogida}
+   defaults: { _controller: BrasaTransporteBundle:Recogida:nuevo }
+
+
 brs_tte_recogidas_lista:
     path:     /transporte/recogidas/lista
     defaults: { _controller: BrasaTransporteBundle:Recogidas:lista }

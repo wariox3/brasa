@@ -32,6 +32,11 @@ class TurRecurso
      */
     protected $programacionesDetallesRecursoRel;    
 
+   /**
+     * @ORM\OneToMany(targetEntity="TurSoportePago", mappedBy="recursoRel")
+     */
+    protected $soportesPagosRecursoRel;        
+    
     /**
      * Get codigoRecursoPk
      *
@@ -129,5 +134,39 @@ class TurRecurso
     public function getProgramacionesDetallesRecursoRel()
     {
         return $this->programacionesDetallesRecursoRel;
+    }
+
+    /**
+     * Add soportesPagosRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addSoportesPagosRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel)
+    {
+        $this->soportesPagosRecursoRel[] = $soportesPagosRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel
+     */
+    public function removeSoportesPagosRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel)
+    {
+        $this->soportesPagosRecursoRel->removeElement($soportesPagosRecursoRel);
+    }
+
+    /**
+     * Get soportesPagosRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosRecursoRel()
+    {
+        return $this->soportesPagosRecursoRel;
     }
 }

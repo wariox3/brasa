@@ -39,12 +39,13 @@ class TteProducto
     public function __construct()
     {
         $this->listasPreciosDetallesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->guiasRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get codigoProductoPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoProductoPk()
     {
@@ -55,6 +56,7 @@ class TteProducto
      * Set nombre
      *
      * @param string $nombre
+     *
      * @return TteProducto
      */
     public function setNombre($nombre)
@@ -67,7 +69,7 @@ class TteProducto
     /**
      * Get nombre
      *
-     * @return string 
+     * @return string
      */
     public function getNombre()
     {
@@ -78,6 +80,7 @@ class TteProducto
      * Add listasPreciosDetallesRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesRel
+     *
      * @return TteProducto
      */
     public function addListasPreciosDetallesRel(\Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesRel)
@@ -100,7 +103,7 @@ class TteProducto
     /**
      * Get listasPreciosDetallesRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getListasPreciosDetallesRel()
     {
@@ -111,6 +114,7 @@ class TteProducto
      * Add guiasRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteGuia $guiasRel
+     *
      * @return TteProducto
      */
     public function addGuiasRel(\Brasa\TransporteBundle\Entity\TteGuia $guiasRel)
@@ -133,7 +137,7 @@ class TteProducto
     /**
      * Get guiasRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGuiasRel()
     {

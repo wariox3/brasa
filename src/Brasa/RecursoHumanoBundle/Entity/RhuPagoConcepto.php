@@ -118,6 +118,11 @@ class RhuPagoConcepto
     protected $incapacidadesTiposPagoConceptoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurTurnoDetalle", mappedBy="pagoConceptoRel")
+     */
+    protected $turProgramacionesTerceroRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -667,5 +672,39 @@ class RhuPagoConcepto
     public function getIncapacidadesTiposPagoConceptoRel()
     {
         return $this->incapacidadesTiposPagoConceptoRel;
+    }
+
+    /**
+     * Add turProgramacionesTerceroRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurTurnoDetalle $turProgramacionesTerceroRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addTurProgramacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurTurnoDetalle $turProgramacionesTerceroRel)
+    {
+        $this->turProgramacionesTerceroRel[] = $turProgramacionesTerceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turProgramacionesTerceroRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurTurnoDetalle $turProgramacionesTerceroRel
+     */
+    public function removeTurProgramacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurTurnoDetalle $turProgramacionesTerceroRel)
+    {
+        $this->turProgramacionesTerceroRel->removeElement($turProgramacionesTerceroRel);
+    }
+
+    /**
+     * Get turProgramacionesTerceroRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurProgramacionesTerceroRel()
+    {
+        return $this->turProgramacionesTerceroRel;
     }
 }

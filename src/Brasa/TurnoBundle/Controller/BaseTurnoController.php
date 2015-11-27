@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurTurnoType;
+use Brasa\TurnoBundle\Form\Type\TurTurnoDetalleType;
 class BaseTurnoController extends Controller
 {
     var $strListaDql = "";
@@ -144,8 +145,8 @@ class BaseTurnoController extends Controller
         }
 
         $arTurnoDetalle = new \Brasa\TurnoBundle\Entity\TurTurnoDetalle();
-        $arTurnoDetalle = $em->getRepository('BrasaTurnoBundle:TurTurnoDetalle')->findBy(array ('codigoProgramacionFk' => $codigoTurno));
-        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalle.html.twig', array(
+        $arTurnoDetalle = $em->getRepository('BrasaTurnoBundle:TurTurnoDetalle')->findBy(array ('codigoTurnoFk' => $codigoTurno));
+        return $this->render('BrasaTurnoBundle:Base/Turno:detalle.html.twig', array(
                     'arTurno' => $arTurno,
                     'arTurnoDetalle' => $arTurnoDetalle,
                     'form' => $form->createView()
@@ -165,17 +166,17 @@ class BaseTurnoController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arTurnoDetalle = $form->getData();            
-            $arTurnoDetalle->setProgramacionRel($arTurno);
+            $arTurnoDetalle->setTurnoRel($arTurno);
             $em->persist($arTurnoDetalle);
             $em->flush();            
             
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle_nuevo', array('codigoProgramacion' => $codigoTurno, 'codigoProgramacionDetalle' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_base_turno_detalle_nuevo', array('codigoTurno' => $codigoTurno, 'codigoTurnoDetalle' => 0 )));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }            
         }
-        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Base/Turno:detalleNuevo.html.twig', array(
             'arTurno' => $arTurno,
             'form' => $form->createView()));
     }   
@@ -209,14 +210,9 @@ class BaseTurnoController extends Controller
     
     private function formularioDetalle($ar) {
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
-        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);        
-        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        if($ar->getEstadoAutorizado() == 1) {
-            $arrBotonDetalleActualizar['disabled'] = true;
-        }        
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);                
         $form = $this->createFormBuilder()    
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)    
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)            
                     ->getForm();  
         return $form;
