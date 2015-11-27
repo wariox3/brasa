@@ -49,9 +49,9 @@ class CtbMovimiento
     private $fecha_creacion;     
     
     /**
-     * @ORM\Column(name="codigo_comprobante_contable_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_comprobante_fk", type="integer", nullable=true)
      */     
-    private $codigoComprobanteContableFk;     
+    private $codigoComprobanteFk;     
     
     /**
      * @ORM\Column(name="codigo_banco_fk", type="integer", nullable=true)
@@ -146,10 +146,10 @@ class CtbMovimiento
     protected $movimientoConceptoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbComprobanteContable", inversedBy="CtbMovimiento")
-     * @ORM\JoinColumn(name="codigo_comprobante_contable_fk", referencedColumnName="codigo_comprobante_contable_pk")
+     * @ORM\ManyToOne(targetEntity="CtbComprobante", inversedBy="CtbMovimiento")
+     * @ORM\JoinColumn(name="codigo_comprobante_fk", referencedColumnName="codigo_comprobante_pk")
      */
-    protected $comprobanteContableRel; 
+    protected $comprobanteRel; 
 
     /**
      * @ORM\ManyToOne(targetEntity="CtbBanco", inversedBy="CtbMovimiento")
@@ -162,6 +162,7 @@ class CtbMovimiento
      * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
      */
     protected $terceroRel;    
+
 
 
 
@@ -320,27 +321,27 @@ class CtbMovimiento
     }
 
     /**
-     * Set codigoComprobanteContableFk
+     * Set codigoComprobanteFk
      *
-     * @param integer $codigoComprobanteContableFk
+     * @param integer $codigoComprobanteFk
      *
      * @return CtbMovimiento
      */
-    public function setCodigoComprobanteContableFk($codigoComprobanteContableFk)
+    public function setCodigoComprobanteFk($codigoComprobanteFk)
     {
-        $this->codigoComprobanteContableFk = $codigoComprobanteContableFk;
+        $this->codigoComprobanteFk = $codigoComprobanteFk;
 
         return $this;
     }
 
     /**
-     * Get codigoComprobanteContableFk
+     * Get codigoComprobanteFk
      *
      * @return integer
      */
-    public function getCodigoComprobanteContableFk()
+    public function getCodigoComprobanteFk()
     {
-        return $this->codigoComprobanteContableFk;
+        return $this->codigoComprobanteFk;
     }
 
     /**
@@ -776,27 +777,27 @@ class CtbMovimiento
     }
 
     /**
-     * Set comprobanteContableRel
+     * Set comprobanteRel
      *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbComprobanteContable $comprobanteContableRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbComprobante $comprobanteRel
      *
      * @return CtbMovimiento
      */
-    public function setComprobanteContableRel(\Brasa\ContabilidadBundle\Entity\CtbComprobanteContable $comprobanteContableRel = null)
+    public function setComprobanteRel(\Brasa\ContabilidadBundle\Entity\CtbComprobante $comprobanteRel = null)
     {
-        $this->comprobanteContableRel = $comprobanteContableRel;
+        $this->comprobanteRel = $comprobanteRel;
 
         return $this;
     }
 
     /**
-     * Get comprobanteContableRel
+     * Get comprobanteRel
      *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbComprobanteContable
+     * @return \Brasa\ContabilidadBundle\Entity\CtbComprobante
      */
-    public function getComprobanteContableRel()
+    public function getComprobanteRel()
     {
-        return $this->comprobanteContableRel;
+        return $this->comprobanteRel;
     }
 
     /**

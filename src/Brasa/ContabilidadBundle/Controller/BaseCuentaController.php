@@ -80,7 +80,7 @@ class BaseCuentaController extends Controller
         $em = $this->getDoctrine()->getManager(); 
                 
         $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->listaDql(    
-                $form->get('TxtCódigoCuenta')->getData(),
+                $form->get('TxtCodigoCuenta')->getData(),
                 $form->get('TxtNombreCuenta')->getData()                
         );  
     }
@@ -89,16 +89,17 @@ class BaseCuentaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
         $form = $this->createFormBuilder()                                    
-            ->add('TxtCódigoCuenta', 'text', array('label'  => 'Código Cuenta','data' => ""))
-            ->add('TxtNombreCuenta', 'text', array('label'  => 'Nombre Cuenta','data' => ""))
+            ->add('TxtCodigoCuenta', 'text', array('label'  => 'Código Cuenta','data' => "", 'required' => false))
+            ->add('TxtNombreCuenta', 'text', array('label'  => 'Nombre Cuenta','data' => "", 'required' => false))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                                            
             ->getForm();        
         return $form;
     }
     
-    public function generarExcel(){
-        $em = $this->getDoctrine()->getManager();
+    private function generarExcel() {
+        $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -111,25 +112,48 @@ class BaseCuentaController extends Controller
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'NOMBRE');
+                    ->setCellValue('B1', 'NOMBRE')
+                    ->setCellValue('C1', 'PERMITE MOVIMIENTOS')
+                    ->setCellValue('D1', 'EXIGE NIT')
+                    ->setCellValue('E1', 'EXIGE CENTRO COSTO')
+                    ->setCellValue('F1', 'PORCENTAJE RETENCIÓN');
 
         $i = 2;
-        $arComprobantes = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->findAll();
-
-        foreach ($arComprobantes as $arComprobante) {
-
+        $query = $em->createQuery($this->strDqlLista);
+        //$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arCuentas = $query->getResult();
+        foreach ($arCuentas as $arCuenta) {
+            if ($arCuenta->getPermiteMovimientos() == 1){
+                $strPermiteMovimientos = "SI";
+            }else {
+                $strPermiteMovimientos = "NO";
+            }
+            if ($arCuenta->getExigeNit() == 1){
+                $strExigeNit = "SI";
+            }else {
+                $strExigeNit = "NO";
+            }
+            if ($arCuenta->getExigeCentroCostos() == 1){
+                $strExigeCentroCosto = "SI";
+            }else {
+                $strExigeCentroCosto = "NO";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arComprobante->getCodigoComprobantePk())
-                    ->setCellValue('B' . $i, $arComprobante->getNombre());
+                    ->setCellValue('A' . $i, $arCuenta->getCodigoCuentaPk())
+                    ->setCellValue('B' . $i, $arCuenta->getNombreCuenta())
+                    ->setCellValue('C' . $i, $strPermiteMovimientos)
+                    ->setCellValue('D' . $i, $strExigeNit)
+                    ->setCellValue('E' . $i, $strExigeCentroCosto)
+                    ->setCellValue('F' . $i, $arCuenta->getPorcentajeRetencion());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Comprobantes');
+        $objPHPExcel->getActiveSheet()->setTitle('Cuentas');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Comprobantes.xlsx"');
+        header('Content-Disposition: attachment;filename="Cuentas.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

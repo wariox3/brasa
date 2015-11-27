@@ -12,26 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class CtbCuentaRepository extends EntityRepository
 {
-    /**
-     * Busca los productos que coincida con la descripcion enviada con el parametro
-     * @param string $strDescripcion La descripcion del producto a buscar
-     * @return query el resultado de la busqueda. 
-     */
-    public function BuscarDescripcionCuenta($strDescripcion) {
-        try {
-            $strDescripcion = str_replace(" ", "%", $strDescripcion);
-            
-            $em = $this->getEntityManager();
-            $query = $em->createQueryBuilder()
-                    ->select('cuenta')
-                    ->from('BrasaContabilidadBundle:CtbCuentaContable', 'cuenta')
-                    ->where($em->createQueryBuilder()->expr()->like('cuenta.nombreCuenta', $em->createQueryBuilder()->expr()->literal('%' . $strDescripcion . '%')))
-                    ->orWhere($em->createQueryBuilder()->expr()->like('cuenta.codigoCuentaPk', $em->createQueryBuilder()->expr()->literal('%' . $strDescripcion . '%')))
-                    ->getQuery();
-            $arResultado = $query->getResult();
-            return $arResultado;
-        } catch (Exception $e) {
-            return $e;
+    public function listaDql($intCodigoCuenta = "", $strNombreCuenta = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT c FROM BrasaContabilidadBundle:CtbCuenta c WHERE c.codigoCuentaPk <> 0";
+        if($intCodigoCuenta != "" && $intCodigoCuenta != 0) {
+            $dql .= " AND c.codigoCuentaPk = " . $intCodigoCuenta;
         }
+        if($strNombreCuenta != "" ) {
+            $dql .= " AND c.nombreCuenta like '%" . $strNombreCuenta."%'";
+        }
+        return $dql;
     }
 }
