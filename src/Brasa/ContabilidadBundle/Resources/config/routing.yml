@@ -44,4 +44,12 @@ brs_ctb_mov_asientos_lista:
     
 brs_ctb_mov_asientos_nuevo:
     path:     /ctb/movimientos/asientos/nuevo/{codigoAsiento}
-    defaults: { _controller: BrasaContabilidadBundle:Asiento:nuevo }    
+    defaults: { _controller: BrasaContabilidadBundle:Asiento:nuevo } 
+    
+brs_ctb_mov_asientos_detalle:
+    path:     /ctb/movimientos/asientos/detalle/{codigoAsiento}
+    defaults: { _controller: BrasaContabilidadBundle:Asiento:detalle } 
+    
+brs_ctb_mov_asientos_detalle_nuevo:
+    path:     /ctb/movimientos/asientos/detalle/nuevo/{codigoAsiento}/{codigoAsientoDetalle}
+    defaults: { _controller: BrasaContabilidadBundle:Asiento:detalleNuevo }    

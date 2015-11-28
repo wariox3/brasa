@@ -1,107 +1,162 @@
 {% extends '::base.html.twig' %}
-{% block title %}Dotación detalle - Soga App{% endblock %}
+{% block title %}Asiento detalle - Soga App{% endblock %}
 {% block content %}
     <div class="container">
         <div class="page-header">
-            <h3>Detalles dotación</h3>
+            <h3>Detalles asiento</h3>
         </div>
 
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">                
+            <div class="btn-group">
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 8,  'numero': arDotacion.codigoDotacionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
+                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnContabilizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
-        </div>            
+        </div>
         <br /><br />
         <div class="panel panel-default">
-            <div class="panel-heading">Información de la dotación</div>
-            <div class="panel-body">    
+            <div class="panel-heading">Información del asiento</div>
+            <div class="panel-body">
                 <table width="100%" class="table table-condensed table-bordered">
                     <tr>
                         <td class="titulo">CODIGO:</td>
-                        <td class="td-in-well">{{ arDotacion.codigoDotacionPk }}</td>
+                        <td class="td-in-well">{{ arAsiento.codigoAsientoPk }}</td>
                         <td class="titulo">FECHA:</th>
-                        <td class="td-in-well">{{ arDotacion.fecha |date("Y/m/d") }}</td>
-                        <td class="titulo">NÚMERO INTERNO REFERENCIA:</th>
-                        <td class="td-in-well" align="right">{{ arDotacion.codigoInternoReferencia}}</td>                        
+                        <td class="td-in-well">{{ arAsiento.fecha |date("Y/m/d") }}</td>
+                        <td class="titulo">IMPRIMIDO:</td>
+                        <td class="td-in-well">{% if arAsiento.estadoImpreso == 1 %}SI{% else %}NO{% endif %}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">IDENTIFICACIÓN:</td>
-                        <td class="td-in-well">{{ arDotacion.empleadoRel.numeroIdentificacion }}</td>
-                        <td class="titulo">EMPLEADO:</td>
-                        <td class="td-in-well">{{ arDotacion.empleadoRel.nombreCorto }}</td>
-                        <td class="titulo">CENTRO COSTOS:</td>
-                        <td class="td-in-well">{{ arDotacion.centroCostoRel.nombre}}</td>                                                
-                    </tr>                    
+                        <td class="titulo">CODIGO COMPROBANTE:</td>
+                        <td class="td-in-well">{{ arAsiento.codigoComprobanteFk }}</td>
+                        <td class="titulo">COMPROBANTE:</th>
+                        <td class="td-in-well">{{ arAsiento.comprobanteRel.nombre }}</td>
+                        <td class="titulo">CONTABILIZADO:</td>
+                        <td class="td-in-well">{% if arAsiento.estadoContabilizado == 1 %}SI{% else %}NO{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">NÚMERO ASIENTO:</td>
+                        <td class="td-in-well">{{ arAsiento.numeroAsiento }}</td>
+                        <td class="titulo">SOPORTE:</td>
+                        <td class="td-in-well">{{ arAsiento.soporte }}</td>
+                        <td class="titulo">ANULADO:</td>
+                        <td class="td-in-well">{% if arAsiento.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" align="right">TOTAL DÉBITO:</th>
+                        <td class="td-in-well" align="right">{{ arAsiento.TotalDebito | number_format(0, '.', ',') }}</td>
+                        <td class="titulo">AUTORIZADO:</td>
+                        <td class="td-in-well">{% if arAsiento.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" align="right">TOTAL CRÉDITO:</th>
+                        <td class="td-in-well" align="right">{{ arAsiento.TotalCredito | number_format(0, '.', ',') }}</td>
+                        <td class="titulo">APROBADO:</td>
+                        <td class="td-in-well">{% if arAsiento.estadoAprobado == 1 %}SI{% else %}NO{% endif %}</td>
+                    </tr>
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
-                        <td class="td-in-well" colspan="3">{{ arDotacion.comentarios }}</td>
-                        <td class="titulo">TIPO DOTACIÓN:</td>
-                        <td class="td-in-well">{{ arDotacion.dotacionTipoRel.nombre}}</td>                                                
-                    </tr>                    
+                        <td class="td-in-well" colspan="5">{{ arAsiento.comentarios }}</td>
+                    </tr>
                 </table>
             </div>
         </div>
-        
+
             <table class="table table-striped table-bordered table-condensed">
                 <tr>
                     <th>CÓDIGO</th>
-                    <th>ELEMENTO DOTACIÓN</th>
-                    <th>CANTIDAD</th>
-                    <th>DEVUELTA</th>
-                    <th>SERIE</th>
-                    <th>LOTE</th>
-                    <th>ENLACE</th>
+                    <th>CUENTA</th>
+                    <th>IDENTIFICACIÓN TERCERO</th>
+                    <th>TERCERO</th>
+                    <th>RAZÓN SOCIAL</th>
+                    <th>CENTRO COSTO</th>
+                    <th>FECHA</th>
+                    <th>TIPO ASIENTO</th>
+                    <th>DOCUMENTO REFERENTE</th>
+                    <th>SOPORTE</th>
+                    <th>PLAZO</th>
+                    <th>VR BASE</th>
+                    <th>DÉBITO</th>
+                    <th>CRÉDITO</th>
+                    <th>DESCRIPCIÓN</th>
+                    <th></th>
                     <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                 </tr>
-                {% for arDotacionDetalles in arDotacionDetalles %}
+                {% for arAsientoDetalles in arAsientoDetalles %}
                 <tr>
                     <td>
-                        <input type="hidden" name="LblCodigoGuia[]" value="{{ arDotacionDetalles.codigoDotacionDetallePk }}">
-                        <span class="badge">{{ arDotacionDetalles.codigoDotacionDetallePk }}</span>
+                        <input type="hidden" name="LblCodigoGuia[]" value="{{ arAsientoDetalles.codigoAsientoDetallePk }}">
+                        <span class="badge">{{ arAsientoDetalles.codigoAsientoDetallePk }}</span>
                     </td>
-                    <td>{{ arDotacionDetalles.dotacionElementoRel.dotacion }}</td>
-                    <td style="text-align: right">{{ arDotacionDetalles.cantidadAsignada }}</td>
-                    <td style="text-align: right">{{ arDotacionDetalles.cantidadDevuelta }}</td>                                        
-                    <td style="text-align: right">{{ arDotacionDetalles.serie }}</td>
-                    <td style="text-align: right">{{ arDotacionDetalles.lote }}</td>
-                    <td style="text-align: right">{{ arDotacionDetalles.codigoDotacionDetalleEnlaceFk }}</td>
-                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDotacionDetalles.codigoDotacionDetallePk }}" /></td>
+                    {% if arAsiento.estadoAutorizado == 0 %}
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCuenta{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoCuentaFk}}" size="15" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtNumeroIdentificacion{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.terceroRel.numeroIdentificacion}}" size="15" style="width:90px" onclick="this.select()"/></td>    
+                    {% else %}    
+                        <td>{{ arAsientoDetalles.codigoCuentaFk }}</td>
+                        <td>{{ arAsientoDetalles.terceroRel.numeroIdentificacion }}</td>
+                    {% endif %}
+                    <td>{{ arAsientoDetalles.terceroRel.nombreCorto | default('sin dato') }}</td>
+                    <td>{{ arAsientoDetalles.terceroRel.razonSocial }}</td>
+                    <td>{{ arAsientoDetalles.centroCostoRel.nombre | default('sin dato') }}</td>
+                    <td>{{ arAsientoDetalles.fecha | date('Y-m-d') }}</td>
+                    <td>{{ arAsientoDetalles.asientoTipoRel.nombre }}</td>
+                    {% if arAsiento.estadoAutorizado == 0 %}
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDocumentoReferente{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.documentoReferente}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtSoporte{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.soporte}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtPlazo{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.plazo}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorBase{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.valorBase}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDebito{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.debito}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCredito{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.credito}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                    {% else %}    
+                        <td>{{ arAsientoDetalles.documentoReferente }}</td>
+                        <td>{{ arAsientoDetalles.soporte }}</td>
+                        <td>{{ arAsientoDetalles.plazo }}</td>
+                        <td style="text-align: right">{{ arAsientoDetalles.valorBase | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arAsientoDetalles.debito | number_format(0, '.', ',') }}</td>
+                        <td style="text-align: right">{{ arAsientoDetalles.credito | number_format(0, '.', ',') }}</td>
+                    {% endif%}
+                    <td>{{ arAsientoDetalles.descripcion }}</td>
+                    {% if arAsiento.estadoAutorizado == 0 %}
+                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ctb_mov_asientos_detalle_nuevo', {'codigoAsiento': arAsiento.codigoAsientoPk, 'codigoAsientoDetalle': arAsientoDetalles.codigoAsientoDetallePk  }) }}', '', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                    {% else %}
+                        <td></td>
+                    {% endif%}                               
+                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAsientoDetalles.codigoAsientoDetallePk }}" /></td>
                 </tr>
                 {% endfor %}
             </table>
-        
+
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_dotacion_lista') }}" style="float:left">Volver</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_ctb_mov_asientos_lista') }}" style="float:left">Volver</a>
             </div>
-        </div>  
-        <div class="btn-toolbar" style="float: right">                           
-            <div class="btn-group">                
-                {% if arDotacion.estadoAutorizado == 0 %}                
-                    {% if arDotacion.codigoDotacionTipoFk == 1%}
-                        {% if arDotacion.estadoCerrado == 1 %}
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_nuevo', {'codigoDotacion': arDotacion.codigoDotacionPk}) }}', 'AgregarNuevo', 600, 900)" disabled="disabled">Agregar dotación elemento</a>
-                        {% else %}
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_nuevo', {'codigoDotacion': arDotacion.codigoDotacionPk}) }}', 'AgregarNuevo', 600, 900)">Agregar dotación elemento</a>
-                        {% endif%}
-                    {% else%}
-                        {% if arDotacion.estadoCerrado == 1 %}
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_devolucion', {'codigoDotacion': arDotacion.codigoDotacionPk}) }}', 'AgregarDevolucion', 600, 900)" disabled="disabled">Devolución dotación elemento</a>
-                        {% else %}
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_dotacion_detalle_devolucion', {'codigoDotacion': arDotacion.codigoDotacionPk}) }}', 'AgregarDevolucion', 600, 900)">Devolución dotación elemento</a>
-                        {% endif%}
+        </div>
+        <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">
+                {% if arAsiento.estadoAutorizado == 0 %}
+                    {% if arAsiento.estadoAprobado == 1 %}
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ctb_mov_asientos_detalle_nuevo', {'codigoAsiento': arAsiento.codigoAsientoPk, 'codigoAsientoDetalle': 0}) }}', 'AgregarNuevo', 600, 900)" disabled="disabled">Agregar</a>
+                    {% else %}
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ctb_mov_asientos_detalle_nuevo', {'codigoAsiento': arAsiento.codigoAsientoPk, 'codigoAsientoDetalle': 0}) }}', 'AgregarNuevo', 600, 900)">Agregar</a>
                     {% endif%}
-                {% endif%}                    
+                {% endif%}
             </div>
-            <div class="btn-group">                
-                {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
+            <div class="btn-group">
+                {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
-        </div>             
+            <div class="btn-group">
+                {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+            </div>
+        </div>
         {{ form_rest(form) }}
         {{ form_end(form) }}
     </div>

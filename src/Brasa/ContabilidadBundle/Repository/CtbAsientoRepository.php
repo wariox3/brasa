@@ -39,10 +39,10 @@ class CtbAsientoRepository extends EntityRepository
     
     public function Liquidar($codigoAsiento) {
         $em = $this->getEntityManager();
-        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsientos();
-        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsientos')->find($codigoAsiento);
-        $arAsientoDetalles = new \Brasa\ContabilidadBundle\Entity\CtbAsientosDetalles();
-        $arAsientoDetalles = $em->getRepository('BrasaContabilidadBundle:CtbAsientosDetalles')->findBy(array('codigoAsientoFk' => $codigoAsiento));
+        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
+        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
+        $arAsientoDetalles = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
+        $arAsientoDetalles = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->findBy(array('codigoAsientoFk' => $codigoAsiento));
         $douTotalDebito = 0;
         $douTotalCredito = 0;
         foreach($arAsientoDetalles as $arAsientoDetalles) {
@@ -58,16 +58,17 @@ class CtbAsientoRepository extends EntityRepository
     
     public function Autorizar($codigoAsiento) {
         $em = $this->getEntityManager();
-        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsientos();
-        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsientos')->find($codigoAsiento);
+        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
+        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
         if($arAsiento->getEstadoAutorizado() == 0) {            
             if($arAsiento->getTotalDebito() == $arAsiento->getTotalCredito()){
                 $arAsiento->setEstadoAutorizado(1);
                 $em->persist($arAsiento);
                 $em->flush();
                 return "";
-            }
+            }else{
                 return "El asiento esta descuadrado";
+            }    
         }
         else
             return "El asiento no esta autorizado";
@@ -75,19 +76,35 @@ class CtbAsientoRepository extends EntityRepository
     
     public function DesAutorizar($codigoAsiento) {
         $em = $this->getEntityManager();
-        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsientos();
-        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsientos')->find($codigoAsiento);
+        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
+        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
         if($arAsiento->getEstadoAutorizado() == 1) {            
             $arAsiento->setEstadoAutorizado(0);
             $em->persist($arAsiento);
             $em->flush();
             return "";
         }
-        else
-            return "El asiento no esta autorizado";
-    }    
+        
+    }
     
-    public function Imprimir($codigoAsiento) {
+    public function Aprobar($codigoAsiento) {
+        $em = $this->getEntityManager();
+        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
+        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
+        
+        if($arAsiento->getTotalDebito() == $arAsiento->getTotalCredito()){
+            $arAsiento->setEstadoAprobado(1);
+            $em->persist($arAsiento);
+            $em->flush();
+            return "";
+        }else{
+            return "El asiento esta descuadrado";
+        }    
+        
+        
+    }
+    
+    /*public function Imprimir($codigoAsiento) {
         $em = $this->getEntityManager();
         $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsientos();
         $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsientos')->find($codigoAsiento);
@@ -124,5 +141,5 @@ class CtbAsientoRepository extends EntityRepository
         
         $objQuery = $objQuery->getQuery();        
         return $objQuery->getResult();
-    }     
+    }     */
 }

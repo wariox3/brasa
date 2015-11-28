@@ -22,11 +22,11 @@
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
-                    <label for="form_TxtCodigoComprobante" class="col-sm-2 control-label">Código comprobante:</label>
+                    <label for="form_comprobanteRel" class="col-sm-2 control-label">Comprobante:</label>
                     <div class="col-sm-10">
-                        {{ form_widget(form.TxtCodigoComprobante, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.comprobanteRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                </div>    
+                </div>
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -38,16 +38,17 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arAsientos, 'CODIGO', 'a.codigoAsientoPk') }}</th>
                 <th>CÓDIGO COMPROBANTE</th>
+                <th>COMPROBANTE</th>
                 <th>NÚMERO ASIENTO</th>
                 <th>SOPORTE</th>
-                <th>FECHA</th>                
-                <th>TOTAL DÉBITO</th>
-                <th>TOTAL CRÉDITO</th>
+                <th>FECHA</th>
+                <th style="text-align: right">TOTAL DÉBITO</th>
+                <th style="text-align: right">TOTAL CRÉDITO</th>
                 <th>IMPRESO</th>
                 <th>CONTABILIZADO</th>
                 <th>ANULADO</th>
                 <th>AUTORIZADO</th>
-                <th>CERRADO</th>
+                <th>APROBADO</th>
                 <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
@@ -56,35 +57,40 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arAsientos.codigoAsientoPk }}">{{ arAsientos.codigoAsientoPk }} </td>
                 <td>{{ arAsientos.codigoComprobanteFk  }}</td>
-                <td>{{ arAsientos.numeroAsiendo  }}</td>
-                <td>{{ arAsientos.empleadoRel.numeroIdentificacion  }}</td>
-                <td>{{ arAsientos.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arAsientos.codigoInternoReferencia  }}</td>
+                <td>{{ arAsientos.comprobanteRel.nombre  }}</td>
+                <td>{{ arAsientos.numeroAsiento  }}</td>
+                <td>{{ arAsientos.soporte  }}</td>
                 <td>{{ arAsientos.fecha |date("Y/m/d")  }}</td>
+                <td style="text-align: right">{{ arAsientos.totalDebito | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arAsientos.totalCredito | number_format(0, '.', ',') }}</td>
+                <td>{% if arAsientos.estadoImpreso == 1%} SI {% else %} NO {% endif %}</td>
+                <td>{% if arAsientos.estadoContabilizado == 1%} SI {% else %} NO {% endif %}</td>
+                <td>{% if arAsientos.estadoAnulado == 1%} SI {% else %} NO {% endif %}</td>
                 <td>{% if arAsientos.estadoAutorizado == 1%} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_dotacion_nuevo', {'codigoEmpleado':  arAsientos.codigoEmpleadoFk, 'codigoDotacion': arAsientos.codigoDotacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_dotacion_detalle', { 'codigoDotacion': arAsientos.codigoDotacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAsientos.codigoDotacionPk }}" /></td>
+                <td>{% if arAsientos.estadoAprobado == 1%} SI {% else %} NO {% endif %}</td>
+                <td style="text-align: center"><a href="{{ path('brs_ctb_mov_asientos_nuevo', {'codigoAsiento':  arAsientos.codigoAsientoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_ctb_mov_asientos_detalle', { 'codigoAsiento': arAsientos.codigoAsientoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAsientos.codigoAsientoPk }}" /></td>
             </tr>
             {% endfor %}
         </table>
 
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
-            <div class="btn btn-default btn-sm">Dotaciones <span class="badge">{{ arAsientos.getTotalItemCount }}</span></div>                        
+            <div class="btn btn-default btn-sm">Asientos <span class="badge">{{ arAsientos.getTotalItemCount }}</span></div>
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-            {{ knp_pagination_render(arAsientos) }}       
+            {{ knp_pagination_render(arAsientos) }}
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_dotacion_nuevo', {'codigoDotacion': 0}) }}">Nuevo</a>                
+                <a class="btn btn-default btn-sm" href="{{ path('brs_ctb_mov_asientos_nuevo', {'codigoAsiento': 0}) }}">Nuevo</a>
             </div>
             <div class="btn-group">
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>
         <!-- Fin Botones Menu Items -->

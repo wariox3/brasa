@@ -11,7 +11,8 @@ use Brasa\ContabilidadBundle\Form\Type\CtbAsientoDetalleType;
 class AsientoController extends Controller
 {
     var $strListaDql = "";
-
+    var $codigoAsiento = "";
+    var $codigoComprobante = "";
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -27,11 +28,11 @@ class AsientoController extends Controller
                 if(count($arrSelecionados) > 0) {
                     foreach ($arrSelecionados AS $codigoAsiento) {
                         $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
-                        $arAsiento = $em->getRepository('BrasaContabilidadBundleBundle:CtbAsiento')->find($codigoAsiento);
+                        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
                         if ($arAsiento->getEstadoAutorizado() == 1){
                             $objMensaje->Mensaje("error", "El asiento ". $codigoAsiento ." ya fue autorizada, no se pude eliminar", $this);
                         }else{
-                            $arRegistros = $em->getRepository('BrasaContabilidadBundleBundle:CtbAsiento')->validarAsientosDQL($codigoAsiento);
+                            $arRegistros = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->validarAsientosDQL($codigoAsiento);
                             if ($arRegistros){
                                 $objMensaje->Mensaje("error", "El asiento ". $codigoAsiento ." contiene registros asignados", $this);
                             }else{
@@ -57,234 +58,191 @@ class AsientoController extends Controller
         }
 
         $arAsientos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        return $this->render('BrasaContabilidadBundleBundle:Movimientos/Asientos:lista.html.twig', array('arAsientos' => $arAsientos, 'form' => $form->createView()));
+        return $this->render('BrasaContabilidadBundle:Movimientos/Asientos:lista.html.twig', array('arAsientos' => $arAsientos, 'form' => $form->createView()));
     }
 
-    public function nuevoAction($codigoDotacion = 0) {
+    public function nuevoAction($codigoAsiento = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();    
-        if($codigoDotacion != 0) {
-            $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
+        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();    
+        if($codigoAsiento != 0) {
+            $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
         } else {
-            $arDotacion->setFechaEntrega(new \DateTime('now'));
+            $arAsiento->setFecha(new \DateTime('now'));
         }
-        $form = $this->createForm(new RhuDotacionType, $arDotacion);         
+        $form = $this->createForm(new CtbAsientoType, $arAsiento);         
         $form->handleRequest($request);
         if ($form->isValid()) {            
-            $arrControles = $request->request->All();
-            $arDotacion = $form->getData();
-            if($arrControles['txtNumeroIdentificacion'] != '') {
-                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-                if(count($arEmpleado) > 0) {
-                    $arDotacion->setEmpleadoRel($arEmpleado);
-                    if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
-                        $arDotacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                        $arDotacion->setFecha(new \DateTime('now'));
-                        $em->persist($arDotacion);
-                        $em->flush();
-                        if($form->get('guardarnuevo')->isClicked()) {
-                            return $this->redirect($this->generateUrl('brs_rhu_dotacion_nuevo', array('codigoDotacion' => 0 )));
-                        } else {
-                            return $this->redirect($this->generateUrl('brs_rhu_dotacion_lista'));
-                        }                        
-                    } else {
-                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
-                    }                    
-                } else {
-                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
-                }                
-            }
+            $arAsiento = $form->getData();                
+            //$arAsiento->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+            $em->persist($arAsiento);
+            $em->flush();
+            if($form->get('BtnGuardarNuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_nuevo', array('codigoAsiento' => 0 )));
+            } else {
+                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $arAsiento->getCodigoAsientoPk() )));
+            }                                    
         }
 
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:nuevo.html.twig', array(
-            'arDotacion' => $arDotacion,
+        return $this->render('BrasaContabilidadBundle:Movimientos/Asientos:nuevo.html.twig', array(
+            'arAsiento' => $arAsiento,
             'form' => $form->createView()));
     }
 
-    public function detalleAction($codigoDotacion) {
+    public function detalleAction($codigoAsiento) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
-        $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
-        $form = $this->formularioDetalle($arDotacion);
+        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
+        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
+        $form = $this->formularioDetalle($arAsiento);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnAutorizar')->isClicked()) {            
-                if($arDotacion->getEstadoAutorizado() == 0) {
-                    $arDotacion->setEstadoAutorizado(1);
-                    $em->persist($arDotacion);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));                                                
+            if($form->get('BtnAutorizar')->isClicked()) {
+                $autorizar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->Autorizar($codigoAsiento);
+                if ($autorizar != ""){
+                    $objMensaje->Mensaje("error", $autorizar, $this);
                 }
+                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
             }
-            if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arDotacion->getEstadoAutorizado() == 1) {
-                    $arDotacion->setEstadoAutorizado(0);
-                    $em->persist($arDotacion);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));                                                
+            if($form->get('BtnDesAutorizar')->isClicked()) {
+                $autorizar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->DesAutorizar($codigoAsiento);
+                if ($autorizar != ""){
+                    $objMensaje->Mensaje("error", $autorizar, $this);
                 }
-            }            
-            if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDotacionDetalle();
-                $objFormatoDotacionDetalle->Generar($this, $codigoDotacion);
+                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
             }
-            
+            if($form->get('BtnAprobar')->isClicked()) {
+                $aprobar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->Aprobar($codigoAsiento);
+                if ($aprobar != ""){
+                    $objMensaje->Mensaje("error", $aprobar, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+            }
             if($form->get('BtnEliminarDetalle')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoDotacionPk) {
-                        $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                        $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($codigoDotacionPk);
-                        if($arDotacionDetalle->getCodigoDotacionDetalleEnlaceFk()) {
-                            $arDotacionDetalleEnlace = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                            $arDotacionDetalleEnlace = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($arDotacionDetalle->getCodigoDotacionDetalleEnlaceFk());                            
-                            $arDotacionDetalleEnlace->setCantidadDevuelta($arDotacionDetalleEnlace->getCantidadDevuelta() - $arDotacionDetalle->getCantidadAsignada());
-                            $em->persist($arDotacionDetalleEnlace);
+                $arrSelecionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSelecionados) > 0) {
+                    foreach ($arrSelecionados AS $codigoAsientoDetalle) {
+                        $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
+                        $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($codigoAsientoDetalle);
+                        if ($arAsientoDetalle->getEstadoAutorizado() == 1){
+                            $objMensaje->Mensaje("error", "El asiento detalle ". $codigoAsientoDetalle ." ya fue autorizada, no se pude eliminar", $this);
+                        }else{
+                            $em->remove($arAsientoDetalle);
                         }
-                        $em->remove($arDotacionDetalle);
                     }
                     $em->flush();
+                    return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));
             }
-            if($form->get('BtnCerrar')->isClicked()) {
-                $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arDotaciones->getCodigoEmpleadoFk());
-                $intRegistros = count($arDotacionDetalle);
-                if ($intRegistros > 0){
-                    $objMensaje->Mensaje("error", "No se puede cerrar, el empleado tiene devoluciones pendientes", $this);
-                }else{
-                    $arCerrarDotaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->findBy(array('codigoEmpleadoFk' => $arDotaciones->getCodigoEmpleadoFk()));
-                    foreach ($arCerrarDotaciones as $arCerrarDotacion) {
-                        $arCerrarDotacion->setEstadoCerrado(1);
-                        $em->persist($arCerrarDotacion);
+            if($form->get('BtnDetalleActualizar')->isClicked()) {
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                foreach ($arrControles['LblCodigoGuia'] as $intCodigo) {
+                    $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
+                    $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($intCodigo);
+                    
+                    $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
+                    $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arrControles['TxtNumeroIdentificacion'.$intCodigo]));
+                    $registros = count($arTercero);
+                    $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
+                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arrControles['TxtCuenta'.$intCodigo]);
+                    if ($registros == 0 ){
+                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de identificación ". $arrControles['TxtNumeroIdentificacion'.$intCodigo] . " no existe" , $this);
+                    }else {
+                        if ($arCuenta == null){
+                            $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de cuenta ". $arrControles['TxtCuenta'.$intCodigo] . " no existe" , $this);
+                        }else {
+                            $arAsientoDetalle->setTerceroRel($arTercero);
+                            $arAsientoDetalle->setDocumentoReferente($arrControles['TxtDocumentoReferente'.$intCodigo]);
+                            $arAsientoDetalle->setSoporte($arrControles['TxtSoporte'.$intCodigo]);
+                            $arAsientoDetalle->setPlazo($arrControles['TxtPlazo'.$intCodigo]);
+                            $arAsientoDetalle->setValorBase($arrControles['TxtValorBase'.$intCodigo]);
+                            $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
+                            $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
+                            $em->persist($arAsientoDetalle);
+                        }
+                        
                     }
-                    $em->flush();
+                    
+                    
+                    
                 }
+                $em->flush();
+                $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
+                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
             }
-
         }
-        $arDotacionDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-        $arDotacionDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->FindBy(array('codigoDotacionFk' => $codigoDotacion));
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:detalle.html.twig', array(
-                    'arDotacion' => $arDotacion,
-                    'arDotacionDetalles' => $arDotacionDetalles,
+        $arAsientoDetalles = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
+        $arAsientoDetalles = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->FindBy(array('codigoAsientoFk' => $codigoAsiento));
+        return $this->render('BrasaContabilidadBundle:Movimientos/Asientos:detalle.html.twig', array(
+                    'arAsiento' => $arAsiento,
+                    'arAsientoDetalles' => $arAsientoDetalles,
                     'form' => $form->createView()
                     ));
     }
 
-    public function detalleNuevoAction($codigoDotacion) {
+    public function detalleNuevoAction($codigoAsiento, $codigoAsientoDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
-        $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
-        $arDotacionElementos = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-                        $arDotacionElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
-        $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
-            ->getForm();
+        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
+        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
+        $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
+        if($codigoAsientoDetalle != 0) {
+            $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($codigoAsientoDetalle);
+        } else {
+            $arAsientoDetalle->setFecha(new \DateTime('now'));
+        }
+        $form = $this->createForm(new CtbAsientoDetalleType, $arAsientoDetalle);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arrControles = $request->request->All();
-            if ($form->get('BtnGuardar')->isClicked()) {
-                if (isset($arrControles['TxtCantidad'])) {
-                    $intIndice = 0;
-                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        if($arrControles['TxtCantidad'][$intIndice] > 0 ){
-                            $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-                            $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($intCodigo);
-                            $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                            $arDotacionDetalle->setDotacionRel($arDotacion);
-                            $arDotacionDetalle->setDotacionElementoRel($arDotacionElemento);
-                            $intCantidad = $arrControles['TxtCantidad'][$intIndice];
-                            $arDotacionDetalle->setCantidadAsignada($intCantidad);
-                            $arDotacionDetalle->setCantidadDevuelta(0);
-                            $intLote = $arrControles['TxtLote'][$intIndice];
-                            $intSerie = $arrControles['TxtSerie'][$intIndice];
-                            $arDotacionDetalle->setSerie($intSerie);
-                            $arDotacionDetalle->setLote($intLote);
-                            $em->persist($arDotacionDetalle);
-                        }
-                        $intIndice++;
-                    }
-                }
-                $em->flush();
+            $arAsientoDetalle = $form->getData();
+            $arAsientoDetalle->setAsientoRel($arAsiento);
+            if ($arAsientoDetalle->getAsientoTipoRel()->getCodigoAsientoTipoPk() == 1){
+                $arAsientoDetalle->setDebito($arAsientoDetalle->getValorBase());
+            }else {
+                $arAsientoDetalle->setCredito($arAsientoDetalle->getValorBase());
             }
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:detallenuevo.html.twig', array(
-            'arDotacion' => $arDotacion,
-            'arDotacionElementos' => $arDotacionElementos,
-            'form' => $form->createView()));
-    }
-    
-    public function detalleDevolucionAction($codigoDotacion) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
-        $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
-        $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-        $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arDotacion->getCodigoEmpleadoFk());
-        $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
-            ->getForm();
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arrControles = $request->request->All();
-            if ($form->get('BtnGuardar')->isClicked()) {
-                if (isset($arrControles['TxtCantidad'])) {
-                    $intIndice = 0;
-                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        if($arrControles['TxtCantidad'][$intIndice] > 0 ){
-                            $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                            $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($intCodigo);
-                            $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-                            $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($arDotacionDetalle->getCodigoDotacionElementoFk());
-                            $arDotacionDetalleDevolucion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                            $arDotacionDetalleDevolucion->setDotacionRel($arDotacion);
-                            $arDotacionDetalleDevolucion->setDotacionElementoRel($arDotacionElemento);
-                            $intCantidad = $arrControles['TxtCantidad'][$intIndice];
-                            $arDotacionDetalleDevolucion->setCantidadAsignada($intCantidad);
-                            $arDotacionDetalleDevolucion->setSerie($arDotacionDetalle->getSerie());
-                            $arDotacionDetalleDevolucion->setLote($arDotacionDetalle->getLote());
-                            $arDotacionDetalleDevolucion->setCodigoDotacionDetalleEnlaceFk($arDotacionDetalle->getCodigoDotacionDetallePk());
-                            $em->persist($arDotacionDetalleDevolucion);
-                            $arDotacionDetalle->setCantidadDevuelta($arDotacionDetalle->getCantidadDevuelta() + $intCantidad);                            
-                            $em->persist($arDotacionDetalle);
-                        }
-                        $intIndice++;
-                    }
-                }
-                $em->flush();
+            $em->persist($arAsientoDetalle);
+            $em->flush();
+            if($form->get('BtnGuardarNuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle_nuevo', array('codigoAsiento' => $codigoAsiento, 'codigoAsientoDetalle' => 0 )));
+            } else {
+                $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:detalleDevolucion.html.twig', array(
-            'arDotacion' => $arDotacion,
-            'arDotacionDetalle' => $arDotacionDetalle,
+        return $this->render('BrasaContabilidadBundle:Movimientos/Asientos:detalleNuevo.html.twig', array(
+            'arAsiento' => $arAsiento,
             'form' => $form->createView()));
     }
 
     private function listar() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();        
         $this->strListaDql = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->listaDQL(
-                $session->get('filtroCodigoAsiento',
-                $session->get('filtroCodigoComprobante')
-                )
+                $this->codigoAsiento,
+                $this->codigoComprobante                
                 );
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+                    
         $form = $this->createFormBuilder()
-            ->add('TxtCodigoAsiento', 'text', array('label'  => 'Código asiento','data' => $session->get('filtroCodigoAsiento')))
-            ->add('TxtCodigoComprobante', 'text', array('label'  => 'Código comprobante','data' => $session->get('filtroCodigoComprobante')))    
+            ->add('TxtCodigoAsiento', 'text', array('label'  => 'Código asiento'))
+            ->add('comprobanteRel', 'entity', array(
+                'class' => 'BrasaContabilidadBundle:CtbComprobante',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
@@ -293,30 +251,54 @@ class AsientoController extends Controller
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $session->set('filtroCodigoAsiento', $form->get('TxtCodigoAsiento')->getData());
-        $session->set('filtroCodigoComprobante', $form->get('TxtCodigoComprobante')->getData());
+        $em = $this->getDoctrine()->getManager();
+        $arComprobante = $form->get('comprobanteRel')->getData();
+        if ($arComprobante == null){
+            $intComprobante = "";
+        }else {
+            $intComprobante = $arComprobante->getCodigoComprobantePk();
+        }
+        $this->codigoAsiento = $form->get('TxtCodigoAsiento')->getData();
+        $this->codigoComprobante = $intComprobante;
     }    
     
-    private function formularioDetalle($arDotacion) {
+    private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
-        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
-        $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);        
-        if($arDotacion->getEstadoAutorizado() == 1) {            
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => false);
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => false);
+        $arrBotonContabilizar = array('label' => 'Contabilizar', 'disabled' => false);
+        $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
-            $arrBotonEliminarDetalle['disabled'] = true;            
+            $arrBotonEliminarDetalle['disabled'] = true;
+            $arrBotonDetalleActualizar['disabled'] = true;
+            
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
+            $arrBotonContabilizar['disabled'] = true;
+            $arrBotonAprobar['disabled'] = true;
+            $arrBotonAnular['disabled'] = true;
+        }
+        if($ar->getEstadoAprobado() == 1) {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonAprobar['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;
+            $arrBotonContabilizar['disabled'] = true;
+            $arrBotonAnular['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
-                    ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)                                
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)
+                    ->add('BtnContabilizar', 'submit', $arrBotonContabilizar)
+                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)
+                    ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
+                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->getForm();  
         return $form;
     }     

@@ -8,23 +8,29 @@
         <div class="panel-heading">Información general</div>
         <div class="panel-body">
             <div class="form-group form-group-sm">
-                <label for="form_comprobanteRel" class="col-sm-3 control-label">Tipo:</label>
+                <label for="form_comprobanteRel" class="col-sm-3 control-label">Comprobante:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.dotacionTipoRel, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.comprobanteRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>            
             <div class="form-group form-group-sm">
-                <label for="form_fechaEntrega" class="col-sm-3 control-label">Fecha entrega:</label>
+                <label for="form_numeroAsiento" class="col-sm-3 control-label">Número asiento:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.fechaEntrega, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.numeroAsiento, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_codigoInternoReferencia" class="col-sm-3 control-label">Número referencia:</label>
+                <label for="form_soporte" class="col-sm-3 control-label">Soporte:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.codigoInternoReferencia, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.soporte, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
+            <div class="form-group">
+                <label for="form_fecha" class="col-sm-3 control-label">Fecha:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.fecha, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>    
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">
@@ -34,9 +40,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_dotacion_lista') }}">Cancelar</a>        
-        {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
-        {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+        <a class="btn btn-default btn-sm" href="{{ path('brs_ctb_mov_asientos_lista') }}">Cancelar</a>        
+        {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+        {{ form_widget(form.BtnGuardarNuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>    
     {{ form_end(form) }}
 </div>

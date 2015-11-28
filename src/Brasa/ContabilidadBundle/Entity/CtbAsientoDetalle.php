@@ -21,50 +21,75 @@ class CtbAsientoDetalle
     /**
      * @ORM\Column(name="codigo_asiento_fk", type="integer", nullable=false)
      */     
-    private $codigoAsientoFk; 
+    private $codigoAsientoFk;
+    
+    /**
+     * @ORM\Column(name="fecha", type="date", nullable=true)
+     */    
+    private $fecha;
 
     /**
-     * @ORM\Column(name="debe", type="float")
+     * @ORM\Column(name="debito", type="float")
      */
     private $debito = 0;    
 
     /**
-     * @ORM\Column(name="haber", type="float")
+     * @ORM\Column(name="credito", type="float")
      */
     private $credito = 0;    
 
     /**
-     * @ORM\Column(name="base", type="float")
+     * @ORM\Column(name="valor_base", type="float")
      */
-    private $base = 0;    
+    private $valorBase = 0;    
     
     /**    
      * @ORM\Column(name="codigo_cuenta_fk", type="string", length=40)
      */ 
     private $codigo_cuenta_fk;
+    
+    /**    
+     * @ORM\Column(name="soporte", type="string", length=40)
+     */ 
+    private $soporte;
+    
+    /**    
+     * @ORM\Column(name="documento_referente", type="string", length=40)
+     */ 
+    private $documentoReferente;
+    
+    /**    
+     * @ORM\Column(name="plazo", type="string", length=40)
+     */ 
+    private $plazo;
 
     /**
      * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
-     * @Assert\NotBlank
      */    
     private $codigoTerceroFk;    
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */     
-    private $codigoCentroCostoFk;     
+    private $codigoCentroCostoFk; 
+    
+    /**
+     * @ORM\Column(name="codigo_asiento_tipo_fk", type="integer", nullable=false)
+     */     
+    private $codigoAsientoTipoFk;
     
     /**
      * @ORM\Column(name="descripcion", type="string", length=150, nullable=true)
      */    
-    private $descripcion;     
+    private $descripcion; 
+    
     
     /**
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
     private $estadoAutorizado = 0;           
 
-        /**
+     /**
      * @ORM\ManyToOne(targetEntity="CtbAsiento", inversedBy="asientosDetallesAsientoRel")
      * @ORM\JoinColumn(name="codigo_asiento_fk", referencedColumnName="codigo_asiento_pk")
      */
@@ -88,8 +113,13 @@ class CtbAsientoDetalle
      */
     private $centroCostoRel; 
     
+    /**
+     * @ORM\ManyToOne(targetEntity="CtbAsientoTipo", inversedBy="asientosDetallesAsientoTipoRel")
+     * @ORM\JoinColumn(name="codigo_asiento_tipo_fk", referencedColumnName="codigo_asiento_tipo_pk")
+     */
+    protected $asientoTipoRel;
     
-
+    
 
     /**
      * Get codigoAsientoDetallePk
@@ -123,6 +153,30 @@ class CtbAsientoDetalle
     public function getCodigoAsientoFk()
     {
         return $this->codigoAsientoFk;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return CtbAsientoDetalle
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
     }
 
     /**
@@ -174,27 +228,27 @@ class CtbAsientoDetalle
     }
 
     /**
-     * Set base
+     * Set valorBase
      *
-     * @param float $base
+     * @param float $valorBase
      *
      * @return CtbAsientoDetalle
      */
-    public function setBase($base)
+    public function setValorBase($valorBase)
     {
-        $this->base = $base;
+        $this->valorBase = $valorBase;
 
         return $this;
     }
 
     /**
-     * Get base
+     * Get valorBase
      *
      * @return float
      */
-    public function getBase()
+    public function getValorBase()
     {
-        return $this->base;
+        return $this->valorBase;
     }
 
     /**
@@ -219,6 +273,78 @@ class CtbAsientoDetalle
     public function getCodigoCuentaFk()
     {
         return $this->codigo_cuenta_fk;
+    }
+
+    /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return CtbAsientoDetalle
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
+    }
+
+    /**
+     * Set documentoReferente
+     *
+     * @param string $documentoReferente
+     *
+     * @return CtbAsientoDetalle
+     */
+    public function setDocumentoReferente($documentoReferente)
+    {
+        $this->documentoReferente = $documentoReferente;
+
+        return $this;
+    }
+
+    /**
+     * Get documentoReferente
+     *
+     * @return string
+     */
+    public function getDocumentoReferente()
+    {
+        return $this->documentoReferente;
+    }
+
+    /**
+     * Set plazo
+     *
+     * @param string $plazo
+     *
+     * @return CtbAsientoDetalle
+     */
+    public function setPlazo($plazo)
+    {
+        $this->plazo = $plazo;
+
+        return $this;
+    }
+
+    /**
+     * Get plazo
+     *
+     * @return string
+     */
+    public function getPlazo()
+    {
+        return $this->plazo;
     }
 
     /**
@@ -267,6 +393,30 @@ class CtbAsientoDetalle
     public function getCodigoCentroCostoFk()
     {
         return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set codigoAsientoTipoFk
+     *
+     * @param integer $codigoAsientoTipoFk
+     *
+     * @return CtbAsientoDetalle
+     */
+    public function setCodigoAsientoTipoFk($codigoAsientoTipoFk)
+    {
+        $this->codigoAsientoTipoFk = $codigoAsientoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAsientoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoAsientoTipoFk()
+    {
+        return $this->codigoAsientoTipoFk;
     }
 
     /**
@@ -411,5 +561,29 @@ class CtbAsientoDetalle
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Set asientoTipoRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbAsientoTipo $asientoTipoRel
+     *
+     * @return CtbAsientoDetalle
+     */
+    public function setAsientoTipoRel(\Brasa\ContabilidadBundle\Entity\CtbAsientoTipo $asientoTipoRel = null)
+    {
+        $this->asientoTipoRel = $asientoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asientoTipoRel
+     *
+     * @return \Brasa\ContabilidadBundle\Entity\CtbAsientoTipo
+     */
+    public function getAsientoTipoRel()
+    {
+        return $this->asientoTipoRel;
     }
 }

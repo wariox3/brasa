@@ -54,9 +54,9 @@ class CtbAsiento
     private $estadoImpreso = 0;    
     
     /**
-     * @ORM\Column(name="estado_cerrado", type="boolean")
+     * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
-    private $estadoCerrado = 0;    
+    private $estadoAprobado = 0;    
     
     /**
      * @ORM\Column(name="estado_anulado", type="boolean")
@@ -94,7 +94,6 @@ class CtbAsiento
      */
     protected $asientosDetallesAsientoRel;
 
-    
     
     /**
      * Constructor
@@ -283,27 +282,27 @@ class CtbAsiento
     }
 
     /**
-     * Set estadoCerrado
+     * Set estadoAprobado
      *
-     * @param boolean $estadoCerrado
+     * @param boolean $estadoAprobado
      *
      * @return CtbAsiento
      */
-    public function setEstadoCerrado($estadoCerrado)
+    public function setEstadoAprobado($estadoAprobado)
     {
-        $this->estadoCerrado = $estadoCerrado;
+        $this->estadoAprobado = $estadoAprobado;
 
         return $this;
     }
 
     /**
-     * Get estadoCerrado
+     * Get estadoAprobado
      *
      * @return boolean
      */
-    public function getEstadoCerrado()
+    public function getEstadoAprobado()
     {
-        return $this->estadoCerrado;
+        return $this->estadoAprobado;
     }
 
     /**
