@@ -44,11 +44,7 @@
                 <th>FECHA</th>
                 <th style="text-align: right">TOTAL DÉBITO</th>
                 <th style="text-align: right">TOTAL CRÉDITO</th>
-                <th>IMPRESO</th>
-                <th>CONTABILIZADO</th>
-                <th>ANULADO</th>
                 <th>AUTORIZADO</th>
-                <th>APROBADO</th>
                 <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
@@ -63,11 +59,7 @@
                 <td>{{ arAsientos.fecha |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arAsientos.totalDebito | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arAsientos.totalCredito | number_format(0, '.', ',') }}</td>
-                <td>{% if arAsientos.estadoImpreso == 1%} SI {% else %} NO {% endif %}</td>
-                <td>{% if arAsientos.estadoContabilizado == 1%} SI {% else %} NO {% endif %}</td>
-                <td>{% if arAsientos.estadoAnulado == 1%} SI {% else %} NO {% endif %}</td>
                 <td>{% if arAsientos.estadoAutorizado == 1%} SI {% else %} NO {% endif %}</td>
-                <td>{% if arAsientos.estadoAprobado == 1%} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_ctb_mov_asientos_nuevo', {'codigoAsiento':  arAsientos.codigoAsientoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_ctb_mov_asientos_detalle', { 'codigoAsiento': arAsientos.codigoAsientoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAsientos.codigoAsientoPk }}" /></td>

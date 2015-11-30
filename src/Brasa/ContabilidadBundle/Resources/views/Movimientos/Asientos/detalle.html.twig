@@ -1,6 +1,12 @@
 {% extends '::base.html.twig' %}
 {% block title %}Asiento detalle - Soga App{% endblock %}
 {% block content %}
+    <script>
+        $('#myTab a').click(function(e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+        </script>
     <div class="container">
         <div class="page-header">
             <h3>Detalles asiento</h3>
@@ -13,9 +19,6 @@
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnContabilizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
         </div>
         <br /><br />
@@ -28,40 +31,24 @@
                         <td class="td-in-well">{{ arAsiento.codigoAsientoPk }}</td>
                         <td class="titulo">FECHA:</th>
                         <td class="td-in-well">{{ arAsiento.fecha |date("Y/m/d") }}</td>
-                        <td class="titulo">IMPRIMIDO:</td>
-                        <td class="td-in-well">{% if arAsiento.estadoImpreso == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td class="titulo" align="right">TOTAL DÉBITO:</td>
+                        <td class="td-in-well" align="right">{{ arAsiento.TotalDebito | number_format(0, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">CODIGO COMPROBANTE:</td>
                         <td class="td-in-well">{{ arAsiento.codigoComprobanteFk }}</td>
                         <td class="titulo">COMPROBANTE:</th>
                         <td class="td-in-well">{{ arAsiento.comprobanteRel.nombre }}</td>
-                        <td class="titulo">CONTABILIZADO:</td>
-                        <td class="td-in-well">{% if arAsiento.estadoContabilizado == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td class="titulo" align="right">TOTAL CRÉDITO:</td>
+                        <td class="td-in-well" align="right">{{ arAsiento.TotalCredito | number_format(0, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">NÚMERO ASIENTO:</td>
                         <td class="td-in-well">{{ arAsiento.numeroAsiento }}</td>
                         <td class="titulo">SOPORTE:</td>
                         <td class="td-in-well">{{ arAsiento.soporte }}</td>
-                        <td class="titulo">ANULADO:</td>
-                        <td class="td-in-well">{% if arAsiento.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
-                        <td class="titulo" align="right">TOTAL DÉBITO:</th>
-                        <td class="td-in-well" align="right">{{ arAsiento.TotalDebito | number_format(0, '.', ',') }}</td>
                         <td class="titulo">AUTORIZADO:</td>
                         <td class="td-in-well">{% if arAsiento.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
-                        <td class="titulo" align="right">TOTAL CRÉDITO:</th>
-                        <td class="td-in-well" align="right">{{ arAsiento.TotalCredito | number_format(0, '.', ',') }}</td>
-                        <td class="titulo">APROBADO:</td>
-                        <td class="td-in-well">{% if arAsiento.estadoAprobado == 1 %}SI{% else %}NO{% endif %}</td>
                     </tr>
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
@@ -76,8 +63,6 @@
                     <th>CÓDIGO</th>
                     <th>CUENTA</th>
                     <th>IDENTIFICACIÓN TERCERO</th>
-                    <th>TERCERO</th>
-                    <th>RAZÓN SOCIAL</th>
                     <th>CENTRO COSTO</th>
                     <th>FECHA</th>
                     <th>TIPO ASIENTO</th>
@@ -98,33 +83,35 @@
                         <span class="badge">{{ arAsientoDetalles.codigoAsientoDetallePk }}</span>
                     </td>
                     {% if arAsiento.estadoAutorizado == 0 %}
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCuenta{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoCuentaFk}}" size="15" style="width:70px" onclick="this.select()"/></td>    
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtNumeroIdentificacion{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.terceroRel.numeroIdentificacion}}" size="15" style="width:90px" onclick="this.select()"/></td>    
-                    {% else %}    
-                        <td>{{ arAsientoDetalles.codigoCuentaFk }}</td>
-                        <td>{{ arAsientoDetalles.terceroRel.numeroIdentificacion }}</td>
-                    {% endif %}
-                    <td>{{ arAsientoDetalles.terceroRel.nombreCorto | default('sin dato') }}</td>
-                    <td>{{ arAsientoDetalles.terceroRel.razonSocial }}</td>
-                    <td>{{ arAsientoDetalles.centroCostoRel.nombre | default('sin dato') }}</td>
-                    <td>{{ arAsientoDetalles.fecha | date('Y-m-d') }}</td>
-                    <td>{{ arAsientoDetalles.asientoTipoRel.nombre }}</td>
-                    {% if arAsiento.estadoAutorizado == 0 %}
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDocumentoReferente{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.documentoReferente}}" size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtSoporte{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.soporte}}" size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtPlazo{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.plazo}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtCuenta{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoCuentaFk}}" size="15" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtNumeroIdentificacion{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.terceroRel.numeroIdentificacion}}" size="15" style="width:90px" onclick="this.select()"/>
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_tercero', {'campoCodigo': 'TxtNumeroIdentificacion' ~ arAsientoDetalles.terceroRel.numeroIdentificacion }) }}', 'tercero', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a></td>    
+                        <td><input class="input-grid" type="text" name="TxtCodigoCentroCosto{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoCentroCostoFk}}" size="15" style="width:30px" onclick="this.select()"/>
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_centro_costo', {'campoCodigo': 'TxtCodigoCentroCosto' ~ arAsientoDetalles.codigoCentroCostoFk }) }}', 'centro costo', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a></td>
+                        <td><input class="input-grid" type="text" name="TxtFecha{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.Fecha| date('Y-m-d')}}" size="15" style="width:70px" onclick="this.select()"/></td>
+                        <td><input class="input-grid" type="text" name="TxtCodigoAsientoTipo{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoAsientoTipoFk}}" size="15" style="width:30px" onclick="this.select()"/></td>
+                        <td><input class="input-grid" type="text" name="TxtDocumentoReferente{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.documentoReferente}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtSoporte{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.soporte}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtPlazo{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.plazo}}" size="10" style="width:30px" onclick="this.select()"/></td>    
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorBase{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.valorBase}}" size="10" style="width:70px" onclick="this.select()"/></td>    
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDebito{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.debito}}" size="10" style="width:70px" onclick="this.select()"/></td>    
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtCredito{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.credito}}" size="10" style="width:70px" onclick="this.select()"/></td>    
-                    {% else %}    
+                        <td><input class="input-grid" type="text" name="TxtDescripcion{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.descripcion}}" size="10" style="width:130px" onclick="this.select()"/></td>    
+                    {% else %}
+                        <td>{{ arAsientoDetalles.codigoCuentaFk }}</td>
+                        <td>{{ arAsientoDetalles.terceroRel.numeroIdentificacion }}</td>
+                        <td>{{ arAsientoDetalles.codigoCentroCostoFk }}</td>
+                        <td>{{ arAsientoDetalles.fecha | date('Y-m-d') }}</td>
+                        <td>{{ arAsientoDetalles.codigoAsientoTipoFk }}</td>
                         <td>{{ arAsientoDetalles.documentoReferente }}</td>
                         <td>{{ arAsientoDetalles.soporte }}</td>
                         <td>{{ arAsientoDetalles.plazo }}</td>
                         <td style="text-align: right">{{ arAsientoDetalles.valorBase | number_format(0, '.', ',') }}</td>
                         <td style="text-align: right">{{ arAsientoDetalles.debito | number_format(0, '.', ',') }}</td>
                         <td style="text-align: right">{{ arAsientoDetalles.credito | number_format(0, '.', ',') }}</td>
+                        <td>{{ arAsientoDetalles.descripcion }}</td>
                     {% endif%}
-                    <td>{{ arAsientoDetalles.descripcion }}</td>
+                    
                     {% if arAsiento.estadoAutorizado == 0 %}
                         <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ctb_mov_asientos_detalle_nuevo', {'codigoAsiento': arAsiento.codigoAsientoPk, 'codigoAsientoDetalle': arAsientoDetalles.codigoAsientoDetallePk  }) }}', '', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                     {% else %}

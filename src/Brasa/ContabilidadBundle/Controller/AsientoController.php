@@ -113,13 +113,13 @@ class AsientoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
             }
-            if($form->get('BtnAprobar')->isClicked()) {
+            /*if($form->get('BtnAprobar')->isClicked()) {
                 $aprobar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->Aprobar($codigoAsiento);
                 if ($aprobar != ""){
                     $objMensaje->Mensaje("error", $aprobar, $this);
                 }
                 return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
-            }
+            }*/
             if($form->get('BtnEliminarDetalle')->isClicked()) {
                 $arrSelecionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSelecionados) > 0) {
@@ -148,30 +148,47 @@ class AsientoController extends Controller
                     $registros = count($arTercero);
                     $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arrControles['TxtCuenta'.$intCodigo]);
-                    if ($registros == 0 ){
-                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de identificación ". $arrControles['TxtNumeroIdentificacion'.$intCodigo] . " no existe" , $this);
+                    $arAsientoTipo = new \Brasa\ContabilidadBundle\Entity\CtbAsientoTipo();
+                    $arAsientoTipo = $em->getRepository('BrasaContabilidadBundle:CtbAsientoTipo')->find($arrControles['TxtCodigoAsientoTipo'.$intCodigo]);
+                    $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();
+                    $arCentroCosto = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arrControles['TxtCodigoCentroCosto'.$intCodigo]);
+                    if ($arCuenta == null){
+                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de cuenta ". $arrControles['TxtCuenta'.$intCodigo] . " no existe" , $this);
                     }else {
-                        if ($arCuenta == null){
-                            $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de cuenta ". $arrControles['TxtCuenta'.$intCodigo] . " no existe" , $this);
+                        if ($registros == 0 ){
+                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de identificación ". $arrControles['TxtNumeroIdentificacion'.$intCodigo] . " no existe" , $this);
                         }else {
-                            $arAsientoDetalle->setTerceroRel($arTercero);
-                            $arAsientoDetalle->setDocumentoReferente($arrControles['TxtDocumentoReferente'.$intCodigo]);
-                            $arAsientoDetalle->setSoporte($arrControles['TxtSoporte'.$intCodigo]);
-                            $arAsientoDetalle->setPlazo($arrControles['TxtPlazo'.$intCodigo]);
-                            $arAsientoDetalle->setValorBase($arrControles['TxtValorBase'.$intCodigo]);
-                            $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
-                            $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
-                            $em->persist($arAsientoDetalle);
-                        }
-                        
+                            if ($arAsientoTipo == null){
+                            $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el tipo de asiento ". $arrControles['TxtCodigoAsientoTipo'.$intCodigo] . " no existe" , $this);
+                            }else {
+                                if ($arCentroCosto == null){
+                                    $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el centro de costo ". $arrControles['TxtCodigoCentroCosto'.$intCodigo] . " no existe" , $this);
+                                }else {
+                                    $arAsientoDetalle->setCuentaRel($arCuenta);
+                                    $arAsientoDetalle->setAsientoTipoRel($arAsientoTipo);
+                                    $arAsientoDetalle->setTerceroRel($arTercero);
+                                    $arAsientoDetalle->setCentroCostoRel($arCentroCosto);
+                                    //$arAsientoDetalle->setFecha($arrControles['TxtFecha'.$intCodigo]);
+                                    $arAsientoDetalle->setDocumentoReferente($arrControles['TxtDocumentoReferente'.$intCodigo]);
+                                    $arAsientoDetalle->setSoporte($arrControles['TxtSoporte'.$intCodigo]);
+                                    $arAsientoDetalle->setPlazo($arrControles['TxtPlazo'.$intCodigo]);
+                                    $arAsientoDetalle->setValorBase($arrControles['TxtValorBase'.$intCodigo]);
+                                    $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
+                                    $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
+                                    $arAsientoDetalle->setDescripcion($arrControles['TxtDescripcion'.$intCodigo]);
+                                    $em->persist($arAsientoDetalle);
+                                }    
+                            }    
+                        }   
                     }
-                    
-                    
-                    
                 }
                 $em->flush();
                 $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
                 return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+            }
+            if($form->get('BtnImprimir')->isClicked()) {
+                $objFormatoAsientoDetalle = new \Brasa\ContabilidadBundle\Formatos\FormatoAsientoDetalle();
+                $objFormatoAsientoDetalle->Generar($this, $codigoAsiento);
             }
         }
         $arAsientoDetalles = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
@@ -266,9 +283,9 @@ class AsientoController extends Controller
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
-        $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => false);
-        $arrBotonAnular = array('label' => 'Anular', 'disabled' => false);
-        $arrBotonContabilizar = array('label' => 'Contabilizar', 'disabled' => false);
+        //$arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => false);
+        //$arrBotonAnular = array('label' => 'Anular', 'disabled' => false);
+        //$arrBotonContabilizar = array('label' => 'Contabilizar', 'disabled' => false);
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {            
@@ -279,24 +296,24 @@ class AsientoController extends Controller
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
-            $arrBotonContabilizar['disabled'] = true;
-            $arrBotonAprobar['disabled'] = true;
-            $arrBotonAnular['disabled'] = true;
+            //$arrBotonContabilizar['disabled'] = true;
+            //$arrBotonAprobar['disabled'] = true;
+            //$arrBotonAnular['disabled'] = true;
         }
         if($ar->getEstadoAprobado() == 1) {
             $arrBotonDesAutorizar['disabled'] = true;            
-            $arrBotonAprobar['disabled'] = true;
+            //$arrBotonAprobar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
-            $arrBotonContabilizar['disabled'] = true;
-            $arrBotonAnular['disabled'] = true;
+            //$arrBotonContabilizar['disabled'] = true;
+            //$arrBotonAnular['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnAnular', 'submit', $arrBotonAnular)
+                    /*->add('BtnAnular', 'submit', $arrBotonAnular)
                     ->add('BtnContabilizar', 'submit', $arrBotonContabilizar)
-                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)
+                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)*/
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->getForm();  
@@ -304,6 +321,7 @@ class AsientoController extends Controller
     }     
     
     private function generarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -317,35 +335,45 @@ class AsientoController extends Controller
                     ->setCategory("Test result file");
 
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Fecha')
-                            ->setCellValue('C1', 'Centro Centro')
-                            ->setCellValue('D1', 'Identificacion')
-                            ->setCellValue('E1', 'Empleado')
-                            ->setCellValue('F1', 'Numero Interno Referencia');
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'CÓDIGO COMPROBANTE')
+                            ->setCellValue('C1', 'COMPROBANTE')
+                            ->setCellValue('D1', 'NÚMERO ASIENTO')
+                            ->setCellValue('E1', 'SOPORTE')
+                            ->setCellValue('F1', 'FECHA')
+                            ->setCellValue('G1', 'TOTAL DÉBITO')
+                            ->setCellValue('H1', 'TOTAL CRÉDITO')
+                            ->setCellValue('I1', 'AUTORIZADO');
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
-                $arDotaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
-                $arDotaciones = $query->getResult();
+                $arAsientos = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
+                $arAsientos = $query->getResult();
 
-                foreach ($arDotaciones as $arDotacion) {
-
+                foreach ($arAsientos as $arAsiento) {
+                    if ($arAsiento->getEstadoAutorizado() == 1){
+                        $autorizado = "SI";
+                    }else {
+                        $autorizado = "NO";
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arDotacion->getCodigoDotacionPk())
-                            ->setCellValue('B' . $i, $arDotacion->getFecha()->format('Y/m/d'))
-                            ->setCellValue('C' . $i, $arDotacion->getCentroCostoRel()->getNombre())
-                            ->setCellValue('D' . $i, $arDotacion->getEmpleadoRel()->getNumeroIdentificacion())
-                            ->setCellValue('E' . $i, $arDotacion->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('F' . $i, $arDotacion->getCodigoInternoReferencia());
+                            ->setCellValue('A' . $i, $arAsiento->getCodigoAsientoPk())
+                            ->setCellValue('B' . $i, $arAsiento->getCodigoComprobanteFk())
+                            ->setCellValue('C' . $i, $arAsiento->getComprobanteRel()->getNombre())
+                            ->setCellValue('D' . $i, $arAsiento->getNumeroAsiento())
+                            ->setCellValue('E' . $i, $arAsiento->getSoporte())
+                            ->setCellValue('F' . $i, $arAsiento->getFecha()->format('Y-m-d'))
+                            ->setCellValue('G' . $i, $arAsiento->getTotalDebito())
+                            ->setCellValue('H' . $i, $arAsiento->getTotalCredito())
+                            ->setCellValue('I' . $i, $autorizado);
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('Dotacion');
+                $objPHPExcel->getActiveSheet()->setTitle('Asientos');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Dotacion.xlsx"');
+                header('Content-Disposition: attachment;filename="Asientos.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');

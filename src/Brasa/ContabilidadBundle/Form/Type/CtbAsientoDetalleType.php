@@ -44,6 +44,8 @@ class CtbAsientoDetalleType extends AbstractType
                 'required' => true))                
             ->add('fecha', 'date', array('required' => true))
             ->add('valorBase', 'text', array('required' => true))
+            ->add('debito', 'text', array('required' => true))
+            ->add('credito', 'text', array('required' => true))
             ->add('soporte', 'text', array('required' => true))
             ->add('documentoReferente', 'text', array('required' => true))
             ->add('plazo', 'text', array('required' => true))

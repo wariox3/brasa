@@ -52,4 +52,14 @@ brs_ctb_mov_asientos_detalle:
     
 brs_ctb_mov_asientos_detalle_nuevo:
     path:     /ctb/movimientos/asientos/detalle/nuevo/{codigoAsiento}/{codigoAsientoDetalle}
-    defaults: { _controller: BrasaContabilidadBundle:Asiento:detalleNuevo }    
+    defaults: { _controller: BrasaContabilidadBundle:Asiento:detalleNuevo }  
+    
+# Busquedas
+
+brs_ctb_buscar_tercero:
+    pattern:  /ctb/buscar/tercero/{campoCodigo}
+    defaults: { _controller: BrasaContabilidadBundle:BuscarTercero:lista }
+    
+brs_ctb_buscar_centro_costo:
+    pattern:  /ctb/buscar/centro/costo/{campoCodigo}
+    defaults: { _controller: BrasaContabilidadBundle:BuscarCentroCosto:lista }    
