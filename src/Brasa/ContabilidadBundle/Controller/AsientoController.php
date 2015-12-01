@@ -13,6 +13,7 @@ class AsientoController extends Controller
     var $strListaDql = "";
     var $codigoAsiento = "";
     var $codigoComprobante = "";
+    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -139,48 +140,51 @@ class AsientoController extends Controller
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
-                foreach ($arrControles['LblCodigoGuia'] as $intCodigo) {
-                    $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
-                    $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($intCodigo);
-                    
-                    $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
-                    $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arrControles['TxtNumeroIdentificacion'.$intCodigo]));
-                    $registros = count($arTercero);
-                    $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arrControles['TxtCuenta'.$intCodigo]);
-                    $arAsientoTipo = new \Brasa\ContabilidadBundle\Entity\CtbAsientoTipo();
-                    $arAsientoTipo = $em->getRepository('BrasaContabilidadBundle:CtbAsientoTipo')->find($arrControles['TxtCodigoAsientoTipo'.$intCodigo]);
-                    $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();
-                    $arCentroCosto = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arrControles['TxtCodigoCentroCosto'.$intCodigo]);
-                    if ($arCuenta == null){
-                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de cuenta ". $arrControles['TxtCuenta'.$intCodigo] . " no existe" , $this);
-                    }else {
-                        if ($registros == 0 ){
-                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de identificación ". $arrControles['TxtNumeroIdentificacion'.$intCodigo] . " no existe" , $this);
+                
+                if (isset($arrControles['LblCodigoGuia'])){
+                    foreach ($arrControles['LblCodigoGuia'] as $intCodigo) {
+                        $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
+                        $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($intCodigo);
+
+                        $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
+                        $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arrControles['TxtNumeroIdentificacion'.$intCodigo]));
+                        $registros = count($arTercero);
+                        $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
+                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arrControles['TxtCuenta'.$intCodigo]);
+                        $arAsientoTipo = new \Brasa\ContabilidadBundle\Entity\CtbAsientoTipo();
+                        $arAsientoTipo = $em->getRepository('BrasaContabilidadBundle:CtbAsientoTipo')->find($arrControles['TxtCodigoAsientoTipo'.$intCodigo]);
+                        $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();
+                        $arCentroCosto = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arrControles['TxtCodigoCentroCosto'.$intCodigo]);
+                        if ($arCuenta == null){
+                            $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de cuenta ". $arrControles['TxtCuenta'.$intCodigo] . " no existe" , $this);
                         }else {
-                            if ($arAsientoTipo == null){
-                            $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el tipo de asiento ". $arrControles['TxtCodigoAsientoTipo'.$intCodigo] . " no existe" , $this);
+                            if ($registros == 0 ){
+                            $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de identificación ". $arrControles['TxtNumeroIdentificacion'.$intCodigo] . " no existe" , $this);
                             }else {
-                                if ($arCentroCosto == null){
-                                    $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el centro de costo ". $arrControles['TxtCodigoCentroCosto'.$intCodigo] . " no existe" , $this);
+                                if ($arAsientoTipo == null){
+                                $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el tipo de asiento ". $arrControles['TxtCodigoAsientoTipo'.$intCodigo] . " no existe" , $this);
                                 }else {
-                                    $arAsientoDetalle->setCuentaRel($arCuenta);
-                                    $arAsientoDetalle->setAsientoTipoRel($arAsientoTipo);
-                                    $arAsientoDetalle->setTerceroRel($arTercero);
-                                    $arAsientoDetalle->setCentroCostoRel($arCentroCosto);
-                                    $fecha = new \DateTime($arrControles['dateFecha'.$intCodigo]);
-                                    $arAsientoDetalle->setFecha($fecha);
-                                    $arAsientoDetalle->setDocumentoReferente($arrControles['TxtDocumentoReferente'.$intCodigo]);
-                                    $arAsientoDetalle->setSoporte($arrControles['TxtSoporte'.$intCodigo]);
-                                    $arAsientoDetalle->setPlazo($arrControles['TxtPlazo'.$intCodigo]);
-                                    $arAsientoDetalle->setValorBase($arrControles['TxtValorBase'.$intCodigo]);
-                                    $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
-                                    $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
-                                    $arAsientoDetalle->setDescripcion($arrControles['TxtDescripcion'.$intCodigo]);
-                                    $em->persist($arAsientoDetalle);
+                                    if ($arCentroCosto == null){
+                                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el centro de costo ". $arrControles['TxtCodigoCentroCosto'.$intCodigo] . " no existe" , $this);
+                                    }else {
+                                        $arAsientoDetalle->setCuentaRel($arCuenta);
+                                        $arAsientoDetalle->setAsientoTipoRel($arAsientoTipo);
+                                        $arAsientoDetalle->setTerceroRel($arTercero);
+                                        $arAsientoDetalle->setCentroCostoRel($arCentroCosto);
+                                        $fecha = new \DateTime($arrControles['dateFecha'.$intCodigo]);
+                                        $arAsientoDetalle->setFecha($fecha);
+                                        $arAsientoDetalle->setDocumentoReferente($arrControles['TxtDocumentoReferente'.$intCodigo]);
+                                        $arAsientoDetalle->setSoporte($arrControles['TxtSoporte'.$intCodigo]);
+                                        $arAsientoDetalle->setPlazo($arrControles['TxtPlazo'.$intCodigo]);
+                                        $arAsientoDetalle->setValorBase($arrControles['TxtValorBase'.$intCodigo]);
+                                        $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
+                                        $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
+                                        $arAsientoDetalle->setDescripcion($arrControles['TxtDescripcion'.$intCodigo]);
+                                        $em->persist($arAsientoDetalle);
+                                    }    
                                 }    
-                            }    
-                        }   
+                            }   
+                        }
                     }
                 }
                 $em->flush();
@@ -208,13 +212,51 @@ class AsientoController extends Controller
                         $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el número de cuenta ". $arrControlesNew['TxtCuentaNew'] . " no existe en el sistema" , $this);
                     }else {
                         if ($registrosNew == 0 ){
-                        $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el número de identificación ". $arrControlesNew['TxtNumeroIdentificacionNew'] . " no existe en el sistema" , $this);
+                            if ($arrControlesNew['TxtNumeroIdentificacionNew'] != null){
+                                $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el número de identificación ". $arrControlesNew['TxtNumeroIdentificacionNew'] . " no existe en el sistema" , $this);
+                            }else{
+                                $arAsientoDetalleNew->setAsientoRel($arAsientoNew);
+                                $arAsientoDetalleNew->setCuentaRel($arCuentaNew);
+                                $arAsientoDetalleNew->setAsientoTipoRel($arAsientoTipoNew);
+                                $arAsientoDetalleNew->setTerceroRel($arTerceroNew);
+                                $arAsientoDetalleNew->setCentroCostoRel($arCentroCostoNew);
+                                $fecha = new \DateTime($arrControlesNew['dateFechaNew']);
+                                $arAsientoDetalleNew->setFecha($fecha);
+                                $arAsientoDetalleNew->setDocumentoReferente($arrControlesNew['TxtDocumentoReferenteNew']);
+                                $arAsientoDetalleNew->setSoporte($arrControlesNew['TxtSoporteNew']);
+                                $arAsientoDetalleNew->setPlazo($arrControlesNew['TxtPlazoNew']);
+                                $arAsientoDetalleNew->setValorBase($arrControlesNew['TxtValorBaseNew']);
+                                $arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
+                                $arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
+                                $arAsientoDetalleNew->setDescripcion($arrControlesNew['TxtDescripcionNew']);
+                                $em->persist($arAsientoDetalleNew);
+                                $em->flush();
+                            }    
                         }else {
                             if ($arAsientoTipoNew == null){
                             $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el tipo de asiento ". $arrControlesNew['TxtCodigoAsientoTipoNew'] . " no existe en el sistema" , $this);
                             }else {
                                 if ($arCentroCostoNew == null){
-                                    $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el centro de costo ". $arrControles['TxtCodigoCentroCostoNew'] . " no existe en el sistema" , $this);
+                                    if ($arrControlesNew['TxtCodigoCentroCostoNew'] != null){
+                                        $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el centro de costo ". $arrControlesNew['TxtCodigoCentroCostoNew'] . " no existe en el sistema" , $this);
+                                    }else{
+                                        $arAsientoDetalleNew->setAsientoRel($arAsientoNew);
+                                        $arAsientoDetalleNew->setCuentaRel($arCuentaNew);
+                                        $arAsientoDetalleNew->setAsientoTipoRel($arAsientoTipoNew);
+                                        $arAsientoDetalleNew->setTerceroRel($arTerceroNew);
+                                        $arAsientoDetalleNew->setCentroCostoRel($arCentroCostoNew);
+                                        $fecha = new \DateTime($arrControlesNew['dateFechaNew']);
+                                        $arAsientoDetalleNew->setFecha($fecha);
+                                        $arAsientoDetalleNew->setDocumentoReferente($arrControlesNew['TxtDocumentoReferenteNew']);
+                                        $arAsientoDetalleNew->setSoporte($arrControlesNew['TxtSoporteNew']);
+                                        $arAsientoDetalleNew->setPlazo($arrControlesNew['TxtPlazoNew']);
+                                        $arAsientoDetalleNew->setValorBase($arrControlesNew['TxtValorBaseNew']);
+                                        $arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
+                                        $arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
+                                        $arAsientoDetalleNew->setDescripcion($arrControlesNew['TxtDescripcionNew']);
+                                        $em->persist($arAsientoDetalleNew);
+                                        $em->flush();
+                                    }
                                 }else {
                                     $arAsientoDetalleNew->setAsientoRel($arAsientoNew);
                                     $arAsientoDetalleNew->setCuentaRel($arCuentaNew);

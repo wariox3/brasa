@@ -35,8 +35,8 @@ class BuscarCentroCostoController extends Controller
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->listaDQL(
-                $this->strNombre,                
-                $this->strCodigo   
+                $this->strNombre,
+                $this->strCodigo
                 ); 
     }       
     
@@ -51,8 +51,8 @@ class BuscarCentroCostoController extends Controller
 
     private function filtrarLista($form) {
         $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
+        $this->strCodigo = $form->get('TxtCodigo')->getData();
+        $this->strNombre = $form->get('TxtNombre')->getData();
     }    
           
 }

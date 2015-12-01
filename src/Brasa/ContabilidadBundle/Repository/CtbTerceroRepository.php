@@ -12,14 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class CtbTerceroRepository extends EntityRepository {
     
-    public function ListaDql($strNombre = "", $strCodigo = "") {
+    public function ListaDql($strNombre = "", $strIdentificacion = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT t FROM BrasaContabilidadBundle:CtbTercero t WHERE t.codigoTerceroPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND t.nombreCorto LIKE '%" . $strNombre . "%'";
         }
-        if($strCodigo != "" ) {
-            $dql .= " AND t.codigoTerceroPk LIKE '%" . $strCodigo . "%'";
+        if($strIdentificacion != "" ) {
+            $dql .= " AND t.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
         $dql .= " ORDER BY t.nombreCorto";
         return $dql;

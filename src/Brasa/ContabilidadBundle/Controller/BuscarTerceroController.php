@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 class BuscarTerceroController extends Controller
 {
     var $strDqlLista = "";     
-    var $strCodigo = "";
+    var $strIdentificacion = "";
     var $strNombre = "";
     
     public function listaAction($campoCodigo) {
@@ -36,23 +36,22 @@ class BuscarTerceroController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->listaDQL(
                 $this->strNombre,                
-                $this->strCodigo   
+                $this->strIdentificacion   
                 ); 
     }       
     
     private function formularioLista() {                
         $form = $this->createFormBuilder()                                                
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $this->strIdentificacion))                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
         return $form;
     }           
 
     private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
+        $this->strIdentificacion = $form->get('TxtIdentificacion')->getData();
+        $this->strNombre = $form->get('TxtNombre')->getData();
     }    
           
 }
