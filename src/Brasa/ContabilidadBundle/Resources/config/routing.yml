@@ -63,3 +63,7 @@ brs_ctb_buscar_tercero:
 brs_ctb_buscar_centro_costo:
     pattern:  /ctb/buscar/centro/costo/{campoCodigo}
     defaults: { _controller: BrasaContabilidadBundle:BuscarCentroCosto:lista }    
+    
+brs_ctb_buscar_cuenta:
+    pattern:  /ctb/buscar/cuenta/{campoCodigo}
+    defaults: { _controller: BrasaContabilidadBundle:BuscarCuenta:lista }    

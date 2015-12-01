@@ -1,6 +1,10 @@
 {% extends '::base.html.twig' %}
 {% block title %}Asiento detalle - Soga App{% endblock %}
 {% block content %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+        $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
+    </script>
     <script>
         $('#myTab a').click(function(e) {
             e.preventDefault();
@@ -76,6 +80,28 @@
                     <th></th>
                     <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                 </tr>
+                {% if arAsiento.estadoAutorizado == 0 %}                
+                    <tr>
+                        <td></td>
+                        <td><input class="input-grid" type="text" name="TxtCuentaNew" id="TxtCuentaNew" size="15" style="width:70px" onclick="this.select()"/>
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_cuenta', {'campoCodigo': 'TxtCuentaNew' }) }}', 'cuenta', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>    
+                        <td><input class="input-grid" type="text" name="TxtNumeroIdentificacionNew" id="TxtNumeroIdentificacionNew" size="15" style="width:90px" onclick="this.select()"/>
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_tercero', {'campoCodigo': 'TxtNumeroIdentificacionNew' }) }}', 'tercero', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>    
+                        <td><input class="input-grid" type="text" name="TxtCodigoCentroCostoNew" id="TxtCodigoCentroCostoNew" size="15" style="width:30px" onclick="this.select()"/>
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_centro_costo', {'campoCodigo': 'TxtCodigoCentroCostoNew'}) }}', 'centro costo', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>
+                        <td><input class="date" type="date" name="dateFechaNew" size="15" style="width:106px" onclick="this.select()"/></td>
+                        <td><input class="input-grid" type="text" name="TxtCodigoAsientoTipoNew"  size="15" style="width:30px" onclick="this.select()"/></td>
+                        <td><input class="input-grid" type="text" name="TxtDocumentoReferenteNew"  size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtSoporteNew"  size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtPlazoNew"  size="10" style="width:30px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorBaseNew" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDebitoNew" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCreditoNew" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtDescripcionNew" size="10" style="width:130px" onclick="this.select()"/></td>                                                
+                        <td></td>
+                        <td></td>
+                    </tr>                        
+                {% endif%}
                 {% for arAsientoDetalles in arAsientoDetalles %}
                 <tr>
                     <td>
@@ -83,12 +109,13 @@
                         <span class="badge">{{ arAsientoDetalles.codigoAsientoDetallePk }}</span>
                     </td>
                     {% if arAsiento.estadoAutorizado == 0 %}
-                        <td><input class="input-grid" type="text" name="TxtCuenta{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoCuentaFk}}" size="15" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtCuenta{{ arAsientoDetalles.codigoAsientoDetallePk }}" id="TxtCuenta{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoCuentaFk}}" size="15" style="width:70px" onclick="this.select()"/>   
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_cuenta', {'campoCodigo': 'TxtCuenta' ~ arAsientoDetalles.codigoAsientoDetallePk }) }}', 'cuenta', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>    
                         <td><input class="input-grid" type="text" name="TxtNumeroIdentificacion{{ arAsientoDetalles.codigoAsientoDetallePk }}" id="TxtNumeroIdentificacion{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.terceroRel.numeroIdentificacion}}" size="15" style="width:90px" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_tercero', {'campoCodigo': 'TxtNumeroIdentificacion' ~ arAsientoDetalles.codigoAsientoDetallePk }) }}', 'tercero', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a></td>    
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_tercero', {'campoCodigo': 'TxtNumeroIdentificacion' ~ arAsientoDetalles.codigoAsientoDetallePk }) }}', 'tercero', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>    
                         <td><input class="input-grid" type="text" name="TxtCodigoCentroCosto{{ arAsientoDetalles.codigoAsientoDetallePk }}" id="TxtCodigoCentroCosto{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoCentroCostoFk}}" size="15" style="width:30px" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_centro_costo', {'campoCodigo': 'TxtCodigoCentroCosto' ~ arAsientoDetalles.codigoAsientoDetallePk }) }}', 'centro costo', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a></td>
-                        <td><input class="input-grid" type="text" name="TxtFecha{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.Fecha| date('Y-m-d')}}" size="15" style="width:70px" onclick="this.select()"/></td>
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_centro_costo', {'campoCodigo': 'TxtCodigoCentroCosto' ~ arAsientoDetalles.codigoAsientoDetallePk }) }}', 'centro costo', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>
+                        <td><input class="input-grid" type="date" name="dateFecha{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.Fecha| date('Y-m-d')}}" size="15" style="width:105px" onclick="this.select()"/></td>
                         <td><input class="input-grid" type="text" name="TxtCodigoAsientoTipo{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoAsientoTipoFk}}" size="15" style="width:30px" onclick="this.select()"/></td>
                         <td><input class="input-grid" type="text" name="TxtDocumentoReferente{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.documentoReferente}}" size="10" style="width:70px" onclick="this.select()"/></td>    
                         <td><input class="input-grid" type="text" name="TxtSoporte{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.soporte}}" size="10" style="width:70px" onclick="this.select()"/></td>    
@@ -120,28 +147,7 @@
                     {% endif%}                               
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAsientoDetalles.codigoAsientoDetallePk }}" /></td>
                 </tr>                
-                {% endfor %}
-                {% if arAsiento.estadoAutorizado == 0 %}                
-                    <tr>
-                        <td></td>
-                        <td><input class="input-grid" type="text" name="TxtCuentaNew" size="15" style="width:70px" onclick="this.select()"/></td>    
-                        <td><input class="input-grid" type="text" name="TxtNumeroIdentificacionNew" id="TxtNumeroIdentificacionNew" size="15" style="width:90px" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_tercero', {'campoCodigo': 'TxtNumeroIdentificacionNew' }) }}', 'tercero', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a></td>    
-                        <td><input class="input-grid" type="text" name="TxtCodigoCentroCostoNew" id="TxtCodigoCentroCostoNew" size="15" style="width:30px" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_centro_costo', {'campoCodigo': 'TxtCodigoCentroCostoNew'}) }}', 'centro costo', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a></td>
-                        <td><input class="input-grid" type="text" name="TxtFechaNew" size="15" style="width:70px" onclick="this.select()"/></td>
-                        <td><input class="input-grid" type="text" name="TxtCodigoAsientoTipoNew"  size="15" style="width:30px" onclick="this.select()"/></td>
-                        <td><input class="input-grid" type="text" name="TxtDocumentoReferenteNew"  size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td><input class="input-grid" type="text" name="TxtSoporteNew"  size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td><input class="input-grid" type="text" name="TxtPlazoNew"  size="10" style="width:30px" onclick="this.select()"/></td>    
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorBaseNew" size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDebitoNew" size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCreditoNew" size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td><input class="input-grid" type="text" name="TxtDescripcionNew" size="10" style="width:130px" onclick="this.select()"/></td>                                                
-                        <td></td>
-                        <td></td>
-                    </tr>                        
-                {% endif%}        
+                {% endfor %}        
             </table>
 
         <div class="btn-toolbar" style="float:left">
@@ -150,14 +156,9 @@
             </div>
         </div>
         <div class="btn-toolbar" style="float: right">
+            
             <div class="btn-group">
-                {% if arAsiento.estadoAutorizado == 0 %}
-                    {% if arAsiento.estadoAprobado == 1 %}
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ctb_mov_asientos_detalle_nuevo', {'codigoAsiento': arAsiento.codigoAsientoPk, 'codigoAsientoDetalle': 0}) }}', 'AgregarNuevo', 600, 900)" disabled="disabled">Agregar</a>
-                    {% else %}
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ctb_mov_asientos_detalle_nuevo', {'codigoAsiento': arAsiento.codigoAsientoPk, 'codigoAsientoDetalle': 0}) }}', 'AgregarNuevo', 600, 900)">Agregar</a>
-                    {% endif%}
-                {% endif%}
+                {{ form_widget(form.BtnAgregar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}

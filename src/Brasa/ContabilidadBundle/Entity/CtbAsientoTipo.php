@@ -40,6 +40,7 @@ class CtbAsientoTipo
     protected $asientosDetallesAsientoTipoRel;
     
     
+    
     /**
      * Constructor
      */

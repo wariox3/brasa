@@ -2,19 +2,22 @@
 
 namespace Brasa\ContabilidadBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="ctb_comprobante")
  * @ORM\Entity(repositoryClass="Brasa\ContabilidadBundle\Repository\CtbComprobanteRepository")
+ * @DoctrineAssert\UniqueEntity(fields={"codigoComprobantePk"},message="Ya existe el código del comprobante")
  */
+
 class CtbComprobante
 {
     /** 
      * @ORM\Id
      * @ORM\Column(name="codigo_comprobante_pk", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */    
     private $codigoComprobantePk;
     
@@ -30,12 +33,27 @@ class CtbComprobante
     
     
     
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->asientosComprobanteRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set codigoComprobantePk
+     *
+     * @param integer $codigoComprobantePk
+     *
+     * @return CtbComprobante
+     */
+    public function setCodigoComprobantePk($codigoComprobantePk)
+    {
+        $this->codigoComprobantePk = $codigoComprobantePk;
+
+        return $this;
     }
 
     /**

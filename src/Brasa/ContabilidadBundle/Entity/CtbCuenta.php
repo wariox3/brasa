@@ -27,9 +27,9 @@ class CtbCuenta
     private $nombreCuenta;     
     
     /**
-     * @ORM\Column(name="codigo_cuenta_padre_fk", type="integer", nullable=false)
+     * @ORM\Column(name="codigo_cuenta_padre_fk", type="integer", nullable=true)
      */ 
-    private $codigo_cuenta_padre_fk;    
+    private $codigo_cuenta_padre_fk = 0;    
 
     /**
      * @ORM\Column(name="permite_movimientos", type="boolean")

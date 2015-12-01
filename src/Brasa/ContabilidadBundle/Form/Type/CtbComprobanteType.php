@@ -15,6 +15,7 @@ class CtbComprobanteType extends AbstractType
     {
         $builder
             
+            ->add('codigoComprobantePk', 'number', array('required' => true))
             ->add('nombre', 'text', array('required' => true))
             ->add('BtnGuardar', 'submit', array('label' => 'Guardar'));
     }
