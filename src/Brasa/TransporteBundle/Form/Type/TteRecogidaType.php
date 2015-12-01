@@ -8,19 +8,14 @@ class TteRecogidaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-
-            ->add('terceroRel', 'entity', array(
-                'class' => 'BrasaGeneralBundle:GenTercero',
-                'property' => 'nombreCorto',
-            ))       
+        $builder      
             ->add('anunciante', 'text')
             ->add('direccion', 'text')
             ->add('telefono', 'text')                
             ->add('fechaRecogida', 'datetime')                
-            ->add('ctUnidades', 'text')
-            ->add('ctPesoReal', 'text')
-            ->add('ctPesoVolumen', 'text') 
+            ->add('unidades', 'text')
+            ->add('pesoReal', 'text')
+            ->add('pesoVolumen', 'text') 
             ->add('vrDeclarado', 'text')
             ->add('contenido', 'textarea', array('required' => false))
             ->add('comentarios', 'textarea', array('required' => false))

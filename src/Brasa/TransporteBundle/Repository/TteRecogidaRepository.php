@@ -12,28 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class TteRecogidaRepository extends EntityRepository {                
     
-    public function ListaRecogidas($boolAnulada, $codigoRecogida, $fechaDesde, $fechaHasta, $codigoTercero = "") {        
-        $em = $this->getEntityManager();
-        $dql   = "SELECT recogidas FROM BrasaTransporteBundle:TteRecogida recogidas WHERE recogidas.codigoRecogidaPk <> 0";
-
-        if($boolAnulada != 1 ) {
-            $dql .= " AND recogidas.estadoAnulada = 0";
-        }        
-        if($codigoRecogida != "" ) {
-            $dql .= " AND recogidas.codigoRecogidaPk = " . $codigoRecogida;
-        }         
-        if($codigoTercero != "" ) {
-            $dql .= " AND recogidas.codigoTerceroFk = " . $codigoTercero;
-        }        
-        if($fechaDesde != "" ) {
-            $dql .= " AND recogidas.fechaIngreso >= '" . $fechaDesde->format('Y/m/d') . " 00:00:00'";
-        }        
-        if($fechaHasta != "" ) {
-            $dql .= " AND recogidas.fechaIngreso <= '" . $fechaHasta->format('Y/m/d') . " 23:59:59'";
-        }        
-        $query = $em->createQuery($dql);        
-        return $query;
-    }        
+    public function listaDql($codigoRecogida) {
+        $dql   = "SELECT r FROM BrasaTransporteBundle:TteRecogida r WHERE r.codigoRecogidaPk <> 0";
+        if($codigoRecogida != "") {
+            $dql = $dql . " AND r.codigoRecogidaPk = " . $codigoRecogida;
+        }
+        return $dql;
+    }       
     
     public function ListaPendientes() {        
         $em = $this->getEntityManager();

@@ -44,24 +44,24 @@ class TteRecogida
     private $codigoPlanRecogidaFk;     
     
     /**
-     * @ORM\Column(name="ct_unidades", type="integer")
+     * @ORM\Column(name="unidades", type="integer")
      */
-    private $ctUnidades = 0;
+    private $unidades = 0;
 
     /**
-     * @ORM\Column(name="ct_peso_real", type="integer")
+     * @ORM\Column(name="peso_real", type="integer")
      */
-    private $ctPesoReal = 0;    
+    private $pesoReal = 0;    
 
     /**
-     * @ORM\Column(name="ct_peso_volumen", type="integer")
+     * @ORM\Column(name="peso_volumen", type="integer")
      */
-    private $ctPesoVolumen = 0;    
+    private $pesoVolumen = 0;    
     
     /**
-     * @ORM\Column(name="ct_peso_liquidar", type="integer")
+     * @ORM\Column(name="peso_liquidar", type="integer")
      */
-    private $ctPesoLiquidar = 0;    
+    private $pesoLiquidar = 0;    
 
     /**
      * @ORM\Column(name="vr_declarado", type="float")
@@ -71,17 +71,17 @@ class TteRecogida
     /**
      * @ORM\Column(name="estado_impreso", type="boolean")
      */    
-    private $estadoImpresa = 0;             
+    private $estadoImpresa = false;             
 
     /**
      * @ORM\Column(name="estado_anulada", type="boolean")
      */    
-    private $estadoAnulada = 0;                
+    private $estadoAnulada = false;                
 
     /**
      * @ORM\Column(name="estado_asignada", type="boolean")
      */    
-    private $estadoAsignada = 0;    
+    private $estadoAsignada = false;    
     
     /**
      * @ORM\Column(name="Anunciante", type="string", length=80, nullable=true)
@@ -126,10 +126,12 @@ class TteRecogida
      */
     protected $planRecogidaRel;     
 
+
+
     /**
      * Get codigoRecogidaPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoRecogidaPk()
     {
@@ -140,6 +142,7 @@ class TteRecogida
      * Set fechaAnuncio
      *
      * @param \DateTime $fechaAnuncio
+     *
      * @return TteRecogida
      */
     public function setFechaAnuncio($fechaAnuncio)
@@ -152,7 +155,7 @@ class TteRecogida
     /**
      * Get fechaAnuncio
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaAnuncio()
     {
@@ -160,216 +163,10 @@ class TteRecogida
     }
 
     /**
-     * Set codigoTerceroFk
-     *
-     * @param integer $codigoTerceroFk
-     * @return TteRecogida
-     */
-    public function setCodigoTerceroFk($codigoTerceroFk)
-    {
-        $this->codigoTerceroFk = $codigoTerceroFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTerceroFk
-     *
-     * @return integer 
-     */
-    public function getCodigoTerceroFk()
-    {
-        return $this->codigoTerceroFk;
-    }
-
-    /**
-     * Set codigoPuntoOperacionFk
-     *
-     * @param integer $codigoPuntoOperacionFk
-     * @return TteRecogida
-     */
-    public function setCodigoPuntoOperacionFk($codigoPuntoOperacionFk)
-    {
-        $this->codigoPuntoOperacionFk = $codigoPuntoOperacionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPuntoOperacionFk
-     *
-     * @return integer 
-     */
-    public function getCodigoPuntoOperacionFk()
-    {
-        return $this->codigoPuntoOperacionFk;
-    }
-
-    /**
-     * Set ctUnidades
-     *
-     * @param integer $ctUnidades
-     * @return TteRecogida
-     */
-    public function setCtUnidades($ctUnidades)
-    {
-        $this->ctUnidades = $ctUnidades;
-
-        return $this;
-    }
-
-    /**
-     * Get ctUnidades
-     *
-     * @return integer 
-     */
-    public function getCtUnidades()
-    {
-        return $this->ctUnidades;
-    }
-
-    /**
-     * Set ctPesoReal
-     *
-     * @param integer $ctPesoReal
-     * @return TteRecogida
-     */
-    public function setCtPesoReal($ctPesoReal)
-    {
-        $this->ctPesoReal = $ctPesoReal;
-
-        return $this;
-    }
-
-    /**
-     * Get ctPesoReal
-     *
-     * @return integer 
-     */
-    public function getCtPesoReal()
-    {
-        return $this->ctPesoReal;
-    }
-
-    /**
-     * Set ctPesoVolumen
-     *
-     * @param integer $ctPesoVolumen
-     * @return TteRecogida
-     */
-    public function setCtPesoVolumen($ctPesoVolumen)
-    {
-        $this->ctPesoVolumen = $ctPesoVolumen;
-
-        return $this;
-    }
-
-    /**
-     * Get ctPesoVolumen
-     *
-     * @return integer 
-     */
-    public function getCtPesoVolumen()
-    {
-        return $this->ctPesoVolumen;
-    }
-
-    /**
-     * Set ctPesoLiquidar
-     *
-     * @param integer $ctPesoLiquidar
-     * @return TteRecogida
-     */
-    public function setCtPesoLiquidar($ctPesoLiquidar)
-    {
-        $this->ctPesoLiquidar = $ctPesoLiquidar;
-
-        return $this;
-    }
-
-    /**
-     * Get ctPesoLiquidar
-     *
-     * @return integer 
-     */
-    public function getCtPesoLiquidar()
-    {
-        return $this->ctPesoLiquidar;
-    }
-
-    /**
-     * Set vrDeclarado
-     *
-     * @param float $vrDeclarado
-     * @return TteRecogida
-     */
-    public function setVrDeclarado($vrDeclarado)
-    {
-        $this->vrDeclarado = $vrDeclarado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrDeclarado
-     *
-     * @return float 
-     */
-    public function getVrDeclarado()
-    {
-        return $this->vrDeclarado;
-    }
-
-    /**
-     * Set estadoImpresa
-     *
-     * @param boolean $estadoImpresa
-     * @return TteRecogida
-     */
-    public function setEstadoImpresa($estadoImpresa)
-    {
-        $this->estadoImpresa = $estadoImpresa;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoImpresa
-     *
-     * @return boolean 
-     */
-    public function getEstadoImpresa()
-    {
-        return $this->estadoImpresa;
-    }
-
-    /**
-     * Set estadoAnulada
-     *
-     * @param boolean $estadoAnulada
-     * @return TteRecogida
-     */
-    public function setEstadoAnulada($estadoAnulada)
-    {
-        $this->estadoAnulada = $estadoAnulada;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAnulada
-     *
-     * @return boolean 
-     */
-    public function getEstadoAnulada()
-    {
-        return $this->estadoAnulada;
-    }
-
-    /**
      * Set fechaRecogida
      *
      * @param \DateTime $fechaRecogida
+     *
      * @return TteRecogida
      */
     public function setFechaRecogida($fechaRecogida)
@@ -382,7 +179,7 @@ class TteRecogida
     /**
      * Get fechaRecogida
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaRecogida()
     {
@@ -390,193 +187,58 @@ class TteRecogida
     }
 
     /**
-     * Set contenido
+     * Set codigoTerceroFk
      *
-     * @param string $contenido
+     * @param integer $codigoTerceroFk
+     *
      * @return TteRecogida
      */
-    public function setContenido($contenido)
+    public function setCodigoTerceroFk($codigoTerceroFk)
     {
-        $this->contenido = $contenido;
+        $this->codigoTerceroFk = $codigoTerceroFk;
 
         return $this;
     }
 
     /**
-     * Get contenido
+     * Get codigoTerceroFk
      *
-     * @return string 
+     * @return integer
      */
-    public function getContenido()
+    public function getCodigoTerceroFk()
     {
-        return $this->contenido;
+        return $this->codigoTerceroFk;
     }
 
     /**
-     * Set comentarios
+     * Set codigoPuntoOperacionFk
      *
-     * @param string $comentarios
+     * @param integer $codigoPuntoOperacionFk
+     *
      * @return TteRecogida
      */
-    public function setComentarios($comentarios)
+    public function setCodigoPuntoOperacionFk($codigoPuntoOperacionFk)
     {
-        $this->comentarios = $comentarios;
+        $this->codigoPuntoOperacionFk = $codigoPuntoOperacionFk;
 
         return $this;
     }
 
     /**
-     * Get comentarios
+     * Get codigoPuntoOperacionFk
      *
-     * @return string 
+     * @return integer
      */
-    public function getComentarios()
+    public function getCodigoPuntoOperacionFk()
     {
-        return $this->comentarios;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     * @return TteRecogida
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero 
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
-    }
-
-    /**
-     * Set puntoOperacionRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionRel
-     * @return TteRecogida
-     */
-    public function setPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionRel = null)
-    {
-        $this->puntoOperacionRel = $puntoOperacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get puntoOperacionRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TtePuntoOperacion 
-     */
-    public function getPuntoOperacionRel()
-    {
-        return $this->puntoOperacionRel;
-    }
-
-    /**
-     * Set anunciante
-     *
-     * @param string $anunciante
-     * @return TteRecogida
-     */
-    public function setAnunciante($anunciante)
-    {
-        $this->anunciante = $anunciante;
-
-        return $this;
-    }
-
-    /**
-     * Get anunciante
-     *
-     * @return string 
-     */
-    public function getAnunciante()
-    {
-        return $this->anunciante;
-    }
-
-    /**
-     * Set direccion
-     *
-     * @param string $direccion
-     * @return TteRecogida
-     */
-    public function setDireccion($direccion)
-    {
-        $this->direccion = $direccion;
-
-        return $this;
-    }
-
-    /**
-     * Get direccion
-     *
-     * @return string 
-     */
-    public function getDireccion()
-    {
-        return $this->direccion;
-    }
-
-    /**
-     * Set telefono
-     *
-     * @param string $telefono
-     * @return TteRecogida
-     */
-    public function setTelefono($telefono)
-    {
-        $this->telefono = $telefono;
-
-        return $this;
-    }
-
-    /**
-     * Get telefono
-     *
-     * @return string 
-     */
-    public function getTelefono()
-    {
-        return $this->telefono;
-    }
-
-    /**
-     * Set estadoAsignada
-     *
-     * @param boolean $estadoAsignada
-     * @return TteRecogida
-     */
-    public function setEstadoAsignada($estadoAsignada)
-    {
-        $this->estadoAsignada = $estadoAsignada;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAsignada
-     *
-     * @return boolean 
-     */
-    public function getEstadoAsignada()
-    {
-        return $this->estadoAsignada;
+        return $this->codigoPuntoOperacionFk;
     }
 
     /**
      * Set codigoPlanRecogidaFk
      *
      * @param integer $codigoPlanRecogidaFk
+     *
      * @return TteRecogida
      */
     public function setCodigoPlanRecogidaFk($codigoPlanRecogidaFk)
@@ -589,7 +251,7 @@ class TteRecogida
     /**
      * Get codigoPlanRecogidaFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoPlanRecogidaFk()
     {
@@ -597,9 +259,370 @@ class TteRecogida
     }
 
     /**
+     * Set unidades
+     *
+     * @param integer $unidades
+     *
+     * @return TteRecogida
+     */
+    public function setUnidades($unidades)
+    {
+        $this->unidades = $unidades;
+
+        return $this;
+    }
+
+    /**
+     * Get unidades
+     *
+     * @return integer
+     */
+    public function getUnidades()
+    {
+        return $this->unidades;
+    }
+
+    /**
+     * Set pesoReal
+     *
+     * @param integer $pesoReal
+     *
+     * @return TteRecogida
+     */
+    public function setPesoReal($pesoReal)
+    {
+        $this->pesoReal = $pesoReal;
+
+        return $this;
+    }
+
+    /**
+     * Get pesoReal
+     *
+     * @return integer
+     */
+    public function getPesoReal()
+    {
+        return $this->pesoReal;
+    }
+
+    /**
+     * Set pesoVolumen
+     *
+     * @param integer $pesoVolumen
+     *
+     * @return TteRecogida
+     */
+    public function setPesoVolumen($pesoVolumen)
+    {
+        $this->pesoVolumen = $pesoVolumen;
+
+        return $this;
+    }
+
+    /**
+     * Get pesoVolumen
+     *
+     * @return integer
+     */
+    public function getPesoVolumen()
+    {
+        return $this->pesoVolumen;
+    }
+
+    /**
+     * Set pesoLiquidar
+     *
+     * @param integer $pesoLiquidar
+     *
+     * @return TteRecogida
+     */
+    public function setPesoLiquidar($pesoLiquidar)
+    {
+        $this->pesoLiquidar = $pesoLiquidar;
+
+        return $this;
+    }
+
+    /**
+     * Get pesoLiquidar
+     *
+     * @return integer
+     */
+    public function getPesoLiquidar()
+    {
+        return $this->pesoLiquidar;
+    }
+
+    /**
+     * Set vrDeclarado
+     *
+     * @param float $vrDeclarado
+     *
+     * @return TteRecogida
+     */
+    public function setVrDeclarado($vrDeclarado)
+    {
+        $this->vrDeclarado = $vrDeclarado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDeclarado
+     *
+     * @return float
+     */
+    public function getVrDeclarado()
+    {
+        return $this->vrDeclarado;
+    }
+
+    /**
+     * Set estadoImpresa
+     *
+     * @param boolean $estadoImpresa
+     *
+     * @return TteRecogida
+     */
+    public function setEstadoImpresa($estadoImpresa)
+    {
+        $this->estadoImpresa = $estadoImpresa;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoImpresa
+     *
+     * @return boolean
+     */
+    public function getEstadoImpresa()
+    {
+        return $this->estadoImpresa;
+    }
+
+    /**
+     * Set estadoAnulada
+     *
+     * @param boolean $estadoAnulada
+     *
+     * @return TteRecogida
+     */
+    public function setEstadoAnulada($estadoAnulada)
+    {
+        $this->estadoAnulada = $estadoAnulada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulada
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulada()
+    {
+        return $this->estadoAnulada;
+    }
+
+    /**
+     * Set estadoAsignada
+     *
+     * @param boolean $estadoAsignada
+     *
+     * @return TteRecogida
+     */
+    public function setEstadoAsignada($estadoAsignada)
+    {
+        $this->estadoAsignada = $estadoAsignada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAsignada
+     *
+     * @return boolean
+     */
+    public function getEstadoAsignada()
+    {
+        return $this->estadoAsignada;
+    }
+
+    /**
+     * Set anunciante
+     *
+     * @param string $anunciante
+     *
+     * @return TteRecogida
+     */
+    public function setAnunciante($anunciante)
+    {
+        $this->anunciante = $anunciante;
+
+        return $this;
+    }
+
+    /**
+     * Get anunciante
+     *
+     * @return string
+     */
+    public function getAnunciante()
+    {
+        return $this->anunciante;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return TteRecogida
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return TteRecogida
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    /**
+     * Set contenido
+     *
+     * @param string $contenido
+     *
+     * @return TteRecogida
+     */
+    public function setContenido($contenido)
+    {
+        $this->contenido = $contenido;
+
+        return $this;
+    }
+
+    /**
+     * Get contenido
+     *
+     * @return string
+     */
+    public function getContenido()
+    {
+        return $this->contenido;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return TteRecogida
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set terceroRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     *
+     * @return TteRecogida
+     */
+    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    {
+        $this->terceroRel = $terceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     */
+    public function getTerceroRel()
+    {
+        return $this->terceroRel;
+    }
+
+    /**
+     * Set puntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionRel
+     *
+     * @return TteRecogida
+     */
+    public function setPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionRel = null)
+    {
+        $this->puntoOperacionRel = $puntoOperacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puntoOperacionRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TtePuntoOperacion
+     */
+    public function getPuntoOperacionRel()
+    {
+        return $this->puntoOperacionRel;
+    }
+
+    /**
      * Set planRecogidaRel
      *
      * @param \Brasa\TransporteBundle\Entity\TtePlanRecogida $planRecogidaRel
+     *
      * @return TteRecogida
      */
     public function setPlanRecogidaRel(\Brasa\TransporteBundle\Entity\TtePlanRecogida $planRecogidaRel = null)
@@ -612,7 +635,7 @@ class TteRecogida
     /**
      * Get planRecogidaRel
      *
-     * @return \Brasa\TransporteBundle\Entity\TtePlanRecogida 
+     * @return \Brasa\TransporteBundle\Entity\TtePlanRecogida
      */
     public function getPlanRecogidaRel()
     {

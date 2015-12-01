@@ -97,6 +97,7 @@
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDebito{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.debito}}" size="10" style="width:70px" onclick="this.select()"/></td>    
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtCredito{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.credito}}" size="10" style="width:70px" onclick="this.select()"/></td>    
                         <td><input class="input-grid" type="text" name="TxtDescripcion{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.descripcion}}" size="10" style="width:130px" onclick="this.select()"/></td>    
+                        
                     {% else %}
                         <td>{{ arAsientoDetalles.codigoCuentaFk }}</td>
                         <td>{{ arAsientoDetalles.terceroRel.numeroIdentificacion }}</td>
@@ -118,8 +119,29 @@
                         <td></td>
                     {% endif%}                               
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAsientoDetalles.codigoAsientoDetallePk }}" /></td>
-                </tr>
+                </tr>                
                 {% endfor %}
+                {% if arAsiento.estadoAutorizado == 0 %}                
+                    <tr>
+                        <td></td>
+                        <td><input class="input-grid" type="text" name="TxtCuentaNew" size="15" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtNumeroIdentificacionNew" id="TxtNumeroIdentificacionNew" size="15" style="width:90px" onclick="this.select()"/>
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_tercero', {'campoCodigo': 'TxtNumeroIdentificacionNew' }) }}', 'tercero', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a></td>    
+                        <td><input class="input-grid" type="text" name="TxtCodigoCentroCostoNew" id="TxtCodigoCentroCostoNew" size="15" style="width:30px" onclick="this.select()"/>
+                            <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_centro_costo', {'campoCodigo': 'TxtCodigoCentroCostoNew'}) }}', 'centro costo', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a></td>
+                        <td><input class="input-grid" type="text" name="TxtFechaNew" size="15" style="width:70px" onclick="this.select()"/></td>
+                        <td><input class="input-grid" type="text" name="TxtCodigoAsientoTipoNew"  size="15" style="width:30px" onclick="this.select()"/></td>
+                        <td><input class="input-grid" type="text" name="TxtDocumentoReferenteNew"  size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtSoporteNew"  size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtPlazoNew"  size="10" style="width:30px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorBaseNew" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDebitoNew" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCreditoNew" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtDescripcionNew" size="10" style="width:130px" onclick="this.select()"/></td>                                                
+                        <td></td>
+                        <td></td>
+                    </tr>                        
+                {% endif%}        
             </table>
 
         <div class="btn-toolbar" style="float:left">

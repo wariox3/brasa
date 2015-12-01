@@ -11,6 +11,15 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class TteGuiaRepository extends EntityRepository {
+    
+    public function listaDql($codigoGuia) {
+        $dql   = "SELECT g FROM BrasaTransporteBundle:TteGuia g WHERE g.codigoGuiaPk <> 0";
+        if($codigoGuia != "") {
+            $dql = $dql . " AND g.codigoGuiaPk = " . $codigoGuia;
+        }
+        return $dql;
+    }           
+    
     public function GuiasDespachoDetalle($codigoDespacho) {        
         $em = $this->getEntityManager();
         $dql   = "SELECT guias FROM BrasaTransporteBundle:TteGuia guias WHERE guias.codigoDespachoFk = " . $codigoDespacho;
