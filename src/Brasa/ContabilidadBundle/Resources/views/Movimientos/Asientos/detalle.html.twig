@@ -83,22 +83,36 @@
                 {% if arAsiento.estadoAutorizado == 0 %}                
                     <tr>
                         <td></td>
-                        <td><input class="input-grid" type="text" name="TxtCuentaNew" id="TxtCuentaNew" size="15" style="width:70px" onclick="this.select()"/>
+                        <td><input class="input-grid" type="text" name="TxtCuentaNew" id="TxtCuentaNew" value="{{cuenta}}" size="15" style="width:70px" onclick="this.select()"/>
                             <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_cuenta', {'campoCodigo': 'TxtCuentaNew' }) }}', 'cuenta', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>    
-                        <td><input class="input-grid" type="text" name="TxtNumeroIdentificacionNew" id="TxtNumeroIdentificacionNew" size="15" style="width:90px" onclick="this.select()"/>
+                        <td><input class="input-grid" type="text" name="TxtNumeroIdentificacionNew" id="TxtNumeroIdentificacionNew" value="{{identificacion}}" size="15" style="width:90px" onclick="this.select()"/>
                             <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_tercero', {'campoCodigo': 'TxtNumeroIdentificacionNew' }) }}', 'tercero', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>    
-                        <td><input class="input-grid" type="text" name="TxtCodigoCentroCostoNew" id="TxtCodigoCentroCostoNew" size="15" style="width:30px" onclick="this.select()"/>
+                        <td><input class="input-grid" type="text" name="TxtCodigoCentroCostoNew" id="TxtCodigoCentroCostoNew" value="{{centroCosto}}" size="15" style="width:30px" onclick="this.select()"/>
                             <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_centro_costo', {'campoCodigo': 'TxtCodigoCentroCostoNew'}) }}', 'centro costo', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>
-                        <td><input class="date" type="date" name="dateFechaNew" size="15" style="width:106px" onclick="this.select()"/></td>
-                        <td><input class="input-grid" type="text" name="TxtCodigoAsientoTipoNew"  size="15" style="width:30px" onclick="this.select()"/></td>
-                        <td><input class="input-grid" type="text" name="TxtDocumentoReferenteNew"  size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td><input class="input-grid" type="text" name="TxtSoporteNew"  size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td><input class="input-grid" type="text" name="TxtPlazoNew"  size="10" style="width:30px" onclick="this.select()"/></td>    
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorBaseNew" size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDebitoNew" size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCreditoNew" size="10" style="width:70px" onclick="this.select()"/></td>    
-                        <td><input class="input-grid" type="text" name="TxtDescripcionNew" size="10" style="width:130px" onclick="this.select()"/></td>                                                
-                        <td></td>
+                        <td><input class="date" type="date" name="dateFechaNew" value="{{arAsientoDetalleNew.fecha| date('Y-m-d')}}"size="15" style="width:106px" onclick="this.select()"/></td>
+                        <!--<td><input class="input-grid" type="text" name="TxtCodigoAsientoTipoNew"  size="15" style="width:30px" onclick="this.select()"/></td>-->
+                        {% if arAsientoTipoNew.codigoAsientoTipoPk %}
+                            <td><select name="CboCodigoAsientoTipoNew">
+                                    <option value="{{arAsientoTipoNew.codigoAsientoTipoPk}}">{{arAsientoTipoNew.nombre}}</option>
+                                    <option value="1">DÉBITO</option>
+                                    <option value="2">CRÉDITO</option>
+                                </select>
+                            </td>
+                        {% else %}
+                            <td><select name="CboCodigoAsientoTipoNew">
+                                <option value="1">DÉBITO</option>
+                                <option value="2">CRÉDITO</option>
+                            </select>
+                        </td>
+                        {% endif %}
+                        <td><input class="input-grid" type="text" name="TxtDocumentoReferenteNew" value="{{ arAsientoDetalleNew.documentoReferente}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtSoporteNew" value="{{ arAsientoDetalleNew.soporte}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtPlazoNew" value="{{ arAsientoDetalleNew.plazo}}" size="10" style="width:30px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorBaseNew" value="{{ arAsientoDetalleNew.valorBase}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDebitoNew" value="{{ arAsientoDetalleNew.debito}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCreditoNew" value="{{ arAsientoDetalleNew.credito}}" size="10" style="width:70px" onclick="this.select()"/></td>    
+                        <td><input class="input-grid" type="text" name="TxtDescripcionNew" value="{{ arAsientoDetalleNew.descripcion}}" size="10" style="width:130px" onclick="this.select()"/></td>                                                
+                        <td>{{ form_widget(form.BtnAgregar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</td>
                         <td></td>
                     </tr>                        
                 {% endif%}
@@ -115,8 +129,15 @@
                             <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_tercero', {'campoCodigo': 'TxtNumeroIdentificacion' ~ arAsientoDetalles.codigoAsientoDetallePk }) }}', 'tercero', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>    
                         <td><input class="input-grid" type="text" name="TxtCodigoCentroCosto{{ arAsientoDetalles.codigoAsientoDetallePk }}" id="TxtCodigoCentroCosto{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoCentroCostoFk}}" size="15" style="width:30px" onclick="this.select()"/>
                             <a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_centro_costo', {'campoCodigo': 'TxtCodigoCentroCosto' ~ arAsientoDetalles.codigoAsientoDetallePk }) }}', 'centro costo', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>
-                        <td><input class="input-grid" type="date" name="dateFecha{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.Fecha| date('Y-m-d')}}" size="15" style="width:105px" onclick="this.select()"/></td>
-                        <td><input class="input-grid" type="text" name="TxtCodigoAsientoTipo{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.codigoAsientoTipoFk}}" size="15" style="width:30px" onclick="this.select()"/></td>
+                        <td><input class="input-grid" type="date" name="dateFecha{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.fecha| date('Y-m-d')}}" size="15" style="width:105px" onclick="this.select()"/></td>
+                        
+                        <td><select name="CboCodigoAsientoTipo{{ arAsientoDetalles.codigoAsientoDetallePk }}">
+                                <option value="{{ arAsientoDetalles.codigoAsientoTipoFk}}">{{ arAsientoDetalles.AsientoTipoRel.nombre}}</option>
+                                <option value="1">DÉBITO</option>
+                                <option value="2">CRÉDITO</option>
+                            </select>
+                        </td>
+                        
                         <td><input class="input-grid" type="text" name="TxtDocumentoReferente{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.documentoReferente}}" size="10" style="width:70px" onclick="this.select()"/></td>    
                         <td><input class="input-grid" type="text" name="TxtSoporte{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.soporte}}" size="10" style="width:70px" onclick="this.select()"/></td>    
                         <td><input class="input-grid" type="text" name="TxtPlazo{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.plazo}}" size="10" style="width:30px" onclick="this.select()"/></td>    
@@ -157,9 +178,7 @@
         </div>
         <div class="btn-toolbar" style="float: right">
             
-            <div class="btn-group">
-                {{ form_widget(form.BtnAgregar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            </div>
+            
             <div class="btn-group">
                 {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
