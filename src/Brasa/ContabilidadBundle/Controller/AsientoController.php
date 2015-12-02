@@ -383,6 +383,7 @@ class AsientoController extends Controller
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {            
+            
             $arrBotonAgregar['disabled'] = true;
             $arrBotonAutorizar['disabled'] = true;            
             $arrBotonEliminarDetalle['disabled'] = true;
