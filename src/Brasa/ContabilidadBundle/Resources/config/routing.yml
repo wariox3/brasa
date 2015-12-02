@@ -34,7 +34,16 @@ brs_ctb_base_cuentas_lista:
     
 brs_ctb_base_cuentas_nuevo:
     path:     /ctb/base/cuentas/nuevo/{codigoCuenta}
-    defaults: { _controller: BrasaContabilidadBundle:BaseCuenta:nuevo }    
+    defaults: { _controller: BrasaContabilidadBundle:BaseCuenta:nuevo }
+    
+brs_ctb_base_centro_costo_lista:
+    path:     /ctb/base/centro/costo/lista
+    defaults: { _controller: BrasaContabilidadBundle:BaseCentroCosto:lista }
+    
+brs_ctb_base_centro_costo_nuevo:
+    path:     /ctb/base/centro/costo/nuevo/{codigoCentroCosto}
+    defaults: { _controller: BrasaContabilidadBundle:BaseCentroCosto:nuevo }    
+    
     
 # Movimientos
 
