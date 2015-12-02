@@ -38,6 +38,11 @@ class TurPedidoDetalle
     private $codigoPeriodoFk;     
     
     /**
+     * @ORM\Column(name="codigo_plantilla_fk", type="integer", nullable=true)
+     */    
+    private $codigoPlantillaFk;    
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fecha_desde;     
@@ -140,6 +145,12 @@ class TurPedidoDetalle
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
     protected $periodoRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPlantilla", inversedBy="pedidosDetallesPlantillaRel")
+     * @ORM\JoinColumn(name="codigo_plantilla_fk", referencedColumnName="codigo_plantilla_pk")
+     */
+    protected $plantillaRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="pedidoDetalleRel")
@@ -259,6 +270,30 @@ class TurPedidoDetalle
     public function getCodigoPeriodoFk()
     {
         return $this->codigoPeriodoFk;
+    }
+
+    /**
+     * Set codigoPlantillaFk
+     *
+     * @param integer $codigoPlantillaFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoPlantillaFk($codigoPlantillaFk)
+    {
+        $this->codigoPlantillaFk = $codigoPlantillaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPlantillaFk
+     *
+     * @return integer
+     */
+    public function getCodigoPlantillaFk()
+    {
+        return $this->codigoPlantillaFk;
     }
 
     /**
@@ -739,6 +774,30 @@ class TurPedidoDetalle
     public function getPeriodoRel()
     {
         return $this->periodoRel;
+    }
+
+    /**
+     * Set plantillaRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPlantilla $plantillaRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setPlantillaRel(\Brasa\TurnoBundle\Entity\TurPlantilla $plantillaRel = null)
+    {
+        $this->plantillaRel = $plantillaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get plantillaRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPlantilla
+     */
+    public function getPlantillaRel()
+    {
+        return $this->plantillaRel;
     }
 
     /**

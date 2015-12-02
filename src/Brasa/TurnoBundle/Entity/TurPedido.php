@@ -30,7 +30,7 @@ class TurPedido
     /**
      * @ORM\Column(name="codigo_sector_fk", type="integer", nullable=true)
      */    
-    private $codigoSectorFk;    
+    private $codigoSectorFk;            
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -41,6 +41,11 @@ class TurPedido
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
     private $estadoAprobado = false;     
+    
+    /**     
+     * @ORM\Column(name="permanente", type="boolean")
+     */    
+    private $permanente = false;    
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -82,13 +87,12 @@ class TurPedido
      * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="pedidosSectorRel")
      * @ORM\JoinColumn(name="codigo_sector_fk", referencedColumnName="codigo_sector_pk")
      */
-    protected $sectorRel;     
+    protected $sectorRel;         
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="pedidoRel", cascade={"persist", "remove"})
      */
     protected $pedidosDetallesPedidoRel; 
-
 
     /**
      * Constructor
@@ -226,6 +230,30 @@ class TurPedido
     public function getEstadoAprobado()
     {
         return $this->estadoAprobado;
+    }
+
+    /**
+     * Set permanente
+     *
+     * @param boolean $permanente
+     *
+     * @return TurPedido
+     */
+    public function setPermanente($permanente)
+    {
+        $this->permanente = $permanente;
+
+        return $this;
+    }
+
+    /**
+     * Get permanente
+     *
+     * @return boolean
+     */
+    public function getPermanente()
+    {
+        return $this->permanente;
     }
 
     /**

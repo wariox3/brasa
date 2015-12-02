@@ -33,6 +33,13 @@ class TurPedidoDetalleType extends AbstractType
                     ->orderBy('p.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                                                         
+            ->add('plantillaRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurPlantilla',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('p')
+                    ->orderBy('p.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false))                            
             ->add('fechaDesde', 'date')
             ->add('fechaHasta', 'date')
             ->add('cantidad', 'number')

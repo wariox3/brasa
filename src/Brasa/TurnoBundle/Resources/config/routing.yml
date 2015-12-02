@@ -101,3 +101,7 @@ brs_tur_proceso_generar_soporte_pago:
 brs_tur_proceso_generar_soporte_pago_lista:
     path:     /tur/proceso/generar/soporte/pago/lista
     defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:lista }         
+    
+brs_tur_proceso_generar_programacion_lista:
+    path:     /tur/proceso/generar/programacion/lista
+    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarProgramacion:lista }         

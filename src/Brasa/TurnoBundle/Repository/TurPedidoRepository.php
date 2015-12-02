@@ -6,10 +6,15 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPedidoRepository extends EntityRepository {
     
-    public function listaDQL() {
+    public function listaDql() {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.codigoPedidoPk <> 0";
         return $dql;
     }
+    
+    public function pedidoPermanenteDql() {
+        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.permanente = 1";
+        return $dql;
+    }    
     
     public function liquidar($codigoPedido) {        
         $em = $this->getEntityManager();        

@@ -28,6 +28,11 @@ class TurPlantilla
     private $estadoAutorizado = false;    
     
     /**
+     * @ORM\Column(name="dias", type="integer")
+     */    
+    private $dias = 0;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;         
@@ -37,6 +42,11 @@ class TurPlantilla
      */
     protected $plantillasDetallesPlantillaRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="plantillaRel")
+     */
+    protected $pedidosDetallesPlantillaRel;     
+
 
     /**
      * Constructor
@@ -44,6 +54,7 @@ class TurPlantilla
     public function __construct()
     {
         $this->plantillasDetallesPlantillaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pedidosDetallesPlantillaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -78,6 +89,54 @@ class TurPlantilla
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return TurPlantilla
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return TurPlantilla
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
     }
 
     /**
@@ -139,26 +198,36 @@ class TurPlantilla
     }
 
     /**
-     * Set estadoAutorizado
+     * Add pedidosDetallesPlantillaRel
      *
-     * @param boolean $estadoAutorizado
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesPlantillaRel
      *
      * @return TurPlantilla
      */
-    public function setEstadoAutorizado($estadoAutorizado)
+    public function addPedidosDetallesPlantillaRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesPlantillaRel)
     {
-        $this->estadoAutorizado = $estadoAutorizado;
+        $this->pedidosDetallesPlantillaRel[] = $pedidosDetallesPlantillaRel;
 
         return $this;
     }
 
     /**
-     * Get estadoAutorizado
+     * Remove pedidosDetallesPlantillaRel
      *
-     * @return boolean
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesPlantillaRel
      */
-    public function getEstadoAutorizado()
+    public function removePedidosDetallesPlantillaRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesPlantillaRel)
     {
-        return $this->estadoAutorizado;
+        $this->pedidosDetallesPlantillaRel->removeElement($pedidosDetallesPlantillaRel);
+    }
+
+    /**
+     * Get pedidosDetallesPlantillaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesPlantillaRel()
+    {
+        return $this->pedidosDetallesPlantillaRel;
     }
 }

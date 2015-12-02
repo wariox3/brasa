@@ -1,4 +1,5 @@
 {% extends '::base_sin_menu.html.twig' %}
+{% block title %}Programacion detalle nuevo - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
@@ -20,6 +21,7 @@
             <th>TURNO</th>
             <th>MODALIDAD</th>
             <th>PERIODO</th>
+            <th>PLANTILLA</th>
             <th>DESDE</th>
             <th>HASTA</th>            
             <th>LUN</th>
@@ -44,6 +46,7 @@
                 <td>{{ arPedidosDetalle.turnoRel.nombre  }}</td>                    
                 <td>{{ arPedidosDetalle.modalidadServicioRel.nombre  }}</td>                    
                 <td>{{ arPedidosDetalle.periodoRel.nombre  }}</td>  
+                <td>{{ arPedidosDetalle.plantillaRel.nombre | default('')  }}</td>
                 <td>{{ arPedidosDetalle.fechaDesde | date("Y/m/d")}}</td>
                 <td>{{ arPedidosDetalle.fechaHasta | date("Y/m/d")}}</td>                
                 <td>{% if arPedidosDetalle.lunes == 1%} SI {% else %} NO {% endif %}</td>                
