@@ -76,7 +76,12 @@ class CtbAsiento
     /**
      * @ORM\Column(name="total_credito", type="float")
      */
-    private $totalCredito = 0;    
+    private $totalCredito = 0;
+    
+    /**
+     * @ORM\Column(name="diferencia", type="float")
+     */
+    private $diferencia = 0;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -94,6 +99,7 @@ class CtbAsiento
      */
     protected $asientosDetallesAsientoRel;
 
+    
     
     /**
      * Constructor
@@ -399,6 +405,30 @@ class CtbAsiento
     public function getTotalCredito()
     {
         return $this->totalCredito;
+    }
+
+    /**
+     * Set diferencia
+     *
+     * @param float $diferencia
+     *
+     * @return CtbAsiento
+     */
+    public function setDiferencia($diferencia)
+    {
+        $this->diferencia = $diferencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diferencia
+     *
+     * @return float
+     */
+    public function getDiferencia()
+    {
+        return $this->diferencia;
     }
 
     /**

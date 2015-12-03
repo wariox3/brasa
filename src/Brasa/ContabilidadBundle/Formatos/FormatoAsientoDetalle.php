@@ -10,7 +10,7 @@ class FormatoAsientoDetalle extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoAsiento = $codigoAsiento;
-        $pdf = new FormatoAsientoDetalle();
+        $pdf = new FormatoAsientoDetalle('L');
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
@@ -31,100 +31,120 @@ class FormatoAsientoDetalle extends \FPDF_FPDF {
         $this->SetXY(53, 14);
         $this->Image('imagenes/logos/logo.jpg', 12, 15, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("DOTACIÓN EMPLEADO"), 0, 0, 'C', 1);
+        $this->Cell(238, 7, utf8_decode("DOTACIÓN EMPLEADO"), 0, 0, 'C', 1);
         $this->SetXY(53, 22);
         $this->SetFont('Arial','B',9);
-        $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
+        $this->Cell(30, 4, "EMPRESA:", 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
         $this->SetXY(53, 26);
-        $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
+        $this->Cell(30, 4, "NIT:", 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
         $this->SetXY(53, 30);
-        $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
+        $this->Cell(30, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
         $this->SetXY(53, 34);
-        $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
+        $this->Cell(30, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0); 
         //FILA 1
         $this->SetXY(10, 40);
         $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(33, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);                            
+        $this->SetFont('Arial','B',8);
+        $this->Cell(43, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',7);
-        $this->Cell(15, 6, $arAsiento->getCodigoAsientoPk() , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 6, $arAsiento->getCodigoAsientoPk() , 1, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(24, 6, utf8_decode("FECHA:") , 1, 0, 'L', 1);                            
+        $this->SetFont('Arial','B',8);
+        $this->Cell(40, 6, utf8_decode("FECHA:") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',7);
-        $this->Cell(71, 6, $arAsiento->getFecha()->Format('Y/m/d') , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(85, 6, $arAsiento->getFecha()->Format('Y/m/d') , 1, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(25, 6, utf8_decode("TOTAL DÉBITO:") , 1, 0, 'L', 1);                            
+        $this->SetFont('Arial','B',8);
+        $this->Cell(40, 6, utf8_decode("TOTAL DÉBITO:") , 1, 0, 'R', 1);                            
         $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',7);
-        $this->Cell(25, 6, number_format($arAsiento->getTotalDebito(), 0, '.', ','), 1, 0, 'R');
+        $this->SetFont('Arial','',8);
+        $this->Cell(43, 6, number_format($arAsiento->getTotalDebito(), 0, '.', ','), 1, 0, 'R');
         //FILA 2
         $this->SetXY(10, 46);
-        $this->SetFont('Arial','B',7);
+        $this->SetFont('Arial','B',8);
         $this->SetFillColor(236, 236, 236);
-        $this->Cell(33, 6, utf8_decode("CÓDIGO COMPROBANTE:") , 1, 0, 'L', 1);
+        $this->Cell(43, 6, utf8_decode("CÓDIGO COMPROBANTE:") , 1, 0, 'L', 1);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 6, $arAsiento->getCodigoComprobanteFk() , 1, 0, 'L', 1);
+        $this->SetFillColor(236, 236, 236);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(40, 6, utf8_decode("COMPROBANTE:") , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',7);
-        $this->Cell(15, 6, $arAsiento->getCodigoComprobanteFk() , 1, 0, 'L', 1);
+        $this->Cell(85, 6, utf8_decode($arAsiento->getComprobanteRel()->getNombre()) , 1, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(24, 6, utf8_decode("COMPROBANTE:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(40, 6, utf8_decode("TOTAL CRÉDITOS:") , 1, 0, 'R', 1);                            
         $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',6);
-        $this->Cell(71, 6, utf8_decode($arAsiento->getComprobanteRel()->getNombre()) , 1, 0, 'L', 1);
-        $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(25, 6, utf8_decode("TOTAL CRÉDITOS:") , 1, 0, 'L', 1);                            
-        $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',7);
-        $this->Cell(25, 6, number_format($arAsiento->getTotalCredito(), 0, '.', ','), 1, 0, 'R');
+        $this->SetFont('Arial','',8);
+        $this->Cell(43, 6, number_format($arAsiento->getTotalCredito(), 0, '.', ','), 1, 0, 'R');
         //FILA 3
+        $this->SetXY(10, 46);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(236, 236, 236);
+        $this->Cell(43, 6, utf8_decode("CÓDIGO COMPROBANTE:") , 1, 0, 'L', 1);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 6, $arAsiento->getCodigoComprobanteFk() , 1, 0, 'L', 1);
+        $this->SetFillColor(236, 236, 236);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(40, 6, utf8_decode("COMPROBANTE:") , 1, 0, 'L', 1);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetFont('Arial','',7);
+        $this->Cell(85, 6, utf8_decode($arAsiento->getComprobanteRel()->getNombre()) , 1, 0, 'L', 1);
+        $this->SetFillColor(236, 236, 236);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(40, 6, utf8_decode("TOTAL CRÉDITOS:") , 1, 0, 'R', 1);                            
+        $this->SetFillColor(255, 255, 255);
+        $this->SetFont('Arial','',8);
+        $this->Cell(43, 6, number_format($arAsiento->getTotalCredito(), 0, '.', ','), 1, 0, 'R');
+        //FILA 4
         $this->SetXY(10, 51);
         $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(33, 6, utf8_decode("NÚMERO ASIENTO:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(43, 6, utf8_decode("NÚMERO ASIENTO:") , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',7);
-        $this->Cell(15, 6, utf8_decode($arAsiento->getNumeroAsiento()) , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 6, utf8_decode($arAsiento->getNumeroAsiento()) , 1, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(24, 6, utf8_decode("SOPORTE:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(40, 6, utf8_decode("SOPORTE:") , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',7);
-        $this->Cell(71, 6, utf8_decode($arAsiento->getSoporte()) , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(85, 6, utf8_decode($arAsiento->getSoporte()) , 1, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(25, 6, utf8_decode("AUTORIZADO") , 1, 0, 'L', 1);                            
+        $this->SetFont('Arial','B',8);
+        $this->Cell(40, 6, utf8_decode("AUTORIZADO") , 1, 0, 'L', 1);                            
         $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',7);
+        $this->SetFont('Arial','',8);
         if ($arAsiento->getEstadoAutorizado() == 1 ){
-            $this->Cell(25, 6, "SI", 1, 0, 'L', 1);
+            $this->Cell(43, 6, "SI", 1, 0, 'L', 1);
         }else {
-            $this->Cell(25, 6, "NO", 1, 0, 'L', 1);
+            $this->Cell(43, 6, "NO", 1, 0, 'L', 1);
         }
         
-        //FILA 4
+        //FILA 
         $this->SetXY(10, 57);
         $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',7);
-        $this->Cell(33, 6, "COMENTARIOS:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(43, 6, "COMENTARIOS:" , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',6);
-        $this->Cell(160, 6, utf8_decode($arAsiento->getComentarios()) , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        $this->Cell(238, 6, utf8_decode($arAsiento->getComentarios()) , 1, 0, 'L', 1);
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(10);
-        $header = array(utf8_decode('CÓDIGO'), 'CUENTA', utf8_decode('IDENTIFICACIÓN'), 'FECHA', 'TIPO ASIENTO','DOC REFERENTE','SOPORTE','PLAZO','VR BASE',utf8_decode('DÉBITO'),utf8_decode('CRÉDITO'));
+        $header = array(utf8_decode('CÓDIGO'), 'CUENTA', utf8_decode('IDENTIFICACIÓN'), 'TIPO ASIENTO','DOC REFERENTE','SOPORTE','PLAZO','VR BASE',utf8_decode('DÉBITO'),utf8_decode('CRÉDITO'));
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -132,7 +152,7 @@ class FormatoAsientoDetalle extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(14, 19, 22, 18, 20, 22, 15, 12, 17, 17, 17);
+        $w = array(14, 77, 70, 20, 22, 15, 12, 17, 17, 17);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
@@ -154,9 +174,10 @@ class FormatoAsientoDetalle extends \FPDF_FPDF {
         foreach ($arAsientoDetalle as $arAsientoDetalle) {            
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(14, 4, $arAsientoDetalle->getCodigoAsientoDetallePk(), 1, 0, 'L');
-            $pdf->Cell(19, 4, $arAsientoDetalle->getCodigoCuentaFk(), 1, 0, 'L');
-            $pdf->Cell(22, 4, $arAsientoDetalle->getTerceroRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(18, 4, $arAsientoDetalle->getFecha()->format('Y-m-d'), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(77, 4, $arAsientoDetalle->getCodigoCuentaFk()." - ".$arAsientoDetalle->getCuentaRel()->getNombreCuenta() , 1, 0, 'L');
+            $pdf->Cell(70, 4, $arAsientoDetalle->getTerceroRel()->getNumeroIdentificacion()." - ".$arAsientoDetalle->getTerceroRel()->getNombreCorto()." ".$arAsientoDetalle->getTerceroRel()->getRazonSocial(), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(20, 4, utf8_decode($arAsientoDetalle->getAsientoTipoRel()->getNombre()), 1, 0, 'L');
             $pdf->Cell(22, 4, $arAsientoDetalle->getDocumentoReferente(), 1, 0, 'L');
             $pdf->Cell(15, 4, $arAsientoDetalle->getSoporte(), 1, 0, 'L');
@@ -173,7 +194,7 @@ class FormatoAsientoDetalle extends \FPDF_FPDF {
 
     public function Footer() {
         
-        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');;
+        $this->Text(265, 205, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');;
     }    
 }
 

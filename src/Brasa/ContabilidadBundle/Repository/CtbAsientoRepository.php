@@ -51,6 +51,7 @@ class CtbAsientoRepository extends EntityRepository
         }
         $arAsiento->setTotalDebito($douTotalDebito);
         $arAsiento->setTotalCredito($douTotalCredito);
+        $arAsiento->setDiferencia($douTotalDebito - $douTotalCredito);
         $em->persist($arAsiento);
         $em->flush();
 

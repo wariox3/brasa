@@ -23,9 +23,9 @@ class CtbTerceroType extends AbstractType
                 'required' => true))
             ->add('digitoVerificacion', 'number', array('required' => false))
             ->add('numeroIdentificacion', 'text', array('required' => true))
-            ->add('nombre1', 'text', array('required' => true))
+            ->add('nombre1', 'text', array('required' => false))
             ->add('nombre2', 'text', array('required' => false))
-            ->add('apellido1', 'text', array('required' => true))    
+            ->add('apellido1', 'text', array('required' => false))    
             ->add('apellido2', 'text', array('required' => false))
             ->add('razonSocial', 'text', array('required' => false))
             ->add('ciudadRel', 'entity', array(

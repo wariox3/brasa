@@ -136,6 +136,7 @@ class AsientoController extends Controller
                         }
                     }
                     $em->flush();
+                    $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
                     return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
                 }
             }
@@ -159,12 +160,17 @@ class AsientoController extends Controller
                     $arAsientoDetalleNew->setAsientoTipoRel($arAsientoTipoNew);
                     $arAsientoDetalleNew->setTerceroRel($arTerceroNew);
                     $arAsientoDetalleNew->setCentroCostoRel($arCentroCostoNew);
-                    $fecha = new \DateTime($arrControlesNew['dateFechaNew']);
-                    $arAsientoDetalleNew->setFecha($fecha);
+                    //$fecha = new \DateTime($arrControlesNew['dateFechaNew']);
+                    $arAsientoDetalleNew->setFecha($arAsiento->getFecha());
                     $arAsientoDetalleNew->setDocumentoReferente($arrControlesNew['TxtDocumentoReferenteNew']);
                     $arAsientoDetalleNew->setSoporte($arrControlesNew['TxtSoporteNew']);
                     $arAsientoDetalleNew->setPlazo($arrControlesNew['TxtPlazoNew']);
                     $arAsientoDetalleNew->setValorBase($arrControlesNew['TxtValorBaseNew']);
+                    if ($arAsientoTipoNew->getCodigoAsientoTipoPk() == 1){
+                        $arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
+                    }else{
+                        $arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
+                    }
                     //$arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
                     //$arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
                     $arAsientoDetalleNew->setDescripcion($arrControlesNew['TxtDescripcionNew']);
@@ -176,11 +182,7 @@ class AsientoController extends Controller
                                 if ($arCuentaNew->getExigeNit() == 1){
                                     $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que la cuenta exige número de identificación" , $this);
                                 }else{
-                                    if ($arAsientoTipoNew->getCodigoAsientoTipoPk() == 1){
-                                        $arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
-                                    }else{
-                                        $arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
-                                    }
+                                    
                                     $em->persist($arAsientoDetalleNew);
                                     $em->flush();
                                     $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
@@ -193,23 +195,13 @@ class AsientoController extends Controller
                             if ($arCentroCostoNew == null){
                                 if ($arrControlesNew['TxtCodigoCentroCostoNew'] != null){
                                     $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el centro de costo ". $arrControlesNew['TxtCodigoCentroCostoNew'] . " no existe en el sistema" , $this);
-                                }else{
-                                    if ($arAsientoTipoNew->getCodigoAsientoTipoPk() == 1){
-                                        $arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
-                                    }else{
-                                        $arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
-                                    }
+                                }else{ 
                                     $em->persist($arAsientoDetalleNew);
                                     $em->flush();
                                     $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
                                     return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
                                 }
                             }else {
-                                if ($arAsientoTipoNew->getCodigoAsientoTipoPk() == 1){
-                                    $arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
-                                }else{
-                                    $arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
-                                }
                                 $em->persist($arAsientoDetalleNew);
                                 $em->flush();
                                 $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
@@ -243,12 +235,17 @@ class AsientoController extends Controller
                         $arAsientoDetalle->setAsientoTipoRel($arAsientoTipo);
                         $arAsientoDetalle->setTerceroRel($arTercero);
                         $arAsientoDetalle->setCentroCostoRel($arCentroCosto);
-                        $fecha = new \DateTime($arrControles['dateFecha'.$intCodigo]);
-                        $arAsientoDetalle->setFecha($fecha);
                         $arAsientoDetalle->setDocumentoReferente($arrControles['TxtDocumentoReferente'.$intCodigo]);
                         $arAsientoDetalle->setSoporte($arrControles['TxtSoporte'.$intCodigo]);
                         $arAsientoDetalle->setPlazo($arrControles['TxtPlazo'.$intCodigo]);
                         $arAsientoDetalle->setValorBase($arrControles['TxtValorBase'.$intCodigo]);
+                        if ($arAsientoTipo->getCodigoAsientoTipoPk() == 1){
+                            $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
+                            $arAsientoDetalle->setCredito(0);
+                        }else{
+                            $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
+                            $arAsientoDetalle->setDebito(0);
+                        }
                         //$arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
                         //$arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
                         $arAsientoDetalle->setDescripcion($arrControles['TxtDescripcion'.$intCodigo]);
@@ -260,11 +257,7 @@ class AsientoController extends Controller
                                     if ($arCuenta->getExigeNit() == 1){
                                         $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que la cuenta exige número de identificación" , $this);
                                     } else {
-                                        if ($arAsientoTipo->getCodigoAsientoTipoPk() == 1){
-                                            $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
-                                        }else{
-                                            $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
-                                        }
+                                        
                                         $em->persist($arAsientoDetalle);
                                     }
                                 }else {
@@ -275,19 +268,11 @@ class AsientoController extends Controller
                                     if ($arrControles['TxtCodigoCentroCosto'.$intCodigo] != null){
                                         $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el centro de costo ". $arrControles['TxtCodigoCentroCosto'.$intCodigo] . " no existe" , $this);
                                     }else {
-                                        if ($arAsientoTipo->getCodigoAsientoTipoPk() == 1){
-                                            $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
-                                        }else{
-                                            $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
-                                        }
+                                        
                                         $em->persist($arAsientoDetalle);
                                     }    
                                 }else {
-                                    if ($arAsientoTipo->getCodigoAsientoTipoPk() == 1){
-                                        $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
-                                    }else{
-                                        $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
-                                    }
+                                    
                                     $em->persist($arAsientoDetalle);
                                 }    
                             }    

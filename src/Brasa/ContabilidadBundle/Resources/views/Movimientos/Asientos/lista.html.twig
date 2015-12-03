@@ -57,8 +57,8 @@
                 <td>{{ arAsientos.numeroAsiento  }}</td>
                 <td>{{ arAsientos.soporte  }}</td>
                 <td>{{ arAsientos.fecha |date("Y/m/d")  }}</td>
-                <td style="text-align: right">{{ arAsientos.totalDebito | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arAsientos.totalCredito | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arAsientos.totalDebito | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arAsientos.totalCredito | number_format(2, '.', ',') }}</td>
                 <td>{% if arAsientos.estadoAutorizado == 1%} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_ctb_mov_asientos_nuevo', {'codigoAsiento':  arAsientos.codigoAsientoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_ctb_mov_asientos_detalle', { 'codigoAsiento': arAsientos.codigoAsientoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
