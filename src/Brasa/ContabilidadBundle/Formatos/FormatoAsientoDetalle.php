@@ -64,7 +64,7 @@ class FormatoAsientoDetalle extends \FPDF_FPDF {
         $this->Cell(40, 6, utf8_decode("TOTAL DÉBITO:") , 1, 0, 'R', 1);                            
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
-        $this->Cell(43, 6, number_format($arAsiento->getTotalDebito(), 0, '.', ','), 1, 0, 'R');
+        $this->Cell(43, 6, number_format($arAsiento->getTotalDebito(), 2, '.', ','), 1, 0, 'R');
         //FILA 2
         $this->SetXY(10, 46);
         $this->SetFont('Arial','B',8);
@@ -84,28 +84,8 @@ class FormatoAsientoDetalle extends \FPDF_FPDF {
         $this->Cell(40, 6, utf8_decode("TOTAL CRÉDITOS:") , 1, 0, 'R', 1);                            
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
-        $this->Cell(43, 6, number_format($arAsiento->getTotalCredito(), 0, '.', ','), 1, 0, 'R');
+        $this->Cell(43, 6, number_format($arAsiento->getTotalCredito(), 2, '.', ','), 1, 0, 'R');
         //FILA 3
-        $this->SetXY(10, 46);
-        $this->SetFont('Arial','B',8);
-        $this->SetFillColor(236, 236, 236);
-        $this->Cell(43, 6, utf8_decode("CÓDIGO COMPROBANTE:") , 1, 0, 'L', 1);
-        $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',8);
-        $this->Cell(30, 6, $arAsiento->getCodigoComprobanteFk() , 1, 0, 'L', 1);
-        $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(40, 6, utf8_decode("COMPROBANTE:") , 1, 0, 'L', 1);
-        $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',7);
-        $this->Cell(85, 6, utf8_decode($arAsiento->getComprobanteRel()->getNombre()) , 1, 0, 'L', 1);
-        $this->SetFillColor(236, 236, 236);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(40, 6, utf8_decode("TOTAL CRÉDITOS:") , 1, 0, 'R', 1);                            
-        $this->SetFillColor(255, 255, 255);
-        $this->SetFont('Arial','',8);
-        $this->Cell(43, 6, number_format($arAsiento->getTotalCredito(), 0, '.', ','), 1, 0, 'R');
-        //FILA 4
         $this->SetXY(10, 51);
         $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',8);
@@ -129,8 +109,7 @@ class FormatoAsientoDetalle extends \FPDF_FPDF {
         }else {
             $this->Cell(43, 6, "NO", 1, 0, 'L', 1);
         }
-        
-        //FILA 
+        //FILA 4
         $this->SetXY(10, 57);
         $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',8);
@@ -169,23 +148,32 @@ class FormatoAsientoDetalle extends \FPDF_FPDF {
     public function Body($pdf) {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 8);
-        $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
-        $arAsientoDetalle = self::$em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->findBy(array('codigoAsientoFk' => self::$codigoAsiento));
-        foreach ($arAsientoDetalle as $arAsientoDetalle) {            
+        $arAsientoDetalles = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
+        $arAsientoDetalles = self::$em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->findBy(array('codigoAsientoFk' => self::$codigoAsiento));
+        foreach ($arAsientoDetalles as $arAsientoDetalle) {
+            if ($arAsientoDetalle->getCodigoTerceroFk() == null){
+                $strNumeroIdentificacion = "";
+                $strNombreCorto = "";
+                $strRazonSocial = "";       
+            }else {
+                $strNumeroIdentificacion = $arAsientoDetalle->getTerceroRel()->getNumeroIdentificacion();
+                $strNombreCorto = $arAsientoDetalle->getTerceroRel()->getNombreCorto();
+                $strRazonSocial = $arAsientoDetalle->getTerceroRel()->getRazonSocial();
+            }
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(14, 4, $arAsientoDetalle->getCodigoAsientoDetallePk(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(77, 4, $arAsientoDetalle->getCodigoCuentaFk()." - ".$arAsientoDetalle->getCuentaRel()->getNombreCuenta() , 1, 0, 'L');
-            $pdf->Cell(70, 4, $arAsientoDetalle->getTerceroRel()->getNumeroIdentificacion()." - ".$arAsientoDetalle->getTerceroRel()->getNombreCorto()." ".$arAsientoDetalle->getTerceroRel()->getRazonSocial(), 1, 0, 'L');
+            $pdf->Cell(70, 4, $strNumeroIdentificacion." - ".$strNombreCorto." ".$strRazonSocial, 1, 0, 'L');
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(20, 4, utf8_decode($arAsientoDetalle->getAsientoTipoRel()->getNombre()), 1, 0, 'L');
             $pdf->Cell(22, 4, $arAsientoDetalle->getDocumentoReferente(), 1, 0, 'L');
             $pdf->Cell(15, 4, $arAsientoDetalle->getSoporte(), 1, 0, 'L');
             $pdf->Cell(12, 4, $arAsientoDetalle->getPlazo(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(17, 4, number_format($arAsientoDetalle->getValorBase(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(17, 4, number_format($arAsientoDetalle->getDebito(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(17, 4, number_format($arAsientoDetalle->getCredito(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(17, 4, number_format($arAsientoDetalle->getValorBase(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(17, 4, number_format($arAsientoDetalle->getDebito(), 2, '.', ','), 1, 0, 'R');
+            $pdf->Cell(17, 4, number_format($arAsientoDetalle->getCredito(), 2, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }

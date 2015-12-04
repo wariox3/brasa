@@ -92,7 +92,7 @@
                 {% if arAsiento.estadoAutorizado == 0 %}                
                     <tr>
                         <td></td>
-                        <td><input class="input-grid" type="text" name="TxtCuentaNew" id="TxtCuentaNew" value="{{cuenta}}" size="15" style="width:70px" onclick="this.select()"/></td>
+                        <td><input autofocus="autofocus" class="input-grid" type="text" name="TxtCuentaNew" id="TxtCuentaNew" value="{{cuenta}}" size="15" style="width:70px" onclick="this.select()"/></td>
                         <td><a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_cuenta', {'campoCodigo': 'TxtCuentaNew' }) }}', 'cuenta', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>    
                         <td><input class="input-grid" type="text" name="TxtNumeroIdentificacionNew" id="TxtNumeroIdentificacionNew" value="{{identificacion}}" size="15" style="width:90px" onclick="this.select()"/></td>
                         <td><a href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_tercero', {'campoCodigo': 'TxtNumeroIdentificacionNew' }) }}', 'tercero', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=10 height=10 title="Buscar"></a></td>    
@@ -123,7 +123,7 @@
                         <td colspan="2">{{ form_widget(form.BtnAgregar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</td>
                         
                 {% else %}
-                        <td colspan="15" style="text-align: right">{{ form_widget(form.BtnAgregar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</td>
+                        <td colspan="16" style="text-align: right">{{ form_widget(form.BtnAgregar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</td>
                         
                     </tr>                        
                 {% endif%}
@@ -156,9 +156,9 @@
                         <td><input class="input-grid" type="text" name="TxtDescripcion{{ arAsientoDetalles.codigoAsientoDetallePk }}" value="{{ arAsientoDetalles.descripcion}}" size="10" style="width:210px" onclick="this.select()"/></td>    
                         
                     {% else %}
-                        <td>{{ arAsientoDetalles.codigoCuentaFk }} - {{arAsientoDetalles.cuentaRel.nombreCuenta|default('')}}</td>
-                        <td>{{ arAsientoDetalles.terceroRel.numeroIdentificacion }} - {{ arAsientoDetalles.terceroRel.nombreCorto }}  {{ arAsientoDetalles.terceroRel.razonSocial }}</td>
-                        <td>{{ arAsientoDetalles.centroCostoRel.nombre|default('') }}</td>
+                        <td colspan="2">{{ arAsientoDetalles.codigoCuentaFk }} - {{arAsientoDetalles.cuentaRel.nombreCuenta|default('')}}</td>
+                        <td colspan="2">{{ arAsientoDetalles.terceroRel.numeroIdentificacion|default('') }} - {{ arAsientoDetalles.terceroRel.nombreCorto|default('') }}  {{ arAsientoDetalles.terceroRel.razonSocial|default('') }}</td>
+                        <td colspan="2">{{ arAsientoDetalles.centroCostoRel.nombre|default('') }}</td>
                         <td>{{ arAsientoDetalles.AsientoTipoRel.nombre }}</td>
                         <td>{{ arAsientoDetalles.documentoReferente }}</td>
                         <td>{{ arAsientoDetalles.soporte }}</td>
