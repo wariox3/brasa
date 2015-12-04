@@ -61,12 +61,7 @@ class BaseCuentaController extends Controller
             $arCuentaPadre = $form->get('codigoCuentaPadreFk')->getData();
             $arCuenta = $form->getData();
             $arCuenta->setCodigoCuentaPadreFk($arCuentaPadre->getCodigoCuentaPk());
-            if ($codigoCuenta == 0){
-                $arCuenta->setNombreCuenta($arCuenta->getCodigoCuentaPk()." ".$arCuenta->getNombreCuenta());
-            }else {
-                $arCuenta->setNombreCuenta($arCuenta->getNombreCuenta());
-            }
-            
+            $arCuenta->setNombreCuenta($arCuenta->getNombreCuenta());
             $em->persist($arCuenta);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_ctb_base_cuentas_lista'));

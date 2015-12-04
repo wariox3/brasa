@@ -19,7 +19,7 @@ class CtbAsiento
     private $codigoAsientoPk;    
     
     /**
-     * @ORM\Column(name="numero_asiento", type="integer", nullable=true)
+     * @ORM\Column(name="numero_asiento", type="string", length=30, nullable=true)
      */     
     private $numeroAsiento;    
 
@@ -122,7 +122,7 @@ class CtbAsiento
     /**
      * Set numeroAsiento
      *
-     * @param integer $numeroAsiento
+     * @param string $numeroAsiento
      *
      * @return CtbAsiento
      */
@@ -136,7 +136,7 @@ class CtbAsiento
     /**
      * Get numeroAsiento
      *
-     * @return integer
+     * @return string
      */
     public function getNumeroAsiento()
     {

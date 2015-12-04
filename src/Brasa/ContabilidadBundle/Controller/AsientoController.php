@@ -11,8 +11,10 @@ use Brasa\ContabilidadBundle\Form\Type\CtbAsientoDetalleType;
 class AsientoController extends Controller
 {
     var $strListaDql = "";
-    var $codigoAsiento = "";
+    var $numeroAsiento = "";
     var $codigoComprobante = "";
+    var $fechaDesde = "";
+    var $fechaHasta = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -75,14 +77,17 @@ class AsientoController extends Controller
         $form = $this->createForm(new CtbAsientoType, $arAsiento);         
         $form->handleRequest($request);
         if ($form->isValid()) {            
-            $arAsiento = $form->getData();                
-            //$arAsiento->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+            $arAsiento = $form->getData();
             $em->persist($arAsiento);
             $em->flush();
             if($form->get('BtnGuardarNuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_nuevo', array('codigoAsiento' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $arAsiento->getCodigoAsientoPk() )));
+                if ($codigoAsiento == 0){
+                    return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $arAsiento->getCodigoAsientoPk() )));
+                }else {
+                    return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_lista'));
+                }    
             }                                    
         }
 
@@ -160,8 +165,6 @@ class AsientoController extends Controller
                     $arAsientoDetalleNew->setAsientoTipoRel($arAsientoTipoNew);
                     $arAsientoDetalleNew->setTerceroRel($arTerceroNew);
                     $arAsientoDetalleNew->setCentroCostoRel($arCentroCostoNew);
-                    //$fecha = new \DateTime($arrControlesNew['dateFechaNew']);
-                    $arAsientoDetalleNew->setFecha($arAsiento->getFecha());
                     $arAsientoDetalleNew->setDocumentoReferente($arrControlesNew['TxtDocumentoReferenteNew']);
                     $arAsientoDetalleNew->setSoporte($arrControlesNew['TxtSoporteNew']);
                     $arAsientoDetalleNew->setPlazo($arrControlesNew['TxtPlazoNew']);
@@ -304,46 +307,13 @@ class AsientoController extends Controller
                     ));
     }
 
-    public function detalleNuevoAction($codigoAsiento, $codigoAsientoDetalle = 0) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
-        $arAsiento = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
-        $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
-        if($codigoAsientoDetalle != 0) {
-            $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($codigoAsientoDetalle);
-        } else {
-            $arAsientoDetalle->setFecha(new \DateTime('now'));
-        }
-        $form = $this->createForm(new CtbAsientoDetalleType, $arAsientoDetalle);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arAsientoDetalle = $form->getData();
-            $arAsientoDetalle->setAsientoRel($arAsiento);
-            if ($arAsientoDetalle->getAsientoTipoRel()->getCodigoAsientoTipoPk() == 1){
-                $arAsientoDetalle->setDebito($arAsientoDetalle->getValorBase());
-            }else {
-                $arAsientoDetalle->setCredito($arAsientoDetalle->getValorBase());
-            }
-            $em->persist($arAsientoDetalle);
-            $em->flush();
-            if($form->get('BtnGuardarNuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle_nuevo', array('codigoAsiento' => $codigoAsiento, 'codigoAsientoDetalle' => 0 )));
-            } else {
-                $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
-        }
-        return $this->render('BrasaContabilidadBundle:Movimientos/Asientos:detalleNuevo.html.twig', array(
-            'arAsiento' => $arAsiento,
-            'form' => $form->createView()));
-    }
-
     private function listar() {
         $em = $this->getDoctrine()->getManager();        
         $this->strListaDql = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->listaDQL(
-                $this->codigoAsiento,
-                $this->codigoComprobante                
+                $this->numeroAsiento,
+                $this->codigoComprobante,
+                $this->fechaDesde,
+                $this->fechaHasta
                 );
     }
 
@@ -353,7 +323,7 @@ class AsientoController extends Controller
         $request = $this->getRequest();
                     
         $form = $this->createFormBuilder()
-            ->add('TxtCodigoAsiento', 'text', array('label'  => 'Código asiento'))
+            ->add('TxtNumeroAsiento', 'text', array('label'  => 'Número asiento'))
             ->add('comprobanteRel', 'entity', array(
                 'class' => 'BrasaContabilidadBundle:CtbComprobante',
                 'query_builder' => function (EntityRepository $er) {
@@ -364,6 +334,8 @@ class AsientoController extends Controller
                 'empty_data' => "",
                 'empty_value' => "TODOS",
                 'data' => ""))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
@@ -379,8 +351,10 @@ class AsientoController extends Controller
         }else {
             $intComprobante = $arComprobante->getCodigoComprobantePk();
         }
-        $this->codigoAsiento = $form->get('TxtCodigoAsiento')->getData();
+        $this->numeroAsiento = $form->get('TxtNumeroAsiento')->getData();
         $this->codigoComprobante = $intComprobante;
+        $this->fechaDesde = $form->get('fechaDesde')->getData();
+        $this->fechaHasta = $form->get('fechaHasta')->getData();
     }    
     
     private function formularioDetalle($ar) {

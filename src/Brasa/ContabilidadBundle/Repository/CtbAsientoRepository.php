@@ -16,13 +16,19 @@ class CtbAsientoRepository extends EntityRepository
      * Liquida los totales de un asiento
      * @param integer $codigoAsiento codigo del asiento que se va a procesar.
      * */
-    public function listaDQL($intCodigoAsiento = "", $intCodigoComprobante = "") {
+    public function listaDQL($intNumeroAsiento = "", $intCodigoComprobante = "", $strFechaDesde = "", $strFechaHasta= "") {
         $dql   = "SELECT a FROM BrasaContabilidadBundle:CtbAsiento a WHERE a.codigoAsientoPk <> 0";
-        if($intCodigoAsiento != "" && $intCodigoAsiento != 0) {
-            $dql .= " AND a.codigoAsientoPk = " . $intCodigoAsiento;
+        if($intNumeroAsiento != "" && $intNumeroAsiento != 0) {
+            $dql .= " AND a.numeroAsiento = " . $intNumeroAsiento;
         }
         if($intCodigoComprobante != "" && $intCodigoComprobante != 0) {
             $dql .= " AND a.codigoComprobanteFk = " . $intCodigoComprobante;
+        }
+        if($strFechaDesde != "" || $strFechaDesde != 0){
+            $dql .= " AND a.fecha >='" . date_format($strFechaDesde, ('Y-m-d')) . "'";
+        }
+        if($strFechaHasta != "" || $strFechaHasta != 0){
+            $dql .= " AND a.fecha >='" . date_format($strFechaDesde, ('Y-m-d')) . "'";
         }
         $dql .= " ORDER BY a.fecha DESC";
         return $dql;

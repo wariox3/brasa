@@ -22,11 +22,6 @@ class CtbAsientoDetalle
      * @ORM\Column(name="codigo_asiento_fk", type="integer", nullable=false)
      */     
     private $codigoAsientoFk;
-    
-    /**
-     * @ORM\Column(name="fecha", type="date", nullable=true)
-     */    
-    private $fecha;
 
     /**
      * @ORM\Column(name="debito", type="float")
@@ -153,30 +148,6 @@ class CtbAsientoDetalle
     public function getCodigoAsientoFk()
     {
         return $this->codigoAsientoFk;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return CtbAsientoDetalle
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
     }
 
     /**

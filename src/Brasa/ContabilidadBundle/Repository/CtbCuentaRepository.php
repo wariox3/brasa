@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class CtbCuentaRepository extends EntityRepository
 {
-    public function listaDql($intCodigoCuenta = "", $strNombreCuenta = "") {
+    public function listaDql($intCodigoCuenta = "", $strNombreCuenta = "" ) {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaContabilidadBundle:CtbCuenta c WHERE c.codigoCuentaPk <> 0";
         if($intCodigoCuenta != "" && $intCodigoCuenta != 0) {
