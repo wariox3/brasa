@@ -9,6 +9,13 @@ class TurPedidoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('pedidoTipoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurPedidoTipo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('pt')
+                    ->orderBy('pt.codigoPedidoTipoPk', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('sectorRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurSector',
                 'query_builder' => function (EntityRepository $er)  {
@@ -16,7 +23,6 @@ class TurPedidoType extends AbstractType
                     ->orderBy('s.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))  
-            ->add('permanente', 'checkbox', array('required'  => false))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

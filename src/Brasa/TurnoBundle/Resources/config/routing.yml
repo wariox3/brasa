@@ -90,6 +90,10 @@ brs_tur_pedido_detalle_nuevo:
    path:     /tur/pedido/detalle/nuevo/{codigoPedido}/{codigoPedidoDetalle}
    defaults: { _controller: BrasaTurnoBundle:Pedido:detalleNuevo }     
    
+brs_tur_pedido_detalle_nuevo_cotizacion:
+   path:     /tur/pedido/detalle/nuevo/cotizacion/{codigoPedido}/{codigoPedidoDetalle}
+   defaults: { _controller: BrasaTurnoBundle:Pedido:detalleNuevoCotizacion }   
+   
 brs_tur_buscar_recurso:
     pattern:  /turno/buscar/recurso/{campoCodigo}
     defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:lista }    
@@ -105,3 +109,7 @@ brs_tur_proceso_generar_soporte_pago_lista:
 brs_tur_proceso_generar_programacion_lista:
     path:     /tur/proceso/generar/programacion/lista
     defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarProgramacion:lista }         
+    
+brs_tur_proceso_generar_pedido_lista:
+    path:     /tur/proceso/generar/pedido/lista
+    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarPedido:lista }             

@@ -122,6 +122,7 @@ class PedidoController extends Controller
                     $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
                     $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($intCodigo);
                     $arPedidoDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
+                    $arPedidoDetalle->setCantidadRecurso($arrControles['TxtCantidadRecurso'.$intCodigo]);
                     $arPedidoDetalle->setFechaDesde(date_create($arrControles['TxtFechaDesde'.$intCodigo]));
                     $arPedidoDetalle->setFechaHasta(date_create($arrControles['TxtFechaHasta'.$intCodigo]));
                     
@@ -228,6 +229,58 @@ class PedidoController extends Controller
             'form' => $form->createView()));
     }
 
+    public function detalleNuevoCotizacionAction($codigoPedido, $codigoPedidoDetalle = 0) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {                
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
+                        $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigo);                                                
+                        $arCotizacionDetalles = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
+                        $arCotizacionDetalles = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array('codigoCotizacionFk' => $arCotizacion->getCodigoCotizacionPk()));
+                        foreach($arCotizacionDetalles as $arCotizacionDetalle) {
+                            $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                            $arPedidoDetalle->setPedidoRel($arPedido);
+                            $arPedidoDetalle->setModalidadServicioRel($arCotizacionDetalle->getModalidadServicioRel());
+                            $arPedidoDetalle->setPeriodoRel($arCotizacionDetalle->getPeriodoRel());
+                            $arPedidoDetalle->setTurnoRel($arCotizacionDetalle->getTurnoRel());
+                            $arPedidoDetalle->setDias($arCotizacionDetalle->getDias());
+                            $arPedidoDetalle->setLunes($arCotizacionDetalle->getLunes());
+                            $arPedidoDetalle->setMartes($arCotizacionDetalle->getMartes());
+                            $arPedidoDetalle->setMiercoles($arCotizacionDetalle->getMiercoles());
+                            $arPedidoDetalle->setJueves($arCotizacionDetalle->getJueves());
+                            $arPedidoDetalle->setViernes($arCotizacionDetalle->getViernes());
+                            $arPedidoDetalle->setSabado($arCotizacionDetalle->getSabado());
+                            $arPedidoDetalle->setDomingo($arCotizacionDetalle->getDomingo());
+                            $arPedidoDetalle->setFestivo($arCotizacionDetalle->getFestivo());                            
+                            $arPedidoDetalle->setCantidad($arCotizacionDetalle->getCantidad());
+                            $arPedidoDetalle->setFechaDesde($arCotizacionDetalle->getFechaDesde());
+                            $arPedidoDetalle->setFechaHasta($arCotizacionDetalle->getFechaHasta());
+                            $em->persist($arPedidoDetalle);
+                        }                       
+                    }
+                    $em->flush();
+                }
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        $arCotizaciones = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->pendientes($arPedido->getCodigoTerceroFk());
+        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleNuevoCotizacion.html.twig', array(
+            'arPedido' => $arPedido,
+            'arCotizaciones' => $arCotizaciones,
+            'form' => $form->createView()));
+    }    
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL($this->codigoPedido);

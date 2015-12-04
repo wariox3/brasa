@@ -11,10 +11,23 @@ class TurPedidoRepository extends EntityRepository {
         return $dql;
     }
     
-    public function pedidoPermanenteDql() {
-        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.permanente = 1";
+    public function pedidoMaestroDql() {
+        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.codigoPedidoTipoFk = 2";
         return $dql;
     }    
+    
+    public function pedidoSinProgramarDql($strFechaDesde = '', $strFechaHasta = '') {
+        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.codigoPedidoTipoFk = 1 "
+                . "AND p.programado = 0 ";
+
+        if($strFechaDesde != '') {
+            $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  
+        }
+        if($strFechaHasta != '') {
+            $dql .= " AND p.fecha <= '" . $strFechaHasta . "'";  
+        }        
+        return $dql;
+    }        
     
     public function liquidar($codigoPedido) {        
         $em = $this->getEntityManager();        

@@ -34,6 +34,12 @@
                     <td class="td-in-well"></td>
                 </tr>
                 <tr>
+                    <td class="titulo">TIPO:</td>
+                    <td class="td-in-well">{{ arPedido.pedidoTipoRel.nombre }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                </tr>                
+                <tr>
                     <td class="titulo">CLIENTE:</td>
                     <td class="td-in-well">{{ arPedido.terceroRel.nombreCorto }}</td>
                     <td class="titulo" >HORAS DIURNAS:</td>
@@ -81,6 +87,7 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>CANT</th>
+                <th>CANT.RE</th>
                 <th>LU</th>
                 <th>MA</th>
                 <th>MI</th>
@@ -107,7 +114,8 @@
                     {% if arPedido.estadoAutorizado == 0 %}                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.fechaDesde | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.fechaHasta | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                                                
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="5" style="width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadRecurso{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidadRecurso  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                         <td><input type="checkbox" name="chkLunes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.lunes == 1 %} checked="true" {% endif %}></td>
                         <td><input type="checkbox" name="chkMartes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.martes == 1 %} checked="true" {% endif %}></td>
                         <td><input type="checkbox" name="chkMiercoles{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
@@ -120,6 +128,7 @@
                         <td>{{ arPedidoDetalle.fechaDesde | date('Y/m/d') }}</td>    
                         <td>{{ arPedidoDetalle.fechaHasta | date('Y/m/d') }}</td>    
                         <td>{{ arPedidoDetalle.cantidad  }}</td>
+                        <td>{{ arPedidoDetalle.cantidadRecurso  }}</td>
                         <td>{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
                         <td>{% if arPedidoDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
                         <td>{% if arPedidoDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
@@ -145,6 +154,7 @@
         {% if arPedido.estadoAutorizado == 0 %}
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_cotizacion', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo de cotizacion</a>                
             </div>
         {% endif %}            
         <div class="btn-group">

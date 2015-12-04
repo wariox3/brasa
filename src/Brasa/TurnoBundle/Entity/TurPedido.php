@@ -23,6 +23,11 @@ class TurPedido
     private $fecha;    
     
     /**
+     * @ORM\Column(name="codigo_pedido_tipo_fk", type="integer")
+     */    
+    private $codigoPedidoTipoFk;
+    
+    /**
      * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
      */    
     private $codigoTerceroFk;    
@@ -40,12 +45,17 @@ class TurPedido
     /**     
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
-    private $estadoAprobado = false;     
+    private $estadoAprobado = false;         
     
     /**     
-     * @ORM\Column(name="permanente", type="boolean")
+     * @ORM\Column(name="cerrado", type="boolean")
      */    
-    private $permanente = false;    
+    private $cerrado = false;    
+
+    /**     
+     * @ORM\Column(name="programado", type="boolean")
+     */    
+    private $programado = false;     
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -76,6 +86,12 @@ class TurPedido
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;         
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPedidoTipo", inversedBy="pedidosPedidoTipoRel")
+     * @ORM\JoinColumn(name="codigo_pedido_tipo_fk", referencedColumnName="codigo_pedido_tipo_pk")
+     */
+    protected $pedidoTipoRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="turPedidosTerceroRel")
@@ -134,6 +150,30 @@ class TurPedido
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set codigoPedidoTipoFk
+     *
+     * @param integer $codigoPedidoTipoFk
+     *
+     * @return TurPedido
+     */
+    public function setCodigoPedidoTipoFk($codigoPedidoTipoFk)
+    {
+        $this->codigoPedidoTipoFk = $codigoPedidoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPedidoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPedidoTipoFk()
+    {
+        return $this->codigoPedidoTipoFk;
     }
 
     /**
@@ -401,6 +441,30 @@ class TurPedido
     }
 
     /**
+     * Set pedidoTipoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoTipo $pedidoTipoRel
+     *
+     * @return TurPedido
+     */
+    public function setPedidoTipoRel(\Brasa\TurnoBundle\Entity\TurPedidoTipo $pedidoTipoRel = null)
+    {
+        $this->pedidoTipoRel = $pedidoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoTipoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoTipo
+     */
+    public function getPedidoTipoRel()
+    {
+        return $this->pedidoTipoRel;
+    }
+
+    /**
      * Set terceroRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
@@ -480,5 +544,53 @@ class TurPedido
     public function getPedidosDetallesPedidoRel()
     {
         return $this->pedidosDetallesPedidoRel;
+    }
+
+    /**
+     * Set cerrado
+     *
+     * @param boolean $cerrado
+     *
+     * @return TurPedido
+     */
+    public function setCerrado($cerrado)
+    {
+        $this->cerrado = $cerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get cerrado
+     *
+     * @return boolean
+     */
+    public function getCerrado()
+    {
+        return $this->cerrado;
+    }
+
+    /**
+     * Set programado
+     *
+     * @param boolean $programado
+     *
+     * @return TurPedido
+     */
+    public function setProgramado($programado)
+    {
+        $this->programado = $programado;
+
+        return $this;
+    }
+
+    /**
+     * Get programado
+     *
+     * @return boolean
+     */
+    public function getProgramado()
+    {
+        return $this->programado;
     }
 }

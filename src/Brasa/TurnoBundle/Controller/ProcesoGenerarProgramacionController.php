@@ -16,16 +16,31 @@ class ProcesoGenerarProgramacionController extends Controller
         $this->lista();
         if ($form->isValid()) {
             if ($form->get('BtnGenerar')->isClicked()) { 
-                $arPedidos = new \Brasa\TurnoBundle\Entity\TurPedido();
-                $query = $em->createQuery($this->strListaDql);
+                $dateFecha = $form->get('fecha')->getData();
+                $strAnioMes = $dateFecha->format('Y/m');
+                $strFechaInicio = $dateFecha->format('Y/m') . '/01';                        
+                $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+                $strFechaFinal = $dateFecha->format('Y/m') . '/' . $strUltimoDiaMes;                
+                $strDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->pedidoSinProgramarDql($strFechaInicio, $strFechaFinal);
+                $arPedidos = new \Brasa\TurnoBundle\Entity\TurPedido();                
+                $query = $em->createQuery($strDql);
                 $arPedidos = $query->getResult();
                 foreach ($arPedidos as $arPedido) {
+                    $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
+                    $arProgramacion->setTerceroRel($arPedido->getTerceroRel());
+                    $arProgramacion->setFecha($dateFecha);
+                    $em->persist($arProgramacion);                    
                     $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-                    $arPedidoDetalles =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('arPedido' => $arPedido->getCodigoPedidoPk())); 
+                    $arPedidoDetalles =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $arPedido->getCodigoPedidoPk())); 
                     foreach ($arPedidoDetalles as $arPedidoDetalle) {
-                        
+                        $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($arPedidoDetalle->getCodigoPedidoDetallePk(), $arProgramacion);
                     }
+                    $arPedidoActualizar = new \Brasa\TurnoBundle\Entity\TurPedido();
+                    $arPedidoActualizar =  $em->getRepository('BrasaTurnoBundle:TurPedido')->find($arPedido->getCodigoPedidoPk());    
+                    $arPedidoActualizar->setProgramado(true);
+                    $em->persist($arPedidoActualizar);
                 }
+                $em->flush();
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_programacion_lista'));                                 
             }
             if ($form->get('BtnExcel')->isClicked()) {
@@ -43,27 +58,16 @@ class ProcesoGenerarProgramacionController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->pedidoPermanenteDql();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->pedidoSinProgramarDql();
     }
     
     private function formularioLista() {                
         $form = $this->createFormBuilder()
+            ->add('fecha', 'date', array('data'  => new \DateTime('now')))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->getForm();
         return $form;
-    }    
-    
-    private function insertarSoportePago ($arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $codigoTurno) {
-        $em = $this->getDoctrine()->getManager();
-        $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
-        $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);   
-        $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
-        $arSoportePago->setRecursoRel($arProgramacionDetalle->getRecursoRel());
-        $arSoportePago->setFechaDesde($dateFechaDesde);
-        $arSoportePago->setFechaHasta($dateFechaHasta);
-        $arSoportePago->setTurnoRel($arTurno);
-        $em->persist($arSoportePago);          
-    }
+    }        
     
 }

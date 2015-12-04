@@ -78,6 +78,11 @@ class TurPedidoDetalle
     private $cantidad = 0;     
     
     /**
+     * @ORM\Column(name="cantidad_recurso", type="integer")
+     */    
+    private $cantidadRecurso = 0;         
+    
+    /**
      * @ORM\Column(name="vr_total", type="float")
      */
     private $vrTotal = 0; 
@@ -832,5 +837,29 @@ class TurPedidoDetalle
     public function getProgramacionesDetallesPedidoDetalleRel()
     {
         return $this->programacionesDetallesPedidoDetalleRel;
+    }
+
+    /**
+     * Set cantidadRecurso
+     *
+     * @param integer $cantidadRecurso
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCantidadRecurso($cantidadRecurso)
+    {
+        $this->cantidadRecurso = $cantidadRecurso;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadRecurso
+     *
+     * @return integer
+     */
+    public function getCantidadRecurso()
+    {
+        return $this->cantidadRecurso;
     }
 }
