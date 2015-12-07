@@ -2,9 +2,17 @@ buscarcuentas:
   pattern: /buscarcuentas
   defaults: { _controller: BrasaContabilidadBundle:Contabilidad:buscarCuentas}
   
+# Consultas  
+  
 brs_ctb_consultas_registros:
     path:     /ctb/consultas/registros/
-    defaults: { _controller: BrasaContabilidadBundle:ConsultasRegistros:lista }   
+    defaults: { _controller: BrasaContabilidadBundle:ConsultasRegistros:lista } 
+    
+brs_ctb_consultas_balance_prueba:
+    path:     /ctb/consultas/balance/prueba/
+    defaults: { _controller: BrasaContabilidadBundle:ConsultasBalancePrueba:balance }    
+    
+# Utilidades    
     
 brs_ctb_utilidades_intercambio_datos_exportar:
     path:     /ctb/utilidades/intercambio/datos/exportar

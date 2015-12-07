@@ -12,6 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class CtbAsientoDetalleRepository extends EntityRepository
 {
+    public function balancePruebaDql($intNumeroAsiento = "", $intCodigoComprobante = "", $strFechaDesde = "", $strFechaHasta= "") {
+        $dql   = "SELECT ad FROM BrasaContabilidadBundle:CtbAsientoDetalle ad JOIN ad.asientoRel a WHERE ad.codigoAsientoDetallePk <> 0";
+        if($intNumeroAsiento != "" && $intNumeroAsiento != 0) {
+            $dql .= " AND ad.codigoAsientoFk = " . $intNumeroAsiento;
+        }
+        if($intCodigoComprobante != "" && $intCodigoComprobante != 0) {
+            $dql .= " AND ad.codigoAsientoFk = " . $intCodigoComprobante;
+        }
+        if($strFechaDesde != "" || $strFechaDesde != 0){
+            $dql .= " AND a.fecha >='" . date_format($strFechaDesde, ('Y-m-d')) . "'";
+        }
+        if($strFechaHasta != "" || $strFechaHasta != 0){
+            $dql .= " AND a.fecha >='" . date_format($strFechaDesde, ('Y-m-d')) . "'";
+        }
+        $dql .= " ORDER BY a.fecha DESC";
+        return $dql;
+    }
+    
     public function DevNroDetallesAsiento($codigoAsiento) {
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
