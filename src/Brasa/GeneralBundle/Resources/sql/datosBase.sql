@@ -5316,9 +5316,9 @@ INSERT INTO `rhu_seleccion_prueba_tipo` (`codigo_seleccion_prueba_tipo_pk`, `nom
 INSERT INTO `rhu_seleccion_prueba_tipo` (`codigo_seleccion_prueba_tipo_pk`, `nombre`) VALUES('8','VALANTI');
 INSERT INTO `rhu_seleccion_prueba_tipo` (`codigo_seleccion_prueba_tipo_pk`, `nombre`) VALUES('9','WARTEGG');
 
-INSERT INTO `rhu_seleccion_tipo` (`codigo_seleccion_tipo_pk`, `nombre`) VALUES('1','SERVICIOS DE SELECCION');
-INSERT INTO `rhu_seleccion_tipo` (`codigo_seleccion_tipo_pk`, `nombre`) VALUES('2','AUTORIZACION DE INGRESO');
-INSERT INTO `rhu_seleccion_tipo` (`codigo_seleccion_tipo_pk`, `nombre`) VALUES('3','SELECCIÓN DE PERSONAL');
+insert into `rhu_seleccion_tipo` (`codigo_seleccion_tipo_pk`, `nombre`) values('1','SERVICIOS DE SELECCIÓN');
+insert into `rhu_seleccion_tipo` (`codigo_seleccion_tipo_pk`, `nombre`) values('2','AUTORIZACIÓN DE INGRESO');
+insert into `rhu_seleccion_tipo` (`codigo_seleccion_tipo_pk`, `nombre`) values('3','SELECCIÓN DE PERSONAL');
 
 INSERT INTO `rhu_seleccion_tipo_referencia` (`codigo_seleccion_tipo_referencia_pk`, `nombre`) VALUES('1','PERSONAL');
 INSERT INTO `rhu_seleccion_tipo_referencia` (`codigo_seleccion_tipo_referencia_pk`, `nombre`) VALUES('2','LABORAL');

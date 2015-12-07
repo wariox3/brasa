@@ -34,8 +34,8 @@
                 <tr>
                     <td class="titulo">NOMBRE:</td>
                     <td class="td-in-well">{{ arRequisito.nombre }}</td>
-                    <td class="titulo">FECHA PRUEBAS:</td>
-                    <td class="td-in-well">{{ arRequisito.fechaPruebas | date('Y/m/d') }}</td>
+                    <td class="titulo">CARGO:</td>
+                    <td class="td-in-well">{{ arRequisito.cargoRel().nombre|default('') }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">CANTIDAD SOLICITADA:</td>
