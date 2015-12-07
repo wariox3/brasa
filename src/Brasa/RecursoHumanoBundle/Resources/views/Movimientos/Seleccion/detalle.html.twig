@@ -154,7 +154,8 @@
                         <tr>
                             <th>CÓDIGO</th>
                             <th>TIPO PRUEBA</th>
-                            <th>RESULTADO</th>
+                            <th>RESULTADO CUALITATIVO</th>
+                            <th>RESULTADO CUANTITATIVO</th>
                             <th>COMENTARIOS</th>
                             <th></th>
                             <th></th>
@@ -168,6 +169,7 @@
                             </td>
                             <td>{{ arSeleccionPruebas.seleccionPruebaTipoRel.nombre }}</td>
                             <td>{{ arSeleccionPruebas.resultado }}</td>
+                            <td>{{ arSeleccionPruebas.resultadoCuantitativo }}</td>
                             <td>{{ arSeleccionPruebas.comentarios }}</td>
                             <td>{% if arSeleccion.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionPrueba': arSeleccionPruebas.codigoSeleccionPruebaPk }) }}', 'AgregarSeleccionPrueba', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a>{% endif %}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 2,  'numero': arSeleccionPruebas.codigoSeleccionPruebaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>

@@ -14,7 +14,8 @@ class RhuSeleccionPruebaType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionPruebaTipo',
                 'property' => 'nombre',
             ))    
-            ->add('resultado', 'text', array('required' => true))                                                   
+            ->add('resultado', 'text', array('required' => false))
+            ->add('resultadoCuantitativo', 'number', array('required' => true))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

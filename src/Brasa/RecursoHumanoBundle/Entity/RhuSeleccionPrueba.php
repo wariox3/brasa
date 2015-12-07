@@ -33,6 +33,11 @@ class RhuSeleccionPrueba
     private $resultado;        
     
     /**
+     * @ORM\Column(name="resultado_cuantitativo", type="integer", nullable=true)
+     */    
+    private $resultadoCuantitativo;
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;              
@@ -50,7 +55,7 @@ class RhuSeleccionPrueba
     protected $seleccionPruebaTipoRel;
 
 
-
+    
 
     /**
      * Get codigoSeleccionPruebaPk
@@ -132,6 +137,30 @@ class RhuSeleccionPrueba
     public function getResultado()
     {
         return $this->resultado;
+    }
+
+    /**
+     * Set resultadoCuantitativo
+     *
+     * @param integer $resultadoCuantitativo
+     *
+     * @return RhuSeleccionPrueba
+     */
+    public function setResultadoCuantitativo($resultadoCuantitativo)
+    {
+        $this->resultadoCuantitativo = $resultadoCuantitativo;
+
+        return $this;
+    }
+
+    /**
+     * Get resultadoCuantitativo
+     *
+     * @return integer
+     */
+    public function getResultadoCuantitativo()
+    {
+        return $this->resultadoCuantitativo;
     }
 
     /**
