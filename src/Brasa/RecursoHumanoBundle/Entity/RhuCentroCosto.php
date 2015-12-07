@@ -142,9 +142,9 @@ class RhuCentroCosto
     protected $seleccionesCentroCostoRel;     
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuSeleccionGrupo", mappedBy="centroCostoRel")
+     * @ORM\OneToMany(targetEntity="RhuSeleccionRequisito", mappedBy="centroCostoRel")
      */
-    protected $seleccionesGruposCentroCostoRel;              
+    protected $seleccionesRequisitosCentroCostoRel;              
     
     /**
      * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="centroCostoRel")
@@ -226,7 +226,7 @@ class RhuCentroCosto
         $this->programacionesPagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->seleccionesGruposCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesRequisitosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -860,37 +860,37 @@ class RhuCentroCosto
     }
 
     /**
-     * Add seleccionesGruposCentroCostoRel
+     * Add seleccionesRequisitosCentroCostoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionesGruposCentroCostoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosCentroCostoRel
      *
      * @return RhuCentroCosto
      */
-    public function addSeleccionesGruposCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionesGruposCentroCostoRel)
+    public function addSeleccionesRequisitosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosCentroCostoRel)
     {
-        $this->seleccionesGruposCentroCostoRel[] = $seleccionesGruposCentroCostoRel;
+        $this->seleccionesRequisitosCentroCostoRel[] = $seleccionesRequisitosCentroCostoRel;
 
         return $this;
     }
 
     /**
-     * Remove seleccionesGruposCentroCostoRel
+     * Remove seleccionesRequisitosCentroCostoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionesGruposCentroCostoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosCentroCostoRel
      */
-    public function removeSeleccionesGruposCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionesGruposCentroCostoRel)
+    public function removeSeleccionesRequisitosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosCentroCostoRel)
     {
-        $this->seleccionesGruposCentroCostoRel->removeElement($seleccionesGruposCentroCostoRel);
+        $this->seleccionesRequisitosCentroCostoRel->removeElement($seleccionesRequisitosCentroCostoRel);
     }
 
     /**
-     * Get seleccionesGruposCentroCostoRel
+     * Get seleccionesRequisitosCentroCostoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSeleccionesGruposCentroCostoRel()
+    public function getSeleccionesRequisitosCentroCostoRel()
     {
-        return $this->seleccionesGruposCentroCostoRel;
+        return $this->seleccionesRequisitosCentroCostoRel;
     }
 
     /**

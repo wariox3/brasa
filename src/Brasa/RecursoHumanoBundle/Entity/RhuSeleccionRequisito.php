@@ -5,17 +5,17 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_seleccion_grupo")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuSeleccionGrupoRepository")
+ * @ORM\Table(name="rhu_seleccion_requisito")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuSeleccionRequisitoRepository")
  */
-class RhuSeleccionGrupo
+class RhuSeleccionRequisito
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_seleccion_grupo_pk", type="integer")
+     * @ORM\Column(name="codigo_seleccion_requisito_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoSeleccionGrupoPk;        
+    private $codigoSeleccionRequisitoPk;        
     
     /**
      * @ORM\Column(name="fecha", type="date")
@@ -48,36 +48,48 @@ class RhuSeleccionGrupo
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
-    private $codigoCentroCostoFk; 
+    private $codigoCentroCostoFk;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="seleccionesGruposCentroCostoRel")
+     * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCargoFk;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="seleccionesRequisitosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $centroCostoRel;    
+    protected $centroCostoRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="seleccionGrupoRel")
+     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="seleccionesRequisitosCargoRel")
+     * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
      */
-    protected $seleccionesSeleccionGrupoRel;
+    protected $cargoRel;
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="seleccionRequisitoRel")
+     */
+    protected $seleccionesSeleccionRequisitoRel;
+    
+    
+    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->seleccionesSeleccionGrupoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesSeleccionRequisitoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get codigoSeleccionGrupoPk
+     * Get codigoSeleccionRequisitoPk
      *
      * @return integer
      */
-    public function getCodigoSeleccionGrupoPk()
+    public function getCodigoSeleccionRequisitoPk()
     {
-        return $this->codigoSeleccionGrupoPk;
+        return $this->codigoSeleccionRequisitoPk;
     }
 
     /**
@@ -85,7 +97,7 @@ class RhuSeleccionGrupo
      *
      * @param \DateTime $fecha
      *
-     * @return RhuSeleccionGrupo
+     * @return RhuSeleccionRequisito
      */
     public function setFecha($fecha)
     {
@@ -109,7 +121,7 @@ class RhuSeleccionGrupo
      *
      * @param string $nombre
      *
-     * @return RhuSeleccionGrupo
+     * @return RhuSeleccionRequisito
      */
     public function setNombre($nombre)
     {
@@ -133,7 +145,7 @@ class RhuSeleccionGrupo
      *
      * @param integer $cantidadSolicitida
      *
-     * @return RhuSeleccionGrupo
+     * @return RhuSeleccionRequisito
      */
     public function setCantidadSolicitida($cantidadSolicitida)
     {
@@ -157,7 +169,7 @@ class RhuSeleccionGrupo
      *
      * @param \DateTime $fechaPruebas
      *
-     * @return RhuSeleccionGrupo
+     * @return RhuSeleccionRequisito
      */
     public function setFechaPruebas($fechaPruebas)
     {
@@ -181,7 +193,7 @@ class RhuSeleccionGrupo
      *
      * @param integer $estadoAbierto
      *
-     * @return RhuSeleccionGrupo
+     * @return RhuSeleccionRequisito
      */
     public function setEstadoAbierto($estadoAbierto)
     {
@@ -205,7 +217,7 @@ class RhuSeleccionGrupo
      *
      * @param integer $codigoCentroCostoFk
      *
-     * @return RhuSeleccionGrupo
+     * @return RhuSeleccionRequisito
      */
     public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
@@ -225,11 +237,35 @@ class RhuSeleccionGrupo
     }
 
     /**
+     * Set codigoCargoFk
+     *
+     * @param integer $codigoCargoFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoCargoFk($codigoCargoFk)
+    {
+        $this->codigoCargoFk = $codigoCargoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCargoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCargoFk()
+    {
+        return $this->codigoCargoFk;
+    }
+
+    /**
      * Set centroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
      *
-     * @return RhuSeleccionGrupo
+     * @return RhuSeleccionRequisito
      */
     public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
     {
@@ -249,36 +285,60 @@ class RhuSeleccionGrupo
     }
 
     /**
-     * Add seleccionesSeleccionGrupoRel
+     * Set cargoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionGrupoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
      *
-     * @return RhuSeleccionGrupo
+     * @return RhuSeleccionRequisito
      */
-    public function addSeleccionesSeleccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionGrupoRel)
+    public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
     {
-        $this->seleccionesSeleccionGrupoRel[] = $seleccionesSeleccionGrupoRel;
+        $this->cargoRel = $cargoRel;
 
         return $this;
     }
 
     /**
-     * Remove seleccionesSeleccionGrupoRel
+     * Get cargoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionGrupoRel
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargo
      */
-    public function removeSeleccionesSeleccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionGrupoRel)
+    public function getCargoRel()
     {
-        $this->seleccionesSeleccionGrupoRel->removeElement($seleccionesSeleccionGrupoRel);
+        return $this->cargoRel;
     }
 
     /**
-     * Get seleccionesSeleccionGrupoRel
+     * Add seleccionesSeleccionRequisitoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionRequisitoRel
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function addSeleccionesSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionRequisitoRel)
+    {
+        $this->seleccionesSeleccionRequisitoRel[] = $seleccionesSeleccionRequisitoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesSeleccionRequisitoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionRequisitoRel
+     */
+    public function removeSeleccionesSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionRequisitoRel)
+    {
+        $this->seleccionesSeleccionRequisitoRel->removeElement($seleccionesSeleccionRequisitoRel);
+    }
+
+    /**
+     * Get seleccionesSeleccionRequisitoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSeleccionesSeleccionGrupoRel()
+    public function getSeleccionesSeleccionRequisitoRel()
     {
-        return $this->seleccionesSeleccionGrupoRel;
+        return $this->seleccionesSeleccionRequisitoRel;
     }
 }

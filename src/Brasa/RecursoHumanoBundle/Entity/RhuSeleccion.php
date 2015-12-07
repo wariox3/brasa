@@ -18,9 +18,9 @@ class RhuSeleccion
     private $codigoSeleccionPk;
 
     /**
-     * @ORM\Column(name="codigo_seleccion_grupo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_seleccion_requisito_fk", type="integer", nullable=true)
      */
-    private $codigoSeleccionGrupoFk;
+    private $codigoSeleccionRequisitoFk;
 
     /**
      * @ORM\Column(name="codigo_seleccion_tipo_fk", type="integer")
@@ -238,10 +238,10 @@ class RhuSeleccion
     protected $rhRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSeleccionGrupo", inversedBy="seleccionesSeleccionGrupoRel")
-     * @ORM\JoinColumn(name="codigo_seleccion_grupo_fk", referencedColumnName="codigo_seleccion_grupo_pk")
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionRequisito", inversedBy="seleccionesSeleccionRequisitoRel")
+     * @ORM\JoinColumn(name="codigo_seleccion_requisito_fk", referencedColumnName="codigo_seleccion_requisito_pk")
      */
-    protected $seleccionGrupoRel;
+    protected $seleccionRequisitoRel;
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuFactura", inversedBy="seleccionesFacturaRel")
@@ -287,27 +287,27 @@ class RhuSeleccion
     }
 
     /**
-     * Set codigoSeleccionGrupoFk
+     * Set codigoSeleccionRequisitoFk
      *
-     * @param integer $codigoSeleccionGrupoFk
+     * @param integer $codigoSeleccionRequisitoFk
      *
      * @return RhuSeleccion
      */
-    public function setCodigoSeleccionGrupoFk($codigoSeleccionGrupoFk)
+    public function setCodigoSeleccionRequisitoFk($codigoSeleccionRequisitoFk)
     {
-        $this->codigoSeleccionGrupoFk = $codigoSeleccionGrupoFk;
+        $this->codigoSeleccionRequisitoFk = $codigoSeleccionRequisitoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoSeleccionGrupoFk
+     * Get codigoSeleccionRequisitoFk
      *
      * @return integer
      */
-    public function getCodigoSeleccionGrupoFk()
+    public function getCodigoSeleccionRequisitoFk()
     {
-        return $this->codigoSeleccionGrupoFk;
+        return $this->codigoSeleccionRequisitoFk;
     }
 
     /**
@@ -1295,27 +1295,27 @@ class RhuSeleccion
     }
 
     /**
-     * Set seleccionGrupoRel
+     * Set seleccionRequisitoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionGrupoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel
      *
      * @return RhuSeleccion
      */
-    public function setSeleccionGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo $seleccionGrupoRel = null)
+    public function setSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel = null)
     {
-        $this->seleccionGrupoRel = $seleccionGrupoRel;
+        $this->seleccionRequisitoRel = $seleccionRequisitoRel;
 
         return $this;
     }
 
     /**
-     * Get seleccionGrupoRel
+     * Get seleccionRequisitoRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito
      */
-    public function getSeleccionGrupoRel()
+    public function getSeleccionRequisitoRel()
     {
-        return $this->seleccionGrupoRel;
+        return $this->seleccionRequisitoRel;
     }
 
     /**

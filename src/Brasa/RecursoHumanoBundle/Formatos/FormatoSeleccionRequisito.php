@@ -1,25 +1,25 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoSeleccionGrupo extends \FPDF_FPDF {
+class FormatoSeleccionRequisito extends \FPDF_FPDF {
     public static $em;
-    public static $codigoSeleccionGrupo;
-    public function Generar($miThis, $codigoSeleccionGrupo) {        
+    public static $codigoSeleccionRequisito;
+    public function Generar($miThis, $codigoSeleccionRequisito) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
-        self::$codigoSeleccionGrupo = $codigoSeleccionGrupo;
-        $pdf = new FormatoSeleccionGrupo();
+        self::$codigoSeleccionRequisito = $codigoSeleccionRequisito;
+        $pdf = new FormatoSeleccionRequisito();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("SeleccionGrupo$codigoSeleccionGrupo.pdf", 'D');        
+        $pdf->Output("SeleccionRequisito$codigoSeleccionRequisito.pdf", 'D');        
         
     } 
     public function Header() {
-        $arSeleccionGrupo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionGrupo();
-        $arSeleccionGrupo = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionGrupo')->find(self::$codigoSeleccionGrupo);
+        $arSeleccionRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito();
+        $arSeleccionRequisito = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find(self::$codigoSeleccionRequisito);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $this->SetFillColor(200, 200, 200);        
@@ -28,7 +28,7 @@ class FormatoSeleccionGrupo extends \FPDF_FPDF {
         $this->SetXY(53, 10);
         $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("GRUPO SELECCIÓN ". $arSeleccionGrupo->getCodigoSeleccionGrupoPk()." ". $arSeleccionGrupo->getNombre()), 0, 0, 'C', 1);
+        $this->Cell(150, 7, utf8_decode("GRUPO SELECCIÓN ". $arSeleccionRequisito->getCodigoSeleccionRequisitoPk()." ". $arSeleccionRequisito->getNombre()), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -77,7 +77,7 @@ class FormatoSeleccionGrupo extends \FPDF_FPDF {
 
     public function Body($pdf) {
         $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
-        $arSelecciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('codigoSeleccionGrupoFk' => self::$codigoSeleccionGrupo));
+        $arSelecciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('codigoSeleccionRequisitoFk' => self::$codigoSeleccionRequisito));
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arSelecciones as $arSeleccion) {            

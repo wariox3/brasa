@@ -21,8 +21,8 @@ class RhuSeleccionType extends AbstractType
                 'empty_data' => 3,
                 'empty_value' => 'SELECCIÓN DE PERSONAL',            
             ))
-            ->add('seleccionGrupoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionGrupo',
+            ->add('seleccionRequisitoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionRequisito',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('sg')
                     ->where('sg.estadoAbierto = :estadoAbierto')

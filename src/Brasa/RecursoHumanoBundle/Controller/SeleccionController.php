@@ -83,7 +83,11 @@ class SeleccionController extends Controller
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_rhu_seleccion_nuevo', array('codigoSeleccion' => 0)));
             } else {
-                return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $arSeleccion->getCodigoSeleccionPk())));
+                if ($codigoSeleccion == 0){
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $arSeleccion->getCodigoSeleccionPk())));
+                }else {
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
+                }
             }
         }
 
@@ -390,7 +394,7 @@ class SeleccionController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'GRUPO')
+                    ->setCellValue('C1', 'REQUISITO')
                     ->setCellValue('D1', 'IDENTIFICACION')
                     ->setCellValue('E1', 'NOMBRE')
                     ->setCellValue('F1', 'CENTRO_COSTOS')
@@ -437,19 +441,19 @@ class SeleccionController extends Controller
             {
                 $abierto = "NO";
             }
-            if ($arSelecciones->getCodigoSeleccionGrupoFk() == null)
+            if ($arSelecciones->getCodigoSeleccionRequisitoFk() == null)
             {
-                $seleccionGrupo = "";
+                $seleccionRequisito = "";
             }
             else
             {
-                $seleccionGrupo = $arSelecciones->getSeleccionGrupoRel()->getNombre();
+                $seleccionRequisito = $arSelecciones->getSeleccionRequisitoRel()->getNombre();
             }
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arSelecciones->getCodigoSeleccionPk())
                     ->setCellValue('B' . $i, $arSelecciones->getSeleccionTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $seleccionGrupo)
+                    ->setCellValue('C' . $i, $seleccionRequisito)
                     ->setCellValue('D' . $i, $arSelecciones->getNumeroIdentificacion())
                     ->setCellValue('E' . $i, $arSelecciones->getNombreCorto())
                     ->setCellValue('F' . $i, $arSelecciones->getCentroCostoRel()->getNombre())

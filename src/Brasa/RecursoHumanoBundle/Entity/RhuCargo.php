@@ -52,6 +52,10 @@ class RhuCargo
      */
     protected $desempenosCargoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionRequisito", mappedBy="cargoRel")
+     */
+    protected $seleccionesRequisitosCargoRel;
     
     /**
      * Constructor
@@ -64,6 +68,7 @@ class RhuCargo
         $this->requisitosCargosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->requisitosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->desempenosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesRequisitosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -302,5 +307,39 @@ class RhuCargo
     public function getDesempenosCargoRel()
     {
         return $this->desempenosCargoRel;
+    }
+
+    /**
+     * Add seleccionesRequisitosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addSeleccionesRequisitosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosCargoRel)
+    {
+        $this->seleccionesRequisitosCargoRel[] = $seleccionesRequisitosCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesRequisitosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosCargoRel
+     */
+    public function removeSeleccionesRequisitosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosCargoRel)
+    {
+        $this->seleccionesRequisitosCargoRel->removeElement($seleccionesRequisitosCargoRel);
+    }
+
+    /**
+     * Get seleccionesRequisitosCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesRequisitosCargoRel()
+    {
+        return $this->seleccionesRequisitosCargoRel;
     }
 }

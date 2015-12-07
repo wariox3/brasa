@@ -610,17 +610,17 @@ brs_rhu_seleccion_detalle:
     path:     /rhu/seleccion/detalle/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:detalle }     
     
-brs_rhu_selecciongrupo_lista:
-    path:     /rhu/selecciongrupo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionGrupo:lista }
+brs_rhu_seleccionrequisito_lista:
+    path:     /rhu/seleccionrequisito/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionRequisito:lista }
     
-brs_rhu_selecciongrupo_nuevo:
-    path:     /rhu/selecciongrupo/nuevo/{codigoSeleccionGrupo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionGrupo:nuevo }     
+brs_rhu_seleccionrequisito_nuevo:
+    path:     /rhu/seleccionrequisito/nuevo/{codigoSeleccionRequisito}
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionRequisito:nuevo }     
     
-brs_rhu_selecciongrupo_detalle:
-    path:     /rhu/selecciongrupo/detalle/{codigoSeleccionGrupo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionGrupo:detalle }    
+brs_rhu_seleccionrequisito_detalle:
+    path:     /rhu/seleccionrequisito/detalle/{codigoSeleccionRequisito}
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionRequisito:detalle }    
 
 brs_rhu_ss_periodo_lista:
     path:     /rhu/seguridadsocial/periodo/lista
