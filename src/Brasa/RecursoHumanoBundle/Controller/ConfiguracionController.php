@@ -111,6 +111,24 @@ class ConfiguracionController extends Controller
             'required' => false);                   
         $arrayPropiedadesConceptoEntidadExamenIngreso['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadExamen", $arConfiguracion->getCodigoEntidadExamenIngreso());
         
+        $arrayPropiedadesConceptoEntidadComprobanteNomina = array(
+            'class' => 'BrasaContabilidadBundle:CtbComprobante',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('c')                                        
+                ->orderBy('c.codigoComprobantePk', 'ASC');},
+            'property' => 'nombre',
+            'required' => false);                   
+        $arrayPropiedadesConceptoEntidadComprobanteNomina['data'] = $em->getReference("BrasaContabilidadBundle:CtbComprobante", $arConfiguracion->getCodigoComprobantePagoNomina());
+        
+        $arrayPropiedadesConceptoEntidadComprobanteBanco = array(
+            'class' => 'BrasaContabilidadBundle:CtbComprobante',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('c')                                        
+                ->orderBy('c.codigoComprobantePk', 'ASC');},
+            'property' => 'nombre',
+            'required' => false);                   
+        $arrayPropiedadesConceptoEntidadComprobanteBanco['data'] = $em->getReference("BrasaContabilidadBundle:CtbComprobante", $arConfiguracion->getCodigoComprobantePagoBanco());
+        
         $formConfiguracion = $this->createFormBuilder() 
             ->add('conceptoAuxilioTransporte', 'entity', $arrayPropiedadesConceptoAuxilioTransporte)    
             ->add('vrAuxilioTransporte', 'number', array('data' => $arConfiguracion->getVrAuxilioTransporte(), 'required' => true))
@@ -128,6 +146,8 @@ class ConfiguracionController extends Controller
             ->add('porcentajeBonificacionNoPrestacional', 'number', array('data' => $arConfiguracion->getPorcentajeBonificacionNoPrestacional(), 'required' => true))
             ->add('edadMinimaEmpleado', 'number', array('data' => $arConfiguracion->getEdadMinimaEmpleado(), 'required' => true))    
             ->add('entidadExamenIngreso', 'entity', $arrayPropiedadesConceptoEntidadExamenIngreso, array('required' => true))        
+            ->add('comprobantePagoNomina', 'entity', $arrayPropiedadesConceptoEntidadComprobanteNomina, array('required' => true))            
+            ->add('comprobantePagoBanco', 'entity', $arrayPropiedadesConceptoEntidadComprobanteBanco, array('required' => true))            
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -149,6 +169,8 @@ class ConfiguracionController extends Controller
             $porcentajeBonificacionNoPrestacional = $controles['porcentajeBonificacionNoPrestacional'];
             $edadMinimaEmpleado = $controles['edadMinimaEmpleado'];
             $entidadExamenIngreso = $controles['entidadExamenIngreso'];
+            $comprobantePagoNomina = $controles['comprobantePagoNomina'];
+            $comprobantePagoBanco = $controles['comprobantePagoBanco'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -166,6 +188,8 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setPorcentajeBonificacionNoPrestacional($porcentajeBonificacionNoPrestacional);
             $arConfiguracion->setEdadMinimaEmpleado($edadMinimaEmpleado);
             $arConfiguracion->setCodigoEntidadExamenIngreso($entidadExamenIngreso);
+            $arConfiguracion->setCodigoComprobantePagoNomina($comprobantePagoNomina);
+            $arConfiguracion->setCodigoComprobantepagoBanco($comprobantePagoBanco);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {

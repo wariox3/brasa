@@ -92,7 +92,7 @@ class CtbRegistro
     private $centroCostoRel;      
 
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="CtbRegistro")
+     * @ORM\ManyToOne(targetEntity="CtbTercero", inversedBy="CtbRegistro")
      * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
      */
     protected $terceroRel;    
@@ -102,6 +102,7 @@ class CtbRegistro
      * @ORM\JoinColumn(name="codigo_comprobante_fk", referencedColumnName="codigo_comprobante_pk")
      */
     protected $comprobanteRel;     
+
 
 
 
@@ -454,11 +455,11 @@ class CtbRegistro
     /**
      * Set terceroRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     * @param \Brasa\ContabilidadBundle\Entity\CtbTercero $terceroRel
      *
      * @return CtbRegistro
      */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    public function setTerceroRel(\Brasa\ContabilidadBundle\Entity\CtbTercero $terceroRel = null)
     {
         $this->terceroRel = $terceroRel;
 
@@ -468,7 +469,7 @@ class CtbRegistro
     /**
      * Get terceroRel
      *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     * @return \Brasa\ContabilidadBundle\Entity\CtbTercero
      */
     public function getTerceroRel()
     {

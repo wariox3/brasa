@@ -25,13 +25,19 @@
                     </div>                      
                 </div>
                 <div class="form-group form-group-sm">  
-                    <label for="form_cuentaDesdeRel" class="col-sm-2 control-label">Cuenta desde:</label>
+                    <label for="form_TxtCuentaDesde" class="col-sm-2 control-label">Cuenta desde:</label>
                     <div class="col-sm-4">                  
-                        {{ form_widget(form.cuentaDesdeRel, { 'attr': {'class': 'form-control'} }) }}
+                        <input id="TxtCuentaDesde"  name="TxtCuentaDesde"  type="text" class="form-control" value=""/>
+                          <span class="input-group-btn">                                        
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_cuenta', {'campoCodigo': 'TxtCuentaDesde'}) }}', 'buscarCuenta', 600, 900)">Buscar</a>
+                          </span>
                     </div>
-                    <label for="form_cuentaHastaRel" class="col-sm-2 control-label">Cuenta hasta:</label>
+                    <label for="form_TxtCuentaHasta" class="col-sm-2 control-label">Cuenta hasta:</label>
                     <div class="col-sm-4">                  
-                        {{ form_widget(form.cuentaHastaRel, { 'attr': {'class': 'form-control'} }) }}
+                        <input id="TxtCuentaHasta"  name="TxtCuentaHasta"  type="text" class="form-control" value=""/>
+                          <span class="input-group-btn">                                        
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_cuenta', {'campoCodigo': 'TxtCuentaHasta'}) }}', 'buscarCuenta', 600, 900)">Buscar</a>
+                          </span>
                     </div>                    
                 </div>                                       
                 <div class="form-group form-group-sm">

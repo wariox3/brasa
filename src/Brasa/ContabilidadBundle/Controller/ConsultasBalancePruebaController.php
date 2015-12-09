@@ -8,9 +8,8 @@ use Doctrine\ORM\EntityRepository;
 class ConsultasBalancePruebaController extends Controller
 {
     var $strDqlLista = "";
-    var $strNumero = "";
-    var $strNumeroReferencia = "";
-    var $strComprobante = "";
+    var $strCuentaDesde = "";
+    var $strCuentaHasta = "";
     var $strDesde = "";
     var $strHasta = "";
     
@@ -49,32 +48,14 @@ class ConsultasBalancePruebaController extends Controller
     
     private function listar() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->balancePruebaDql("", $this->strNumero, $this->strNumeroReferencia, $this->strComprobante);
+        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->balancePruebaDql($this->strDesde, $this->strHasta, $this->strCuentaDesde, $this->strCuentaHasta);
     }       
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();                
         $form = $this->createFormBuilder()
-            ->add('cuentaDesdeRel', 'entity', array(
-                'class' => 'BrasaContabilidadBundle:CtbCuenta',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('c')
-                    ->orderBy('c.codigoCuentaPk', 'ASC');},
-                'property' => 'codigoCuentaPk',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""))
-            ->add('cuentaHastaRel', 'entity', array(
-                'class' => 'BrasaContabilidadBundle:CtbCuenta',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('c')
-                    ->orderBy('c.codigoCuentaPk', 'ASC');},
-                'property' => 'codigoCuentaPk',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""))                
+            ->add('TxtCuentaDesde', 'text')
+            ->add('TxtCuentaHasta', 'text')                 
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -85,11 +66,13 @@ class ConsultasBalancePruebaController extends Controller
     }    
 
     private function filtrar($form) {        
-        $this->strNumero = $form->get('TxtNumero')->getData();
-        $this->strNumeroReferencia = $form->get('TxtNumeroReferencia')->getData();
-        $this->strComprobante = $form->get('TxtComprobante')->getData();
         $this->strDesde = $form->get('fechaDesde')->getData();
         $this->strHasta = $form->get('fechaHasta')->getData();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $this->strCuentaDesde = $controles['TxtCuentaDesde'];
+        $this->strCuentaHasta = $controles['TxtCuentaHasta'];
+        
     }   
 
     private function generarExcel() {

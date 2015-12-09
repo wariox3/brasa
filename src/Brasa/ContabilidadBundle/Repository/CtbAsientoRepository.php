@@ -111,6 +111,12 @@ class CtbAsientoRepository extends EntityRepository
         
     }
     
+    public function pendientesContabilizarDql() {        
+        $dql   = "SELECT a FROM BrasaContabilidadBundle:CtbAsiento a WHERE a.estadoContabilizado = 0 AND a.estadoAutorizado = 1";       
+        $dql .= " ORDER BY a.codigoAsientoPk DESC";
+        return $dql;
+    }
+    
     /*public function Imprimir($codigoAsiento) {
         $em = $this->getEntityManager();
         $arAsiento = new \Brasa\ContabilidadBundle\Entity\CtbAsientos();

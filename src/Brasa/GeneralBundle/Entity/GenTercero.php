@@ -245,6 +245,7 @@ class GenTercero
      */
     protected $turProgramacionesTerceroRel;     
     
+    
     /**
      * Constructor
      */
@@ -257,6 +258,9 @@ class GenTercero
         $this->recogidasProgramadasRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->TteFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuFacturasTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turCotizacionesTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turPedidosTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turProgramacionesTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

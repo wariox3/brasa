@@ -29,6 +29,7 @@ class CtbCentroCosto
     protected $asientosDetallesCentroCostoRel;
     
     
+    
     /**
      * Constructor
      */

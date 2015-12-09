@@ -335,4 +335,16 @@ class CtbRegistroRepository extends EntityRepository
             //------------------ Fin Cuenta total --------------------------------------
         }
     }
+    
+    public function balancePruebaDql($strFechaDesde = "", $strFechaHasta= "",$strCuentaDesde = "", $strCuentaHasta = "") {
+        $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.codigoRegistroPk <> 0";
+        if($strFechaDesde != "" || $strFechaDesde != 0){
+            $dql .= " AND r.fecha >='" . date_format($strFechaDesde, ('Y-m-d')) . "'";
+        }
+        if($strFechaHasta != "" || $strFechaHasta != 0){
+            $dql .= " AND r.fecha <='" . date_format($strFechaDesde, ('Y-m-d')) . "'";
+        }
+        $dql .= " ORDER BY r.fecha DESC";
+        return $dql;
+    }
 }

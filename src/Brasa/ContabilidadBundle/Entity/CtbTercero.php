@@ -112,6 +112,7 @@ class CtbTercero
     protected $asientosDetallesTerceroRel;
     
     
+    
     /**
      * Constructor
      */

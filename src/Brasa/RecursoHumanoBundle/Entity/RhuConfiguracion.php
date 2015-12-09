@@ -106,6 +106,16 @@ class RhuConfiguracion
      */    
     private $codigoEntidadExamenIngreso;
     
+    /**
+     * @ORM\Column(name="codigo_comprobante_pago_nomina", type="integer")
+     */    
+    private $codigoComprobantePagoNomina;
+    
+    /**
+     * @ORM\Column(name="codigo_comprobante_pago_banco", type="integer")
+     */    
+    private $codigoComprobantePagoBanco;
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
@@ -113,7 +123,7 @@ class RhuConfiguracion
      */
     protected $entidadRiesgoProfesionalRel;
 
-
+    
 
     /**
      * Set codigoConfiguracionPk
@@ -548,30 +558,6 @@ class RhuConfiguracion
     }
 
     /**
-     * Set entidadRiesgoProfesionalRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
-     *
-     * @return RhuConfiguracion
-     */
-    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
-    {
-        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadRiesgoProfesionalRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
-     */
-    public function getEntidadRiesgoProfesionalRel()
-    {
-        return $this->entidadRiesgoProfesionalRel;
-    }
-
-    /**
      * Set codigoEntidadExamenIngreso
      *
      * @param integer $codigoEntidadExamenIngreso
@@ -593,5 +579,77 @@ class RhuConfiguracion
     public function getCodigoEntidadExamenIngreso()
     {
         return $this->codigoEntidadExamenIngreso;
+    }
+
+    /**
+     * Set codigoComprobantePagoNomina
+     *
+     * @param integer $codigoComprobantePagoNomina
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoComprobantePagoNomina($codigoComprobantePagoNomina)
+    {
+        $this->codigoComprobantePagoNomina = $codigoComprobantePagoNomina;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoComprobantePagoNomina
+     *
+     * @return integer
+     */
+    public function getCodigoComprobantePagoNomina()
+    {
+        return $this->codigoComprobantePagoNomina;
+    }
+
+    /**
+     * Set codigoComprobantePagoBanco
+     *
+     * @param integer $codigoComprobantePagoBanco
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoComprobantePagoBanco($codigoComprobantePagoBanco)
+    {
+        $this->codigoComprobantePagoBanco = $codigoComprobantePagoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoComprobantePagoBanco
+     *
+     * @return integer
+     */
+    public function getCodigoComprobantePagoBanco()
+    {
+        return $this->codigoComprobantePagoBanco;
+    }
+
+    /**
+     * Set entidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
+     *
+     * @return RhuConfiguracion
+     */
+    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
+    {
+        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadRiesgoProfesionalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
+     */
+    public function getEntidadRiesgoProfesionalRel()
+    {
+        return $this->entidadRiesgoProfesionalRel;
     }
 }
