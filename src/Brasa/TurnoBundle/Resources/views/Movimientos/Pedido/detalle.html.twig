@@ -58,10 +58,16 @@
                     <td align="right">{{ arPedido.horas | number_format(0, '.', ',')}}</td>
                 </tr>                
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">DESDE:</td>
+                    <td class="td-in-well">{{ arPedido.fechaDesde |date("Y/m/d") }}</td>
                     <td class="titulo" >VALOR:</td>
                     <td align="right">{{ arPedido.vrTotal | number_format(0, '.', ',')}}</td>
+                </tr>                
+                <tr>
+                    <td class="titulo">HASTA:</td>
+                    <td class="td-in-well">{{ arPedido.fechaHasta |date("Y/m/d") }}</td>
+                    <td class="titulo" ></td>
+                    <td align="right"></td>
                 </tr>                
             </table>
       </div>

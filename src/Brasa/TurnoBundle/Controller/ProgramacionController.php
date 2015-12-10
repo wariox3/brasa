@@ -135,7 +135,7 @@ class ProgramacionController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
         }
-        $strAnioMes = "2015/11";
+        $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
         $arrDiaSemana = array();
         for($i = 1; $i <= 31; $i++) {
             $strFecha = $strAnioMes . '/' . $i;

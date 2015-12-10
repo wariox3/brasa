@@ -35,8 +35,21 @@ class TurRecurso
    /**
      * @ORM\OneToMany(targetEntity="TurSoportePago", mappedBy="recursoRel")
      */
-    protected $soportesPagosRecursoRel;        
+    protected $soportesPagosRecursoRel;      
     
+   /**
+     * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="recursoRel")
+     */
+    protected $soportesPagosDetallesRecursoRel;            
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->programacionesDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoRecursoPk
      *
@@ -94,13 +107,6 @@ class TurRecurso
     {
         return $this->comentarios;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->programacionesDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add programacionesDetallesRecursoRel
@@ -134,6 +140,40 @@ class TurRecurso
     public function getProgramacionesDetallesRecursoRel()
     {
         return $this->programacionesDetallesRecursoRel;
+    }
+
+    /**
+     * Add soportesPagosDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addSoportesPagosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel)
+    {
+        $this->soportesPagosDetallesRecursoRel[] = $soportesPagosDetallesRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel
+     */
+    public function removeSoportesPagosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel)
+    {
+        $this->soportesPagosDetallesRecursoRel->removeElement($soportesPagosDetallesRecursoRel);
+    }
+
+    /**
+     * Get soportesPagosDetallesRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosDetallesRecursoRel()
+    {
+        return $this->soportesPagosDetallesRecursoRel;
     }
 
     /**

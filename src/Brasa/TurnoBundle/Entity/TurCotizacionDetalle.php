@@ -117,6 +117,11 @@ class TurCotizacionDetalle
      */    
     private $festivo = false;                      
     
+    /**     
+     * @ORM\Column(name="dia_31", type="boolean")
+     */    
+    private $dia31 = false;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurCotizacion", inversedBy="cotizacionesDetallesCotizacionRel")
      * @ORM\JoinColumn(name="codigo_cotizacion_fk", referencedColumnName="codigo_cotizacion_pk")
@@ -726,5 +731,29 @@ class TurCotizacionDetalle
     public function getPeriodoRel()
     {
         return $this->periodoRel;
+    }
+
+    /**
+     * Set dia31
+     *
+     * @param boolean $dia31
+     *
+     * @return TurCotizacionDetalle
+     */
+    public function setDia31($dia31)
+    {
+        $this->dia31 = $dia31;
+
+        return $this;
+    }
+
+    /**
+     * Get dia31
+     *
+     * @return boolean
+     */
+    public function getDia31()
+    {
+        return $this->dia31;
     }
 }

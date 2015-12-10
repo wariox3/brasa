@@ -127,6 +127,11 @@ class TurPedidoDetalle
      */    
     private $festivo = false;        
     
+    /**     
+     * @ORM\Column(name="dia_31", type="boolean")
+     */    
+    private $dia31 = false;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurPedido", inversedBy="pedidosDetallesPedidoRel")
      * @ORM\JoinColumn(name="codigo_pedido_fk", referencedColumnName="codigo_pedido_pk")
@@ -861,5 +866,29 @@ class TurPedidoDetalle
     public function getCantidadRecurso()
     {
         return $this->cantidadRecurso;
+    }
+
+    /**
+     * Set dia31
+     *
+     * @param boolean $dia31
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setDia31($dia31)
+    {
+        $this->dia31 = $dia31;
+
+        return $this;
+    }
+
+    /**
+     * Get dia31
+     *
+     * @return boolean
+     */
+    public function getDia31()
+    {
+        return $this->dia31;
     }
 }

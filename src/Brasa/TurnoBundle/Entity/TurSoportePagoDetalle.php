@@ -5,17 +5,22 @@ namespace Brasa\TurnoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="tur_soporte_pago")
- * @ORM\Entity(repositoryClass="Brasa\TurnoBundle\Repository\TurSoportePagoRepository")
+ * @ORM\Table(name="tur_soporte_pago_detalle")
+ * @ORM\Entity(repositoryClass="Brasa\TurnoBundle\Repository\TurSoportePagoDetalleRepository")
  */
-class TurSoportePago
+class TurSoportePagoDetalle
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_soporte_pago_pk", type="integer")
+     * @ORM\Column(name="codigo_soporte_pago_detalle_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoSoportePagoPk;         
+    private $codigoSoportePagoDetallePk;         
+    
+    /**
+     * @ORM\Column(name="codigo_soporte_pago_fk", type="integer", nullable=true)
+     */    
+    private $codigoSoportePagoFk;    
     
     /**
      * @ORM\Column(name="codigo_recurso_fk", type="integer", nullable=true)
@@ -23,14 +28,9 @@ class TurSoportePago
     private $codigoRecursoFk;
     
     /**
-     * @ORM\Column(name="fecha_desde", type="date", nullable=true)
+     * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
-    private $fechaDesde;        
-
-    /**
-     * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
-     */    
-    private $fechaHasta;            
+    private $fecha;        
     
     /**     
      * @ORM\Column(name="estado_cerrado", type="boolean")
@@ -66,34 +66,52 @@ class TurSoportePago
      * @ORM\Column(name="horas_extras_festivas_nocturnas", type="integer")
      */    
     private $horasExtrasFestivasNocturnas = 0;    
-        
+    
+    /**
+     * @ORM\Column(name="codigo_turno_fk", type="string", length=5)
+     */    
+    private $codigoTurnoFk;    
+
+    /**
+     * @ORM\Column(name="codigo_programacion_detalle_fk", type="integer", nullable=true)
+     */    
+    private $codigoProgramacionDetalleFk;   
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurSoportePago", inversedBy="soportesPagosDetallesSoportePagoRel")
+     * @ORM\JoinColumn(name="codigo_soporte_pago_fk", referencedColumnName="codigo_soporte_pago_pk")
+     */
+    protected $soportePagoRel;
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurRecurso", inversedBy="soportesPagosDetallesRecursoRel")
      * @ORM\JoinColumn(name="codigo_recurso_fk", referencedColumnName="codigo_recurso_pk")
      */
-    protected $recursoRel;   
+    protected $recursoRel;     
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurProgramacionDetalle", inversedBy="soportesPagosDetallesProgramacionDetalleRel")
+     * @ORM\JoinColumn(name="codigo_programacion_detalle_fk", referencedColumnName="codigo_programacion_detalle_pk")
+     */
+    protected $programacionDetalleRel;     
     
-   /**
-     * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="soportePagoRel")
+    /**
+     * @ORM\ManyToOne(targetEntity="TurTurno", inversedBy="soportesPagosDetallesTurnoRel")
+     * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
      */
-    protected $soportesPagosDetallesSoportePagoRel;     
+    protected $turnoRel;    
+    
+
+
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->soportesPagosDetallesSoportePagoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Get codigoSoportePagoPk
+     * Get codigoSoportePagoDetallePk
      *
      * @return integer
      */
-    public function getCodigoSoportePagoPk()
+    public function getCodigoSoportePagoDetallePk()
     {
-        return $this->codigoSoportePagoPk;
+        return $this->codigoSoportePagoDetallePk;
     }
 
     /**
@@ -101,7 +119,7 @@ class TurSoportePago
      *
      * @param integer $codigoRecursoFk
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
     public function setCodigoRecursoFk($codigoRecursoFk)
     {
@@ -121,51 +139,27 @@ class TurSoportePago
     }
 
     /**
-     * Set fechaDesde
+     * Set fecha
      *
-     * @param \DateTime $fechaDesde
+     * @param \DateTime $fecha
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
-    public function setFechaDesde($fechaDesde)
+    public function setFecha($fecha)
     {
-        $this->fechaDesde = $fechaDesde;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
     /**
-     * Get fechaDesde
+     * Get fecha
      *
      * @return \DateTime
      */
-    public function getFechaDesde()
+    public function getFecha()
     {
-        return $this->fechaDesde;
-    }
-
-    /**
-     * Set fechaHasta
-     *
-     * @param \DateTime $fechaHasta
-     *
-     * @return TurSoportePago
-     */
-    public function setFechaHasta($fechaHasta)
-    {
-        $this->fechaHasta = $fechaHasta;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaHasta
-     *
-     * @return \DateTime
-     */
-    public function getFechaHasta()
-    {
-        return $this->fechaHasta;
+        return $this->fecha;
     }
 
     /**
@@ -173,7 +167,7 @@ class TurSoportePago
      *
      * @param integer $horas
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
     public function setHoras($horas)
     {
@@ -197,7 +191,7 @@ class TurSoportePago
      *
      * @param integer $horasDiurnas
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
     public function setHorasDiurnas($horasDiurnas)
     {
@@ -221,7 +215,7 @@ class TurSoportePago
      *
      * @param integer $horasExtrasOrdinariasDiurnas
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
     public function setHorasExtrasOrdinariasDiurnas($horasExtrasOrdinariasDiurnas)
     {
@@ -245,7 +239,7 @@ class TurSoportePago
      *
      * @param integer $horasExtrasOrdinariasNocturnas
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
     public function setHorasExtrasOrdinariasNocturnas($horasExtrasOrdinariasNocturnas)
     {
@@ -269,7 +263,7 @@ class TurSoportePago
      *
      * @param integer $horasExtrasFestivasDiurnas
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
     public function setHorasExtrasFestivasDiurnas($horasExtrasFestivasDiurnas)
     {
@@ -293,7 +287,7 @@ class TurSoportePago
      *
      * @param integer $horasExtrasFestivasNocturnas
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
     public function setHorasExtrasFestivasNocturnas($horasExtrasFestivasNocturnas)
     {
@@ -313,11 +307,59 @@ class TurSoportePago
     }
 
     /**
+     * Set codigoTurnoFk
+     *
+     * @param string $codigoTurnoFk
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setCodigoTurnoFk($codigoTurnoFk)
+    {
+        $this->codigoTurnoFk = $codigoTurnoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFk()
+    {
+        return $this->codigoTurnoFk;
+    }
+
+    /**
+     * Set codigoProgramacionDetalleFk
+     *
+     * @param integer $codigoProgramacionDetalleFk
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setCodigoProgramacionDetalleFk($codigoProgramacionDetalleFk)
+    {
+        $this->codigoProgramacionDetalleFk = $codigoProgramacionDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProgramacionDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoProgramacionDetalleFk()
+    {
+        return $this->codigoProgramacionDetalleFk;
+    }
+
+    /**
      * Set recursoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursoRel
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
     public function setRecursoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursoRel = null)
     {
@@ -337,37 +379,99 @@ class TurSoportePago
     }
 
     /**
-     * Add soportesPagosDetallesSoportePagoRel
+     * Set programacionDetalleRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionDetalleRel
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
-    public function addSoportesPagosDetallesSoportePagoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel)
+    public function setProgramacionDetalleRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionDetalleRel = null)
     {
-        $this->soportesPagosDetallesSoportePagoRel[] = $soportesPagosDetallesSoportePagoRel;
+        $this->programacionDetalleRel = $programacionDetalleRel;
 
         return $this;
     }
 
     /**
-     * Remove soportesPagosDetallesSoportePagoRel
+     * Get programacionDetalleRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel
+     * @return \Brasa\TurnoBundle\Entity\TurProgramacionDetalle
      */
-    public function removeSoportesPagosDetallesSoportePagoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel)
+    public function getProgramacionDetalleRel()
     {
-        $this->soportesPagosDetallesSoportePagoRel->removeElement($soportesPagosDetallesSoportePagoRel);
+        return $this->programacionDetalleRel;
     }
 
     /**
-     * Get soportesPagosDetallesSoportePagoRel
+     * Set turnoRel
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
+     *
+     * @return TurSoportePagoDetalle
      */
-    public function getSoportesPagosDetallesSoportePagoRel()
+    public function setTurnoRel(\Brasa\TurnoBundle\Entity\TurTurno $turnoRel = null)
     {
-        return $this->soportesPagosDetallesSoportePagoRel;
+        $this->turnoRel = $turnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get turnoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurTurno
+     */
+    public function getTurnoRel()
+    {
+        return $this->turnoRel;
+    }
+
+    /**
+     * Set codigoSoportePagoFk
+     *
+     * @param integer $codigoSoportePagoFk
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setCodigoSoportePagoFk($codigoSoportePagoFk)
+    {
+        $this->codigoSoportePagoFk = $codigoSoportePagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoFk()
+    {
+        return $this->codigoSoportePagoFk;
+    }
+
+    /**
+     * Set soportePagoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportePagoRel
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setSoportePagoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportePagoRel = null)
+    {
+        $this->soportePagoRel = $soportePagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get soportePagoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSoportePago
+     */
+    public function getSoportePagoRel()
+    {
+        return $this->soportePagoRel;
     }
 
     /**
@@ -375,7 +479,7 @@ class TurSoportePago
      *
      * @param boolean $estadoCerrado
      *
-     * @return TurSoportePago
+     * @return TurSoportePagoDetalle
      */
     public function setEstadoCerrado($estadoCerrado)
     {

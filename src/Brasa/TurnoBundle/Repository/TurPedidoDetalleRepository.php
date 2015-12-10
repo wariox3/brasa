@@ -9,7 +9,7 @@ class TurPedidoDetalleRepository extends EntityRepository {
     public function pendientesCliente($codigoTercero) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "
-                . "WHERE p.codigoTerceroFk = " . $codigoTercero;
+                . "WHERE p.codigoTerceroFk = " . $codigoTercero . " AND p.codigoPedidoTipoFk = 1";
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
         return $arResultado;                

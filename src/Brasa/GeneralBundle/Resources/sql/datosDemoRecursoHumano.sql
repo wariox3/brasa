@@ -25,7 +25,7 @@ DELETE FROM rhu_seleccion_referencia;
 DELETE FROM rhu_seleccion_prueba;
 DELETE FROM rhu_seleccion_visita;
 DELETE FROM rhu_seleccion;
-DELETE FROM rhu_seleccion_grupo;
+DELETE FROM rhu_seleccion_requisito;
 DELETE FROM rhu_pago_adicional;
 DELETE FROM rhu_servicio_cobrar;
 DELETE FROM rhu_pago_detalle;

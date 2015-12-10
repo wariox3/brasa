@@ -36,6 +36,16 @@ class TurPedido
      * @ORM\Column(name="codigo_sector_fk", type="integer", nullable=true)
      */    
     private $codigoSectorFk;            
+
+    /**
+     * @ORM\Column(name="fecha_desde", type="date", nullable=true)
+     */    
+    private $fechaDesde;    
+    
+    /**
+     * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
+     */    
+    private $fechaHasta;    
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -592,5 +602,53 @@ class TurPedido
     public function getProgramado()
     {
         return $this->programado;
+    }
+
+    /**
+     * Set fechaDesde
+     *
+     * @param \DateTime $fechaDesde
+     *
+     * @return TurPedido
+     */
+    public function setFechaDesde($fechaDesde)
+    {
+        $this->fechaDesde = $fechaDesde;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesde
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesde()
+    {
+        return $this->fechaDesde;
+    }
+
+    /**
+     * Set fechaHasta
+     *
+     * @param \DateTime $fechaHasta
+     *
+     * @return TurPedido
+     */
+    public function setFechaHasta($fechaHasta)
+    {
+        $this->fechaHasta = $fechaHasta;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHasta
+     *
+     * @return \DateTime
+     */
+    public function getFechaHasta()
+    {
+        return $this->fechaHasta;
     }
 }

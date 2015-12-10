@@ -51,6 +51,7 @@ class TurPedidoDetalleType extends AbstractType
             ->add('sabado', 'checkbox', array('required'  => false))
             ->add('domingo', 'checkbox', array('required'  => false))
             ->add('festivo', 'checkbox', array('required'  => false))                                              
+            ->add('dia31', 'checkbox', array('required'  => false))                            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

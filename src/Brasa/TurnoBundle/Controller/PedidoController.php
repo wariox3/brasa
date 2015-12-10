@@ -49,6 +49,8 @@ class PedidoController extends Controller
             $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
         }else{
             $arPedido->setFecha(new \DateTime('now'));
+            $arPedido->setFechaDesde(new \DateTime('now'));
+            $arPedido->setFechaHasta(new \DateTime('now'));
         }
         $form = $this->createForm(new TurPedidoType, $arPedido);
         $form->handleRequest($request);

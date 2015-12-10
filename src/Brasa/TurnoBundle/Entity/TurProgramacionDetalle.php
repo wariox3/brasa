@@ -210,7 +210,19 @@ class TurProgramacionDetalle
      */
     protected $recursoRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="programacionDetalleRel")
+     */
+    protected $soportesPagosDetallesProgramacionDetalleRel; 
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->soportesPagosDetallesProgramacionDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoProgramacionDetallePk
@@ -1132,5 +1144,39 @@ class TurProgramacionDetalle
     public function getRecursoRel()
     {
         return $this->recursoRel;
+    }
+
+    /**
+     * Add soportesPagosDetallesProgramacionDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesProgramacionDetalleRel
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function addSoportesPagosDetallesProgramacionDetalleRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesProgramacionDetalleRel)
+    {
+        $this->soportesPagosDetallesProgramacionDetalleRel[] = $soportesPagosDetallesProgramacionDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosDetallesProgramacionDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesProgramacionDetalleRel
+     */
+    public function removeSoportesPagosDetallesProgramacionDetalleRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesProgramacionDetalleRel)
+    {
+        $this->soportesPagosDetallesProgramacionDetalleRel->removeElement($soportesPagosDetallesProgramacionDetalleRel);
+    }
+
+    /**
+     * Get soportesPagosDetallesProgramacionDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosDetallesProgramacionDetalleRel()
+    {
+        return $this->soportesPagosDetallesProgramacionDetalleRel;
     }
 }

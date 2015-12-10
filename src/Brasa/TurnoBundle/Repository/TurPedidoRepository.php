@@ -41,9 +41,22 @@ class TurPedidoRepository extends EntityRepository {
         $arPedidosDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        
         $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido));         
         foreach ($arPedidosDetalle as $arPedidoDetalle) {
-            $intDias = $arPedidoDetalle->getFechaDesde()->diff($arPedidoDetalle->getFechaHasta());
-            $intDias = $intDias->format('%a');                           
-            $intDias += 1; 
+            if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 2) {
+                $intDias = $arPedidoDetalle->getFechaDesde()->diff($arPedidoDetalle->getFechaHasta());
+                $intDias = $intDias->format('%a');                           
+                $intDias += 1;   
+                if($arPedidoDetalle->getFechaHasta()->format('d') == '31') {
+                    $intDias = $intDias - 1;
+                }
+                if($arPedidoDetalle->getDia31() == 1) {
+                    if($arPedidoDetalle->getFechaHasta()->format('d') == '31') {
+                        $intDias = $intDias + 1;    
+                    }                    
+                }                
+            } else {
+                $intDias = 30;
+            }
+
             $intHorasRealesDiurnas = 0;
             $intHorasRealesNocturnas = 0;            
             $intDiasOrdinarios = 0;
@@ -81,7 +94,7 @@ class TurPedidoRepository extends EntityRepository {
             } else {
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arPedidoDetalle->getFechaDesde()->format('Y-m-d'), $arPedidoDetalle->getFechaHasta()->format('Y-m-d'));
                 $fecha = $arPedidoDetalle->getFechaDesde()->format('Y-m-j');
-                for($i = 0; $i < $intDias; $i++) {
+                for($i = 1; $i <= $intDias; $i++) {
                     $nuevafecha = strtotime ( '+'.$i.' day' , strtotime ( $fecha ) ) ;
                     $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
                     $dateNuevaFecha = date_create($nuevafecha);

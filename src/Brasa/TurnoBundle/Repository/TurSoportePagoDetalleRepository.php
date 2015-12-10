@@ -4,24 +4,12 @@ namespace Brasa\TurnoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class TurCotizacionRepository extends EntityRepository {
+class TurSoportePagoDetalleRepository extends EntityRepository {
     
-    public function listaDQL($codigoCotizacion) {
-        $dql   = "SELECT c FROM BrasaTurnoBundle:TurCotizacion c WHERE c.codigoCotizacionPk <> 0";
-        if($codigoCotizacion != "") {
-            $dql = $dql . " AND c.codigoCotizacionPk = " . $codigoCotizacion;
-        }
+    public function listaDql() {
+        $dql   = "SELECT spd FROM BrasaTurnoBundle:TurSoportePagoDetalle spd WHERE spd.estadoCerrado = 0";
         return $dql;
     }
-    
-    public function pendientes($codigoTercero) {
-        $em = $this->getEntityManager();
-        $dql   = "SELECT c FROM BrasaTurnoBundle:TurCotizacion c "
-                . "WHERE c.codigoTerceroFk = " . $codigoTercero;
-        $query = $em->createQuery($dql);
-        $arResultado = $query->getResult();
-        return $arResultado;                
-    }    
     
     public function liquidar($codigoCotizacion) {        
         $em = $this->getEntityManager();        
@@ -35,29 +23,16 @@ class TurCotizacionRepository extends EntityRepository {
         $arCotizacionesDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();        
         $arCotizacionesDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array('codigoCotizacionFk' => $codigoCotizacion));         
         foreach ($arCotizacionesDetalle as $arCotizacionDetalle) {
-            if($arCotizacionDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 2) {
-                $intDias = $arCotizacionDetalle->getFechaDesde()->diff($arCotizacionDetalle->getFechaHasta());
-                $intDias = $intDias->format('%a');                           
-                $intDias += 1;
-                if($arCotizacionDetalle->getFechaHasta()->format('d') == '31') {
-                    $intDias = $intDias - 1;
-                }
-                if($arCotizacionDetalle->getDia31() == 1) {
-                    if($arCotizacionDetalle->getFechaHasta()->format('d') == '31') {
-                        $intDias = $intDias + 1;    
-                    }                    
-                }
-            } else {
-                $intDias = 30;
-            }
-
+            $intDias = $arCotizacionDetalle->getFechaDesde()->diff($arCotizacionDetalle->getFechaHasta());
+            $intDias = $intDias->format('%a');                           
+            $intDias += 1; 
             $intHorasRealesDiurnas = 0;
             $intHorasRealesNocturnas = 0;            
             $intDiasOrdinarios = 0;
             $intDiasSabados = 0;
             $intDiasDominicales = 0;
             $intDiasFestivos = 0;
-            if($arCotizacionDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 1) {                
+            if($arCotizacionDetalle->getCodigoPeriodoFk() == 1) {                
                 if($arCotizacionDetalle->getLunes() == 1) {
                     $intDiasOrdinarios += 4;
                 }
@@ -88,7 +63,7 @@ class TurCotizacionRepository extends EntityRepository {
             } else {
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arCotizacionDetalle->getFechaDesde()->format('Y-m-d'), $arCotizacionDetalle->getFechaHasta()->format('Y-m-d'));
                 $fecha = $arCotizacionDetalle->getFechaDesde()->format('Y-m-j');
-                for($i = 1; $i <= $intDias; $i++) {
+                for($i = 0; $i < $intDias; $i++) {
                     $nuevafecha = strtotime ( '+'.$i.' day' , strtotime ( $fecha ) ) ;
                     $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
                     $dateNuevaFecha = date_create($nuevafecha);

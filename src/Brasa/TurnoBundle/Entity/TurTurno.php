@@ -57,6 +57,11 @@ class TurTurno
     private $programacion = false;    
     
     /**
+     * @ORM\Column(name="novedad", type="boolean")
+     */    
+    private $novedad = false;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;       
@@ -77,16 +82,20 @@ class TurTurno
     protected $cotizacionesDetallesTurnoRel;     
     
     /**
-     * @ORM\OneToMany(targetEntity="TurSoportePago", mappedBy="turnoRel")
+     * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="turnoRel")
      */
-    protected $soportesPagosTurnoRel;    
+    protected $soportesPagosDetallesTurnoRel;    
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->turnosDetallesTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pedidosDetallesTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cotizacionesDetallesTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosDetallesTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -258,6 +267,78 @@ class TurTurno
     }
 
     /**
+     * Set servicio
+     *
+     * @param boolean $servicio
+     *
+     * @return TurTurno
+     */
+    public function setServicio($servicio)
+    {
+        $this->servicio = $servicio;
+
+        return $this;
+    }
+
+    /**
+     * Get servicio
+     *
+     * @return boolean
+     */
+    public function getServicio()
+    {
+        return $this->servicio;
+    }
+
+    /**
+     * Set programacion
+     *
+     * @param boolean $programacion
+     *
+     * @return TurTurno
+     */
+    public function setProgramacion($programacion)
+    {
+        $this->programacion = $programacion;
+
+        return $this;
+    }
+
+    /**
+     * Get programacion
+     *
+     * @return boolean
+     */
+    public function getProgramacion()
+    {
+        return $this->programacion;
+    }
+
+    /**
+     * Set novedad
+     *
+     * @param boolean $novedad
+     *
+     * @return TurTurno
+     */
+    public function setNovedad($novedad)
+    {
+        $this->novedad = $novedad;
+
+        return $this;
+    }
+
+    /**
+     * Get novedad
+     *
+     * @return boolean
+     */
+    public function getNovedad()
+    {
+        return $this->novedad;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -279,6 +360,40 @@ class TurTurno
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Add turnosDetallesTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurTurnoDetalle $turnosDetallesTurnoRel
+     *
+     * @return TurTurno
+     */
+    public function addTurnosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurTurnoDetalle $turnosDetallesTurnoRel)
+    {
+        $this->turnosDetallesTurnoRel[] = $turnosDetallesTurnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turnosDetallesTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurTurnoDetalle $turnosDetallesTurnoRel
+     */
+    public function removeTurnosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurTurnoDetalle $turnosDetallesTurnoRel)
+    {
+        $this->turnosDetallesTurnoRel->removeElement($turnosDetallesTurnoRel);
+    }
+
+    /**
+     * Get turnosDetallesTurnoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurnosDetallesTurnoRel()
+    {
+        return $this->turnosDetallesTurnoRel;
     }
 
     /**
@@ -350,118 +465,36 @@ class TurTurno
     }
 
     /**
-     * Set servicio
+     * Add soportesPagosDetallesTurnoRel
      *
-     * @param boolean $servicio
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesTurnoRel
      *
      * @return TurTurno
      */
-    public function setServicio($servicio)
+    public function addSoportesPagosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesTurnoRel)
     {
-        $this->servicio = $servicio;
+        $this->soportesPagosDetallesTurnoRel[] = $soportesPagosDetallesTurnoRel;
 
         return $this;
     }
 
     /**
-     * Get servicio
+     * Remove soportesPagosDetallesTurnoRel
      *
-     * @return boolean
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesTurnoRel
      */
-    public function getServicio()
+    public function removeSoportesPagosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesTurnoRel)
     {
-        return $this->servicio;
+        $this->soportesPagosDetallesTurnoRel->removeElement($soportesPagosDetallesTurnoRel);
     }
 
     /**
-     * Set programacion
-     *
-     * @param boolean $programacion
-     *
-     * @return TurTurno
-     */
-    public function setProgramacion($programacion)
-    {
-        $this->programacion = $programacion;
-
-        return $this;
-    }
-
-    /**
-     * Get programacion
-     *
-     * @return boolean
-     */
-    public function getProgramacion()
-    {
-        return $this->programacion;
-    }
-
-    /**
-     * Add soportesPagosTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosTurnoRel
-     *
-     * @return TurTurno
-     */
-    public function addSoportesPagosTurnoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosTurnoRel)
-    {
-        $this->soportesPagosTurnoRel[] = $soportesPagosTurnoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove soportesPagosTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosTurnoRel
-     */
-    public function removeSoportesPagosTurnoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosTurnoRel)
-    {
-        $this->soportesPagosTurnoRel->removeElement($soportesPagosTurnoRel);
-    }
-
-    /**
-     * Get soportesPagosTurnoRel
+     * Get soportesPagosDetallesTurnoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSoportesPagosTurnoRel()
+    public function getSoportesPagosDetallesTurnoRel()
     {
-        return $this->soportesPagosTurnoRel;
-    }
-
-    /**
-     * Add turnosDetallesTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurTurnoDetalle $turnosDetallesTurnoRel
-     *
-     * @return TurTurno
-     */
-    public function addTurnosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurTurnoDetalle $turnosDetallesTurnoRel)
-    {
-        $this->turnosDetallesTurnoRel[] = $turnosDetallesTurnoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove turnosDetallesTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurTurnoDetalle $turnosDetallesTurnoRel
-     */
-    public function removeTurnosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurTurnoDetalle $turnosDetallesTurnoRel)
-    {
-        $this->turnosDetallesTurnoRel->removeElement($turnosDetallesTurnoRel);
-    }
-
-    /**
-     * Get turnosDetallesTurnoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTurnosDetallesTurnoRel()
-    {
-        return $this->turnosDetallesTurnoRel;
+        return $this->soportesPagosDetallesTurnoRel;
     }
 }
