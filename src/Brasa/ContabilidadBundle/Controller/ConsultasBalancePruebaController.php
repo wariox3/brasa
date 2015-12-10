@@ -53,9 +53,7 @@ class ConsultasBalancePruebaController extends Controller
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();                
-        $form = $this->createFormBuilder()
-            ->add('TxtCuentaDesde', 'text')
-            ->add('TxtCuentaHasta', 'text')                 
+        $form = $this->createFormBuilder()              
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -69,9 +67,9 @@ class ConsultasBalancePruebaController extends Controller
         $this->strDesde = $form->get('fechaDesde')->getData();
         $this->strHasta = $form->get('fechaHasta')->getData();
         $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $this->strCuentaDesde = $controles['TxtCuentaDesde'];
-        $this->strCuentaHasta = $controles['TxtCuentaHasta'];
+        $arrControles = $request->request->All();
+        $this->strCuentaDesde = $arrControles['TxtCuentaDesde'];
+        $this->strCuentaHasta = $arrControles['TxtCuentaHasta'];
         
     }   
 

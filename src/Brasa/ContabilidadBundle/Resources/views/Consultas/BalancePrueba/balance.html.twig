@@ -35,7 +35,8 @@
                     <label for="form_TxtCuentaHasta" class="col-sm-2 control-label">Cuenta hasta:</label>
                     <div class="col-sm-4">                  
                         <input id="TxtCuentaHasta"  name="TxtCuentaHasta"  type="text" class="form-control" value=""/>
-                          <span class="input-group-btn">                                        
+                          
+                        <span class="input-group-btn">                                        
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ctb_buscar_cuenta', {'campoCodigo': 'TxtCuentaHasta'}) }}', 'buscarCuenta', 600, 900)">Buscar</a>
                           </span>
                     </div>                    
@@ -65,9 +66,9 @@
             {% for arBalancePrueba in arBalancePrueba %}
             <tr>
                 <td>{{ arBalancePrueba.codigoCuentaFk }}</td>
-                <td>{{ arBalancePrueba.terceroRel.numeroIdentificacion | default('') }}</td>
-                <td>{{ arBalancePrueba.terceroRel.nombreCorto | default('') }} - {{ arBalancePrueba.terceroRel.razonSocial | default('') }}</td>
-                <td>{{ arBalancePrueba.cuentaRel.nombreCuenta | default('') }}</td>
+                <td>{{ arBalancePrueba.numeroIdentificacion | default('') }}</td>
+                <td>{{ arBalancePrueba.nombreCorto | default('') }} - {{ arBalancePrueba.razonSocial | default('') }}</td>
+                <td>{{ arBalancePrueba.nombreCuenta | default('') }}</td>
                 <td style="text-align: right">{{ arBalancePrueba.debito | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arBalancePrueba.debito | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arBalancePrueba.credito | number_format(0, '.', ',') }}</td>
@@ -79,21 +80,21 @@
             </tr>
             {% endfor %}
             <tr>
-                <th colspan="4" style="text-align: right">DÉBITOS: </th>
+                <td colspan="4" style="text-align: right"><b>DÉBITOS: </b></td>
                 <td style="text-align: right">{{ floDebitos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ floCreditos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ floCreditos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ floCreditos | number_format(0, '.', ',') }}</td>
             </tr>
             <tr>
-                <th colspan="4" style="text-align: right">CRÉDITOS: </th>
+                <td colspan="4" style="text-align: right"><b>CRÉDITOS: </b></td>
                 <td style="text-align: right">{{ floDebitos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ floCreditos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ floCreditos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ floCreditos | number_format(0, '.', ',') }}</td>
             </tr>
             <tr>
-                <th colspan="4" style="text-align: right">TOTALES: </th>
+                <td colspan="4" style="text-align: right"><b>TOTALES: </b></td>
                 <td style="text-align: right">{{ floDebitos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ floCreditos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ floCreditos | number_format(0, '.', ',') }}</td>

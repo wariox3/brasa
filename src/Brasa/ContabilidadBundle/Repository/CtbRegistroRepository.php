@@ -337,14 +337,21 @@ class CtbRegistroRepository extends EntityRepository
     }
     
     public function balancePruebaDql($strFechaDesde = "", $strFechaHasta= "",$strCuentaDesde = "", $strCuentaHasta = "") {
-        $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.codigoRegistroPk <> 0";
+        //SELECT codigo_cuenta_fk, SUM(debito),SUM(credito) FROM ctb_registro WHERE codigo_registro_pk <> 0 AND fecha >= "2015-11-11" AND fecha <="2015-11-11" GROUP BY codigo_cuenta_fk ORDER BY codigo_cuenta_fk ASC
+        $dql   = "SELECT r.codigoCuentaFk,t.numeroIdentificacion,t.nombreCorto,t.razonSocial,c.nombreCuenta,sum(r.debito)as debito, sum(r.credito)as credito FROM BrasaContabilidadBundle:CtbRegistro r JOIN r.terceroRel t JOIN r.cuentaRel c WHERE r.codigoRegistroPk <> 0";
         if($strFechaDesde != "" || $strFechaDesde != 0){
             $dql .= " AND r.fecha >='" . date_format($strFechaDesde, ('Y-m-d')) . "'";
         }
         if($strFechaHasta != "" || $strFechaHasta != 0){
             $dql .= " AND r.fecha <='" . date_format($strFechaDesde, ('Y-m-d')) . "'";
         }
-        $dql .= " ORDER BY r.fecha DESC";
+        if ($strCuentaDesde != "" || $strCuentaDesde != 0){
+            $dql .= " AND r.codigoCuentaFk >= " .$strCuentaDesde;
+        }
+        if ($strCuentaHasta != "" || $strCuentaHasta != 0){
+            $dql .= " AND r.codigoCuentaFk <= " .$strCuentaHasta;
+        }
+        $dql .= " GROUP BY r.codigoCuentaFk ORDER BY r.codigoCuentaFk ASC";
         return $dql;
     }
 }
