@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class RhuSeleccionRepository extends EntityRepository {
     
-    public function listaDQL($strNombre = "", $strIdentificacion = "", $boolAbierto = 2, $boolAprobado = 2, $codigoCentroCosto = "") {
+    public function listaDQL($strNombre = "", $strIdentificacion = "", $boolCerrado = "", $boolAprobado = "", $codigoCentroCosto = "") {
         $dql   = "SELECT s FROM BrasaRecursoHumanoBundle:RhuSeleccion s WHERE s.codigoSeleccionPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND s.nombreCorto LIKE '%" . $strNombre . "%'";
@@ -14,11 +14,11 @@ class RhuSeleccionRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND s.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
-        if($boolAbierto != null) {
-            if($boolAbierto == 1 ) {
-                $dql .= " AND s.estadoAbierto = 1";
-            } elseif($boolAbierto == 0) {
-                $dql .= " AND s.estadoAbierto = 0";
+        if($boolCerrado != null) {
+            if($boolCerrado == 1 ) {
+                $dql .= " AND s.estadoCerrado = 1";
+            } elseif($boolCerrado == 0) {
+                $dql .= " AND s.estadoCerrado = 0";
             }
         }
         if($boolAprobado != null) {
@@ -50,6 +50,7 @@ class RhuSeleccionRepository extends EntityRepository {
         $douNumeroReferencias = $query->getSingleScalarResult();
         return $douNumeroReferencias;
     }
+    
     public function devuelveNumeroPruebas($id) {
         $em = $this->getEntityManager();
         $dql   = "SELECT COUNT(s.codigoSeleccionPruebaPk) FROM BrasaRecursoHumanoBundle:RhuSeleccionPrueba s WHERE s.codigoSeleccionFk = " . $id;

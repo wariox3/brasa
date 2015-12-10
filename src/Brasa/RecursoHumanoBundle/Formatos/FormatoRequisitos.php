@@ -71,7 +71,7 @@ class FormatoRequisitos extends \FPDF_FPDF {
         $this->SetFont('', 'B', 8);
 
         //creamos la cabecera de la tabla.
-        $w = array(15, 103, 21, 21, 12, 21);
+        $w = array(15, 100, 24, 21, 12, 21);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -93,8 +93,8 @@ class FormatoRequisitos extends \FPDF_FPDF {
         foreach ($arRequisitoDetalle as $arRequisitoDetalle) {
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(15, 4, $arRequisitoDetalle->getCodigoRequisitoDetallePk(), 1, 0, 'L');
-            $pdf->Cell(103, 4, utf8_decode($arRequisitoDetalle->getRequisitoConceptoRel()->getNombre()), 1, 0, 'L');
-            $pdf->Cell(21, 4, $arRequisitoDetalle->getTipo(), 1, 0, 'L');
+            $pdf->Cell(100, 4, utf8_decode($arRequisitoDetalle->getRequisitoConceptoRel()->getNombre()), 1, 0, 'L');
+            $pdf->Cell(24, 4, $arRequisitoDetalle->getTipo(), 1, 0, 'L');
             if($arRequisitoDetalle->getEstadoEntregado() == 1) {
                 $pdf->Cell(21, 4, 'SI', 1, 0, 'L');
             } else {

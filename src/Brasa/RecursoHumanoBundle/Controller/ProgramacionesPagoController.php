@@ -399,8 +399,7 @@ class ProgramacionesPagoController extends Controller
                     ->setCellValue('H1', 'Empleados')
                     ->setCellValue('I1', 'Estado Generado')
                     ->setCellValue('J1', 'Estado Pagado')
-                    ->setCellValue('K1', 'Exportado Banco')
-                    ->setCellValue('L1', 'Neto');
+                    ->setCellValue('K1', 'Neto');
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
         $arProgramacionesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -416,11 +415,7 @@ class ProgramacionesPagoController extends Controller
             } else {
                 $estadoPagado = "NO";
             }
-            if ($arProgramacionPago->getArchivoExportadoBanco() == 1){
-                $archivoExportado = "SI";
-            } else {
-                $archivoExportado = "NO";
-            }
+            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arProgramacionPago->getCodigoProgramacionPagoPk())
                     ->setCellValue('B' . $i, $arProgramacionPago->getPagoTipoRel()->getNombre())
@@ -432,8 +427,7 @@ class ProgramacionesPagoController extends Controller
                     ->setCellValue('H' . $i, $arProgramacionPago->getNumeroEmpleados())
                     ->setCellValue('I' . $i, $estadoGenerado)
                     ->setCellValue('J' . $i, $estadoPagado)
-                    ->setCellValue('K' . $i, $archivoExportado)
-                    ->setCellValue('L' . $i, $arProgramacionPago->getVrNeto());
+                    ->setCellValue('K' . $i, $arProgramacionPago->getVrNeto());
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('ProgramacionesPago');

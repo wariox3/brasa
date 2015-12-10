@@ -323,7 +323,7 @@ class SeleccionController extends Controller
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoSeleccion')))
-            ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccion')))
+            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccion')))
             ->add('TxtNombre', 'text', array('label'  => 'Nombre', 'data' => $session->get('filtroNombreSeleccion')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -380,7 +380,7 @@ class SeleccionController extends Controller
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroNombreSeleccion', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacionSeleccion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroAbiertoSeleccion', $form->get('estadoAbierto')->getData());
+        $session->set('filtroAbiertoSeleccion', $form->get('estadoCerrado')->getData());
         $session->set('filtroAprobadoSeleccion', $form->get('estadoAprobado')->getData());
     }
 

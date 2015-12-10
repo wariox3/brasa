@@ -21,12 +21,12 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
         }     
     }     
     
-    public function listaDQL($strNombre = "", $boolAbierto = "") {                
+    public function listaDQL($strNombre = "", $boolAbierto = 2) {                
         $dql   = "SELECT sq FROM BrasaRecursoHumanoBundle:RhuSeleccionRequisito sq WHERE sq.codigoSeleccionRequisitoPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND sq.nombre LIKE '%" . $strNombre . "%'";
         }   
-        if($boolAbierto != "") {
+        if($boolAbierto != null) {
             if($boolAbierto == 1 ) {
                 $dql .= " AND sq.estadoAbierto = 1";
             } elseif($boolAbierto == 0) {

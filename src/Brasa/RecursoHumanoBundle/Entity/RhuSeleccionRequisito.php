@@ -40,10 +40,10 @@ class RhuSeleccionRequisito
     
     private $fechaPruebas;         
     
-    /**     
-     * @ORM\Column(type="integer", name="estado_abierto", options={"unsigned":true, "default":"1"})
-     */    
-    private $estadoAbierto= 1;            
+    /**
+     * @ORM\Column(name="estado_abierto", type="boolean")
+     */
+    private $estadoAbierto = 0;            
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -191,7 +191,7 @@ class RhuSeleccionRequisito
     /**
      * Set estadoAbierto
      *
-     * @param integer $estadoAbierto
+     * @param boolean $estadoAbierto
      *
      * @return RhuSeleccionRequisito
      */
@@ -205,7 +205,7 @@ class RhuSeleccionRequisito
     /**
      * Get estadoAbierto
      *
-     * @return integer
+     * @return boolean
      */
     public function getEstadoAbierto()
     {

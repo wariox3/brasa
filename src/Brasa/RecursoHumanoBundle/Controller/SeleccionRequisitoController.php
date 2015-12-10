@@ -108,7 +108,7 @@ class SeleccionRequisitoController extends Controller
         $strSqlLista = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $strSqlLista->get('filtroNombreSeleccionRequisito')))
-            ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $strSqlLista->get('filtroAbiertoSeleccionRequisito'))) 
+            ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '00' => 'NO'), 'data' => $strSqlLista->get('filtroAbiertoSeleccionRequisito'))) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEstadoAbierto', 'submit', array('label'  => 'Cerrar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            

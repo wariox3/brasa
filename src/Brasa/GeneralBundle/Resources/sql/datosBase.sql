@@ -4113,6 +4113,37 @@ INSERT INTO `rhu_disciplinario_tipo` (`codigo_disciplinario_tipo_pk`, `nombre`) 
 INSERT INTO `rhu_dotacion_tipo` (`codigo_dotacion_tipo_pk`, `nombre`) VALUES('1','NUEVO');
 INSERT INTO `rhu_dotacion_tipo` (`codigo_dotacion_tipo_pk`, `nombre`) VALUES('2','DEVOLUCIÓN');
 
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('1','CARNET');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('2','CAMISA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('3','PANTALON');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('4','ZAPATOS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('5','TAPABOCA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('6','MEDIAS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('7','BOTAS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('8','GORRO');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('9','GUANTES');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('10','CORRE');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('11','BATOLA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('12','TAPAOIDOS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('13','GAFAS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('14','MORRAL');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('15','CARPETA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('16','INVENTARIO');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('17','BORRADOR');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('18','LAPIZ');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('19','RESALTADOR');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('20','LAPICERO');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('21','REGLA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('22','CALCULADORA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('23','GRAPADORA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('24','TIJERAS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('25','VISTURI');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('26','MARCADOR');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('27','GUELLERO');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('28','PEGANTE');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('29','IMPRESORA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('30','TABLA');
+
 INSERT INTO `rhu_empleado_estudio_tipo` (`codigo_empleado_estudio_tipo_pk`, `nombre`, `validar_vencimiento`) VALUES('1','SECUNDARIA','0');
 INSERT INTO `rhu_empleado_estudio_tipo` (`codigo_empleado_estudio_tipo_pk`, `nombre`, `validar_vencimiento`) VALUES('2','TECNICO','0');
 INSERT INTO `rhu_empleado_estudio_tipo` (`codigo_empleado_estudio_tipo_pk`, `nombre`, `validar_vencimiento`) VALUES('3','TECNOLOGIA','0');
@@ -5296,6 +5327,15 @@ INSERT INTO `rhu_periodo_pago` (`codigo_periodo_pago_pk`, `nombre`, `dias`, `con
 INSERT INTO `rhu_periodo_pago` (`codigo_periodo_pago_pk`, `nombre`, `dias`, `continuo`, `periodos_mes`) VALUES('3','CATORCENAL','14','1','2.14');
 INSERT INTO `rhu_periodo_pago` (`codigo_periodo_pago_pk`, `nombre`, `dias`, `continuo`, `periodos_mes`) VALUES('4','QUINCENAL','15','0','2');
 INSERT INTO `rhu_periodo_pago` (`codigo_periodo_pago_pk`, `nombre`, `dias`, `continuo`, `periodos_mes`) VALUES('5','MENSUAL','30','0','1');
+
+insert into `rhu_requisito_concepto` (`codigo_requisito_concepto_pk`, `nombre`, `general`) values('1','FOTOCOPIA ACTA DE GRADO O DIPLOMA','1');
+insert into `rhu_requisito_concepto` (`codigo_requisito_concepto_pk`, `nombre`, `general`) values('2','FOTOCOPIA DOCUMENTO IDENTIFICACION','1');
+insert into `rhu_requisito_concepto` (`codigo_requisito_concepto_pk`, `nombre`, `general`) values('3','CERTIFICADO CUENTA BANCARIA','1');
+insert into `rhu_requisito_concepto` (`codigo_requisito_concepto_pk`, `nombre`, `general`) values('4','CERTIFICADO EPS Y FONDO DE PENSIÓN','1');
+insert into `rhu_requisito_concepto` (`codigo_requisito_concepto_pk`, `nombre`, `general`) values('5','CARTA LABORALES','1');
+insert into `rhu_requisito_concepto` (`codigo_requisito_concepto_pk`, `nombre`, `general`) values('6','TARJETA PROFESIONAL','0');
+
+insert into `rhu_requisito_cargo` (`codigo_requisito_cargo_pk`, `codigo_requisito_concepto_fk`, `codigo_cargo_fk`) values('1','6','1');
 
 INSERT INTO `rhu_rh` (`codigo_rh_pk`, `tipo`) VALUES('1','O-');
 INSERT INTO `rhu_rh` (`codigo_rh_pk`, `tipo`) VALUES('2','O+');
