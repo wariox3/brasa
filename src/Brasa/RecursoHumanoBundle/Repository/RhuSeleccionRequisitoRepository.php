@@ -50,7 +50,7 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
                     $arSeleccionRequisito->setEstadoAbierto(0);
                     if (count($arSeleccion) > 0){
                         foreach ($arSeleccion AS $arSeleccion) {
-                            $arSeleccion->setEstadoAbierto(0);
+                            $arSeleccion->setEstadoCerrado(0);
                         }
                         $em->persist($arSeleccion);
                     }

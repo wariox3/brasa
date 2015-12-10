@@ -17,6 +17,7 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         $pdf->Output("SeleccionRequisito$codigoSeleccionRequisito.pdf", 'D');        
         
     } 
+    
     public function Header() {
         $arSeleccionRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito();
         $arSeleccionRequisito = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find(self::$codigoSeleccionRequisito);
@@ -28,7 +29,7 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         $this->SetXY(53, 10);
         $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("GRUPO SELECCIÓN ". $arSeleccionRequisito->getCodigoSeleccionRequisitoPk()." ". $arSeleccionRequisito->getNombre()), 0, 0, 'C', 1);
+        $this->Cell(150, 7, utf8_decode("REQUISITO SELECCIÓN ". $arSeleccionRequisito->getCodigoSeleccionRequisitoPk()." ". $arSeleccionRequisito->getNombre()), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -82,7 +83,7 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         foreach ($arSelecciones as $arSeleccion) {            
             $pdf->Cell(10, 4, $arSeleccion->getCodigoSeleccionPk(), 1, 0, 'L');
-            $pdf->Cell(40, 4, $arSeleccion->getSeleccionTipoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(40, 4, utf8_decode($arSeleccion->getSeleccionTipoRel()->getNombre()), 1, 0, 'L');
             $pdf->Cell(22, 4, $arSeleccion->getFechaPruebas()->format('Y/m/d'), 1, 0, 'L');
             $pdf->Cell(22, 4, $arSeleccion->getNumeroIdentificacion(), 1, 0, 'L');
             $pdf->Cell(65, 4, utf8_decode($arSeleccion->getNombreCorto()), 1, 0, 'L');

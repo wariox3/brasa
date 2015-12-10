@@ -12,7 +12,7 @@ class RhuSeleccionVisitaType extends AbstractType
         $builder
                 
             ->add('comentarios', 'textarea', array('required' => true))
-            ->add('fecha', 'datetime', array('required' => true))    
+            ->add('fecha', 'datetime', array('required' => true, 'data' => new \DateTime('now')))    
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
