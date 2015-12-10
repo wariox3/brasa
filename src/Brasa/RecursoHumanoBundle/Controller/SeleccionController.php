@@ -36,10 +36,16 @@ class SeleccionController extends Controller
                         $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
                         $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($id);
                         $totalReferencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->devuelveNumeroReferencias($id);
+                        $totalPruebas = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->devuelveNumeroPruebas($id);
+                        $totalVisitas = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->devuelveNumeroVisitas($id);
                         if($totalReferencias == 0){
-                           if ($arSelecciones->getEstadoCerrado() == 0 and $arSelecciones->getEstadoAutorizado()== 0 and $arSelecciones->getReferenciasVerificadas()== 0 and $arSelecciones->getPresentaPruebas()== 0){
-                                $em->remove($arSelecciones);
-                                $em->flush();
+                            if($totalPruebas == 0){
+                                if($totalPruebas == 0){
+                                    if ($arSelecciones->getEstadoCerrado() == 0 and $arSelecciones->getEstadoAutorizado()== 0 and $arSelecciones->getReferenciasVerificadas()== 0 and $arSelecciones->getPresentaPruebas()== 0){
+                                         $em->remove($arSelecciones);
+                                         $em->flush();
+                                    }
+                                }
                             }
                         }
                     }

@@ -50,6 +50,21 @@ class RhuSeleccionRepository extends EntityRepository {
         $douNumeroReferencias = $query->getSingleScalarResult();
         return $douNumeroReferencias;
     }
+    public function devuelveNumeroPruebas($id) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT COUNT(s.codigoSeleccionPruebaPk) FROM BrasaRecursoHumanoBundle:RhuSeleccionPrueba s WHERE s.codigoSeleccionFk = " . $id;
+        $query = $em->createQuery($dql);
+        $douNumeroPruebas = $query->getSingleScalarResult();
+        return $douNumeroPruebas;
+    }
+    
+    public function devuelveNumeroVisitas($id) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT COUNT(s.codigoSeleccionVisitaPk) FROM BrasaRecursoHumanoBundle:RhuSeleccionVisita s WHERE s.codigoSeleccionFk = " . $id;
+        $query = $em->createQuery($dql);
+        $douNumeroVisitas = $query->getSingleScalarResult();
+        return $douNumeroVisitas;
+    }
 
     public function devuelveNumeroReferenciasSinVerificar($codigoSeleccion) {
         $em = $this->getEntityManager();
