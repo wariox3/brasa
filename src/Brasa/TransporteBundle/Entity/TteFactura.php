@@ -98,16 +98,19 @@ class TteFactura
      */
     protected $guiasDetallesRel;    
     
+
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="TteFacturaRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
+     * Constructor
      */
-    protected $terceroRel;
+    public function __construct()
+    {
+        $this->guiasDetallesRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoFacturaPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoFacturaPk()
     {
@@ -118,6 +121,7 @@ class TteFactura
      * Set numero
      *
      * @param integer $numero
+     *
      * @return TteFactura
      */
     public function setNumero($numero)
@@ -130,7 +134,7 @@ class TteFactura
     /**
      * Get numero
      *
-     * @return integer 
+     * @return integer
      */
     public function getNumero()
     {
@@ -141,6 +145,7 @@ class TteFactura
      * Set fecha
      *
      * @param \DateTime $fecha
+     *
      * @return TteFactura
      */
     public function setFecha($fecha)
@@ -153,7 +158,7 @@ class TteFactura
     /**
      * Get fecha
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFecha()
     {
@@ -164,6 +169,7 @@ class TteFactura
      * Set fechaVencimiento
      *
      * @param \DateTime $fechaVencimiento
+     *
      * @return TteFactura
      */
     public function setFechaVencimiento($fechaVencimiento)
@@ -176,7 +182,7 @@ class TteFactura
     /**
      * Get fechaVencimiento
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaVencimiento()
     {
@@ -184,124 +190,10 @@ class TteFactura
     }
 
     /**
-     * Set ctUnidades
-     *
-     * @param float $ctUnidades
-     * @return TteFactura
-     */
-    public function setCtUnidades($ctUnidades)
-    {
-        $this->ctUnidades = $ctUnidades;
-
-        return $this;
-    }
-
-    /**
-     * Get ctUnidades
-     *
-     * @return float 
-     */
-    public function getCtUnidades()
-    {
-        return $this->ctUnidades;
-    }
-
-    /**
-     * Set vrFlete
-     *
-     * @param float $vrFlete
-     * @return TteFactura
-     */
-    public function setVrFlete($vrFlete)
-    {
-        $this->vrFlete = $vrFlete;
-
-        return $this;
-    }
-
-    /**
-     * Get vrFlete
-     *
-     * @return float 
-     */
-    public function getVrFlete()
-    {
-        return $this->vrFlete;
-    }
-
-    /**
-     * Set vrManejo
-     *
-     * @param float $vrManejo
-     * @return TteFactura
-     */
-    public function setVrManejo($vrManejo)
-    {
-        $this->vrManejo = $vrManejo;
-
-        return $this;
-    }
-
-    /**
-     * Get vrManejo
-     *
-     * @return float 
-     */
-    public function getVrManejo()
-    {
-        return $this->vrManejo;
-    }
-
-    /**
-     * Set vrOtros
-     *
-     * @param float $vrOtros
-     * @return TteFactura
-     */
-    public function setVrOtros($vrOtros)
-    {
-        $this->vrOtros = $vrOtros;
-
-        return $this;
-    }
-
-    /**
-     * Get vrOtros
-     *
-     * @return float 
-     */
-    public function getVrOtros()
-    {
-        return $this->vrOtros;
-    }
-
-    /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     * @return TteFactura
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string 
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
-    }
-
-    /**
      * Set codigoTerceroFk
      *
      * @param integer $codigoTerceroFk
+     *
      * @return TteFactura
      */
     public function setCodigoTerceroFk($codigoTerceroFk)
@@ -314,7 +206,7 @@ class TteFactura
     /**
      * Get codigoTerceroFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoTerceroFk()
     {
@@ -322,39 +214,274 @@ class TteFactura
     }
 
     /**
-     * Set terceroRel
+     * Set ctUnidades
      *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     * @param float $ctUnidades
+     *
      * @return TteFactura
      */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    public function setCtUnidades($ctUnidades)
     {
-        $this->terceroRel = $terceroRel;
+        $this->ctUnidades = $ctUnidades;
 
         return $this;
     }
 
     /**
-     * Get terceroRel
+     * Get ctUnidades
      *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero 
+     * @return float
      */
-    public function getTerceroRel()
+    public function getCtUnidades()
     {
-        return $this->terceroRel;
+        return $this->ctUnidades;
     }
+
     /**
-     * Constructor
+     * Set vrFlete
+     *
+     * @param float $vrFlete
+     *
+     * @return TteFactura
      */
-    public function __construct()
+    public function setVrFlete($vrFlete)
     {
-        $this->guiasDetallesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vrFlete = $vrFlete;
+
+        return $this;
+    }
+
+    /**
+     * Get vrFlete
+     *
+     * @return float
+     */
+    public function getVrFlete()
+    {
+        return $this->vrFlete;
+    }
+
+    /**
+     * Set vrManejo
+     *
+     * @param float $vrManejo
+     *
+     * @return TteFactura
+     */
+    public function setVrManejo($vrManejo)
+    {
+        $this->vrManejo = $vrManejo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrManejo
+     *
+     * @return float
+     */
+    public function getVrManejo()
+    {
+        return $this->vrManejo;
+    }
+
+    /**
+     * Set vrOtros
+     *
+     * @param float $vrOtros
+     *
+     * @return TteFactura
+     */
+    public function setVrOtros($vrOtros)
+    {
+        $this->vrOtros = $vrOtros;
+
+        return $this;
+    }
+
+    /**
+     * Get vrOtros
+     *
+     * @return float
+     */
+    public function getVrOtros()
+    {
+        return $this->vrOtros;
+    }
+
+    /**
+     * Set vrTotal
+     *
+     * @param float $vrTotal
+     *
+     * @return TteFactura
+     */
+    public function setVrTotal($vrTotal)
+    {
+        $this->vrTotal = $vrTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotal
+     *
+     * @return float
+     */
+    public function getVrTotal()
+    {
+        return $this->vrTotal;
+    }
+
+    /**
+     * Set ctGuias
+     *
+     * @param float $ctGuias
+     *
+     * @return TteFactura
+     */
+    public function setCtGuias($ctGuias)
+    {
+        $this->ctGuias = $ctGuias;
+
+        return $this;
+    }
+
+    /**
+     * Get ctGuias
+     *
+     * @return float
+     */
+    public function getCtGuias()
+    {
+        return $this->ctGuias;
+    }
+
+    /**
+     * Set ctPlanillas
+     *
+     * @param float $ctPlanillas
+     *
+     * @return TteFactura
+     */
+    public function setCtPlanillas($ctPlanillas)
+    {
+        $this->ctPlanillas = $ctPlanillas;
+
+        return $this;
+    }
+
+    /**
+     * Get ctPlanillas
+     *
+     * @return float
+     */
+    public function getCtPlanillas()
+    {
+        return $this->ctPlanillas;
+    }
+
+    /**
+     * Set ctConceptos
+     *
+     * @param float $ctConceptos
+     *
+     * @return TteFactura
+     */
+    public function setCtConceptos($ctConceptos)
+    {
+        $this->ctConceptos = $ctConceptos;
+
+        return $this;
+    }
+
+    /**
+     * Get ctConceptos
+     *
+     * @return float
+     */
+    public function getCtConceptos()
+    {
+        return $this->ctConceptos;
+    }
+
+    /**
+     * Set estadoImpreso
+     *
+     * @param boolean $estadoImpreso
+     *
+     * @return TteFactura
+     */
+    public function setEstadoImpreso($estadoImpreso)
+    {
+        $this->estadoImpreso = $estadoImpreso;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoImpreso
+     *
+     * @return boolean
+     */
+    public function getEstadoImpreso()
+    {
+        return $this->estadoImpreso;
+    }
+
+    /**
+     * Set estadoAnulada
+     *
+     * @param boolean $estadoAnulada
+     *
+     * @return TteFactura
+     */
+    public function setEstadoAnulada($estadoAnulada)
+    {
+        $this->estadoAnulada = $estadoAnulada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulada
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulada()
+    {
+        return $this->estadoAnulada;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return TteFactura
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 
     /**
      * Add guiasDetallesRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteGuia $guiasDetallesRel
+     *
      * @return TteFactura
      */
     public function addGuiasDetallesRel(\Brasa\TransporteBundle\Entity\TteGuia $guiasDetallesRel)
@@ -377,148 +504,10 @@ class TteFactura
     /**
      * Get guiasDetallesRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGuiasDetallesRel()
     {
         return $this->guiasDetallesRel;
-    }
-
-    /**
-     * Set vrTotal
-     *
-     * @param float $vrTotal
-     * @return TteFactura
-     */
-    public function setVrTotal($vrTotal)
-    {
-        $this->vrTotal = $vrTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotal
-     *
-     * @return float 
-     */
-    public function getVrTotal()
-    {
-        return $this->vrTotal;
-    }
-
-    /**
-     * Set estadoAnulada
-     *
-     * @param boolean $estadoAnulada
-     * @return TteFactura
-     */
-    public function setEstadoAnulada($estadoAnulada)
-    {
-        $this->estadoAnulada = $estadoAnulada;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAnulada
-     *
-     * @return boolean 
-     */
-    public function getEstadoAnulada()
-    {
-        return $this->estadoAnulada;
-    }
-
-    /**
-     * Set estadoImpreso
-     *
-     * @param boolean $estadoImpreso
-     * @return TteFactura
-     */
-    public function setEstadoImpreso($estadoImpreso)
-    {
-        $this->estadoImpreso = $estadoImpreso;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoImpreso
-     *
-     * @return boolean 
-     */
-    public function getEstadoImpreso()
-    {
-        return $this->estadoImpreso;
-    }
-
-    /**
-     * Set ctGuias
-     *
-     * @param float $ctGuias
-     * @return TteFactura
-     */
-    public function setCtGuias($ctGuias)
-    {
-        $this->ctGuias = $ctGuias;
-
-        return $this;
-    }
-
-    /**
-     * Get ctGuias
-     *
-     * @return float 
-     */
-    public function getCtGuias()
-    {
-        return $this->ctGuias;
-    }
-
-    /**
-     * Set ctPlanillas
-     *
-     * @param float $ctPlanillas
-     * @return TteFactura
-     */
-    public function setCtPlanillas($ctPlanillas)
-    {
-        $this->ctPlanillas = $ctPlanillas;
-
-        return $this;
-    }
-
-    /**
-     * Get ctPlanillas
-     *
-     * @return float 
-     */
-    public function getCtPlanillas()
-    {
-        return $this->ctPlanillas;
-    }
-
-    /**
-     * Set ctConceptos
-     *
-     * @param float $ctConceptos
-     * @return TteFactura
-     */
-    public function setCtConceptos($ctConceptos)
-    {
-        $this->ctConceptos = $ctConceptos;
-
-        return $this;
-    }
-
-    /**
-     * Get ctConceptos
-     *
-     * @return float 
-     */
-    public function getCtConceptos()
-    {
-        return $this->ctConceptos;
     }
 }

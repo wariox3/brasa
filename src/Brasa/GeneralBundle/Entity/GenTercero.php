@@ -158,12 +158,7 @@ class GenTercero
     /**
      * @ORM\Column(name="porcentaje_cree", type="float")
      */
-    private $porcentajeCREE = 0;    
-    
-    /**
-     * @ORM\Column(name="codigo_negociacion_transporte_fk", type="integer", nullable=true)
-     */    
-    private $codigoNegociacionTransporteFk;     
+    private $porcentajeCREE = 0;           
     
     /**
      * @ORM\ManyToOne(targetEntity="GenClasificacionTributaria", inversedBy="tercerosClasificacionTributariaRel")
@@ -187,13 +182,7 @@ class GenTercero
      * @ORM\ManyToOne(targetEntity="GenAsesor", inversedBy="tercerosRel")
      * @ORM\JoinColumn(name="codigo_asesor_fk", referencedColumnName="codigo_asesor_pk")
      */
-    protected $asesorRel;    
-
-     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\TransporteBundle\Entity\TteNegociacion", inversedBy="tercerosRel")
-     * @ORM\JoinColumn(name="codigo_negociacion_transporte_fk", referencedColumnName="codigo_negociacion_pk")
-     */
-    protected $negociacionRel;     
+    protected $asesorRel;        
     
     /**
      * @ORM\OneToMany(targetEntity="GenTerceroDireccion", mappedBy="terceroRel")
@@ -204,26 +193,7 @@ class GenTercero
      * @ORM\OneToMany(targetEntity="Brasa\InventarioBundle\Entity\InvMovimiento", mappedBy="terceroRel")
      */
     protected $movimientosRel;    
-          
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteGuia", mappedBy="terceroRel")
-     */
-    protected $guiasRel;    
-
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteRecogida", mappedBy="terceroRel")
-     */
-    protected $recogidasRel;    
-
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteRecogidaProgramada", mappedBy="terceroRel")
-     */
-    protected $recogidasProgramadasRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteFactura", mappedBy="terceroRel")
-     */
-    protected $TteFacturaRel;          
+                          
 
     /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuFactura", mappedBy="terceroRel")
@@ -244,8 +214,11 @@ class GenTercero
      * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurProgramacion", mappedBy="terceroRel")
      */
     protected $turProgramacionesTerceroRel;     
-    
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurFactura", mappedBy="terceroRel")
+     */
+    protected $turFacturasTerceroRel;        
     /**
      * Constructor
      */
@@ -253,14 +226,11 @@ class GenTercero
     {
         $this->tercerosDireccionesRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->guiasRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->recogidasRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->recogidasProgramadasRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->TteFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuFacturasTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turCotizacionesTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turPedidosTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turProgramacionesTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turFacturasTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -946,30 +916,6 @@ class GenTercero
     }
 
     /**
-     * Set codigoNegociacionTransporteFk
-     *
-     * @param integer $codigoNegociacionTransporteFk
-     *
-     * @return GenTercero
-     */
-    public function setCodigoNegociacionTransporteFk($codigoNegociacionTransporteFk)
-    {
-        $this->codigoNegociacionTransporteFk = $codigoNegociacionTransporteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoNegociacionTransporteFk
-     *
-     * @return integer
-     */
-    public function getCodigoNegociacionTransporteFk()
-    {
-        return $this->codigoNegociacionTransporteFk;
-    }
-
-    /**
      * Set clasificacionTributariaRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenClasificacionTributaria $clasificacionTributariaRel
@@ -1066,30 +1012,6 @@ class GenTercero
     }
 
     /**
-     * Set negociacionRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteNegociacion $negociacionRel
-     *
-     * @return GenTercero
-     */
-    public function setNegociacionRel(\Brasa\TransporteBundle\Entity\TteNegociacion $negociacionRel = null)
-    {
-        $this->negociacionRel = $negociacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get negociacionRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteNegociacion
-     */
-    public function getNegociacionRel()
-    {
-        return $this->negociacionRel;
-    }
-
-    /**
      * Add tercerosDireccionesRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenTerceroDireccion $tercerosDireccionesRel
@@ -1155,142 +1077,6 @@ class GenTercero
     public function getMovimientosRel()
     {
         return $this->movimientosRel;
-    }
-
-    /**
-     * Add guiasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteGuia $guiasRel
-     *
-     * @return GenTercero
-     */
-    public function addGuiasRel(\Brasa\TransporteBundle\Entity\TteGuia $guiasRel)
-    {
-        $this->guiasRel[] = $guiasRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove guiasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteGuia $guiasRel
-     */
-    public function removeGuiasRel(\Brasa\TransporteBundle\Entity\TteGuia $guiasRel)
-    {
-        $this->guiasRel->removeElement($guiasRel);
-    }
-
-    /**
-     * Get guiasRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGuiasRel()
-    {
-        return $this->guiasRel;
-    }
-
-    /**
-     * Add recogidasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteRecogida $recogidasRel
-     *
-     * @return GenTercero
-     */
-    public function addRecogidasRel(\Brasa\TransporteBundle\Entity\TteRecogida $recogidasRel)
-    {
-        $this->recogidasRel[] = $recogidasRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove recogidasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteRecogida $recogidasRel
-     */
-    public function removeRecogidasRel(\Brasa\TransporteBundle\Entity\TteRecogida $recogidasRel)
-    {
-        $this->recogidasRel->removeElement($recogidasRel);
-    }
-
-    /**
-     * Get recogidasRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRecogidasRel()
-    {
-        return $this->recogidasRel;
-    }
-
-    /**
-     * Add recogidasProgramadasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteRecogidaProgramada $recogidasProgramadasRel
-     *
-     * @return GenTercero
-     */
-    public function addRecogidasProgramadasRel(\Brasa\TransporteBundle\Entity\TteRecogidaProgramada $recogidasProgramadasRel)
-    {
-        $this->recogidasProgramadasRel[] = $recogidasProgramadasRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove recogidasProgramadasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteRecogidaProgramada $recogidasProgramadasRel
-     */
-    public function removeRecogidasProgramadasRel(\Brasa\TransporteBundle\Entity\TteRecogidaProgramada $recogidasProgramadasRel)
-    {
-        $this->recogidasProgramadasRel->removeElement($recogidasProgramadasRel);
-    }
-
-    /**
-     * Get recogidasProgramadasRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRecogidasProgramadasRel()
-    {
-        return $this->recogidasProgramadasRel;
-    }
-
-    /**
-     * Add tteFacturaRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteFactura $tteFacturaRel
-     *
-     * @return GenTercero
-     */
-    public function addTteFacturaRel(\Brasa\TransporteBundle\Entity\TteFactura $tteFacturaRel)
-    {
-        $this->TteFacturaRel[] = $tteFacturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove tteFacturaRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteFactura $tteFacturaRel
-     */
-    public function removeTteFacturaRel(\Brasa\TransporteBundle\Entity\TteFactura $tteFacturaRel)
-    {
-        $this->TteFacturaRel->removeElement($tteFacturaRel);
-    }
-
-    /**
-     * Get tteFacturaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTteFacturaRel()
-    {
-        return $this->TteFacturaRel;
     }
 
     /**
@@ -1427,5 +1213,39 @@ class GenTercero
     public function getTurProgramacionesTerceroRel()
     {
         return $this->turProgramacionesTerceroRel;
+    }
+
+    /**
+     * Add turFacturasTerceroRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $turFacturasTerceroRel
+     *
+     * @return GenTercero
+     */
+    public function addTurFacturasTerceroRel(\Brasa\TurnoBundle\Entity\TurFactura $turFacturasTerceroRel)
+    {
+        $this->turFacturasTerceroRel[] = $turFacturasTerceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turFacturasTerceroRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $turFacturasTerceroRel
+     */
+    public function removeTurFacturasTerceroRel(\Brasa\TurnoBundle\Entity\TurFactura $turFacturasTerceroRel)
+    {
+        $this->turFacturasTerceroRel->removeElement($turFacturasTerceroRel);
+    }
+
+    /**
+     * Get turFacturasTerceroRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurFacturasTerceroRel()
+    {
+        return $this->turFacturasTerceroRel;
     }
 }

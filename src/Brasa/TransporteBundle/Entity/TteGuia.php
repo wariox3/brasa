@@ -260,13 +260,7 @@ class TteGuia
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="guiasCiudadDestinoRel")
      * @ORM\JoinColumn(name="codigo_ciudad_destino_fk", referencedColumnName="codigo_ciudad_pk")
      */
-    protected $ciudadDestinoRel;     
-        
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="guiasRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;    
+    protected $ciudadDestinoRel;                
 
     /**
      * @ORM\ManyToOne(targetEntity="TteRuta", inversedBy="guiasRel")
@@ -311,6 +305,7 @@ class TteGuia
     public function __construct()
     {
         $this->novedadesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->redespachosRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recibosCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->guiasCobrosAdicionalesRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -318,7 +313,7 @@ class TteGuia
     /**
      * Get codigoGuiaPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoGuiaPk()
     {
@@ -329,6 +324,7 @@ class TteGuia
      * Set numeroGuia
      *
      * @param integer $numeroGuia
+     *
      * @return TteGuia
      */
     public function setNumeroGuia($numeroGuia)
@@ -341,7 +337,7 @@ class TteGuia
     /**
      * Get numeroGuia
      *
-     * @return integer 
+     * @return integer
      */
     public function getNumeroGuia()
     {
@@ -352,6 +348,7 @@ class TteGuia
      * Set fechaIngreso
      *
      * @param \DateTime $fechaIngreso
+     *
      * @return TteGuia
      */
     public function setFechaIngreso($fechaIngreso)
@@ -364,7 +361,7 @@ class TteGuia
     /**
      * Get fechaIngreso
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaIngreso()
     {
@@ -375,6 +372,7 @@ class TteGuia
      * Set codigoTerceroFk
      *
      * @param integer $codigoTerceroFk
+     *
      * @return TteGuia
      */
     public function setCodigoTerceroFk($codigoTerceroFk)
@@ -387,7 +385,7 @@ class TteGuia
     /**
      * Get codigoTerceroFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoTerceroFk()
     {
@@ -398,6 +396,7 @@ class TteGuia
      * Set codigoDespachoFk
      *
      * @param integer $codigoDespachoFk
+     *
      * @return TteGuia
      */
     public function setCodigoDespachoFk($codigoDespachoFk)
@@ -410,7 +409,7 @@ class TteGuia
     /**
      * Get codigoDespachoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDespachoFk()
     {
@@ -421,6 +420,7 @@ class TteGuia
      * Set codigoFacturaFk
      *
      * @param integer $codigoFacturaFk
+     *
      * @return TteGuia
      */
     public function setCodigoFacturaFk($codigoFacturaFk)
@@ -433,7 +433,7 @@ class TteGuia
     /**
      * Get codigoFacturaFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoFacturaFk()
     {
@@ -444,6 +444,7 @@ class TteGuia
      * Set documentoCliente
      *
      * @param string $documentoCliente
+     *
      * @return TteGuia
      */
     public function setDocumentoCliente($documentoCliente)
@@ -456,7 +457,7 @@ class TteGuia
     /**
      * Get documentoCliente
      *
-     * @return string 
+     * @return string
      */
     public function getDocumentoCliente()
     {
@@ -467,6 +468,7 @@ class TteGuia
      * Set nombreDestinatario
      *
      * @param string $nombreDestinatario
+     *
      * @return TteGuia
      */
     public function setNombreDestinatario($nombreDestinatario)
@@ -479,7 +481,7 @@ class TteGuia
     /**
      * Get nombreDestinatario
      *
-     * @return string 
+     * @return string
      */
     public function getNombreDestinatario()
     {
@@ -490,6 +492,7 @@ class TteGuia
      * Set direccionDestinatario
      *
      * @param string $direccionDestinatario
+     *
      * @return TteGuia
      */
     public function setDireccionDestinatario($direccionDestinatario)
@@ -502,7 +505,7 @@ class TteGuia
     /**
      * Get direccionDestinatario
      *
-     * @return string 
+     * @return string
      */
     public function getDireccionDestinatario()
     {
@@ -513,6 +516,7 @@ class TteGuia
      * Set telefonoDestinatario
      *
      * @param string $telefonoDestinatario
+     *
      * @return TteGuia
      */
     public function setTelefonoDestinatario($telefonoDestinatario)
@@ -525,7 +529,7 @@ class TteGuia
     /**
      * Get telefonoDestinatario
      *
-     * @return string 
+     * @return string
      */
     public function getTelefonoDestinatario()
     {
@@ -536,6 +540,7 @@ class TteGuia
      * Set codigoCiudadOrigenFk
      *
      * @param integer $codigoCiudadOrigenFk
+     *
      * @return TteGuia
      */
     public function setCodigoCiudadOrigenFk($codigoCiudadOrigenFk)
@@ -548,7 +553,7 @@ class TteGuia
     /**
      * Get codigoCiudadOrigenFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoCiudadOrigenFk()
     {
@@ -559,6 +564,7 @@ class TteGuia
      * Set codigoCiudadDestinoFk
      *
      * @param integer $codigoCiudadDestinoFk
+     *
      * @return TteGuia
      */
     public function setCodigoCiudadDestinoFk($codigoCiudadDestinoFk)
@@ -571,7 +577,7 @@ class TteGuia
     /**
      * Get codigoCiudadDestinoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoCiudadDestinoFk()
     {
@@ -582,6 +588,7 @@ class TteGuia
      * Set codigoRutaFk
      *
      * @param integer $codigoRutaFk
+     *
      * @return TteGuia
      */
     public function setCodigoRutaFk($codigoRutaFk)
@@ -594,7 +601,7 @@ class TteGuia
     /**
      * Get codigoRutaFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoRutaFk()
     {
@@ -605,6 +612,7 @@ class TteGuia
      * Set codigoTipoServicioFk
      *
      * @param integer $codigoTipoServicioFk
+     *
      * @return TteGuia
      */
     public function setCodigoTipoServicioFk($codigoTipoServicioFk)
@@ -617,7 +625,7 @@ class TteGuia
     /**
      * Get codigoTipoServicioFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoTipoServicioFk()
     {
@@ -628,6 +636,7 @@ class TteGuia
      * Set codigoTipoPagoFk
      *
      * @param integer $codigoTipoPagoFk
+     *
      * @return TteGuia
      */
     public function setCodigoTipoPagoFk($codigoTipoPagoFk)
@@ -640,7 +649,7 @@ class TteGuia
     /**
      * Get codigoTipoPagoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoTipoPagoFk()
     {
@@ -651,6 +660,7 @@ class TteGuia
      * Set codigoProductoFk
      *
      * @param integer $codigoProductoFk
+     *
      * @return TteGuia
      */
     public function setCodigoProductoFk($codigoProductoFk)
@@ -663,7 +673,7 @@ class TteGuia
     /**
      * Get codigoProductoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoProductoFk()
     {
@@ -674,6 +684,7 @@ class TteGuia
      * Set codigoPuntoOperacionIngresoFk
      *
      * @param integer $codigoPuntoOperacionIngresoFk
+     *
      * @return TteGuia
      */
     public function setCodigoPuntoOperacionIngresoFk($codigoPuntoOperacionIngresoFk)
@@ -686,7 +697,7 @@ class TteGuia
     /**
      * Get codigoPuntoOperacionIngresoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoPuntoOperacionIngresoFk()
     {
@@ -697,6 +708,7 @@ class TteGuia
      * Set codigoPuntoOperacionActualFk
      *
      * @param integer $codigoPuntoOperacionActualFk
+     *
      * @return TteGuia
      */
     public function setCodigoPuntoOperacionActualFk($codigoPuntoOperacionActualFk)
@@ -709,7 +721,7 @@ class TteGuia
     /**
      * Get codigoPuntoOperacionActualFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoPuntoOperacionActualFk()
     {
@@ -720,6 +732,7 @@ class TteGuia
      * Set ctUnidades
      *
      * @param integer $ctUnidades
+     *
      * @return TteGuia
      */
     public function setCtUnidades($ctUnidades)
@@ -732,7 +745,7 @@ class TteGuia
     /**
      * Get ctUnidades
      *
-     * @return integer 
+     * @return integer
      */
     public function getCtUnidades()
     {
@@ -743,6 +756,7 @@ class TteGuia
      * Set ctPesoReal
      *
      * @param integer $ctPesoReal
+     *
      * @return TteGuia
      */
     public function setCtPesoReal($ctPesoReal)
@@ -755,7 +769,7 @@ class TteGuia
     /**
      * Get ctPesoReal
      *
-     * @return integer 
+     * @return integer
      */
     public function getCtPesoReal()
     {
@@ -766,6 +780,7 @@ class TteGuia
      * Set ctPesoVolumen
      *
      * @param integer $ctPesoVolumen
+     *
      * @return TteGuia
      */
     public function setCtPesoVolumen($ctPesoVolumen)
@@ -778,7 +793,7 @@ class TteGuia
     /**
      * Get ctPesoVolumen
      *
-     * @return integer 
+     * @return integer
      */
     public function getCtPesoVolumen()
     {
@@ -789,6 +804,7 @@ class TteGuia
      * Set ctPesoLiquidar
      *
      * @param integer $ctPesoLiquidar
+     *
      * @return TteGuia
      */
     public function setCtPesoLiquidar($ctPesoLiquidar)
@@ -801,7 +817,7 @@ class TteGuia
     /**
      * Get ctPesoLiquidar
      *
-     * @return integer 
+     * @return integer
      */
     public function getCtPesoLiquidar()
     {
@@ -812,6 +828,7 @@ class TteGuia
      * Set vrDeclarado
      *
      * @param float $vrDeclarado
+     *
      * @return TteGuia
      */
     public function setVrDeclarado($vrDeclarado)
@@ -824,7 +841,7 @@ class TteGuia
     /**
      * Get vrDeclarado
      *
-     * @return float 
+     * @return float
      */
     public function getVrDeclarado()
     {
@@ -835,6 +852,7 @@ class TteGuia
      * Set vrFlete
      *
      * @param float $vrFlete
+     *
      * @return TteGuia
      */
     public function setVrFlete($vrFlete)
@@ -847,7 +865,7 @@ class TteGuia
     /**
      * Get vrFlete
      *
-     * @return float 
+     * @return float
      */
     public function getVrFlete()
     {
@@ -858,6 +876,7 @@ class TteGuia
      * Set vrManejo
      *
      * @param float $vrManejo
+     *
      * @return TteGuia
      */
     public function setVrManejo($vrManejo)
@@ -870,7 +889,7 @@ class TteGuia
     /**
      * Get vrManejo
      *
-     * @return float 
+     * @return float
      */
     public function getVrManejo()
     {
@@ -881,6 +900,7 @@ class TteGuia
      * Set vrRecaudo
      *
      * @param float $vrRecaudo
+     *
      * @return TteGuia
      */
     public function setVrRecaudo($vrRecaudo)
@@ -893,7 +913,7 @@ class TteGuia
     /**
      * Get vrRecaudo
      *
-     * @return float 
+     * @return float
      */
     public function getVrRecaudo()
     {
@@ -904,6 +924,7 @@ class TteGuia
      * Set vrAbonosFlete
      *
      * @param float $vrAbonosFlete
+     *
      * @return TteGuia
      */
     public function setVrAbonosFlete($vrAbonosFlete)
@@ -916,7 +937,7 @@ class TteGuia
     /**
      * Get vrAbonosFlete
      *
-     * @return float 
+     * @return float
      */
     public function getVrAbonosFlete()
     {
@@ -927,6 +948,7 @@ class TteGuia
      * Set vrAbonosManejo
      *
      * @param float $vrAbonosManejo
+     *
      * @return TteGuia
      */
     public function setVrAbonosManejo($vrAbonosManejo)
@@ -939,7 +961,7 @@ class TteGuia
     /**
      * Get vrAbonosManejo
      *
-     * @return float 
+     * @return float
      */
     public function getVrAbonosManejo()
     {
@@ -950,6 +972,7 @@ class TteGuia
      * Set vrNeto
      *
      * @param float $vrNeto
+     *
      * @return TteGuia
      */
     public function setVrNeto($vrNeto)
@@ -962,7 +985,7 @@ class TteGuia
     /**
      * Get vrNeto
      *
-     * @return float 
+     * @return float
      */
     public function getVrNeto()
     {
@@ -973,6 +996,7 @@ class TteGuia
      * Set estadoImpreso
      *
      * @param boolean $estadoImpreso
+     *
      * @return TteGuia
      */
     public function setEstadoImpreso($estadoImpreso)
@@ -985,7 +1009,7 @@ class TteGuia
     /**
      * Get estadoImpreso
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoImpreso()
     {
@@ -996,6 +1020,7 @@ class TteGuia
      * Set estadoAnulada
      *
      * @param boolean $estadoAnulada
+     *
      * @return TteGuia
      */
     public function setEstadoAnulada($estadoAnulada)
@@ -1008,7 +1033,7 @@ class TteGuia
     /**
      * Get estadoAnulada
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoAnulada()
     {
@@ -1019,6 +1044,7 @@ class TteGuia
      * Set estadoDespachada
      *
      * @param boolean $estadoDespachada
+     *
      * @return TteGuia
      */
     public function setEstadoDespachada($estadoDespachada)
@@ -1031,7 +1057,7 @@ class TteGuia
     /**
      * Get estadoDespachada
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoDespachada()
     {
@@ -1039,9 +1065,34 @@ class TteGuia
     }
 
     /**
+     * Set estadoFacturada
+     *
+     * @param boolean $estadoFacturada
+     *
+     * @return TteGuia
+     */
+    public function setEstadoFacturada($estadoFacturada)
+    {
+        $this->estadoFacturada = $estadoFacturada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturada
+     *
+     * @return boolean
+     */
+    public function getEstadoFacturada()
+    {
+        return $this->estadoFacturada;
+    }
+
+    /**
      * Set estadoEntregada
      *
      * @param boolean $estadoEntregada
+     *
      * @return TteGuia
      */
     public function setEstadoEntregada($estadoEntregada)
@@ -1054,7 +1105,7 @@ class TteGuia
     /**
      * Get estadoEntregada
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoEntregada()
     {
@@ -1065,6 +1116,7 @@ class TteGuia
      * Set estadoDescargada
      *
      * @param boolean $estadoDescargada
+     *
      * @return TteGuia
      */
     public function setEstadoDescargada($estadoDescargada)
@@ -1077,7 +1129,7 @@ class TteGuia
     /**
      * Get estadoDescargada
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoDescargada()
     {
@@ -1088,6 +1140,7 @@ class TteGuia
      * Set estadoGenerada
      *
      * @param boolean $estadoGenerada
+     *
      * @return TteGuia
      */
     public function setEstadoGenerada($estadoGenerada)
@@ -1100,7 +1153,7 @@ class TteGuia
     /**
      * Get estadoGenerada
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoGenerada()
     {
@@ -1111,6 +1164,7 @@ class TteGuia
      * Set fechaEntrega
      *
      * @param \DateTime $fechaEntrega
+     *
      * @return TteGuia
      */
     public function setFechaEntrega($fechaEntrega)
@@ -1123,7 +1177,7 @@ class TteGuia
     /**
      * Get fechaEntrega
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaEntrega()
     {
@@ -1134,6 +1188,7 @@ class TteGuia
      * Set fechaDescargada
      *
      * @param \DateTime $fechaDescargada
+     *
      * @return TteGuia
      */
     public function setFechaDescargada($fechaDescargada)
@@ -1146,7 +1201,7 @@ class TteGuia
     /**
      * Get fechaDescargada
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaDescargada()
     {
@@ -1157,6 +1212,7 @@ class TteGuia
      * Set contenido
      *
      * @param string $contenido
+     *
      * @return TteGuia
      */
     public function setContenido($contenido)
@@ -1169,7 +1225,7 @@ class TteGuia
     /**
      * Get contenido
      *
-     * @return string 
+     * @return string
      */
     public function getContenido()
     {
@@ -1180,6 +1236,7 @@ class TteGuia
      * Set comentarios
      *
      * @param string $comentarios
+     *
      * @return TteGuia
      */
     public function setComentarios($comentarios)
@@ -1192,7 +1249,7 @@ class TteGuia
     /**
      * Get comentarios
      *
-     * @return string 
+     * @return string
      */
     public function getComentarios()
     {
@@ -1203,6 +1260,7 @@ class TteGuia
      * Set formaLiquidacion
      *
      * @param integer $formaLiquidacion
+     *
      * @return TteGuia
      */
     public function setFormaLiquidacion($formaLiquidacion)
@@ -1215,7 +1273,7 @@ class TteGuia
     /**
      * Get formaLiquidacion
      *
-     * @return integer 
+     * @return integer
      */
     public function getFormaLiquidacion()
     {
@@ -1226,6 +1284,7 @@ class TteGuia
      * Add novedadesRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteNovedad $novedadesRel
+     *
      * @return TteGuia
      */
     public function addNovedadesRel(\Brasa\TransporteBundle\Entity\TteNovedad $novedadesRel)
@@ -1248,7 +1307,7 @@ class TteGuia
     /**
      * Get novedadesRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getNovedadesRel()
     {
@@ -1256,351 +1315,10 @@ class TteGuia
     }
 
     /**
-     * Add recibosCajaRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteReciboCaja $recibosCajaRel
-     * @return TteGuia
-     */
-    public function addRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteReciboCaja $recibosCajaRel)
-    {
-        $this->recibosCajaRel[] = $recibosCajaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove recibosCajaRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteReciboCaja $recibosCajaRel
-     */
-    public function removeRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteReciboCaja $recibosCajaRel)
-    {
-        $this->recibosCajaRel->removeElement($recibosCajaRel);
-    }
-
-    /**
-     * Get recibosCajaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRecibosCajaRel()
-    {
-        return $this->recibosCajaRel;
-    }
-
-    /**
-     * Add guiasCobrosAdicionalesRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteGuiaCobroAdicional $guiasCobrosAdicionalesRel
-     * @return TteGuia
-     */
-    public function addGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiaCobroAdicional $guiasCobrosAdicionalesRel)
-    {
-        $this->guiasCobrosAdicionalesRel[] = $guiasCobrosAdicionalesRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove guiasCobrosAdicionalesRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteGuiaCobroAdicional $guiasCobrosAdicionalesRel
-     */
-    public function removeGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiaCobroAdicional $guiasCobrosAdicionalesRel)
-    {
-        $this->guiasCobrosAdicionalesRel->removeElement($guiasCobrosAdicionalesRel);
-    }
-
-    /**
-     * Get guiasCobrosAdicionalesRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGuiasCobrosAdicionalesRel()
-    {
-        return $this->guiasCobrosAdicionalesRel;
-    }
-
-    /**
-     * Set despachoRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteDespacho $despachoRel
-     * @return TteGuia
-     */
-    public function setDespachoRel(\Brasa\TransporteBundle\Entity\TteDespacho $despachoRel = null)
-    {
-        $this->despachoRel = $despachoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get despachoRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteDespacho 
-     */
-    public function getDespachoRel()
-    {
-        return $this->despachoRel;
-    }
-
-    /**
-     * Set facturaRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteFactura $facturaRel
-     * @return TteGuia
-     */
-    public function setFacturaRel(\Brasa\TransporteBundle\Entity\TteFactura $facturaRel = null)
-    {
-        $this->facturaRel = $facturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteFactura 
-     */
-    public function getFacturaRel()
-    {
-        return $this->facturaRel;
-    }
-
-    /**
-     * Set ciudadOrigenRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadOrigenRel
-     * @return TteGuia
-     */
-    public function setCiudadOrigenRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadOrigenRel = null)
-    {
-        $this->ciudadOrigenRel = $ciudadOrigenRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadOrigenRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad 
-     */
-    public function getCiudadOrigenRel()
-    {
-        return $this->ciudadOrigenRel;
-    }
-
-    /**
-     * Set ciudadDestinoRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadDestinoRel
-     * @return TteGuia
-     */
-    public function setCiudadDestinoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadDestinoRel = null)
-    {
-        $this->ciudadDestinoRel = $ciudadDestinoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadDestinoRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad 
-     */
-    public function getCiudadDestinoRel()
-    {
-        return $this->ciudadDestinoRel;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     * @return TteGuia
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero 
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
-    }
-
-    /**
-     * Set rutaRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteRuta $rutaRel
-     * @return TteGuia
-     */
-    public function setRutaRel(\Brasa\TransporteBundle\Entity\TteRuta $rutaRel = null)
-    {
-        $this->rutaRel = $rutaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get rutaRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteRuta 
-     */
-    public function getRutaRel()
-    {
-        return $this->rutaRel;
-    }
-
-    /**
-     * Set tipoServicioRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteTipoServicio $tipoServicioRel
-     * @return TteGuia
-     */
-    public function setTipoServicioRel(\Brasa\TransporteBundle\Entity\TteTipoServicio $tipoServicioRel = null)
-    {
-        $this->tipoServicioRel = $tipoServicioRel;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoServicioRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteTipoServicio 
-     */
-    public function getTipoServicioRel()
-    {
-        return $this->tipoServicioRel;
-    }
-
-    /**
-     * Set tipoPagoRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteTipoPago $tipoPagoRel
-     * @return TteGuia
-     */
-    public function setTipoPagoRel(\Brasa\TransporteBundle\Entity\TteTipoPago $tipoPagoRel = null)
-    {
-        $this->tipoPagoRel = $tipoPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoPagoRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteTipoPago 
-     */
-    public function getTipoPagoRel()
-    {
-        return $this->tipoPagoRel;
-    }
-
-    /**
-     * Set productoRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteProducto $productoRel
-     * @return TteGuia
-     */
-    public function setProductoRel(\Brasa\TransporteBundle\Entity\TteProducto $productoRel = null)
-    {
-        $this->productoRel = $productoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get productoRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteProducto 
-     */
-    public function getProductoRel()
-    {
-        return $this->productoRel;
-    }
-
-    /**
-     * Set puntoOperacionIngresoRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionIngresoRel
-     * @return TteGuia
-     */
-    public function setPuntoOperacionIngresoRel(\Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionIngresoRel = null)
-    {
-        $this->puntoOperacionIngresoRel = $puntoOperacionIngresoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get puntoOperacionIngresoRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TtePuntoOperacion 
-     */
-    public function getPuntoOperacionIngresoRel()
-    {
-        return $this->puntoOperacionIngresoRel;
-    }
-
-    /**
-     * Set puntoOperacionActualRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionActualRel
-     * @return TteGuia
-     */
-    public function setPuntoOperacionActualRel(\Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionActualRel = null)
-    {
-        $this->puntoOperacionActualRel = $puntoOperacionActualRel;
-
-        return $this;
-    }
-
-    /**
-     * Get puntoOperacionActualRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TtePuntoOperacion 
-     */
-    public function getPuntoOperacionActualRel()
-    {
-        return $this->puntoOperacionActualRel;
-    }
-
-    /**
-     * Set estadoFacturada
-     *
-     * @param boolean $estadoFacturada
-     * @return TteGuia
-     */
-    public function setEstadoFacturada($estadoFacturada)
-    {
-        $this->estadoFacturada = $estadoFacturada;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoFacturada
-     *
-     * @return boolean 
-     */
-    public function getEstadoFacturada()
-    {
-        return $this->estadoFacturada;
-    }
-
-    /**
      * Add redespachosRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteRedespacho $redespachosRel
+     *
      * @return TteGuia
      */
     public function addRedespachosRel(\Brasa\TransporteBundle\Entity\TteRedespacho $redespachosRel)
@@ -1623,10 +1341,318 @@ class TteGuia
     /**
      * Get redespachosRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRedespachosRel()
     {
         return $this->redespachosRel;
+    }
+
+    /**
+     * Add recibosCajaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteReciboCaja $recibosCajaRel
+     *
+     * @return TteGuia
+     */
+    public function addRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteReciboCaja $recibosCajaRel)
+    {
+        $this->recibosCajaRel[] = $recibosCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recibosCajaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteReciboCaja $recibosCajaRel
+     */
+    public function removeRecibosCajaRel(\Brasa\TransporteBundle\Entity\TteReciboCaja $recibosCajaRel)
+    {
+        $this->recibosCajaRel->removeElement($recibosCajaRel);
+    }
+
+    /**
+     * Get recibosCajaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRecibosCajaRel()
+    {
+        return $this->recibosCajaRel;
+    }
+
+    /**
+     * Add guiasCobrosAdicionalesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuiaCobroAdicional $guiasCobrosAdicionalesRel
+     *
+     * @return TteGuia
+     */
+    public function addGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiaCobroAdicional $guiasCobrosAdicionalesRel)
+    {
+        $this->guiasCobrosAdicionalesRel[] = $guiasCobrosAdicionalesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove guiasCobrosAdicionalesRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteGuiaCobroAdicional $guiasCobrosAdicionalesRel
+     */
+    public function removeGuiasCobrosAdicionalesRel(\Brasa\TransporteBundle\Entity\TteGuiaCobroAdicional $guiasCobrosAdicionalesRel)
+    {
+        $this->guiasCobrosAdicionalesRel->removeElement($guiasCobrosAdicionalesRel);
+    }
+
+    /**
+     * Get guiasCobrosAdicionalesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGuiasCobrosAdicionalesRel()
+    {
+        return $this->guiasCobrosAdicionalesRel;
+    }
+
+    /**
+     * Set despachoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteDespacho $despachoRel
+     *
+     * @return TteGuia
+     */
+    public function setDespachoRel(\Brasa\TransporteBundle\Entity\TteDespacho $despachoRel = null)
+    {
+        $this->despachoRel = $despachoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get despachoRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteDespacho
+     */
+    public function getDespachoRel()
+    {
+        return $this->despachoRel;
+    }
+
+    /**
+     * Set facturaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteFactura $facturaRel
+     *
+     * @return TteGuia
+     */
+    public function setFacturaRel(\Brasa\TransporteBundle\Entity\TteFactura $facturaRel = null)
+    {
+        $this->facturaRel = $facturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteFactura
+     */
+    public function getFacturaRel()
+    {
+        return $this->facturaRel;
+    }
+
+    /**
+     * Set ciudadOrigenRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadOrigenRel
+     *
+     * @return TteGuia
+     */
+    public function setCiudadOrigenRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadOrigenRel = null)
+    {
+        $this->ciudadOrigenRel = $ciudadOrigenRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadOrigenRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadOrigenRel()
+    {
+        return $this->ciudadOrigenRel;
+    }
+
+    /**
+     * Set ciudadDestinoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadDestinoRel
+     *
+     * @return TteGuia
+     */
+    public function setCiudadDestinoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadDestinoRel = null)
+    {
+        $this->ciudadDestinoRel = $ciudadDestinoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadDestinoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadDestinoRel()
+    {
+        return $this->ciudadDestinoRel;
+    }
+
+    /**
+     * Set rutaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRuta $rutaRel
+     *
+     * @return TteGuia
+     */
+    public function setRutaRel(\Brasa\TransporteBundle\Entity\TteRuta $rutaRel = null)
+    {
+        $this->rutaRel = $rutaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteRuta
+     */
+    public function getRutaRel()
+    {
+        return $this->rutaRel;
+    }
+
+    /**
+     * Set tipoServicioRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteTipoServicio $tipoServicioRel
+     *
+     * @return TteGuia
+     */
+    public function setTipoServicioRel(\Brasa\TransporteBundle\Entity\TteTipoServicio $tipoServicioRel = null)
+    {
+        $this->tipoServicioRel = $tipoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoServicioRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteTipoServicio
+     */
+    public function getTipoServicioRel()
+    {
+        return $this->tipoServicioRel;
+    }
+
+    /**
+     * Set tipoPagoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteTipoPago $tipoPagoRel
+     *
+     * @return TteGuia
+     */
+    public function setTipoPagoRel(\Brasa\TransporteBundle\Entity\TteTipoPago $tipoPagoRel = null)
+    {
+        $this->tipoPagoRel = $tipoPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPagoRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteTipoPago
+     */
+    public function getTipoPagoRel()
+    {
+        return $this->tipoPagoRel;
+    }
+
+    /**
+     * Set productoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProducto $productoRel
+     *
+     * @return TteGuia
+     */
+    public function setProductoRel(\Brasa\TransporteBundle\Entity\TteProducto $productoRel = null)
+    {
+        $this->productoRel = $productoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get productoRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteProducto
+     */
+    public function getProductoRel()
+    {
+        return $this->productoRel;
+    }
+
+    /**
+     * Set puntoOperacionIngresoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionIngresoRel
+     *
+     * @return TteGuia
+     */
+    public function setPuntoOperacionIngresoRel(\Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionIngresoRel = null)
+    {
+        $this->puntoOperacionIngresoRel = $puntoOperacionIngresoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puntoOperacionIngresoRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TtePuntoOperacion
+     */
+    public function getPuntoOperacionIngresoRel()
+    {
+        return $this->puntoOperacionIngresoRel;
+    }
+
+    /**
+     * Set puntoOperacionActualRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionActualRel
+     *
+     * @return TteGuia
+     */
+    public function setPuntoOperacionActualRel(\Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionActualRel = null)
+    {
+        $this->puntoOperacionActualRel = $puntoOperacionActualRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puntoOperacionActualRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TtePuntoOperacion
+     */
+    public function getPuntoOperacionActualRel()
+    {
+        return $this->puntoOperacionActualRel;
     }
 }

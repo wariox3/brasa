@@ -31,9 +31,6 @@ class GenTercerosType extends AbstractType
             ->add('asesorRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenAsesor',
                         'property' => 'nombre',))
-            ->add('negociacionRel', 'entity', array(
-                'class' => 'BrasaTransporteBundle:TteNegociacion',
-                        'property' => 'nombre',))
             ->add('plazoPagoCliente', 'number', array('required' => true))    
             ->add('plazoPagoProveedor', 'number', array('required' => true))    
             ->add('direccion', 'text', array('required' => false))    

@@ -13,10 +13,10 @@ class TteListaPrecio
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_lista_precios_pk", type="integer")
+     * @ORM\Column(name="codigo_lista_precio_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoListaPreciosPk;  
+    private $codigoListaPrecioPk;  
     
     /**
      * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
@@ -29,70 +29,40 @@ class TteListaPrecio
     private $fechaVencimiento;    
     
     /**
-     * @ORM\OneToMany(targetEntity="TteListaPrecioDetalle", mappedBy="listaPreciosRel")
+     * @ORM\OneToMany(targetEntity="TteListaPrecioDetalle", mappedBy="listaPrecioRel")
      */
-    protected $listasPreciosDetallesRel;
+    protected $listasPreciosDetallesListaPrecioRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="TteListaPrecioDetalle", mappedBy="listaPreciosRel")
+     * @ORM\OneToMany(targetEntity="TteCliente", mappedBy="listaPrecioRel")
      */
-    protected $negociacionesRel;    
+    protected $clientesListaPrecioRel;    
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->listasPreciosDetallesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->listasPreciosDetallesListaPrecioRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->clientesListaPrecioRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get codigoListaPreciosPk
+     * Get codigoListaPrecioPk
      *
-     * @return integer 
+     * @return integer
      */
-    public function getCodigoListaPreciosPk()
+    public function getCodigoListaPrecioPk()
     {
-        return $this->codigoListaPreciosPk;
-    }
-
-    /**
-     * Add listasPreciosDetallesRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesRel
-     * @return TteListaPrecio
-     */
-    public function addListasPreciosDetallesRel(\Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesRel)
-    {
-        $this->listasPreciosDetallesRel[] = $listasPreciosDetallesRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove listasPreciosDetallesRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesRel
-     */
-    public function removeListasPreciosDetallesRel(\Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesRel)
-    {
-        $this->listasPreciosDetallesRel->removeElement($listasPreciosDetallesRel);
-    }
-
-    /**
-     * Get listasPreciosDetallesRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getListasPreciosDetallesRel()
-    {
-        return $this->listasPreciosDetallesRel;
+        return $this->codigoListaPrecioPk;
     }
 
     /**
      * Set nombre
      *
      * @param string $nombre
+     *
      * @return TteListaPrecio
      */
     public function setNombre($nombre)
@@ -105,7 +75,7 @@ class TteListaPrecio
     /**
      * Get nombre
      *
-     * @return string 
+     * @return string
      */
     public function getNombre()
     {
@@ -116,6 +86,7 @@ class TteListaPrecio
      * Set fechaVencimiento
      *
      * @param \DateTime $fechaVencimiento
+     *
      * @return TteListaPrecio
      */
     public function setFechaVencimiento($fechaVencimiento)
@@ -128,7 +99,7 @@ class TteListaPrecio
     /**
      * Get fechaVencimiento
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaVencimiento()
     {
@@ -136,35 +107,70 @@ class TteListaPrecio
     }
 
     /**
-     * Add negociacionesRel
+     * Add listasPreciosDetallesListaPrecioRel
      *
-     * @param \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $negociacionesRel
+     * @param \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesListaPrecioRel
+     *
      * @return TteListaPrecio
      */
-    public function addNegociacionesRel(\Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $negociacionesRel)
+    public function addListasPreciosDetallesListaPrecioRel(\Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesListaPrecioRel)
     {
-        $this->negociacionesRel[] = $negociacionesRel;
+        $this->listasPreciosDetallesListaPrecioRel[] = $listasPreciosDetallesListaPrecioRel;
 
         return $this;
     }
 
     /**
-     * Remove negociacionesRel
+     * Remove listasPreciosDetallesListaPrecioRel
      *
-     * @param \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $negociacionesRel
+     * @param \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesListaPrecioRel
      */
-    public function removeNegociacionesRel(\Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $negociacionesRel)
+    public function removeListasPreciosDetallesListaPrecioRel(\Brasa\TransporteBundle\Entity\TteListaPrecioDetalle $listasPreciosDetallesListaPrecioRel)
     {
-        $this->negociacionesRel->removeElement($negociacionesRel);
+        $this->listasPreciosDetallesListaPrecioRel->removeElement($listasPreciosDetallesListaPrecioRel);
     }
 
     /**
-     * Get negociacionesRel
+     * Get listasPreciosDetallesListaPrecioRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getNegociacionesRel()
+    public function getListasPreciosDetallesListaPrecioRel()
     {
-        return $this->negociacionesRel;
+        return $this->listasPreciosDetallesListaPrecioRel;
+    }
+
+    /**
+     * Add clientesListaPrecioRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteCliente $clientesListaPrecioRel
+     *
+     * @return TteListaPrecio
+     */
+    public function addClientesListaPrecioRel(\Brasa\TransporteBundle\Entity\TteCliente $clientesListaPrecioRel)
+    {
+        $this->clientesListaPrecioRel[] = $clientesListaPrecioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove clientesListaPrecioRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteCliente $clientesListaPrecioRel
+     */
+    public function removeClientesListaPrecioRel(\Brasa\TransporteBundle\Entity\TteCliente $clientesListaPrecioRel)
+    {
+        $this->clientesListaPrecioRel->removeElement($clientesListaPrecioRel);
+    }
+
+    /**
+     * Get clientesListaPrecioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClientesListaPrecioRel()
+    {
+        return $this->clientesListaPrecioRel;
     }
 }

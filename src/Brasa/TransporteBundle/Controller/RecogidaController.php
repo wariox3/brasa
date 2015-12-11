@@ -41,6 +41,7 @@ class RecogidaController extends Controller
 
     public function nuevoAction($codigoRecogida) {
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $em = $this->getDoctrine()->getManager();
         $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();
         if($codigoRecogida != 0) {
@@ -54,21 +55,21 @@ class RecogidaController extends Controller
         if ($form->isValid()) {
             $arRecogida = $form->getData();                       
             $arrControles = $request->request->All();
-            if($arrControles['txtNit'] != '') {
-                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
-                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arrControles['txtNit']));                
-                if(count($arTercero) > 0) {
-                    $arRecogida->setTerceroRel($arTercero);
+            if($arrControles['txtCodigo'] != '') {
+                $arCliente = new \Brasa\TransporteBundle\Entity\TteCliente;
+                $arCliente = $em->getRepository('BrasaTransporteBundle:TteCliente')->find($arrControles['txtCodigo']);                
+                if(count($arCliente) > 0) {
+                    $arRecogida->setClienteRel($arCliente);
                     $em->persist($arRecogida);
                     $em->flush();
 
                     if($form->get('guardarnuevo')->isClicked()) {
                         return $this->redirect($this->generateUrl('brs_tte_recogida_nuevo', array('codigoRecogida' => 0 )));
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tte_recogida_detalle', array('codigoRecogida' => $arRecogida->getCodigoRecogidaPk())));
+                        return $this->redirect($this->generateUrl('brs_tte_recogida_lista'));
                     }                      
                 } else {
-                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
+                    $objMensaje->Mensaje("error", "El cliente no existe", $this);
                 }                             
             }            
             

@@ -163,7 +163,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $intHorasDiurnasNueva = $this->calcularTiempo(0, $intHoraFinal, 6, 22);
                 $intHorasExtras2Nueva = $this->calcularTiempo(0, $intHoraFinal, 22, 24);
 
-                if($diaSemana >= 1 && $diaSemana <= 5) {
+                /*if($diaSemana >= 1 && $diaSemana <= 5) {
                     $intTotalHorasDiurnas = $intHorasDiurnas + $intHorasDiurnasNueva;
                     $intTotalHorasExtrasOrinariasDiurnas = 0;
                     $intTotalHorasExtrasOrinariasNocturnas = $intHorasExtras + $intHorasExtrasNueva + $intHorasExtras2 + $intHorasExtras2Nueva;
@@ -236,7 +236,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                             $intTotalHorasExtrasFestivasNocturnas = $intHorasExtras + $intHorasExtras2 + $intHorasExtrasNueva + $intHorasExtras2Nueva;                            
                         }
                     }
-                }
+                }*/
             }
         }
 

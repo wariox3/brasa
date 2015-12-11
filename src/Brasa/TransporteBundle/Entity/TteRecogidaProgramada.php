@@ -47,12 +47,7 @@ class TteRecogidaProgramada
      * @ORM\Column(name="codigo_punto_operacion_fk", type="integer", nullable=true)
      */    
     private $codigoPuntoOperacionFk;    
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="recogidasProgramadasRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;      
+          
     
     /**
      * @ORM\ManyToOne(targetEntity="TtePuntoOperacion", inversedBy="recogidasProgramadasRel")
@@ -61,11 +56,10 @@ class TteRecogidaProgramada
     protected $puntoOperacionRel;     
      
 
-
     /**
      * Get codigoRecogidaProgramadaPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoRecogidaProgramadaPk()
     {
@@ -76,6 +70,7 @@ class TteRecogidaProgramada
      * Set horaRecogida
      *
      * @param \DateTime $horaRecogida
+     *
      * @return TteRecogidaProgramada
      */
     public function setHoraRecogida($horaRecogida)
@@ -88,7 +83,7 @@ class TteRecogidaProgramada
     /**
      * Get horaRecogida
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHoraRecogida()
     {
@@ -99,6 +94,7 @@ class TteRecogidaProgramada
      * Set anunciante
      *
      * @param string $anunciante
+     *
      * @return TteRecogidaProgramada
      */
     public function setAnunciante($anunciante)
@@ -111,7 +107,7 @@ class TteRecogidaProgramada
     /**
      * Get anunciante
      *
-     * @return string 
+     * @return string
      */
     public function getAnunciante()
     {
@@ -122,6 +118,7 @@ class TteRecogidaProgramada
      * Set direccion
      *
      * @param string $direccion
+     *
      * @return TteRecogidaProgramada
      */
     public function setDireccion($direccion)
@@ -134,7 +131,7 @@ class TteRecogidaProgramada
     /**
      * Get direccion
      *
-     * @return string 
+     * @return string
      */
     public function getDireccion()
     {
@@ -145,6 +142,7 @@ class TteRecogidaProgramada
      * Set telefono
      *
      * @param string $telefono
+     *
      * @return TteRecogidaProgramada
      */
     public function setTelefono($telefono)
@@ -157,7 +155,7 @@ class TteRecogidaProgramada
     /**
      * Get telefono
      *
-     * @return string 
+     * @return string
      */
     public function getTelefono()
     {
@@ -168,6 +166,7 @@ class TteRecogidaProgramada
      * Set codigoTerceroFk
      *
      * @param integer $codigoTerceroFk
+     *
      * @return TteRecogidaProgramada
      */
     public function setCodigoTerceroFk($codigoTerceroFk)
@@ -180,7 +179,7 @@ class TteRecogidaProgramada
     /**
      * Get codigoTerceroFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoTerceroFk()
     {
@@ -191,6 +190,7 @@ class TteRecogidaProgramada
      * Set codigoPuntoOperacionFk
      *
      * @param integer $codigoPuntoOperacionFk
+     *
      * @return TteRecogidaProgramada
      */
     public function setCodigoPuntoOperacionFk($codigoPuntoOperacionFk)
@@ -203,7 +203,7 @@ class TteRecogidaProgramada
     /**
      * Get codigoPuntoOperacionFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoPuntoOperacionFk()
     {
@@ -211,32 +211,10 @@ class TteRecogidaProgramada
     }
 
     /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     * @return TteRecogidaProgramada
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero 
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
-    }
-
-    /**
      * Set puntoOperacionRel
      *
      * @param \Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionRel
+     *
      * @return TteRecogidaProgramada
      */
     public function setPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionRel = null)
@@ -249,7 +227,7 @@ class TteRecogidaProgramada
     /**
      * Get puntoOperacionRel
      *
-     * @return \Brasa\TransporteBundle\Entity\TtePuntoOperacion 
+     * @return \Brasa\TransporteBundle\Entity\TtePuntoOperacion
      */
     public function getPuntoOperacionRel()
     {

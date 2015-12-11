@@ -13,15 +13,15 @@ class TteListaPrecioDetalle
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_lista_precios_detalle_pk", type="integer")
+     * @ORM\Column(name="codigo_lista_precio_detalle_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoListaPreciosDetallePk; 
+    private $codigoListaPrecioDetallePk; 
     
     /**
-     * @ORM\Column(name="codigo_lista_precios_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_lista_precio_fk", type="integer", nullable=true)
      */    
-    private $codigoListaPreciosFk;   
+    private $codigoListaPrecioFk;   
     
     /**
      * @ORM\Column(name="codigo_producto_fk", type="integer", nullable=true)
@@ -65,10 +65,10 @@ class TteListaPrecioDetalle
     protected $ciudadDestinoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="TteListaPrecio", inversedBy="listasPreciosDetallesRel")
-     * @ORM\JoinColumn(name="codigo_lista_precios_fk", referencedColumnName="codigo_lista_precios_pk")
+     * @ORM\ManyToOne(targetEntity="TteListaPrecio", inversedBy="listasPreciosDetallesListaPrecioRel")
+     * @ORM\JoinColumn(name="codigo_lista_precio_fk", referencedColumnName="codigo_lista_precio_pk")
      */
-    protected $listaPreciosRel;    
+    protected $listaPrecioRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TteProducto", inversedBy="listasPreciosDetallesRel")
@@ -76,112 +76,46 @@ class TteListaPrecioDetalle
      */
     protected $productoRel;
 
+
     /**
-     * Get codigoListaPreciosDetallePk
+     * Get codigoListaPrecioDetallePk
      *
-     * @return integer 
+     * @return integer
      */
-    public function getCodigoListaPreciosDetallePk()
+    public function getCodigoListaPrecioDetallePk()
     {
-        return $this->codigoListaPreciosDetallePk;
+        return $this->codigoListaPrecioDetallePk;
     }
 
     /**
-     * Set codigoListaPreciosFk
+     * Set codigoListaPrecioFk
      *
-     * @param integer $codigoListaPreciosFk
+     * @param integer $codigoListaPrecioFk
+     *
      * @return TteListaPrecioDetalle
      */
-    public function setCodigoListaPreciosFk($codigoListaPreciosFk)
+    public function setCodigoListaPrecioFk($codigoListaPrecioFk)
     {
-        $this->codigoListaPreciosFk = $codigoListaPreciosFk;
+        $this->codigoListaPrecioFk = $codigoListaPrecioFk;
 
         return $this;
     }
 
     /**
-     * Get codigoListaPreciosFk
+     * Get codigoListaPrecioFk
      *
-     * @return integer 
+     * @return integer
      */
-    public function getCodigoListaPreciosFk()
+    public function getCodigoListaPrecioFk()
     {
-        return $this->codigoListaPreciosFk;
-    }
-
-    /**
-     * Set listaPreciosRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteListaPrecio $listaPreciosRel
-     * @return TteListaPrecioDetalle
-     */
-    public function setListaPreciosRel(\Brasa\TransporteBundle\Entity\TteListaPrecio $listaPreciosRel = null)
-    {
-        $this->listaPreciosRel = $listaPreciosRel;
-
-        return $this;
-    }
-
-    /**
-     * Get listaPreciosRel
-     *
-     * @return \Brasa\TransporteBundle\Entity\TteListaPrecio 
-     */
-    public function getListaPreciosRel()
-    {
-        return $this->listaPreciosRel;
-    }
-
-    /**
-     * Set codigoCiudadDestinoFk
-     *
-     * @param integer $codigoCiudadDestinoFk
-     * @return TteListaPrecioDetalle
-     */
-    public function setCodigoCiudadDestinoFk($codigoCiudadDestinoFk)
-    {
-        $this->codigoCiudadDestinoFk = $codigoCiudadDestinoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadDestinoFk
-     *
-     * @return integer 
-     */
-    public function getCodigoCiudadDestinoFk()
-    {
-        return $this->codigoCiudadDestinoFk;
-    }
-
-    /**
-     * Set ciudadDestinoRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadDestinoRel
-     * @return TteListaPrecioDetalle
-     */
-    public function setCiudadDestinoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadDestinoRel = null)
-    {
-        $this->ciudadDestinoRel = $ciudadDestinoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadDestinoRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad 
-     */
-    public function getCiudadDestinoRel()
-    {
-        return $this->ciudadDestinoRel;
+        return $this->codigoListaPrecioFk;
     }
 
     /**
      * Set codigoProductoFk
      *
      * @param integer $codigoProductoFk
+     *
      * @return TteListaPrecioDetalle
      */
     public function setCodigoProductoFk($codigoProductoFk)
@@ -194,7 +128,7 @@ class TteListaPrecioDetalle
     /**
      * Get codigoProductoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoProductoFk()
     {
@@ -202,32 +136,34 @@ class TteListaPrecioDetalle
     }
 
     /**
-     * Set productoRel
+     * Set codigoCiudadDestinoFk
      *
-     * @param \Brasa\TransporteBundle\Entity\TteProducto $productoRel
+     * @param integer $codigoCiudadDestinoFk
+     *
      * @return TteListaPrecioDetalle
      */
-    public function setProductoRel(\Brasa\TransporteBundle\Entity\TteProducto $productoRel = null)
+    public function setCodigoCiudadDestinoFk($codigoCiudadDestinoFk)
     {
-        $this->productoRel = $productoRel;
+        $this->codigoCiudadDestinoFk = $codigoCiudadDestinoFk;
 
         return $this;
     }
 
     /**
-     * Get productoRel
+     * Get codigoCiudadDestinoFk
      *
-     * @return \Brasa\TransporteBundle\Entity\TteProducto 
+     * @return integer
      */
-    public function getProductoRel()
+    public function getCodigoCiudadDestinoFk()
     {
-        return $this->productoRel;
+        return $this->codigoCiudadDestinoFk;
     }
 
     /**
      * Set vrKilo
      *
      * @param float $vrKilo
+     *
      * @return TteListaPrecioDetalle
      */
     public function setVrKilo($vrKilo)
@@ -240,7 +176,7 @@ class TteListaPrecioDetalle
     /**
      * Get vrKilo
      *
-     * @return float 
+     * @return float
      */
     public function getVrKilo()
     {
@@ -251,6 +187,7 @@ class TteListaPrecioDetalle
      * Set vrUnidad
      *
      * @param float $vrUnidad
+     *
      * @return TteListaPrecioDetalle
      */
     public function setVrUnidad($vrUnidad)
@@ -263,7 +200,7 @@ class TteListaPrecioDetalle
     /**
      * Get vrUnidad
      *
-     * @return float 
+     * @return float
      */
     public function getVrUnidad()
     {
@@ -274,6 +211,7 @@ class TteListaPrecioDetalle
      * Set ctKilosLimite
      *
      * @param float $ctKilosLimite
+     *
      * @return TteListaPrecioDetalle
      */
     public function setCtKilosLimite($ctKilosLimite)
@@ -286,7 +224,7 @@ class TteListaPrecioDetalle
     /**
      * Get ctKilosLimite
      *
-     * @return float 
+     * @return float
      */
     public function getCtKilosLimite()
     {
@@ -297,6 +235,7 @@ class TteListaPrecioDetalle
      * Set vrKilosLimite
      *
      * @param float $vrKilosLimite
+     *
      * @return TteListaPrecioDetalle
      */
     public function setVrKilosLimite($vrKilosLimite)
@@ -309,7 +248,7 @@ class TteListaPrecioDetalle
     /**
      * Get vrKilosLimite
      *
-     * @return float 
+     * @return float
      */
     public function getVrKilosLimite()
     {
@@ -320,6 +259,7 @@ class TteListaPrecioDetalle
      * Set vrKiloAdicional
      *
      * @param float $vrKiloAdicional
+     *
      * @return TteListaPrecioDetalle
      */
     public function setVrKiloAdicional($vrKiloAdicional)
@@ -332,10 +272,82 @@ class TteListaPrecioDetalle
     /**
      * Get vrKiloAdicional
      *
-     * @return float 
+     * @return float
      */
     public function getVrKiloAdicional()
     {
         return $this->vrKiloAdicional;
+    }
+
+    /**
+     * Set ciudadDestinoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadDestinoRel
+     *
+     * @return TteListaPrecioDetalle
+     */
+    public function setCiudadDestinoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadDestinoRel = null)
+    {
+        $this->ciudadDestinoRel = $ciudadDestinoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadDestinoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadDestinoRel()
+    {
+        return $this->ciudadDestinoRel;
+    }
+
+    /**
+     * Set listaPrecioRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteListaPrecio $listaPrecioRel
+     *
+     * @return TteListaPrecioDetalle
+     */
+    public function setListaPrecioRel(\Brasa\TransporteBundle\Entity\TteListaPrecio $listaPrecioRel = null)
+    {
+        $this->listaPrecioRel = $listaPrecioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get listaPrecioRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteListaPrecio
+     */
+    public function getListaPrecioRel()
+    {
+        return $this->listaPrecioRel;
+    }
+
+    /**
+     * Set productoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProducto $productoRel
+     *
+     * @return TteListaPrecioDetalle
+     */
+    public function setProductoRel(\Brasa\TransporteBundle\Entity\TteProducto $productoRel = null)
+    {
+        $this->productoRel = $productoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get productoRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteProducto
+     */
+    public function getProductoRel()
+    {
+        return $this->productoRel;
     }
 }

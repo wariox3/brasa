@@ -29,9 +29,9 @@ class TteRecogida
     private $fechaRecogida;     
     
     /**
-     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
-    private $codigoTerceroFk;          
+    private $codigoClienteFk;          
     
     /**
      * @ORM\Column(name="codigo_punto_operacion_fk", type="integer", nullable=true)
@@ -109,10 +109,10 @@ class TteRecogida
     private $comentarios;    
         
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="recogidasRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
+     * @ORM\ManyToOne(targetEntity="TteCliente", inversedBy="recogidasClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
-    protected $terceroRel;      
+    protected $clienteRel;      
     
     /**
      * @ORM\ManyToOne(targetEntity="TtePuntoOperacion", inversedBy="recogidasPuntoOperacionRel")
@@ -187,27 +187,27 @@ class TteRecogida
     }
 
     /**
-     * Set codigoTerceroFk
+     * Set codigoClienteFk
      *
-     * @param integer $codigoTerceroFk
+     * @param integer $codigoClienteFk
      *
      * @return TteRecogida
      */
-    public function setCodigoTerceroFk($codigoTerceroFk)
+    public function setCodigoClienteFk($codigoClienteFk)
     {
-        $this->codigoTerceroFk = $codigoTerceroFk;
+        $this->codigoClienteFk = $codigoClienteFk;
 
         return $this;
     }
 
     /**
-     * Get codigoTerceroFk
+     * Get codigoClienteFk
      *
      * @return integer
      */
-    public function getCodigoTerceroFk()
+    public function getCodigoClienteFk()
     {
-        return $this->codigoTerceroFk;
+        return $this->codigoClienteFk;
     }
 
     /**
@@ -571,27 +571,27 @@ class TteRecogida
     }
 
     /**
-     * Set terceroRel
+     * Set clienteRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     * @param \Brasa\TransporteBundle\Entity\TteCliente $clienteRel
      *
      * @return TteRecogida
      */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    public function setClienteRel(\Brasa\TransporteBundle\Entity\TteCliente $clienteRel = null)
     {
-        $this->terceroRel = $terceroRel;
+        $this->clienteRel = $clienteRel;
 
         return $this;
     }
 
     /**
-     * Get terceroRel
+     * Get clienteRel
      *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     * @return \Brasa\TransporteBundle\Entity\TteCliente
      */
-    public function getTerceroRel()
+    public function getClienteRel()
     {
-        return $this->terceroRel;
+        return $this->clienteRel;
     }
 
     /**

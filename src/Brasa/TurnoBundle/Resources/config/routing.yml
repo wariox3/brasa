@@ -93,6 +93,22 @@ brs_tur_pedido_detalle_nuevo:
 brs_tur_pedido_detalle_nuevo_cotizacion:
    path:     /tur/pedido/detalle/nuevo/cotizacion/{codigoPedido}/{codigoPedidoDetalle}
    defaults: { _controller: BrasaTurnoBundle:Pedido:detalleNuevoCotizacion }   
+
+brs_tur_factura_lista:
+   path:     /tur/factura/lista
+   defaults: { _controller: BrasaTurnoBundle:Factura:lista } 
+   
+brs_tur_factura_nuevo:
+   path:     /tur/factura/nuevo/{codigoFactura}
+   defaults: { _controller: BrasaTurnoBundle:Factura:nuevo }
+
+brs_tur_factura_detalle:
+   path:     /tur/factura/detalle/{codigoFactura}
+   defaults: { _controller: BrasaTurnoBundle:Factura:detalle }
+   
+brs_tur_factura_detalle_nuevo:
+   path:     /tur/factura/detalle/nuevo/{codigoFactura}/{codigoFacturaDetalle}
+   defaults: { _controller: BrasaTurnoBundle:Factura:detalleNuevo }         
    
 brs_tur_buscar_recurso:
     pattern:  /turno/buscar/recurso/{campoCodigo}

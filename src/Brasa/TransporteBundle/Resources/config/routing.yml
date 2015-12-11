@@ -129,6 +129,10 @@ brs_tte_consultas_recibos_caja:
     defaults: { _controller: BrasaTransporteBundle:Consultas:recibosCaja }    
 
 #Utilidades    
+brs_tte_buscar_cliente:
+    pattern:  /transporte/buscar/cliente/{campoCodigo}/{campoNombre}
+    defaults: { _controller: BrasaTransporteBundle:BuscarCliente:lista } 
+
 brs_tte_buscar_conductor:
     pattern:  /transporte/buscar/conductor/
     defaults: { _controller: BrasaTransporteBundle:Busquedas:buscarConductor }     
