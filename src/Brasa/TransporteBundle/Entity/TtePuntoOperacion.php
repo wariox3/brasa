@@ -64,11 +64,7 @@ class TtePuntoOperacion
      */
     protected $despachosPuntoOperacionRel;     
 
-    /**
-     * @ORM\OneToMany(targetEntity="TtePlanRecogida", mappedBy="puntoOperacionRel")
-     */
-    protected $planesRecogidasRel;     
-    
+
     /**
      * Constructor
      */
@@ -76,13 +72,16 @@ class TtePuntoOperacion
     {
         $this->usuariosConfiguracionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->guiasPuntoOperacionIngresoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->recogidasPuntoOperacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->recogidasProgramadasRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->guiasPuntoOperacionActualRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->despachosPuntoOperacionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get codigoPuntoOperacionPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoPuntoOperacionPk()
     {
@@ -93,6 +92,7 @@ class TtePuntoOperacion
      * Set nombre
      *
      * @param string $nombre
+     *
      * @return TtePuntoOperacion
      */
     public function setNombre($nombre)
@@ -105,7 +105,7 @@ class TtePuntoOperacion
     /**
      * Get nombre
      *
-     * @return string 
+     * @return string
      */
     public function getNombre()
     {
@@ -116,6 +116,7 @@ class TtePuntoOperacion
      * Set codigoCiudadOrigenFk
      *
      * @param integer $codigoCiudadOrigenFk
+     *
      * @return TtePuntoOperacion
      */
     public function setCodigoCiudadOrigenFk($codigoCiudadOrigenFk)
@@ -128,7 +129,7 @@ class TtePuntoOperacion
     /**
      * Get codigoCiudadOrigenFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoCiudadOrigenFk()
     {
@@ -139,6 +140,7 @@ class TtePuntoOperacion
      * Set ciudadOrigenRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadOrigenRel
+     *
      * @return TtePuntoOperacion
      */
     public function setCiudadOrigenRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadOrigenRel = null)
@@ -151,7 +153,7 @@ class TtePuntoOperacion
     /**
      * Get ciudadOrigenRel
      *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad 
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
      */
     public function getCiudadOrigenRel()
     {
@@ -162,6 +164,7 @@ class TtePuntoOperacion
      * Add usuariosConfiguracionRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteUsuarioConfiguracion $usuariosConfiguracionRel
+     *
      * @return TtePuntoOperacion
      */
     public function addUsuariosConfiguracionRel(\Brasa\TransporteBundle\Entity\TteUsuarioConfiguracion $usuariosConfiguracionRel)
@@ -184,7 +187,7 @@ class TtePuntoOperacion
     /**
      * Get usuariosConfiguracionRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUsuariosConfiguracionRel()
     {
@@ -195,6 +198,7 @@ class TtePuntoOperacion
      * Add guiasPuntoOperacionIngresoRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionIngresoRel
+     *
      * @return TtePuntoOperacion
      */
     public function addGuiasPuntoOperacionIngresoRel(\Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionIngresoRel)
@@ -217,7 +221,7 @@ class TtePuntoOperacion
     /**
      * Get guiasPuntoOperacionIngresoRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGuiasPuntoOperacionIngresoRel()
     {
@@ -225,75 +229,10 @@ class TtePuntoOperacion
     }
 
     /**
-     * Add guiasPuntoOperacionActualRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionActualRel
-     * @return TtePuntoOperacion
-     */
-    public function addGuiasPuntoOperacionActualRel(\Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionActualRel)
-    {
-        $this->guiasPuntoOperacionActualRel[] = $guiasPuntoOperacionActualRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove guiasPuntoOperacionActualRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionActualRel
-     */
-    public function removeGuiasPuntoOperacionActualRel(\Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionActualRel)
-    {
-        $this->guiasPuntoOperacionActualRel->removeElement($guiasPuntoOperacionActualRel);
-    }
-
-    /**
-     * Get guiasPuntoOperacionActualRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGuiasPuntoOperacionActualRel()
-    {
-        return $this->guiasPuntoOperacionActualRel;
-    }
-
-    /**
-     * Add despachosPuntoOperacionRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteDespacho $despachosPuntoOperacionRel
-     * @return TtePuntoOperacion
-     */
-    public function addDespachosPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteDespacho $despachosPuntoOperacionRel)
-    {
-        $this->despachosPuntoOperacionRel[] = $despachosPuntoOperacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove despachosPuntoOperacionRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TteDespacho $despachosPuntoOperacionRel
-     */
-    public function removeDespachosPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteDespacho $despachosPuntoOperacionRel)
-    {
-        $this->despachosPuntoOperacionRel->removeElement($despachosPuntoOperacionRel);
-    }
-
-    /**
-     * Get despachosPuntoOperacionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDespachosPuntoOperacionRel()
-    {
-        return $this->despachosPuntoOperacionRel;
-    }
-
-    /**
      * Add recogidasPuntoOperacionRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteRecogida $recogidasPuntoOperacionRel
+     *
      * @return TtePuntoOperacion
      */
     public function addRecogidasPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteRecogida $recogidasPuntoOperacionRel)
@@ -316,7 +255,7 @@ class TtePuntoOperacion
     /**
      * Get recogidasPuntoOperacionRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRecogidasPuntoOperacionRel()
     {
@@ -327,6 +266,7 @@ class TtePuntoOperacion
      * Add recogidasProgramadasRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteRecogidaProgramada $recogidasProgramadasRel
+     *
      * @return TtePuntoOperacion
      */
     public function addRecogidasProgramadasRel(\Brasa\TransporteBundle\Entity\TteRecogidaProgramada $recogidasProgramadasRel)
@@ -349,7 +289,7 @@ class TtePuntoOperacion
     /**
      * Get recogidasProgramadasRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRecogidasProgramadasRel()
     {
@@ -357,35 +297,70 @@ class TtePuntoOperacion
     }
 
     /**
-     * Add planesRecogidasRel
+     * Add guiasPuntoOperacionActualRel
      *
-     * @param \Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionActualRel
+     *
      * @return TtePuntoOperacion
      */
-    public function addPlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel)
+    public function addGuiasPuntoOperacionActualRel(\Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionActualRel)
     {
-        $this->planesRecogidasRel[] = $planesRecogidasRel;
+        $this->guiasPuntoOperacionActualRel[] = $guiasPuntoOperacionActualRel;
 
         return $this;
     }
 
     /**
-     * Remove planesRecogidasRel
+     * Remove guiasPuntoOperacionActualRel
      *
-     * @param \Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel
+     * @param \Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionActualRel
      */
-    public function removePlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel)
+    public function removeGuiasPuntoOperacionActualRel(\Brasa\TransporteBundle\Entity\TteGuia $guiasPuntoOperacionActualRel)
     {
-        $this->planesRecogidasRel->removeElement($planesRecogidasRel);
+        $this->guiasPuntoOperacionActualRel->removeElement($guiasPuntoOperacionActualRel);
     }
 
     /**
-     * Get planesRecogidasRel
+     * Get guiasPuntoOperacionActualRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPlanesRecogidasRel()
+    public function getGuiasPuntoOperacionActualRel()
     {
-        return $this->planesRecogidasRel;
+        return $this->guiasPuntoOperacionActualRel;
+    }
+
+    /**
+     * Add despachosPuntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteDespacho $despachosPuntoOperacionRel
+     *
+     * @return TtePuntoOperacion
+     */
+    public function addDespachosPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteDespacho $despachosPuntoOperacionRel)
+    {
+        $this->despachosPuntoOperacionRel[] = $despachosPuntoOperacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove despachosPuntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteDespacho $despachosPuntoOperacionRel
+     */
+    public function removeDespachosPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteDespacho $despachosPuntoOperacionRel)
+    {
+        $this->despachosPuntoOperacionRel->removeElement($despachosPuntoOperacionRel);
+    }
+
+    /**
+     * Get despachosPuntoOperacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDespachosPuntoOperacionRel()
+    {
+        return $this->despachosPuntoOperacionRel;
     }
 }

@@ -28,10 +28,8 @@ class TteConductor
      */
     protected $despachosRel;    
 
-    /**
-     * @ORM\OneToMany(targetEntity="TtePlanRecogida", mappedBy="conductorRel")
-     */
-    protected $planesRecogidasRel;    
+   
+
 
     /**
      * Constructor
@@ -44,7 +42,7 @@ class TteConductor
     /**
      * Get codigoConductorPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoConductorPk()
     {
@@ -55,6 +53,7 @@ class TteConductor
      * Set nombreCorto
      *
      * @param string $nombreCorto
+     *
      * @return TteConductor
      */
     public function setNombreCorto($nombreCorto)
@@ -67,7 +66,7 @@ class TteConductor
     /**
      * Get nombreCorto
      *
-     * @return string 
+     * @return string
      */
     public function getNombreCorto()
     {
@@ -78,6 +77,7 @@ class TteConductor
      * Add despachosRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteDespacho $despachosRel
+     *
      * @return TteConductor
      */
     public function addDespachosRel(\Brasa\TransporteBundle\Entity\TteDespacho $despachosRel)
@@ -100,43 +100,10 @@ class TteConductor
     /**
      * Get despachosRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDespachosRel()
     {
         return $this->despachosRel;
-    }
-
-    /**
-     * Add planesRecogidasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel
-     * @return TteConductor
-     */
-    public function addPlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel)
-    {
-        $this->planesRecogidasRel[] = $planesRecogidasRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove planesRecogidasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel
-     */
-    public function removePlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel)
-    {
-        $this->planesRecogidasRel->removeElement($planesRecogidasRel);
-    }
-
-    /**
-     * Get planesRecogidasRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPlanesRecogidasRel()
-    {
-        return $this->planesRecogidasRel;
     }
 }

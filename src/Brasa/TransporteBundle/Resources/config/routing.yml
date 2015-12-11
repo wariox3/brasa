@@ -1,11 +1,3 @@
-brs_tte_recogida_lista:
-   path:     /tte/recogida/lista
-   defaults: { _controller: BrasaTransporteBundle:Recogida:lista } 
-   
-brs_tte_recogida_nuevo:
-   path:     /tte/recogida/nuevo/{codigoRecogida}
-   defaults: { _controller: BrasaTransporteBundle:Recogida:nuevo }
-
 brs_tte_guia_lista:
    path:     /tte/guia/lista
    defaults: { _controller: BrasaTransporteBundle:Guia:lista } 
@@ -14,22 +6,18 @@ brs_tte_guia_nuevo:
    path:     /tte/guia/nuevo/{codigoRecogida}
    defaults: { _controller: BrasaTransporteBundle:Guia:nuevo }
 
+brs_tte_recogida_lista:
+    path:     /transporte/recogida/lista
+    defaults: { _controller: BrasaTransporteBundle:Recogida:lista }
 
-brs_tte_recogidas_lista:
-    path:     /transporte/recogidas/lista
-    defaults: { _controller: BrasaTransporteBundle:Recogidas:lista }
-
-brs_tte_recogidas_detalle:
-    path:     /transporte/recogidas/detalle/{codigoRecogida}
-    defaults: { _controller: BrasaTransporteBundle:Recogidas:detalle }
+brs_tte_recogida_detalle:
+    path:     /transporte/recogida/detalle/{codigoRecogida}
+    defaults: { _controller: BrasaTransporteBundle:Recogida:detalle }
     
-brs_tte_recogidas_nuevo:
-    path:     /transporte/recogidas/nuevo/{codigoRecogida}
-    defaults: { _controller: BrasaTransporteBundle:Recogidas:nuevo }    
+brs_tte_recogida_nuevo:
+    path:     /transporte/recogida/nuevo/{codigoRecogida}
+    defaults: { _controller: BrasaTransporteBundle:Recogida:nuevo }    
 
-brs_tte_recogidas_agregar:
-    path:     /transporte/recogidas/agregar/{codigoPlanRecogida}
-    defaults: { _controller: BrasaTransporteBundle:RecogidasFunciones:agregarRecogida } 
 
 brs_tte_recogidas_funciones_programacion:
     path:     /transporte/recogidas/funciones/programacion

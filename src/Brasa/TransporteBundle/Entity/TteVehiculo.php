@@ -26,12 +26,7 @@ class TteVehiculo
     /**
      * @ORM\OneToMany(targetEntity="TteDespacho", mappedBy="vehiculoRel")
      */
-    protected $despachosRel; 
-
-    /**
-     * @ORM\OneToMany(targetEntity="TtePlanRecogida", mappedBy="vehiculoRel")
-     */
-    protected $planesRecogidasRel;    
+    protected $despachosRel;    
     
     /**
      * Constructor
@@ -44,7 +39,7 @@ class TteVehiculo
     /**
      * Get codigoVehiculoPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoVehiculoPk()
     {
@@ -55,6 +50,7 @@ class TteVehiculo
      * Set placa
      *
      * @param string $placa
+     *
      * @return TteVehiculo
      */
     public function setPlaca($placa)
@@ -67,7 +63,7 @@ class TteVehiculo
     /**
      * Get placa
      *
-     * @return string 
+     * @return string
      */
     public function getPlaca()
     {
@@ -78,6 +74,7 @@ class TteVehiculo
      * Add despachosRel
      *
      * @param \Brasa\TransporteBundle\Entity\TteDespacho $despachosRel
+     *
      * @return TteVehiculo
      */
     public function addDespachosRel(\Brasa\TransporteBundle\Entity\TteDespacho $despachosRel)
@@ -100,43 +97,10 @@ class TteVehiculo
     /**
      * Get despachosRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDespachosRel()
     {
         return $this->despachosRel;
-    }
-
-    /**
-     * Add planesRecogidasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel
-     * @return TteVehiculo
-     */
-    public function addPlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel)
-    {
-        $this->planesRecogidasRel[] = $planesRecogidasRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove planesRecogidasRel
-     *
-     * @param \Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel
-     */
-    public function removePlanesRecogidasRel(\Brasa\TransporteBundle\Entity\TtePlanRecogida $planesRecogidasRel)
-    {
-        $this->planesRecogidasRel->removeElement($planesRecogidasRel);
-    }
-
-    /**
-     * Get planesRecogidasRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPlanesRecogidasRel()
-    {
-        return $this->planesRecogidasRel;
     }
 }

@@ -78,6 +78,26 @@ class RecogidaController extends Controller
             'arRecogida' => $arRecogida,
             'form' => $form->createView()));
     }        
+
+    public function detalleAction($codigoRecogida) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');
+        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();
+        $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogida')->find($codigoRecogida);
+        $form = $this->formularioDetalle($arRecogida);
+        $form->handleRequest($request);
+        if($form->isValid()) {                        
+            if($form->get('BtnImprimir')->isClicked()) {                
+                $objRecogida = new \Brasa\TransporteBundle\Formatos\FormatoRecogida();
+                $objRecogida->Generar($this, $codigoRecogida);
+            }            
+        }
+        return $this->render('BrasaTransporteBundle:Movimientos/Recogida:detalle.html.twig', array(
+                    'arRecogida' => $arRecogida,                    
+                    'form' => $form->createView()
+                    ));
+    }    
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
@@ -99,6 +119,15 @@ class RecogidaController extends Controller
         return $form;
     }    
 
+    private function formularioDetalle($ar) {        
+        
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);         
+        $form = $this->createFormBuilder()      
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->getForm();
+        return $form;
+    }    
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();        

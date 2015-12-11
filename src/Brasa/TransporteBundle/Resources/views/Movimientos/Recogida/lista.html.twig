@@ -39,6 +39,7 @@
                 <th>DECLARADO</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arRecogidas in arRecogidas %}
             <tr>
@@ -51,6 +52,7 @@
                 <td style="text-align: right">{{ arRecogidas.pesoVolumen | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arRecogidas.vrDeclarado | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_tte_recogida_nuevo', {'codigoRecogida': arRecogidas.codigoRecogidaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_tte_recogida_detalle', { 'codigoRecogida': arRecogidas.codigoRecogidaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRecogidas.codigoRecogidaPk }}" /></td>
             </tr>
 
