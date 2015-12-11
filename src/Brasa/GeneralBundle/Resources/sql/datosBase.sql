@@ -5422,6 +5422,10 @@ INSERT INTO `rhu_examen_tipo` (`codigo_examen_tipo_pk`, `nombre`, `ingreso`) VAL
 INSERT INTO `rhu_examen_tipo` (`codigo_examen_tipo_pk`, `nombre`, `ingreso`) VALUES('19','SEROLOGIA II','0');
 INSERT INTO `rhu_examen_tipo` (`codigo_examen_tipo_pk`, `nombre`, `ingreso`) VALUES('20','HEMOGRAMA','0');
 
+insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) values('1','GENERAL');
+insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) values('2','INDUCCIÓN');
+insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) values('3','OTROS');
+
 INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('2','ORGANIZACION MEDICA ODONTOLOGICA NACIONAL INTEGRADA SA','88888888','CL 33 74 E 56','222222222');
 INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('3','SALUD MEDICA ROTE','800980987','CARRERA 20 N 40-20','343444');
 INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('4','SALUD EN CASA','800145748','CARRERA 48 N 58-+58','4587458');

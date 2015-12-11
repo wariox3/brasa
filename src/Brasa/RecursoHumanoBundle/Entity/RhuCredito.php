@@ -18,7 +18,7 @@ class RhuCredito
     private $codigoCreditoPk;
     
     /**
-     * @ORM\Column(name="codigo_credito_tipo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_credito_tipo_fk", type="integer")
      */    
     private $codigoCreditoTipoFk;
     
@@ -131,17 +131,6 @@ class RhuCredito
     protected $creditoTipoRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuCreditoPago", mappedBy="creditoRel")
-     */
-    protected $creditosPagosCreditoRel;
-    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="creditoRel")
-     */
-    protected $pagosDetallesCreditoRel;
-    
-    /**
      * @ORM\ManyToOne(targetEntity="RhuCreditoTipoPago", inversedBy="creditosCreditoTipoPagoRel")
      * @ORM\JoinColumn(name="codigo_credito_tipo_pago_fk", referencedColumnName="codigo_credito_tipo_pago_pk")
      */
@@ -151,7 +140,17 @@ class RhuCredito
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="creditosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $centroCostoRel;
+    protected $centroCostoRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCreditoPago", mappedBy="creditoRel")
+     */
+    protected $creditosPagosCreditoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="creditoRel")
+     */
+    protected $pagosDetallesCreditoRel;   
 
     /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacionAdicionales", mappedBy="creditoRel")
@@ -162,6 +161,8 @@ class RhuCredito
      * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="creditoRel")
      */
     protected $VacacionesCreditosCreditoRel;
+    
+    
     
     
     /**

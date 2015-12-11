@@ -253,17 +253,17 @@ class CapacitacionesController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        if($controles['fechaDesdeInicia']) {
-            $this->fechaDesdeInicia = $controles['fechaDesdeInicia'];
+        if($controles['fechaDesde']) {
+            $this->fechaDesdeInicia = $controles['fechaDesde'];
         }
-        if($controles['fechaHastaInicia']) {
-            $this->fechaHastaInicia = $controles['fechaHastaInicia'];
+        if($controles['fechaHasta']) {
+            $this->fechaHastaInicia = $controles['fechaHasta'];
         }
         //$session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
 
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        /*$session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);*/
     }
 
     private function generarExcel() {
@@ -272,69 +272,55 @@ class CapacitacionesController extends Controller
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
-            ->setLastModifiedBy("EMPRESA")
-            ->setTitle("Office 2007 XLSX Test Document")
-            ->setSubject("Office 2007 XLSX Test Document")
-            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-            ->setKeywords("office 2007 openxml php")
-            ->setCategory("Test result file");
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'NUMERO')
-                    ->setCellValue('E1', 'CENTRO COSTOS')
-                    ->setCellValue('F1', 'TIEMPO')
-                    ->setCellValue('G1', 'DESDE')
-                    ->setCellValue('H1', 'HASTA')
-                    ->setCellValue('I1', 'SALARIO')
-                    ->setCellValue('J1', 'CARGO')
-                    ->setCellValue('K1', 'CARGO DESCRIPCION')
-                    ->setCellValue('L1', 'CLA. RIESGO')
-                    ->setCellValue('M1', 'ULT. PAGO')
-                    ->setCellValue('N1', 'ULT. PAGO PRIMAS')
-                    ->setCellValue('O1', 'ULT. PAGO CESANTIAS')
-                    ->setCellValue('P1', 'ULT. PAGO VACACIONES');
-        $i = 2;
-        $query = $em->createQuery($session->get('dqlContratoLista'));
-        //$arCapacitaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion();
-        $arCapacitaciones = $query->getResult();
-        foreach ($arCapacitaciones as $arCapacitacion) {
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arCapacitacion->getCodigoContratoPk())
-                    ->setCellValue('B' . $i, $arCapacitacion->getContratoTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arCapacitacion->getFecha()->Format('Y-m-d'))
-                    ->setCellValue('D' . $i, $arCapacitacion->getNumero())
-                    ->setCellValue('E' . $i, $arCapacitacion->getCentroCostoRel()->getNombre())
-                    ->setCellValue('F' . $i, $arCapacitacion->getTipoTiempoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arCapacitacion->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arCapacitacion->getFechaHasta()->Format('Y-m-d'))
-                    ->setCellValue('I' . $i, $arCapacitacion->getVrSalario())
-                    ->setCellValue('J' . $i, $arCapacitacion->getCargoRel()->getNombre())
-                    ->setCellValue('K' . $i, $arCapacitacion->getCargoDescripcion())
-                    ->setCellValue('L' . $i, $arCapacitacion->getClasificacionRiesgoRel()->getNombre())
-                    ->setCellValue('M' . $i, $arCapacitacion->getFechaUltimoPago()->Format('Y-m-d'))
-                    ->setCellValue('N' . $i, $arCapacitacion->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
-                    ->setCellValue('O' . $i, $arCapacitacion->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
-                    ->setCellValue('P' . $i, $arCapacitacion->getFechaUltimoPagoVacaciones()->Format('Y-m-d'));
-            $i++;
-        }
-        $objPHPExcel->getActiveSheet()->setTitle('contratos');
-        $objPHPExcel->setActiveSheetIndex(0);
-        // Redirect output to a client’s web browser (Excel2007)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Contratos.xlsx"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-        // If you're serving to IE over SSL, then the following may be needed
-        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header ('Pragma: public'); // HTTP/1.0
-        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-        $objWriter->save('php://output');
-        exit;
-    }
+                    ->setLastModifiedBy("EMPRESA")
+                    ->setTitle("Office 2007 XLSX Test Document")
+                    ->setSubject("Office 2007 XLSX Test Document")
+                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("Test result file");
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'FECHA')
+                            ->setCellValue('C1', 'TIPO')
+                            ->setCellValue('D1', 'TEMA');
+
+                $i = 2;
+                $query = $em->createQuery($this->strDqlLista);
+                $arCapacitaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion();
+                $arCapacitaciones = $query->getResult();
+
+                foreach ($arCapacitaciones as $arCapacitacion) {                   
+                    if ($arCapacitacion->getCodigoCapacitacionTipoFk() == null){
+                        $strCapacitacionTipo = "";
+                    }else{
+                        $strCapacitacionTipo = $arCapacitacion->getCapacitacionTipoRel()->getNombre();
+                    }
+                    $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A' . $i, $arCapacitacion->getCodigoCapacitacionPk())
+                            ->setCellValue('B' . $i, $arCapacitacion->getFecha())
+                            ->setCellValue('C' . $i, $strCapacitacionTipo)
+                            ->setCellValue('D' . $i, $arCapacitacion->getTema());
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->setTitle('Capacitaciones');
+                $objPHPExcel->setActiveSheetIndex(0);
+
+                // Redirect output to a client’s web browser (Excel2007)
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="Capacitaciones.xlsx"');
+                header('Cache-Control: max-age=0');
+                // If you're serving to IE 9, then the following may be needed
+                header('Cache-Control: max-age=1');
+                // If you're serving to IE over SSL, then the following may be needed
+                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header ('Pragma: public'); // HTTP/1.0
+                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+                $objWriter->save('php://output');
+                exit;
+            }
 
 }

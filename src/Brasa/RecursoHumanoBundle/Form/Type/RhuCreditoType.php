@@ -23,7 +23,7 @@ class RhuCreditoType extends AbstractType
             ->add('vrPagar', 'number', array('required' => true))                                                                           
             ->add('numeroCuotas', 'number', array('required' => true))
             ->add('fechaInicio', 'date', array('required' => true))    
-            ->add('comentarios', 'textarea', array('required' => true))
+            ->add('comentarios', 'textarea', array('required' => false))
             ->add('seguro', 'number', array('required' => true))
             ->add('numeroLibranza', 'number', array('required' => false))
             ->add('guardar', 'submit')
