@@ -6,17 +6,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="tte_plan_recogida")
- * @ORM\Entity(repositoryClass="Brasa\TransporteBundle\Repository\TtePlanRecogidaRepository")
+ * @ORM\Table(name="tte_programacion_recogida")
+ * @ORM\Entity(repositoryClass="Brasa\TransporteBundle\Repository\TteProgramacionRecogidaRepository")
  */
-class TtePlanRecogida
+class TteProgramacionRecogida
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_plan_recogida_pk", type="integer")
+     * @ORM\Column(name="codigo_programacion_recogida_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoPlanRecogidaPk;                 
+    private $codigoProgramacionRecogidaPk;                 
     
     /**
      * @ORM\Column(name="fecha", type="datetime", nullable=true)
@@ -71,17 +71,47 @@ class TtePlanRecogida
     /**
      * @ORM\Column(name="estado_descargado", type="boolean")
      */    
-    private $estadoDescargado = 0;    
+    private $estadoDescargado = false;    
+    /**
+     * @ORM\ManyToOne(targetEntity="TteConductor", inversedBy="programacionesRecogidasConductorRel")
+     * @ORM\JoinColumn(name="codigo_conductor_fk", referencedColumnName="codigo_conductor_pk")
+     */
+    protected $conductorRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TteVehiculo", inversedBy="programacionesRecogidasVehiculoRel")
+     * @ORM\JoinColumn(name="codigo_vehiculo_fk", referencedColumnName="codigo_vehiculo_pk")
+     */
+    protected $vehiculoRel;          
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TtePuntoOperacion", inversedBy="programacionesRecogidasPuntoOperacionRel")
+     * @ORM\JoinColumn(name="codigo_punto_operacion_fk", referencedColumnName="codigo_punto_operacion_pk")
+     */
+    protected $puntoOperacionRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TteRecogida", mappedBy="programacionRecogidaRel")
+     */
+    protected $recogidasProgramacionRecogidaRel; 
     
 
     /**
-     * Get codigoPlanRecogidaPk
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->recogidasProgramacionRecogidaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get codigoProgramacionRecogidaPk
      *
      * @return integer
      */
-    public function getCodigoPlanRecogidaPk()
+    public function getCodigoProgramacionRecogidaPk()
     {
-        return $this->codigoPlanRecogidaPk;
+        return $this->codigoProgramacionRecogidaPk;
     }
 
     /**
@@ -89,7 +119,7 @@ class TtePlanRecogida
      *
      * @param \DateTime $fecha
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setFecha($fecha)
     {
@@ -113,7 +143,7 @@ class TtePlanRecogida
      *
      * @param integer $codigoPuntoOperacionFk
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setCodigoPuntoOperacionFk($codigoPuntoOperacionFk)
     {
@@ -137,7 +167,7 @@ class TtePlanRecogida
      *
      * @param integer $codigoConductorFk
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setCodigoConductorFk($codigoConductorFk)
     {
@@ -161,7 +191,7 @@ class TtePlanRecogida
      *
      * @param integer $codigoVehiculoFk
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setCodigoVehiculoFk($codigoVehiculoFk)
     {
@@ -185,7 +215,7 @@ class TtePlanRecogida
      *
      * @param float $vrFletePagado
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setVrFletePagado($vrFletePagado)
     {
@@ -209,7 +239,7 @@ class TtePlanRecogida
      *
      * @param integer $ctPesoReal
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setCtPesoReal($ctPesoReal)
     {
@@ -233,7 +263,7 @@ class TtePlanRecogida
      *
      * @param integer $ctPesoVolumen
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setCtPesoVolumen($ctPesoVolumen)
     {
@@ -257,7 +287,7 @@ class TtePlanRecogida
      *
      * @param integer $ctUnidades
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setCtUnidades($ctUnidades)
     {
@@ -281,7 +311,7 @@ class TtePlanRecogida
      *
      * @param integer $ctRecogidas
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setCtRecogidas($ctRecogidas)
     {
@@ -305,7 +335,7 @@ class TtePlanRecogida
      *
      * @param string $comentarios
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setComentarios($comentarios)
     {
@@ -329,7 +359,7 @@ class TtePlanRecogida
      *
      * @param boolean $estadoDescargado
      *
-     * @return TtePlanRecogida
+     * @return TteProgramacionRecogida
      */
     public function setEstadoDescargado($estadoDescargado)
     {
@@ -346,5 +376,111 @@ class TtePlanRecogida
     public function getEstadoDescargado()
     {
         return $this->estadoDescargado;
+    }
+
+    /**
+     * Set conductorRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteConductor $conductorRel
+     *
+     * @return TteProgramacionRecogida
+     */
+    public function setConductorRel(\Brasa\TransporteBundle\Entity\TteConductor $conductorRel = null)
+    {
+        $this->conductorRel = $conductorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get conductorRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteConductor
+     */
+    public function getConductorRel()
+    {
+        return $this->conductorRel;
+    }
+
+    /**
+     * Set vehiculoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteVehiculo $vehiculoRel
+     *
+     * @return TteProgramacionRecogida
+     */
+    public function setVehiculoRel(\Brasa\TransporteBundle\Entity\TteVehiculo $vehiculoRel = null)
+    {
+        $this->vehiculoRel = $vehiculoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculoRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TteVehiculo
+     */
+    public function getVehiculoRel()
+    {
+        return $this->vehiculoRel;
+    }
+
+    /**
+     * Set puntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionRel
+     *
+     * @return TteProgramacionRecogida
+     */
+    public function setPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TtePuntoOperacion $puntoOperacionRel = null)
+    {
+        $this->puntoOperacionRel = $puntoOperacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puntoOperacionRel
+     *
+     * @return \Brasa\TransporteBundle\Entity\TtePuntoOperacion
+     */
+    public function getPuntoOperacionRel()
+    {
+        return $this->puntoOperacionRel;
+    }
+
+    /**
+     * Add recogidasProgramacionRecogidaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogida $recogidasProgramacionRecogidaRel
+     *
+     * @return TteProgramacionRecogida
+     */
+    public function addRecogidasProgramacionRecogidaRel(\Brasa\TransporteBundle\Entity\TteRecogida $recogidasProgramacionRecogidaRel)
+    {
+        $this->recogidasProgramacionRecogidaRel[] = $recogidasProgramacionRecogidaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recogidasProgramacionRecogidaRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteRecogida $recogidasProgramacionRecogidaRel
+     */
+    public function removeRecogidasProgramacionRecogidaRel(\Brasa\TransporteBundle\Entity\TteRecogida $recogidasProgramacionRecogidaRel)
+    {
+        $this->recogidasProgramacionRecogidaRel->removeElement($recogidasProgramacionRecogidaRel);
+    }
+
+    /**
+     * Get recogidasProgramacionRecogidaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRecogidasProgramacionRecogidaRel()
+    {
+        return $this->recogidasProgramacionRecogidaRel;
     }
 }

@@ -35,6 +35,11 @@ class TtePuntoOperacion
     protected $ciudadOrigenRel; 
     
     /**
+     * @ORM\OneToMany(targetEntity="TteProgramacionRecogida", mappedBy="puntoOperacionRel")
+     */
+    protected $programacionesRecogidasPuntoOperacionRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TteUsuarioConfiguracion", mappedBy="puntoOperacionRel")
      */
     protected $usuariosConfiguracionRel; 
@@ -362,5 +367,39 @@ class TtePuntoOperacion
     public function getDespachosPuntoOperacionRel()
     {
         return $this->despachosPuntoOperacionRel;
+    }
+
+    /**
+     * Add programacionesRecogidasPuntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasPuntoOperacionRel
+     *
+     * @return TtePuntoOperacion
+     */
+    public function addProgramacionesRecogidasPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasPuntoOperacionRel)
+    {
+        $this->programacionesRecogidasPuntoOperacionRel[] = $programacionesRecogidasPuntoOperacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesRecogidasPuntoOperacionRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasPuntoOperacionRel
+     */
+    public function removeProgramacionesRecogidasPuntoOperacionRel(\Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasPuntoOperacionRel)
+    {
+        $this->programacionesRecogidasPuntoOperacionRel->removeElement($programacionesRecogidasPuntoOperacionRel);
+    }
+
+    /**
+     * Get programacionesRecogidasPuntoOperacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesRecogidasPuntoOperacionRel()
+    {
+        return $this->programacionesRecogidasPuntoOperacionRel;
     }
 }

@@ -121,10 +121,10 @@ class TteRecogida
     protected $puntoOperacionRel;     
      
     /**
-     * @ORM\ManyToOne(targetEntity="TtePlanRecogida", inversedBy="recogidasRel")
-     * @ORM\JoinColumn(name="codigo_plan_recogida_fk", referencedColumnName="codigo_plan_recogida_pk")
+     * @ORM\ManyToOne(targetEntity="TteProgramacionRecogida", inversedBy="recogidasProgramacionRecogidaRel")
+     * @ORM\JoinColumn(name="codigo_programacion_recogida_fk", referencedColumnName="codigo_programacion_recogida_pk")
      */
-    protected $planRecogidaRel;     
+    protected $programacionRecogidaRel;     
 
 
 
@@ -619,26 +619,26 @@ class TteRecogida
     }
 
     /**
-     * Set planRecogidaRel
+     * Set programacionRecogidaRel
      *
-     * @param \Brasa\TransporteBundle\Entity\TtePlanRecogida $planRecogidaRel
+     * @param \Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionRecogidaRel
      *
      * @return TteRecogida
      */
-    public function setPlanRecogidaRel(\Brasa\TransporteBundle\Entity\TtePlanRecogida $planRecogidaRel = null)
+    public function setProgramacionRecogidaRel(\Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionRecogidaRel = null)
     {
-        $this->planRecogidaRel = $planRecogidaRel;
+        $this->programacionRecogidaRel = $programacionRecogidaRel;
 
         return $this;
     }
 
     /**
-     * Get planRecogidaRel
+     * Get programacionRecogidaRel
      *
-     * @return \Brasa\TransporteBundle\Entity\TtePlanRecogida
+     * @return \Brasa\TransporteBundle\Entity\TteProgramacionRecogida
      */
-    public function getPlanRecogidaRel()
+    public function getProgramacionRecogidaRel()
     {
-        return $this->planRecogidaRel;
+        return $this->programacionRecogidaRel;
     }
 }

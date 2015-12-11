@@ -26,7 +26,12 @@ class TteVehiculo
     /**
      * @ORM\OneToMany(targetEntity="TteDespacho", mappedBy="vehiculoRel")
      */
-    protected $despachosRel;    
+    protected $despachosRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TteProgramacionRecogida", mappedBy="vehiculoRel")
+     */
+    protected $programacionesRecogidasVehiculoRel;     
     
     /**
      * Constructor
@@ -102,5 +107,39 @@ class TteVehiculo
     public function getDespachosRel()
     {
         return $this->despachosRel;
+    }
+
+    /**
+     * Add programacionesRecogidasVehiculoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasVehiculoRel
+     *
+     * @return TteVehiculo
+     */
+    public function addProgramacionesRecogidasVehiculoRel(\Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasVehiculoRel)
+    {
+        $this->programacionesRecogidasVehiculoRel[] = $programacionesRecogidasVehiculoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesRecogidasVehiculoRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasVehiculoRel
+     */
+    public function removeProgramacionesRecogidasVehiculoRel(\Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasVehiculoRel)
+    {
+        $this->programacionesRecogidasVehiculoRel->removeElement($programacionesRecogidasVehiculoRel);
+    }
+
+    /**
+     * Get programacionesRecogidasVehiculoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesRecogidasVehiculoRel()
+    {
+        return $this->programacionesRecogidasVehiculoRel;
     }
 }

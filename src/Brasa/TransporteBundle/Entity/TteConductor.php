@@ -28,7 +28,10 @@ class TteConductor
      */
     protected $despachosRel;    
 
-   
+    /**
+     * @ORM\OneToMany(targetEntity="TteProgramacionRecogida", mappedBy="conductorRel")
+     */
+    protected $programacionesRecogidasConductorRel;    
 
 
     /**
@@ -105,5 +108,39 @@ class TteConductor
     public function getDespachosRel()
     {
         return $this->despachosRel;
+    }
+
+    /**
+     * Add programacionesRecogidasConductorRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasConductorRel
+     *
+     * @return TteConductor
+     */
+    public function addProgramacionesRecogidasConductorRel(\Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasConductorRel)
+    {
+        $this->programacionesRecogidasConductorRel[] = $programacionesRecogidasConductorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesRecogidasConductorRel
+     *
+     * @param \Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasConductorRel
+     */
+    public function removeProgramacionesRecogidasConductorRel(\Brasa\TransporteBundle\Entity\TteProgramacionRecogida $programacionesRecogidasConductorRel)
+    {
+        $this->programacionesRecogidasConductorRel->removeElement($programacionesRecogidasConductorRel);
+    }
+
+    /**
+     * Get programacionesRecogidasConductorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesRecogidasConductorRel()
+    {
+        return $this->programacionesRecogidasConductorRel;
     }
 }
