@@ -4059,6 +4059,9 @@ INSERT INTO `rhu_contrato_tipo` (`codigo_contrato_tipo_pk`, `nombre`) VALUES('3'
 INSERT INTO `rhu_contrato_tipo` (`codigo_contrato_tipo_pk`, `nombre`) VALUES('4','CONTRATO POR APRENDIZ DEL SENA');
 INSERT INTO `rhu_contrato_tipo` (`codigo_contrato_tipo_pk`, `nombre`) VALUES('5','CONTRATO DE PRACTICA ESTUDIANTIL');
 
+insert into `rhu_credito_tipo` (`codigo_credito_tipo_pk`, `nombre`, `cupo_maximo`) values('1','ALMACEN DE ROPA','350000');
+insert into `rhu_credito_tipo` (`codigo_credito_tipo_pk`, `nombre`, `cupo_maximo`) values('2','CONVENIO ODONTOLOGÍA','350000');
+
 INSERT INTO `rhu_credito_tipo_pago` (`codigo_credito_tipo_pago_pk`, `nombre`) VALUES('1','DESCUENTO POR NOMINA');
 INSERT INTO `rhu_credito_tipo_pago` (`codigo_credito_tipo_pago_pk`, `nombre`) VALUES('2','PRESTAMO');
 INSERT INTO `rhu_credito_tipo_pago` (`codigo_credito_tipo_pago_pk`, `nombre`) VALUES('3','VACACIONES');

@@ -82,7 +82,7 @@
                 {% if arCreditos.Aprobado == 1 %}
                         <td style="text-align: center"><a href="#marcador" onclick="javascript:alert('No se puede modificar el credito, se encuenta aprobado o cancelado!');"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
                 {% else %}
-                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk,  'codigoEmpleado': arCreditos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                        <td style="text-align: center"><a href="{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk,  'codigoEmpleado': arCreditos.codigoEmpleadoFk}) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
                 {% endif %}
                 <td><a href="{{ path('brs_rhu_credito_detalle', { 'codigoCreditoPk': arCreditos.codigoCreditoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCreditos.codigoCreditoPk }}" /></td>

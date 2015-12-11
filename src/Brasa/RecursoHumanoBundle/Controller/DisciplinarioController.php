@@ -13,6 +13,7 @@ class DisciplinarioController extends Controller
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $paginator  = $this->get('knp_paginator');
         $session = $this->getRequest()->getSession();
         $form = $this->formularioFiltro();
@@ -25,7 +26,11 @@ class DisciplinarioController extends Controller
                     foreach ($arrSelecionados AS $codigoDisciplinario) {
                         $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
                         $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
-                        $em->remove($arDisciplinario);
+                        if ($arDisciplinario->getEstadoAutorizado() == 0){
+                            $em->remove($arDisciplinario);
+                        }else{
+                            $objMensaje->Mensaje("error", "El proceso número ".$codigoDisciplinario. ", no se puede eliminar, se encuentra autorizado", $this);
+                        }   
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_disciplinario_lista'));
@@ -111,7 +116,7 @@ class DisciplinarioController extends Controller
             if($form->get('BtnDesAutorizar')->isClicked()) {            
                 if($arProcesoDisciplinario->getEstadoAutorizado() == 1) {
                     $arProcesoDisciplinario->setEstadoAutorizado(0);
-                    $em->persist($arDotacion);
+                    $em->persist($arProcesoDisciplinario);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
                 }
