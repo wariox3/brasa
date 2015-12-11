@@ -3,6 +3,7 @@
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    {{ form_errors(form) }}
     <h3>Nuevo crédito</h3>    
     <div class="panel panel-default">
         <div class="panel-heading">Información general</div>
@@ -84,6 +85,7 @@
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
         {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>    
+    {{ form_rest(form) }}
     {{ form_end(form) }}
 </div>
 {% endblock %}

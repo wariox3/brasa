@@ -219,7 +219,7 @@ class DisciplinarioController extends Controller
 
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        ob_clean();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

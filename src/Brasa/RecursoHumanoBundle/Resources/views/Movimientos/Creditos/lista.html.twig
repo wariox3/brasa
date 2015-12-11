@@ -67,7 +67,7 @@
             {% for arCreditos in arCreditos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCreditos.codigoCreditoPk }}">{{ arCreditos.codigoCreditoPk }} </td>
-                <td>{{ arCreditos.creditoTipoRel.nombre  }}</td>
+                <td>{{ arCreditos.creditoTipoRel.nombre|default('')  }}</td>
                 <td>{{ arCreditos.fechaInicio |date("Y/m/d")  }}</td>
                 <td>{{ arCreditos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arCreditos.empleadoRel.nombreCorto  }}</td>

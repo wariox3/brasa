@@ -61,9 +61,14 @@ class FormatoCredito extends \FPDF_FPDF {
         //$arCreditos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findAll();
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
-        foreach ($arCreditos as $arCredito) {            
+        foreach ($arCreditos as $arCredito) {
+            if ($arCredito->getCodigoCreditoTipoFk() == null){
+                $strCreditoTipo = "";
+            }else{
+                $strCreditoTipo = $arCredito->getCreditoTipoRel()->getNombre();
+            }
             $pdf->Cell(14, 4, $arCredito->getCodigoCreditoPk(), 1, 0, 'L');
-            $pdf->Cell(45, 4, utf8_decode($arCredito->getCreditoTipoRel()->getNombre()), 1, 0, 'L');
+            $pdf->Cell(45, 4, utf8_decode($strCreditoTipo), 1, 0, 'L');
             $pdf->Cell(17, 4, $arCredito->getFecha()->format('Y/m/d'), 1, 0, 'C');
             $pdf->Cell(65, 4, utf8_decode($arCredito->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');
             $pdf->Cell(19, 4, number_format($arCredito->getVrPagar(), 2, '.', ','), 1, 0, 'R');

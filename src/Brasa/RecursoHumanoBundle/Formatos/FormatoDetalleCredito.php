@@ -65,7 +65,12 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "CREDITO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 6, $arDetallePago->getCreditoTipoRel()->getNombre() , 1, 0, 'L', 1);
+        if ($arDetallePago->getCodigoCreditoTipoFk() == null){
+            $strCreditoTipo = "";
+        }else{
+            $strCreditoTipo = $arDetallePago->getCreditoTipoRel()->getNombre();
+        }
+        $this->Cell(65, 6, utf8_decode($strCreditoTipo) , 1, 0, 'L', 1);
         //fila3
         $this->SetXY(10, 50);
         $this->SetFont('Arial','B',8);

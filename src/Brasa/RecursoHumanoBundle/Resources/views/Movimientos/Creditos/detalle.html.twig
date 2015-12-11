@@ -29,7 +29,7 @@
                         <td class="titulo">EMPLEADO:</th>
                         <td class="td-in-well">{{ arCreditos.empleadoRel.nombreCorto }}</td>
                         <td class="titulo">CRÉDITO:</th>
-                        <td class="td-in-well">{{ arCreditos.creditoTipoRel.nombre }}</td>
+                        <td class="td-in-well">{{ arCreditos.creditoTipoRel.nombre|default('') }}</td>
                         <td class="titulo">VALOR CUOTA:</th>
                         <td class="td-in-well" align="right">{{ arCreditos.vrCuota | number_format(2, '.', ',')}}</td>                                                
                     </tr>                    

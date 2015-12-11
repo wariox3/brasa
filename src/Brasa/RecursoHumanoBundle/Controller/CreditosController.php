@@ -447,9 +447,14 @@ class CreditosController extends Controller
                     {
                         $Suspendido = "NO";
                     }
+                    if ($arCredito->getCodigoCreditoTipoFk() == null){
+                        $strCreditoTipo = "";
+                    }else{
+                        $strCreditoTipo = $arCredito->getCreditoTipoRel()->getNombre();
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
-                            ->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre())
+                            ->setCellValue('B' . $i, $strCreditoTipo)
                             ->setCellValue('C' . $i, $arCredito->getFecha())
                             ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
