@@ -461,69 +461,6 @@
                                 <li><a href="{{ path('brs_inv_documentos_lista', { 'codigoTipoDocumento': 7 }) }}">Orden de produccion</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Transporte</a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Logistica</a>
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Recogidas</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_tte_recogida_lista') }}">Lista</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="{{ path('brs_tte_recogidas_funciones_programacion') }}">Programacion</a></li>
-                                                <li><a href="{{ path('brs_tte_recogidas_funciones_programadas') }}">Generar recogidas programadas</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Guias</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_tte_guias_lista') }}">Lista</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="{{ path('brs_tte_guias_funciones_entregar') }}">Fechas de entrega</a></li>
-                                                <li><a href="{{ path('brs_tte_guias_funciones_descargar') }}">Descargar</a></li>
-                                                <li><a href="{{ path('brs_tte_guias_funciones_redespachar') }}">Redespachos</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Despachos</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_tte_despachos_lista') }}">Lista</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Relaciones cumplidos</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_tte_relacionescumplidos_lista') }}">Lista</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Monitoreo</a>
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Vehiculos</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_tte_facturas_lista') }}">Ver</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Comercial</a>
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Facturas</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_tte_facturas_lista') }}">Lista</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
                         -->
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
@@ -695,6 +632,7 @@
                                     <a tabindex="-1" href="#">Recogida</a>
                                     <ul class="dropdown-menu">                                        
                                         <li><a href="{{ path('brs_tte_recogida_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_tte_programacion_recogida_lista') }}">Programacion</a></li>
                                     </ul>
                                 </li>                                 
                                 <li class="dropdown-submenu">

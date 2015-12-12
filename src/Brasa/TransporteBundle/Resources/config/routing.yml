@@ -18,18 +18,17 @@ brs_tte_recogida_nuevo:
     path:     /transporte/recogida/nuevo/{codigoRecogida}
     defaults: { _controller: BrasaTransporteBundle:Recogida:nuevo }    
 
+brs_tte_programacion_recogida_lista:
+    path:     /transporte/programacion/recogida/lista
+    defaults: { _controller: BrasaTransporteBundle:ProgramacionRecogida:lista }
 
-brs_tte_recogidas_funciones_programacion:
-    path:     /transporte/recogidas/funciones/programacion
-    defaults: { _controller: BrasaTransporteBundle:RecogidasFunciones:programacion }
-
-brs_tte_recogidas_planrecogida_nuevo:
-    path:     /transporte/recogidas/planrecogida/nuevo/{codigoPlanRecogida}
-    defaults: { _controller: BrasaTransporteBundle:RecogidasFunciones:planRecogidaNuevo }
-
-brs_tte_recogidas_funciones_programadas:
-    path:     /transporte/recogidas/funciones/programadas
-    defaults: { _controller: BrasaTransporteBundle:RecogidasFunciones:programadas }    
+brs_tte_programacion_recogida_detalle:
+    path:     /transporte/programacion/recogida/detalle/{codigoProgramacionRecogida}
+    defaults: { _controller: BrasaTransporteBundle:ProgramacionRecogida:detalle }
+    
+brs_tte_programacion_recogida_nuevo:
+    path:     /transporte/programacion/recogida/nuevo/{codigoProgramacionRecogida}
+    defaults: { _controller: BrasaTransporteBundle:ProgramacionRecogida:nuevo }     
     
 brs_tte_guias_lista:
     path:     /transporte/guias/lista
@@ -122,8 +121,8 @@ brs_tte_buscar_cliente:
     defaults: { _controller: BrasaTransporteBundle:BuscarCliente:lista } 
 
 brs_tte_buscar_conductor:
-    pattern:  /transporte/buscar/conductor/
-    defaults: { _controller: BrasaTransporteBundle:Busquedas:buscarConductor }     
+    pattern:  /transporte/buscar/conductor/{campoCodigo}/{campoNombre}
+    defaults: { _controller: BrasaTransporteBundle:BuscarConductor:lista }
     
 brs_tte_buscar_vehiculo:
     pattern:  /transporte/buscar/vehiculo/

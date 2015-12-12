@@ -1,0 +1,43 @@
+{% extends '::base.html.twig' %}
+{% block title %}Recogida detalle - Soga App{% endblock %}
+{% block content %}
+<script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+<div class="container">
+    <div class="page-header">
+        <h3>Detalle recogida</h3>
+    </div>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+    {{ form_errors(form) }}
+    <div class="btn-toolbar" style="float:left">
+        <div class="btn-group">
+            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+        </div>
+    </div>
+    <br /><br />
+    <!-- Encabezado Movimiento -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Información</div>
+      <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="titulo">CODIGO:</td>
+                    <td class="td-in-well">{{ arRecogida.codigoRecogidaPk }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                </tr>                
+            </table>
+      </div>
+    </div>
+
+
+
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+    <a  class="btn btn-default btn-sm" href="{{ path('brs_tte_recogida_lista') }}">Volver</a>
+</div>
+{% endblock %}
