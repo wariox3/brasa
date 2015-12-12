@@ -192,27 +192,37 @@ class PagoIncapacidadController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'ENTIDAD')
-                    ->setCellValue('C1', 'TOTAL');
+                    ->setCellValue('C1', 'TOTAL')
+                    ->setCellValue('D1', 'COMENTARIOS')
+                    ->setCellValue('E1', 'AUTORIZADO');
                     
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
-        $arPagoExamenes = $query->getResult();
-        foreach ($arPagoExamenes as $arPagoExamen) {
+        
+        $arPagoIncapacidades = $query->getResult();
+        foreach ($arPagoIncapacidades as $arPagoIncapacidad) {
             $strNombreEntidad = "";
-            if($arPagoExamen->getEntidadExamenRel()) {
-                $strNombreEntidad = $arPagoExamen->getEntidadExamenRel()->getNombre();
+            if($arPagoIncapacidad->getCodigoEntidadSaludFk() != null) {
+                $strNombreEntidad = $arPagoIncapacidad->getEntidadSaludRel()->getNombre();
+            }
+            if ($arPagoIncapacidad->getEstadoAutorizado()== 1){
+                $autorizado = "SI";
+            } else{
+                $autorizado = "NO";
             }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPagoExamen->getCodigoPagoExamenPk())
+                    ->setCellValue('A' . $i, $arPagoIncapacidad->getCodigoIncapacidadPagoPk())
                     ->setCellValue('B' . $i, $strNombreEntidad)
-                    ->setCellValue('C' . $i, $arPagoExamen->getVrTotal());
+                    ->setCellValue('C' . $i, $arPagoIncapacidad->getVrTotal())
+                    ->setCellValue('D' . $i, $arPagoIncapacidad->getComentarios())
+                    ->setCellValue('E' . $i, $autorizado);
             $i++;
         }
-        $objPHPExcel->getActiveSheet()->setTitle('PagoExamen');
+        $objPHPExcel->getActiveSheet()->setTitle('PagoIncapacidades');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="pagoExamanes.xlsx"');
+        header('Content-Disposition: attachment;filename="PagoIncapacidades.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
