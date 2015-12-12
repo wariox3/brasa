@@ -18,12 +18,12 @@ class RhuCredito
     private $codigoCreditoPk;
     
     /**
-     * @ORM\Column(name="codigo_credito_tipo_fk", type="integer")
+     * @ORM\Column(name="codigo_credito_tipo_fk", type="integer", nullable=false)
      */    
     private $codigoCreditoTipoFk;
     
     /**
-     * @ORM\Column(name="codigo_credito_tipo_pago_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_credito_tipo_pago_fk", type="integer", nullable=false)
      */    
     private $codigoCreditoTipoPagoFk;
     
@@ -162,8 +162,7 @@ class RhuCredito
      */
     protected $VacacionesCreditosCreditoRel;
     
-    
-    
+       
     
     /**
      * Constructor
@@ -715,6 +714,54 @@ class RhuCredito
     }
 
     /**
+     * Set creditoTipoPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago $creditoTipoPagoRel
+     *
+     * @return RhuCredito
+     */
+    public function setCreditoTipoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago $creditoTipoPagoRel = null)
+    {
+        $this->creditoTipoPagoRel = $creditoTipoPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get creditoTipoPagoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago
+     */
+    public function getCreditoTipoPagoRel()
+    {
+        return $this->creditoTipoPagoRel;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuCredito
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
+    }
+
+    /**
      * Add creditosPagosCreditoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago $creditosPagosCreditoRel
@@ -780,54 +827,6 @@ class RhuCredito
     public function getPagosDetallesCreditoRel()
     {
         return $this->pagosDetallesCreditoRel;
-    }
-
-    /**
-     * Set creditoTipoPagoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago $creditoTipoPagoRel
-     *
-     * @return RhuCredito
-     */
-    public function setCreditoTipoPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago $creditoTipoPagoRel = null)
-    {
-        $this->creditoTipoPagoRel = $creditoTipoPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get creditoTipoPagoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipoPago
-     */
-    public function getCreditoTipoPagoRel()
-    {
-        return $this->creditoTipoPagoRel;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuCredito
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
     }
 
     /**
