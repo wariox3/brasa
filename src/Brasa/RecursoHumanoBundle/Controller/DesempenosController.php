@@ -195,8 +195,14 @@ class DesempenosController extends Controller
                         $arDesempenoDetalle->setCasiNunca($intCasiNunca);
                         $arDesempenoDetalle->setNunca($intNunca);
                         $em->persist($arDesempenoDetalle);
+                        
                     }
                 }
+                $strObservaciones = $arrControles['TextareaObservaciones'];
+                $strAspectosMejorar = $arrControles['TextareaAspectosMejorar'];
+                $arDesempeno->setObservaciones($strObservaciones);
+                $arDesempeno->setAspectosMejorar($strAspectosMejorar);
+                $em->persist($arDesempeno);
                 $em->flush();
                 $intSiempreAreaProfesional = 0;
                 $intCasiSiempreAreaProfesional = 0;

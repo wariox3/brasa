@@ -113,9 +113,10 @@
                         <th colspan="2">OBSERVACIONES</th>
                     </tr>    
                     <tr>    
-                        <td>{{arDesempeno.observaciones}}</td>
                         {% if arDesempeno.estadoAutorizado == 0%}
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_desempeno_detalle_nuevo_observacion', { 'codigoDesempeno': arDesempeno.codigoDesempenoPk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td><textarea class="textarea-grid" type="textarea" rows="4" cols="220" name="TextareaObservaciones">{{ arDesempeno.observaciones }}</textarea>
+                        {% else %}  
+                            <td>{{arDesempeno.observaciones}}</td>
                         {% endif %}    
                     </tr>
                 </table>
@@ -124,9 +125,10 @@
                         <th colspan="2">QUE ASPECTOS MEJORARÍA DE SU COLABORADOR</th>
                     </tr>    
                     <tr>    
-                        <td>{{arDesempeno.aspectosMejorar}}</td>
                         {% if arDesempeno.estadoAutorizado == 0%}
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_desempeno_detalle_nuevo_aspectosMejorar', { 'codigoDesempeno': arDesempeno.codigoDesempenoPk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td><textarea class="textarea-grid" type="textarea" rows="4" cols="220" name="TextareaAspectosMejorar">{{ arDesempeno.aspectosMejorar }}</textarea>
+                        {% else %}  
+                            <td>{{arDesempeno.aspectosMejorar}}</td>
                         {% endif %}
                     </tr>
                 </table>

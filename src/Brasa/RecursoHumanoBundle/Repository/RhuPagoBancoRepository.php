@@ -14,7 +14,7 @@ class RhuPagoBancoRepository extends EntityRepository {
     public function listaDQL($strFecha = "") {                
         $dql   = "SELECT pb FROM BrasaRecursoHumanoBundle:RhuPagoBanco pb WHERE pb.codigoPagoBancoPk <> 0";
         if($strFecha != "") {
-            $dql .= " AND pb.fechaAplicacion = '" . $strFecha . "'";
+            $dql .= " AND pb.fechaAplicacion = '" .$strFecha. "'";
         }    
         
         $dql .= " ORDER BY pb.codigoPagoBancoPk";

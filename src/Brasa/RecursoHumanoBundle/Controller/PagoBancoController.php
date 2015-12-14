@@ -231,28 +231,31 @@ class PagoBancoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'ENTIDAD')
-                    ->setCellValue('C1', 'TOTAL');
+                    ->setCellValue('B1', 'DESCRIPCIÓN')
+                    ->setCellValue('C1', 'CUENTA')
+                    ->setCellValue('D1', 'FECHA TRANSMISIÓN')
+                    ->setCellValue('E1', 'FECHA APLICACIÓN')
+                    ->setCellValue('F1', 'SECUENCIA');
                     
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
-        $arPagoExamenes = $query->getResult();
-        foreach ($arPagoExamenes as $arPagoExamen) {
-            $strNombreEntidad = "";
-            if($arPagoExamen->getEntidadExamenRel()) {
-                $strNombreEntidad = $arPagoExamen->getEntidadExamenRel()->getNombre();
-            }
+        $arPagoBancos = $query->getResult();
+        foreach ($arPagoBancos as $arPagoBanco) {
+            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPagoExamen->getCodigoPagoExamenPk())
-                    ->setCellValue('B' . $i, $strNombreEntidad)
-                    ->setCellValue('C' . $i, $arPagoExamen->getVrTotal());
+                    ->setCellValue('A' . $i, $arPagoBanco->getCodigoPagoBancoPk())
+                    ->setCellValue('B' . $i, $arPagoBanco->getDescripcion())
+                    ->setCellValue('C' . $i, $arPagoBanco->getCuentaRel()->getNombre())
+                    ->setCellValue('D' . $i, $arPagoBanco->getFechaTrasmision())
+                    ->setCellValue('E' . $i, $arPagoBanco->getFechaAplicacion())
+                    ->setCellValue('F' . $i, $arPagoBanco->getSecuencia());
             $i++;
         }
-        $objPHPExcel->getActiveSheet()->setTitle('PagoExamen');
+        $objPHPExcel->getActiveSheet()->setTitle('PagoBancos');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="pagoExamanes.xlsx"');
+        header('Content-Disposition: attachment;filename="PagoBancos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -269,20 +272,7 @@ class PagoBancoController extends Controller
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
-        /*$arrayPropiedades = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('ee')                                        
-                    ->orderBy('ee.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,  
-                'empty_data' => "",
-                'empty_value' => "TODOS",    
-                'data' => ""
-            );  
-        if($session->get('filtroCodigoEntidadExamen')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadExamen", $session->get('filtroCodigoEntidadExamen'));                                    
-        }  */      
+              
         $form = $this->createFormBuilder()
             //->add('entidadExamenRel', 'entity', $arrayPropiedades) 
             ->add('fecha','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
