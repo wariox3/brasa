@@ -1,4 +1,5 @@
 {% extends '::base.html.twig' %}
+{% block title %}Generar soporte pago - Soga App{% endblock %}
 {% block content %}
 <script>
     $(function () {
@@ -46,7 +47,12 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>RECURSO</th>
+                <th>DIAS</th>
+                <th>DESCANSO</th>
                 <th>HD</th>
+                <th>HN</th>
+                <th>HFD</th>
+                <th>HFN</th>                
                 <th>HEOD</th>
                 <th>HEON</th>
                 <th>HEFD</th>
@@ -58,7 +64,12 @@
                 <td>{{ arSoportesPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSoportesPagos.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{{ arSoportesPagos.recursoRel.nombreCorto  }}</td>    
+                <td style="text-align: right">{{ arSoportesPagos.dias | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.descanso | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasDiurnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasNocturnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasFestivasDiurnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasFestivasNocturnas | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasOrdinariasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasOrdinariasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasDiurnas | number_format(0, '.', ',') }}</td>
@@ -85,7 +96,13 @@
                 <th>{{ knp_pagination_sortable(arSoportesPagos, 'CÓDIGO', 'p.codigoSoportePagoPk') }}</th>
                 <th>FECHA</th>
                 <th>RECURSO</th>
+                <th>TURNO</th>
+                <th>DIAS</th>
+                <th>DESCANSO</th>
                 <th>HD</th>
+                <th>HN</th>
+                <th>HFD</th>
+                <th>HFN</th>                
                 <th>HEOD</th>
                 <th>HEON</th>
                 <th>HEFD</th>
@@ -96,7 +113,13 @@
                 <td>{{ arSoportesPagosDetalles.codigoSoportePagoDetallePk  }}</td>
                 <td>{{ arSoportesPagosDetalles.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arSoportesPagosDetalles.recursoRel.nombreCorto  }}</td>    
+                <td>{{ arSoportesPagosDetalles.codigoTurnoFk  }}</td>    
+                <td style="text-align: right">{{ arSoportesPagosDetalles.dias | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.descanso | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasDiurnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasNocturnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasFestivasDiurnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasFestivasNocturnas | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasOrdinariasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasOrdinariasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasFestivasDiurnas | number_format(0, '.', ',') }}</td>

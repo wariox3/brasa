@@ -22,6 +22,16 @@ class TurRecurso
      */    
     private $nombreCorto;    
     
+    /**     
+     * @ORM\Column(name="pago_promedio", type="boolean")
+     */    
+    private $pagoPromedio = false;    
+
+    /**     
+     * @ORM\Column(name="pago_variable", type="boolean")
+     */    
+    private $pagoVariable = false;                
+    
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
@@ -208,5 +218,53 @@ class TurRecurso
     public function getSoportesPagosRecursoRel()
     {
         return $this->soportesPagosRecursoRel;
+    }
+
+    /**
+     * Set pagoPromedio
+     *
+     * @param boolean $pagoPromedio
+     *
+     * @return TurRecurso
+     */
+    public function setPagoPromedio($pagoPromedio)
+    {
+        $this->pagoPromedio = $pagoPromedio;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoPromedio
+     *
+     * @return boolean
+     */
+    public function getPagoPromedio()
+    {
+        return $this->pagoPromedio;
+    }
+
+    /**
+     * Set pagoVariable
+     *
+     * @param boolean $pagoVariable
+     *
+     * @return TurRecurso
+     */
+    public function setPagoVariable($pagoVariable)
+    {
+        $this->pagoVariable = $pagoVariable;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoVariable
+     *
+     * @return boolean
+     */
+    public function getPagoVariable()
+    {
+        return $this->pagoVariable;
     }
 }

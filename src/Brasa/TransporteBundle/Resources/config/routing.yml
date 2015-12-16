@@ -25,6 +25,10 @@ brs_tte_programacion_recogida_lista:
 brs_tte_programacion_recogida_detalle:
     path:     /transporte/programacion/recogida/detalle/{codigoProgramacionRecogida}
     defaults: { _controller: BrasaTransporteBundle:ProgramacionRecogida:detalle }
+
+brs_tte_programacion_recogida_detalle_nuevo:
+    path:     /transporte/programacion/recogida/detalle/nuevo/{codigoProgramacionRecogida}
+    defaults: { _controller: BrasaTransporteBundle:ProgramacionRecogida:detalleNuevo }
     
 brs_tte_programacion_recogida_nuevo:
     path:     /transporte/programacion/recogida/nuevo/{codigoProgramacionRecogida}

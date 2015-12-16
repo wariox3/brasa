@@ -14,7 +14,12 @@ class TurSoportePagoRepository extends EntityRepository {
     public function resumen($dateFechaDesde, $dateFechaHasta) {
         $em = $this->getEntityManager();
         $dql   = "SELECT spd.codigoRecursoFk, "
+                . "SUM(spd.descanso) as descanso, "
+                . "SUM(spd.dias) as dias, "
                 . "SUM(spd.horasDiurnas) as horasDiurnas, "
+                . "SUM(spd.horasNocturnas) as horasNocturnas, "
+                . "SUM(spd.horasFestivasDiurnas) as horasFestivasDiurnas, "
+                . "SUM(spd.horasFestivasNocturnas) as horasFestivasNocturnas, "                
                 . "SUM(spd.horasExtrasOrdinariasDiurnas) as horasExtrasOrdinariasDiurnas, "
                 . "SUM(spd.horasExtrasOrdinariasNocturnas) as horasExtrasOrdinariasNocturnas, "
                 . "SUM(spd.horasExtrasFestivasDiurnas) as horasExtrasFestivasDiurnas, "
@@ -32,7 +37,12 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setRecursoRel($arRecurso);
             $arSoportePago->setFechaDesde($dateFechaDesde);
             $arSoportePago->setFechaHasta($dateFechaHasta);
+            $arSoportePago->setDias($arrayResultado[$i]['dias']);
+            $arSoportePago->setDescanso($arrayResultado[$i]['descanso']);
             $arSoportePago->setHorasDiurnas($arrayResultado[$i]['horasDiurnas']);
+            $arSoportePago->setHorasNocturnas($arrayResultado[$i]['horasNocturnas']);
+            $arSoportePago->setHorasFestivasDiurnas($arrayResultado[$i]['horasFestivasDiurnas']);
+            $arSoportePago->setHorasFestivasNocturnas($arrayResultado[$i]['horasFestivasNocturnas']);            
             $arSoportePago->setHorasExtrasOrdinariasDiurnas($arrayResultado[$i]['horasExtrasOrdinariasDiurnas']);
             $arSoportePago->setHorasExtrasOrdinariasNocturnas($arrayResultado[$i]['horasExtrasOrdinariasNocturnas']);
             $arSoportePago->setHorasExtrasFestivasDiurnas($arrayResultado[$i]['horasExtrasFestivasDiurnas']);

@@ -44,7 +44,8 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31");
                 foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
                     $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'));
-                    for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {
+                    //if($arProgramacionDetalle->getCodigoRecursoFk() != 2) {
+                        for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {
                         $strFecha = $dateFechaDesde->format('Y/m/') . $i;
                         $dateFecha = date_create($strFecha);
                         $nuevafecha = strtotime ( '+1 day' , strtotime ( $strFecha ) ) ;
@@ -101,7 +102,9 @@ class ProcesoGenerarSoportePagoController extends Controller
                         if($arTurno) {
                             $this->insertarSoportePago($arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $arTurno, $dateFecha, $boolFestivo, $boolFestivo2);
                         }
-                    }
+                    }                        
+                    //}
+
                 }                
                 $em->flush();
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->resumen($dateFechaDesde, $dateFechaHasta);
@@ -137,7 +140,12 @@ class ProcesoGenerarSoportePagoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
         $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
+        $intDias = 0;
+        $intDescanso = 0;
         $intTotalHorasDiurnas = 0;
+        $intTotalHorasNocturnas = 0;
+        $intTotalHorasFestivasDiurnas = 0;
+        $intTotalHorasFestivasNocturnas = 0;
         $intTotalHorasExtrasOrinariasDiurnas = 0;
         $intTotalHorasExtrasOrinariasNocturnas = 0;
         $intTotalHorasExtrasFestivasDiurnas = 0;
@@ -146,98 +154,69 @@ class ProcesoGenerarSoportePagoController extends Controller
         $intHoraInicio = $arTurno->getHoraDesde()->format('G');
         $intHoraFinal = $arTurno->getHoraHasta()->format('G');
         $diaSemana = $dateFecha->format('N');
-        if($arTurno->getNovedad() == 0) {
-            if($intHoraInicio < $intHoraFinal){
-                $intHorasExtras = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 0, 6);
-                $intHorasDiurnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 6, 22);
-                $intHorasExtras2 = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 22, 24);
-                $intTotalHorasDiurnas = $intHorasDiurnas;
-                $intTotalHorasExtrasOrinariasNocturnas = $intHorasExtras + $intHorasExtras2;
-            } else {
-
-                $intHorasExtras = $this->calcularTiempo($intHoraInicio, 24, 0, 6);
-                $intHorasDiurnas = $this->calcularTiempo($intHoraInicio, 24, 6, 22);
-                $intHorasExtras2 = $this->calcularTiempo($intHoraInicio, 24, 22, 24);
-
-                $intHorasExtrasNueva = $this->calcularTiempo(0, $intHoraFinal, 0, 6);
-                $intHorasDiurnasNueva = $this->calcularTiempo(0, $intHoraFinal, 6, 22);
-                $intHorasExtras2Nueva = $this->calcularTiempo(0, $intHoraFinal, 22, 24);
-
-                /*if($diaSemana >= 1 && $diaSemana <= 5) {
-                    $intTotalHorasDiurnas = $intHorasDiurnas + $intHorasDiurnasNueva;
-                    $intTotalHorasExtrasOrinariasDiurnas = 0;
-                    $intTotalHorasExtrasOrinariasNocturnas = $intHorasExtras + $intHorasExtrasNueva + $intHorasExtras2 + $intHorasExtras2Nueva;
-                    $intTotalHorasExtrasFestivasDiurnas = 0;
-                    $intTotalHorasExtrasFestivasNocturnas = 0;
-                    if($boolFestivo2 == 1) {
-                        $intTotalHorasDiurnas = $intHorasDiurnas;
-                        $intTotalHorasExtrasOrinariasDiurnas = 0;
-                        $intTotalHorasExtrasOrinariasNocturnas = $intHorasExtras + $intHorasExtras2;
-                        $intTotalHorasExtrasFestivasDiurnas = $intHorasDiurnasNueva;
-                        $intTotalHorasExtrasFestivasNocturnas = $intHorasExtrasNueva + $intHorasExtras2Nueva;
-                    }
-                }
-                if($diaSemana == 6) {
-                    $intTotalHorasDiurnas = $intHorasDiurnas + $intHorasDiurnasNueva;
-                    $intTotalHorasExtrasOrinariasDiurnas = 0;
-                    $intTotalHorasExtrasOrinariasNocturnas = $intHorasExtras + $intHorasExtrasNueva;
-                    $intTotalHorasExtrasFestivasDiurnas = 0;
-                    $intTotalHorasExtrasFestivasNocturnas = $intHorasExtrasNueva + $intHorasExtras2Nueva;
-                }
-
-                if($diaSemana == 7) {
-                    $intTotalHorasDiurnas = $intHorasDiurnasNueva;
-                    $intTotalHorasExtrasOrinariasDiurnas = 0;
-                    $intTotalHorasExtrasOrinariasNocturnas = $intHorasExtrasNueva + $intHorasExtras2Nueva;
-                    $intTotalHorasExtrasFestivasDiurnas = $intHorasDiurnas;
-                    $intTotalHorasExtrasFestivasNocturnas = $intHorasExtras + $intHorasExtras2;
-                    if($boolFestivo2 == 1) {
-                        $intTotalHorasDiurnas = 0;
-                        $intTotalHorasExtrasOrinariasDiurnas = 0;
-                        $intTotalHorasExtrasOrinariasNocturnas = 0;
-                        $intTotalHorasExtrasFestivasDiurnas = $intHorasDiurnas + $intHorasDiurnasNueva;
-                        $intTotalHorasExtrasFestivasNocturnas = $intHorasExtras + $intHorasExtras2 + $intHorasExtrasNueva + $intHorasExtras2Nueva;
-                    }
-                }
-                if($boolFestivo == 1) {
-                    if($diaSemana >= 1 && $diaSemana <= 5) {
-                        $intTotalHorasDiurnas = $intHorasDiurnasNueva;
-                        $intTotalHorasExtrasOrinariasDiurnas = 0;
-                        $intTotalHorasExtrasOrinariasNocturnas = $intHorasExtrasNueva + $intHorasExtras2Nueva;
-                        $intTotalHorasExtrasFestivasDiurnas = $intHorasDiurnas;
-                        $intTotalHorasExtrasFestivasNocturnas = $intHorasExtras + $intHorasExtras2;
-                        if($boolFestivo2 == 1) {
-                            $intTotalHorasDiurnas = 0;
-                            $intTotalHorasExtrasOrinariasDiurnas = 0;
-                            $intTotalHorasExtrasOrinariasNocturnas = 0;
-                            $intTotalHorasExtrasFestivasDiurnas = $intHorasDiurnas + $intHorasDiurnasNueva;
-                            $intTotalHorasExtrasFestivasNocturnas = $intHorasExtras + $intHorasExtras2 + $intHorasExtrasNueva + $intHorasExtras2Nueva;                            
-                        }
-                    }
-                    if($diaSemana == 6) {
-                        $intTotalHorasDiurnas = 0;
-                        $intTotalHorasExtrasOrinariasDiurnas = 0;
-                        $intTotalHorasExtrasOrinariasNocturnas = 0;
-                        $intTotalHorasExtrasFestivasDiurnas = $intHorasDiurnas + $intHorasDiurnasNueva;
-                        $intTotalHorasExtrasFestivasNocturnas = $intHorasExtrasNueva + $intHorasExtras2Nueva + $intHorasExtras + $intHorasExtrasNueva;
-                    }
-
-                    if($diaSemana == 7) {
-                        $intTotalHorasDiurnas = $intHorasDiurnasNueva;
-                        $intTotalHorasExtrasOrinariasDiurnas = 0;
-                        $intTotalHorasExtrasOrinariasNocturnas = $intHorasExtrasNueva + $intHorasExtras2Nueva;
-                        $intTotalHorasExtrasFestivasDiurnas = $intHorasDiurnas;
-                        $intTotalHorasExtrasFestivasNocturnas = $intHorasExtras + $intHorasExtras2;
-                        if($boolFestivo2 == 1) {
-                            $intTotalHorasDiurnas = 0;
-                            $intTotalHorasExtrasOrinariasDiurnas = 0;
-                            $intTotalHorasExtrasOrinariasNocturnas = 0;
-                            $intTotalHorasExtrasFestivasDiurnas = $intHorasDiurnas + $intHorasDiurnasNueva;
-                            $intTotalHorasExtrasFestivasNocturnas = $intHorasExtras + $intHorasExtras2 + $intHorasExtrasNueva + $intHorasExtras2Nueva;                            
-                        }
-                    }
-                }*/
+        if($arTurno->getDescanso() == 1){
+            $intDescanso = 1;
+        }
+        if($arTurno->getNovedad() == 0 && $arTurno->getDescanso() == 0) {
+            $intDias += 1;
+            if($diaSemana == 7) {
+                $boolFestivo = 1;
             }
+            if($intHoraInicio < $intHoraFinal){  
+                if($boolFestivo == 0) {
+                    $intHorasExtras = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 0, 6);
+                    $intHorasDiurnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 6, 22);
+                    $intHorasExtras2 = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 22, 24);
+                    $intTotalHorasDiurnas = $intHorasDiurnas;
+                    $intTotalHorasExtrasOrinariasNocturnas = $intHorasExtras + $intHorasExtras2;
+                    if($intHorasDiurnas > 8) {
+                        $intTotalHorasDiurnas = 8;
+                        $intTotalHorasExtrasOrinariasDiurnas = $intHorasDiurnas - 8;
+                    }                    
+                } else {                    
+                    $intHorasFestivasDiurnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 6, 22);                    
+                    $intTotalHorasFestivasDiurnas = $intHorasFestivasDiurnas;                    
+                    if($intHorasFestivasDiurnas > 8) {
+                        $intTotalHorasFestivasDiurnas = 8;
+                        $intTotalHorasExtrasFestivasDiurnas = $intHorasFestivasDiurnas - 8;
+                    }                    
+                }
+            } else {
+                if($boolFestivo == 0) {
+                    $intHorasDiurnas = $this->calcularTiempo($intHoraInicio, 24, 6, 22);
+                    $intHorasNocturnas = $this->calcularTiempo($intHoraInicio, 24, 22, 24);                
+                    $intTotalHorasDiurnas = $intHorasDiurnas;
+                    $intTotalHorasNocturnas += $intHorasNocturnas;
+
+                    if($boolFestivo2 == 1 || $diaSemana == 6) {
+                        $intHorasFestivasNocturnas = $this->calcularTiempo(0, $intHoraFinal, 0, 2);   
+                        $intHorasExtrasFestivasNocturnas = $this->calcularTiempo(0, $intHoraFinal, 2, 6);   
+                        $intTotalHorasFestivasNocturnas += $intHorasFestivasNocturnas;
+                        $intTotalHorasExtrasFestivasNocturnas += $intHorasExtrasFestivasNocturnas;
+                    } else {
+                        $intHorasNocturnas = $this->calcularTiempo(0, $intHoraFinal, 0, 6);      
+                        $intTotalHorasNocturnas += $intHorasNocturnas;
+                    }                       
+                } else {
+                    $intHorasFestivasDiurnas = $this->calcularTiempo($intHoraInicio, 24, 18, 22);
+                    $intHorasFestivasNocturnas = $this->calcularTiempo($intHoraInicio, 24, 22, 24);                                    
+                    $intTotalHorasFestivasDiurnas += $intHorasFestivasDiurnas;
+                    $intTotalHorasFestivasNocturnas += $intHorasFestivasNocturnas;
+
+                    if($boolFestivo2 == 1 || $diaSemana == 6) {
+                        $intHorasFestivasNocturnas = $this->calcularTiempo(0, $intHoraFinal, 0, 2);   
+                        $intHorasExtrasFestivasNocturnas = $this->calcularTiempo(0, $intHoraFinal, 2, 6);   
+                        $intTotalHorasFestivasNocturnas += $intHorasFestivasNocturnas;
+                        $intTotalHorasExtrasFestivasNocturnas += $intHorasExtrasFestivasNocturnas;
+                    } else {
+                        $intHorasNocturnas = $this->calcularTiempo(0, $intHoraFinal, 0, 2);
+                        $intHorasExtrasNocturnas = $this->calcularTiempo(0, $intHoraFinal, 2, 6);
+                        $intTotalHorasNocturnas += $intHorasNocturnas;
+                        $intTotalHorasExtrasOrinariasNocturnas += $intHorasExtrasNocturnas;
+                    }                    
+                }             
+            }
+            
         }
 
 
@@ -246,8 +225,13 @@ class ProcesoGenerarSoportePagoController extends Controller
         $arSoportePagoDetalle->setProgramacionDetalleRel($arProgramacionDetalle);
         $arSoportePagoDetalle->setFecha($dateFecha);
         $arSoportePagoDetalle->setTurnoRel($arTurno);
-        $arSoportePagoDetalle->setHoras($arTurno->getHoras());
+        $arSoportePagoDetalle->setDescanso($intDescanso);
+        $arSoportePagoDetalle->setDias($intDias);
+        $arSoportePagoDetalle->setHoras($arTurno->getHoras());        
         $arSoportePagoDetalle->setHorasDiurnas($intTotalHorasDiurnas);
+        $arSoportePagoDetalle->setHorasNocturnas($intTotalHorasNocturnas);
+        $arSoportePagoDetalle->setHorasFestivasDiurnas($intTotalHorasFestivasDiurnas);
+        $arSoportePagoDetalle->setHorasFestivasNocturnas($intTotalHorasFestivasNocturnas);        
         $arSoportePagoDetalle->setHorasExtrasOrdinariasDiurnas($intTotalHorasExtrasOrinariasDiurnas);
         $arSoportePagoDetalle->setHorasExtrasOrdinariasNocturnas($intTotalHorasExtrasOrinariasNocturnas);
         $arSoportePagoDetalle->setHorasExtrasFestivasDiurnas($intTotalHorasExtrasFestivasDiurnas);
@@ -308,11 +292,16 @@ class ProcesoGenerarSoportePagoController extends Controller
                     ->setCellValue('B1', 'RECURSO')
                     ->setCellValue('C1', 'DESDE')
                     ->setCellValue('D1', 'HASTA')
-                    ->setCellValue('E1', 'HD')
-                    ->setCellValue('F1', 'HEOD')
-                    ->setCellValue('G1', 'HEON')
-                    ->setCellValue('H1', 'HEFD')
-                    ->setCellValue('I1', 'HEFN');
+                    ->setCellValue('E1', 'DIAS')
+                    ->setCellValue('F1', 'DESCANSO')
+                    ->setCellValue('G1', 'HD')
+                    ->setCellValue('H1', 'HN')
+                    ->setCellValue('I1', 'HFD')
+                    ->setCellValue('J1', 'HFN')                
+                    ->setCellValue('K1', 'HEOD')
+                    ->setCellValue('L1', 'HEON')
+                    ->setCellValue('M1', 'HEFD')
+                    ->setCellValue('N1', 'HEFN');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -325,11 +314,16 @@ class ProcesoGenerarSoportePagoController extends Controller
                     ->setCellValue('B' . $i, $arSoportePago->getRecursoRel()->getNombreCorto())
                     ->setCellValue('C' . $i, $arSoportePago->getFechaDesde()->format('Y/m/d'))
                     ->setCellValue('D' . $i, $arSoportePago->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arSoportePago->getHorasDiurnas())
-                    ->setCellValue('F' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnas())
-                    ->setCellValue('G' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnas())
-                    ->setCellValue('H' . $i, $arSoportePago->getHorasExtrasFestivasDiurnas())
-                    ->setCellValue('I' . $i, $arSoportePago->getHorasExtrasFestivasNocturnas());
+                    ->setCellValue('E' . $i, $arSoportePago->getDias())
+                    ->setCellValue('F' . $i, $arSoportePago->getDescanso())
+                    ->setCellValue('G' . $i, $arSoportePago->getHorasDiurnas())
+                    ->setCellValue('H' . $i, $arSoportePago->getHorasNocturnas())
+                    ->setCellValue('I' . $i, $arSoportePago->getHorasFestivasDiurnas())
+                    ->setCellValue('J' . $i, $arSoportePago->getHorasFestivasNocturnas())                    
+                    ->setCellValue('K' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnas())
+                    ->setCellValue('L' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnas())
+                    ->setCellValue('M' . $i, $arSoportePago->getHorasExtrasFestivasDiurnas())
+                    ->setCellValue('N' . $i, $arSoportePago->getHorasExtrasFestivasNocturnas());
 
             $i++;
         }
@@ -338,12 +332,18 @@ class ProcesoGenerarSoportePagoController extends Controller
         $objPHPExcel->createSheet(2)->setTitle('Detalle')       
                     ->setCellValue('A1', 'CODIG0')
                     ->setCellValue('B1', 'RECURSO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'HD')
-                    ->setCellValue('E1', 'HEOD')
-                    ->setCellValue('F1', 'HEON')
-                    ->setCellValue('G1', 'HEFD')
-                    ->setCellValue('H1', 'HEFN');
+                    ->setCellValue('C1', 'TURNO')
+                    ->setCellValue('D1', 'FECHA')
+                    ->setCellValue('E1', 'DIAS')
+                    ->setCellValue('F1', 'DESCANSO')
+                    ->setCellValue('G1', 'HD')
+                    ->setCellValue('H1', 'HN')
+                    ->setCellValue('I1', 'HFD')
+                    ->setCellValue('J1', 'HFN')                
+                    ->setCellValue('K1', 'HEOD')
+                    ->setCellValue('L1', 'HEON')
+                    ->setCellValue('M1', 'HEFD')
+                    ->setCellValue('N1', 'HEFN');
         
         $i = 2;
         $query = $em->createQuery($this->strListaDqlDetalle);
@@ -354,12 +354,18 @@ class ProcesoGenerarSoportePagoController extends Controller
             $objPHPExcel->setActiveSheetIndex(1)
                     ->setCellValue('A' . $i, $arSoportePagoDetalle->getCodigoSoportePagoDetallePk())
                     ->setCellValue('B' . $i, $arSoportePagoDetalle->getRecursoRel()->getNombreCorto())
-                    ->setCellValue('C' . $i, $arSoportePagoDetalle->getFecha()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arSoportePagoDetalle->getHorasDiurnas())
-                    ->setCellValue('E' . $i, $arSoportePagoDetalle->getHorasExtrasOrdinariasDiurnas())
-                    ->setCellValue('F' . $i, $arSoportePagoDetalle->getHorasExtrasOrdinariasNocturnas())
-                    ->setCellValue('G' . $i, $arSoportePagoDetalle->getHorasExtrasFestivasDiurnas())
-                    ->setCellValue('H' . $i, $arSoportePagoDetalle->getHorasExtrasFestivasNocturnas());
+                    ->setCellValue('C' . $i, $arSoportePagoDetalle->getCodigoTurnoFk())
+                    ->setCellValue('D' . $i, $arSoportePagoDetalle->getFecha()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arSoportePagoDetalle->getDias())
+                    ->setCellValue('F' . $i, $arSoportePagoDetalle->getDescanso())
+                    ->setCellValue('G' . $i, $arSoportePagoDetalle->getHorasDiurnas())
+                    ->setCellValue('H' . $i, $arSoportePagoDetalle->getHorasNocturnas())
+                    ->setCellValue('I' . $i, $arSoportePagoDetalle->getHorasFestivasDiurnas())
+                    ->setCellValue('J' . $i, $arSoportePagoDetalle->getHorasFestivasNocturnas())                    
+                    ->setCellValue('K' . $i, $arSoportePagoDetalle->getHorasExtrasOrdinariasDiurnas())
+                    ->setCellValue('L' . $i, $arSoportePagoDetalle->getHorasExtrasOrdinariasNocturnas())
+                    ->setCellValue('M' . $i, $arSoportePagoDetalle->getHorasExtrasFestivasDiurnas())
+                    ->setCellValue('N' . $i, $arSoportePagoDetalle->getHorasExtrasFestivasNocturnas());
 
             $i++;
         }

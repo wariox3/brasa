@@ -30,7 +30,7 @@ class TurPlantilla
     /**
      * @ORM\Column(name="dias", type="integer")
      */    
-    private $dias = 0;     
+    private $dias = 0;         
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -229,5 +229,29 @@ class TurPlantilla
     public function getPedidosDetallesPlantillaRel()
     {
         return $this->pedidosDetallesPlantillaRel;
+    }
+
+    /**
+     * Set vrSalario
+     *
+     * @param float $vrSalario
+     *
+     * @return TurPlantilla
+     */
+    public function setVrSalario($vrSalario)
+    {
+        $this->vrSalario = $vrSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalario
+     *
+     * @return float
+     */
+    public function getVrSalario()
+    {
+        return $this->vrSalario;
     }
 }

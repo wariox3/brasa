@@ -36,6 +36,16 @@ class TurSoportePago
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
     private $estadoCerrado = false;    
+
+    /**
+     * @ORM\Column(name="descanso", type="integer")
+     */    
+    private $descanso = 0;    
+    
+    /**
+     * @ORM\Column(name="dias", type="integer")
+     */    
+    private $dias = 0;    
     
     /**
      * @ORM\Column(name="horas", type="integer")
@@ -46,6 +56,21 @@ class TurSoportePago
      * @ORM\Column(name="horas_diurnas", type="integer")
      */    
     private $horasDiurnas = 0;     
+
+    /**
+     * @ORM\Column(name="horas_nocturnas", type="integer")
+     */    
+    private $horasNocturnas = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_festivas_diurnas", type="integer")
+     */    
+    private $horasFestivasDiurnas = 0;     
+
+    /**
+     * @ORM\Column(name="horas_festivas_nocturnas", type="integer")
+     */    
+    private $horasFestivasNocturnas = 0;     
     
     /**
      * @ORM\Column(name="horas_extras_ordinarias_diurnas", type="integer")
@@ -392,5 +417,125 @@ class TurSoportePago
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return TurSoportePago
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
+    }
+
+    /**
+     * Set horasNocturnas
+     *
+     * @param integer $horasNocturnas
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasNocturnas($horasNocturnas)
+    {
+        $this->horasNocturnas = $horasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnas()
+    {
+        return $this->horasNocturnas;
+    }
+
+    /**
+     * Set horasFestivasDiurnas
+     *
+     * @param integer $horasFestivasDiurnas
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasFestivasDiurnas($horasFestivasDiurnas)
+    {
+        $this->horasFestivasDiurnas = $horasFestivasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasFestivasDiurnas()
+    {
+        return $this->horasFestivasDiurnas;
+    }
+
+    /**
+     * Set horasFestivasNocturnas
+     *
+     * @param integer $horasFestivasNocturnas
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasFestivasNocturnas($horasFestivasNocturnas)
+    {
+        $this->horasFestivasNocturnas = $horasFestivasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasFestivasNocturnas()
+    {
+        return $this->horasFestivasNocturnas;
+    }
+
+    /**
+     * Set descanso
+     *
+     * @param integer $descanso
+     *
+     * @return TurSoportePago
+     */
+    public function setDescanso($descanso)
+    {
+        $this->descanso = $descanso;
+
+        return $this;
+    }
+
+    /**
+     * Get descanso
+     *
+     * @return integer
+     */
+    public function getDescanso()
+    {
+        return $this->descanso;
     }
 }

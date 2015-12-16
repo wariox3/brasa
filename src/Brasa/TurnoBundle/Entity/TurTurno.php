@@ -60,6 +60,11 @@ class TurTurno
      * @ORM\Column(name="novedad", type="boolean")
      */    
     private $novedad = false;     
+
+    /**
+     * @ORM\Column(name="descanso", type="boolean")
+     */    
+    private $descanso = false;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -496,5 +501,29 @@ class TurTurno
     public function getSoportesPagosDetallesTurnoRel()
     {
         return $this->soportesPagosDetallesTurnoRel;
+    }
+
+    /**
+     * Set descanso
+     *
+     * @param boolean $descanso
+     *
+     * @return TurTurno
+     */
+    public function setDescanso($descanso)
+    {
+        $this->descanso = $descanso;
+
+        return $this;
+    }
+
+    /**
+     * Get descanso
+     *
+     * @return boolean
+     */
+    public function getDescanso()
+    {
+        return $this->descanso;
     }
 }

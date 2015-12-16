@@ -39,9 +39,9 @@ class TteRecogida
     private $codigoPuntoOperacionFk;     
 
     /**
-     * @ORM\Column(name="codigo_plan_recogida_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_programacion_recogida_fk", type="integer", nullable=true)
      */    
-    private $codigoPlanRecogidaFk;     
+    private $codigoProgramacionRecogidaFk;     
     
     /**
      * @ORM\Column(name="unidades", type="integer")
@@ -235,27 +235,27 @@ class TteRecogida
     }
 
     /**
-     * Set codigoPlanRecogidaFk
+     * Set codigoProgramacionRecogidaFk
      *
-     * @param integer $codigoPlanRecogidaFk
+     * @param integer $codigoProgramacionRecogidaFk
      *
      * @return TteRecogida
      */
-    public function setCodigoPlanRecogidaFk($codigoPlanRecogidaFk)
+    public function setCodigoProgramacionRecogidaFk($codigoProgramacionRecogidaFk)
     {
-        $this->codigoPlanRecogidaFk = $codigoPlanRecogidaFk;
+        $this->codigoProgramacionRecogidaFk = $codigoProgramacionRecogidaFk;
 
         return $this;
     }
 
     /**
-     * Get codigoPlanRecogidaFk
+     * Get codigoProgramacionRecogidaFk
      *
      * @return integer
      */
-    public function getCodigoPlanRecogidaFk()
+    public function getCodigoProgramacionRecogidaFk()
     {
-        return $this->codigoPlanRecogidaFk;
+        return $this->codigoProgramacionRecogidaFk;
     }
 
     /**

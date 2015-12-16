@@ -72,6 +72,12 @@ class TteProgramacionRecogida
      * @ORM\Column(name="estado_descargado", type="boolean")
      */    
     private $estadoDescargado = false;    
+    
+    /**
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */    
+    private $estadoAutorizado = false;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="TteConductor", inversedBy="programacionesRecogidasConductorRel")
      * @ORM\JoinColumn(name="codigo_conductor_fk", referencedColumnName="codigo_conductor_pk")
@@ -482,5 +488,29 @@ class TteProgramacionRecogida
     public function getRecogidasProgramacionRecogidaRel()
     {
         return $this->recogidasProgramacionRecogidaRel;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return TteProgramacionRecogida
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 }

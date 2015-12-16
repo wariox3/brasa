@@ -54,21 +54,21 @@ class ProgramacionRecogidaController extends Controller
         if ($form->isValid()) {
             $arProgramacionRecogida = $form->getData();                       
             $arrControles = $request->request->All();
-            if($arrControles['txtCodigo'] != '') {
-                $arCliente = new \Brasa\TransporteBundle\Entity\TteCliente;
-                $arCliente = $em->getRepository('BrasaTransporteBundle:TteCliente')->find($arrControles['txtCodigo']);                
-                if(count($arCliente) > 0) {
-                    $arProgramacionRecogida->setClienteRel($arCliente);
+            if($arrControles['txtCodigoConductor'] != '') {
+                $arConductor = new \Brasa\TransporteBundle\Entity\TteConductor();
+                $arConductor = $em->getRepository('BrasaTransporteBundle:TteConductor')->find($arrControles['txtCodigoConductor']);                
+                if(count($arConductor) > 0) {
+                    $arProgramacionRecogida->setConductorRel($arConductor);
                     $em->persist($arProgramacionRecogida);
                     $em->flush();
 
                     if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tte_recogida_nuevo', array('codigoProgramacionRecogida' => 0 )));
+                        return $this->redirect($this->generateUrl('brs_tte_programacion_recogida_nuevo', array('codigoProgramacionRecogida' => 0 )));
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tte_recogida_lista'));
+                        return $this->redirect($this->generateUrl('brs_tte_programacion_recogida_detalle', array('codigoProgramacionRecogida' => $arProgramacionRecogida->getCodigoProgramacionRecogidaPk())));
                     }                      
                 } else {
-                    $objMensaje->Mensaje("error", "El cliente no existe", $this);
+                    $objMensaje->Mensaje("error", "El conductor no existe", $this);
                 }                             
             }            
             
@@ -92,9 +92,12 @@ class ProgramacionRecogidaController extends Controller
                 $objRecogida->Generar($this, $codigoProgramacionRecogida);
             }            
         }
-        return $this->render('BrasaTransporteBundle:Movimientos/Recogida:detalle.html.twig', array(
-                    'arRecogida' => $arProgramacionRecogida,                    
-                    'form' => $form->createView()
+        $arRecogidas = new \Brasa\TransporteBundle\Entity\TteRecogida();
+        $arRecogidas = $em->getRepository('BrasaTransporteBundle:TteRecogida')->findBy(array ('codigoProgramacionRecogidaFk' => $codigoProgramacionRecogida));        
+        return $this->render('BrasaTransporteBundle:Movimientos/ProgramacionRecogida:detalle.html.twig', array(
+            'arRecogidas' => $arRecogidas,                            
+            'arProgramacionRecogida' => $arProgramacionRecogida,                    
+            'form' => $form->createView()
                     ));
     }    
     
@@ -121,8 +124,10 @@ class ProgramacionRecogidaController extends Controller
     private function formularioDetalle($ar) {        
         
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);         
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);         
         $form = $this->createFormBuilder()      
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)    
+                ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->getForm();
         return $form;
     }    
