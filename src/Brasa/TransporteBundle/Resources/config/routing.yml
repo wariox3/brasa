@@ -1,3 +1,29 @@
+# Base (Administracion)
+brs_tte_base_clientes_lista:
+    path:     /tte/base/clientes/lista
+    defaults: { _controller: BrasaTransporteBundle:BaseCliente:lista }
+    
+brs_tte_base_clientes_nuevo:
+    path:     /tte/base/clientes/nuevo/{codigoCliente}
+    defaults: { _controller: BrasaTransporteBundle:BaseCliente:nuevo } 
+    
+brs_tte_base_productos_lista:
+    path:     /tte/base/productos/lista
+    defaults: { _controller: BrasaTransporteBundle:BaseProducto:lista }
+    
+brs_tte_base_productos_nuevo:
+    path:     /tte/base/productos/nuevo/{codigoProducto}
+    defaults: { _controller: BrasaTransporteBundle:BaseProducto:nuevo }    
+    
+brs_tte_base_precios_lista:
+    path:     /tte/base/precios/lista
+    defaults: { _controller: BrasaTransporteBundle:BasePrecio:lista }
+    
+brs_tte_base_precios_nuevo:
+    path:     /tte/base/precios/nuevo/{codigoPrecio}
+    defaults: { _controller: BrasaTransporteBundle:BasePrecio:nuevo }    
+
+# Movimientos
 brs_tte_guia_lista:
    path:     /tte/guia/lista
    defaults: { _controller: BrasaTransporteBundle:Guia:lista } 

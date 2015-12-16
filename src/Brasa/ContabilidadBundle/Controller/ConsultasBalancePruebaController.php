@@ -39,7 +39,7 @@ class ConsultasBalancePruebaController extends Controller
             }
 
         }
-        $arBalancePrueba = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 60);
+        $arBalancePrueba = $this->strDqlLista;
         return $this->render('BrasaContabilidadBundle:Consultas/BalancePrueba:balance.html.twig', array(
             'arBalancePrueba' => $arBalancePrueba,
             'form' => $form->createView()

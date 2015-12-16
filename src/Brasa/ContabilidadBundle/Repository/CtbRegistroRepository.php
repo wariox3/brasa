@@ -337,6 +337,7 @@ class CtbRegistroRepository extends EntityRepository
     }
     
     public function balancePruebaDql($strFechaDesde = "", $strFechaHasta= "",$strCuentaDesde = "", $strCuentaHasta = "") {
+        $em = $this->getEntityManager();
         //SELECT codigo_cuenta_fk, SUM(debito),SUM(credito) FROM ctb_registro WHERE codigo_registro_pk <> 0 AND fecha >= "2015-11-11" AND fecha <="2015-11-11" GROUP BY codigo_cuenta_fk ORDER BY codigo_cuenta_fk ASC
         $dql   = "SELECT r.codigoCuentaFk,t.numeroIdentificacion,t.nombreCorto,t.razonSocial,c.nombreCuenta,sum(r.debito)as debito, sum(r.credito)as credito FROM BrasaContabilidadBundle:CtbRegistro r JOIN r.terceroRel t JOIN r.cuentaRel c WHERE r.codigoRegistroPk <> 0";
         if($strFechaDesde != "" || $strFechaDesde != 0){
@@ -352,6 +353,10 @@ class CtbRegistroRepository extends EntityRepository
             $dql .= " AND r.codigoCuentaFk <= " .$strCuentaHasta;
         }
         $dql .= " GROUP BY r.codigoCuentaFk ORDER BY r.codigoCuentaFk ASC";
-        return $dql;
+        //return $dql;
+        
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
     }
 }

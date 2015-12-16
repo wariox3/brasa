@@ -11,7 +11,8 @@ class ProcesoContabilizarPagoBancoController extends Controller
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
-        $paginator  = $this->get('knp_paginator');        
+        $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
@@ -29,7 +30,7 @@ class ProcesoContabilizarPagoBancoController extends Controller
                         $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
                         $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->find($codigo);
                         if($arPagoBancoDetalle->getEstadoContabilizado() == 0) {
-                            $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arPagoBancoDetalle->getNumeroIdentificacion()));
+                            $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPagoBancoDetalle->getNumeroIdentificacion()));
                             if(count($arTercero) > 0) {                              
                                 //La cuenta
                                 $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
@@ -62,6 +63,8 @@ class ProcesoContabilizarPagoBancoController extends Controller
                                 
                                 $arPagoBancoDetalle->setEstadoContabilizado(1);
                                 $em->persist($arPagoBancoDetalle);  
+                            }else {
+                                $objMensaje->Mensaje("error", "No existe el tercero", $this);
                             }                                                   
                         }
                     }

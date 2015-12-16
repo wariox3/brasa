@@ -29,7 +29,7 @@ class ProcesoContabilizarPagoController extends Controller
                         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigo);
                         if($arPago->getEstadoContabilizado() == 0) {
-                            $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arPago->getEmpleadoRel()->getNumeroIdentificacion()));
+                            $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPago->getEmpleadoRel()->getNumeroIdentificacion()));
                             if(count($arTercero) > 0) {
                                 $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                 $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigo));
@@ -67,9 +67,19 @@ class ProcesoContabilizarPagoController extends Controller
                                 $arPago->setEstadoContabilizado(1);
                                 $em->persist($arPago);  
                             } else {
-                                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
+                                $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
+                                $arTercero->setCiudadRel($arPago->getEmpleadoRel()->getCiudadRel());
+                                $arTercero->setTipoIdentificacionRel($arPago->getEmpleadoRel()->getTipoIdentificacionRel());
+                                $arTercero->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
                                 $arTercero->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
-                                $arTercero->setNit($arPago->getEmpleadoRel()->getNumeroIdentificacion());
+                                $arTercero->setNombre1($arPago->getEmpleadoRel()->getNombre1());
+                                $arTercero->setNombre2($arPago->getEmpleadoRel()->getNombre2());
+                                $arTercero->setApellido1($arPago->getEmpleadoRel()->getApellido1());
+                                $arTercero->setApellido2($arPago->getEmpleadoRel()->getApellido2());
+                                $arTercero->setDireccion($arPago->getEmpleadoRel()->getDireccion());
+                                $arTercero->setTelefono($arPago->getEmpleadoRel()->getTelefono());
+                                $arTercero->setCelular($arPago->getEmpleadoRel()->getCelular());
+                                $arTercero->setEmail($arPago->getEmpleadoRel()->getCorreo());
                                 $em->persist($arTercero);                                
                             }                                                    
                         }
