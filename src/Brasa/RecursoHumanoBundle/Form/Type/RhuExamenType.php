@@ -3,7 +3,7 @@ namespace Brasa\RecursoHumanoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-
+use Doctrine\ORM\EntityRepository;
 class RhuExamenType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -19,8 +19,11 @@ class RhuExamenType extends AbstractType
             ))
             ->add('centroCostoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-            ))
+                'required' => true))                            
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'property' => 'nombre',
