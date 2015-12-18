@@ -37,13 +37,15 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arTurnos, 'CÓDIGO', 'p.codigoTurnoPk') }}</th>
                 <th>NOMBRE</th>
+                <th>H. DESDE</th>
+                <th>H. HASTA</th>                
                 <th>SERVICIO</th>
                 <th>PROGRAMACION</th>
                 <th>NOVEDAD</th>
                 <th>DESCANSO</th>
                 <th>HORAS</th>
                 <th>H. DIURNAS</th>
-                <th>H. NOCTURNAS</th>
+                <th>H. NOCTURNAS</th>                
                 <th></th>
                 <th></th>
                 <th></th>
@@ -52,6 +54,8 @@
             <tr>                
                 <td>{{ arTurnos.codigoTurnoPk  }}</td>                               
                 <td>{{ arTurnos.nombre }}</td>
+                <td>{{ arTurnos.horaDesde |date("H:i") }}</td>
+                <td>{{ arTurnos.horaHasta |date("H:i") }}</td>
                 <td>{% if arTurnos.servicio == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.programacion == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.novedad == 1 %} SI {% else %} NO {% endif %}</td>
