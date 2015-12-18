@@ -54,10 +54,10 @@ class BuscarClienteController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);        
-        $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroEmpleadoActivo', $form->get('estadoActivo')->getData());
+        
+        $this->strNombre = $form->get('TxtNombre')->getData();
+        $this->strNit = $form->get('TxtNit')->getData();
+        
     }    
           
 }

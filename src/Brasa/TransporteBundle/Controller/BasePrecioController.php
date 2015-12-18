@@ -4,7 +4,7 @@ namespace Brasa\TransporteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\TransporteBundle\Form\Type\TtePrecioType;
+use Brasa\TransporteBundle\Form\Type\TtePrecioDetalleType;
 
 
 
@@ -19,13 +19,13 @@ class BasePrecioController extends Controller
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
-        $arPrecios = new \Brasa\TransporteBundle\Entity\TtePrecio();
+        $arPrecios = new \Brasa\TransporteBundle\Entity\TteListaPrecio();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
                 foreach ($arrSeleccionados AS $codigoPrecio) {
-                    $arPrecio = new \Brasa\TransporteBundle\Entity\TtePrecio();
-                    $arPrecio = $em->getRepository('BrasaTransporteBundle:TtePrecio')->find($codigoPrecio);
+                    $arPrecio = new \Brasa\TransporteBundle\Entity\TteListaPrecio();
+                    $arPrecio = $em->getRepository('BrasaTransporteBundle:TteListaPrecio')->find($codigoPrecio);
                     $em->remove($arPrecio);
                     $em->flush();
                 }
@@ -34,8 +34,8 @@ class BasePrecioController extends Controller
                 $this->generarExcel();
             }
         }
-        $arPrecios = new \Brasa\TransporteBundle\Entity\TtePrecio();
-        $query = $em->getRepository('BrasaTransporteBundle:TtePrecio')->findAll();
+        $arPrecios = new \Brasa\TransporteBundle\Entity\TteListaPrecio();
+        $query = $em->getRepository('BrasaTransporteBundle:TteListaPrecio')->findAll();
         $arPrecios = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
 
         return $this->render('BrasaTransporteBundle:Base/Precios:lista.html.twig', array(
@@ -48,10 +48,12 @@ class BasePrecioController extends Controller
     public function nuevoAction($codigoPrecio) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arPrecio = new \Brasa\TransporteBundle\Entity\TtePrecio();
+        $arPrecio = new \Brasa\TransporteBundle\Entity\TteListaPrecio();
         if ($codigoPrecio != 0)
         {
-            $arPrecio = $em->getRepository('BrasaTransporteBundle:TtePrecio')->find($codigoPrecio);
+            $arPrecio = $em->getRepository('BrasaTransporteBundle:TteListaPrecio')->find($codigoPrecio);
+        }else {
+            $arPrecio->setFechaVencimiento(new \DateTime('now'));
         }   
         $form = $this->createForm(new TtePrecioType(), $arPrecio);
         $form->handleRequest($request);
@@ -68,6 +70,75 @@ class BasePrecioController extends Controller
         ));
     }
     
+    public function detalleAction($codigoPrecio) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arPrecio = new \Brasa\TransporteBundle\Entity\TteListaPrecio();
+        $arPrecio = $em->getRepository('BrasaTransporteBundle:TteListaPrecio')->find($codigoPrecio);
+        $form = $this->formularioDetalle($arPrecio);
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnEliminar')->isClicked()) {  
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPrecioDetalle) {
+                        $arPrecioDetalle = new \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle();
+                        $arPrecioDetalle = $em->getRepository('BrasaTransporteBundle:TteListaPrecioDetalle')->find($codigoPrecioDetalle);                        
+                        $em->remove($arPrecioDetalle);                        
+                    }
+                    $em->flush();                    
+                } 
+                return $this->redirect($this->generateUrl('brs_tte_base_precios_detalle', array('codigoPrecio' => $codigoPrecio)));
+            } 
+                        
+        }
+        $arPrecioDetalles = new \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle();
+        $arPrecioDetalles = $em->getRepository('BrasaTransporteBundle:TteListaPrecioDetalle')->findBy(array('codigoListaPrecioFk' => $codigoPrecio));
+        return $this->render('BrasaTransporteBundle:Base/Precios:detalle.html.twig', array(
+                        'arPrecioDetalles' => $arPrecioDetalles,
+                        'arPrecio' => $arPrecio,
+                        'form' => $form->createView()
+                    ));
+    }
+    
+    public function detallenuevoAction($codigoPrecioDetalle, $codigoPrecio) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arPrecio = new \Brasa\TransporteBundle\Entity\TteListaPrecio();
+        $arPrecio = $em->getRepository('BrasaTransporteBundle:TteListaPrecio')->find($codigoPrecio);
+        $arPrecioDetalle = new \Brasa\TransporteBundle\Entity\TteListaPrecioDetalle();
+        if($codigoPrecioDetalle != 0) {
+            $arPrecioDetalle = $em->getRepository('BrasaTransporteBundle:TteListaPrecioDetalle')->find($codigoPrecioDetalle);
+        }
+        $form = $this->createForm(new TtePrecioDetalleType(), $arPrecioDetalle);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arPrecioDetalle = $form->getData();
+            $arPrecioDetalle->setListaPrecioRel($arPrecio);
+            $em->persist($arPrecioDetalle);
+            $em->flush();
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tte_base_precios_detalle_nuevo', array('codigoPrecioDetalle' => 0, 'codigoPrecio' => $codigoPrecio)));
+            } else {
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+
+        return $this->render('BrasaTransporteBundle:Base/Precios:detallenuevo.html.twig', array(
+            'form' => $form->createView()
+            ));
+    }
+    
+    private function formularioDetalle($ar) {
+        
+        $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
+        $form = $this->createFormBuilder()
+                    ->add('BtnEliminar', 'submit', $arrBotonEliminarDetalle)
+                    ->getForm();
+        return $form;
+
+    }
+    
     public function generarExcel(){
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
@@ -82,16 +153,18 @@ class BasePrecioController extends Controller
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'PRODUCTO');
+                    ->setCellValue('B1', 'PRODUCTO')
+                    ->setCellValue('C1', 'FECHA VENCIMIENTO');
 
         $i = 2;
-        $arPrecios = $em->getRepository('BrasaTransporteBundle:TtePrecio')->findAll();
+        $arPrecios = $em->getRepository('BrasaTransporteBundle:TteListaPrecio')->findAll();
 
         foreach ($arPrecios as $arPrecio) {
 
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPrecio->getCodigoPrecioPk())
-                    ->setCellValue('B' . $i, $arPrecio->getNombre());
+                    ->setCellValue('A' . $i, $arPrecio->getCodigoListaPrecioPk())
+                    ->setCellValue('B' . $i, $arPrecio->getNombre())
+                    ->setCellValue('C' . $i, $arPrecio->getFechaVencimiento());
             $i++;
         }
 

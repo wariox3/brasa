@@ -21,7 +21,15 @@ brs_tte_base_precios_lista:
     
 brs_tte_base_precios_nuevo:
     path:     /tte/base/precios/nuevo/{codigoPrecio}
-    defaults: { _controller: BrasaTransporteBundle:BasePrecio:nuevo }    
+    defaults: { _controller: BrasaTransporteBundle:BasePrecio:nuevo }
+    
+brs_tte_base_precios_detalle:
+    path:     /tte/base/precios/detalle/{codigoPrecio}
+    defaults: { _controller: BrasaTransporteBundle:BasePrecio:detalle }
+    
+brs_tte_base_precios_detalle_nuevo:
+    path:     /tte/base/precios/detalle/nuevo/{codigoPrecioDetalle}/{codigoPrecio}
+    defaults: { _controller: BrasaTransporteBundle:BasePrecio:detallenuevo }    
 
 # Movimientos
 brs_tte_guia_lista:

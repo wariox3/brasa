@@ -29,13 +29,13 @@
             <div class="form-group form-group-sm">
                 <label for="form_anunciante" class="col-sm-3 control-label">Anunciante:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.anunciante, { 'attr': {'class': 'form-control'} }) }}                        
+                    {{ form_widget(form.anunciante, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}                        
                 </div>                
             </div>
             <div class="form-group form-group-sm">
                 <label for="form_direccion" class="col-sm-3 control-label">Direccion:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.direccion, { 'attr': {'class': 'form-control'} }) }}                        
+                    {{ form_widget(form.direccion, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}                        
                 </div>                
             </div>     
             <div class="form-group form-group-sm">
@@ -43,9 +43,15 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.telefono, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
-            </div>  
+            </div>
             <div class="form-group form-group-sm">
-                <label for="form_fecha" class="col-sm-3 control-label">fecha:</label>
+                <label for="form_fecha" class="col-sm-3 control-label">fecha anuncio:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.fechaAnuncio) }}                        
+                </div>                
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_fecha" class="col-sm-3 control-label">fecha recogida:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.fechaRecogida) }}                        
                 </div>                
@@ -69,7 +75,7 @@
                 </div>                
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_vrDeclarado" class="col-sm-3 control-label">Declarado:</label>
+                <label for="form_vrDeclarado" class="col-sm-3 control-label">Valor declarado:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.vrDeclarado, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                

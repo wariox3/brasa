@@ -34,9 +34,6 @@ class BaseCuentaController extends Controller
             }
         }
         
-        //$arCuentas = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
-        //$query = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->findAll();
-        //$arCuentas = $paginator->paginate($query, $this->get('request')->query->get('page', 1),35);
         $arCuentas = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 35);                                       
         return $this->render('BrasaContabilidadBundle:Base/Cuentas:lista.html.twig', array(
                     'arCuentas' => $arCuentas,

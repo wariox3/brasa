@@ -11,7 +11,8 @@ class TteRecogidaType extends AbstractType
         $builder      
             ->add('anunciante', 'text')
             ->add('direccion', 'text')
-            ->add('telefono', 'text')                
+            ->add('telefono', 'text')
+            ->add('fechaAnuncio', 'datetime')    
             ->add('fechaRecogida', 'datetime')                
             ->add('unidades', 'text')
             ->add('pesoReal', 'text')

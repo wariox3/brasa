@@ -19,8 +19,15 @@ class RecogidaController extends Controller
         if ($form->isValid()) {
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTransporteBundle:TteRecogida')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_programacion_lista'));                                 
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoRecogida) {
+                        $arRecogida = new \Brasa\TransporteBundle\Entity\TteRecogida();
+                        $arRecogida = $em->getRepository('BrasaTransporteBundle:TteRecogida')->find($codigoRecogida);
+                        $em->remove($arRecogida);
+                        $em->flush();
+                    }
+                }
+                return $this->redirect($this->generateUrl('brs_tte_recogida_lista'));                                 
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);

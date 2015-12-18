@@ -1,13 +1,14 @@
 <?php
 
 namespace Brasa\TransporteBundle\Entity;
-
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="tte_cliente")
  * @ORM\Entity(repositoryClass="Brasa\TransporteBundle\Repository\TteClienteRepository")
+ * @DoctrineAssert\UniqueEntity(fields={"nit"},message="Ya existe este nit")
  */
 class TteCliente
 {
@@ -19,7 +20,7 @@ class TteCliente
     private $codigoClientePk;  
     
     /**
-     * @ORM\Column(name="nit", type="string", length=11)
+     * @ORM\Column(name="nit", type="string", length=15, nullable=false, unique=true)
      */
     private $nit;    
     

@@ -10,15 +10,14 @@ use Brasa\TransporteBundle\Form\Type\TteClienteType;
 
 class BaseClienteController extends Controller
 {
+    var $strDqlLista = "";
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
-        $form = $this->createFormBuilder() //
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
-            ->getForm(); 
-        $form->handleRequest($request);
+        $form = $this->formularioLista();
+        $form->handleRequest($request);        
+        $this->listar($form); 
         $arClientes = new \Brasa\TransporteBundle\Entity\TteCliente();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -34,10 +33,8 @@ class BaseClienteController extends Controller
                 $this->generarExcel();
             }
         }
-        $arClientes = new \Brasa\TransporteBundle\Entity\TteCliente();
-        $query = $em->getRepository('BrasaTransporteBundle:TteCliente')->findAll();
-        $arClientes = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
-
+        
+        $arClientes = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 35);                                       
         return $this->render('BrasaTransporteBundle:Base/Clientes:lista.html.twig', array(
                     'arClientes' => $arClientes,
                     'form'=> $form->createView()
@@ -68,8 +65,30 @@ class BaseClienteController extends Controller
         ));
     }
     
-    public function generarExcel(){
+    private function listar($form) {
+        $em = $this->getDoctrine()->getManager(); 
+                
+        $this->strDqlLista = $em->getRepository('BrasaTransporteBundle:TteCliente')->listaDql(    
+                $form->get('TxtNombreCliente')->getData(),
+                $form->get('TxtIdentificacionCliente')->getData()                
+        );  
+    }
+    
+    private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();        
+        $form = $this->createFormBuilder()                                    
+            ->add('TxtNombreCliente', 'text', array('label'  => 'Nombre','data' => "", 'required' => false))
+            ->add('TxtIdentificacionCliente', 'text', array('label'  => 'Identificacion','data' => "", 'required' => false))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                                            
+            ->getForm();        
+        return $form;
+    }
+    
+    private function generarExcel() {
+        $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -82,45 +101,60 @@ class BaseClienteController extends Controller
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'TIPO IDENTIFICACIÓN')
-                    ->setCellValue('C1', 'NÚMERO IDENTIFICACIÓN')
-                    ->setCellValue('D1', 'DIGITO VERIFICACIÓN')
+                    ->setCellValue('B1', 'CÓDIGO LISTA PRECIO')
+                    ->setCellValue('C1', 'LISTA PRECIO')
+                    ->setCellValue('D1', 'NIT')
                     ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'RAZÓN SOCIAL')
-                    ->setCellValue('G1', 'CIUDAD')
-                    ->setCellValue('H1', 'DIRECCIÓN')
-                    ->setCellValue('I1', 'TELÉFONO')
-                    ->setCellValue('J1', 'CELULAR')
-                    ->setCellValue('K1', 'FAX')
-                    ->setCellValue('L1', 'EMAIL');
+                    ->setCellValue('F1', 'LIQUIDAR AUTOMÁTICAMENTE FLETE')
+                    ->setCellValue('G1', 'LIQUIDAR AUTOMÁTICAMENTE MANEJO')
+                    ->setCellValue('H1', 'PORCENTAJE MANEJO')
+                    ->setCellValue('I1', 'VR. MANEJO MÍNIMO UNIDAD')
+                    ->setCellValue('J1', 'DESCUENTO KILOS')
+                    ->setCellValue('K1', 'CANTIDAD MÍNIMA')
+                    ->setCellValue('L1', 'PAGA MANEJO CORRIENTE');
 
         $i = 2;
-        $arTerceros = $em->getRepository('BrasaTransporteBundle:CtbTercero')->findAll();
-
-        foreach ($arTerceros as $arTerceros) {
-
+        $query = $em->createQuery($this->strDqlLista);
+        
+        $arClientes = $query->getResult();
+        foreach ($arClientes as $arCliente) {
+            if ($arCliente->getLiquidarAutomaticamenteFlete() == 1){
+                $strLiquidarAutomaticamenteFlete = "SI";
+            }else {
+                $strLiquidarAutomaticamenteFlete = "NO";
+            }
+            if ($arCliente->getLiquidarAutomaticamenteManejo() == 1){
+                $strLiquidarAutomaticamenteManejo = "SI";
+            }else {
+                $strLiquidarAutomaticamenteManejo = "NO";
+            }
+            if ($arCliente->getPagaManejoCorriente() == 1){
+                $strPagaManejoCorriente = "SI";
+            }else {
+                $strPagaManejoCorriente = "NO";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arTerceros->getCodigoTerceroPk())
-                    ->setCellValue('B' . $i, $arTerceros->getTipoIdentificacionRel()->getNombre())
-                    ->setCellValue('C' . $i, $arTerceros->getNumeroIdentificacion())
-                    ->setCellValue('D' . $i, $arTerceros->getDigitoVerificacion())
-                    ->setCellValue('E' . $i, $arTerceros->getNombreCorto())
-                    ->setCellValue('F' . $i, $arTerceros->getRazonSocial())
-                    ->setCellValue('G' . $i, $arTerceros->getCiudadRel()->getNombre())
-                    ->setCellValue('H' . $i, $arTerceros->getDireccion())
-                    ->setCellValue('I' . $i, $arTerceros->getTelefono())
-                    ->setCellValue('J' . $i, $arTerceros->getCelular())
-                    ->setCellValue('K' . $i, $arTerceros->getFax())
-                    ->setCellValue('L' . $i, $arTerceros->getEmail());
+                    ->setCellValue('A' . $i, $arCliente->getCodigoClientePk())
+                    ->setCellValue('B' . $i, $arCliente->getCodigoListaPrecioFk())
+                    ->setCellValue('C' . $i, $arCliente->getListaPrecioRel()->getNombre())
+                    ->setCellValue('D' . $i, $arCliente->getNit())
+                    ->setCellValue('E' . $i, $arCliente->getNombreCorto())
+                    ->setCellValue('F' . $i, $strLiquidarAutomaticamenteFlete)
+                    ->setCellValue('G' . $i, $strLiquidarAutomaticamenteManejo)
+                    ->setCellValue('H' . $i, $arCliente->getPorcentajeManejo())
+                    ->setCellValue('I' . $i, $arCliente->getvrManejoMinimoUnidad())
+                    ->setCellValue('J' . $i, $arCliente->getDescuentoKilos())
+                    ->setCellValue('K' . $i, $arCliente->getctPesoMinimoUnidad())
+                    ->setCellValue('L' . $i, $strPagaManejoCorriente);
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Terceros');
+        $objPHPExcel->getActiveSheet()->setTitle('Clientes');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Terceros.xlsx"');
+        header('Content-Disposition: attachment;filename="Clientes.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

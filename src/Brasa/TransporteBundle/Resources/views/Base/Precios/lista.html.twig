@@ -19,11 +19,12 @@
         
             {%for arPrecios in arPrecios %}
                <tr>
-                <td>{{arPrecios.codigoPrecioPk}}</td>
+                <td>{{arPrecios.codigoListaPrecioPk}}</td>
                 <td>{{arPrecios.nombre}}</td>
-                <td>{{arPrecios.fechaVencimiento}}</td>
-                <td><a href="{{ path('brs_tte_base_precios_nuevo',{'codigoPrecio': arPrecios.codigoPrecioPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPrecios.codigoPrecioPk }}" /></td>
+                <td>{{arPrecios.fechaVencimiento|date('Y-m-d')}}</td>
+                <td><a href="{{ path('brs_tte_base_precios_nuevo',{'codigoPrecio': arPrecios.codigoListaPrecioPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td><a href="{{ path('brs_tte_base_precios_detalle', { 'codigoPrecio': arPrecios.codigoListaPrecioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPrecios.codigoListaPrecioPk }}" /></td>
             {%endfor%}
             </tr>            
     </table>
