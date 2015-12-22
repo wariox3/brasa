@@ -1,5 +1,7 @@
 UPDATE rhu_examen SET codigo_factura_fk = NULL;
 UPDATE rhu_seleccion SET codigo_factura_fk = NULL;
+DELETE FROM rhu_desempeno_detalle;
+DELETE FROM rhu_desempeno;
 DELETE FROM rhu_capacitacion_detalle;
 DELETE FROM rhu_capacitacion_nota;
 DELETE FROM rhu_capacitacion;

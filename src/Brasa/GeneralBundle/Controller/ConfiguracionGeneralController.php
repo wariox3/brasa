@@ -100,9 +100,18 @@ class ConfiguracionGeneralController extends Controller
 
         if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
-                //$form['attachment']->getData()->move("/var/www/temporal", "carga.txt");                            
-                //$fp = fopen("/var/www/temporal/carga.txt", "r");                
-                $fp = fopen("../src/Brasa/GeneralBundle/Resources/sql/limpiarbd.txt", "r");                                
+                $fp = fopen("../src/Brasa/GeneralBundle/Resources/sql/datosDemoRecursoHumano.sql", "r");                                
+                $strSql = "";
+                while(!feof($fp)) {
+                    $linea = fgets($fp);
+                    if($linea){
+                        $strSql = $strSql . $linea;
+                    }
+                }
+                fclose($fp);
+                //Turnos
+                $em->getConnection()->executeQuery($strSql);
+                $fp = fopen("../src/Brasa/GeneralBundle/Resources/sql/datosDemoTurnos.sql", "r");                                
                 $strSql = "";
                 while(!feof($fp)) {
                     $linea = fgets($fp);
@@ -112,6 +121,7 @@ class ConfiguracionGeneralController extends Controller
                 }
                 fclose($fp);
                 $em->getConnection()->executeQuery($strSql);
+                
                 echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";                
             }                                   
         }         
