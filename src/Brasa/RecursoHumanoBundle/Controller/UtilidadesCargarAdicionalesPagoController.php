@@ -77,7 +77,7 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }                                   
         }         
-        return $this->render('BrasaRecursoHumanoBundle:ProgramacionesPago:cargarAdicionalesPago.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:cargarAdicionalesPago.html.twig', array(
             'form' => $form->createView()
             ));
     }
