@@ -439,7 +439,7 @@ class SeleccionController extends Controller
             {
                 $referenciasV = "NO";
             }
-            if ($arSelecciones->getEstadoAbierto() == 1)
+            if ($arSelecciones->getEstadoCerrado() == 1)
             {
                 $abierto = "SI";
             }
