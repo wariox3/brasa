@@ -37,7 +37,7 @@ class ProgramacionesPagoController extends Controller
                 } else {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
-            }
+            }            
             if($request->request->get('OpLiquidar')) {
                 $codigoProgramacionPago = $request->request->get('OpLiquidar');
                 $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);

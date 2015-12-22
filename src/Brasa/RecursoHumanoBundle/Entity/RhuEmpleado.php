@@ -541,6 +541,11 @@ class RhuEmpleado
      */
     protected $examenesEmpleadoRel;    
        
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurRecurso", mappedBy="empleadoRel")
+     */
+    protected $turRecursosEmpleadoRel;    
+    
     
     /**
      * Constructor
@@ -3195,5 +3200,39 @@ class RhuEmpleado
     public function getExamenesEmpleadoRel()
     {
         return $this->examenesEmpleadoRel;
+    }
+
+    /**
+     * Add turRecursosEmpleadoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $turRecursosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addTurRecursosEmpleadoRel(\Brasa\TurnoBundle\Entity\TurRecurso $turRecursosEmpleadoRel)
+    {
+        $this->turRecursosEmpleadoRel[] = $turRecursosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turRecursosEmpleadoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $turRecursosEmpleadoRel
+     */
+    public function removeTurRecursosEmpleadoRel(\Brasa\TurnoBundle\Entity\TurRecurso $turRecursosEmpleadoRel)
+    {
+        $this->turRecursosEmpleadoRel->removeElement($turRecursosEmpleadoRel);
+    }
+
+    /**
+     * Get turRecursosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurRecursosEmpleadoRel()
+    {
+        return $this->turRecursosEmpleadoRel;
     }
 }
