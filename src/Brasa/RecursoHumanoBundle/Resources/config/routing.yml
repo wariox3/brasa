@@ -330,6 +330,10 @@ brs_rhu_programaciones_pago_cargar_tiempo_sede:
     path:     /rhu/programaciones/pago/cargar/tiempo/sede/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarTiempoSedes:cargar }
 
+brs_rhu_programaciones_pago_cargar_soporte_turno:
+    path:     /rhu/programaciones/pago/cargar/soporte/turno/{codigoProgramacionPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoCargarSoporteTurno:cargar }
+
 brs_rhu_programaciones_pago_cargar_adicionales_pago:
     path:     /rhu/programaciones/pago/cargar/adicionales/pago/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarAdicionalesPago:cargar }

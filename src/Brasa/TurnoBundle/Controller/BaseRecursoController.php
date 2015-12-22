@@ -40,6 +40,7 @@ class BaseRecursoController extends Controller
     public function nuevoAction($codigoRecurso = '') {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
         if($codigoRecurso != '' && $codigoRecurso != '0') {
             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
@@ -47,15 +48,27 @@ class BaseRecursoController extends Controller
         $form = $this->createForm(new TurRecursoType, $arRecurso);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arRecurso = $form->getData();            
-            $em->persist($arRecurso);
-            $em->flush();            
-            
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_base_recurso_nuevo', array('codigoRecurso' => 0 )));
-            } else {
-                return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
+            $arrControles = $request->request->All();
+            $arRecurso = $form->getData(); 
+            if($arrControles['txtNumeroIdentificacion'] != '') {
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                if(count($arEmpleado) > 0) {
+                    $arRecurso->setEmpleadoRel($arEmpleado);
+                    $em->persist($arRecurso);
+                    $em->flush();            
+
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_tur_base_recurso_nuevo', array('codigoRecurso' => 0 )));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
+                    }                    
+                } else {
+                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                }
             }
+                       
+
         }
         return $this->render('BrasaTurnoBundle:Base/Recurso:nuevo.html.twig', array(
             'arRecurso' => $arRecurso,

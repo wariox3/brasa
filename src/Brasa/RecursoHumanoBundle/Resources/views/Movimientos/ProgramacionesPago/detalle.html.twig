@@ -200,10 +200,10 @@
                 <td>{{ arProgramacionPagoDetalles.fechaDesdePago |date("Y/m/d")  }}</td>
                 <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{% if arProgramacionPagoDetalles.indefinido == 1 %} INDEFINIDO {% else %} {{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDevengado | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDeducciones | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrNetoPagar | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDevengado | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDeducciones | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrNetoPagar | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(0, '.', ',') }}</td>               
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.factorDia | number_format(0, '.', ',') }}</td>
@@ -241,7 +241,7 @@
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 {% if arProgramacionPago.estadoGenerado == 0 %}
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar turnos</a>                    
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_soporte_turno', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar turnos</a>                    
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_agregar_empleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>                
                 {% endif %}
