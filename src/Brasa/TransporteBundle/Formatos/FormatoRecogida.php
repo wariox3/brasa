@@ -54,72 +54,77 @@ class FormatoRecogida extends \FPDF_FPDF {
         //linea 1
         $this->SetXY(10, $intY);
         $this->SetFont('Arial','B',8);
-        $this->Cell(26, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
+        $this->Cell(31, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(50, 6, $arRecogida->getCodigoRecogidaPk(), 1, 0, 'L', 1);
+        $this->Cell(66, 6, $arRecogida->getCodigoRecogidaPk(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(28, 6, utf8_decode("CÓDIGO CLIENTE:") , 1, 0, 'L', 1);
+        $this->Cell(30, 6, utf8_decode("CÓDIGO CLIENTE:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(20, 6, $arRecogida->getCodigoClienteFk(), 1, 0, 'L', 1);
+        $this->Cell(66, 6, $arRecogida->getCodigoClienteFk(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(27, 6, "CLIENTE:" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(50, 6, utf8_decode($arRecogida->getClienteRel()->getNombreCorto()), 1, 0, 'L', 1);
         //linea 2
-        $this->SetXY(10, $intY + 5);
+        $this->SetXY(10, $intY + 6);
+        $this->Cell(31, 6, "CLIENTE:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7.2);
+        $this->Cell(66, 6, utf8_decode($arRecogida->getClienteRel()->getNombreCorto()), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(26, 6, utf8_decode("DIRECCIÓN:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(50, 6, $arRecogida->getDireccion(), 1, 0, 'L', 1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(28, 6, utf8_decode("TELÉFONO:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',8);
-        $this->Cell(20, 6, $arRecogida->getTelefono(), 1, 0, 'L', 1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(27, 6, utf8_decode("ANUNCIANTE:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(50, 6, $arRecogida->getAnunciante(), 1, 0, 'L', 1);
-        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, utf8_decode("ANUNCIANTE:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7.2);
+        $this->Cell(66, 6, $arRecogida->getAnunciante(), 1, 0, 'L', 1);
         //linea 3
-        $this->SetXY(10, $intY + 10);
+        $this->SetXY(10, $intY + 12);
         $this->SetFont('Arial','B',8);
-        $this->Cell(26, 6, utf8_decode("FECHA ANUNCIO:") , 1, 0, 'L', 1);
+        $this->Cell(31, 6, utf8_decode("DIRECCIÓN:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7.2);
+        $this->Cell(66, 6, $arRecogida->getDireccion(), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, utf8_decode("TELÉFONO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(50, 6, $arRecogida->getFechaAnuncio()->format('Y-m-d'), 1, 0, 'L', 1);
+        $this->Cell(66, 6, $arRecogida->getTelefono(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(28, 6, utf8_decode("FECHA RECOGIDA:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',8);
-        $this->Cell(20, 6, $arRecogida->getFechaRecogida()->format('Y-m-d'), 1, 0, 'L', 1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(27, 6, "UNIDADES:" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(50, 6, utf8_decode($arRecogida->getClienteRel()->getNombreCorto()), 1, 0, 'L', 1);
         //linea 4
-        $this->SetXY(10, $intY + 15);
+        $this->SetXY(10, $intY + 18);
         $this->SetFont('Arial','B',8);
-        $this->Cell(26, 6, utf8_decode("PESO REAL:") , 1, 0, 'L', 1);
+        $this->Cell(31, 6, utf8_decode("FECHA ANUNCIO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(50, 6, $arRecogida->getCodigoRecogidaPk(), 1, 0, 'L', 1);
+        $this->Cell(66, 6, $arRecogida->getFechaAnuncio()->format('Y-m-d'), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(28, 6, utf8_decode("PESO VOLUMEN:") , 1, 0, 'L', 1);
+        $this->Cell(30, 6, utf8_decode("FECHA RECOGIDA:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(20, 6, $arRecogida->getCodigoRecogidaPk(), 1, 0, 'L', 1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(27, 6, "VR. DECLARADO:" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(50, 6, utf8_decode($arRecogida->getClienteRel()->getNombreCorto()), 1, 0, 'L', 1);
+        $this->Cell(66, 6, $arRecogida->getFechaRecogida()->format('Y-m-d'), 1, 0, 'L', 1);
         //linea 5
-        $this->SetXY(10, $intY + 20);
+        $this->SetXY(10, $intY + 24);
         $this->SetFont('Arial','B',8);
-        $this->Cell(26, 5, utf8_decode("CONTENIDO:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(160, 5, $arRecogida->getComentarios() , 1, 0, 'L', 1);
+        $this->Cell(31, 6, "UNIDADES:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(66, 6, utf8_decode($arRecogida->getUnidades()), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, utf8_decode("PESO REAL:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(66, 6, $arRecogida->getPesoReal(), 1, 0, 'L', 1);
         //linea 6
-        $this->SetXY(10, $intY + 25);
+        $this->SetXY(10, $intY + 30);
         $this->SetFont('Arial','B',8);
-        $this->Cell(26, 5, utf8_decode("COMENTARIOS:") , 1, 0, 'L', 1);
+        $this->Cell(31, 6, "VALOR DECLARADO:" , 1, 0, 'R', 1);
+        $this->SetFont('Arial','',8);
+        
+        $this->Cell(66, 6, number_format($arRecogida->getVrDeclarado(), 2, '.', ','), 1, 0, 'R');
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, utf8_decode("PESO VOLUMEN:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(66, 6, $arRecogida->getPesoVolumen(), 1, 0, 'L', 1);
+        //linea 7
+        $this->SetXY(10, $intY + 38);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(31, 8, utf8_decode("CONTENIDO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(160, 5, $arRecogida->getComentarios() , 1, 0, 'L', 1);
+        $this->Cell(162, 8, $arRecogida->getContenido() , 1, 0, 'L', 1);
+        //linea 8
+        $this->SetXY(10, $intY + 48);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(31, 8, utf8_decode("COMENTARIOS:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        $this->Cell(162, 8, $arRecogida->getComentarios() , 1, 0, 'L', 1);
         
         $this->EncabezadoDetalles();
         

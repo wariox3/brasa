@@ -23,13 +23,11 @@ class RhuSeleccionType extends AbstractType
             ))
             ->add('seleccionRequisitoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionRequisito',
-                'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('sg')
-                    ->where('sg.estadoAbierto = :estadoAbierto')
-                    ->setParameter('estadoAbierto', 1)
-                    ->orderBy('sg.nombre', 'ASC');},
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false))
+                'required' => true))                
             ->add('tipoIdentificacionRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenTipoIdentificacion',
                 'query_builder' => function (EntityRepository $er) {

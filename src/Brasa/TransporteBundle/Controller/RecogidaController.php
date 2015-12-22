@@ -149,7 +149,13 @@ class RecogidaController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIG0')
-                    ->setCellValue('B1', 'CLIENTE');
+                    ->setCellValue('B1', 'FECHA ANUNCIO')
+                    ->setCellValue('C1', 'FECHA RECOGIDA')
+                    ->setCellValue('D1', 'CLIENTE')
+                    ->setCellValue('E1', 'UNIDADES')
+                    ->setCellValue('F1', 'PESO REAL')
+                    ->setCellValue('G1', 'PESO VOLUMEN')
+                    ->setCellValue('H1', 'VALOR DECLARADO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -159,16 +165,22 @@ class RecogidaController extends Controller
         foreach ($arRecogidas as $arRecogida) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arRecogida->getCodigoRecogidaPk())
-                    ->setCellValue('B' . $i, $arRecogida->getTerceroRel()->getNombreCorto());
+                    ->setCellValue('B' . $i, $arRecogida->getFechaAnuncio()->format('Y-m-d'))
+                    ->setCellValue('C' . $i, $arRecogida->getFechaRecogida()->format('Y-m-d'))
+                    ->setCellValue('D' . $i, $arRecogida->getClienteRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arRecogida->getUnidades())
+                    ->setCellValue('F' . $i, $arRecogida->getPesoReal())
+                    ->setCellValue('G' . $i, $arRecogida->getPesoVolumen())
+                    ->setCellValue('H' . $i, $arRecogida->getVrDeclarado());
 
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Recogidaes');
+        $objPHPExcel->getActiveSheet()->setTitle('Recogidas');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Recogidaes.xlsx"');
+        header('Content-Disposition: attachment;filename="Recogidas.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
