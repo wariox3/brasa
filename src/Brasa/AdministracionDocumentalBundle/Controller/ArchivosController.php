@@ -61,7 +61,7 @@ class ArchivosController extends Controller
             ));
     }    
     
-    public function descargarAction($codigoDirectorioArchivo) {
+    public function descargarAction($codigoArchivo) {
         $em = $this->getDoctrine()->getManager();
         $arArchivo = new \Brasa\AdministracionDocumentalBundle\Entity\AdArchivo();
         $arArchivo = $em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivo')->find($codigoArchivo);
