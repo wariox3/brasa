@@ -474,6 +474,23 @@ class BaseEmpleadoController extends Controller
             }else{
                 $subtipoCotizante = $arEmpleado->getSubtipoCotizacion()->getNombre();
             }
+            if ($arEmpleado->getCodigoEntidadSaludFk() == null){
+                $entidadSalud = "";
+            }else{
+                $entidadSalud = $arEmpleado->getEntidadSaludRel()->getNombre();
+            }
+            
+            if ($arEmpleado->getCodigoEntidadPensionFk() == null){
+                $entidadPension = "";
+            }else{
+                $entidadPension = $arEmpleado->getEntidadPensionRel()->getNombre();
+            }
+            
+            if ($arEmpleado->getCodigoEntidadCajaFk() == null){
+                $entidadCaja = "";
+            }else{
+                $entidadCaja = $arEmpleado->getEntidadCajaRel()->getNombre();
+            }        
             if ($arEmpleado->getCodigoSexoFk() == "M"){
                 $sexo = "MASCULINO";
             }else{
@@ -522,9 +539,9 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('T' . $i, $padreFamilia)
                     ->setCellValue('U' . $i, $cabezaHogar)
                     ->setCellValue('V' . $i, $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre())
-                    ->setCellValue('W' . $i, $arEmpleado->getEntidadSaludRel()->getNombre())
-                    ->setCellValue('X' . $i, $arEmpleado->getEntidadPensionRel()->getNombre())
-                    ->setCellValue('Y' . $i, $arEmpleado->getEntidadCajaRel()->getNombre())
+                    ->setCellValue('W' . $i, $entidadSalud)
+                    ->setCellValue('X' . $i, $entidadPension)
+                    ->setCellValue('Y' . $i, $entidadCaja)
                     ->setCellValue('Z' . $i, $clasificacionRiesgo)
                     ->setCellValue('AA' . $i, $arEmpleado->getCuenta())
                     ->setCellValue('AB' . $i, $arEmpleado->getBancoRel()->getNombre())
