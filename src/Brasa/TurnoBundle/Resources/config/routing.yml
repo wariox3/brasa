@@ -26,6 +26,18 @@ brs_tur_base_recurso_nuevo:
     path:     /tur/base/recurso/nuevo/{codigoRecurso}
     defaults: { _controller: BrasaTurnoBundle:BaseRecurso:nuevo }
 
+brs_tur_base_cliente_lista:
+    path:     /tur/base/cliente/lista
+    defaults: { _controller: BrasaTurnoBundle:BaseCliente:lista }     
+    
+brs_tur_base_cliente_detalle:
+    path:     /tur/base/cliente/detalle/{codigoCliente}
+    defaults: { _controller: BrasaTurnoBundle:BaseCliente:detalle }    
+    
+brs_tur_base_cliente_nuevo:
+    path:     /tur/base/cliente/nuevo/{codigoCliente}
+    defaults: { _controller: BrasaTurnoBundle:BaseCliente:nuevo }
+
 brs_tur_base_plantilla_lista:
     path:     /tur/base/plantilla/lista
     defaults: { _controller: BrasaTurnoBundle:BasePlantilla:lista }     

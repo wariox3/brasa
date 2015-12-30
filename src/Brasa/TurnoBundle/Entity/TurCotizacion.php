@@ -28,9 +28,9 @@ class TurCotizacion
     private $fechaVence;    
     
     /**
-     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
-    private $codigoTerceroFk;    
+    private $codigoClienteFk;    
 
     /**
      * @ORM\Column(name="codigo_sector_fk", type="integer", nullable=true)
@@ -87,6 +87,7 @@ class TurCotizacion
      * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="cotizacionRel", cascade={"persist", "remove"})
      */
     protected $cotizacionesDetallesCotizacionRel; 
+
 
     /**
      * Constructor
@@ -155,27 +156,27 @@ class TurCotizacion
     }
 
     /**
-     * Set codigoTerceroFk
+     * Set codigoClienteFk
      *
-     * @param integer $codigoTerceroFk
+     * @param integer $codigoClienteFk
      *
      * @return TurCotizacion
      */
-    public function setCodigoTerceroFk($codigoTerceroFk)
+    public function setCodigoClienteFk($codigoClienteFk)
     {
-        $this->codigoTerceroFk = $codigoTerceroFk;
+        $this->codigoClienteFk = $codigoClienteFk;
 
         return $this;
     }
 
     /**
-     * Get codigoTerceroFk
+     * Get codigoClienteFk
      *
      * @return integer
      */
-    public function getCodigoTerceroFk()
+    public function getCodigoClienteFk()
     {
-        return $this->codigoTerceroFk;
+        return $this->codigoClienteFk;
     }
 
     /**
