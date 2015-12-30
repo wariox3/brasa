@@ -75,13 +75,7 @@ class TurCotizacion
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;            
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="turCotizacionesTerceroRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;    
+    private $comentarios;                  
     
     /**
      * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="cotizacionesSectorRel")
@@ -93,7 +87,6 @@ class TurCotizacion
      * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="cotizacionRel", cascade={"persist", "remove"})
      */
     protected $cotizacionesDetallesCotizacionRel; 
-
 
     /**
      * Constructor
@@ -399,30 +392,6 @@ class TurCotizacion
     public function getComentarios()
     {
         return $this->comentarios;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return TurCotizacion
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
     }
 
     /**

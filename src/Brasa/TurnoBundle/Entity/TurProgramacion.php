@@ -45,19 +45,14 @@ class TurProgramacion
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;             
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="turProgramacionesTerceroRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;    
+    private $comentarios;                    
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="programacionRel", cascade={"persist", "remove"})
      */
     protected $programacionesDetallesProgramacionRel; 
     
+
     /**
      * Constructor
      */
@@ -101,6 +96,30 @@ class TurProgramacion
     }
 
     /**
+     * Set codigoTerceroFk
+     *
+     * @param integer $codigoTerceroFk
+     *
+     * @return TurProgramacion
+     */
+    public function setCodigoTerceroFk($codigoTerceroFk)
+    {
+        $this->codigoTerceroFk = $codigoTerceroFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTerceroFk
+     *
+     * @return integer
+     */
+    public function getCodigoTerceroFk()
+    {
+        return $this->codigoTerceroFk;
+    }
+
+    /**
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
@@ -122,6 +141,30 @@ class TurProgramacion
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoAprobado
+     *
+     * @param boolean $estadoAprobado
+     *
+     * @return TurProgramacion
+     */
+    public function setEstadoAprobado($estadoAprobado)
+    {
+        $this->estadoAprobado = $estadoAprobado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAprobado
+     *
+     * @return boolean
+     */
+    public function getEstadoAprobado()
+    {
+        return $this->estadoAprobado;
     }
 
     /**
@@ -204,77 +247,5 @@ class TurProgramacion
     public function getProgramacionesDetallesProgramacionRel()
     {
         return $this->programacionesDetallesProgramacionRel;
-    }
-
-    /**
-     * Set codigoTerceroFk
-     *
-     * @param integer $codigoTerceroFk
-     *
-     * @return TurProgramacion
-     */
-    public function setCodigoTerceroFk($codigoTerceroFk)
-    {
-        $this->codigoTerceroFk = $codigoTerceroFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTerceroFk
-     *
-     * @return integer
-     */
-    public function getCodigoTerceroFk()
-    {
-        return $this->codigoTerceroFk;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return TurProgramacion
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
-    }
-
-    /**
-     * Set estadoAprobado
-     *
-     * @param boolean $estadoAprobado
-     *
-     * @return TurProgramacion
-     */
-    public function setEstadoAprobado($estadoAprobado)
-    {
-        $this->estadoAprobado = $estadoAprobado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAprobado
-     *
-     * @return boolean
-     */
-    public function getEstadoAprobado()
-    {
-        return $this->estadoAprobado;
     }
 }

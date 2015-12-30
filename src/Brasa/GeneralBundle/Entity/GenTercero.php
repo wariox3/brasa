@@ -194,31 +194,16 @@ class GenTercero
      */
     protected $movimientosRel;    
                           
-
     /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuFactura", mappedBy="terceroRel")
      */
     protected $rhuFacturasTerceroRel;    
 
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCotizacion", mappedBy="terceroRel")
-     */
-    protected $turCotizacionesTerceroRel;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurPedido", mappedBy="terceroRel")
-     */
-    protected $turPedidosTerceroRel;    
-
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurProgramacion", mappedBy="terceroRel")
-     */
-    protected $turProgramacionesTerceroRel;     
-
-    /**
      * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurFactura", mappedBy="terceroRel")
      */
     protected $turFacturasTerceroRel;        
+
     /**
      * Constructor
      */
@@ -227,9 +212,6 @@ class GenTercero
         $this->tercerosDireccionesRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuFacturasTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->turCotizacionesTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->turPedidosTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->turProgramacionesTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turFacturasTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -1111,108 +1093,6 @@ class GenTercero
     public function getRhuFacturasTerceroRel()
     {
         return $this->rhuFacturasTerceroRel;
-    }
-
-    /**
-     * Add turCotizacionesTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCotizacion $turCotizacionesTerceroRel
-     *
-     * @return GenTercero
-     */
-    public function addTurCotizacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurCotizacion $turCotizacionesTerceroRel)
-    {
-        $this->turCotizacionesTerceroRel[] = $turCotizacionesTerceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove turCotizacionesTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCotizacion $turCotizacionesTerceroRel
-     */
-    public function removeTurCotizacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurCotizacion $turCotizacionesTerceroRel)
-    {
-        $this->turCotizacionesTerceroRel->removeElement($turCotizacionesTerceroRel);
-    }
-
-    /**
-     * Get turCotizacionesTerceroRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTurCotizacionesTerceroRel()
-    {
-        return $this->turCotizacionesTerceroRel;
-    }
-
-    /**
-     * Add turPedidosTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedido $turPedidosTerceroRel
-     *
-     * @return GenTercero
-     */
-    public function addTurPedidosTerceroRel(\Brasa\TurnoBundle\Entity\TurPedido $turPedidosTerceroRel)
-    {
-        $this->turPedidosTerceroRel[] = $turPedidosTerceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove turPedidosTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedido $turPedidosTerceroRel
-     */
-    public function removeTurPedidosTerceroRel(\Brasa\TurnoBundle\Entity\TurPedido $turPedidosTerceroRel)
-    {
-        $this->turPedidosTerceroRel->removeElement($turPedidosTerceroRel);
-    }
-
-    /**
-     * Get turPedidosTerceroRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTurPedidosTerceroRel()
-    {
-        return $this->turPedidosTerceroRel;
-    }
-
-    /**
-     * Add turProgramacionesTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProgramacion $turProgramacionesTerceroRel
-     *
-     * @return GenTercero
-     */
-    public function addTurProgramacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurProgramacion $turProgramacionesTerceroRel)
-    {
-        $this->turProgramacionesTerceroRel[] = $turProgramacionesTerceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove turProgramacionesTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProgramacion $turProgramacionesTerceroRel
-     */
-    public function removeTurProgramacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurProgramacion $turProgramacionesTerceroRel)
-    {
-        $this->turProgramacionesTerceroRel->removeElement($turProgramacionesTerceroRel);
-    }
-
-    /**
-     * Get turProgramacionesTerceroRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTurProgramacionesTerceroRel()
-    {
-        return $this->turProgramacionesTerceroRel;
     }
 
     /**

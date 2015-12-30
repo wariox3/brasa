@@ -101,13 +101,7 @@ class TurPedido
      * @ORM\ManyToOne(targetEntity="TurPedidoTipo", inversedBy="pedidosPedidoTipoRel")
      * @ORM\JoinColumn(name="codigo_pedido_tipo_fk", referencedColumnName="codigo_pedido_tipo_pk")
      */
-    protected $pedidoTipoRel;    
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="turPedidosTerceroRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;    
+    protected $pedidoTipoRel;           
     
     /**
      * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="pedidosSectorRel")
@@ -119,6 +113,7 @@ class TurPedido
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="pedidoRel", cascade={"persist", "remove"})
      */
     protected $pedidosDetallesPedidoRel; 
+
 
     /**
      * Constructor
@@ -235,6 +230,54 @@ class TurPedido
     }
 
     /**
+     * Set fechaDesde
+     *
+     * @param \DateTime $fechaDesde
+     *
+     * @return TurPedido
+     */
+    public function setFechaDesde($fechaDesde)
+    {
+        $this->fechaDesde = $fechaDesde;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesde
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesde()
+    {
+        return $this->fechaDesde;
+    }
+
+    /**
+     * Set fechaHasta
+     *
+     * @param \DateTime $fechaHasta
+     *
+     * @return TurPedido
+     */
+    public function setFechaHasta($fechaHasta)
+    {
+        $this->fechaHasta = $fechaHasta;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHasta
+     *
+     * @return \DateTime
+     */
+    public function getFechaHasta()
+    {
+        return $this->fechaHasta;
+    }
+
+    /**
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
@@ -283,27 +326,51 @@ class TurPedido
     }
 
     /**
-     * Set permanente
+     * Set cerrado
      *
-     * @param boolean $permanente
+     * @param boolean $cerrado
      *
      * @return TurPedido
      */
-    public function setPermanente($permanente)
+    public function setCerrado($cerrado)
     {
-        $this->permanente = $permanente;
+        $this->cerrado = $cerrado;
 
         return $this;
     }
 
     /**
-     * Get permanente
+     * Get cerrado
      *
      * @return boolean
      */
-    public function getPermanente()
+    public function getCerrado()
     {
-        return $this->permanente;
+        return $this->cerrado;
+    }
+
+    /**
+     * Set programado
+     *
+     * @param boolean $programado
+     *
+     * @return TurPedido
+     */
+    public function setProgramado($programado)
+    {
+        $this->programado = $programado;
+
+        return $this;
+    }
+
+    /**
+     * Get programado
+     *
+     * @return boolean
+     */
+    public function getProgramado()
+    {
+        return $this->programado;
     }
 
     /**
@@ -475,30 +542,6 @@ class TurPedido
     }
 
     /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return TurPedido
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
-    }
-
-    /**
      * Set sectorRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
@@ -554,101 +597,5 @@ class TurPedido
     public function getPedidosDetallesPedidoRel()
     {
         return $this->pedidosDetallesPedidoRel;
-    }
-
-    /**
-     * Set cerrado
-     *
-     * @param boolean $cerrado
-     *
-     * @return TurPedido
-     */
-    public function setCerrado($cerrado)
-    {
-        $this->cerrado = $cerrado;
-
-        return $this;
-    }
-
-    /**
-     * Get cerrado
-     *
-     * @return boolean
-     */
-    public function getCerrado()
-    {
-        return $this->cerrado;
-    }
-
-    /**
-     * Set programado
-     *
-     * @param boolean $programado
-     *
-     * @return TurPedido
-     */
-    public function setProgramado($programado)
-    {
-        $this->programado = $programado;
-
-        return $this;
-    }
-
-    /**
-     * Get programado
-     *
-     * @return boolean
-     */
-    public function getProgramado()
-    {
-        return $this->programado;
-    }
-
-    /**
-     * Set fechaDesde
-     *
-     * @param \DateTime $fechaDesde
-     *
-     * @return TurPedido
-     */
-    public function setFechaDesde($fechaDesde)
-    {
-        $this->fechaDesde = $fechaDesde;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDesde
-     *
-     * @return \DateTime
-     */
-    public function getFechaDesde()
-    {
-        return $this->fechaDesde;
-    }
-
-    /**
-     * Set fechaHasta
-     *
-     * @param \DateTime $fechaHasta
-     *
-     * @return TurPedido
-     */
-    public function setFechaHasta($fechaHasta)
-    {
-        $this->fechaHasta = $fechaHasta;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaHasta
-     *
-     * @return \DateTime
-     */
-    public function getFechaHasta()
-    {
-        return $this->fechaHasta;
     }
 }
