@@ -76,6 +76,12 @@ class TurCotizacion
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;                  
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="cotizacionesClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;     
     
     /**
      * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="cotizacionesSectorRel")
@@ -88,6 +94,12 @@ class TurCotizacion
      */
     protected $cotizacionesDetallesCotizacionRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurCotizacionOtro", mappedBy="cotizacionRel", cascade={"persist", "remove"})
+     */
+    protected $cotizacionesOtrosCotizacionRel;    
+    
+
 
     /**
      * Constructor
@@ -95,6 +107,7 @@ class TurCotizacion
     public function __construct()
     {
         $this->cotizacionesDetallesCotizacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cotizacionesOtrosCotizacionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -396,6 +409,30 @@ class TurCotizacion
     }
 
     /**
+     * Set clienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     *
+     * @return TurCotizacion
+     */
+    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
+    }
+
+    /**
      * Set sectorRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
@@ -451,5 +488,39 @@ class TurCotizacion
     public function getCotizacionesDetallesCotizacionRel()
     {
         return $this->cotizacionesDetallesCotizacionRel;
+    }
+
+    /**
+     * Add cotizacionesOtrosCotizacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacionOtro $cotizacionesOtrosCotizacionRel
+     *
+     * @return TurCotizacion
+     */
+    public function addCotizacionesOtrosCotizacionRel(\Brasa\TurnoBundle\Entity\TurCotizacionOtro $cotizacionesOtrosCotizacionRel)
+    {
+        $this->cotizacionesOtrosCotizacionRel[] = $cotizacionesOtrosCotizacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cotizacionesOtrosCotizacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacionOtro $cotizacionesOtrosCotizacionRel
+     */
+    public function removeCotizacionesOtrosCotizacionRel(\Brasa\TurnoBundle\Entity\TurCotizacionOtro $cotizacionesOtrosCotizacionRel)
+    {
+        $this->cotizacionesOtrosCotizacionRel->removeElement($cotizacionesOtrosCotizacionRel);
+    }
+
+    /**
+     * Get cotizacionesOtrosCotizacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCotizacionesOtrosCotizacionRel()
+    {
+        return $this->cotizacionesOtrosCotizacionRel;
     }
 }

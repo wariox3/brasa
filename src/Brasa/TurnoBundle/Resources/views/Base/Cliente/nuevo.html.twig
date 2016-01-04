@@ -2,24 +2,24 @@
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
-    <h3>Nuevo recurso</h3>
+    <h3>Nuevo cliente</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
-        <div class="panel-body">               
+        <div class="panel-body">                           
             <div class="form-group form-group-sm">
-                <label for="txtNumeroIdentificacion" class="col-sm-3 control-label">Empleado:</label>
+                <label for="txtNit" class="col-sm-3 control-label">Tercero:</label>
                 <div class="col-sm-9">
                     <div class="row">
                       <div class="col-lg-2">
                         <div class="input-group">
-                          <input id="txtNumeroIdentificacion"  name="txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arRecurso.empleadoRel.numeroIdentificacion |default('') }}"/>
+                          <input id="txtNit"  name="txtNit"  type="text" class="form-control" value="{{ arCliente.terceroRel.nit |default('') }}"/>
                         </div>
                       </div>
                       <div class="col-lg-10">
                         <div class="input-group">                                      
-                          <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arRecurso.empleadoRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                          <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arCliente.terceroRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
                           <span class="input-group-btn">                                        
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_buscar_empleado') }}', 'buscarEmpleado', 600, 900)">Buscar</a>
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_gen_buscar_tercero', { 'campoCodigo': 'txtNit', 'campoNombre': 'txtNombreCorto' }) }}', 'buscarTercero', 600, 900)">Buscar</a>
                           </span>
                         </div>
                       </div>
@@ -27,21 +27,15 @@
                 </div>
             </div>            
             <div class="form-group form-group-sm">
+                <label for="form_nit" class="col-sm-3 control-label">Nit:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.nit, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>
+            <div class="form-group form-group-sm">
                 <label for="form_nombreCorto" class="col-sm-3 control-label">Nombre corto:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.nombreCorto, { 'attr': {'class': 'form-control'} }) }}                        
-                </div>                
-            </div> 
-            <div class="form-group form-group-sm">
-                <label for="form_pagoPromedio" class="col-sm-3 control-label">Pago promedio:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.pagoPromedio) }}                        
-                </div>                
-            </div>                
-            <div class="form-group form-group-sm">
-                <label for="form_pagoVariable" class="col-sm-3 control-label">Pago variable:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.pagoVariable) }}                        
                 </div>                
             </div>                                
             <div class="form-group">
@@ -53,7 +47,7 @@
         </div>
     </div>               
     <div class="modal-footer">
-        <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_lista') }}">Cancelar</a>        
+        <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_cliente_lista') }}">Cancelar</a>        
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
         {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>

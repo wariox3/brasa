@@ -54,6 +54,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                     $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                     $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                     $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                    $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                     for($i = 1; $i < 32; $i++) {
                         $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle);
 
@@ -164,6 +165,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                         $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                         $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                        $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                         $em->persist($arProgramacionDetalle);
                     }
                 }

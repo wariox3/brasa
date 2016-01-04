@@ -68,7 +68,7 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "NIT:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getNit(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getNit(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "VENCE:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -78,17 +78,17 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "CLIENTE:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getNombreCorto(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getNombreCorto(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CONTACTO:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getContactoCliente(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getContactoCliente(), 1, 0, 'L', 1);
         
         $this->SetXY(10, $intY + 12);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "DIRECCION:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getDireccion(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getDireccion(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CARGO:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -108,17 +108,17 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "TELEFONO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getTelefono(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getTelefono(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CELULAR:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getCelular(), 1, 0, 'L', 1);                
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getCelular(), 1, 0, 'L', 1);                
         
         $this->SetXY(10, $intY + 24);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "EMAIL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getTerceroRel()->getEmail(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getEmail(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, '' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);

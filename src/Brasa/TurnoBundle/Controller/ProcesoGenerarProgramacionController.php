@@ -27,7 +27,7 @@ class ProcesoGenerarProgramacionController extends Controller
                 $arPedidos = $query->getResult();
                 foreach ($arPedidos as $arPedido) {
                     $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
-                    $arProgramacion->setTerceroRel($arPedido->getTerceroRel());
+                    $arProgramacion->setClienteRel($arPedido->getClienteRel());
                     $arProgramacion->setFecha($dateFecha);
                     $em->persist($arProgramacion);                    
                     $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();

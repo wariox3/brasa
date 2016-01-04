@@ -102,8 +102,7 @@ class GenTercero
      * @ORM\Column(name="celular", type="string", length=20, nullable=true)
      */
     private $celular;    
-    
-    
+        
     /**
      * @ORM\Column(name="fax", type="string", length=20, nullable=true)
      */
@@ -204,6 +203,11 @@ class GenTercero
      */
     protected $turFacturasTerceroRel;        
 
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="terceroRel")
+     */
+    protected $turClientesTerceroRel;     
+    
     /**
      * Constructor
      */

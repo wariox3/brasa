@@ -3,7 +3,8 @@ namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\TurnoBundle\Form\Type\TurRecursoType;
+use Brasa\TurnoBundle\Form\Type\TurClienteType;
+use Brasa\TurnoBundle\Form\Type\TurClientePuestoType;
 class BaseClienteController extends Controller
 {
     var $strDqlLista = "";
@@ -20,7 +21,7 @@ class BaseClienteController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
-                //$em->getRepository('BrasaTurnoBundle:TurRecurso')->eliminarExamen($arrSeleccionados);
+                //$em->getRepository('BrasaTurnoBundle:TurCliente')->eliminarExamen($arrSeleccionados);
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -31,171 +32,171 @@ class BaseClienteController extends Controller
             }
         }
         
-        $arRecursos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Base/Recurso:lista.html.twig', array(
-            'arRecursos' => $arRecursos, 
+        $arClientes = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaTurnoBundle:Base/Cliente:lista.html.twig', array(
+            'arClientes' => $arClientes, 
             'form' => $form->createView()));
     }
 
-    public function nuevoAction($codigoRecurso = '') {
+    public function nuevoAction($codigoCliente = '') {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-        if($codigoRecurso != '' && $codigoRecurso != '0') {
-            $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        if($codigoCliente != '' && $codigoCliente != '0') {
+            $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
         }        
-        $form = $this->createForm(new TurRecursoType, $arRecurso);
+        $form = $this->createForm(new TurClienteType, $arCliente);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arrControles = $request->request->All();
-            $arRecurso = $form->getData(); 
-            if($arrControles['txtNumeroIdentificacion'] != '') {
-                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-                if(count($arEmpleado) > 0) {
-                    $arRecurso->setEmpleadoRel($arEmpleado);
-                    $em->persist($arRecurso);
+            $arCliente = $form->getData();
+            $arrControles = $request->request->All();                        
+            if($arrControles['txtNit'] != '') {
+                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
+                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arTercero) > 0) {
+                    $arCliente->setTerceroRel($arTercero);
+                    $em->persist($arCliente);
                     $em->flush();            
 
                     if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_base_recurso_nuevo', array('codigoRecurso' => 0 )));
+                        return $this->redirect($this->generateUrl('brs_tur_base_cliente_nuevo', array('codigoCliente' => 0 )));
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
-                    }                    
+                        return $this->redirect($this->generateUrl('brs_tur_base_cliente_lista'));
+                    }                     
                 } else {
-                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
-                }
-            }
+                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
+                }                
+            }            
+                   
+            
                        
 
         }
-        return $this->render('BrasaTurnoBundle:Base/Recurso:nuevo.html.twig', array(
-            'arRecurso' => $arRecurso,
+        return $this->render('BrasaTurnoBundle:Base/Cliente:nuevo.html.twig', array(
+            'arCliente' => $arCliente,
             'form' => $form->createView()));
     }        
 
-    public function detalleAction($codigoRecurso) {
+    public function detalleAction($codigoCliente) {
         $em = $this->getDoctrine()->getManager(); 
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
-        $form = $this->formularioDetalle($arRecurso);
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
+        $form = $this->formularioDetalle($arCliente);
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnAutorizar')->isClicked()) {            
-                if($arRecurso->getEstadoAutorizado() == 0) {
-                    if($em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->numeroRegistros($codigoRecurso) > 0) {
-                        $arRecurso->setEstadoAutorizado(1);
-                        $em->persist($arRecurso);
+                if($arCliente->getEstadoAutorizado() == 0) {
+                    if($em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->numeroRegistros($codigoCliente) > 0) {
+                        $arCliente->setEstadoAutorizado(1);
+                        $em->persist($arCliente);
                         $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));                                                                        
+                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));                                                                        
                     } else {
                         $objMensaje->Mensaje('error', 'Debe adicionar detalles al examen', $this);
                     }                    
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));                                                
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));                                                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arRecurso->getEstadoAutorizado() == 1) {
-                    $arRecurso->setEstadoAutorizado(0);
-                    $em->persist($arRecurso);
+                if($arCliente->getEstadoAutorizado() == 1) {
+                    $arCliente->setEstadoAutorizado(0);
+                    $em->persist($arCliente);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));                                                
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));                                                
                 }
             }
             if ($form->get('BtnAprobar')->isClicked()) {                
-                $strRespuesta = $em->getRepository('BrasaTurnoBundle:TurRecurso')->aprobarExamen($codigoRecurso);
+                $strRespuesta = $em->getRepository('BrasaTurnoBundle:TurCliente')->aprobarExamen($codigoCliente);
                 if($strRespuesta == ''){
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));                                                
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));                                                
                 }else {
                   $objMensaje->Mensaje('error', $strRespuesta, $this);
                 }                 
             }      
             
             if($form->get('BtnImprimir')->isClicked()) {
-                if($arRecurso->getEstadoAutorizado() == 1) {
+                if($arCliente->getEstadoAutorizado() == 1) {
                     $objExamen = new \Brasa\TurnoBundle\Formatos\FormatoExamen();
-                    $objExamen->Generar($this, $codigoRecurso);
+                    $objExamen->Generar($this, $codigoCliente);
                 } else {
                     $objMensaje->Mensaje("error", "No puede imprimir una orden de examen sin estar autorizada", $this);
                 }
             }
             if($form->get('BtnEliminarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaTurnoBundle:TurRecurso')->liquidar($codigoRecurso);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));
+                $em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurCliente')->liquidar($codigoCliente);
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));
             }
             if($form->get('BtnAprobarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));
+                $em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));
             }
             if($form->get('BtnCerrarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->cerrarDetallesSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));
+                $em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->cerrarDetallesSeleccionados($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));
             }            
             if ($form->get('BtnActualizarDetalle')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {                
                     if($arrControles['TxtPrecio'.$intCodigo] != "" && $arrControles['TxtPrecio'.$intCodigo] != 0) {
-                        $arRecursoDetalle = new \Brasa\TurnoBundle\Entity\TurRecursoDetalle();
-                        $arRecursoDetalle = $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->find($intCodigo);                                        
+                        $arClienteDetalle = new \Brasa\TurnoBundle\Entity\TurClienteDetalle();
+                        $arClienteDetalle = $em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->find($intCodigo);                                        
                         $floPrecio = $arrControles['TxtPrecio'.$intCodigo];
-                        $arRecursoDetalle->setValidarVencimiento($arrControles['cboValidarVencimiento'.$intCodigo]);
-                        $arRecursoDetalle->setFechaVence(date_create($arrControles['TxtVence'.$intCodigo]));
-                        $arRecursoDetalle->setVrPrecio($floPrecio);
-                        $em->persist($arRecursoDetalle);                        
+                        $arClienteDetalle->setValidarVencimiento($arrControles['cboValidarVencimiento'.$intCodigo]);
+                        $arClienteDetalle->setFechaVence(date_create($arrControles['TxtVence'.$intCodigo]));
+                        $arClienteDetalle->setVrPrecio($floPrecio);
+                        $em->persist($arClienteDetalle);                        
                     }
                 }
                 $em->flush();
-                $em->getRepository('BrasaTurnoBundle:TurRecurso')->liquidar($codigoRecurso);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));
+                $em->getRepository('BrasaTurnoBundle:TurCliente')->liquidar($codigoCliente);
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));
             }            
         }
 
-        $arRecursoDetalle = new \Brasa\TurnoBundle\Entity\TurRecursoDetalle();
-        $arRecursoDetalle = $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->findBy(array ('codigoProgramacionFk' => $codigoRecurso));
-        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalle.html.twig', array(
-                    'arRecurso' => $arRecurso,
-                    'arRecursoDetalle' => $arRecursoDetalle,
+        $arPuestos = new \Brasa\TurnoBundle\Entity\TurPuesto();
+        $arPuestos = $em->getRepository('BrasaTurnoBundle:TurPuesto')->findBy(array ('codigoClienteFk' => $codigoCliente));
+        return $this->render('BrasaTurnoBundle:Base/Cliente:detalle.html.twig', array(
+                    'arCliente' => $arCliente,
+                    'arPuestos' => $arPuestos,
                     'form' => $form->createView()
                     ));
     }
 
-    public function detalleNuevoAction($codigoRecurso, $codigoRecursoDetalle = 0) {
+    public function puestoNuevoAction($codigoCliente) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        
-        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
-        $arRecursoDetalle = new \Brasa\TurnoBundle\Entity\TurRecursoDetalle();
-        if($codigoRecursoDetalle != 0) {
-            $arRecursoDetalle = $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->find($codigoRecursoDetalle);
-        }       
-        $form = $this->createForm(new TurRecursoDetalleType, $arRecursoDetalle);
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
+        $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
+        
+        $form = $this->createForm(new TurClientePuestoType, $arPuesto);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arRecursoDetalle = $form->getData();            
-            $arRecursoDetalle->setProgramacionRel($arRecurso);
-            $em->persist($arRecursoDetalle);
+            $arPuesto = $form->getData();
+            $arPuesto->setClienteRel($arCliente);
+            $em->persist($arPuesto);
             $em->flush();            
             
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle_nuevo', array('codigoProgramacion' => $codigoRecurso, 'codigoProgramacionDetalle' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_cliente_puesto_nuevo', array('codigoCliente' => $codigoCliente )));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }            
         }
-        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
-            'arRecurso' => $arRecurso,
+        return $this->render('BrasaTurnoBundle:Base/Cliente:puestoNuevo.html.twig', array(
+            'arCliente' => $arCliente,
             'form' => $form->createView()));
     }   
     
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
+        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurCliente')->listaDQL(
                 $this->strNombre,                
                 $this->strCodigo   
                 ); 
@@ -220,15 +221,11 @@ class BaseClienteController extends Controller
     
     private function formularioDetalle($ar) {
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
-        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);        
-        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        if($ar->getEstadoAutorizado() == 1) {
-            $arrBotonDetalleActualizar['disabled'] = true;
-        }        
+        $arrBotonEliminarPuesto = array('label' => 'Eliminar', 'disabled' => false);                
+       
         $form = $this->createFormBuilder()    
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)    
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)            
+                    ->add('BtnEliminarPuesto', 'submit', $arrBotonEliminarPuesto)            
                     ->getForm();  
         return $form;
     }
@@ -253,22 +250,22 @@ class BaseClienteController extends Controller
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
-                $arRecursos = new \Brasa\TurnoBundle\Entity\TurRecurso();
-                $arRecursos = $query->getResult();
+                $arClientes = new \Brasa\TurnoBundle\Entity\TurCliente();
+                $arClientes = $query->getResult();
                 
-        foreach ($arRecursos as $arRecurso) {            
+        foreach ($arClientes as $arCliente) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arRecurso->getCodigoRecursoPk())
-                    ->setCellValue('B' . $i, $arRecurso->getNombreCorto());
+                    ->setCellValue('A' . $i, $arCliente->getCodigoClientePk())
+                    ->setCellValue('B' . $i, $arCliente->getNombreCorto());
                         
             $i++;
         }
         
-        $objPHPExcel->getActiveSheet()->setTitle('Recurso');
+        $objPHPExcel->getActiveSheet()->setTitle('Cliente');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Recursos.xlsx"');
+        header('Content-Disposition: attachment;filename="Clientes.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

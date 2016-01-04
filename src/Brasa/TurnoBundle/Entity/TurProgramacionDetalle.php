@@ -28,6 +28,11 @@ class TurProgramacionDetalle
     private $codigoPedidoDetalleFk;    
 
     /**
+     * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPuestoFk;    
+    
+    /**
      * @ORM\Column(name="codigo_recurso_fk", type="integer", nullable=true)
      */    
     private $codigoRecursoFk;    
@@ -209,6 +214,12 @@ class TurProgramacionDetalle
      * @ORM\JoinColumn(name="codigo_recurso_fk", referencedColumnName="codigo_recurso_pk")
      */
     protected $recursoRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="programacionesDetallesPuestoRel")
+     * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
+     */
+    protected $puestoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="programacionDetalleRel")
@@ -1178,5 +1189,53 @@ class TurProgramacionDetalle
     public function getSoportesPagosDetallesProgramacionDetalleRel()
     {
         return $this->soportesPagosDetallesProgramacionDetalleRel;
+    }
+
+    /**
+     * Set codigoPuestoFk
+     *
+     * @param integer $codigoPuestoFk
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setCodigoPuestoFk($codigoPuestoFk)
+    {
+        $this->codigoPuestoFk = $codigoPuestoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuestoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPuestoFk()
+    {
+        return $this->codigoPuestoFk;
+    }
+
+    /**
+     * Set puestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
+    {
+        $this->puestoRel = $puestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puestoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
+     */
+    public function getPuestoRel()
+    {
+        return $this->puestoRel;
     }
 }

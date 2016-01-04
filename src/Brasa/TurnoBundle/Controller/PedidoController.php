@@ -57,11 +57,11 @@ class PedidoController extends Controller
         if ($form->isValid()) {
             $arPedido = $form->getData();            
             $arrControles = $request->request->All();
-            if($arrControles['txtNit'] != '') {
-                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
-                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arrControles['txtNit']));                
-                if(count($arTercero) > 0) {
-                    $arPedido->setTerceroRel($arTercero);
+            if($arrControles['txtNit'] != '') {                
+                $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arCliente) > 0) {
+                    $arPedido->setClienteRel($arCliente);
                     $em->persist($arPedido);
                     $em->flush();
 
@@ -71,7 +71,7 @@ class PedidoController extends Controller
                         return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $arPedido->getCodigoPedidoPk())));
                     }                       
                 } else {
-                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
+                    $objMensaje->Mensaje("error", "El cliente no existe", $this);
                 }                             
             }            
         }
@@ -117,61 +117,9 @@ class PedidoController extends Controller
                     return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
                 }
             }            
-            if($form->get('BtnDetalleActualizar')->isClicked()) {
+            if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                    $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-                    $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($intCodigo);
-                    $arPedidoDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-                    $arPedidoDetalle->setCantidadRecurso($arrControles['TxtCantidadRecurso'.$intCodigo]);
-                    $arPedidoDetalle->setFechaDesde(date_create($arrControles['TxtFechaDesde'.$intCodigo]));
-                    $arPedidoDetalle->setFechaHasta(date_create($arrControles['TxtFechaHasta'.$intCodigo]));
-                    
-                    if(isset($arrControles['chkLunes'.$intCodigo])) {
-                        $arPedidoDetalle->setLunes(1);
-                    } else {
-                        $arPedidoDetalle->setLunes(0);
-                    }
-                    if(isset($arrControles['chkMartes'.$intCodigo])) {
-                        $arPedidoDetalle->setMartes(1);
-                    } else {
-                        $arPedidoDetalle->setMartes(0);
-                    }
-                    if(isset($arrControles['chkMiercoles'.$intCodigo])) {
-                        $arPedidoDetalle->setMiercoles(1);
-                    } else {
-                        $arPedidoDetalle->setMiercoles(0);
-                    }
-                    if(isset($arrControles['chkJueves'.$intCodigo])) {
-                        $arPedidoDetalle->setJueves(1);
-                    } else {
-                        $arPedidoDetalle->setJueves(0);
-                    }
-                    if(isset($arrControles['chkViernes'.$intCodigo])) {
-                        $arPedidoDetalle->setViernes(1);
-                    } else {
-                        $arPedidoDetalle->setViernes(0);
-                    }
-                    if(isset($arrControles['chkSabado'.$intCodigo])) {
-                        $arPedidoDetalle->setSabado(1);
-                    } else {
-                        $arPedidoDetalle->setSabado(0);
-                    }
-                    if(isset($arrControles['chkDomingo'.$intCodigo])) {
-                        $arPedidoDetalle->setDomingo(1);
-                    } else {
-                        $arPedidoDetalle->setDomingo(0);
-                    }
-                    if(isset($arrControles['chkFestivo'.$intCodigo])) {
-                        $arPedidoDetalle->setFestivo(1);
-                    } else {
-                        $arPedidoDetalle->setFestivo(0);
-                    }                    
-                    $em->persist($arPedidoDetalle);
-                }
-                $em->flush();
-                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
+                $this->actualizarDetalle($arrControles, $codigoPedido);                                
                 return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
@@ -276,7 +224,7 @@ class PedidoController extends Controller
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        $arCotizaciones = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->pendientes($arPedido->getCodigoTerceroFk());
+        $arCotizaciones = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->pendientes($arPedido->getCodigoClienteFk());
         return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleNuevoCotizacion.html.twig', array(
             'arPedido' => $arPedido,
             'arCotizaciones' => $arCotizaciones,
@@ -382,7 +330,69 @@ class PedidoController extends Controller
         $objWriter->save('php://output');
         exit;
     }
-
+    
+    private function actualizarDetalle($arrControles, $codigoPedido) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        foreach ($arrControles['LblCodigo'] as $intCodigo) {
+            $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+            $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($intCodigo);
+            $arPedidoDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
+            $arPedidoDetalle->setCantidadRecurso($arrControles['TxtCantidadRecurso'.$intCodigo]);
+            $arPedidoDetalle->setFechaDesde(date_create($arrControles['TxtFechaDesde'.$intCodigo]));
+            $arPedidoDetalle->setFechaHasta(date_create($arrControles['TxtFechaHasta'.$intCodigo]));
+            if($arrControles['TxtPuesto'.$intCodigo] != '') {
+                $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
+                $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($arrControles['TxtPuesto'.$intCodigo]);
+                if($arPuesto) {
+                    $arPedidoDetalle->setPuestoRel($arPuesto);
+                }
+            }
+            if(isset($arrControles['chkLunes'.$intCodigo])) {
+                $arPedidoDetalle->setLunes(1);
+            } else {
+                $arPedidoDetalle->setLunes(0);
+            }
+            if(isset($arrControles['chkMartes'.$intCodigo])) {
+                $arPedidoDetalle->setMartes(1);
+            } else {
+                $arPedidoDetalle->setMartes(0);
+            }
+            if(isset($arrControles['chkMiercoles'.$intCodigo])) {
+                $arPedidoDetalle->setMiercoles(1);
+            } else {
+                $arPedidoDetalle->setMiercoles(0);
+            }
+            if(isset($arrControles['chkJueves'.$intCodigo])) {
+                $arPedidoDetalle->setJueves(1);
+            } else {
+                $arPedidoDetalle->setJueves(0);
+            }
+            if(isset($arrControles['chkViernes'.$intCodigo])) {
+                $arPedidoDetalle->setViernes(1);
+            } else {
+                $arPedidoDetalle->setViernes(0);
+            }
+            if(isset($arrControles['chkSabado'.$intCodigo])) {
+                $arPedidoDetalle->setSabado(1);
+            } else {
+                $arPedidoDetalle->setSabado(0);
+            }
+            if(isset($arrControles['chkDomingo'.$intCodigo])) {
+                $arPedidoDetalle->setDomingo(1);
+            } else {
+                $arPedidoDetalle->setDomingo(0);
+            }
+            if(isset($arrControles['chkFestivo'.$intCodigo])) {
+                $arPedidoDetalle->setFestivo(1);
+            } else {
+                $arPedidoDetalle->setFestivo(0);
+            }                    
+            $em->persist($arPedidoDetalle);
+        }
+        $em->flush();                
+        $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);        
+    }
 
 
 }

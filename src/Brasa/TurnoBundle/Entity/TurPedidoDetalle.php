@@ -21,6 +21,11 @@ class TurPedidoDetalle
      * @ORM\Column(name="codigo_pedido_fk", type="integer")
      */    
     private $codigoPedidoFk;
+
+    /**
+     * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPuestoFk;    
     
     /**
      * @ORM\Column(name="codigo_turno_fk", type="string", length=5)
@@ -139,6 +144,12 @@ class TurPedidoDetalle
     protected $pedidoRel;       
 
     /**
+     * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="pedidosDetallesPuestoRel")
+     * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
+     */
+    protected $puestoRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurTurno", inversedBy="pedidosDetallesTurnoRel")
      * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
      */
@@ -208,6 +219,30 @@ class TurPedidoDetalle
     public function getCodigoPedidoFk()
     {
         return $this->codigoPedidoFk;
+    }
+
+    /**
+     * Set codigoPuestoFk
+     *
+     * @param integer $codigoPuestoFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoPuestoFk($codigoPuestoFk)
+    {
+        $this->codigoPuestoFk = $codigoPuestoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuestoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPuestoFk()
+    {
+        return $this->codigoPuestoFk;
     }
 
     /**
@@ -475,6 +510,30 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set cantidadRecurso
+     *
+     * @param integer $cantidadRecurso
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCantidadRecurso($cantidadRecurso)
+    {
+        $this->cantidadRecurso = $cantidadRecurso;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadRecurso
+     *
+     * @return integer
+     */
+    public function getCantidadRecurso()
+    {
+        return $this->cantidadRecurso;
+    }
+
+    /**
      * Set vrTotal
      *
      * @param float $vrTotal
@@ -691,6 +750,30 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set dia31
+     *
+     * @param boolean $dia31
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setDia31($dia31)
+    {
+        $this->dia31 = $dia31;
+
+        return $this;
+    }
+
+    /**
+     * Get dia31
+     *
+     * @return boolean
+     */
+    public function getDia31()
+    {
+        return $this->dia31;
+    }
+
+    /**
      * Set pedidoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPedido $pedidoRel
@@ -712,6 +795,30 @@ class TurPedidoDetalle
     public function getPedidoRel()
     {
         return $this->pedidoRel;
+    }
+
+    /**
+     * Set puestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
+    {
+        $this->puestoRel = $puestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puestoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
+     */
+    public function getPuestoRel()
+    {
+        return $this->puestoRel;
     }
 
     /**
@@ -842,53 +949,5 @@ class TurPedidoDetalle
     public function getProgramacionesDetallesPedidoDetalleRel()
     {
         return $this->programacionesDetallesPedidoDetalleRel;
-    }
-
-    /**
-     * Set cantidadRecurso
-     *
-     * @param integer $cantidadRecurso
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setCantidadRecurso($cantidadRecurso)
-    {
-        $this->cantidadRecurso = $cantidadRecurso;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadRecurso
-     *
-     * @return integer
-     */
-    public function getCantidadRecurso()
-    {
-        return $this->cantidadRecurso;
-    }
-
-    /**
-     * Set dia31
-     *
-     * @param boolean $dia31
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setDia31($dia31)
-    {
-        $this->dia31 = $dia31;
-
-        return $this;
-    }
-
-    /**
-     * Get dia31
-     *
-     * @return boolean
-     */
-    public function getDia31()
-    {
-        return $this->dia31;
     }
 }

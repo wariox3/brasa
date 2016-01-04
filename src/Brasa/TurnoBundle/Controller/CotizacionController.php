@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionType;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionDetalleType;
+use Brasa\TurnoBundle\Form\Type\TurCotizacionOtroType;
 class CotizacionController extends Controller
 {
     var $strListaDql = "";
@@ -57,10 +58,10 @@ class CotizacionController extends Controller
             $arCotizacion = $form->getData();
             $arrControles = $request->request->All();
             if($arrControles['txtNit'] != '') {
-                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
-                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arrControles['txtNit']));                
-                if(count($arTercero) > 0) {
-                    $arCotizacion->setTerceroRel($arTercero);
+                $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arCliente) > 0) {
+                    $arCotizacion->setClienteRel($arCliente);
                     $em->persist($arCotizacion);
                     $em->flush();
 
@@ -70,7 +71,7 @@ class CotizacionController extends Controller
                         return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $arCotizacion->getCodigoCotizacionPk())));
                     }                       
                 } else {
-                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
+                    $objMensaje->Mensaje("error", "El cliente no existe", $this);
                 }                
              
             }
@@ -178,6 +179,25 @@ class CotizacionController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->eliminarSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
                 return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
+            }  
+            if($form->get('BtnOtroActualizar')->isClicked()) {
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                foreach ($arrControles['LblCodigoCotizacionOtro'] as $intCodigo) {
+                    $arCotizacionOtro = new \Brasa\TurnoBundle\Entity\TurCotizacionOtro();
+                    $arCotizacionOtro = $em->getRepository('BrasaTurnoBundle:TurCotizacionOtro')->find($intCodigo);
+                    $arCotizacionDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);                                                          
+                    $em->persist($arCotizacionDetalle);
+                }
+                $em->flush();
+                $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
+                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
+            }
+            if($form->get('BtnOtroEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->eliminarSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
+                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
             }            
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arCotizacion->getEstadoAutorizado() == 1) {
@@ -191,9 +211,12 @@ class CotizacionController extends Controller
 
         $arCotizacionDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
         $arCotizacionDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array ('codigoCotizacionFk' => $codigoCotizacion));
+        $arCotizacionOtros = new \Brasa\TurnoBundle\Entity\TurCotizacionOtro();
+        $arCotizacionOtros = $em->getRepository('BrasaTurnoBundle:TurCotizacionOtro')->findBy(array ('codigoCotizacionFk' => $codigoCotizacion));        
         return $this->render('BrasaTurnoBundle:Movimientos/Cotizacion:detalle.html.twig', array(
                     'arCotizacion' => $arCotizacion,
                     'arCotizacionDetalle' => $arCotizacionDetalle,
+                    'arCotizacionOtros' => $arCotizacionOtros,
                     'form' => $form->createView()
                     ));
     }
@@ -229,6 +252,33 @@ class CotizacionController extends Controller
             'form' => $form->createView()));
     }
 
+    public function otroNuevoAction($codigoCotizacion, $codigoCotizacionOtro = 0) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
+        $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigoCotizacion);
+        $arCotizacionOtro = new \Brasa\TurnoBundle\Entity\TurCotizacionOtro();
+        if($codigoCotizacionOtro != 0) {
+            $arCotizacionOtro = $em->getRepository('BrasaTurnoBundle:TurCotizacionOtro')->find($codigoCotizacionOtro);
+        }
+        $form = $this->createForm(new TurCotizacionOtroType, $arCotizacionOtro);
+        $form->handleRequest($request);
+        if ($form->isValid()) {            
+            $arCotizacionOtro = $form->getData();
+            $arCotizacionOtro->setCotizacionRel($arCotizacion);
+            $em->persist($arCotizacionOtro);
+            $em->flush();            
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle_nuevo', array('codigoCotizacion' => $codigoCotizacion, 'codigoCotizacionDetalle' => 0 )));
+            } else {
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+        return $this->render('BrasaTurnoBundle:Movimientos/Cotizacion:otroNuevo.html.twig', array(
+            'arCotizacion' => $arCotizacion,
+            'form' => $form->createView()));
+    }    
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCotizacion')->listaDQL($this->codigoCotizacion);
@@ -259,12 +309,15 @@ class CotizacionController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        
+        $arrBotonOtroActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        $arrBotonOtroEliminar = array('label' => 'Eliminar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
             $arrBotonAprobar['disabled'] = false;            
             $arrBotonDetalleEliminar['disabled'] = true;
+            $arrBotonOtroEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
+            $arrBotonOtroActualizar['disabled'] = true;
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonImprimir['disabled'] = true;
@@ -280,6 +333,8 @@ class CotizacionController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnOtroActualizar', 'submit', $arrBotonOtroActualizar)
+                    ->add('BtnOtroEliminar', 'submit', $arrBotonOtroEliminar)
                     ->getForm();
         return $form;
     }

@@ -38,6 +38,10 @@ brs_tur_base_cliente_nuevo:
     path:     /tur/base/cliente/nuevo/{codigoCliente}
     defaults: { _controller: BrasaTurnoBundle:BaseCliente:nuevo }
 
+brs_tur_base_cliente_puesto_nuevo:
+    path:     /tur/base/cliente/puesto/nuevo/{codigoCliente}
+    defaults: { _controller: BrasaTurnoBundle:BaseCliente:puestoNuevo }    
+
 brs_tur_base_plantilla_lista:
     path:     /tur/base/plantilla/lista
     defaults: { _controller: BrasaTurnoBundle:BasePlantilla:lista }     
@@ -85,6 +89,10 @@ brs_tur_cotizacion_detalle:
 brs_tur_cotizacion_detalle_nuevo:
    path:     /tur/cotizacion/detalle/nuevo/{codigoCotizacion}/{codigoCotizacionDetalle}
    defaults: { _controller: BrasaTurnoBundle:Cotizacion:detalleNuevo }    
+
+brs_tur_cotizacion_otro_nuevo:
+   path:     /tur/cotizacion/otro/nuevo/{codigoCotizacion}/{codigoCotizacionOtro}
+   defaults: { _controller: BrasaTurnoBundle:Cotizacion:otroNuevo }       
    
 brs_tur_pedido_lista:
    path:     /tur/pedido/lista
@@ -120,11 +128,7 @@ brs_tur_factura_detalle:
    
 brs_tur_factura_detalle_nuevo:
    path:     /tur/factura/detalle/nuevo/{codigoFactura}/{codigoFacturaDetalle}
-   defaults: { _controller: BrasaTurnoBundle:Factura:detalleNuevo }         
-   
-brs_tur_buscar_recurso:
-    pattern:  /turno/buscar/recurso/{campoCodigo}
-    defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:lista }    
+   defaults: { _controller: BrasaTurnoBundle:Factura:detalleNuevo }            
     
 brs_tur_proceso_generar_soporte_pago:
     path:     /tur/proceso/generar/soporte/pago
@@ -137,3 +141,15 @@ brs_tur_proceso_generar_programacion_lista:
 brs_tur_proceso_generar_pedido_lista:
     path:     /tur/proceso/generar/pedido/lista
     defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarPedido:lista }             
+    
+brs_tur_buscar_cliente:
+    pattern:  /tur/buscar/cliente/{campoCodigo}/{campoNombre}
+    defaults: { _controller: BrasaTurnoBundle:BuscarCliente:lista }     
+    
+brs_tur_buscar_recurso:
+    pattern:  /turno/buscar/recurso/{campoCodigo}
+    defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:lista }    
+    
+brs_tur_buscar_puesto:
+    pattern:  /turno/buscar/puesto/{campoCodigo}/{codigoCliente}
+    defaults: { _controller: BrasaTurnoBundle:BuscarPuesto:lista }    

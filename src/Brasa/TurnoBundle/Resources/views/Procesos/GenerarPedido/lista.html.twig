@@ -44,7 +44,7 @@
             <tr>                
                 <td>{{ arPedidos.codigoPedidoPk  }}</td>  
                 <td>{{ arPedidos.fecha |date("Y/m/d")  }}</td>                
-                <td>{{ arPedidos.terceroRel.nombreCorto  }}</td>  
+                <td>{{ arPedidos.clienteRel.nombreCorto  }}</td>  
                 <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td>                
                 <td style="text-align: right">{{ arPedidos.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasDiurnas | number_format(0, '.', ',') }}</td>

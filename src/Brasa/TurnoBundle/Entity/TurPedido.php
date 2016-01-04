@@ -104,6 +104,12 @@ class TurPedido
     protected $pedidoTipoRel;           
     
     /**
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="pedidosClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="pedidosSectorRel")
      * @ORM\JoinColumn(name="codigo_sector_fk", referencedColumnName="codigo_sector_pk")
      */
@@ -113,7 +119,6 @@ class TurPedido
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="pedidoRel", cascade={"persist", "remove"})
      */
     protected $pedidosDetallesPedidoRel; 
-
 
 
     /**
@@ -540,6 +545,30 @@ class TurPedido
     public function getPedidoTipoRel()
     {
         return $this->pedidoTipoRel;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     *
+     * @return TurPedido
+     */
+    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
     }
 
     /**

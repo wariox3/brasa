@@ -54,10 +54,10 @@ class ProgramacionController extends Controller
             $arProgramacion = $form->getData();
             $arrControles = $request->request->All();
             if($arrControles['txtNit'] != '') {
-                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
-                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arrControles['txtNit']));
-                if(count($arTercero) > 0) {
-                    $arProgramacion->setTerceroRel($arTercero);
+                $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arCliente) > 0) {
+                    $arProgramacion->setClienteRel($arCliente);
                     $em->persist($arProgramacion);
                     $em->flush();
 
@@ -67,7 +67,7 @@ class ProgramacionController extends Controller
                         return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $arProgramacion->getCodigoProgramacionPk())));
                     }
                 } else {
-                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
+                    $objMensaje->Mensaje("error", "El cliente no existe", $this);
                 }
             }
 
@@ -195,6 +195,7 @@ class ProgramacionController extends Controller
                                     $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                                     $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                                     $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                                    $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                                     for($i = 1; $i < 32; $i++) {
                                         $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle);
                                         
@@ -305,6 +306,7 @@ class ProgramacionController extends Controller
                                         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                                         $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                                         $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                                        $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                                         $em->persist($arProgramacionDetalle);
                                     }
                                 }
@@ -317,7 +319,7 @@ class ProgramacionController extends Controller
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesCliente($arProgramacion->getCodigoTerceroFk());
+        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesCliente($arProgramacion->getCodigoClienteFk());
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
             'arProgramacion' => $arProgramacion,
             'arPedidosDetalle' => $arPedidosDetalle,
@@ -526,7 +528,13 @@ class ProgramacionController extends Controller
                     $arProgramacionDetalle->setRecursoRel($arRecurso);
                 }
             }
-
+            if($arrControles['TxtPuesto'.$intCodigo] != '') {
+                $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
+                $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($arrControles['TxtPuesto'.$intCodigo]);
+                if($arPuesto) {
+                    $arProgramacionDetalle->setPuestoRel($arPuesto);
+                }
+            }
             if($arrControles['TxtDia1'.$intCodigo] != '') {
                 $arProgramacionDetalle->setDia1($arrControles['TxtDia1'.$intCodigo]);
             } else {

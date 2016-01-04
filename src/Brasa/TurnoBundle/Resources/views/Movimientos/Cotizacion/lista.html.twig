@@ -48,7 +48,7 @@
                 <td>{{ arCotizaciones.codigoCotizacionPk  }}</td>
                 <td>{{ arCotizaciones.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arCotizaciones.fechaVence |date("Y/m/d")  }}</td>
-                <td>{{ arCotizaciones.terceroRel.nombreCorto |default('')  }}</td>
+                <td>{{ arCotizaciones.clienteRel.nombreCorto |default('')  }}</td>
                 <td>{{ arCotizaciones.sectorRel.nombre |default('')  }}</td>
                 <td style="text-align: right">{{ arCotizaciones.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCotizaciones.horasDiurnas | number_format(0, '.', ',') }}</td>

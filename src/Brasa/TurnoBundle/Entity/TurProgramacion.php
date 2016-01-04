@@ -48,11 +48,16 @@ class TurProgramacion
     private $comentarios;                    
     
     /**
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="programacionesClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="programacionRel", cascade={"persist", "remove"})
      */
     protected $programacionesDetallesProgramacionRel; 
     
-
 
     /**
      * Constructor
@@ -214,6 +219,30 @@ class TurProgramacion
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     *
+     * @return TurProgramacion
+     */
+    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
     }
 
     /**

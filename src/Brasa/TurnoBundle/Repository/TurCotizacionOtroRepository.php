@@ -4,12 +4,12 @@ namespace Brasa\TurnoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class TurPedidoDetalleRepository extends EntityRepository {
+class TurCotizacionOtroRepository extends EntityRepository {
 
     public function pendientesCliente($codigoCliente) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "
-                . "WHERE p.codigoClienteFk = " . $codigoCliente . " AND p.codigoPedidoTipoFk = 1";
+                . "WHERE p.codigoClienteFk = " . $codigoCliente;
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
         return $arResultado;                
@@ -19,18 +19,17 @@ class TurPedidoDetalleRepository extends EntityRepository {
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
             foreach ($arrSeleccionados AS $codigo) {                
-                $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                
-                $em->remove($arPedidoDetalle);                  
+                $arCotizacionDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($codigo);                
+                $em->remove($arCotizacionDetalle);                  
             }                                         
             $em->flush();       
         }
         
     }        
     
-    public function numeroRegistros($codigo) {
+    public function numeroRegistros($codigoCotizacion) {
         $em = $this->getEntityManager();
-        $arDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigo));
-        return count($arDetalles);
-    }          
-    
+        $arCotizacionDetalles = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array('codigoCotizacionFk' => $codigoCotizacion));
+        return count($arCotizacionDetalles);
+    }      
 }
