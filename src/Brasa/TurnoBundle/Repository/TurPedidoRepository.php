@@ -18,7 +18,7 @@ class TurPedidoRepository extends EntityRepository {
     
     public function pedidoSinProgramarDql($strFechaDesde = '', $strFechaHasta = '') {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.codigoPedidoTipoFk = 1 "
-                . "AND p.programado = 0 ";
+                . "AND p.estadoProgramado = 0 AND p.estadoAutorizado = 1";
 
         if($strFechaDesde != '') {
             $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  

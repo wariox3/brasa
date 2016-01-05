@@ -58,14 +58,14 @@ class TurPedido
     private $estadoAprobado = false;         
     
     /**     
-     * @ORM\Column(name="cerrado", type="boolean")
+     * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
-    private $cerrado = false;    
+    private $estadoCerrado = false;    
 
     /**     
-     * @ORM\Column(name="programado", type="boolean")
+     * @ORM\Column(name="estado_programado", type="boolean")
      */    
-    private $programado = false;     
+    private $estadoProgramado = false;     
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -627,5 +627,53 @@ class TurPedido
     public function getPedidosDetallesPedidoRel()
     {
         return $this->pedidosDetallesPedidoRel;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return TurPedido
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
+    }
+
+    /**
+     * Set estadoProgramado
+     *
+     * @param boolean $estadoProgramado
+     *
+     * @return TurPedido
+     */
+    public function setEstadoProgramado($estadoProgramado)
+    {
+        $this->estadoProgramado = $estadoProgramado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoProgramado
+     *
+     * @return boolean
+     */
+    public function getEstadoProgramado()
+    {
+        return $this->estadoProgramado;
     }
 }

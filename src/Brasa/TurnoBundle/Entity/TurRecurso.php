@@ -20,12 +20,17 @@ class TurRecurso
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
-    private $codigoEmpleadoFk;    
+    private $codigoEmpleadoFk;            
     
     /**
      * @ORM\Column(name="nombreCorto", type="string", length=120, nullable=true)
      */    
     private $nombreCorto;    
+    
+    /**
+     * @ORM\Column(name="codigo_recurso_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoRecursoTipoFk;    
     
     /**     
      * @ORM\Column(name="pago_promedio", type="boolean")
@@ -49,6 +54,12 @@ class TurRecurso
     protected $empleadoRel;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="TurRecursoTipo", inversedBy="recursosRecursoTipoRel")
+     * @ORM\JoinColumn(name="codigo_recurso_tipo_fk", referencedColumnName="codigo_recurso_tipo_pk")
+     */
+    protected $recursoTipoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="recursoRel")
      */
     protected $programacionesDetallesRecursoRel;    
@@ -62,12 +73,15 @@ class TurRecurso
      * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="recursoRel")
      */
     protected $soportesPagosDetallesRecursoRel;            
+    
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->programacionesDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -79,6 +93,30 @@ class TurRecurso
     public function getCodigoRecursoPk()
     {
         return $this->codigoRecursoPk;
+    }
+
+    /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
     }
 
     /**
@@ -106,129 +144,27 @@ class TurRecurso
     }
 
     /**
-     * Set comentarios
+     * Set codigoRecursoTipoFk
      *
-     * @param string $comentarios
+     * @param integer $codigoRecursoTipoFk
      *
      * @return TurRecurso
      */
-    public function setComentarios($comentarios)
+    public function setCodigoRecursoTipoFk($codigoRecursoTipoFk)
     {
-        $this->comentarios = $comentarios;
+        $this->codigoRecursoTipoFk = $codigoRecursoTipoFk;
 
         return $this;
     }
 
     /**
-     * Get comentarios
+     * Get codigoRecursoTipoFk
      *
-     * @return string
+     * @return integer
      */
-    public function getComentarios()
+    public function getCodigoRecursoTipoFk()
     {
-        return $this->comentarios;
-    }
-
-    /**
-     * Add programacionesDetallesRecursoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesRecursoRel
-     *
-     * @return TurRecurso
-     */
-    public function addProgramacionesDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesRecursoRel)
-    {
-        $this->programacionesDetallesRecursoRel[] = $programacionesDetallesRecursoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove programacionesDetallesRecursoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesRecursoRel
-     */
-    public function removeProgramacionesDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesRecursoRel)
-    {
-        $this->programacionesDetallesRecursoRel->removeElement($programacionesDetallesRecursoRel);
-    }
-
-    /**
-     * Get programacionesDetallesRecursoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProgramacionesDetallesRecursoRel()
-    {
-        return $this->programacionesDetallesRecursoRel;
-    }
-
-    /**
-     * Add soportesPagosDetallesRecursoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel
-     *
-     * @return TurRecurso
-     */
-    public function addSoportesPagosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel)
-    {
-        $this->soportesPagosDetallesRecursoRel[] = $soportesPagosDetallesRecursoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove soportesPagosDetallesRecursoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel
-     */
-    public function removeSoportesPagosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel)
-    {
-        $this->soportesPagosDetallesRecursoRel->removeElement($soportesPagosDetallesRecursoRel);
-    }
-
-    /**
-     * Get soportesPagosDetallesRecursoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSoportesPagosDetallesRecursoRel()
-    {
-        return $this->soportesPagosDetallesRecursoRel;
-    }
-
-    /**
-     * Add soportesPagosRecursoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel
-     *
-     * @return TurRecurso
-     */
-    public function addSoportesPagosRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel)
-    {
-        $this->soportesPagosRecursoRel[] = $soportesPagosRecursoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove soportesPagosRecursoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel
-     */
-    public function removeSoportesPagosRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel)
-    {
-        $this->soportesPagosRecursoRel->removeElement($soportesPagosRecursoRel);
-    }
-
-    /**
-     * Get soportesPagosRecursoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSoportesPagosRecursoRel()
-    {
-        return $this->soportesPagosRecursoRel;
+        return $this->codigoRecursoTipoFk;
     }
 
     /**
@@ -280,27 +216,27 @@ class TurRecurso
     }
 
     /**
-     * Set codigoEmpleadoFk
+     * Set comentarios
      *
-     * @param integer $codigoEmpleadoFk
+     * @param string $comentarios
      *
      * @return TurRecurso
      */
-    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    public function setComentarios($comentarios)
     {
-        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+        $this->comentarios = $comentarios;
 
         return $this;
     }
 
     /**
-     * Get codigoEmpleadoFk
+     * Get comentarios
      *
-     * @return integer
+     * @return string
      */
-    public function getCodigoEmpleadoFk()
+    public function getComentarios()
     {
-        return $this->codigoEmpleadoFk;
+        return $this->comentarios;
     }
 
     /**
@@ -325,5 +261,131 @@ class TurRecurso
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set recursoTipoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecursoTipo $recursoTipoRel
+     *
+     * @return TurRecurso
+     */
+    public function setRecursoTipoRel(\Brasa\TurnoBundle\Entity\TurRecursoTipo $recursoTipoRel = null)
+    {
+        $this->recursoTipoRel = $recursoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get recursoTipoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurRecursoTipo
+     */
+    public function getRecursoTipoRel()
+    {
+        return $this->recursoTipoRel;
+    }
+
+    /**
+     * Add programacionesDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addProgramacionesDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesRecursoRel)
+    {
+        $this->programacionesDetallesRecursoRel[] = $programacionesDetallesRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesRecursoRel
+     */
+    public function removeProgramacionesDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesRecursoRel)
+    {
+        $this->programacionesDetallesRecursoRel->removeElement($programacionesDetallesRecursoRel);
+    }
+
+    /**
+     * Get programacionesDetallesRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesDetallesRecursoRel()
+    {
+        return $this->programacionesDetallesRecursoRel;
+    }
+
+    /**
+     * Add soportesPagosRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addSoportesPagosRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel)
+    {
+        $this->soportesPagosRecursoRel[] = $soportesPagosRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel
+     */
+    public function removeSoportesPagosRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosRecursoRel)
+    {
+        $this->soportesPagosRecursoRel->removeElement($soportesPagosRecursoRel);
+    }
+
+    /**
+     * Get soportesPagosRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosRecursoRel()
+    {
+        return $this->soportesPagosRecursoRel;
+    }
+
+    /**
+     * Add soportesPagosDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addSoportesPagosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel)
+    {
+        $this->soportesPagosDetallesRecursoRel[] = $soportesPagosDetallesRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel
+     */
+    public function removeSoportesPagosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesRecursoRel)
+    {
+        $this->soportesPagosDetallesRecursoRel->removeElement($soportesPagosDetallesRecursoRel);
+    }
+
+    /**
+     * Get soportesPagosDetallesRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosDetallesRecursoRel()
+    {
+        return $this->soportesPagosDetallesRecursoRel;
     }
 }

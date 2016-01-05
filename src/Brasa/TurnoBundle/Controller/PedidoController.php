@@ -259,6 +259,7 @@ class PedidoController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        $arrBotonDesprogramar = array('label' => 'Desprogramar', 'disabled' => true);        
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
@@ -273,6 +274,9 @@ class PedidoController extends Controller
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonAprobar['disabled'] = true;            
         } 
+        if($ar->getEstadoProgramado() == 1) {
+            $arrBotonDesprogramar['disabled'] = false;                   
+        } 
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
@@ -280,6 +284,7 @@ class PedidoController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDesprogramar', 'submit', $arrBotonDesprogramar)                 
                     ->getForm();
         return $form;
     }

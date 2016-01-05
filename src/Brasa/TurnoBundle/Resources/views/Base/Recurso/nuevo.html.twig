@@ -33,6 +33,12 @@
                 </div>                
             </div> 
             <div class="form-group form-group-sm">
+                <label for="form_recursoTipoRel" class="col-sm-3 control-label">Tipo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.recursoTipoRel, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>                
+            <div class="form-group form-group-sm">
                 <label for="form_pagoPromedio" class="col-sm-3 control-label">Pago promedio:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.pagoPromedio) }}                        

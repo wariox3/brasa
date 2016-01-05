@@ -294,6 +294,30 @@
                                 </li>
                             </ul>
                         </li>
+                        
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Turnos</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Recursos</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_tur_consultas_recursos_programaciones') }}">Programaciones</a></li>
+                                    </ul>
+                                </li>                                
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Pedidos</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_tur_consultas_pedidos_pendientes_programar') }}">Pendientes por programar</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Programaciones</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_tur_consultas_programaciones_detalles') }}">Detalles</a></li>
+                                    </ul>
+                                </li>                                
+                            </ul>
+                        </li>                        
                     </ul>
                 </li>
                 <li class="dropdown">

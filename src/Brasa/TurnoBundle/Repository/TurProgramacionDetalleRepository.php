@@ -6,6 +6,13 @@ use Doctrine\ORM\EntityRepository;
 
 class TurProgramacionDetalleRepository extends EntityRepository {
     
+    public function ListaDql() {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd WHERE pd.codigoProgramacionDetallePk <> 0";
+        $dql .= " ORDER BY pd.codigoProgramacionDetallePk";
+        return $dql;
+    }                
+    
     public function eliminarDetallesSeleccionados($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
