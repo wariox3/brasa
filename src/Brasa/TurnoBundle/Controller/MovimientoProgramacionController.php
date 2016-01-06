@@ -42,6 +42,7 @@ class MovimientoProgramacionController extends Controller
     public function nuevoAction($codigoProgramacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = $this->get('mensajes_brasa');
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         if($codigoProgramacion != 0) {
             $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);

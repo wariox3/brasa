@@ -23,6 +23,12 @@ class TurRecurso
     private $codigoEmpleadoFk;            
     
     /**
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
+     */
+         
+    private $numeroIdentificacion;    
+    
+    /**
      * @ORM\Column(name="nombreCorto", type="string", length=120, nullable=true)
      */    
     private $nombreCorto;    
@@ -425,5 +431,29 @@ class TurRecurso
     public function getPedidosDetallesRecursosRecursoRel()
     {
         return $this->pedidosDetallesRecursosRecursoRel;
+    }
+
+    /**
+     * Set numeroIdentificacion
+     *
+     * @param string $numeroIdentificacion
+     *
+     * @return TurRecurso
+     */
+    public function setNumeroIdentificacion($numeroIdentificacion)
+    {
+        $this->numeroIdentificacion = $numeroIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacion
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacion()
+    {
+        return $this->numeroIdentificacion;
     }
 }

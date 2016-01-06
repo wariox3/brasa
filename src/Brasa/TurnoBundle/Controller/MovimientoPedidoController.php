@@ -234,13 +234,32 @@ class MovimientoPedidoController extends Controller
     public function recursoAction($codigoPedidoDetalle = 0) {
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = $this->get('mensajes_brasa');
         $em = $this->getDoctrine()->getManager();
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);        
         $form = $this->formularioRecurso();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arPedidoDetalle = $form->getData();
+            //$arProgramacion = $form->getData();
+            $arrControles = $request->request->All();
+            if($arrControles['txtNumeroIdentificacion'] != '') {
+                $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
+                if(count($arRecurso) > 0) {
+                    $intPosicion = $form->get('TxtPosicion')->getData();
+                    $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
+                    $arPedidoDetalleRecurso->setPedidoDetalleRel($arPedidoDetalle);
+                    $arPedidoDetalleRecurso->setRecursoRel($arRecurso);
+                    $arPedidoDetalleRecurso->setPosicion($intPosicion);
+                    $em->persist($arPedidoDetalleRecurso);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                
+                } else {
+                    $objMensaje->Mensaje("error", "El recurso no existe", $this);
+                }
+            }
+            /*$arPedidoDetalle = $form->getData();
             $arPedidoDetalle->setPedidoRel($arPedido);
             $em->persist($arPedidoDetalle);
             $em->flush();
@@ -250,7 +269,7 @@ class MovimientoPedidoController extends Controller
             } else {
                 $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
+            }*/
         }
         $strLista = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->listaDql($codigoPedidoDetalle);
         $arPedidoDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);
@@ -321,7 +340,7 @@ class MovimientoPedidoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtCantidad', 'text', array('label'  => 'Codigo','data' => 0))            
+            ->add('TxtPosicion', 'text', array('label'  => 'Codigo','data' => 0))            
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('guardar', 'submit', array('label'  => 'Guardar'))

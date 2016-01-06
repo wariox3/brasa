@@ -3,10 +3,9 @@
 {% block content %}
 <div class="container">
     <script language="javascript">
-        function selTercero(codigo,nombre,campoCodigo,campoNombre)
+        function selTercero(codigo,campoCodigo)
         {            
             opener.document.getElementById(campoCodigo).value = codigo;
-            opener.document.getElementById(campoNombre).value = nombre;
             opener.document.getElementById(campoCodigo).focus();
             self.close();
         }
@@ -50,9 +49,9 @@
             {% for arRecursos in arRecursos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arRecursos.codigoRecursoPk }}">{{ arRecursos.codigoRecursoPk }} </td>
-                <td>{{ arRecursos.numeroIdentificacion  }}</td>
+                <td>{{ arRecursos.codigoRecursoPk  }}</td>
                 <td>{{ arRecursos.nombreCorto }}</td>                                                
-                <td style="text-align: center"><a href="javascript:selTercero('{{ arRecursos.numeroIdentificacion }}','{{ arRecursos.nombreCorto }}','{{ campoCodigo }}','{{ campoNombre }}')" ><img src="{{ asset('imagenes/bootstrap/glyphicons_198_ok.png') }}" width=20 height=20></a></td>                                
+                <td style="text-align: center"><a href="javascript:selTercero('{{ arRecursos.codigoRecursoPk }}','{{ campoCodigo }}')" ><img src="{{ asset('imagenes/bootstrap/glyphicons_198_ok.png') }}" width=20 height=20></a></td>                                
             </tr>
             {% endfor %} 
         </table>                                         

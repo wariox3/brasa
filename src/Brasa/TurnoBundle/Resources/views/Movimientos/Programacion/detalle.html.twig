@@ -79,7 +79,7 @@
                     {% if arProgramacion.estadoAutorizado == 0 %}
                         <td>
                             <input class="input-grid" type="text" name="TxtRecurso{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" id="TxtRecurso{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.codigoRecursoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_recurso', {'campoCodigo': 'TxtRecurso' ~ arProgramacionDetalle.codigoProgramacionDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
+                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_recurso2', {'campoCodigo': 'TxtRecurso' ~ arProgramacionDetalle.codigoProgramacionDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
                         </td>    
                         <td>{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</td> 
                         <td>

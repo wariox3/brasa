@@ -63,6 +63,11 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                     $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                     $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
                     $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                    $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
+                    $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findOneBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $intPosicionRecurso));                
+                    if(count($arPedidoDetalleRecurso) > 0) {
+                        $arProgramacionDetalle->setRecursoRel($arPedidoDetalleRecurso->getRecursoRel());
+                    }
                     for($i = 1; $i < 32; $i++) {
                         $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle);
 
@@ -165,6 +170,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         }
                     }
                     $em->persist($arProgramacionDetalle);
+                    $intPosicionRecurso++;
                 }
             } else {
                 if($arPedidoDetalle->getCantidadRecurso() != 0) {

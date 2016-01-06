@@ -163,8 +163,12 @@ brs_tur_buscar_cliente:
     defaults: { _controller: BrasaTurnoBundle:BuscarCliente:lista }     
     
 brs_tur_buscar_recurso:
+    pattern:  /turno/buscar/recurso/{campoCodigo}/{campoNombre}
+    defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:buscar }    
+
+brs_tur_buscar_recurso2:
     pattern:  /turno/buscar/recurso/{campoCodigo}
-    defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:lista }    
+    defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:buscar2 }
     
 brs_tur_buscar_puesto:
     pattern:  /turno/buscar/puesto/{campoCodigo}/{codigoCliente}
