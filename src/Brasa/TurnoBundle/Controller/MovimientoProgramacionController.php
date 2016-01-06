@@ -4,7 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurProgramacionType;
-class ProgramacionController extends Controller
+class MovimientoProgramacionController extends Controller
 {
     var $strListaDql = "";
     var $codigoProgramacion = "";
@@ -176,8 +176,8 @@ class ProgramacionController extends Controller
                 $arrControles = $request->request->All();
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigo) {
-
-                        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                        $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($codigo, $arProgramacion);
+                        /*$arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
                         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);
                         $intDiaInicial = $arPedidoDetalle->getFechaDesde()->format('j');
                         $intDiaFinal = $arPedidoDetalle->getFechaHasta()->format('j');
@@ -312,6 +312,8 @@ class ProgramacionController extends Controller
                                 }
                             }
                         }
+                         * 
+                         */
                     }
                     $em->flush();
                 }

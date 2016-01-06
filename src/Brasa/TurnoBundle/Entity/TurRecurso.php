@@ -74,6 +74,10 @@ class TurRecurso
      */
     protected $soportesPagosDetallesRecursoRel;            
     
+    /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleRecurso", mappedBy="recursoRel")
+     */
+    protected $pedidosDetallesRecursosRecursoRel;     
 
     /**
      * Constructor
@@ -387,5 +391,39 @@ class TurRecurso
     public function getSoportesPagosDetallesRecursoRel()
     {
         return $this->soportesPagosDetallesRecursoRel;
+    }
+
+    /**
+     * Add pedidosDetallesRecursosRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso $pedidosDetallesRecursosRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addPedidosDetallesRecursosRecursoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso $pedidosDetallesRecursosRecursoRel)
+    {
+        $this->pedidosDetallesRecursosRecursoRel[] = $pedidosDetallesRecursosRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesRecursosRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso $pedidosDetallesRecursosRecursoRel
+     */
+    public function removePedidosDetallesRecursosRecursoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso $pedidosDetallesRecursosRecursoRel)
+    {
+        $this->pedidosDetallesRecursosRecursoRel->removeElement($pedidosDetallesRecursosRecursoRel);
+    }
+
+    /**
+     * Get pedidosDetallesRecursosRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesRecursosRecursoRel()
+    {
+        return $this->pedidosDetallesRecursosRecursoRel;
     }
 }

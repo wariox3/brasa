@@ -60,75 +60,79 @@ brs_tur_base_plantilla_detalle_nuevo:
 
 brs_tur_programacion_lista:
    path:     /tur/programacion/lista
-   defaults: { _controller: BrasaTurnoBundle:Programacion:lista } 
+   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:lista } 
    
 brs_tur_programacion_nuevo:
    path:     /tur/programacion/nuevo/{codigoProgramacion}
-   defaults: { _controller: BrasaTurnoBundle:Programacion:nuevo }
+   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:nuevo }
 
 brs_tur_programacion_detalle:
    path:     /tur/programacion/detalle/{codigoProgramacion}
-   defaults: { _controller: BrasaTurnoBundle:Programacion:detalle }
+   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:detalle }
    
 brs_tur_programacion_detalle_nuevo:
    path:     /tur/programacion/detalle/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}
-   defaults: { _controller: BrasaTurnoBundle:Programacion:detalleNuevo }   
+   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:detalleNuevo }   
 
 brs_tur_cotizacion_lista:
    path:     /tur/cotizacion/lista
-   defaults: { _controller: BrasaTurnoBundle:Cotizacion:lista } 
+   defaults: { _controller: BrasaTurnoBundle:MovimientoCotizacion:lista } 
    
 brs_tur_cotizacion_nuevo:
    path:     /tur/cotizacion/nuevo/{codigoCotizacion}
-   defaults: { _controller: BrasaTurnoBundle:Cotizacion:nuevo }
+   defaults: { _controller: BrasaTurnoBundle:MovimientoCotizacion:nuevo }
 
 brs_tur_cotizacion_detalle:
    path:     /tur/cotizacion/detalle/{codigoCotizacion}
-   defaults: { _controller: BrasaTurnoBundle:Cotizacion:detalle }
+   defaults: { _controller: BrasaTurnoBundle:MovimientoCotizacion:detalle }
    
 brs_tur_cotizacion_detalle_nuevo:
    path:     /tur/cotizacion/detalle/nuevo/{codigoCotizacion}/{codigoCotizacionDetalle}
-   defaults: { _controller: BrasaTurnoBundle:Cotizacion:detalleNuevo }    
+   defaults: { _controller: BrasaTurnoBundle:MovimientoCotizacion:detalleNuevo }    
 
 brs_tur_cotizacion_otro_nuevo:
    path:     /tur/cotizacion/otro/nuevo/{codigoCotizacion}/{codigoCotizacionOtro}
-   defaults: { _controller: BrasaTurnoBundle:Cotizacion:otroNuevo }       
+   defaults: { _controller: BrasaTurnoBundle:MovimientoCotizacion:otroNuevo }       
    
 brs_tur_pedido_lista:
    path:     /tur/pedido/lista
-   defaults: { _controller: BrasaTurnoBundle:Pedido:lista } 
+   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:lista } 
    
 brs_tur_pedido_nuevo:
    path:     /tur/pedido/nuevo/{codigoPedido}
-   defaults: { _controller: BrasaTurnoBundle:Pedido:nuevo }
+   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:nuevo }
 
 brs_tur_pedido_detalle:
    path:     /tur/pedido/detalle/{codigoPedido}
-   defaults: { _controller: BrasaTurnoBundle:Pedido:detalle }
+   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalle }
    
 brs_tur_pedido_detalle_nuevo:
    path:     /tur/pedido/detalle/nuevo/{codigoPedido}/{codigoPedidoDetalle}
-   defaults: { _controller: BrasaTurnoBundle:Pedido:detalleNuevo }     
+   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalleNuevo }     
    
 brs_tur_pedido_detalle_nuevo_cotizacion:
    path:     /tur/pedido/detalle/nuevo/cotizacion/{codigoPedido}/{codigoPedidoDetalle}
-   defaults: { _controller: BrasaTurnoBundle:Pedido:detalleNuevoCotizacion }   
+   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalleNuevoCotizacion }   
+
+brs_tur_pedido_detalle_recurso:
+   path:     /tur/pedido/detalle/recurso/{codigoPedidoDetalle}
+   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:recurso }
 
 brs_tur_factura_lista:
    path:     /tur/factura/lista
-   defaults: { _controller: BrasaTurnoBundle:Factura:lista } 
+   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:lista } 
    
 brs_tur_factura_nuevo:
    path:     /tur/factura/nuevo/{codigoFactura}
-   defaults: { _controller: BrasaTurnoBundle:Factura:nuevo }
+   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:nuevo }
 
 brs_tur_factura_detalle:
    path:     /tur/factura/detalle/{codigoFactura}
-   defaults: { _controller: BrasaTurnoBundle:Factura:detalle }
+   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalle }
    
 brs_tur_factura_detalle_nuevo:
    path:     /tur/factura/detalle/nuevo/{codigoFactura}/{codigoFacturaDetalle}
-   defaults: { _controller: BrasaTurnoBundle:Factura:detalleNuevo }            
+   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalleNuevo }            
     
 brs_tur_consultas_pedidos_pendientes_programar:    
     path:     /tur/consultas/pedidos/pendientes/programar

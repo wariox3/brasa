@@ -53,10 +53,11 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                 if($arPedidoDetalle->getPlantillaRel()) {
                     $arPlantilla = $arPedidoDetalle->getPlantillaRel();
                 }
+                $intPosicionRecurso = 1;
                 $arPlantillaDetalles = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
-                $arPlantillaDetalles = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->findBy(array('codigoPlantillaFk' => 1));
+                $arPlantillaDetalles = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->findBy(array('codigoPlantillaFk' => 1));                
                 foreach ($arPlantillaDetalles as $arPlantillaDetalle) {
-                    $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla(2015, $arPlantilla->getDias(), $arPedidoDetalle->getFechaDesde()->format('Y/m/d'));                                                                    
+                    $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla(2016, $arPlantilla->getDias(), $arPedidoDetalle->getFechaDesde()->format('Y/m/d'));                                                                    
                     $arrTurnos = $this->devuelveTurnosMes($arPlantillaDetalle);
                     $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                     $arProgramacionDetalle->setProgramacionRel($arProgramacion);

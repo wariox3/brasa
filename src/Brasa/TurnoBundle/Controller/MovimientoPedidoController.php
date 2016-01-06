@@ -5,10 +5,10 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPedidoType;
 use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
-class PedidoController extends Controller
+class MovimientoPedidoController extends Controller
 {
-    var $strListaDql = "";
-    var $codigoPedido = "";
+    var $strListaDql = "";    
+    var $codigoPedido = "";    
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -231,10 +231,38 @@ class PedidoController extends Controller
             'form' => $form->createView()));
     }    
     
+    public function recursoAction($codigoPedidoDetalle = 0) {
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $em = $this->getDoctrine()->getManager();
+        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);        
+        $form = $this->formularioRecurso();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arPedidoDetalle = $form->getData();
+            $arPedidoDetalle->setPedidoRel($arPedido);
+            $em->persist($arPedidoDetalle);
+            $em->flush();
+
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_nuevo', array('codigoPedido' => $codigoPedido, 'codigoPedidoDetalle' => 0 )));
+            } else {
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+        $strLista = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->listaDql($codigoPedidoDetalle);
+        $arPedidoDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:recurso.html.twig', array(
+            'arPedidoDetalleRecursos' => $arPedidoDetalleRecursos,
+            'form' => $form->createView()));
+    }    
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL($this->codigoPedido);
-    }
+    }    
 
     private function filtrar ($form) {                
         $this->codigoPedido = $form->get('TxtCodigo')->getData();
@@ -289,6 +317,18 @@ class PedidoController extends Controller
         return $form;
     }
 
+    private function formularioRecurso() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $form = $this->createFormBuilder()
+            ->add('TxtCantidad', 'text', array('label'  => 'Codigo','data' => 0))            
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('guardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        return $form;
+    }    
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();        

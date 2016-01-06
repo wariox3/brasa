@@ -5,7 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurFacturaType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleType;
-class FacturaController extends Controller
+class MovimientoFacturaController extends Controller
 {
     var $strListaDql = "";
     var $codigoFactura = "";

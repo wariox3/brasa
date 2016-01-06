@@ -174,10 +174,14 @@ class TurPedidoDetalle
     protected $plantillaRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleRecurso", mappedBy="pedidoDetalleRel", cascade={"persist", "remove"})
+     */
+    protected $pedidosDetallesRecursosPedidoDetalleRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="pedidoDetalleRel")
      */
     protected $programacionesDetallesPedidoDetalleRel; 
-
 
     /**
      * Constructor
@@ -949,5 +953,39 @@ class TurPedidoDetalle
     public function getProgramacionesDetallesPedidoDetalleRel()
     {
         return $this->programacionesDetallesPedidoDetalleRel;
+    }
+
+    /**
+     * Add pedidosDetallesRecursosPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso $pedidosDetallesRecursosPedidoDetalleRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function addPedidosDetallesRecursosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso $pedidosDetallesRecursosPedidoDetalleRel)
+    {
+        $this->pedidosDetallesRecursosPedidoDetalleRel[] = $pedidosDetallesRecursosPedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesRecursosPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso $pedidosDetallesRecursosPedidoDetalleRel
+     */
+    public function removePedidosDetallesRecursosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso $pedidosDetallesRecursosPedidoDetalleRel)
+    {
+        $this->pedidosDetallesRecursosPedidoDetalleRel->removeElement($pedidosDetallesRecursosPedidoDetalleRel);
+    }
+
+    /**
+     * Get pedidosDetallesRecursosPedidoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesRecursosPedidoDetalleRel()
+    {
+        return $this->pedidosDetallesRecursosPedidoDetalleRel;
     }
 }

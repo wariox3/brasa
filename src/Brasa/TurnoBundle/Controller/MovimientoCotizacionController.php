@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionType;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionDetalleType;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionOtroType;
-class CotizacionController extends Controller
+class MovimientoCotizacionController extends Controller
 {
     var $strListaDql = "";
     var $codigoCotizacion = "";
