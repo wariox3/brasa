@@ -100,7 +100,11 @@ brs_rhu_utilidades_certificado_ingreso_retencion:
 
 brs_rhu_utilidades_supervigilancia_parafiscales:
     path:     /rhu/utilidades/supervigilancia/parafiscales
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesSupervigilanciaParafiscales:lista }         
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesSupervigilanciaParafiscales:lista }  
+    
+brs_rhu_utilidades_controlacceso_registro:
+    path:     /rhu/utilidades/controlacceso/registro
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:registro }    
     
 brs_rhu_pagos_adicionales_lista:
     path:     /rhu/pagos/adicionales/lista

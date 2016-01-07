@@ -1132,4 +1132,38 @@ class GenTercero
     {
         return $this->turFacturasTerceroRel;
     }
+
+    /**
+     * Add turClientesTerceroRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesTerceroRel
+     *
+     * @return GenTercero
+     */
+    public function addTurClientesTerceroRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesTerceroRel)
+    {
+        $this->turClientesTerceroRel[] = $turClientesTerceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turClientesTerceroRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesTerceroRel
+     */
+    public function removeTurClientesTerceroRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesTerceroRel)
+    {
+        $this->turClientesTerceroRel->removeElement($turClientesTerceroRel);
+    }
+
+    /**
+     * Get turClientesTerceroRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurClientesTerceroRel()
+    {
+        return $this->turClientesTerceroRel;
+    }
 }

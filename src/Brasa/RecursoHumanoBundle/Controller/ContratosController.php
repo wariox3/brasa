@@ -135,62 +135,126 @@ class ContratosController extends Controller
             if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 5 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 19 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
                 $boolValidarTipoContrato = FALSE;
             }
-
-            if($boolValidarTipoContrato == TRUE) {
-                if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),1)) {
-                    $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
-                    $arContrato->setEmpleadoRel($arEmpleado);
-                    $arContrato->setFechaHasta($form->get('fechaHasta')->getData());
-                    $dateFechaUltimoPago = $arContrato->getFechaDesde()->format('Y-m-d');
-                    $dateFechaUltimoPago = date("Y-m-d", strtotime("$dateFechaUltimoPago -1 day"));
-                    $dateFechaUltimoPago = date_create_from_format('Y-m-d H:i', $dateFechaUltimoPago . "00:00");
-                    $arContrato->setFechaUltimoPago($dateFechaUltimoPago);
-                    $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
-                    $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
-                    $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
-                    $arContrato->setFactor($arContrato->getTipoTiempoRel()->getFactor());
-                    $arContrato->setFactorHorasDia($arContrato->getTipoTiempoRel()->getFactorHorasDia());
-                    if($arContrato->getTipoTiempoRel()->getFactor() > 0) {
-                        $arContrato->setVrSalarioPago($arContrato->getVrSalario() / $arContrato->getTipoTiempoRel()->getFactor());
+            
+            if ($codigoContrato == 0){
+                $douValidarEmpleadoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->validarEmpleadoContrato($codigoEmpleado);
+                if ($douValidarEmpleadoContrato >= 1){
+                    $objMensaje->Mensaje("error", "El empleado tiene contrato abierto, no se puede generar otro contrato", $this);
+                    $intEstado = 1;
+                } else{
+                    if($boolValidarTipoContrato == TRUE) {
+                        if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),1)) {
+                            $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
+                            $arContrato->setEmpleadoRel($arEmpleado);
+                            $arContrato->setFechaHasta($form->get('fechaHasta')->getData());
+                            $dateFechaUltimoPago = $arContrato->getFechaDesde()->format('Y-m-d');
+                            $dateFechaUltimoPago = date("Y-m-d", strtotime("$dateFechaUltimoPago -1 day"));
+                            $dateFechaUltimoPago = date_create_from_format('Y-m-d H:i', $dateFechaUltimoPago . "00:00");
+                            $arContrato->setFechaUltimoPago($dateFechaUltimoPago);
+                            $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
+                            $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
+                            $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
+                            $arContrato->setFactor($arContrato->getTipoTiempoRel()->getFactor());
+                            $arContrato->setFactorHorasDia($arContrato->getTipoTiempoRel()->getFactorHorasDia());
+                            if($arContrato->getTipoTiempoRel()->getFactor() > 0) {
+                                $arContrato->setVrSalarioPago($arContrato->getVrSalario() / $arContrato->getTipoTiempoRel()->getFactor());
+                            } else {
+                                $arContrato->setVrSalarioPago($arContrato->getVrSalario());
+                            }
+                            $em->persist($arContrato);
+                            $em->flush();
+                            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+                            $douSalarioMinimo = $arConfiguracion->getVrSalario();
+                            //$douSalarioMinimo = 644350;
+                            if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
+                                $arEmpleado->setAuxilioTransporte(1);
+                            } else {
+                                $arEmpleado->setAuxilioTransporte(0);
+                            }
+                            $arEmpleado->setCentroCostoRel($arContrato->getCentroCostoRel());
+                            $arEmpleado->setTipoTiempoRel($arContrato->getTipoTiempoRel());
+                            $arEmpleado->setVrSalario($arContrato->getVrSalario());
+                            $arEmpleado->setFechaContrato($arContrato->getFechaDesde());
+                            $arEmpleado->setFechaFinalizaContrato($arContrato->getFechaHasta());
+                            $arEmpleado->setClasificacionRiesgoRel($arContrato->getClasificacionRiesgoRel());
+                            $arEmpleado->setCargoRel($arContrato->getCargoRel());
+                            $arEmpleado->setCargoDescripcion($arContrato->getCargoDescripcion());
+                            $arEmpleado->setTipoPensionRel($arContrato->getTipoPensionRel());
+                            $arEmpleado->setSsoTipoCotizanteRel($arContrato->getSsoTipoCotizanteRel());
+                            $arEmpleado->setSsoSubtipoCotizanteRel($arContrato->getSsoSubtipoCotizanteRel());
+                            $arEmpleado->setEstadoContratoActivo(1);
+                            $arEmpleado->setEstadoActivo(1);
+                            $arEmpleado->setCodigoContratoActivoFk($arContrato->getCodigoContratoPk());
+                            $arEmpleado->setEntidadPensionRel($arContrato->getEntidadPensionRel());
+                            $arEmpleado->setEntidadSaludRel($arContrato->getEntidadSaludRel());
+                            $arEmpleado->setEntidadCajaRel($arContrato->getEntidadCajaRel());
+                            $em->persist($arEmpleado);
+                            $em->flush();
+                            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                        } else {
+                            echo "La fecha de inicio del contrato debe ser mayor a la ultima fecha de pago del centro de costos " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d');
+                        }
                     } else {
-                        $arContrato->setVrSalarioPago($arContrato->getVrSalario());
+                        echo "Verifique el tipo de contrato con el tipo y subtipo de cotizante a seguridad social";
                     }
-                    $em->persist($arContrato);
-                    $em->flush();
-                    $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
-                    $douSalarioMinimo = $arConfiguracion->getVrSalario();
-                    //$douSalarioMinimo = 644350;
-                    if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
-                        $arEmpleado->setAuxilioTransporte(1);
+                }    
+            } else{
+                if($boolValidarTipoContrato == TRUE) {
+                    if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),1)) {
+                        $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
+                        $arContrato->setEmpleadoRel($arEmpleado);
+                        $arContrato->setFechaHasta($form->get('fechaHasta')->getData());
+                        $dateFechaUltimoPago = $arContrato->getFechaDesde()->format('Y-m-d');
+                        $dateFechaUltimoPago = date("Y-m-d", strtotime("$dateFechaUltimoPago -1 day"));
+                        $dateFechaUltimoPago = date_create_from_format('Y-m-d H:i', $dateFechaUltimoPago . "00:00");
+                        $arContrato->setFechaUltimoPago($dateFechaUltimoPago);
+                        $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
+                        $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
+                        $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
+                        $arContrato->setFactor($arContrato->getTipoTiempoRel()->getFactor());
+                        $arContrato->setFactorHorasDia($arContrato->getTipoTiempoRel()->getFactorHorasDia());
+                        if($arContrato->getTipoTiempoRel()->getFactor() > 0) {
+                            $arContrato->setVrSalarioPago($arContrato->getVrSalario() / $arContrato->getTipoTiempoRel()->getFactor());
+                        } else {
+                            $arContrato->setVrSalarioPago($arContrato->getVrSalario());
+                        }
+                        $em->persist($arContrato);
+                        $em->flush();
+                        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+                        $douSalarioMinimo = $arConfiguracion->getVrSalario();
+                        //$douSalarioMinimo = 644350;
+                        if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
+                            $arEmpleado->setAuxilioTransporte(1);
+                        } else {
+                            $arEmpleado->setAuxilioTransporte(0);
+                        }
+                        $arEmpleado->setCentroCostoRel($arContrato->getCentroCostoRel());
+                        $arEmpleado->setTipoTiempoRel($arContrato->getTipoTiempoRel());
+                        $arEmpleado->setVrSalario($arContrato->getVrSalario());
+                        $arEmpleado->setFechaContrato($arContrato->getFechaDesde());
+                        $arEmpleado->setFechaFinalizaContrato($arContrato->getFechaHasta());
+                        $arEmpleado->setClasificacionRiesgoRel($arContrato->getClasificacionRiesgoRel());
+                        $arEmpleado->setCargoRel($arContrato->getCargoRel());
+                        $arEmpleado->setCargoDescripcion($arContrato->getCargoDescripcion());
+                        $arEmpleado->setTipoPensionRel($arContrato->getTipoPensionRel());
+                        $arEmpleado->setSsoTipoCotizanteRel($arContrato->getSsoTipoCotizanteRel());
+                        $arEmpleado->setSsoSubtipoCotizanteRel($arContrato->getSsoSubtipoCotizanteRel());
+                        $arEmpleado->setEstadoContratoActivo(1);
+                        $arEmpleado->setEstadoActivo(1);
+                        $arEmpleado->setCodigoContratoActivoFk($arContrato->getCodigoContratoPk());
+                        $arEmpleado->setEntidadPensionRel($arContrato->getEntidadPensionRel());
+                        $arEmpleado->setEntidadSaludRel($arContrato->getEntidadSaludRel());
+                        $arEmpleado->setEntidadCajaRel($arContrato->getEntidadCajaRel());
+                        $em->persist($arEmpleado);
+                        $em->flush();
+                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                     } else {
-                        $arEmpleado->setAuxilioTransporte(0);
-                    }
-                    $arEmpleado->setCentroCostoRel($arContrato->getCentroCostoRel());
-                    $arEmpleado->setTipoTiempoRel($arContrato->getTipoTiempoRel());
-                    $arEmpleado->setVrSalario($arContrato->getVrSalario());
-                    $arEmpleado->setFechaContrato($arContrato->getFechaDesde());
-                    $arEmpleado->setFechaFinalizaContrato($arContrato->getFechaHasta());
-                    $arEmpleado->setClasificacionRiesgoRel($arContrato->getClasificacionRiesgoRel());
-                    $arEmpleado->setCargoRel($arContrato->getCargoRel());
-                    $arEmpleado->setCargoDescripcion($arContrato->getCargoDescripcion());
-                    $arEmpleado->setTipoPensionRel($arContrato->getTipoPensionRel());
-                    $arEmpleado->setSsoTipoCotizanteRel($arContrato->getSsoTipoCotizanteRel());
-                    $arEmpleado->setSsoSubtipoCotizanteRel($arContrato->getSsoSubtipoCotizanteRel());
-                    $arEmpleado->setEstadoContratoActivo(1);
-                    $arEmpleado->setEstadoActivo(1);
-                    $arEmpleado->setCodigoContratoActivoFk($arContrato->getCodigoContratoPk());
-                    $arEmpleado->setEntidadPensionRel($arContrato->getEntidadPensionRel());
-                    $arEmpleado->setEntidadSaludRel($arContrato->getEntidadSaludRel());
-                    $arEmpleado->setEntidadCajaRel($arContrato->getEntidadCajaRel());
-                    $em->persist($arEmpleado);
-                    $em->flush();
-                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                        echo "La fecha de inicio del contrato debe ser mayor a la ultima fecha de pago del centro de costos " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d');
+                      }   
                 } else {
-                    echo "La fecha de inicio del contrato debe ser mayor a la ultima fecha de pago del centro de costos " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d');
-                }
-            } else {
-                echo "Verifique el tipo de contrato con el tipo y subtipo de cotizante a seguridad social";
-            }
+                    echo "Verifique el tipo de contrato con el tipo y subtipo de cotizante a seguridad social";
+                  }  
+             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:nuevo.html.twig', array(
             'arContrato' => $arContrato,

@@ -544,8 +544,12 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurRecurso", mappedBy="empleadoRel")
      */
-    protected $turRecursosEmpleadoRel;    
+    protected $turRecursosEmpleadoRel; 
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuHorarioAcceso", mappedBy="empleadoRel")
+     */
+    protected $horarioAccesoEmpleadoRel;
     
     /**
      * Constructor
@@ -578,6 +582,8 @@ class RhuEmpleado
         $this->empleadosInformacionesInternasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->desempenosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->examenesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turRecursosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->horarioAccesoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -3234,5 +3240,39 @@ class RhuEmpleado
     public function getTurRecursosEmpleadoRel()
     {
         return $this->turRecursosEmpleadoRel;
+    }
+
+    /**
+     * Add horarioAccesoEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horarioAccesoEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addHorarioAccesoEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horarioAccesoEmpleadoRel)
+    {
+        $this->horarioAccesoEmpleadoRel[] = $horarioAccesoEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove horarioAccesoEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horarioAccesoEmpleadoRel
+     */
+    public function removeHorarioAccesoEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horarioAccesoEmpleadoRel)
+    {
+        $this->horarioAccesoEmpleadoRel->removeElement($horarioAccesoEmpleadoRel);
+    }
+
+    /**
+     * Get horarioAccesoEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHorarioAccesoEmpleadoRel()
+    {
+        return $this->horarioAccesoEmpleadoRel;
     }
 }
