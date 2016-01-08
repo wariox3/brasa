@@ -9,4 +9,15 @@ class TurTurnoRepository extends EntityRepository {
         $dql   = "SELECT t FROM BrasaTurnoBundle:TurTurno t WHERE t.codigoTurnoPk <> ''";
         return $dql;
     }
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $ar = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigo);
+                $em->remove($ar);
+            }
+            $em->flush();
+        }
+    }    
 }

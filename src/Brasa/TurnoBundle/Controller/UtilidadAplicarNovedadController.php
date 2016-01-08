@@ -5,51 +5,88 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 class UtilidadAplicarNovedadController extends Controller
 {
-    var $strListaDql = "";
+    var $strListaIncapacidadesDql = "";
     var $codigoPedido = "";
+    var $fechDesde = "";
+    var $fechHasta = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
-        $form->handleRequest($request);
+        $form->handleRequest($request); 
+        $this->listaIncapacidades();
         if ($form->isValid()) {            
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $this->lista();
+                $this->listaIncapacidades();
             }
+            if ($form->get('BtnAplicar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarIncapacidad');
+                if($arrSeleccionados) {
+                    foreach ($arrSeleccionados as $codigoIncapacidad) {
+                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+                        $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
+                        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('codigoEmpleadoFk' => $arIncapacidad->getCodigoEmpleadoFk()));
+                        if($arRecurso) {
+                            $strDql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd JOIN pd.programacionRel p "
+                                      . "WHERE (p.fecha >= '" . $this->fechDesde . "' AND p.fecha <= '" . $this->fechHasta . "') "
+                                      . "AND pd.codigoRecursoFk = " . $arRecurso->getCodigoRecursoPk();                        
+                            $objQuery = $em->createQuery($strDql);  
+                            $arProgramacionesDetalles = $objQuery->getResult();                            
+                        }                                                
+                    }
+                }
+                return $this->redirect($this->generateUrl('brs_tur_utilidad_aplicar_novedad'));
+            }            
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
                 $this->lista();
                 $this->generarExcel();
             }
-        }
-        $arIncapacidades = null;
-        //$arIncapacidades = $paginator->paginate($em->createQuery($this->listaIncapacidades()), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Consultas/Pedido:pendienteProgramar.html.twig', array(
+        }        
+        
+        $arIncapacidades = $paginator->paginate($em->createQuery($this->strListaIncapacidadesDql), $request->query->get('page', 1), 20);
+        return $this->render('BrasaTurnoBundle:Utilidades:aplicarNovedad.html.twig', array(
             'arIncapacidades' => $arIncapacidades,
             'form' => $form->createView()));
     }        
     
     private function listaIncapacidades() {
-        $em = $this->getDoctrine()->getManager();
-        $strDql =  $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->pendientesAplicarTurnoDql();
-        return $strDql;
+        $em = $this->getDoctrine()->getManager();        
+        if(!$this->fechDesde) {
+            $this->fechDesde = date('Y/m/d');
+        }
+        if(!$this->fechHasta) {
+            $this->fechHasta = date('Y/m/d');
+        }        
+        $this->strListaIncapacidadesDql =  $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->pendientesAplicarTurnoDql($this->fechDesde, $this->fechHasta);        
     }
 
-    private function filtrar ($form) {                
-        $this->codigoPedido = $form->get('TxtCodigo')->getData();
+    private function filtrar ($form) {     
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if($dateFechaDesde) {
+            $this->fechDesde = $dateFechaDesde->format('Y/m/d');                
+        }
+        if($dateFechaHasta) {
+            $this->fechHasta = $dateFechaHasta->format('Y/m/d');                
+        }        
+        
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido)) 
+        $form = $this->createFormBuilder()            
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnAplicar', 'submit', array('label'  => 'Aplicar',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;

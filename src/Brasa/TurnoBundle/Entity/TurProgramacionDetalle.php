@@ -23,6 +23,16 @@ class TurProgramacionDetalle
     private $codigoProgramacionFk;
 
     /**
+     * @ORM\Column(name="anio", type="integer")
+     */    
+    private $anio = 0;    
+    
+    /**
+     * @ORM\Column(name="mes", type="integer")
+     */    
+    private $mes = 0;     
+    
+    /**
      * @ORM\Column(name="codigo_pedido_detalle_fk", type="integer", nullable=true)
      */    
     private $codigoPedidoDetalleFk;    
@@ -1237,5 +1247,53 @@ class TurProgramacionDetalle
     public function getPuestoRel()
     {
         return $this->puestoRel;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
     }
 }

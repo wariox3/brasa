@@ -19,15 +19,17 @@ class BaseTurnoController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurTurno')->eliminarExamen($arrSeleccionados);
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurTurno')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_turno_lista'));                                  
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $this->listar();
+                $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
-                $this->listar();
+                $this->lista();
                 $this->generarExcel();
             }
         }
@@ -189,18 +191,12 @@ class BaseTurnoController extends Controller
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest(); 
-        $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroAprobadoExamen', $form->get('estadoAprobado')->getData());
     }
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()            
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoExamen')))
+        $form = $this->createFormBuilder()                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -233,115 +229,27 @@ class BaseTurnoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIG0')
-                    ->setCellValue('B1', 'IDENTIFICACION')
-                    ->setCellValue('C1', 'NOMBRES Y APELLIDOS')
-                    ->setCellValue('D1', 'EDAD')
-                    ->setCellValue('E1', 'SEXO')
-                    ->setCellValue('F1', 'CARGO')
-                    ->setCellValue('G1', 'CENTRO COSTOS')
-                    ->setCellValue('H1', 'ENTIDAD / LABORATORIO')
-                    ->setCellValue('I1', 'CIUDAD')
-                    ->setCellValue('J1', 'FECHA EXAMEN')
-                    ->setCellValue('K1', 'AÑO EXAMEN')
-                    ->setCellValue('L1', 'MES EXAMEN')
-                    ->setCellValue('M1', 'DIA EXAMEN')
-                    ->setCellValue('N1', 'TIPO EXAMEN')
-                    ->setCellValue('O1', 'TOTAL')
-                    ->setCellValue('P1', 'APROBADO')
-                    ->setCellValue('Q1', 'COMENTARIOS GENERALES')
-                    ->setCellValue('R1', 'EXAMEN 1')
-                    ->setCellValue('S1', 'ESTADO')
-                    ->setCellValue('T1', 'OBSERVACIONES')
-                    ->setCellValue('U1', 'EXAMEN 2')
-                    ->setCellValue('V1', 'ESTADO')
-                    ->setCellValue('W1', 'OBSERVACIONES')
-                    ->setCellValue('X1', 'EXAMEN 3')
-                    ->setCellValue('Y1', 'ESTADO')
-                    ->setCellValue('Z1', 'OBSERVACIONES')
-                    ->setCellValue('AA1', 'EXAMEN 4')
-                    ->setCellValue('AB1', 'ESTADO')
-                    ->setCellValue('AC1', 'OBSERVACIONES')
-                    ->setCellValue('AD1', 'EXAMEN 5')
-                    ->setCellValue('AE1', 'ESTADO')
-                    ->setCellValue('AF1', 'OBSERVACIONES')
-                    ->setCellValue('AG1', 'EXAMEN 6')
-                    ->setCellValue('AH1', 'ESTADO')
-                    ->setCellValue('AI1', 'OBSERVACIONES');
+                    ->setCellValue('B1', 'NOMBRE');
 
         $i = 2;
         
         $query = $em->createQuery($this->strListaDql);
-                $arTurnos = new \Brasa\TurnoBundle\Entity\RhuDotacion();
-                $arTurnos = $query->getResult();
+        $arTurnos = new \Brasa\TurnoBundle\Entity\TurTurno();
+        $arTurnos = $query->getResult();
                 
-        foreach ($arTurnos as $arTurno) {
-            $strNombreCentroCosto = "";
-            if($arTurno->getCentroCostoRel()) {
-                $strNombreCentroCosto = $arTurno->getCentroCostoRel()->getNombre();
-            }
-            $strNombreEntidad = "SIN ENTIDAD";
-            if($arTurno->getEntidadExamenRel()) {
-                $strNombreEntidad = $arTurno->getEntidadExamenRel()->getNombre();
-            }
-            if ($arTurno->getEstadoAprobado() == 1){
-                $aprobado = "SI";
-            } else {
-                $aprobado = "NO";
-            }
-            //Calculo edad
-            $varFechaNacimientoAnio = $arTurno->getFechaNacimiento()->format('Y');
-            $varFechaNacimientoMes =  $arTurno->getFechaNacimiento()->format('m');
-            $varMesActual = date('m');
-            if ($varMesActual >= $varFechaNacimientoMes){
-                $varEdad = date('Y') - $varFechaNacimientoAnio;
-            } else {
-                $varEdad = date('Y') - $varFechaNacimientoAnio -1;
-            }
-            //Fin calculo edad
-            $arDetalleExamen = $em->getRepository('BrasaTurnoBundle:TurTurnoDetalle')->findBy(array('codigoExamenFk' => $arTurno->getCodigoExamenPk()));
+        foreach ($arTurnos as $arTurno) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arTurno->getCodigoExamenPk())
-                    ->setCellValue('B' . $i, $arTurno->getIdentificacion())
-                    ->setCellValue('C' . $i, $arTurno->getNombreCorto())
-                    ->setCellValue('D' . $i, $varEdad)
-                    ->setCellValue('E' . $i, $arTurno->getCodigoSexoFk())
-                    ->setCellValue('F' . $i, $arTurno->getCargoDescripcion())
-                    ->setCellValue('G' . $i, $arTurno->getCentroCostoRel()->getNombre())
-                    ->setCellValue('H' . $i, $strNombreEntidad)
-                    ->setCellValue('I' . $i, $arTurno->getCiudadRel()->getNombre())
-                    ->setCellValue('J' . $i, $arTurno->getFecha())
-                    ->setCellValue('K' . $i, $arTurno->getFecha()->format('Y'))
-                    ->setCellValue('L' . $i, $arTurno->getFecha()->format('m'))
-                    ->setCellValue('M' . $i, $arTurno->getFecha()->format('d'))
-                    ->setCellValue('N' . $i, $arTurno->getExamenClaseRel()->getNombre())
-                    ->setCellValue('O' . $i, $arTurno->getVrTotal())
-                    ->setCellValue('P' . $i, $aprobado)
-                    ->setCellValue('Q' . $i, $arTurno->getComentarios());
-                    $array = array();
-                    foreach ($arDetalleExamen as $arDetalleExamen){
-                        $array[] = $arDetalleExamen->getCodigoExamenTipoFk();
-                        $array[] = $arDetalleExamen->getEstadoAprobado();
-                        $array[] = $arDetalleExamen->getComentarios();
-                    }
-                    
-                    
-                    foreach ($array as $posicion=>$jugador){
-                        $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('R' . $i, $jugador)
-                            ->setCellValue('S' . $i, $jugador)
-                            ->setCellValue('T' . $i, $jugador)
-                            ->setCellValue('U' . $i, $jugador)
-                            ->setCellValue('V' . $i, $jugador);
-                    }
+                    ->setCellValue('A' . $i, $arTurno->getCodigoTurnoPk())
+                    ->setCellValue('B' . $i, $arTurno->getNombre());
                         
             $i++;
         }
         
-        $objPHPExcel->getActiveSheet()->setTitle('Examen');
+        $objPHPExcel->getActiveSheet()->setTitle('Turnos');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Examenes.xlsx"');
+        header('Content-Disposition: attachment;filename="Turnos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

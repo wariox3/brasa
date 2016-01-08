@@ -72,7 +72,7 @@ class TurTurno
     private $comentarios;       
 
     /**
-     * @ORM\OneToMany(targetEntity="TurTurnoDetalle", mappedBy="turnoRel")
+     * @ORM\OneToMany(targetEntity="TurTurnoDetalle", mappedBy="turnoRel", cascade={"persist", "remove"})
      */
     protected $turnosDetallesTurnoRel;    
     
@@ -91,6 +91,7 @@ class TurTurno
      */
     protected $soportesPagosDetallesTurnoRel;    
     
+
 
     /**
      * Constructor
@@ -344,6 +345,30 @@ class TurTurno
     }
 
     /**
+     * Set descanso
+     *
+     * @param boolean $descanso
+     *
+     * @return TurTurno
+     */
+    public function setDescanso($descanso)
+    {
+        $this->descanso = $descanso;
+
+        return $this;
+    }
+
+    /**
+     * Get descanso
+     *
+     * @return boolean
+     */
+    public function getDescanso()
+    {
+        return $this->descanso;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -501,29 +526,5 @@ class TurTurno
     public function getSoportesPagosDetallesTurnoRel()
     {
         return $this->soportesPagosDetallesTurnoRel;
-    }
-
-    /**
-     * Set descanso
-     *
-     * @param boolean $descanso
-     *
-     * @return TurTurno
-     */
-    public function setDescanso($descanso)
-    {
-        $this->descanso = $descanso;
-
-        return $this;
-    }
-
-    /**
-     * Get descanso
-     *
-     * @return boolean
-     */
-    public function getDescanso()
-    {
-        return $this->descanso;
     }
 }
