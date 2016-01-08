@@ -40,6 +40,19 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         return $arResultado;                
     }    
     
+    public function validarRecurso($codigoProgramacion) {
+        $em = $this->getEntityManager();
+        $boolResultado = TRUE;
+        $dql   = "SELECT pd.codigoProgramacionDetallePk FROM BrasaTurnoBundle:TurProgramacionDetalle pd "
+                . "WHERE pd.codigoProgramacionFk = " . $codigoProgramacion . " AND pd.codigoRecursoFk IS NULL";
+        $query = $em->createQuery($dql);        
+        $arResultado = $query->getResult();
+        if(count($arResultado) > 0) {
+            $boolResultado = FALSE;
+        }
+        return $boolResultado;                
+    }    
+    
     public function nuevo($codigoPedidoDetalle, $arProgramacion) {
         $em = $this->getEntityManager();
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        

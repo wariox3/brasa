@@ -156,14 +156,14 @@ class MovimientoPedidoController extends Controller
         if($codigoPedidoDetalle != 0) {
             $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
         } else {
+            $arPedidoDetalle->setPedidoRel($arPedido);
             $arPedidoDetalle->setFechaDesde(new \DateTime('now'));
             $arPedidoDetalle->setFechaHasta(new \DateTime('now'));
         }
         $form = $this->createForm(new TurPedidoDetalleType, $arPedidoDetalle);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arPedidoDetalle = $form->getData();
-            $arPedidoDetalle->setPedidoRel($arPedido);
+            $arPedidoDetalle = $form->getData();            
             $em->persist($arPedidoDetalle);
             $em->flush();
 
@@ -241,35 +241,35 @@ class MovimientoPedidoController extends Controller
         $form = $this->formularioRecurso();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            //$arProgramacion = $form->getData();
-            $arrControles = $request->request->All();
-            if($arrControles['txtNumeroIdentificacion'] != '') {
-                $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
-                if(count($arRecurso) > 0) {
-                    $intPosicion = $form->get('TxtPosicion')->getData();
-                    $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
-                    $arPedidoDetalleRecurso->setPedidoDetalleRel($arPedidoDetalle);
-                    $arPedidoDetalleRecurso->setRecursoRel($arRecurso);
-                    $arPedidoDetalleRecurso->setPosicion($intPosicion);
-                    $em->persist($arPedidoDetalleRecurso);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                
-                } else {
-                    $objMensaje->Mensaje("error", "El recurso no existe", $this);
-                }
+            if($form->get('guardar')->isClicked()) {   
+                $arrControles = $request->request->All();
+                if($arrControles['txtNumeroIdentificacion'] != '') {
+                    $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                    $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
+                    if(count($arRecurso) > 0) {
+                        $intPosicion = $form->get('TxtPosicion')->getData();
+                        $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
+                        $arPedidoDetalleRecurso->setPedidoDetalleRel($arPedidoDetalle);
+                        $arPedidoDetalleRecurso->setRecursoRel($arRecurso);
+                        $arPedidoDetalleRecurso->setPosicion($intPosicion);
+                        $em->persist($arPedidoDetalleRecurso);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                
+                    } else {
+                        $objMensaje->Mensaje("error", "El recurso no existe", $this);
+                    }
+                }                
             }
-            /*$arPedidoDetalle = $form->getData();
-            $arPedidoDetalle->setPedidoRel($arPedido);
-            $em->persist($arPedidoDetalle);
-            $em->flush();
-
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_nuevo', array('codigoPedido' => $codigoPedido, 'codigoPedidoDetalle' => 0 )));
-            } else {
-                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }*/
+            if($form->get('BtnDetalleEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->eliminarSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
+            } 
+            if($form->get('BtnDetalleActualizar')->isClicked()) {                
+                $arrControles = $request->request->All();
+                $this->actualizarDetalleRecurso($arrControles);                                
+                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
+            }            
         }
         $strLista = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->listaDql($codigoPedidoDetalle);
         $arPedidoDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);
@@ -341,8 +341,8 @@ class MovimientoPedidoController extends Controller
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
             ->add('TxtPosicion', 'text', array('label'  => 'Codigo','data' => 0))            
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnDetalleEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnDetalleActualizar', 'submit', array('label'  => 'Actualizar',))            
             ->add('guardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         return $form;
@@ -457,6 +457,17 @@ class MovimientoPedidoController extends Controller
         $em->flush();                
         $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);        
     }
-
+    
+    private function actualizarDetalleRecurso($arrControles) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        foreach ($arrControles['LblCodigo'] as $intCodigo) {
+            $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
+            $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->find($intCodigo);
+            $arPedidoDetalleRecurso->setPosicion($arrControles['TxtPosicion'.$intCodigo]);
+            $em->persist($arPedidoDetalleRecurso);
+        }
+        $em->flush();                        
+    }
 
 }

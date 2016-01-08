@@ -230,5 +230,20 @@ class TurProgramacionRepository extends EntityRepository {
             }
             $em->flush();
         }
-    }         
+    }      
+    
+    public function validarAutorizar($codigoProgramacion) {
+        $em = $this->getEntityManager(); 
+        $strResultados = "";
+        if($em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->numeroRegistros($codigoProgramacion) > 0) {        
+            if($em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->validarRecurso($codigoProgramacion)) {        
+                
+            } else {
+                $strResultados = "Hay detalles sin recursos asignados";
+            }
+        } else {
+            $strResultados = "La programacion no tiene registros";
+        }
+        return $strResultados;
+    }
 }

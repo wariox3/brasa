@@ -67,26 +67,97 @@ class ConsultasProgramacionesDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIG0')
-                    ->setCellValue('B1', 'CLIENTE');
+                    ->setCellValue('B1', 'PROG')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'CLIENTE')
+                    ->setCellValue('E1', 'PUESTO')
+                    ->setCellValue('F1', 'RECURSO')
+                    ->setCellValue('G1', 'TIPO')
+                    ->setCellValue('H1', 'D1')
+                    ->setCellValue('I1', 'D2')
+                    ->setCellValue('J1', 'D3')
+                    ->setCellValue('K1', 'D4')
+                    ->setCellValue('L1', 'D5')
+                    ->setCellValue('M1', 'D6')
+                    ->setCellValue('N1', 'D7')
+                    ->setCellValue('O1', 'D8')
+                    ->setCellValue('P1', 'D9')
+                    ->setCellValue('Q1', 'D10')
+                    ->setCellValue('R1', 'D11')
+                    ->setCellValue('S1', 'D12')
+                    ->setCellValue('T1', 'D13')
+                    ->setCellValue('U1', 'D14')
+                    ->setCellValue('V1', 'D15')
+                    ->setCellValue('W1', 'D16')
+                    ->setCellValue('X1', 'D17')
+                    ->setCellValue('Y1', 'D18')
+                    ->setCellValue('Z1', 'D19')
+                    ->setCellValue('AA1', 'D20')
+                    ->setCellValue('AB1', 'D21')
+                    ->setCellValue('AC1', 'D22')
+                    ->setCellValue('AD1', 'D23')
+                    ->setCellValue('AE1', 'D24')
+                    ->setCellValue('AF1', 'D25')
+                    ->setCellValue('AG1', 'D26')
+                    ->setCellValue('AH1', 'D27')
+                    ->setCellValue('AI1', 'D28')
+                    ->setCellValue('AJ1', 'D29')
+                    ->setCellValue('AK1', 'D30')
+                    ->setCellValue('AL1', 'D31');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arProgramaciones = new \Brasa\TurnoBundle\Entity\TurPedido();
-        $arProgramaciones = $query->getResult();
+        $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+        $arProgramacionDetalles = $query->getResult();
 
-        foreach ($arProgramaciones as $arPedido) {            
+        foreach ($arProgramacionDetalles as $arProgramacionDetalle) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPedido->getCodigoPedidoPk())
-                    ->setCellValue('B' . $i, $arPedido->getTerceroRel()->getNombreCorto());
-
+                    ->setCellValue('A' . $i, $arProgramacionDetalle->getCodigoProgramacionDetallePk())
+                    ->setCellValue('B' . $i, $arProgramacionDetalle->getProgramacionRel()->getCodigoProgramacionPk())
+                    ->setCellValue('C' . $i, $arProgramacionDetalle->getProgramacionRel()->getFecha()->format('Y-m'))
+                    ->setCellValue('D' . $i, $arProgramacionDetalle->getProgramacionRel()->getClienteRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arProgramacionDetalle->getPuestoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arProgramacionDetalle->getRecursoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arProgramacionDetalle->getDia1())
+                    ->setCellValue('I' . $i, $arProgramacionDetalle->getDia2())
+                    ->setCellValue('J' . $i, $arProgramacionDetalle->getDia3())
+                    ->setCellValue('K' . $i, $arProgramacionDetalle->getDia4())
+                    ->setCellValue('L' . $i, $arProgramacionDetalle->getDia5())
+                    ->setCellValue('M' . $i, $arProgramacionDetalle->getDia6())
+                    ->setCellValue('N' . $i, $arProgramacionDetalle->getDia7())
+                    ->setCellValue('O' . $i, $arProgramacionDetalle->getDia8())
+                    ->setCellValue('P' . $i, $arProgramacionDetalle->getDia9())
+                    ->setCellValue('Q' . $i, $arProgramacionDetalle->getDia10())
+                    ->setCellValue('R' . $i, $arProgramacionDetalle->getDia11())
+                    ->setCellValue('S' . $i, $arProgramacionDetalle->getDia12())
+                    ->setCellValue('T' . $i, $arProgramacionDetalle->getDia13())
+                    ->setCellValue('U' . $i, $arProgramacionDetalle->getDia14())
+                    ->setCellValue('V' . $i, $arProgramacionDetalle->getDia15())
+                    ->setCellValue('W' . $i, $arProgramacionDetalle->getDia16())
+                    ->setCellValue('X' . $i, $arProgramacionDetalle->getDia17())
+                    ->setCellValue('Y' . $i, $arProgramacionDetalle->getDia18())
+                    ->setCellValue('Z' . $i, $arProgramacionDetalle->getDia19())
+                    ->setCellValue('AA' . $i, $arProgramacionDetalle->getDia20())
+                    ->setCellValue('AB' . $i, $arProgramacionDetalle->getDia21())
+                    ->setCellValue('AC' . $i, $arProgramacionDetalle->getDia22())
+                    ->setCellValue('AD' . $i, $arProgramacionDetalle->getDia23())
+                    ->setCellValue('AE' . $i, $arProgramacionDetalle->getDia24())
+                    ->setCellValue('AF' . $i, $arProgramacionDetalle->getDia25())
+                    ->setCellValue('AG' . $i, $arProgramacionDetalle->getDia26())
+                    ->setCellValue('AH' . $i, $arProgramacionDetalle->getDia27())
+                    ->setCellValue('AI' . $i, $arProgramacionDetalle->getDia28())
+                    ->setCellValue('AJ' . $i, $arProgramacionDetalle->getDia29())
+                    ->setCellValue('AK' . $i, $arProgramacionDetalle->getDia30())
+                    ->setCellValue('AL' . $i, $arProgramacionDetalle->getDia31());                    
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Pedidos');
+        $objPHPExcel->getActiveSheet()->setTitle('ProgramacionDetalle');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Pedidos.xlsx"');
+        header('Content-Disposition: attachment;filename="ProgramacionDetalle.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

@@ -89,15 +89,16 @@ class MovimientoProgramacionController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if($arProgramacion->getEstadoAutorizado() == 0) {
-                    if($em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->numeroRegistros($codigoProgramacion) > 0) {
+                    $strResultados = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->validarAutorizar($codigoProgramacion);
+                    if($strResultados == "") {
                         $arrControles = $request->request->All();
                         $this->actualizarDetalle($arrControles, $codigoProgramacion);
                         $arProgramacion->setEstadoAutorizado(1);
                         $em->persist($arProgramacion);
-                        $em->flush();
+                        $em->flush();                        
                     } else {
-                        $objMensaje->Mensaje('error', 'Debe adicionar detalles a la programacion', $this);
-                    }
+                        $objMensaje->Mensaje('error', $strResultados, $this);
+                    }                                          
                 }
                 return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
@@ -160,19 +161,11 @@ class MovimientoProgramacionController extends Controller
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
         $form = $this->createFormBuilder()
-            ->add('plantillaRel', 'entity', array(
-                'class' => 'BrasaTurnoBundle:TurPlantilla',
-                'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('p')
-                    ->orderBy('p.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            if ($form->get('BtnGuardar')->isClicked()) {
-                $arPlantilla = $form->get('plantillaRel')->getData();
+            if ($form->get('BtnGuardar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $arrControles = $request->request->All();
                 if(count($arrSeleccionados) > 0) {
@@ -407,7 +400,7 @@ class MovimientoProgramacionController extends Controller
         foreach ($arProgramaciones as $arProgramacion) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arProgramacion->getCodigoProgramacionPk())
-                    ->setCellValue('B' . $i, $arProgramacion->getTerceroRel()->getNombreCorto());
+                    ->setCellValue('B' . $i, $arProgramacion->getClienteRel()->getNombreCorto());
 
             $i++;
         }
@@ -428,21 +421,7 @@ class MovimientoProgramacionController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }
-
-    private function devuelveCodigoTurno ($strCodigo) {
-        $strCodigoReal = "";
-        if($strCodigo == 'A') {
-            $strCodigoReal = '1';
-        }
-        if($strCodigo == 'B') {
-            $strCodigoReal = '2';
-        }
-        if($strCodigo == 'D') {
-            $strCodigoReal = 'D';
-        }
-        return $strCodigoReal;
-    }
+    }   
 
     private function aplicaPlantilla ($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle) {
         $boolResultado = FALSE;
@@ -697,23 +676,7 @@ class MovimientoProgramacionController extends Controller
         }
         $em->flush();
         $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
-    }
-
-    private function devuelvePosicionInicialMatrizPlantilla($strAnio, $intPosiciones, $strFechaHasta) {
-        $intPos = 1;        
-        $strFecha = $strAnio."/01/01";
-        while($strFecha != $strFechaHasta) {
-            //$dateFecha = date_create($strAnio."/01/01");
-            $nuevafecha = strtotime ( '+1 day' , strtotime ( $strFecha ) ) ;
-            $strFecha = date ( 'Y/m/d' , $nuevafecha );
-
-            $intPos++;
-            if($intPos == ($intPosiciones+1)) {
-                $intPos = 1;
-            }
-        }
-        return $intPos;
-    }
+    }   
     
     private function devuelveTurnosMes($arPlantillaDetalle) {
         $arrTurnos = array(

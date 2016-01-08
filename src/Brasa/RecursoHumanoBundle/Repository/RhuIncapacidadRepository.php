@@ -211,4 +211,18 @@ class RhuIncapacidadRepository extends EntityRepository {
 
         return $boolValidar;                     
     }          
+    
+    /*
+     * Se utiliza en la utilidad de turnos para saber 
+     */
+    public function pendientesAplicarTurnoDql($fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $dql = "SELECT incapacidad FROM BrasaRecursoHumanoBundle:RhuIncapacidad incapacidad "
+                . "WHERE (((incapacidad.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (incapacidad.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (incapacidad.fechaDesde >= '$strFechaDesde' AND incapacidad.fechaDesde <= '$strFechaHasta') "
+                . "OR (incapacidad.fechaHasta >= '$strFechaHasta' AND incapacidad.fechaDesde <= '$strFechaDesde')) ";
+        return $dql;
+    }         
 }

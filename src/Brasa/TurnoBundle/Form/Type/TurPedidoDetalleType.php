@@ -8,8 +8,17 @@ use Doctrine\ORM\EntityRepository;
 class TurPedidoDetalleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {       
         $builder
+            ->add('puestoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurPuesto',
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('p')
+                    ->where('p.codigoClienteFk = :codigoCliente ')
+                    ->setParameter('codigoCliente', $options['data']->getPedidoRel()->getCodigoClienteFk())
+                    ->orderBy('p.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false))                
             ->add('turnoRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurTurno',
                 'query_builder' => function (EntityRepository $er)  {

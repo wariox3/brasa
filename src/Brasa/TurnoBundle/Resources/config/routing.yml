@@ -158,6 +158,10 @@ brs_tur_proceso_generar_pedido_lista:
     path:     /tur/proceso/generar/pedido/lista
     defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarPedido:lista }             
     
+brs_tur_utilidad_aplicar_novedad:    
+    path:     /tur/utilidad/aplicar/novedad
+    defaults: { _controller: BrasaTurnoBundle:ConsultasRecursosProgramaciones:lista }     
+    
 brs_tur_buscar_cliente:
     pattern:  /tur/buscar/cliente/{campoCodigo}/{campoNombre}
     defaults: { _controller: BrasaTurnoBundle:BuscarCliente:lista }     
