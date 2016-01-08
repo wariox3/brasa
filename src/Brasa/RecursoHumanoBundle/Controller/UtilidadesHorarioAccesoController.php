@@ -11,12 +11,14 @@ class UtilidadesHorarioAccesoController extends Controller
 
     public function registroAction() {
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
         $arHorarioAccesos = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
         $fechaHoy = new \DateTime('now');
-        $arHorarioAccesos = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->RegistroHoy($fechaHoy);
+        $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->RegistroHoy($fechaHoy->format('Y/m/d'));
+        $arHorarioAccesos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 40);
         $form = $this->createForm(new RhuHorarioAccesoType, $arHorarioAcceso);         
         $form->handleRequest($request);
         if ($form->isValid()) {            
@@ -82,11 +84,9 @@ class UtilidadesHorarioAccesoController extends Controller
                                     $arTipoAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoAcceso')->find($arrayDetalle[1]);
                                     $arHorarioAcceso->setEmpleadoRel($arEmpleado);
                                     $arHorarioAcceso->setTipoAccesoRel($arTipoAcceso);
-                                    $dateFecha = $arrayDetalle[1];
+                                    $dateFecha = $arrayDetalle[2];
                                     $dateFecha = new \DateTime($dateFecha);
                                     $arHorarioAcceso->setFecha($dateFecha);
-                                    $strComentarios = $arrayDetalle[2];
-                                    $arHorarioAcceso->setComentarios($strComentarios);
                                     $em->persist($arHorarioAcceso);
                                 }
                             }else{
@@ -108,7 +108,7 @@ class UtilidadesHorarioAccesoController extends Controller
                 }
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/HorarioAceso:cargarRegistro.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/HorarioAcceso:cargarRegistro.html.twig', array(
             'form' => $form->createView()
             ));
     }    

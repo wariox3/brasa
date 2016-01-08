@@ -28,12 +28,14 @@ class GenAsesor
      */
     protected $tercerosRel;
 
+    
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->tercerosRel = new ArrayCollection();
+        $this->tercerosRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-
 
     /**
      * Get codigoAsesorPk

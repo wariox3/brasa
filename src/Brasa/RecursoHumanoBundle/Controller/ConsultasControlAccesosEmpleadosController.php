@@ -86,38 +86,43 @@ class ConsultasControlAccesosEmpleadosController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'IDENTIFICACION')
+                    ->setCellValue('A1', 'NRO')
+                    ->setCellValue('B1', 'IDENTIFICACIÓN')
                     ->setCellValue('C1', 'EMPLEADO')
-                    ->setCellValue('D1', 'CODIGO CONTRATO')                    
-                    ->setCellValue('E1', 'DESDE')
-                    ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'IBC')
-                    ->setCellValue('H1', 'IBP');
+                    ->setCellValue('D1', 'TIPO ACCESO')                    
+                    ->setCellValue('E1', 'FECHA')
+                    ->setCellValue('F1', 'HORA')
+                    ->setCellValue('G1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
-        $arIngresosBase = new \Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase();
-        $arIngresosBase = $query->getResult();
-        foreach ($arIngresosBase as $arIngresoBase) {
+        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
+        $arHorarioAcceso = $query->getResult();
+        $j = 1;
+        foreach ($arHorarioAcceso as $arHorarioAcceso) {
+            if ($arHorarioAcceso->getCodigoTipoAccesoFk() == 1){
+                    $tipoAcceso = "ENTRADA";
+                }else {
+                    $tipoAcceso = "SALIDA";
+                }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arIngresoBase->getCodigoIngresoBasePk())
-                    ->setCellValue('B' . $i, $arIngresoBase->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arIngresoBase->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arIngresoBase->getCodigoContratoFk())                    
-                    ->setCellValue('E' . $i, $arIngresoBase->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('F' . $i, $arIngresoBase->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arIngresoBase->getvrIngresoBaseCotizacion())
-                    ->setCellValue('H' . $i, $arIngresoBase->getvrIngresoBasePrestacion());
+                ->setCellValue('A' . $i, $j)    
+                ->setCellValue('B' . $i, $arHorarioAcceso->getEmpleadoRel()->getNumeroIdentificacion())
+                ->setCellValue('C' . $i, $arHorarioAcceso->getEmpleadoRel()->getNombreCorto())
+                ->setCellValue('D' . $i, $tipoAcceso)                    
+                ->setCellValue('E' . $i, $arHorarioAcceso->getFecha()->Format('Y-m-d'))
+                ->setCellValue('F' . $i, $arHorarioAcceso->getFecha()->Format('H:i:s'))
+                ->setCellValue('G' . $i, $arHorarioAcceso->getComentarios());
             $i++;
+            $j++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('IngresosEmpleado');
+        $objPHPExcel->getActiveSheet()->setTitle('ControlAccesoEmpleado');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="IngresosEmpleado.xlsx"');
+        header('Content-Disposition: attachment;filename="ControlAccesoEmpleado.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

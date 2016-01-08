@@ -24,7 +24,15 @@ brs_gen_base_cuentas:
 
 brs_gen_base_cuentas_nuevo:
     path:     /general/base/cuentas/nuevo/{codigoCuenta}
-    defaults: { _controller: BrasaGeneralBundle:BaseCuentas:nuevo }    
+    defaults: { _controller: BrasaGeneralBundle:BaseCuentas:nuevo }
+    
+brs_gen_base_asesor:
+    path:     /general/base/asesor
+    defaults: { _controller: BrasaGeneralBundle:BaseAsesor:lista }   
+    
+brs_gen_base_asesor_nuevo:
+    path:     /general/base/asesor/nuevo/{codigoAsesor}
+    defaults: { _controller: BrasaGeneralBundle:BaseAsesor:nuevo }    
     
 brs_gen_configuracion_general:
     path:     /gen/configuracion/general/{codigoConfiguracionPk}
