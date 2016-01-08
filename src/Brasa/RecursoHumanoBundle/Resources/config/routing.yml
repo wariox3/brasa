@@ -102,9 +102,13 @@ brs_rhu_utilidades_supervigilancia_parafiscales:
     path:     /rhu/utilidades/supervigilancia/parafiscales
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesSupervigilanciaParafiscales:lista }  
     
-brs_rhu_utilidades_controlacceso_registro:
-    path:     /rhu/utilidades/controlacceso/registro
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:registro }    
+brs_rhu_utilidades_control_acceso_empleado:
+    path:     /rhu/utilidades/control/acceso/empleado
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:registro }
+    
+brs_rhu_utilidades_control_acceso_visitante:
+    path:     /rhu/utilidades/control/acceso/visitante
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesRegistroVisitante:registro }    
     
 brs_rhu_pagos_adicionales_lista:
     path:     /rhu/pagos/adicionales/lista
@@ -296,7 +300,11 @@ brs_rhu_creditos_refinanciar:
     
 brs_rhu_cargar_creditos:
     path:     /rhu/cargar/creditos
-    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:cargar }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:cargar }
+    
+brs_rhu_cargar_control_acceso_empleados:
+    path:     /rhu/cargar/control/acceso/empleados
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:cargar }    
 
 brs_rhu_pagos_lista:
     path:     /rhu/pagos/lista
@@ -732,7 +740,15 @@ brs_rhu_consultas_dotacion_pendiente:
 
 brs_rhu_consultas_examen_cobrar:    
     path:     /rhu/consultas/examen/cobrar
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasExamenesCobrar:lista }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasExamenesCobrar:lista }
+    
+brs_rhu_consultas_control_acceso_empleados:    
+    path:     /rhu/consultas/control/acceso/empleado
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasControlAccesosEmpleados:lista }
+    
+brs_rhu_consultas_control_acceso_visitantes:    
+    path:     /rhu/consultas/control/acceso/visitantes
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasControlAccesosVisitantes:lista }    
     
 brs_rhu_pago_examen_lista:
     path:     /rhu/pago/examen/lista

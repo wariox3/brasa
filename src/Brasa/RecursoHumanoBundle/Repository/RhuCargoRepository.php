@@ -11,5 +11,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuCargoRepository extends EntityRepository {
     
-    
+    public function listaDQL($strNombre = "") {        
+        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCargo c WHERE c.codigoCargoPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND c.nombre LIKE '%" . $strNombre . "%'";
+        }
+        $dql .= " ORDER BY c.codigoCargoPk";
+        return $dql;
+    }
 }

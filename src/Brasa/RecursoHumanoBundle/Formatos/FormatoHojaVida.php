@@ -203,9 +203,21 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(65, 5, "CCF", 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 62);
         $this->SetFont('Arial','',6.5);
-        $this->Cell(61, 8, utf8_decode($arEmpleado->getEntidadSaludRel()->getNombre()), 1, 0, 'C', 1);
-        $this->Cell(78, 8, utf8_decode($arEmpleado->getEntidadPensionRel()->getNombre()), 1, 0, 'C', 1);
-        $this->Cell(65, 8, utf8_decode($arEmpleado->getEntidadCajaRel()->getNombre()), 1, 0, 'C', 1);
+        if ($arEmpleado->getCodigoEntidadSaludFk()== null) {
+            $this->Cell(61, 8, "SIN CONTRATO", 1, 0, 'C', 1);
+        } else {
+            $this->Cell(61, 8, utf8_decode($arEmpleado->getEntidadSaludRel()->getNombre()), 1, 0, 'C', 1);
+        }
+        if ($arEmpleado->getCodigoEntidadPensionFk()== null) {
+            $this->Cell(78, 8, "SIN CONTRATO", 1, 0, 'C', 1);
+        } else {
+            $this->Cell(78, 8, utf8_decode($arEmpleado->getEntidadPensionRel()->getNombre()), 1, 0, 'C', 1);
+        }
+        if ($arEmpleado->getCodigoEntidadCajaFk()== null) {
+            $this->Cell(65, 8, "SIN CONTRATO", 1, 0, 'C', 1);
+        } else {
+            $this->Cell(65, 8, utf8_decode($arEmpleado->getEntidadCajaRel()->getNombre()), 1, 0, 'C', 1);
+        }
         $this->SetXY($intX, $intY + 70);
         $this->SetFont('Arial','B',8);
         $this->Cell(41, 5, "NIVEL DE ESTUDIO", 1, 0, 'C', 1);

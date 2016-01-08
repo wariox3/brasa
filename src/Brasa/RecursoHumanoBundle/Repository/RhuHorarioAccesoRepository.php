@@ -21,4 +21,23 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         return $dql;
     }
     
+    public function listaDql($strIdentificacion = "", $strNombre = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ha,e FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha JOIN ha.empleadoRel e WHERE ha.codigoHorarioAccesoPk <> 0 ";   
+        if($strIdentificacion != "") {
+            $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
+        }   
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%". $strNombre . "%'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND ha.fecha >='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND ha.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
+        return $dql;
+    }
+    
 }

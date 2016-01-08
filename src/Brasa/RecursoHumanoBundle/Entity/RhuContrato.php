@@ -172,8 +172,13 @@ class RhuContrato
      * @ORM\Column(name="codigo_entidad_pension_fk", type="integer", nullable=true)
      */    
     private $codigoEntidadPensionFk;
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
 
-/**
+     /**
      * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
      */    
     private $codigoEntidadCajaFk;
@@ -315,6 +320,8 @@ class RhuContrato
      * @ORM\OneToMany(targetEntity="RhuTrasladoSalud", mappedBy="contratoRel")
      */
     protected $trasladosSaludContratoRel;
+    
+    
     /**
      * Constructor
      */
@@ -1086,6 +1093,30 @@ class RhuContrato
     public function getCodigoEntidadPensionFk()
     {
         return $this->codigoEntidadPensionFk;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 
     /**
