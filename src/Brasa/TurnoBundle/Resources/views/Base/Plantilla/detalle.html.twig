@@ -1,4 +1,5 @@
 {% extends '::base.html.twig' %}
+{% block title %}Detalle plantilla - Soga App{% endblock %}
 {% block content %}
 <script>
     $('#myTab a').click(function(e) {
@@ -28,14 +29,14 @@
                 <tr>
                     <td class="titulo">CODIGO:</td>
                     <td class="td-in-well">{{ arPlantilla.codigoPlantillaPk }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">HOMOLOGAR:</td>
+                    <td class="td-in-well" align="right">{% if arPlantilla.homologarCodigoTurno == 1 %}SI{% else %}NO{% endif %}</td>
                 </tr>
                 <tr>
                     <td class="titulo">CLIENTE:</td>
                     <td class="td-in-well">{{ arPlantilla.nombre }}</td>
                     <td class="titulo" >DIAS</td>
-                    <td align="right">{{ arPlantilla.dias }}</td>
+                    <td align="right">{{ arPlantilla.diasSecuencia }}</td>
                 </tr>                
             </table>
       </div>
@@ -54,6 +55,7 @@
             <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>COD</th>                                
+                <th>POS</th>
                 <th>1</th>
                 <th>2</th>
                 <th>3</th>
@@ -91,6 +93,7 @@
                 <tr>
                     <td>{{ arPlantillaDetalle.codigoPlantillaDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arPlantillaDetalle.codigoPlantillaDetallePk }}"></td>                    
                     {% if arPlantilla.estadoAutorizado == 0 %}                       
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtPosicion{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.posicion  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>    
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia1{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.dia1  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia2{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.dia2  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia3{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.dia3  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
@@ -123,6 +126,7 @@
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia30{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.dia30  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia31{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.dia31  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                     {% else %}                        
+                        <td>{{ arPlantillaDetalle.posicion  }}</td>    
                         <td>{{ arPlantillaDetalle.dia1  }}</td>
                         <td>{{ arPlantillaDetalle.dia2  }}</td>
                         <td>{{ arPlantillaDetalle.dia3  }}</td>

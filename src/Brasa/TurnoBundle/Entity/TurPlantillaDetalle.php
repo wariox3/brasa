@@ -23,6 +23,11 @@ class TurPlantillaDetalle
     private $codigoPlantillaFk;
     
     /**
+     * @ORM\Column(name="posicion", type="integer")
+     */    
+    private $posicion = 0;    
+    
+    /**
      * @ORM\Column(name="dia_1", type="string", length=5, nullable=true)
      */    
     private $dia1;    
@@ -1014,5 +1019,29 @@ class TurPlantillaDetalle
     public function getPlantillaRel()
     {
         return $this->plantillaRel;
+    }
+
+    /**
+     * Set posicion
+     *
+     * @param integer $posicion
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setPosicion($posicion)
+    {
+        $this->posicion = $posicion;
+
+        return $this;
+    }
+
+    /**
+     * Get posicion
+     *
+     * @return integer
+     */
+    public function getPosicion()
+    {
+        return $this->posicion;
     }
 }

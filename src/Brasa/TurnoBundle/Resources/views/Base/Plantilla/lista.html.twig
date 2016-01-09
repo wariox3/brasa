@@ -39,6 +39,8 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arPlantillas, 'CÓDIGO', 'p.codigoPlantillaPk') }}</th>
                 <th>NOMBRE</th>                
+                <th>HOMOLOGAR</th>
+                <th>D.SEC</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -46,7 +48,9 @@
             {% for arPlantillas in arPlantillas %}
             <tr>                
                 <td>{{ arPlantillas.codigoPlantillaPk  }}</td>                               
-                <td>{{ arPlantillas.nombre }}</td>                
+                <td>{{ arPlantillas.nombre }}</td>  
+                <td>{% if arPlantillas.homologarCodigoTurno == 1 %} SI {% else %} NO {% endif %}</td>  
+                <td style="text-align: right">{{ arPlantillas.diasSecuencia | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_plantilla_nuevo', {'codigoPlantilla': arPlantillas.codigoPlantillaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arPlantillas.codigoPlantillaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPlantillas.codigoPlantillaPk }}" /></td>

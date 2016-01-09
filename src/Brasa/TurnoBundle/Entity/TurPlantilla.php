@@ -27,10 +27,15 @@ class TurPlantilla
      */    
     private $estadoAutorizado = false;    
     
-    /**
-     * @ORM\Column(name="dias", type="integer")
+    /**     
+     * @ORM\Column(name="homologar_codigo_turno", type="boolean")
      */    
-    private $dias = 0;         
+    private $homologarCodigoTurno = false;     
+    
+    /**
+     * @ORM\Column(name="dias_secuencia", type="integer")
+     */    
+    private $diasSecuencia = 0;         
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -253,5 +258,53 @@ class TurPlantilla
     public function getVrSalario()
     {
         return $this->vrSalario;
+    }
+
+    /**
+     * Set homologarCodigoTurno
+     *
+     * @param boolean $homologarCodigoTurno
+     *
+     * @return TurPlantilla
+     */
+    public function setHomologarCodigoTurno($homologarCodigoTurno)
+    {
+        $this->homologarCodigoTurno = $homologarCodigoTurno;
+
+        return $this;
+    }
+
+    /**
+     * Get homologarCodigoTurno
+     *
+     * @return boolean
+     */
+    public function getHomologarCodigoTurno()
+    {
+        return $this->homologarCodigoTurno;
+    }
+
+    /**
+     * Set diasSecuencia
+     *
+     * @param integer $diasSecuencia
+     *
+     * @return TurPlantilla
+     */
+    public function setDiasSecuencia($diasSecuencia)
+    {
+        $this->diasSecuencia = $diasSecuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasSecuencia
+     *
+     * @return integer
+     */
+    public function getDiasSecuencia()
+    {
+        return $this->diasSecuencia;
     }
 }

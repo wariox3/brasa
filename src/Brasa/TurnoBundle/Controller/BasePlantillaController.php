@@ -112,7 +112,11 @@ class BasePlantillaController extends Controller
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {                
                     $arPlantillaDetalle = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
                     $arPlantillaDetalle = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->find($intCodigo);                                                            
-                    
+                    if($arrControles['TxtPosicion'.$intCodigo] != '') {
+                        $arPlantillaDetalle->setPosicion($arrControles['TxtPosicion'.$intCodigo]);                                                
+                    } else {
+                        $arPlantillaDetalle->setPosicion(0);                                                
+                    }                    
                     if($arrControles['TxtDia1'.$intCodigo] != '') {
                         $arPlantillaDetalle->setDia1($arrControles['TxtDia1'.$intCodigo]);                                                
                     } else {
