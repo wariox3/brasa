@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuRegistroVisitaType;
 
-class UtilidadesRegistroVisitaController extends Controller
+class UtilidadesRegistroVisitasController extends Controller
 {
     public function registroAction() {
         $request = $this->getRequest();
@@ -22,10 +22,10 @@ class UtilidadesRegistroVisitaController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arRegistroVisita = $form->getData();                      
-            $arHorarioAcceso->setFecha(new \DateTime('now'));
-            $em->persist($arHorarioAcceso);
+            $arRegistroVisita->setFecha(new \DateTime('now'));
+            $em->persist($arRegistroVisita);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
+            return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_visitante'));
         }            
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/RegistroVisitas:registro.html.twig', array(
         'arRegistroVisita' => $arRegistroVisita,

@@ -23,7 +23,7 @@ class RhuDepartamentoEmpresa
     private $nombre;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuRegistroVisita", mappedBy="depatamentoEmpresaRel")
+     * @ORM\OneToMany(targetEntity="RhuRegistroVisita", mappedBy="departamentoEmpresaRel")
      */
     protected $registroVisitaDepartamentoEmpresaRel;    
     

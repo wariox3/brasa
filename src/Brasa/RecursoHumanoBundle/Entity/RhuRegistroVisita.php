@@ -62,9 +62,10 @@ class RhuRegistroVisita
      * @ORM\ManyToOne(targetEntity="RhuDepartamentoEmpresa", inversedBy="registroVisitaDepartamentoEmpresaRel")
      * @ORM\JoinColumn(name="codigo_departamento_empresa_fk", referencedColumnName="codigo_departamento_empresa_pk")
      */
-    protected $depatamentoEmpresaRel;
+    protected $departamentoEmpresaRel;
 
     
+
 
     /**
      * Get codigoRegistroVisitaPk
@@ -269,26 +270,26 @@ class RhuRegistroVisita
     }
 
     /**
-     * Set depatamentoEmpresaRel
+     * Set departamentoEmpresaRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa $depatamentoEmpresaRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa $departamentoEmpresaRel
      *
      * @return RhuRegistroVisita
      */
-    public function setDepatamentoEmpresaRel(\Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa $depatamentoEmpresaRel = null)
+    public function setDepartamentoEmpresaRel(\Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa $departamentoEmpresaRel = null)
     {
-        $this->depatamentoEmpresaRel = $depatamentoEmpresaRel;
+        $this->departamentoEmpresaRel = $departamentoEmpresaRel;
 
         return $this;
     }
 
     /**
-     * Get depatamentoEmpresaRel
+     * Get departamentoEmpresaRel
      *
      * @return \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa
      */
-    public function getDepatamentoEmpresaRel()
+    public function getDepartamentoEmpresaRel()
     {
-        return $this->depatamentoEmpresaRel;
+        return $this->departamentoEmpresaRel;
     }
 }

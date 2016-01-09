@@ -19,7 +19,7 @@ class RhuRegistroVisitaType extends AbstractType
             ->add('departamentoEmpresaRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa',
                 'property' => 'nombre',
-                'required' => true))    
+                'required' => true))  
             ->add('numeroIdentificacion', 'text', array('required' => true))
             ->add('nombre', 'text', array('required' => true))    
             ->add('motivo', 'text', array('required' => true))        

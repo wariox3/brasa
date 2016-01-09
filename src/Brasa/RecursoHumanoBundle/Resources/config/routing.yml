@@ -108,7 +108,7 @@ brs_rhu_utilidades_control_acceso_empleado:
     
 brs_rhu_utilidades_control_acceso_visitante:
     path:     /rhu/utilidades/control/acceso/visitante
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesRegistroVisitante:registro }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesRegistroVisitas:registro }    
     
 brs_rhu_pagos_adicionales_lista:
     path:     /rhu/pagos/adicionales/lista
