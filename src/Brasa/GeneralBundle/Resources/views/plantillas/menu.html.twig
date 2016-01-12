@@ -134,71 +134,6 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Consultas <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <!--
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Inventario</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ path('brs_inv_consultas_kardex') }}">Kardex</a></li>
-                                <li><a href="{{ path('brs_inv_consultas_disponibles') }}">Disponibles</a></li>
-                                <li><a href="{{ path('brs_inv_consultas_existencias') }}">Existencias</a></li>
-                                <li><a href="{{ path('brs_inv_consultas_inventario_valorizado') }}">Inventario valorizado</a></li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Movimienos</a>
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Solicitudes</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 8 }) }}">Detalles (Pendientes)</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Ordenes de compra</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 5 }) }}">Detalles (Pendientes)</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Pedidos</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 3 }) }}">Detalles (Pendientes)</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Remision</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{{ path('brs_inv_consultas_movimientos_pendientes_detalles', { 'codigoDocumentoTipo': 9 }) }}">Detalles (Pendientes)</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Transporte</a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Logistica</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tte_consultas_pendientes_despacho') }}">Pendientes por despachar</a></li>
-                                        <li><a href="{{ path('brs_tte_consultas_novedades_pendientes') }}">Novedades pendientes</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Control</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tte_consultas_recibos_caja') }}">Recibos caja</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Comercial</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tte_consultas_recibos_caja') }}">Pendientes por facturar</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        -->
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
@@ -315,7 +250,8 @@
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Pedidos</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_consultas_pedidos_pendientes_programar') }}">Pendientes por programar</a></li>
+                                        <li><a href="{{ path('brs_tur_consultas_pedidos') }}">Pedidos</a></li>
+                                        <li><a href="{{ path('brs_tur_consultas_pedidos_detalles') }}">Pedidos detalles</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">

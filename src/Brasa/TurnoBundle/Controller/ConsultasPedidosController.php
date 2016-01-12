@@ -3,7 +3,7 @@ namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultasPedidosPendientesProgramarController extends Controller
+class ConsultasPedidosController extends Controller
 {
     var $strListaDql = "";
     var $codigoPedido = "";

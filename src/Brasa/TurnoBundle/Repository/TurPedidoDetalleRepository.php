@@ -6,6 +6,20 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPedidoDetalleRepository extends EntityRepository {
 
+    public function listaConsultaDql() {
+        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd WHERE pd.codigoPedidoDetallePk <> 0 ";
+
+        /*if($strFechaDesde != '') {
+            $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  
+        }
+        if($strFechaHasta != '') {
+            $dql .= " AND p.fecha <= '" . $strFechaHasta . "'";  
+        } 
+         * 
+         */       
+        return $dql;
+    }     
+    
     public function pendientesCliente($codigoCliente) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "

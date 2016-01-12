@@ -134,9 +134,13 @@ brs_tur_factura_detalle_nuevo:
    path:     /tur/factura/detalle/nuevo/{codigoFactura}/{codigoFacturaDetalle}
    defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalleNuevo }            
     
-brs_tur_consultas_pedidos_pendientes_programar:    
-    path:     /tur/consultas/pedidos/pendientes/programar
-    defaults: { _controller: BrasaTurnoBundle:ConsultasPedidosPendientesProgramar:lista }     
+brs_tur_consultas_pedidos:    
+    path:     /tur/consultas/pedidos
+    defaults: { _controller: BrasaTurnoBundle:ConsultasPedidos:lista }     
+
+brs_tur_consultas_pedidos_detalles:    
+    path:     /tur/consultas/pedidos/detalles
+    defaults: { _controller: BrasaTurnoBundle:ConsultasPedidosDetalles:lista }
 
 brs_tur_consultas_programaciones_detalles:    
     path:     /tur/consultas/programaciones/detalles

@@ -163,7 +163,7 @@
                     <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidoDetalle.vrTotal | number_format(0, '.', ',') }}</td> 
                     <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
-                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_recurso', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarRecurso', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Recursos"></a></td>
+                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_recurso', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarRecurso', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=20 height=20 title="Recursos"></a></td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
                 </tr>
             {% endfor %}
