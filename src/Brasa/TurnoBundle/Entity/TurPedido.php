@@ -18,6 +18,11 @@ class TurPedido
     private $codigoPedidoPk;           
     
     /**
+     * @ORM\Column(name="numero", type="integer")
+     */    
+    private $numero = 0;     
+    
+    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;    
@@ -121,6 +126,7 @@ class TurPedido
     protected $pedidosDetallesPedidoRel; 
 
 
+
     /**
      * Constructor
      */
@@ -137,6 +143,30 @@ class TurPedido
     public function getCodigoPedidoPk()
     {
         return $this->codigoPedidoPk;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return TurPedido
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 
     /**
@@ -332,51 +362,51 @@ class TurPedido
     }
 
     /**
-     * Set cerrado
+     * Set estadoCerrado
      *
-     * @param boolean $cerrado
+     * @param boolean $estadoCerrado
      *
      * @return TurPedido
      */
-    public function setCerrado($cerrado)
+    public function setEstadoCerrado($estadoCerrado)
     {
-        $this->cerrado = $cerrado;
+        $this->estadoCerrado = $estadoCerrado;
 
         return $this;
     }
 
     /**
-     * Get cerrado
+     * Get estadoCerrado
      *
      * @return boolean
      */
-    public function getCerrado()
+    public function getEstadoCerrado()
     {
-        return $this->cerrado;
+        return $this->estadoCerrado;
     }
 
     /**
-     * Set programado
+     * Set estadoProgramado
      *
-     * @param boolean $programado
+     * @param boolean $estadoProgramado
      *
      * @return TurPedido
      */
-    public function setProgramado($programado)
+    public function setEstadoProgramado($estadoProgramado)
     {
-        $this->programado = $programado;
+        $this->estadoProgramado = $estadoProgramado;
 
         return $this;
     }
 
     /**
-     * Get programado
+     * Get estadoProgramado
      *
      * @return boolean
      */
-    public function getProgramado()
+    public function getEstadoProgramado()
     {
-        return $this->programado;
+        return $this->estadoProgramado;
     }
 
     /**
@@ -627,53 +657,5 @@ class TurPedido
     public function getPedidosDetallesPedidoRel()
     {
         return $this->pedidosDetallesPedidoRel;
-    }
-
-    /**
-     * Set estadoCerrado
-     *
-     * @param boolean $estadoCerrado
-     *
-     * @return TurPedido
-     */
-    public function setEstadoCerrado($estadoCerrado)
-    {
-        $this->estadoCerrado = $estadoCerrado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCerrado
-     *
-     * @return boolean
-     */
-    public function getEstadoCerrado()
-    {
-        return $this->estadoCerrado;
-    }
-
-    /**
-     * Set estadoProgramado
-     *
-     * @param boolean $estadoProgramado
-     *
-     * @return TurPedido
-     */
-    public function setEstadoProgramado($estadoProgramado)
-    {
-        $this->estadoProgramado = $estadoProgramado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoProgramado
-     *
-     * @return boolean
-     */
-    public function getEstadoProgramado()
-    {
-        return $this->estadoProgramado;
     }
 }

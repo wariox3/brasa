@@ -17,4 +17,15 @@ class TurClienteRepository extends EntityRepository {
         $dql .= " ORDER BY c.nombreCorto";
         return $dql;
     }            
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $ar = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigo);
+                $em->remove($ar);
+            }
+            $em->flush();
+        }
+    }        
 }

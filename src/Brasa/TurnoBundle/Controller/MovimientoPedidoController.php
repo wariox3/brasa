@@ -361,8 +361,17 @@ class MovimientoPedidoController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIG0')
-                    ->setCellValue('B1', 'CLIENTE');
+                    ->setCellValue('A' . $i, $arPedido->getCodigoPedidoPk())
+                    ->setCellValue('B' . $i, $arPedido->getPedidoTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arPedido->getNumero())
+                    ->setCellValue('D' . $i, $arPedido->getFecha()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arPedido->getClienteRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arPedido->getSectorRel()->getNombre())
+                    ->setCellValue('G' . $i, $arPedido->getProgramado()*1)
+                    ->setCellValue('H' . $i, $arPedido->getHoras())
+                    ->setCellValue('I' . $i, $arPedido->getHorasDiurnas())
+                    ->setCellValue('J' . $i, $arPedido->getHorasNocturnas())
+                    ->setCellValue('K' . $i, $arPedido->getVrTotal());
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);

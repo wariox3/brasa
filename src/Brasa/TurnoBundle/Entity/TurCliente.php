@@ -33,6 +33,11 @@ class TurCliente
     private $nombreCorto;                         
     
     /**
+     * @ORM\Column(name="estrato", type="string", length=5, nullable=true)
+     */
+    private $estrato;                
+    
+    /**
      * @ORM\Column(name="contacto", type="string", length=80, nullable=true)
      */
     private $contacto;    
@@ -41,6 +46,11 @@ class TurCliente
      * @ORM\Column(name="calular_contacto", type="string", length=20, nullable=true)
      */
     private $celularContacto;     
+
+    /**
+     * @ORM\Column(name="telefono_contacto", type="string", length=20, nullable=true)
+     */
+    private $telefonoContacto;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -73,6 +83,7 @@ class TurCliente
      */
     protected $puestosClienteRel;     
 
+
     /**
      * Constructor
      */
@@ -81,6 +92,7 @@ class TurCliente
         $this->cotizacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pedidosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->puestosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -118,6 +130,30 @@ class TurCliente
     }
 
     /**
+     * Set codigoTerceroFk
+     *
+     * @param integer $codigoTerceroFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoTerceroFk($codigoTerceroFk)
+    {
+        $this->codigoTerceroFk = $codigoTerceroFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTerceroFk
+     *
+     * @return integer
+     */
+    public function getCodigoTerceroFk()
+    {
+        return $this->codigoTerceroFk;
+    }
+
+    /**
      * Set nombreCorto
      *
      * @param string $nombreCorto
@@ -139,6 +175,150 @@ class TurCliente
     public function getNombreCorto()
     {
         return $this->nombreCorto;
+    }
+
+    /**
+     * Set estrato
+     *
+     * @param string $estrato
+     *
+     * @return TurCliente
+     */
+    public function setEstrato($estrato)
+    {
+        $this->estrato = $estrato;
+
+        return $this;
+    }
+
+    /**
+     * Get estrato
+     *
+     * @return string
+     */
+    public function getEstrato()
+    {
+        return $this->estrato;
+    }
+
+    /**
+     * Set contacto
+     *
+     * @param string $contacto
+     *
+     * @return TurCliente
+     */
+    public function setContacto($contacto)
+    {
+        $this->contacto = $contacto;
+
+        return $this;
+    }
+
+    /**
+     * Get contacto
+     *
+     * @return string
+     */
+    public function getContacto()
+    {
+        return $this->contacto;
+    }
+
+    /**
+     * Set celularContacto
+     *
+     * @param string $celularContacto
+     *
+     * @return TurCliente
+     */
+    public function setCelularContacto($celularContacto)
+    {
+        $this->celularContacto = $celularContacto;
+
+        return $this;
+    }
+
+    /**
+     * Get celularContacto
+     *
+     * @return string
+     */
+    public function getCelularContacto()
+    {
+        return $this->celularContacto;
+    }
+
+    /**
+     * Set telefonoContacto
+     *
+     * @param string $telefonoContacto
+     *
+     * @return TurCliente
+     */
+    public function setTelefonoContacto($telefonoContacto)
+    {
+        $this->telefonoContacto = $telefonoContacto;
+
+        return $this;
+    }
+
+    /**
+     * Get telefonoContacto
+     *
+     * @return string
+     */
+    public function getTelefonoContacto()
+    {
+        return $this->telefonoContacto;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return TurCliente
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set terceroRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     *
+     * @return TurCliente
+     */
+    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    {
+        $this->terceroRel = $terceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTercero
+     */
+    public function getTerceroRel()
+    {
+        return $this->terceroRel;
     }
 
     /**
@@ -244,30 +424,6 @@ class TurCliente
     }
 
     /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     *
-     * @return TurCliente
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
-    }
-
-    /**
      * Add puestosClienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestosClienteRel
@@ -299,437 +455,5 @@ class TurCliente
     public function getPuestosClienteRel()
     {
         return $this->puestosClienteRel;
-    }
-
-    /**
-     * Set digitoVerificacion
-     *
-     * @param string $digitoVerificacion
-     *
-     * @return TurCliente
-     */
-    public function setDigitoVerificacion($digitoVerificacion)
-    {
-        $this->digitoVerificacion = $digitoVerificacion;
-
-        return $this;
-    }
-
-    /**
-     * Get digitoVerificacion
-     *
-     * @return string
-     */
-    public function getDigitoVerificacion()
-    {
-        return $this->digitoVerificacion;
-    }
-
-    /**
-     * Set nombre1
-     *
-     * @param string $nombre1
-     *
-     * @return TurCliente
-     */
-    public function setNombre1($nombre1)
-    {
-        $this->nombre1 = $nombre1;
-
-        return $this;
-    }
-
-    /**
-     * Get nombre1
-     *
-     * @return string
-     */
-    public function getNombre1()
-    {
-        return $this->nombre1;
-    }
-
-    /**
-     * Set nombre2
-     *
-     * @param string $nombre2
-     *
-     * @return TurCliente
-     */
-    public function setNombre2($nombre2)
-    {
-        $this->nombre2 = $nombre2;
-
-        return $this;
-    }
-
-    /**
-     * Get nombre2
-     *
-     * @return string
-     */
-    public function getNombre2()
-    {
-        return $this->nombre2;
-    }
-
-    /**
-     * Set apellido1
-     *
-     * @param string $apellido1
-     *
-     * @return TurCliente
-     */
-    public function setApellido1($apellido1)
-    {
-        $this->apellido1 = $apellido1;
-
-        return $this;
-    }
-
-    /**
-     * Get apellido1
-     *
-     * @return string
-     */
-    public function getApellido1()
-    {
-        return $this->apellido1;
-    }
-
-    /**
-     * Set apellido2
-     *
-     * @param string $apellido2
-     *
-     * @return TurCliente
-     */
-    public function setApellido2($apellido2)
-    {
-        $this->apellido2 = $apellido2;
-
-        return $this;
-    }
-
-    /**
-     * Get apellido2
-     *
-     * @return string
-     */
-    public function getApellido2()
-    {
-        return $this->apellido2;
-    }
-
-    /**
-     * Set codigoAsesorFk
-     *
-     * @param integer $codigoAsesorFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoAsesorFk($codigoAsesorFk)
-    {
-        $this->codigoAsesorFk = $codigoAsesorFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoAsesorFk
-     *
-     * @return integer
-     */
-    public function getCodigoAsesorFk()
-    {
-        return $this->codigoAsesorFk;
-    }
-
-    /**
-     * Set codigoClasificacionTributariaFk
-     *
-     * @param integer $codigoClasificacionTributariaFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoClasificacionTributariaFk($codigoClasificacionTributariaFk)
-    {
-        $this->codigoClasificacionTributariaFk = $codigoClasificacionTributariaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoClasificacionTributariaFk
-     *
-     * @return integer
-     */
-    public function getCodigoClasificacionTributariaFk()
-    {
-        return $this->codigoClasificacionTributariaFk;
-    }
-
-    /**
-     * Set codigoFormaPagoFk
-     *
-     * @param integer $codigoFormaPagoFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoFormaPagoFk($codigoFormaPagoFk)
-    {
-        $this->codigoFormaPagoFk = $codigoFormaPagoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoFormaPagoFk
-     *
-     * @return integer
-     */
-    public function getCodigoFormaPagoFk()
-    {
-        return $this->codigoFormaPagoFk;
-    }
-
-    /**
-     * Set plazoPago
-     *
-     * @param integer $plazoPago
-     *
-     * @return TurCliente
-     */
-    public function setPlazoPago($plazoPago)
-    {
-        $this->plazoPago = $plazoPago;
-
-        return $this;
-    }
-
-    /**
-     * Get plazoPago
-     *
-     * @return integer
-     */
-    public function getPlazoPago()
-    {
-        return $this->plazoPago;
-    }
-
-    /**
-     * Set direccion
-     *
-     * @param string $direccion
-     *
-     * @return TurCliente
-     */
-    public function setDireccion($direccion)
-    {
-        $this->direccion = $direccion;
-
-        return $this;
-    }
-
-    /**
-     * Get direccion
-     *
-     * @return string
-     */
-    public function getDireccion()
-    {
-        return $this->direccion;
-    }
-
-    /**
-     * Set telefono
-     *
-     * @param string $telefono
-     *
-     * @return TurCliente
-     */
-    public function setTelefono($telefono)
-    {
-        $this->telefono = $telefono;
-
-        return $this;
-    }
-
-    /**
-     * Get telefono
-     *
-     * @return string
-     */
-    public function getTelefono()
-    {
-        return $this->telefono;
-    }
-
-    /**
-     * Set celular
-     *
-     * @param string $celular
-     *
-     * @return TurCliente
-     */
-    public function setCelular($celular)
-    {
-        $this->celular = $celular;
-
-        return $this;
-    }
-
-    /**
-     * Get celular
-     *
-     * @return string
-     */
-    public function getCelular()
-    {
-        return $this->celular;
-    }
-
-    /**
-     * Set fax
-     *
-     * @param string $fax
-     *
-     * @return TurCliente
-     */
-    public function setFax($fax)
-    {
-        $this->fax = $fax;
-
-        return $this;
-    }
-
-    /**
-     * Get fax
-     *
-     * @return string
-     */
-    public function getFax()
-    {
-        return $this->fax;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return TurCliente
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set contacto
-     *
-     * @param string $contacto
-     *
-     * @return TurCliente
-     */
-    public function setContacto($contacto)
-    {
-        $this->contacto = $contacto;
-
-        return $this;
-    }
-
-    /**
-     * Get contacto
-     *
-     * @return string
-     */
-    public function getContacto()
-    {
-        return $this->contacto;
-    }
-
-    /**
-     * Set celularContacto
-     *
-     * @param string $celularContacto
-     *
-     * @return TurCliente
-     */
-    public function setCelularContacto($celularContacto)
-    {
-        $this->celularContacto = $celularContacto;
-
-        return $this;
-    }
-
-    /**
-     * Get celularContacto
-     *
-     * @return string
-     */
-    public function getCelularContacto()
-    {
-        return $this->celularContacto;
-    }
-
-    /**
-     * Set codigoTerceroFk
-     *
-     * @param integer $codigoTerceroFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoTerceroFk($codigoTerceroFk)
-    {
-        $this->codigoTerceroFk = $codigoTerceroFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTerceroFk
-     *
-     * @return integer
-     */
-    public function getCodigoTerceroFk()
-    {
-        return $this->codigoTerceroFk;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return TurCliente
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
     }
 }

@@ -28,15 +28,14 @@ class ConsultasPedidosController extends Controller
         }
 
         $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Consultas/Pedido:pendienteProgramar.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Consultas/Pedido:lista.html.twig', array(
             'arPedidos' => $arPedidos,
             'form' => $form->createView()));
-    }
-        
+    }        
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->pedidoSinProgramarDql();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDql();
     }
 
     private function filtrar ($form) {                
@@ -68,7 +67,16 @@ class ConsultasPedidosController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIG0')
-                    ->setCellValue('B1', 'CLIENTE');
+                    ->setCellValue('B1', 'TIPO')
+                    ->setCellValue('C1', 'NUMERO')
+                    ->setCellValue('D1', 'FECHA')
+                    ->setCellValue('E1', 'CLIENTE')
+                    ->setCellValue('F1', 'SECTOR')
+                    ->setCellValue('G1', 'PROGRAMADO')
+                    ->setCellValue('H1', 'HORAS')
+                    ->setCellValue('I1', 'H.DIURNAS')
+                    ->setCellValue('J1', 'H.NOCTURNAS')
+                    ->setCellValue('K1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -78,7 +86,16 @@ class ConsultasPedidosController extends Controller
         foreach ($arPedidos as $arPedido) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPedido->getCodigoPedidoPk())
-                    ->setCellValue('B' . $i, $arPedido->getTerceroRel()->getNombreCorto());
+                    ->setCellValue('B' . $i, $arPedido->getPedidoTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arPedido->getNumero())
+                    ->setCellValue('D' . $i, $arPedido->getFecha()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arPedido->getClienteRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arPedido->getSectorRel()->getNombre())
+                    ->setCellValue('G' . $i, $arPedido->getProgramado()*1)
+                    ->setCellValue('H' . $i, $arPedido->getHoras())
+                    ->setCellValue('I' . $i, $arPedido->getHorasDiurnas())
+                    ->setCellValue('J' . $i, $arPedido->getHorasNocturnas())
+                    ->setCellValue('K' . $i, $arPedido->getVrTotal());
 
             $i++;
         }

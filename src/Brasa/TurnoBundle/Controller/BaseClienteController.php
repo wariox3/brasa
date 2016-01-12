@@ -21,7 +21,9 @@ class BaseClienteController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
-                //$em->getRepository('BrasaTurnoBundle:TurCliente')->eliminarExamen($arrSeleccionados);
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurCliente')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_cliente_lista'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
