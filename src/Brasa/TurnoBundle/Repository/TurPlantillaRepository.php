@@ -225,5 +225,16 @@ class TurPlantillaRepository extends EntityRepository {
         $em->persist($arProgramacion);
         $em->flush();
         return true;
-    }        
+    }  
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $ar = $em->getRepository('BrasaTurnoBundle:TurPlantilla')->find($codigo);
+                $em->remove($ar);
+            }
+            $em->flush();
+        }
+    }    
 }

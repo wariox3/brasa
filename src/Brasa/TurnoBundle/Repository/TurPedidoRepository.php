@@ -202,8 +202,8 @@ class TurPedidoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
-                $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigo);
-                $em->remove($arPedido);
+                $ar = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigo);
+                $em->remove($ar);
             }
             $em->flush();
         }

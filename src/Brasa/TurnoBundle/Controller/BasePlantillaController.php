@@ -21,7 +21,9 @@ class BasePlantillaController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
-                //$em->getRepository('BrasaTurnoBundle:TurPlantilla')->eliminarExamen($arrSeleccionados);
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurPlantilla')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_lista')); 
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
