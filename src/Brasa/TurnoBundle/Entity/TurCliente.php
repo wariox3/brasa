@@ -74,6 +74,11 @@ class TurCliente
     protected $pedidosClienteRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TurServicio", mappedBy="clienteRel")
+     */
+    protected $serviciosClienteRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurProgramacion", mappedBy="clienteRel")
      */
     protected $programacionesClienteRel;    
@@ -84,6 +89,7 @@ class TurCliente
     protected $puestosClienteRel;     
 
 
+
     /**
      * Constructor
      */
@@ -91,6 +97,7 @@ class TurCliente
     {
         $this->cotizacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pedidosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -387,6 +394,40 @@ class TurCliente
     public function getPedidosClienteRel()
     {
         return $this->pedidosClienteRel;
+    }
+
+    /**
+     * Add serviciosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicio $serviciosClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addServiciosClienteRel(\Brasa\TurnoBundle\Entity\TurServicio $serviciosClienteRel)
+    {
+        $this->serviciosClienteRel[] = $serviciosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicio $serviciosClienteRel
+     */
+    public function removeServiciosClienteRel(\Brasa\TurnoBundle\Entity\TurServicio $serviciosClienteRel)
+    {
+        $this->serviciosClienteRel->removeElement($serviciosClienteRel);
+    }
+
+    /**
+     * Get serviciosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosClienteRel()
+    {
+        return $this->serviciosClienteRel;
     }
 
     /**

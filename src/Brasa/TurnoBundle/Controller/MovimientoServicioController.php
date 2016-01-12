@@ -3,12 +3,12 @@ namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\TurnoBundle\Form\Type\TurPedidoType;
-use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
-class MovimientoPedidoController extends Controller
+use Brasa\TurnoBundle\Form\Type\TurServicioType;
+use Brasa\TurnoBundle\Form\Type\TurServicioDetalleType;
+class MovimientoServicioController extends Controller
 {
     var $strListaDql = "";    
-    var $codigoPedido = "";    
+    var $codigoServicio = "";    
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -20,8 +20,8 @@ class MovimientoPedidoController extends Controller
         if ($form->isValid()) {            
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurPedido')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_pedido_lista'));                 
+                $em->getRepository('BrasaTurnoBundle:TurServicio')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_servicio_lista'));                 
                 
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
@@ -35,160 +35,150 @@ class MovimientoPedidoController extends Controller
             }
         }
 
-        $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:lista.html.twig', array(
-            'arPedidos' => $arPedidos,
+        $arServicios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:lista.html.twig', array(
+            'arServicios' => $arServicios,
             'form' => $form->createView()));
     }
 
-    public function nuevoAction($codigoPedido) {
+    public function nuevoAction($codigoServicio) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
-        if($codigoPedido != 0) {
-            $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
-        }else{
-            $arPedido->setFecha(new \DateTime('now'));
-            $arPedido->setFechaProgramacion(new \DateTime('now'));
+        $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
+        if($codigoServicio != 0) {
+            $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
         }
-        $form = $this->createForm(new TurPedidoType, $arPedido);
+        $form = $this->createForm(new TurServicioType, $arServicio);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arPedido = $form->getData();            
+            $arServicio = $form->getData();            
             $arrControles = $request->request->All();
             if($arrControles['txtNit'] != '') {                
                 $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
-                    $arPedido->setClienteRel($arCliente);
-                    $em->persist($arPedido);
+                    $arServicio->setClienteRel($arCliente);
+                    $em->persist($arServicio);
                     $em->flush();
 
                     if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_pedido_nuevo', array('codigoPedido' => 0 )));
+                        return $this->redirect($this->generateUrl('brs_tur_servicio_nuevo', array('codigoServicio' => 0 )));
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $arPedido->getCodigoPedidoPk())));
+                        return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $arServicio->getCodigoServicioPk())));
                     }                       
                 } else {
                     $objMensaje->Mensaje("error", "El cliente no existe", $this);
                 }                             
             }            
         }
-        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:nuevo.html.twig', array(
-            'arPedido' => $arPedido,
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:nuevo.html.twig', array(
+            'arServicio' => $arServicio,
             'form' => $form->createView()));
     }
 
-    public function detalleAction($codigoPedido) {
+    public function detalleAction($codigoServicio) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
-        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
-        $form = $this->formularioDetalle($arPedido);
+        $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
+        $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
+        $form = $this->formularioDetalle($arServicio);
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {            
-                if($arPedido->getEstadoAutorizado() == 0) {
-                    if($em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->numeroRegistros($codigoPedido) > 0) {
-                        $arPedido->setEstadoAutorizado(1);
-                        $em->persist($arPedido);
+                if($arServicio->getEstadoAutorizado() == 0) {
+                    if($em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->numeroRegistros($codigoServicio) > 0) {
+                        $arServicio->setEstadoAutorizado(1);
+                        $em->persist($arServicio);
                         $em->flush();                        
                     } else {
-                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al pedido', $this);
+                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al servicio', $this);
                     }                    
                 }
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
             }    
             if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arPedido->getEstadoAutorizado() == 1) {
-                    $arPedido->setEstadoAutorizado(0);
-                    $em->persist($arPedido);
+                if($arServicio->getEstadoAutorizado() == 1) {
+                    $arServicio->setEstadoAutorizado(0);
+                    $em->persist($arServicio);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                    return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
                 }
             }   
             if($form->get('BtnAprobar')->isClicked()) {            
-                if($arPedido->getEstadoAutorizado() == 1) {
-                    $arPedido->setEstadoAprobado(1);
-                    $em->persist($arPedido);
+                if($arServicio->getEstadoAutorizado() == 1) {
+                    $arServicio->setEstadoAprobado(1);
+                    $em->persist($arServicio);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                    return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
                 }
             }            
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoPedido);                                
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+                $this->actualizarDetalle($arrControles, $codigoServicio);                                
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->eliminarSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->eliminarSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
-                if($arPedido->getEstadoAutorizado() == 1) {
-                    $objPedido = new \Brasa\TurnoBundle\Formatos\FormatoPedido();
-                    $objPedido->Generar($this, $codigoPedido);
+                if($arServicio->getEstadoAutorizado() == 1) {
+                    $objServicio = new \Brasa\TurnoBundle\Formatos\FormatoServicio();
+                    $objServicio->Generar($this, $codigoServicio);
                 } else {
                     $objMensaje->Mensaje("error", "No puede imprimir una cotizacion sin estar autorizada", $this);
                 }
             }            
         }
 
-        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array ('codigoPedidoFk' => $codigoPedido));
-        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalle.html.twig', array(
-                    'arPedido' => $arPedido,
-                    'arPedidoDetalle' => $arPedidoDetalle,
+        $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+        $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->findBy(array ('codigoServicioFk' => $codigoServicio));
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalle.html.twig', array(
+                    'arServicio' => $arServicio,
+                    'arServicioDetalle' => $arServicioDetalle,
                     'form' => $form->createView()
                     ));
     }
 
-    public function detalleNuevoAction($codigoPedido, $codigoPedidoDetalle = 0) {
+    public function detalleNuevoAction($codigoServicio, $codigoServicioDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
-        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
-        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-        if($codigoPedidoDetalle != 0) {
-            $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
+        $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
+        $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
+        $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+        if($codigoServicioDetalle != 0) {
+            $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
         } else {
-            $arPedidoDetalle->setPedidoRel($arPedido);
+            $arServicioDetalle->setServicioRel($arServicio);
         }
-        $form = $this->createForm(new TurPedidoDetalleType, $arPedidoDetalle);
+        $form = $this->createForm(new TurServicioDetalleType, $arServicioDetalle);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arPedidoDetalle = $form->getData();
+            $arServicioDetalle = $form->getData();
             $arPeriodo = $form->get('periodoRel')->getData();
-            if($arPeriodo->getCodigoPeriodoPk() == 1) {
-                $intAnio = $arPedido->getFechaProgramacion()->format('Y');                
-                $intMes = $arPedido->getFechaProgramacion()->format('m');
-                $intDiaFinalMes = date("d",(mktime(0,0,0,$intMes+1,1,$intAnio)-1));
-                $arPedidoDetalle->setDiaDesde(1);
-                $arPedidoDetalle->setDiaHasta($intDiaFinalMes);
-            }
-            $em->persist($arPedidoDetalle);
+            $em->persist($arServicioDetalle);
             $em->flush();
 
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_nuevo', array('codigoPedido' => $codigoPedido, 'codigoPedidoDetalle' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_nuevo', array('codigoServicio' => $codigoServicio, 'codigoServicioDetalle' => 0 )));
             } else {
-                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
+                $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
         }
-        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleNuevo.html.twig', array(
-            'arPedido' => $arPedido,
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleNuevo.html.twig', array(
+            'arServicio' => $arServicio,
             'form' => $form->createView()));
     }
 
-    public function detalleNuevoCotizacionAction($codigoPedido, $codigoPedidoDetalle = 0) {
+    public function detalleNuevoCotizacionAction($codigoServicio, $codigoServicioDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
-        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
+        $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
+        $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
@@ -203,46 +193,46 @@ class MovimientoPedidoController extends Controller
                         $arCotizacionDetalles = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
                         $arCotizacionDetalles = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array('codigoCotizacionFk' => $arCotizacion->getCodigoCotizacionPk()));
                         foreach($arCotizacionDetalles as $arCotizacionDetalle) {
-                            $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-                            $arPedidoDetalle->setPedidoRel($arPedido);
-                            $arPedidoDetalle->setModalidadServicioRel($arCotizacionDetalle->getModalidadServicioRel());
-                            $arPedidoDetalle->setPeriodoRel($arCotizacionDetalle->getPeriodoRel());
-                            $arPedidoDetalle->setTurnoRel($arCotizacionDetalle->getTurnoRel());
-                            $arPedidoDetalle->setDias($arCotizacionDetalle->getDias());
-                            $arPedidoDetalle->setLunes($arCotizacionDetalle->getLunes());
-                            $arPedidoDetalle->setMartes($arCotizacionDetalle->getMartes());
-                            $arPedidoDetalle->setMiercoles($arCotizacionDetalle->getMiercoles());
-                            $arPedidoDetalle->setJueves($arCotizacionDetalle->getJueves());
-                            $arPedidoDetalle->setViernes($arCotizacionDetalle->getViernes());
-                            $arPedidoDetalle->setSabado($arCotizacionDetalle->getSabado());
-                            $arPedidoDetalle->setDomingo($arCotizacionDetalle->getDomingo());
-                            $arPedidoDetalle->setFestivo($arCotizacionDetalle->getFestivo());                            
-                            $arPedidoDetalle->setCantidad($arCotizacionDetalle->getCantidad());
-                            $arPedidoDetalle->setFechaDesde($arCotizacionDetalle->getFechaDesde());
-                            $arPedidoDetalle->setFechaHasta($arCotizacionDetalle->getFechaHasta());
-                            $em->persist($arPedidoDetalle);
+                            $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+                            $arServicioDetalle->setServicioRel($arServicio);
+                            $arServicioDetalle->setModalidadServicioRel($arCotizacionDetalle->getModalidadServicioRel());
+                            $arServicioDetalle->setPeriodoRel($arCotizacionDetalle->getPeriodoRel());
+                            $arServicioDetalle->setTurnoRel($arCotizacionDetalle->getTurnoRel());
+                            $arServicioDetalle->setDias($arCotizacionDetalle->getDias());
+                            $arServicioDetalle->setLunes($arCotizacionDetalle->getLunes());
+                            $arServicioDetalle->setMartes($arCotizacionDetalle->getMartes());
+                            $arServicioDetalle->setMiercoles($arCotizacionDetalle->getMiercoles());
+                            $arServicioDetalle->setJueves($arCotizacionDetalle->getJueves());
+                            $arServicioDetalle->setViernes($arCotizacionDetalle->getViernes());
+                            $arServicioDetalle->setSabado($arCotizacionDetalle->getSabado());
+                            $arServicioDetalle->setDomingo($arCotizacionDetalle->getDomingo());
+                            $arServicioDetalle->setFestivo($arCotizacionDetalle->getFestivo());                            
+                            $arServicioDetalle->setCantidad($arCotizacionDetalle->getCantidad());
+                            $arServicioDetalle->setFechaDesde($arCotizacionDetalle->getFechaDesde());
+                            $arServicioDetalle->setFechaHasta($arCotizacionDetalle->getFechaHasta());
+                            $em->persist($arServicioDetalle);
                         }                       
                     }
                     $em->flush();
                 }
-                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
+                $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        $arCotizaciones = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->pendientes($arPedido->getCodigoClienteFk());
-        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleNuevoCotizacion.html.twig', array(
-            'arPedido' => $arPedido,
+        $arCotizaciones = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->pendientes($arServicio->getCodigoClienteFk());
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleNuevoCotizacion.html.twig', array(
+            'arServicio' => $arServicio,
             'arCotizaciones' => $arCotizaciones,
             'form' => $form->createView()));
     }    
     
-    public function recursoAction($codigoPedidoDetalle = 0) {
+    public function recursoAction($codigoServicioDetalle = 0) {
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $em = $this->getDoctrine()->getManager();
-        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);        
+        $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+        $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);        
         $form = $this->formularioRecurso();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -253,13 +243,13 @@ class MovimientoPedidoController extends Controller
                     $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
                     if(count($arRecurso) > 0) {
                         $intPosicion = $form->get('TxtPosicion')->getData();
-                        $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
-                        $arPedidoDetalleRecurso->setPedidoDetalleRel($arPedidoDetalle);
-                        $arPedidoDetalleRecurso->setRecursoRel($arRecurso);
-                        $arPedidoDetalleRecurso->setPosicion($intPosicion);
-                        $em->persist($arPedidoDetalleRecurso);
+                        $arServicioDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
+                        $arServicioDetalleRecurso->setServicioDetalleRel($arServicioDetalle);
+                        $arServicioDetalleRecurso->setRecursoRel($arRecurso);
+                        $arServicioDetalleRecurso->setPosicion($intPosicion);
+                        $em->persist($arServicioDetalleRecurso);
                         $em->flush();
-                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                
+                        return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                
                     } else {
                         $objMensaje->Mensaje("error", "El recurso no existe", $this);
                     }
@@ -267,36 +257,36 @@ class MovimientoPedidoController extends Controller
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->eliminarSeleccionados($arrSeleccionados);                
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->eliminarSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             } 
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
                 $this->actualizarDetalleRecurso($arrControles);                                
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             }            
         }
-        $strLista = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->listaDql($codigoPedidoDetalle);
-        $arPedidoDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:recurso.html.twig', array(
-            'arPedidoDetalleRecursos' => $arPedidoDetalleRecursos,
+        $strLista = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->listaDql($codigoServicioDetalle);
+        $arServicioDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:recurso.html.twig', array(
+            'arServicioDetalleRecursos' => $arServicioDetalleRecursos,
             'form' => $form->createView()));
     }    
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL($this->codigoPedido);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL($this->codigoServicio);
     }    
 
     private function filtrar ($form) {                
-        $this->codigoPedido = $form->get('TxtCodigo')->getData();
+        $this->codigoServicio = $form->get('TxtCodigo')->getData();
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido))            
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio))            
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -380,31 +370,31 @@ class MovimientoPedidoController extends Controller
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arPedidos = new \Brasa\TurnoBundle\Entity\TurPedido();
-        $arPedidos = $query->getResult();
+        $arServicios = new \Brasa\TurnoBundle\Entity\TurServicio();
+        $arServicios = $query->getResult();
 
-        foreach ($arPedidos as $arPedido) {            
+        foreach ($arServicios as $arServicio) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPedido->getCodigoPedidoPk())
-                    ->setCellValue('B' . $i, $arPedido->getPedidoTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arPedido->getNumero())
-                    ->setCellValue('D' . $i, $arPedido->getFecha()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arPedido->getClienteRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arPedido->getSectorRel()->getNombre())
-                    ->setCellValue('G' . $i, $arPedido->getEstadoProgramado()*1)
-                    ->setCellValue('H' . $i, $arPedido->getHoras())
-                    ->setCellValue('I' . $i, $arPedido->getHorasDiurnas())
-                    ->setCellValue('J' . $i, $arPedido->getHorasNocturnas())
-                    ->setCellValue('K' . $i, $arPedido->getVrTotal());
+                    ->setCellValue('A' . $i, $arServicio->getCodigoServicioPk())
+                    ->setCellValue('B' . $i, $arServicio->getServicioTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arServicio->getNumero())
+                    ->setCellValue('D' . $i, $arServicio->getFecha()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arServicio->getClienteRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arServicio->getSectorRel()->getNombre())
+                    ->setCellValue('G' . $i, $arServicio->getEstadoProgramado()*1)
+                    ->setCellValue('H' . $i, $arServicio->getHoras())
+                    ->setCellValue('I' . $i, $arServicio->getHorasDiurnas())
+                    ->setCellValue('J' . $i, $arServicio->getHorasNocturnas())
+                    ->setCellValue('K' . $i, $arServicio->getVrTotal());
 
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Pedidos');
+        $objPHPExcel->getActiveSheet()->setTitle('Servicios');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Pedidos.xlsx"');
+        header('Content-Disposition: attachment;filename="Servicios.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -418,77 +408,77 @@ class MovimientoPedidoController extends Controller
         exit;
     }
     
-    private function actualizarDetalle($arrControles, $codigoPedido) {
+    private function actualizarDetalle($arrControles, $codigoServicio) {
         $em = $this->getDoctrine()->getManager();
         $intIndice = 0;
         foreach ($arrControles['LblCodigo'] as $intCodigo) {
-            $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-            $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($intCodigo);
-            $arPedidoDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-            $arPedidoDetalle->setCantidadRecurso($arrControles['TxtCantidadRecurso'.$intCodigo]);
-            $arPedidoDetalle->setDiaDesde($arrControles['TxtDiaDesde'.$intCodigo]);
-            $arPedidoDetalle->setDiaHasta($arrControles['TxtDiaHasta'.$intCodigo]);
+            $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+            $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($intCodigo);
+            $arServicioDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
+            $arServicioDetalle->setCantidadRecurso($arrControles['TxtCantidadRecurso'.$intCodigo]);
+            $arServicioDetalle->setDiaDesde($arrControles['TxtDiaDesde'.$intCodigo]);
+            $arServicioDetalle->setDiaHasta($arrControles['TxtDiaHasta'.$intCodigo]);
             if($arrControles['TxtPuesto'.$intCodigo] != '') {
                 $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
                 $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($arrControles['TxtPuesto'.$intCodigo]);
                 if($arPuesto) {
-                    $arPedidoDetalle->setPuestoRel($arPuesto);
+                    $arServicioDetalle->setPuestoRel($arPuesto);
                 }
             }
             if(isset($arrControles['chkLunes'.$intCodigo])) {
-                $arPedidoDetalle->setLunes(1);
+                $arServicioDetalle->setLunes(1);
             } else {
-                $arPedidoDetalle->setLunes(0);
+                $arServicioDetalle->setLunes(0);
             }
             if(isset($arrControles['chkMartes'.$intCodigo])) {
-                $arPedidoDetalle->setMartes(1);
+                $arServicioDetalle->setMartes(1);
             } else {
-                $arPedidoDetalle->setMartes(0);
+                $arServicioDetalle->setMartes(0);
             }
             if(isset($arrControles['chkMiercoles'.$intCodigo])) {
-                $arPedidoDetalle->setMiercoles(1);
+                $arServicioDetalle->setMiercoles(1);
             } else {
-                $arPedidoDetalle->setMiercoles(0);
+                $arServicioDetalle->setMiercoles(0);
             }
             if(isset($arrControles['chkJueves'.$intCodigo])) {
-                $arPedidoDetalle->setJueves(1);
+                $arServicioDetalle->setJueves(1);
             } else {
-                $arPedidoDetalle->setJueves(0);
+                $arServicioDetalle->setJueves(0);
             }
             if(isset($arrControles['chkViernes'.$intCodigo])) {
-                $arPedidoDetalle->setViernes(1);
+                $arServicioDetalle->setViernes(1);
             } else {
-                $arPedidoDetalle->setViernes(0);
+                $arServicioDetalle->setViernes(0);
             }
             if(isset($arrControles['chkSabado'.$intCodigo])) {
-                $arPedidoDetalle->setSabado(1);
+                $arServicioDetalle->setSabado(1);
             } else {
-                $arPedidoDetalle->setSabado(0);
+                $arServicioDetalle->setSabado(0);
             }
             if(isset($arrControles['chkDomingo'.$intCodigo])) {
-                $arPedidoDetalle->setDomingo(1);
+                $arServicioDetalle->setDomingo(1);
             } else {
-                $arPedidoDetalle->setDomingo(0);
+                $arServicioDetalle->setDomingo(0);
             }
             if(isset($arrControles['chkFestivo'.$intCodigo])) {
-                $arPedidoDetalle->setFestivo(1);
+                $arServicioDetalle->setFestivo(1);
             } else {
-                $arPedidoDetalle->setFestivo(0);
+                $arServicioDetalle->setFestivo(0);
             }                    
-            $em->persist($arPedidoDetalle);
+            $em->persist($arServicioDetalle);
         }
         $em->flush();                
-        $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);        
+        $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);        
     }
     
     private function actualizarDetalleRecurso($arrControles) {
         $em = $this->getDoctrine()->getManager();
         $intIndice = 0;
         foreach ($arrControles['LblCodigo'] as $intCodigo) {
-            $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
-            $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->find($intCodigo);
-            $arPedidoDetalleRecurso->setPosicion($arrControles['TxtPosicion'.$intCodigo]);
-            $em->persist($arPedidoDetalleRecurso);
+            $arServicioDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
+            $arServicioDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->find($intCodigo);
+            $arServicioDetalleRecurso->setPosicion($arrControles['TxtPosicion'.$intCodigo]);
+            $em->persist($arServicioDetalleRecurso);
         }
         $em->flush();                        
     }

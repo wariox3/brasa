@@ -31,8 +31,8 @@
                 <tr>
                     <td class="titulo">CODIGO:</td>
                     <td class="td-in-well">{{ arPedido.codigoPedidoPk }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">NUMERO:</td>
+                    <td class="td-in-well">{{ arPedido.numero }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">TIPO:</td>
@@ -59,16 +59,10 @@
                     <td align="right">{{ arPedido.horas | number_format(0, '.', ',')}}</td>
                 </tr>                
                 <tr>
-                    <td class="titulo">DESDE:</td>
-                    <td class="td-in-well">{{ arPedido.fechaDesde |date("Y/m/d") }}</td>
+                    <td class="titulo">FECHA PROGRAMACION:</td>
+                    <td class="td-in-well">{{ arPedido.fechaProgramacion |date("Y F") }}</td>
                     <td class="titulo" >VALOR:</td>
                     <td align="right">{{ arPedido.vrTotal | number_format(0, '.', ',')}}</td>
-                </tr>                
-                <tr>
-                    <td class="titulo">HASTA:</td>
-                    <td class="td-in-well">{{ arPedido.fechaHasta |date("Y/m/d") }}</td>
-                    <td class="titulo" ></td>
-                    <td align="right"></td>
                 </tr>                
             </table>
       </div>
@@ -131,8 +125,8 @@
                     <td>{{ arPedidoDetalle.periodoRel.nombre  }}</td>
                     <td>{{ arPedidoDetalle.plantillaRel.nombre | default('')  }}</td>
                     {% if arPedido.estadoAutorizado == 0 %}                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.fechaDesde | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.fechaHasta | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                                                
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaDesde  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaHasta  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadRecurso{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidadRecurso  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                         <td><input type="checkbox" name="chkLunes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.lunes == 1 %} checked="true" {% endif %}></td>
@@ -144,8 +138,8 @@
                         <td><input type="checkbox" name="chkDomingo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.domingo == 1 %} checked="true" {% endif %}></td>
                         <td><input type="checkbox" name="chkFestivo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
                     {% else %}                        
-                        <td>{{ arPedidoDetalle.fechaDesde | date('Y/m/d') }}</td>    
-                        <td>{{ arPedidoDetalle.fechaHasta | date('Y/m/d') }}</td>    
+                        <td>{{ arPedidoDetalle.diaDesde }}</td>    
+                        <td>{{ arPedidoDetalle.diaHasta }}</td>    
                         <td>{{ arPedidoDetalle.cantidad  }}</td>
                         <td>{{ arPedidoDetalle.cantidadRecurso  }}</td>
                         <td>{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>

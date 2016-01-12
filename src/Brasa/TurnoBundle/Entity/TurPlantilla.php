@@ -52,6 +52,10 @@ class TurPlantilla
      */
     protected $pedidosDetallesPlantillaRel;     
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="plantillaRel")
+     */
+    protected $serviciosDetallesPlantillaRel;         
 
     /**
      * Constructor
@@ -306,5 +310,39 @@ class TurPlantilla
     public function getDiasSecuencia()
     {
         return $this->diasSecuencia;
+    }
+
+    /**
+     * Add serviciosDetallesPlantillaRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPlantillaRel
+     *
+     * @return TurPlantilla
+     */
+    public function addServiciosDetallesPlantillaRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPlantillaRel)
+    {
+        $this->serviciosDetallesPlantillaRel[] = $serviciosDetallesPlantillaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesPlantillaRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPlantillaRel
+     */
+    public function removeServiciosDetallesPlantillaRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPlantillaRel)
+    {
+        $this->serviciosDetallesPlantillaRel->removeElement($serviciosDetallesPlantillaRel);
+    }
+
+    /**
+     * Get serviciosDetallesPlantillaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesPlantillaRel()
+    {
+        return $this->serviciosDetallesPlantillaRel;
     }
 }

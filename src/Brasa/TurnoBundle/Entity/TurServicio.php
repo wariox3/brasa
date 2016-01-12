@@ -5,32 +5,17 @@ namespace Brasa\TurnoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="tur_pedido")
- * @ORM\Entity(repositoryClass="Brasa\TurnoBundle\Repository\TurPedidoRepository")
+ * @ORM\Table(name="tur_servicio")
+ * @ORM\Entity(repositoryClass="Brasa\TurnoBundle\Repository\TurServicioRepository")
  */
-class TurPedido
+class TurServicio
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_pedido_pk", type="integer")
+     * @ORM\Column(name="codigo_servicio_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoPedidoPk;           
-    
-    /**
-     * @ORM\Column(name="numero", type="integer")
-     */    
-    private $numero = 0;     
-    
-    /**
-     * @ORM\Column(name="fecha", type="date", nullable=true)
-     */    
-    private $fecha;    
-    
-    /**
-     * @ORM\Column(name="codigo_pedido_tipo_fk", type="integer")
-     */    
-    private $codigoPedidoTipoFk;
+    private $codigoServicioPk;                      
     
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
@@ -40,12 +25,7 @@ class TurPedido
     /**
      * @ORM\Column(name="codigo_sector_fk", type="integer", nullable=true)
      */    
-    private $codigoSectorFk;               
-
-    /**
-     * @ORM\Column(name="fecha_programacion", type="date", nullable=true)
-     */    
-    private $fechaProgramacion;              
+    private $codigoSectorFk;                            
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -95,119 +75,42 @@ class TurPedido
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;         
+    private $comentarios;                       
     
     /**
-     * @ORM\ManyToOne(targetEntity="TurPedidoTipo", inversedBy="pedidosPedidoTipoRel")
-     * @ORM\JoinColumn(name="codigo_pedido_tipo_fk", referencedColumnName="codigo_pedido_tipo_pk")
-     */
-    protected $pedidoTipoRel;           
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="pedidosClienteRel")
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="serviciosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
     protected $clienteRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="pedidosSectorRel")
+     * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="serviciosSectorRel")
      * @ORM\JoinColumn(name="codigo_sector_fk", referencedColumnName="codigo_sector_pk")
      */
     protected $sectorRel;         
     
     /**
-     * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="pedidoRel", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="servicioRel", cascade={"persist", "remove"})
      */
-    protected $pedidosDetallesPedidoRel; 
+    protected $serviciosDetallesServicioRel; 
+
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->pedidosDetallesPedidoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosDetallesServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get codigoPedidoPk
+     * Get codigoServicioPk
      *
      * @return integer
      */
-    public function getCodigoPedidoPk()
+    public function getCodigoServicioPk()
     {
-        return $this->codigoPedidoPk;
-    }
-
-    /**
-     * Set numero
-     *
-     * @param integer $numero
-     *
-     * @return TurPedido
-     */
-    public function setNumero($numero)
-    {
-        $this->numero = $numero;
-
-        return $this;
-    }
-
-    /**
-     * Get numero
-     *
-     * @return integer
-     */
-    public function getNumero()
-    {
-        return $this->numero;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return TurPedido
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
-    }
-
-    /**
-     * Set codigoPedidoTipoFk
-     *
-     * @param integer $codigoPedidoTipoFk
-     *
-     * @return TurPedido
-     */
-    public function setCodigoPedidoTipoFk($codigoPedidoTipoFk)
-    {
-        $this->codigoPedidoTipoFk = $codigoPedidoTipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPedidoTipoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPedidoTipoFk()
-    {
-        return $this->codigoPedidoTipoFk;
+        return $this->codigoServicioPk;
     }
 
     /**
@@ -215,7 +118,7 @@ class TurPedido
      *
      * @param integer $codigoClienteFk
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setCodigoClienteFk($codigoClienteFk)
     {
@@ -239,7 +142,7 @@ class TurPedido
      *
      * @param integer $codigoSectorFk
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setCodigoSectorFk($codigoSectorFk)
     {
@@ -263,7 +166,7 @@ class TurPedido
      *
      * @param \DateTime $fechaProgramacion
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setFechaProgramacion($fechaProgramacion)
     {
@@ -287,7 +190,7 @@ class TurPedido
      *
      * @param boolean $estadoAutorizado
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setEstadoAutorizado($estadoAutorizado)
     {
@@ -311,7 +214,7 @@ class TurPedido
      *
      * @param boolean $estadoAprobado
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setEstadoAprobado($estadoAprobado)
     {
@@ -335,7 +238,7 @@ class TurPedido
      *
      * @param boolean $estadoCerrado
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setEstadoCerrado($estadoCerrado)
     {
@@ -359,7 +262,7 @@ class TurPedido
      *
      * @param boolean $estadoProgramado
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setEstadoProgramado($estadoProgramado)
     {
@@ -383,7 +286,7 @@ class TurPedido
      *
      * @param integer $cantidad
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setCantidad($cantidad)
     {
@@ -407,7 +310,7 @@ class TurPedido
      *
      * @param integer $horas
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setHoras($horas)
     {
@@ -431,7 +334,7 @@ class TurPedido
      *
      * @param integer $horasDiurnas
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setHorasDiurnas($horasDiurnas)
     {
@@ -455,7 +358,7 @@ class TurPedido
      *
      * @param integer $horasNocturnas
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setHorasNocturnas($horasNocturnas)
     {
@@ -479,7 +382,7 @@ class TurPedido
      *
      * @param float $vrTotal
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setVrTotal($vrTotal)
     {
@@ -503,7 +406,7 @@ class TurPedido
      *
      * @param string $comentarios
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setComentarios($comentarios)
     {
@@ -523,35 +426,11 @@ class TurPedido
     }
 
     /**
-     * Set pedidoTipoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoTipo $pedidoTipoRel
-     *
-     * @return TurPedido
-     */
-    public function setPedidoTipoRel(\Brasa\TurnoBundle\Entity\TurPedidoTipo $pedidoTipoRel = null)
-    {
-        $this->pedidoTipoRel = $pedidoTipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pedidoTipoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPedidoTipo
-     */
-    public function getPedidoTipoRel()
-    {
-        return $this->pedidoTipoRel;
-    }
-
-    /**
      * Set clienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
     {
@@ -575,7 +454,7 @@ class TurPedido
      *
      * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
      *
-     * @return TurPedido
+     * @return TurServicio
      */
     public function setSectorRel(\Brasa\TurnoBundle\Entity\TurSector $sectorRel = null)
     {
@@ -595,36 +474,36 @@ class TurPedido
     }
 
     /**
-     * Add pedidosDetallesPedidoRel
+     * Add serviciosDetallesServicioRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesPedidoRel
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesServicioRel
      *
-     * @return TurPedido
+     * @return TurServicio
      */
-    public function addPedidosDetallesPedidoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesPedidoRel)
+    public function addServiciosDetallesServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesServicioRel)
     {
-        $this->pedidosDetallesPedidoRel[] = $pedidosDetallesPedidoRel;
+        $this->serviciosDetallesServicioRel[] = $serviciosDetallesServicioRel;
 
         return $this;
     }
 
     /**
-     * Remove pedidosDetallesPedidoRel
+     * Remove serviciosDetallesServicioRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesPedidoRel
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesServicioRel
      */
-    public function removePedidosDetallesPedidoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesPedidoRel)
+    public function removeServiciosDetallesServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesServicioRel)
     {
-        $this->pedidosDetallesPedidoRel->removeElement($pedidosDetallesPedidoRel);
+        $this->serviciosDetallesServicioRel->removeElement($serviciosDetallesServicioRel);
     }
 
     /**
-     * Get pedidosDetallesPedidoRel
+     * Get serviciosDetallesServicioRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPedidosDetallesPedidoRel()
+    public function getServiciosDetallesServicioRel()
     {
-        return $this->pedidosDetallesPedidoRel;
+        return $this->serviciosDetallesServicioRel;
     }
 }

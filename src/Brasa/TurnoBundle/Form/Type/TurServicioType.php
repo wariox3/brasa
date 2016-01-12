@@ -4,26 +4,18 @@ namespace Brasa\TurnoBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
-class TurPedidoType extends AbstractType
+class TurServicioType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('pedidoTipoRel', 'entity', array(
-                'class' => 'BrasaTurnoBundle:TurPedidoTipo',
-                'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('pt')
-                    ->orderBy('pt.codigoPedidoTipoPk', 'ASC');},
-                'property' => 'nombre',
-                'required' => true))                
+        $builder               
             ->add('sectorRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurSector',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('s')
                     ->orderBy('s.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))  
-            ->add('fechaProgramacion', 'date', array('format' => 'yyyyMMMMdd'))                            
+                'required' => true))              
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

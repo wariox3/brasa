@@ -43,6 +43,11 @@ class TurSector
     protected $pedidosSectorRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="TurServicio", mappedBy="sectorRel")
+     */
+    protected $serviciosSectorRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -198,5 +203,39 @@ class TurSector
     public function getPedidosSectorRel()
     {
         return $this->pedidosSectorRel;
+    }
+
+    /**
+     * Add serviciosSectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicio $serviciosSectorRel
+     *
+     * @return TurSector
+     */
+    public function addServiciosSectorRel(\Brasa\TurnoBundle\Entity\TurServicio $serviciosSectorRel)
+    {
+        $this->serviciosSectorRel[] = $serviciosSectorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosSectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicio $serviciosSectorRel
+     */
+    public function removeServiciosSectorRel(\Brasa\TurnoBundle\Entity\TurServicio $serviciosSectorRel)
+    {
+        $this->serviciosSectorRel->removeElement($serviciosSectorRel);
+    }
+
+    /**
+     * Get serviciosSectorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosSectorRel()
+    {
+        return $this->serviciosSectorRel;
     }
 }

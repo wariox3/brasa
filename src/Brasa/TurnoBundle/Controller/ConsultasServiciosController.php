@@ -3,10 +3,10 @@ namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultasPedidosController extends Controller
+class ConsultasServiciosController extends Controller
 {
     var $strListaDql = "";
-    var $codigoPedido = "";
+    var $codigoServicio = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -27,26 +27,26 @@ class ConsultasPedidosController extends Controller
             }
         }
 
-        $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Consultas/Pedido:lista.html.twig', array(
-            'arPedidos' => $arPedidos,
+        $arServicios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        return $this->render('BrasaTurnoBundle:Consultas/Servicio:lista.html.twig', array(
+            'arServicios' => $arServicios,
             'form' => $form->createView()));
     }        
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDql();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDql();
     }
 
     private function filtrar ($form) {                
-        $this->codigoPedido = $form->get('TxtCodigo')->getData();
+        $this->codigoServicio = $form->get('TxtCodigo')->getData();
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido))                        
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio))                        
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -66,45 +66,37 @@ class ConsultasPedidosController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIG0')
-                    ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'NUMERO')
-                    ->setCellValue('D1', 'FECHA')
-                    ->setCellValue('E1', 'CLIENTE')
-                    ->setCellValue('F1', 'SECTOR')
-                    ->setCellValue('G1', 'PROGRAMADO')
-                    ->setCellValue('H1', 'HORAS')
-                    ->setCellValue('I1', 'H.DIURNAS')
-                    ->setCellValue('J1', 'H.NOCTURNAS')
-                    ->setCellValue('K1', 'VALOR');
+                    ->setCellValue('A1', 'CODIG0')                                                            
+                    ->setCellValue('B1', 'CLIENTE')
+                    ->setCellValue('C1', 'SECTOR')
+                    ->setCellValue('D1', 'HORAS')
+                    ->setCellValue('E1', 'H.DIURNAS')
+                    ->setCellValue('F1', 'H.NOCTURNAS')
+                    ->setCellValue('G1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arPedidos = new \Brasa\TurnoBundle\Entity\TurPedido();
-        $arPedidos = $query->getResult();
+        $arServicios = new \Brasa\TurnoBundle\Entity\TurServicio();
+        $arServicios = $query->getResult();
 
-        foreach ($arPedidos as $arPedido) {            
+        foreach ($arServicios as $arServicio) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPedido->getCodigoPedidoPk())
-                    ->setCellValue('B' . $i, $arPedido->getPedidoTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arPedido->getNumero())
-                    ->setCellValue('D' . $i, $arPedido->getFecha()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arPedido->getClienteRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arPedido->getSectorRel()->getNombre())
-                    ->setCellValue('G' . $i, $arPedido->getEstadoProgramado()*1)
-                    ->setCellValue('H' . $i, $arPedido->getHoras())
-                    ->setCellValue('I' . $i, $arPedido->getHorasDiurnas())
-                    ->setCellValue('J' . $i, $arPedido->getHorasNocturnas())
-                    ->setCellValue('K' . $i, $arPedido->getVrTotal());
+                    ->setCellValue('A' . $i, $arServicio->getCodigoServicioPk())                                                            
+                    ->setCellValue('B' . $i, $arServicio->getClienteRel()->getNombreCorto())
+                    ->setCellValue('C' . $i, $arServicio->getSectorRel()->getNombre())                    
+                    ->setCellValue('D' . $i, $arServicio->getHoras())
+                    ->setCellValue('E' . $i, $arServicio->getHorasDiurnas())
+                    ->setCellValue('F' . $i, $arServicio->getHorasNocturnas())
+                    ->setCellValue('G' . $i, $arServicio->getVrTotal());
 
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Pedidos');
+        $objPHPExcel->getActiveSheet()->setTitle('Servicios');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Pedidos.xlsx"');
+        header('Content-Disposition: attachment;filename="Servicios.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

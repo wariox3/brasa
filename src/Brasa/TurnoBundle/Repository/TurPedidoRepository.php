@@ -42,17 +42,8 @@ class TurPedidoRepository extends EntityRepository {
         $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido));         
         foreach ($arPedidosDetalle as $arPedidoDetalle) {
             if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 2) {
-                $intDias = $arPedidoDetalle->getFechaDesde()->diff($arPedidoDetalle->getFechaHasta());
-                $intDias = $intDias->format('%a');                           
-                $intDias += 1;   
-                if($arPedidoDetalle->getFechaHasta()->format('d') == '31') {
-                    $intDias = $intDias - 1;
-                }
-                if($arPedidoDetalle->getDia31() == 1) {
-                    if($arPedidoDetalle->getFechaHasta()->format('d') == '31') {
-                        $intDias = $intDias + 1;    
-                    }                    
-                }                
+                $intDias = $arPedidoDetalle->getDiaHasta() - $arPedidoDetalle->getDiaDesde();
+                $intDias += 1;
             } else {
                 $intDias = 30;
             }
@@ -92,8 +83,10 @@ class TurPedidoRepository extends EntityRepository {
                 $intHorasRealesDiurnas = $arPedidoDetalle->getTurnoRel()->getHorasDiurnas() * $intTotalDias;
                 $intHorasRealesNocturnas = $arPedidoDetalle->getTurnoRel()->getHorasNocturnas() * $intTotalDias;                            
             } else {
-                $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arPedidoDetalle->getFechaDesde()->format('Y-m-d'), $arPedidoDetalle->getFechaHasta()->format('Y-m-d'));
-                $fecha = $arPedidoDetalle->getFechaDesde()->format('Y-m-j');
+                $strFechaDesde = $arPedido->getFechaProgramacion()->format('Y-m') ."-". $arPedidoDetalle->getDiaDesde();
+                $strFechaHasta = $arPedido->getFechaProgramacion()->format('Y-m') ."-". $arPedidoDetalle->getDiaHasta();
+                $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($strFechaDesde, $strFechaHasta);
+                $fecha = $strFechaDesde;
                 for($i = 1; $i <= $intDias; $i++) {
                     $nuevafecha = strtotime ( '+'.$i.' day' , strtotime ( $fecha ) ) ;
                     $nuevafecha = date ( 'Y-m-j' , $nuevafecha );

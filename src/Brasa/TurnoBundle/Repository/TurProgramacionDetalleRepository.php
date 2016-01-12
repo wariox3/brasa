@@ -58,9 +58,9 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        
         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);                
         
-        $intDiaInicial = $arPedidoDetalle->getFechaDesde()->format('j');
-        $intDiaFinal = $arPedidoDetalle->getFechaHasta()->format('j');
-        $strMesAnio = $arPedidoDetalle->getPedidoRel()->getFecha()->format('Y/m');
+        $intDiaInicial = $arPedidoDetalle->getDiaDesde();
+        $intDiaFinal = $arPedidoDetalle->getDiaHasta();
+        $strMesAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m');
         for($j = 1; $j <= $arPedidoDetalle->getCantidad(); $j++) {
             if($arPedidoDetalle->getPlantillaRel()) { 
                 if($arPedidoDetalle->getPlantillaRel()) {

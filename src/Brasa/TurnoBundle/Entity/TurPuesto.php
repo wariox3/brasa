@@ -44,6 +44,11 @@ class TurPuesto
     protected $pedidosDetallesPuestoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="puestoRel")
+     */
+    protected $serviciosDetallesPuestoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="puestoRel")
      */
     protected $programacionesDetallesPuestoRel;        
@@ -228,5 +233,39 @@ class TurPuesto
     public function getProgramacionesDetallesPuestoRel()
     {
         return $this->programacionesDetallesPuestoRel;
+    }
+
+    /**
+     * Add serviciosDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addServiciosDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPuestoRel)
+    {
+        $this->serviciosDetallesPuestoRel[] = $serviciosDetallesPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPuestoRel
+     */
+    public function removeServiciosDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPuestoRel)
+    {
+        $this->serviciosDetallesPuestoRel->removeElement($serviciosDetallesPuestoRel);
+    }
+
+    /**
+     * Get serviciosDetallesPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesPuestoRel()
+    {
+        return $this->serviciosDetallesPuestoRel;
     }
 }

@@ -82,6 +82,11 @@ class TurTurno
     protected $pedidosDetallesTurnoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="turnoRel")
+     */
+    protected $serviciosDetallesTurnoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="turnoRel")
      */
     protected $cotizacionesDetallesTurnoRel;     
@@ -526,5 +531,39 @@ class TurTurno
     public function getSoportesPagosDetallesTurnoRel()
     {
         return $this->soportesPagosDetallesTurnoRel;
+    }
+
+    /**
+     * Add serviciosDetallesTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesTurnoRel
+     *
+     * @return TurTurno
+     */
+    public function addServiciosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesTurnoRel)
+    {
+        $this->serviciosDetallesTurnoRel[] = $serviciosDetallesTurnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesTurnoRel
+     */
+    public function removeServiciosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesTurnoRel)
+    {
+        $this->serviciosDetallesTurnoRel->removeElement($serviciosDetallesTurnoRel);
+    }
+
+    /**
+     * Get serviciosDetallesTurnoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesTurnoRel()
+    {
+        return $this->serviciosDetallesTurnoRel;
     }
 }

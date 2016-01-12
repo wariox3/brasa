@@ -33,6 +33,11 @@ class TurPeriodo
     protected $pedidosDetallesPeriodoRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="periodoRel")
+     */
+    protected $serviciosDetallesPeriodoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="periodoRel")
      */
     protected $cotizacionesDetallesPeriodoRel;    
@@ -169,5 +174,39 @@ class TurPeriodo
     public function getCotizacionesDetallesPeriodoRel()
     {
         return $this->cotizacionesDetallesPeriodoRel;
+    }
+
+    /**
+     * Add serviciosDetallesPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPeriodoRel
+     *
+     * @return TurPeriodo
+     */
+    public function addServiciosDetallesPeriodoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPeriodoRel)
+    {
+        $this->serviciosDetallesPeriodoRel[] = $serviciosDetallesPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPeriodoRel
+     */
+    public function removeServiciosDetallesPeriodoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPeriodoRel)
+    {
+        $this->serviciosDetallesPeriodoRel->removeElement($serviciosDetallesPeriodoRel);
+    }
+
+    /**
+     * Get serviciosDetallesPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesPeriodoRel()
+    {
+        return $this->serviciosDetallesPeriodoRel;
     }
 }

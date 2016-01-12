@@ -69,7 +69,7 @@ class ProcesoGenerarPedidoController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->pedidoMaestroDql();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDql();
     }
     
     private function formularioLista() {                

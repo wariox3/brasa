@@ -5,7 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
 
-class TurPedidoDetalleType extends AbstractType
+class TurServicioDetalleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {       
@@ -15,7 +15,7 @@ class TurPedidoDetalleType extends AbstractType
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('p')
                     ->where('p.codigoClienteFk = :codigoCliente ')
-                    ->setParameter('codigoCliente', $options['data']->getPedidoRel()->getCodigoClienteFk())
+                    ->setParameter('codigoCliente', $options['data']->getServicioRel()->getCodigoClienteFk())
                     ->orderBy('p.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => false))                
