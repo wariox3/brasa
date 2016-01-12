@@ -69,7 +69,9 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                 $arPlantillaDetalles = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
                 $arPlantillaDetalles = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->findBy(array('codigoPlantillaFk' => $arPlantilla->getCodigoPlantillaPk()));                
                 foreach ($arPlantillaDetalles as $arPlantillaDetalle) {
-                    $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla(2016, $arPlantilla->getDiasSecuencia(), $arPedidoDetalle->getFechaDesde()->format('Y/m/d'));                                                                    
+                    $strFechaDesde = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m') . "/" . $arPedidoDetalle->getDiaDesde();
+                    $strAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y');
+                    $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPlantilla->getDiasSecuencia(), $strFechaDesde);                                                                    
                     $arrTurnos = $this->devuelveTurnosMes($arPlantillaDetalle);
                     $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                     $arProgramacionDetalle->setProgramacionRel($arProgramacion);
@@ -251,11 +253,11 @@ class TurProgramacionDetalleRepository extends EntityRepository {
 
     private function devuelvePosicionInicialMatrizPlantilla($strAnio, $intPosiciones, $strFechaHasta) {
         $intPos = 1;        
-        $strFecha = $strAnio."/01/01";
+        $strFecha = $strAnio."/01/1";
         while($strFecha != $strFechaHasta) {
             //$dateFecha = date_create($strAnio."/01/01");
             $nuevafecha = strtotime ( '+1 day' , strtotime ( $strFecha ) ) ;
-            $strFecha = date ( 'Y/m/d' , $nuevafecha );
+            $strFecha = date ( 'Y/m/j' , $nuevafecha );
 
             $intPos++;
             if($intPos == ($intPosiciones+1)) {

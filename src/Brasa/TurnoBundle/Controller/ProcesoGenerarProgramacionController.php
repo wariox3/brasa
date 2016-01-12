@@ -37,7 +37,7 @@ class ProcesoGenerarProgramacionController extends Controller
                     }
                     $arPedidoActualizar = new \Brasa\TurnoBundle\Entity\TurPedido();
                     $arPedidoActualizar =  $em->getRepository('BrasaTurnoBundle:TurPedido')->find($arPedido->getCodigoPedidoPk());    
-                    $arPedidoActualizar->setProgramado(true);
+                    $arPedidoActualizar->setEstadoProgramado(true);
                     $em->persist($arPedidoActualizar);
                 }
                 $em->flush();

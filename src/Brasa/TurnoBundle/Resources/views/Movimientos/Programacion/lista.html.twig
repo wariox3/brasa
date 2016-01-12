@@ -40,7 +40,7 @@
             {% for arProgramaciones in arProgramaciones %}
             <tr>                
                 <td>{{ arProgramaciones.codigoProgramacionPk  }}</td>
-                <td>{{ arProgramaciones.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arProgramaciones.fecha |date("Y F")  }}</td>
                 <td>{{ arProgramaciones.clienteRel.nombreCorto  }}</td>                               
                 <td style="text-align: center"><a href="{{ path('brs_tur_programacion_nuevo', {'codigoProgramacion': arProgramaciones.codigoProgramacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_programacion_detalle', { 'codigoProgramacion': arProgramaciones.codigoProgramacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
