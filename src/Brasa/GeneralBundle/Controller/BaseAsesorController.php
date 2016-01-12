@@ -42,8 +42,12 @@ class BaseAsesorController extends Controller
                     ->setCategory("Test result file");
 
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Asesor');
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'NOMBRE')
+                            ->setCellValue('C1', 'DIRECCIÓN')
+                            ->setCellValue('D1', 'TELÉFONO')
+                            ->setCellValue('E1', 'CELULAR')
+                            ->setCellValue('F1', 'EMAIL');
 
                 $i = 2;
                 $arAsesor = $em->getRepository('BrasaGeneralBundle:GenAsesor')->findAll();
@@ -52,7 +56,11 @@ class BaseAsesorController extends Controller
                         
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arAsesor->getCodigoAsesorPk())
-                            ->setCellValue('B' . $i, $arAsesor->getNombre());
+                            ->setCellValue('B' . $i, $arAsesor->getNombre())
+                            ->setCellValue('C' . $i, $arAsesor->getDireccion())
+                            ->setCellValue('D' . $i, $arAsesor->getTelefono())
+                            ->setCellValue('E' . $i, $arAsesor->getCelular())
+                            ->setCellValue('F' . $i, $arAsesor->getEmail());
                     $i++;
                 }
 

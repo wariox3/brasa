@@ -18,7 +18,6 @@ class BaseDotacionElementoController extends Controller
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder() //
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
@@ -34,12 +33,7 @@ class BaseDotacionElementoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_empleado_dotacion_lista'));
                 }
-            }
-            
-        if($form->get('BtnPdf')->isClicked()) {
-                $objFormatoDotacionElemento = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDotacionElemento();
-                $objFormatoDotacionElemento->Generar($this);
-        }    
+            } 
         
         if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();

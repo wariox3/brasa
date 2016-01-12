@@ -14,6 +14,10 @@ class GenAsesorType extends AbstractType
     {
         $builder
             ->add('nombre', 'text', array('required' => true))
+            ->add('direccion', 'text', array('required' => false))    
+            ->add('telefono', 'text', array('required' => false))    
+            ->add('celular', 'text', array('required' => false))
+            ->add('email', 'text', array('required' => false))    
             ->add('BtnGuardar', 'submit', array('label' => 'Guardar'));
     }
 
