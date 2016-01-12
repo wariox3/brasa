@@ -41,11 +41,7 @@ class TurServicio
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
     private $estadoCerrado = false;    
-
-    /**     
-     * @ORM\Column(name="estado_programado", type="boolean")
-     */    
-    private $estadoProgramado = false;     
+    
     
     /**
      * @ORM\Column(name="cantidad", type="integer")

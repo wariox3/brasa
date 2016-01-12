@@ -18,40 +18,62 @@ class ProcesoGenerarPedidoController extends Controller
         if ($form->isValid()) {
             if ($form->get('BtnGenerar')->isClicked()) { 
                 $dateFecha = $form->get('fecha')->getData();
-                $arPedidos = new \Brasa\TurnoBundle\Entity\TurPedido();
+                $arServicios = new \Brasa\TurnoBundle\Entity\TurServicio();
                 $query = $em->createQuery($this->strListaDql);
-                $arPedidos = $query->getResult();
-                foreach ($arPedidos as $arPedido) {
-                    $arPedidoTipo = $em->getRepository('BrasaTurnoBundle:TurPedidoTipo')->find(1);
-                    $arPedidoNuevo = new \Brasa\TurnoBundle\Entity\TurPedido();
-                    $arPedidoNuevo = clone $arPedido;                    
+                $arServicios = $query->getResult();
+                foreach ($arServicios as $arServicio) {
+                    $arPedidoTipo = $em->getRepository('BrasaTurnoBundle:TurPedidoTipo')->find(2);
+                    $arPedidoNuevo = new \Brasa\TurnoBundle\Entity\TurPedido();                    
                     $arPedidoNuevo->setPedidoTipoRel($arPedidoTipo);
+                    $arPedidoNuevo->setClienteRel($arServicio->getClienteRel());
+                    $arPedidoNuevo->setSectorRel($arServicio->getSectorRel());
                     $arPedidoNuevo->setFecha($dateFecha);
+                    $arPedidoNuevo->setFechaProgramacion($dateFecha);
+                    
                     $em->persist($arPedidoNuevo);                    
                                         
-                    $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-                    $arPedidoDetalles =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $arPedido->getCodigoPedidoPk())); 
-                    foreach ($arPedidoDetalles as $arPedidoDetalle) {
+                    $arServicioDetalles = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+                    $arServicioDetalles =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->findBy(array('codigoServicioFk' => $arServicio->getCodigoServicioPk())); 
+                    foreach ($arServicioDetalles as $arServicioDetalle) {
                         $arPedidoDetalleNuevo = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-                        $arPedidoDetalleNuevo = clone $arPedidoDetalle;
                         $arPedidoDetalleNuevo->setPedidoRel($arPedidoNuevo);
-                        if($arPedidoDetalle->getCodigoPeriodoFk() == 1) {
-                            $strFechaInicio = $dateFecha->format('Y/m') . '/01';                        
+                        if($arServicioDetalle->getCodigoPeriodoFk() == 1) {                            
                             $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
-                            $strFechaFinal = $dateFecha->format('Y/m') . '/' . $strUltimoDiaMes;
+                            $arPedidoDetalleNuevo->setDiaDesde(1);
+                            $arPedidoDetalleNuevo->setDiaHasta($strUltimoDiaMes);                            
                         } else {
-                            $strAnioMes = $dateFecha->format('Y/m');
-                            $strFechaInicio = $strAnioMes . "/" . $arPedidoDetalle->getFechaDesde()->format('d');                                                    
-                            $strFechaFinal = $strAnioMes . "/" . $arPedidoDetalle->getFechaHasta()->format('d');                                                    
+                            $arPedidoDetalleNuevo->setDiaDesde($arServicioDetalle->getDiaDesde());
+                            $arPedidoDetalleNuevo->setDiaHasta($arServicioDetalle->getDiaHasta());
                         }
-                        $dateFechaDesde = date_create($strFechaInicio);
-                        $dateFechaHasta = date_create($strFechaFinal);                        
-                        $arPedidoDetalleNuevo->setFechaDesde($dateFechaDesde);
-                        $arPedidoDetalleNuevo->setFechaHasta($dateFechaHasta);
-                        $em->persist($arPedidoDetalleNuevo);                               
-                    }
+                        $arPedidoDetalleNuevo->setCantidad($arServicioDetalle->getCantidad());
+                        $arPedidoDetalleNuevo->setTurnoRel($arServicioDetalle->getTurnoRel());
+                        $arPedidoDetalleNuevo->setModalidadServicioRel($arServicioDetalle->getModalidadServicioRel());
+                        $arPedidoDetalleNuevo->setPeriodoRel($arServicioDetalle->getPeriodoRel());
+                        $arPedidoDetalleNuevo->setPuestoRel($arServicioDetalle->getPuestoRel());
+                        $arPedidoDetalleNuevo->setPlantillaRel($arServicioDetalle->getPlantillaRel());
+                        $arPedidoDetalleNuevo->setLunes($arServicioDetalle->getLunes());
+                        $arPedidoDetalleNuevo->setMartes($arServicioDetalle->getMartes());
+                        $arPedidoDetalleNuevo->setMiercoles($arServicioDetalle->getMiercoles());
+                        $arPedidoDetalleNuevo->setJueves($arServicioDetalle->getJueves());
+                        $arPedidoDetalleNuevo->setViernes($arServicioDetalle->getViernes());
+                        $arPedidoDetalleNuevo->setSabado($arServicioDetalle->getSabado());
+                        $arPedidoDetalleNuevo->setDomingo($arServicioDetalle->getDomingo());
+                        $arPedidoDetalleNuevo->setFestivo($arServicioDetalle->getFestivo());                        
+                        $em->persist($arPedidoDetalleNuevo);  
+                        $arServicioDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
+                        $arServicioDetalleRecursos =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->findBy(array('codigoServicioDetalleFk' => $arServicioDetalle->getCodigoServicioDetallePk())); 
+                        foreach ($arServicioDetalleRecursos as $arServicioDetalleRecurso) {
+                            $arPedidoDetalleRecursoNuevo = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
+                            $arPedidoDetalleRecursoNuevo->setPedidoDetalleRel($arPedidoDetalleNuevo);
+                            $arPedidoDetalleRecursoNuevo->setRecursoRel($arServicioDetalleRecurso->getRecursoRel());
+                            $arPedidoDetalleRecursoNuevo->setPosicion($arServicioDetalleRecurso->getPosicion());
+                            $em->persist($arPedidoDetalleRecursoNuevo);
+                        }
+                    }                   
+                    $em->flush();
+                    $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($arPedidoNuevo->getCodigoPedidoPk());
                 }
-                $em->flush();
+                //$em->flush();
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_pedido_lista'));                                 
             }
             if ($form->get('BtnExcel')->isClicked()) {
@@ -61,9 +83,9 @@ class ProcesoGenerarPedidoController extends Controller
             }
         }
         
-        $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arServicios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Procesos/GenerarPedido:lista.html.twig', array(
-            'arPedidos' => $arPedidos, 
+            'arServicios' => $arServicios, 
             'form' => $form->createView()));
     }        
     
@@ -74,7 +96,7 @@ class ProcesoGenerarPedidoController extends Controller
     
     private function formularioLista() {                
         $form = $this->createFormBuilder()
-            ->add('fecha', 'date', array('data'  => new \DateTime('now')))
+            ->add('fecha', 'date', array('data'  => new \DateTime('now'), 'format' => 'y MMMM d'))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->getForm();

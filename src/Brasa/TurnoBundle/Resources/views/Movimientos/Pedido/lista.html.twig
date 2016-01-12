@@ -52,7 +52,7 @@
                 <td>{{ arPedidos.pedidoTipoRel.nombre  }}</td> 
                 <td>{{ arPedidos.numero  }}</td> 
                 <td>{{ arPedidos.fecha |date("Y/m/d")  }}</td>                                
-                <td>{{ arPedidos.clienteRel.nombreCorto  }}</td>  
+                <td>{{ arPedidos.clienteRel.nombreCorto |default('') }}</td>  
                 <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td> 
                 <td>{{ arPedidos.fechaProgramacion |date("Y F")  }}</td>                                
                 <td>{% if arPedidos.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>

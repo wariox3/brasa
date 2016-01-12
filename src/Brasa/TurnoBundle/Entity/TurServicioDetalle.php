@@ -173,7 +173,20 @@ class TurServicioDetalle
      */
     protected $plantillaRel;        
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalleRecurso", mappedBy="servicioDetalleRel", cascade={"persist", "remove"})
+     */
+    protected $serviciosDetallesRecursosServicioDetalleRel;     
 
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->serviciosDetallesRecursosServicioDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoServicioDetallePk
@@ -903,5 +916,39 @@ class TurServicioDetalle
     public function getPlantillaRel()
     {
         return $this->plantillaRel;
+    }
+
+    /**
+     * Add serviciosDetallesRecursosServicioDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso $serviciosDetallesRecursosServicioDetalleRel
+     *
+     * @return TurServicioDetalle
+     */
+    public function addServiciosDetallesRecursosServicioDetalleRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso $serviciosDetallesRecursosServicioDetalleRel)
+    {
+        $this->serviciosDetallesRecursosServicioDetalleRel[] = $serviciosDetallesRecursosServicioDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesRecursosServicioDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso $serviciosDetallesRecursosServicioDetalleRel
+     */
+    public function removeServiciosDetallesRecursosServicioDetalleRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso $serviciosDetallesRecursosServicioDetalleRel)
+    {
+        $this->serviciosDetallesRecursosServicioDetalleRel->removeElement($serviciosDetallesRecursosServicioDetalleRel);
+    }
+
+    /**
+     * Get serviciosDetallesRecursosServicioDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesRecursosServicioDetalleRel()
+    {
+        return $this->serviciosDetallesRecursosServicioDetalleRel;
     }
 }

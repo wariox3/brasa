@@ -138,6 +138,10 @@ brs_tur_servicio_detalle_nuevo_cotizacion:
    path:     /tur/servicio/detalle/nuevo/cotizacion/{codigoServicio}/{codigoServicioDetalle}
    defaults: { _controller: BrasaTurnoBundle:MovimientoServicio:detalleNuevoCotizacion }   
 
+brs_tur_servicio_detalle_recurso:
+   path:     /tur/servicio/detalle/recurso/{codigoServicioDetalle}
+   defaults: { _controller: BrasaTurnoBundle:MovimientoServicio:recurso }
+
 brs_tur_factura_lista:
    path:     /tur/factura/lista
    defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:lista } 

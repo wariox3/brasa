@@ -86,6 +86,12 @@ class TurRecurso
     protected $pedidosDetallesRecursosRecursoRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalleRecurso", mappedBy="recursoRel")
+     */
+    protected $serviciosDetallesRecursosRecursoRel;     
+    
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -93,6 +99,8 @@ class TurRecurso
         $this->programacionesDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pedidosDetallesRecursosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosDetallesRecursosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -127,6 +135,30 @@ class TurRecurso
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set numeroIdentificacion
+     *
+     * @param string $numeroIdentificacion
+     *
+     * @return TurRecurso
+     */
+    public function setNumeroIdentificacion($numeroIdentificacion)
+    {
+        $this->numeroIdentificacion = $numeroIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacion
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacion()
+    {
+        return $this->numeroIdentificacion;
     }
 
     /**
@@ -434,26 +466,36 @@ class TurRecurso
     }
 
     /**
-     * Set numeroIdentificacion
+     * Add serviciosDetallesRecursosRecursoRel
      *
-     * @param string $numeroIdentificacion
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso $serviciosDetallesRecursosRecursoRel
      *
      * @return TurRecurso
      */
-    public function setNumeroIdentificacion($numeroIdentificacion)
+    public function addServiciosDetallesRecursosRecursoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso $serviciosDetallesRecursosRecursoRel)
     {
-        $this->numeroIdentificacion = $numeroIdentificacion;
+        $this->serviciosDetallesRecursosRecursoRel[] = $serviciosDetallesRecursosRecursoRel;
 
         return $this;
     }
 
     /**
-     * Get numeroIdentificacion
+     * Remove serviciosDetallesRecursosRecursoRel
      *
-     * @return string
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso $serviciosDetallesRecursosRecursoRel
      */
-    public function getNumeroIdentificacion()
+    public function removeServiciosDetallesRecursosRecursoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso $serviciosDetallesRecursosRecursoRel)
     {
-        return $this->numeroIdentificacion;
+        $this->serviciosDetallesRecursosRecursoRel->removeElement($serviciosDetallesRecursosRecursoRel);
+    }
+
+    /**
+     * Get serviciosDetallesRecursosRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesRecursosRecursoRel()
+    {
+        return $this->serviciosDetallesRecursosRecursoRel;
     }
 }

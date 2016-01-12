@@ -1,5 +1,5 @@
 {% extends '::base_sin_menu.html.twig' %}
-{% block title %}Pedido detalle nuevo - Soga App{% endblock %}
+{% block title %}Servicio detalle nuevo - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
@@ -45,12 +45,12 @@
                 <th>POS</th>
                 <th></th>
             </tr>
-            {% for arPedidoDetalleRecursos in arPedidoDetalleRecursos %}
+            {% for arServicioDetalleRecursos in arServicioDetalleRecursos %}
                 <tr>
-                    <td>{{ arPedidoDetalleRecursos.codigoPedidoDetalleRecursoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arPedidoDetalleRecursos.codigoPedidoDetalleRecursoPk }}"></td>
-                    <td>{{ arPedidoDetalleRecursos.recursoRel.nombreCorto | default('') }}</td>                     
-                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtPosicion{{ arPedidoDetalleRecursos.codigoPedidoDetalleRecursoPk }}" value="{{ arPedidoDetalleRecursos.posicion  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalleRecursos.codigoPedidoDetalleRecursoPk }}" /></td>
+                    <td>{{ arServicioDetalleRecursos.codigoServicioDetalleRecursoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arServicioDetalleRecursos.codigoServicioDetalleRecursoPk }}"></td>
+                    <td>{{ arServicioDetalleRecursos.recursoRel.nombreCorto | default('') }}</td>                     
+                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtPosicion{{ arServicioDetalleRecursos.codigoServicioDetalleRecursoPk }}" value="{{ arServicioDetalleRecursos.posicion  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServicioDetalleRecursos.codigoServicioDetalleRecursoPk }}" /></td>
                 </tr>
             {% endfor %}
         </table> 

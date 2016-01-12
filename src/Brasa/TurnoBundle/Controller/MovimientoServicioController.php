@@ -300,8 +300,7 @@ class MovimientoServicioController extends Controller
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
-        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        $arrBotonDesprogramar = array('label' => 'Desprogramar', 'disabled' => true);        
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
@@ -316,9 +315,6 @@ class MovimientoServicioController extends Controller
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonAprobar['disabled'] = true;            
         } 
-        if($ar->getEstadoProgramado() == 1) {
-            $arrBotonDesprogramar['disabled'] = false;                   
-        } 
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
@@ -326,7 +322,6 @@ class MovimientoServicioController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnDesprogramar', 'submit', $arrBotonDesprogramar)                 
                     ->getForm();
         return $form;
     }
