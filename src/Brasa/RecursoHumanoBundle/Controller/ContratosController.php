@@ -126,6 +126,7 @@ class ContratosController extends Controller
         $form = $this->createForm(new RhuContratoType(), $arContrato);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arContrato = $form->getData();
             $boolValidarTipoContrato = TRUE;
             if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 4 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 12 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
@@ -160,7 +161,7 @@ class ContratosController extends Controller
                             } else {
                                 $arContrato->setVrSalarioPago($arContrato->getVrSalario());
                             }
-                            $arUsuario = $this->get('security.context')->getToken()->getUser();
+                            
                             $arContrato->setCodigoUsuario($arUsuario->getId());
                             $em->persist($arContrato);
                             $em->flush();
