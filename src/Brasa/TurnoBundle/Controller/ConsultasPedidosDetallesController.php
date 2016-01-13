@@ -111,8 +111,7 @@ class ConsultasPedidosDetallesController extends Controller
                     ->setCellValue('E' . $i, $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m/d'))
                     ->setCellValue('F' . $i, $arPedidoDetalle->getPedidoRel()->getClienteRel()->getNombreCorto())
                     ->setCellValue('G' . $i, $arPedidoDetalle->getPedidoRel()->getSectorRel()->getNombre())
-                    ->setCellValue('H' . $i, $arPedidoDetalle->getPedidoRel()->getEstadoProgramado())
-                    ->setCellValue('I' . $i, $arPedidoDetalle->getPuestoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arPedidoDetalle->getPedidoRel()->getEstadoProgramado())                    
                     ->setCellValue('J' . $i, $arPedidoDetalle->getTurnoRel()->getNombre())
                     ->setCellValue('K' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre())
                     ->setCellValue('L' . $i, $arPedidoDetalle->getPeriodoRel()->getNombre())
@@ -134,7 +133,10 @@ class ConsultasPedidosDetallesController extends Controller
                     ->setCellValue('AB' . $i, $arPedidoDetalle->getHorasNocturnas())
                     ->setCellValue('AC' . $i, $arPedidoDetalle->getDias())
                     ->setCellValue('AD' . $i, $arPedidoDetalle->getVrTotal());
-
+            if($arPedidoDetalle->getPuestoRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('I' . $i, $arPedidoDetalle->getPuestoRel()->getNombre());
+            }
             $i++;
         }
 

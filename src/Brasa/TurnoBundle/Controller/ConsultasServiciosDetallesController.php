@@ -101,8 +101,7 @@ class ConsultasServiciosDetallesController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arServicioDetalle->getCodigoServicioDetallePk())
                     ->setCellValue('B' . $i, $arServicioDetalle->getServicioRel()->getClienteRel()->getNombreCorto())
-                    ->setCellValue('C' . $i, $arServicioDetalle->getServicioRel()->getSectorRel()->getNombre())
-                    ->setCellValue('D' . $i, $arServicioDetalle->getPuestoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arServicioDetalle->getServicioRel()->getSectorRel()->getNombre())                    
                     ->setCellValue('E' . $i, $arServicioDetalle->getTurnoRel()->getNombre())
                     ->setCellValue('F' . $i, $arServicioDetalle->getModalidadServicioRel()->getNombre())
                     ->setCellValue('G' . $i, $arServicioDetalle->getPeriodoRel()->getNombre())
@@ -124,7 +123,10 @@ class ConsultasServiciosDetallesController extends Controller
                     ->setCellValue('W' . $i, $arServicioDetalle->getHorasNocturnas())
                     ->setCellValue('X' . $i, $arServicioDetalle->getDias())
                     ->setCellValue('Y' . $i, $arServicioDetalle->getVrTotal());
-
+            if($arServicioDetalle->getPuestoRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('D' . $i, $arServicioDetalle->getPuestoRel()->getNombre());
+            }
             $i++;
         }
 

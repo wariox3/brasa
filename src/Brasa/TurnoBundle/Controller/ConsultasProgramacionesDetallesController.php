@@ -65,6 +65,8 @@ class ConsultasProgramacionesDetallesController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'PROG')
@@ -145,7 +147,8 @@ class ConsultasProgramacionesDetallesController extends Controller
                     ->setCellValue('AI' . $i, $arProgramacionDetalle->getDia28())
                     ->setCellValue('AJ' . $i, $arProgramacionDetalle->getDia29())
                     ->setCellValue('AK' . $i, $arProgramacionDetalle->getDia30())
-                    ->setCellValue('AL' . $i, $arProgramacionDetalle->getDia31());   
+                    ->setCellValue('AL' . $i, $arProgramacionDetalle->getDia31());  
+            
             if($arProgramacionDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('E' . $i, $arProgramacionDetalle->getPuestoRel()->getNombre());
@@ -155,12 +158,15 @@ class ConsultasProgramacionesDetallesController extends Controller
                     ->setCellValue('F' . $i, $arProgramacionDetalle->getRecursoRel()->getNombreCorto())
                     ->setCellValue('G' . $i, $arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()->getNombre());                
             }
+            
             $i++;
         }
         $intNum = count($arProgramacionDetalles);
-        $intNum += 1;
-        $objPHPExcel->getActiveSheet()->getStyle('A1:AL' . $intNum)->getFont()->setName('Arial');
-        $objPHPExcel->getActiveSheet()->getStyle('A1:AL' . $intNum)->getFont()->setSize(10);        
+        $intNum += 1;                
+        //$objPHPExcel->getActiveSheet()->getStyle('A1:AL1')->getFont()->setBold(true);        
+        
+        //$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        
         $objPHPExcel->getActiveSheet()->setTitle('ProgramacionDetalle');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
