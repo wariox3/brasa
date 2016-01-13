@@ -66,7 +66,7 @@ class ConsultasProgramacionesDetallesController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIG0')
+                    ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'PROG')
                     ->setCellValue('C1', 'FECHA')
                     ->setCellValue('D1', 'CLIENTE')
@@ -104,21 +104,17 @@ class ConsultasProgramacionesDetallesController extends Controller
                     ->setCellValue('AJ1', 'D29')
                     ->setCellValue('AK1', 'D30')
                     ->setCellValue('AL1', 'D31');
-
+        
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         $arProgramacionDetalles = $query->getResult();
-
         foreach ($arProgramacionDetalles as $arProgramacionDetalle) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arProgramacionDetalle->getCodigoProgramacionDetallePk())
                     ->setCellValue('B' . $i, $arProgramacionDetalle->getProgramacionRel()->getCodigoProgramacionPk())
                     ->setCellValue('C' . $i, $arProgramacionDetalle->getProgramacionRel()->getFecha()->format('Y-m'))
-                    ->setCellValue('D' . $i, $arProgramacionDetalle->getProgramacionRel()->getClienteRel()->getNombreCorto())
-                    ->setCellValue('E' . $i, $arProgramacionDetalle->getPuestoRel()->getNombre())
-                    ->setCellValue('F' . $i, $arProgramacionDetalle->getRecursoRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arProgramacionDetalle->getProgramacionRel()->getClienteRel()->getNombreCorto())                    
                     ->setCellValue('H' . $i, $arProgramacionDetalle->getDia1())
                     ->setCellValue('I' . $i, $arProgramacionDetalle->getDia2())
                     ->setCellValue('J' . $i, $arProgramacionDetalle->getDia3())
@@ -149,10 +145,22 @@ class ConsultasProgramacionesDetallesController extends Controller
                     ->setCellValue('AI' . $i, $arProgramacionDetalle->getDia28())
                     ->setCellValue('AJ' . $i, $arProgramacionDetalle->getDia29())
                     ->setCellValue('AK' . $i, $arProgramacionDetalle->getDia30())
-                    ->setCellValue('AL' . $i, $arProgramacionDetalle->getDia31());                    
+                    ->setCellValue('AL' . $i, $arProgramacionDetalle->getDia31());   
+            if($arProgramacionDetalle->getPuestoRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('E' . $i, $arProgramacionDetalle->getPuestoRel()->getNombre());
+            }
+            if($arProgramacionDetalle->getRecursoRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('F' . $i, $arProgramacionDetalle->getRecursoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()->getNombre());                
+            }
             $i++;
         }
-
+        $intNum = count($arProgramacionDetalles);
+        $intNum += 1;
+        $objPHPExcel->getActiveSheet()->getStyle('A1:AL' . $intNum)->getFont()->setName('Arial');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:AL' . $intNum)->getFont()->setSize(10);        
         $objPHPExcel->getActiveSheet()->setTitle('ProgramacionDetalle');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
