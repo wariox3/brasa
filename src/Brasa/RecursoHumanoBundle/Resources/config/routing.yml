@@ -72,7 +72,15 @@ brs_rhu_base_departamento_empresa_listar:
    
 brs_rhu_base_departamento_empresa_nuevo:
    path:     /rhu/base/departamento/empresa/nuevo/{codigoDepartamentoEmpresa}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDepartamentoEmpresa:nuevo }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDepartamentoEmpresa:nuevo }
+   
+brs_rhu_base_seleccion_prueba_tipo_listar:
+   path:     /rhu/base/seleccion/prueba/tipo/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionPruebaTipo:listar }
+   
+brs_rhu_base_seleccion_prueba_tipo_nuevo:
+   path:     /rhu/base/seleccion/prueba/tipo/nuevo{codigoSeleccionPruebaTipo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionPruebaTipo:nuevo }   
    
 brs_rhu_empleado_informacion_interna_lista:
     path:     /rhu/empleado/informacion/interna/lista
