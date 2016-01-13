@@ -74,13 +74,14 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'IDENTIFICACION')
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'IDENTIFICACIÓN')
                     ->setCellValue('C1', 'EMPLEADO')
                     ->setCellValue('D1', 'ESTUDIO')                    
-                    ->setCellValue('E1', 'INSTITUCION')
+                    ->setCellValue('E1', 'INSTITUCIÓN')
                     ->setCellValue('F1', 'CIUDAD')
                     ->setCellValue('G1', 'TITULO')
                     ->setCellValue('H1', 'VENCIMIENTO');

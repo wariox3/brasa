@@ -262,12 +262,14 @@ class ProcesoGenerarSoportePagoController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIG0')
+                    ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'RECURSO')
                     ->setCellValue('C1', 'DESDE')
                     ->setCellValue('D1', 'HASTA')
-                    ->setCellValue('E1', 'DIAS')
+                    ->setCellValue('E1', 'DÍAS')
                     ->setCellValue('F1', 'DESCANSO')
                     ->setCellValue('G1', 'HD')
                     ->setCellValue('H1', 'HN')
@@ -303,7 +305,8 @@ class ProcesoGenerarSoportePagoController extends Controller
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('SoportePago');
-        
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->createSheet(2)->setTitle('Detalle')       
                     ->setCellValue('A1', 'CODIG0')
                     ->setCellValue('B1', 'RECURSO')

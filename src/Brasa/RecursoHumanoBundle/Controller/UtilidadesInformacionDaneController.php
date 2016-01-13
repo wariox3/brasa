@@ -190,6 +190,7 @@ class UtilidadesInformacionDaneController extends Controller
                 $objPHPExcel->getActiveSheet()->mergeCells('A6:J6');
                 $objPHPExcel->getActiveSheet()->mergeCells('A7:J7');
                 $objPHPExcel->getActiveSheet()->mergeCells('A8:J8')
+                        
                     ->setCellValue('A1', 'TIPO CONTRATACION')
                     ->setCellValue('A2', 'Propietarios, socios y familiares (sin remuneracion fija)')
                     ->setCellValue('A3', 'Personal permanente (contrato a termino indefinido)')

@@ -118,15 +118,16 @@ class UtilidadesSupervigilanciaParafiscalesController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'MES')
                     ->setCellValue('C1', 'CARGO')
                     ->setCellValue('D1', 'EMPLEADOS')
-                    ->setCellValue('E1', 'NOMINA')
+                    ->setCellValue('E1', 'NÓMINA')
                     ->setCellValue('F1', 'EPS')
-                    ->setCellValue('G1', 'PENSION')
+                    ->setCellValue('G1', 'PENSIÓN')
                     ->setCellValue('H1', 'ARL')
                     ->setCellValue('I1', 'CAJA')
                     ->setCellValue('J1', 'SENA')

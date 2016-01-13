@@ -348,14 +348,15 @@ class DotacionController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-
+                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);    
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
+                            ->setCellValue('A1', 'Código')
                             ->setCellValue('B1', 'Fecha')
                             ->setCellValue('C1', 'Centro Centro')
-                            ->setCellValue('D1', 'Identificacion')
+                            ->setCellValue('D1', 'Identificación')
                             ->setCellValue('E1', 'Empleado')
-                            ->setCellValue('F1', 'Numero Interno Referencia');
+                            ->setCellValue('F1', 'Número Interno Referencia');
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
                 $arDotaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();

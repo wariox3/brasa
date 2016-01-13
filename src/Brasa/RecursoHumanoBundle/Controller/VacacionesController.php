@@ -337,7 +337,7 @@ class VacacionesController extends Controller
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);    
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
+                            ->setCellValue('A1', 'Código')
                             ->setCellValue('B1', 'Centro Costo')
                             ->setCellValue('C1', 'Desde')
                             ->setCellValue('D1', 'Hasta')

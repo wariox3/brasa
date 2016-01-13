@@ -53,13 +53,14 @@ class BaseEntidadExamenController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-
+                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
+                            ->setCellValue('A1', 'Código')
                             ->setCellValue('B1', 'Nombre')
                             ->setCellValue('C1', 'Nit')
-                            ->setCellValue('D1', 'Direccion')
-                            ->setCellValue('E1', 'Telefono');
+                            ->setCellValue('D1', 'Dirección')
+                            ->setCellValue('E1', 'Teléfono');
 
                 $i = 2;
                 $arEntidadesExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->findAll();

@@ -52,14 +52,15 @@ class BaseCajaController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-
+                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Nombre')
-                            ->setCellValue('C1', 'Nit')
-                            ->setCellValue('D1', 'Direccion')
-                            ->setCellValue('E1', 'Telefono')
-                            ->setCellValue('F1', 'Codigo_interface');
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'NOMBRE')
+                            ->setCellValue('C1', 'NIT')
+                            ->setCellValue('D1', 'DIRECCIÓN')
+                            ->setCellValue('E1', 'TELEFONO')
+                            ->setCellValue('F1', 'CÓDIGO INTERFACE');
                 $i = 2;
                 $arCajas = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->findAll();
                 
