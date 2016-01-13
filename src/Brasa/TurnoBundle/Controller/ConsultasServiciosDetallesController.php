@@ -107,7 +107,6 @@ class ConsultasServiciosDetallesController extends Controller
                     ->setCellValue('E' . $i, $arServicioDetalle->getTurnoRel()->getNombre())
                     ->setCellValue('F' . $i, $arServicioDetalle->getModalidadServicioRel()->getNombre())
                     ->setCellValue('G' . $i, $arServicioDetalle->getPeriodoRel()->getNombre())
-                    ->setCellValue('H' . $i, $arServicioDetalle->getPlantillaRel()->getNombre())
                     ->setCellValue('I' . $i, $arServicioDetalle->getDiaDesde())
                     ->setCellValue('J' . $i, $arServicioDetalle->getDiaHasta())
                     ->setCellValue('K' . $i, $arServicioDetalle->getCantidad())
@@ -128,6 +127,10 @@ class ConsultasServiciosDetallesController extends Controller
             if($arServicioDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arServicioDetalle->getPuestoRel()->getNombre());
+            }
+            if($arServicioDetalle->getPlantillaRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('H' . $i, $arServicioDetalle->getPlantillaRel()->getNombre());
             }
             $i++;
         }
