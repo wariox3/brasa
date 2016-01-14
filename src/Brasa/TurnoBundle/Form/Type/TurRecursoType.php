@@ -15,7 +15,8 @@ class TurRecursoType extends AbstractType
                     return $er->createQueryBuilder('rt')
                     ->orderBy('rt.codigoRecursoTipoPk', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                
+                'required' => true))  
+            ->add('numeroIdentificacion', 'text', array('required' => true))                             
             ->add('nombreCorto', 'text', array('required' => true))                  
             ->add('pagoPromedio', 'checkbox', array('required'  => false))                
             ->add('pagoVariable', 'checkbox', array('required'  => false))                
