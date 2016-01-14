@@ -16,7 +16,7 @@ class TurCotizacionType extends AbstractType
                     ->orderBy('s.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))    
-            ->add('fechaVence', 'date')                            
+            ->add('fechaVence', 'date', array('format' => 'yyyyMMMMdd'))                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

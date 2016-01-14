@@ -38,14 +38,14 @@ class TurCotizacionDetalle
     private $codigoPeriodoFk;     
     
     /**
-     * @ORM\Column(name="fecha_desde", type="date", nullable=true)
+     * @ORM\Column(name="dia_desde", type="integer")
      */    
-    private $fecha_desde;     
-    
+    private $diaDesde = 1;     
+
     /**
-     * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
+     * @ORM\Column(name="dia_hasta", type="integer")
      */    
-    private $fecha_hasta;     
+    private $diaHasta = 1;      
     
     /**
      * @ORM\Column(name="dias", type="integer")
@@ -71,6 +71,21 @@ class TurCotizacionDetalle
      * @ORM\Column(name="cantidad", type="integer")
      */    
     private $cantidad = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_costo_calculado", type="float")
+     */
+    private $vrCostoCalculado = 0;
+    
+    /**
+     * @ORM\Column(name="vr_total_ajustado", type="float")
+     */
+    private $vrTotalAjustado = 0;            
+
+    /**
+     * @ORM\Column(name="vr_total_minimo", type="float")
+     */
+    private $vrTotalMinimo = 0;        
     
     /**
      * @ORM\Column(name="vr_total", type="float")
@@ -146,6 +161,7 @@ class TurCotizacionDetalle
      */
     protected $periodoRel;     
     
+
 
     /**
      * Get codigoCotizacionDetallePk
@@ -422,6 +438,78 @@ class TurCotizacionDetalle
     }
 
     /**
+     * Set vrCostoCalculado
+     *
+     * @param float $vrCostoCalculado
+     *
+     * @return TurCotizacionDetalle
+     */
+    public function setVrCostoCalculado($vrCostoCalculado)
+    {
+        $this->vrCostoCalculado = $vrCostoCalculado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCostoCalculado
+     *
+     * @return float
+     */
+    public function getVrCostoCalculado()
+    {
+        return $this->vrCostoCalculado;
+    }
+
+    /**
+     * Set vrTotalAjustado
+     *
+     * @param float $vrTotalAjustado
+     *
+     * @return TurCotizacionDetalle
+     */
+    public function setVrTotalAjustado($vrTotalAjustado)
+    {
+        $this->vrTotalAjustado = $vrTotalAjustado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalAjustado
+     *
+     * @return float
+     */
+    public function getVrTotalAjustado()
+    {
+        return $this->vrTotalAjustado;
+    }
+
+    /**
+     * Set vrTotalMinimo
+     *
+     * @param float $vrTotalMinimo
+     *
+     * @return TurCotizacionDetalle
+     */
+    public function setVrTotalMinimo($vrTotalMinimo)
+    {
+        $this->vrTotalMinimo = $vrTotalMinimo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalMinimo
+     *
+     * @return float
+     */
+    public function getVrTotalMinimo()
+    {
+        return $this->vrTotalMinimo;
+    }
+
+    /**
      * Set vrTotal
      *
      * @param float $vrTotal
@@ -638,6 +726,30 @@ class TurCotizacionDetalle
     }
 
     /**
+     * Set dia31
+     *
+     * @param boolean $dia31
+     *
+     * @return TurCotizacionDetalle
+     */
+    public function setDia31($dia31)
+    {
+        $this->dia31 = $dia31;
+
+        return $this;
+    }
+
+    /**
+     * Get dia31
+     *
+     * @return boolean
+     */
+    public function getDia31()
+    {
+        return $this->dia31;
+    }
+
+    /**
      * Set cotizacionRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionRel
@@ -734,26 +846,50 @@ class TurCotizacionDetalle
     }
 
     /**
-     * Set dia31
+     * Set diaDesde
      *
-     * @param boolean $dia31
+     * @param integer $diaDesde
      *
      * @return TurCotizacionDetalle
      */
-    public function setDia31($dia31)
+    public function setDiaDesde($diaDesde)
     {
-        $this->dia31 = $dia31;
+        $this->diaDesde = $diaDesde;
 
         return $this;
     }
 
     /**
-     * Get dia31
+     * Get diaDesde
      *
-     * @return boolean
+     * @return integer
      */
-    public function getDia31()
+    public function getDiaDesde()
     {
-        return $this->dia31;
+        return $this->diaDesde;
+    }
+
+    /**
+     * Set diaHasta
+     *
+     * @param integer $diaHasta
+     *
+     * @return TurCotizacionDetalle
+     */
+    public function setDiaHasta($diaHasta)
+    {
+        $this->diaHasta = $diaHasta;
+
+        return $this;
+    }
+
+    /**
+     * Get diaHasta
+     *
+     * @return integer
+     */
+    public function getDiaHasta()
+    {
+        return $this->diaHasta;
     }
 }

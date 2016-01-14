@@ -22,8 +22,8 @@ class TurServicioDetalleRepository extends EntityRepository {
     
     public function pendientesCliente($codigoCliente) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurServicioDetalle pd JOIN pd.pedidoRel p "
-                . "WHERE p.codigoClienteFk = " . $codigoCliente . " AND p.codigoServicioTipoFk = 1";
+        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurServicioDetalle sd JOIN sd.servicioRel s "
+                . "WHERE s.codigoClienteFk = " . $codigoCliente;
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
         return $arResultado;                

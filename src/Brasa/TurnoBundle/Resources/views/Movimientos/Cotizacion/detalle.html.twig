@@ -56,7 +56,25 @@
                         <td class="td-in-well">{{ arCotizacion.fechaVence |date("Y/m/d") }}</td>
                         <td class="titulo" >VALOR:</td>
                         <td align="right">{{ arCotizacion.vrTotal | number_format(0, '.', ',')}}</td>
+                    </tr> 
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >COSTO CALCULADO:</td>
+                        <td align="right">{{ arCotizacion.vrCostoCalculado | number_format(0, '.', ',')}}</td>
                     </tr>                
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >VALOR MINIMO:</td>
+                        <td align="right">{{ arCotizacion.vrTotalMinimo | number_format(0, '.', ',')}}</td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo">VENCE:</td>
+                        <td class="td-in-well">{{ arCotizacion.fechaVence |date("Y/m/d") }}</td>
+                        <td class="titulo" >VALOR:</td>
+                        <td align="right">{{ arCotizacion.vrTotal | number_format(0, '.', ',')}}</td>
+                    </tr>                     
                 </table>
             </div>
         </div>
@@ -93,7 +111,10 @@
                             <th>H.D</th>
                             <th>H.N</th>
                             <th>DIAS</th>
-                            <th>VALOR</th>
+                            <th>COSTO.C</th>
+                            <th>MINIMO</th>
+                            <th>AJUSTADO</th>
+                            <th>TOTAL</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -104,8 +125,8 @@
                                 <td>{{ arCotizacionDetalle.modalidadServicioRel.nombre  }}</td>                    
                                 <td>{{ arCotizacionDetalle.periodoRel.nombre  }}</td>                    
                                 {% if arCotizacion.estadoAutorizado == 0 %}                        
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaDesde{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.fechaDesde | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                        
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaHasta{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.fechaHasta | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                                                
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.diaDesde}}" size="15" style="width:85px" onclick="this.select()"/></td>                        
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.diaHasta}}" size="15" style="width:85px" onclick="this.select()"/></td>                                                
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.cantidad  }}" size="5" style="width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                                     <td><input type="checkbox" name="chkLunes{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.lunes == 1 %} checked="true" {% endif %}></td>
                                     <td><input type="checkbox" name="chkMartes{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.martes == 1 %} checked="true" {% endif %}></td>
@@ -116,8 +137,8 @@
                                     <td><input type="checkbox" name="chkDomingo{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.domingo == 1 %} checked="true" {% endif %}></td>
                                     <td><input type="checkbox" name="chkFestivo{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
                                     {% else %}                        
-                                    <td>{{ arCotizacionDetalle.fechaDesde | date('Y/m/d') }}</td>    
-                                    <td>{{ arCotizacionDetalle.fechaHasta | date('Y/m/d') }}</td>    
+                                    <td>{{ arCotizacionDetalle.diaDesde }}</td>    
+                                    <td>{{ arCotizacionDetalle.diaHasta }}</td>    
                                     <td>{{ arCotizacionDetalle.cantidad  }}</td>
                                     <td>{% if arCotizacionDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
                                     <td>{% if arCotizacionDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
@@ -132,6 +153,13 @@
                                 <td style="text-align: right">{{ arCotizacionDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
                                 <td style="text-align: right">{{ arCotizacionDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
                                 <td style="text-align: right">{{ arCotizacionDetalle.dias | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arCotizacionDetalle.vrCostoCalculado | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arCotizacionDetalle.vrTotalMinimo | number_format(0, '.', ',') }}</td> 
+                                {% if arCotizacion.estadoAutorizado == 0 %}
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.vrTotalAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                                {% else %}
+                                    <td style="text-align: right">{{ arCotizacionDetalle.vrTotalAjustado | number_format(0, '.', ',') }}</td> 
+                                {% endif %}                    
                                 <td style="text-align: right">{{ arCotizacionDetalle.vrTotal | number_format(0, '.', ',') }}</td> 
                                 <td>{% if arCotizacion.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_cotizacion_detalle_nuevo', {'codigoCotizacion': arCotizacion.codigoCotizacionPk, 'codigoCotizacionDetalle': arCotizacionDetalle.codigoCotizacionDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" /></td>

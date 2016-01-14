@@ -125,9 +125,11 @@ class MovimientoCotizacionController extends Controller
                     $arCotizacionDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
                     $arCotizacionDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($intCodigo);
                     $arCotizacionDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-                    $arCotizacionDetalle->setFechaDesde(date_create($arrControles['TxtFechaDesde'.$intCodigo]));
-                    $arCotizacionDetalle->setFechaHasta(date_create($arrControles['TxtFechaHasta'.$intCodigo]));
-                    
+                    $arCotizacionDetalle->setDiaDesde(date_create($arrControles['TxtDiaDesde'.$intCodigo]));
+                    $arCotizacionDetalle->setDiaHasta(date_create($arrControles['TxtDiaHasta'.$intCodigo]));
+                    if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
+                        $arCotizacionDetalle->setVrTotalAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+                    }                     
                     if(isset($arrControles['chkLunes'.$intCodigo])) {
                         $arCotizacionDetalle->setLunes(1);
                     } else {

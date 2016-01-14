@@ -158,7 +158,6 @@ class MovimientoServicioController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arServicioDetalle = $form->getData();
-            $arPeriodo = $form->get('periodoRel')->getData();
             $em->persist($arServicioDetalle);
             $em->flush();
 
@@ -422,6 +421,9 @@ class MovimientoServicioController extends Controller
                     $arServicioDetalle->setPuestoRel($arPuesto);
                 }
             }
+            if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
+                $arServicioDetalle->setVrTotalAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+            }            
             if(isset($arrControles['chkLunes'.$intCodigo])) {
                 $arServicioDetalle->setLunes(1);
             } else {

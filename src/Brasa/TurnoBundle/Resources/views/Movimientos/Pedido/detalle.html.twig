@@ -57,6 +57,18 @@
                     <td class="td-in-well">{{ arPedido.fecha |date("Y/m/d") }}</td>
                     <td class="titulo" >HORAS:</td>
                     <td align="right">{{ arPedido.horas | number_format(0, '.', ',')}}</td>
+                </tr>                 
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo" >COSTO CALCULADO:</td>
+                    <td align="right">{{ arPedido.vrCostoCalculado | number_format(0, '.', ',')}}</td>
+                </tr>                
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo" >VALOR MINIMO:</td>
+                    <td align="right">{{ arPedido.vrTotalMinimo | number_format(0, '.', ',')}}</td>
                 </tr>                
                 <tr>
                     <td class="titulo">FECHA PROGRAMACION:</td>
@@ -103,7 +115,10 @@
                 <th>H.D</th>
                 <th>H.N</th>
                 <th>DIAS</th>
-                <th>VALOR</th>
+                <th>COSTO.C</th>
+                <th>MINIMO</th>
+                <th>AJUSTADO</th>
+                <th>TOTAL</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -155,6 +170,13 @@
                     <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arPedidoDetalle.vrCostoCalculado | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arPedidoDetalle.vrTotalMinimo | number_format(0, '.', ',') }}</td> 
+                    {% if arPedido.estadoAutorizado == 0 %}
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.vrTotalAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                    {% else %}
+                        <td style="text-align: right">{{ arPedidoDetalle.vrTotalAjustado | number_format(0, '.', ',') }}</td> 
+                    {% endif %}                    
                     <td style="text-align: right">{{ arPedidoDetalle.vrTotal | number_format(0, '.', ',') }}</td> 
                     <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
                     <td><a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_recurso', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarRecurso', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=20 height=20 title="Recursos"></a></td>
@@ -168,7 +190,8 @@
             {% if arPedido.estadoAutorizado == 0 %}
                 <div class="btn-group">
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_cotizacion', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo de cotizacion</a>                
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_cotizacion', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde cotizacion</a>                
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_servicio', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 1200)">Nuevo desde servicio</a>                                    
                 </div>
             {% endif %}            
             <div class="btn-group">

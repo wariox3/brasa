@@ -40,8 +40,8 @@
                 <td>{{ arPedidosDetalle.modalidadServicioRel.nombre  }}</td>                    
                 <td>{{ arPedidosDetalle.periodoRel.nombre  }}</td>  
                 <td>{{ arPedidosDetalle.plantillaRel.nombre | default('')  }}</td>
-                <td>{{ arPedidosDetalle.fechaDesde | date("Y/m/d")}}</td>
-                <td>{{ arPedidosDetalle.fechaHasta | date("Y/m/d")}}</td>                
+                <td>{{ arPedidosDetalle.diaDesde }}</td>
+                <td>{{ arPedidosDetalle.diaHasta }}</td>                
                 <td>{% if arPedidosDetalle.lunes == 1%} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arPedidosDetalle.martes == 1%} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arPedidosDetalle.miercoles == 1%} SI {% else %} NO {% endif %}</td>                

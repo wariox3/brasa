@@ -88,9 +88,24 @@ class TurServicioDetalle
     private $cantidadRecurso = 0;         
     
     /**
+     * @ORM\Column(name="vr_costo_calculado", type="float")
+     */
+    private $vrCostoCalculado = 0;
+    
+    /**
+     * @ORM\Column(name="vr_total_ajustado", type="float")
+     */
+    private $vrTotalAjustado = 0;            
+
+    /**
+     * @ORM\Column(name="vr_total_minimo", type="float")
+     */
+    private $vrTotalMinimo = 0;        
+    
+    /**
      * @ORM\Column(name="vr_total", type="float")
      */
-    private $vrTotal = 0; 
+    private $vrTotal = 0;
     
     /**     
      * @ORM\Column(name="lunes", type="boolean")
@@ -950,5 +965,77 @@ class TurServicioDetalle
     public function getServiciosDetallesRecursosServicioDetalleRel()
     {
         return $this->serviciosDetallesRecursosServicioDetalleRel;
+    }
+
+    /**
+     * Set vrCostoCalculado
+     *
+     * @param float $vrCostoCalculado
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrCostoCalculado($vrCostoCalculado)
+    {
+        $this->vrCostoCalculado = $vrCostoCalculado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCostoCalculado
+     *
+     * @return float
+     */
+    public function getVrCostoCalculado()
+    {
+        return $this->vrCostoCalculado;
+    }
+
+    /**
+     * Set vrTotalAjustado
+     *
+     * @param float $vrTotalAjustado
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrTotalAjustado($vrTotalAjustado)
+    {
+        $this->vrTotalAjustado = $vrTotalAjustado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalAjustado
+     *
+     * @return float
+     */
+    public function getVrTotalAjustado()
+    {
+        return $this->vrTotalAjustado;
+    }
+
+    /**
+     * Set vrTotalMinimo
+     *
+     * @param float $vrTotalMinimo
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrTotalMinimo($vrTotalMinimo)
+    {
+        $this->vrTotalMinimo = $vrTotalMinimo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalMinimo
+     *
+     * @return float
+     */
+    public function getVrTotalMinimo()
+    {
+        return $this->vrTotalMinimo;
     }
 }

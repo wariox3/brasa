@@ -33,8 +33,8 @@ class TurCotizacionDetalleType extends AbstractType
                     ->orderBy('p.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
-            ->add('fechaDesde', 'date')
-            ->add('fechaHasta', 'date')
+            ->add('diaDesde', 'number')
+            ->add('diaHasta', 'number')
             ->add('cantidad', 'number')
             ->add('lunes', 'checkbox', array('required'  => false))
             ->add('martes', 'checkbox', array('required'  => false))

@@ -57,5 +57,16 @@ class TurRecursoRepository extends EntityRepository {
         $em->persist($arPedido);
         $em->flush();
         return true;
-    }        
+    }     
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $ar = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigo);
+                $em->remove($ar);
+            }
+            $em->flush();
+        }
+    }     
 }

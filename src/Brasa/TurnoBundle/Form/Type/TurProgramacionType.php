@@ -9,7 +9,7 @@ class TurProgramacionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder  
-            ->add('fecha', 'date') 
+            ->add('fecha', 'date', array('format' => 'yyyyMMMMdd')) 
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

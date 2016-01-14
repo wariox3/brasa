@@ -67,6 +67,11 @@ class TurTurno
     private $descanso = false;    
     
     /**
+     * @ORM\Column(name="vr_costo_calculado", type="float")
+     */
+    private $vrCostoCalculado = 0;    
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;       
@@ -565,5 +570,29 @@ class TurTurno
     public function getServiciosDetallesTurnoRel()
     {
         return $this->serviciosDetallesTurnoRel;
+    }
+
+    /**
+     * Set vrCostoCalculado
+     *
+     * @param float $vrCostoCalculado
+     *
+     * @return TurTurno
+     */
+    public function setVrCostoCalculado($vrCostoCalculado)
+    {
+        $this->vrCostoCalculado = $vrCostoCalculado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCostoCalculado
+     *
+     * @return float
+     */
+    public function getVrCostoCalculado()
+    {
+        return $this->vrCostoCalculado;
     }
 }

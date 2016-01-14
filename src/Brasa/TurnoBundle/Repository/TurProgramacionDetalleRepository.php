@@ -56,10 +56,10 @@ class TurProgramacionDetalleRepository extends EntityRepository {
     public function nuevo($codigoPedidoDetalle, $arProgramacion) {
         $em = $this->getEntityManager();
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        
-        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);                
-        
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);                        
         $intDiaInicial = $arPedidoDetalle->getDiaDesde();
         $intDiaFinal = $arPedidoDetalle->getDiaHasta();
+        $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacion->getFecha()->format('Y-m-') . $intDiaInicial, $arProgramacion->getFecha()->format('Y-m-') . $intDiaFinal);
         $strMesAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m');
         for($j = 1; $j <= $arPedidoDetalle->getCantidad(); $j++) {
             if($arPedidoDetalle->getPlantillaRel()) { 
@@ -84,10 +84,39 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                     }
                     for($i = 1; $i < 32; $i++) {
                         $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle);
+                        $strTurno = $arrTurnos[$intPosicion];                        
+                        $strFechaDia = $arProgramacion->getFecha()->format('Y-m-') . $i;
+                        $dateFechaDia = date_create($strFechaDia); 
+                        $diaSemana = $dateFechaDia->format('N');
+                        
+                        $boolFestivo = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDia);
+                        if($diaSemana == 1 && isset($arrTurnos['lunes'])) {
+                            $strTurno = $arrTurnos['lunes'];
+                        }
+                        if($diaSemana == 2 && isset($arrTurnos['martes'])) {
+                            $strTurno = $arrTurnos['martes'];
+                        }
+                        if($diaSemana == 3 && isset($arrTurnos['miercoles'])) {
+                            $strTurno = $arrTurnos['miercoles'];
+                        }
+                        if($diaSemana == 4 && isset($arrTurnos['jueves'])) {
+                            $strTurno = $arrTurnos['jueves'];
+                        }
+                        if($diaSemana == 5 && isset($arrTurnos['viernes'])) {
+                            $strTurno = $arrTurnos['viernes'];
+                        }                        
+                        if($diaSemana == 6 && isset($arrTurnos['sabado'])) {
+                            $strTurno = $arrTurnos['sabado'];
+                        }
+                        if($diaSemana == 7 && isset($arrTurnos['domingo'])) {
+                            $strTurno = $arrTurnos['domingo'];
+                        }                        
+                        if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
+                            $strTurno = $arrTurnos['festivo'];
+                        }
+                        
                         if($arPlantilla->getHomologarCodigoTurno() == 1) {
                             $strTurno = $this->devuelveCodigoTurno($arrTurnos[$intPosicion]);
-                        } else {
-                            $strTurno = $arrTurnos[$intPosicion];
                         }
                         if($boolAplica == TRUE) {
                             if($i == 1) {                                
@@ -299,7 +328,15 @@ class TurProgramacionDetalleRepository extends EntityRepository {
             '28' => $arPlantillaDetalle->getDia28(),
             '29' => $arPlantillaDetalle->getDia29(),
             '30' => $arPlantillaDetalle->getDia30(),
-            '31' => $arPlantillaDetalle->getDia31(),);        
+            '31' => $arPlantillaDetalle->getDia31(),
+            'lunes' => $arPlantillaDetalle->getLunes(),
+            'martes' => $arPlantillaDetalle->getMartes(),
+            'miercoles' => $arPlantillaDetalle->getMiercoles(),
+            'jueves' => $arPlantillaDetalle->getJueves(),
+            'viernes' => $arPlantillaDetalle->getViernes(),
+            'sabado' => $arPlantillaDetalle->getSabado(),
+            'domingo' => $arPlantillaDetalle->getDomingo(),
+            'festivo' => $arPlantillaDetalle->getFestivo(),);        
         return $arrTurnos;
     }
     

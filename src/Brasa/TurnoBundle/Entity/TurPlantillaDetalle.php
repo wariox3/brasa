@@ -181,6 +181,46 @@ class TurPlantillaDetalle
      * @ORM\Column(name="dia_31", type="string", length=5, nullable=true)
      */    
     private $dia31;    
+
+    /**
+     * @ORM\Column(name="lunes", type="string", length=5, nullable=true)
+     */    
+    private $lunes;
+    
+    /**
+     * @ORM\Column(name="martes", type="string", length=5, nullable=true)
+     */    
+    private $martes;
+    
+    /**
+     * @ORM\Column(name="miercoles", type="string", length=5, nullable=true)
+     */    
+    private $miercoles;
+    
+    /**
+     * @ORM\Column(name="jueves", type="string", length=5, nullable=true)
+     */    
+    private $jueves;
+    
+    /**
+     * @ORM\Column(name="viernes", type="string", length=5, nullable=true)
+     */    
+    private $viernes;
+    
+    /**
+     * @ORM\Column(name="sabado", type="string", length=5, nullable=true)
+     */    
+    private $sabado;
+    
+    /**
+     * @ORM\Column(name="domingo", type="string", length=5, nullable=true)
+     */    
+    private $domingo;
+    
+    /**
+     * @ORM\Column(name="festivo", type="string", length=5, nullable=true)
+     */    
+    private $festivo;    
     
     /**
      * @ORM\Column(name="horas", type="integer")
@@ -1043,5 +1083,197 @@ class TurPlantillaDetalle
     public function getPosicion()
     {
         return $this->posicion;
+    }
+
+    /**
+     * Set lunes
+     *
+     * @param string $lunes
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setLunes($lunes)
+    {
+        $this->lunes = $lunes;
+
+        return $this;
+    }
+
+    /**
+     * Get lunes
+     *
+     * @return string
+     */
+    public function getLunes()
+    {
+        return $this->lunes;
+    }
+
+    /**
+     * Set martes
+     *
+     * @param string $martes
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setMartes($martes)
+    {
+        $this->martes = $martes;
+
+        return $this;
+    }
+
+    /**
+     * Get martes
+     *
+     * @return string
+     */
+    public function getMartes()
+    {
+        return $this->martes;
+    }
+
+    /**
+     * Set miercoles
+     *
+     * @param string $miercoles
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setMiercoles($miercoles)
+    {
+        $this->miercoles = $miercoles;
+
+        return $this;
+    }
+
+    /**
+     * Get miercoles
+     *
+     * @return string
+     */
+    public function getMiercoles()
+    {
+        return $this->miercoles;
+    }
+
+    /**
+     * Set jueves
+     *
+     * @param string $jueves
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setJueves($jueves)
+    {
+        $this->jueves = $jueves;
+
+        return $this;
+    }
+
+    /**
+     * Get jueves
+     *
+     * @return string
+     */
+    public function getJueves()
+    {
+        return $this->jueves;
+    }
+
+    /**
+     * Set viernes
+     *
+     * @param string $viernes
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setViernes($viernes)
+    {
+        $this->viernes = $viernes;
+
+        return $this;
+    }
+
+    /**
+     * Get viernes
+     *
+     * @return string
+     */
+    public function getViernes()
+    {
+        return $this->viernes;
+    }
+
+    /**
+     * Set sabado
+     *
+     * @param string $sabado
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setSabado($sabado)
+    {
+        $this->sabado = $sabado;
+
+        return $this;
+    }
+
+    /**
+     * Get sabado
+     *
+     * @return string
+     */
+    public function getSabado()
+    {
+        return $this->sabado;
+    }
+
+    /**
+     * Set domingo
+     *
+     * @param string $domingo
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setDomingo($domingo)
+    {
+        $this->domingo = $domingo;
+
+        return $this;
+    }
+
+    /**
+     * Get domingo
+     *
+     * @return string
+     */
+    public function getDomingo()
+    {
+        return $this->domingo;
+    }
+
+    /**
+     * Set festivo
+     *
+     * @param string $festivo
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setFestivo($festivo)
+    {
+        $this->festivo = $festivo;
+
+        return $this;
+    }
+
+    /**
+     * Get festivo
+     *
+     * @return string
+     */
+    public function getFestivo()
+    {
+        return $this->festivo;
     }
 }

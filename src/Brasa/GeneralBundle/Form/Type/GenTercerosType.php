@@ -19,8 +19,8 @@ class GenTercerosType extends AbstractType
             ->add('nit', 'number', array('required' => true))
             ->add('digitoVerificacion', 'number', array('required' => true))    
             ->add('nombreCorto', 'text', array('required' => true))    
-            ->add('nombres', 'text', array('required' => true))
-            ->add('apellido1', 'text', array('required' => true))    
+            ->add('nombres', 'text', array('required' => false))
+            ->add('apellido1', 'text', array('required' => false))    
             ->add('apellido2', 'text', array('required' => false))
             ->add('formaPagoClienteRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenFormaPago',

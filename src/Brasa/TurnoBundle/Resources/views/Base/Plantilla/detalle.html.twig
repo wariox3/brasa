@@ -87,6 +87,14 @@
                 <th>29</th>
                 <th>30</th>
                 <th>31</th>
+                <th>LU</th>
+                <th>MA</th>
+                <th>MI</th>
+                <th>JU</th>
+                <th>VI</th>
+                <th>SA</th>
+                <th>DO</th>
+                <th>FE</th>
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arPlantillaDetalle in arPlantillaDetalle %}
@@ -125,6 +133,14 @@
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia29{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.dia29 }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia30{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.dia30  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia31{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.dia31  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtLunes{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.lunes  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtMartes{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.martes  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtMiercoles{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.miercoles  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtJueves{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.jueves  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtViernes{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.viernes  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtSabado{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.sabado  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDomingo{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.domingo  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtFestivo{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" value="{{ arPlantillaDetalle.festivo  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                     {% else %}                        
                         <td>{{ arPlantillaDetalle.posicion  }}</td>    
                         <td>{{ arPlantillaDetalle.dia1  }}</td>
@@ -158,6 +174,14 @@
                         <td>{{ arPlantillaDetalle.dia29  }}</td>
                         <td>{{ arPlantillaDetalle.dia30  }}</td>
                         <td>{{ arPlantillaDetalle.dia31  }}</td>
+                        <td>{{ arPlantillaDetalle.lunes  }}</td>
+                        <td>{{ arPlantillaDetalle.martes  }}</td>
+                        <td>{{ arPlantillaDetalle.miercoles  }}</td>
+                        <td>{{ arPlantillaDetalle.jueves  }}</td>
+                        <td>{{ arPlantillaDetalle.viernes  }}</td>
+                        <td>{{ arPlantillaDetalle.sabado  }}</td>
+                        <td>{{ arPlantillaDetalle.domingo  }}</td>
+                        <td>{{ arPlantillaDetalle.festivo  }}</td>
                     {% endif %}
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPlantillaDetalle.codigoPlantillaDetallePk }}" /></td>
                 </tr>
@@ -166,10 +190,8 @@
             </div>
         </div>
         <div class="btn-toolbar" style="float: right">
-        <div class="btn-group">
-            {% if arPlantilla.estadoAutorizado == 0 %}
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_base_plantilla_detalle_nuevo', {'codigoPlantilla': arPlantilla.codigoPlantillaPk, 'codigoPlantillaDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
-            {% endif %}            
+        <div class="btn-group">            
+            {{ form_widget(form.BtnDetalleNuevo, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                       
         </div>
         <div class="btn-group">
             {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}

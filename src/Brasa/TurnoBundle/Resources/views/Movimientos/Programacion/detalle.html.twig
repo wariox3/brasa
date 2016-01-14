@@ -167,7 +167,7 @@
         <div class="btn-toolbar" style="float: right">
         <div class="btn-group">
             {% if arProgramacion.estadoAutorizado == 0 %}
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_programacion_detalle_nuevo', {'codigoProgramacion': arProgramacion.codigoProgramacionPk, 'codigoProgramacionDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_programacion_detalle_nuevo', {'codigoProgramacion': arProgramacion.codigoProgramacionPk, 'codigoProgramacionDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 1200)">Nuevo</a>
             {% endif %}
             {{ form_widget(form.BtnDetalleNuevoLibre, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
         </div>

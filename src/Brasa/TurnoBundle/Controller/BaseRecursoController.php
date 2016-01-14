@@ -20,7 +20,9 @@ class BaseRecursoController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
-                //$em->getRepository('BrasaTurnoBundle:TurRecurso')->eliminarExamen($arrSeleccionados);
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurRecurso')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);

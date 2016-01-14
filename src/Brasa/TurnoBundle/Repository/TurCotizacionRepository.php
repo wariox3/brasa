@@ -32,6 +32,8 @@ class TurCotizacionRepository extends EntityRepository {
         $douTotalHorasDiurnas = 0;
         $douTotalHorasNocturnas = 0;
         $douTotalServicio = 0;
+        $douTotalMinimoServicio = 0;
+        $douTotalCostoCalculado = 0;
         $arCotizacionesDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();        
         $arCotizacionesDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array('codigoCotizacionFk' => $codigoCotizacion));         
         foreach ($arCotizacionesDetalle as $arCotizacionDetalle) {
@@ -149,7 +151,7 @@ class TurCotizacionRepository extends EntityRepository {
                 }                
             }
                                     
-            
+            $douCostoCalculado = $arCotizacionDetalle->getCantidad() * $arCotizacionDetalle->getTurnoRel()->getVrCostoCalculado();
             $douHoras = ($intHorasRealesDiurnas + $intHorasRealesNocturnas ) * $arCotizacionDetalle->getCantidad();            
             $arCotizacionDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();        
             $arCotizacionDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($arCotizacionDetalle->getCodigoCotizacionDetallePk());                         
@@ -159,8 +161,17 @@ class TurCotizacionRepository extends EntityRepository {
             $floValorBaseServicioMes = $floValorBaseServicio + ($floValorBaseServicio * $arCotizacionDetalle->getModalidadServicioRel()->getPorcentaje() / 100);                        
             $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;            
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  
-            $floVrServicio = (($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna)) * $arCotizacionDetalle->getCantidad();                        
-            $arCotizacionDetalleActualizar->setVrTotal($floVrServicio);
+            $floVrMinimoServicio = (($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna)) * $arCotizacionDetalle->getCantidad();                        
+            $floVrServicio = 0;            
+            if($arCotizacionDetalleActualizar->getVrTotalAjustado() != 0) {
+                $floVrServicio = $arCotizacionDetalleActualizar->getVrTotalAjustado();
+            } else {
+                $floVrServicio = $floVrMinimoServicio;
+            }            
+            $arCotizacionDetalleActualizar->setVrTotal($floVrServicio);            
+            $arCotizacionDetalleActualizar->setVrTotalMinimo($floVrMinimoServicio);
+            $arCotizacionDetalleActualizar->setVrCostoCalculado($douCostoCalculado);
+            
             $arCotizacionDetalleActualizar->setHoras($douHoras);
             $arCotizacionDetalleActualizar->setHorasDiurnas($intHorasRealesDiurnas);
             $arCotizacionDetalleActualizar->setHorasNocturnas($intHorasRealesNocturnas);
@@ -170,6 +181,8 @@ class TurCotizacionRepository extends EntityRepository {
             $douTotalHoras += $douHoras;
             $douTotalHorasDiurnas += $intHorasRealesDiurnas;
             $douTotalHorasNocturnas += $intHorasRealesNocturnas;
+            $douTotalMinimoServicio += $floVrMinimoServicio;
+            $douTotalCostoCalculado += $douCostoCalculado;
             $douTotalServicio += $floVrServicio;
             $intCantidad++;
         }
@@ -177,6 +190,8 @@ class TurCotizacionRepository extends EntityRepository {
         $arCotizacion->setHorasDiurnas($douTotalHorasDiurnas);
         $arCotizacion->setHorasNocturnas($douTotalHorasNocturnas);
         $arCotizacion->setVrTotal($douTotalServicio);
+        $arCotizacion->setVrTotalMinimo($douTotalMinimoServicio);
+        $arCotizacion->setVrCostoCalculado($douTotalCostoCalculado);
         $em->persist($arCotizacion);
         $em->flush();
         return true;

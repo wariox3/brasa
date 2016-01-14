@@ -20,6 +20,7 @@ class TurTurnoType extends AbstractType
             ->add('programacion', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
             ->add('novedad', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
             ->add('descanso', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
+            ->add('vrCostoCalculado', 'number')                 
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
