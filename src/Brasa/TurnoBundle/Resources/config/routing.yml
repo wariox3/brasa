@@ -39,7 +39,7 @@ brs_tur_base_cliente_nuevo:
     defaults: { _controller: BrasaTurnoBundle:BaseCliente:nuevo }
 
 brs_tur_base_cliente_puesto_nuevo:
-    path:     /tur/base/cliente/puesto/nuevo/{codigoCliente}
+    path:     /tur/base/cliente/puesto/nuevo/{codigoCliente}/{codigoPuesto}
     defaults: { _controller: BrasaTurnoBundle:BaseCliente:puestoNuevo }    
 
 brs_tur_base_plantilla_lista:

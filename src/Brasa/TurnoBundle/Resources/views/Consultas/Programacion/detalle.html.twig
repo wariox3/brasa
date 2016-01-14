@@ -75,7 +75,7 @@
             {% for arProgramacionDetalle in arProgramacionDetalle %}
                 <tr>
                     <td>{{ arProgramacionDetalle.codigoProgramacionDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}"></td>                    
-                    <td>{{ arProgramacionDetalle.programacionRel.clienteRel.nombreCorto | default('') }}</td>   
+                    <td style="text-align: left; width: 200px" width="120px">{{ arProgramacionDetalle.programacionRel.clienteRel.nombreCorto | default('') }}</td>   
                     <td>{{ arProgramacionDetalle.codigoRecursoFk }}</td>   
                     <td>{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</td>                                         
                     <td>{{ arProgramacionDetalle.codigoPuestoFk }}</td>   

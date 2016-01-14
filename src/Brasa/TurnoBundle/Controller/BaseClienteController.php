@@ -170,13 +170,15 @@ class BaseClienteController extends Controller
                     ));
     }
 
-    public function puestoNuevoAction($codigoCliente) {
+    public function puestoNuevoAction($codigoCliente, $codigoPuesto) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
         $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
-        
+        if($codigoPuesto != '' && $codigoPuesto != '0') {
+            $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigoPuesto);
+        }        
         $form = $this->createForm(new TurClientePuestoType, $arPuesto);
         $form->handleRequest($request);
         if ($form->isValid()) {

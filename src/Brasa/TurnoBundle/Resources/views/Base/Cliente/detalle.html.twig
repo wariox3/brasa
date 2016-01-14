@@ -53,12 +53,14 @@
             <tr>
                 <th>COD</th>                                
                 <th>NOMBRE</th>
+                <th></th>
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arPuestos in arPuestos %}
                 <tr>
                     <td>{{ arPuestos.codigoPuestoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arPuestos.codigoPuestoPk }}"></td>                    
                         <td>{{ arPuestos.nombre  }}</td>
+                        <td><a href="javascript:abrirVentana3('{{ path('brs_tur_base_cliente_puesto_nuevo', {'codigoCliente': arCliente.codigoClientePk, 'codigoPuesto': arPuestos.codigoPuestoPk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                        
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPuestos.codigoPuestoPk }}" /></td>
                 </tr>
             {% endfor %}
@@ -67,7 +69,7 @@
         </div>
         <div class="btn-toolbar" style="float: right">
         <div class="btn-group">            
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_base_cliente_puesto_nuevo', {'codigoCliente': arCliente.codigoClientePk, 'codigoPlantillaDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>            
+            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_base_cliente_puesto_nuevo', {'codigoCliente': arCliente.codigoClientePk, 'codigoPuesto': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>            
         </div>
         <div class="btn-group">
             {{ form_widget(form.BtnEliminarPuesto, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
