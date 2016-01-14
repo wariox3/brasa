@@ -17,4 +17,15 @@ class TurPuestoRepository extends EntityRepository {
         $dql .= " ORDER BY p.nombre";
         return $dql;
     }            
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $ar = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigo);
+                $em->remove($ar);
+            }
+            $em->flush();
+        }
+    }     
 }

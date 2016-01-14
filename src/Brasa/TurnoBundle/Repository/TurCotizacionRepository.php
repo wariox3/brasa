@@ -211,8 +211,8 @@ class TurCotizacionRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
-                $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigo);
-                $em->remove($arCotizacion);
+                $ar = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigo);
+                $em->remove($ar);
             }
             $em->flush();
         }

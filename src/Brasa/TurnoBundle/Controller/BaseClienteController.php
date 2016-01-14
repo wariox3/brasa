@@ -88,76 +88,11 @@ class BaseClienteController extends Controller
         $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
         $form = $this->formularioDetalle($arCliente);
         $form->handleRequest($request);
-        if($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnAutorizar')->isClicked()) {            
-                if($arCliente->getEstadoAutorizado() == 0) {
-                    if($em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->numeroRegistros($codigoCliente) > 0) {
-                        $arCliente->setEstadoAutorizado(1);
-                        $em->persist($arCliente);
-                        $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));                                                                        
-                    } else {
-                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al examen', $this);
-                    }                    
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));                                                
-            }
-            if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arCliente->getEstadoAutorizado() == 1) {
-                    $arCliente->setEstadoAutorizado(0);
-                    $em->persist($arCliente);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));                                                
-                }
-            }
-            if ($form->get('BtnAprobar')->isClicked()) {                
-                $strRespuesta = $em->getRepository('BrasaTurnoBundle:TurCliente')->aprobarExamen($codigoCliente);
-                if($strRespuesta == ''){
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));                                                
-                }else {
-                  $objMensaje->Mensaje('error', $strRespuesta, $this);
-                }                 
-            }      
-            
-            if($form->get('BtnImprimir')->isClicked()) {
-                if($arCliente->getEstadoAutorizado() == 1) {
-                    $objExamen = new \Brasa\TurnoBundle\Formatos\FormatoExamen();
-                    $objExamen->Generar($this, $codigoCliente);
-                } else {
-                    $objMensaje->Mensaje("error", "No puede imprimir una orden de examen sin estar autorizada", $this);
-                }
-            }
-            if($form->get('BtnEliminarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaTurnoBundle:TurCliente')->liquidar($codigoCliente);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));
-            }
-            if($form->get('BtnAprobarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));
-            }
-            if($form->get('BtnCerrarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->cerrarDetallesSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));
-            }            
-            if ($form->get('BtnActualizarDetalle')->isClicked()) {
-                $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigo'] as $intCodigo) {                
-                    if($arrControles['TxtPrecio'.$intCodigo] != "" && $arrControles['TxtPrecio'.$intCodigo] != 0) {
-                        $arClienteDetalle = new \Brasa\TurnoBundle\Entity\TurClienteDetalle();
-                        $arClienteDetalle = $em->getRepository('BrasaTurnoBundle:TurClienteDetalle')->find($intCodigo);                                        
-                        $floPrecio = $arrControles['TxtPrecio'.$intCodigo];
-                        $arClienteDetalle->setValidarVencimiento($arrControles['cboValidarVencimiento'.$intCodigo]);
-                        $arClienteDetalle->setFechaVence(date_create($arrControles['TxtVence'.$intCodigo]));
-                        $arClienteDetalle->setVrPrecio($floPrecio);
-                        $em->persist($arClienteDetalle);                        
-                    }
-                }
-                $em->flush();
-                $em->getRepository('BrasaTurnoBundle:TurCliente')->liquidar($codigoCliente);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoCliente)));
+        if($form->isValid()) {                        
+            if($form->get('BtnEliminarPuesto')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPuesto');
+                $em->getRepository('BrasaTurnoBundle:TurPuesto')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_cliente_detalle', array('codigoCliente' => $codigoCliente)));
             }            
         }
 
