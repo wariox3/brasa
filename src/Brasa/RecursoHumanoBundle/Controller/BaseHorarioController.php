@@ -1,16 +1,19 @@
 <?php
 
-namespace Brasa\GeneralBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\GeneralBundle\Form\Type\GenBancoType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuHorarioType;
 
-
-
-class BaseBancosController extends Controller
+/**
+ * RhuHorario controller.
+ *
+ */
+class BaseHorarioController extends Controller
 {
-    public function listaAction() {
+
+    public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
@@ -19,18 +22,22 @@ class BaseBancosController extends Controller
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
-        $arTerceros = new \Brasa\GeneralBundle\Entity\GenTercero();
+        
+        $arHorarios = new \Brasa\RecursoHumanoBundle\Entity\RhuHorario();
+        
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoBanco) {
-                    $arBanco = new \Brasa\GeneralBundle\Entity\GenBanco();
-                    $arBanco = $em->getRepository('BrasaGeneralBundle:GenBanco')->find($codigoBanco);
-                    $em->remove($arBanco);
+                foreach ($arrSeleccionados AS $codigoHorarioPk) {
+                    $arHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuHorario();
+                    $arHorario = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->find($codigoHorarioPk);
+                    $em->remove($arHorario);
                     $em->flush();
                 }
-            }
-            if($form->get('BtnExcel')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_rhu_base_horario_listar'));
+            }    
+        
+        if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -43,28 +50,29 @@ class BaseBancosController extends Controller
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Banco')
-                            ->setCellValue('C1', 'Cuenta');
+                            ->setCellValue('A1', 'Código')
+                            ->setCellValue('B1', 'Nombre')
+                            ->setCellValue('C1', 'Entrada')
+                            ->setCellValue('D1', 'Salida');
 
                 $i = 2;
-                $arBanco = $em->getRepository('BrasaGeneralBundle:GenBanco')->findAll();
+                $arHorarios = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->findAll();
                 
-                foreach ($arBanco as $arBanco) {
-                        
+                foreach ($arHorarios as $arHorarios) {
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arBanco->getCodigoBancoGeneralPk())
-                            ->setCellValue('B' . $i, $arBanco->getBancoRel()->getNombre())
-                            ->setCellValue('C' . $i, $arBanco->getCuenta());
+                            ->setCellValue('A' . $i, $arHorarios->getCodigoHorarioPk())
+                            ->setCellValue('B' . $i, $arHorarios->getNombre())
+                            ->setCellValue('C' . $i, $arHorarios->getEntrada())
+                            ->setCellValue('D' . $i, $arHorarios->getSalida());
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('BancoGeneral');
+                $objPHPExcel->getActiveSheet()->setTitle('Horarios');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="BancoGeneral.xlsx"');
+                header('Content-Disposition: attachment;filename="Horarios.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
@@ -79,38 +87,38 @@ class BaseBancosController extends Controller
             }
             
         }
-        $arBancos = new \Brasa\GeneralBundle\Entity\GenBanco();
-        $query = $em->getRepository('BrasaGeneralBundle:GenBanco')->findAll();
-        $arBancos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),50);
+        $arHorarios = new \Brasa\RecursoHumanoBundle\Entity\RhuHorario();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->findAll();
+        $arHorarios = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
-        return $this->render('BrasaGeneralBundle:Base/Bancos:lista.html.twig', array(
-                    'arBancos' => $arBancos,
+        return $this->render('BrasaRecursoHumanoBundle:Base/Horario:listar.html.twig', array(
+                    'arHorarios' => $arHorarios,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoBanco) {
+    public function nuevoAction($codigoHorarioPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arBanco = new \Brasa\GeneralBundle\Entity\GenBanco();
-        if ($codigoBanco != 0)
+        $arHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuHorario();
+        if ($codigoHorarioPk != 0)
         {
-            $arBanco = $em->getRepository('BrasaGeneralBundle:GenBanco')->find($codigoBanco);
+            $arHorario = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->find($codigoHorarioPk);
         }    
-        $form = $this->createForm(new GenBancoType(), $arBanco);
-        $form->handleRequest($request);
-        if ($form->isValid())
+        $formHorario = $this->createForm(new RhuHorarioType(), $arHorario);
+        $formHorario->handleRequest($request);
+        if ($formHorario->isValid())
         {
             // guardar la tarea en la base de datos
-            $arBanco = $form->getData();
-            $em->persist($arBanco);
+            $arHorario = $formHorario->getData();
+            $em->persist($arHorario);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_gen_base_bancos'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_horario_listar'));
         }
-        return $this->render('BrasaGeneralBundle:Base/Bancos:nuevo.html.twig', array(
-            'form' => $form->createView(),
+        return $this->render('BrasaRecursoHumanoBundle:Base/Horario:nuevo.html.twig', array(
+            'formHorario' => $formHorario->createView(),
         ));
     }
-        
+    
 }

@@ -15,12 +15,7 @@ class RhuHorarioAcceso
      * @ORM\Column(name="codigo_horario_acceso_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoHorarioAccesoPk;                    
-    
-    /**
-     * @ORM\Column(name="codigo_tipo_acceso_fk", type="integer", nullable=true)
-     */    
-    private $codigoTipoAccesoFk;     
+    private $codigoHorarioAccesoPk;                         
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -28,20 +23,30 @@ class RhuHorarioAcceso
     private $codigoEmpleadoFk;
     
     /**
-     * @ORM\Column(name="fecha", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_entrada", type="datetime", nullable=true)
      */    
-    private $fecha;
+    private $fechaEntrada;
+    
+    /**
+     * @ORM\Column(name="fecha_salida", type="datetime", nullable=true)
+     */    
+    private $fechaSalida;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
      */    
-    private $comentarios;           
-   
+    private $comentarios;
+    
     /**
-     * @ORM\ManyToOne(targetEntity="RhuTipoAcceso", inversedBy="horarioAccesoTipoAccesoRel")
-     * @ORM\JoinColumn(name="codigo_tipo_acceso_fk", referencedColumnName="codigo_tipo_acceso_pk")
-     */
-    protected $tipoAccesoRel;
+     * @ORM\Column(name="duracion_registro", type="datetime", nullable=true)
+     */    
+    private $duracionRegistro;
+    
+    /**     
+     * @ORM\Column(name="estado", type="boolean")
+     */    
+    private $estado = 0;
+   
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="horarioAccesoEmpleadoRel")
@@ -59,30 +64,6 @@ class RhuHorarioAcceso
     public function getCodigoHorarioAccesoPk()
     {
         return $this->codigoHorarioAccesoPk;
-    }
-
-    /**
-     * Set codigoTipoAccesoFk
-     *
-     * @param integer $codigoTipoAccesoFk
-     *
-     * @return RhuHorarioAcceso
-     */
-    public function setCodigoTipoAccesoFk($codigoTipoAccesoFk)
-    {
-        $this->codigoTipoAccesoFk = $codigoTipoAccesoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTipoAccesoFk
-     *
-     * @return integer
-     */
-    public function getCodigoTipoAccesoFk()
-    {
-        return $this->codigoTipoAccesoFk;
     }
 
     /**
@@ -110,27 +91,51 @@ class RhuHorarioAcceso
     }
 
     /**
-     * Set fecha
+     * Set fechaEntrada
      *
-     * @param \DateTime $fecha
+     * @param \DateTime $fechaEntrada
      *
      * @return RhuHorarioAcceso
      */
-    public function setFecha($fecha)
+    public function setFechaEntrada($fechaEntrada)
     {
-        $this->fecha = $fecha;
+        $this->fechaEntrada = $fechaEntrada;
 
         return $this;
     }
 
     /**
-     * Get fecha
+     * Get fechaEntrada
      *
      * @return \DateTime
      */
-    public function getFecha()
+    public function getFechaEntrada()
     {
-        return $this->fecha;
+        return $this->fechaEntrada;
+    }
+
+    /**
+     * Set fechaSalida
+     *
+     * @param \DateTime $fechaSalida
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setFechaSalida($fechaSalida)
+    {
+        $this->fechaSalida = $fechaSalida;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaSalida
+     *
+     * @return \DateTime
+     */
+    public function getFechaSalida()
+    {
+        return $this->fechaSalida;
     }
 
     /**
@@ -158,27 +163,51 @@ class RhuHorarioAcceso
     }
 
     /**
-     * Set tipoAccesoRel
+     * Set duracionRegistro
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoAcceso $tipoAccesoRel
+     * @param \DateTime $duracionRegistro
      *
      * @return RhuHorarioAcceso
      */
-    public function setTipoAccesoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoAcceso $tipoAccesoRel = null)
+    public function setDuracionRegistro($duracionRegistro)
     {
-        $this->tipoAccesoRel = $tipoAccesoRel;
+        $this->duracionRegistro = $duracionRegistro;
 
         return $this;
     }
 
     /**
-     * Get tipoAccesoRel
+     * Get duracionRegistro
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoAcceso
+     * @return \DateTime
      */
-    public function getTipoAccesoRel()
+    public function getDuracionRegistro()
     {
-        return $this->tipoAccesoRel;
+        return $this->duracionRegistro;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

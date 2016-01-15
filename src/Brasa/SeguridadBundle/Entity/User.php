@@ -63,7 +63,12 @@ class User implements UserInterface, \Serializable
      * @ORM\ManyToOne(targetEntity="SegRoles", inversedBy="usersRolRel")
      * @ORM\JoinColumn(name="roles", referencedColumnName="codigo_rol_pk")
      */
-    protected $rolRel;     
+    protected $rolRel; 
+
+    /**
+     * @ORM\OneToMany(targetEntity="SegUsuarioPermisoEspecial", mappedBy="usuarioRel")
+     */
+    protected $userUsuarioPermisoEspecialRel;
     
     
     public function __construct()
@@ -333,5 +338,39 @@ class User implements UserInterface, \Serializable
     public function getRolRel()
     {
         return $this->rolRel;
+    }
+
+    /**
+     * Add userUsuarioPermisoEspecialRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial $userUsuarioPermisoEspecialRel
+     *
+     * @return User
+     */
+    public function addUserUsuarioPermisoEspecialRel(\Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial $userUsuarioPermisoEspecialRel)
+    {
+        $this->userUsuarioPermisoEspecialRel[] = $userUsuarioPermisoEspecialRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove userUsuarioPermisoEspecialRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial $userUsuarioPermisoEspecialRel
+     */
+    public function removeUserUsuarioPermisoEspecialRel(\Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial $userUsuarioPermisoEspecialRel)
+    {
+        $this->userUsuarioPermisoEspecialRel->removeElement($userUsuarioPermisoEspecialRel);
+    }
+
+    /**
+     * Get userUsuarioPermisoEspecialRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserUsuarioPermisoEspecialRel()
+    {
+        return $this->userUsuarioPermisoEspecialRel;
     }
 }

@@ -54,6 +54,32 @@ class SegUsuariosController extends Controller
             'form' => $form->createView(),
         ));
     }
+    
+    public function detalleAction($codigoUsuario) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $form = $this->createFormBuilder()
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->getForm();
+        $form->handleRequest($request);
+        
+        $arUsuario = new \Brasa\RecursoHumanoBundle\Entity\Us();
+        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
+        $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
+        $arCreditoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => $codigoCreditoFk));
+        if($form->isValid()) {
+
+            if($form->get('BtnImprimir')->isClicked()) {
+                $objFormatoDetalleCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleCredito();
+                $objFormatoDetalleCredito->Generar($this, $codigoCreditoFk);
+            }
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:detalle.html.twig', array(
+                    'arCreditoPago' => $arCreditoPago,
+                    'arCreditos' => $arCreditos,
+                    'form' => $form->createView()
+                    ));
+    }
 
     public function recuperarAction() {
         $em = $this->getDoctrine()->getManager();

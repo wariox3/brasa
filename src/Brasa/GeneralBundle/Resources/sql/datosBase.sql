@@ -3809,6 +3809,23 @@ INSERT INTO `tur_recurso` (`codigo_recurso_pk`, `nombreCorto`, `comentarios`, `p
 
 
 /** Recurso humano **/
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('1','SISTEMAS');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('2','NOMINA');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('3','GERENCIA GENERAL');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('4','GERENCIA ADMINISTRATIVA');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('5','GERENCIA COMERCIAL');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('6','GERENCIA FINANCIERA');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('7','CONTABILIDAD');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('8','SELECCIÓN');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('9','GESTIÓN HUMANA');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('10','ARCHIVOS');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('11','SALUD OCUPACIONAL');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('12','SEGURIDAD SOCIAL');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('13','COMPRAS');
+
+insert into `rhu_horario` (`codigo_horario_pk`, `entrada`, `salida`, `nombre`) values('2','8:00','5:00','ADMINISTRATIVOS 8-5');
+insert into `rhu_horario` (`codigo_horario_pk`, `entrada`, `salida`, `nombre`) values('3','6','2','OPERATIVOS 6-2');
+
 INSERT INTO `rhu_accidente_trabajo_tipo_accidente` (`codigo_accidente_trabajo_tipo_accidente_pk`, `nombre`) VALUES('1','ACCIDENTE');
 INSERT INTO `rhu_accidente_trabajo_tipo_accidente` (`codigo_accidente_trabajo_tipo_accidente_pk`, `nombre`) VALUES('2','ACCIDENTE GRAVE');
 INSERT INTO `rhu_accidente_trabajo_tipo_accidente` (`codigo_accidente_trabajo_tipo_accidente_pk`, `nombre`) VALUES('3','ACCIDENTE MORTAL');

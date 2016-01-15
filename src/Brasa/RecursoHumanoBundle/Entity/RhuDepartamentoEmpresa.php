@@ -25,7 +25,12 @@ class RhuDepartamentoEmpresa
     /**
      * @ORM\OneToMany(targetEntity="RhuRegistroVisita", mappedBy="departamentoEmpresaRel")
      */
-    protected $registroVisitaDepartamentoEmpresaRel;    
+    protected $registroVisitaDepartamentoEmpresaRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="departamentoEmpresaRel")
+     */
+    protected $empleadosDepartamentoEmpresaRel;
     
     
     /**
@@ -34,6 +39,7 @@ class RhuDepartamentoEmpresa
     public function __construct()
     {
         $this->registroVisitaDepartamentoEmpresaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosDepartamentoEmpresaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -102,5 +108,39 @@ class RhuDepartamentoEmpresa
     public function getRegistroVisitaDepartamentoEmpresaRel()
     {
         return $this->registroVisitaDepartamentoEmpresaRel;
+    }
+
+    /**
+     * Add empleadosDepartamentoEmpresaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosDepartamentoEmpresaRel
+     *
+     * @return RhuDepartamentoEmpresa
+     */
+    public function addEmpleadosDepartamentoEmpresaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosDepartamentoEmpresaRel)
+    {
+        $this->empleadosDepartamentoEmpresaRel[] = $empleadosDepartamentoEmpresaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosDepartamentoEmpresaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosDepartamentoEmpresaRel
+     */
+    public function removeEmpleadosDepartamentoEmpresaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosDepartamentoEmpresaRel)
+    {
+        $this->empleadosDepartamentoEmpresaRel->removeElement($empleadosDepartamentoEmpresaRel);
+    }
+
+    /**
+     * Get empleadosDepartamentoEmpresaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosDepartamentoEmpresaRel()
+    {
+        return $this->empleadosDepartamentoEmpresaRel;
     }
 }

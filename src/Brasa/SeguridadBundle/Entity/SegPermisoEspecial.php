@@ -24,6 +24,18 @@ class SegPermisoEspecial
     
 
     /**
+     * @ORM\OneToMany(targetEntity="SegUsuarioPermisoEspecial", mappedBy="permisoEspecialRel")
+     */
+    protected $segPermisoEspecialSegUsuarioPermisoEspecialRel;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->segPermisoEspecialSegUsuarioPermisoEspecialRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get codigoPermisoEspecialPk
      *
      * @return integer
@@ -58,26 +70,36 @@ class SegPermisoEspecial
     }
 
     /**
-     * Set permitir
+     * Add segPermisoEspecialSegUsuarioPermisoEspecialRel
      *
-     * @param boolean $permitir
+     * @param \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial $segPermisoEspecialSegUsuarioPermisoEspecialRel
      *
      * @return SegPermisoEspecial
      */
-    public function setPermitir($permitir)
+    public function addSegPermisoEspecialSegUsuarioPermisoEspecialRel(\Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial $segPermisoEspecialSegUsuarioPermisoEspecialRel)
     {
-        $this->permitir = $permitir;
+        $this->segPermisoEspecialSegUsuarioPermisoEspecialRel[] = $segPermisoEspecialSegUsuarioPermisoEspecialRel;
 
         return $this;
     }
 
     /**
-     * Get permitir
+     * Remove segPermisoEspecialSegUsuarioPermisoEspecialRel
      *
-     * @return boolean
+     * @param \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial $segPermisoEspecialSegUsuarioPermisoEspecialRel
      */
-    public function getPermitir()
+    public function removeSegPermisoEspecialSegUsuarioPermisoEspecialRel(\Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial $segPermisoEspecialSegUsuarioPermisoEspecialRel)
     {
-        return $this->permitir;
+        $this->segPermisoEspecialSegUsuarioPermisoEspecialRel->removeElement($segPermisoEspecialSegUsuarioPermisoEspecialRel);
+    }
+
+    /**
+     * Get segPermisoEspecialSegUsuarioPermisoEspecialRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSegPermisoEspecialSegUsuarioPermisoEspecialRel()
+    {
+        return $this->segPermisoEspecialSegUsuarioPermisoEspecialRel;
     }
 }

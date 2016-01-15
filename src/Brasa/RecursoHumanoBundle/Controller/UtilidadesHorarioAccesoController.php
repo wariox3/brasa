@@ -30,7 +30,7 @@ class UtilidadesHorarioAccesoController extends Controller
                 if(count($arEmpleado) > 0) {
                     $arHorarioAcceso->setEmpleadoRel($arEmpleado);
                     if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
-                        $arHorarioAcceso->setFecha(new \DateTime('now'));
+                        $arHorarioAcceso->setFechaEntrada(new \DateTime('now'));
                         $em->persist($arHorarioAcceso);
                         $em->flush();
                         return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
@@ -111,6 +111,37 @@ class UtilidadesHorarioAccesoController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/HorarioAcceso:cargarRegistro.html.twig', array(
             'form' => $form->createView()
             ));
-    }    
+    } 
+    
+    public function salidaAction($codigoHorarioAcceso) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_rhu_salida_control_acceso_empleados', array('codigoHorarioAcceso' => $codigoHorarioAcceso)))
+            ->add('comentarios', 'textarea', array('required' => false))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
+        $arHorarioAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoHorarioAcceso);
+        if ($form->isValid()) {
+            //$arHorarioAcceso = $form->getData();
+            $arHorarioAcceso->setFechaSalida(new \DateTime('now'));
+            $arHorarioAcceso->setEstado(1);
+            $arHorarioAcceso->setComentarios($form->get('comentarios')->getData());
+            $dateEntrada = $arHorarioAcceso->getFechaEntrada();
+            $dateSalida = $arHorarioAcceso->getFechaSalida();
+            $dateDiferencia = $dateSalida->diff($dateEntrada);
+            $arHorarioAcceso->setDuracionRegistro($dateDiferencia);
+            $em->persist($arHorarioAcceso);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/HorarioAcceso:salida.html.twig', array(
+            '$arHorarioAcceso' => $arHorarioAcceso,
+            'form' => $form->createView()
+        ));
+    }
         
 }

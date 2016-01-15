@@ -320,7 +320,11 @@ brs_rhu_cargar_creditos:
     
 brs_rhu_cargar_control_acceso_empleados:
     path:     /rhu/cargar/control/acceso/empleados
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:cargar }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:cargar } 
+    
+brs_rhu_salida_control_acceso_empleados:
+    path:     /rhu/salida/control/acceso/empleados/{codigoHorarioAcceso}
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:salida }    
 
 brs_rhu_pagos_lista:
     path:     /rhu/pagos/lista
@@ -509,6 +513,14 @@ brs_rhu_base_banco_listar:
 brs_rhu_base_banco_nuevo:
    path:     /rhu/base/banco/nuevo/{codigoBancoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:nuevo }
+   
+brs_rhu_base_horario_listar:
+   path:     /rhu/base/horario/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseHorario:listar }
+   
+brs_rhu_base_horario_nuevo:
+   path:     /rhu/base/horario/nuevo/{codigoHorarioPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseHorario:nuevo }   
    
 brs_rhu_base_certificadoIngreso_generar:
    path:     /rhu/base/Certificado/generar/{codigoEmpleado}

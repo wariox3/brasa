@@ -32,6 +32,17 @@ class SegUsuarioPermisoEspecial
      */    
     private $permitir = 0;    
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="userUsuarioPermisoEspecialRel")
+     * @ORM\JoinColumn(name="codigo_usuario_fk", referencedColumnName="id")
+     */
+    protected $usuarioRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="SegPermisoEspecial", inversedBy="segPermisoEspecialSegUsuarioPermisoEspecialRel")
+     * @ORM\JoinColumn(name="codigo_permiso_especial_fk", referencedColumnName="codigo_permiso_especial_pk")
+     */
+    protected $permisoEspecialRel;
 
     /**
      * Get codigoUsuarioPermisoEspecialPk
@@ -113,5 +124,53 @@ class SegUsuarioPermisoEspecial
     public function getPermitir()
     {
         return $this->permitir;
+    }
+
+    /**
+     * Set usuarioRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\User $usuarioRel
+     *
+     * @return SegUsuarioPermisoEspecial
+     */
+    public function setUsuarioRel(\Brasa\SeguridadBundle\Entity\User $usuarioRel = null)
+    {
+        $this->usuarioRel = $usuarioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioRel
+     *
+     * @return \Brasa\SeguridadBundle\Entity\User
+     */
+    public function getUsuarioRel()
+    {
+        return $this->usuarioRel;
+    }
+
+    /**
+     * Set permisoEspecialRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegPermisoEspecial $permisoEspecialRel
+     *
+     * @return SegUsuarioPermisoEspecial
+     */
+    public function setPermisoEspecialRel(\Brasa\SeguridadBundle\Entity\SegPermisoEspecial $permisoEspecialRel = null)
+    {
+        $this->permisoEspecialRel = $permisoEspecialRel;
+
+        return $this;
+    }
+
+    /**
+     * Get permisoEspecialRel
+     *
+     * @return \Brasa\SeguridadBundle\Entity\SegPermisoEspecial
+     */
+    public function getPermisoEspecialRel()
+    {
+        return $this->permisoEspecialRel;
     }
 }

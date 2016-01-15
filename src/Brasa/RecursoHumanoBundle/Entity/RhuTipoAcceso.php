@@ -22,19 +22,7 @@ class RhuTipoAcceso
      */    
     private $nombre;        
     
-    /**
-     * @ORM\OneToMany(targetEntity="RhuHorarioAcceso", mappedBy="tipoAccesoRel")
-     */
-    protected $horarioAccesoTipoAccesoRel;    
-
     
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->horarioAccesoTipoAccesoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get codigoTipoAccesoPk
@@ -68,39 +56,5 @@ class RhuTipoAcceso
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add horarioAccesoTipoAccesoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horarioAccesoTipoAccesoRel
-     *
-     * @return RhuTipoAcceso
-     */
-    public function addHorarioAccesoTipoAccesoRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horarioAccesoTipoAccesoRel)
-    {
-        $this->horarioAccesoTipoAccesoRel[] = $horarioAccesoTipoAccesoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove horarioAccesoTipoAccesoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horarioAccesoTipoAccesoRel
-     */
-    public function removeHorarioAccesoTipoAccesoRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horarioAccesoTipoAccesoRel)
-    {
-        $this->horarioAccesoTipoAccesoRel->removeElement($horarioAccesoTipoAccesoRel);
-    }
-
-    /**
-     * Get horarioAccesoTipoAccesoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getHorarioAccesoTipoAccesoRel()
-    {
-        return $this->horarioAccesoTipoAccesoRel;
     }
 }

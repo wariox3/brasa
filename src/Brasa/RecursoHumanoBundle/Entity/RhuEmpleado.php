@@ -303,6 +303,16 @@ class RhuEmpleado
     private $empleadoInformacionInterna = 0;
     
     /**
+     * @ORM\Column(name="codigo_horario_fk", type="integer", nullable=true)
+     */    
+    private $codigoHorarioFk;
+    
+    /**
+     * @ORM\Column(name="codigo_departamento_empresa_fk", type="integer", nullable=true)
+     */    
+    private $codigoDepartamentoEmpresaFk;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
@@ -467,6 +477,18 @@ class RhuEmpleado
     protected $rhRel; 
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuHorario", inversedBy="empleadosHorarioRel")
+     * @ORM\JoinColumn(name="codigo_horario_fk", referencedColumnName="codigo_horario_pk")
+     */
+    protected $horarioRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuDepartamentoEmpresa", inversedBy="empleadosDepartamentoEmpresaRel")
+     * @ORM\JoinColumn(name="codigo_departamento_empresa_fk", referencedColumnName="codigo_departamento_empresa_pk")
+     */
+    protected $departamentoEmpresaRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuEmpleadoFamilia", mappedBy="empleadoRel")
      */
     protected $empleadosFamiliasEmpleadoRel;
@@ -550,6 +572,7 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuHorarioAcceso", mappedBy="empleadoRel")
      */
     protected $horarioAccesoEmpleadoRel;
+    
     
     /**
      * Constructor
@@ -1893,6 +1916,54 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoHorarioFk
+     *
+     * @param integer $codigoHorarioFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoHorarioFk($codigoHorarioFk)
+    {
+        $this->codigoHorarioFk = $codigoHorarioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHorarioFk
+     *
+     * @return integer
+     */
+    public function getCodigoHorarioFk()
+    {
+        return $this->codigoHorarioFk;
+    }
+
+    /**
+     * Set codigoDepartamentoEmpresaFk
+     *
+     * @param integer $codigoDepartamentoEmpresaFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoDepartamentoEmpresaFk($codigoDepartamentoEmpresaFk)
+    {
+        $this->codigoDepartamentoEmpresaFk = $codigoDepartamentoEmpresaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDepartamentoEmpresaFk
+     *
+     * @return integer
+     */
+    public function getCodigoDepartamentoEmpresaFk()
+    {
+        return $this->codigoDepartamentoEmpresaFk;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -2696,6 +2767,54 @@ class RhuEmpleado
     public function getRhRel()
     {
         return $this->rhRel;
+    }
+
+    /**
+     * Set horarioRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorario $horarioRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setHorarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorario $horarioRel = null)
+    {
+        $this->horarioRel = $horarioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get horarioRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuHorario
+     */
+    public function getHorarioRel()
+    {
+        return $this->horarioRel;
+    }
+
+    /**
+     * Set departamentoEmpresaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa $departamentoEmpresaRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setDepartamentoEmpresaRel(\Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa $departamentoEmpresaRel = null)
+    {
+        $this->departamentoEmpresaRel = $departamentoEmpresaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get departamentoEmpresaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa
+     */
+    public function getDepartamentoEmpresaRel()
+    {
+        return $this->departamentoEmpresaRel;
     }
 
     /**

@@ -83,6 +83,14 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo',
                 'property' => 'nombre',
             ))
+            ->add('horarioRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuHorario',
+                'property' => 'nombre',
+            ))
+            ->add('departamentoEmpresaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa',
+                'property' => 'nombre',
+            ))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

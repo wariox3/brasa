@@ -50,9 +50,10 @@
                     <th>NRO</th>
                     <th>IDENTIFICACION</th>
                     <th>EMPLEADO</th>
-                    <th>TIPO ACCESO</th>
                     <th>FECHA</th>
-                    <th>HORA</th>
+                    <th>HORA ENTRADA</th>
+                    <th>HORA SALIDA</th>
+                    <th>TOTAL VISITA</th>
                     <th>COMENTARIOS</th>
                 </tr>
             {% set contador = 1  %}
@@ -61,9 +62,10 @@
                 <td>{{ contador  }}</td>
                 <td>{{ arControlAccesosEmpleados.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arControlAccesosEmpleados.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arControlAccesosEmpleados.tipoAccesoRel.nombre  }}</td>
-                <td>{{ arControlAccesosEmpleados.fecha|date('Y-m-d')  }}</td>
-                <td>{{ arControlAccesosEmpleados.fecha|date('H:i:s')  }}</td>
+                <td>{{ arControlAccesosEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
+                <td>{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}</td>
+                <td>{{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}</td>
+                <td>{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }} - {{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}</td>
                 <td>{{ arControlAccesosEmpleados.comentarios  }}</td>
             </tr>
             {% set contador = contador + 1  %}

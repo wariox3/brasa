@@ -14,9 +14,9 @@ class RhuHorarioAccesoRepository extends EntityRepository {
     public function RegistroHoy($strFechaHoy = "") {
         
         $em = $this->getEntityManager();
-        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 ";   
+        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estado = 0";   
         if ($strFechaHoy != ""){
-            $dql .= " AND ha.fecha >= '". $strFechaHoy . " 00:00:00' AND ha.fecha <= '" . $strFechaHoy . " 23:59:59' ";
+            $dql .= " AND ha.fechaEntrada >= '". $strFechaHoy . " 00:00:00' AND ha.fechaEntrada <= '" . $strFechaHoy . " 23:59:59' ";
         }
         return $dql;
     }
@@ -31,12 +31,12 @@ class RhuHorarioAccesoRepository extends EntityRepository {
             $dql .= " AND e.nombreCorto LIKE '%". $strNombre . "%'";
         }
         if ($strDesde != ""){
-            $dql .= " AND ha.fecha >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
+            $dql .= " AND ha.fechaEntrada >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
         }
         if($strHasta != "") {
-            $dql .= " AND ha.fecha <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
+            $dql .= " AND ha.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
         }
-        $dql .= " ORDER BY ha.fecha";
+        $dql .= " ORDER BY ha.fechaEntrada";
         return $dql;
     }
     
