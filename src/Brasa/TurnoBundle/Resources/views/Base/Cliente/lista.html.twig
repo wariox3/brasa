@@ -40,6 +40,7 @@
                 <th>{{ knp_pagination_sortable(arClientes, 'CÓDIGO', 'p.codigoClientePk') }}</th>
                 <th>NIT</th>
                 <th>NOMBRE</th>                
+                <th>ESTRATO</th>
                 <th>CONTACTO</th>
                 <th></th>
                 <th></th>
@@ -50,6 +51,7 @@
                 <td>{{ arClientes.codigoClientePk  }}</td>                               
                 <td>{{ arClientes.nit }}</td>                
                 <td>{{ arClientes.nombreCorto }}</td>
+                <td>{{ arClientes.estrato }}</td>
                 <td>{{ arClientes.contacto }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_cliente_nuevo', {'codigoCliente': arClientes.codigoClientePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_cliente_detalle', { 'codigoCliente': arClientes.codigoClientePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                                

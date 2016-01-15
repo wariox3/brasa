@@ -249,10 +249,12 @@ class BaseRecursoController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE');
+                    ->setCellValue('B1', 'IDENTIFICACION')
+                    ->setCellValue('C1', 'NOMBRE')
+                    ->setCellValue('D1', 'TIPO');
 
         $i = 2;
         
@@ -263,7 +265,9 @@ class BaseRecursoController extends Controller
         foreach ($arRecursos as $arRecurso) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arRecurso->getCodigoRecursoPk())
-                    ->setCellValue('B' . $i, $arRecurso->getNombreCorto());
+                    ->setCellValue('B' . $i, $arRecurso->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arRecurso->getNombreCorto())
+                    ->setCellValue('D' . $i, $arRecurso->getRecursoTipoRel()->getNombre());
                         
             $i++;
         }

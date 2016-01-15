@@ -15,12 +15,46 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-                <div class="form-group form-group-sm">
-                    <label for="form_TxtCodigo" class="col-sm-2 control-label">Codigo:</label>
+                <div     class="form-group form-group-sm">
+                    <label for="txtNit" class="col-sm-2 control-label">Cliente:</label>
                     <div class="col-sm-10">
-                        {{ form_widget(form.TxtCodigo, { 'attr': {'class': 'form-control'} }) }}
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="input-group">
+                              <input id="txtNit"  name="txtNit"  type="text" class="form-control" value="{{ arCliente.nit |default('') }}"/>
+                            </div>
+                          </div>
+                          <div class="col-lg-10">
+                            <div class="input-group">                                      
+                              <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arCliente.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                              <span class="input-group-btn">                                        
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_cliente', { 'campoCodigo': 'txtNit', 'campoNombre': 'txtNombreCorto' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                     </div>
-                </div>    
+                </div>                 
+                <div class="form-group form-group-sm">
+                    <label for="txtNit" class="col-sm-2 control-label">Recurso:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="input-group">
+                              <input id="txtNumeroIdentificacion"  name="txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arRecurso.numeroIdentificacion |default('') }}"/>
+                            </div>
+                          </div>
+                          <div class="col-lg-10">
+                            <div class="input-group">                                      
+                              <input id="txtNombreCortoRecurso"  name="txtNombreCortoRecurso"  type="text" class="form-control" value="{{ arRecurso.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                              <span class="input-group-btn">                                        
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_recurso', { 'campoCodigo': 'txtNumeroIdentificacion', 'campoNombre': 'txtNombreCortoRecurso' }) }}', 'buscarTercero', 600, 900)">Buscar</a>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>                              
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -31,11 +65,8 @@
             <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>COD</th>
-                <th>CLIENTE</th>
-                <th>RECURSO</th>                
-                <th></th>                
+                <th>RECURSO</th>                               
                 <th>PUESTO</th>                
-                <th></th>
                 <th>1</th>
                 <th>2</th>
                 <th>3</th>
@@ -72,13 +103,17 @@
                 <th></th>
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
+            {% set intCodigoCliente = '' %}
             {% for arProgramacionDetalle in arProgramacionDetalle %}
+               {% if intCodigoCliente != arProgramacionDetalle.programacionRel.codigoClienteFk %}
+                    <tr> 
+                        <td id="suptipo" colspan="38">{{ arProgramacionDetalle.programacionRel.clienteRel.nombreCorto | default('') }}</td>
+                    </tr>
+                    {% set intCodigoCliente = arProgramacionDetalle.programacionRel.codigoClienteFk %}
+                {% endif %} 
                 <tr>
-                    <td>{{ arProgramacionDetalle.codigoProgramacionDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}"></td>                    
-                    <td style="text-align: left; width: 200px" width="120px">{{ arProgramacionDetalle.programacionRel.clienteRel.nombreCorto | default('') }}</td>   
-                    <td>{{ arProgramacionDetalle.codigoRecursoFk }}</td>   
-                    <td>{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</td>                                         
-                    <td>{{ arProgramacionDetalle.codigoPuestoFk }}</td>   
+                    <td>{{ arProgramacionDetalle.codigoProgramacionDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}"></td>                                        
+                    <td>{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</td>                                                             
                     <td>{{ arProgramacionDetalle.puestoRel.nombre | default('') }}</td>                                                                 
                     <td>{{ arProgramacionDetalle.dia1  }}</td>
                     <td>{{ arProgramacionDetalle.dia2  }}</td>

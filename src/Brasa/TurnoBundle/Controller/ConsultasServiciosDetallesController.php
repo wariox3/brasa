@@ -26,7 +26,6 @@ class ConsultasServiciosDetallesController extends Controller
                 $this->generarExcel();
             }
         }
-        
         $arServiciosDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Consultas/Servicio:detalle.html.twig', array(
             'arServiciosDetalles' => $arServiciosDetalles,
@@ -54,9 +53,11 @@ class ConsultasServiciosDetallesController extends Controller
     }    
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();            
         $objPHPExcel = new \PHPExcel();
+        
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
             ->setLastModifiedBy("EMPRESA")
@@ -67,6 +68,15 @@ class ConsultasServiciosDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Y'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }     
+        for($col = 'Y'; $col !== 'AC'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0.00');
+        }        
+        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'CLIENTE')
@@ -92,14 +102,17 @@ class ConsultasServiciosDetallesController extends Controller
                     ->setCellValue('V1', 'H.D')
                     ->setCellValue('W1', 'H.N')
                     ->setCellValue('X1', 'DIAS')
-                    ->setCellValue('Y1', 'VALOR');
+                    ->setCellValue('Y1', 'COSTO')
+                    ->setCellValue('Z1', 'VR.MINIMO')
+                    ->setCellValue('AA1', 'VR.AJUSTADO')
+                    ->setCellValue('AB1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arServiciosDetalles = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServiciosDetalles = $query->getResult();
 
-        foreach ($arServiciosDetalles as $arServicioDetalle) {            
+        foreach ($arServiciosDetalles as $arServicioDetalle) {   
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arServicioDetalle->getCodigoServicioDetallePk())
                     ->setCellValue('B' . $i, $arServicioDetalle->getServicioRel()->getClienteRel()->getNombreCorto())
@@ -111,19 +124,22 @@ class ConsultasServiciosDetallesController extends Controller
                     ->setCellValue('J' . $i, $arServicioDetalle->getDiaHasta())
                     ->setCellValue('K' . $i, $arServicioDetalle->getCantidad())
                     ->setCellValue('L' . $i, $arServicioDetalle->getCantidadRecurso())
-                    ->setCellValue('M' . $i, $arServicioDetalle->getLunes())
-                    ->setCellValue('N' . $i, $arServicioDetalle->getMartes())
-                    ->setCellValue('O' . $i, $arServicioDetalle->getMiercoles())
-                    ->setCellValue('P' . $i, $arServicioDetalle->getJueves())
-                    ->setCellValue('Q' . $i, $arServicioDetalle->getViernes())
-                    ->setCellValue('R' . $i, $arServicioDetalle->getSabado())
-                    ->setCellValue('S' . $i, $arServicioDetalle->getDomingo())
-                    ->setCellValue('T' . $i, $arServicioDetalle->getFestivo())
+                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getLunes()))
+                    ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getMartes()))
+                    ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getMiercoles()))
+                    ->setCellValue('P' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getJueves()))
+                    ->setCellValue('Q' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getViernes()))
+                    ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getSabado()))
+                    ->setCellValue('S' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getDomingo()))
+                    ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getFestivo()))
                     ->setCellValue('U' . $i, $arServicioDetalle->getHoras())
                     ->setCellValue('V' . $i, $arServicioDetalle->getHorasDiurnas())
                     ->setCellValue('W' . $i, $arServicioDetalle->getHorasNocturnas())
                     ->setCellValue('X' . $i, $arServicioDetalle->getDias())
-                    ->setCellValue('Y' . $i, $arServicioDetalle->getVrTotal());
+                    ->setCellValue('Y' . $i, $arServicioDetalle->getVrCostoCalculado())
+                    ->setCellValue('Z' . $i, $arServicioDetalle->getVrTotalMinimo())
+                    ->setCellValue('AA' . $i, $arServicioDetalle->getVrTotalAjustado())
+                    ->setCellValue('AB' . $i, $arServicioDetalle->getVrTotal());
             if($arServicioDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arServicioDetalle->getPuestoRel()->getNombre());

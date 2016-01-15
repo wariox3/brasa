@@ -39,6 +39,7 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arRecursos, 'CÓDIGO', 'p.codigoRecursoPk') }}</th>
                 <th>TIPO</th>
+                <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>                
                 <th>P.PROMEDIO</th>
                 <th>P.VARIABLE</th>
@@ -49,6 +50,7 @@
             <tr>                
                 <td>{{ arRecursos.codigoRecursoPk  }}</td>                               
                 <td>{{ arRecursos.recursoTipoRel.nombre |default('') }}</td>                
+                <td>{{ arRecursos.numeroIdentificacion }}</td>                
                 <td>{{ arRecursos.nombreCorto }}</td>                
                 <td>{% if arRecursos.pagoPromedio == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arRecursos.pagoVariable == 1 %} SI {% else %} NO {% endif %}</td>

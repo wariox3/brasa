@@ -29,6 +29,7 @@ class ProcesoGenerarPedidoController extends Controller
                     $arPedidoNuevo->setSectorRel($arServicio->getSectorRel());
                     $arPedidoNuevo->setFecha($dateFecha);
                     $arPedidoNuevo->setFechaProgramacion($dateFecha);
+                    $arPedidoNuevo->setEstadoAutorizado(1);
                     
                     $em->persist($arPedidoNuevo);                    
                                         
@@ -58,7 +59,8 @@ class ProcesoGenerarPedidoController extends Controller
                         $arPedidoDetalleNuevo->setViernes($arServicioDetalle->getViernes());
                         $arPedidoDetalleNuevo->setSabado($arServicioDetalle->getSabado());
                         $arPedidoDetalleNuevo->setDomingo($arServicioDetalle->getDomingo());
-                        $arPedidoDetalleNuevo->setFestivo($arServicioDetalle->getFestivo());                        
+                        $arPedidoDetalleNuevo->setFestivo($arServicioDetalle->getFestivo());    
+                        $arPedidoDetalleNuevo->setVrTotalAjustado($arServicioDetalle->getVrTotalAjustado());
                         $em->persist($arPedidoDetalleNuevo);  
                         $arServicioDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
                         $arServicioDetalleRecursos =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->findBy(array('codigoServicioDetalleFk' => $arServicioDetalle->getCodigoServicioDetallePk())); 

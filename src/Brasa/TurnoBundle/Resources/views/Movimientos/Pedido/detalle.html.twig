@@ -129,7 +129,7 @@
                     {% if arPedido.estadoAutorizado == 0 %}
                         <td>
                             <input class="input-grid" type="text" name="TxtPuesto{{ arPedidoDetalle.codigoPedidoDetallePk }}" id="TxtPuesto{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.codigoPuestoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arPedidoDetalle.codigoPedidoDetallePk, 'codigoCliente' : arPedido.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
+                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arPedidoDetalle.codigoPedidoDetallePk, 'codigoCliente' : arPedido.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a>                            
                         </td>                        
                     {% else %}
                         <td>{{ arPedidoDetalle.codigoPuestoFk }}</td> 

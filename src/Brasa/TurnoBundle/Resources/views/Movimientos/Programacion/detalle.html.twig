@@ -79,12 +79,12 @@
                     {% if arProgramacion.estadoAutorizado == 0 %}
                         <td>
                             <input class="input-grid" type="text" name="TxtRecurso{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" id="TxtRecurso{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.codigoRecursoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_recurso2', {'campoCodigo': 'TxtRecurso' ~ arProgramacionDetalle.codigoProgramacionDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
+                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_recurso2', {'campoCodigo': 'TxtRecurso' ~ arProgramacionDetalle.codigoProgramacionDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a>                            
                         </td>    
                         <td>{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</td> 
                         <td>
                             <input class="input-grid" type="text" name="TxtPuesto{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" id="TxtPuesto{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.codigoPuestoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arProgramacionDetalle.codigoProgramacionDetallePk, 'codigoCliente' : arProgramacion.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
+                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arProgramacionDetalle.codigoProgramacionDetallePk, 'codigoCliente' : arProgramacion.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a>                            
                         </td>  
                         <td>{{ arProgramacionDetalle.puestoRel.nombre | default('') }}</td> 
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia1{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia1  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>

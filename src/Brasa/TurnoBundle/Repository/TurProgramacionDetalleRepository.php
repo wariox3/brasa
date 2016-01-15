@@ -12,6 +12,20 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         $dql .= " ORDER BY pd.codigoProgramacionDetallePk";
         return $dql;
     }                
+
+    public function consultaDetalleDql($codigoCliente, $codigoRecurso) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd JOIN pd.programacionRel p "
+                . "WHERE pd.codigoProgramacionDetallePk <> 0 ";
+        if($codigoCliente != '') {
+            $dql = $dql . "AND p.codigoClienteFk = " . $codigoCliente;
+        }
+        if($codigoRecurso != '') {
+            $dql = $dql . "AND pd.codigoRecursoFk = " . $codigoRecurso;
+        }        
+        $dql .= " ORDER BY p.codigoClienteFk";
+        return $dql;
+    }    
     
     public function eliminarDetallesSeleccionados($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {

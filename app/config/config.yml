@@ -95,6 +95,8 @@ swiftmailer:
 services:
     mensajes_brasa:
         class:        Brasa\GeneralBundle\MisClases\Mensajes   
+    funciones_brasa:
+        class:        Brasa\GeneralBundle\MisClases\Funciones           
     
        
         

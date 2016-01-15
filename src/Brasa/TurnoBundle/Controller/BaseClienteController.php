@@ -186,7 +186,12 @@ class BaseClienteController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE');
+                    ->setCellValue('B1', 'NIT')
+                    ->setCellValue('C1', 'NOMBRE')
+                    ->setCellValue('D1', 'ESTRATO')
+                    ->setCellValue('E1', 'CONTACTO')
+                    ->setCellValue('F1', 'TELEFONO')
+                    ->setCellValue('G1', 'CELULAR');
 
         $i = 2;
         
@@ -197,7 +202,12 @@ class BaseClienteController extends Controller
         foreach ($arClientes as $arCliente) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCliente->getCodigoClientePk())
-                    ->setCellValue('B' . $i, $arCliente->getNombreCorto());
+                    ->setCellValue('B' . $i, $arCliente->getNit())
+                    ->setCellValue('C' . $i, $arCliente->getNombreCorto())
+                    ->setCellValue('D' . $i, $arCliente->getEstrato())
+                    ->setCellValue('E' . $i, $arCliente->getContacto())
+                    ->setCellValue('F' . $i, $arCliente->getTelefonoContacto())
+                    ->setCellValue('G' . $i, $arCliente->getCelularContacto());
                         
             $i++;
         }

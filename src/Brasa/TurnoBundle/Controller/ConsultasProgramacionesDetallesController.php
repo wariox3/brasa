@@ -6,7 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 class ConsultasProgramacionesDetallesController extends Controller
 {
     var $strListaDql = "";
-    var $codigoPedido = "";
+    var $codigoCliente = "";
+    var $codigoRecurso = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -15,38 +16,50 @@ class ConsultasProgramacionesDetallesController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
         if ($form->isValid()) {            
-            if ($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrar($form);
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {                
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
+                if($arCliente) {
+                    $this->codigoCliente = $arCliente->getCodigoClientePk();
+                }
+            } 
+            if($arrControles['txtNumeroIdentificacion'] != '') {                
+                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                if($arRecurso) {
+                    $this->codigoRecurso = $arRecurso->getCodigoRecursoPk();
+                }
+            }            
+            if ($form->get('BtnFiltrar')->isClicked()) {                
                 $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
                 $this->lista();
                 $this->generarExcel();
             }
         }
 
-        $arProgramacionDetalle = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arProgramacionDetalle = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
         return $this->render('BrasaTurnoBundle:Consultas/Programacion:detalle.html.twig', array(
             'arProgramacionDetalle' => $arProgramacionDetalle,
+            'arCliente' => $arCliente,
+            'arRecurso' => $arRecurso,
             'form' => $form->createView()));
     }        
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql();
-    }
-
-    private function filtrar ($form) {                
-        $this->codigoPedido = $form->get('TxtCodigo')->getData();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->consultaDetalleDql(
+                $this->codigoCliente,
+                $this->codigoRecurso);
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido))                        
+        $form = $this->createFormBuilder()                       
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -67,6 +80,10 @@ class ConsultasProgramacionesDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'AM'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }                   
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'PROG')
