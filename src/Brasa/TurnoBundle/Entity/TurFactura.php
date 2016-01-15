@@ -23,9 +23,9 @@ class TurFactura
     private $fecha;        
     
     /**
-     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
-    private $codigoTerceroFk;        
+    private $codigoClienteFk;      
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -41,6 +41,12 @@ class TurFactura
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;                  
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="facturasClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="facturaRel")
@@ -218,5 +224,53 @@ class TurFactura
     public function getFacturasDetallesFacturaRel()
     {
         return $this->facturasDetallesFacturaRel;
+    }
+
+    /**
+     * Set codigoClienteFk
+     *
+     * @param integer $codigoClienteFk
+     *
+     * @return TurFactura
+     */
+    public function setCodigoClienteFk($codigoClienteFk)
+    {
+        $this->codigoClienteFk = $codigoClienteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteFk
+     *
+     * @return integer
+     */
+    public function getCodigoClienteFk()
+    {
+        return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     *
+     * @return TurFactura
+     */
+    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
     }
 }

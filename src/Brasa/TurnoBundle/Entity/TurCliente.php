@@ -67,7 +67,7 @@ class TurCliente
      * @ORM\OneToMany(targetEntity="TurCotizacion", mappedBy="clienteRel")
      */
     protected $cotizacionesClienteRel; 
-
+    
     /**
      * @ORM\OneToMany(targetEntity="TurPedido", mappedBy="clienteRel")
      */
@@ -77,6 +77,11 @@ class TurCliente
      * @ORM\OneToMany(targetEntity="TurServicio", mappedBy="clienteRel")
      */
     protected $serviciosClienteRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="TurFactura", mappedBy="clienteRel")
+     */
+    protected $facturasClienteRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacion", mappedBy="clienteRel")
@@ -496,5 +501,39 @@ class TurCliente
     public function getPuestosClienteRel()
     {
         return $this->puestosClienteRel;
+    }
+
+    /**
+     * Add facturasClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addFacturasClienteRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel)
+    {
+        $this->facturasClienteRel[] = $facturasClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel
+     */
+    public function removeFacturasClienteRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel)
+    {
+        $this->facturasClienteRel->removeElement($facturasClienteRel);
+    }
+
+    /**
+     * Get facturasClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasClienteRel()
+    {
+        return $this->facturasClienteRel;
     }
 }
