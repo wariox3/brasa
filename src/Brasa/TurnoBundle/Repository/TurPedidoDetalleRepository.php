@@ -29,6 +29,13 @@ class TurPedidoDetalleRepository extends EntityRepository {
         return $arResultado;                
     }
     
+    public function pendientesFacturarDql($codigoCliente) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "
+                . "WHERE p.codigoClienteFk = " . $codigoCliente;
+        return $dql;                
+    }    
+    
     public function eliminarSeleccionados($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();

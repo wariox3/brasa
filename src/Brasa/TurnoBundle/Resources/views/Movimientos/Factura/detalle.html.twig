@@ -34,7 +34,7 @@
                 </tr>               
                 <tr>
                     <td class="titulo">CLIENTE:</td>
-                    <td class="td-in-well">{{ arFactura.terceroRel.nombreCorto }}</td>
+                    <td class="td-in-well">{{ arFactura.clienteRel.nombreCorto }}</td>
                     <td class="titulo" ></td>
                     <td align="right"></td>
                 </tr> 
@@ -68,70 +68,11 @@
             <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>COD</th>
-                <th>TURNO</th>
-                <th>MODALIDAD</th>
-                <th>PERIODO</th>
-                <th>PLANTILLA</th>
-                <th>DESDE</th>
-                <th>HASTA</th>
-                <th>CANT</th>
-                <th>CANT.RE</th>
-                <th>LU</th>
-                <th>MA</th>
-                <th>MI</th>
-                <th>JU</th>
-                <th>VI</th>
-                <th>SA</th>
-                <th>DO</th>
-                <th>FE</th>
-                <th>HORAS</th>
-                <th>H.D</th>
-                <th>H.N</th>
-                <th>DIAS</th>
-                <th>VALOR</th>
-                <th></th>
                 <th></th>
             </tr>
             {% for arFacturaDetalle in arFacturaDetalle %}
                 <tr>
                     <td>{{ arFacturaDetalle.codigoFacturaDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}"></td>
-                    <td>{{ arFacturaDetalle.turnoRel.nombre  }}</td>                    
-                    <td>{{ arFacturaDetalle.modalidadServicioRel.nombre  }}</td>                    
-                    <td>{{ arFacturaDetalle.periodoRel.nombre  }}</td>
-                    <td>{{ arFacturaDetalle.plantillaRel.nombre | default('')  }}</td>
-                    {% if arFactura.estadoAutorizado == 0 %}                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaDesde{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.fechaDesde | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaHasta{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.fechaHasta | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>                                                
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadRecurso{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.cantidadRecurso  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td><input type="checkbox" name="chkLunes{{ arFacturaDetalle.codigoFacturaDetallePk }}" {% if arFacturaDetalle.lunes == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkMartes{{ arFacturaDetalle.codigoFacturaDetallePk }}" {% if arFacturaDetalle.martes == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkMiercoles{{ arFacturaDetalle.codigoFacturaDetallePk }}" {% if arFacturaDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkJueves{{ arFacturaDetalle.codigoFacturaDetallePk }}" {% if arFacturaDetalle.jueves == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkViernes{{ arFacturaDetalle.codigoFacturaDetallePk }}" {% if arFacturaDetalle.viernes == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkSabado{{ arFacturaDetalle.codigoFacturaDetallePk }}" {% if arFacturaDetalle.sabado == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkDomingo{{ arFacturaDetalle.codigoFacturaDetallePk }}" {% if arFacturaDetalle.domingo == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkFestivo{{ arFacturaDetalle.codigoFacturaDetallePk }}" {% if arFacturaDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
-                    {% else %}                        
-                        <td>{{ arFacturaDetalle.fechaDesde | date('Y/m/d') }}</td>    
-                        <td>{{ arFacturaDetalle.fechaHasta | date('Y/m/d') }}</td>    
-                        <td>{{ arFacturaDetalle.cantidad  }}</td>
-                        <td>{{ arFacturaDetalle.cantidadRecurso  }}</td>
-                        <td>{% if arFacturaDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arFacturaDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arFacturaDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arFacturaDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arFacturaDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arFacturaDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arFacturaDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arFacturaDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>
-                    {% endif %}
-                    <td style="text-align: right">{{ arFacturaDetalle.horas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arFacturaDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arFacturaDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arFacturaDetalle.dias | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arFacturaDetalle.vrTotal | number_format(0, '.', ',') }}</td> 
-                    <td>{% if arFactura.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_factura_detalle_nuevo', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': arFacturaDetalle.codigoFacturaDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}" /></td>
                 </tr>
             {% endfor %}
@@ -141,7 +82,7 @@
         <div class="btn-toolbar" style="float: right">
         {% if arFactura.estadoAutorizado == 0 %}
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_factura_detalle_nuevo', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>                
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_factura_detalle_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>                
             </div>
         {% endif %}            
         <div class="btn-group">

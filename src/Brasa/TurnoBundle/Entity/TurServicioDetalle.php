@@ -25,12 +25,12 @@ class TurServicioDetalle
     /**
      * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
      */    
-    private $codigoPuestoFk;    
+    private $codigoPuestoFk;            
     
     /**
-     * @ORM\Column(name="codigo_turno_fk", type="string", length=5)
+     * @ORM\Column(name="codigo_concepto_servicio_fk", type="integer")
      */    
-    private $codigoTurnoFk;    
+    private $codigoConceptoServicioFk;    
     
     /**
      * @ORM\Column(name="codigo_modalidad_servicio_fk", type="integer")
@@ -165,10 +165,10 @@ class TurServicioDetalle
     protected $puestoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="TurTurno", inversedBy="serviciosDetallesTurnoRel")
-     * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
+     * @ORM\ManyToOne(targetEntity="TurConceptoServicio", inversedBy="serviciosDetallesConceptoServicioRel")
+     * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
      */
-    protected $turnoRel;      
+    protected $conceptoServicioRel;      
 
     /**
      * @ORM\ManyToOne(targetEntity="TurModalidadServicio", inversedBy="serviciosDetallesModalidadServicioRel")
@@ -192,7 +192,6 @@ class TurServicioDetalle
      * @ORM\OneToMany(targetEntity="TurServicioDetalleRecurso", mappedBy="servicioDetalleRel", cascade={"persist", "remove"})
      */
     protected $serviciosDetallesRecursosServicioDetalleRel;     
-
 
 
     /**
@@ -262,27 +261,27 @@ class TurServicioDetalle
     }
 
     /**
-     * Set codigoTurnoFk
+     * Set codigoConceptoServicioFk
      *
-     * @param string $codigoTurnoFk
+     * @param integer $codigoConceptoServicioFk
      *
      * @return TurServicioDetalle
      */
-    public function setCodigoTurnoFk($codigoTurnoFk)
+    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
     {
-        $this->codigoTurnoFk = $codigoTurnoFk;
+        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
 
         return $this;
     }
 
     /**
-     * Get codigoTurnoFk
+     * Get codigoConceptoServicioFk
      *
-     * @return string
+     * @return integer
      */
-    public function getCodigoTurnoFk()
+    public function getCodigoConceptoServicioFk()
     {
-        return $this->codigoTurnoFk;
+        return $this->codigoConceptoServicioFk;
     }
 
     /**
@@ -547,6 +546,78 @@ class TurServicioDetalle
     public function getCantidadRecurso()
     {
         return $this->cantidadRecurso;
+    }
+
+    /**
+     * Set vrCostoCalculado
+     *
+     * @param float $vrCostoCalculado
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrCostoCalculado($vrCostoCalculado)
+    {
+        $this->vrCostoCalculado = $vrCostoCalculado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCostoCalculado
+     *
+     * @return float
+     */
+    public function getVrCostoCalculado()
+    {
+        return $this->vrCostoCalculado;
+    }
+
+    /**
+     * Set vrTotalAjustado
+     *
+     * @param float $vrTotalAjustado
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrTotalAjustado($vrTotalAjustado)
+    {
+        $this->vrTotalAjustado = $vrTotalAjustado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalAjustado
+     *
+     * @return float
+     */
+    public function getVrTotalAjustado()
+    {
+        return $this->vrTotalAjustado;
+    }
+
+    /**
+     * Set vrTotalMinimo
+     *
+     * @param float $vrTotalMinimo
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrTotalMinimo($vrTotalMinimo)
+    {
+        $this->vrTotalMinimo = $vrTotalMinimo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalMinimo
+     *
+     * @return float
+     */
+    public function getVrTotalMinimo()
+    {
+        return $this->vrTotalMinimo;
     }
 
     /**
@@ -838,27 +909,27 @@ class TurServicioDetalle
     }
 
     /**
-     * Set turnoRel
+     * Set conceptoServicioRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
+     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
      *
      * @return TurServicioDetalle
      */
-    public function setTurnoRel(\Brasa\TurnoBundle\Entity\TurTurno $turnoRel = null)
+    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
     {
-        $this->turnoRel = $turnoRel;
+        $this->conceptoServicioRel = $conceptoServicioRel;
 
         return $this;
     }
 
     /**
-     * Get turnoRel
+     * Get conceptoServicioRel
      *
-     * @return \Brasa\TurnoBundle\Entity\TurTurno
+     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
      */
-    public function getTurnoRel()
+    public function getConceptoServicioRel()
     {
-        return $this->turnoRel;
+        return $this->conceptoServicioRel;
     }
 
     /**
@@ -965,77 +1036,5 @@ class TurServicioDetalle
     public function getServiciosDetallesRecursosServicioDetalleRel()
     {
         return $this->serviciosDetallesRecursosServicioDetalleRel;
-    }
-
-    /**
-     * Set vrCostoCalculado
-     *
-     * @param float $vrCostoCalculado
-     *
-     * @return TurServicioDetalle
-     */
-    public function setVrCostoCalculado($vrCostoCalculado)
-    {
-        $this->vrCostoCalculado = $vrCostoCalculado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrCostoCalculado
-     *
-     * @return float
-     */
-    public function getVrCostoCalculado()
-    {
-        return $this->vrCostoCalculado;
-    }
-
-    /**
-     * Set vrTotalAjustado
-     *
-     * @param float $vrTotalAjustado
-     *
-     * @return TurServicioDetalle
-     */
-    public function setVrTotalAjustado($vrTotalAjustado)
-    {
-        $this->vrTotalAjustado = $vrTotalAjustado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalAjustado
-     *
-     * @return float
-     */
-    public function getVrTotalAjustado()
-    {
-        return $this->vrTotalAjustado;
-    }
-
-    /**
-     * Set vrTotalMinimo
-     *
-     * @param float $vrTotalMinimo
-     *
-     * @return TurServicioDetalle
-     */
-    public function setVrTotalMinimo($vrTotalMinimo)
-    {
-        $this->vrTotalMinimo = $vrTotalMinimo;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalMinimo
-     *
-     * @return float
-     */
-    public function getVrTotalMinimo()
-    {
-        return $this->vrTotalMinimo;
     }
 }

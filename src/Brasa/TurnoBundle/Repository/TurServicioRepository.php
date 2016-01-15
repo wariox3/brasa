@@ -82,17 +82,17 @@ class TurServicioRepository extends EntityRepository {
                     $intDiasFestivos = 2;    
                 }                               
                 $intTotalDias = $intDiasOrdinarios + $intDiasSabados + $intDiasDominicales + $intDiasFestivos;
-                $intHorasRealesDiurnas = $arServicioDetalle->getTurnoRel()->getHorasDiurnas() * $intTotalDias;
-                $intHorasRealesNocturnas = $arServicioDetalle->getTurnoRel()->getHorasNocturnas() * $intTotalDias;                            
+                $intHorasRealesDiurnas = $arServicioDetalle->getConceptoServicioRel()->getHorasDiurnas() * $intTotalDias;
+                $intHorasRealesNocturnas = $arServicioDetalle->getConceptoServicioRel()->getHorasNocturnas() * $intTotalDias;                            
             } else {
                 $intDiaInicial = $arServicioDetalle->getDiaDesde();
                 $intDiaFinal = $arServicioDetalle->getDiaHasta();
                 for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {
-                    $intHorasRealesDiurnas +=  $arServicioDetalle->getTurnoRel()->getHorasDiurnas();
-                    $intHorasRealesNocturnas +=  $arServicioDetalle->getTurnoRel()->getHorasNocturnas();                                                                                              
+                    $intHorasRealesDiurnas +=  $arServicioDetalle->getConceptoServicioRel()->getHorasDiurnas();
+                    $intHorasRealesNocturnas +=  $arServicioDetalle->getConceptoServicioRel()->getHorasNocturnas();                                                                                              
                 }                                                                                                 
             }                                    
-            $douCostoCalculado = $arServicioDetalle->getCantidad() * $arServicioDetalle->getTurnoRel()->getVrCostoCalculado();
+            $douCostoCalculado = $arServicioDetalle->getCantidad() * $arServicioDetalle->getConceptoServicioRel()->getVrCostoCalculado();
             $douHoras = ($intHorasRealesDiurnas + $intHorasRealesNocturnas ) * $arServicioDetalle->getCantidad();            
             $arServicioDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();        
             $arServicioDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($arServicioDetalle->getCodigoServicioDetallePk());                         

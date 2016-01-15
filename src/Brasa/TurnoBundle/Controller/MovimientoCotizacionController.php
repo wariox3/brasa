@@ -231,9 +231,6 @@ class MovimientoCotizacionController extends Controller
         $arCotizacionDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
         if($codigoCotizacionDetalle != 0) {
             $arCotizacionDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($codigoCotizacionDetalle);
-        } else {
-            $arCotizacionDetalle->setFechaDesde(new \DateTime('now'));
-            $arCotizacionDetalle->setFechaHasta(new \DateTime('now'));
         }
         $form = $this->createForm(new TurCotizacionDetalleType, $arCotizacionDetalle);
         $form->handleRequest($request);

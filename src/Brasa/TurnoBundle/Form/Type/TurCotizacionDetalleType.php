@@ -10,13 +10,11 @@ class TurCotizacionDetalleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('turnoRel', 'entity', array(
-                'class' => 'BrasaTurnoBundle:TurTurno',
+            ->add('conceptoServicioRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurConceptoServicio',
                 'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('t')
-                    ->where('t.servicio = :servicio ')
-                    ->setParameter('servicio', 1)
-                    ->orderBy('t.nombre', 'ASC');},
+                    return $er->createQueryBuilder('cs')
+                    ->orderBy('cs.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
             ->add('modalidadServicioRel', 'entity', array(

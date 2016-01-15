@@ -4,7 +4,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurFacturaType;
-use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleType;
 class MovimientoFacturaController extends Controller
 {
     var $strListaDql = "";
@@ -56,10 +55,10 @@ class MovimientoFacturaController extends Controller
             $arFactura = $form->getData();            
             $arrControles = $request->request->All();
             if($arrControles['txtNit'] != '') {
-                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
-                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arrControles['txtNit']));                
-                if(count($arTercero) > 0) {
-                    $arFactura->setTerceroRel($arTercero);
+                $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arCliente) > 0) {
+                    $arFactura->setClienteRel($arCliente);
                     $em->persist($arFactura);
                     $em->flush();
 
@@ -197,22 +196,16 @@ class MovimientoFacturaController extends Controller
                     ));
     }
 
-    public function detalleNuevoAction($codigoFactura, $codigoFacturaDetalle = 0) {
+    public function detalleNuevoAction($codigoFactura) {
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
-        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
-        $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
-        if($codigoFacturaDetalle != 0) {
-            $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($codigoFacturaDetalle);
-        } else {
-            $arFacturaDetalle->setFechaDesde(new \DateTime('now'));
-            $arFacturaDetalle->setFechaHasta(new \DateTime('now'));
-        }
-        $form = $this->createForm(new TurFacturaDetalleType, $arFacturaDetalle);
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);        
+        $form = $this->formularioDetalleNuevo();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arFacturaDetalle = $form->getData();
+            $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
             $arFacturaDetalle->setFacturaRel($arFactura);
             $em->persist($arFacturaDetalle);
             $em->flush();
@@ -224,8 +217,11 @@ class MovimientoFacturaController extends Controller
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
         }
+        
+        $arPedidoDetalles = $paginator->paginate($em->createQuery($this->listaNuevoDetalle($arFactura->getCodigoClienteFk())), $request->query->get('page', 1), 20);        
         return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleNuevo.html.twig', array(
             'arFactura' => $arFactura,
+            'arPedidoDetalles' => $arPedidoDetalles,
             'form' => $form->createView()));
     }
 
@@ -285,6 +281,12 @@ class MovimientoFacturaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurFactura')->listaDql($this->codigoFactura);
     }
+    
+    private function listaNuevoDetalle($codigoCliente) {
+        $em = $this->getDoctrine()->getManager();
+        $strDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesFacturarDql($codigoCliente);
+        return $strDql;
+    }
 
     private function filtrar ($form) {                
         $this->codigoFactura = $form->get('TxtCodigo')->getData();
@@ -327,7 +329,15 @@ class MovimientoFacturaController extends Controller
                     ->getForm();
         return $form;
     }
-
+    
+    private function formularioDetalleNuevo() {
+        $em = $this->getDoctrine()->getManager();        
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        return $form;
+    }    
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();        

@@ -64,12 +64,7 @@ class TurTurno
     /**
      * @ORM\Column(name="descanso", type="boolean")
      */    
-    private $descanso = false;    
-    
-    /**
-     * @ORM\Column(name="vr_costo_calculado", type="float")
-     */
-    private $vrCostoCalculado = 0;    
+    private $descanso = false;           
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -79,38 +74,19 @@ class TurTurno
     /**
      * @ORM\OneToMany(targetEntity="TurTurnoDetalle", mappedBy="turnoRel", cascade={"persist", "remove"})
      */
-    protected $turnosDetallesTurnoRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="turnoRel")
-     */
-    protected $pedidosDetallesTurnoRel;     
-    
-    /**
-     * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="turnoRel")
-     */
-    protected $serviciosDetallesTurnoRel;     
-    
-    /**
-     * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="turnoRel")
-     */
-    protected $cotizacionesDetallesTurnoRel;     
+    protected $turnosDetallesTurnoRel;            
     
     /**
      * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="turnoRel")
      */
     protected $soportesPagosDetallesTurnoRel;    
     
-
-
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->turnosDetallesTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pedidosDetallesTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->cotizacionesDetallesTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosDetallesTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -437,74 +413,6 @@ class TurTurno
     }
 
     /**
-     * Add pedidosDetallesTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesTurnoRel
-     *
-     * @return TurTurno
-     */
-    public function addPedidosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesTurnoRel)
-    {
-        $this->pedidosDetallesTurnoRel[] = $pedidosDetallesTurnoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove pedidosDetallesTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesTurnoRel
-     */
-    public function removePedidosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesTurnoRel)
-    {
-        $this->pedidosDetallesTurnoRel->removeElement($pedidosDetallesTurnoRel);
-    }
-
-    /**
-     * Get pedidosDetallesTurnoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPedidosDetallesTurnoRel()
-    {
-        return $this->pedidosDetallesTurnoRel;
-    }
-
-    /**
-     * Add cotizacionesDetallesTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesTurnoRel
-     *
-     * @return TurTurno
-     */
-    public function addCotizacionesDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesTurnoRel)
-    {
-        $this->cotizacionesDetallesTurnoRel[] = $cotizacionesDetallesTurnoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove cotizacionesDetallesTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesTurnoRel
-     */
-    public function removeCotizacionesDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesTurnoRel)
-    {
-        $this->cotizacionesDetallesTurnoRel->removeElement($cotizacionesDetallesTurnoRel);
-    }
-
-    /**
-     * Get cotizacionesDetallesTurnoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCotizacionesDetallesTurnoRel()
-    {
-        return $this->cotizacionesDetallesTurnoRel;
-    }
-
-    /**
      * Add soportesPagosDetallesTurnoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesTurnoRel
@@ -536,63 +444,5 @@ class TurTurno
     public function getSoportesPagosDetallesTurnoRel()
     {
         return $this->soportesPagosDetallesTurnoRel;
-    }
-
-    /**
-     * Add serviciosDetallesTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesTurnoRel
-     *
-     * @return TurTurno
-     */
-    public function addServiciosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesTurnoRel)
-    {
-        $this->serviciosDetallesTurnoRel[] = $serviciosDetallesTurnoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove serviciosDetallesTurnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesTurnoRel
-     */
-    public function removeServiciosDetallesTurnoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesTurnoRel)
-    {
-        $this->serviciosDetallesTurnoRel->removeElement($serviciosDetallesTurnoRel);
-    }
-
-    /**
-     * Get serviciosDetallesTurnoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getServiciosDetallesTurnoRel()
-    {
-        return $this->serviciosDetallesTurnoRel;
-    }
-
-    /**
-     * Set vrCostoCalculado
-     *
-     * @param float $vrCostoCalculado
-     *
-     * @return TurTurno
-     */
-    public function setVrCostoCalculado($vrCostoCalculado)
-    {
-        $this->vrCostoCalculado = $vrCostoCalculado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrCostoCalculado
-     *
-     * @return float
-     */
-    public function getVrCostoCalculado()
-    {
-        return $this->vrCostoCalculado;
     }
 }

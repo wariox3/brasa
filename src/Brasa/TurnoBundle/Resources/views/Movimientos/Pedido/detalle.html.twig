@@ -95,7 +95,7 @@
                 <th>COD</th>
                 <th>PUESTO</th>
                 <th></th>
-                <th>TURNO</th>
+                <th>SERVICIO</th>
                 <th>MODALIDAD</th>
                 <th>PERIODO</th>
                 <th>PLANTILLA</th>
@@ -135,7 +135,7 @@
                         <td>{{ arPedidoDetalle.codigoPuestoFk }}</td> 
                     {% endif %}
                     <td>{{ arPedidoDetalle.puestoRel.nombre | default('') }}</td> 
-                    <td>{{ arPedidoDetalle.turnoRel.nombre  }}</td>                    
+                    <td>{{ arPedidoDetalle.conceptoServicioRel.nombre  }}</td>                    
                     <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    
                     <td>{{ arPedidoDetalle.periodoRel.nombre  }}</td>
                     <td>{{ arPedidoDetalle.plantillaRel.nombre | default('')  }}</td>

@@ -26,6 +26,14 @@ brs_tur_base_recurso_nuevo:
     path:     /tur/base/recurso/nuevo/{codigoRecurso}
     defaults: { _controller: BrasaTurnoBundle:BaseRecurso:nuevo }
 
+brs_tur_base_concepto_servicio_lista:
+    path:     /tur/base/concepto/servicio/lista
+    defaults: { _controller: BrasaTurnoBundle:BaseConceptoServicio:lista }          
+    
+brs_tur_base_concepto_servicio_nuevo:
+    path:     /tur/base/concepto/servicio/nuevo/{codigoRecurso}
+    defaults: { _controller: BrasaTurnoBundle:BaseConceptoServicio:nuevo }
+
 brs_tur_base_cliente_lista:
     path:     /tur/base/cliente/lista
     defaults: { _controller: BrasaTurnoBundle:BaseCliente:lista }     
@@ -155,7 +163,7 @@ brs_tur_factura_detalle:
    defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalle }
    
 brs_tur_factura_detalle_nuevo:
-   path:     /tur/factura/detalle/nuevo/{codigoFactura}/{codigoFacturaDetalle}
+   path:     /tur/factura/detalle/nuevo/{codigoFactura}
    defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalleNuevo }            
     
 brs_tur_consultas_servicios:    

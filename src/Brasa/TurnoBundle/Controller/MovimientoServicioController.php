@@ -196,7 +196,7 @@ class MovimientoServicioController extends Controller
                             $arServicioDetalle->setServicioRel($arServicio);
                             $arServicioDetalle->setModalidadServicioRel($arCotizacionDetalle->getModalidadServicioRel());
                             $arServicioDetalle->setPeriodoRel($arCotizacionDetalle->getPeriodoRel());
-                            $arServicioDetalle->setTurnoRel($arCotizacionDetalle->getTurnoRel());
+                            $arServicioDetalle->setConceptoServicioRel($arCotizacionDetalle->getConceptoServicioRel());
                             $arServicioDetalle->setDias($arCotizacionDetalle->getDias());
                             $arServicioDetalle->setLunes($arCotizacionDetalle->getLunes());
                             $arServicioDetalle->setMartes($arCotizacionDetalle->getMartes());
@@ -207,8 +207,9 @@ class MovimientoServicioController extends Controller
                             $arServicioDetalle->setDomingo($arCotizacionDetalle->getDomingo());
                             $arServicioDetalle->setFestivo($arCotizacionDetalle->getFestivo());                            
                             $arServicioDetalle->setCantidad($arCotizacionDetalle->getCantidad());
-                            $arServicioDetalle->setFechaDesde($arCotizacionDetalle->getFechaDesde());
-                            $arServicioDetalle->setFechaHasta($arCotizacionDetalle->getFechaHasta());
+                            $arServicioDetalle->setDiaDesde($arCotizacionDetalle->getDiaDesde());
+                            $arServicioDetalle->setDiaHasta($arCotizacionDetalle->getDiaHasta());
+                            $arServicioDetalle->setVrTotalAjustado($arCotizacionDetalle->getVrTotalAjustado());
                             $em->persist($arServicioDetalle);
                         }                       
                     }

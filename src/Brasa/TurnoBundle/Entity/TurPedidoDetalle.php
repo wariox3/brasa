@@ -25,12 +25,12 @@ class TurPedidoDetalle
     /**
      * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
      */    
-    private $codigoPuestoFk;    
+    private $codigoPuestoFk;           
     
     /**
-     * @ORM\Column(name="codigo_turno_fk", type="string", length=5)
+     * @ORM\Column(name="codigo_concepto_servicio_fk", type="integer")
      */    
-    private $codigoTurnoFk;    
+    private $codigoConceptoServicioFk;    
     
     /**
      * @ORM\Column(name="codigo_modalidad_servicio_fk", type="integer")
@@ -165,10 +165,10 @@ class TurPedidoDetalle
     protected $puestoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="TurTurno", inversedBy="pedidosDetallesTurnoRel")
-     * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
+     * @ORM\ManyToOne(targetEntity="TurConceptoServicio", inversedBy="pedidosDetallesConceptoServicioRel")
+     * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
      */
-    protected $turnoRel;      
+    protected $conceptoServicioRel;      
 
     /**
      * @ORM\ManyToOne(targetEntity="TurModalidadServicio", inversedBy="pedidosDetallesModalidadServicioRel")
@@ -267,27 +267,27 @@ class TurPedidoDetalle
     }
 
     /**
-     * Set codigoTurnoFk
+     * Set codigoConceptoServicioFk
      *
-     * @param string $codigoTurnoFk
+     * @param integer $codigoConceptoServicioFk
      *
      * @return TurPedidoDetalle
      */
-    public function setCodigoTurnoFk($codigoTurnoFk)
+    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
     {
-        $this->codigoTurnoFk = $codigoTurnoFk;
+        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
 
         return $this;
     }
 
     /**
-     * Get codigoTurnoFk
+     * Get codigoConceptoServicioFk
      *
-     * @return string
+     * @return integer
      */
-    public function getCodigoTurnoFk()
+    public function getCodigoConceptoServicioFk()
     {
-        return $this->codigoTurnoFk;
+        return $this->codigoConceptoServicioFk;
     }
 
     /**
@@ -915,27 +915,27 @@ class TurPedidoDetalle
     }
 
     /**
-     * Set turnoRel
+     * Set conceptoServicioRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
+     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
      *
      * @return TurPedidoDetalle
      */
-    public function setTurnoRel(\Brasa\TurnoBundle\Entity\TurTurno $turnoRel = null)
+    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
     {
-        $this->turnoRel = $turnoRel;
+        $this->conceptoServicioRel = $conceptoServicioRel;
 
         return $this;
     }
 
     /**
-     * Get turnoRel
+     * Get conceptoServicioRel
      *
-     * @return \Brasa\TurnoBundle\Entity\TurTurno
+     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
      */
-    public function getTurnoRel()
+    public function getConceptoServicioRel()
     {
-        return $this->turnoRel;
+        return $this->conceptoServicioRel;
     }
 
     /**

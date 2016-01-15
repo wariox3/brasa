@@ -20,12 +20,12 @@ class TurCotizacionDetalle
     /**
      * @ORM\Column(name="codigo_cotizacion_fk", type="integer")
      */    
-    private $codigoCotizacionFk;
+    private $codigoCotizacionFk;    
     
     /**
-     * @ORM\Column(name="codigo_turno_fk", type="string", length=5)
+     * @ORM\Column(name="codigo_concepto_servicio_fk", type="integer")
      */    
-    private $codigoTurnoFk;    
+    private $codigoConceptoServicioFk;  
     
     /**
      * @ORM\Column(name="codigo_modalidad_servicio_fk", type="integer")
@@ -144,10 +144,10 @@ class TurCotizacionDetalle
     protected $cotizacionRel;       
 
     /**
-     * @ORM\ManyToOne(targetEntity="TurTurno", inversedBy="cotizacionesDetallesTurnoRel")
-     * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
+     * @ORM\ManyToOne(targetEntity="TurConceptoServicio", inversedBy="cotizacionesDetallesConceptoServicioRel")
+     * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
      */
-    protected $turnoRel;      
+    protected $conceptoServicioRel;      
 
     /**
      * @ORM\ManyToOne(targetEntity="TurModalidadServicio", inversedBy="cotizacionesDetallesModalidadServicioRel")
@@ -160,7 +160,7 @@ class TurCotizacionDetalle
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
     protected $periodoRel;     
-    
+
 
 
     /**
@@ -198,27 +198,27 @@ class TurCotizacionDetalle
     }
 
     /**
-     * Set codigoTurnoFk
+     * Set codigoConceptoServicioFk
      *
-     * @param string $codigoTurnoFk
+     * @param integer $codigoConceptoServicioFk
      *
      * @return TurCotizacionDetalle
      */
-    public function setCodigoTurnoFk($codigoTurnoFk)
+    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
     {
-        $this->codigoTurnoFk = $codigoTurnoFk;
+        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
 
         return $this;
     }
 
     /**
-     * Get codigoTurnoFk
+     * Get codigoConceptoServicioFk
      *
-     * @return string
+     * @return integer
      */
-    public function getCodigoTurnoFk()
+    public function getCodigoConceptoServicioFk()
     {
-        return $this->codigoTurnoFk;
+        return $this->codigoConceptoServicioFk;
     }
 
     /**
@@ -270,51 +270,51 @@ class TurCotizacionDetalle
     }
 
     /**
-     * Set fechaDesde
+     * Set diaDesde
      *
-     * @param \DateTime $fechaDesde
+     * @param integer $diaDesde
      *
      * @return TurCotizacionDetalle
      */
-    public function setFechaDesde($fechaDesde)
+    public function setDiaDesde($diaDesde)
     {
-        $this->fecha_desde = $fechaDesde;
+        $this->diaDesde = $diaDesde;
 
         return $this;
     }
 
     /**
-     * Get fechaDesde
+     * Get diaDesde
      *
-     * @return \DateTime
+     * @return integer
      */
-    public function getFechaDesde()
+    public function getDiaDesde()
     {
-        return $this->fecha_desde;
+        return $this->diaDesde;
     }
 
     /**
-     * Set fechaHasta
+     * Set diaHasta
      *
-     * @param \DateTime $fechaHasta
+     * @param integer $diaHasta
      *
      * @return TurCotizacionDetalle
      */
-    public function setFechaHasta($fechaHasta)
+    public function setDiaHasta($diaHasta)
     {
-        $this->fecha_hasta = $fechaHasta;
+        $this->diaHasta = $diaHasta;
 
         return $this;
     }
 
     /**
-     * Get fechaHasta
+     * Get diaHasta
      *
-     * @return \DateTime
+     * @return integer
      */
-    public function getFechaHasta()
+    public function getDiaHasta()
     {
-        return $this->fecha_hasta;
+        return $this->diaHasta;
     }
 
     /**
@@ -774,27 +774,27 @@ class TurCotizacionDetalle
     }
 
     /**
-     * Set turnoRel
+     * Set conceptoServicioRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
+     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
      *
      * @return TurCotizacionDetalle
      */
-    public function setTurnoRel(\Brasa\TurnoBundle\Entity\TurTurno $turnoRel = null)
+    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
     {
-        $this->turnoRel = $turnoRel;
+        $this->conceptoServicioRel = $conceptoServicioRel;
 
         return $this;
     }
 
     /**
-     * Get turnoRel
+     * Get conceptoServicioRel
      *
-     * @return \Brasa\TurnoBundle\Entity\TurTurno
+     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
      */
-    public function getTurnoRel()
+    public function getConceptoServicioRel()
     {
-        return $this->turnoRel;
+        return $this->conceptoServicioRel;
     }
 
     /**
@@ -843,53 +843,5 @@ class TurCotizacionDetalle
     public function getPeriodoRel()
     {
         return $this->periodoRel;
-    }
-
-    /**
-     * Set diaDesde
-     *
-     * @param integer $diaDesde
-     *
-     * @return TurCotizacionDetalle
-     */
-    public function setDiaDesde($diaDesde)
-    {
-        $this->diaDesde = $diaDesde;
-
-        return $this;
-    }
-
-    /**
-     * Get diaDesde
-     *
-     * @return integer
-     */
-    public function getDiaDesde()
-    {
-        return $this->diaDesde;
-    }
-
-    /**
-     * Set diaHasta
-     *
-     * @param integer $diaHasta
-     *
-     * @return TurCotizacionDetalle
-     */
-    public function setDiaHasta($diaHasta)
-    {
-        $this->diaHasta = $diaHasta;
-
-        return $this;
-    }
-
-    /**
-     * Get diaHasta
-     *
-     * @return integer
-     */
-    public function getDiaHasta()
-    {
-        return $this->diaHasta;
     }
 }
