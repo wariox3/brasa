@@ -24,7 +24,7 @@ class BuscarRecursoController extends Controller
                 $this->lista();
             }
         }
-        $arRecurso = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
+        $arRecurso = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
         return $this->render('BrasaTurnoBundle:Buscar:recurso.html.twig', array(
             'arRecursos' => $arRecurso,
             'campoCodigo' => $campoCodigo,
@@ -75,6 +75,7 @@ class BuscarRecursoController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
+        
     }    
           
 }
