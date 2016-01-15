@@ -29,7 +29,7 @@ class TurRecurso
     private $numeroIdentificacion;    
     
     /**
-     * @ORM\Column(name="nombreCorto", type="string", length=120, nullable=true)
+     * @ORM\Column(name="nombre_corto", type="string", length=120, nullable=true)
      */    
     private $nombreCorto;    
     
@@ -90,6 +90,7 @@ class TurRecurso
      */
     protected $serviciosDetallesRecursosRecursoRel;     
     
+
 
     /**
      * Constructor
