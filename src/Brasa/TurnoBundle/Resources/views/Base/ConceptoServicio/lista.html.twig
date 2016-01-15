@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Lista turnos - Soga App{% endblock %}
+{% block title %}Lista concepto servicios - Soga App{% endblock %}
 {% block content %}
 <script>
     $(function () {
@@ -8,14 +8,26 @@
 </script>    
 <div class="container">
     <div class="page-header">
-        <h3>Lista turnos</h3>
+        <h3>Lista concepto servicios</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-    
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtNombre" class="col-sm-3 control-label">Nombre:</label>
+                    <div class="col-sm-9">                  
+                        {{ form_widget(form.TxtNombre , { 'attr': {'class': 'form-control'} }) }}
+                    </div>                   
+                </div>  
+                     
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtCodigo" class="col-sm-3 control-label">Codigo:</label>
+                    <div class="col-sm-9">                  
+                        {{ form_widget(form.TxtCodigo, { 'attr': {'class': 'form-control'} }) }}
+                    </div>      
+                </div>
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -25,39 +37,27 @@
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>{{ knp_pagination_sortable(arTurnos, 'CÓDIGO', 'p.codigoTurnoPk') }}</th>
+                <th>{{ knp_pagination_sortable(arConceptoServicios, 'CÓDIGO', 'codigo') }}</th>
                 <th>NOMBRE</th>
-                <th>H. DESDE</th>
-                <th>H. HASTA</th>                
-                <th>SERVICIO</th>
-                <th>PROGRAMACION</th>
-                <th>NOVEDAD</th>
-                <th>DESCANSO</th>
                 <th>HORAS</th>
-                <th>H. DIURNAS</th>
-                <th>H. NOCTURNAS</th>                
+                <th>HORAS DIURNAS</th>                
+                <th>HORAS NOCTURAS</th>
                 <th>COSTO CALCULADO</th>
                 <th></th>
                 <th></th>
                 <th></th>
             </tr>
-            {% for arTurnos in arTurnos %}
+            {% for arConceptoServicios in arConceptoServicios %}
             <tr>                
-                <td>{{ arTurnos.codigoTurnoPk  }}</td>                               
-                <td>{{ arTurnos.nombre }}</td>
-                <td>{{ arTurnos.horaDesde |date("H:i") }}</td>
-                <td>{{ arTurnos.horaHasta |date("H:i") }}</td>
-                <td>{% if arTurnos.servicio == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{% if arTurnos.programacion == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{% if arTurnos.novedad == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{% if arTurnos.descanso == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: right">{{ arTurnos.horas | number_format(0, '.', ',') }}</td>                 
-                <td style="text-align: right">{{ arTurnos.horasDiurnas | number_format(0, '.', ',') }}</td> 
-                <td style="text-align: right">{{ arTurnos.horasNocturnas | number_format(0, '.', ',') }}</td> 
-                <td style="text-align: right">{{ arTurnos.vrCostoCalculado | number_format(0, '.', ',') }}</td> 
-                <td style="text-align: center"><a href="{{ path('brs_tur_base_turno_nuevo', {'codigoTurno': arTurnos.codigoTurnoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
-                <td style="text-align: center"><a href="{{ path('brs_tur_base_turno_detalle', { 'codigoTurno': arTurnos.codigoTurnoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arTurnos.codigoTurnoPk }}" /></td>
+                <td>{{ arConceptoServicios.codigoConceptoServicioPk  }}</td>                               
+                <td>{{ arConceptoServicios.nombre }}</td>
+                <td>{{ arConceptoServicios.horas }}</td>
+                <td>{{ arConceptoServicios.horasDiurnas }}</td>
+                <td>{{ arConceptoServicios.horasNocturnas }}</td>
+                <td style="text-align: right">{{ arConceptoServicios.VrCostoCalculado | number_format(0, '.', ',') }}</td>                 
+                <td style="text-align: center"><a href="{{ path('brs_tur_base_concepto_servicio_nuevo', {'codigoRecurso': arConceptoServicios.codigoConceptoServicioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
+                <td style="text-align: center"><a href="{{ path('brs_tur_base_concepto_servicio_nuevo', { 'codigoRecurso': arConceptoServicios.codigoConceptoServicioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arConceptoServicios.codigoConceptoServicioPk }}" /></td>
             </tr>
             
             {% endfor %}
@@ -65,17 +65,17 @@
 
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Examenes <span class="badge">{{ arTurnos.getTotalItemCount }}</span></div>                        
+                <div class="btn btn-default btn-sm">Conceptos servicios <span class="badge">{{ arConceptoServicios.getTotalItemCount }}</span></div>                        
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                {{ knp_pagination_render(arTurnos) }}       
+                {{ knp_pagination_render(arConceptoServicios) }}       
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">                                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">                                
-                <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_turno_nuevo', {'codigoTurno': 0}) }}">Nuevo</a>                                                
+                <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_concepto_servicio_nuevo', {'codigoRecurso': 0}) }}">Nuevo</a>                                                
             </div>
             <div class="btn-group">                
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}

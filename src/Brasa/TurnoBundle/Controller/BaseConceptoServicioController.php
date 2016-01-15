@@ -22,7 +22,7 @@ class BaseConceptoServicioController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurConceptoServicio')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
+                return $this->redirect($this->generateUrl('brs_tur_base_concepto_servicio_lista'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -52,23 +52,17 @@ class BaseConceptoServicioController extends Controller
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             $arConceptoServicio = $form->getData(); 
-            if($arrControles['txtNumeroIdentificacion'] != '') {
-                $arEmpleado = new \Brasa\ConceptoServicioHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaConceptoServicioHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-                if(count($arEmpleado) > 0) {
-                    $arConceptoServicio->setEmpleadoRel($arEmpleado);
-                    $em->persist($arConceptoServicio);
-                    $em->flush();            
+            
+            $em->persist($arConceptoServicio);
+            $em->flush();            
 
-                    if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_base_recurso_nuevo', array('codigoConceptoServicio' => 0 )));
-                    } else {
-                        return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
-                    }                    
-                } else {
-                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
-                }
-            }
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tur_base_concepto_servicio_nuevo', array('codigoRecurso' => 0 )));
+            } else {
+                return $this->redirect($this->generateUrl('brs_tur_base_concepto_servicio_lista'));
+            }                    
+                
+            
                        
 
         }

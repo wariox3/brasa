@@ -14,7 +14,7 @@ class TurConceptoServicioType extends AbstractType
             ->add('horasDiurnas', 'number', array('required' => true))                
             ->add('horasNocturnas', 'number', array('required' => true))
             ->add('vrCostoCalculado', 'number')                 
-            ->add('comentarios', 'textarea', array('required' => false))
+            //->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
