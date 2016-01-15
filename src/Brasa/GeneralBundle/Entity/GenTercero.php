@@ -196,12 +196,7 @@ class GenTercero
     /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuFactura", mappedBy="terceroRel")
      */
-    protected $rhuFacturasTerceroRel;    
-
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurFactura", mappedBy="terceroRel")
-     */
-    protected $turFacturasTerceroRel;        
+    protected $rhuFacturasTerceroRel;          
 
     /**
      * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="terceroRel")

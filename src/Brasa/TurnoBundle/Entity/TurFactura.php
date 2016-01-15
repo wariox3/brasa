@@ -40,19 +40,14 @@ class TurFactura
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;             
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="turFacturasTerceroRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;    
+    private $comentarios;                  
     
     /**
      * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="facturaRel")
      */
     protected $facturasDetallesFacturaRel; 
     
+
     /**
      * Constructor
      */
@@ -189,30 +184,6 @@ class TurFactura
     public function getComentarios()
     {
         return $this->comentarios;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return TurFactura
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
     }
 
     /**

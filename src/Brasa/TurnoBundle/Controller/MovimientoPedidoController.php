@@ -218,8 +218,17 @@ class MovimientoPedidoController extends Controller
                             $arPedidoDetalle->setDomingo($arCotizacionDetalle->getDomingo());
                             $arPedidoDetalle->setFestivo($arCotizacionDetalle->getFestivo());                            
                             $arPedidoDetalle->setCantidad($arCotizacionDetalle->getCantidad());
-                            $arPedidoDetalle->setFechaDesde($arCotizacionDetalle->getFechaDesde());
-                            $arPedidoDetalle->setFechaHasta($arCotizacionDetalle->getFechaHasta());
+                            $arPedidoDetalle->setVrTotalAjustado($arCotizacionDetalle->getVrTotalAjustado());
+                            if($arCotizacionDetalle->getCodigoPeriodoFk() == 1) {
+                                $intAnio = $arPedido->getFechaProgramacion()->format('Y');
+                                $intMes = $arPedido->getFechaProgramacion()->format('m');
+                                $intUltimoDiaMes = date("d",(mktime(0,0,0,$intMes+1,1,$intAnio)-1));
+                                $arPedidoDetalle->setDiaDesde(1);
+                                $arPedidoDetalle->setDiaHasta($intUltimoDiaMes);                                                        
+                            } else {
+                                $arPedidoDetalle->setDiaDesde($arCotizacionDetalle->getDiaDesde());
+                                $arPedidoDetalle->setDiaHasta($arCotizacionDetalle->getDiaHasta());                            
+                            }                            
                             $em->persist($arPedidoDetalle);
                         }                       
                     }
@@ -270,6 +279,7 @@ class MovimientoPedidoController extends Controller
                         $arPedidoDetalle->setDomingo($arServicioDetalle->getDomingo());
                         $arPedidoDetalle->setFestivo($arServicioDetalle->getFestivo());                            
                         $arPedidoDetalle->setCantidad($arServicioDetalle->getCantidad());
+                        $arPedidoDetalle->setVrTotalAjustado($arServicioDetalle->getVrTotalAjustado());
                         if($arServicioDetalle->getCodigoPeriodoFk() == 1) {
                             $intAnio = $arPedido->getFechaProgramacion()->format('Y');
                             $intMes = $arPedido->getFechaProgramacion()->format('m');
