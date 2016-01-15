@@ -63,7 +63,10 @@
             <div class="btn-group" style="float: left">
                 <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arRecursos.getTotalItemCount }}</span></div>                        
             </div>            
-        </div>          
+        </div>  
+        <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arRecursos) }}       
+        </div>
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}
     {{ form_end(form) }}   
