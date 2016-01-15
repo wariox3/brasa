@@ -23,17 +23,17 @@ class TurConceptoServicio
     private $nombre;             
     
     /**
-     * @ORM\Column(name="horas", type="integer")
+     * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
 
     /**
-     * @ORM\Column(name="horas_diurnas", type="integer")
+     * @ORM\Column(name="horas_diurnas", type="float")
      */    
     private $horasDiurnas = 0;     
     
     /**
-     * @ORM\Column(name="horas_nocturnas", type="integer")
+     * @ORM\Column(name="horas_nocturnas", type="float")
      */    
     private $horasNocturnas = 0; 
     
@@ -56,6 +56,7 @@ class TurConceptoServicio
      * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="conceptoServicioRel")
      */
     protected $cotizacionesDetallesConceptoServicioRel;     
+
 
     /**
      * Constructor
@@ -104,7 +105,7 @@ class TurConceptoServicio
     /**
      * Set horas
      *
-     * @param integer $horas
+     * @param float $horas
      *
      * @return TurConceptoServicio
      */
@@ -118,7 +119,7 @@ class TurConceptoServicio
     /**
      * Get horas
      *
-     * @return integer
+     * @return float
      */
     public function getHoras()
     {
@@ -128,7 +129,7 @@ class TurConceptoServicio
     /**
      * Set horasDiurnas
      *
-     * @param integer $horasDiurnas
+     * @param float $horasDiurnas
      *
      * @return TurConceptoServicio
      */
@@ -142,7 +143,7 @@ class TurConceptoServicio
     /**
      * Get horasDiurnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasDiurnas()
     {
@@ -152,7 +153,7 @@ class TurConceptoServicio
     /**
      * Set horasNocturnas
      *
-     * @param integer $horasNocturnas
+     * @param float $horasNocturnas
      *
      * @return TurConceptoServicio
      */
@@ -166,7 +167,7 @@ class TurConceptoServicio
     /**
      * Get horasNocturnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasNocturnas()
     {

@@ -32,17 +32,17 @@ class TurTurno
     private $horaHasta;    
     
     /**
-     * @ORM\Column(name="horas", type="integer")
+     * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
 
     /**
-     * @ORM\Column(name="horas_diurnas", type="integer")
+     * @ORM\Column(name="horas_diurnas", type="float")
      */    
     private $horasDiurnas = 0;     
     
     /**
-     * @ORM\Column(name="horas_nocturnas", type="integer")
+     * @ORM\Column(name="horas_nocturnas", type="float")
      */    
     private $horasNocturnas = 0;    
     
