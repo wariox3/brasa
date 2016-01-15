@@ -34,7 +34,7 @@
                 <th>CLIENTE</th>                
                 <th>PUESTO</th>
                 <th></th>
-                <th>TURNO</th>
+                <th>SERVICIO</th>
                 <th>MODALIDAD</th>
                 <th>PERIODO</th>
                 <th>PLANTILLA</th>
@@ -62,7 +62,7 @@
                     <td>{{ arServiciosDetalles.servicioRel.clienteRel.nombreCorto }}</td> 
                     <td>{{ arServiciosDetalles.codigoPuestoFk }}</td> 
                     <td>{{ arServiciosDetalles.puestoRel.nombre | default('') }}</td> 
-                    <td>{{ arServiciosDetalles.turnoRel.nombre  }}</td>                    
+                    <td>{{ arServiciosDetalles.conceptoServicioRel.nombre  }}</td>                    
                     <td>{{ arServiciosDetalles.modalidadServicioRel.nombre  }}</td>                    
                     <td>{{ arServiciosDetalles.periodoRel.nombre  }}</td>
                     <td>{{ arServiciosDetalles.plantillaRel.nombre | default('')  }}</td>                                            
