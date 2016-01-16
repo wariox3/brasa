@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 class TurServicioDetalleRepository extends EntityRepository {
 
     public function listaConsultaDql() {
-        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurServicioDetalle pd WHERE pd.codigoServicioDetallePk <> 0 ";
+        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurServicioDetalle sd WHERE sd.codigoServicioDetallePk <> 0 ";
 
         /*if($strFechaDesde != '') {
             $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  

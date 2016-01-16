@@ -21,5 +21,20 @@ class TurServicioDetalleRecursoRepository extends EntityRepository {
             $em->flush();       
         }
         
-    }            
+    }
+    
+    public function listaConsultaDql() {
+        $dql   = "SELECT sdr FROM BrasaTurnoBundle:TurServicioDetalleRecurso sdr WHERE sdr.codigoServicioDetalleRecursoPk <> 0 ";
+
+        /*if($strFechaDesde != '') {
+            $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  
+        }
+        if($strFechaHasta != '') {
+            $dql .= " AND p.fecha <= '" . $strFechaHasta . "'";  
+        } 
+         * 
+         */
+        $dql .= " ORDER BY sdr.codigoServicioDetalleFk";
+        return $dql;
+    }      
 }

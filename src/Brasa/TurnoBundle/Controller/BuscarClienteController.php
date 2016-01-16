@@ -24,7 +24,7 @@ class BuscarClienteController extends Controller
                 $this->lista();
             }
         }
-        $arCliente = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
+        $arCliente = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Buscar:cliente.html.twig', array(
             'arClientes' => $arCliente,
             'campoCodigo' => $campoCodigo,
@@ -54,6 +54,7 @@ class BuscarClienteController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
+        $this->strNombre = $form->get('TxtNombre')->getData();
     }    
           
 }

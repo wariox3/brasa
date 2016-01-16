@@ -44,17 +44,7 @@ class TurTurno
     /**
      * @ORM\Column(name="horas_nocturnas", type="float")
      */    
-    private $horasNocturnas = 0;    
-    
-    /**
-     * @ORM\Column(name="servicio", type="boolean")
-     */    
-    private $servicio = false;     
-
-    /**
-     * @ORM\Column(name="programacion", type="boolean")
-     */    
-    private $programacion = false;    
+    private $horasNocturnas = 0;            
     
     /**
      * @ORM\Column(name="novedad", type="boolean")

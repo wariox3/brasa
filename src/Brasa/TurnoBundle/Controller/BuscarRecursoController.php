@@ -75,7 +75,7 @@ class BuscarRecursoController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        
+        $this->strNombre = $form->get('TxtNombre')->getData();
     }    
           
 }

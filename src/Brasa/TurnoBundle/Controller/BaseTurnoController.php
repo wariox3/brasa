@@ -234,13 +234,11 @@ class BaseTurnoController extends Controller
                     ->setCellValue('B1', 'NOMBRE')
                     ->setCellValue('C1', 'H.DESDE')
                     ->setCellValue('D1', 'H.HASTA')
-                    ->setCellValue('E1', 'SERVICIO')
-                    ->setCellValue('F1', 'PROGRAMACIÓN')
-                    ->setCellValue('G1', 'NOVEDAD')
-                    ->setCellValue('H1', 'DESCANSO')
-                    ->setCellValue('I1', 'HORAS')
-                    ->setCellValue('J1', 'H.DIURNAS')
-                    ->setCellValue('K1', 'H.NOCTURNAS');
+                    ->setCellValue('E1', 'NOVEDAD')
+                    ->setCellValue('F1', 'DESCANSO')
+                    ->setCellValue('G1', 'HORAS')
+                    ->setCellValue('H1', 'H.DIURNAS')
+                    ->setCellValue('I1', 'H.NOCTURNAS');
 
         $i = 2;
         
@@ -254,13 +252,11 @@ class BaseTurnoController extends Controller
                     ->setCellValue('B' . $i, $arTurno->getNombre())
                     ->setCellValue('C' . $i, $arTurno->getHoraDesde()->format('H:i'))
                     ->setCellValue('D' . $i, $arTurno->getHoraHasta()->format('H:i'))
-                    ->setCellValue('E' . $i, $arTurno->getServicio())
-                    ->setCellValue('F' . $i, $arTurno->getProgramacion()*1)
-                    ->setCellValue('G' . $i, $arTurno->getNovedad()*1)
-                    ->setCellValue('H' . $i, $arTurno->getDescanso()*1)
-                    ->setCellValue('I' . $i, $arTurno->getHoras())
-                    ->setCellValue('J' . $i, $arTurno->getHorasDiurnas())
-                    ->setCellValue('K' . $i, $arTurno->getHorasNocturnas());
+                    ->setCellValue('E' . $i, $arTurno->getNovedad()*1)
+                    ->setCellValue('F' . $i, $arTurno->getDescanso()*1)
+                    ->setCellValue('G' . $i, $arTurno->getHoras())
+                    ->setCellValue('H' . $i, $arTurno->getHorasDiurnas())
+                    ->setCellValue('I' . $i, $arTurno->getHorasNocturnas());
                         
             $i++;
         }

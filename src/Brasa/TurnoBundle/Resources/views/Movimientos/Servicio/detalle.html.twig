@@ -171,7 +171,7 @@
                         <td style="text-align: right">{{ arServicioDetalle.vrTotalAjustado | number_format(0, '.', ',') }}</td> 
                     {% endif %}                    
                     <td style="text-align: right">{{ arServicioDetalle.vrTotal | number_format(0, '.', ',') }}</td> 
-                    <td>{% if arServicio.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo', {'codigoServicio': arServicioDetalle.codigoServicioDetallePk, 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
+                    <td>{% if arServicio.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo', {'codigoServicio': arServicioDetalle.codigoServicioFk, 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
                     <td><a href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_recurso', {'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarRecurso', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=20 height=20 title="Recursos"></a></td>                    
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}" /></td>
                 </tr>

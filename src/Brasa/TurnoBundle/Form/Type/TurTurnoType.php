@@ -16,8 +16,6 @@ class TurTurnoType extends AbstractType
             ->add('horas', 'number', array('required' => true))                
             ->add('horasDiurnas', 'number', array('required' => true))                
             ->add('horasNocturnas', 'number', array('required' => true))
-            ->add('servicio', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('programacion', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
             ->add('novedad', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
             ->add('descanso', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
             ->add('comentarios', 'textarea', array('required' => false))
