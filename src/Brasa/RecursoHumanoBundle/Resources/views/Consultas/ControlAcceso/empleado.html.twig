@@ -53,7 +53,7 @@
                     <th>FECHA</th>
                     <th>HORA ENTRADA</th>
                     <th>HORA SALIDA</th>
-                    <th>TOTAL VISITA</th>
+                    <th>DURACIÓN VISITA</th>
                     <th>COMENTARIOS</th>
                 </tr>
             {% set contador = 1  %}
@@ -65,7 +65,7 @@
                 <td>{{ arControlAccesosEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
                 <td>{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}</td>
                 <td>{{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}</td>
-                <td>{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }} - {{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}</td>
+                <td>{{ arControlAccesosEmpleados.duracionRegistro }}</td>
                 <td>{{ arControlAccesosEmpleados.comentarios  }}</td>
             </tr>
             {% set contador = contador + 1  %}

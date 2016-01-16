@@ -36,9 +36,9 @@ class RhuHorarioAcceso
      * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
      */    
     private $comentarios;
-    
+       
     /**
-     * @ORM\Column(name="duracion_registro", type="datetime", nullable=true)
+     * @ORM\Column(name="duracion_registro", type="string", length=15, nullable=true)
      */    
     private $duracionRegistro;
     
@@ -47,7 +47,6 @@ class RhuHorarioAcceso
      */    
     private $estado = 0;
    
-
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="horarioAccesoEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -165,7 +164,7 @@ class RhuHorarioAcceso
     /**
      * Set duracionRegistro
      *
-     * @param \DateTime $duracionRegistro
+     * @param string $duracionRegistro
      *
      * @return RhuHorarioAcceso
      */
@@ -179,7 +178,7 @@ class RhuHorarioAcceso
     /**
      * Get duracionRegistro
      *
-     * @return \DateTime
+     * @return string
      */
     public function getDuracionRegistro()
     {

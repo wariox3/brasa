@@ -132,8 +132,12 @@ class UtilidadesHorarioAccesoController extends Controller
             $arHorarioAcceso->setComentarios($form->get('comentarios')->getData());
             $dateEntrada = $arHorarioAcceso->getFechaEntrada();
             $dateSalida = $arHorarioAcceso->getFechaSalida();
-            $dateDiferencia = $dateSalida->diff($dateEntrada);
-            $arHorarioAcceso->setDuracionRegistro($dateDiferencia);
+            $dateDiferencia = date_diff($dateSalida, $dateEntrada);
+            $horas = $dateDiferencia->format('%H');
+            $minutos = $dateDiferencia->format('%i');
+            $segundos = $dateDiferencia->format('%s');
+            $diferencia = $horas.":".$minutos.":".$segundos;
+            $arHorarioAcceso->setDuracionRegistro($diferencia);
             $em->persist($arHorarioAcceso);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
