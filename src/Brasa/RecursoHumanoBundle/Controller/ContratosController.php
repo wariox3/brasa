@@ -17,6 +17,10 @@ class ContratosController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
+        //inicio - acceso contratos
+        $arUsuario = $this->get('security.context')->getToken()->getUser();
+        $accesoContrato = $em->getRepository('BrasaSeguridadBundle:SegAccesoUsuario')->Acceso($arUsuario->getId(),2);
+        //fin - acceso contratos
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnFiltrar')->isClicked()) {
@@ -31,7 +35,10 @@ class ContratosController extends Controller
         }
 
         $arContratos = $paginator->paginate($em->createQuery($session->get('dqlContratoLista')), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:lista.html.twig', array('arContratos' => $arContratos, 'form' => $form->createView()));
+        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:lista.html.twig', array(
+            'arContratos' => $arContratos,
+            'accesoContrato' => $accesoContrato,
+            'form' => $form->createView()));
     }
 
     public function detalleAction($codigoContrato) {
