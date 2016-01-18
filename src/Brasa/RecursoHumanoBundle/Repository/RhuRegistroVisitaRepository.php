@@ -14,11 +14,25 @@ class RhuRegistroVisitaRepository extends EntityRepository {
     public function RegistroHoy($strFechaHoy = "") {
         
         $em = $this->getEntityManager();
-        $dql   = "SELECT rv FROM BrasaRecursoHumanoBundle:RhuRegistroVisita rv WHERE rv.codigoRegistroVisitaPk <> 0 ";   
+        $dql   = "SELECT rv FROM BrasaRecursoHumanoBundle:RhuRegistroVisita rv WHERE rv.codigoRegistroVisitaPk <> 0 AND rv.estado = 0 ";   
         if ($strFechaHoy != ""){
-            $dql .= " AND rv.fecha >= '". $strFechaHoy . " 00:00:00' AND rv.fecha <= '" . $strFechaHoy . " 23:59:59' ";
+            $dql .= " AND rv.fechaEntrada >= '". $strFechaHoy . " 00:00:00' AND rv.fechaEntrada <= '" . $strFechaHoy . " 23:59:59' ";
         }
         return $dql;
+    }
+    public function RegistroEntrada($strFechaHoy = "", $strIdentificacion= "") {
+        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT rv FROM BrasaRecursoHumanoBundle:RhuRegistroVisita rv WHERE rv.codigoRegistroVisitaPk <> 0 AND rv.estado = 0 ";   
+        if ($strFechaHoy != ""){
+            $dql .= " AND rv.fechaEntrada >= '". $strFechaHoy . " 00:00:00' AND rv.fechaEntrada <= '" . $strFechaHoy . " 23:59:59' ";
+        }
+        if ($strIdentificacion != ""){
+            $dql .= " AND rv.numeroIdentificacion = ". $strIdentificacion;
+        }
+        $query = $em->createQuery($dql);
+        $arVisitaEntrada = $query->getResult();
+        return $arVisitaEntrada;
     }
     
     public function listaDql($strIdentificacion = "", $strNombre = "", $strDesde = "", $strHasta = "") {        
@@ -31,12 +45,12 @@ class RhuRegistroVisitaRepository extends EntityRepository {
             $dql .= " AND rv.nombre LIKE '%". $strNombre . "%'";
         }
         if ($strDesde != ""){
-            $dql .= " AND rv.fecha >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
+            $dql .= " AND rv.fechaEntrada >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
         }
         if($strHasta != "") {
-            $dql .= " AND rv.fecha <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
+            $dql .= " AND rv.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
         }
-        $dql .= " ORDER BY rv.fecha";
+        $dql .= " ORDER BY rv.fechaEntrada";
         return $dql;
     }
     

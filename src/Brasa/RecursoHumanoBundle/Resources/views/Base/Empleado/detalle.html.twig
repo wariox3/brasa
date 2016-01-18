@@ -161,7 +161,7 @@
                             <td>{{ arContratos.tipoTiempoRel.nombre  }}</td>
                             <td>{{ arContratos.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{% if arContratos.indefinido == 1 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
-                            <td style="text-align: right">{{ arContratos.vrSalario | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{% if permisoVerSalario == false %} {% else %} {{ arContratos.vrSalario | number_format(0, '.', ',') }}{% endif %}</td>
                             <td>{{ arContratos.cargoRel.nombre|default('SIN CONTRATO')  }}</td>
                             <td>{{ arContratos.cargoDescripcion  }}</td>
                             <td>{{ arContratos.clasificacionRiesgoRel.nombre|default('SIN CONTRATO') }}</td>

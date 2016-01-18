@@ -12,17 +12,13 @@ class RhuRegistroVisitaType extends AbstractType
 
         $builder
 
-            ->add('tipoAccesoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuTipoAcceso',
-                'property' => 'nombre',
-                'required' => true))
+            
             ->add('departamentoEmpresaRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa',
                 'property' => 'nombre',
-                'required' => true))  
-            ->add('numeroIdentificacion', 'text', array('required' => true))
-            ->add('nombre', 'text', array('required' => true))    
+                'required' => true))   
             ->add('motivo', 'text', array('required' => true))        
+            ->add('codigoEscarapela', 'text', array('required' => false))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit');
     }

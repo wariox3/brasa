@@ -29,11 +29,16 @@ class UtilidadesHorarioAccesoController extends Controller
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
                 if(count($arEmpleado) > 0) {
                     $arHorarioAcceso->setEmpleadoRel($arEmpleado);
-                    if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
-                        $arHorarioAcceso->setFechaEntrada(new \DateTime('now'));
-                        $em->persist($arHorarioAcceso);
-                        $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
+                    if($arEmpleado->getCodigoContratoActivoFk() != '') {
+                        $arEmpleadoEntrada = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->RegistroEntrada($fechaHoy->format('Y/m/d'),$arEmpleado->getCodigoEmpleadoPk());
+                        if (count($arEmpleadoEntrada) != 0){
+                            $objMensaje->Mensaje("error", "El empleado se encuentra registrado", $this);
+                        }else {
+                            $arHorarioAcceso->setFechaEntrada(new \DateTime('now'));
+                            $em->persist($arHorarioAcceso);
+                            $em->flush();
+                            return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
+                        }
                     }else {
                         $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
                         }                       
@@ -80,13 +85,10 @@ class UtilidadesHorarioAccesoController extends Controller
                                 }else{
                                     //Registro acceso empleado
                                     $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
-                                    $arTipoAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoAcceso();
-                                    $arTipoAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoAcceso')->find($arrayDetalle[1]);
                                     $arHorarioAcceso->setEmpleadoRel($arEmpleado);
-                                    $arHorarioAcceso->setTipoAccesoRel($arTipoAcceso);
-                                    $dateFecha = $arrayDetalle[2];
+                                    $dateFecha = $arrayDetalle[1];
                                     $dateFecha = new \DateTime($dateFecha);
-                                    $arHorarioAcceso->setFecha($dateFecha);
+                                    $arHorarioAcceso->setFechaEntrada($dateFecha);
                                     $em->persist($arHorarioAcceso);
                                 }
                             }else{

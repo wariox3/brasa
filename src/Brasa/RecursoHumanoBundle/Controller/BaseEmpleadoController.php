@@ -72,6 +72,10 @@ class BaseEmpleadoController extends Controller
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
+        //inicio - permiso para ver el salario del empleado
+        $arUsuario = $this->get('security.context')->getToken()->getUser();
+        $permisoVerSalario = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),2);
+        //fin - permiso para ver el salario del empleado
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
@@ -170,6 +174,7 @@ class BaseEmpleadoController extends Controller
                     'arEmpleadoFamilia' => $arEmpleadoFamilia,
                     'arDotacion' => $arDotacion,
                     'strRutaImagen' => $strRutaImagen,
+                    'permisoVerSalario' => $permisoVerSalario,
                     'form' => $form->createView()
                     ));
     }
@@ -425,20 +430,19 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('Z1', 'CLASIFICACIÓN DE RIESGO')
                     ->setCellValue('AA1', 'CUENTA BANCARIA')
                     ->setCellValue('AB1', 'BANCO')
-                    ->setCellValue('AC1', 'SALARIO')
-                    ->setCellValue('AD1', 'FECHA CONTRATO')
-                    ->setCellValue('AE1', 'FECHA FINALIZA CONTRATO')
-                    ->setCellValue('AF1', 'CARGO')
-                    ->setCellValue('AG1', 'DESCRIPCIÓN CARGO')
-                    ->setCellValue('AH1', 'TIPO PENSIÓN')
-                    ->setCellValue('AI1', 'TIPO COTIZANTE')
-                    ->setCellValue('AJ1', 'SUBTIPO COTIZANTE')
-                    ->setCellValue('AK1', 'ESTADO ACTIVO')
-                    ->setCellValue('AL1', 'ESTADO CONTRATO')
-                    ->setCellValue('AM1', 'CODIGO CONTRATO')
-                    ->setCellValue('AN1', 'TALLA CAMISA')
-                    ->setCellValue('AO1', 'TALLA JEANS')
-                    ->setCellValue('AP1', 'TALLA CALZADO');
+                    ->setCellValue('AC1', 'FECHA CONTRATO')
+                    ->setCellValue('AD1', 'FECHA FINALIZA CONTRATO')
+                    ->setCellValue('AE1', 'CARGO')
+                    ->setCellValue('AF1', 'DESCRIPCIÓN CARGO')
+                    ->setCellValue('AG1', 'TIPO PENSIÓN')
+                    ->setCellValue('AH1', 'TIPO COTIZANTE')
+                    ->setCellValue('AI1', 'SUBTIPO COTIZANTE')
+                    ->setCellValue('AJ1', 'ESTADO ACTIVO')
+                    ->setCellValue('AK1', 'ESTADO CONTRATO')
+                    ->setCellValue('AL1', 'CODIGO CONTRATO')
+                    ->setCellValue('AM1', 'TALLA CAMISA')
+                    ->setCellValue('AN1', 'TALLA JEANS')
+                    ->setCellValue('AO1', 'TALLA CALZADO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -546,20 +550,19 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('Z' . $i, $clasificacionRiesgo)
                     ->setCellValue('AA' . $i, $arEmpleado->getCuenta())
                     ->setCellValue('AB' . $i, $arEmpleado->getBancoRel()->getNombre())
-                    ->setCellValue('AC' . $i, $arEmpleado->getVrSalario())
-                    ->setCellValue('AD' . $i, $arEmpleado->getFechaContrato())
-                    ->setCellValue('AE' . $i, $arEmpleado->getFechaFinalizaContrato())
-                    ->setCellValue('AF' . $i, $cargo)
-                    ->setCellValue('AG' . $i, $arEmpleado->getCargoDescripcion())
-                    ->setCellValue('AH' . $i, $tipoPension)
-                    ->setCellValue('AI' . $i, $tipoCotizante)
-                    ->setCellValue('AJ' . $i, $subtipoCotizante)
-                    ->setCellValue('AK' . $i, $estadoActivo)
-                    ->setCellValue('AL' . $i, $estadoContratoActivo)
-                    ->setCellValue('AM' . $i, $arEmpleado->getCodigoContratoActivoFk())
-                    ->setCellValue('AN' . $i, $arEmpleado->getCamisa())
-                    ->setCellValue('AO' . $i, $arEmpleado->getJeans())
-                    ->setCellValue('AP' . $i, $arEmpleado->getCalzado());
+                    ->setCellValue('AC' . $i, $arEmpleado->getFechaContrato())
+                    ->setCellValue('AD' . $i, $arEmpleado->getFechaFinalizaContrato())
+                    ->setCellValue('AE' . $i, $cargo)
+                    ->setCellValue('AF' . $i, $arEmpleado->getCargoDescripcion())
+                    ->setCellValue('AG' . $i, $tipoPension)
+                    ->setCellValue('AH' . $i, $tipoCotizante)
+                    ->setCellValue('AI' . $i, $subtipoCotizante)
+                    ->setCellValue('AJ' . $i, $estadoActivo)
+                    ->setCellValue('AK' . $i, $estadoContratoActivo)
+                    ->setCellValue('AL' . $i, $arEmpleado->getCodigoContratoActivoFk())
+                    ->setCellValue('AM' . $i, $arEmpleado->getCamisa())
+                    ->setCellValue('AN' . $i, $arEmpleado->getJeans())
+                    ->setCellValue('AO' . $i, $arEmpleado->getCalzado());
             $i++;
         }
 

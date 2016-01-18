@@ -20,6 +20,20 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         }
         return $dql;
     }
+    public function RegistroEntrada($strFechaHoy = "", $strEmpleado= "") {
+        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estado = 0 ";   
+        if ($strFechaHoy != ""){
+            $dql .= " AND ha.fechaEntrada >= '". $strFechaHoy . " 00:00:00' AND ha.fechaEntrada <= '" . $strFechaHoy . " 23:59:59' ";
+        }
+        if ($strEmpleado != ""){
+            $dql .= " AND ha.codigoEmpleadoFk = ". $strEmpleado;
+        }
+        $query = $em->createQuery($dql);
+        $arEmpleadoEntrada = $query->getResult();
+        return $arEmpleadoEntrada;
+    }
     
     public function listaDql($strIdentificacion = "", $strNombre = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();

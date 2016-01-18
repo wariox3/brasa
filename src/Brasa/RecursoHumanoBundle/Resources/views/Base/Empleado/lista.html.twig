@@ -50,7 +50,6 @@
                 <th>CENTRO COSTO</th>
                 <th>CONTRATO</th>
                 <th>TELÉFONO</th>                
-                <th style="text-align: right">SALARIO</th>
                 <th>FECHA INICIO</th>
                 <th>AUX.T</th>
                 <th>ACT</th>
@@ -67,7 +66,6 @@
                 <td>{% if arEmpleados.centroCostoRel.nombre is defined %} {{ arEmpleados.centroCostoRel.nombre  }} {% endif %}</td>
                 <td>{{ arEmpleados.codigoContratoActivoFk  }}</td>
                 <td>{{ arEmpleados.telefono }}</td>                
-                <td style="text-align: right">{{ arEmpleados.VrSalario | number_format(0, '.', ',') }}</td>                            
                 <td>{% if arEmpleados.fechaContrato != "" %} {{ arEmpleados.fechaContrato|date('Y/m/d')  }} {% else %} SIN DEFINIR {% endif %}</td>
                 <td>{% if arEmpleados.auxilioTransporte == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>{% if arEmpleados.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                                

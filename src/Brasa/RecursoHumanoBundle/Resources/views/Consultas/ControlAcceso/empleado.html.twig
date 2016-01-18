@@ -64,8 +64,8 @@
                 <td>{{ arControlAccesosEmpleados.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arControlAccesosEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
                 <td>{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}</td>
-                <td>{{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}</td>
-                <td>{{ arControlAccesosEmpleados.duracionRegistro }}</td>
+                <td>{% if arControlAccesosEmpleados.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}{% endif%}</td>
+                <td>{{ arControlAccesosEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>
                 <td>{{ arControlAccesosEmpleados.comentarios  }}</td>
             </tr>
             {% set contador = contador + 1  %}

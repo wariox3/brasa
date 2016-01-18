@@ -324,7 +324,11 @@ brs_rhu_cargar_control_acceso_empleados:
     
 brs_rhu_salida_control_acceso_empleados:
     path:     /rhu/salida/control/acceso/empleados/{codigoHorarioAcceso}
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:salida }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:salida }
+    
+brs_rhu_salida_control_acceso_visitantes:
+    path:     /rhu/salida/control/acceso/visitantes/{codigoRegistroVisita}
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesRegistroVisitas:salida }    
 
 brs_rhu_pagos_lista:
     path:     /rhu/pagos/lista
@@ -901,4 +905,8 @@ brs_rhu_capacitacion_detalle_nuevo_empleado:
 brs_rhu_buscar_empleado:
     pattern:  /rhu/buscar/empleado
     defaults: { _controller: BrasaRecursoHumanoBundle:BuscarEmpleado:lista }
+    
+brs_rhu_buscar_visitante:
+    pattern:  /rhu/buscar/visitante
+    defaults: { _controller: BrasaRecursoHumanoBundle:BuscarVisitante:lista }    
        

@@ -50,11 +50,13 @@
                     <th>NRO</th>
                     <th>IDENTIFICACION</th>
                     <th>EMPLEADO</th>
-                    <th>TIPO ACCESO</th>
                     <th>DEPARTAMENTO EMPRESA</th>
                     <th>FECHA</th>
-                    <th>HORA</th>
+                    <th>HORA ENTRADA</th>
+                    <th>HORA SALIDA</th>
+                    <th>DURACIÓN VISITA</th>
                     <th>MOTIVO</th>
+                    <th>ESCARAPELA</th>
                     <th>COMENTARIOS</th>
                 </tr>
             {% set contador = 1  %}
@@ -63,11 +65,13 @@
                 <td>{{ contador  }}</td>
                 <td>{{ arControlAccesosVisitantes.numeroIdentificacion  }}</td>
                 <td>{{ arControlAccesosVisitantes.nombre  }}</td>
-                <td>{{ arControlAccesosVisitantes.tipoAccesoRel.nombre  }}</td>
                 <td>{{ arControlAccesosVisitantes.departamentoEmpresaRel.nombre  }}</td>
-                <td>{{ arControlAccesosVisitantes.fecha|date('Y-m-d')  }}</td>
-                <td>{{ arControlAccesosVisitantes.fecha|date('H:i:s')  }}</td>
+                <td>{{ arControlAccesosVisitantes.fechaEntrada|date('Y-m-d')  }}</td>
+                <td>{{ arControlAccesosVisitantes.fechaEntrada|date('H:i:s')  }}</td>
+                <td>{% if arControlAccesosVisitantes.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesosVisitantes.fechaSalida|date('H:i:s')  }}{% endif%}</td>
+                <td>{{ arControlAccesosVisitantes.duracionRegistro|default('SIN SALIDA')  }}</td>
                 <td>{{ arControlAccesosVisitantes.motivo  }}</td>
+                <td>{{ arControlAccesosVisitantes.codigoEscarapela  }}</td>
                 <td>{{ arControlAccesosVisitantes.comentarios  }}</td>
             </tr>
             {% set contador = contador + 1  %}

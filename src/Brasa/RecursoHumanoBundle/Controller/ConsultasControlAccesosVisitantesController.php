@@ -90,12 +90,14 @@ class ConsultasControlAccesosVisitantesController extends Controller
                     ->setCellValue('A1', 'NRO')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
                     ->setCellValue('C1', 'EMPLEADO')
-                    ->setCellValue('D1', 'TIPO ACCESO')
-                    ->setCellValue('E1', 'DEPARTAMENTO EMPRESA')
-                    ->setCellValue('F1', 'FECHA')
-                    ->setCellValue('G1', 'HORA')
-                    ->setCellValue('H1', 'MOTIVO')
-                    ->setCellValue('I1', 'COMENTARIOS');
+                    ->setCellValue('D1', 'DEPARTAMENTO EMPRESA')
+                    ->setCellValue('E1', 'FECHA')
+                    ->setCellValue('F1', 'HORA ENTRADA')
+                    ->setCellValue('G1', 'HORA SALIDA')
+                    ->setCellValue('H1', 'DURACIÓN VISITA')
+                    ->setCellValue('I1', 'MOTIVO')
+                    ->setCellValue('J1', 'CÓDIGO ESCARAPELA')
+                    ->setCellValue('K1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -103,21 +105,23 @@ class ConsultasControlAccesosVisitantesController extends Controller
         $arRegistroVisitas = $query->getResult();
         $j = 1;
         foreach ($arRegistroVisitas as $arRegistroVisita) {
-            if ($arRegistroVisita->getCodigoTipoAccesoFk() == 1){
-                    $tipoAcceso = "ENTRADA";
-                }else {
-                    $tipoAcceso = "SALIDA";
-                }
+            if ($arRegistroVisita->getFechaSalida() == null){
+                $dateFechaSalida = "";
+            } else{
+                $dateFechaSalida = $arRegistroVisita->getFechaSalida()->Format('H:i:s');
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A' . $i, $j)
                 ->setCellValue('B' . $i, $arRegistroVisita->getNumeroIdentificacion())
                 ->setCellValue('C' . $i, $arRegistroVisita->getNombre())
-                ->setCellValue('D' . $i, $tipoAcceso)
-                ->setCellValue('E' . $i, $arRegistroVisita->getDepartamentoEmpresaRel()->getNombre())    
-                ->setCellValue('F' . $i, $arRegistroVisita->getFecha()->Format('Y-m-d'))
-                ->setCellValue('G' . $i, $arRegistroVisita->getFecha()->Format('H:i:s'))
-                ->setCellValue('H' . $i, $arRegistroVisita->getMotivo())
-                ->setCellValue('I' . $i, $arRegistroVisita->getComentarios())    ;
+                ->setCellValue('D' . $i, $arRegistroVisita->getDepartamentoEmpresaRel()->getNombre())    
+                ->setCellValue('E' . $i, $arRegistroVisita->getFechaEntrada()->Format('Y-m-d'))
+                ->setCellValue('F' . $i, $arRegistroVisita->getFechaEntrada()->Format('H:i:s'))
+                ->setCellValue('G' . $i, $dateFechaSalida)
+                ->setCellValue('H' . $i, $arRegistroVisita->getDuracionRegistro())
+                ->setCellValue('I' . $i, $arRegistroVisita->getMotivo())
+                ->setCellValue('J' . $i, $arRegistroVisita->getCodigoEscarapela())
+                ->setCellValue('K' . $i, $arRegistroVisita->getComentarios())    ;
             $i++;
             $j++;
         }

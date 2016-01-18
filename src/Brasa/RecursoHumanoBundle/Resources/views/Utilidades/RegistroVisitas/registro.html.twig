@@ -8,21 +8,23 @@
         <div class="panel-heading">Información general</div>
         <div class="panel-body">          
             <div class="form-group form-group-sm">
-                <label for="form_numeroIdentificacion" class="col-sm-3 control-label">Identificación:</label>
+                <label for="txtNumeroIdentificacion" class="col-sm-3 control-label">Empleado:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.numeroIdentificacion, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_nombre" class="col-sm-3 control-label">Nombre:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.nombre, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
-                </div>
-            </div>    
-            <div class="form-group form-group-sm">
-                <label for="form_tipoAccesoRel" class="col-sm-3 control-label">Tipo acceso:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.tipoAccesoRel, { 'attr': {'class': 'form-control'} }) }}
+                    <div class="row">
+                      <div class="col-lg-2">
+                        <div class="input-group">
+                          <input id="txtNumeroIdentificacion"  name="txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arRegistroVisita.numeroIdentificacion |default('') }}" placeholder="IDENTIFICACIÓN" style="text-transform:uppercase" onblur="javascript:this.value=this.value.toUpperCase()"/>
+                        </div>
+                      </div>
+                      <div class="col-lg-10">
+                        <div class="input-group">                                      
+                          <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arRegistroVisita.nombre |default('') }}" placeholder="NOMBRE VISITANTE" style="text-transform:uppercase" onblur="javascript:this.value=this.value.toUpperCase()"/>
+                          <span class="input-group-btn">                                        
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_buscar_visitante') }}', 'buscarVisitante', 600, 900)">Buscar</a>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                 </div>
             </div>
             
@@ -36,6 +38,12 @@
                 <label for="form_motivo" class="col-sm-3 control-label">Motivo:</label>
                 <div class="col-sm-9">
                             {{ form_widget(form.motivo, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="form_codigoEscarapela" class="col-sm-3 control-label">Código escarapela:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.codigoEscarapela, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
             </div>    
             <div class="form-group">
@@ -55,12 +63,13 @@
                 <th>NRO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>VISITANTE</th>
-                <th>TIPO ACCESO</th>
                 <th>DEPARTAMENTO EMPRESA</th>
                 <th>FECHA</th>
                 <th>HORA</th>
                 <th>MOTIVO</th>
+                <th>CÓDIGO ESCARAPELA</th>
                 <th>COMENTARIOS</th>
+                <th></th>
             </tr>
             {% set contador = 1  %}
             {% for arRegistroVisitas in arRegistroVisitas %}
@@ -68,12 +77,13 @@
                 <td>{{ contador  }}</td>
                 <td>{{ arRegistroVisitas.numeroIdentificacion  }}</td>
                 <td>{{ arRegistroVisitas.nombre  }}</td>
-                <td>{{ arRegistroVisitas.tipoAccesoRel.nombre  }}</td>
                 <td>{{ arRegistroVisitas.departamentoEmpresaRel.nombre  }}</td>
-                <td>{{ arRegistroVisitas.fecha|date('Y-m-d')  }}</td>
-                <td>{{ arRegistroVisitas.fecha|date('H:i:s')  }}</td>
+                <td>{{ arRegistroVisitas.fechaEntrada|date('Y-m-d')  }}</td>
+                <td>{{ arRegistroVisitas.fechaEntrada|date('H:i:s')  }}</td>
                 <td>{{ arRegistroVisitas.motivo  }}</td>
+                <td>{{ arRegistroVisitas.codigoEscarapela  }}</td>
                 <td>{{ arRegistroVisitas.comentarios  }}</td>
+                <td style="text-align: center"><a id="{{ path('brs_rhu_salida_control_acceso_visitantes',{'codigoRegistroVisita': arRegistroVisitas.codigoRegistroVisitaPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_192_circle_remove.png') }}" width=20 height=20 title="salida visitante"></a></td>                                
             </tr>
             {% set contador = contador + 1  %}
             {% endfor %}                        
