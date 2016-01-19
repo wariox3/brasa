@@ -47,11 +47,12 @@ class ProcesoGenerarPedidoController extends Controller
                             $arPedidoDetalleNuevo->setDiaHasta($arServicioDetalle->getDiaHasta());
                         }
                         $arPedidoDetalleNuevo->setCantidad($arServicioDetalle->getCantidad());
-                        $arPedidoDetalleNuevo->setTurnoRel($arServicioDetalle->getTurnoRel());
+                        $arPedidoDetalleNuevo->setConceptoServicioRel($arServicioDetalle->getConceptoServicioRel());
                         $arPedidoDetalleNuevo->setModalidadServicioRel($arServicioDetalle->getModalidadServicioRel());
                         $arPedidoDetalleNuevo->setPeriodoRel($arServicioDetalle->getPeriodoRel());
                         $arPedidoDetalleNuevo->setPuestoRel($arServicioDetalle->getPuestoRel());
                         $arPedidoDetalleNuevo->setPlantillaRel($arServicioDetalle->getPlantillaRel());
+                        $arPedidoDetalleNuevo->setServicioDetalleRel($arServicioDetalle);
                         $arPedidoDetalleNuevo->setLunes($arServicioDetalle->getLunes());
                         $arPedidoDetalleNuevo->setMartes($arServicioDetalle->getMartes());
                         $arPedidoDetalleNuevo->setMiercoles($arServicioDetalle->getMiercoles());

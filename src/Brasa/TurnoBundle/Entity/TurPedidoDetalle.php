@@ -43,6 +43,11 @@ class TurPedidoDetalle
     private $codigoPeriodoFk;     
     
     /**
+     * @ORM\Column(name="codigo_servicio_detalle_fk", type="integer", nullable=true)
+     */    
+    private $codigoServicioDetalleFk;    
+    
+    /**
      * @ORM\Column(name="codigo_plantilla_fk", type="integer", nullable=true)
      */    
     private $codigoPlantillaFk;    
@@ -187,6 +192,12 @@ class TurPedidoDetalle
      * @ORM\JoinColumn(name="codigo_plantilla_fk", referencedColumnName="codigo_plantilla_pk")
      */
     protected $plantillaRel;    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurServicioDetalle", inversedBy="pedidosDetallesServicioDetalleRel")
+     * @ORM\JoinColumn(name="codigo_servicio_detalle_fk", referencedColumnName="codigo_servicio_detalle_pk")
+     */
+    protected $servicioDetalleRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalleRecurso", mappedBy="pedidoDetalleRel", cascade={"persist", "remove"})
@@ -197,7 +208,6 @@ class TurPedidoDetalle
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="pedidoDetalleRel")
      */
     protected $programacionesDetallesPedidoDetalleRel; 
-
 
     /**
      * Constructor
@@ -336,6 +346,30 @@ class TurPedidoDetalle
     public function getCodigoPeriodoFk()
     {
         return $this->codigoPeriodoFk;
+    }
+
+    /**
+     * Set codigoServicioDetalleFk
+     *
+     * @param integer $codigoServicioDetalleFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoServicioDetalleFk($codigoServicioDetalleFk)
+    {
+        $this->codigoServicioDetalleFk = $codigoServicioDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoServicioDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoServicioDetalleFk()
+    {
+        return $this->codigoServicioDetalleFk;
     }
 
     /**
@@ -1008,6 +1042,30 @@ class TurPedidoDetalle
     public function getPlantillaRel()
     {
         return $this->plantillaRel;
+    }
+
+    /**
+     * Set servicioDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $servicioDetalleRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setServicioDetalleRel(\Brasa\TurnoBundle\Entity\TurServicioDetalle $servicioDetalleRel = null)
+    {
+        $this->servicioDetalleRel = $servicioDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get servicioDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurServicioDetalle
+     */
+    public function getServicioDetalleRel()
+    {
+        return $this->servicioDetalleRel;
     }
 
     /**

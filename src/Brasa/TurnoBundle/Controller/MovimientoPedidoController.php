@@ -266,9 +266,10 @@ class MovimientoPedidoController extends Controller
                         $arPedidoDetalle->setPedidoRel($arPedido);
                         $arPedidoDetalle->setModalidadServicioRel($arServicioDetalle->getModalidadServicioRel());
                         $arPedidoDetalle->setPeriodoRel($arServicioDetalle->getPeriodoRel());
-                        $arPedidoDetalle->setTurnoRel($arServicioDetalle->getTurnoRel());
-                        $arPedidoDetalle->setPlantillaRel($arServicioDetalle->getPlantillaRel());
+                        $arPedidoDetalle->setConceptoServicioRel($arServicioDetalle->getConceptoServicioRel());
+                        $arPedidoDetalle->setPlantillaRel($arServicioDetalle->getPlantillaRel());                        
                         $arPedidoDetalle->setPuestoRel($arServicioDetalle->getPuestoRel());
+                        $arPedidoDetalle->setServicioDetalleRel($arServicioDetalle);
                         $arPedidoDetalle->setDias($arServicioDetalle->getDias());
                         $arPedidoDetalle->setLunes($arServicioDetalle->getLunes());
                         $arPedidoDetalle->setMartes($arServicioDetalle->getMartes());
@@ -280,6 +281,7 @@ class MovimientoPedidoController extends Controller
                         $arPedidoDetalle->setFestivo($arServicioDetalle->getFestivo());                            
                         $arPedidoDetalle->setCantidad($arServicioDetalle->getCantidad());
                         $arPedidoDetalle->setVrTotalAjustado($arServicioDetalle->getVrTotalAjustado());
+                        
                         if($arServicioDetalle->getCodigoPeriodoFk() == 1) {
                             $intAnio = $arPedido->getFechaProgramacion()->format('Y');
                             $intMes = $arPedido->getFechaProgramacion()->format('m');

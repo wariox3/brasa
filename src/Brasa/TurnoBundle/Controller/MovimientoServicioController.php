@@ -233,7 +233,7 @@ class MovimientoServicioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);        
-        $form = $this->formularioRecurso();
+        $form = $this->formularioRecurso($arServicioDetalle->getDiasSecuencia());
         $form->handleRequest($request);
         if ($form->isValid()) {
             if($form->get('guardar')->isClicked()) {   
@@ -264,12 +264,39 @@ class MovimientoServicioController extends Controller
                 $arrControles = $request->request->All();
                 $this->actualizarDetalleRecurso($arrControles);                                
                 return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+            }   
+            if($form->get('BtnPlantillaNuevo')->isClicked()) {   
+                $arServicioDetallePlantilla = new \Brasa\TurnoBundle\Entity\TurServicioDetallePlantilla();
+                $arServicioDetallePlantilla->setServicioDetalleRel($arServicioDetalle);
+                $em->persist($arServicioDetallePlantilla);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+            }
+            if($form->get('BtnPlantillaActualizar')->isClicked()) {
+                $arrControles = $request->request->All();
+                $this->actualizarDetallePlantilla($arrControles);
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+            }
+            if($form->get('BtnPlantillaEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPlantilla');
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetallePlantilla')->eliminar($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+            }    
+            if($form->get('BtnGuardarServicioDetalle')->isClicked()) {   
+                $intDiasSecuencia = $form->get('TxtDiasSecuencia')->getData();     
+                $arServicioDetalle->setDiasSecuencia($intDiasSecuencia);
+                $em->persist($arServicioDetalle);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             }            
         }
         $strLista = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->listaDql($codigoServicioDetalle);
+        $strListaPlantilla = $em->getRepository('BrasaTurnoBundle:TurServicioDetallePlantilla')->listaDql($codigoServicioDetalle);
         $arServicioDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);
+        $arServicioDetallePlantilla = $paginator->paginate($em->createQuery($strListaPlantilla), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:recurso.html.twig', array(
             'arServicioDetalleRecursos' => $arServicioDetalleRecursos,
+            'arServicioDetallePlantilla' => $arServicioDetallePlantilla,
             'form' => $form->createView()));
     }    
     
@@ -326,13 +353,18 @@ class MovimientoServicioController extends Controller
         return $form;
     }
 
-    private function formularioRecurso() {
+    private function formularioRecurso($intDiasSecuencia) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtPosicion', 'text', array('label'  => 'Codigo','data' => 0))            
+            ->add('TxtPosicion', 'text', array('label'  => 'Codigo','data' => 0))   
+            ->add('TxtDiasSecuencia', 'text', array('label'  => 'Codigo','data' => $intDiasSecuencia)) 
             ->add('BtnDetalleEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnDetalleActualizar', 'submit', array('label'  => 'Actualizar',))            
+            ->add('BtnPlantillaNuevo', 'submit', array('label'  => 'Nuevo',))                
+            ->add('BtnPlantillaEliminar', 'submit', array('label'  => 'Eliminar',))                
+            ->add('BtnPlantillaActualizar', 'submit', array('label'  => 'Actualizar',))                
+            ->add('BtnGuardarServicioDetalle', 'submit', array('label'  => 'Guardar',))                
             ->add('guardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         return $form;
@@ -483,4 +515,217 @@ class MovimientoServicioController extends Controller
         $em->flush();                        
     }
 
+    private function actualizarDetallePlantilla($arrControles) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        if(isset($arrControles['LblCodigoDetallePlantilla'])) {
+            foreach ($arrControles['LblCodigoDetallePlantilla'] as $intCodigo) {
+                $arServicioDetallePlantilla = new \Brasa\TurnoBundle\Entity\TurServicioDetallePlantilla();
+                $arServicioDetallePlantilla = $em->getRepository('BrasaTurnoBundle:TurServicioDetallePlantilla')->find($intCodigo);
+                if ($arrControles['TxtPosicion' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setPosicion($arrControles['TxtPosicion' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setPosicion(0);
+                }
+                if ($arrControles['TxtDia1' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia1($arrControles['TxtDia1' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia1(null);
+                }
+                if ($arrControles['TxtDia2' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia2($arrControles['TxtDia2' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia2(null);
+                }
+                if ($arrControles['TxtDia3' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia3($arrControles['TxtDia3' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia3(null);
+                }
+                if ($arrControles['TxtDia4' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia4($arrControles['TxtDia4' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia4(null);
+                }
+                if ($arrControles['TxtDia5' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia5($arrControles['TxtDia5' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia5(null);
+                }
+                if ($arrControles['TxtDia6' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia6($arrControles['TxtDia6' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia6(null);
+                }
+                if ($arrControles['TxtDia7' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia7($arrControles['TxtDia7' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia7(null);
+                }
+                if ($arrControles['TxtDia8' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia8($arrControles['TxtDia8' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia8(null);
+                }
+                if ($arrControles['TxtDia9' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia9($arrControles['TxtDia9' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia9(null);
+                }
+                if ($arrControles['TxtDia10' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia10($arrControles['TxtDia10' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia10(null);
+                }
+                if ($arrControles['TxtDia11' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia11($arrControles['TxtDia11' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia11(null);
+                }
+                if ($arrControles['TxtDia12' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia12($arrControles['TxtDia12' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia12(null);
+                }
+                if ($arrControles['TxtDia13' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia13($arrControles['TxtDia13' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia13(null);
+                }
+                if ($arrControles['TxtDia14' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia14($arrControles['TxtDia14' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia14(null);
+                }
+                if ($arrControles['TxtDia15' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia15($arrControles['TxtDia15' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia15(null);
+                }
+                if ($arrControles['TxtDia16' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia16($arrControles['TxtDia16' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia16(null);
+                }
+                if ($arrControles['TxtDia17' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia17($arrControles['TxtDia17' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia17(null);
+                }
+                if ($arrControles['TxtDia18' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia18($arrControles['TxtDia18' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia18(null);
+                }
+                if ($arrControles['TxtDia19' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia19($arrControles['TxtDia19' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia19(null);
+                }
+                if ($arrControles['TxtDia20' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia20($arrControles['TxtDia20' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia20(null);
+                }
+                if ($arrControles['TxtDia21' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia21($arrControles['TxtDia21' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia21(null);
+                }
+                if ($arrControles['TxtDia22' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia22($arrControles['TxtDia22' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia22(null);
+                }
+                if ($arrControles['TxtDia23' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia23($arrControles['TxtDia23' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia23(null);
+                }
+                if ($arrControles['TxtDia24' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia24($arrControles['TxtDia24' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia24(null);
+                }
+                if ($arrControles['TxtDia25' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia25($arrControles['TxtDia25' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia25(null);
+                }
+                if ($arrControles['TxtDia26' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia26($arrControles['TxtDia26' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia26(null);
+                }
+                if ($arrControles['TxtDia27' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia27($arrControles['TxtDia27' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia27(null);
+                }
+                if ($arrControles['TxtDia28' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia28($arrControles['TxtDia28' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia28(null);
+                }
+                if ($arrControles['TxtDia29' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia29($arrControles['TxtDia29' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia29(null);
+                }
+                if ($arrControles['TxtDia30' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia30($arrControles['TxtDia30' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia30(null);
+                }
+                if ($arrControles['TxtDia31' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDia31($arrControles['TxtDia31' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDia31(null);
+                }
+                if ($arrControles['TxtLunes' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setLunes($arrControles['TxtLunes' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setLunes(null);
+                }
+                if ($arrControles['TxtMartes' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setMartes($arrControles['TxtMartes' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setMartes(null);
+                }
+                if ($arrControles['TxtMiercoles' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setMiercoles($arrControles['TxtMiercoles' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setMiercoles(null);
+                }
+                if ($arrControles['TxtJueves' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setJueves($arrControles['TxtJueves' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setJueves(null);
+                }
+                if ($arrControles['TxtViernes' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setViernes($arrControles['TxtViernes' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setViernes(null);
+                }
+                if ($arrControles['TxtSabado' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setSabado($arrControles['TxtSabado' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setSabado(null);
+                }
+                if ($arrControles['TxtDomingo' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDomingo($arrControles['TxtDomingo' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDomingo(null);
+                }
+                if ($arrControles['TxtFestivo' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setFestivo($arrControles['TxtFestivo' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setFestivo(null);
+                }
+                $em->persist($arServicioDetallePlantilla);
+            }            
+        }
+
+        $em->flush();
+    }    
 }

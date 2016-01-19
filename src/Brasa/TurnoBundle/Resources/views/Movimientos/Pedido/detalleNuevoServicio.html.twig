@@ -15,7 +15,7 @@
                 <th>COD</th>
                 <th>PUESTO</th>
                 <th></th>
-                <th>TURNO</th>
+                <th>SERVICIO</th>
                 <th>MODALIDAD</th>
                 <th>PERIODO</th>
                 <th>PLANTILLA</th>
@@ -43,7 +43,7 @@
                 <td>{{ arServicioDetalles.codigoServicioDetallePk  }}</td>
                 <td>{{ arServicioDetalles.codigoPuestoFk }}</td>
                 <td>{{ arServicioDetalles.puestoRel.nombre | default('') }}</td> 
-                <td>{{ arServicioDetalles.turnoRel.nombre  }}</td>                    
+                <td>{{ arServicioDetalles.conceptoServicioRel.nombre  }}</td>                    
                 <td>{{ arServicioDetalles.modalidadServicioRel.nombre  }}</td>                    
                 <td>{{ arServicioDetalles.periodoRel.nombre  }}</td>
                 <td>{{ arServicioDetalles.plantillaRel.nombre | default('')  }}</td>

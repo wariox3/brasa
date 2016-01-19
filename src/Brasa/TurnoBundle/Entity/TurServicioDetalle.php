@@ -153,6 +153,11 @@ class TurServicioDetalle
     private $dia31 = false;    
     
     /**
+     * @ORM\Column(name="dias_secuencia", type="integer")
+     */    
+    private $diasSecuencia = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurServicio", inversedBy="serviciosDetallesServicioRel")
      * @ORM\JoinColumn(name="codigo_servicio_fk", referencedColumnName="codigo_servicio_pk")
      */
@@ -193,6 +198,16 @@ class TurServicioDetalle
      */
     protected $serviciosDetallesRecursosServicioDetalleRel;     
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetallePlantilla", mappedBy="servicioDetalleRel", cascade={"persist", "remove"})
+     */
+    protected $serviciosDetallesPlantillasServicioDetalleRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="servicioDetalleRel")
+     */
+    protected $pedidosDetallesServicioDetalleRel;     
+    
 
     /**
      * Constructor
@@ -200,6 +215,8 @@ class TurServicioDetalle
     public function __construct()
     {
         $this->serviciosDetallesRecursosServicioDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosDetallesPlantillasServicioDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pedidosDetallesServicioDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1036,5 +1053,97 @@ class TurServicioDetalle
     public function getServiciosDetallesRecursosServicioDetalleRel()
     {
         return $this->serviciosDetallesRecursosServicioDetalleRel;
+    }
+
+    /**
+     * Add serviciosDetallesPlantillasServicioDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetallePlantilla $serviciosDetallesPlantillasServicioDetalleRel
+     *
+     * @return TurServicioDetalle
+     */
+    public function addServiciosDetallesPlantillasServicioDetalleRel(\Brasa\TurnoBundle\Entity\TurServicioDetallePlantilla $serviciosDetallesPlantillasServicioDetalleRel)
+    {
+        $this->serviciosDetallesPlantillasServicioDetalleRel[] = $serviciosDetallesPlantillasServicioDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesPlantillasServicioDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetallePlantilla $serviciosDetallesPlantillasServicioDetalleRel
+     */
+    public function removeServiciosDetallesPlantillasServicioDetalleRel(\Brasa\TurnoBundle\Entity\TurServicioDetallePlantilla $serviciosDetallesPlantillasServicioDetalleRel)
+    {
+        $this->serviciosDetallesPlantillasServicioDetalleRel->removeElement($serviciosDetallesPlantillasServicioDetalleRel);
+    }
+
+    /**
+     * Get serviciosDetallesPlantillasServicioDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesPlantillasServicioDetalleRel()
+    {
+        return $this->serviciosDetallesPlantillasServicioDetalleRel;
+    }
+
+    /**
+     * Add pedidosDetallesServicioDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesServicioDetalleRel
+     *
+     * @return TurServicioDetalle
+     */
+    public function addPedidosDetallesServicioDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesServicioDetalleRel)
+    {
+        $this->pedidosDetallesServicioDetalleRel[] = $pedidosDetallesServicioDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesServicioDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesServicioDetalleRel
+     */
+    public function removePedidosDetallesServicioDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesServicioDetalleRel)
+    {
+        $this->pedidosDetallesServicioDetalleRel->removeElement($pedidosDetallesServicioDetalleRel);
+    }
+
+    /**
+     * Get pedidosDetallesServicioDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesServicioDetalleRel()
+    {
+        return $this->pedidosDetallesServicioDetalleRel;
+    }
+
+    /**
+     * Set diasSecuencia
+     *
+     * @param integer $diasSecuencia
+     *
+     * @return TurServicioDetalle
+     */
+    public function setDiasSecuencia($diasSecuencia)
+    {
+        $this->diasSecuencia = $diasSecuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasSecuencia
+     *
+     * @return integer
+     */
+    public function getDiasSecuencia()
+    {
+        return $this->diasSecuencia;
     }
 }
