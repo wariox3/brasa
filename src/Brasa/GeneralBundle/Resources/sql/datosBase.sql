@@ -3845,18 +3845,18 @@ insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contra
 insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('6','JUBILACIÓN');
 insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('7','MUERTE');
 
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('1','2015','1','2015','2','2015-01-01','2015-01-31','1','0','2015-02-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('2','2015','2','2015','3','2015-02-01','2015-02-28','0','0','2015-03-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('3','2015','3','2015','4','2015-03-01','2015-03-31','0','0','2015-04-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('4','2015','4','2015','5','2015-04-01','2015-04-30','0','0','2015-05-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('5','2015','5','2015','6','2015-05-01','2015-05-31','0','0','2015-06-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('6','2015','6','2015','7','2015-06-01','2015-06-30','0','0','2015-07-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('7','2015','7','2015','8','2015-07-01','2015-07-31','0','0','2015-08-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('8','2015','8','2015','9','2015-08-01','2015-08-31','0','0','2015-09-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('9','2015','9','2015','10','2015-09-01','2015-09-30','0','0','2015-10-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('10','2015','10','2015','11','2015-10-01','2015-10-31','0','0','2015-11-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('11','2015','11','2015','12','2015-11-01','2015-11-30','0','0','2015-12-01');
-insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('12','2015','12','2016','1','2015-12-01','2015-12-31','0','0','2016-01-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('1','2016','1','2016','2','2016-01-01','2016-01-31','1','0','2016-02-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('2','2016','2','2016','3','2016-02-01','2016-02-28','0','0','2016-03-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('3','2016','3','2016','4','2016-03-01','2016-03-31','0','0','2016-04-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('4','2016','4','2016','5','2016-04-01','2016-04-30','0','0','2016-05-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('5','2016','5','2016','6','2016-05-01','2016-05-31','0','0','2016-06-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('6','2016','6','2016','7','2016-06-01','2016-06-30','0','0','2016-07-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('7','2016','7','2016','8','2016-07-01','2016-07-31','0','0','2016-08-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('8','2016','8','2016','9','2016-08-01','2016-08-31','0','0','2016-09-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('9','2016','9','2016','10','2016-09-01','2016-09-30','0','0','2016-10-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('10','2016','10','2016','11','2016-10-01','2016-10-31','0','0','2016-11-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('11','2016','11','2016','12','2016-11-01','2016-11-30','0','0','2016-12-01');
+insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('12','2016','12','2017','1','2016-12-01','2016-12-31','0','0','2017-01-01');
 
 INSERT INTO `rhu_cargo` (`codigo_cargo_pk`, `nombre`) VALUES('1','ABOGADO');
 INSERT INTO `rhu_cargo` (`codigo_cargo_pk`, `nombre`) VALUES('2','ABOGADO ESPECIALISTA');
@@ -5507,7 +5507,10 @@ INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `
 INSERT INTO `rhu_sso_sucursal` (`codigo_sucursal_pk`, `nombre`, `codigo_interface`) values('1','MEDELLIN','1010');
 
 /** Seguridad **/
-INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`) VALUES('1','CREAR CONTRATOS DESPUES DE PAGADO EL PERIODO');
+
+
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`) values('1','CREAR CONTRATOS DESPUES DE PAGADO EL PERIODO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`) values('2','VER SALARIO EMPLEADO');
 
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_ADMIN','ADMINISTRADOR');
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_USER','USUARIO');
@@ -5517,6 +5520,23 @@ INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `emai
 INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('4','DANIELGRANADA','DANIEL GRANADA','b6905f341c121301080b3c9449ba718e','A4aG6KWdcudH2xniCt5erl61T+jAghqxduZpS4s4p4Y+qiSDKOQhZ5DgNQuitlAKYj8H1Knno6uMVxDxEt2SZg==','AUXILIARSISTEMAS@JGEFECTIVO.COM','1','emp1','ROLE_USER');
 INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('5','ADMINISTRADOR','ADMINISTRADOR','a0d365adb33e4d59b6a9c9af2639e2fb','VusE/ogCqpMWuaFE3rusp7Yx5nMK90tIMsa7dvgyD/NmwLkgc2nXuupaoBqsPt3shsB1UWqgRs/UFqioNrZbLg==','administrador@appsoga.com','1',NULL,'ROLE_ADMIN');
 INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('7','JUANDELAP','JUAN DE LA PEÑA','8834a99bd0913447212c1d1610ed0460','8A5rac6utPsxSL9fzp9NsURqcnBcTFPu7B5DFw+tPwfGJEpfBlHOYl2U+3WZVFdekJ7KyLPeXB1otCMW8uiJyw==','JUAN@HOTMAIL.COM','1',NULL,'ROLE_USER');
+
+insert into `seg_acceso` (`codigo_acceso_pk`, `nombre`) values('1','EMPLEADOS');
+insert into `seg_acceso` (`codigo_acceso_pk`, `nombre`) values('2','CONTRATOS');
+
+insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('1','1','1','1');
+insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('2','2','1','1');
+insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('3','5','1','1');
+insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('4','2','2','1');
+insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('5','1','2','1');
+insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('6','5','2','1');
+
+insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('1','1','1','1');
+insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('2','2','1','1');
+insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('3','5','1','1');
+insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('4','1','2','1');
+insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('5','2','2','1');
+insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('6','5','2','1');
 
 CREATE TABLE `emp_users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -5534,6 +5554,6 @@ CREATE TABLE `emp_users` (
 INSERT INTO `emp_users` (`id`, `username`, `password`, `email`, `is_active`, `codigo_empleado_fk`, `roles`, `nombre`, `numero_identificacion`) VALUES('5','administrador','$2a$04$87ghqV5zf0CrVj7eSO/MQOAWYydhS./8R7GGHb5rRp7cI42RI0xj.','administrador@appsoga.com','1','0','ROLE_ADMIN','Mario Estrada',NULL);
 
 /** Configuraciones **/
-insert into `rhu_configuracion` (`codigo_configuracion_pk`, `codigo_entidad_riesgo_fk`, `vr_salario`, `codigo_auxilio_transporte`, `vr_auxilio_transporte`, `codigo_credito`, `codigo_seguro`, `codigo_tiempo_suplementario`, `codigo_hora_diurna_trabajada`, `codigo_aporte_salud`, `codigo_aporte_pension`, `porcentaje_pension_extra`, `codigo_incapacidad`, `anio_actual`, `porcentaje_iva`, `codigo_retencion_fuente`, `edad_minima_empleado`, `porcentaje_bonificacion_no_prestacional`, `codigo_entidad_Examen_ingreso`, `codigo_comprobante_pago_nomina`, `codigo_comprobante_pago_banco`) values('1','6','689455','18','77700','14','27','5','1','3','4','5','16','2015','16','26','16','40','2','8','15');
-INSERT INTO `gen_configuracion` (`codigo_configuracion_pk`, `base_retencion_fuente`, `base_retencion_cree`, `porcentaje_retencion_fuente`, `porcentaje_retencion_cree`, `base_retencion_iva_ventas`, `porcentaje_retencion_iva_ventas`, `fecha_ultimo_cierre`, `nit_ventas_mostrador`, `ruta_temporal`, `nit_empresa`, `digito_verificacion_empresa`, `nombre_empresa`, `telefono_empresa`, `direccion_empresa`, `sigla`, `ruta_almacenamiento`, `ruta_directorio`) VALUES('1','1','0','1','0','0','15','2015-09-01','0','/var/www/temporal/','900456778','6','EMPRESA MEDELLIN S.A','4448120','calle 34 # 66b - 93','MEDELLIN','/var/www/html/almacenamiento/','/var/www/gestorarchivos/');
+insert into `rhu_configuracion` (`codigo_configuracion_pk`, `codigo_entidad_riesgo_fk`, `vr_salario`, `codigo_auxilio_transporte`, `vr_auxilio_transporte`, `codigo_credito`, `codigo_seguro`, `codigo_tiempo_suplementario`, `codigo_hora_diurna_trabajada`, `codigo_aporte_salud`, `codigo_aporte_pension`, `porcentaje_pension_extra`, `codigo_incapacidad`, `anio_actual`, `porcentaje_iva`, `codigo_retencion_fuente`, `edad_minima_empleado`, `porcentaje_bonificacion_no_prestacional`, `codigo_entidad_Examen_ingreso`, `codigo_comprobante_pago_nomina`, `codigo_comprobante_pago_banco`) values('1','6','689455','18','77700','14','27','5','1','3','4','5','16','2016','16','26','16','40','2','8','15');
+INSERT INTO `gen_configuracion` (`codigo_configuracion_pk`, `base_retencion_fuente`, `base_retencion_cree`, `porcentaje_retencion_fuente`, `porcentaje_retencion_cree`, `base_retencion_iva_ventas`, `porcentaje_retencion_iva_ventas`, `fecha_ultimo_cierre`, `nit_ventas_mostrador`, `ruta_temporal`, `nit_empresa`, `digito_verificacion_empresa`, `nombre_empresa`, `telefono_empresa`, `direccion_empresa`, `sigla`, `ruta_almacenamiento`, `ruta_directorio`) VALUES('1','1','0','1','0','0','15','2016-09-01','0','/var/www/temporal/','900456778','6','EMPRESA MEDELLIN S.A','4448120','calle 34 # 66b - 93','MEDELLIN','/var/www/html/almacenamiento/','/var/www/gestorarchivos/');
 

@@ -844,7 +844,11 @@ brs_rhu_proceso_contabilizar_pago:
 
 brs_rhu_proceso_contabilizar_pago_banco:
     path:     /rhu/proceso/contabilizar/pago/banco
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPagoBanco:lista }         
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPagoBanco:lista }
+    
+brs_rhu_proceso_soporte_pago_horario:
+    path:     /rhu/proceso/soporte/pago/horario
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarSoportePagoHorario:generar }    
     
 brs_rhu_requisito_nuevo:
     path:     /rhu/requisito/nuevo/{codigoRequisito}
