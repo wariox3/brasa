@@ -30,7 +30,7 @@ class RhuHorarioAcceso
     /**
      * @ORM\Column(name="fecha_salida", type="datetime", nullable=true)
      */    
-    private $fechaSalida;
+    private $fechaSalida;        
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
@@ -43,9 +43,9 @@ class RhuHorarioAcceso
     private $duracionRegistro;
     
     /**     
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="estado_salida", type="boolean")
      */    
-    private $estado = 0;
+    private $estadoSalida = FALSE;
    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="horarioAccesoEmpleadoRel")
@@ -53,7 +53,7 @@ class RhuHorarioAcceso
      */
     protected $empleadoRel;
     
-    
+
 
     /**
      * Get codigoHorarioAccesoPk
@@ -186,27 +186,27 @@ class RhuHorarioAcceso
     }
 
     /**
-     * Set estado
+     * Set estadoSalida
      *
-     * @param boolean $estado
+     * @param boolean $estadoSalida
      *
      * @return RhuHorarioAcceso
      */
-    public function setEstado($estado)
+    public function setEstadoSalida($estadoSalida)
     {
-        $this->estado = $estado;
+        $this->estadoSalida = $estadoSalida;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get estadoSalida
      *
      * @return boolean
      */
-    public function getEstado()
+    public function getEstadoSalida()
     {
-        return $this->estado;
+        return $this->estadoSalida;
     }
 
     /**

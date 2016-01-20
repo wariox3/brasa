@@ -240,7 +240,8 @@
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                {% if arProgramacionPago.estadoGenerado == 0 %}
+                {% if arProgramacionPago.estadoGenerado == 0 %}                    
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_soporte_horario', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar horarios</a>                    
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_soporte_turno', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar turnos</a>                    
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_agregar_empleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>                

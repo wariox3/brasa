@@ -18,6 +18,11 @@ class RhuSoportePagoHorario
     private $codigoSoportePagoHorarioPk;         
       
     /**
+     * @ORM\Column(name="codigo_empleado_fk", type="integer")
+     */    
+    private $codigoEmpleadoFk;    
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fechaDesde;        
@@ -87,7 +92,11 @@ class RhuSoportePagoHorario
      */    
     private $horasExtrasFestivasNocturnas = 0;       
     
-   
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="soportesPagosHorariosEmpleadoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
+     */
+    protected $empleadoRel;     
 
     /**
      * Get codigoSoportePagoHorarioPk
@@ -97,6 +106,30 @@ class RhuSoportePagoHorario
     public function getCodigoSoportePagoHorarioPk()
     {
         return $this->codigoSoportePagoHorarioPk;
+    }
+
+    /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return RhuSoportePagoHorario
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
     }
 
     /**
@@ -433,5 +466,29 @@ class RhuSoportePagoHorario
     public function getHorasExtrasFestivasNocturnas()
     {
         return $this->horasExtrasFestivasNocturnas;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuSoportePagoHorario
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
     }
 }

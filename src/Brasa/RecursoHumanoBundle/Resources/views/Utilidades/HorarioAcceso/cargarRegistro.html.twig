@@ -16,10 +16,20 @@
                 </div>                                
             </div>                                            
         </div>
-    </div>                   
+    </div>                       
     <div class="modal-footer">        
             {{ form_widget(form.BtnCargar, { 'attr': {'class': 'btn btn-sm btn-primary'} }) }}            
-    </div>    
+    </div>   
+    <table  class="table table-striped table-bordered table-condensed table-hover">            
+            <tr>
+                <th>Error</th>                
+            </tr>            
+            {% for arrErrores in arrErrores %}
+            <tr>
+                <td>{{ arrErrores.error  }}</td>                
+            </tr>            
+            {% endfor %}                        
+        </table>    
     {{ form_end(form) }}
 </div>
 {% endblock %}

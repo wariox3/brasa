@@ -14,8 +14,10 @@ class RhuHorarioType extends AbstractType
     {
         $builder
             ->add('nombre', 'text', array('required' => true))
-            ->add('entrada', 'text', array('required' => true))
-            ->add('salida', 'text', array('required' => true))
+            ->add('horaEntrada', 'time', array('required' => true))
+            ->add('horaSalida', 'time', array('required' => true))
+            ->add('generaHoraExtra', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))     
+                
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }
 

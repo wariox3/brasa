@@ -572,7 +572,11 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuHorarioAcceso", mappedBy="empleadoRel")
      */
     protected $horarioAccesoEmpleadoRel;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSoportePagoHorario", mappedBy="empleadoRel")
+     */
+    protected $soportesPagosHorariosEmpleadoRel;    
     
     /**
      * Constructor
@@ -607,6 +611,7 @@ class RhuEmpleado
         $this->examenesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turRecursosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->horarioAccesoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosHorariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -3393,5 +3398,39 @@ class RhuEmpleado
     public function getHorarioAccesoEmpleadoRel()
     {
         return $this->horarioAccesoEmpleadoRel;
+    }
+
+    /**
+     * Add soportesPagosHorariosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addSoportesPagosHorariosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosEmpleadoRel)
+    {
+        $this->soportesPagosHorariosEmpleadoRel[] = $soportesPagosHorariosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosHorariosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosEmpleadoRel
+     */
+    public function removeSoportesPagosHorariosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosEmpleadoRel)
+    {
+        $this->soportesPagosHorariosEmpleadoRel->removeElement($soportesPagosHorariosEmpleadoRel);
+    }
+
+    /**
+     * Get soportesPagosHorariosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosHorariosEmpleadoRel()
+    {
+        return $this->soportesPagosHorariosEmpleadoRel;
     }
 }

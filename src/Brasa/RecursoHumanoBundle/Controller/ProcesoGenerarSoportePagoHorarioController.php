@@ -22,7 +22,28 @@ class ProcesoGenerarSoportePagoHorarioController extends Controller
                 //$this->filtrar($form);
                 $this->lista();
                 $this->generarExcel();
-            }                        
+            }    
+            if ($form->get('BtnGenerar')->isClicked()) {
+                $dateFechaDesde = $form->get('fechaDesde')->getData();
+                $dateFechaHasta = $form->get('fechaHasta')->getData();
+                $arEmpleadosPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->resumenEmpleado($dateFechaDesde->format('Y/m/d'), $dateFechaHasta->format('Y/m/d'));                
+                
+                foreach ($arEmpleadosPeriodo as $arEmpleadoPeriodo ) {
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleadoPeriodo['codigoEmpleadoFk']);                                        
+                    $arHorarioAccesos = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->empleado($dateFechaDesde->format('Y/m/d'), $dateFechaHasta->format('Y/m/d'), $arEmpleadoPeriodo['codigoEmpleadoFk']);                    
+                    foreach ($arHorarioAccesos as $arHorarioAcceso) {
+                        $intPrueba = $arHorarioAcceso->getFechaSalida()->diff($arHorarioAcceso->getFechaEntrada());
+                    }
+                    $intHorasDiurnas = 0;
+                    $arSoportePagoHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario();                                                            
+                    $arSoportePagoHorario->setEmpleadoRel($arEmpleado);
+                    $arSoportePagoHorario->setFechaDesde($dateFechaDesde);
+                    $arSoportePagoHorario->setFechaHasta($dateFechaHasta);
+                    $em->persist($arSoportePagoHorario);                    
+                }                
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_proceso_soporte_pago_horario'));
+            }
             /*if ($form->get('BtnGenerar')->isClicked()) {
                 $dateFechaDesde = $form->get('fechaDesde')->getData();
                 $dateFechaHasta = $form->get('fechaHasta')->getData();
@@ -114,8 +135,8 @@ class ProcesoGenerarSoportePagoHorarioController extends Controller
 
     private function formularioGenerar() {
         $form = $this->createFormBuilder()
-            ->add('fechaDesde', 'date', array('data' => new \DateTime('now')))
-            ->add('fechaHasta', 'date', array('data' => new \DateTime('now')))
+            ->add('fechaDesde', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMMMdd'))
+            ->add('fechaHasta', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMMMdd'))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnCerrar', 'submit', array('label'  => 'Cerrar'))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))            

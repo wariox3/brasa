@@ -64,53 +64,70 @@ class UtilidadesHorarioAccesoController extends Controller
             ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
             ->getForm();
         $form->handleRequest($request);
-
+        $arrErrores = array();
         if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
                 $form['attachment']->getData()->move("/var/www/temporal", "carga.txt");
                 $fp = fopen("/var/www/temporal/carga.txt", "r");
-                $empleadoSinContrato = "";
-                $empleadoNoExiste = "";
+                $arrRegistros = array();
                 while(!feof($fp)) {
                     $linea = fgets($fp);
                     if($linea){
                         $arrayDetalle = explode(";", $linea);
                         if($arrayDetalle[0] != "") {
-                            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrayDetalle[0]));
-                            if(count($arEmpleado) > 0) {
-                                $arEmpleadoValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrayDetalle[0], 'codigoCentroCostoFk' => null));
-                                if (count($arEmpleadoValidar) > 0){
-                                    $empleadoSinContrato = "El numero de identificación " .$arrayDetalle[0]. " No tiene contrato";
-                                }else{
-                                    //Registro acceso empleado
-                                    $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
-                                    $arHorarioAcceso->setEmpleadoRel($arEmpleado);
-                                    $dateFecha = $arrayDetalle[1];
-                                    $dateFecha = new \DateTime($dateFecha);
-                                    $arHorarioAcceso->setFechaEntrada($dateFecha);
-                                    $em->persist($arHorarioAcceso);
-                                }
-                            }else{
-                                $empleadoNoExiste = "El numero de identificación " .$arrayDetalle[0]. " No existe";
-                            }
+                            $arrRegistros[] = array('identificacion' => $arrayDetalle[0], 
+                                'fechaIngreso' => $arrayDetalle[1],
+                                'fechaSalida' => $arrayDetalle[2]);
+                        }
+                    }
+                }                
+                fclose($fp);                
+                foreach ($arrRegistros as $arrRegistro) { 
+                    $i = 0;
+                    foreach ($arrRegistros as $arrRegistroValidar) {                         
+                        if($arrRegistro['identificacion'] == $arrRegistroValidar['identificacion']) {
+                            $i++;
+                            if($i > 1) {
+                                $arrErrores[] = array('error' => "La identificacion " . $arrRegistro['identificacion'] . " esta ducplicada en el archivo");                                
+                            }                            
                         }
                     }
                 }
-                fclose($fp);
-                if ($empleadoNoExiste <> ""){
-                    $objMensaje->Mensaje("error", "" .$empleadoNoExiste. "", $this);
-                }else{
-                    if($empleadoSinContrato <> ""){
-                        $objMensaje->Mensaje("error", "" .$empleadoSinContrato. "", $this);                        
+                foreach ($arrRegistros as $arrRegistro) {                    
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrRegistro['identificacion']));
+                    if(count($arEmpleado) > 0) {
+                        if($arEmpleado->getCodigoContratoActivoFk() != ''){
+                            $dateFechaIngreso = $arrRegistro['fechaIngreso'];
+                            $dateFechaIngreso = new \DateTime($dateFechaIngreso);
+                            $dateFechaSalida = $arrRegistro['fechaSalida'];
+                            $dateFechaSalida = new \DateTime($dateFechaSalida);                            
+                            if($em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->validarIngreso($dateFechaIngreso->format('Y/m/d'), $arEmpleado->getCodigoEmpleadoPk()) == FALSE) {
+                                $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
+                                $arHorarioAcceso->setEmpleadoRel($arEmpleado);
+                                $arHorarioAcceso->setFechaEntrada($dateFechaIngreso);
+                                $arHorarioAcceso->setFechaSalida($dateFechaSalida);
+                                $arHorarioAcceso->setEstadoSalida(1);
+                                $em->persist($arHorarioAcceso);                                                                    
+                            } else {
+                                $arrErrores[] = array('error' => "El empleado " . $arrRegistro['identificacion'] . " ya registra ingreso");                                    
+                            }
+                        }else {
+                            $arrErrores[] = array('error' => "El empleado " . $arrRegistro['identificacion'] . " " . $arEmpleado->getNombreCorto() . " no tiene contrato");                                
+                        }                                                                                               
                     }else{
-                        $em->flush();
-                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                        
-                    }
+                        $arrErrores[] = array('error' => "El numero de identificación " . $arrRegistro['identificacion'] . " no existe");                                
+                    }                                     
+                }
+                                
+                if(count($arrErrores) <= 0) {
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                            
                 }
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/HorarioAcceso:cargarRegistro.html.twig', array(
+            'arrErrores' => $arrErrores,
             'form' => $form->createView()
             ));
     } 

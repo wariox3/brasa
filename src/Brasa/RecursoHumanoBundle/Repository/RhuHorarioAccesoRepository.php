@@ -14,16 +14,17 @@ class RhuHorarioAccesoRepository extends EntityRepository {
     public function RegistroHoy($strFechaHoy = "") {
         
         $em = $this->getEntityManager();
-        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estado = 0";   
+        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estadoSalida = 0";   
         if ($strFechaHoy != ""){
             $dql .= " AND ha.fechaEntrada >= '". $strFechaHoy . " 00:00:00' AND ha.fechaEntrada <= '" . $strFechaHoy . " 23:59:59' ";
         }
         return $dql;
     }
+    
     public function RegistroEntrada($strFechaHoy = "", $strEmpleado= "") {
         
         $em = $this->getEntityManager();
-        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estado = 0 ";   
+        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estadoSalida = 0 ";   
         if ($strFechaHoy != ""){
             $dql .= " AND ha.fechaEntrada >= '". $strFechaHoy . " 00:00:00' AND ha.fechaEntrada <= '" . $strFechaHoy . " 23:59:59' ";
         }
@@ -33,6 +34,42 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arEmpleadoEntrada = $query->getResult();
         return $arEmpleadoEntrada;
+    }
+    
+    public function resumenEmpleado($strFechaDesde = "", $strFechaHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ha.codigoEmpleadoFk, COUNT(ha.codigoHorarioAccesoPk) FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha "
+                . "WHERE  ha.fechaEntrada >= '". $strFechaDesde . " 00:00:00' AND ha.fechaEntrada <= '" . $strFechaHasta . " 23:59:59' "
+                . "GROUP BY ha.codigoEmpleadoFk";   
+                
+        $query = $em->createQuery($dql);
+        $arEmpleado = $query->getResult();
+        return $arEmpleado;
+    }    
+    
+    public function empleado($strFechaDesde = "", $strFechaHasta = "", $codigoEmpleado = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha "
+                . "WHERE  ha.fechaEntrada >= '". $strFechaDesde . " 00:00:00' AND ha.fechaEntrada <= '" . $strFechaHasta . " 23:59:59' "
+                . "AND ha.codigoEmpleadoFk = " . $codigoEmpleado;                   
+        $query = $em->createQuery($dql);
+        $arEmpleado = $query->getResult();
+        return $arEmpleado;
+    }    
+    
+    public function validarIngreso($strFechaHoy = "", $strEmpleado= "") {          
+        $em = $this->getEntityManager();
+        $boolResultado = TRUE;
+        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha "
+                . "WHERE ha.fechaEntrada >= '". $strFechaHoy . " 00:00:00' AND ha.fechaEntrada <= '" . $strFechaHoy . " 23:59:59' "       
+                . "AND ha.codigoEmpleadoFk = ". $strEmpleado;
+        
+        $query = $em->createQuery($dql);
+        $arEmpleadoEntrada = $query->getResult();
+        if(count($arEmpleadoEntrada) <= 0) {
+            $boolResultado = FALSE;
+        }
+        return $boolResultado;
     }
     
     public function listaDql($strIdentificacion = "", $strNombre = "", $strDesde = "", $strHasta = "") {        
