@@ -103,6 +103,14 @@
                         <td class="td-in-well">{% if arEmpleado.auxilioTransporte == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>
                     <tr>
+                        <td class="titulo">HORARIO:</td>
+                        <td class="td-in-well">{{ arEmpleado.horarioRel.nombre|default('SIN HORARIO') }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>                    
+                    <tr>
                         <td class="titulo" >COMENTARIOS: </td>
                         <td class="td-in-well" colspan="7">{{ arEmpleado.comentarios }}</td>
                     </tr>

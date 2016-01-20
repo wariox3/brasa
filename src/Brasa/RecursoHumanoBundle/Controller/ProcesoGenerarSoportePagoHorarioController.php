@@ -30,15 +30,47 @@ class ProcesoGenerarSoportePagoHorarioController extends Controller
                 
                 foreach ($arEmpleadosPeriodo as $arEmpleadoPeriodo ) {
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleadoPeriodo['codigoEmpleadoFk']);                                        
+                    $arHorario = $arEmpleado->getHorarioRel();                                        
                     $arHorarioAccesos = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->empleado($dateFechaDesde->format('Y/m/d'), $dateFechaHasta->format('Y/m/d'), $arEmpleadoPeriodo['codigoEmpleadoFk']);                    
+                    $intHorasDiurnas = 0;                    
                     foreach ($arHorarioAccesos as $arHorarioAcceso) {
+                        $diaSemana = $arHorarioAcceso->getFechaEntrada()->format('N');
+                        $arTurno = new \Brasa\RecursoHumanoBundle\Entity\RhuTurno();
+                        if($diaSemana == 1) {
+                            $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getLunes());
+                        }
+                        if($diaSemana == 2) {
+                            $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getMartes());
+                        }
+                        if($diaSemana == 3) {
+                            $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getMiercoles());
+                        }
+                        if($diaSemana == 4) {
+                            $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getJueves());
+                        }
+                        if($diaSemana == 5) {
+                            $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getViernes());
+                        }
+                        if($diaSemana == 6) {
+                            $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getSabado());
+                        }
+                        if($diaSemana == 7) {
+                            $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getDomingo());
+                        } 
+                        if($arTurno->getHoraDesde()->format('h') >= $arHorarioAcceso->getFechaEntrada()->format('h')) {
+                            if($arTurno->getHoraHasta()->format('h') >= $arHorarioAcceso->getFechaSalida()->format('h')){
+                                $intHorasDiurnas += $arTurno->getHorasDiurnas();
+                            }
+                        }
                         $intPrueba = $arHorarioAcceso->getFechaSalida()->diff($arHorarioAcceso->getFechaEntrada());
+                        
                     }
-                    $intHorasDiurnas = 0;
+                    
                     $arSoportePagoHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario();                                                            
                     $arSoportePagoHorario->setEmpleadoRel($arEmpleado);
                     $arSoportePagoHorario->setFechaDesde($dateFechaDesde);
                     $arSoportePagoHorario->setFechaHasta($dateFechaHasta);
+                    $arSoportePagoHorario->setHorasDiurnas($intHorasDiurnas);
                     $em->persist($arSoportePagoHorario);                    
                 }                
                 $em->flush();
@@ -127,6 +159,10 @@ class ProcesoGenerarSoportePagoHorarioController extends Controller
             'form' => $form->createView()));
     }
 
+    private function devuelveHoras ($dateFechaInicial, $dateFechaFinal) {
+        
+    }
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorario')->listaDql();

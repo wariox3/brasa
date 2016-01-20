@@ -20,6 +20,10 @@ class Funciones {
         }
         return $strResultado;                
     }
+    
+    public function diaSemana($dateFecha) {
+        
+    }
 }
 ?>
 

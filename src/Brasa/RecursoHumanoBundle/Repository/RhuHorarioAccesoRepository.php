@@ -91,4 +91,9 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         return $dql;
     }
     
+    public function calculoHoras($strFechaDesde = "", $strFechaHasta = "", $codigoEmpleado = "") {        
+        $em = $this->getEntityManager();
+        
+    }
+    
 }
