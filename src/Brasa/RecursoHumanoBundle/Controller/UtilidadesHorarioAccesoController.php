@@ -161,9 +161,13 @@ class UtilidadesHorarioAccesoController extends Controller
             $diferencia = $horas.":".$minutos.":".$segundos;
             $arHorarioAcceso->setDuracionRegistro($diferencia);
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arHorarioAcceso->getCodigoEmpleadoFk());
-            $horasDiurnas = $arEmpleado->getHorarioRel()->getHoraSalida()- $dateEntrada->format('H:i');
+            $horarioSalida = $arEmpleado->getHorarioRel()->getHoraSalida()->format('H');
+            $horaEntrada = $dateEntrada->format('H');
+            $horaSalida = $dateSalida->format('H');
+            $horasDiurnas = $horarioSalida - $horaEntrada;
+            $arHorarioAcceso->setHoras($horas);
+            $arHorarioAcceso->setHorasDiurnas($horasDiurnas);
             
-            $arHorarioAcceso->setHorasDiurnas($horasDiurnas->format('%H'));
             $em->persist($arHorarioAcceso);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
