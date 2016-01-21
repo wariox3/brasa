@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ConsultasServiciosDetallesRecursosController extends Controller
 {
     var $strListaDql = "";
-    var $codigoServicio = "";
+    var $codigoCliente = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -15,13 +15,19 @@ class ConsultasServiciosDetallesRecursosController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {            
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        if ($form->isValid()) {  
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {                
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
+                if($arCliente) {
+                    $this->codigoCliente = $arCliente->getCodigoClientePk();
+                }
+            }            
             if ($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrar($form);
                 $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
                 $this->lista();
                 $this->generarExcel();
             }
@@ -29,23 +35,20 @@ class ConsultasServiciosDetallesRecursosController extends Controller
         $arServiciosDetallesRecursos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Consultas/Servicio:detalleRecurso.html.twig', array(
             'arServiciosDetallesRecursos' => $arServiciosDetallesRecursos,
+            'arCliente' => $arCliente,
             'form' => $form->createView()));
     }
             
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->listaConsultaDql();
-    }
-
-    private function filtrar ($form) {                
-        $this->codigoServicio = $form->get('TxtCodigo')->getData();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->listaConsultaDql(
+                $this->codigoCliente);
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio))                        
+        $form = $this->createFormBuilder()            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

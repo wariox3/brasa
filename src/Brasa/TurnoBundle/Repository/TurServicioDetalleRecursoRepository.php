@@ -23,17 +23,11 @@ class TurServicioDetalleRecursoRepository extends EntityRepository {
         
     }
     
-    public function listaConsultaDql() {
+    public function listaConsultaDql($codigoCliente = "") {
         $dql   = "SELECT sdr FROM BrasaTurnoBundle:TurServicioDetalleRecurso sdr JOIN sdr.servicioDetalleRel sd JOIN sd.servicioRel s WHERE sdr.codigoServicioDetalleRecursoPk <> 0 ";
-
-        /*if($strFechaDesde != '') {
-            $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  
-        }
-        if($strFechaHasta != '') {
-            $dql .= " AND p.fecha <= '" . $strFechaHasta . "'";  
+        if($codigoCliente != "") {
+            $dql .= " AND s.codigoClienteFk = '" . $codigoCliente . "'";  
         } 
-         * 
-         */
         $dql .= " ORDER BY s.codigoClienteFk, sd.codigoServicioFk";
         return $dql;
     }      
