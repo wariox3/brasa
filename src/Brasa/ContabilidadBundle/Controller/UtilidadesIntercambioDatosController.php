@@ -21,16 +21,16 @@ class UtilidadesIntercambioDatosController extends Controller
             if($form->get('BtnExportar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados as $codigoRegistro) {                        
-                        //$arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
                         $arRegistro = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->find($codigoRegistro);
                         $arRegistroExportar = new \Brasa\ContabilidadBundle\Entity\CtbRegistroExportar();
                         $arRegistroExportar->setFecha($arRegistro->getFecha());
-                        $arRegistroExportar->setComprobante($arRegistro->getCodigoComprobanteContableFk());
+                        $arRegistroExportar->setComprobante($arRegistro->getCodigoComprobanteFk());
                         $arRegistroExportar->setNumero($arRegistro->getNumero());
                         $arRegistroExportar->setCuenta($arRegistro->getCodigoCuentaFk());
                         $arRegistroExportar->setDebito($arRegistro->getDebito());
                         $arRegistroExportar->setCredito($arRegistro->getCredito());
-                        $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNit());
+                        $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
                         if($arRegistro->getDebito() > 0) {
                             $arRegistroExportar->setTipo(1);
                         } else {

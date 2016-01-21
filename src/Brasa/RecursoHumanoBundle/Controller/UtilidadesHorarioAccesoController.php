@@ -108,6 +108,7 @@ class UtilidadesHorarioAccesoController extends Controller
                                 $arHorarioAcceso->setFechaEntrada($dateFechaIngreso);
                                 $arHorarioAcceso->setFechaSalida($dateFechaSalida);
                                 $arHorarioAcceso->setEstadoSalida(1);
+                                $arHorarioAcceso->setDuracionRegistro('0');
                                 $em->persist($arHorarioAcceso);                                                                    
                             } else {
                                 $arrErrores[] = array('error' => "El empleado " . $arrRegistro['identificacion'] . " ya registra ingreso");                                    

@@ -86,6 +86,7 @@ class ProcesoContabilizarPagoController extends Controller
                     }
                     $em->flush();
                 }
+                return $this->redirect($this->generateUrl('brs_rhu_proceso_contabilizar_pago'));
             }            
         }       
                 
