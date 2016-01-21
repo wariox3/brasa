@@ -82,7 +82,7 @@ class UtilidadesHorarioAccesoController extends Controller
                     }
                 }                
                 fclose($fp);                
-                foreach ($arrRegistros as $arrRegistro) { 
+                /*foreach ($arrRegistros as $arrRegistro) { 
                     $i = 0;
                     foreach ($arrRegistros as $arrRegistroValidar) {                         
                         if($arrRegistro['identificacion'] == $arrRegistroValidar['identificacion']) {
@@ -92,7 +92,7 @@ class UtilidadesHorarioAccesoController extends Controller
                             }                            
                         }
                     }
-                }
+                }*/
                 foreach ($arrRegistros as $arrRegistro) {                    
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrRegistro['identificacion']));
