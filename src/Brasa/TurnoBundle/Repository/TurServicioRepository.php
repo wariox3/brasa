@@ -6,8 +6,11 @@ use Doctrine\ORM\EntityRepository;
 
 class TurServicioRepository extends EntityRepository {
     
-    public function listaDql() {
-        $dql   = "SELECT s FROM BrasaTurnoBundle:TurServicio s WHERE s.codigoServicioPk <> 0";
+    public function listaDql($codigoServicio = "", $codigoCliente = "") {
+        $dql   = "SELECT s FROM BrasaTurnoBundle:TurServicio s WHERE s.codigoServicioPk <> 0 ";
+        if($codigoCliente != "") {
+            $dql .= " AND s.codigoClienteFk = " . $codigoCliente;  
+        }        
         return $dql;
     }
     

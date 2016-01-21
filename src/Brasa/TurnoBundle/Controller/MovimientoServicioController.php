@@ -8,7 +8,8 @@ use Brasa\TurnoBundle\Form\Type\TurServicioDetalleType;
 class MovimientoServicioController extends Controller
 {
     var $strListaDql = "";    
-    var $codigoServicio = "";    
+    var $codigoServicio = "";  
+    var $codigoCliente = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -17,14 +18,22 @@ class MovimientoServicioController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {            
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        if ($form->isValid()) {    
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {                
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
+                if($arCliente) {
+                    $this->codigoCliente = $arCliente->getCodigoClientePk();
+                }
+            }            
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicio')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_tur_servicio_lista'));                 
                 
             }
-            if ($form->get('BtnFiltrar')->isClicked()) {
+            if ($form->get('BtnFiltrar')->isClicked()) {                
                 $this->filtrar($form);
                 $this->lista();
             }
@@ -38,6 +47,7 @@ class MovimientoServicioController extends Controller
         $arServicios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:lista.html.twig', array(
             'arServicios' => $arServicios,
+            'arCliente' => $arCliente,
             'form' => $form->createView()));
     }
 
@@ -302,7 +312,7 @@ class MovimientoServicioController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL($this->codigoServicio);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL($this->codigoServicio, $this->codigoCliente);
     }    
 
     private function filtrar ($form) {                

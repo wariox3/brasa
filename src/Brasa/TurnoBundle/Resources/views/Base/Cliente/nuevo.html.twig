@@ -2,6 +2,7 @@
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    {{ form_errors(form) }}
     <h3>Nuevo cliente</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
