@@ -13,6 +13,8 @@ class UtilidadesRegistroVisitasController extends Controller
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $nombreVisitante = "";
+        $arVisitante = new \Brasa\RecursoHumanoBundle\Entity\RhuVisitante();
         $arRegistroVisita = new \Brasa\RecursoHumanoBundle\Entity\RhuRegistroVisita();
         $arRegistroVisitas = new \Brasa\RecursoHumanoBundle\Entity\RhuRegistroVisita();
         $fechaHoy = new \DateTime('now');
@@ -23,6 +25,18 @@ class UtilidadesRegistroVisitasController extends Controller
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             $arRegistroVisita = $form->getData();
+            $arRegistroVisita->setNumeroIdentificacion($arrControles['txtNumeroIdentificacion']);
+            $arVisitante = $em->getRepository('BrasaRecursoHumanoBundle:RhuVisitante')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+            $registros = count($arVisitante);
+            if ($registros == 0){
+                $nombreVisitante = "";
+            } else {
+                $nombreVisitante = $arVisitante->getNombre();
+            }
+                
+            if ($form->get('buscar')->isClicked()){
+                $nombreVisitante;
+            }else{
             if ($arrControles['txtNumeroIdentificacion'] == ''){
                 $objMensaje->Mensaje("error", "Número de identificación es requerido", $this);
             }else {
@@ -34,11 +48,11 @@ class UtilidadesRegistroVisitasController extends Controller
                             $objMensaje->Mensaje("error", "El visitante se encuentra registrado", $this);
                         }else {
                             $arRegistroVisita->setFechaEntrada(new \DateTime('now'));
-                            $arRegistroVisita->setNumeroIdentificacion($arrControles['txtNumeroIdentificacion']);
+                            //$arRegistroVisita->setNumeroIdentificacion($arrControles['txtNumeroIdentificacion']);
                             $arRegistroVisita->setNombre($arrControles['txtNombreCorto']);
                             $em->persist($arRegistroVisita);
-                            $arVisitante = $em->getRepository('BrasaRecursoHumanoBundle:RhuVisitante')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-                            $registros = count($arVisitante);
+                            //$arVisitante = $em->getRepository('BrasaRecursoHumanoBundle:RhuVisitante')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                            //$registros = count($arVisitante);
                             if ($registros == 0){
                                 $arVisitante = new \Brasa\RecursoHumanoBundle\Entity\RhuVisitante();
                                 $arVisitante->setNumeroIdentificacion($arRegistroVisita->getNumeroIdentificacion());
@@ -50,10 +64,13 @@ class UtilidadesRegistroVisitasController extends Controller
                         }
                 }
             }
-        }            
+        }
+        
+                            }            
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/RegistroVisitas:registro.html.twig', array(
         'arRegistroVisita' => $arRegistroVisita,
         'arRegistroVisitas' => $arRegistroVisitas,
+        'nombreVisitante' => $nombreVisitante,
         'form' => $form->createView()));
     } 
     
@@ -91,5 +108,6 @@ class UtilidadesRegistroVisitasController extends Controller
             'form' => $form->createView()
         ));
     }
+    
         
 }

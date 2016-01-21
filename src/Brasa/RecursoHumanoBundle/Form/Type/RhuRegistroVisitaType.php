@@ -17,9 +17,10 @@ class RhuRegistroVisitaType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa',
                 'property' => 'nombre',
                 'required' => true))   
-            ->add('motivo', 'text', array('required' => true))        
+            ->add('motivo', 'text', array('required' => false))        
             ->add('codigoEscarapela', 'text', array('required' => false))
             ->add('comentarios', 'textarea', array('required' => false))
+            ->add('buscar', 'submit')    
             ->add('guardar', 'submit');
     }
 

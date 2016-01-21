@@ -3809,22 +3809,11 @@ INSERT INTO `tur_recurso` (`codigo_recurso_pk`, `nombreCorto`, `comentarios`, `p
 
 
 /** Recurso humano **/
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('1','SISTEMAS');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('2','NOMINA');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('3','GERENCIA GENERAL');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('4','GERENCIA ADMINISTRATIVA');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('5','GERENCIA COMERCIAL');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('6','GERENCIA FINANCIERA');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('7','CONTABILIDAD');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('8','SELECCIÓN');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('9','GESTIÓN HUMANA');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('10','ARCHIVOS');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('11','SALUD OCUPACIONAL');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('12','SEGURIDAD SOCIAL');
-insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('13','COMPRAS');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('1','ADMINISTRATIVO');
+insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('2','OPERATIVO');
 
-insert into `rhu_horario` (`codigo_horario_pk`, `entrada`, `salida`, `nombre`) values('2','8:00','5:00','ADMINISTRATIVOS 8-5');
-insert into `rhu_horario` (`codigo_horario_pk`, `entrada`, `salida`, `nombre`) values('3','6','2','OPERATIVOS 6-2');
+insert into `rhu_horario` (`codigo_horario_pk`, `nombre`, `hora_entrada`, `hora_salida`, `genera_hora_extra`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `sabado`, `domingo`, `festivo`) values('1','ADMINISTRATIVO','08:00:00','17:00:00','0','D','D','D','D','D','D','D','D');
+insert into `rhu_horario` (`codigo_horario_pk`, `nombre`, `hora_entrada`, `hora_salida`, `genera_hora_extra`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `sabado`, `domingo`, `festivo`) values('2','OPERATIVO','08:00:00','17:00:00','1','D','D','D','D','D','D','D','D');
 
 INSERT INTO `rhu_accidente_trabajo_tipo_accidente` (`codigo_accidente_trabajo_tipo_accidente_pk`, `nombre`) VALUES('1','ACCIDENTE');
 INSERT INTO `rhu_accidente_trabajo_tipo_accidente` (`codigo_accidente_trabajo_tipo_accidente_pk`, `nombre`) VALUES('2','ACCIDENTE GRAVE');
@@ -3834,6 +3823,8 @@ INSERT INTO `rhu_accidente_trabajo_tipo_accidente` (`codigo_accidente_trabajo_ti
 INSERT INTO `rhu_accidente_trabajo_tipo_control` (`codigo_accidente_trabajo_tipo_control_pk`, `nombre`) VALUES('1','FUENTE');
 INSERT INTO `rhu_accidente_trabajo_tipo_control` (`codigo_accidente_trabajo_tipo_control_pk`, `nombre`) VALUES('2','MEDIO');
 INSERT INTO `rhu_accidente_trabajo_tipo_control` (`codigo_accidente_trabajo_tipo_control_pk`, `nombre`) VALUES('3','PERSONA');
+
+insert into `rhu_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `comentarios`) values('','DIURNO',NULL,NULL,'0','0','0','0','0',NULL);
 
 INSERT INTO `rhu_banco` (`codigo_banco_pk`, `nombre`, `convenio_nomina`, `numero_digitos`, `codigo_general`, `nit`, `direccion`, `telefono`) values('1','BANCOLOMBIA','1','11','2323','890.903.93','CARRERA 20 N 40-20','3384244');
 

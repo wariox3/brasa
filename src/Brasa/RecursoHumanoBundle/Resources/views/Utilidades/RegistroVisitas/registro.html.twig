@@ -13,14 +13,14 @@
                     <div class="row">
                       <div class="col-lg-2">
                         <div class="input-group">
-                          <input id="txtNumeroIdentificacion"  name="txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arRegistroVisita.numeroIdentificacion |default('') }}" placeholder="IDENTIFICACIÓN" style="text-transform:uppercase" onblur="javascript:this.value=this.value.toUpperCase()"/>
+                          <input id="txtNumeroIdentificacion"  autofocus="autofocus" name="txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arRegistroVisita.numeroIdentificacion |default('') }}" placeholder="IDENTIFICACIÓN" style="text-transform:uppercase" onblur="javascript:this.value=this.value.toUpperCase()"/>
                         </div>
                       </div>
                       <div class="col-lg-10">
                         <div class="input-group">                                      
-                          <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arRegistroVisita.nombre |default('') }}" placeholder="NOMBRE VISITANTE" style="text-transform:uppercase" onblur="javascript:this.value=this.value.toUpperCase()"/>
+                          <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ nombreVisitante }}" placeholder="NOMBRE VISITANTE" style="text-transform:uppercase" onblur="javascript:this.value=this.value.toUpperCase()"/>
                           <span class="input-group-btn">                                        
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_buscar_visitante') }}', 'buscarVisitante', 600, 900)">Buscar</a>
+                            {{ form_widget(form.buscar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                           </span>
                         </div>
                       </div>
@@ -63,7 +63,7 @@
                 <th>NRO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>VISITANTE</th>
-                <th>DEPARTAMENTO EMPRESA</th>
+                <th>DEPARTAMENTO VISITA</th>
                 <th>FECHA</th>
                 <th>HORA</th>
                 <th>MOTIVO</th>
