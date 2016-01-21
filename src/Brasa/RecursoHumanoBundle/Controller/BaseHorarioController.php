@@ -38,6 +38,9 @@ class BaseHorarioController extends Controller
             }    
         
         if($form->get('BtnExcel')->isClicked()) {
+                $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+                ob_clean();
+                $em = $this->getDoctrine()->getManager();  
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -71,9 +74,9 @@ class BaseHorarioController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arHorarios->getCodigoHorarioPk())
                             ->setCellValue('B' . $i, $arHorarios->getNombre())
-                            ->setCellValue('C' . $i, $arHorarios->getHoraEntrada())
-                            ->setCellValue('D' . $i, $arHorarios->getHoraSalida())
-                            ->setCellValue('E' . $i, $arHorarios->getGeneraHoraExtra())
+                            ->setCellValue('C' . $i, $arHorarios->getHoraEntrada()->format('H:i:s'))
+                            ->setCellValue('D' . $i, $arHorarios->getHoraSalida()->format('H:i:s'))
+                            ->setCellValue('E' . $i, $objFunciones->devuelveBoolean($arHorarios->getGeneraHoraExtra()))
                             ->setCellValue('F' . $i, $arHorarios->getLunes())
                             ->setCellValue('G' . $i, $arHorarios->getMartes())
                             ->setCellValue('H' . $i, $arHorarios->getMiercoles())
