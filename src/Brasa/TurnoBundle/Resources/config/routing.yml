@@ -31,7 +31,7 @@ brs_tur_base_concepto_servicio_lista:
     defaults: { _controller: BrasaTurnoBundle:BaseConceptoServicio:lista }          
     
 brs_tur_base_concepto_servicio_nuevo:
-    path:     /tur/base/concepto/servicio/nuevo/{codigoRecurso}
+    path:     /tur/base/concepto/servicio/nuevo/{codigoConceptoServicio}
     defaults: { _controller: BrasaTurnoBundle:BaseConceptoServicio:nuevo }
 
 brs_tur_base_cliente_lista:

@@ -39,25 +39,24 @@ class BaseConceptoServicioController extends Controller
             'form' => $form->createView()));
     }
 
-    public function nuevoAction($codigoConceptoServicio = '') {
+    public function nuevoAction($codigoConceptoServicio) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arConceptoServicio = new \Brasa\TurnoBundle\Entity\TurConceptoServicio();
-        if($codigoConceptoServicio != '' && $codigoConceptoServicio != '0') {
+        if($codigoConceptoServicio != 0) {
             $arConceptoServicio = $em->getRepository('BrasaTurnoBundle:TurConceptoServicio')->find($codigoConceptoServicio);
         }        
         $form = $this->createForm(new TurConceptoServicioType, $arConceptoServicio);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arrControles = $request->request->All();
+            //$arrControles = $request->request->All();
             $arConceptoServicio = $form->getData(); 
-            
             $em->persist($arConceptoServicio);
             $em->flush();            
 
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_base_concepto_servicio_nuevo', array('codigoRecurso' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_base_concepto_servicio_nuevo', array('codigoConceptoServicio' => 0 )));
             } else {
                 return $this->redirect($this->generateUrl('brs_tur_base_concepto_servicio_lista'));
             }                    

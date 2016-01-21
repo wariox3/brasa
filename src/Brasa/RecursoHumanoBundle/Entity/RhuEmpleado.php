@@ -578,6 +578,7 @@ class RhuEmpleado
      */
     protected $soportesPagosHorariosEmpleadoRel;    
     
+    
     /**
      * Constructor
      */

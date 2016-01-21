@@ -50,10 +50,19 @@ class BaseHorarioController extends Controller
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Código')
-                            ->setCellValue('B1', 'Nombre')
-                            ->setCellValue('C1', 'Entrada')
-                            ->setCellValue('D1', 'Salida');
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'NOMBRE')
+                            ->setCellValue('C1', 'HORA ENTRADA')
+                            ->setCellValue('D1', 'HORA SALIDA')
+                            ->setCellValue('E1', 'HORA GENERA HE')
+                            ->setCellValue('F1', 'HORA LUNES')
+                            ->setCellValue('G1', 'HORA MARTES')
+                            ->setCellValue('H1', 'HORA MIERCOLES')
+                            ->setCellValue('I1', 'HORA JUEVES')
+                            ->setCellValue('J1', 'HORA VIERNES')
+                            ->setCellValue('H1', 'HORA SABADO')
+                            ->setCellValue('L1', 'HORA DOMINGO')
+                            ->setCellValue('M1', 'HORA FESTIVO');
 
                 $i = 2;
                 $arHorarios = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->findAll();
@@ -62,8 +71,17 @@ class BaseHorarioController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arHorarios->getCodigoHorarioPk())
                             ->setCellValue('B' . $i, $arHorarios->getNombre())
-                            ->setCellValue('C' . $i, $arHorarios->getEntrada())
-                            ->setCellValue('D' . $i, $arHorarios->getSalida());
+                            ->setCellValue('C' . $i, $arHorarios->getHoraEntrada())
+                            ->setCellValue('D' . $i, $arHorarios->getHoraSalida())
+                            ->setCellValue('E' . $i, $arHorarios->getGeneraHoraExtra())
+                            ->setCellValue('F' . $i, $arHorarios->getLunes())
+                            ->setCellValue('G' . $i, $arHorarios->getMartes())
+                            ->setCellValue('H' . $i, $arHorarios->getMiercoles())
+                            ->setCellValue('I' . $i, $arHorarios->getJueves())
+                            ->setCellValue('J' . $i, $arHorarios->getViernes())
+                            ->setCellValue('K' . $i, $arHorarios->getSabado())
+                            ->setCellValue('L' . $i, $arHorarios->getDomingo())
+                            ->setCellValue('M' . $i, $arHorarios->getFestivo());
                     $i++;
                 }
 

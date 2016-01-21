@@ -11,8 +11,17 @@
         <tr>
             <th>CÓDIGO</th>
             <th>{{ knp_pagination_sortable(arHorarios, 'NOMBRE', 'codigo') }}</th>
-            <th>ENTRADA</th>
-            <th>SALIDA</th>
+            <th>HORA ENTRADA</th>
+            <th>HORA SALIDA</th>
+            <th>GENERA HE</th>
+            <th>LUNES</th>
+            <th>MARTES</th>
+            <th>MIERCOLES</th>
+            <th>JUEVES</th>
+            <th>VIERNES</th>
+            <th>SABADO</th>
+            <th>DOMINGO</th>
+            <th>FESTIVO</th>
             <th></th>
             <th></th>
         </tr>
@@ -20,8 +29,17 @@
                <tr>
                 <td>{{arHorarios.codigoHorarioPk}}</td>
                 <td>{{arHorarios.nombre}}</td>
-                <td>{{arHorarios.entrada}}</td>
-                <td>{{arHorarios.salida}}</td>
+                <td>{{arHorarios.horaEntrada|date('H:i:s')}}</td>
+                <td>{{arHorarios.horaSalida|date('H:i:s')}}</td>
+                <td>{% if arHorarios.generaHoraExtra == 1 %}SI {% else %}NO{% endif %}</td>
+                <td>{{arHorarios.lunes}}</td>
+                <td>{{arHorarios.martes}}</td>
+                <td>{{arHorarios.miercoles}}</td>
+                <td>{{arHorarios.jueves}}</td>
+                <td>{{arHorarios.viernes}}</td>
+                <td>{{arHorarios.sabado}}</td>
+                <td>{{arHorarios.domingo}}</td>
+                <td>{{arHorarios.festivo}}</td>
                 <td><a href="{{ path('brs_rhu_base_horario_nuevo',{'codigoHorarioPk': arHorarios.codigoHorarioPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arHorarios.codigoHorarioPk }}" /></td>
             {%endfor%}

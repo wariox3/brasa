@@ -11,11 +11,6 @@ class RhuHorarioAccesoType extends AbstractType
     {
 
         $builder
-
-            /*->add('tipoAccesoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuTipoAcceso',
-                'property' => 'nombre',
-                'required' => true))*/
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit');
     }
