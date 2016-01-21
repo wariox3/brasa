@@ -66,9 +66,12 @@ class ConsultasServiciosDetallesRecursosController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
+        
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-  
+        for($col = 'A'; $col !== 'AE'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }  
         $objPHPExcel->setActiveSheetIndex(0)              
                     ->setCellValue('A1', 'CLIENTE')
                     ->setCellValue('B1', 'PUESTO')
@@ -150,9 +153,7 @@ class ConsultasServiciosDetallesRecursosController extends Controller
             }
             $i++;
         }
-        $objPHPExcel->getActiveSheet()->setTitle('SerDetRecurso');
-        
-        
+        $objPHPExcel->getActiveSheet()->setTitle('DetRecurso');     
         $objPHPExcel->createSheet(2)->setTitle('Detalle')
                     ->setCellValue('A1', 'CLIENTE')
                     ->setCellValue('B1', 'SERVICIO')
@@ -173,7 +174,7 @@ class ConsultasServiciosDetallesRecursosController extends Controller
             $i++;
         }        
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);        
-        
+ 
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
