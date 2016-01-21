@@ -18,13 +18,13 @@ class ProgramacionesPagoCargarSoporteHorarioController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
-                $query = $em->createQuery($em->getRepository('BrasaTurnoBundle:TurSoportePago')->listaDql());                                
+                $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorario')->listaDql());                                
                 $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                       
                 $arSoportesPago = $query->getResult();
                 foreach ($arSoportesPago as $arSoportePago) {
                     
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleado = $arSoportePago->getRecursoRel()->getEmpleadoRel();
+                    $arEmpleado = $arSoportePago->getEmpleadoRel();
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
                     $floVrDia = $arContrato->getVrSalario() / 30;
@@ -70,12 +70,11 @@ class ProgramacionesPagoCargarSoporteHorarioController extends Controller
                         $this->insertarAdicionalPago($arProgramacionPago, 45, $arSoportePago->getHorasExtrasFestivasNocturnas(), $arEmpleado);
                     }                    
                 }
-                $em->flush();
-                //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarProgramacionPagoDetallePorSede($codigoProgramacionPago);
+                $em->flush();                
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }                                   
         }         
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:cargarSoporteTurno.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:cargarSoporteHorario.html.twig', array(
             'form' => $form->createView()
             ));
     }
