@@ -149,10 +149,8 @@ class UtilidadesHorarioAccesoController extends Controller
         $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
         $arHorarioAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoHorarioAcceso);
         if ($form->isValid()) {
-            //$arHorarioAcceso = $form->getData();
             
-            //$arHorarioAcceso->setFechaSalida(new \DateTime('now'));
-            $arHorarioAcceso->setFechaSalida(new \DateTime('2016-01-20 18:00:00'));
+            $arHorarioAcceso->setFechaSalida(new \DateTime('now'));
             $arHorarioAcceso->setEstadoSalida(1);
             $arHorarioAcceso->setComentarios($form->get('comentarios')->getData());
             $dateEntrada = $arHorarioAcceso->getFechaEntrada();
@@ -163,14 +161,6 @@ class UtilidadesHorarioAccesoController extends Controller
             $segundos = $dateDiferencia->format('%s');
             $diferencia = $horas.":".$minutos.":".$segundos;
             $arHorarioAcceso->setDuracionRegistro($diferencia);
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arHorarioAcceso->getCodigoEmpleadoFk());
-            $horarioSalida = $arEmpleado->getHorarioRel()->getHoraSalida()->format('H');
-            $horaEntrada = $dateEntrada->format('H');
-            $horaSalida = $dateSalida->format('H');
-            $horasDiurnas = $horarioSalida - $horaEntrada;
-            $arHorarioAcceso->setHoras($horas);
-            $arHorarioAcceso->setHorasDiurnas($horasDiurnas);
-            
             $em->persist($arHorarioAcceso);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));

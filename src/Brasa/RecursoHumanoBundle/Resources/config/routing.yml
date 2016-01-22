@@ -528,7 +528,15 @@ brs_rhu_base_horario_listar:
    
 brs_rhu_base_horario_nuevo:
    path:     /rhu/base/horario/nuevo/{codigoHorarioPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseHorario:nuevo }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseHorario:nuevo }
+   
+brs_rhu_base_turno_listar:
+   path:     /rhu/base/turno/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseTurno:listar }
+   
+brs_rhu_base_turno_nuevo:
+   path:     /rhu/base/turno/nuevo/{codigoTurnoPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseTurno:nuevo }   
    
 brs_rhu_base_certificadoIngreso_generar:
    path:     /rhu/base/Certificado/generar/{codigoEmpleado}

@@ -2,11 +2,14 @@
 
 namespace Brasa\RecursoHumanoBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="rhu_turno")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuTurnoRepository")
+ * @DoctrineAssert\UniqueEntity(fields={"codigoTurnoPk"},message="Ya existe este código para turno")
  */
 class RhuTurno
 {
@@ -47,12 +50,12 @@ class RhuTurno
     private $horasNocturnas = 0;            
     
     /**
-     * @ORM\Column(name="novedad", type="boolean")
+     * @ORM\Column(name="novedad", type="boolean", nullable=true)
      */    
     private $novedad = false;     
 
     /**
-     * @ORM\Column(name="descanso", type="boolean")
+     * @ORM\Column(name="descanso", type="boolean", nullable=true)
      */    
     private $descanso = false;           
     
@@ -60,6 +63,8 @@ class RhuTurno
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;       
+
+    
 
     /**
      * Set codigoTurnoPk
