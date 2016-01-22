@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurServicioType;
 use Brasa\TurnoBundle\Form\Type\TurServicioDetalleType;
+use Brasa\TurnoBundle\Form\Type\TurServicioDetalleRecursoType;
 class MovimientoServicioController extends Controller
 {
     var $strListaDql = "";    
@@ -165,6 +166,16 @@ class MovimientoServicioController extends Controller
         if($codigoServicioDetalle != 0) {
             $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
         } else {
+            $arServicioDetalle->setLunes(true);
+            $arServicioDetalle->setMartes(true);
+            $arServicioDetalle->setMiercoles(true);
+            $arServicioDetalle->setJueves(true);
+            $arServicioDetalle->setViernes(true);
+            $arServicioDetalle->setSabado(true);
+            $arServicioDetalle->setDomingo(true);
+            $arServicioDetalle->setFestivo(true);
+            $arServicioDetalle->setCantidad(1);
+            $arServicioDetalle->setFechaIniciaPlantilla(new \DateTime('now'));
             $arServicioDetalle->setServicioRel($arServicio);
         }
         $form = $this->createForm(new TurServicioDetalleType, $arServicioDetalle);
@@ -237,37 +248,18 @@ class MovimientoServicioController extends Controller
             'arServicio' => $arServicio,
             'arCotizaciones' => $arCotizaciones,
             'form' => $form->createView()));
-    }    
+    }           
     
-    public function recursoAction($codigoServicioDetalle = 0) {
+    public function detalleRecursoAction($codigoServicioDetalle = 0) {
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $em = $this->getDoctrine()->getManager();
         $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);        
-        $form = $this->formularioRecurso($arServicioDetalle->getDiasSecuencia());
+        $form = $this->formularioRecurso($arServicioDetalle->getDiasSecuencia(), $arServicioDetalle->getFechaIniciaPlantilla(), $arServicioDetalle->getPlantillaRel());
         $form->handleRequest($request);
         if ($form->isValid()) {
-            if($form->get('guardar')->isClicked()) {   
-                $arrControles = $request->request->All();
-                if($arrControles['txtNumeroIdentificacion'] != '') {
-                    $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-                    $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
-                    if(count($arRecurso) > 0) {
-                        $intPosicion = $form->get('TxtPosicion')->getData();
-                        $arServicioDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
-                        $arServicioDetalleRecurso->setServicioDetalleRel($arServicioDetalle);
-                        $arServicioDetalleRecurso->setRecursoRel($arRecurso);
-                        $arServicioDetalleRecurso->setPosicion($intPosicion);
-                        $em->persist($arServicioDetalleRecurso);
-                        $em->flush();
-                        return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                
-                    } else {
-                        $objMensaje->Mensaje("error", "El recurso no existe", $this);
-                    }
-                }                
-            }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->eliminarSeleccionados($arrSeleccionados);                
@@ -297,7 +289,10 @@ class MovimientoServicioController extends Controller
             }    
             if($form->get('BtnGuardarServicioDetalle')->isClicked()) {   
                 $intDiasSecuencia = $form->get('TxtDiasSecuencia')->getData();     
+                $fechaIniciaPlantilla = $form->get('fechaIniciaPlantilla')->getData();
                 $arServicioDetalle->setDiasSecuencia($intDiasSecuencia);
+                $arServicioDetalle->setFechaIniciaPlantilla($fechaIniciaPlantilla);
+                $arServicioDetalle->setPlantillaRel($form->get('plantillaRel')->getData());
                 $em->persist($arServicioDetalle);
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
@@ -307,9 +302,46 @@ class MovimientoServicioController extends Controller
         $strListaPlantilla = $em->getRepository('BrasaTurnoBundle:TurServicioDetallePlantilla')->listaDql($codigoServicioDetalle);
         $arServicioDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);
         $arServicioDetallePlantilla = $paginator->paginate($em->createQuery($strListaPlantilla), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:recurso.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleRecurso.html.twig', array(
+            'arServicioDetalle' => $arServicioDetalle,
             'arServicioDetalleRecursos' => $arServicioDetalleRecursos,
             'arServicioDetallePlantilla' => $arServicioDetallePlantilla,
+            'form' => $form->createView()));
+    }    
+    
+    public function detalleRecursoNuevoAction($codigoServicioDetalle = 0) {
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');
+        $em = $this->getDoctrine()->getManager();
+        $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+        $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
+        $arServicioDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
+        $form = $this->createForm(new TurServicioDetalleRecursoType, $arServicioDetalleRecurso);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arrControles = $request->request->All();
+            if($arrControles['txtNumeroIdentificacion'] != '') {
+                $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
+                if(count($arRecurso) > 0) {
+                    $arServicioDetalleRecurso = $form->getData();
+                    $arServicioDetalleRecurso->setServicioDetalleRel($arServicioDetalle);
+                    $arServicioDetalleRecurso->setRecursoRel($arRecurso);
+                    $em->persist($arServicioDetalleRecurso);
+                    $em->flush();
+
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso_nuevo', array('codigoServicioDetalle' => $codigoServicioDetalle )));
+                    } else {
+                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                    }                    
+                } else {
+                    $objMensaje->Mensaje("error", "El recurso no existe", $this);
+                }
+            }            
+        }
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleRecursoNuevo.html.twig', array(
+            'arServicioDetalle' => $arServicioDetalle,
             'form' => $form->createView()));
     }    
     
@@ -368,19 +400,26 @@ class MovimientoServicioController extends Controller
         return $form;
     }
 
-    private function formularioRecurso($intDiasSecuencia) {
+    private function formularioRecurso($intDiasSecuencia, $fechaIniciaPlantilla, $arPlantilla) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()
-            ->add('TxtPosicion', 'text', array('label'  => 'Codigo','data' => 0))   
+        $form = $this->createFormBuilder()      
+            ->add('plantillaRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurPlantilla',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('p')
+                    ->orderBy('p.nombre', 'ASC');},
+                'property' => 'nombre',
+                'data' => $arPlantilla,
+                'required' => false))                 
             ->add('TxtDiasSecuencia', 'text', array('label'  => 'Codigo','data' => $intDiasSecuencia)) 
+            ->add('fechaIniciaPlantilla', 'date', array('data'  => $fechaIniciaPlantilla, 'format' => 'y MMMM d'))
             ->add('BtnDetalleEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnDetalleActualizar', 'submit', array('label'  => 'Actualizar',))            
             ->add('BtnPlantillaNuevo', 'submit', array('label'  => 'Nuevo',))                
             ->add('BtnPlantillaEliminar', 'submit', array('label'  => 'Eliminar',))                
             ->add('BtnPlantillaActualizar', 'submit', array('label'  => 'Actualizar',))                
-            ->add('BtnGuardarServicioDetalle', 'submit', array('label'  => 'Guardar',))                
-            ->add('guardar', 'submit', array('label'  => 'Guardar'))
+            ->add('BtnGuardarServicioDetalle', 'submit', array('label'  => 'Guardar',))                            
             ->getForm();
         return $form;
     }    

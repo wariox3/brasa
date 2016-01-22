@@ -155,7 +155,12 @@ class TurServicioDetalle
     /**
      * @ORM\Column(name="dias_secuencia", type="integer")
      */    
-    private $diasSecuencia = 0;     
+    private $diasSecuencia = 0;    
+    
+    /**
+     * @ORM\Column(name="fecha_inicia_plantilla", type="date", nullable=true)
+     */    
+    private $fechaIniciaPlantilla;     
     
     /**
      * @ORM\ManyToOne(targetEntity="TurServicio", inversedBy="serviciosDetallesServicioRel")
@@ -1145,5 +1150,29 @@ class TurServicioDetalle
     public function getPedidosDetallesServicioDetalleRel()
     {
         return $this->pedidosDetallesServicioDetalleRel;
+    }
+
+    /**
+     * Set fechaIniciaPlantilla
+     *
+     * @param \DateTime $fechaIniciaPlantilla
+     *
+     * @return TurServicioDetalle
+     */
+    public function setFechaIniciaPlantilla($fechaIniciaPlantilla)
+    {
+        $this->fechaIniciaPlantilla = $fechaIniciaPlantilla;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIniciaPlantilla
+     *
+     * @return \DateTime
+     */
+    public function getFechaIniciaPlantilla()
+    {
+        return $this->fechaIniciaPlantilla;
     }
 }

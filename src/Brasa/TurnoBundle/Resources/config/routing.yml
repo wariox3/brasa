@@ -137,6 +137,14 @@ brs_tur_servicio_nuevo:
 brs_tur_servicio_detalle:
    path:     /tur/servicio/detalle/{codigoServicio}
    defaults: { _controller: BrasaTurnoBundle:MovimientoServicio:detalle }
+
+brs_tur_servicio_detalle_recurso:
+   path:     /tur/servicio/detalle/recurso/{codigoServicioDetalle}
+   defaults: { _controller: BrasaTurnoBundle:MovimientoServicio:detalleRecurso }   
+
+brs_tur_servicio_detalle_recurso_nuevo:
+   path:     /tur/servicio/detalle/recurso/nuevo/{codigoServicioDetalle}
+   defaults: { _controller: BrasaTurnoBundle:MovimientoServicio:detalleRecursoNuevo }    
    
 brs_tur_servicio_detalle_nuevo:
    path:     /tur/servicio/detalle/nuevo/{codigoServicio}/{codigoServicioDetalle}
@@ -145,10 +153,6 @@ brs_tur_servicio_detalle_nuevo:
 brs_tur_servicio_detalle_nuevo_cotizacion:
    path:     /tur/servicio/detalle/nuevo/cotizacion/{codigoServicio}/{codigoServicioDetalle}
    defaults: { _controller: BrasaTurnoBundle:MovimientoServicio:detalleNuevoCotizacion }   
-
-brs_tur_servicio_detalle_recurso:
-   path:     /tur/servicio/detalle/recurso/{codigoServicioDetalle}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoServicio:recurso }
 
 brs_tur_factura_lista:
    path:     /tur/factura/lista

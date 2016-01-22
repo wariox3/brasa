@@ -110,6 +110,14 @@ class MovimientoPedidoController extends Controller
                     return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
                 }
             }   
+            if($form->get('BtnDesprogramar')->isClicked()) {            
+                if($arPedido->getEstadoProgramado() == 1) {
+                    $arPedido->setEstadoProgramado(0);
+                    $em->persist($arPedido);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                }
+            }   
             if($form->get('BtnAprobar')->isClicked()) {            
                 if($arPedido->getEstadoAutorizado() == 1) {
                     $arPedido->setEstadoAprobado(1);

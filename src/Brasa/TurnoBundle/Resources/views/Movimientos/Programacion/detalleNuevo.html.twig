@@ -35,9 +35,9 @@
                <tr>
                 <td>{{ arPedidosDetalle.codigoPedidoDetallePk}}</td>   
                 <td>{{ arPedidosDetalle.codigoPedidoFk}}</td>   
-                <td>{{ arPedidosDetalle.puestoRel.nombre  }}</td>                    
-                <td>{{ arPedidosDetalle.conceptoServicioRel.nombre  }}</td>                    
-                <td>{{ arPedidosDetalle.modalidadServicioRel.nombre  }}</td>                    
+                <td>{{ arPedidosDetalle.puestoRel.nombre | default('') }}</td>                    
+                <td>{{ arPedidosDetalle.conceptoServicioRel.nombre | default('') }}</td>                    
+                <td>{{ arPedidosDetalle.modalidadServicioRel.nombre | default('') }}</td>                    
                 <td>{{ arPedidosDetalle.periodoRel.nombre  }}</td>  
                 <td>{{ arPedidosDetalle.plantillaRel.nombre | default('')  }}</td>
                 <td>{{ arPedidosDetalle.diaDesde }}</td>

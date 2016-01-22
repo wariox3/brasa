@@ -37,16 +37,9 @@ class TurServicioDetalleType extends AbstractType
                 'class' => 'BrasaTurnoBundle:TurPeriodo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('p')
-                    ->orderBy('p.nombre', 'ASC');},
+                    ->orderBy('p.codigoPeriodoPk', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                                                         
-            ->add('plantillaRel', 'entity', array(
-                'class' => 'BrasaTurnoBundle:TurPlantilla',
-                'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('p')
-                    ->orderBy('p.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false))                            
+                'required' => true))                                                                                    
             ->add('cantidad', 'number')
             ->add('diaDesde', 'number')
             ->add('diaHasta', 'number')
