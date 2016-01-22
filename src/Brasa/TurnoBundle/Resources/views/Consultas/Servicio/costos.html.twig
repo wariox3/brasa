@@ -74,6 +74,7 @@
                 <th>H.D</th>
                 <th>H.N</th>
                 <th>DIAS</th>
+                <th>VALOR</th>
             </tr>
             {% for arServiciosDetalles in arServiciosDetalles %}
                 <tr>
@@ -101,6 +102,7 @@
                     <td style="text-align: right">{{ arServiciosDetalles.horasDiurnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arServiciosDetalles.horasNocturnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arServiciosDetalles.dias | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arServiciosDetalles.vrTotal | number_format(0, '.', ',') }}</td> 
                 </tr>
             {% endfor %}
         </table>        

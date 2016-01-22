@@ -3,7 +3,7 @@ namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultasServiciosDetallesController extends Controller
+class ConsultasServiciosCostosController extends Controller
 {
     var $strListaDql = "";
     var $codigoServicio = "";
@@ -83,7 +83,7 @@ class ConsultasServiciosDetallesController extends Controller
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }     
-        for($col = 'Y'; $col !== 'Y'; $col++) {
+        for($col = 'Y'; $col !== 'AC'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0.00');
         }        
@@ -112,7 +112,11 @@ class ConsultasServiciosDetallesController extends Controller
                     ->setCellValue('U1', 'H')
                     ->setCellValue('V1', 'H.D')
                     ->setCellValue('W1', 'H.N')
-                    ->setCellValue('X1', 'DIAS');
+                    ->setCellValue('X1', 'DIAS')
+                    ->setCellValue('Y1', 'COSTO')
+                    ->setCellValue('Z1', 'VR.MINIMO')
+                    ->setCellValue('AA1', 'VR.AJUSTADO')
+                    ->setCellValue('AB1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -142,7 +146,11 @@ class ConsultasServiciosDetallesController extends Controller
                     ->setCellValue('U' . $i, $arServicioDetalle->getHoras())
                     ->setCellValue('V' . $i, $arServicioDetalle->getHorasDiurnas())
                     ->setCellValue('W' . $i, $arServicioDetalle->getHorasNocturnas())
-                    ->setCellValue('X' . $i, $arServicioDetalle->getDias());
+                    ->setCellValue('X' . $i, $arServicioDetalle->getDias())
+                    ->setCellValue('Y' . $i, $arServicioDetalle->getVrCostoCalculado())
+                    ->setCellValue('Z' . $i, $arServicioDetalle->getVrTotalMinimo())
+                    ->setCellValue('AA' . $i, $arServicioDetalle->getVrTotalAjustado())
+                    ->setCellValue('AB' . $i, $arServicioDetalle->getVrTotal());
             if($arServicioDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arServicioDetalle->getPuestoRel()->getNombre());

@@ -170,6 +170,10 @@ brs_tur_consultas_servicios:
     path:     /tur/consultas/servicios
     defaults: { _controller: BrasaTurnoBundle:ConsultasServicios:lista }     
 
+brs_tur_consultas_servicios_costos:    
+    path:     /tur/consultas/servicios/costos
+    defaults: { _controller: BrasaTurnoBundle:ConsultasServiciosCostos:lista }
+
 brs_tur_consultas_servicios_detalles:    
     path:     /tur/consultas/servicios/detalles
     defaults: { _controller: BrasaTurnoBundle:ConsultasServiciosDetalles:lista }
