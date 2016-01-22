@@ -59,6 +59,8 @@ class UtilidadesHorarioAccesoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $rutaTemporal = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $rutaTemporal = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $form = $this->createFormBuilder()
             ->add('attachment', 'file')
             ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
@@ -67,8 +69,8 @@ class UtilidadesHorarioAccesoController extends Controller
         $arrErrores = array();
         if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
-                $form['attachment']->getData()->move("/var/www/temporal", "carga.txt");
-                $fp = fopen("/var/www/temporal/carga.txt", "r");
+                $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "carga.txt");
+                $fp = fopen($rutaTemporal->getRutaTemporal()."carga.txt", "r");
                 $arrRegistros = array();
                 while(!feof($fp)) {
                     $linea = fgets($fp);

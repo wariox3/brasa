@@ -10,7 +10,8 @@ class UtilidadesCargarTiempoSedesController extends Controller
     public function cargarAction($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        
+        $rutaTemporal = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $rutaTemporal = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $form = $this->createFormBuilder()
             ->add('attachment', 'file')
             ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
@@ -18,8 +19,8 @@ class UtilidadesCargarTiempoSedesController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
-                $form['attachment']->getData()->move("/var/www/cargas", "carga.txt");            
-                $fp = fopen("/var/www/cargas/carga.txt", "r");
+                $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "carga.txt");            
+                $fp = fopen($rutaTemporal->getRutaTemporal()."carga.txt", "r");
                 while(!feof($fp)) {
                     $linea = fgets($fp);
                     if($linea){
