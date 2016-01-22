@@ -37,7 +37,8 @@
                 <th>CLIENTE</th>
                 <th>SECTOR</th>
                 <th>PROGRAMACION</th>
-                <th>PROGRAMADO</th>
+                <th>PROG</th>
+                <th>AUT</th>
                 <th>H</th>
                 <th>H.D</th>
                 <th>H.N</th>
@@ -56,6 +57,7 @@
                 <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td> 
                 <td>{{ arPedidos.fechaProgramacion |date("Y F")  }}</td>                                
                 <td>{% if arPedidos.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arPedidos.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasNocturnas | number_format(0, '.', ',') }}</td>

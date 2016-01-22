@@ -88,7 +88,9 @@ class MovimientoPedidoController extends Controller
         $form = $this->formularioDetalle($arPedido);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnAutorizar')->isClicked()) {            
+            if($form->get('BtnAutorizar')->isClicked()) { 
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoPedido);                
                 if($arPedido->getEstadoAutorizado() == 0) {
                     if($em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->numeroRegistros($codigoPedido) > 0) {
                         $arPedido->setEstadoAutorizado(1);
@@ -207,7 +209,7 @@ class MovimientoPedidoController extends Controller
                             $arPedidoDetalle->setPedidoRel($arPedido);
                             $arPedidoDetalle->setModalidadServicioRel($arCotizacionDetalle->getModalidadServicioRel());
                             $arPedidoDetalle->setPeriodoRel($arCotizacionDetalle->getPeriodoRel());
-                            $arPedidoDetalle->setTurnoRel($arCotizacionDetalle->getTurnoRel());
+                            $arPedidoDetalle->setConceptoServicioRel($arCotizacionDetalle->getConceptoServicioRel());
                             $arPedidoDetalle->setDias($arCotizacionDetalle->getDias());
                             $arPedidoDetalle->setLunes($arCotizacionDetalle->getLunes());
                             $arPedidoDetalle->setMartes($arCotizacionDetalle->getMartes());
@@ -218,7 +220,7 @@ class MovimientoPedidoController extends Controller
                             $arPedidoDetalle->setDomingo($arCotizacionDetalle->getDomingo());
                             $arPedidoDetalle->setFestivo($arCotizacionDetalle->getFestivo());                            
                             $arPedidoDetalle->setCantidad($arCotizacionDetalle->getCantidad());
-                            $arPedidoDetalle->setVrTotalAjustado($arCotizacionDetalle->getVrTotalAjustado());
+                            $arPedidoDetalle->setVrPrecioAjustado($arCotizacionDetalle->getVrPrecioAjustado());
                             if($arCotizacionDetalle->getCodigoPeriodoFk() == 1) {
                                 $intAnio = $arPedido->getFechaProgramacion()->format('Y');
                                 $intMes = $arPedido->getFechaProgramacion()->format('m');
@@ -280,7 +282,7 @@ class MovimientoPedidoController extends Controller
                         $arPedidoDetalle->setDomingo($arServicioDetalle->getDomingo());
                         $arPedidoDetalle->setFestivo($arServicioDetalle->getFestivo());                            
                         $arPedidoDetalle->setCantidad($arServicioDetalle->getCantidad());
-                        $arPedidoDetalle->setVrTotalAjustado($arServicioDetalle->getVrTotalAjustado());
+                        $arPedidoDetalle->setVrPrecioAjustado($arServicioDetalle->getVrPrecioAjustado());
                         
                         if($arServicioDetalle->getCodigoPeriodoFk() == 1) {
                             $intAnio = $arPedido->getFechaProgramacion()->format('Y');
@@ -518,7 +520,7 @@ class MovimientoPedidoController extends Controller
                 }
             }
             if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
-                $arPedidoDetalle->setVrTotalAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+                $arPedidoDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
             }            
             if(isset($arrControles['chkLunes'.$intCodigo])) {
                 $arPedidoDetalle->setLunes(1);

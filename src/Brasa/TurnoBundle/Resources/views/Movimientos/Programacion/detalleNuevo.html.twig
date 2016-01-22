@@ -54,7 +54,7 @@
                 <td style="text-align: right">{{ arPedidosDetalle.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidosDetalle.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidosDetalle.horasNocturnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPedidosDetalle.vrTotal | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPedidosDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidosDetalle.codigoPedidoDetallePk }}" value="1" size="10" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidosDetalle.codigoPedidoDetallePk }}" /></td>
             {%endfor%}

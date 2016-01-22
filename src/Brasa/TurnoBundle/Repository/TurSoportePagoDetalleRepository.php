@@ -135,7 +135,7 @@ class TurSoportePagoDetalleRepository extends EntityRepository {
             $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;            
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  
             $floVrServicio = (($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna)) * $arCotizacionDetalle->getCantidad();                        
-            $arCotizacionDetalleActualizar->setVrTotal($floVrServicio);
+            $arCotizacionDetalleActualizar->setVrTotalDetalle($floVrServicio);
             $arCotizacionDetalleActualizar->setHoras($douHoras);
             $arCotizacionDetalleActualizar->setHorasDiurnas($intHorasRealesDiurnas);
             $arCotizacionDetalleActualizar->setHorasNocturnas($intHorasRealesNocturnas);

@@ -61,7 +61,7 @@ class ProcesoGenerarPedidoController extends Controller
                         $arPedidoDetalleNuevo->setSabado($arServicioDetalle->getSabado());
                         $arPedidoDetalleNuevo->setDomingo($arServicioDetalle->getDomingo());
                         $arPedidoDetalleNuevo->setFestivo($arServicioDetalle->getFestivo());    
-                        $arPedidoDetalleNuevo->setVrTotalAjustado($arServicioDetalle->getVrTotalAjustado());
+                        $arPedidoDetalleNuevo->setVrPrecioAjustado($arServicioDetalle->getVrPrecioAjustado());
                         $em->persist($arPedidoDetalleNuevo);  
                         $arServicioDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
                         $arServicioDetalleRecursos =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->findBy(array('codigoServicioDetalleFk' => $arServicioDetalle->getCodigoServicioDetallePk())); 

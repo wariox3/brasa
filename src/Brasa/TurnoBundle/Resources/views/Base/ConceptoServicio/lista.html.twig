@@ -42,7 +42,7 @@
                 <th>HORAS</th>
                 <th>HORAS DIURNAS</th>                
                 <th>HORAS NOCTURAS</th>
-                <th>COSTO CALCULADO</th>
+                <th>COSTO</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -53,7 +53,7 @@
                 <td>{{ arConceptoServicios.horas }}</td>
                 <td>{{ arConceptoServicios.horasDiurnas }}</td>
                 <td>{{ arConceptoServicios.horasNocturnas }}</td>
-                <td style="text-align: right">{{ arConceptoServicios.VrCostoCalculado | number_format(0, '.', ',') }}</td>                 
+                <td style="text-align: right">{{ arConceptoServicios.VrCosto | number_format(0, '.', ',') }}</td>                 
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_concepto_servicio_nuevo', {'codigoConceptoServicio': arConceptoServicios.codigoConceptoServicioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arConceptoServicios.codigoConceptoServicioPk }}" /></td>
             </tr>

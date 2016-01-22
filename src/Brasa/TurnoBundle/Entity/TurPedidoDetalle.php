@@ -93,24 +93,24 @@ class TurPedidoDetalle
     private $cantidadRecurso = 0;         
     
     /**
-     * @ORM\Column(name="vr_costo_calculado", type="float")
+     * @ORM\Column(name="vr_costo", type="float")
      */
-    private $vrCostoCalculado = 0;
+    private $vrCosto = 0;
     
     /**
-     * @ORM\Column(name="vr_total_ajustado", type="float")
+     * @ORM\Column(name="vr_precio_ajustado", type="float")
      */
-    private $vrTotalAjustado = 0;            
+    private $vrPrecioAjustado = 0;            
 
     /**
-     * @ORM\Column(name="vr_total_minimo", type="float")
+     * @ORM\Column(name="vr_precio_minimo", type="float")
      */
-    private $vrTotalMinimo = 0;        
+    private $vrPrecioMinimo = 0;        
     
     /**
-     * @ORM\Column(name="vr_total", type="float")
+     * @ORM\Column(name="vr_total_detalle", type="float")
      */
-    private $vrTotal = 0; 
+    private $vrTotalDetalle = 0; 
     
     /**     
      * @ORM\Column(name="lunes", type="boolean")
@@ -589,99 +589,99 @@ class TurPedidoDetalle
     }
 
     /**
-     * Set vrCostoCalculado
+     * Set vrCosto
      *
-     * @param float $vrCostoCalculado
+     * @param float $vrCosto
      *
      * @return TurPedidoDetalle
      */
-    public function setVrCostoCalculado($vrCostoCalculado)
+    public function setVrCosto($vrCosto)
     {
-        $this->vrCostoCalculado = $vrCostoCalculado;
+        $this->vrCosto = $vrCosto;
 
         return $this;
     }
 
     /**
-     * Get vrCostoCalculado
+     * Get vrCosto
      *
      * @return float
      */
-    public function getVrCostoCalculado()
+    public function getVrCosto()
     {
-        return $this->vrCostoCalculado;
+        return $this->vrCosto;
     }
 
     /**
-     * Set vrTotalAjustado
+     * Set vrPrecioAjustado
      *
-     * @param float $vrTotalAjustado
+     * @param float $vrPrecioAjustado
      *
      * @return TurPedidoDetalle
      */
-    public function setVrTotalAjustado($vrTotalAjustado)
+    public function setVrPrecioAjustado($vrPrecioAjustado)
     {
-        $this->vrTotalAjustado = $vrTotalAjustado;
+        $this->vrPrecioAjustado = $vrPrecioAjustado;
 
         return $this;
     }
 
     /**
-     * Get vrTotalAjustado
+     * Get vrPrecioAjustado
      *
      * @return float
      */
-    public function getVrTotalAjustado()
+    public function getVrPrecioAjustado()
     {
-        return $this->vrTotalAjustado;
+        return $this->vrPrecioAjustado;
     }
 
     /**
-     * Set vrTotalMinimo
+     * Set vrPrecioMinimo
      *
-     * @param float $vrTotalMinimo
+     * @param float $vrPrecioMinimo
      *
      * @return TurPedidoDetalle
      */
-    public function setVrTotalMinimo($vrTotalMinimo)
+    public function setVrPrecioMinimo($vrPrecioMinimo)
     {
-        $this->vrTotalMinimo = $vrTotalMinimo;
+        $this->vrPrecioMinimo = $vrPrecioMinimo;
 
         return $this;
     }
 
     /**
-     * Get vrTotalMinimo
+     * Get vrPrecioMinimo
      *
      * @return float
      */
-    public function getVrTotalMinimo()
+    public function getVrPrecioMinimo()
     {
-        return $this->vrTotalMinimo;
+        return $this->vrPrecioMinimo;
     }
 
     /**
-     * Set vrTotal
+     * Set vrTotalDetalle
      *
-     * @param float $vrTotal
+     * @param float $vrTotalDetalle
      *
      * @return TurPedidoDetalle
      */
-    public function setVrTotal($vrTotal)
+    public function setVrTotalDetalle($vrTotalDetalle)
     {
-        $this->vrTotal = $vrTotal;
+        $this->vrTotalDetalle = $vrTotalDetalle;
 
         return $this;
     }
 
     /**
-     * Get vrTotal
+     * Get vrTotalDetalle
      *
      * @return float
      */
-    public function getVrTotal()
+    public function getVrTotalDetalle()
     {
-        return $this->vrTotal;
+        return $this->vrTotalDetalle;
     }
 
     /**

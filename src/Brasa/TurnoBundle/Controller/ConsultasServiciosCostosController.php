@@ -36,7 +36,7 @@ class ConsultasServiciosCostosController extends Controller
             }
         }
         $arServiciosDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Consultas/Servicio:detalle.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Consultas/Servicio:costos.html.twig', array(
             'arServiciosDetalles' => $arServiciosDetalles,
             'form' => $form->createView()));
     }
@@ -83,7 +83,7 @@ class ConsultasServiciosCostosController extends Controller
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }     
-        for($col = 'Y'; $col !== 'AC'; $col++) {
+        for($col = 'Y'; $col !== 'AD'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0.00');
         }        
@@ -114,9 +114,10 @@ class ConsultasServiciosCostosController extends Controller
                     ->setCellValue('W1', 'H.N')
                     ->setCellValue('X1', 'DIAS')
                     ->setCellValue('Y1', 'COSTO')
-                    ->setCellValue('Z1', 'VR.MINIMO')
-                    ->setCellValue('AA1', 'VR.AJUSTADO')
-                    ->setCellValue('AB1', 'VALOR');
+                    ->setCellValue('Z1', 'P.MINIMO')
+                    ->setCellValue('AA1', 'P.AJUSTADO')
+                    ->setCellValue('AB1', 'TOTAL')
+                    ->setCellValue('AC1', 'RENTABILIDAD');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -147,10 +148,11 @@ class ConsultasServiciosCostosController extends Controller
                     ->setCellValue('V' . $i, $arServicioDetalle->getHorasDiurnas())
                     ->setCellValue('W' . $i, $arServicioDetalle->getHorasNocturnas())
                     ->setCellValue('X' . $i, $arServicioDetalle->getDias())
-                    ->setCellValue('Y' . $i, $arServicioDetalle->getVrCostoCalculado())
-                    ->setCellValue('Z' . $i, $arServicioDetalle->getVrTotalMinimo())
-                    ->setCellValue('AA' . $i, $arServicioDetalle->getVrTotalAjustado())
-                    ->setCellValue('AB' . $i, $arServicioDetalle->getVrTotal());
+                    ->setCellValue('Y' . $i, $arServicioDetalle->getVrCosto())
+                    ->setCellValue('Z' . $i, $arServicioDetalle->getVrPrecioMinimo())
+                    ->setCellValue('AA' . $i, $arServicioDetalle->getVrPrecioAjustado())
+                    ->setCellValue('AB' . $i, $arServicioDetalle->getVrTotalDetalle())
+                    ->setCellValue('AC' . $i, $arServicioDetalle->getVrTotalDetalle()-$arServicioDetalle->getVrCosto());
             if($arServicioDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arServicioDetalle->getPuestoRel()->getNombre());

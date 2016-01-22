@@ -149,7 +149,7 @@ class TurPedidoRepository extends EntityRepository {
                 }                
             }
                                     
-            $douCostoCalculado = $arPedidoDetalle->getCantidad() * $arPedidoDetalle->getConceptoServicioRel()->getVrCostoCalculado();
+            $douCostoCalculado = $arPedidoDetalle->getCantidad() * $arPedidoDetalle->getConceptoServicioRel()->getVrCosto();
             $douHoras = ($intHorasRealesDiurnas + $intHorasRealesNocturnas ) * $arPedidoDetalle->getCantidad();            
             $arPedidoDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        
             $arPedidoDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arPedidoDetalle->getCodigoPedidoDetallePk());                         
@@ -161,14 +161,14 @@ class TurPedidoRepository extends EntityRepository {
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  
             $floVrMinimoServicio = (($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna)) * $arPedidoDetalle->getCantidad();                        
             $floVrServicio = 0;            
-            if($arPedidoDetalleActualizar->getVrTotalAjustado() != 0) {
-                $floVrServicio = $arPedidoDetalleActualizar->getVrTotalAjustado();
+            if($arPedidoDetalleActualizar->getVrPrecioAjustado() != 0) {
+                $floVrServicio = $arPedidoDetalleActualizar->getVrPrecioAjustado();
             } else {
                 $floVrServicio = $floVrMinimoServicio;
             }            
-            $arPedidoDetalleActualizar->setVrTotal($floVrServicio);            
-            $arPedidoDetalleActualizar->setVrTotalMinimo($floVrMinimoServicio);
-            $arPedidoDetalleActualizar->setVrCostoCalculado($douCostoCalculado);
+            $arPedidoDetalleActualizar->setVrTotalDetalle($floVrServicio);            
+            $arPedidoDetalleActualizar->setVrPrecioMinimo($floVrMinimoServicio);
+            $arPedidoDetalleActualizar->setVrCosto($douCostoCalculado);
             
             $arPedidoDetalleActualizar->setHoras($douHoras);
             $arPedidoDetalleActualizar->setHorasDiurnas($intHorasRealesDiurnas);
@@ -188,8 +188,8 @@ class TurPedidoRepository extends EntityRepository {
         $arPedido->setHorasDiurnas($douTotalHorasDiurnas);
         $arPedido->setHorasNocturnas($douTotalHorasNocturnas);
         $arPedido->setVrTotal($douTotalServicio);
-        $arPedido->setVrTotalMinimo($douTotalMinimoServicio);
-        $arPedido->setVrCostoCalculado($douTotalCostoCalculado);
+        $arPedido->setVrTotalPrecioMinimo($douTotalMinimoServicio);
+        $arPedido->setVrTotalCosto($douTotalCostoCalculado);
         $em->persist($arPedido);
         $em->flush();
         return true;

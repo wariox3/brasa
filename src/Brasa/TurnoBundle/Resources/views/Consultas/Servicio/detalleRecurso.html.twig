@@ -68,7 +68,6 @@
                 <th>H.D</th>
                 <th>H.N</th>
                 <th>DIAS</th>
-                <th>VALOR</th>
             </tr>
             {% set intCodigoServicioDetalle = '' %}
             {% for arServiciosDetallesRecursos in arServiciosDetallesRecursos %}
@@ -97,7 +96,6 @@
                         <td style="text-align: right">{{ arServiciosDetallesRecursos.servicioDetalleRel.horasDiurnas | number_format(0, '.', ',') }}</td> 
                         <td style="text-align: right">{{ arServiciosDetallesRecursos.servicioDetalleRel.horasNocturnas | number_format(0, '.', ',') }}</td> 
                         <td style="text-align: right">{{ arServiciosDetallesRecursos.servicioDetalleRel.dias | number_format(0, '.', ',') }}</td> 
-                        <td style="text-align: right">{{ arServiciosDetallesRecursos.servicioDetalleRel.vrTotal | number_format(0, '.', ',') }}</td> 
                     </tr>
                     {% set intCodigoServicioDetalle = arServiciosDetallesRecursos.codigoServicioDetalleFk %}
                 {% endif %}                

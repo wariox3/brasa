@@ -54,14 +54,14 @@
                 <tr>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="titulo" >COSTO CALCULADO:</td>
-                    <td align="right">{{ arServicio.vrCostoCalculado | number_format(0, '.', ',')}}</td>
+                    <td class="titulo" >COSTO:</td>
+                    <td align="right">{{ arServicio.vrTotalCosto | number_format(0, '.', ',')}}</td>
                 </tr>                
                 <tr>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="titulo" >VALOR MINIMO:</td>
-                    <td align="right">{{ arServicio.vrTotalMinimo | number_format(0, '.', ',')}}</td>
+                    <td class="titulo" >MINIMO:</td>
+                    <td align="right">{{ arServicio.vrTotalPrecioMinimo | number_format(0, '.', ',')}}</td>
                 </tr>                
                 <tr>
                     <td class="titulo"></td>
@@ -108,9 +108,9 @@
                 <th>H.D</th>
                 <th>H.N</th>
                 <th>DIAS</th>
-                <th>COSTO.C</th>
-                <th>MINIMO</th>
-                <th>AJUSTADO</th>
+                <th>COSTO</th>
+                <th>P.MINIMO</th>
+                <th>P.AJUSTADO</th>
                 <th>TOTAL</th>
                 <th></th>
                 <th></th>
@@ -163,14 +163,14 @@
                     <td style="text-align: right">{{ arServicioDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arServicioDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arServicioDetalle.dias | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arServicioDetalle.vrCostoCalculado | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arServicioDetalle.vrTotalMinimo | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arServicioDetalle.vrCosto | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arServicioDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td> 
                     {% if arServicio.estadoAutorizado == 0 %}
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.vrTotalAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
                     {% else %}
-                        <td style="text-align: right">{{ arServicioDetalle.vrTotalAjustado | number_format(0, '.', ',') }}</td> 
+                        <td style="text-align: right">{{ arServicioDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
                     {% endif %}                    
-                    <td style="text-align: right">{{ arServicioDetalle.vrTotal | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arServicioDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td> 
                     <td>{% if arServicio.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo', {'codigoServicio': arServicioDetalle.codigoServicioFk, 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
                     <td><a href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_recurso', {'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarRecurso', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=20 height=20 title="Recursos"></a></td>                    
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}" /></td>

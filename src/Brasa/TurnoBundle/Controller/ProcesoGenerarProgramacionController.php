@@ -63,7 +63,7 @@ class ProcesoGenerarProgramacionController extends Controller
     
     private function formularioLista() {                
         $form = $this->createFormBuilder()
-            ->add('fecha', 'date', array('data'  => new \DateTime('now')))
+            ->add('fecha', 'date', array('data'  => new \DateTime('now'), 'format' => 'y MMMM d'))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->getForm();

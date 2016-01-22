@@ -130,7 +130,7 @@ class FormatoCotizacion extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(14);
-        $header = array('COD', 'TURNO', 'MODALIDAD', 'PER', 'DESDE', 'HASTA', 'CANT', 'LU', 'MA', 'MI', 'JU', 'VI', 'SA', 'DO', 'FE', 'H', 'H.D', 'H.N', 'VALOR');
+        $header = array('COD', 'SERVICIO', 'MODALIDAD', 'PER', 'DESDE', 'HASTA', 'CANT', 'LU', 'MA', 'MI', 'JU', 'VI', 'SA', 'DO', 'FE', 'H', 'H.D', 'H.N', 'VALOR');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -159,7 +159,7 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         foreach ($arCotizacionDetalles as $arCotizacionDetalle) {            
             $pdf->Cell(10, 4, $arCotizacionDetalle->getCodigoCotizacionDetallePk(), 1, 0, 'L');
-            $pdf->Cell(30, 4, $arCotizacionDetalle->getTurnoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(30, 4, $arCotizacionDetalle->getConceptoServicioRel()->getNombre(), 1, 0, 'L');
             $pdf->Cell(20, 4, $arCotizacionDetalle->getModalidadServicioRel()->getNombre(), 1, 0, 'L');                
             $pdf->Cell(10, 4, $arCotizacionDetalle->getPeriodoRel()->getNombre(), 1, 0, 'L');                
             $pdf->Cell(15, 4, $arCotizacionDetalle->getDiaDesde(), 1, 0, 'L');                
@@ -208,7 +208,7 @@ class FormatoCotizacion extends \FPDF_FPDF {
             $pdf->Cell(8, 4, $arCotizacionDetalle->getHoras(), 1, 0, 'R');                                  
             $pdf->Cell(8, 4, $arCotizacionDetalle->getHorasDiurnas(), 1, 0, 'R');                                  
             $pdf->Cell(8, 4, $arCotizacionDetalle->getHorasNocturnas(), 1, 0, 'R');                                  
-            $pdf->Cell(15, 4, number_format($arCotizacionDetalle->getVrTotal(), 0, '.', ','), 1, 0, 'R');                
+            $pdf->Cell(15, 4, number_format($arCotizacionDetalle->getVrTotalDetalle(), 0, '.', ','), 1, 0, 'R');                
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }

@@ -38,9 +38,9 @@ class TurConceptoServicio
     private $horasNocturnas = 0; 
     
     /**
-     * @ORM\Column(name="vr_costo_calculado", type="float")
+     * @ORM\Column(name="vr_costo", type="float")
      */
-    private $vrCostoCalculado = 0;    
+    private $vrCosto = 0;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="conceptoServicioRel")
@@ -175,27 +175,27 @@ class TurConceptoServicio
     }
 
     /**
-     * Set vrCostoCalculado
+     * Set vrCosto
      *
-     * @param float $vrCostoCalculado
+     * @param float $vrCosto
      *
      * @return TurConceptoServicio
      */
-    public function setVrCostoCalculado($vrCostoCalculado)
+    public function setVrCosto($vrCosto)
     {
-        $this->vrCostoCalculado = $vrCostoCalculado;
+        $this->vrCosto = $vrCosto;
 
         return $this;
     }
 
     /**
-     * Get vrCostoCalculado
+     * Get vrCosto
      *
      * @return float
      */
-    public function getVrCostoCalculado()
+    public function getVrCosto()
     {
-        return $this->vrCostoCalculado;
+        return $this->vrCosto;
     }
 
     /**

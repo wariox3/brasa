@@ -10,6 +10,7 @@ class MovimientoServicioController extends Controller
     var $strListaDql = "";    
     var $codigoServicio = "";  
     var $codigoCliente = "";
+    var $estadoAutorizado = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -95,7 +96,9 @@ class MovimientoServicioController extends Controller
         $form = $this->formularioDetalle($arServicio);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnAutorizar')->isClicked()) {            
+            if($form->get('BtnAutorizar')->isClicked()) {
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoServicio);
                 if($arServicio->getEstadoAutorizado() == 0) {
                     if($em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->numeroRegistros($codigoServicio) > 0) {
                         $arServicio->setEstadoAutorizado(1);
@@ -219,7 +222,7 @@ class MovimientoServicioController extends Controller
                             $arServicioDetalle->setCantidad($arCotizacionDetalle->getCantidad());
                             $arServicioDetalle->setDiaDesde($arCotizacionDetalle->getDiaDesde());
                             $arServicioDetalle->setDiaHasta($arCotizacionDetalle->getDiaHasta());
-                            $arServicioDetalle->setVrTotalAjustado($arCotizacionDetalle->getVrTotalAjustado());
+                            $arServicioDetalle->setVrPrecioAjustado($arCotizacionDetalle->getVrPrecioAjustado());
                             $em->persist($arServicioDetalle);
                         }                       
                     }
@@ -312,18 +315,20 @@ class MovimientoServicioController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL($this->codigoServicio, $this->codigoCliente);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL($this->codigoServicio, $this->codigoCliente, $this->estadoAutorizado);
     }    
 
     private function filtrar ($form) {                
         $this->codigoServicio = $form->get('TxtCodigo')->getData();
+        $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio))            
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio)) 
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -465,7 +470,7 @@ class MovimientoServicioController extends Controller
                 }
             }
             if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
-                $arServicioDetalle->setVrTotalAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+                $arServicioDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
             }            
             if(isset($arrControles['chkLunes'.$intCodigo])) {
                 $arServicioDetalle->setLunes(1);

@@ -90,7 +90,9 @@ class MovimientoCotizacionController extends Controller
         $form = $this->formularioDetalle($arCotizacion);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnAutorizar')->isClicked()) {            
+            if($form->get('BtnAutorizar')->isClicked()) {  
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoCotizacion);                
                 if($arCotizacion->getEstadoAutorizado() == 0) {
                     if($em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->numeroRegistros($codigoCotizacion) > 0) {
                         $arCotizacion->setEstadoAutorizado(1);
@@ -120,60 +122,7 @@ class MovimientoCotizacionController extends Controller
             }            
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                    $arCotizacionDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
-                    $arCotizacionDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($intCodigo);
-                    $arCotizacionDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-                    $arCotizacionDetalle->setDiaDesde(date_create($arrControles['TxtDiaDesde'.$intCodigo]));
-                    $arCotizacionDetalle->setDiaHasta(date_create($arrControles['TxtDiaHasta'.$intCodigo]));
-                    if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
-                        $arCotizacionDetalle->setVrTotalAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
-                    }                     
-                    if(isset($arrControles['chkLunes'.$intCodigo])) {
-                        $arCotizacionDetalle->setLunes(1);
-                    } else {
-                        $arCotizacionDetalle->setLunes(0);
-                    }
-                    if(isset($arrControles['chkMartes'.$intCodigo])) {
-                        $arCotizacionDetalle->setMartes(1);
-                    } else {
-                        $arCotizacionDetalle->setMartes(0);
-                    }
-                    if(isset($arrControles['chkMiercoles'.$intCodigo])) {
-                        $arCotizacionDetalle->setMiercoles(1);
-                    } else {
-                        $arCotizacionDetalle->setMiercoles(0);
-                    }
-                    if(isset($arrControles['chkJueves'.$intCodigo])) {
-                        $arCotizacionDetalle->setJueves(1);
-                    } else {
-                        $arCotizacionDetalle->setJueves(0);
-                    }
-                    if(isset($arrControles['chkViernes'.$intCodigo])) {
-                        $arCotizacionDetalle->setViernes(1);
-                    } else {
-                        $arCotizacionDetalle->setViernes(0);
-                    }
-                    if(isset($arrControles['chkSabado'.$intCodigo])) {
-                        $arCotizacionDetalle->setSabado(1);
-                    } else {
-                        $arCotizacionDetalle->setSabado(0);
-                    }
-                    if(isset($arrControles['chkDomingo'.$intCodigo])) {
-                        $arCotizacionDetalle->setDomingo(1);
-                    } else {
-                        $arCotizacionDetalle->setDomingo(0);
-                    }
-                    if(isset($arrControles['chkFestivo'.$intCodigo])) {
-                        $arCotizacionDetalle->setFestivo(1);
-                    } else {
-                        $arCotizacionDetalle->setFestivo(0);
-                    }                    
-                    $em->persist($arCotizacionDetalle);
-                }
-                $em->flush();
-                $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
+                $this->actualizarDetalle($arrControles, $codigoCotizacion);                
                 return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
@@ -387,6 +336,62 @@ class MovimientoCotizacionController extends Controller
         exit;
     }
 
-
+    private function actualizarDetalle($arrControles, $codigoCotizacion) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        foreach ($arrControles['LblCodigo'] as $intCodigo) {
+            $arCotizacionDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
+            $arCotizacionDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($intCodigo);
+            $arCotizacionDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
+            $arCotizacionDetalle->setDiaDesde(date_create($arrControles['TxtDiaDesde'.$intCodigo]));
+            $arCotizacionDetalle->setDiaHasta(date_create($arrControles['TxtDiaHasta'.$intCodigo]));
+            if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
+                $arCotizacionDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+            }                     
+            if(isset($arrControles['chkLunes'.$intCodigo])) {
+                $arCotizacionDetalle->setLunes(1);
+            } else {
+                $arCotizacionDetalle->setLunes(0);
+            }
+            if(isset($arrControles['chkMartes'.$intCodigo])) {
+                $arCotizacionDetalle->setMartes(1);
+            } else {
+                $arCotizacionDetalle->setMartes(0);
+            }
+            if(isset($arrControles['chkMiercoles'.$intCodigo])) {
+                $arCotizacionDetalle->setMiercoles(1);
+            } else {
+                $arCotizacionDetalle->setMiercoles(0);
+            }
+            if(isset($arrControles['chkJueves'.$intCodigo])) {
+                $arCotizacionDetalle->setJueves(1);
+            } else {
+                $arCotizacionDetalle->setJueves(0);
+            }
+            if(isset($arrControles['chkViernes'.$intCodigo])) {
+                $arCotizacionDetalle->setViernes(1);
+            } else {
+                $arCotizacionDetalle->setViernes(0);
+            }
+            if(isset($arrControles['chkSabado'.$intCodigo])) {
+                $arCotizacionDetalle->setSabado(1);
+            } else {
+                $arCotizacionDetalle->setSabado(0);
+            }
+            if(isset($arrControles['chkDomingo'.$intCodigo])) {
+                $arCotizacionDetalle->setDomingo(1);
+            } else {
+                $arCotizacionDetalle->setDomingo(0);
+            }
+            if(isset($arrControles['chkFestivo'.$intCodigo])) {
+                $arCotizacionDetalle->setFestivo(1);
+            } else {
+                $arCotizacionDetalle->setFestivo(0);
+            }                    
+            $em->persist($arCotizacionDetalle);
+        }
+        $em->flush();
+        $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);       
+    }
 
 }

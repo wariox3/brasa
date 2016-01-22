@@ -64,19 +64,19 @@ class TurServicio
     private $horasNocturnas = 0;    
   
     /**
-     * @ORM\Column(name="vr_costo_calculado", type="float")
+     * @ORM\Column(name="vr_total_costo", type="float")
      */
-    private $vrCostoCalculado = 0;
+    private $vrTotalCosto = 0;
     
     /**
-     * @ORM\Column(name="vr_total_ajustado", type="float")
+     * @ORM\Column(name="vr_total_precio_ajustado", type="float")
      */
-    private $vrTotalAjustado = 0;            
+    private $vrTotalPrecioAjustado = 0;            
 
     /**
-     * @ORM\Column(name="vr_total_minimo", type="float")
+     * @ORM\Column(name="vr_total_precio_minimo", type="float")
      */
-    private $vrTotalMinimo = 0;        
+    private $vrTotalPrecioMinimo = 0;        
     
     /**
      * @ORM\Column(name="vr_total", type="float")
@@ -173,30 +173,6 @@ class TurServicio
     }
 
     /**
-     * Set fechaProgramacion
-     *
-     * @param \DateTime $fechaProgramacion
-     *
-     * @return TurServicio
-     */
-    public function setFechaProgramacion($fechaProgramacion)
-    {
-        $this->fechaProgramacion = $fechaProgramacion;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaProgramacion
-     *
-     * @return \DateTime
-     */
-    public function getFechaProgramacion()
-    {
-        return $this->fechaProgramacion;
-    }
-
-    /**
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
@@ -266,30 +242,6 @@ class TurServicio
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
-    }
-
-    /**
-     * Set estadoProgramado
-     *
-     * @param boolean $estadoProgramado
-     *
-     * @return TurServicio
-     */
-    public function setEstadoProgramado($estadoProgramado)
-    {
-        $this->estadoProgramado = $estadoProgramado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoProgramado
-     *
-     * @return boolean
-     */
-    public function getEstadoProgramado()
-    {
-        return $this->estadoProgramado;
     }
 
     /**
@@ -386,6 +338,78 @@ class TurServicio
     public function getHorasNocturnas()
     {
         return $this->horasNocturnas;
+    }
+
+    /**
+     * Set vrTotalCosto
+     *
+     * @param float $vrTotalCosto
+     *
+     * @return TurServicio
+     */
+    public function setVrTotalCosto($vrTotalCosto)
+    {
+        $this->vrTotalCosto = $vrTotalCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalCosto
+     *
+     * @return float
+     */
+    public function getVrTotalCosto()
+    {
+        return $this->vrTotalCosto;
+    }
+
+    /**
+     * Set vrTotalPrecioAjustado
+     *
+     * @param float $vrTotalPrecioAjustado
+     *
+     * @return TurServicio
+     */
+    public function setVrTotalPrecioAjustado($vrTotalPrecioAjustado)
+    {
+        $this->vrTotalPrecioAjustado = $vrTotalPrecioAjustado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalPrecioAjustado
+     *
+     * @return float
+     */
+    public function getVrTotalPrecioAjustado()
+    {
+        return $this->vrTotalPrecioAjustado;
+    }
+
+    /**
+     * Set vrTotalPrecioMinimo
+     *
+     * @param float $vrTotalPrecioMinimo
+     *
+     * @return TurServicio
+     */
+    public function setVrTotalPrecioMinimo($vrTotalPrecioMinimo)
+    {
+        $this->vrTotalPrecioMinimo = $vrTotalPrecioMinimo;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalPrecioMinimo
+     *
+     * @return float
+     */
+    public function getVrTotalPrecioMinimo()
+    {
+        return $this->vrTotalPrecioMinimo;
     }
 
     /**
@@ -516,77 +540,5 @@ class TurServicio
     public function getServiciosDetallesServicioRel()
     {
         return $this->serviciosDetallesServicioRel;
-    }
-
-    /**
-     * Set vrCostoCalculado
-     *
-     * @param float $vrCostoCalculado
-     *
-     * @return TurServicio
-     */
-    public function setVrCostoCalculado($vrCostoCalculado)
-    {
-        $this->vrCostoCalculado = $vrCostoCalculado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrCostoCalculado
-     *
-     * @return float
-     */
-    public function getVrCostoCalculado()
-    {
-        return $this->vrCostoCalculado;
-    }
-
-    /**
-     * Set vrTotalAjustado
-     *
-     * @param float $vrTotalAjustado
-     *
-     * @return TurServicio
-     */
-    public function setVrTotalAjustado($vrTotalAjustado)
-    {
-        $this->vrTotalAjustado = $vrTotalAjustado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalAjustado
-     *
-     * @return float
-     */
-    public function getVrTotalAjustado()
-    {
-        return $this->vrTotalAjustado;
-    }
-
-    /**
-     * Set vrTotalMinimo
-     *
-     * @param float $vrTotalMinimo
-     *
-     * @return TurServicio
-     */
-    public function setVrTotalMinimo($vrTotalMinimo)
-    {
-        $this->vrTotalMinimo = $vrTotalMinimo;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalMinimo
-     *
-     * @return float
-     */
-    public function getVrTotalMinimo()
-    {
-        return $this->vrTotalMinimo;
     }
 }

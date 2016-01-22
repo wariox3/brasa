@@ -166,7 +166,7 @@ class TurFacturaRepository extends EntityRepository {
             $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;            
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  
             $floVrServicio = (($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna)) * $arPedidoDetalle->getCantidad();                        
-            $arPedidoDetalleActualizar->setVrTotal($floVrServicio);
+            $arPedidoDetalleActualizar->setVrTotalDetalle($floVrServicio);
             $arPedidoDetalleActualizar->setHoras($douHoras);
             $arPedidoDetalleActualizar->setHorasDiurnas($intHorasRealesDiurnas);
             $arPedidoDetalleActualizar->setHorasNocturnas($intHorasRealesNocturnas);

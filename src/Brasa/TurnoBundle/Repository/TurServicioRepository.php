@@ -6,10 +6,16 @@ use Doctrine\ORM\EntityRepository;
 
 class TurServicioRepository extends EntityRepository {
     
-    public function listaDql($codigoServicio = "", $codigoCliente = "") {
+    public function listaDql($codigoServicio = "", $codigoCliente = "", $boolEstadoAutorizado = "") {
         $dql   = "SELECT s FROM BrasaTurnoBundle:TurServicio s WHERE s.codigoServicioPk <> 0 ";
         if($codigoCliente != "") {
             $dql .= " AND s.codigoClienteFk = " . $codigoCliente;  
+        }    
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND s.estadoAutorizado = 1";
+        }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND s.estadoAutorizado = 0";
         }        
         return $dql;
     }
@@ -95,7 +101,7 @@ class TurServicioRepository extends EntityRepository {
                     $intHorasRealesNocturnas +=  $arServicioDetalle->getConceptoServicioRel()->getHorasNocturnas();                                                                                              
                 }                                                                                                 
             }                                    
-            $douCostoCalculado = $arServicioDetalle->getCantidad() * $arServicioDetalle->getConceptoServicioRel()->getVrCostoCalculado();
+            $douCostoCalculado = $arServicioDetalle->getCantidad() * $arServicioDetalle->getConceptoServicioRel()->getVrCosto();
             $douHoras = ($intHorasRealesDiurnas + $intHorasRealesNocturnas ) * $arServicioDetalle->getCantidad();            
             $arServicioDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();        
             $arServicioDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($arServicioDetalle->getCodigoServicioDetallePk());                         
@@ -107,14 +113,14 @@ class TurServicioRepository extends EntityRepository {
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  
             $floVrMinimoServicio = (($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna)) * $arServicioDetalle->getCantidad();                        
             $floVrServicio = 0;            
-            if($arServicioDetalleActualizar->getVrTotalAjustado() != 0) {
-                $floVrServicio = $arServicioDetalleActualizar->getVrTotalAjustado();
+            if($arServicioDetalleActualizar->getVrPrecioAjustado() != 0) {
+                $floVrServicio = $arServicioDetalleActualizar->getVrPrecioAjustado();
             } else {
                 $floVrServicio = $floVrMinimoServicio;
             }            
-            $arServicioDetalleActualizar->setVrTotal($floVrServicio);
-            $arServicioDetalleActualizar->setVrTotalMinimo($floVrMinimoServicio);
-            $arServicioDetalleActualizar->setVrCostoCalculado($douCostoCalculado);
+            $arServicioDetalleActualizar->setVrTotalDetalle($floVrServicio);
+            $arServicioDetalleActualizar->setVrPrecioMinimo($floVrMinimoServicio);
+            $arServicioDetalleActualizar->setVrCosto($douCostoCalculado);
             
             $arServicioDetalleActualizar->setHoras($douHoras);
             $arServicioDetalleActualizar->setHorasDiurnas($intHorasRealesDiurnas);
@@ -134,8 +140,8 @@ class TurServicioRepository extends EntityRepository {
         $arServicio->setHorasDiurnas($douTotalHorasDiurnas);
         $arServicio->setHorasNocturnas($douTotalHorasNocturnas);
         $arServicio->setVrTotal($douTotalServicio);
-        $arServicio->setVrTotalMinimo($douTotalMinimoServicio);
-        $arServicio->setVrCostoCalculado($douTotalCostoCalculado);
+        $arServicio->setVrTotalPrecioMinimo($douTotalMinimoServicio);
+        $arServicio->setVrTotalCosto($douTotalCostoCalculado);
         $em->persist($arServicio);
         $em->flush();
         return true;

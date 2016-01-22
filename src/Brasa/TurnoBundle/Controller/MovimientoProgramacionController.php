@@ -136,6 +136,14 @@ class MovimientoProgramacionController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
                 return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
+            if($form->get('BtnImprimir')->isClicked()) {
+                if($arProgramacion->getEstadoAutorizado() == 1) {
+                    $objProgramacion = new \Brasa\TurnoBundle\Formatos\FormatoProgramacion();
+                    $objProgramacion->Generar($this, $codigoProgramacion);
+                } else {
+                    $objMensaje->Mensaje("error", "No puede imprimir sin estar autorizada", $this);
+                }
+            }            
         }
         $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
         $arrDiaSemana = array();
