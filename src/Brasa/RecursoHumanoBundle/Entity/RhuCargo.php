@@ -58,6 +58,10 @@ class RhuCargo
     protected $seleccionesRequisitosCargoRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuPermiso", mappedBy="cargoRel")
+     */
+    protected $permisosCargoRel;
+    /**
      * Constructor
      */
     public function __construct()
@@ -69,6 +73,7 @@ class RhuCargo
         $this->requisitosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->desempenosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesRequisitosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->permisosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -341,5 +346,39 @@ class RhuCargo
     public function getSeleccionesRequisitosCargoRel()
     {
         return $this->seleccionesRequisitosCargoRel;
+    }
+
+    /**
+     * Add permisosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addPermisosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosCargoRel)
+    {
+        $this->permisosCargoRel[] = $permisosCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove permisosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosCargoRel
+     */
+    public function removePermisosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosCargoRel)
+    {
+        $this->permisosCargoRel->removeElement($permisosCargoRel);
+    }
+
+    /**
+     * Get permisosCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPermisosCargoRel()
+    {
+        return $this->permisosCargoRel;
     }
 }

@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Procesos disciplinarios lista - Soga App{% endblock %}
+{% block title %}Permisos lista - Soga App{% endblock %}
 {% block content %}
 <script>
     $(function () {
@@ -12,7 +12,7 @@
     </script>
 <div class="container">
     <div class="page-header">
-        <h3>Lista procesos disciplinarios</h3>
+        <h3>Lista permisos</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -52,54 +52,56 @@
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>{{ knp_pagination_sortable(arDisciplinarios, 'CODIGO', 'd.codigoDisciplinarioPk') }}</th>
+                <th>{{ knp_pagination_sortable(arPermisos, 'CODIGO', 'p.codigoPermisoPk') }}</th>
                 <th>FECHA</th>
                 <th>CENTRO COSTO</th>
                 <th>IDENTIFICACIÓN</th>
-                <th>{{ knp_pagination_sortable(arDisciplinarios, 'NOMBRE', 'd.nombreCorto') }}</th>
+                <th>{{ knp_pagination_sortable(arPermisos, 'NOMBRE', 'e.nombreCorto') }}</th>
                 <th>CARGO</th>
-                <th>PROCESO</th>
-                <th>CAUSAL</th>
-                <th>DESCARGOS</th>
-                <th>FECHA DE SUSPENSIÓN</th>
+                <th>TIPO PERMISO</th>
+                <th>HORA SALIDA</th>
+                <th>HORA LLEGADA</th>
+                <th>HORAS</th>
+                <th>AFECTA HORARIO</th>
                 <th>AUTORIZADO</th>
                 <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
             </tr>
-            {% for arDisciplinarios in arDisciplinarios %}
+            {% for arPermisos in arPermisos %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}">{{ arDisciplinarios.codigoDisciplinarioPk }} </td>
-                <td>{{ arDisciplinarios.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arDisciplinarios.centroCostoRel.nombre  }}</td>
-                <td>{{ arDisciplinarios.empleadoRel.numeroIdentificacion  }}</td>
-                <td>{{ arDisciplinarios.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arDisciplinarios.empleadoRel.cargoDescripcion  }}</td>
-                <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
-                <td>{{ arDisciplinarios.asunto|default('NO APLICA')  }}</td>
-                <td>{{ arDisciplinarios.descargos|default('NO APLICA')  }}</td>
-                <td>{{ arDisciplinarios.suspension|default('NO APLICA')  }}</td>
-                <td>{% if arDisciplinarios.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arDisciplinarios.codigoCentroCostoFk, 'codigoEmpleado':  arDisciplinarios.codigoEmpleadoFk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_disciplinario_detalle', { 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}" /></td>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arPermisos.codigoPermisoPk }}">{{ arPermisos.codigoPermisoPk }} </td>
+                <td>{{ arPermisos.fechaPermiso |date("Y-m-d")  }}</td>
+                <td>{{ arPermisos.centroCostoRel.nombre  }}</td>
+                <td>{{ arPermisos.empleadoRel.numeroIdentificacion  }}</td>
+                <td>{{ arPermisos.empleadoRel.nombreCorto  }}</td>
+                <td>{{ arPermisos.empleadoRel.cargoDescripcion  }}</td>
+                <td>{{ arPermisos.permisoTipoRel.nombre  }}</td>
+                <td>{{ arPermisos.horaSalida |date('H:i:s')  }}</td>
+                <td>{{ arPermisos.horaLlegada |date('H:i:s')  }}</td>
+                <td>{{ arPermisos.horasPermiso  }}</td>
+                <td>{% if arPermisos.afectaHorario == 1%}SI{% else %}NO{% endif %}</td>
+                <td>{% if arPermisos.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_permiso_nuevo', {'codigoPermiso': arPermisos.codigoPermisoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_rhu_permiso_detalle', { 'codigoPermiso': arPermisos.codigoPermisoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPermisos.codigoPermisoPk }}" /></td>
             </tr>
             {% endfor %}
         </table>
 
         <!-- Botones Menu Items -->.
         <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Disciplinarios <span class="badge">{{ arDisciplinarios.getTotalItemCount }}</span></div>
+                <div class="btn btn-default btn-sm">Permisos <span class="badge">{{ arPermisos.getTotalItemCount }}</span></div>
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                {{ knp_pagination_render(arDisciplinarios) }}
+                {{ knp_pagination_render(arPermisos) }}
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_disciplinario_nuevo', {'codigoDisciplinario': 0}) }}">Nuevo</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_permiso_nuevo', {'codigoPermiso': 0}) }}">Nuevo</a>
             </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}

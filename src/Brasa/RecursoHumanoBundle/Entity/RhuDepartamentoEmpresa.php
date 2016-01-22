@@ -32,6 +32,10 @@ class RhuDepartamentoEmpresa
      */
     protected $empleadosDepartamentoEmpresaRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPermiso", mappedBy="departamentoEmpresaRel")
+     */
+    protected $permisosDepartamentoEmpresaRel;
     
     /**
      * Constructor
@@ -40,6 +44,7 @@ class RhuDepartamentoEmpresa
     {
         $this->registroVisitaDepartamentoEmpresaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosDepartamentoEmpresaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->permisosDepartamentoEmpresaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -142,5 +147,39 @@ class RhuDepartamentoEmpresa
     public function getEmpleadosDepartamentoEmpresaRel()
     {
         return $this->empleadosDepartamentoEmpresaRel;
+    }
+
+    /**
+     * Add permisosDepartamentoEmpresaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosDepartamentoEmpresaRel
+     *
+     * @return RhuDepartamentoEmpresa
+     */
+    public function addPermisosDepartamentoEmpresaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosDepartamentoEmpresaRel)
+    {
+        $this->permisosDepartamentoEmpresaRel[] = $permisosDepartamentoEmpresaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove permisosDepartamentoEmpresaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosDepartamentoEmpresaRel
+     */
+    public function removePermisosDepartamentoEmpresaRel(\Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosDepartamentoEmpresaRel)
+    {
+        $this->permisosDepartamentoEmpresaRel->removeElement($permisosDepartamentoEmpresaRel);
+    }
+
+    /**
+     * Get permisosDepartamentoEmpresaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPermisosDepartamentoEmpresaRel()
+    {
+        return $this->permisosDepartamentoEmpresaRel;
     }
 }

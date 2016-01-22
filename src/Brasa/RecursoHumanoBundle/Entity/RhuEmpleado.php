@@ -576,7 +576,12 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="RhuSoportePagoHorario", mappedBy="empleadoRel")
      */
-    protected $soportesPagosHorariosEmpleadoRel;    
+    protected $soportesPagosHorariosEmpleadoRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPermiso", mappedBy="empleadoRel")
+     */
+    protected $permisosEmpleadoRel;
     
     
     /**
@@ -613,6 +618,7 @@ class RhuEmpleado
         $this->turRecursosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->horarioAccesoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosHorariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->permisosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -3433,5 +3439,39 @@ class RhuEmpleado
     public function getSoportesPagosHorariosEmpleadoRel()
     {
         return $this->soportesPagosHorariosEmpleadoRel;
+    }
+
+    /**
+     * Add permisosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addPermisosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosEmpleadoRel)
+    {
+        $this->permisosEmpleadoRel[] = $permisosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove permisosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosEmpleadoRel
+     */
+    public function removePermisosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosEmpleadoRel)
+    {
+        $this->permisosEmpleadoRel->removeElement($permisosEmpleadoRel);
+    }
+
+    /**
+     * Get permisosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPermisosEmpleadoRel()
+    {
+        return $this->permisosEmpleadoRel;
     }
 }

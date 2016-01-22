@@ -215,7 +215,11 @@ class RhuCentroCosto
      * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="centroCostoRel")
      */
     protected $disciplinariosCentroCostoRel;
-
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPermiso", mappedBy="centroCostoRel")
+     */
+    protected $permisosCentroCostoRel;
     
     
     /**
@@ -241,6 +245,7 @@ class RhuCentroCosto
         $this->facturasDetallesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->disciplinariosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->permisosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1367,5 +1372,39 @@ class RhuCentroCosto
     public function getDisciplinariosCentroCostoRel()
     {
         return $this->disciplinariosCentroCostoRel;
+    }
+
+    /**
+     * Add permisosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addPermisosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosCentroCostoRel)
+    {
+        $this->permisosCentroCostoRel[] = $permisosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove permisosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosCentroCostoRel
+     */
+    public function removePermisosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPermiso $permisosCentroCostoRel)
+    {
+        $this->permisosCentroCostoRel->removeElement($permisosCentroCostoRel);
+    }
+
+    /**
+     * Get permisosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPermisosCentroCostoRel()
+    {
+        return $this->permisosCentroCostoRel;
     }
 }

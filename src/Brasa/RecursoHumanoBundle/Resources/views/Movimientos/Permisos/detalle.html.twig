@@ -1,0 +1,68 @@
+{% extends '::base.html.twig' %}
+{% block title %}Permiso detalle - Soga App{% endblock %}
+{% block content %}
+<script>
+    $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+<div class="container">
+    <div class="page-header">
+        <h3>Permiso</h3>
+    </div>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 5,  'numero': arPermiso.codigoPermisoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
+            </div>
+        </div>
+        <br /><br />
+    <!-- Encabezado Movimiento -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Información disciplinario</div>
+      <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="titulo">CÓDIGO:</td>
+                    <td>{{ arPermiso.codigoPermisoPk }}</td>
+                    <td class="titulo">PROCESO:</td>
+                    <td>{{ arPermiso.PermisoTipoRel.nombre }}</td>
+                    <td class="titulo">CAUSAL</td>
+                    <td>{{ arPermiso.asunto|default('NO APLICA') }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">DESCARGOS:</td>
+                    <td>{{ arPermiso.descargos|default('NO APLICA') }}</td>
+                    <td class="titulo">FECHA SUSPENSIÓN</td>
+                    <td>{{ arPermiso.suspension|default('NO APLICA') }}</td>
+                    <td class="titulo">AUTORIZADO:</td>
+                    <td>{% if arPermiso.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">EMPLEADO:</td>
+                    <td>{{ arPermiso.empleadoRel.nombreCorto }}</td>
+                    <td class="titulo">IDENTIFICACIÓN:</td>
+                    <td>{{ arPermiso.empleadoRel.numeroIdentificacion }}</td>
+                    <td class="titulo">FECHA CREACIÓN</td>
+                    <td>{{ arPermiso.fechaPermiso | date('Y/m/d') }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">OBSERVACIONES:</td>
+                    <td colspan="5" >{{ arPermiso.observaciones }}</td>
+                </tr>
+            </table>
+      </div>
+    </div>
+
+    <!-- Fin Encabezado Movimiento -->
+    
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+    <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_disciplinario_lista') }}">Volver</a>
+</div>
+{% endblock %}
