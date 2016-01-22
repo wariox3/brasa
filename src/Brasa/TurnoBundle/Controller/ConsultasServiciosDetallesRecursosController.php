@@ -72,7 +72,7 @@ class ConsultasServiciosDetallesRecursosController extends Controller
         
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AE'; $col++) {
+        for($col = 'A'; $col !== 'AC'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }  
         $objPHPExcel->setActiveSheetIndex(0)              
@@ -103,11 +103,7 @@ class ConsultasServiciosDetallesRecursosController extends Controller
                     ->setCellValue('Y1', 'H')
                     ->setCellValue('Z1', 'H.D')
                     ->setCellValue('AA1', 'H.N')
-                    ->setCellValue('AB1', 'DIAS')
-                    ->setCellValue('AC1', 'COSTO')
-                    ->setCellValue('AD1', 'VR.MINIMO')
-                    ->setCellValue('AE1', 'VR.AJUSTADO')
-                    ->setCellValue('AF1', 'VALOR');
+                    ->setCellValue('AB1', 'DIAS');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -141,11 +137,7 @@ class ConsultasServiciosDetallesRecursosController extends Controller
                     ->setCellValue('Y' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getHoras())
                     ->setCellValue('Z' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getHorasDiurnas())
                     ->setCellValue('AA' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getHorasNocturnas())
-                    ->setCellValue('AB' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getDias())
-                    ->setCellValue('AC' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getVrCostoCalculado())
-                    ->setCellValue('AD' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getVrTotalMinimo())
-                    ->setCellValue('AE' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getVrTotalAjustado())
-                    ->setCellValue('AF' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getVrTotal());
+                    ->setCellValue('AB' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getDias());
             if($arServicioDetalleRecurso->getServicioDetalleRel()->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('H' . $i, $arServicioDetalleRecurso->getServicioDetalleRel()->getPuestoRel()->getNombre());

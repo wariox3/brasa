@@ -7,6 +7,7 @@ class ConsultasServiciosDetallesController extends Controller
 {
     var $strListaDql = "";
     var $codigoServicio = "";
+    var $codigoCliente = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -15,7 +16,15 @@ class ConsultasServiciosDetallesController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {            
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        if ($form->isValid()) {    
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {                
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
+                if($arCliente) {
+                    $this->codigoCliente = $arCliente->getCodigoClientePk();
+                }
+            }            
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $this->lista();
@@ -34,7 +43,9 @@ class ConsultasServiciosDetallesController extends Controller
             
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->listaConsultaDql();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->listaConsultaDql(
+                $this->codigoServicio, 
+                $this->codigoCliente);
     }
 
     private function filtrar ($form) {                

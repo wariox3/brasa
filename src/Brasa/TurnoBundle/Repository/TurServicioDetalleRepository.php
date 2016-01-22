@@ -6,17 +6,12 @@ use Doctrine\ORM\EntityRepository;
 
 class TurServicioDetalleRepository extends EntityRepository {
 
-    public function listaConsultaDql() {
-        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurServicioDetalle sd WHERE sd.codigoServicioDetallePk <> 0 ";
+    public function listaConsultaDql($codigoServicio = "", $codigoCliente = "") {
+        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurServicioDetalle sd JOIN sd.servicioRel s WHERE sd.codigoServicioDetallePk <> 0 ";
 
-        /*if($strFechaDesde != '') {
-            $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  
+        if($codigoCliente != '') {
+            $dql .= "AND s.codigoClienteFk = " . $codigoCliente . " ";  
         }
-        if($strFechaHasta != '') {
-            $dql .= " AND p.fecha <= '" . $strFechaHasta . "'";  
-        } 
-         * 
-         */       
         return $dql;
     }     
     
