@@ -15,7 +15,6 @@ class FormatoExamen extends \FPDF_FPDF {
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
-
         $pdf->Output("Examen$codigoExamen.pdf", 'D');        
         
     } 

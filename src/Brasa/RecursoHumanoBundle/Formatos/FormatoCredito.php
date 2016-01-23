@@ -14,7 +14,6 @@ class FormatoCredito extends \FPDF_FPDF {
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 11);
-        
         $this->Body($pdf);
         $pdf->Output("Lista_Creditos.pdf", 'D');        
         

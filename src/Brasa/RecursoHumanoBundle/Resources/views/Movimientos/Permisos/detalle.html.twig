@@ -18,7 +18,7 @@
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 5,  'numero': arPermiso.codigoPermisoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 12,  'numero': arPermiso.codigoPermisoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
             </div>
         </div>
         <br /><br />
@@ -30,26 +30,50 @@
                 <tr>
                     <td class="titulo">CÓDIGO:</td>
                     <td>{{ arPermiso.codigoPermisoPk }}</td>
-                    <td class="titulo">PROCESO:</td>
-                    <td>{{ arPermiso.PermisoTipoRel.nombre }}</td>
-                    <td class="titulo">CAUSAL</td>
-                    <td>{{ arPermiso.asunto|default('NO APLICA') }}</td>
-                </tr>
-                <tr>
-                    <td class="titulo">DESCARGOS:</td>
-                    <td>{{ arPermiso.descargos|default('NO APLICA') }}</td>
-                    <td class="titulo">FECHA SUSPENSIÓN</td>
-                    <td>{{ arPermiso.suspension|default('NO APLICA') }}</td>
-                    <td class="titulo">AUTORIZADO:</td>
-                    <td>{% if arPermiso.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
+                    <td class="titulo">FECHA:</td>
+                    <td>{{ arPermiso.fechaPermiso | date('Y/m/d') }}</td>
+                    <td class="titulo"></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="titulo">EMPLEADO:</td>
                     <td>{{ arPermiso.empleadoRel.nombreCorto }}</td>
                     <td class="titulo">IDENTIFICACIÓN:</td>
                     <td>{{ arPermiso.empleadoRel.numeroIdentificacion }}</td>
-                    <td class="titulo">FECHA CREACIÓN</td>
-                    <td>{{ arPermiso.fechaPermiso | date('Y/m/d') }}</td>
+                    <td class="titulo">CENTRO COSTO</td>
+                    <td>{{ arPermiso.centroCostoRel.nombre }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">DEPARTAMENTO:</td>
+                    <td>{{ arPermiso.departamentoEmpresaRel.nombre|default('') }}</td>
+                    <td class="titulo">CARGO</td>
+                    <td>{{ arPermiso.cargoRel.nombre|default('') }}</td>
+                    <td class="titulo"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="titulo">TIPO PERMISO</td>
+                    <td>{{ arPermiso.permisoTipoRel.nombre|default('') }}</td>
+                    <td class="titulo">MOTIVO:</td>
+                    <td>{{ arPermiso.motivo }}</td>
+                    <td class="titulo">JEFE AUTORIZA</td>
+                    <td>{{ arPermiso.jefeAutoriza }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">HORA SALIDA</td>
+                    <td>{{ arPermiso.horaSalida|date('H:i') }}</td>
+                    <td class="titulo">HORA LLEGADA:</td>
+                    <td>{{ arPermiso.horaLlegada|date('H:i') }}</td>
+                    <td class="titulo">HORAS PERMISO</td>
+                    <td>{{ arPermiso.horasPermiso }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td></td>
+                    <td class="titulo">AFECTA HORARIO:</td>
+                    <td>{% if arPermiso.afectaHorario == 1%}SI{% else %}NO{% endif %}</td>
+                    <td class="titulo">AUTORIZADO:</td>
+                    <td>{% if arPermiso.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
                 </tr>
                 <tr>
                     <td class="titulo">OBSERVACIONES:</td>

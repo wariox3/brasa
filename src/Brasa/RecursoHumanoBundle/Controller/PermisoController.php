@@ -111,16 +111,16 @@ class PermisoController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {            
                 if($arPermiso->getEstadoAutorizado() == 0) {
-                    $arPermiso->getEstadoAutorizado(1);
+                    $arPermiso->setEstadoAutorizado(1);
                     $em->persist($arPermiso);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_permiso_detalle', array('codigoPermiso' => $codigoPermiso)));                                                
                 }
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($codigoPermiso->getEstadoAutorizado() == 1) {
-                    $codigoPermiso->getEstadoAutorizado(0);
-                    $em->persist($codigoPermiso);
+                if($arPermiso->getEstadoAutorizado() == 1) {
+                    $arPermiso->setEstadoAutorizado(0);
+                    $em->persist($arPermiso);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_permiso_detalle', array('codigoPermiso' => $codigoPermiso)));                                                
                 }

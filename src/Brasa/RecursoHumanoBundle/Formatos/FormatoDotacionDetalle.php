@@ -162,7 +162,7 @@ class FormatoDotacionDetalle extends \FPDF_FPDF {
         $this->Text(105, 247, $arConfiguracion->getNombreEmpresa());
         $this->Text(105, 254, "NIT: ". $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa());
         $this->SetFont('Arial', '', 8);
-        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');;
+        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 
