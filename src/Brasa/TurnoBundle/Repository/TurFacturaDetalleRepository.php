@@ -15,12 +15,12 @@ class TurFacturaDetalleRepository extends EntityRepository {
         return $arResultado;                
     }
     
-    public function eliminarSeleccionados($arrSeleccionados) {        
+    public function eliminar($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
             foreach ($arrSeleccionados AS $codigo) {                
-                $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                
-                $em->remove($arPedidoDetalle);                  
+                $ar = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($codigo);                
+                $em->remove($ar);                  
             }                                         
             $em->flush();       
         }
@@ -29,7 +29,7 @@ class TurFacturaDetalleRepository extends EntityRepository {
     
     public function numeroRegistros($codigo) {
         $em = $this->getEntityManager();
-        $arDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigo));
+        $arDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigo));
         return count($arDetalles);
     }          
     

@@ -162,8 +162,8 @@ class FormatoPedido extends \FPDF_FPDF {
             $pdf->Cell(30, 4, $arPedidoDetalle->getConceptoServicioRel()->getNombre(), 1, 0, 'L');
             $pdf->Cell(20, 4, $arPedidoDetalle->getModalidadServicioRel()->getNombre(), 1, 0, 'L');                
             $pdf->Cell(10, 4, $arPedidoDetalle->getPeriodoRel()->getNombre(), 1, 0, 'L');                
-            $pdf->Cell(15, 4, $arPedidoDetalle->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');                
-            $pdf->Cell(15, 4, $arPedidoDetalle->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');                                  
+            $pdf->Cell(15, 4, $arPedidoDetalle->getDiaDesde(), 1, 0, 'L');                
+            $pdf->Cell(15, 4, $arPedidoDetalle->getDiaHasta(), 1, 0, 'L');                                  
             $pdf->Cell(10, 4, number_format($arPedidoDetalle->getCantidad(), 0, '.', ','), 1, 0, 'R');                
             if($arPedidoDetalle->getLunes() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  

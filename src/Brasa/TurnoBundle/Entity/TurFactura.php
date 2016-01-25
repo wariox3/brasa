@@ -31,6 +31,26 @@ class TurFactura
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
     private $estadoAutorizado = false;             
+
+    /**
+     * @ORM\Column(name="vr_base_aiu", type="float")
+     */
+    private $VrBaseAIU = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_iva", type="float")
+     */
+    private $VrIva = 0; 
+    
+    /**
+     * @ORM\Column(name="vr_retencion_fuente", type="float")
+     */
+    private $VrRetencionFuente = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_subtotal", type="float")
+     */
+    private $vrSubtotal = 0;     
     
     /**
      * @ORM\Column(name="vr_total", type="float")
@@ -272,5 +292,101 @@ class TurFactura
     public function getClienteRel()
     {
         return $this->clienteRel;
+    }
+
+    /**
+     * Set vrSubtotal
+     *
+     * @param float $vrSubtotal
+     *
+     * @return TurFactura
+     */
+    public function setVrSubtotal($vrSubtotal)
+    {
+        $this->vrSubtotal = $vrSubtotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSubtotal
+     *
+     * @return float
+     */
+    public function getVrSubtotal()
+    {
+        return $this->vrSubtotal;
+    }
+
+    /**
+     * Set vrBaseAIU
+     *
+     * @param float $vrBaseAIU
+     *
+     * @return TurFactura
+     */
+    public function setVrBaseAIU($vrBaseAIU)
+    {
+        $this->VrBaseAIU = $vrBaseAIU;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBaseAIU
+     *
+     * @return float
+     */
+    public function getVrBaseAIU()
+    {
+        return $this->VrBaseAIU;
+    }
+
+    /**
+     * Set vrIva
+     *
+     * @param float $vrIva
+     *
+     * @return TurFactura
+     */
+    public function setVrIva($vrIva)
+    {
+        $this->VrIva = $vrIva;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIva
+     *
+     * @return float
+     */
+    public function getVrIva()
+    {
+        return $this->VrIva;
+    }
+
+    /**
+     * Set vrRetencionFuente
+     *
+     * @param float $vrRetencionFuente
+     *
+     * @return TurFactura
+     */
+    public function setVrRetencionFuente($vrRetencionFuente)
+    {
+        $this->VrRetencionFuente = $vrRetencionFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get vrRetencionFuente
+     *
+     * @return float
+     */
+    public function getVrRetencionFuente()
+    {
+        return $this->VrRetencionFuente;
     }
 }

@@ -21,6 +21,21 @@ class TurFacturaDetalle
      * @ORM\Column(name="codigo_factura_fk", type="integer")
      */    
     private $codigoFacturaFk;     
+
+    /**
+     * @ORM\Column(name="codigo_concepto_servicio_fk", type="integer")
+     */    
+    private $codigoConceptoServicioFk;     
+    
+    /**
+     * @ORM\Column(name="cantidad", type="float")
+     */
+    private $cantidad = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_precio", type="float")
+     */
+    private $vrPrecio = 0;     
     
     /**
      * @ORM\ManyToOne(targetEntity="TurFactura", inversedBy="facturasDetallesFacturaRel")
@@ -28,7 +43,11 @@ class TurFacturaDetalle
      */
     protected $facturaRel;          
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="TurConceptoServicio", inversedBy="facturasDetallesConceptoServicioRel")
+     * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
+     */
+    protected $conceptoServicioRel; 
 
     /**
      * Get codigoFacturaDetallePk
@@ -86,5 +105,101 @@ class TurFacturaDetalle
     public function getFacturaRel()
     {
         return $this->facturaRel;
+    }
+
+    /**
+     * Set vrPrecio
+     *
+     * @param float $vrPrecio
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setVrPrecio($vrPrecio)
+    {
+        $this->vrPrecio = $vrPrecio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrecio
+     *
+     * @return float
+     */
+    public function getVrPrecio()
+    {
+        return $this->vrPrecio;
+    }
+
+    /**
+     * Set codigoConceptoServicioFk
+     *
+     * @param integer $codigoConceptoServicioFk
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
+    {
+        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoServicioFk()
+    {
+        return $this->codigoConceptoServicioFk;
+    }
+
+    /**
+     * Set cantidad
+     *
+     * @param float $cantidad
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidad
+     *
+     * @return float
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
+    }
+
+    /**
+     * Set conceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
+    {
+        $this->conceptoServicioRel = $conceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
+     */
+    public function getConceptoServicioRel()
+    {
+        return $this->conceptoServicioRel;
     }
 }

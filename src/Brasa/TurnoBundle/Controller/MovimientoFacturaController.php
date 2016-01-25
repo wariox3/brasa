@@ -20,8 +20,7 @@ class MovimientoFacturaController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_pedido_lista'));                 
-                
+                return $this->redirect($this->generateUrl('brs_tur_factura_lista'));                                 
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -93,89 +92,28 @@ class MovimientoFacturaController extends Controller
                         $em->persist($arFactura);
                         $em->flush();                        
                     } else {
-                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al pedido', $this);
+                        $objMensaje->Mensaje('error', 'Debe adicionar detalles', $this);
                     }                    
                 }
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoFactura' => $codigoFactura)));                
+                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                
             }    
             if($form->get('BtnDesAutorizar')->isClicked()) {            
                 if($arFactura->getEstadoAutorizado() == 1) {
                     $arFactura->setEstadoAutorizado(0);
                     $em->persist($arFactura);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoFactura' => $codigoFactura)));                
+                    return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                
                 }
-            }   
-            if($form->get('BtnAprobar')->isClicked()) {            
-                if($arFactura->getEstadoAutorizado() == 1) {
-                    $arFactura->setEstadoAprobado(1);
-                    $em->persist($arFactura);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoFactura' => $codigoFactura)));                
-                }
-            }            
-            if($form->get('BtnDetalleActualizar')->isClicked()) {
-                $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                    $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
-                    $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($intCodigo);
-                    $arFacturaDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-                    $arFacturaDetalle->setCantidadRecurso($arrControles['TxtCantidadRecurso'.$intCodigo]);
-                    $arFacturaDetalle->setFechaDesde(date_create($arrControles['TxtFechaDesde'.$intCodigo]));
-                    $arFacturaDetalle->setFechaHasta(date_create($arrControles['TxtFechaHasta'.$intCodigo]));
-                    
-                    if(isset($arrControles['chkLunes'.$intCodigo])) {
-                        $arFacturaDetalle->setLunes(1);
-                    } else {
-                        $arFacturaDetalle->setLunes(0);
-                    }
-                    if(isset($arrControles['chkMartes'.$intCodigo])) {
-                        $arFacturaDetalle->setMartes(1);
-                    } else {
-                        $arFacturaDetalle->setMartes(0);
-                    }
-                    if(isset($arrControles['chkMiercoles'.$intCodigo])) {
-                        $arFacturaDetalle->setMiercoles(1);
-                    } else {
-                        $arFacturaDetalle->setMiercoles(0);
-                    }
-                    if(isset($arrControles['chkJueves'.$intCodigo])) {
-                        $arFacturaDetalle->setJueves(1);
-                    } else {
-                        $arFacturaDetalle->setJueves(0);
-                    }
-                    if(isset($arrControles['chkViernes'.$intCodigo])) {
-                        $arFacturaDetalle->setViernes(1);
-                    } else {
-                        $arFacturaDetalle->setViernes(0);
-                    }
-                    if(isset($arrControles['chkSabado'.$intCodigo])) {
-                        $arFacturaDetalle->setSabado(1);
-                    } else {
-                        $arFacturaDetalle->setSabado(0);
-                    }
-                    if(isset($arrControles['chkDomingo'.$intCodigo])) {
-                        $arFacturaDetalle->setDomingo(1);
-                    } else {
-                        $arFacturaDetalle->setDomingo(0);
-                    }
-                    if(isset($arrControles['chkFestivo'.$intCodigo])) {
-                        $arFacturaDetalle->setFestivo(1);
-                    } else {
-                        $arFacturaDetalle->setFestivo(0);
-                    }                    
-                    $em->persist($arFacturaDetalle);
-                }
-                $em->flush();
+            }               
+            if($form->get('BtnDetalleActualizar')->isClicked()) {                                                    
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoFactura' => $codigoFactura)));
+                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->eliminarSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->eliminar($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoFactura' => $codigoFactura)));
+                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arFactura->getEstadoAutorizado() == 1) {
@@ -205,17 +143,24 @@ class MovimientoFacturaController extends Controller
         $form = $this->formularioDetalleNuevo();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
-            $arFacturaDetalle->setFacturaRel($arFactura);
-            $em->persist($arFacturaDetalle);
-            $em->flush();
-
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_nuevo', array('codigoFactura' => $codigoFactura, 'codigoFacturaDetalle' => 0 )));
-            } else {
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {    
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                        
+                        $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                        $arFacturaDetalle->setFacturaRel($arFactura);
+                        $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+                        $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
+                        $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetalle());
+                        $em->persist($arFacturaDetalle);                        
+                    }
+                }
+                $em->flush();
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            }            
         }
         
         $arPedidoDetalles = $paginator->paginate($em->createQuery($this->listaNuevoDetalle($arFactura->getCodigoClienteFk())), $request->query->get('page', 1), 20);        
@@ -224,58 +169,6 @@ class MovimientoFacturaController extends Controller
             'arPedidoDetalles' => $arPedidoDetalles,
             'form' => $form->createView()));
     }
-
-    public function detalleNuevoCotizacionAction($codigoFactura, $codigoFacturaDetalle = 0) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
-        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
-        $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
-            ->getForm();
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            if ($form->get('BtnGuardar')->isClicked()) {                
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigo) {
-                        $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
-                        $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigo);                                                
-                        $arCotizacionDetalles = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
-                        $arCotizacionDetalles = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array('codigoCotizacionFk' => $arCotizacion->getCodigoCotizacionPk()));
-                        foreach($arCotizacionDetalles as $arCotizacionDetalle) {
-                            $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
-                            $arFacturaDetalle->setFacturaRel($arFactura);
-                            $arFacturaDetalle->setModalidadServicioRel($arCotizacionDetalle->getModalidadServicioRel());
-                            $arFacturaDetalle->setPeriodoRel($arCotizacionDetalle->getPeriodoRel());
-                            $arFacturaDetalle->setTurnoRel($arCotizacionDetalle->getTurnoRel());
-                            $arFacturaDetalle->setDias($arCotizacionDetalle->getDias());
-                            $arFacturaDetalle->setLunes($arCotizacionDetalle->getLunes());
-                            $arFacturaDetalle->setMartes($arCotizacionDetalle->getMartes());
-                            $arFacturaDetalle->setMiercoles($arCotizacionDetalle->getMiercoles());
-                            $arFacturaDetalle->setJueves($arCotizacionDetalle->getJueves());
-                            $arFacturaDetalle->setViernes($arCotizacionDetalle->getViernes());
-                            $arFacturaDetalle->setSabado($arCotizacionDetalle->getSabado());
-                            $arFacturaDetalle->setDomingo($arCotizacionDetalle->getDomingo());
-                            $arFacturaDetalle->setFestivo($arCotizacionDetalle->getFestivo());                            
-                            $arFacturaDetalle->setCantidad($arCotizacionDetalle->getCantidad());
-                            $arFacturaDetalle->setFechaDesde($arCotizacionDetalle->getFechaDesde());
-                            $arFacturaDetalle->setFechaHasta($arCotizacionDetalle->getFechaHasta());
-                            $em->persist($arFacturaDetalle);
-                        }                       
-                    }
-                    $em->flush();
-                }
-                $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
-            }
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-        }
-        $arCotizaciones = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->pendientes($arFactura->getCodigoTerceroFk());
-        return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleNuevoCotizacion.html.twig', array(
-            'arFactura' => $arFactura,
-            'arCotizaciones' => $arCotizaciones,
-            'form' => $form->createView()));
-    }    
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
