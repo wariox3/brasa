@@ -73,10 +73,14 @@ brs_tur_programacion_nuevo:
 brs_tur_programacion_detalle:
    path:     /tur/programacion/detalle/{codigoProgramacion}
    defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:detalle }
-   
+
 brs_tur_programacion_detalle_nuevo:
    path:     /tur/programacion/detalle/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:detalleNuevo }   
+   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:detalleNuevo }      
+   
+brs_tur_programacion_detalle_nuevo_pedido:
+   path:     /tur/programacion/detalle/nuevo/pedido/{codigoProgramacion}/{codigoProgramacionDetalle}
+   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:detalleNuevoPedido }   
 
 brs_tur_cotizacion_lista:
    path:     /tur/cotizacion/lista

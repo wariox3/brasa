@@ -137,6 +137,16 @@ class MovimientoPedidoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
                 return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
             }
+            if($form->get('BtnDetalleDesprogramar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                foreach ($arrSeleccionados AS $codigo) {                
+                    $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                
+                    $arPedidoDetalle->setEstadoProgramado(0);
+                    $em->persist($arPedidoDetalle);                  
+                }                                         
+                $em->flush();  
+                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+            }            
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arPedido->getEstadoAutorizado() == 1) {
                     $objPedido = new \Brasa\TurnoBundle\Formatos\FormatoPedido();
@@ -401,6 +411,7 @@ class MovimientoPedidoController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        $arrBotonDetalleDesprogramar = array('label' => 'Desprogramar', 'disabled' => false);
         $arrBotonDesprogramar = array('label' => 'Desprogramar', 'disabled' => true);        
         
         if($ar->getEstadoAutorizado() == 1) {            
@@ -426,6 +437,7 @@ class MovimientoPedidoController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleDesprogramar', 'submit', $arrBotonDetalleDesprogramar)
                     ->add('BtnDesprogramar', 'submit', $arrBotonDesprogramar)                 
                     ->getForm();
         return $form;

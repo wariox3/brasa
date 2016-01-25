@@ -118,13 +118,6 @@ class MovimientoProgramacionController extends Controller
                     return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
                 }
             }
-            if($form->get('BtnDetalleNuevoLibre')->isClicked()) {
-                $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-                $arProgramacionDetalle->setProgramacionRel($arProgramacion);
-                $em->persist($arProgramacionDetalle);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
-            }
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoProgramacion);
@@ -176,6 +169,44 @@ class MovimientoProgramacionController extends Controller
             if ($form->get('BtnGuardar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $arrControles = $request->request->All();
+                if(count($arrSeleccionados) > 0) {    
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $intCantidad = $arrControles['TxtCantidad'.$codigo];
+                        for($i = 1; $i <= $intCantidad; $i++) {
+                            $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                            $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);
+                            $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                            $arProgramacionDetalle->setProgramacionRel($arProgramacion);
+                            $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                            $em->persist($arProgramacionDetalle);                           
+                        }
+                    }
+                    $em->flush();
+                }
+                $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaCliente($arProgramacion->getCodigoClienteFk());
+        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
+            'arProgramacion' => $arProgramacion,
+            'arPedidosDetalle' => $arPedidosDetalle,
+            'form' => $form->createView()));
+    }    
+    
+    public function detalleNuevoPedidoAction($codigoProgramacion, $codigoProgramacionDetalle = 0) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
+        $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {                
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigo) {
                         $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($codigo, $arProgramacion);                        
@@ -187,7 +218,7 @@ class MovimientoProgramacionController extends Controller
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
         $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesCliente($arProgramacion->getCodigoClienteFk());
-        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevoPedido.html.twig', array(
             'arProgramacion' => $arProgramacion,
             'arPedidosDetalle' => $arPedidosDetalle,
             'form' => $form->createView()));
@@ -219,14 +250,12 @@ class MovimientoProgramacionController extends Controller
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
-        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        $arrBotonDetalleNuevoLibre = array('label' => 'Nuevo libre', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
         if($ar->getEstadoAutorizado() == 1) {
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = false;
             $arrBotonDetalleEliminar['disabled'] = true;
-            $arrBotonDetalleActualizar['disabled'] = true;
-            $arrBotonDetalleNuevoLibre['disabled'] = true;
+            $arrBotonDetalleActualizar['disabled'] = true;        
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
@@ -240,8 +269,7 @@ class MovimientoProgramacionController extends Controller
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                    ->add('BtnDetalleNuevoLibre', 'submit', $arrBotonDetalleNuevoLibre)
+                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)                    
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->getForm();
         return $form;

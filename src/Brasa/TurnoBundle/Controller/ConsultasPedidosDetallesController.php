@@ -7,6 +7,9 @@ class ConsultasPedidosDetallesController extends Controller
 {
     var $strListaDql = "";
     var $codigoPedido = "";
+    var $codigoCliente = "";
+    var $estadoProgramado = "";
+    var $estadoFacturado = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -35,18 +38,25 @@ class ConsultasPedidosDetallesController extends Controller
             
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaConsultaDql();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaConsultaDql(
+                $this->codigoCliente,
+                $this->estadoProgramado,
+                $this->estadoFacturado);
     }
 
     private function filtrar ($form) {                
         $this->codigoPedido = $form->get('TxtCodigo')->getData();
+        $this->estadoProgramado = $form->get('estadoProgramado')->getData();
+        $this->estadoFacturado = $form->get('estadoFacturado')->getData();
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido))                        
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido))     
+            ->add('estadoProgramado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PROGRAMADO', '0' => 'SIN PROGRAMAR'), 'data' => $this->estadoProgramado))                
+            ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $this->estadoFacturado))                                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

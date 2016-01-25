@@ -119,7 +119,8 @@
                 <th>P.MINIMO</th>
                 <th>P.AJUSTADO</th>
                 <th>TOTAL</th>
-                <th>SER</th>
+                <th>SERV</th>
+                <th>PRG</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -180,6 +181,7 @@
                     {% endif %}                    
                     <td style="text-align: right">{{ arPedidoDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidoDetalle.codigoServicioDetalleFk }}</td>                     
+                    <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
                     <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
                     <td><a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_recurso', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarRecurso', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=20 height=20 title="Recursos"></a></td>
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
@@ -200,6 +202,7 @@
                 {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>        
             <div class="btn-group">
+                {{ form_widget(form.BtnDetalleDesprogramar, { 'attr': {'class': 'btn btn-sm'} }) }}
                 {{ form_widget(form.BtnDetalleEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>

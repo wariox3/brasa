@@ -157,6 +157,16 @@ class TurPedidoDetalle
      */    
     private $dia31 = false;    
     
+    /**     
+     * @ORM\Column(name="estado_programado", type="boolean")
+     */    
+    private $estadoProgramado = false; 
+    
+    /**     
+     * @ORM\Column(name="estado_facturado", type="boolean")
+     */    
+    private $estadoFacturado = false;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurPedido", inversedBy="pedidosDetallesPedidoRel")
      * @ORM\JoinColumn(name="codigo_pedido_fk", referencedColumnName="codigo_pedido_pk")
@@ -1134,5 +1144,53 @@ class TurPedidoDetalle
     public function getProgramacionesDetallesPedidoDetalleRel()
     {
         return $this->programacionesDetallesPedidoDetalleRel;
+    }
+
+    /**
+     * Set estadoProgramado
+     *
+     * @param boolean $estadoProgramado
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setEstadoProgramado($estadoProgramado)
+    {
+        $this->estadoProgramado = $estadoProgramado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoProgramado
+     *
+     * @return boolean
+     */
+    public function getEstadoProgramado()
+    {
+        return $this->estadoProgramado;
+    }
+
+    /**
+     * Set estadoFacturado
+     *
+     * @param boolean $estadoFacturado
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setEstadoFacturado($estadoFacturado)
+    {
+        $this->estadoFacturado = $estadoFacturado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturado
+     *
+     * @return boolean
+     */
+    public function getEstadoFacturado()
+    {
+        return $this->estadoFacturado;
     }
 }

@@ -6,28 +6,45 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPedidoDetalleRepository extends EntityRepository {
 
-    public function listaConsultaDql() {
-        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd WHERE pd.codigoPedidoDetallePk <> 0 ";
-
-        /*if($strFechaDesde != '') {
-            $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  
+    public function listaConsultaDql($codigoCliente = "", $boolEstadoProgramado = "", $boolEstadoFacturado = "") {
+        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p WHERE pd.codigoPedidoDetallePk <> 0 ";
+        if($codigoCliente != "") {
+            $dql .= " AND p.codigoClienteFk = " . $codigoCliente;  
         }
-        if($strFechaHasta != '') {
-            $dql .= " AND p.fecha <= '" . $strFechaHasta . "'";  
-        } 
-         * 
-         */       
+        
+        if($boolEstadoProgramado == 1 ) {
+            $dql .= " AND pd.estadoProgramado = 1";
+        }
+        if($boolEstadoProgramado == "0") {
+            $dql .= " AND pd.estadoProgramado = 0";
+        }  
+        
+        if($boolEstadoFacturado == 1 ) {
+            $dql .= " AND pd.estadoFacturado = 1";
+        }
+        if($boolEstadoFacturado == "0") {
+            $dql .= " AND pd.estadoFacturado = 0";
+        }        
         return $dql;
     }     
     
     public function pendientesCliente($codigoCliente) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "
-                . "WHERE p.codigoClienteFk = " . $codigoCliente . " AND p.estadoProgramado = 0";
+                . "WHERE p.codigoClienteFk = " . $codigoCliente . " AND pd.estadoProgramado = 0";
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
         return $arResultado;                
     }
+    
+    public function listaCliente($codigoCliente) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "
+                . "WHERE p.codigoClienteFk = " . $codigoCliente;
+        $query = $em->createQuery($dql);
+        $arResultado = $query->getResult();
+        return $arResultado;                
+    }    
     
     public function pendientesFacturarDql($codigoCliente) {
         $em = $this->getEntityManager();

@@ -400,7 +400,10 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                     }                    
                 }
             }
-        }        
+        }      
+        $arPedidoDetalle->setEstadoProgramado(1);
+        $em->persist($arPedidoDetalle);
+        $em->flush();
     }
     
     private function aplicaPlantilla ($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle) {
