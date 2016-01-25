@@ -28,4 +28,37 @@ class RhuPermisoRepository extends EntityRepository {
         $dql .= " ORDER BY p.fechaPermiso";
         return $dql;
     }
+    
+    public function permisosAutorizados($strNombre = "", $strIdentificacion = "", $codigoCentroCosto = "", $codigoCargo = "", $codigoDepartametoEmpresa = "", $afectaHorario, $strDesde = "", $strHasta = "") {        
+        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPermiso p JOIN p.empleadoRel e WHERE p.codigoPermisoPk <> 0 AND p.estadoAutorizado = 1";
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        if($codigoCentroCosto != "" || $codigoCentroCosto != 0 ) {
+            $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
+        }
+        if($codigoCargo != "" || $codigoCargo != 0 ) {
+            $dql .= " AND e.codigoCargoFk = " . $codigoCargo;
+        }
+        if($codigoDepartametoEmpresa != "" || $codigoDepartametoEmpresa != 0 ) {
+            $dql .= " AND e.codigoDepartamentoEmpresaFk = " . $codigoDepartametoEmpresa;
+        }
+        if($afectaHorario == 1 ) {
+            $dql .= " AND p.afectaHorario = 1";
+        }
+        if($afectaHorario == 0 ) {
+            $dql .= " AND p.afectaHorario = 0";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND p.fechaPermiso >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND p.fechaPermiso <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        $dql .= " ORDER BY p.fechaPermiso";
+        return $dql;
+    }
 }

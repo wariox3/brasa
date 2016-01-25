@@ -91,6 +91,44 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         return $dql;
     }
     
+    public function listaRegistradosDql($strIdentificacion = "", $strNombre = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ha,e FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha JOIN ha.empleadoRel e WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estadoSalida = 1";   
+        if($strIdentificacion != "") {
+            $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
+        }   
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%". $strNombre . "%'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND ha.fechaEntrada >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND ha.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
+        }
+        $dql .= " ORDER BY ha.fechaEntrada";
+        return $dql;
+    }
+    
+    public function listaNoRegistradosDql($strIdentificacion = "", $strNombre = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ha,e FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha JOIN ha.empleadoRel e WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estadoSalida = 0";   
+        if($strIdentificacion != "") {
+            $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
+        }   
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%". $strNombre . "%'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND ha.fechaEntrada >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND ha.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
+        }
+        $dql .= " ORDER BY ha.fechaEntrada";
+        return $dql;
+    }
+    
     public function calculoHoras($strFechaDesde = "", $strFechaHasta = "", $codigoEmpleado = "") {        
         $em = $this->getEntityManager();
         
