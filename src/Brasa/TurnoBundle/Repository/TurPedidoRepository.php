@@ -209,19 +209,21 @@ class TurPedidoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {                
-                $boolEliminar = TRUE;
-                $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-                $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigo));                
-                foreach ($arPedidoDetalles as $arPedidoDetalle) {
-                    $arProgramacionesDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-                    $arProgramacionesDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));                    
-                    if(count($arProgramacionesDetalles) > 0) {
-                        $boolEliminar = FALSE;
+                $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigo);
+                if($arPedido->getNumero() == 0) {
+                    $boolEliminar = TRUE;
+                    $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                    $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigo));                
+                    foreach ($arPedidoDetalles as $arPedidoDetalle) {
+                        $arProgramacionesDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                        $arProgramacionesDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));                    
+                        if(count($arProgramacionesDetalles) > 0) {
+                            $boolEliminar = FALSE;
+                        }
                     }
-                }
-                if($boolEliminar == TRUE) {
-                    $ar = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigo);
-                    $em->remove($ar);                      
+                    if($boolEliminar == TRUE) {                    
+                        $em->remove($arPedido);                      
+                    }                    
                 }
             }
             $em->flush();
@@ -249,4 +251,52 @@ class TurPedidoRepository extends EntityRepository {
         }        
         return $strResultado;
     }
+    
+    public function anular($codigoPedido) {
+        $em = $this->getEntityManager();                
+        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);            
+        $strResultado = "";        
+        if($arPedido->getEstadoAutorizado() == 1 && $arPedido->getEstadoAnulado() == 0) {
+            $boolAnular = TRUE;
+            $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+            $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido));                
+            foreach ($arPedidoDetalles as $arPedidoDetalle) {
+                $arProgramacionesDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                $arProgramacionesDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));                    
+                if(count($arProgramacionesDetalles) > 0) {
+                    $boolAnular = FALSE;
+                }
+            }
+            if($boolAnular == TRUE) {
+                foreach ($arPedidoDetalles as $arPedidoDetalle) {
+                    $arPedidoDetalleAct = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                    $arPedidoDetalleAct = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arPedidoDetalle->getCodigoPedidoDetallePk());                                        
+                    $arPedidoDetalleAct->setVrCosto(0);
+                    $arPedidoDetalleAct->setVrPrecioAjustado(0);
+                    $arPedidoDetalleAct->setVrPrecioMinimo(0);
+                    $arPedidoDetalleAct->setVrTotalDetalle(0);
+                    $arPedidoDetalleAct->setHoras(0);
+                    $arPedidoDetalleAct->setHorasDiurnas(0);
+                    $arPedidoDetalleAct->setHorasNocturnas(0);                    
+                    $arPedidoDetalleAct->setDias(0);                    
+                    $em->persist($arPedidoDetalleAct);
+                }
+                $arPedido->setEstadoAnulado(1);
+                $arPedido->setVrTotalCosto(0);
+                $arPedido->setVrTotalPrecioAjustado(0);
+                $arPedido->setVrTotalPrecioMinimo(0);
+                $arPedido->setVrTotal(0);
+                $arPedido->setHoras(0);
+                $arPedido->setHorasDiurnas(0);
+                $arPedido->setHorasNocturnas(0);
+                $em->persist($arPedido);
+                $em->flush();      
+            } else {
+                $strResultado = "Hay programaciones que dependen de este pedido, por lo tanto no se puede anular";
+            }                            
+        } else {
+            $strResultado = "El pedido debe estar autorizado y no puede estar previamente anulado";
+        }        
+        return $strResultado;
+    }    
 }

@@ -66,6 +66,11 @@ class TurPedido
      * @ORM\Column(name="estado_programado", type="boolean")
      */    
     private $estadoProgramado = false;     
+
+    /**     
+     * @ORM\Column(name="estado_anulado", type="boolean")
+     */    
+    private $estadoAnulado = false;     
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -713,5 +718,29 @@ class TurPedido
     public function getPedidosDetallesPedidoRel()
     {
         return $this->pedidosDetallesPedidoRel;
+    }
+
+    /**
+     * Set estadoAnulado
+     *
+     * @param boolean $estadoAnulado
+     *
+     * @return TurPedido
+     */
+    public function setEstadoAnulado($estadoAnulado)
+    {
+        $this->estadoAnulado = $estadoAnulado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulado
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulado()
+    {
+        return $this->estadoAnulado;
     }
 }

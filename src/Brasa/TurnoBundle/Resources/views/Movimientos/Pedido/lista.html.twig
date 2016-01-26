@@ -37,12 +37,13 @@
                 <th>CLIENTE</th>
                 <th>SECTOR</th>
                 <th>PROGRAMACION</th>
-                <th>PROG</th>
-                <th>AUT</th>
                 <th>H</th>
                 <th>H.D</th>
                 <th>H.N</th>
-                <th>VALOR</th>                
+                <th>VALOR</th>       
+                <th>PROG</th>
+                <th>AUT</th>
+                <th>ANU</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -56,14 +57,15 @@
                 <td>{{ arPedidos.clienteRel.nombreCorto |default('') }}</td>  
                 <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td> 
                 <td>{{ arPedidos.fechaProgramacion |date("Y F")  }}</td>                                
-                <td>{% if arPedidos.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arPedidos.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.vrTotal | number_format(0, '.', ',') }}</td>                
+                <td>{% if arPedidos.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arPedidos.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
+                <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidos.codigoPedidoPk }}" /></td>
             </tr>
             

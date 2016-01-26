@@ -98,6 +98,14 @@ class MovimientoPedidoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
             }    
+            if($form->get('BtnAnular')->isClicked()) {                                 
+                $strResultado = $em->getRepository('BrasaTurnoBundle:TurPedido')->anular($codigoPedido);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+            }            
+            
             if($form->get('BtnDesAutorizar')->isClicked()) {            
                 if($arPedido->getEstadoAutorizado() == 1) {
                     $arPedido->setEstadoAutorizado(0);
@@ -438,6 +446,7 @@ class MovimientoPedidoController extends Controller
 
     private function formularioDetalle($ar) {        
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);        
         $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => true);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
@@ -451,20 +460,28 @@ class MovimientoPedidoController extends Controller
             $arrBotonAprobar['disabled'] = false;            
             $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
-        } else {
-            $arrBotonDesAutorizar['disabled'] = true;            
-            $arrBotonImprimir['disabled'] = true;
+            $arrBotonAnular['disabled'] = false; 
+            if($ar->getEstadoAnulado() == 1) {
+                $arrBotonDesAutorizar['disabled'] = true;
+                $arrBotonAnular['disabled'] = true;
+                $arrBotonAprobar['disabled'] = true;
+                $arrBotonDetalleDesprogramar['disabled'] = true;
+            }
+        } else {            
+            $arrBotonDesAutorizar['disabled'] = true;                        
+            $arrBotonImprimir['disabled'] = true;            
         }
-        if($ar->getEstadoAprobado() == 1) {
+        if($ar->getEstadoAprobado() == 1 && $ar->getEstadoAnulado() == 0) {
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonAprobar['disabled'] = true;            
         } 
-        if($ar->getEstadoProgramado() == 1) {
+        if($ar->getEstadoProgramado() == 1 && $ar->getEstadoAnulado() == 0) {
             $arrBotonDesprogramar['disabled'] = false;                   
         } 
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)                 
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)                 
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)

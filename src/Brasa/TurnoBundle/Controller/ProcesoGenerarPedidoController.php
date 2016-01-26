@@ -29,9 +29,7 @@ class ProcesoGenerarPedidoController extends Controller
                     $arPedidoNuevo->setClienteRel($arServicio->getClienteRel());
                     $arPedidoNuevo->setSectorRel($arServicio->getSectorRel());
                     $arPedidoNuevo->setFecha($dateFecha);
-                    $arPedidoNuevo->setFechaProgramacion($dateFecha);
-                    $arPedidoNuevo->setEstadoAutorizado(1);
-                    
+                    $arPedidoNuevo->setFechaProgramacion($dateFecha);                                        
                     $em->persist($arPedidoNuevo);                    
                                         
                     $arServicioDetalles = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
@@ -77,6 +75,7 @@ class ProcesoGenerarPedidoController extends Controller
                     }                   
                     $em->flush();
                     $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($arPedidoNuevo->getCodigoPedidoPk());
+                    $em->getRepository('BrasaTurnoBundle:TurPedido')->autorizar($arPedidoNuevo->getCodigoPedidoPk());
                 }
                 //$em->flush();
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_pedido_lista'));                                 
