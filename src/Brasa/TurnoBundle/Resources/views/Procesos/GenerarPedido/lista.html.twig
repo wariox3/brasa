@@ -36,7 +36,7 @@
                 <th>H</th>
                 <th>H.D</th>
                 <th>H.N</th>
-                <th>VALOR</th>                
+                <th>AUT</th>                
                 <th></th>
             </tr>
             {% for arServicios in arServicios %}
@@ -47,7 +47,7 @@
                 <td style="text-align: right">{{ arServicios.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServicios.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServicios.horasNocturnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arServicios.vrTotal | number_format(0, '.', ',') }}</td>                                
+                <td>{% if arServicios.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_servicio_detalle', { 'codigoServicio': arServicios.codigoServicioPk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
             </tr>
             

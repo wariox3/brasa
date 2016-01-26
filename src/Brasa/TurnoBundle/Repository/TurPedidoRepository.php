@@ -208,11 +208,45 @@ class TurPedidoRepository extends EntityRepository {
     public function eliminar($arrSeleccionados) {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
-            foreach ($arrSeleccionados AS $codigo) {
-                $ar = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigo);
-                $em->remove($ar);
+            foreach ($arrSeleccionados AS $codigo) {                
+                $boolEliminar = TRUE;
+                $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigo));                
+                foreach ($arPedidoDetalles as $arPedidoDetalle) {
+                    $arProgramacionesDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                    $arProgramacionesDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));                    
+                    if(count($arProgramacionesDetalles) > 0) {
+                        $boolEliminar = FALSE;
+                    }
+                }
+                if($boolEliminar == TRUE) {
+                    $ar = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigo);
+                    $em->remove($ar);                      
+                }
             }
             $em->flush();
         }
     }     
+    
+    public function autorizar($codigoPedido) {
+        $em = $this->getEntityManager();                
+        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);            
+        $strResultado = "";        
+        if($arPedido->getEstadoAutorizado() == 0) {
+            if($em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->numeroRegistros($codigoPedido) > 0) {            
+                $arPedido->setEstadoAutorizado(1);
+                if($arPedido->getNumero() == 0) {
+                    $intNumero = $em->getRepository('BrasaTurnoBundle:TurConsecutivo')->consecutivo(1);
+                    $arPedido->setNumero($intNumero);
+                }
+                $em->persist($arPedido);
+                $em->flush();                        
+            } else {
+                $strResultado = "Debe adicionar detalles al pedido";
+            }            
+        } else {
+            $strResultado = "El pedido ya esta autorizado";
+        }        
+        return $strResultado;
+    }
 }

@@ -168,6 +168,11 @@ class TurPedidoDetalle
     private $estadoFacturado = false;     
     
     /**
+     * @ORM\Column(name="fecha_inicia_plantilla", type="date", nullable=true)
+     */    
+    private $fechaIniciaPlantilla;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurPedido", inversedBy="pedidosDetallesPedidoRel")
      * @ORM\JoinColumn(name="codigo_pedido_fk", referencedColumnName="codigo_pedido_pk")
      */
@@ -1192,5 +1197,29 @@ class TurPedidoDetalle
     public function getEstadoFacturado()
     {
         return $this->estadoFacturado;
+    }
+
+    /**
+     * Set fechaIniciaPlantilla
+     *
+     * @param \DateTime $fechaIniciaPlantilla
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setFechaIniciaPlantilla($fechaIniciaPlantilla)
+    {
+        $this->fechaIniciaPlantilla = $fechaIniciaPlantilla;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIniciaPlantilla
+     *
+     * @return \DateTime
+     */
+    public function getFechaIniciaPlantilla()
+    {
+        return $this->fechaIniciaPlantilla;
     }
 }

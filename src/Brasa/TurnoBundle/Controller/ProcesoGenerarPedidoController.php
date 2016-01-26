@@ -19,7 +19,8 @@ class ProcesoGenerarPedidoController extends Controller
             if ($form->get('BtnGenerar')->isClicked()) { 
                 $dateFecha = $form->get('fecha')->getData();
                 $arServicios = new \Brasa\TurnoBundle\Entity\TurServicio();
-                $query = $em->createQuery($this->strListaDql);
+                $strDql = $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDql("", "", 1);
+                $query = $em->createQuery($strDql);
                 $arServicios = $query->getResult();
                 foreach ($arServicios as $arServicio) {
                     $arPedidoTipo = $em->getRepository('BrasaTurnoBundle:TurPedidoTipo')->find(2);
@@ -62,6 +63,7 @@ class ProcesoGenerarPedidoController extends Controller
                         $arPedidoDetalleNuevo->setDomingo($arServicioDetalle->getDomingo());
                         $arPedidoDetalleNuevo->setFestivo($arServicioDetalle->getFestivo());    
                         $arPedidoDetalleNuevo->setVrPrecioAjustado($arServicioDetalle->getVrPrecioAjustado());
+                        $arPedidoDetalleNuevo->setFechaIniciaPlantilla($arServicioDetalle->getFechaIniciaPlantilla());
                         $em->persist($arPedidoDetalleNuevo);  
                         $arServicioDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
                         $arServicioDetalleRecursos =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->findBy(array('codigoServicioDetalleFk' => $arServicioDetalle->getCodigoServicioDetallePk())); 

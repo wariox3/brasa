@@ -118,6 +118,14 @@ brs_tur_pedido_detalle_nuevo:
    path:     /tur/pedido/detalle/nuevo/{codigoPedido}/{codigoPedidoDetalle}
    defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalleNuevo }     
    
+brs_tur_pedido_detalle_recurso:
+   path:     /tur/pedido/detalle/recurso/{codigoPedidoDetalle}
+   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalleRecurso }    
+   
+brs_tur_pedido_detalle_recurso_nuevo:
+   path:     /tur/pedido/detalle/recurso/nuevo/{codigoPedidoDetalle}
+   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalleRecursoNuevo }   
+   
 brs_tur_pedido_detalle_nuevo_cotizacion:
    path:     /tur/pedido/detalle/nuevo/cotizacion/{codigoPedido}/{codigoPedidoDetalle}
    defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalleNuevoCotizacion }   
@@ -125,10 +133,6 @@ brs_tur_pedido_detalle_nuevo_cotizacion:
 brs_tur_pedido_detalle_nuevo_servicio:
    path:     /tur/pedido/detalle/nuevo/servicio/{codigoPedido}/{codigoPedidoDetalle}
    defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalleNuevoServicio } 
-
-brs_tur_pedido_detalle_recurso:
-   path:     /tur/pedido/detalle/recurso/{codigoPedidoDetalle}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:recurso }
 
 brs_tur_servicio_lista:
    path:     /tur/servicio/lista

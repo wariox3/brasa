@@ -28,7 +28,7 @@ class TurCotizacionDetalleType extends AbstractType
                 'class' => 'BrasaTurnoBundle:TurPeriodo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('p')
-                    ->orderBy('p.nombre', 'ASC');},
+                    ->orderBy('p.codigoPeriodoPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
             ->add('diaDesde', 'number')

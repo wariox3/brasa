@@ -3789,6 +3789,8 @@ insert into `tur_sector` (`codigo_sector_pk`, `nombre`, `porcentaje`, `comentari
 insert into `tur_pedido_tipo` (`codigo_pedido_tipo_pk`, `nombre`) values('1','COMERCIAL');
 insert into `tur_pedido_tipo` (`codigo_pedido_tipo_pk`, `nombre`) values('2','PROGRAMADO');
 
+insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('1','PEDIDO','1');
+insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('2','FACTURA','1');
 
 /** Recurso humano **/
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('1','ADMINISTRATIVO');

@@ -85,7 +85,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                 foreach ($arPlantillaDetalles as $arPlantillaDetalle) {
                     $strFechaDesde = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m') . "/" . $arPedidoDetalle->getDiaDesde();
                     $strAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y');
-                    $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPlantilla->getDiasSecuencia(), $strFechaDesde, $arPedidoDetalle->getServicioDetalleRel()->getFechaIniciaPlantilla());                                                                    
+                    $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPlantilla->getDiasSecuencia(), $strFechaDesde, $arPedidoDetalle->getFechaIniciaPlantilla());                                                                    
                     $arrTurnos = $this->devuelveTurnosMes($arPlantillaDetalle);
                     $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                     $arProgramacionDetalle->setProgramacionRel($arProgramacion);
@@ -241,7 +241,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                     foreach ($arPlantillaDetalles as $arPlantillaDetalle) {
                         $strFechaDesde = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m') . "/" . $arPedidoDetalle->getDiaDesde();
                         $strAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y');
-                        $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPedidoDetalle->getServicioDetalleRel()->getDiasSecuencia(), $strFechaDesde, $arPedidoDetalle->getServicioDetalleRel()->getFechaIniciaPlantilla());                                                                    
+                        $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPedidoDetalle->getServicioDetalleRel()->getDiasSecuencia(), $strFechaDesde, $arPedidoDetalle->getFechaIniciaPlantilla());                                                                    
                         $arrTurnos = $this->devuelveTurnosMes($arPlantillaDetalle);
                         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                         $arProgramacionDetalle->setProgramacionRel($arProgramacion);
@@ -456,15 +456,17 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         $dateFechaHasta = date_create($strFechaHasta);
         //$strFecha = $strAnio."/01/1";
         $strFecha = $dateFechaDesde->format('Y/m/j');
-        while($strFecha != $strFechaHasta) {
-            //$dateFecha = date_create($strAnio."/01/01");
-            $nuevafecha = strtotime ( '+1 day' , strtotime ( $strFecha ) ) ;
-            $strFecha = date ( 'Y/m/j' , $nuevafecha );
+        if($dateFechaDesde < $dateFechaHasta) {
+            while($strFecha != $strFechaHasta) {
+                //$dateFecha = date_create($strAnio."/01/01");
+                $nuevafecha = strtotime ( '+1 day' , strtotime ( $strFecha ) ) ;
+                $strFecha = date ( 'Y/m/j' , $nuevafecha );
 
-            $intPos++;
-            if($intPos == ($intPosiciones+1)) {
-                $intPos = 1;
-            }
+                $intPos++;
+                if($intPos == ($intPosiciones+1)) {
+                    $intPos = 1;
+                }
+            }            
         }
         return $intPos;
     }    

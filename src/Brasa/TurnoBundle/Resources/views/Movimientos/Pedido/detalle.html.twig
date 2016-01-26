@@ -99,10 +99,9 @@
                 <th>MODALIDAD</th>
                 <th>PERIODO</th>
                 <th>PLANTILLA</th>
-                <th>DESDE</th>
-                <th>HASTA</th>
+                <th>DES</th>
+                <th>HAS</th>
                 <th>CANT</th>
-                <th>CANT.RE</th>
                 <th>LU</th>
                 <th>MA</th>
                 <th>MI</th>
@@ -122,7 +121,7 @@
                 <th>SERV</th>
                 <th>PRG</th>
                 <th></th>
-                <th></th>
+                <th></th>               
                 <th></th>
             </tr>
             {% for arPedidoDetalle in arPedidoDetalle %}
@@ -140,12 +139,11 @@
                     <td>{{ arPedidoDetalle.conceptoServicioRel.nombre  }}</td>                    
                     <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    
                     <td>{{ arPedidoDetalle.periodoRel.nombre  }}</td>
-                    <td>{{ arPedidoDetalle.plantillaRel.nombre | default('')  }}</td>
+                    <td>{% if arPedidoDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arPedidoDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arPedidoDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
                     {% if arPedido.estadoAutorizado == 0 %}                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaDesde  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaHasta  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadRecurso{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidadRecurso  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
                         <td><input type="checkbox" name="chkLunes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.lunes == 1 %} checked="true" {% endif %}></td>
                         <td><input type="checkbox" name="chkMartes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.martes == 1 %} checked="true" {% endif %}></td>
                         <td><input type="checkbox" name="chkMiercoles{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
@@ -158,7 +156,6 @@
                         <td>{{ arPedidoDetalle.diaDesde }}</td>    
                         <td>{{ arPedidoDetalle.diaHasta }}</td>    
                         <td>{{ arPedidoDetalle.cantidad  }}</td>
-                        <td>{{ arPedidoDetalle.cantidadRecurso  }}</td>
                         <td>{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
                         <td>{% if arPedidoDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
                         <td>{% if arPedidoDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
@@ -182,8 +179,8 @@
                     <td style="text-align: right">{{ arPedidoDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidoDetalle.codigoServicioDetalleFk }}</td>                     
                     <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
-                    <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
-                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_recurso', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarRecurso', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=20 height=20 title="Recursos"></a></td>
+                    <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
+                    <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                                        
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
                 </tr>
             {% endfor %}
