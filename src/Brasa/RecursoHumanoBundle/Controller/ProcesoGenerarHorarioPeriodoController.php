@@ -26,6 +26,16 @@ class ProcesoGenerarHorarioPeriodoController extends Controller
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
             }
+            if($request->request->get('OpCerrar')) {
+                $codigoHorarioPeriodo = $request->request->get('OpCerrar');
+                $strResultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->cerrar($codigoHorarioPeriodo);
+                if($strResultado == "") {
+                    return $this->redirect($this->generateUrl('brs_rhu_proceso_control_acceso_horario_periodo_listar'));
+                } else {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+            }
+            
             if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {

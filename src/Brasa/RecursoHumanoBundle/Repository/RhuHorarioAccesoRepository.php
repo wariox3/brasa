@@ -91,39 +91,41 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         return $dql;
     }
     
-    public function listaRegistradosDql($strIdentificacion = "", $strNombre = "", $strDesde = "", $strHasta = "") {        
+    public function listaConsultaDql($strNombre = "", $strIdentificacion = "", $codigoCentroCosto = "", $codigoCargo = "", $codigoDepartametoEmpresa = "", $estadoEntrada, $estadoSalida, $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT ha,e FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha JOIN ha.empleadoRel e WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estadoSalida = 1";   
-        if($strIdentificacion != "") {
-            $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
-        }   
+        $dql   = "SELECT ha,e FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha JOIN ha.empleadoRel e WHERE ha.codigoHorarioAccesoPk <> 0 ";   
         if($strNombre != "" ) {
-            $dql .= " AND e.nombreCorto LIKE '%". $strNombre . "%'";
+            $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        if($codigoCentroCosto != "" || $codigoCentroCosto != 0 ) {
+            $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
+        }
+        if($codigoCargo != "" || $codigoCargo != 0 ) {
+            $dql .= " AND e.codigoCargoFk = " . $codigoCargo;
+        }
+        if($codigoDepartametoEmpresa != "" || $codigoDepartametoEmpresa != 0 ) {
+            $dql .= " AND e.codigoDepartamentoEmpresaFk = " . $codigoDepartametoEmpresa;
+        }
+        if($estadoEntrada == 1 ) {
+            $dql .= " AND ha.estadoEntrada = 1";
+        }
+        if($estadoEntrada == 0 ) {
+            $dql .= " AND ha.estadoEntrada = 0";
+        }
+        if($estadoSalida == 1 ) {
+            $dql .= " AND ha.estadoSalida = 1";
+        }
+        if($estadoSalida == 0 ) {
+            $dql .= " AND ha.estadoSalida = 0";
         }
         if ($strDesde != ""){
-            $dql .= " AND ha.fechaEntrada >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
+            $dql .= " AND ha.fechaEntrada >='" . date_format($strDesde, ('Y-m-d')) . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND ha.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
-        }
-        $dql .= " ORDER BY ha.fechaEntrada";
-        return $dql;
-    }
-    
-    public function listaNoRegistradosDql($strIdentificacion = "", $strNombre = "", $strDesde = "", $strHasta = "") {        
-        $em = $this->getEntityManager();
-        $dql   = "SELECT ha,e FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha JOIN ha.empleadoRel e WHERE ha.codigoHorarioAccesoPk <> 0 AND ha.estadoSalida = 0";   
-        if($strIdentificacion != "") {
-            $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
-        }   
-        if($strNombre != "" ) {
-            $dql .= " AND e.nombreCorto LIKE '%". $strNombre . "%'";
-        }
-        if ($strDesde != ""){
-            $dql .= " AND ha.fechaEntrada >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
-        }
-        if($strHasta != "") {
-            $dql .= " AND ha.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
+            $dql .= " AND ha.fechaEntrada <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         $dql .= " ORDER BY ha.fechaEntrada";
         return $dql;

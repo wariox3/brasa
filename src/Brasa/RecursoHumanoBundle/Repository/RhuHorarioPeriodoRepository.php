@@ -26,8 +26,9 @@ class RhuHorarioPeriodoRepository extends EntityRepository {
         $arHorarioPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioPeriodo();
         $arHorarioPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->find($codigoHorarioPeriodo);
         
-        
-        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
+        $arHorariosPeriodos = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->findOneBy(array('estadoGenerado' => 1, 'estadoCerrado' => 0));
+        if ($arHorariosPeriodos == null){
+            $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                     . "WHERE c.codigoContratoPk <> 0 "
                     . " AND (c.fechaHasta <= '" . $arHorarioPeriodo->getPeriodo()->format('Y-m-d') . "' "
                     . " OR c.indefinido = 1)";            
@@ -42,6 +43,22 @@ class RhuHorarioPeriodoRepository extends EntityRepository {
             $arHorarioPeriodo->setEstadoGenerado(1);
             $em->persist($arHorarioPeriodo);
             $em->flush();
+        } else {
+            $strMensaje = "Hay periodos pendientes por cerrar";
+        }
+        
+        
         return $strMensaje;    
-    }    
+    }   
+    
+    public function cerrar($codigoHorarioPeriodo) {
+        $em = $this->getEntityManager(); 
+        $strMensaje = "";
+        $arHorarioPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioPeriodo();
+        $arHorarioPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->find($codigoHorarioPeriodo);
+        $arHorarioPeriodo->setEstadoCerrado(1);
+        $em->persist($arHorarioPeriodo);
+        $em->flush();
+        return $strMensaje;    
+    } 
 }

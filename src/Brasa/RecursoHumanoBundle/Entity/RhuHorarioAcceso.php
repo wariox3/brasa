@@ -43,6 +43,11 @@ class RhuHorarioAcceso
     private $duracionRegistro;
     
     /**     
+     * @ORM\Column(name="estado_entrada", type="boolean")
+     */    
+    private $estadoEntrada = FALSE;
+    
+    /**     
      * @ORM\Column(name="estado_salida", type="boolean")
      */    
     private $estadoSalida = FALSE;
@@ -228,6 +233,30 @@ class RhuHorarioAcceso
     public function getDuracionRegistro()
     {
         return $this->duracionRegistro;
+    }
+
+    /**
+     * Set estadoEntrada
+     *
+     * @param boolean $estadoEntrada
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setEstadoEntrada($estadoEntrada)
+    {
+        $this->estadoEntrada = $estadoEntrada;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoEntrada
+     *
+     * @return boolean
+     */
+    public function getEstadoEntrada()
+    {
+        return $this->estadoEntrada;
     }
 
     /**

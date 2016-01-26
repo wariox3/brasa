@@ -794,13 +794,9 @@ brs_rhu_consultas_examen_cobrar:
     path:     /rhu/consultas/examen/cobrar
     defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasExamenesCobrar:lista }
     
-brs_rhu_consultas_control_acceso_empleados_registrados:    
-    path:     /rhu/consultas/control/acceso/empleado/registrados
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasControlAccesosEmpleados:Registrados }
-    
-brs_rhu_consultas_control_acceso_empleados_noregistrados:    
-    path:     /rhu/consultas/control/acceso/empleado/noregistrados
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasControlAccesosEmpleados:NoRegistrados }
+brs_rhu_consultas_control_acceso_empleados:    
+    path:     /rhu/consultas/control/acceso/empleado
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasControlAccesosEmpleados:lista }
     
 brs_rhu_consultas_control_acceso_visitantes:    
     path:     /rhu/consultas/control/acceso/visitantes
