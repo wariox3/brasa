@@ -35,7 +35,7 @@ class ConsultasServiciosDetallesController extends Controller
                 $this->generarExcel();
             }
         }
-        $arServiciosDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arServiciosDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Consultas/Servicio:detalle.html.twig', array(
             'arServiciosDetalles' => $arServiciosDetalles,
             'form' => $form->createView()));

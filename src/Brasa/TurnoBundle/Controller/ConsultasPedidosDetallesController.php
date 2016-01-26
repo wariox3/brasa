@@ -30,7 +30,7 @@ class ConsultasPedidosDetallesController extends Controller
             }
         }
         
-        $arPedidosDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arPedidosDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
         return $this->render('BrasaTurnoBundle:Consultas/Pedido:detalle.html.twig', array(
             'arPedidosDetalles' => $arPedidosDetalles,
             'form' => $form->createView()));

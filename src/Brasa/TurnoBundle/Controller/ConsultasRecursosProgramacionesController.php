@@ -27,7 +27,7 @@ class ConsultasRecursosProgramacionesController extends Controller
             }
         }
 
-        $arProgramacionDetalle = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arProgramacionDetalle = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Consultas/Recurso:programacion.html.twig', array(
             'arProgramacionDetalle' => $arProgramacionDetalle,
             'form' => $form->createView()));

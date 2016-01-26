@@ -32,7 +32,7 @@ class ConsultasServiciosDetallesRecursosController extends Controller
                 $this->generarExcel();
             }
         }
-        $arServiciosDetallesRecursos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arServiciosDetallesRecursos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Consultas/Servicio:detalleRecurso.html.twig', array(
             'arServiciosDetallesRecursos' => $arServiciosDetallesRecursos,
             'arCliente' => $arCliente,
