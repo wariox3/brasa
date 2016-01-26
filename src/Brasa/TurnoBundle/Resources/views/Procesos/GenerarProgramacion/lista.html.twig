@@ -31,6 +31,7 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>{{ knp_pagination_sortable(arPedidos, 'CÓDIGO', 'p.codigoPedidoPk') }}</th>
+                <th>NUMERO</th>
                 <th>FECHA</th>
                 <th>CLIENTE</th>
                 <th>SECTOR</th>                
@@ -45,6 +46,7 @@
             {% for arPedidos in arPedidos %}
             <tr>                
                 <td>{{ arPedidos.codigoPedidoPk  }}</td>  
+                <td>{{ arPedidos.numero  }}</td>  
                 <td>{{ arPedidos.fecha |date("Y F")  }}</td>                
                 <td>{{ arPedidos.clienteRel.nombreCorto  }}</td>  
                 <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td>
