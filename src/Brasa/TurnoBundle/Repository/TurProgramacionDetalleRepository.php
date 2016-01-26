@@ -452,7 +452,11 @@ class TurProgramacionDetalleRepository extends EntityRepository {
     }    
 
     private function devuelvePosicionInicialMatrizPlantilla($strAnio, $intPosiciones, $strFechaHasta, $dateFechaDesde) {
-        $intPos = 1;        
+        if($intPosiciones == 0) {
+            $intPosiciones = 1;
+        }
+        $intPos = 1;      
+        
         $dateFechaHasta = date_create($strFechaHasta);
         //$strFecha = $strAnio."/01/1";
         $strFecha = $dateFechaDesde->format('Y/m/j');

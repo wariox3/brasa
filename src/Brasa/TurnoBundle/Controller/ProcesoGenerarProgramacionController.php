@@ -15,6 +15,26 @@ class ProcesoGenerarProgramacionController extends Controller
         $form->handleRequest($request);
         $this->lista();
         if ($form->isValid()) {
+            if($request->request->get('OpGenerar')) {
+                $codigoPedido = $request->request->get('OpGenerar');
+                $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+                $arPedido =  $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);                    
+                
+                $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
+                $arProgramacion->setClienteRel($arPedido->getClienteRel());
+                $arProgramacion->setFecha($arPedido->getFechaProgramacion());
+                $em->persist($arProgramacion); 
+                $arPedido->setEstadoProgramado(true);
+                $em->persist($arPedido);
+                
+                $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                $arPedidoDetalles =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido)); 
+                foreach ($arPedidoDetalles as $arPedidoDetalle) {
+                    $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($arPedidoDetalle->getCodigoPedidoDetallePk(), $arProgramacion);
+                }                
+                $em->flush();               
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_programacion_lista')); 
+            }    
             if ($form->get('BtnGenerar')->isClicked()) { 
                 $dateFecha = $form->get('fecha')->getData();
                 $strAnioMes = $dateFecha->format('Y/m');
