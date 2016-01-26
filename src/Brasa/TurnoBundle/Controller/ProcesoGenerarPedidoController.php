@@ -87,7 +87,7 @@ class ProcesoGenerarPedidoController extends Controller
             }
         }
         
-        $arServicios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arServicios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Procesos/GenerarPedido:lista.html.twig', array(
             'arServicios' => $arServicios, 
             'form' => $form->createView()));

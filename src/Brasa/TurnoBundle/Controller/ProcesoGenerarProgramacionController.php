@@ -50,7 +50,7 @@ class ProcesoGenerarProgramacionController extends Controller
             }
         }
         
-        $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Procesos/GenerarProgramacion:lista.html.twig', array(
             'arPedidos' => $arPedidos, 
             'form' => $form->createView()));
