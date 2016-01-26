@@ -37,19 +37,21 @@
                 <th>H</th>
                 <th>H.D</th>
                 <th>H.N</th>
-                <th>VALOR</th>                
+                <th>VALOR</th> 
+                <th>AUT</th> 
                 <th></th>
             </tr>
             {% for arPedidos in arPedidos %}
             <tr>                
                 <td>{{ arPedidos.codigoPedidoPk  }}</td>  
-                <td>{{ arPedidos.fecha |date("Y/m/d")  }}</td>                
+                <td>{{ arPedidos.fecha |date("Y F")  }}</td>                
                 <td>{{ arPedidos.clienteRel.nombreCorto  }}</td>  
                 <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td>
                 <td style="text-align: right">{{ arPedidos.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.vrTotal | number_format(0, '.', ',') }}</td>                                
+                <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
             </tr>
             

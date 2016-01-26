@@ -6,8 +6,20 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPedidoRepository extends EntityRepository {
     
-    public function listaDql() {
+    public function listaDql($numeroPedido = "", $codigoCliente = "", $boolEstadoAutorizado = "") {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.codigoPedidoPk <> 0";
+        if($numeroPedido != "") {
+            $dql .= " AND p.numero = " . $numeroPedido;  
+        }        
+        if($codigoCliente != "") {
+            $dql .= " AND p.codigoClienteFk = " . $codigoCliente;  
+        }    
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND p.estadoAutorizado = 1";
+        }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND p.estadoAutorizado = 0";
+        }        
         return $dql;
     }
     
@@ -17,7 +29,7 @@ class TurPedidoRepository extends EntityRepository {
     }    
     
     public function pedidoSinProgramarDql($strFechaDesde = '', $strFechaHasta = '') {
-        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.estadoProgramado = 0 AND p.estadoAutorizado = 1";
+        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.estadoProgramado = 0 AND p.estadoAutorizado = 1 AND p.estadoAnulado = 0 ";
 
         if($strFechaDesde != '') {
             $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  

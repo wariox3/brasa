@@ -9,7 +9,9 @@ use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleRecursoType;
 class MovimientoPedidoController extends Controller
 {
     var $strListaDql = "";    
-    var $codigoPedido = "";    
+    var $numeroPedido = "";
+    var $codigoCliente = "";
+    var $estadoAutorizado = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -18,7 +20,15 @@ class MovimientoPedidoController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {            
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        if ($form->isValid()) { 
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {                
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
+                if($arCliente) {
+                    $this->codigoCliente = $arCliente->getCodigoClientePk();
+                }
+            }            
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurPedido')->eliminar($arrSeleccionados);
@@ -36,9 +46,10 @@ class MovimientoPedidoController extends Controller
             }
         }
 
-        $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 50);
         return $this->render('BrasaTurnoBundle:Movimientos/Pedido:lista.html.twig', array(
             'arPedidos' => $arPedidos,
+            'arCliente' => $arCliente,
             'form' => $form->createView()));
     }
 
@@ -425,18 +436,20 @@ class MovimientoPedidoController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL($this->codigoPedido);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL($this->numeroPedido, $this->codigoCliente, $this->estadoAutorizado);
     }    
 
     private function filtrar ($form) {                
-        $this->codigoPedido = $form->get('TxtCodigo')->getData();
+        $this->numeroPedido = $form->get('TxtNumero')->getData();
+        $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido))            
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numeroPedido))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

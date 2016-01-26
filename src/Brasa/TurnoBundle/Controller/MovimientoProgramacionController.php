@@ -7,7 +7,9 @@ use Brasa\TurnoBundle\Form\Type\TurProgramacionType;
 class MovimientoProgramacionController extends Controller
 {
     var $strListaDql = "";
-    var $codigoProgramacion = "";
+    var $numeroProgramacion = "";
+    var $codigoCliente = "";
+    var $estadoAutorizado = "";
 
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -16,7 +18,15 @@ class MovimientoProgramacionController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         if ($form->isValid()) {
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {                
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
+                if($arCliente) {
+                    $this->codigoCliente = $arCliente->getCodigoClientePk();
+                }
+            }             
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurProgramacion')->eliminar($arrSeleccionados);
@@ -36,6 +46,7 @@ class MovimientoProgramacionController extends Controller
         $arProgramaciones = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:lista.html.twig', array(
             'arProgramaciones' => $arProgramaciones,
+            'arCliente' => $arCliente,
             'form' => $form->createView()));
     }
 
@@ -226,17 +237,20 @@ class MovimientoProgramacionController extends Controller
 
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacion')->listaDQL($this->codigoProgramacion);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacion')->listaDQL(
+                $this->numeroProgramacion, $this->codigoCliente, $this->estadoAutorizado);
     }
 
     private function filtrar ($form) {
-        $this->codigoProgramacion = $form->get('TxtCodigo')->getData();
+        $this->numeroPedido = $form->get('TxtNumero')->getData();
+        $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
     }
 
     private function formularioFiltro() {
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroIdentificacion')))
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numeroProgramacion))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

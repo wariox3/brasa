@@ -15,12 +15,37 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-                <div class="form-group form-group-sm">
-                    <label for="form_TxtCodigo" class="col-sm-2 control-label">Codigo:</label>
+                <div     class="form-group form-group-sm">
+                    <label for="txtNit" class="col-sm-2 control-label">Cliente:</label>
                     <div class="col-sm-10">
-                        {{ form_widget(form.TxtCodigo, { 'attr': {'class': 'form-control'} }) }}
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="input-group">
+                              <input id="txtNit"  name="txtNit"  type="text" class="form-control" value="{{ arCliente.nit |default('') }}"/>
+                            </div>
+                          </div>
+                          <div class="col-lg-10">
+                            <div class="input-group">                                      
+                              <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arCliente.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                              <span class="input-group-btn">                                        
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_cliente', { 'campoCodigo': 'txtNit', 'campoNombre': 'txtNombreCorto' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                     </div>
-                </div>
+                </div>                
+                    
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtNumero" class="col-sm-2 control-label">Numero:</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <label for="form_estadoAutorizado" class="col-sm-2 control-label">Autorizado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoAutorizado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div> 
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -33,6 +58,8 @@
                 <th>{{ knp_pagination_sortable(arProgramaciones, 'CÓDIGO', 'p.codigoProgramacionPk') }}</th>
                 <th>FECHA</th>
                 <th>CLIENTE</th>
+                <th>AUT</th>
+                <th>ANU</th>                
                 <th></th>
                 <th></th>
                 <th></th>
@@ -41,7 +68,9 @@
             <tr>                
                 <td>{{ arProgramaciones.codigoProgramacionPk  }}</td>
                 <td>{{ arProgramaciones.fecha |date("Y F")  }}</td>
-                <td>{{ arProgramaciones.clienteRel.nombreCorto  }}</td>                               
+                <td>{{ arProgramaciones.clienteRel.nombreCorto  }}</td>  
+                <td>{% if arProgramaciones.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                                
+                <td>{% if arProgramaciones.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td style="text-align: center"><a href="{{ path('brs_tur_programacion_nuevo', {'codigoProgramacion': arProgramaciones.codigoProgramacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_programacion_detalle', { 'codigoProgramacion': arProgramaciones.codigoProgramacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramaciones.codigoProgramacionPk }}" /></td>

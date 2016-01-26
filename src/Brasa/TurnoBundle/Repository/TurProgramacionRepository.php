@@ -6,11 +6,20 @@ use Doctrine\ORM\EntityRepository;
 
 class TurProgramacionRepository extends EntityRepository {
     
-    public function listaDQL($codigoProgramacion) {
+    public function listaDQL($numeroProgramacion = "", $codigoCliente = "", $boolEstadoAutorizado = "") {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurProgramacion p WHERE p.codigoProgramacionPk <> 0";
-        if($codigoProgramacion != "") {
-            $dql = $dql . " AND p.codigoProgramacionPk = " . $codigoProgramacion;
+        if($numeroProgramacion != "") {
+            $dql .= " AND p.numero = " . $numeroProgramacion;  
+        }        
+        if($codigoCliente != "") {
+            $dql .= " AND p.codigoClienteFk = " . $codigoCliente;  
+        }    
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND p.estadoAutorizado = 1";
         }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND p.estadoAutorizado = 0";
+        } 
         return $dql;
     }    
     

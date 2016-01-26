@@ -18,6 +18,11 @@ class TurProgramacion
     private $codigoProgramacionPk;             
     
     /**
+     * @ORM\Column(name="numero", type="integer")
+     */    
+    private $numero = 0;    
+    
+    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;    
@@ -46,6 +51,11 @@ class TurProgramacion
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
     private $estadoAprobado = false;    
+    
+    /**     
+     * @ORM\Column(name="estado_anulado", type="boolean")
+     */    
+    private $estadoAnulado = false;    
     
     /**
      * @ORM\Column(name="horas", type="integer")
@@ -335,5 +345,53 @@ class TurProgramacion
     public function getMes()
     {
         return $this->mes;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return TurProgramacion
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    /**
+     * Set estadoAnulado
+     *
+     * @param boolean $estadoAnulado
+     *
+     * @return TurProgramacion
+     */
+    public function setEstadoAnulado($estadoAnulado)
+    {
+        $this->estadoAnulado = $estadoAnulado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulado
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulado()
+    {
+        return $this->estadoAnulado;
     }
 }
