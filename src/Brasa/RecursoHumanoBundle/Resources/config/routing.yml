@@ -888,7 +888,23 @@ brs_rhu_proceso_contabilizar_pago_banco:
     
 brs_rhu_proceso_soporte_pago_horario:
     path:     /rhu/proceso/soporte/pago/horario
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarSoportePagoHorario:generar }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarSoportePagoHorario:generar } 
+    
+brs_rhu_proceso_control_acceso_horario_periodo_listar:
+    path:     /rhu/proceso/control/acceso/periodo/horario/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarHorarioPeriodo:listar }
+    
+brs_rhu_proceso_control_acceso_horario_periodo_nuevo:
+    path:     /rhu/proceso/control/acceso/periodo/horario/nuevo/{codigoHorarioPeriodo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarHorarioPeriodo:nuevo }
+    
+brs_rhu_proceso_control_acceso_horario_periodo_generar:
+    path:     /rhu/proceso/control/acceso/periodo/horario/nuevo/{codigoHorarioPeriodo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarHorarioPeriodo:generar }
+    
+brs_rhu_proceso_control_acceso_horario_periodo_cerrar:
+    path:     /rhu/proceso/control/acceso/periodo/horario/nuevo/{codigoHorarioPeriodo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarHorarioPeriodo:cerrar }    
     
 brs_rhu_requisito_nuevo:
     path:     /rhu/requisito/nuevo/{codigoRequisito}
