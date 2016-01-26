@@ -25,7 +25,7 @@ class RhuHorarioPeriodoRepository extends EntityRepository {
         $strMensaje = "";
         $arHorarioPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioPeriodo();
         $arHorarioPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->find($codigoHorarioPeriodo);
-        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
+        
         
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                     . "WHERE c.codigoContratoPk <> 0 "
@@ -35,6 +35,7 @@ class RhuHorarioPeriodoRepository extends EntityRepository {
             $query = $em->createQuery($dql);
             $arContratos = $query->getResult();
             foreach ($arContratos as $arContrato) {
+                $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
                 $arHorarioAcceso->setEmpleadoRel($arContrato->getEmpleadoRel());
                 $em->persist($arHorarioAcceso);
             }
