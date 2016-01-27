@@ -15,8 +15,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
     var $centroCosto = "";
     var $cargo = "";
     var $departamentoEmpresa = "";
-    var $registrado = "";
-    var $salida = "";
+    var $registrado = "2";
+    var $salida = "2";
     var $fechaDesde = "";
     var $fechaHasta = "";
     
@@ -58,8 +58,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
             $this->departamentoEmpresa,
             $this->registrado,
             $this->salida,
-            $this->fechaDesde,    
-            $this->fechaDesde);
+            $this->fechaDesde,
+            $this->fechaHasta);
     }       
     
     private function formularioLista() {
@@ -101,7 +101,7 @@ class ConsultasControlAccesosEmpleadosController extends Controller
             ->add('estadoEntrada', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))
             ->add('estadoSalida', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))
             ->add('fechaDesde','date', array('data' => new \DateTime('now'), 'format' => 'yyyy-MM-dd'))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
+            ->add('fechaHasta','date', array('data' => new \DateTime('now'), 'format' => 'yyyy-MM-dd'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -152,6 +152,7 @@ class ConsultasControlAccesosEmpleadosController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'NRO')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
@@ -164,10 +165,11 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                     ->setCellValue('I1', 'HORA SALIDA')
                     ->setCellValue('J1', 'DURACIÓN REGISTRO')
                     ->setCellValue('K1', 'COMENTARIOS');
+        
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
-        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
+        //$arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
         $arHorarioAcceso = $query->getResult();
         $j = 1;
         foreach ($arHorarioAcceso as $arHorarioAcceso) {

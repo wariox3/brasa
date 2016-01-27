@@ -122,10 +122,10 @@ class RhuHorarioAccesoRepository extends EntityRepository {
             $dql .= " AND ha.estadoSalida = 0";
         }
         if ($strDesde != ""){
-            $dql .= " AND ha.fechaEntrada >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND ha.fechaEntrada >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
         }
         if($strHasta != "") {
-            $dql .= " AND ha.fechaEntrada <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND ha.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
         }
         $dql .= " ORDER BY ha.fechaEntrada";
         return $dql;

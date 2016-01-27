@@ -38,6 +38,7 @@ class RhuHorarioPeriodoRepository extends EntityRepository {
             foreach ($arContratos as $arContrato) {
                 $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
                 $arHorarioAcceso->setEmpleadoRel($arContrato->getEmpleadoRel());
+                $arHorarioAcceso->setFechaEntrada($arHorarioPeriodo->getPeriodo());
                 $em->persist($arHorarioAcceso);
             }
             $arHorarioPeriodo->setEstadoGenerado(1);
