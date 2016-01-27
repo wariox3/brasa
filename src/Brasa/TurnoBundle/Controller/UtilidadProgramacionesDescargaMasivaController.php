@@ -19,51 +19,46 @@ class UtilidadProgramacionesDescargaMasivaController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnGenerar')->isClicked()) {                
-                    
-                        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-                        $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                        $strRutaGeneral = $arConfiguracion->getRutaTemporal();
-                        if(!file_exists($strRutaGeneral)) {
-                            mkdir($strRutaGeneral, 0777);
-                        }           
-                        $arProgramaciones = new \Brasa\TurnoBundle\Entity\TurProgramacion();
-                        $strDql = $em->getRepository('BrasaTurnoBundle:RhuPago')->
-                        //$arPagos = new \Brasa\TurnoBundle\Entity\RhuPago();
-                        //$arPagos = $em->getRepository('BrasaTurnoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacion));
-                        /*$strRuta = $strRutaGeneral . "ProgramacionesTurno" . $codigoProgramacion . "/";
-                        if(!file_exists($strRuta)) {
-                            mkdir($strRuta, 0777);
-                        }
-                        foreach ($arPagos as $arPago) {                                        
-                            $objFormatoPago = new \Brasa\TurnoBundle\Formatos\FormatoPago();
-                            $objFormatoPago->Generar($this, $arPago->getCodigoPagoPk(), $strRuta);
-                        }            
-                        $strRutaZip = $strRutaGeneral . 'ProgramacionesTurno' . $codigoProgramacion . '.zip';
-                        $this->comprimir($strRuta, $strRutaZip);                                                
-                        $dir = opendir($strRuta);                
-                        while ($current = readdir($dir)){
-                            if( $current != "." && $current != "..") {
-                                unlink($strRuta . $current);
-                            }                    
-                        } 
-                        rmdir($strRuta);
-
-                        // Generate response
-                        $response = new Response();
-
-                        // Set headers
-                        $response->headers->set('Cache-Control', 'private');
-                        $response->headers->set('Content-type', 'application/zip');
-                        $response->headers->set('Content-Transfer-Encoding', 'binary');                
-                        $response->headers->set('Content-Disposition', 'attachment; filename="ComprobantesPago' . $codigoProgramacion . '.zip";');
-                        //$response->headers->set('Content-length', '');        
-                        $response->sendHeaders();
-                        $response->setContent(readfile($strRutaZip));    
-                        unlink($strRutaZip);    
-                         * 
-                         */                    
-                                         
-                   
+                $dateFechaDesde = $form->get('fechaDesde')->getData();
+                $dateFechaHasta = $form->get('fechaHasta')->getData();
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                $strRutaGeneral = $arConfiguracion->getRutaTemporal();
+                if(!file_exists($strRutaGeneral)) {
+                    mkdir($strRutaGeneral, 0777);
+                }           
+                $arProgramaciones = new \Brasa\TurnoBundle\Entity\TurProgramacion();
+                $strDql = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->listaDql("", "", "", $dateFechaDesde->format('Y/m/d'), $dateFechaHasta->format('Y/m/d'));
+                $query = $em->createQuery($strDql);
+                $arProgramaciones = $query->getResult();
+                $strRuta = $strRutaGeneral . "ProgramacionesTurno/";
+                if(!file_exists($strRuta)) {
+                    mkdir($strRuta, 0777);
+                }
+                foreach ($arProgramaciones as $arProgramacion) {                                        
+                    $objFormatoProgramacion = new \Brasa\TurnoBundle\Formatos\FormatoProgramacion();
+                    $objFormatoProgramacion->Generar($this, $arProgramacion->getCodigoProgramacionPk(), $strRuta);
+                }            
+                $strRutaZip = $strRutaGeneral . 'ProgramacionesTurno.zip';
+                $this->comprimir($strRuta, $strRutaZip);                                                
+                $dir = opendir($strRuta);                
+                while ($current = readdir($dir)){
+                    if( $current != "." && $current != "..") {
+                        unlink($strRuta . $current);
+                    }                    
+                } 
+                rmdir($strRuta);
+                
+                $strArchivo = $strRutaZip;
+                header('Content-Description: File Transfer');
+                header('Content-Type: text/csv; charset=ISO-8859-15');
+                header('Content-Disposition: attachment; filename='.basename($strArchivo));
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($strArchivo));
+                readfile($strArchivo);                               
+                unlink($strRutaZip);                                                                
             }            
         }                    
         return $this->render('BrasaTurnoBundle:Utilidades/Programaciones:descargaMasiva.html.twig', array(            

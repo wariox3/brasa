@@ -49,6 +49,11 @@ class TurRecurso
     private $pagoVariable = false;                
     
     /**
+     * @ORM\Column(name="apodo", type="string", length=80, nullable=true)
+     */    
+    private $apodo;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;     
@@ -498,5 +503,29 @@ class TurRecurso
     public function getServiciosDetallesRecursosRecursoRel()
     {
         return $this->serviciosDetallesRecursosRecursoRel;
+    }
+
+    /**
+     * Set apodo
+     *
+     * @param string $apodo
+     *
+     * @return TurRecurso
+     */
+    public function setApodo($apodo)
+    {
+        $this->apodo = $apodo;
+
+        return $this;
+    }
+
+    /**
+     * Get apodo
+     *
+     * @return string
+     */
+    public function getApodo()
+    {
+        return $this->apodo;
     }
 }

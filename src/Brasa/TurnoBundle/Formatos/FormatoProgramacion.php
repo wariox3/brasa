@@ -5,7 +5,7 @@ class FormatoProgramacion extends \FPDF_FPDF {
     
     public static $codigoProgramacion;
     
-    public function Generar($miThis, $codigoProgramacion) {        
+    public function Generar($miThis, $codigoProgramacion, $strRuta = "") {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
@@ -15,8 +15,12 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
-
-        $pdf->Output("Programacion$codigoProgramacion.pdf", 'D');        
+        if($strRuta == "") {
+            $pdf->Output("Programacion$codigoProgramacion.pdf", 'D');                
+        } else {
+            $pdf->Output($strRuta."Programacion$codigoProgramacion.pdf", 'F');        
+        }
+        
         
     } 
     
@@ -161,8 +165,16 @@ class FormatoProgramacion extends \FPDF_FPDF {
                 
         foreach ($arProgramacionDetalles as $arProgramacionDetalle) {                                       
             $pdf->Cell(10, 4, $arProgramacionDetalle->getCodigoProgramacionDetallePk(), 1, 0, 'L');
-            $pdf->Cell(30, 4, substr($arProgramacionDetalle->getRecursoRel()->getNombreCorto(), 0,17), 1, 0, 'L');
-            $pdf->Cell(30, 4, substr($arProgramacionDetalle->getPuestoRel()->getNombre(), 0, 17), 1, 0, 'L');
+            if($arProgramacionDetalle->getCodigoRecursoFk()) {
+                $pdf->Cell(30, 4, substr($arProgramacionDetalle->getRecursoRel()->getNombreCorto(), 0,17), 1, 0, 'L');
+            } else {
+                $pdf->Cell(30, 4, "", 1, 0, 'L');
+            }
+            if($arProgramacionDetalle->getCodigoPuestoFk()) {
+                $pdf->Cell(30, 4, substr($arProgramacionDetalle->getPuestoRel()->getNombre(), 0, 17), 1, 0, 'L');
+            } else {
+                $pdf->Cell(30, 4, "", 1, 0, 'L');
+            }            
             
             $pdf->Cell(5, 4, $arProgramacionDetalle->getDia1(), 1, 0, 'L');
             $pdf->Cell(5, 4, $arProgramacionDetalle->getDia2(), 1, 0, 'L');
@@ -208,12 +220,14 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $arrTurnos = $this->turnos($arProgramacionDetalles);        
         foreach ($arrTurnos as $arrTurno) {
             $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
-            $arTurno = self::$em->getRepository('BrasaTurnoBundle:TurTurno')->find($arrTurno['turno']);            
-            $pdf->Cell(15, 4, $arrTurno['turno'], 1, 0, 'L');
-            $pdf->Cell(30, 4, $arTurno->getNombre(), 1, 0, 'L');
-            $pdf->Cell(15, 4, $arTurno->getHoraDesde()->format('H:s'), 1, 0, 'L');
-            $pdf->Cell(15, 4, $arTurno->getHoraHasta()->format('H:s'), 1, 0, 'L');
-            $pdf->Ln();
+            $arTurno = self::$em->getRepository('BrasaTurnoBundle:TurTurno')->find($arrTurno['turno']);  
+            if(count($arTurno) > 0) {
+                $pdf->Cell(15, 4, $arrTurno['turno'], 1, 0, 'L');
+                $pdf->Cell(30, 4, $arTurno->getNombre(), 1, 0, 'L');
+                $pdf->Cell(15, 4, $arTurno->getHoraDesde()->format('H:s'), 1, 0, 'L');
+                $pdf->Cell(15, 4, $arTurno->getHoraHasta()->format('H:s'), 1, 0, 'L');
+                $pdf->Ln();                
+            }
         }
     }
 

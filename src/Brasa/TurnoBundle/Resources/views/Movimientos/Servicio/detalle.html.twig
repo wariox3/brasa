@@ -132,7 +132,7 @@
                     <td>{{ arServicioDetalle.conceptoServicioRel.nombre  }}</td>                    
                     <td>{{ arServicioDetalle.modalidadServicioRel.nombre  }}</td>                    
                     <td>{{ arServicioDetalle.periodoRel.nombre  }}</td>
-                    <td>{{ arServicioDetalle.plantillaRel.nombre | default('')  }}</td>
+                    <td>{% if arServicioDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arServicioDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arServicioDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arServicioDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
                     {% if arServicio.estadoAutorizado == 0 %}                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.diaDesde  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.diaHasta  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        

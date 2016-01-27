@@ -40,7 +40,8 @@
                 <th>{{ knp_pagination_sortable(arRecursos, 'CÓDIGO', 'p.codigoRecursoPk') }}</th>
                 <th>TIPO</th>
                 <th>IDENTIFICACION</th>
-                <th>NOMBRE</th>                
+                <th>NOMBRE</th>
+                <th>APODO</th>
                 <th>P.PROMEDIO</th>
                 <th>P.VARIABLE</th>
                 <th></th>
@@ -51,7 +52,8 @@
                 <td>{{ arRecursos.codigoRecursoPk  }}</td>                               
                 <td>{{ arRecursos.recursoTipoRel.nombre |default('') }}</td>                
                 <td>{{ arRecursos.numeroIdentificacion }}</td>                
-                <td>{{ arRecursos.nombreCorto }}</td>                
+                <td>{{ arRecursos.nombreCorto }}</td>   
+                <td>{{ arRecursos.apodo }}</td> 
                 <td>{% if arRecursos.pagoPromedio == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arRecursos.pagoVariable == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_recurso_nuevo', {'codigoRecurso': arRecursos.codigoRecursoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                

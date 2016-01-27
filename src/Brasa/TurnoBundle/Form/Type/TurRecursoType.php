@@ -19,7 +19,8 @@ class TurRecursoType extends AbstractType
             ->add('numeroIdentificacion', 'text', array('required' => true))                             
             ->add('nombreCorto', 'text', array('required' => true))                  
             ->add('pagoPromedio', 'checkbox', array('required'  => false))                
-            ->add('pagoVariable', 'checkbox', array('required'  => false))                
+            ->add('pagoVariable', 'checkbox', array('required'  => false))           
+            ->add('apodo', 'text', array('required' => false))                  
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

@@ -44,14 +44,16 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arRecursos, 'CÓDIGO', 'e.codigoRecursoPk') }}</th>
                 <th>NIT</th>
-                <th>{{ knp_pagination_sortable(arRecursos, 'NOMBRE', 'e.nombreCorto') }}</th>                                                
+                <th>{{ knp_pagination_sortable(arRecursos, 'NOMBRE', 'e.nombreCorto') }}</th>
+                <th>{{ knp_pagination_sortable(arRecursos, 'NOMBRE', 'e.apodo') }}</th>
                 <th></th>
             </tr>
             {% for arRecursos in arRecursos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arRecursos.codigoRecursoPk }}">{{ arRecursos.codigoRecursoPk }} </td>
                 <td>{{ arRecursos.numeroIdentificacion  }}</td>
-                <td>{{ arRecursos.nombreCorto }}</td>                                                
+                <td>{{ arRecursos.nombreCorto }}</td>
+                <td>{{ arRecursos.apodo }}</td>
                 <td style="text-align: center"><a href="javascript:selTercero('{{ arRecursos.numeroIdentificacion }}','{{ arRecursos.nombreCorto }}','{{ campoCodigo }}','{{ campoNombre }}')" ><img src="{{ asset('imagenes/bootstrap/glyphicons_198_ok.png') }}" width=20 height=20></a></td>                                
             </tr>
             {% endfor %} 

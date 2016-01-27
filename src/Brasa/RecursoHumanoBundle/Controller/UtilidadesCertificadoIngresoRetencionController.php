@@ -156,19 +156,16 @@ class UtilidadesCertificadoIngresoRetencionController extends Controller
                                     } 
                                     rmdir($strRuta);
                                     
-                                    
-                                    // Generate response
-                                    $response = new Response();                                                                        
-                                    // Set headers
-                                    $response->headers->set('Cache-Control', 'private');
-                                    $response->headers->set('Content-type', 'application/zip');
-                                    $response->headers->set('Content-Transfer-Encoding', 'binary');                
-                                    $response->headers->set('Content-Disposition', 'attachment; filename="Certificado.zip"');
-                                    //$response->headers->set('Content-length', '');        
-                                    $response->sendHeaders();
-                                    $response->setContent(readfile($strRutaZip));    
-                                    unlink($strRutaZip);     
-                                    
+                                    $strArchivo = $strRutaZip;
+                                    header('Content-Description: File Transfer');
+                                    header('Content-Type: text/csv; charset=ISO-8859-15');
+                                    header('Content-Disposition: attachment; filename='.basename($strArchivo));
+                                    header('Expires: 0');
+                                    header('Cache-Control: must-revalidate');
+                                    header('Pragma: public');
+                                    header('Content-Length: ' . filesize($strArchivo));
+                                    readfile($strArchivo);                               
+                                    unlink($strRutaZip);                                     
                                     
                     }
                     
