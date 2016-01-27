@@ -81,9 +81,12 @@ class ProcesoGenerarProgramacionController extends Controller
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->pedidoSinProgramarDql();
     }
     
-    private function formularioLista() {                
+    private function formularioLista() {
+        $dateDia = new \DateTime('now');
+        $strDia = $dateDia->format('Y/m/') . "01";
+        $dateDia = date_create($strDia);
         $form = $this->createFormBuilder()
-            ->add('fecha', 'date', array('data'  => new \DateTime('now'), 'format' => 'y MMMM d'))
+            ->add('fecha', 'date', array('data'  => $dateDia, 'format' => 'y MMMM d'))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->getForm();

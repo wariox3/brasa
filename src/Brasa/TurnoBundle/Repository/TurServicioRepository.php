@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TurServicioRepository extends EntityRepository {
     
-    public function listaDql($codigoServicio = "", $codigoCliente = "", $boolEstadoAutorizado = "") {
+    public function listaDql($codigoServicio = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoCerrado = "") {
         $dql   = "SELECT s FROM BrasaTurnoBundle:TurServicio s WHERE s.codigoServicioPk <> 0 ";
         if($codigoCliente != "") {
             $dql .= " AND s.codigoClienteFk = " . $codigoCliente;  
@@ -16,7 +16,14 @@ class TurServicioRepository extends EntityRepository {
         }
         if($boolEstadoAutorizado == "0") {
             $dql .= " AND s.estadoAutorizado = 0";
-        }        
+        }      
+        
+        if($boolEstadoCerrado == 1 ) {
+            $dql .= " AND s.estadoCerrado = 1";
+        }
+        if($boolEstadoCerrado == "0") {
+            $dql .= " AND s.estadoCerrado = 0";
+        }         
         return $dql;
     }
     

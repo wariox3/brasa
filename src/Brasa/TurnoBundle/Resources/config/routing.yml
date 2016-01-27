@@ -225,6 +225,10 @@ brs_tur_proceso_generar_pedido_lista:
 brs_tur_utilidad_aplicar_novedad:    
     path:     /tur/utilidad/aplicar/novedad
     defaults: { _controller: BrasaTurnoBundle:UtilidadAplicarNovedad:lista }     
+
+brs_tur_utilidad_programacion_descarga_masiva:    
+    path:     /tur/utilidad/programacion/descarga/masiva
+    defaults: { _controller: BrasaTurnoBundle:UtilidadProgramacionesDescargaMasiva:lista }    
     
 brs_tur_buscar_cliente:
     pattern:  /tur/buscar/cliente/{campoCodigo}/{campoNombre}

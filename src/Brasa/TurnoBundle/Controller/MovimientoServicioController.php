@@ -126,6 +126,14 @@ class MovimientoServicioController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
                 }
+            }  
+            if($form->get('BtnCerrar')->isClicked()) {            
+                if($arServicio->getEstadoAutorizado() == 1) {
+                    $arServicio->setEstadoCerrado(1);
+                    $em->persist($arServicio);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
+                }
             }            
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
@@ -369,7 +377,8 @@ class MovimientoServicioController extends Controller
     }
 
     private function formularioDetalle($ar) {        
-        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);  
+        $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => true);  
         $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => true);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
@@ -381,6 +390,7 @@ class MovimientoServicioController extends Controller
             $arrBotonAprobar['disabled'] = false;            
             $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
+            $arrBotonCerrar['disabled'] = false;  
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonImprimir['disabled'] = true;
@@ -389,9 +399,15 @@ class MovimientoServicioController extends Controller
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonAprobar['disabled'] = true;            
         } 
+        if($ar->getEstadoCerrado() == 1) {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonAprobar['disabled'] = true;
+            $arrBotonCerrar['disabled'] = true;
+        }         
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
+                    ->add('BtnCerrar', 'submit', $arrBotonCerrar)                 
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)                 
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
