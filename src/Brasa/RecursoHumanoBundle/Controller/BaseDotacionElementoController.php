@@ -31,8 +31,9 @@ class BaseDotacionElementoController extends Controller
                     $arDotacionElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($codigoDotacionElementoPk);
                     $em->remove($arDotacionElementos);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleado_dotacion_lista'));
+                   
                 }
+                return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElemento_lista'));
             } 
         
         if($form->get('BtnExcel')->isClicked()) {
@@ -108,7 +109,11 @@ class BaseDotacionElementoController extends Controller
             $em->persist($arDotacionElemento);
             $arDotacionElemento = $formDotacionElemento->getData();
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElemento_lista'));
+            if($formDotacionElemento->get('guardarynuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElemento_nuevo', array('codigoDotacionElemento' => 0)));
+            } else {
+                return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElemento_lista'));
+            }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/DotacionElementos:nuevo.html.twig', array(
             'formDotacionElemento' => $formDotacionElemento->createView(),

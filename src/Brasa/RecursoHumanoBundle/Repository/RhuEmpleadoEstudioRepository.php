@@ -19,7 +19,7 @@ class RhuEmpleadoEstudioRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strFecha != ""){
-            $dql .= " AND ee.fechaVencimiento <='" . $strFecha . "'";
+            $dql .= " AND ee.fechaVencimiento >='" . $strFecha . "'";
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;

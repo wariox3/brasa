@@ -47,11 +47,11 @@ class FormatoDesempenos extends \FPDF_FPDF {
         $this->SetXY(150, 10);
         $this->Cell(53, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
         $this->SetXY(150, 20);
-        $this->Cell(53, 20, utf8_decode("Código FOR-GH-16.02"), 1, 0, 'C', 1); //cuadro derecho mitad 1
+        $this->Cell(53, 20, utf8_decode(""), 1, 0, 'C', 1); //cuadro derecho mitad 1
         $this->SetXY(150, 40);
-        $this->Cell(53, 5, utf8_decode("Versión 02"), 1, 0, 'C', 1); //cuadro derecho abajo 1
+        $this->Cell(53, 5, utf8_decode("Versión 01"), 1, 0, 'C', 1); //cuadro derecho abajo 1
         $this->SetXY(150, 45);
-        $this->Cell(53, 5, "Fecha Marzo de 2014 ", 1, 0, 'C', 1); //cuadro derecho abajo 2
+        $this->Cell(53, 5, "Fecha: 01/09/2015", 1, 0, 'C', 1); //cuadro derecho abajo 2
 
         //Restauracion de colores y fuentes
         $this->SetFillColor(224, 235, 255);

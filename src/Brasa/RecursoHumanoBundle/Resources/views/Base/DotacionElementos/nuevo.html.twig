@@ -11,7 +11,7 @@
             <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Nombre:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formDotacionElemento.dotacion, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','onkeypress': 'txNombres();', 'class': 'form-control','autofocus':'autofocus'} }) }}
+                        {{ form_widget(formDotacionElemento.dotacion, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()', 'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
             </div>
         
@@ -20,6 +20,7 @@
     <div class="modal-footer">
             <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_dotacionElemento_lista') }}">Cancelar</a>
             {{ form_widget(formDotacionElemento.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+            {{ form_widget(formDotacionElemento.guardarynuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>            
     {{ form_end(formDotacionElemento) }}
 </div>    

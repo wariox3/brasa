@@ -35,6 +35,7 @@ class BaseCajaController extends Controller
                     $em->remove($arCaja);
                     $em->flush();
                 }
+                return $this->redirect($this->generateUrl('brs_rhu_base_caja_listar'));
             }
             
         if($form->get('BtnPdf')->isClicked()) {

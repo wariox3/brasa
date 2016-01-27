@@ -33,6 +33,7 @@ class BaseClasificacionRiesgosController extends Controller
                     $em->remove($arClasificacion);
                     $em->flush();
                 }
+                return $this->redirect($this->generateUrl('brs_rhu_base_clasificacion_listar'));
             }
             
         if($form->get('BtnPdf')->isClicked()) {

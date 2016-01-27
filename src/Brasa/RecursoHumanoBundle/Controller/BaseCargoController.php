@@ -31,6 +31,7 @@ class BaseCargoController extends Controller
                     $em->remove($arCargo);
                     $em->flush();
                 }
+                return $this->redirect($this->generateUrl('brs_rhu_base_cargo_listar'));
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);

@@ -14,7 +14,8 @@ class RhuDotacionElementoType extends AbstractType
     {
         $builder
             ->add('dotacion', 'text', array('required' => true))
-            ->add('guardar', 'submit', array('label' => 'Guardar'));
+            ->add('guardar', 'submit', array('label' => 'Guardar'))
+            ->add('guardarynuevo', 'submit', array('label' => 'Guardar y nuevo'));
     }
 
     public function getName()

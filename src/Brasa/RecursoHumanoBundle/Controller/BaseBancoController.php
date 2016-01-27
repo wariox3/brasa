@@ -35,6 +35,7 @@ class BaseBancoController extends Controller
                     $em->remove($arBanco);
                     $em->flush();
                 }
+                 return $this->redirect($this->generateUrl('brs_rhu_base_banco_listar'));
             }
             
         if($form->get('BtnPdf')->isClicked()) {

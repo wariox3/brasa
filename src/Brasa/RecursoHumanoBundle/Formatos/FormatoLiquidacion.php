@@ -42,6 +42,13 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetXY(53, 30);
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);
+        //FORMATO ISO
+        $this->SetXY(168, 18);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(35, 8, "FECHA: 01/09/2015", 1, 0, 'L', 1);
+        $this->SetXY(168, 26);
+        $this->Cell(35, 8, utf8_decode("VERSIÓN: 01"), 1, 0, 'L', 1);
+        //
         $this->Ln(1);
         $this->EncabezadoDetalles();
     }
