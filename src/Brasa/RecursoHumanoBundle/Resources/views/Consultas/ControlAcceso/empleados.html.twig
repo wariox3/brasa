@@ -78,6 +78,7 @@
                     <th>DEPARTAMENTO</th>
                     <th>CARGO</th>
                     <th>FECHA</th>
+                    <th>TURNO</th>
                     <th>H. ENTRADA TURNO</th>
                     <th>HORA ENTRADA</th>
                     <th>H. SALIDA TURNO</th>
@@ -95,6 +96,7 @@
                 <td>{{ arControlAccesosEmpleados.empleadoRel.departamentoEmpresaRel.nombre  }}</td>
                 <td>{{ arControlAccesosEmpleados.empleadoRel.cargoRel.nombre  }}</td>
                 <td>{{ arControlAccesosEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
+                <td>{{ arControlAccesosEmpleados.codigoTurnoFk  }}</td>
                 <td>{{ arControlAccesosEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesosEmpleados.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
                 <td>{{ arControlAccesosEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>

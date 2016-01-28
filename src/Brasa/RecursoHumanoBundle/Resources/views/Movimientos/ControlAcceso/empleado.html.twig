@@ -51,6 +51,7 @@
                 <th>IDENTIFICACION</th>
                 <th>EMPLEADO</th>
                 <th>FECHA</th>
+                <th>TURNO</th>
                 <th>H. ENTRADA TURNO</th>
                 <th>HORA ENTRADA</th>
                 <th>H. SALIDA TURNO</th>
@@ -66,6 +67,7 @@
                 <td>{{ arControlAccesoEmpleados.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arControlAccesoEmpleados.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arControlAccesoEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
+                <td>{{ arControlAccesoEmpleados.codigoTurnoFk  }}</td>
                 <td>{{ arControlAccesoEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesoEmpleados.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arControlAccesoEmpleados.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
                 <td>{{ arControlAccesoEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>

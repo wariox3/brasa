@@ -139,6 +139,7 @@ class ConsultasControlAccesosEmpleadosController extends Controller
     }    
     
     private function generarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -163,21 +164,24 @@ class ConsultasControlAccesosEmpleadosController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'NRO')
+                    ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
                     ->setCellValue('C1', 'EMPLEADO')
                     ->setCellValue('D1', 'CENTRO COSTO')
                     ->setCellValue('E1', 'DEPARTAMENTO EMPRESA')                    
                     ->setCellValue('F1', 'CARGO')
                     ->setCellValue('G1', 'FECHA')
-                    ->setCellValue('H1', 'HORARIO ENTRADA EMPLEADO')
-                    ->setCellValue('I1', 'HORA ENTRADA')
-                    ->setCellValue('J1', 'HORARIO SALIDA EMPLEADO')
-                    ->setCellValue('K1', 'HORA SALIDA')
-                    ->setCellValue('L1', 'DURACIÓN REGISTRO')
-                    ->setCellValue('M1', 'COMENTARIOS');
-        
+                    ->setCellValue('H1', 'TURNO')
+                    ->setCellValue('I1', 'HORA ENTRADA TURNO')
+                    ->setCellValue('J1', 'HORA ENTRADA')
+                    ->setCellValue('K1', 'HORA SALIDA TURNO')
+                    ->setCellValue('L1', 'HORA SALIDA')
+                    ->setCellValue('M1', 'DURACIÓN REGISTRO')
+                    ->setCellValue('N1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -185,17 +189,20 @@ class ConsultasControlAccesosEmpleadosController extends Controller
         $arHorarioAcceso = $query->getResult();
         $j = 1;
         foreach ($arHorarioAcceso as $arHorarioAcceso) {
-            if ($arHorarioAcceso->getFechaSalida() == null){
-                $dateFechaSalida = "";
-            }else {
-                $dateFechaSalida = $arHorarioAcceso->getFechaSalida()->Format('H:i:s');
+            
+            if ($arHorarioAcceso->getFechaEntrada()->format('H:i:s') == "00:00:00"){
+                $timeHoraEntrada = "SIN ENTRADA";
+            } else {
+                $timeHoraEntrada = $arHorarioAcceso->getFechaEntrada()->format('H:i:s');
             }
-            if ($arHorarioAcceso->getFechaEntrada() == null){
-                $dateFechaEntrada = "";
-                $timeFechaEntrada = "";
-            }else {
-                $dateFechaEntrada = $arHorarioAcceso->getFechaEntrada()->Format('H:i:s');
-                $timeFechaEntrada = $arHorarioAcceso->getFechaEntrada()->Format('H:i:s');
+            if ($arHorarioAcceso->getFechaSalida() == null){
+                $timeHoraSalida = "SIN SALIDA";
+            } else {
+                if ($arHorarioAcceso->getFechaSalida()->format('H:i:s') == "00:00:00") {
+                    $timeHoraSalida = "SIN SALIDA";
+                }
+                    $timeHoraSalida = $arHorarioAcceso->getFechaSalida()->format('H:i:s');
+                
             }
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A' . $i, $j)    
@@ -204,13 +211,14 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                 ->setCellValue('D' . $i, $arHorarioAcceso->getEmpleadoRel()->getCentroCostoRel()->getNombre())                        
                 ->setCellValue('E' . $i, $arHorarioAcceso->getEmpleadoRel()->getDepartamentoEmpresaRel()->getNombre())                    
                 ->setCellValue('F' . $i, $arHorarioAcceso->getEmpleadoRel()->getCargoRel()->getNombre())                    
-                ->setCellValue('G' . $i, $arHorarioAcceso->getHoraEntradaEmpleado())
-                ->setCellValue('H' . $i, $dateFechaEntrada)
-                ->setCellValue('I' . $i, $timeFechaEntrada)
-                ->setCellValue('G' . $i, $arHorarioAcceso->getHoraSalidaEmpleado())    
-                ->setCellValue('J' . $i, $dateFechaSalida)
-                ->setCellValue('K' . $i, $arHorarioAcceso->getDuracionRegistro())
-                ->setCellValue('L' . $i, $arHorarioAcceso->getComentarios());
+                ->setCellValue('G' . $i, $arHorarioAcceso->getFechaEntrada()->format('Y-m-d'))
+                ->setCellValue('H' . $i, $arHorarioAcceso->getCodigoTurnoFk())
+                ->setCellValue('I' . $i, $arHorarioAcceso->getHoraEntradaTurno()->format('H:i:s'))
+                ->setCellValue('J' . $i, $timeHoraEntrada)
+                ->setCellValue('K' . $i, $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s'))        
+                ->setCellValue('L' . $i, $timeHoraSalida)
+                ->setCellValue('M' . $i, $arHorarioAcceso->getDuracionRegistro())        
+                ->setCellValue('N' . $i, $arHorarioAcceso->getComentarios());
             $i++;
             $j++;
         }
