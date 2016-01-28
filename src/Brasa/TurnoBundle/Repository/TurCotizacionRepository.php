@@ -14,10 +14,13 @@ class TurCotizacionRepository extends EntityRepository {
         return $dql;
     }
     
-    public function pendientes($codigoCliente) {
+    public function pendientes($codigoCliente = "", $codigoProspecto = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaTurnoBundle:TurCotizacion c "
                 . "WHERE c.codigoClienteFk = " . $codigoCliente;
+        if($codigoProspecto != "") {
+            $dql .= " OR c.codigoProspectoFk = " . $codigoProspecto;
+        }
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
         return $arResultado;                

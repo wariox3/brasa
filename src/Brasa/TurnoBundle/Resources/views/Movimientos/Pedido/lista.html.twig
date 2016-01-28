@@ -66,7 +66,8 @@
                 <th>H.D</th>
                 <th>H.N</th>
                 <th>VALOR</th>       
-                <th>PROG</th>
+                <th>PRO</th>
+                <th>FAC</th>
                 <th>AUT</th>
                 <th>ANU</th>
                 <th></th>
@@ -87,6 +88,7 @@
                 <td style="text-align: right">{{ arPedidos.horasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.vrTotal | number_format(0, '.', ',') }}</td>                
                 <td>{% if arPedidos.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arPedidos.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arPedidos.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>

@@ -24,18 +24,18 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.periodoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>
+            </div>                
             <div class="form-group form-group-sm">
-                <label for="form_diasDesde" class="col-sm-3 control-label">Dia desde:</label>
+                <label for="form_fechaDesde" class="col-sm-3 control-label">Desde:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.diaDesde, { 'attr': {'class': 'form-control'} }) }}                        
-                </div>                
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_diasHasta" class="col-sm-3 control-label">Dia hasta:</label>
+                    {{ form_widget(form.fechaDesde) }}                        
+                </div>                                
+            </div>     
+            <div class="form-group form-group-sm">               
+                <label for="form_fechaHasta" class="col-sm-3 control-label">Hasta:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.diaHasta, { 'attr': {'class': 'form-control'} }) }}                        
-                </div>                
+                    {{ form_widget(form.fechaHasta) }}                        
+                </div>                 
             </div>
             <div class="form-group form-group-sm">
                 <label for="form_dia31" class="col-sm-3 control-label">Habilitar dia 31:</label>

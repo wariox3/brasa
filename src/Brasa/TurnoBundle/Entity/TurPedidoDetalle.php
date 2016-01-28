@@ -35,12 +35,12 @@ class TurPedidoDetalle
     /**
      * @ORM\Column(name="codigo_modalidad_servicio_fk", type="integer")
      */    
-    private $codigoModalidadServicioFk;    
+    private $codigoModalidadServicioFk;           
     
     /**
      * @ORM\Column(name="codigo_periodo_fk", type="integer")
      */    
-    private $codigoPeriodoFk;     
+    private $codigoPeriodoFk;      
     
     /**
      * @ORM\Column(name="codigo_servicio_detalle_fk", type="integer", nullable=true)
@@ -194,13 +194,13 @@ class TurPedidoDetalle
      * @ORM\ManyToOne(targetEntity="TurModalidadServicio", inversedBy="pedidosDetallesModalidadServicioRel")
      * @ORM\JoinColumn(name="codigo_modalidad_servicio_fk", referencedColumnName="codigo_modalidad_servicio_pk")
      */
-    protected $modalidadServicioRel;    
+    protected $modalidadServicioRel;            
     
     /**
      * @ORM\ManyToOne(targetEntity="TurPeriodo", inversedBy="pedidosDetallesPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
-    protected $periodoRel;     
+    protected $periodoRel;      
     
     /**
      * @ORM\ManyToOne(targetEntity="TurPlantilla", inversedBy="pedidosDetallesPlantillaRel")
@@ -223,6 +223,7 @@ class TurPedidoDetalle
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="pedidoDetalleRel")
      */
     protected $programacionesDetallesPedidoDetalleRel; 
+
 
     /**
      * Constructor
@@ -916,6 +917,78 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set estadoProgramado
+     *
+     * @param boolean $estadoProgramado
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setEstadoProgramado($estadoProgramado)
+    {
+        $this->estadoProgramado = $estadoProgramado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoProgramado
+     *
+     * @return boolean
+     */
+    public function getEstadoProgramado()
+    {
+        return $this->estadoProgramado;
+    }
+
+    /**
+     * Set estadoFacturado
+     *
+     * @param boolean $estadoFacturado
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setEstadoFacturado($estadoFacturado)
+    {
+        $this->estadoFacturado = $estadoFacturado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturado
+     *
+     * @return boolean
+     */
+    public function getEstadoFacturado()
+    {
+        return $this->estadoFacturado;
+    }
+
+    /**
+     * Set fechaIniciaPlantilla
+     *
+     * @param \DateTime $fechaIniciaPlantilla
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setFechaIniciaPlantilla($fechaIniciaPlantilla)
+    {
+        $this->fechaIniciaPlantilla = $fechaIniciaPlantilla;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIniciaPlantilla
+     *
+     * @return \DateTime
+     */
+    public function getFechaIniciaPlantilla()
+    {
+        return $this->fechaIniciaPlantilla;
+    }
+
+    /**
      * Set pedidoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPedido $pedidoRel
@@ -1149,77 +1222,5 @@ class TurPedidoDetalle
     public function getProgramacionesDetallesPedidoDetalleRel()
     {
         return $this->programacionesDetallesPedidoDetalleRel;
-    }
-
-    /**
-     * Set estadoProgramado
-     *
-     * @param boolean $estadoProgramado
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setEstadoProgramado($estadoProgramado)
-    {
-        $this->estadoProgramado = $estadoProgramado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoProgramado
-     *
-     * @return boolean
-     */
-    public function getEstadoProgramado()
-    {
-        return $this->estadoProgramado;
-    }
-
-    /**
-     * Set estadoFacturado
-     *
-     * @param boolean $estadoFacturado
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setEstadoFacturado($estadoFacturado)
-    {
-        $this->estadoFacturado = $estadoFacturado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoFacturado
-     *
-     * @return boolean
-     */
-    public function getEstadoFacturado()
-    {
-        return $this->estadoFacturado;
-    }
-
-    /**
-     * Set fechaIniciaPlantilla
-     *
-     * @param \DateTime $fechaIniciaPlantilla
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setFechaIniciaPlantilla($fechaIniciaPlantilla)
-    {
-        $this->fechaIniciaPlantilla = $fechaIniciaPlantilla;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaIniciaPlantilla
-     *
-     * @return \DateTime
-     */
-    public function getFechaIniciaPlantilla()
-    {
-        return $this->fechaIniciaPlantilla;
     }
 }

@@ -32,14 +32,14 @@ class TurPedidoDetalleType extends AbstractType
                     return $er->createQueryBuilder('ms')
                     ->orderBy('ms.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                             
+                'required' => true))  
             ->add('periodoRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurPeriodo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('p')
                     ->orderBy('p.codigoPeriodoPk', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                                                                                     
+                'required' => true))                            
             ->add('cantidad', 'number')
             ->add('diaDesde', 'number')
             ->add('diaHasta', 'number')

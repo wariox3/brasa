@@ -30,22 +30,22 @@ class TurCotizacionDetalle
     /**
      * @ORM\Column(name="codigo_modalidad_servicio_fk", type="integer")
      */    
-    private $codigoModalidadServicioFk;    
-    
+    private $codigoModalidadServicioFk;       
+
     /**
      * @ORM\Column(name="codigo_periodo_fk", type="integer")
      */    
     private $codigoPeriodoFk;     
     
     /**
-     * @ORM\Column(name="dia_desde", type="integer")
+     * @ORM\Column(name="fechaDesde", type="date", nullable=true)
      */    
-    private $diaDesde = 1;     
-
+    private $fechaDesde;
+    
     /**
-     * @ORM\Column(name="dia_hasta", type="integer")
+     * @ORM\Column(name="fechaHasta", type="date", nullable=true)
      */    
-    private $diaHasta = 1;      
+    private $fechaHasta;    
     
     /**
      * @ORM\Column(name="dias", type="integer")
@@ -154,7 +154,7 @@ class TurCotizacionDetalle
      * @ORM\JoinColumn(name="codigo_modalidad_servicio_fk", referencedColumnName="codigo_modalidad_servicio_pk")
      */
     protected $modalidadServicioRel;    
-    
+  
     /**
      * @ORM\ManyToOne(targetEntity="TurPeriodo", inversedBy="cotizacionesDetallesPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
@@ -270,51 +270,51 @@ class TurCotizacionDetalle
     }
 
     /**
-     * Set diaDesde
+     * Set fechaDesde
      *
-     * @param integer $diaDesde
+     * @param \DateTime $fechaDesde
      *
      * @return TurCotizacionDetalle
      */
-    public function setDiaDesde($diaDesde)
+    public function setFechaDesde($fechaDesde)
     {
-        $this->diaDesde = $diaDesde;
+        $this->fechaDesde = $fechaDesde;
 
         return $this;
     }
 
     /**
-     * Get diaDesde
+     * Get fechaDesde
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getDiaDesde()
+    public function getFechaDesde()
     {
-        return $this->diaDesde;
+        return $this->fechaDesde;
     }
 
     /**
-     * Set diaHasta
+     * Set fechaHasta
      *
-     * @param integer $diaHasta
+     * @param \DateTime $fechaHasta
      *
      * @return TurCotizacionDetalle
      */
-    public function setDiaHasta($diaHasta)
+    public function setFechaHasta($fechaHasta)
     {
-        $this->diaHasta = $diaHasta;
+        $this->fechaHasta = $fechaHasta;
 
         return $this;
     }
 
     /**
-     * Get diaHasta
+     * Get fechaHasta
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getDiaHasta()
+    public function getFechaHasta()
     {
-        return $this->diaHasta;
+        return $this->fechaHasta;
     }
 
     /**

@@ -35,6 +35,7 @@
                 <th>VENCE</th>
                 <th>CLIENTE</th>
                 <th>SECTOR</th>
+                <th>PROSPECTO</th>
                 <th>H</th>
                 <th>H.D</th>
                 <th>H.N</th>
@@ -50,6 +51,7 @@
                 <td>{{ arCotizaciones.fechaVence |date("Y/m/d")  }}</td>
                 <td>{{ arCotizaciones.clienteRel.nombreCorto |default('')  }}</td>
                 <td>{{ arCotizaciones.sectorRel.nombre |default('')  }}</td>
+                <td>{{ arCotizaciones.prospectoRel.nombreCorto |default('')  }}</td>
                 <td style="text-align: right">{{ arCotizaciones.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCotizaciones.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCotizaciones.horasNocturnas | number_format(0, '.', ',') }}</td>

@@ -33,6 +33,16 @@ class TurCotizacion
     private $codigoClienteFk;    
 
     /**
+     * @ORM\Column(name="codigo_prospecto_fk", type="integer", nullable=true)
+     */    
+    private $codigoProspectoFk;    
+    
+    /**
+     * @ORM\Column(name="nombre", type="string", length=90, nullable=true)
+     */
+    private $nombre;    
+    
+    /**
      * @ORM\Column(name="codigo_sector_fk", type="integer", nullable=true)
      */    
     private $codigoSectorFk;    
@@ -97,6 +107,12 @@ class TurCotizacion
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
     protected $clienteRel;     
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurProspecto", inversedBy="cotizacionesProspectoRel")
+     * @ORM\JoinColumn(name="codigo_prospecto_fk", referencedColumnName="codigo_prospecto_pk")
+     */
+    protected $prospectoRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="cotizacionesSectorRel")
@@ -204,6 +220,54 @@ class TurCotizacion
     public function getCodigoClienteFk()
     {
         return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set codigoProspectoFk
+     *
+     * @param integer $codigoProspectoFk
+     *
+     * @return TurCotizacion
+     */
+    public function setCodigoProspectoFk($codigoProspectoFk)
+    {
+        $this->codigoProspectoFk = $codigoProspectoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProspectoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProspectoFk()
+    {
+        return $this->codigoProspectoFk;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return TurCotizacion
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
     }
 
     /**
@@ -516,6 +580,30 @@ class TurCotizacion
     public function getClienteRel()
     {
         return $this->clienteRel;
+    }
+
+    /**
+     * Set prospectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProspecto $prospectoRel
+     *
+     * @return TurCotizacion
+     */
+    public function setProspectoRel(\Brasa\TurnoBundle\Entity\TurProspecto $prospectoRel = null)
+    {
+        $this->prospectoRel = $prospectoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get prospectoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurProspecto
+     */
+    public function getProspectoRel()
+    {
+        return $this->prospectoRel;
     }
 
     /**

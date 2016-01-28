@@ -96,7 +96,6 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>CANT</th>
-                <th>CANT.RE</th>
                 <th>LU</th>
                 <th>MA</th>
                 <th>MI</th>
@@ -109,7 +108,6 @@
                 <th>H.D</th>
                 <th>H.N</th>
                 <th>DIAS</th>
-                <th>COSTO</th>
                 <th>P.MINIMO</th>
                 <th>P.AJUSTADO</th>
                 <th>TOTAL</th>
@@ -133,11 +131,10 @@
                     <td>{{ arServicioDetalle.modalidadServicioRel.nombre  }}</td>                    
                     <td>{{ arServicioDetalle.periodoRel.nombre  }}</td>
                     <td>{% if arServicioDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arServicioDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arServicioDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arServicioDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
+                    <td>{{ arServicioDetalle.fechaDesde |date('Y/m/d') }}</td>    
+                    <td>{{ arServicioDetalle.fechaHasta |date('Y/m/d') }}</td>                    
                     {% if arServicio.estadoAutorizado == 0 %}                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.diaDesde  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.diaHasta  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadRecurso{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.cantidadRecurso  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
                         <td><input type="checkbox" name="chkLunes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.lunes == 1 %} checked="true" {% endif %}></td>
                         <td><input type="checkbox" name="chkMartes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.martes == 1 %} checked="true" {% endif %}></td>
                         <td><input type="checkbox" name="chkMiercoles{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
@@ -146,11 +143,8 @@
                         <td><input type="checkbox" name="chkSabado{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.sabado == 1 %} checked="true" {% endif %}></td>
                         <td><input type="checkbox" name="chkDomingo{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.domingo == 1 %} checked="true" {% endif %}></td>
                         <td><input type="checkbox" name="chkFestivo{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
-                    {% else %}                        
-                        <td>{{ arServicioDetalle.diaDesde }}</td>    
-                        <td>{{ arServicioDetalle.diaHasta }}</td>    
-                        <td>{{ arServicioDetalle.cantidad  }}</td>
-                        <td>{{ arServicioDetalle.cantidadRecurso  }}</td>
+                    {% else %}                            
+                        <td>{{ arServicioDetalle.cantidad  }}</td>                        
                         <td>{% if arServicioDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
                         <td>{% if arServicioDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
                         <td>{% if arServicioDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
@@ -163,8 +157,7 @@
                     <td style="text-align: right">{{ arServicioDetalle.horas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arServicioDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arServicioDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arServicioDetalle.dias | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arServicioDetalle.vrCosto | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arServicioDetalle.dias | number_format(0, '.', ',') }}</td>                     
                     <td style="text-align: right">{{ arServicioDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td> 
                     {% if arServicio.estadoAutorizado == 0 %}
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                

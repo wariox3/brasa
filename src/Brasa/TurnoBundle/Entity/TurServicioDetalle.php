@@ -35,7 +35,7 @@ class TurServicioDetalle
     /**
      * @ORM\Column(name="codigo_modalidad_servicio_fk", type="integer")
      */    
-    private $codigoModalidadServicioFk;    
+    private $codigoModalidadServicioFk;           
     
     /**
      * @ORM\Column(name="codigo_periodo_fk", type="integer")
@@ -48,14 +48,14 @@ class TurServicioDetalle
     private $codigoPlantillaFk;    
     
     /**
-     * @ORM\Column(name="dia_desde", type="integer")
+     * @ORM\Column(name="fechaDesde", type="date", nullable=true)
      */    
-    private $diaDesde = 1;     
-
+    private $fechaDesde;
+    
     /**
-     * @ORM\Column(name="dia_hasta", type="integer")
+     * @ORM\Column(name="fechaHasta", type="date", nullable=true)
      */    
-    private $diaHasta = 1;         
+    private $fechaHasta;              
     
     /**
      * @ORM\Column(name="dias", type="integer")
@@ -184,13 +184,13 @@ class TurServicioDetalle
      * @ORM\ManyToOne(targetEntity="TurModalidadServicio", inversedBy="serviciosDetallesModalidadServicioRel")
      * @ORM\JoinColumn(name="codigo_modalidad_servicio_fk", referencedColumnName="codigo_modalidad_servicio_pk")
      */
-    protected $modalidadServicioRel;    
+    protected $modalidadServicioRel;            
     
     /**
      * @ORM\ManyToOne(targetEntity="TurPeriodo", inversedBy="serviciosDetallesPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
-    protected $periodoRel;     
+    protected $periodoRel;      
     
     /**
      * @ORM\ManyToOne(targetEntity="TurPlantilla", inversedBy="serviciosDetallesPlantillaRel")
@@ -331,30 +331,6 @@ class TurServicioDetalle
     }
 
     /**
-     * Set codigoPeriodoFk
-     *
-     * @param integer $codigoPeriodoFk
-     *
-     * @return TurServicioDetalle
-     */
-    public function setCodigoPeriodoFk($codigoPeriodoFk)
-    {
-        $this->codigoPeriodoFk = $codigoPeriodoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPeriodoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPeriodoFk()
-    {
-        return $this->codigoPeriodoFk;
-    }
-
-    /**
      * Set codigoPlantillaFk
      *
      * @param integer $codigoPlantillaFk
@@ -379,51 +355,51 @@ class TurServicioDetalle
     }
 
     /**
-     * Set diaDesde
+     * Set fechaDesde
      *
-     * @param integer $diaDesde
+     * @param \DateTime $fechaDesde
      *
      * @return TurServicioDetalle
      */
-    public function setDiaDesde($diaDesde)
+    public function setFechaDesde($fechaDesde)
     {
-        $this->diaDesde = $diaDesde;
+        $this->fechaDesde = $fechaDesde;
 
         return $this;
     }
 
     /**
-     * Get diaDesde
+     * Get fechaDesde
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getDiaDesde()
+    public function getFechaDesde()
     {
-        return $this->diaDesde;
+        return $this->fechaDesde;
     }
 
     /**
-     * Set diaHasta
+     * Set fechaHasta
      *
-     * @param integer $diaHasta
+     * @param \DateTime $fechaHasta
      *
      * @return TurServicioDetalle
      */
-    public function setDiaHasta($diaHasta)
+    public function setFechaHasta($fechaHasta)
     {
-        $this->diaHasta = $diaHasta;
+        $this->fechaHasta = $fechaHasta;
 
         return $this;
     }
 
     /**
-     * Get diaHasta
+     * Get fechaHasta
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getDiaHasta()
+    public function getFechaHasta()
     {
-        return $this->diaHasta;
+        return $this->fechaHasta;
     }
 
     /**
@@ -907,6 +883,30 @@ class TurServicioDetalle
     }
 
     /**
+     * Set fechaIniciaPlantilla
+     *
+     * @param \DateTime $fechaIniciaPlantilla
+     *
+     * @return TurServicioDetalle
+     */
+    public function setFechaIniciaPlantilla($fechaIniciaPlantilla)
+    {
+        $this->fechaIniciaPlantilla = $fechaIniciaPlantilla;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIniciaPlantilla
+     *
+     * @return \DateTime
+     */
+    public function getFechaIniciaPlantilla()
+    {
+        return $this->fechaIniciaPlantilla;
+    }
+
+    /**
      * Set servicioRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurServicio $servicioRel
@@ -1000,30 +1000,6 @@ class TurServicioDetalle
     public function getModalidadServicioRel()
     {
         return $this->modalidadServicioRel;
-    }
-
-    /**
-     * Set periodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel
-     *
-     * @return TurServicioDetalle
-     */
-    public function setPeriodoRel(\Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel = null)
-    {
-        $this->periodoRel = $periodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get periodoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPeriodo
-     */
-    public function getPeriodoRel()
-    {
-        return $this->periodoRel;
     }
 
     /**
@@ -1153,26 +1129,50 @@ class TurServicioDetalle
     }
 
     /**
-     * Set fechaIniciaPlantilla
+     * Set codigoPeriodoFk
      *
-     * @param \DateTime $fechaIniciaPlantilla
+     * @param integer $codigoPeriodoFk
      *
      * @return TurServicioDetalle
      */
-    public function setFechaIniciaPlantilla($fechaIniciaPlantilla)
+    public function setCodigoPeriodoFk($codigoPeriodoFk)
     {
-        $this->fechaIniciaPlantilla = $fechaIniciaPlantilla;
+        $this->codigoPeriodoFk = $codigoPeriodoFk;
 
         return $this;
     }
 
     /**
-     * Get fechaIniciaPlantilla
+     * Get codigoPeriodoFk
      *
-     * @return \DateTime
+     * @return integer
      */
-    public function getFechaIniciaPlantilla()
+    public function getCodigoPeriodoFk()
     {
-        return $this->fechaIniciaPlantilla;
+        return $this->codigoPeriodoFk;
+    }
+
+    /**
+     * Set periodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel
+     *
+     * @return TurServicioDetalle
+     */
+    public function setPeriodoRel(\Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel = null)
+    {
+        $this->periodoRel = $periodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get periodoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPeriodo
+     */
+    public function getPeriodoRel()
+    {
+        return $this->periodoRel;
     }
 }

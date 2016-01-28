@@ -22,6 +22,11 @@ class TurPedidoTipo
      */    
     private $nombre;             
     
+    /**     
+     * @ORM\Column(name="control", type="boolean")
+     */    
+    private $control = false;     
+    
     /**
      * @ORM\OneToMany(targetEntity="TurPedido", mappedBy="pedidoTipoRel")
      */
@@ -68,6 +73,30 @@ class TurPedidoTipo
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set control
+     *
+     * @param boolean $control
+     *
+     * @return TurPedidoTipo
+     */
+    public function setControl($control)
+    {
+        $this->control = $control;
+
+        return $this;
+    }
+
+    /**
+     * Get control
+     *
+     * @return boolean
+     */
+    public function getControl()
+    {
+        return $this->control;
     }
 
     /**

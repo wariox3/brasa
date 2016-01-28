@@ -38,6 +38,26 @@ class TurCliente
     private $estrato;                
     
     /**
+     * @ORM\Column(name="gerente", type="string", length=80, nullable=true)
+     */
+    private $gerente;    
+    
+    /**
+     * @ORM\Column(name="calular_gerente", type="string", length=20, nullable=true)
+     */
+    private $celularGerente;  
+    
+    /**
+     * @ORM\Column(name="financiero", type="string", length=80, nullable=true)
+     */
+    private $financiero;    
+    
+    /**
+     * @ORM\Column(name="calular_financiero", type="string", length=20, nullable=true)
+     */
+    private $celularFinanciero;     
+    
+    /**
      * @ORM\Column(name="contacto", type="string", length=80, nullable=true)
      */
     private $contacto;    
@@ -535,5 +555,101 @@ class TurCliente
     public function getFacturasClienteRel()
     {
         return $this->facturasClienteRel;
+    }
+
+    /**
+     * Set gerente
+     *
+     * @param string $gerente
+     *
+     * @return TurCliente
+     */
+    public function setGerente($gerente)
+    {
+        $this->gerente = $gerente;
+
+        return $this;
+    }
+
+    /**
+     * Get gerente
+     *
+     * @return string
+     */
+    public function getGerente()
+    {
+        return $this->gerente;
+    }
+
+    /**
+     * Set celularGerente
+     *
+     * @param string $celularGerente
+     *
+     * @return TurCliente
+     */
+    public function setCelularGerente($celularGerente)
+    {
+        $this->celularGerente = $celularGerente;
+
+        return $this;
+    }
+
+    /**
+     * Get celularGerente
+     *
+     * @return string
+     */
+    public function getCelularGerente()
+    {
+        return $this->celularGerente;
+    }
+
+    /**
+     * Set financiero
+     *
+     * @param string $financiero
+     *
+     * @return TurCliente
+     */
+    public function setFinanciero($financiero)
+    {
+        $this->financiero = $financiero;
+
+        return $this;
+    }
+
+    /**
+     * Get financiero
+     *
+     * @return string
+     */
+    public function getFinanciero()
+    {
+        return $this->financiero;
+    }
+
+    /**
+     * Set celularFinanciero
+     *
+     * @param string $celularFinanciero
+     *
+     * @return TurCliente
+     */
+    public function setCelularFinanciero($celularFinanciero)
+    {
+        $this->celularFinanciero = $celularFinanciero;
+
+        return $this;
+    }
+
+    /**
+     * Get celularFinanciero
+     *
+     * @return string
+     */
+    public function getCelularFinanciero()
+    {
+        return $this->celularFinanciero;
     }
 }

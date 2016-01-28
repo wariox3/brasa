@@ -57,6 +57,9 @@ class TurPedidoRepository extends EntityRepository {
             if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 2) {
                 $intDias = $arPedidoDetalle->getDiaHasta() - $arPedidoDetalle->getDiaDesde();
                 $intDias += 1;
+                if($arPedidoDetalle->getDiaHasta() == 0 || $arPedidoDetalle->getDiaDesde() == 0) {
+                    $intDias = 0;
+                }
             } else {
                 $intDias = 30;
             }
@@ -67,7 +70,7 @@ class TurPedidoRepository extends EntityRepository {
             $intDiasSabados = 0;
             $intDiasDominicales = 0;
             $intDiasFestivos = 0;
-            if($arPedidoDetalle->getCodigoPeriodoFk() == 1) {                
+            if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 1) {                
                 if($arPedidoDetalle->getLunes() == 1) {
                     $intDiasOrdinarios += 4;
                 }

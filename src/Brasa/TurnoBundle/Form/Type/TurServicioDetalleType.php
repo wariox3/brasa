@@ -30,19 +30,12 @@ class TurServicioDetalleType extends AbstractType
                 'class' => 'BrasaTurnoBundle:TurModalidadServicio',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ms')
-                    ->orderBy('ms.nombre', 'ASC');},
+                    ->orderBy('ms.codigoModalidadServicioPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                             
-            ->add('periodoRel', 'entity', array(
-                'class' => 'BrasaTurnoBundle:TurPeriodo',
-                'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('p')
-                    ->orderBy('p.codigoPeriodoPk', 'ASC');},
-                'property' => 'nombre',
-                'required' => true))                                                                                    
             ->add('cantidad', 'number')
-            ->add('diaDesde', 'number')
-            ->add('diaHasta', 'number')
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd')) 
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd')) 
             ->add('lunes', 'checkbox', array('required'  => false))
             ->add('martes', 'checkbox', array('required'  => false))
             ->add('miercoles', 'checkbox', array('required'  => false))

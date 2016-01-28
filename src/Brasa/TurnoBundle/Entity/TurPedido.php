@@ -68,6 +68,11 @@ class TurPedido
     private $estadoProgramado = false;     
 
     /**     
+     * @ORM\Column(name="estado_facturado", type="boolean")
+     */    
+    private $estadoFacturado = false;    
+    
+    /**     
      * @ORM\Column(name="estado_anulado", type="boolean")
      */    
     private $estadoAnulado = false;     
@@ -742,5 +747,29 @@ class TurPedido
     public function getEstadoAnulado()
     {
         return $this->estadoAnulado;
+    }
+
+    /**
+     * Set estadoFacturado
+     *
+     * @param boolean $estadoFacturado
+     *
+     * @return TurPedido
+     */
+    public function setEstadoFacturado($estadoFacturado)
+    {
+        $this->estadoFacturado = $estadoFacturado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturado
+     *
+     * @return boolean
+     */
+    public function getEstadoFacturado()
+    {
+        return $this->estadoFacturado;
     }
 }

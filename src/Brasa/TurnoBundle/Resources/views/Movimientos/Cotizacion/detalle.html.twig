@@ -35,13 +35,19 @@
                     </tr>
                     <tr>
                         <td class="titulo">CLIENTE:</td>
-                        <td class="td-in-well">{{ arCotizacion.clienteRel.nombreCorto }}</td>
-                        <td class="titulo" >HORAS DIURNAS:</td>
-                        <td align="right">{{ arCotizacion.horasDiurnas | number_format(0, '.', ',')}}</td>
+                        <td class="td-in-well">{{ arCotizacion.clienteRel.nombreCorto | default('') }}</td>
+                        <td class="titulo" ></td>
+                        <td align="right"></td>
                     </tr> 
                     <tr>
+                        <td class="titulo">PROSPECTO:</td>
+                        <td class="td-in-well">{{ arCotizacion.prospectoRel.nombreCorto | default('') }}</td>
+                        <td class="titulo" >HORAS DIURNAS:</td>
+                        <td align="right">{{ arCotizacion.horasDiurnas | number_format(0, '.', ',')}}</td>
+                    </tr>                     
+                    <tr>
                         <td class="titulo">SECTOR:</td>
-                        <td class="td-in-well">{{ arCotizacion.sectorRel.nombre }}</td>
+                        <td class="td-in-well">{{ arCotizacion.sectorRel.nombre | default('') }}</td>
                         <td class="titulo" >HORAS NOCTURNAS:</td>
                         <td align="right">{{ arCotizacion.horasNocturnas | number_format(0, '.', ',')}}</td>
                     </tr>                 
@@ -94,7 +100,7 @@
                         <tr>
                             <th>COD</th>
                             <th>SERVICIO</th>
-                            <th>MODALIDAD</th>
+                            <th>MODALIDAD</th> 
                             <th>PERIODO</th>
                             <th>DESDE</th>
                             <th>HASTA</th>
@@ -122,11 +128,11 @@
                             <tr>
                                 <td>{{ arCotizacionDetalle.codigoCotizacionDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arCotizacionDetalle.codigoCotizacionDetallePk }}"></td>
                                 <td>{{ arCotizacionDetalle.conceptoServicioRel.nombre  }}</td>                    
-                                <td>{{ arCotizacionDetalle.modalidadServicioRel.nombre  }}</td>                    
-                                <td>{{ arCotizacionDetalle.periodoRel.nombre  }}</td>                    
+                                <td>{{ arCotizacionDetalle.modalidadServicioRel.nombre  }}</td> 
+                                <td>{{ arCotizacionDetalle.periodoRel.nombre  }}</td>                                 
+                                <td>{{ arCotizacionDetalle.fechaDesde |date('Y/m/d') }}</td>    
+                                <td>{{ arCotizacionDetalle.fechaHasta |date('Y/m/d') }}</td>                                 
                                 {% if arCotizacion.estadoAutorizado == 0 %}                        
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.diaDesde}}" size="15" style="width:85px" onclick="this.select()"/></td>                        
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.diaHasta}}" size="15" style="width:85px" onclick="this.select()"/></td>                                                
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.cantidad  }}" size="5" style="width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                                     <td><input type="checkbox" name="chkLunes{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.lunes == 1 %} checked="true" {% endif %}></td>
                                     <td><input type="checkbox" name="chkMartes{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.martes == 1 %} checked="true" {% endif %}></td>
@@ -136,9 +142,7 @@
                                     <td><input type="checkbox" name="chkSabado{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.sabado == 1 %} checked="true" {% endif %}></td>
                                     <td><input type="checkbox" name="chkDomingo{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.domingo == 1 %} checked="true" {% endif %}></td>
                                     <td><input type="checkbox" name="chkFestivo{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
-                                    {% else %}                        
-                                    <td>{{ arCotizacionDetalle.diaDesde }}</td>    
-                                    <td>{{ arCotizacionDetalle.diaHasta }}</td>    
+                                {% else %}                        
                                     <td>{{ arCotizacionDetalle.cantidad  }}</td>
                                     <td>{% if arCotizacionDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
                                     <td>{% if arCotizacionDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>

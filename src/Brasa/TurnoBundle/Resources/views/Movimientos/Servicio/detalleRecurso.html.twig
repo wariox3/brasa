@@ -15,43 +15,7 @@
     {{ form_errors(form) }}
 
     <!-- Encabezado Movimiento -->
-    <div class="panel panel-default">
-      <div class="panel-heading">Información</div>
-      <div class="panel-body">
-            <table width="100%" class="table table-condensed table-bordered">
-                <tr>
-                    <td class="titulo">CODIGO:</td>
-                    <td class="td-in-well">{{ arServicioDetalle.codigoServicioDetallePk }}</td>
-                    <td class="titulo">PUESTO:</td>
-                    <td class="td-in-well">{{ arServicioDetalle.puestoRel.nombre |default('') }}</td>
-                </tr>                
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo">SERVICIO:</td>
-                    <td class="td-in-well">{{ arServicioDetalle.conceptoServicioRel.nombre |default('') }}</td>
-                </tr>
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo">MODALIDAD:</td>
-                    <td class="td-in-well">{{ arServicioDetalle.modalidadServicioRel.nombre |default('') }}</td>
-                </tr>                
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo">PERIODO:</td>
-                    <td class="td-in-well">{{ arServicioDetalle.periodoRel.nombre |default('') }}</td>
-                </tr>
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo">PLANTILLA:</td>
-                    <td class="td-in-well">{{ arServicioDetalle.plantillaRel.nombre |default('') }}</td>
-                </tr>                
-            </table>                    
-      </div>
-    </div>
+
 
     <div class="panel panel-default">
       <div class="panel-heading">Información</div>

@@ -174,6 +174,8 @@ class MovimientoServicioController extends Controller
         if($codigoServicioDetalle != 0) {
             $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
         } else {
+            $arPeriodo = new \Brasa\TurnoBundle\Entity\TurPeriodo();
+            $arPeriodo = $em->getRepository('BrasaTurnoBundle:TurPeriodo')->find(1);
             $arServicioDetalle->setLunes(true);
             $arServicioDetalle->setMartes(true);
             $arServicioDetalle->setMiercoles(true);
@@ -185,6 +187,9 @@ class MovimientoServicioController extends Controller
             $arServicioDetalle->setCantidad(1);
             $arServicioDetalle->setFechaIniciaPlantilla(new \DateTime('now'));
             $arServicioDetalle->setServicioRel($arServicio);
+            $arServicioDetalle->setPeriodoRel($arPeriodo);
+            $arServicioDetalle->setFechaDesde(new \DateTime('now'));
+            $arServicioDetalle->setFechaHasta(new \DateTime('now'));            
         }
         $form = $this->createForm(new TurServicioDetalleType, $arServicioDetalle);
         $form->handleRequest($request);
@@ -211,10 +216,25 @@ class MovimientoServicioController extends Controller
         $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
         $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
         $form = $this->createFormBuilder()
+            ->add('prospectoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurProspecto',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('p')
+                    ->orderBy('p.nombreCorto', 'ASC');},
+                'property' => 'nombreCorto',
+                'required' => false))                 
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))
             ->getForm();
         $form->handleRequest($request);
+        $codigoProspecto = "";
         if ($form->isValid()) {
+            if ($form->get('BtnFiltrar')->isClicked()) {
+                $arProspecto = $form->get('prospectoRel')->getData();
+                if($arProspecto) {
+                    $codigoProspecto = $arProspecto->getCodigoProspectoPk();
+                }                
+            }
             if ($form->get('BtnGuardar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
@@ -239,8 +259,9 @@ class MovimientoServicioController extends Controller
                             $arServicioDetalle->setDomingo($arCotizacionDetalle->getDomingo());
                             $arServicioDetalle->setFestivo($arCotizacionDetalle->getFestivo());                            
                             $arServicioDetalle->setCantidad($arCotizacionDetalle->getCantidad());
-                            $arServicioDetalle->setDiaDesde($arCotizacionDetalle->getDiaDesde());
-                            $arServicioDetalle->setDiaHasta($arCotizacionDetalle->getDiaHasta());
+                            $arServicioDetalle->setFechaIniciaPlantilla(new \DateTime('now'));
+                            $arServicioDetalle->setFechaDesde($arCotizacionDetalle->getFechaDesde());
+                            $arServicioDetalle->setFechaHasta($arCotizacionDetalle->getFechaHasta());
                             $arServicioDetalle->setVrPrecioAjustado($arCotizacionDetalle->getVrPrecioAjustado());
                             $em->persist($arServicioDetalle);
                         }                       
@@ -248,10 +269,10 @@ class MovimientoServicioController extends Controller
                     $em->flush();
                 }
                 $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
-            }
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }            
         }
-        $arCotizaciones = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->pendientes($arServicio->getCodigoClienteFk());
+        $arCotizaciones = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->pendientes($arServicio->getCodigoClienteFk(), $codigoProspecto);
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleNuevoCotizacion.html.twig', array(
             'arServicio' => $arServicio,
             'arCotizaciones' => $arCotizaciones,
@@ -514,9 +535,6 @@ class MovimientoServicioController extends Controller
             $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
             $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($intCodigo);
             $arServicioDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-            $arServicioDetalle->setCantidadRecurso($arrControles['TxtCantidadRecurso'.$intCodigo]);
-            $arServicioDetalle->setDiaDesde($arrControles['TxtDiaDesde'.$intCodigo]);
-            $arServicioDetalle->setDiaHasta($arrControles['TxtDiaHasta'.$intCodigo]);
             if($arrControles['TxtPuesto'.$intCodigo] != '') {
                 $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
                 $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($arrControles['TxtPuesto'.$intCodigo]);

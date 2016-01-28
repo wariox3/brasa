@@ -9,6 +9,13 @@ class TurCotizacionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder     
+            ->add('prospectoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurProspecto',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('p')
+                    ->orderBy('p.nombreCorto', 'ASC');},
+                'property' => 'nombreCorto',
+                'required' => false))                    
             ->add('sectorRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurSector',
                 'query_builder' => function (EntityRepository $er)  {

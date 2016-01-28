@@ -57,24 +57,24 @@ class MovimientoCotizacionController extends Controller
         if ($form->isValid()) {
             $arCotizacion = $form->getData();
             $arrControles = $request->request->All();
-            if($arrControles['txtNit'] != '') {
-                $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+            $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+            if($arrControles['txtNit'] != '') {                
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
                     $arCotizacion->setClienteRel($arCliente);
-                    $em->persist($arCotizacion);
-                    $em->flush();
-
-                    if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_cotizacion_nuevo', array('codigoCotizacion' => 0 )));
-                    } else {
-                        return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $arCotizacion->getCodigoCotizacionPk())));
-                    }                       
-                } else {
-                    $objMensaje->Mensaje("error", "El cliente no existe", $this);
-                }                
-             
+                }
             }
+            $em->persist($arCotizacion);
+            $em->flush();
+
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tur_cotizacion_nuevo', array('codigoCotizacion' => 0 )));
+            } else {
+                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $arCotizacion->getCodigoCotizacionPk())));
+            }                       
+                               
+             
+            
         }
         return $this->render('BrasaTurnoBundle:Movimientos/Cotizacion:nuevo.html.twig', array(
             'arCotizacion' => $arCotizacion,
@@ -180,6 +180,18 @@ class MovimientoCotizacionController extends Controller
         $arCotizacionDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
         if($codigoCotizacionDetalle != 0) {
             $arCotizacionDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($codigoCotizacionDetalle);
+        } else {
+            $arCotizacionDetalle->setLunes(true);
+            $arCotizacionDetalle->setMartes(true);
+            $arCotizacionDetalle->setMiercoles(true);
+            $arCotizacionDetalle->setJueves(true);
+            $arCotizacionDetalle->setViernes(true);
+            $arCotizacionDetalle->setSabado(true);
+            $arCotizacionDetalle->setDomingo(true);
+            $arCotizacionDetalle->setFestivo(true);            
+            $arCotizacionDetalle->setCantidad(1);
+            $arCotizacionDetalle->setFechaDesde(new \DateTime('now'));
+            $arCotizacionDetalle->setFechaHasta(new \DateTime('now'));
         }
         $form = $this->createForm(new TurCotizacionDetalleType, $arCotizacionDetalle);
         $form->handleRequest($request);
@@ -343,8 +355,6 @@ class MovimientoCotizacionController extends Controller
             $arCotizacionDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
             $arCotizacionDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($intCodigo);
             $arCotizacionDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-            $arCotizacionDetalle->setDiaDesde(date_create($arrControles['TxtDiaDesde'.$intCodigo]));
-            $arCotizacionDetalle->setDiaHasta(date_create($arrControles['TxtDiaHasta'.$intCodigo]));
             if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
                 $arCotizacionDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
             }                     

@@ -13,6 +13,7 @@ class TurPedidoType extends AbstractType
                 'class' => 'BrasaTurnoBundle:TurPedidoTipo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('pt')
+                    ->where('pt.control = 0')                    
                     ->orderBy('pt.codigoPedidoTipoPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                
