@@ -100,14 +100,20 @@ class ControlAccesoEmpleadoController extends Controller
         if ($codigoControlAcceso != 0)
         {
             $arControlAccesoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoControlAcceso);
-        }    
+            if ($arControlAccesoEmpleado->getEstadoSalida() == "1"){
+                $intSalida = "SI";
+            } else {
+                $intSalida = "NO";
+            }
+        } 
+         
         $form = $this->createFormBuilder()
             ->add('identificacion', 'text', array('data' => $arControlAccesoEmpleado->getEmpleadoRel()->getNumeroIdentificacion()))
             ->add('nombre', 'text', array('data' => $arControlAccesoEmpleado->getEmpleadoRel()->getNombreCorto()))    
             ->add('fechaEntrada', 'datetime', array('required' => true, 'data' => $arControlAccesoEmpleado->getFechaEntrada()))
             ->add('fechaSalida', 'datetime', array('required' => true, 'data' => $arControlAccesoEmpleado->getFechaSalida()))
-            ->add('duracionVisita', 'text', array('data' => $arControlAccesoEmpleado->getDuracionRegistro(),'required' => false))
-            ->add('comentarios', 'textarea', array('data' => $arControlAccesoEmpleado->getComentarios(),'required' => false))    
+            ->add('salida', 'choice', array('choices' => array($arControlAccesoEmpleado->getEstadoSalida() => $intSalida, '0' => 'NO', '1' => 'SI')))    
+            ->add('comentarios', 'textarea', array('data' => $arControlAccesoEmpleado->getComentarios(), 'required' => false))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -117,25 +123,53 @@ class ControlAccesoEmpleadoController extends Controller
             $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
             $dateEntrada = $arControlAccesoEmpleado->getFechaEntrada();
             $dateSalida = $arControlAccesoEmpleado->getFechaSalida();
+            $dateDiferencia = date_diff($dateSalida, $dateEntrada);
+            $horas = $dateDiferencia->format('%H');
+            $minutos = $dateDiferencia->format('%i');
+            $segundos = $dateDiferencia->format('%s');
             $horaEntrada = $dateEntrada->format('H');
             $horaSalida = $dateSalida->format('H');
-            if ($horaSalida < $horaEntrada){
-               $objMensaje->Mensaje("error", "La hora de salida no puede ser menor a la hora de entrada", $this);
+            $diferencia = $horas.":".$minutos.":".$segundos;
+            if ($diferencia == "00:0:0"){
+                $diferencia = "";
+            }
+            if ($form->get('salida')->getData() == 1) {
+                if ($horaSalida < $horaEntrada){
+                        $objMensaje->Mensaje("error", "La hora de salida no puede ser menor a la hora de entrada", $this);
+                } else {
+                        if ($arControlAccesoEmpleado->getEstadoEntrada() == 1 && $arControlAccesoEmpleado->getEstadoSalida() == 1){
+                            $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
+                            $arControlAccesoEmpleado->setEstadoSalida(1);
+                            $arControlAccesoEmpleado->setDuracionRegistro($diferencia);
+                            $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
+                            $em->persist($arControlAccesoEmpleado);
+                            $em->flush();
+                            return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
+                        } else {
+                            if ($arControlAccesoEmpleado->getEstadoEntrada() == 1 && $arControlAccesoEmpleado->getEstadoSalida() == 0){
+                                $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
+                                $arControlAccesoEmpleado->setEstadoSalida(1);
+                                $arControlAccesoEmpleado->setDuracionRegistro($diferencia);
+                                $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
+                                $em->persist($arControlAccesoEmpleado);
+                                $em->flush();
+                                return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
+                            }else {
+                                $objMensaje->Mensaje("error", "No se puede registrar la salida sin haber registrado la entrada", $this);    
+                            }
+                        }
+                    }        
             } else {
-               $dateEntrada = $arControlAccesoEmpleado->getFechaEntrada();
-               $dateSalida = $arControlAccesoEmpleado->getFechaSalida();
-               $dateDiferencia = date_diff($dateSalida, $dateEntrada);
-               $horas = $dateDiferencia->format('%H');
-               $minutos = $dateDiferencia->format('%i');
-               $segundos = $dateDiferencia->format('%s');
-               $diferencia = $horas.":".$minutos.":".$segundos;
-               $arControlAccesoEmpleado->setDuracionRegistro($diferencia);
-               $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
-               $em->persist($arControlAccesoEmpleado);  
-               $em->flush();
-               return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
-           }
-            
+                if ($arControlAccesoEmpleado->getEstadoEntrada() == 1){
+                    $arControlAccesoEmpleado->setFechaSalida(null);
+                    $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
+                    $em->persist($arControlAccesoEmpleado);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));  
+                } else {
+                        $objMensaje->Mensaje("error", "No se puede modificar sin registrarse", $this);    
+                }
+            }
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ControlAcceso:nuevo.html.twig', array(
             'form' => $form->createView(),
