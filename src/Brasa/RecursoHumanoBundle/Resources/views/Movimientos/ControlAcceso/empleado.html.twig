@@ -55,7 +55,7 @@
                 <th>HORA ENTRADA</th>
                 <th>H. SALIDA TURNO</th>
                 <th>HORA SALIDA</th>
-                <th>DURACIÓN VISITA</th>
+                <th>DURACIÓN REGISTRO</th>
                 <th>COMENTARIOS</th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center"></th>
@@ -65,9 +65,9 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arControlAccesoEmpleados.codigoHorarioAccesoPk }}">{{ arControlAccesoEmpleados.codigoHorarioAccesoPk }} </td>
                 <td>{{ arControlAccesoEmpleados.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arControlAccesoEmpleados.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arControlAccesoEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{{ arControlAccesoEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
-                <td>{{ arControlAccesoEmpleados.fechaEntrada|date('H:i:s')  }}</td>
+                <td>{{ arControlAccesoEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
+                <td>{% if arControlAccesoEmpleados.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arControlAccesoEmpleados.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
                 <td>{{ arControlAccesoEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesoEmpleados.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesoEmpleados.fechaSalida|date('H:i:s')  }}{% endif%}</td>
                 <td>{{ arControlAccesoEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>

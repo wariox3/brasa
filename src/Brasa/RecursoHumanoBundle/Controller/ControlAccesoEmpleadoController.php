@@ -113,14 +113,28 @@ class ControlAccesoEmpleadoController extends Controller
         $form->handleRequest($request);
         if ($form->isValid())
         {
-                $arControlAccesoEmpleado->setFechaEntrada($form->get('fechaEntrada')->getData());
-                $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
-                $arControlAccesoEmpleado->setDuracionRegistro($form->get('duracionVisita')->getData());
-                $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
-                $em->persist($arControlAccesoEmpleado);  
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
-            
+            $arControlAccesoEmpleado->setFechaEntrada($form->get('fechaEntrada')->getData());
+            $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
+            $dateEntrada = $arControlAccesoEmpleado->getFechaEntrada();
+            $dateSalida = $arControlAccesoEmpleado->getFechaSalida();
+            $horaEntrada = $dateEntrada->format('H');
+            $horaSalida = $dateSalida->format('H');
+            if ($horaSalida < $horaEntrada){
+               $objMensaje->Mensaje("error", "La hora de salida no puede ser menor a la hora de entrada", $this);
+            } else {
+               $dateEntrada = $arControlAccesoEmpleado->getFechaEntrada();
+               $dateSalida = $arControlAccesoEmpleado->getFechaSalida();
+               $dateDiferencia = date_diff($dateSalida, $dateEntrada);
+               $horas = $dateDiferencia->format('%H');
+               $minutos = $dateDiferencia->format('%i');
+               $segundos = $dateDiferencia->format('%s');
+               $diferencia = $horas.":".$minutos.":".$segundos;
+               $arControlAccesoEmpleado->setDuracionRegistro($diferencia);
+               $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
+               $em->persist($arControlAccesoEmpleado);  
+               $em->flush();
+               return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
+           }
             
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ControlAcceso:nuevo.html.twig', array(

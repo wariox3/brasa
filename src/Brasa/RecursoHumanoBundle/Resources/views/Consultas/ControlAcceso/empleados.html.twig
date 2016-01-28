@@ -82,7 +82,7 @@
                     <th>HORA ENTRADA</th>
                     <th>H. SALIDA TURNO</th>
                     <th>HORA SALIDA</th>
-                    <th>DURACIÓN VISITA</th>
+                    <th>DURACIÓN REGISTRO</th>
                     <th>COMENTARIOS</th>
                 </tr>
             {% set contador = 1  %}
@@ -96,7 +96,7 @@
                 <td>{{ arControlAccesosEmpleados.empleadoRel.cargoRel.nombre  }}</td>
                 <td>{{ arControlAccesosEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
                 <td>{{ arControlAccesosEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
-                <td>{% if arControlAccesosEmpleados.fechaEntrada == null %} SIN ENTRADA {% else %}{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}{% endif%}</td>
+                <td>{% if arControlAccesosEmpleados.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
                 <td>{{ arControlAccesosEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesosEmpleados.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}{% endif%}</td>
                 <td>{{ arControlAccesosEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>

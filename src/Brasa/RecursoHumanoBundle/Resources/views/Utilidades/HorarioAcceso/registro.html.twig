@@ -46,7 +46,7 @@
                 <td>{{ arHorarioAccesos.empleadoRel.departamentoEmpresaRel.nombre  }}</td>
                 <td>{{ arHorarioAccesos.fechaEntrada|date('Y-m-d')  }}</td>
                 <td>{{ arHorarioAccesos.horaEntradaTurno|date('H:i:s')  }}</td>
-                <td>{{ arHorarioAccesos.fechaEntrada|date('H:i:s')  }}</td>
+                <td>{% if arHorarioAccesos.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arHorarioAccesos.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
                 <td>{{ arHorarioAccesos.comentarios  }}</td>
                 
             </tr>
