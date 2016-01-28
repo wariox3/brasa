@@ -63,14 +63,14 @@ class RhuHorarioAcceso
     private $horas = 0;    
     
     /**
-     * @ORM\Column(name="hora_entrada_empleado", type="time", nullable=true)
+     * @ORM\Column(name="hora_entrada_turno", type="time", nullable=true)
      */    
-    private $horaEntradaEmpleado;    
+    private $horaEntradaTurno;    
 
     /**
-     * @ORM\Column(name="hora_salida_empleado", type="time", nullable=true)
+     * @ORM\Column(name="hora_salida_turno", type="time", nullable=true)
      */    
-    private $horaSalidaEmpleado;
+    private $horaSalidaTurno;
    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="horarioAccesoEmpleadoRel")
@@ -314,51 +314,51 @@ class RhuHorarioAcceso
     }
 
     /**
-     * Set horaEntradaEmpleado
+     * Set horaEntradaTurno
      *
-     * @param \DateTime $horaEntradaEmpleado
+     * @param \DateTime $horaEntradaTurno
      *
      * @return RhuHorarioAcceso
      */
-    public function setHoraEntradaEmpleado($horaEntradaEmpleado)
+    public function setHoraEntradaTurno($horaEntradaTurno)
     {
-        $this->horaEntradaEmpleado = $horaEntradaEmpleado;
+        $this->horaEntradaTurno = $horaEntradaTurno;
 
         return $this;
     }
 
     /**
-     * Get horaEntradaEmpleado
+     * Get horaEntradaTurno
      *
      * @return \DateTime
      */
-    public function getHoraEntradaEmpleado()
+    public function getHoraEntradaTurno()
     {
-        return $this->horaEntradaEmpleado;
+        return $this->horaEntradaTurno;
     }
 
     /**
-     * Set horaSalidaEmpleado
+     * Set horaSalidaTurno
      *
-     * @param \DateTime $horaSalidaEmpleado
+     * @param \DateTime $horaSalidaTurno
      *
      * @return RhuHorarioAcceso
      */
-    public function setHoraSalidaEmpleado($horaSalidaEmpleado)
+    public function setHoraSalidaTurno($horaSalidaTurno)
     {
-        $this->horaSalidaEmpleado = $horaSalidaEmpleado;
+        $this->horaSalidaTurno = $horaSalidaTurno;
 
         return $this;
     }
 
     /**
-     * Get horaSalidaEmpleado
+     * Get horaSalidaTurno
      *
      * @return \DateTime
      */
-    public function getHoraSalidaEmpleado()
+    public function getHoraSalidaTurno()
     {
-        return $this->horaSalidaEmpleado;
+        return $this->horaSalidaTurno;
     }
 
     /**

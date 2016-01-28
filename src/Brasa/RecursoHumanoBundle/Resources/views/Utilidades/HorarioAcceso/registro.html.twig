@@ -33,9 +33,9 @@
                 <th>EMPLEADO</th>
                 <th>DEPARTAMENTO</th>
                 <th>FECHA</th>
-                <th>HORA</th>
+                <th>HORA TURNO</th>
+                <th>HORA EMPLEADO</th>
                 <th>COMENTARIOS</th>
-                <th></th>
             </tr>
             {% set contador = 1  %}
             {% for arHorarioAccesos in arHorarioAccesos %}
@@ -45,9 +45,9 @@
                 <td>{{ arHorarioAccesos.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arHorarioAccesos.empleadoRel.departamentoEmpresaRel.nombre  }}</td>
                 <td>{{ arHorarioAccesos.fechaEntrada|date('Y-m-d')  }}</td>
+                <td>{{ arHorarioAccesos.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{{ arHorarioAccesos.fechaEntrada|date('H:i:s')  }}</td>
                 <td>{{ arHorarioAccesos.comentarios  }}</td>
-                <td style="text-align: center"><a id="{{ path('brs_rhu_salida_control_acceso_empleados',{'codigoHorarioAcceso': arHorarioAccesos.codigoHorarioAccesoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_192_circle_remove.png') }}" width=20 height=20 title="salida empleado"></a></td>                                
                 
             </tr>
             {% set contador = contador + 1  %}

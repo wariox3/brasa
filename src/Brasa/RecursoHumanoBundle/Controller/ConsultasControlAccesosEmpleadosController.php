@@ -153,6 +153,16 @@ class ConsultasControlAccesosEmpleadosController extends Controller
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'NRO')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
@@ -161,15 +171,17 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                     ->setCellValue('E1', 'DEPARTAMENTO EMPRESA')                    
                     ->setCellValue('F1', 'CARGO')
                     ->setCellValue('G1', 'FECHA')
-                    ->setCellValue('H1', 'HORA ENTRADA')
-                    ->setCellValue('I1', 'HORA SALIDA')
-                    ->setCellValue('J1', 'DURACIÓN REGISTRO')
-                    ->setCellValue('K1', 'COMENTARIOS');
+                    ->setCellValue('H1', 'HORARIO ENTRADA EMPLEADO')
+                    ->setCellValue('I1', 'HORA ENTRADA')
+                    ->setCellValue('J1', 'HORARIO SALIDA EMPLEADO')
+                    ->setCellValue('K1', 'HORA SALIDA')
+                    ->setCellValue('L1', 'DURACIÓN REGISTRO')
+                    ->setCellValue('M1', 'COMENTARIOS');
         
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
-        //$arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
+        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
         $arHorarioAcceso = $query->getResult();
         $j = 1;
         foreach ($arHorarioAcceso as $arHorarioAcceso) {
@@ -192,11 +204,13 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                 ->setCellValue('D' . $i, $arHorarioAcceso->getEmpleadoRel()->getCentroCostoRel()->getNombre())                        
                 ->setCellValue('E' . $i, $arHorarioAcceso->getEmpleadoRel()->getDepartamentoEmpresaRel()->getNombre())                    
                 ->setCellValue('F' . $i, $arHorarioAcceso->getEmpleadoRel()->getCargoRel()->getNombre())                    
-                ->setCellValue('G' . $i, $dateFechaEntrada)
-                ->setCellValue('H' . $i, $timeFechaEntrada)
-                ->setCellValue('I' . $i, $dateFechaSalida)
-                ->setCellValue('J' . $i, $arHorarioAcceso->getDuracionRegistro())
-                ->setCellValue('K' . $i, $arHorarioAcceso->getComentarios());
+                ->setCellValue('G' . $i, $arHorarioAcceso->getHoraEntradaEmpleado())
+                ->setCellValue('H' . $i, $dateFechaEntrada)
+                ->setCellValue('I' . $i, $timeFechaEntrada)
+                ->setCellValue('G' . $i, $arHorarioAcceso->getHoraSalidaEmpleado())    
+                ->setCellValue('J' . $i, $dateFechaSalida)
+                ->setCellValue('K' . $i, $arHorarioAcceso->getDuracionRegistro())
+                ->setCellValue('L' . $i, $arHorarioAcceso->getComentarios());
             $i++;
             $j++;
         }

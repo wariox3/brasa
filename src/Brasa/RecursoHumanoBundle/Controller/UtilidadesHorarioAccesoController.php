@@ -27,24 +27,39 @@ class UtilidadesHorarioAccesoController extends Controller
             if($arrControles['txtNumeroIdentificacion'] != '') {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-                if(count($arEmpleado) > 0) {
-                    $arHorarioAcceso->setEmpleadoRel($arEmpleado);
-                    if($arEmpleado->getCodigoContratoActivoFk() != '') {
-                        $arEmpleadoEntrada = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->RegistroEntrada($fechaHoy->format('Y/m/d'),$arEmpleado->getCodigoEmpleadoPk());
-                        if (count($arEmpleadoEntrada) != 0){
-                            $objMensaje->Mensaje("error", "El empleado se encuentra registrado", $this);
-                        }else {
-                            $arHorarioAcceso->setFechaEntrada(new \DateTime('now'));
+                $arHorarioAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->findOneBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));                     
+                if(count($arHorarioAcceso) > 0) {
+                    if ($arHorarioAcceso->getEstadoEntrada() == 0 && $arHorarioAcceso->getEstadoSalida() == 0 ){
+                        $arHorarioAcceso->setFechaEntrada(new \DateTime('now'));
+                        $arHorarioAcceso->setEstadoEntrada(1);
+                        $em->persist($arHorarioAcceso);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
+                    } else {
+                        if ($arHorarioAcceso->getEstadoEntrada() == 1 && $arHorarioAcceso->getEstadoSalida() == 0 ){
+                            $arHorarioAcceso->setFechaSalida(new \DateTime('now'));
+                            $dateEntrada = $arHorarioAcceso->getFechaEntrada();
+                            $dateSalida = $arHorarioAcceso->getFechaSalida();
+                            $dateDiferencia = date_diff($dateSalida, $dateEntrada);
+                            $horas = $dateDiferencia->format('%H');
+                            $minutos = $dateDiferencia->format('%i');
+                            $segundos = $dateDiferencia->format('%s');
+                            $diferencia = $horas.":".$minutos.":".$segundos;
+                            $arHorarioAcceso->setDuracionRegistro($diferencia);
+                            $arHorarioAcceso->setEstadoSalida(1);
                             $em->persist($arHorarioAcceso);
                             $em->flush();
                             return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
+                        } else {
+                            if ($arHorarioAcceso->getEstadoEntrada() == 1 && $arHorarioAcceso->getEstadoSalida() == 1 ){
+                                $objMensaje->Mensaje("error", "El empleado registra entrada y salida el día de hoy", $this);
+                            }
                         }
-                    }else {
-                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
-                        }                       
+                    }
+                       
                 } else {
-                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
-                }                    
+                    $objMensaje->Mensaje("error", "El número de identificacion no se encuentra registrada en el horario de hoy", $this);
+                }
             }else {
                     $objMensaje->Mensaje("error", "Digite por favor el numero de identificación", $this);
                 }                 

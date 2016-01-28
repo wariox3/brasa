@@ -51,7 +51,9 @@
                 <th>IDENTIFICACION</th>
                 <th>EMPLEADO</th>
                 <th>FECHA</th>
+                <th>H. ENTRADA TURNO</th>
                 <th>HORA ENTRADA</th>
+                <th>H. SALIDA TURNO</th>
                 <th>HORA SALIDA</th>
                 <th>DURACIÓN VISITA</th>
                 <th>COMENTARIOS</th>
@@ -63,8 +65,10 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arControlAccesoEmpleados.codigoHorarioAccesoPk }}">{{ arControlAccesoEmpleados.codigoHorarioAccesoPk }} </td>
                 <td>{{ arControlAccesoEmpleados.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arControlAccesoEmpleados.empleadoRel.nombreCorto  }}</td>
+                <td>{{ arControlAccesoEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{{ arControlAccesoEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
                 <td>{{ arControlAccesoEmpleados.fechaEntrada|date('H:i:s')  }}</td>
+                <td>{{ arControlAccesoEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesoEmpleados.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesoEmpleados.fechaSalida|date('H:i:s')  }}{% endif%}</td>
                 <td>{{ arControlAccesoEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>
                 <td>{{ arControlAccesoEmpleados.comentarios  }}</td>
