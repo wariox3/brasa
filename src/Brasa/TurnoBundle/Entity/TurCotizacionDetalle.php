@@ -38,12 +38,12 @@ class TurCotizacionDetalle
     private $codigoPeriodoFk;     
     
     /**
-     * @ORM\Column(name="fechaDesde", type="date", nullable=true)
+     * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fechaDesde;
     
     /**
-     * @ORM\Column(name="fechaHasta", type="date", nullable=true)
+     * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
      */    
     private $fechaHasta;    
     

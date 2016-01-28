@@ -48,12 +48,12 @@ class TurServicioDetalle
     private $codigoPlantillaFk;    
     
     /**
-     * @ORM\Column(name="fechaDesde", type="date", nullable=true)
+     * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fechaDesde;
     
     /**
-     * @ORM\Column(name="fechaHasta", type="date", nullable=true)
+     * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
      */    
     private $fechaHasta;              
     
@@ -328,6 +328,30 @@ class TurServicioDetalle
     public function getCodigoModalidadServicioFk()
     {
         return $this->codigoModalidadServicioFk;
+    }
+
+    /**
+     * Set codigoPeriodoFk
+     *
+     * @param integer $codigoPeriodoFk
+     *
+     * @return TurServicioDetalle
+     */
+    public function setCodigoPeriodoFk($codigoPeriodoFk)
+    {
+        $this->codigoPeriodoFk = $codigoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPeriodoFk()
+    {
+        return $this->codigoPeriodoFk;
     }
 
     /**
@@ -1003,6 +1027,30 @@ class TurServicioDetalle
     }
 
     /**
+     * Set periodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel
+     *
+     * @return TurServicioDetalle
+     */
+    public function setPeriodoRel(\Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel = null)
+    {
+        $this->periodoRel = $periodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get periodoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPeriodo
+     */
+    public function getPeriodoRel()
+    {
+        return $this->periodoRel;
+    }
+
+    /**
      * Set plantillaRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPlantilla $plantillaRel
@@ -1126,53 +1174,5 @@ class TurServicioDetalle
     public function getPedidosDetallesServicioDetalleRel()
     {
         return $this->pedidosDetallesServicioDetalleRel;
-    }
-
-    /**
-     * Set codigoPeriodoFk
-     *
-     * @param integer $codigoPeriodoFk
-     *
-     * @return TurServicioDetalle
-     */
-    public function setCodigoPeriodoFk($codigoPeriodoFk)
-    {
-        $this->codigoPeriodoFk = $codigoPeriodoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPeriodoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPeriodoFk()
-    {
-        return $this->codigoPeriodoFk;
-    }
-
-    /**
-     * Set periodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel
-     *
-     * @return TurServicioDetalle
-     */
-    public function setPeriodoRel(\Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel = null)
-    {
-        $this->periodoRel = $periodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get periodoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPeriodo
-     */
-    public function getPeriodoRel()
-    {
-        return $this->periodoRel;
     }
 }
