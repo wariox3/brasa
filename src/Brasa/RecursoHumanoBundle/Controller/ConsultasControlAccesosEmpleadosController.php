@@ -15,8 +15,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
     var $centroCosto = "";
     var $cargo = "";
     var $departamentoEmpresa = "";
-    var $registrado = "2";
-    var $salida = "2";
+    var $registrado = 2;
+    var $salida = 2;
     var $fechaDesde = "";
     var $fechaHasta = "";
     
@@ -26,17 +26,17 @@ class ConsultasControlAccesosEmpleadosController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
-        $this->listar();
+        $this->listar($form);
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
-                $this->listar();
+                $this->listar($form);
                 $this->generarExcel();
             }            
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
-                $this->listar();
+                $this->listar($form);
             }
 
         }
@@ -47,8 +47,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
             ));
     }        
     
-    private function listar() {
-        $session = $this->getRequest()->getSession();
+    private function listar($form) {
+        $session = $this->getRequest()->getSession();         
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->listaConsultaDql(                    
             $this->nombre,
@@ -58,8 +58,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
             $this->departamentoEmpresa,
             $this->registrado,
             $this->salida,
-            $this->fechaDesde,
-            $this->fechaHasta);
+            $this->fechaDesde = $form->get('fechaDesde')->getData(),
+            $this->fechaHasta = $form->get('fechaHasta')->getData());
     }       
     
     private function formularioLista() {

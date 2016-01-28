@@ -64,7 +64,19 @@ class RhuTurno
      */    
     private $comentarios;       
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuHorarioAcceso", mappedBy="turnoRel")
+     */
+    protected $horariosAccesosTurnoRel;
     
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->horariosAccesosTurnoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set codigoTurnoPk
@@ -304,5 +316,39 @@ class RhuTurno
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Add horariosAccesosTurnoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horariosAccesosTurnoRel
+     *
+     * @return RhuTurno
+     */
+    public function addHorariosAccesosTurnoRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horariosAccesosTurnoRel)
+    {
+        $this->horariosAccesosTurnoRel[] = $horariosAccesosTurnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove horariosAccesosTurnoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horariosAccesosTurnoRel
+     */
+    public function removeHorariosAccesosTurnoRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horariosAccesosTurnoRel)
+    {
+        $this->horariosAccesosTurnoRel->removeElement($horariosAccesosTurnoRel);
+    }
+
+    /**
+     * Get horariosAccesosTurnoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHorariosAccesosTurnoRel()
+    {
+        return $this->horariosAccesosTurnoRel;
     }
 }

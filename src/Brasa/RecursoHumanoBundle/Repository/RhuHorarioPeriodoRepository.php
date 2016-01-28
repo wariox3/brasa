@@ -23,6 +23,11 @@ class RhuHorarioPeriodoRepository extends EntityRepository {
     public function generar($codigoHorarioPeriodo) {
         $em = $this->getEntityManager(); 
         $strMensaje = "";
+        $intDiaSemana = "";
+        
+        $CodigoHorarioEmpleado = "";
+        $arHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuHorario();
+        $arTurno = new \Brasa\RecursoHumanoBundle\Entity\RhuTurno();
         $arHorarioPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioPeriodo();
         $arHorarioPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->find($codigoHorarioPeriodo);
         
@@ -39,7 +44,61 @@ class RhuHorarioPeriodoRepository extends EntityRepository {
                 $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
                 $arHorarioAcceso->setEmpleadoRel($arContrato->getEmpleadoRel());
                 $arHorarioAcceso->setFechaEntrada($arHorarioPeriodo->getPeriodo());
+                $intDiaSemana = $arHorarioPeriodo->getPeriodo()->format('N');
+                $CodigoHorarioEmpleado = $arContrato->getEmpleadoRel()->getCodigoHorarioFk();
+                $arHorario = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->find($CodigoHorarioEmpleado);
                 $em->persist($arHorarioAcceso);
+                if ($intDiaSemana == 1) {
+                    $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getLunes());
+                    $arHorarioAcceso->setTurnoRel($arTurno);
+                    $arHorarioAcceso->setHoraEntradaEmpleado($arTurno->getHoraDesde());
+                    $arHorarioAcceso->setHoraSalidaEmpleado($arTurno->getHoraHasta());
+                    $em->persist($arHorarioAcceso);
+                }
+                if ($intDiaSemana == 2) {
+                    $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getMartes());
+                    $arHorarioAcceso->setTurnoRel($arTurno);
+                    $arHorarioAcceso->setHoraEntradaEmpleado($arTurno->getHoraDesde());
+                    $arHorarioAcceso->setHoraSalidaEmpleado($arTurno->getHoraHasta());
+                    $em->persist($arHorarioAcceso);
+                }
+                if ($intDiaSemana == 3) {
+                    $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getMiercoles());
+                    $arHorarioAcceso->setTurnoRel($arTurno);
+                    $arHorarioAcceso->setHoraEntradaEmpleado($arTurno->getHoraDesde());
+                    $arHorarioAcceso->setHoraSalidaEmpleado($arTurno->getHoraHasta());
+                    $em->persist($arHorarioAcceso);
+                }
+                if ($intDiaSemana == 4) {
+                    $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getJueves());
+                    $arHorarioAcceso->setTurnoRel($arTurno);
+                    $arHorarioAcceso->setHoraEntradaEmpleado($arTurno->getHoraDesde());
+                    $arHorarioAcceso->setHoraSalidaEmpleado($arTurno->getHoraHasta());
+                    $em->persist($arHorarioAcceso);
+                }
+                if ($intDiaSemana == 5) {
+                    $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getViernes());
+                    $arHorarioAcceso->setTurnoRel($arTurno);
+                    $arHorarioAcceso->setHoraEntradaEmpleado($arTurno->getHoraDesde());
+                    $arHorarioAcceso->setHoraSalidaEmpleado($arTurno->getHoraHasta());
+                    $em->persist($arHorarioAcceso);
+                }
+                if ($intDiaSemana == 6) {
+                    $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getSabado());
+                    $arHorarioAcceso->setTurnoRel($arTurno);
+                    $arHorarioAcceso->setHoraEntradaEmpleado($arTurno->getHoraDesde());
+                    $arHorarioAcceso->setHoraSalidaEmpleado($arTurno->getHoraHasta());
+                    $em->persist($arHorarioAcceso);
+                }
+                if ($intDiaSemana == 7) {
+                    $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorario->getDomingo());
+                    $arHorarioAcceso->setTurnoRel($arTurno);
+                    $arHorarioAcceso->setHoraEntradaEmpleado($arTurno->getHoraDesde());
+                    $arHorarioAcceso->setHoraSalidaEmpleado($arTurno->getHoraHasta());
+                    $em->persist($arHorarioAcceso);
+                }
+                
+                
             }
             $arHorarioPeriodo->setEstadoGenerado(1);
             $em->persist($arHorarioPeriodo);

@@ -23,6 +23,11 @@ class RhuHorarioAcceso
     private $codigoEmpleadoFk;
     
     /**
+     * @ORM\Column(name="codigo_turno_fk",  type="string", length=250, nullable=true)
+     */    
+    private $codigoTurnoFk;
+    
+    /**
      * @ORM\Column(name="fecha_entrada", type="datetime", nullable=true)
      */    
     private $fechaEntrada;
@@ -58,50 +63,27 @@ class RhuHorarioAcceso
     private $horas = 0;    
     
     /**
-     * @ORM\Column(name="horas_diurnas", type="integer")
+     * @ORM\Column(name="hora_entrada_empleado", type="time", nullable=true)
      */    
-    private $horasDiurnas = 0;     
+    private $horaEntradaEmpleado;    
 
     /**
-     * @ORM\Column(name="horas_nocturnas", type="integer")
+     * @ORM\Column(name="hora_salida_empleado", type="time", nullable=true)
      */    
-    private $horasNocturnas = 0;    
-    
-    /**
-     * @ORM\Column(name="horas_festivas_diurnas", type="integer")
-     */    
-    private $horasFestivasDiurnas = 0;     
-
-    /**
-     * @ORM\Column(name="horas_festivas_nocturnas", type="integer")
-     */    
-    private $horasFestivasNocturnas = 0;     
-    
-    /**
-     * @ORM\Column(name="horas_extras_ordinarias_diurnas", type="integer")
-     */    
-    private $horasExtrasOrdinariasDiurnas = 0;    
-
-    /**
-     * @ORM\Column(name="horas_extras_ordinarias_nocturnas", type="integer")
-     */    
-    private $horasExtrasOrdinariasNocturnas = 0;        
-
-    /**
-     * @ORM\Column(name="horas_extras_festivas_diurnas", type="integer")
-     */    
-    private $horasExtrasFestivasDiurnas = 0;    
-
-    /**
-     * @ORM\Column(name="horas_extras_festivas_nocturnas", type="integer")
-     */    
-    private $horasExtrasFestivasNocturnas = 0;
+    private $horaSalidaEmpleado;
    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="horarioAccesoEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuTurno", inversedBy="horariosAccesosTurnoRel")
+     * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
+     */
+    protected $turnoRel;
+    
     
 
 
@@ -137,6 +119,30 @@ class RhuHorarioAcceso
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoTurnoFk
+     *
+     * @param string $codigoTurnoFk
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setCodigoTurnoFk($codigoTurnoFk)
+    {
+        $this->codigoTurnoFk = $codigoTurnoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFk()
+    {
+        return $this->codigoTurnoFk;
     }
 
     /**
@@ -308,195 +314,51 @@ class RhuHorarioAcceso
     }
 
     /**
-     * Set horasDiurnas
+     * Set horaEntradaEmpleado
      *
-     * @param integer $horasDiurnas
+     * @param \DateTime $horaEntradaEmpleado
      *
      * @return RhuHorarioAcceso
      */
-    public function setHorasDiurnas($horasDiurnas)
+    public function setHoraEntradaEmpleado($horaEntradaEmpleado)
     {
-        $this->horasDiurnas = $horasDiurnas;
+        $this->horaEntradaEmpleado = $horaEntradaEmpleado;
 
         return $this;
     }
 
     /**
-     * Get horasDiurnas
+     * Get horaEntradaEmpleado
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getHorasDiurnas()
+    public function getHoraEntradaEmpleado()
     {
-        return $this->horasDiurnas;
+        return $this->horaEntradaEmpleado;
     }
 
     /**
-     * Set horasNocturnas
+     * Set horaSalidaEmpleado
      *
-     * @param integer $horasNocturnas
+     * @param \DateTime $horaSalidaEmpleado
      *
      * @return RhuHorarioAcceso
      */
-    public function setHorasNocturnas($horasNocturnas)
+    public function setHoraSalidaEmpleado($horaSalidaEmpleado)
     {
-        $this->horasNocturnas = $horasNocturnas;
+        $this->horaSalidaEmpleado = $horaSalidaEmpleado;
 
         return $this;
     }
 
     /**
-     * Get horasNocturnas
+     * Get horaSalidaEmpleado
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getHorasNocturnas()
+    public function getHoraSalidaEmpleado()
     {
-        return $this->horasNocturnas;
-    }
-
-    /**
-     * Set horasFestivasDiurnas
-     *
-     * @param integer $horasFestivasDiurnas
-     *
-     * @return RhuHorarioAcceso
-     */
-    public function setHorasFestivasDiurnas($horasFestivasDiurnas)
-    {
-        $this->horasFestivasDiurnas = $horasFestivasDiurnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasFestivasDiurnas
-     *
-     * @return integer
-     */
-    public function getHorasFestivasDiurnas()
-    {
-        return $this->horasFestivasDiurnas;
-    }
-
-    /**
-     * Set horasFestivasNocturnas
-     *
-     * @param integer $horasFestivasNocturnas
-     *
-     * @return RhuHorarioAcceso
-     */
-    public function setHorasFestivasNocturnas($horasFestivasNocturnas)
-    {
-        $this->horasFestivasNocturnas = $horasFestivasNocturnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasFestivasNocturnas
-     *
-     * @return integer
-     */
-    public function getHorasFestivasNocturnas()
-    {
-        return $this->horasFestivasNocturnas;
-    }
-
-    /**
-     * Set horasExtrasOrdinariasDiurnas
-     *
-     * @param integer $horasExtrasOrdinariasDiurnas
-     *
-     * @return RhuHorarioAcceso
-     */
-    public function setHorasExtrasOrdinariasDiurnas($horasExtrasOrdinariasDiurnas)
-    {
-        $this->horasExtrasOrdinariasDiurnas = $horasExtrasOrdinariasDiurnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasExtrasOrdinariasDiurnas
-     *
-     * @return integer
-     */
-    public function getHorasExtrasOrdinariasDiurnas()
-    {
-        return $this->horasExtrasOrdinariasDiurnas;
-    }
-
-    /**
-     * Set horasExtrasOrdinariasNocturnas
-     *
-     * @param integer $horasExtrasOrdinariasNocturnas
-     *
-     * @return RhuHorarioAcceso
-     */
-    public function setHorasExtrasOrdinariasNocturnas($horasExtrasOrdinariasNocturnas)
-    {
-        $this->horasExtrasOrdinariasNocturnas = $horasExtrasOrdinariasNocturnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasExtrasOrdinariasNocturnas
-     *
-     * @return integer
-     */
-    public function getHorasExtrasOrdinariasNocturnas()
-    {
-        return $this->horasExtrasOrdinariasNocturnas;
-    }
-
-    /**
-     * Set horasExtrasFestivasDiurnas
-     *
-     * @param integer $horasExtrasFestivasDiurnas
-     *
-     * @return RhuHorarioAcceso
-     */
-    public function setHorasExtrasFestivasDiurnas($horasExtrasFestivasDiurnas)
-    {
-        $this->horasExtrasFestivasDiurnas = $horasExtrasFestivasDiurnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasExtrasFestivasDiurnas
-     *
-     * @return integer
-     */
-    public function getHorasExtrasFestivasDiurnas()
-    {
-        return $this->horasExtrasFestivasDiurnas;
-    }
-
-    /**
-     * Set horasExtrasFestivasNocturnas
-     *
-     * @param integer $horasExtrasFestivasNocturnas
-     *
-     * @return RhuHorarioAcceso
-     */
-    public function setHorasExtrasFestivasNocturnas($horasExtrasFestivasNocturnas)
-    {
-        $this->horasExtrasFestivasNocturnas = $horasExtrasFestivasNocturnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasExtrasFestivasNocturnas
-     *
-     * @return integer
-     */
-    public function getHorasExtrasFestivasNocturnas()
-    {
-        return $this->horasExtrasFestivasNocturnas;
+        return $this->horaSalidaEmpleado;
     }
 
     /**
@@ -521,5 +383,29 @@ class RhuHorarioAcceso
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set turnoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTurno $turnoRel
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setTurnoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTurno $turnoRel = null)
+    {
+        $this->turnoRel = $turnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get turnoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTurno
+     */
+    public function getTurnoRel()
+    {
+        return $this->turnoRel;
     }
 }
