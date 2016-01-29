@@ -155,41 +155,35 @@ class ControlAccesoEmpleadoController extends Controller
                     $arControlAccesoEmpleado->setDuracionRegistro($diferencia);
                     $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
                     
-                    //calculo llegadaTarde
-                    $horaTurno = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H:i:s');
-                    $horaLlegada = $arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s');                        
-                    if ($horaTurno < $horaLlegada){
-                        $arControlAccesoEmpleado->setLlegadaTarde(1);
-                        $horaTurnoH = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H');
-                        $horaTurnoM = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('i');
-                        $horaTurnoS = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('s');
-                        $horaLlegadaH = $arControlAccesoEmpleado->getFechaEntrada()->format('H');
-                        $horaLlegadaM = $arControlAccesoEmpleado->getFechaEntrada()->format('i');
-                        $horaLlegadaS = $arControlAccesoEmpleado->getFechaEntrada()->format('s');
-                        $diferenciaHora = $horaLlegadaH - $horaTurnoH;
-                        $diferenciaMinutos = $horaLlegadaM - $horaTurnoM;
-                        $diferenciaSegundo = $horaLlegadaS - $horaTurnoS;
-                        $timeLlegadaTarde = $diferenciaHora.":".$diferenciaMinutos.":".$diferenciaSegundo;
-                        $arControlAccesoEmpleado->setDuracionLlegadaTarde($timeLlegadaTarde);
-                    }
+                    //calculo entradaTarde
+                            $horaTurno = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H:i:s');
+                            $horaLlegada = $arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s');
+                            if ($horaTurno < $horaLlegada){
+                                $arControlAccesoEmpleado->setLlegadaTarde(1);
+                                $date1 = strtotime($horaTurno);
+                                $date2 = strtotime($horaLlegada);
+                                $interval = $date2 - $date1;
+                                $seconds = $interval % 60;
+                                $minutes = floor(($interval % 3600) / 60);
+                                $hours = floor($interval / 3600);
+                                $timeLlegadaTarde = $hours.":".$minutes.":".$seconds;
+                                $arControlAccesoEmpleado->setDuracionLlegadaTarde($timeLlegadaTarde);
+                            }
                     
-                    //calculo salidaAntes
-                    $horaTurno = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('H:i:s');
-                    $horaSalida = $arControlAccesoEmpleado->getFechaSalida()->format('H:i:s');
-                    if ($horaTurno > $horaSalida){
-                        $arControlAccesoEmpleado->setSalidaAntes(1);
-                        $horaTurnoH = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('H');
-                        $horaTurnoM = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('i');
-                        $horaTurnoS = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('s');
-                        $horaSalidaH = $arControlAccesoEmpleado->getFechaSalida()->format('H');
-                        $horaSalidaM = $arControlAccesoEmpleado->getFechaSalida()->format('i');
-                        $horaSalidaS = $arControlAccesoEmpleado->getFechaSalida()->format('s');
-                        $diferenciaHora = $horaTurnoH - $horaSalidaH;
-                        $diferenciaMinutos = $horaSalidaM - $horaTurnoM;
-                        $diferenciaSegundo = $horaSalidaS - $horaTurnoS;
-                        $timeSalidaTarde = $diferenciaHora.":".$diferenciaMinutos.":".$diferenciaSegundo;
-                        $arControlAccesoEmpleado->setDuracionSalidaAntes($timeSalidaTarde);
-                    }
+                     //calculo salidaAntes
+                            $horaTurno = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('H:i:s');
+                            $horaSalida = $arControlAccesoEmpleado->getFechaSalida()->format('H:i:s');
+                            if ($horaTurno > $horaSalida){
+                                $arControlAccesoEmpleado->setSalidaAntes(1);
+                                $date1 = strtotime($horaTurno);
+                                $date2 = strtotime($horaSalida);
+                                $interval = $date1 - $date2;
+                                $seconds = $interval % 60;
+                                $minutes = floor(($interval % 3600) / 60);
+                                $hours = floor($interval / 3600);
+                                $timeSalidaTarde = $hours.":".$minutes.":".$seconds;
+                                $arControlAccesoEmpleado->setDuracionSalidaAntes($timeSalidaTarde);
+                            }
                     
                     
                     $em->persist($arControlAccesoEmpleado);
@@ -225,21 +219,18 @@ class ControlAccesoEmpleadoController extends Controller
                 $arControlAccesoEmpleado->setEstadoEntrada(1);
                 $arControlAccesoEmpleado->setDuracionRegistro("");
                 $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
-                //calculo llegadaTarde
+                //calculo entradaTarde
                     $horaTurno = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H:i:s');
-                    $horaLlegada = $arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s');                        
+                    $horaLlegada = $arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s');
                     if ($horaTurno < $horaLlegada){
                         $arControlAccesoEmpleado->setLlegadaTarde(1);
-                        $horaTurnoH = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H');
-                        $horaTurnoM = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('i');
-                        $horaTurnoS = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('s');
-                        $horaLlegadaH = $arControlAccesoEmpleado->getFechaEntrada()->format('H');
-                        $horaLlegadaM = $arControlAccesoEmpleado->getFechaEntrada()->format('i');
-                        $horaLlegadaS = $arControlAccesoEmpleado->getFechaEntrada()->format('s');
-                        $diferenciaHora = $horaLlegadaH - $horaTurnoH;
-                        $diferenciaMinutos = $horaLlegadaM - $horaTurnoM;
-                        $diferenciaSegundo = $horaLlegadaS - $horaTurnoS;
-                        $timeLlegadaTarde = $diferenciaHora.":".$diferenciaMinutos.":".$diferenciaSegundo;
+                        $date1 = strtotime($horaTurno);
+                        $date2 = strtotime($horaLlegada);
+                        $interval = $date2 - $date1;
+                        $seconds = $interval % 60;
+                        $minutes = floor(($interval % 3600) / 60);
+                        $hours = floor($interval / 3600);
+                        $timeLlegadaTarde = $hours.":".$minutes.":".$seconds;
                         $arControlAccesoEmpleado->setDuracionLlegadaTarde($timeLlegadaTarde);
                     }
                 $em->persist($arControlAccesoEmpleado);
@@ -310,54 +301,54 @@ class ControlAccesoEmpleadoController extends Controller
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
-        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
-        $arHorarioAcceso = $query->getResult();
+        $arControlAccesoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
+        $arControlAccesoEmpleado = $query->getResult();
         $j = 1;
-        foreach ($arHorarioAcceso as $arHorarioAcceso) {
+        foreach ($arControlAccesoEmpleado as $arControlAccesoEmpleado) {
             
-            if ($arHorarioAcceso->getFechaEntrada()->format('H:i:s') == "00:00:00"){
+            if ($arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s') == "00:00:00"){
                 $timeHoraEntrada = "SIN ENTRADA";
             } else {
-                $timeHoraEntrada = $arHorarioAcceso->getFechaEntrada()->format('H:i:s');
+                $timeHoraEntrada = $arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s');
             }
-            if ($arHorarioAcceso->getFechaSalida() == null){
+            if ($arControlAccesoEmpleado->getFechaSalida() == null){
                 $timeHoraSalida = "SIN SALIDA";
             } else {
-                if ($arHorarioAcceso->getFechaSalida()->format('H:i:s') == "00:00:00") {
+                if ($arControlAccesoEmpleado->getFechaSalida()->format('H:i:s') == "00:00:00") {
                     $timeHoraSalida = "SIN SALIDA";
                 }
-                    $timeHoraSalida = $arHorarioAcceso->getFechaSalida()->format('H:i:s');
+                    $timeHoraSalida = $arControlAccesoEmpleado->getFechaSalida()->format('H:i:s');
                 
             }
-            if ($arHorarioAcceso->getDuracionLlegadaTarde() == null){
+            if ($arControlAccesoEmpleado->getDuracionLlegadaTarde() == null){
                 $duracionLLegadaTarde = "";
             } else {
-                $duracionLLegadaTarde = $arHorarioAcceso->getDuracionLlegadaTarde();
+                $duracionLLegadaTarde = $arControlAccesoEmpleado->getDuracionLlegadaTarde();
             }
-            if ($arHorarioAcceso->getDuracionSalidaAntes() == null){
+            if ($arControlAccesoEmpleado->getDuracionSalidaAntes() == null){
                 $duracionSalidaAntes = "";
             } else {
-                $duracionSalidaAntes = $arHorarioAcceso->getDuracionSalidaAntes();
+                $duracionSalidaAntes = $arControlAccesoEmpleado->getDuracionSalidaAntes();
             }
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A' . $i, $j)    
-                ->setCellValue('B' . $i, $arHorarioAcceso->getEmpleadoRel()->getNumeroIdentificacion())
-                ->setCellValue('C' . $i, $arHorarioAcceso->getEmpleadoRel()->getNombreCorto())
-                ->setCellValue('D' . $i, $arHorarioAcceso->getEmpleadoRel()->getCentroCostoRel()->getNombre())                        
-                ->setCellValue('E' . $i, $arHorarioAcceso->getEmpleadoRel()->getDepartamentoEmpresaRel()->getNombre())                    
-                ->setCellValue('F' . $i, $arHorarioAcceso->getEmpleadoRel()->getCargoRel()->getNombre())                    
-                ->setCellValue('G' . $i, $arHorarioAcceso->getFechaEntrada()->format('Y-m-d'))
-                ->setCellValue('H' . $i, $arHorarioAcceso->getCodigoTurnoFk())
-                ->setCellValue('I' . $i, $arHorarioAcceso->getHoraEntradaTurno()->format('H:i:s'))
+                ->setCellValue('B' . $i, $arControlAccesoEmpleado->getEmpleadoRel()->getNumeroIdentificacion())
+                ->setCellValue('C' . $i, $arControlAccesoEmpleado->getEmpleadoRel()->getNombreCorto())
+                ->setCellValue('D' . $i, $arControlAccesoEmpleado->getEmpleadoRel()->getCentroCostoRel()->getNombre())                        
+                ->setCellValue('E' . $i, $arControlAccesoEmpleado->getEmpleadoRel()->getDepartamentoEmpresaRel()->getNombre())                    
+                ->setCellValue('F' . $i, $arControlAccesoEmpleado->getEmpleadoRel()->getCargoRel()->getNombre())                    
+                ->setCellValue('G' . $i, $arControlAccesoEmpleado->getFechaEntrada()->format('Y-m-d'))
+                ->setCellValue('H' . $i, $arControlAccesoEmpleado->getCodigoTurnoFk())
+                ->setCellValue('I' . $i, $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H:i:s'))
                 ->setCellValue('J' . $i, $timeHoraEntrada)
-                ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getLlegadaTarde()))
+                ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arControlAccesoEmpleado->getLlegadaTarde()))
                 ->setCellValue('L' . $i, $duracionLLegadaTarde)    
-                ->setCellValue('M' . $i, $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s'))        
+                ->setCellValue('M' . $i, $arControlAccesoEmpleado->getHoraSalidaTurno()->format('H:i:s'))        
                 ->setCellValue('N' . $i, $timeHoraSalida)
-                ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getSalidaAntes()))    
+                ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arControlAccesoEmpleado->getSalidaAntes()))    
                 ->setCellValue('P' . $i, $duracionSalidaAntes)
-                ->setCellValue('Q' . $i, $arHorarioAcceso->getDuracionRegistro())        
-                ->setCellValue('R' . $i, $arHorarioAcceso->getComentarios());
+                ->setCellValue('Q' . $i, $arControlAccesoEmpleado->getDuracionRegistro())        
+                ->setCellValue('R' . $i, $arControlAccesoEmpleado->getComentarios());
             $i++;
             $j++;
         }
