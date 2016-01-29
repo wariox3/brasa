@@ -224,6 +224,10 @@ class TurPedidoDetalle
      */
     protected $programacionesDetallesPedidoDetalleRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="pedidoDetalleRel")
+     */
+    protected $facturasDetallesPedidoDetalleRel;     
 
     /**
      * Constructor
@@ -232,6 +236,7 @@ class TurPedidoDetalle
     {
         $this->pedidosDetallesRecursosPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1222,5 +1227,39 @@ class TurPedidoDetalle
     public function getProgramacionesDetallesPedidoDetalleRel()
     {
         return $this->programacionesDetallesPedidoDetalleRel;
+    }
+
+    /**
+     * Add facturasDetallesPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPedidoDetalleRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function addFacturasDetallesPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPedidoDetalleRel)
+    {
+        $this->facturasDetallesPedidoDetalleRel[] = $facturasDetallesPedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPedidoDetalleRel
+     */
+    public function removeFacturasDetallesPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPedidoDetalleRel)
+    {
+        $this->facturasDetallesPedidoDetalleRel->removeElement($facturasDetallesPedidoDetalleRel);
+    }
+
+    /**
+     * Get facturasDetallesPedidoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesPedidoDetalleRel()
+    {
+        return $this->facturasDetallesPedidoDetalleRel;
     }
 }

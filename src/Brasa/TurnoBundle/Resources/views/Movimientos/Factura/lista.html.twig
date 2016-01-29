@@ -32,6 +32,7 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arFacturas, 'CÓDIGO', 'p.codigoFacturaPk') }}</th>
                 <th>FECHA</th>
+                <th>VENCE</th>
                 <th>CLIENTE</th>
                 <th>TOTAL</th>                
                 <th></th>
@@ -42,6 +43,7 @@
             <tr>                
                 <td>{{ arFacturas.codigoFacturaPk  }}</td>  
                 <td>{{ arFacturas.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arFacturas.fechaVence |date("Y/m/d")  }}</td>
                 <td>{{ arFacturas.clienteRel.nombreCorto |default('') }}</td>
                 <td style="text-align: right">{{ arFacturas.vrTotal | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_factura_nuevo', {'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>

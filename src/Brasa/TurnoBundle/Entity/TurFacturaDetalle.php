@@ -28,6 +28,11 @@ class TurFacturaDetalle
     private $codigoConceptoServicioFk;     
     
     /**
+     * @ORM\Column(name="codigo_pedido_detalle_fk", type="integer", nullable=true)
+     */    
+    private $codigoPedidoDetalleFk;    
+    
+    /**
      * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad = 0;    
@@ -48,6 +53,13 @@ class TurFacturaDetalle
      * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
      */
     protected $conceptoServicioRel; 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPedidoDetalle", inversedBy="facturasDetallesPedidoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_pedido_detalle_fk", referencedColumnName="codigo_pedido_detalle_pk")
+     */
+    protected $pedidoDetalleRel;    
+    
 
     /**
      * Get codigoFacturaDetallePk
@@ -84,54 +96,6 @@ class TurFacturaDetalle
     }
 
     /**
-     * Set facturaRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturaRel
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setFacturaRel(\Brasa\TurnoBundle\Entity\TurFactura $facturaRel = null)
-    {
-        $this->facturaRel = $facturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurFactura
-     */
-    public function getFacturaRel()
-    {
-        return $this->facturaRel;
-    }
-
-    /**
-     * Set vrPrecio
-     *
-     * @param float $vrPrecio
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setVrPrecio($vrPrecio)
-    {
-        $this->vrPrecio = $vrPrecio;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPrecio
-     *
-     * @return float
-     */
-    public function getVrPrecio()
-    {
-        return $this->vrPrecio;
-    }
-
-    /**
      * Set codigoConceptoServicioFk
      *
      * @param integer $codigoConceptoServicioFk
@@ -153,6 +117,30 @@ class TurFacturaDetalle
     public function getCodigoConceptoServicioFk()
     {
         return $this->codigoConceptoServicioFk;
+    }
+
+    /**
+     * Set codigoPedidoDetalleFk
+     *
+     * @param integer $codigoPedidoDetalleFk
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCodigoPedidoDetalleFk($codigoPedidoDetalleFk)
+    {
+        $this->codigoPedidoDetalleFk = $codigoPedidoDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPedidoDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoPedidoDetalleFk()
+    {
+        return $this->codigoPedidoDetalleFk;
     }
 
     /**
@@ -180,6 +168,54 @@ class TurFacturaDetalle
     }
 
     /**
+     * Set vrPrecio
+     *
+     * @param float $vrPrecio
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setVrPrecio($vrPrecio)
+    {
+        $this->vrPrecio = $vrPrecio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrecio
+     *
+     * @return float
+     */
+    public function getVrPrecio()
+    {
+        return $this->vrPrecio;
+    }
+
+    /**
+     * Set facturaRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturaRel
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setFacturaRel(\Brasa\TurnoBundle\Entity\TurFactura $facturaRel = null)
+    {
+        $this->facturaRel = $facturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurFactura
+     */
+    public function getFacturaRel()
+    {
+        return $this->facturaRel;
+    }
+
+    /**
      * Set conceptoServicioRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
@@ -201,5 +237,29 @@ class TurFacturaDetalle
     public function getConceptoServicioRel()
     {
         return $this->conceptoServicioRel;
+    }
+
+    /**
+     * Set pedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel = null)
+    {
+        $this->pedidoDetalleRel = $pedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalle
+     */
+    public function getPedidoDetalleRel()
+    {
+        return $this->pedidoDetalleRel;
     }
 }

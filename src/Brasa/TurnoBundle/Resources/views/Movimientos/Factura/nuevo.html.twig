@@ -13,12 +13,12 @@
                     <div class="row">
                       <div class="col-lg-2">
                         <div class="input-group">
-                          <input id="txtNit"  name="txtNit"  type="text" class="form-control" value="{{ arPedido.clienteRel.nit |default('') }}"/>
+                          <input id="txtNit"  name="txtNit"  type="text" class="form-control" value="{{ arFactura.clienteRel.nit |default('') }}"/>
                         </div>
                       </div>
                       <div class="col-lg-10">
                         <div class="input-group">                                      
-                          <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arPedido.clienteRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                          <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arFactura.clienteRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
                           <span class="input-group-btn">                                        
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_cliente', { 'campoCodigo': 'txtNit', 'campoNombre': 'txtNombreCorto' }) }}', 'buscarTercero', 600, 900)">Buscar</a>
                           </span>

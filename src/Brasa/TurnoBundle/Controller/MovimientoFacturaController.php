@@ -41,12 +41,14 @@ class MovimientoFacturaController extends Controller
 
     public function nuevoAction($codigoFactura) {
         $request = $this->getRequest();
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $em = $this->getDoctrine()->getManager();
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         if($codigoFactura != 0) {
             $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
         }else{
             $arFactura->setFecha(new \DateTime('now'));
+            $arFactura->setFechaVence(new \DateTime('now'));
         }
         $form = $this->createForm(new TurFacturaType, $arFactura);
         $form->handleRequest($request);
@@ -57,6 +59,8 @@ class MovimientoFacturaController extends Controller
                 $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
+                    $dateFechaVence = $objFunciones->sumarDiasFecha($arCliente->getPlazoPago(), $arFactura->getFecha());
+                    $arFactura->setFechaVence($dateFechaVence);
                     $arFactura->setClienteRel($arCliente);
                     $em->persist($arFactura);
                     $em->flush();
@@ -150,11 +154,14 @@ class MovimientoFacturaController extends Controller
                         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
                         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                        
                         $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
-                        $arFacturaDetalle->setFacturaRel($arFactura);
+                        $arFacturaDetalle->setFacturaRel($arFactura);                        
                         $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+                        $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
                         $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
-                        $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetalle());
-                        $em->persist($arFacturaDetalle);                        
+                        $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetalle());                        
+                        $em->persist($arFacturaDetalle);  
+                        $arPedidoDetalle->setEstadoFacturado(1);
+                        $em->persist($arPedidoDetalle);  
                     }
                 }
                 $em->flush();

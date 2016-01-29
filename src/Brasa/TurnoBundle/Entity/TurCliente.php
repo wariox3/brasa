@@ -33,9 +33,19 @@ class TurCliente
     private $nombreCorto;                         
     
     /**
+     * @ORM\Column(name="codigo_sector_fk", type="integer", nullable=true)
+     */    
+    private $codigoSectorFk;     
+    
+    /**
      * @ORM\Column(name="estrato", type="string", length=5, nullable=true)
      */
     private $estrato;                
+    
+    /**
+     * @ORM\Column(name="plazo_pago", type="integer")
+     */    
+    private $plazoPago = 0;    
     
     /**
      * @ORM\Column(name="gerente", type="string", length=80, nullable=true)
@@ -651,5 +661,53 @@ class TurCliente
     public function getCelularFinanciero()
     {
         return $this->celularFinanciero;
+    }
+
+    /**
+     * Set plazoPago
+     *
+     * @param integer $plazoPago
+     *
+     * @return TurCliente
+     */
+    public function setPlazoPago($plazoPago)
+    {
+        $this->plazoPago = $plazoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get plazoPago
+     *
+     * @return integer
+     */
+    public function getPlazoPago()
+    {
+        return $this->plazoPago;
+    }
+
+    /**
+     * Set codigoSectorFk
+     *
+     * @param integer $codigoSectorFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoSectorFk($codigoSectorFk)
+    {
+        $this->codigoSectorFk = $codigoSectorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSectorFk
+     *
+     * @return integer
+     */
+    public function getCodigoSectorFk()
+    {
+        return $this->codigoSectorFk;
     }
 }

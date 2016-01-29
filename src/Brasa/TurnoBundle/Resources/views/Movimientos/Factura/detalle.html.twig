@@ -46,8 +46,8 @@
                     <td align="right">{{ arFactura.vrSubtotal | number_format(0, '.', ',')}}</td>
                 </tr>                
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">VENCE:</td>
+                    <td class="td-in-well">{{ arFactura.fechaVence |date("Y/m/d") }}</td>
                     <td class="titulo" >BASE:</td>
                     <td align="right">{{ arFactura.vrBaseAIU | number_format(0, '.', ',')}}</td>
                 </tr>                               
@@ -89,6 +89,7 @@
                 <th>SERVICIO</th>
                 <th>CANT</th>
                 <th>PRECIO</th>
+                <th>PED</th>
                 <th></th>
             </tr>
             {% for arFacturaDetalle in arFacturaDetalle %}
@@ -97,6 +98,7 @@
                     <td>{{ arFacturaDetalle.conceptoServicioRel.nombre | default('') }}</td>                                    
                     <td style="text-align: right">{{ arFacturaDetalle.cantidad | number_format(0, '.', ',') }}</td>                                    
                     <td style="text-align: right">{{ arFacturaDetalle.vrPrecio | number_format(0, '.', ',') }}</td>                                    
+                    <td>{{ arFacturaDetalle.codigoPedidoDetalleFk }}</td>                                    
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}" /></td>
                 </tr>
             {% endfor %}

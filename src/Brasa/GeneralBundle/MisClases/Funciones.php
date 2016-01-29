@@ -24,6 +24,14 @@ class Funciones {
     public function diaSemana($dateFecha) {
         
     }
+    
+    public function sumarDiasFecha($intDias, $dateFecha) {
+        $fecha = $dateFecha->format('Y-m-j');
+        $nuevafecha = strtotime ( '+'.$intDias.' day' , strtotime ( $fecha ) ) ;
+        $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+        $dateNuevaFecha = date_create($nuevafecha);                
+        return $dateNuevaFecha;
+    }
 }
 ?>
 

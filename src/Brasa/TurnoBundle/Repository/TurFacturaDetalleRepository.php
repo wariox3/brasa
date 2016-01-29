@@ -18,9 +18,13 @@ class TurFacturaDetalleRepository extends EntityRepository {
     public function eliminar($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
-            foreach ($arrSeleccionados AS $codigo) {                
-                $ar = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($codigo);                
-                $em->remove($ar);                  
+            foreach ($arrSeleccionados AS $codigo) {                                
+                $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($codigo);  
+                $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());  
+                $arPedidoDetalle->setEstadoFacturado(0);
+                $em->persist($arPedidoDetalle);
+                $em->remove($arFacturaDetalle);                  
             }                                         
             $em->flush();       
         }
