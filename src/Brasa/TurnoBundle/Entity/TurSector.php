@@ -48,11 +48,19 @@ class TurSector
     protected $serviciosSectorRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TurCliente", mappedBy="sectorRel")
+     */
+    protected $clientesSectorRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->cotizacionesSectorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pedidosSectorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosSectorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->clientesSectorRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -237,5 +245,39 @@ class TurSector
     public function getServiciosSectorRel()
     {
         return $this->serviciosSectorRel;
+    }
+
+    /**
+     * Add clientesSectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clientesSectorRel
+     *
+     * @return TurSector
+     */
+    public function addClientesSectorRel(\Brasa\TurnoBundle\Entity\TurCliente $clientesSectorRel)
+    {
+        $this->clientesSectorRel[] = $clientesSectorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove clientesSectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clientesSectorRel
+     */
+    public function removeClientesSectorRel(\Brasa\TurnoBundle\Entity\TurCliente $clientesSectorRel)
+    {
+        $this->clientesSectorRel->removeElement($clientesSectorRel);
+    }
+
+    /**
+     * Get clientesSectorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClientesSectorRel()
+    {
+        return $this->clientesSectorRel;
     }
 }

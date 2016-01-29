@@ -33,7 +33,7 @@ class TurCliente
     private $nombreCorto;                         
     
     /**
-     * @ORM\Column(name="codigo_sector_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_sector_fk", type="integer")
      */    
     private $codigoSectorFk;     
     
@@ -94,6 +94,12 @@ class TurCliente
     protected $terceroRel;        
     
     /**
+     * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="clientesSectorRel")
+     * @ORM\JoinColumn(name="codigo_sector_fk", referencedColumnName="codigo_sector_pk")
+     */
+    protected $sectorRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurCotizacion", mappedBy="clienteRel")
      */
     protected $cotizacionesClienteRel; 
@@ -124,7 +130,6 @@ class TurCliente
     protected $puestosClienteRel;     
 
 
-
     /**
      * Constructor
      */
@@ -133,6 +138,7 @@ class TurCliente
         $this->cotizacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pedidosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviciosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -220,6 +226,30 @@ class TurCliente
     }
 
     /**
+     * Set codigoSectorFk
+     *
+     * @param integer $codigoSectorFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoSectorFk($codigoSectorFk)
+    {
+        $this->codigoSectorFk = $codigoSectorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSectorFk
+     *
+     * @return integer
+     */
+    public function getCodigoSectorFk()
+    {
+        return $this->codigoSectorFk;
+    }
+
+    /**
      * Set estrato
      *
      * @param string $estrato
@@ -241,6 +271,126 @@ class TurCliente
     public function getEstrato()
     {
         return $this->estrato;
+    }
+
+    /**
+     * Set plazoPago
+     *
+     * @param integer $plazoPago
+     *
+     * @return TurCliente
+     */
+    public function setPlazoPago($plazoPago)
+    {
+        $this->plazoPago = $plazoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get plazoPago
+     *
+     * @return integer
+     */
+    public function getPlazoPago()
+    {
+        return $this->plazoPago;
+    }
+
+    /**
+     * Set gerente
+     *
+     * @param string $gerente
+     *
+     * @return TurCliente
+     */
+    public function setGerente($gerente)
+    {
+        $this->gerente = $gerente;
+
+        return $this;
+    }
+
+    /**
+     * Get gerente
+     *
+     * @return string
+     */
+    public function getGerente()
+    {
+        return $this->gerente;
+    }
+
+    /**
+     * Set celularGerente
+     *
+     * @param string $celularGerente
+     *
+     * @return TurCliente
+     */
+    public function setCelularGerente($celularGerente)
+    {
+        $this->celularGerente = $celularGerente;
+
+        return $this;
+    }
+
+    /**
+     * Get celularGerente
+     *
+     * @return string
+     */
+    public function getCelularGerente()
+    {
+        return $this->celularGerente;
+    }
+
+    /**
+     * Set financiero
+     *
+     * @param string $financiero
+     *
+     * @return TurCliente
+     */
+    public function setFinanciero($financiero)
+    {
+        $this->financiero = $financiero;
+
+        return $this;
+    }
+
+    /**
+     * Get financiero
+     *
+     * @return string
+     */
+    public function getFinanciero()
+    {
+        return $this->financiero;
+    }
+
+    /**
+     * Set celularFinanciero
+     *
+     * @param string $celularFinanciero
+     *
+     * @return TurCliente
+     */
+    public function setCelularFinanciero($celularFinanciero)
+    {
+        $this->celularFinanciero = $celularFinanciero;
+
+        return $this;
+    }
+
+    /**
+     * Get celularFinanciero
+     *
+     * @return string
+     */
+    public function getCelularFinanciero()
+    {
+        return $this->celularFinanciero;
     }
 
     /**
@@ -364,6 +514,30 @@ class TurCliente
     }
 
     /**
+     * Set sectorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
+     *
+     * @return TurCliente
+     */
+    public function setSectorRel(\Brasa\TurnoBundle\Entity\TurSector $sectorRel = null)
+    {
+        $this->sectorRel = $sectorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sectorRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSector
+     */
+    public function getSectorRel()
+    {
+        return $this->sectorRel;
+    }
+
+    /**
      * Add cotizacionesClienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesClienteRel
@@ -466,6 +640,40 @@ class TurCliente
     }
 
     /**
+     * Add facturasClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addFacturasClienteRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel)
+    {
+        $this->facturasClienteRel[] = $facturasClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel
+     */
+    public function removeFacturasClienteRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel)
+    {
+        $this->facturasClienteRel->removeElement($facturasClienteRel);
+    }
+
+    /**
+     * Get facturasClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasClienteRel()
+    {
+        return $this->facturasClienteRel;
+    }
+
+    /**
      * Add programacionesClienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurProgramacion $programacionesClienteRel
@@ -531,183 +739,5 @@ class TurCliente
     public function getPuestosClienteRel()
     {
         return $this->puestosClienteRel;
-    }
-
-    /**
-     * Add facturasClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel
-     *
-     * @return TurCliente
-     */
-    public function addFacturasClienteRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel)
-    {
-        $this->facturasClienteRel[] = $facturasClienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel
-     */
-    public function removeFacturasClienteRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasClienteRel)
-    {
-        $this->facturasClienteRel->removeElement($facturasClienteRel);
-    }
-
-    /**
-     * Get facturasClienteRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasClienteRel()
-    {
-        return $this->facturasClienteRel;
-    }
-
-    /**
-     * Set gerente
-     *
-     * @param string $gerente
-     *
-     * @return TurCliente
-     */
-    public function setGerente($gerente)
-    {
-        $this->gerente = $gerente;
-
-        return $this;
-    }
-
-    /**
-     * Get gerente
-     *
-     * @return string
-     */
-    public function getGerente()
-    {
-        return $this->gerente;
-    }
-
-    /**
-     * Set celularGerente
-     *
-     * @param string $celularGerente
-     *
-     * @return TurCliente
-     */
-    public function setCelularGerente($celularGerente)
-    {
-        $this->celularGerente = $celularGerente;
-
-        return $this;
-    }
-
-    /**
-     * Get celularGerente
-     *
-     * @return string
-     */
-    public function getCelularGerente()
-    {
-        return $this->celularGerente;
-    }
-
-    /**
-     * Set financiero
-     *
-     * @param string $financiero
-     *
-     * @return TurCliente
-     */
-    public function setFinanciero($financiero)
-    {
-        $this->financiero = $financiero;
-
-        return $this;
-    }
-
-    /**
-     * Get financiero
-     *
-     * @return string
-     */
-    public function getFinanciero()
-    {
-        return $this->financiero;
-    }
-
-    /**
-     * Set celularFinanciero
-     *
-     * @param string $celularFinanciero
-     *
-     * @return TurCliente
-     */
-    public function setCelularFinanciero($celularFinanciero)
-    {
-        $this->celularFinanciero = $celularFinanciero;
-
-        return $this;
-    }
-
-    /**
-     * Get celularFinanciero
-     *
-     * @return string
-     */
-    public function getCelularFinanciero()
-    {
-        return $this->celularFinanciero;
-    }
-
-    /**
-     * Set plazoPago
-     *
-     * @param integer $plazoPago
-     *
-     * @return TurCliente
-     */
-    public function setPlazoPago($plazoPago)
-    {
-        $this->plazoPago = $plazoPago;
-
-        return $this;
-    }
-
-    /**
-     * Get plazoPago
-     *
-     * @return integer
-     */
-    public function getPlazoPago()
-    {
-        return $this->plazoPago;
-    }
-
-    /**
-     * Set codigoSectorFk
-     *
-     * @param integer $codigoSectorFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoSectorFk($codigoSectorFk)
-    {
-        $this->codigoSectorFk = $codigoSectorFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSectorFk
-     *
-     * @return integer
-     */
-    public function getCodigoSectorFk()
-    {
-        return $this->codigoSectorFk;
     }
 }
