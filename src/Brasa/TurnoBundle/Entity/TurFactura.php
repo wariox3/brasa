@@ -18,6 +18,11 @@ class TurFactura
     private $codigoFacturaPk;           
     
     /**
+     * @ORM\Column(name="numero", type="integer")
+     */    
+    private $numero = 0;    
+    
+    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;        
@@ -26,6 +31,11 @@ class TurFactura
      * @ORM\Column(name="fecha_vence", type="date", nullable=true)
      */    
     private $fechaVence;    
+    
+    /**
+     * @ORM\Column(name="soporte", type="string", length=30, nullable=true)
+     */
+    private $soporte;    
     
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
@@ -393,5 +403,53 @@ class TurFactura
     public function getFacturasDetallesFacturaRel()
     {
         return $this->facturasDetallesFacturaRel;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return TurFactura
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return TurFactura
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
     }
 }

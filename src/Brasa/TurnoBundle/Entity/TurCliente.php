@@ -48,6 +48,16 @@ class TurCliente
     private $plazoPago = 0;    
     
     /**
+     * @ORM\Column(name="direccion", type="string", length=120)
+     */
+    private $direccion;
+    
+    /**
+     * @ORM\Column(name="telefono", type="string", length=30)
+     */
+    private $telefono;     
+    
+    /**
      * @ORM\Column(name="gerente", type="string", length=80, nullable=true)
      */
     private $gerente;    
@@ -739,5 +749,53 @@ class TurCliente
     public function getPuestosClienteRel()
     {
         return $this->puestosClienteRel;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return TurCliente
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return TurCliente
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
     }
 }
