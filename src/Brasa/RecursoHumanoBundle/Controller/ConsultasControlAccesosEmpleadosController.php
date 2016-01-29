@@ -9,7 +9,6 @@ class ConsultasControlAccesosEmpleadosController extends Controller
 {
     var $strDqlLista = "";   
     
-    
     var $nombre = "";
     var $identificacion = "";
     var $centroCosto = "";
@@ -19,6 +18,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
     var $salida = 2;
     var $fechaDesde = "";
     var $fechaHasta = "";
+    var $entradaTarde = 2;
+    var $salidaAntes = 2;
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -59,7 +60,9 @@ class ConsultasControlAccesosEmpleadosController extends Controller
             $this->registrado,
             $this->salida,
             $this->fechaDesde = $form->get('fechaDesde')->getData(),
-            $this->fechaHasta = $form->get('fechaHasta')->getData());
+            $this->fechaHasta = $form->get('fechaHasta')->getData(),
+            $this->entradaTarde,
+            $this->salidaAntes);
     }       
     
     private function formularioLista() {
@@ -100,6 +103,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                 'data' => "")) 
             ->add('estadoEntrada', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))
             ->add('estadoSalida', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))
+            ->add('entradaTarde', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))
+            ->add('salidaAntes', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))                
             ->add('fechaDesde','date', array('data' => new \DateTime('now'), 'format' => 'yyyy-MM-dd'))
             ->add('fechaHasta','date', array('data' => new \DateTime('now'), 'format' => 'yyyy-MM-dd'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
@@ -134,11 +139,14 @@ class ConsultasControlAccesosEmpleadosController extends Controller
         $this->departamentoEmpresa = $intDepartamentoEmpresa;
         $this->registrado = $form->get('estadoEntrada')->getData();
         $this->salida = $form->get('estadoSalida')->getData();
+        $this->entradaTarde = $form->get('entradaTarde')->getData();
+        $this->salidaAntes = $form->get('salidaAntes')->getData();
         $this->fechaDesde = $form->get('fechaDesde')->getData();
         $this->fechaHasta = $form->get('fechaHasta')->getData();
     }    
     
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -167,6 +175,10 @@ class ConsultasControlAccesosEmpleadosController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
@@ -178,10 +190,14 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                     ->setCellValue('H1', 'TURNO')
                     ->setCellValue('I1', 'HORA ENTRADA TURNO')
                     ->setCellValue('J1', 'HORA ENTRADA')
-                    ->setCellValue('K1', 'HORA SALIDA TURNO')
-                    ->setCellValue('L1', 'HORA SALIDA')
-                    ->setCellValue('M1', 'DURACIÓN REGISTRO')
-                    ->setCellValue('N1', 'COMENTARIOS');
+                    ->setCellValue('K1', 'LLEGADA TARDE')
+                    ->setCellValue('L1', 'DURACIÓN LLEGADA TARDE')
+                    ->setCellValue('M1', 'HORA SALIDA TURNO')
+                    ->setCellValue('N1', 'HORA SALIDA')
+                    ->setCellValue('O1', 'SALIDA ANTES')
+                    ->setCellValue('P1', 'DURACIÓN SALIDA ANTES')
+                    ->setCellValue('Q1', 'DURACIÓN TOTAL REGISTRO')
+                    ->setCellValue('R1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -204,6 +220,16 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                     $timeHoraSalida = $arHorarioAcceso->getFechaSalida()->format('H:i:s');
                 
             }
+            if ($arHorarioAcceso->getDuracionLlegadaTarde() == null){
+                $duracionLLegadaTarde = "";
+            } else {
+                $duracionLLegadaTarde = $arHorarioAcceso->getDuracionLlegadaTarde();
+            }
+            if ($arHorarioAcceso->getDuracionSalidaAntes() == null){
+                $duracionSalidaAntes = "";
+            } else {
+                $duracionSalidaAntes = $arHorarioAcceso->getDuracionSalidaAntes();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A' . $i, $j)    
                 ->setCellValue('B' . $i, $arHorarioAcceso->getEmpleadoRel()->getNumeroIdentificacion())
@@ -215,10 +241,14 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                 ->setCellValue('H' . $i, $arHorarioAcceso->getCodigoTurnoFk())
                 ->setCellValue('I' . $i, $arHorarioAcceso->getHoraEntradaTurno()->format('H:i:s'))
                 ->setCellValue('J' . $i, $timeHoraEntrada)
-                ->setCellValue('K' . $i, $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s'))        
-                ->setCellValue('L' . $i, $timeHoraSalida)
-                ->setCellValue('M' . $i, $arHorarioAcceso->getDuracionRegistro())        
-                ->setCellValue('N' . $i, $arHorarioAcceso->getComentarios());
+                ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getLlegadaTarde()))
+                ->setCellValue('L' . $i, $duracionLLegadaTarde)    
+                ->setCellValue('M' . $i, $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s'))        
+                ->setCellValue('N' . $i, $timeHoraSalida)
+                ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getSalidaAntes()))    
+                ->setCellValue('P' . $i, $duracionSalidaAntes)
+                ->setCellValue('Q' . $i, $arHorarioAcceso->getDuracionRegistro())        
+                ->setCellValue('R' . $i, $arHorarioAcceso->getComentarios());
             $i++;
             $j++;
         }

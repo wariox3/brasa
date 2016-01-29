@@ -54,7 +54,6 @@ class ControlAccesoEmpleadoController extends Controller
             ));
     }
     
-    
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
@@ -92,7 +91,7 @@ class ControlAccesoEmpleadoController extends Controller
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
-   public function nuevoAction($codigoControlAcceso) {
+    public function nuevoAction($codigoControlAcceso) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -105,13 +104,25 @@ class ControlAccesoEmpleadoController extends Controller
             } else {
                 $intSalida = "NO";
             }
+            $arControlAccesoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoControlAcceso);
+            if ($arControlAccesoEmpleado->getEstadoEntrada() == "1"){
+                $intEntrada = "SI";
+            } else {
+                $intEntrada = "NO";
+            }
+            if ($arControlAccesoEmpleado->getFechaSalida() == null){
+                $dateFechaSalida = new \DateTime('now');
+            } else {
+                $dateFechaSalida = $arControlAccesoEmpleado->getFechaSalida();
+            }
         } 
          
         $form = $this->createFormBuilder()
             ->add('identificacion', 'text', array('data' => $arControlAccesoEmpleado->getEmpleadoRel()->getNumeroIdentificacion()))
             ->add('nombre', 'text', array('data' => $arControlAccesoEmpleado->getEmpleadoRel()->getNombreCorto()))    
             ->add('fechaEntrada', 'datetime', array('required' => true, 'data' => $arControlAccesoEmpleado->getFechaEntrada()))
-            ->add('fechaSalida', 'datetime', array('required' => true, 'data' => $arControlAccesoEmpleado->getFechaSalida()))
+            ->add('fechaSalida', 'datetime', array('required' => true, 'data' => $dateFechaSalida))
+            ->add('entrada', 'choice', array('choices' => array($arControlAccesoEmpleado->getEstadoEntrada() => $intEntrada, '0' => 'NO', '1' => 'SI')))    
             ->add('salida', 'choice', array('choices' => array($arControlAccesoEmpleado->getEstadoSalida() => $intSalida, '0' => 'NO', '1' => 'SI')))    
             ->add('comentarios', 'textarea', array('data' => $arControlAccesoEmpleado->getComentarios(), 'required' => false))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
@@ -133,43 +144,110 @@ class ControlAccesoEmpleadoController extends Controller
             if ($diferencia == "00:0:0"){
                 $diferencia = "";
             }
-            if ($form->get('salida')->getData() == 1) {
-                if ($horaSalida < $horaEntrada){
-                        $objMensaje->Mensaje("error", "La hora de salida no puede ser menor a la hora de entrada", $this);
-                } else {
-                        if ($arControlAccesoEmpleado->getEstadoEntrada() == 1 && $arControlAccesoEmpleado->getEstadoSalida() == 1){
-                            $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
-                            $arControlAccesoEmpleado->setEstadoSalida(1);
-                            $arControlAccesoEmpleado->setDuracionRegistro($diferencia);
-                            $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
-                            $em->persist($arControlAccesoEmpleado);
-                            $em->flush();
-                            return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
-                        } else {
-                            if ($arControlAccesoEmpleado->getEstadoEntrada() == 1 && $arControlAccesoEmpleado->getEstadoSalida() == 0){
-                                $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
-                                $arControlAccesoEmpleado->setEstadoSalida(1);
-                                $arControlAccesoEmpleado->setDuracionRegistro($diferencia);
-                                $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
-                                $em->persist($arControlAccesoEmpleado);
-                                $em->flush();
-                                return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
-                            }else {
-                                $objMensaje->Mensaje("error", "No se puede registrar la salida sin haber registrado la entrada", $this);    
-                            }
-                        }
-                    }        
-            } else {
-                if ($arControlAccesoEmpleado->getEstadoEntrada() == 1){
-                    $arControlAccesoEmpleado->setFechaSalida(null);
+
+            if ($form->get('entrada')->getData() == 1 && $form->get('salida')->getData() == 1) {
+                if ($horaSalida >= $horaEntrada){
+
+                    $arControlAccesoEmpleado->setFechaEntrada($form->get('fechaEntrada')->getData());
+                    $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
+                    $arControlAccesoEmpleado->setEstadoSalida(1);
+                    $arControlAccesoEmpleado->setEstadoEntrada(1);
+                    $arControlAccesoEmpleado->setDuracionRegistro($diferencia);
                     $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
+                    
+                    //calculo llegadaTarde
+                    $horaTurno = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H:i:s');
+                    $horaLlegada = $arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s');                        
+                    if ($horaTurno < $horaLlegada){
+                        $arControlAccesoEmpleado->setLlegadaTarde(1);
+                        $horaTurnoH = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H');
+                        $horaTurnoM = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('i');
+                        $horaTurnoS = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('s');
+                        $horaLlegadaH = $arControlAccesoEmpleado->getFechaEntrada()->format('H');
+                        $horaLlegadaM = $arControlAccesoEmpleado->getFechaEntrada()->format('i');
+                        $horaLlegadaS = $arControlAccesoEmpleado->getFechaEntrada()->format('s');
+                        $diferenciaHora = $horaLlegadaH - $horaTurnoH;
+                        $diferenciaMinutos = $horaLlegadaM - $horaTurnoM;
+                        $diferenciaSegundo = $horaLlegadaS - $horaTurnoS;
+                        $timeLlegadaTarde = $diferenciaHora.":".$diferenciaMinutos.":".$diferenciaSegundo;
+                        $arControlAccesoEmpleado->setDuracionLlegadaTarde($timeLlegadaTarde);
+                    }
+                    
+                    //calculo salidaAntes
+                    $horaTurno = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('H:i:s');
+                    $horaSalida = $arControlAccesoEmpleado->getFechaSalida()->format('H:i:s');
+                    if ($horaTurno > $horaSalida){
+                        $arControlAccesoEmpleado->setSalidaAntes(1);
+                        $horaTurnoH = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('H');
+                        $horaTurnoM = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('i');
+                        $horaTurnoS = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('s');
+                        $horaSalidaH = $arControlAccesoEmpleado->getFechaSalida()->format('H');
+                        $horaSalidaM = $arControlAccesoEmpleado->getFechaSalida()->format('i');
+                        $horaSalidaS = $arControlAccesoEmpleado->getFechaSalida()->format('s');
+                        $diferenciaHora = $horaSalidaH - $horaTurnoH;
+                        $diferenciaMinutos = $horaSalidaM - $horaTurnoM;
+                        $diferenciaSegundo = $horaSalidaS - $horaTurnoS;
+                        $timeSalidaTarde = $diferenciaHora.":".$diferenciaMinutos.":".$diferenciaSegundo;
+                        $arControlAccesoEmpleado->setDuracionSalidaAntes($timeSalidaTarde);
+                    }
+                    
+                    
                     $em->persist($arControlAccesoEmpleado);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));  
+                    return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
                 } else {
-                        $objMensaje->Mensaje("error", "No se puede modificar sin registrarse", $this);    
-                }
+                        $objMensaje->Mensaje("error", "La hora de salida no puede ser menor a la hora de entrada", $this);
+                    }  
+
             }
+            if ($form->get('entrada')->getData() == 0 && $form->get('salida')->getData() == 0) {
+                $arControlAccesoEmpleado->setFechaSalida(null);
+                $arControlAccesoEmpleado->setFechaEntrada($form->get('fechaEntrada')->getData());
+                $arControlAccesoEmpleado->setEstadoSalida(0);
+                $arControlAccesoEmpleado->setEstadoEntrada(0);
+                $arControlAccesoEmpleado->setLlegadaTarde(0);
+                $arControlAccesoEmpleado->setSalidaAntes(0);
+                $arControlAccesoEmpleado->setDuracionRegistro("");
+                $arControlAccesoEmpleado->setDuracionLlegadaTarde("");
+                $arControlAccesoEmpleado->setDuracionSalidaAntes("");
+                $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
+                $em->persist($arControlAccesoEmpleado);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
+            }
+            if ($form->get('entrada')->getData() == 0 && $form->get('salida')->getData() == 1) {
+                $objMensaje->Mensaje("error", "No se puede salir el empleado sin haberse registrado", $this);
+            }
+            if ($form->get('entrada')->getData() == 1 && $form->get('salida')->getData() == 0) {
+                $arControlAccesoEmpleado->setFechaSalida(null);
+                $arControlAccesoEmpleado->setFechaEntrada($form->get('fechaEntrada')->getData());
+                $arControlAccesoEmpleado->setEstadoSalida(0);
+                $arControlAccesoEmpleado->setEstadoEntrada(1);
+                $arControlAccesoEmpleado->setDuracionRegistro("");
+                $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
+                //calculo llegadaTarde
+                    $horaTurno = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H:i:s');
+                    $horaLlegada = $arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s');                        
+                    if ($horaTurno < $horaLlegada){
+                        $arControlAccesoEmpleado->setLlegadaTarde(1);
+                        $horaTurnoH = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H');
+                        $horaTurnoM = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('i');
+                        $horaTurnoS = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('s');
+                        $horaLlegadaH = $arControlAccesoEmpleado->getFechaEntrada()->format('H');
+                        $horaLlegadaM = $arControlAccesoEmpleado->getFechaEntrada()->format('i');
+                        $horaLlegadaS = $arControlAccesoEmpleado->getFechaEntrada()->format('s');
+                        $diferenciaHora = $horaLlegadaH - $horaTurnoH;
+                        $diferenciaMinutos = $horaLlegadaM - $horaTurnoM;
+                        $diferenciaSegundo = $horaLlegadaS - $horaTurnoS;
+                        $timeLlegadaTarde = $diferenciaHora.":".$diferenciaMinutos.":".$diferenciaSegundo;
+                        $arControlAccesoEmpleado->setDuracionLlegadaTarde($timeLlegadaTarde);
+                    }
+                $em->persist($arControlAccesoEmpleado);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
+            }
+               
+            
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ControlAcceso:nuevo.html.twig', array(
             'form' => $form->createView(),
@@ -177,6 +255,7 @@ class ControlAccesoEmpleadoController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -205,6 +284,10 @@ class ControlAccesoEmpleadoController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
@@ -216,10 +299,14 @@ class ControlAccesoEmpleadoController extends Controller
                     ->setCellValue('H1', 'TURNO')
                     ->setCellValue('I1', 'HORA ENTRADA TURNO')
                     ->setCellValue('J1', 'HORA ENTRADA')
-                    ->setCellValue('K1', 'HORA SALIDA TURNO')
-                    ->setCellValue('L1', 'HORA SALIDA')
-                    ->setCellValue('M1', 'DURACIÓN REGISTRO')
-                    ->setCellValue('N1', 'COMENTARIOS');
+                    ->setCellValue('K1', 'LLEGADA TARDE')
+                    ->setCellValue('L1', 'DURACIÓN LLEGADA TARDE')
+                    ->setCellValue('M1', 'HORA SALIDA TURNO')
+                    ->setCellValue('N1', 'HORA SALIDA')
+                    ->setCellValue('O1', 'SALIDA ANTES')
+                    ->setCellValue('P1', 'DURACIÓN SALIDA ANTES')
+                    ->setCellValue('Q1', 'DURACIÓN TOTAL REGISTRO')
+                    ->setCellValue('R1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -242,6 +329,16 @@ class ControlAccesoEmpleadoController extends Controller
                     $timeHoraSalida = $arHorarioAcceso->getFechaSalida()->format('H:i:s');
                 
             }
+            if ($arHorarioAcceso->getDuracionLlegadaTarde() == null){
+                $duracionLLegadaTarde = "";
+            } else {
+                $duracionLLegadaTarde = $arHorarioAcceso->getDuracionLlegadaTarde();
+            }
+            if ($arHorarioAcceso->getDuracionSalidaAntes() == null){
+                $duracionSalidaAntes = "";
+            } else {
+                $duracionSalidaAntes = $arHorarioAcceso->getDuracionSalidaAntes();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A' . $i, $j)    
                 ->setCellValue('B' . $i, $arHorarioAcceso->getEmpleadoRel()->getNumeroIdentificacion())
@@ -253,10 +350,14 @@ class ControlAccesoEmpleadoController extends Controller
                 ->setCellValue('H' . $i, $arHorarioAcceso->getCodigoTurnoFk())
                 ->setCellValue('I' . $i, $arHorarioAcceso->getHoraEntradaTurno()->format('H:i:s'))
                 ->setCellValue('J' . $i, $timeHoraEntrada)
-                ->setCellValue('K' . $i, $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s'))        
-                ->setCellValue('L' . $i, $timeHoraSalida)
-                ->setCellValue('M' . $i, $arHorarioAcceso->getDuracionRegistro())        
-                ->setCellValue('N' . $i, $arHorarioAcceso->getComentarios());
+                ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getLlegadaTarde()))
+                ->setCellValue('L' . $i, $duracionLLegadaTarde)    
+                ->setCellValue('M' . $i, $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s'))        
+                ->setCellValue('N' . $i, $timeHoraSalida)
+                ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getSalidaAntes()))    
+                ->setCellValue('P' . $i, $duracionSalidaAntes)
+                ->setCellValue('Q' . $i, $arHorarioAcceso->getDuracionRegistro())        
+                ->setCellValue('R' . $i, $arHorarioAcceso->getComentarios());
             $i++;
             $j++;
         }

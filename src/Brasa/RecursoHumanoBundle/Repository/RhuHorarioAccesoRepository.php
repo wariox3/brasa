@@ -91,7 +91,7 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         return $dql;
     }
     
-    public function listaConsultaDql($strNombre = "", $strIdentificacion = "", $codigoCentroCosto = "", $codigoCargo = "", $codigoDepartametoEmpresa = "", $estadoEntrada, $estadoSalida, $strDesde = "", $strHasta = "") {        
+    public function listaConsultaDql($strNombre = "", $strIdentificacion = "", $codigoCentroCosto = "", $codigoCargo = "", $codigoDepartametoEmpresa = "", $estadoEntrada, $estadoSalida, $strDesde = "", $strHasta = "", $entradaTarde, $salidaAntes) {        
         $em = $this->getEntityManager();
         $dql   = "SELECT ha,e FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha JOIN ha.empleadoRel e WHERE ha.codigoHorarioAccesoPk <> 0 ";   
         if($strNombre != "" ) {
@@ -126,6 +126,18 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         }
         if($strHasta != "") {
             $dql .= " AND ha.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
+        }
+        if($entradaTarde == 1 ) {
+            $dql .= " AND ha.llegadaTarde = 1";
+        }
+        if($entradaTarde == 0 ) {
+            $dql .= " AND ha.llegadaTarde = 0";
+        }
+        if($salidaAntes == 1 ) {
+            $dql .= " AND ha.salidaAntes = 1";
+        }
+        if($entradaTarde == 0 ) {
+            $dql .= " AND ha.salidaAntes = 0";
         }
         $dql .= " ORDER BY ha.fechaEntrada";
         return $dql;

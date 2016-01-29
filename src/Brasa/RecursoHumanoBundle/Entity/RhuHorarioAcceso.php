@@ -47,6 +47,16 @@ class RhuHorarioAcceso
      */    
     private $duracionRegistro;
     
+    /**
+     * @ORM\Column(name="duracion_llegada_tarde", type="string", length=15, nullable=true)
+     */    
+    private $duracionLlegadaTarde;
+    
+    /**
+     * @ORM\Column(name="duracion_salida_antes", type="string", length=15, nullable=true)
+     */    
+    private $duracionSalidaAntes;
+    
     /**     
      * @ORM\Column(name="estado_entrada", type="boolean")
      */    
@@ -56,6 +66,16 @@ class RhuHorarioAcceso
      * @ORM\Column(name="estado_salida", type="boolean")
      */    
     private $estadoSalida = FALSE;
+    
+    /**     
+     * @ORM\Column(name="llegada_tarde", type="boolean")
+     */    
+    private $llegadaTarde = FALSE;
+    
+    /**     
+     * @ORM\Column(name="salida_antes", type="boolean")
+     */    
+    private $salidaAntes = FALSE;
     
     /**
      * @ORM\Column(name="horas", type="integer")
@@ -85,7 +105,6 @@ class RhuHorarioAcceso
     protected $turnoRel;
     
     
-
 
     /**
      * Get codigoHorarioAccesoPk
@@ -242,6 +261,30 @@ class RhuHorarioAcceso
     }
 
     /**
+     * Set duracionLlegadaTarde
+     *
+     * @param string $duracionLlegadaTarde
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setDuracionLlegadaTarde($duracionLlegadaTarde)
+    {
+        $this->duracionLlegadaTarde = $duracionLlegadaTarde;
+
+        return $this;
+    }
+
+    /**
+     * Get duracionLlegadaTarde
+     *
+     * @return string
+     */
+    public function getDuracionLlegadaTarde()
+    {
+        return $this->duracionLlegadaTarde;
+    }
+
+    /**
      * Set estadoEntrada
      *
      * @param boolean $estadoEntrada
@@ -287,6 +330,30 @@ class RhuHorarioAcceso
     public function getEstadoSalida()
     {
         return $this->estadoSalida;
+    }
+
+    /**
+     * Set llegadaTarde
+     *
+     * @param boolean $llegadaTarde
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setLlegadaTarde($llegadaTarde)
+    {
+        $this->llegadaTarde = $llegadaTarde;
+
+        return $this;
+    }
+
+    /**
+     * Get llegadaTarde
+     *
+     * @return boolean
+     */
+    public function getLlegadaTarde()
+    {
+        return $this->llegadaTarde;
     }
 
     /**
@@ -407,5 +474,53 @@ class RhuHorarioAcceso
     public function getTurnoRel()
     {
         return $this->turnoRel;
+    }
+
+    /**
+     * Set duracionSalidaAntes
+     *
+     * @param string $duracionSalidaAntes
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setDuracionSalidaAntes($duracionSalidaAntes)
+    {
+        $this->duracionSalidaAntes = $duracionSalidaAntes;
+
+        return $this;
+    }
+
+    /**
+     * Get duracionSalidaAntes
+     *
+     * @return string
+     */
+    public function getDuracionSalidaAntes()
+    {
+        return $this->duracionSalidaAntes;
+    }
+
+    /**
+     * Set salidaAntes
+     *
+     * @param boolean $salidaAntes
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setSalidaAntes($salidaAntes)
+    {
+        $this->salidaAntes = $salidaAntes;
+
+        return $this;
+    }
+
+    /**
+     * Get salidaAntes
+     *
+     * @return boolean
+     */
+    public function getSalidaAntes()
+    {
+        return $this->salidaAntes;
     }
 }

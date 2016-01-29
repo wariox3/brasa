@@ -32,6 +32,22 @@ class UtilidadesHorarioAccesoController extends Controller
                     if ($arHorarioAcceso->getEstadoEntrada() == 0 && $arHorarioAcceso->getEstadoSalida() == 0 ){
                         $arHorarioAcceso->setFechaEntrada(new \DateTime('now'));
                         $arHorarioAcceso->setEstadoEntrada(1);
+                        $horaTurno = $arHorarioAcceso->getHoraEntradaTurno()->format('H:i:s');
+                        $horaLlegada = $arHorarioAcceso->getFechaEntrada()->format('H:i:s');                        
+                        if ($horaTurno < $horaLlegada){
+                            $arHorarioAcceso->setLlegadaTarde(1);
+                            $horaTurnoH = $arHorarioAcceso->getHoraEntradaTurno()->format('H');
+                            $horaTurnoM = $arHorarioAcceso->getHoraEntradaTurno()->format('i');
+                            $horaTurnoS = $arHorarioAcceso->getHoraEntradaTurno()->format('s');
+                            $horaLlegadaH = $arHorarioAcceso->getFechaEntrada()->format('H');
+                            $horaLlegadaM = $arHorarioAcceso->getFechaEntrada()->format('i');
+                            $horaLlegadaS = $arHorarioAcceso->getFechaEntrada()->format('s');
+                            $diferenciaHora = $horaLlegadaH - $horaTurnoH;
+                            $diferenciaMinutos = $horaLlegadaM - $horaTurnoM;
+                            $diferenciaSegundo = $horaLlegadaS - $horaTurnoS;
+                            $timeLlegadaTarde = $diferenciaHora.":".$diferenciaMinutos.":".$diferenciaSegundo;
+                            $arHorarioAcceso->setDuracionLlegadaTarde($timeLlegadaTarde);
+                        }
                         $em->persist($arHorarioAcceso);
                         $em->flush();
                         return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
@@ -47,6 +63,22 @@ class UtilidadesHorarioAccesoController extends Controller
                             $diferencia = $horas.":".$minutos.":".$segundos;
                             $arHorarioAcceso->setDuracionRegistro($diferencia);
                             $arHorarioAcceso->setEstadoSalida(1);
+                            $horaTurno = $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s');
+                            $horaSalida = $arHorarioAcceso->getFechaSalida()->format('H:i:s');
+                            if ($horaTurno > $horaSalida){
+                                $arHorarioAcceso->setSalidaAntes(1);
+                                $horaTurnoH = $arHorarioAcceso->getHoraSalidaTurno()->format('H');
+                                $horaTurnoM = $arHorarioAcceso->getHoraSalidaTurno()->format('i');
+                                $horaTurnoS = $arHorarioAcceso->getHoraSalidaTurno()->format('s');
+                                $horaSalidaH = $arHorarioAcceso->getFechaSalida()->format('H');
+                                $horaSalidaM = $arHorarioAcceso->getFechaSalida()->format('i');
+                                $horaSalidaS = $arHorarioAcceso->getFechaSalida()->format('s');
+                                $diferenciaHora = $horaSalidaH - $horaTurnoH;
+                                $diferenciaMinutos = $horaSalidaM - $horaTurnoM;
+                                $diferenciaSegundo = $horaSalidaS - $horaTurnoS;
+                                $timeSalidaTarde = $diferenciaHora.":".$diferenciaMinutos.":".$diferenciaSegundo;
+                                $arHorarioAcceso->setDuracionSalidaAntes($timeSalidaTarde);
+                            }
                             $em->persist($arHorarioAcceso);
                             $em->flush();
                             return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));

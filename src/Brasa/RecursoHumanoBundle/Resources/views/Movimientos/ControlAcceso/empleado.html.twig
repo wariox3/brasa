@@ -54,8 +54,12 @@
                 <th>TURNO</th>
                 <th>H. ENTRADA TURNO</th>
                 <th>HORA ENTRADA</th>
+                <th>ENTRADA TARDE</th>
+                <th>DURACIÓN ENT. TARDE</th>
                 <th>H. SALIDA TURNO</th>
                 <th>HORA SALIDA</th>
+                <th>SALIDA ANTES</th>
+                <th>DURACIÓN SAL. ANTES</th>
                 <th>DURACIÓN REGISTRO</th>
                 <th>COMENTARIOS</th>
                 <th style="text-align: center"></th>
@@ -70,8 +74,12 @@
                 <td>{{ arControlAccesoEmpleados.codigoTurnoFk  }}</td>
                 <td>{{ arControlAccesoEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesoEmpleados.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arControlAccesoEmpleados.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
+                <td>{% if arControlAccesoEmpleados.llegadaTarde == 1 %}SI{% else %}NO{% endif %}</td>
+                <td>{{ arControlAccesoEmpleados.duracionLlegadaTarde }}</td>
                 <td>{{ arControlAccesoEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesoEmpleados.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesoEmpleados.fechaSalida|date('H:i:s')  }}{% endif%}</td>
+                <td>{% if arControlAccesoEmpleados.salidaAntes == 1 %}SI{% else %}NO{% endif %}</td>
+                <td>{{ arControlAccesoEmpleados.duracionSalidaAntes }}</td>
                 <td>{{ arControlAccesoEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>
                 <td>{{ arControlAccesoEmpleados.comentarios  }}</td>
                 <td><a href="{{ path('brs_rhu_control_acceso_empleado_nuevo', { 'codigoControlAcceso': arControlAccesoEmpleados.codigoHorarioAccesoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>

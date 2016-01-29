@@ -28,14 +28,16 @@
     </div>
     <table  class="table table-striped table-bordered table-condensed table-hover">            
             <tr>
-                <th>NRO</th>
-                <th>IDENTIFICACION</th>
+                <th>CÓDIGO</th>
+                <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
                 <th>DEPARTAMENTO</th>
                 <th>FECHA</th>
                 <th>TURNO</th>
                 <th>HORA TURNO</th>
                 <th>HORA EMPLEADO</th>
+                <th>LLEGADA TARDE</th>
+                <th>DURACIÓN LLEG TARDE</th>
                 <th>COMENTARIOS</th>
             </tr>
             {% set contador = 1  %}
@@ -49,6 +51,8 @@
                 <td>{{ arHorarioAccesos.codigoTurnoFk }}</td>
                 <td>{{ arHorarioAccesos.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{% if arHorarioAccesos.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arHorarioAccesos.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
+                <td>{% if arHorarioAccesos.llegadaTarde == 1%}SI{% else %}NO{% endif %}</td>
+                <td>{{ arHorarioAccesos.duracionLlegadaTarde }}</td>
                 <td>{{ arHorarioAccesos.comentarios  }}</td>
                 
             </tr>

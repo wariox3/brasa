@@ -61,6 +61,20 @@
                     <div class="col-sm-offset-0 col-sm-4">                  
                         {{ form_widget(form.estadoSalida, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
+                </div>
+                <div class="form-group form-group-sm">  
+                    
+                    <label for="form_estadoSalida" class="col-sm-offset-6 col-sm-2 control-label">Entrada tarde:</label>
+                    <div class="col-sm-offset-0 col-sm-4">                  
+                        {{ form_widget(form.entradaTarde, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div>
+                <div class="form-group form-group-sm">  
+                    
+                    <label for="form_estadoSalida" class="col-sm-offset-6 col-sm-2 control-label">Salida antes:</label>
+                    <div class="col-sm-offset-0 col-sm-4">                  
+                        {{ form_widget(form.salidaAntes, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
                 </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
@@ -71,7 +85,7 @@
         </div> 
             <table class="table table-striped table-bordered table-condensed">
                 <tr>
-                    <th>NRO</th>
+                    <th>CÓDIGO</th>
                     <th>IDENTIFICACIÓN</th>
                     <th>EMPLEADO</th>
                     <th>CENTRO COSTO</th>
@@ -81,8 +95,12 @@
                     <th>TURNO</th>
                     <th>H. ENTRADA TURNO</th>
                     <th>HORA ENTRADA</th>
+                    <th>ENTRADA TARDE</th>
+                    <th>DURACIÓN ENT. TARDE</th>
                     <th>H. SALIDA TURNO</th>
                     <th>HORA SALIDA</th>
+                    <th>SALIDA ANTES</th>
+                    <th>DURACIÓN SAL. ANTES</th>
                     <th>DURACIÓN REGISTRO</th>
                     <th>COMENTARIOS</th>
                 </tr>
@@ -99,8 +117,12 @@
                 <td>{{ arControlAccesosEmpleados.codigoTurnoFk  }}</td>
                 <td>{{ arControlAccesosEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesosEmpleados.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
+                <td>{% if arControlAccesosEmpleados.llegadaTarde == 1 %}SI{% else %}NO{% endif %}</td>
+                <td>{{ arControlAccesosEmpleados.duracionLlegadaTarde }}</td>
                 <td>{{ arControlAccesosEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesosEmpleados.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}{% endif%}</td>
+                <td>{% if arControlAccesosEmpleados.salidaAntes == 1 %}SI{% else %}NO{% endif %}</td>
+                <td>{{ arControlAccesosEmpleados.duracionSalidaAntes }}</td>
                 <td>{{ arControlAccesosEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>
                 <td>{{ arControlAccesosEmpleados.comentarios  }}</td>
             </tr>
