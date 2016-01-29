@@ -184,7 +184,7 @@ class ControlAccesoEmpleadoController extends Controller
                         $horaSalidaH = $arControlAccesoEmpleado->getFechaSalida()->format('H');
                         $horaSalidaM = $arControlAccesoEmpleado->getFechaSalida()->format('i');
                         $horaSalidaS = $arControlAccesoEmpleado->getFechaSalida()->format('s');
-                        $diferenciaHora = $horaSalidaH - $horaTurnoH;
+                        $diferenciaHora = $horaTurnoH - $horaSalidaH;
                         $diferenciaMinutos = $horaSalidaM - $horaTurnoM;
                         $diferenciaSegundo = $horaSalidaS - $horaTurnoS;
                         $timeSalidaTarde = $diferenciaHora.":".$diferenciaMinutos.":".$diferenciaSegundo;
