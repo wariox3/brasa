@@ -105,8 +105,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
             ->add('estadoSalida', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))
             ->add('entradaTarde', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))
             ->add('salidaAntes', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))                
-            ->add('fechaDesde','date', array('data' => new \DateTime('now'), 'format' => 'yyyy-MM-dd'))
-            ->add('fechaHasta','date', array('data' => new \DateTime('now'), 'format' => 'yyyy-MM-dd'))
+            ->add('fechaDesde','date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMMMdd'))
+            ->add('fechaHasta','date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMMMdd'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
