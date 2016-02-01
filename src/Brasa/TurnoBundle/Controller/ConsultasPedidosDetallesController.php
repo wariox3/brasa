@@ -64,6 +64,7 @@ class ConsultasPedidosDetallesController extends Controller
     }    
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
@@ -126,7 +127,7 @@ class ConsultasPedidosDetallesController extends Controller
                     ->setCellValue('E' . $i, $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m/d'))
                     ->setCellValue('F' . $i, $arPedidoDetalle->getPedidoRel()->getClienteRel()->getNombreCorto())
                     ->setCellValue('G' . $i, $arPedidoDetalle->getPedidoRel()->getSectorRel()->getNombre())
-                    ->setCellValue('H' . $i, $arPedidoDetalle->getPedidoRel()->getEstadoProgramado())                    
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getPedidoRel()->getEstadoProgramado()))
                     ->setCellValue('J' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombre())
                     ->setCellValue('K' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre())
                     ->setCellValue('L' . $i, $arPedidoDetalle->getPeriodoRel()->getNombre())                    
@@ -134,14 +135,14 @@ class ConsultasPedidosDetallesController extends Controller
                     ->setCellValue('O' . $i, $arPedidoDetalle->getDiaHasta())
                     ->setCellValue('P' . $i, $arPedidoDetalle->getCantidad())
                     ->setCellValue('Q' . $i, $arPedidoDetalle->getCantidadRecurso())
-                    ->setCellValue('R' . $i, $arPedidoDetalle->getLunes())
-                    ->setCellValue('S' . $i, $arPedidoDetalle->getMartes())
-                    ->setCellValue('T' . $i, $arPedidoDetalle->getMiercoles())
-                    ->setCellValue('U' . $i, $arPedidoDetalle->getJueves())
-                    ->setCellValue('V' . $i, $arPedidoDetalle->getViernes())
-                    ->setCellValue('W' . $i, $arPedidoDetalle->getSabado())
-                    ->setCellValue('X' . $i, $arPedidoDetalle->getDomingo())
-                    ->setCellValue('Y' . $i, $arPedidoDetalle->getFestivo())
+                    ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getLunes()))
+                    ->setCellValue('S' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getMartes()))
+                    ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getMiercoles()))
+                    ->setCellValue('U' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getJueves()))
+                    ->setCellValue('V' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getViernes()))
+                    ->setCellValue('W' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getSabado()))
+                    ->setCellValue('X' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getDomingo()))
+                    ->setCellValue('Y' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getFestivo()))
                     ->setCellValue('Z' . $i, $arPedidoDetalle->getHoras())
                     ->setCellValue('AA' . $i, $arPedidoDetalle->getHorasDiurnas())
                     ->setCellValue('AB' . $i, $arPedidoDetalle->getHorasNocturnas())
