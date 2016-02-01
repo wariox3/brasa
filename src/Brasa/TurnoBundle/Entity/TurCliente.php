@@ -48,6 +48,11 @@ class TurCliente
     private $plazoPago = 0;    
     
     /**
+     * @ORM\Column(name="codigo_forma_pago_fk", type="integer", nullable=true)
+     */    
+    private $codigoFormaPagoFk;     
+    
+    /**
      * @ORM\Column(name="direccion", type="string", length=120)
      */
     private $direccion;
@@ -117,6 +122,12 @@ class TurCliente
      * @ORM\JoinColumn(name="codigo_sector_fk", referencedColumnName="codigo_sector_pk")
      */
     protected $sectorRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenFormaPago", inversedBy="turClientesFormaPagoRel")
+     * @ORM\JoinColumn(name="codigo_forma_pago_fk", referencedColumnName="codigo_forma_pago_pk")
+     */
+    protected $formaPagoRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurCotizacion", mappedBy="clienteRel")
@@ -854,5 +865,53 @@ class TurCliente
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set codigoFormaPagoFk
+     *
+     * @param integer $codigoFormaPagoFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoFormaPagoFk($codigoFormaPagoFk)
+    {
+        $this->codigoFormaPagoFk = $codigoFormaPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormaPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoFormaPagoFk()
+    {
+        return $this->codigoFormaPagoFk;
+    }
+
+    /**
+     * Set formaPagoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenFormaPago $formaPagoRel
+     *
+     * @return TurCliente
+     */
+    public function setFormaPagoRel(\Brasa\GeneralBundle\Entity\GenFormaPago $formaPagoRel = null)
+    {
+        $this->formaPagoRel = $formaPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get formaPagoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenFormaPago
+     */
+    public function getFormaPagoRel()
+    {
+        return $this->formaPagoRel;
     }
 }

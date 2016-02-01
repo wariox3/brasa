@@ -38,6 +38,12 @@
                 </div>                
             </div> 
             <div class="form-group form-group-sm">
+                <label for="form_formaPagoRel" class="col-sm-3 control-label">Forma pago:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.formaPagoRel, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>                
+            <div class="form-group form-group-sm">
                 <label for="form_plazoPago" class="col-sm-3 control-label">Plazo pago:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.plazoPago, { 'attr': {'class': 'form-control'} }) }}                        

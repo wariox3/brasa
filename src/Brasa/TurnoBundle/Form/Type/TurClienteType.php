@@ -16,7 +16,15 @@ class TurClienteType extends AbstractType
                     return $er->createQueryBuilder('s')
                     ->orderBy('s.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                 
+                'required' => true)) 
+            ->add('formaPagoRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenFormaPago',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('fp')
+                    ->orderBy('fp.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                              
+                            
             ->add('nit', 'number', array('required' => true))
             ->add('digitoVerificacion', 'text', array('required' => false))  
             ->add('nombreCorto', 'text', array('required' => true))  

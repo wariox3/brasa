@@ -19,10 +19,10 @@ class GenFormaPago
     private $codigoFormaPagoPk;
 
     /**
-     * @ORM\Column(name="nombre_forma_pago", type="string", length=50)
+     * @ORM\Column(name="nombre", type="string", length=50)
      * @Assert\NotNull()(message="Debe escribir un nombre de la forma de pago")
      */
-    private $nombreFormaPago;
+    private $nombre;
 
     /**
      * @ORM\OneToMany(targetEntity="GenTercero", mappedBy="formaPagoClienteRel")
@@ -39,16 +39,22 @@ class GenFormaPago
      */
     protected $movimientosRel;        
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="formaPagoRel")
+     */
+    protected $turClientesFormaPagoRel;    
+    
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->tercerosFormaPagoClienteRel = new ArrayCollection();
-        $this->tercerosFormaPagoProveedorRel = new ArrayCollection();
-        $this->movimientosRel = new ArrayCollection();
+        $this->tercerosFormaPagoClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tercerosFormaPagoProveedorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turClientesFormaPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-
-
-   
 
     /**
      * Get codigoFormaPagoPk
@@ -61,27 +67,27 @@ class GenFormaPago
     }
 
     /**
-     * Set nombreFormaPago
+     * Set nombre
      *
-     * @param string $nombreFormaPago
+     * @param string $nombre
      *
      * @return GenFormaPago
      */
-    public function setNombreFormaPago($nombreFormaPago)
+    public function setNombre($nombre)
     {
-        $this->nombreFormaPago = $nombreFormaPago;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreFormaPago
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreFormaPago()
+    public function getNombre()
     {
-        return $this->nombreFormaPago;
+        return $this->nombre;
     }
 
     /**
@@ -184,5 +190,39 @@ class GenFormaPago
     public function getMovimientosRel()
     {
         return $this->movimientosRel;
+    }
+
+    /**
+     * Add turClientesFormaPagoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesFormaPagoRel
+     *
+     * @return GenFormaPago
+     */
+    public function addTurClientesFormaPagoRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesFormaPagoRel)
+    {
+        $this->turClientesFormaPagoRel[] = $turClientesFormaPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turClientesFormaPagoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesFormaPagoRel
+     */
+    public function removeTurClientesFormaPagoRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesFormaPagoRel)
+    {
+        $this->turClientesFormaPagoRel->removeElement($turClientesFormaPagoRel);
+    }
+
+    /**
+     * Get turClientesFormaPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurClientesFormaPagoRel()
+    {
+        return $this->turClientesFormaPagoRel;
     }
 }

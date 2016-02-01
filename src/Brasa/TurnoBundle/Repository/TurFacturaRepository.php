@@ -98,5 +98,45 @@ class TurFacturaRepository extends EntityRepository {
             $strResultado = "Ya esta autorizado";
         }        
         return $strResultado;
-    }    
+    } 
+
+    public function anular($codigoFactura) {
+        $em = $this->getEntityManager();   
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();        
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);            
+        $strResultado = "";        
+        if($arFactura->getEstadoAutorizado() == 1 && $arFactura->getEstadoAnulado() == 0 && $arFactura->getNumero() != 0) {
+            $boolAnular = TRUE;
+            $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+            $arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));      
+            foreach ($arFacturaDetalles as $arFacturaDetalle) {
+                $arPedidoDetalleAct = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                $arPedidoDetalleAct = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());                    
+                $arPedidoDetalleAct->setEstadoFacturado(0);
+                $em->persist($arPedidoDetalleAct);
+
+            }            
+            //$arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+            //$arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                
+            foreach ($arFacturaDetalles as $arFacturaDetalle) {
+                $arFacturaDetalleAct = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                $arFacturaDetalleAct = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($arFacturaDetalle->getCodigoFacturaDetallePk());                                        
+                $arFacturaDetalle->setVrPrecio(0);
+                $arFacturaDetalle->setCantidad(0);
+                $em->persist($arFacturaDetalle);
+            }
+            $arFactura->setVrSubtotal(0);
+            $arFactura->setVrRetencionFuente(0);
+            $arFactura->setVrBaseAIU(0);
+            $arFactura->setVrIva(0);
+            $arFactura->setVrTotal(0);
+            $arFactura->setEstadoAnulado(1);
+            $em->persist($arFactura);
+            $em->flush();      
+                           
+        } else {
+            $strResultado = "La factura debe estar autorizada y no puede estar previamente anulada";
+        }        
+        return $strResultado;
+    }        
 }

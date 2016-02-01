@@ -45,7 +45,12 @@ class TurFactura
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = false;             
+    private $estadoAutorizado = false;   
+
+    /**     
+     * @ORM\Column(name="estado_anulado", type="boolean")
+     */    
+    private $estadoAnulado = false;    
 
     /**
      * @ORM\Column(name="vr_base_aiu", type="float")
@@ -451,5 +456,29 @@ class TurFactura
     public function getSoporte()
     {
         return $this->soporte;
+    }
+
+    /**
+     * Set estadoAnulado
+     *
+     * @param boolean $estadoAnulado
+     *
+     * @return TurFactura
+     */
+    public function setEstadoAnulado($estadoAnulado)
+    {
+        $this->estadoAnulado = $estadoAnulado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulado
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulado()
+    {
+        return $this->estadoAnulado;
     }
 }
