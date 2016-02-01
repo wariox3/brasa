@@ -8,6 +8,7 @@ class MovimientoFacturaController extends Controller
 {
     var $strListaDql = "";
     var $codigoFactura = "";
+    var $boolMostrarTodo = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -90,25 +91,27 @@ class MovimientoFacturaController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {      
-                $arrControles = $request->request->All();                
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoFactura);
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurFactura')->autorizar($codigoFactura);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
                 return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                
             }    
-            if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arFactura->getEstadoAutorizado() == 1) {
-                    $arFactura->setEstadoAutorizado(0);
-                    $em->persist($arFactura);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                
+            if($form->get('BtnDesAutorizar')->isClicked()) {                            
+                $strResultado = $em->getRepository('BrasaTurnoBundle:TurFactura')->desAutorizar($codigoFactura);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
                 }
+                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                
             }               
-            if($form->get('BtnDetalleActualizar')->isClicked()) {                                                    
-                $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
+            if($form->get('BtnDetalleActualizar')->isClicked()) {   
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoFactura);                                 
                 return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
+
             if($form->get('BtnAnular')->isClicked()) {                                 
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurFactura')->anular($codigoFactura);
                 if($strResultado != "") {
@@ -123,12 +126,14 @@ class MovimientoFacturaController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
-                if($arFactura->getEstadoAutorizado() == 1) {
-                    $objFactura = new \Brasa\TurnoBundle\Formatos\FormatoFactura();
-                    $objFactura->Generar($this, $codigoFactura);
+                $strResultado = $em->getRepository('BrasaTurnoBundle:TurFactura')->imprimir($codigoFactura);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
                 } else {
-                    $objMensaje->Mensaje("error", "No puede imprimir una cotizacion sin estar autorizada", $this);
+                    $objFactura = new \Brasa\TurnoBundle\Formatos\FormatoFactura();
+                    $objFactura->Generar($this, $codigoFactura);                    
                 }
+                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
             }            
         }
 
@@ -163,31 +168,35 @@ class MovimientoFacturaController extends Controller
                         $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
                         $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetalle());                        
                         $em->persist($arFacturaDetalle);  
-                        $arPedidoDetalle->setEstadoFacturado(1);
-                        $em->persist($arPedidoDetalle);  
+                        //$arPedidoDetalle->setEstadoFacturado(1);
+                        //$em->persist($arPedidoDetalle);  
                     }
                 }
                 $em->flush();
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
-            }            
+            } 
+            if ($form->get('BtnFiltrar')->isClicked()) {            
+                $this->filtrarDetalleNuevo($form);
+            }
         }
         
-        $arPedidoDetalles = $paginator->paginate($em->createQuery($this->listaNuevoDetalle($arFactura->getCodigoClienteFk())), $request->query->get('page', 1), 20);        
+        $arPedidoDetalles = $paginator->paginate($em->createQuery($this->listaDetalleNuevo($arFactura->getCodigoClienteFk())), $request->query->get('page', 1), 20);        
         return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleNuevo.html.twig', array(
             'arFactura' => $arFactura,
             'arPedidoDetalles' => $arPedidoDetalles,
+            'boolMostrarTodo' => $form->get('mostrarTodo')->getData(),
             'form' => $form->createView()));
     }
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurFactura')->listaDql($this->codigoFactura);
-    }
+    }   
     
-    private function listaNuevoDetalle($codigoCliente) {
+    private function listaDetalleNuevo($codigoCliente) {
         $em = $this->getDoctrine()->getManager();
-        $strDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesFacturarDql($codigoCliente);
+        $strDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesFacturarDql($codigoCliente, $this->boolMostrarTodo);
         return $strDql;
     }
 
@@ -195,6 +204,10 @@ class MovimientoFacturaController extends Controller
         $this->codigoFactura = $form->get('TxtCodigo')->getData();
     }
 
+    private function filtrarDetalleNuevo ($form) {                
+        $this->boolMostrarTodo = $form->get('mostrarTodo')->getData();
+    }    
+    
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -243,9 +256,26 @@ class MovimientoFacturaController extends Controller
     private function formularioDetalleNuevo() {
         $em = $this->getDoctrine()->getManager();        
         $form = $this->createFormBuilder()
+            ->add('mostrarTodo', 'checkbox', array('required'  => false))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         return $form;
+    }    
+
+    private function actualizarDetalle($arrControles, $codigoFactura) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($intCodigo);
+                $arFacturaDetalle->setVrPrecio($arrControles['TxtPrecio'.$intCodigo]);                             
+                $em->persist($arFacturaDetalle);
+            }
+            $em->flush();                
+            $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);            
+        }        
     }    
     
     private function generarExcel() {
@@ -296,7 +326,5 @@ class MovimientoFacturaController extends Controller
         $objWriter->save('php://output');
         exit;
     }
-
-
 
 }

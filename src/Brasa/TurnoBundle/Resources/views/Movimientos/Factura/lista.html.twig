@@ -43,9 +43,9 @@
                 <th></th>
             </tr>
             {% for arFacturas in arFacturas %}
-            <tr>                
-                <td>{{ arFacturas.numero  }}</td>  
+            <tr>                                  
                 <td>{{ arFacturas.codigoFacturaPk  }}</td>  
+                <td>{{ arFacturas.numero  }}</td>
                 <td>{{ arFacturas.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arFacturas.fechaVence |date("Y/m/d")  }}</td>
                 <td>{{ arFacturas.clienteRel.nombreCorto |default('') }}</td>

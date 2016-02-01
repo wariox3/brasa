@@ -112,6 +112,11 @@ class TurPedidoDetalle
      */
     private $vrTotalDetalle = 0; 
     
+    /**
+     * @ORM\Column(name="vr_total_detalle_pendiente", type="float")
+     */
+    private $vrTotalDetallePendiente = 0;    
+    
     /**     
      * @ORM\Column(name="lunes", type="boolean")
      */    
@@ -1261,5 +1266,29 @@ class TurPedidoDetalle
     public function getFacturasDetallesPedidoDetalleRel()
     {
         return $this->facturasDetallesPedidoDetalleRel;
+    }
+
+    /**
+     * Set vrTotalDetallePendiente
+     *
+     * @param float $vrTotalDetallePendiente
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrTotalDetallePendiente($vrTotalDetallePendiente)
+    {
+        $this->vrTotalDetallePendiente = $vrTotalDetallePendiente;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalDetallePendiente
+     *
+     * @return float
+     */
+    public function getVrTotalDetallePendiente()
+    {
+        return $this->vrTotalDetallePendiente;
     }
 }

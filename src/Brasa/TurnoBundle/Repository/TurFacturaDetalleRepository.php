@@ -20,10 +20,10 @@ class TurFacturaDetalleRepository extends EntityRepository {
             $em = $this->getEntityManager();
             foreach ($arrSeleccionados AS $codigo) {                                
                 $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($codigo);  
-                $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                /*$arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
                 $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());  
                 $arPedidoDetalle->setEstadoFacturado(0);
-                $em->persist($arPedidoDetalle);
+                $em->persist($arPedidoDetalle);*/
                 $em->remove($arFacturaDetalle);                  
             }                                         
             $em->flush();       
