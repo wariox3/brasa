@@ -2,14 +2,22 @@
 namespace Brasa\TurnoBundle\Formatos;
 class FormatoFactura extends \FPDF_FPDF {
     public static $em;
-    
     public static $codigoFactura;
-    
-    public function Generar($miThis, $codigoFactura) {        
-        ob_clean();
+    public static $strLetras;
+    public function Generar($miThis, $codigoFactura) {                
+       
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoFactura = $codigoFactura;
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);        
+        $arrayNumero = explode(".", 0,2);
+        $intCentavos = 0;
+        if(count($arrayNumero) > 1)
+            $intCentavos = substr($arrayNumero[1], $arFactura->getVrTotal(), 2);
+        $strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getVrTotal()) . " con " . \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($intCentavos);        
+        self::$strLetras = $strLetras;
+        ob_clean();        
         $pdf = new FormatoFactura();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -76,7 +84,7 @@ class FormatoFactura extends \FPDF_FPDF {
         $List1 = array($arFactura->getNumero(),
             $arFactura->getFecha()->format('Y-m-d'), 
             $arFactura->getFechaVence()->format('Y-m-d'), 
-            'CONTADO', 
+            $arFactura->getClienteRel()->getFormaPagoRel()->getNombre(), 
             $arFactura->getClienteRel()->getPlazoPago(), 
             $arFactura->getSoporte());
         $this->SetFont('Arial', '', 8);
@@ -147,7 +155,7 @@ class FormatoFactura extends \FPDF_FPDF {
         }
     }
 
-    public function Footer() {
+    public function Footer() {        
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura = self::$em->getRepository('BrasaTurnoBundle:TurFactura')->find(self::$codigoFactura);        
         $this->SetY(180);
@@ -201,9 +209,10 @@ class FormatoFactura extends \FPDF_FPDF {
         $intCentavos = 0;
         if(count($arrayNumero) > 1)
             $intCentavos = substr($arrayNumero[1], 0, 2);
-        $strLentras = "cero " . " con " . " cero centavos";
+        $strLetras = "";
+        //$strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getVrTotal()) . " con " . \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($intCentavos);
         $this->SetFont('Arial', 'B', 6);
-        $this->Text(12, 224, "SON : " . substr(strtoupper($strLentras),0,96));
+        $this->Text(12, 224, "SON : " . substr(strtoupper(self::$strLetras),0,96));
         $this->Ln();
 
         $Text = array(
