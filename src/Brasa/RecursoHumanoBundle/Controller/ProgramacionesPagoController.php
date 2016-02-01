@@ -504,19 +504,20 @@ class ProgramacionesPagoController extends Controller
             $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
             $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
             $objPHPExcel->createSheet(2)->setTitle('PagosDetalle')
-                    ->setCellValue('A1', 'Codigo')
-                    ->setCellValue('B1', 'Codigo')
-                    ->setCellValue('C1', 'VrPago')
-                    ->setCellValue('D1', 'Op')
-                    ->setCellValue('E1', 'VrPagoOperado')
-                    ->setCellValue('F1', 'VrHora')
-                    ->setCellValue('G1', 'VrDia')
-                    ->setCellValue('H1', 'VrTotal')
-                    ->setCellValue('I1', 'Horas')
-                    ->setCellValue('J1', 'Dias')
-                    ->setCellValue('K1', 'Porcentaje')                    
-                    ->setCellValue('L1', 'IBC')
-                    ->setCellValue('M1', 'IBP');
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'EMPLEADO')
+                    ->setCellValue('C1', 'CONCEPTO')
+                    ->setCellValue('D1', 'VALOR')
+                    ->setCellValue('E1', 'OP')
+                    ->setCellValue('F1', 'VALOR OP')
+                    ->setCellValue('G1', 'VR HORA')
+                    ->setCellValue('H1', 'VR DIA')
+                    ->setCellValue('I1', 'VR TOTAL')
+                    ->setCellValue('J1', 'HORAS')
+                    ->setCellValue('K1', 'DIAS')
+                    ->setCellValue('L1', 'PORCENTAJE')                    
+                    ->setCellValue('M1', 'IBC')
+                    ->setCellValue('O1', 'IBP');
 
             $i = 2;
             $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
@@ -524,18 +525,19 @@ class ProgramacionesPagoController extends Controller
             foreach ($arPagoDetalles as $arPagoDetalle) {
                 $objPHPExcel->setActiveSheetIndex(1)
                         ->setCellValue('A' . $i, $arPagoDetalle->getCodigoPagoDetallePk())
-                        ->setCellValue('B' . $i, $arPagoDetalle->getPagoConceptoRel()->getNombre())
-                        ->setCellValue('C' . $i, $arPagoDetalle->getVrPago())
-                        ->setCellValue('D' . $i, $arPagoDetalle->getOperacion())
-                        ->setCellValue('E' . $i, $arPagoDetalle->getVrPagoOperado())
-                        ->setCellValue('F' . $i, $arPagoDetalle->getVrHora())
-                        ->setCellValue('G' . $i, $arPagoDetalle->getVrDia())
-                        ->setCellValue('H' . $i, $arPagoDetalle->getVrTotal())
-                        ->setCellValue('I' . $i, $arPagoDetalle->getNumeroHoras())
-                        ->setCellValue('J' . $i, $arPagoDetalle->getNumeroDias())
-                        ->setCellValue('K' . $i, $arPagoDetalle->getPorcentajeAplicado())
-                        ->setCellValue('L' . $i, $arPagoDetalle->getVrIngresoBasePrestacion())
-                        ->setCellValue('M' . $i, $arPagoDetalle->getVrIngresoBaseCotizacion());
+                        ->setCellValue('B' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNombreCorto())
+                        ->setCellValue('C' . $i, $arPagoDetalle->getPagoConceptoRel()->getNombre())
+                        ->setCellValue('D' . $i, $arPagoDetalle->getVrPago())
+                        ->setCellValue('E' . $i, $arPagoDetalle->getOperacion())
+                        ->setCellValue('F' . $i, $arPagoDetalle->getVrPagoOperado())
+                        ->setCellValue('G' . $i, $arPagoDetalle->getVrHora())
+                        ->setCellValue('H' . $i, $arPagoDetalle->getVrDia())
+                        ->setCellValue('I' . $i, $arPagoDetalle->getVrTotal())
+                        ->setCellValue('J' . $i, $arPagoDetalle->getNumeroHoras())
+                        ->setCellValue('K' . $i, $arPagoDetalle->getNumeroDias())
+                        ->setCellValue('L' . $i, $arPagoDetalle->getPorcentajeAplicado())
+                        ->setCellValue('M' . $i, $arPagoDetalle->getVrIngresoBasePrestacion())
+                        ->setCellValue('O' . $i, $arPagoDetalle->getVrIngresoBaseCotizacion());
                 $i++;
             }            
             
