@@ -6,33 +6,19 @@
     <h3>Nuevo cliente</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
-        <div class="panel-body">                           
-            <div class="form-group form-group-sm">
-                <label for="txtNit" class="col-sm-3 control-label">Tercero:</label>
-                <div class="col-sm-9">
-                    <div class="row">
-                      <div class="col-lg-2">
-                        <div class="input-group">
-                          <input id="txtNit"  name="txtNit"  type="text" class="form-control" value="{{ arCliente.terceroRel.nit |default('') }}"/>
-                        </div>
-                      </div>
-                      <div class="col-lg-10">
-                        <div class="input-group">                                      
-                          <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arCliente.terceroRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
-                          <span class="input-group-btn">                                        
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_gen_buscar_tercero', { 'campoCodigo': 'txtNit', 'campoNombre': 'txtNombreCorto' }) }}', 'buscarTercero', 600, 900)">Buscar</a>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-            </div>            
+        <div class="panel-body">                                       
             <div class="form-group form-group-sm">
                 <label for="form_nit" class="col-sm-3 control-label">Nit:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.nit, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
             </div>
+            <div class="form-group form-group-sm">
+                <label for="form_digitoVerificacion" class="col-sm-3 control-label">Digito verificacion:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.digitoVerificacion, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>                
             <div class="form-group form-group-sm">
                 <label for="form_nombreCorto" class="col-sm-3 control-label">Nombre corto:</label>
                 <div class="col-sm-9">
@@ -69,6 +55,24 @@
                     {{ form_widget(form.telefono, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
             </div>                
+            <div class="form-group form-group-sm">
+                <label for="form_celular" class="col-sm-3 control-label">Celular:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.celular, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div> 
+            <div class="form-group form-group-sm">
+                <label for="form_fax" class="col-sm-3 control-label">Fax:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.fax, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div> 
+            <div class="form-group form-group-sm">
+                <label for="form_email" class="col-sm-3 control-label">Email:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>                 
             <div class="form-group form-group-sm">
                 <label for="form_gerente" class="col-sm-3 control-label">Gerente:</label>
                 <div class="col-sm-9">

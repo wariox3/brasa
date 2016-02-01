@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPedidoRepository extends EntityRepository {
     
-    public function listaDql($numeroPedido = "", $codigoCliente = "", $boolEstadoAutorizado = "") {
+    public function listaDql($numeroPedido = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoProgramado = "") {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.codigoPedidoPk <> 0";
         if($numeroPedido != "") {
             $dql .= " AND p.numero = " . $numeroPedido;  
@@ -19,6 +19,12 @@ class TurPedidoRepository extends EntityRepository {
         }
         if($boolEstadoAutorizado == "0") {
             $dql .= " AND p.estadoAutorizado = 0";
+        }        
+        if($boolEstadoProgramado == 1 ) {
+            $dql .= " AND p.estadoProgramado = 1";
+        }
+        if($boolEstadoProgramado == "0") {
+            $dql .= " AND p.estadoProgramado = 0";
         }        
         return $dql;
     }

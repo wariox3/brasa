@@ -46,7 +46,7 @@ class FormatoFactura extends \FPDF_FPDF {
         }
 
         $Datos = array($arFactura->getClienteRel()->getNombreCorto(), 
-            $arFactura->getClienteRel()->getNit(), 
+            $arFactura->getClienteRel()->getNit() . "-" . $arFactura->getClienteRel()->getDigitoVerificacion(), 
             $arFactura->getClienteRel()->getTelefono(), 
             $arFactura->getClienteRel()->getDireccion(), 
             $arFactura->getClienteRel()->getSectorRel()->getNombre(), 
@@ -171,11 +171,11 @@ class FormatoFactura extends \FPDF_FPDF {
             $this->ln();
         }
 
-        $totales2 = array(number_format($arFactura->getVrSubtotal(), 2, '.', ','),
-            number_format($arFactura->getVrBaseAIU(), 2, '.', ','),
-            number_format($arFactura->getVrIva(), 2, '.', ','),
-            number_format($arFactura->getVrRetencionFuente(), 2, '.', ','),
-            number_format($arFactura->getVrTotal(), 2, '.', ',')
+        $totales2 = array(number_format($arFactura->getVrSubtotal(), 0, '.', ','),
+            number_format($arFactura->getVrBaseAIU(), 0, '.', ','),
+            number_format($arFactura->getVrIva(), 0, '.', ','),
+            number_format($arFactura->getVrRetencionFuente(), 0, '.', ','),
+            number_format($arFactura->getVrTotal(), 0, '.', ',')
         );
 
         $this->SetFont('Arial', '', 7.5);

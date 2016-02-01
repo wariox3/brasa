@@ -88,7 +88,7 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "DIRECCION:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getDireccion(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getDireccion(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CARGO:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -108,17 +108,17 @@ class FormatoCotizacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "TELEFONO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getTelefono(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTelefono(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CELULAR:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getCelular(), 1, 0, 'L', 1);                
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getCelular(), 1, 0, 'L', 1);                
         
         $this->SetXY(10, $intY + 24);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "EMAIL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getTerceroRel()->getEmail(), 1, 0, 'L', 1);
+        $this->Cell(65, 4, $arCotizacion->getClienteRel()->getEmail(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, '' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -162,8 +162,8 @@ class FormatoCotizacion extends \FPDF_FPDF {
             $pdf->Cell(30, 4, $arCotizacionDetalle->getConceptoServicioRel()->getNombre(), 1, 0, 'L');
             $pdf->Cell(20, 4, $arCotizacionDetalle->getModalidadServicioRel()->getNombre(), 1, 0, 'L');                
             $pdf->Cell(10, 4, $arCotizacionDetalle->getPeriodoRel()->getNombre(), 1, 0, 'L');                
-            $pdf->Cell(15, 4, $arCotizacionDetalle->getDiaDesde(), 1, 0, 'L');                
-            $pdf->Cell(15, 4, $arCotizacionDetalle->getDiaHasta(), 1, 0, 'L');                                  
+            $pdf->Cell(15, 4, $arCotizacionDetalle->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');                
+            $pdf->Cell(15, 4, $arCotizacionDetalle->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');                                  
             $pdf->Cell(10, 4, number_format($arCotizacionDetalle->getCantidad(), 0, '.', ','), 1, 0, 'R');                
             if($arCotizacionDetalle->getLunes() == 1) {
                 $pdf->Cell(5, 4, 'SI', 1, 0, 'L');                                  

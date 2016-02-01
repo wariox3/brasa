@@ -51,28 +51,15 @@ class BaseClienteController extends Controller
         $form = $this->createForm(new TurClienteType, $arCliente);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arCliente = $form->getData();
-            $arrControles = $request->request->All();                        
-            if($arrControles['txtNit'] != '') {
-                $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
-                $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->findOneBy(array('nit' => $arrControles['txtNit']));                
-                if(count($arTercero) > 0) {
-                    $arCliente->setTerceroRel($arTercero);
-                    $em->persist($arCliente);
-                    $em->flush();            
+            $arCliente = $form->getData();                    
+                $em->persist($arCliente);
+                $em->flush();            
 
-                    if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_base_cliente_nuevo', array('codigoCliente' => 0 )));
-                    } else {
-                        return $this->redirect($this->generateUrl('brs_tur_base_cliente_lista'));
-                    }                     
+                if($form->get('guardarnuevo')->isClicked()) {
+                    return $this->redirect($this->generateUrl('brs_tur_base_cliente_nuevo', array('codigoCliente' => 0 )));
                 } else {
-                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
-                }                
-            }            
-                   
-            
-                       
+                    return $this->redirect($this->generateUrl('brs_tur_base_cliente_lista'));
+                }                                                           
 
         }
         return $this->render('BrasaTurnoBundle:Base/Cliente:nuevo.html.twig', array(

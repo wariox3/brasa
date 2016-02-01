@@ -197,12 +197,8 @@ class GenTercero
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuFactura", mappedBy="terceroRel")
      */
     protected $rhuFacturasTerceroRel;          
+  
 
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="terceroRel")
-     */
-    protected $turClientesTerceroRel;     
-    
     /**
      * Constructor
      */
@@ -211,7 +207,6 @@ class GenTercero
         $this->tercerosDireccionesRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuFacturasTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->turFacturasTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1092,73 +1087,5 @@ class GenTercero
     public function getRhuFacturasTerceroRel()
     {
         return $this->rhuFacturasTerceroRel;
-    }
-
-    /**
-     * Add turFacturasTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFactura $turFacturasTerceroRel
-     *
-     * @return GenTercero
-     */
-    public function addTurFacturasTerceroRel(\Brasa\TurnoBundle\Entity\TurFactura $turFacturasTerceroRel)
-    {
-        $this->turFacturasTerceroRel[] = $turFacturasTerceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove turFacturasTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFactura $turFacturasTerceroRel
-     */
-    public function removeTurFacturasTerceroRel(\Brasa\TurnoBundle\Entity\TurFactura $turFacturasTerceroRel)
-    {
-        $this->turFacturasTerceroRel->removeElement($turFacturasTerceroRel);
-    }
-
-    /**
-     * Get turFacturasTerceroRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTurFacturasTerceroRel()
-    {
-        return $this->turFacturasTerceroRel;
-    }
-
-    /**
-     * Add turClientesTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesTerceroRel
-     *
-     * @return GenTercero
-     */
-    public function addTurClientesTerceroRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesTerceroRel)
-    {
-        $this->turClientesTerceroRel[] = $turClientesTerceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove turClientesTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesTerceroRel
-     */
-    public function removeTurClientesTerceroRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesTerceroRel)
-    {
-        $this->turClientesTerceroRel->removeElement($turClientesTerceroRel);
-    }
-
-    /**
-     * Get turClientesTerceroRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTurClientesTerceroRel()
-    {
-        return $this->turClientesTerceroRel;
     }
 }

@@ -12,6 +12,7 @@ class MovimientoPedidoController extends Controller
     var $numeroPedido = "";
     var $codigoCliente = "";
     var $estadoAutorizado = "";
+    var $estadoProgramado = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -506,12 +507,13 @@ class MovimientoPedidoController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL($this->numeroPedido, $this->codigoCliente, $this->estadoAutorizado);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL($this->numeroPedido, $this->codigoCliente, $this->estadoAutorizado, $this->estadoProgramado);
     }    
 
     private function filtrar ($form) {                
         $this->numeroPedido = $form->get('TxtNumero')->getData();
         $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
+        $this->estadoProgramado = $form->get('estadoProgramado')->getData();
     }
 
     private function formularioFiltro() {
@@ -520,6 +522,7 @@ class MovimientoPedidoController extends Controller
         $form = $this->createFormBuilder()
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numeroPedido))
             ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))                
+            ->add('estadoProgramado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PROGRAMADO', '0' => 'SIN PROGRAMAR'), 'data' => $this->estadoProgramado))                                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

@@ -76,5 +76,27 @@ class TurFacturaRepository extends EntityRepository {
             }
             $em->flush();
         }
-    }     
+    }  
+    
+    public function autorizar($codigoFactura) {
+        $em = $this->getEntityManager();                
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);            
+        $strResultado = "";        
+        if($arFactura->getEstadoAutorizado() == 0) {
+            if($em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->numeroRegistros($codigoFactura) > 0) {            
+                $arFactura->setEstadoAutorizado(1);
+                if($arFactura->getNumero() == 0) {
+                    $intNumero = $em->getRepository('BrasaTurnoBundle:TurConsecutivo')->consecutivo(2);
+                    $arFactura->setNumero($intNumero);
+                }
+                $em->persist($arFactura);
+                $em->flush();                        
+            } else {
+                $strResultado = "Debe adicionar detalles";
+            }            
+        } else {
+            $strResultado = "Ya esta autorizado";
+        }        
+        return $strResultado;
+    }    
 }

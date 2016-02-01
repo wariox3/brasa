@@ -23,9 +23,9 @@ class TurCliente
     private $nit;        
     
     /**
-     * @ORM\Column(name="codigo_tercero_fk", type="integer", nullable=true)
-     */    
-    private $codigoTerceroFk;     
+     * @ORM\Column(name="digito_verificacion", type="string", length=1, nullable=true)
+     */
+    private $digitoVerificacion;             
     
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=50)
@@ -56,6 +56,21 @@ class TurCliente
      * @ORM\Column(name="telefono", type="string", length=30)
      */
     private $telefono;     
+    
+    /**
+     * @ORM\Column(name="celular", type="string", length=20, nullable=true)
+     */
+    private $celular;    
+        
+    /**
+     * @ORM\Column(name="fax", type="string", length=20, nullable=true)
+     */
+    private $fax;    
+    
+    /**
+     * @ORM\Column(name="email", type="string", length=80, nullable=true)
+     */
+    private $email;     
     
     /**
      * @ORM\Column(name="gerente", type="string", length=80, nullable=true)
@@ -95,13 +110,7 @@ class TurCliente
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;         
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="turClientesTerceroRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;        
+    private $comentarios;                    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="clientesSectorRel")
@@ -188,27 +197,27 @@ class TurCliente
     }
 
     /**
-     * Set codigoTerceroFk
+     * Set digitoVerificacion
      *
-     * @param integer $codigoTerceroFk
+     * @param string $digitoVerificacion
      *
      * @return TurCliente
      */
-    public function setCodigoTerceroFk($codigoTerceroFk)
+    public function setDigitoVerificacion($digitoVerificacion)
     {
-        $this->codigoTerceroFk = $codigoTerceroFk;
+        $this->digitoVerificacion = $digitoVerificacion;
 
         return $this;
     }
 
     /**
-     * Get codigoTerceroFk
+     * Get digitoVerificacion
      *
-     * @return integer
+     * @return string
      */
-    public function getCodigoTerceroFk()
+    public function getDigitoVerificacion()
     {
-        return $this->codigoTerceroFk;
+        return $this->digitoVerificacion;
     }
 
     /**
@@ -305,6 +314,54 @@ class TurCliente
     public function getPlazoPago()
     {
         return $this->plazoPago;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return TurCliente
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return TurCliente
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
     }
 
     /**
@@ -497,30 +554,6 @@ class TurCliente
     public function getComentarios()
     {
         return $this->comentarios;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return TurCliente
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
     }
 
     /**
@@ -752,50 +785,74 @@ class TurCliente
     }
 
     /**
-     * Set direccion
+     * Set celular
      *
-     * @param string $direccion
+     * @param string $celular
      *
      * @return TurCliente
      */
-    public function setDireccion($direccion)
+    public function setCelular($celular)
     {
-        $this->direccion = $direccion;
+        $this->celular = $celular;
 
         return $this;
     }
 
     /**
-     * Get direccion
+     * Get celular
      *
      * @return string
      */
-    public function getDireccion()
+    public function getCelular()
     {
-        return $this->direccion;
+        return $this->celular;
     }
 
     /**
-     * Set telefono
+     * Set fax
      *
-     * @param string $telefono
+     * @param string $fax
      *
      * @return TurCliente
      */
-    public function setTelefono($telefono)
+    public function setFax($fax)
     {
-        $this->telefono = $telefono;
+        $this->fax = $fax;
 
         return $this;
     }
 
     /**
-     * Get telefono
+     * Get fax
      *
      * @return string
      */
-    public function getTelefono()
+    public function getFax()
     {
-        return $this->telefono;
+        return $this->fax;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return TurCliente
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }

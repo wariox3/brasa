@@ -13,6 +13,7 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>CODIGO</th>
+                <th>NUMERO</th>
                 <th>PUESTO</th>
                 <th>H</th>
                 <th>H.D</th>
@@ -23,6 +24,7 @@
             {% for arPedidoDetalles in arPedidoDetalles %}
             <tr>
                 <td>{{ arPedidoDetalles.codigoPedidoDetallePk  }}</td>
+                <td>{{ arPedidoDetalles.pedidoRel.numero  }}</td>
                 <td>{{ arPedidoDetalles.puestoRel.nombre | default('') }}</td>                                                
                 <td style="text-align: right">{{ arPedidoDetalles.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidoDetalles.horasDiurnas | number_format(0, '.', ',') }}</td>

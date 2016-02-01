@@ -89,17 +89,13 @@ class MovimientoFacturaController extends Controller
         $form = $this->formularioDetalle($arFactura);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnAutorizar')->isClicked()) {            
-                if($arFactura->getEstadoAutorizado() == 0) {
-                    if($em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->numeroRegistros($codigoFactura) > 0) {
-                        $arFactura->setEstadoAutorizado(1);
-                        $em->persist($arFactura);
-                        $em->flush();                        
-                    } else {
-                        $objMensaje->Mensaje('error', 'Debe adicionar detalles', $this);
-                    }                    
+            if($form->get('BtnAutorizar')->isClicked()) {      
+                $arrControles = $request->request->All();                
+                $strResultado = $em->getRepository('BrasaTurnoBundle:TurFactura')->autorizar($codigoFactura);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
                 }
-                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                
+                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                
             }    
             if($form->get('BtnDesAutorizar')->isClicked()) {            
                 if($arFactura->getEstadoAutorizado() == 1) {
