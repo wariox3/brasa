@@ -64,7 +64,18 @@ class TurClienteDireccion
      */
     protected $ciudadRel;         
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurFactura", mappedBy="clienteDireccionRel")
+     */
+    protected $facturasClienteDireccionRel; 
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->facturasClienteDireccionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoClienteDireccionPk
@@ -290,5 +301,39 @@ class TurClienteDireccion
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Add facturasClienteDireccionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasClienteDireccionRel
+     *
+     * @return TurClienteDireccion
+     */
+    public function addFacturasClienteDireccionRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasClienteDireccionRel)
+    {
+        $this->facturasClienteDireccionRel[] = $facturasClienteDireccionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasClienteDireccionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasClienteDireccionRel
+     */
+    public function removeFacturasClienteDireccionRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasClienteDireccionRel)
+    {
+        $this->facturasClienteDireccionRel->removeElement($facturasClienteDireccionRel);
+    }
+
+    /**
+     * Get facturasClienteDireccionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasClienteDireccionRel()
+    {
+        return $this->facturasClienteDireccionRel;
     }
 }

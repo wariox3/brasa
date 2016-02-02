@@ -109,7 +109,6 @@ class TurFactura
      */
     protected $facturasDetallesFacturaRel; 
     
-
     /**
      * Constructor
      */
@@ -393,6 +392,30 @@ class TurFactura
     }
 
     /**
+     * Set vrRetencionIva
+     *
+     * @param float $vrRetencionIva
+     *
+     * @return TurFactura
+     */
+    public function setVrRetencionIva($vrRetencionIva)
+    {
+        $this->VrRetencionIva = $vrRetencionIva;
+
+        return $this;
+    }
+
+    /**
+     * Get vrRetencionIva
+     *
+     * @return float
+     */
+    public function getVrRetencionIva()
+    {
+        return $this->VrRetencionIva;
+    }
+
+    /**
      * Set vrSubtotal
      *
      * @param float $vrSubtotal
@@ -544,29 +567,5 @@ class TurFactura
     public function getFacturasDetallesFacturaRel()
     {
         return $this->facturasDetallesFacturaRel;
-    }
-
-    /**
-     * Set vrRetencionIva
-     *
-     * @param float $vrRetencionIva
-     *
-     * @return TurFactura
-     */
-    public function setVrRetencionIva($vrRetencionIva)
-    {
-        $this->VrRetencionIva = $vrRetencionIva;
-
-        return $this;
-    }
-
-    /**
-     * Get vrRetencionIva
-     *
-     * @return float
-     */
-    public function getVrRetencionIva()
-    {
-        return $this->VrRetencionIva;
     }
 }
