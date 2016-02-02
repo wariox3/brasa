@@ -16,7 +16,25 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         $dql   = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa WHERE pa.codigoProgramacionPagoFk =  " . $codigoProgramacionPago;
         $dql .= " ORDER BY pa.codigoProgramacionPagoFk DESC";
         return $dql;
-    }    
+    } 
+    
+    public function listaAdicionalesDql($strNombre = "", $strIdentificacion = "", $permanente = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pa,e FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa JOIN pa.empleadoRel e WHERE pa.codigoPagoAdicionalPk <> 0 ";   
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        if($permanente == 1 ) {
+            $dql .= " AND pa.permante = 1";
+        }
+        if($permanente == 0 ) {
+            $dql .= " AND pa.permanente = 0";
+        }
+        return $dql;
+    }
     
     public function programacionPago($codigoEmpleado = "", $codigoProgramacionPago = "") {
         $em = $this->getEntityManager();

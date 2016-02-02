@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityRepository;
 class ConsultasControlAccesosEmpleadosController extends Controller
 {
     var $strDqlLista = "";   
-    
     var $nombre = "";
     var $identificacion = "";
     var $centroCosto = "";

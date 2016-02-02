@@ -8,8 +8,12 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuAdicionalPagoType;
 
 class PagosAdicionalesController extends Controller
 {
-    var $strDqlLista = "";
-    public function listaAction() {
+    var $strDqlLista = "";   
+    var $nombre = "";
+    var $identificacion = "";
+    var $permanente = 2;
+    
+    /*public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $form = $this->createFormBuilder()
@@ -44,6 +48,112 @@ class PagosAdicionalesController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:lista.html.twig', array(
             'arProgramacionPagos' => $arProgramacionPagos,
             'form' => $form->createView()));
+    }*/
+    
+    public function listaAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $objMensaje = $this->get('mensajes_brasa');
+        $form = $this->formularioLista();
+        $form->handleRequest($request);
+        $this->listar($form);
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        if($form->isValid()) {
+            if($form->get('BtnRetirarConcepto')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        $em->remove($arPagoAdicional);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
+                }
+            }
+            if($form->get('BtnConceptoPermanente')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        if($arPagoAdicional->getPermanente() == 1) {
+                            $arPagoAdicional->setPermanente(0);
+                        } else {
+                            $arPagoAdicional->setPermanente(1);
+                        }
+                        $em->persist($arPagoAdicional);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
+                }
+            }
+            if($form->get('BtnAplicaDiaLaborado')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
+                            $arPagoAdicional->setAplicaDiaLaborado(0);
+                        } else {
+                            $arPagoAdicional->setAplicaDiaLaborado(1);
+                        }
+                        $em->persist($arPagoAdicional);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
+                }
+            }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarLista($form);
+                $this->listar($form);
+            }
+            if($form->get('BtnExcel')->isClicked()) {
+                $this->filtrarLista($form);
+                $this->listar($form);
+                $this->generarExcel();
+            }
+        }
+        //$this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaDql("");        
+        $arPagosAdicionales = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:lista.html.twig', array(
+                    'arPagosAdicionales' => $arPagosAdicionales,
+                    'form' => $form->createView()
+                    ));
+    }
+    
+    private function listar($form) {
+        $session = $this->getRequest()->getSession();         
+        $em = $this->getDoctrine()->getManager();
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaAdicionalesDql(                    
+            $this->nombre,
+            $this->identificacion,
+            $this->permanente);
+    }
+
+    private function formularioLista() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();            
+        $form = $this->createFormBuilder()
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->nombre, 'required' => false))
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificación','data' => $this->identificacion, 'required' => false))
+            ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnConceptoPermanente', 'submit', array('label'  => 'Permanente',))
+            ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))
+            ->add('permanente', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))                
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->getForm();
+        return $form;
+    }
+
+    private function filtrarLista($form) {
+        
+        $this->nombre = $form->get('TxtNombre')->getData();
+        $this->identificacion = $form->get('TxtIdentificacion')->getData();
+        $this->permanente = $form->get('permanente')->getData();
     }
 
     public function detalleAction($codigoProgramacionPago) {
