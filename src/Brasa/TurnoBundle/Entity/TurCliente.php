@@ -53,22 +53,22 @@ class TurCliente
     private $codigoFormaPagoFk;     
     
     /**
-     * @ORM\Column(name="direccion", type="string", length=120)
+     * @ORM\Column(name="direccion", type="string", length=120, nullable=true)
      */
     private $direccion;
     
     /**
-     * @ORM\Column(name="telefono", type="string", length=30)
+     * @ORM\Column(name="telefono", type="string", length=30, nullable=true)
      */
     private $telefono;     
     
     /**
-     * @ORM\Column(name="celular", type="string", length=20, nullable=true)
+     * @ORM\Column(name="celular", type="string", length=20, nullable=true, nullable=true)
      */
     private $celular;    
         
     /**
-     * @ORM\Column(name="fax", type="string", length=20, nullable=true)
+     * @ORM\Column(name="fax", type="string", length=20, nullable=true, nullable=true)
      */
     private $fax;    
     
@@ -328,6 +328,30 @@ class TurCliente
     }
 
     /**
+     * Set codigoFormaPagoFk
+     *
+     * @param integer $codigoFormaPagoFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoFormaPagoFk($codigoFormaPagoFk)
+    {
+        $this->codigoFormaPagoFk = $codigoFormaPagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormaPagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoFormaPagoFk()
+    {
+        return $this->codigoFormaPagoFk;
+    }
+
+    /**
      * Set direccion
      *
      * @param string $direccion
@@ -373,6 +397,78 @@ class TurCliente
     public function getTelefono()
     {
         return $this->telefono;
+    }
+
+    /**
+     * Set celular
+     *
+     * @param string $celular
+     *
+     * @return TurCliente
+     */
+    public function setCelular($celular)
+    {
+        $this->celular = $celular;
+
+        return $this;
+    }
+
+    /**
+     * Get celular
+     *
+     * @return string
+     */
+    public function getCelular()
+    {
+        return $this->celular;
+    }
+
+    /**
+     * Set fax
+     *
+     * @param string $fax
+     *
+     * @return TurCliente
+     */
+    public function setFax($fax)
+    {
+        $this->fax = $fax;
+
+        return $this;
+    }
+
+    /**
+     * Get fax
+     *
+     * @return string
+     */
+    public function getFax()
+    {
+        return $this->fax;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return TurCliente
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     /**
@@ -592,6 +688,30 @@ class TurCliente
     }
 
     /**
+     * Set formaPagoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenFormaPago $formaPagoRel
+     *
+     * @return TurCliente
+     */
+    public function setFormaPagoRel(\Brasa\GeneralBundle\Entity\GenFormaPago $formaPagoRel = null)
+    {
+        $this->formaPagoRel = $formaPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get formaPagoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenFormaPago
+     */
+    public function getFormaPagoRel()
+    {
+        return $this->formaPagoRel;
+    }
+
+    /**
      * Add cotizacionesClienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurCotizacion $cotizacionesClienteRel
@@ -793,125 +913,5 @@ class TurCliente
     public function getPuestosClienteRel()
     {
         return $this->puestosClienteRel;
-    }
-
-    /**
-     * Set celular
-     *
-     * @param string $celular
-     *
-     * @return TurCliente
-     */
-    public function setCelular($celular)
-    {
-        $this->celular = $celular;
-
-        return $this;
-    }
-
-    /**
-     * Get celular
-     *
-     * @return string
-     */
-    public function getCelular()
-    {
-        return $this->celular;
-    }
-
-    /**
-     * Set fax
-     *
-     * @param string $fax
-     *
-     * @return TurCliente
-     */
-    public function setFax($fax)
-    {
-        $this->fax = $fax;
-
-        return $this;
-    }
-
-    /**
-     * Get fax
-     *
-     * @return string
-     */
-    public function getFax()
-    {
-        return $this->fax;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return TurCliente
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set codigoFormaPagoFk
-     *
-     * @param integer $codigoFormaPagoFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoFormaPagoFk($codigoFormaPagoFk)
-    {
-        $this->codigoFormaPagoFk = $codigoFormaPagoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoFormaPagoFk
-     *
-     * @return integer
-     */
-    public function getCodigoFormaPagoFk()
-    {
-        return $this->codigoFormaPagoFk;
-    }
-
-    /**
-     * Set formaPagoRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenFormaPago $formaPagoRel
-     *
-     * @return TurCliente
-     */
-    public function setFormaPagoRel(\Brasa\GeneralBundle\Entity\GenFormaPago $formaPagoRel = null)
-    {
-        $this->formaPagoRel = $formaPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get formaPagoRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenFormaPago
-     */
-    public function getFormaPagoRel()
-    {
-        return $this->formaPagoRel;
     }
 }
