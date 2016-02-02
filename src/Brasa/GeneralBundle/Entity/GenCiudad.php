@@ -151,7 +151,12 @@ class GenCiudad
      */
     protected $ctbTercerosCiudadRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurClienteDireccion", mappedBy="ciudadRel")
+     */
+    protected $turClientesDireccionesCiudadRel;    
    
+
     /**
      * Constructor
      */
@@ -176,6 +181,7 @@ class GenCiudad
         $this->rhuEmpleadosEstudiosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuaccidentesTrabajoCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ctbTercerosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turClientesDireccionesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1000,5 +1006,39 @@ class GenCiudad
     public function getCtbTercerosCiudadRel()
     {
         return $this->ctbTercerosCiudadRel;
+    }
+
+    /**
+     * Add turClientesDireccionesCiudadRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurClienteDireccion $turClientesDireccionesCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addTurClientesDireccionesCiudadRel(\Brasa\TurnoBundle\Entity\TurClienteDireccion $turClientesDireccionesCiudadRel)
+    {
+        $this->turClientesDireccionesCiudadRel[] = $turClientesDireccionesCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turClientesDireccionesCiudadRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurClienteDireccion $turClientesDireccionesCiudadRel
+     */
+    public function removeTurClientesDireccionesCiudadRel(\Brasa\TurnoBundle\Entity\TurClienteDireccion $turClientesDireccionesCiudadRel)
+    {
+        $this->turClientesDireccionesCiudadRel->removeElement($turClientesDireccionesCiudadRel);
+    }
+
+    /**
+     * Get turClientesDireccionesCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurClientesDireccionesCiudadRel()
+    {
+        return $this->turClientesDireccionesCiudadRel;
     }
 }

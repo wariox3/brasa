@@ -31,10 +31,17 @@ class TurFacturaDetalleRepository extends EntityRepository {
         
     }        
     
-    public function numeroRegistros($codigo) {
+    public function numeroRegistros($codigo) {        
         $em = $this->getEntityManager();
-        $arDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigo));
-        return count($arDetalles);
+        $intNumeroRegistros = 0;
+        $dql   = "SELECT COUNT(fd.codigoFacturaDetallePk) as numeroRegistros FROM BrasaTurnoBundle:TurFacturaDetalle fd "
+                . "WHERE fd.codigoFacturaFk = " . $codigo;
+        $query = $em->createQuery($dql);
+        $arrFacturaDetalles = $query->getSingleResult(); 
+        if($arrFacturaDetalles) {
+            $intNumeroRegistros = $arrFacturaDetalles['numeroRegistros'];
+        }
+        return $intNumeroRegistros;
     }          
     
 }

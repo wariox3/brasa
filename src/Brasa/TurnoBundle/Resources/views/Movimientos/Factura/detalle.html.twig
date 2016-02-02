@@ -53,15 +53,21 @@
                     <td align="right">{{ arFactura.vrBaseAIU | number_format(0, '.', ',')}}</td>
                 </tr>                               
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">SOPORTE:</td>
+                    <td class="td-in-well">{{ arFactura.soporte }}</td>
                     <td class="titulo" >IVA:</td>
                     <td align="right">{{ arFactura.vrIva | number_format(0, '.', ',')}}</td>
                 </tr>
                 <tr>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="titulo" >RTE FTE:</td>
+                    <td class="titulo" >RETENCION IVA:</td>
+                    <td align="right">{{ arFactura.vrRetencionIva | number_format(0, '.', ',')}}</td>
+                </tr>                
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo" >RETENCION FUENTE:</td>
                     <td align="right">{{ arFactura.vrRetencionFuente | number_format(0, '.', ',')}}</td>
                 </tr>
                 <tr>

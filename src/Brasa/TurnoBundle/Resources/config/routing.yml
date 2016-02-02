@@ -50,6 +50,10 @@ brs_tur_base_cliente_puesto_nuevo:
     path:     /tur/base/cliente/puesto/nuevo/{codigoCliente}/{codigoPuesto}
     defaults: { _controller: BrasaTurnoBundle:BaseCliente:puestoNuevo }    
 
+brs_tur_base_cliente_direccion_nuevo:
+    path:     /tur/base/cliente/direccion/nuevo/{codigoCliente}/{codigoDireccion}
+    defaults: { _controller: BrasaTurnoBundle:BaseCliente:direccionNuevo } 
+
 brs_tur_base_prospecto_lista:
     path:     /tur/base/prospecto/lista
     defaults: { _controller: BrasaTurnoBundle:BaseProspecto:lista }            
@@ -253,6 +257,10 @@ brs_tur_buscar_recurso2:
 brs_tur_buscar_puesto:
     pattern:  /turno/buscar/puesto/{campoCodigo}/{codigoCliente}
     defaults: { _controller: BrasaTurnoBundle:BuscarPuesto:lista } 
+
+brs_tur_buscar_direccion:
+    pattern:  /turno/buscar/direccion/{campoCodigo}/{campoNombre}
+    defaults: { _controller: BrasaTurnoBundle:BuscarDireccion:lista }    
     
 brs_tur_configuracion:
     path:     /tur/configuracion/{codigoConfiguracionPk}

@@ -71,7 +71,6 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>CANT</th>
-                <th>CANT.RE</th>
                 <th>LU</th>
                 <th>MA</th>
                 <th>MI</th>
@@ -85,6 +84,7 @@
                 <th>H.N</th>
                 <th>DIAS</th>
                 <th>VALOR</th>
+                <th>VR.PEND</th>
                 <th>PRG</th>
                 <th>FAC</th>
             </tr>
@@ -107,8 +107,7 @@
                     <td>{{ arPedidosDetalles.plantillaRel.nombre | default('')  }}</td>                                            
                     <td>{{ arPedidosDetalles.diaDesde }}</td>    
                     <td>{{ arPedidosDetalles.diaHasta }}</td>    
-                    <td>{{ arPedidosDetalles.cantidad  }}</td>
-                    <td>{{ arPedidosDetalles.cantidadRecurso  }}</td>
+                    <td>{{ arPedidosDetalles.cantidad  }}</td>                    
                     <td>{% if arPedidosDetalles.lunes == 1 %} SI {% else %} NO {% endif %}</td>
                     <td>{% if arPedidosDetalles.martes == 1 %} SI {% else %} NO {% endif %}</td>
                     <td>{% if arPedidosDetalles.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
@@ -122,6 +121,7 @@
                     <td style="text-align: right">{{ arPedidosDetalles.horasNocturnas | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidosDetalles.dias | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidosDetalles.vrTotalDetalle | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arPedidosDetalles.vrTotalDetallePendiente | number_format(0, '.', ',') }}</td> 
                     <td>{% if arPedidosDetalles.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>                    
                     <td>{% if arPedidosDetalles.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>                                        
                 </tr>

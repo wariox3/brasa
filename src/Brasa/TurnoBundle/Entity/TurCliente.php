@@ -159,6 +159,11 @@ class TurCliente
      */
     protected $puestosClienteRel;     
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurClienteDireccion", mappedBy="clienteRel")
+     */
+    protected $clientesDireccionesClienteRel; 
+    
 
     /**
      * Constructor
@@ -171,6 +176,7 @@ class TurCliente
         $this->facturasClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->clientesDireccionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -913,5 +919,39 @@ class TurCliente
     public function getPuestosClienteRel()
     {
         return $this->puestosClienteRel;
+    }
+
+    /**
+     * Add clientesDireccionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurClienteDireccion $clientesDireccionesClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addClientesDireccionesClienteRel(\Brasa\TurnoBundle\Entity\TurClienteDireccion $clientesDireccionesClienteRel)
+    {
+        $this->clientesDireccionesClienteRel[] = $clientesDireccionesClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove clientesDireccionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurClienteDireccion $clientesDireccionesClienteRel
+     */
+    public function removeClientesDireccionesClienteRel(\Brasa\TurnoBundle\Entity\TurClienteDireccion $clientesDireccionesClienteRel)
+    {
+        $this->clientesDireccionesClienteRel->removeElement($clientesDireccionesClienteRel);
+    }
+
+    /**
+     * Get clientesDireccionesClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClientesDireccionesClienteRel()
+    {
+        return $this->clientesDireccionesClienteRel;
     }
 }

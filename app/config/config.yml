@@ -98,8 +98,7 @@ services:
     funciones_brasa:
         class:        Brasa\GeneralBundle\MisClases\Funciones           
     
-       
-        
+               
 knp_paginator:
     page_range: 5                      # default page range used in pagination control
     default_options:
@@ -112,4 +111,4 @@ knp_paginator:
         
     template:
         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig     # sliding pagination controls template
-        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template                                   
+        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template                                                   

@@ -40,7 +40,12 @@ class TurFactura
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
-    private $codigoClienteFk;      
+    private $codigoClienteFk;           
+    
+    /**
+     * @ORM\Column(name="codigo_cliente_direccion_fk", type="integer", nullable=true)
+     */    
+    private $codigoClienteDireccionFk;    
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -68,6 +73,11 @@ class TurFactura
     private $VrRetencionFuente = 0;     
     
     /**
+     * @ORM\Column(name="vr_retencion_iva", type="float")
+     */
+    private $VrRetencionIva = 0;    
+    
+    /**
      * @ORM\Column(name="vr_subtotal", type="float")
      */
     private $vrSubtotal = 0;     
@@ -87,6 +97,12 @@ class TurFactura
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
     protected $clienteRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurClienteDireccion", inversedBy="facturasClienteDireccionRel")
+     * @ORM\JoinColumn(name="codigo_cliente_direccion_fk", referencedColumnName="codigo_cliente_direccion_pk")
+     */
+    protected $clienteDireccionRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="facturaRel", cascade={"persist", "remove"})
@@ -110,6 +126,30 @@ class TurFactura
     public function getCodigoFacturaPk()
     {
         return $this->codigoFacturaPk;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return TurFactura
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 
     /**
@@ -161,6 +201,30 @@ class TurFactura
     }
 
     /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return TurFactura
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
+    }
+
+    /**
      * Set codigoClienteFk
      *
      * @param integer $codigoClienteFk
@@ -185,6 +249,30 @@ class TurFactura
     }
 
     /**
+     * Set codigoClienteDireccionFk
+     *
+     * @param integer $codigoClienteDireccionFk
+     *
+     * @return TurFactura
+     */
+    public function setCodigoClienteDireccionFk($codigoClienteDireccionFk)
+    {
+        $this->codigoClienteDireccionFk = $codigoClienteDireccionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteDireccionFk
+     *
+     * @return integer
+     */
+    public function getCodigoClienteDireccionFk()
+    {
+        return $this->codigoClienteDireccionFk;
+    }
+
+    /**
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
@@ -206,6 +294,30 @@ class TurFactura
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoAnulado
+     *
+     * @param boolean $estadoAnulado
+     *
+     * @return TurFactura
+     */
+    public function setEstadoAnulado($estadoAnulado)
+    {
+        $this->estadoAnulado = $estadoAnulado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulado
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulado()
+    {
+        return $this->estadoAnulado;
     }
 
     /**
@@ -377,6 +489,30 @@ class TurFactura
     }
 
     /**
+     * Set clienteDireccionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurClienteDireccion $clienteDireccionRel
+     *
+     * @return TurFactura
+     */
+    public function setClienteDireccionRel(\Brasa\TurnoBundle\Entity\TurClienteDireccion $clienteDireccionRel = null)
+    {
+        $this->clienteDireccionRel = $clienteDireccionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteDireccionRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurClienteDireccion
+     */
+    public function getClienteDireccionRel()
+    {
+        return $this->clienteDireccionRel;
+    }
+
+    /**
      * Add facturasDetallesFacturaRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesFacturaRel
@@ -411,74 +547,26 @@ class TurFactura
     }
 
     /**
-     * Set numero
+     * Set vrRetencionIva
      *
-     * @param integer $numero
+     * @param float $vrRetencionIva
      *
      * @return TurFactura
      */
-    public function setNumero($numero)
+    public function setVrRetencionIva($vrRetencionIva)
     {
-        $this->numero = $numero;
+        $this->VrRetencionIva = $vrRetencionIva;
 
         return $this;
     }
 
     /**
-     * Get numero
+     * Get vrRetencionIva
      *
-     * @return integer
+     * @return float
      */
-    public function getNumero()
+    public function getVrRetencionIva()
     {
-        return $this->numero;
-    }
-
-    /**
-     * Set soporte
-     *
-     * @param string $soporte
-     *
-     * @return TurFactura
-     */
-    public function setSoporte($soporte)
-    {
-        $this->soporte = $soporte;
-
-        return $this;
-    }
-
-    /**
-     * Get soporte
-     *
-     * @return string
-     */
-    public function getSoporte()
-    {
-        return $this->soporte;
-    }
-
-    /**
-     * Set estadoAnulado
-     *
-     * @param boolean $estadoAnulado
-     *
-     * @return TurFactura
-     */
-    public function setEstadoAnulado($estadoAnulado)
-    {
-        $this->estadoAnulado = $estadoAnulado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAnulado
-     *
-     * @return boolean
-     */
-    public function getEstadoAnulado()
-    {
-        return $this->estadoAnulado;
+        return $this->VrRetencionIva;
     }
 }

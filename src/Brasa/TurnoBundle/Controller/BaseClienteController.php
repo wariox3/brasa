@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurClienteType;
 use Brasa\TurnoBundle\Form\Type\TurClientePuestoType;
+use Brasa\TurnoBundle\Form\Type\TurClienteDireccionType;
 class BaseClienteController extends Controller
 {
     var $strDqlLista = "";
@@ -80,14 +81,22 @@ class BaseClienteController extends Controller
                 $arrSeleccionados = $request->request->get('ChkSeleccionarPuesto');
                 $em->getRepository('BrasaTurnoBundle:TurPuesto')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_tur_base_cliente_detalle', array('codigoCliente' => $codigoCliente)));
-            }            
+            }    
+            if($form->get('BtnEliminarDireccion')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarDireccion');
+                $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_cliente_detalle', array('codigoCliente' => $codigoCliente)));
+            }             
         }
 
         $arPuestos = new \Brasa\TurnoBundle\Entity\TurPuesto();
         $arPuestos = $em->getRepository('BrasaTurnoBundle:TurPuesto')->findBy(array ('codigoClienteFk' => $codigoCliente));
+        $arClienteDirecciones = new \Brasa\TurnoBundle\Entity\TurClienteDireccion();
+        $arClienteDirecciones = $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->findBy(array ('codigoClienteFk' => $codigoCliente));        
         return $this->render('BrasaTurnoBundle:Base/Cliente:detalle.html.twig', array(
                     'arCliente' => $arCliente,
                     'arPuestos' => $arPuestos,
+                    'arClienteDirecciones' => $arClienteDirecciones,
                     'form' => $form->createView()
                     ));
     }
@@ -120,6 +129,34 @@ class BaseClienteController extends Controller
             'form' => $form->createView()));
     }   
     
+    public function direccionNuevoAction($codigoCliente, $codigoDireccion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
+        $arClienteDireccion = new \Brasa\TurnoBundle\Entity\TurClienteDireccion();
+        if($codigoDireccion != '' && $codigoDireccion != '0') {
+            $arClienteDireccion = $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->find($codigoDireccion);
+        }        
+        $form = $this->createForm(new TurClienteDireccionType, $arClienteDireccion);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arClienteDireccion = $form->getData();
+            $arClienteDireccion->setClienteRel($arCliente);
+            $em->persist($arClienteDireccion);
+            $em->flush();            
+            
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tur_cliente_direccion_nuevo', array('codigoCliente' => $codigoCliente )));
+            } else {
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }            
+        }
+        return $this->render('BrasaTurnoBundle:Base/Cliente:direccionNuevo.html.twig', array(
+            'arCliente' => $arCliente,
+            'form' => $form->createView()));
+    }   
+    
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurCliente')->listaDQL(
@@ -148,10 +185,12 @@ class BaseClienteController extends Controller
     private function formularioDetalle($ar) {
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
         $arrBotonEliminarPuesto = array('label' => 'Eliminar', 'disabled' => false);                
+        $arrBotonEliminarDireccion = array('label' => 'Eliminar', 'disabled' => false);                
        
         $form = $this->createFormBuilder()    
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
                     ->add('BtnEliminarPuesto', 'submit', $arrBotonEliminarPuesto)            
+                    ->add('BtnEliminarDireccion', 'submit', $arrBotonEliminarDireccion)            
                     ->getForm();  
         return $form;
     }

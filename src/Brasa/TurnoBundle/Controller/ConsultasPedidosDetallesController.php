@@ -78,8 +78,11 @@ class ConsultasPedidosDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AC'; $col++) {
+        for($col = 'A'; $col !== 'AF'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'AD'; $col !== 'AF'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0.00');
         }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
@@ -111,7 +114,8 @@ class ConsultasPedidosDetallesController extends Controller
                     ->setCellValue('AA1', 'H.D')
                     ->setCellValue('AB1', 'H.N')
                     ->setCellValue('AC1', 'DIAS')
-                    ->setCellValue('AD1', 'VALOR');
+                    ->setCellValue('AD1', 'VALOR')
+                    ->setCellValue('AE1', 'VR.PEND');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -147,7 +151,8 @@ class ConsultasPedidosDetallesController extends Controller
                     ->setCellValue('AA' . $i, $arPedidoDetalle->getHorasDiurnas())
                     ->setCellValue('AB' . $i, $arPedidoDetalle->getHorasNocturnas())
                     ->setCellValue('AC' . $i, $arPedidoDetalle->getDias())
-                    ->setCellValue('AD' . $i, $arPedidoDetalle->getVrTotalDetalle());
+                    ->setCellValue('AD' . $i, $arPedidoDetalle->getVrTotalDetalle())
+                    ->setCellValue('AE' . $i, $arPedidoDetalle->getVrTotalDetalle());
             if($arPedidoDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('I' . $i, $arPedidoDetalle->getPuestoRel()->getNombre());

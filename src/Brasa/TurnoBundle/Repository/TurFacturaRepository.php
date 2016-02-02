@@ -71,10 +71,12 @@ class TurFacturaRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {                
-                $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigo);
-                if($arFactura->getEstadoAutorizado() == 0) {
-                    $em->remove($arFactura);                    
-                }                
+                if($em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->numeroRegistros($codigo) <= 0) {
+                    $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigo);                    
+                    if($arFactura->getEstadoAutorizado() == 0 && $arFactura->getNumero() == 0) {
+                        $em->remove($arFactura);                    
+                    }                     
+                }               
             }
             $em->flush();
         }
