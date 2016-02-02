@@ -4,9 +4,6 @@ INSERT INTO `gen_banco` (`codigo_banco_pk`, `nombre`) VALUES('2','DAVIVIENDA');
 
 insert into `gen_cuenta` (`codigo_cuenta_pk`, `codigo_banco_fk`, `nombre`, `cuenta`, `tipo`, `codigo_cuenta_fk`) values('1','1','AHORRO BANCOLOMBIA','11111111111','D','1');
 
-insert into `gen_forma_pago` (`codigo_forma_pago_pk`, `nombre`) values('1','CONTADO');
-insert into `gen_forma_pago` (`codigo_forma_pago_pk`, `nombre`) values('2','CREDITO');
-
 INSERT INTO `gen_clasificacion_tributaria` (`codigo_clasificacion_tributaria_pk`, `nombre_clasificacion_tributaria`, `retencion_iva_ventas`, `retencion_cree`, `retencion_fuente`) values('1','RÉGIMEN COMÚN','0','0','0');
 INSERT INTO `gen_clasificacion_tributaria` (`codigo_clasificacion_tributaria_pk`, `nombre_clasificacion_tributaria`, `retencion_iva_ventas`, `retencion_cree`, `retencion_fuente`) values('2','RÉGIMEN SIMPLIFICADO','0','0','0');
 INSERT INTO `gen_clasificacion_tributaria` (`codigo_clasificacion_tributaria_pk`, `nombre_clasificacion_tributaria`, `retencion_iva_ventas`, `retencion_cree`, `retencion_fuente`) values('3','PERSONA NATURAL','0','0','0');
