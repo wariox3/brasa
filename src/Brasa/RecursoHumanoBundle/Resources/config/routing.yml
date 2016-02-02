@@ -150,6 +150,14 @@ brs_rhu_pagos_adicionales_agregar_valor:
     path:     /rhu/pagos/adicionales/agregar/valor/{codigoProgramacionPago}/{tipo}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valor }
     
+brs_rhu_pagos_adicionales_agregar_valoradicional:
+    path:     /rhu/pagos/adicionales/agregar/valoradicional/{tipo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }
+    
+brs_rhu_pagos_adicionales_agregar_tiempoadicional:
+    path:     /rhu/pagos/adicionales/agregar/tiempoadicional/
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempoAdicional }    
+    
 brs_rhu_pago_adicional_editar:
     path:     /rhu/pago/adicional/editar/{codigoAdicionalPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:editar }    

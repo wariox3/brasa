@@ -28,7 +28,7 @@ class RhuPagoAdicionalRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
         if($permanente == 1 ) {
-            $dql .= " AND pa.permante = 1";
+            $dql .= " AND pa.permanente = 1";
         }
         if($permanente == 0 ) {
             $dql .= " AND pa.permanente = 0";

@@ -45,6 +45,7 @@
                 <th>CÓDIGO</th>
                 <th>CONCEPTO</th>
                 <th>DETALLE</th>
+                <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
                 <th>CANTIDAD</th>
                 <th>VALOR</th>
@@ -61,6 +62,7 @@
                 </td>
                 <td>{{ arPagosAdicionales.pagoConceptoRel.nombre}}</td>                        
                 <td>{{ arPagosAdicionales.detalle }}</td>
+                <td>{{ arPagosAdicionales.empleadoRel.numeroIdentificacion }}</td>
                 <td>{{ arPagosAdicionales.empleadoRel.nombreCorto|default('Sin nombre') }}</td>
                 <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>                            
                 <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
@@ -83,10 +85,10 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>    
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_tiempo', {'codigoProgramacionPago': 0}) }}', 'AgregarTiempo', 600, 900)" >Tiempo suplementario</a>
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': 0, 'tipo': 1 }) }}', 'AgregarValor', 600, 900)" >Bonificacion</a>                        
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': 0, 'tipo': 3 }) }}', 'AgregarValor', 600, 900)" >Comision</a>                                                
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': 0, 'tipo': 2 }) }}', 'AgregarValor', 600, 900)" >Descuento</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_tiempoadicional' ) }}" >Tiempo suplementario</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicional', { 'tipo': 1 }) }}" >Bonificacion</a>                        
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicional', { 'tipo': 3 }) }}" >Comision</a>                                                
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicional', { 'tipo': 2 }) }}" >Descuento</a>
              </div>
              <div class="btn-group">
                 {{ form_widget(form.BtnAplicaDiaLaborado, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                                                
