@@ -252,4 +252,8 @@ brs_tur_buscar_recurso2:
     
 brs_tur_buscar_puesto:
     pattern:  /turno/buscar/puesto/{campoCodigo}/{codigoCliente}
-    defaults: { _controller: BrasaTurnoBundle:BuscarPuesto:lista }    
+    defaults: { _controller: BrasaTurnoBundle:BuscarPuesto:lista } 
+    
+brs_tur_configuracion:
+    path:     /tur/configuracion/{codigoConfiguracionPk}
+    defaults: { _controller: BrasaTurnoBundle:Configuracion:configuracion }    
