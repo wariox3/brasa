@@ -29,6 +29,7 @@ class SegAcceso
     protected $accesoAccesoUsuarioRel;
     
     
+    
     /**
      * Constructor
      */

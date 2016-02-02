@@ -108,6 +108,11 @@ class RhuCentroCosto
      */    
     private $diasPago;
     
+    /**     
+     * @ORM\Column(name="genera_servicio_cobrar", type="boolean")
+     */    
+    private $generaServicioCobrar = 0;
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
      * @ORM\JoinColumn(name="codigo_periodo_pago_fk", referencedColumnName="codigo_periodo_pago_pk")
@@ -688,6 +693,30 @@ class RhuCentroCosto
     public function getDiasPago()
     {
         return $this->diasPago;
+    }
+
+    /**
+     * Set generaServicioCobrar
+     *
+     * @param boolean $generaServicioCobrar
+     *
+     * @return RhuCentroCosto
+     */
+    public function setGeneraServicioCobrar($generaServicioCobrar)
+    {
+        $this->generaServicioCobrar = $generaServicioCobrar;
+
+        return $this;
+    }
+
+    /**
+     * Get generaServicioCobrar
+     *
+     * @return boolean
+     */
+    public function getGeneraServicioCobrar()
+    {
+        return $this->generaServicioCobrar;
     }
 
     /**

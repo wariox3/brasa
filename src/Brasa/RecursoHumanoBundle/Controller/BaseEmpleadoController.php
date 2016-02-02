@@ -103,6 +103,8 @@ class BaseEmpleadoController extends Controller
         $arEmpleadoFamilia = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoFamilia')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
         $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        $arAdicionalesPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        $arAdicionalesPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado, 'permanente' => 1));
         if($form->isValid()) {
             if($form->get('BtnInactivarContrato')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
@@ -166,6 +168,7 @@ class BaseEmpleadoController extends Controller
         $arExamenes = $paginator->paginate($arExamenes, $this->get('request')->query->get('page', 1),6);
         $arEmpleadoFamilia = $paginator->paginate($arEmpleadoFamilia, $this->get('request')->query->get('page', 1),8);
         $arDotacion = $paginator->paginate($arDotacion, $this->get('request')->query->get('page', 1),8);
+        $arAdicionalesPago = $paginator->paginate($arAdicionalesPago, $this->get('request')->query->get('page', 1),8);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
                     'arIncapacidades' => $arIncapacidades,
@@ -178,6 +181,7 @@ class BaseEmpleadoController extends Controller
                     'arExamenes' => $arExamenes,
                     'arEmpleadoFamilia' => $arEmpleadoFamilia,
                     'arDotacion' => $arDotacion,
+                    'arAdicionalesPago' => $arAdicionalesPago,
                     'strRutaImagen' => $strRutaImagen,
                     'permisoVerSalario' => $permisoVerSalario,
                     'form' => $form->createView()

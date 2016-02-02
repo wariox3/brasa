@@ -44,6 +44,7 @@ class RhuCentroCostoType extends AbstractType
             ->add('porcentajeAdministracion', 'number', array('required' => false))
             ->add('valorAdministracion', 'number', array('required' => false))
             ->add('diasPago', 'text', array('required' => true))
+            ->add('generaServicioCobrar', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

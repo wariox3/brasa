@@ -390,17 +390,17 @@ class ProgramacionesPagoController extends Controller
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Código')
-                    ->setCellValue('B1', 'Tipo')
-                    ->setCellValue('C1', 'Centro Costos')
-                    ->setCellValue('D1', 'Periodo')
-                    ->setCellValue('E1', 'Desde')
-                    ->setCellValue('F1', 'Hasta')
-                    ->setCellValue('G1', 'Días')
-                    ->setCellValue('H1', 'Empleados')
-                    ->setCellValue('I1', 'Estado Generado')
-                    ->setCellValue('J1', 'Estado Pagado')
-                    ->setCellValue('K1', 'Neto');
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'TIPO')
+                    ->setCellValue('C1', 'CENTRO COSTO')
+                    ->setCellValue('D1', 'PERIODO')
+                    ->setCellValue('E1', 'DESDE')
+                    ->setCellValue('F1', 'HASTA')
+                    ->setCellValue('G1', 'DÍAS')
+                    ->setCellValue('H1', 'EMPLEADOS')
+                    ->setCellValue('I1', 'ESTADO GENERADO')
+                    ->setCellValue('J1', 'ESTADO PAGADO')
+                    ->setCellValue('K1', 'NETO');
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
         $arProgramacionesPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -467,16 +467,27 @@ class ProgramacionesPagoController extends Controller
                 ->setCategory("Test result file");
             $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
             $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
             $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('A1', 'Codigo')
-                        ->setCellValue('B1', 'Identificación')
-                        ->setCellValue('C1', 'Nombre')
-                        ->setCellValue('D1', 'Desde')
-                        ->setCellValue('E1', 'Hasta')
-                        ->setCellValue('F1', 'Salario')
-                        ->setCellValue('G1', 'Devengado')
-                        ->setCellValue('H1', 'Deducciones')
-                        ->setCellValue('I1', 'Neto')
+                        ->setCellValue('A1', 'CÓDIGO')
+                        ->setCellValue('B1', 'IDENTIFICACIÓN')
+                        ->setCellValue('C1', 'NOMBRE')
+                        ->setCellValue('D1', 'DESDE')
+                        ->setCellValue('E1', 'HASTA')
+                        ->setCellValue('F1', 'SALARIO')
+                        ->setCellValue('G1', 'DEVENGADO')
+                        ->setCellValue('H1', 'DEDUCCIONES')
+                        ->setCellValue('I1', 'NETO')
                         ->setCellValue('J1', 'IBP')
                         ->setCellValue('K1', 'IBC');
             $i = 2;
@@ -503,6 +514,21 @@ class ProgramacionesPagoController extends Controller
             $objPHPExcel->setActiveSheetIndex(0);
             $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
             $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
             $objPHPExcel->createSheet(2)->setTitle('PagosDetalle')
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'EMPLEADO')
@@ -569,17 +595,28 @@ class ProgramacionesPagoController extends Controller
                 ->setCategory("Test result file");
             $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
             $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
             $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('A1', 'Código')
-                        ->setCellValue('B1', 'Identificación')
-                        ->setCellValue('C1', 'Nombre')
-                        ->setCellValue('D1', 'Desde')
-                        ->setCellValue('E1', 'Hasta')
-                        ->setCellValue('F1', 'Dias')
-                        ->setCellValue('G1', 'Salario')
-                        ->setCellValue('H1', 'Devengado')
-                        ->setCellValue('I1', 'Deducciones')
-                        ->setCellValue('J1', 'Neto');
+                        ->setCellValue('A1', 'CÓDIGO')
+                        ->setCellValue('B1', 'IDENTIFICACIÓN')
+                        ->setCellValue('C1', 'NOMBRE')
+                        ->setCellValue('D1', 'DESDE')
+                        ->setCellValue('E1', 'HASTA')
+                        ->setCellValue('F1', 'DÍAS')
+                        ->setCellValue('G1', 'SALARIO')
+                        ->setCellValue('H1', 'DEVENGADO')
+                        ->setCellValue('I1', 'DEDUCCIONES')
+                        ->setCellValue('J1', 'NETO');
 
             $i = 2;
 

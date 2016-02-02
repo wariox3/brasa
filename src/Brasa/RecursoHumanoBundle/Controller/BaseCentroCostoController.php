@@ -145,6 +145,8 @@ class BaseCentroCostoController extends Controller
     }    
     
      private function generarExcel() {
+         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+         ob_clean();
          $em = $this->getDoctrine()->getManager();
          $objPHPExcel = new \PHPExcel();
                 // Set document properties
@@ -158,14 +160,15 @@ class BaseCentroCostoController extends Controller
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Nombre')
-                            ->setCellValue('C1', 'Ciudad')
-                            ->setCellValue('D1', 'Periodo')
-                            ->setCellValue('E1', 'Abierto')
-                            ->setCellValue('F1', 'Ult pago')
-                            ->setCellValue('G1', 'Ult pago prima')
-                            ->setCellValue('H1', 'Ult pago cesantias');
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'NOMBRE')
+                            ->setCellValue('C1', 'CIUDAD')
+                            ->setCellValue('D1', 'PERIODO')
+                            ->setCellValue('E1', 'ABIERTO')
+                            ->setCellValue('F1', 'GENERA SERV POR COBRAR')
+                            ->setCellValue('G1', 'ULT PAGO')
+                            ->setCellValue('H1', 'ULT PAGO PRIMA')
+                            ->setCellValue('I1', 'ULT PAGO CESANTIAS');
 
                 $i = 2;
                 $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->findAll();
@@ -175,10 +178,11 @@ class BaseCentroCostoController extends Controller
                             ->setCellValue('B' . $i, $arCentroCosto->getNombre())
                             ->setCellValue('C' . $i, $arCentroCosto->getCiudadRel()->getNombre())
                             ->setCellValue('D' . $i, $arCentroCosto->getPeriodoPagoRel()->getNombre())
-                            ->setCellValue('E' . $i, $arCentroCosto->getPagoAbierto())
-                            ->setCellValue('F' . $i, $arCentroCosto->getFechaUltimoPago()->format('Y-m-d'))
-                            ->setCellValue('G' . $i, $arCentroCosto->getFechaUltimoPagoPrima()->format('Y-m-d'))
-                            ->setCellValue('H' . $i, $arCentroCosto->getFechaUltimoPagoCesantias()->format('Y-m-d'));
+                            ->setCellValue('E' . $i, $objFunciones->devuelveBoolean($arCentroCosto->getPagoAbierto()))
+                            ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arCentroCosto->getGeneraServicioCobrar()))
+                            ->setCellValue('G' . $i, $arCentroCosto->getFechaUltimoPago()->format('Y-m-d'))
+                            ->setCellValue('H' . $i, $arCentroCosto->getFechaUltimoPagoPrima()->format('Y-m-d'))
+                            ->setCellValue('I' . $i, $arCentroCosto->getFechaUltimoPagoCesantias()->format('Y-m-d'));
                     $i++;
                 }
 

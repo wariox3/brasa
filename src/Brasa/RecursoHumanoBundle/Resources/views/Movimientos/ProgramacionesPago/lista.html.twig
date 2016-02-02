@@ -57,8 +57,8 @@
                 <th>N.C</th>
                 <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">CONTRATOS</p></th>                
                 <th>GENERADO</th>
-                <th>PAGADO</th>
                 <th></th>
+                <th>PAGADO</th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center">DETALLE</th>
                 <th></th>
@@ -97,6 +97,13 @@
                 <td>
                     {% if arProgramacionPago.estadoPagado == 0 %}
                         {% if arProgramacionPago.estadoGenerado == 1 %}
+                            <button class="btn btn-default btn-xs" type="submit" name="OpLiquidar" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Liquidar</button> 
+                        {% endif %}
+                    {% endif %}                                        
+                </td>
+                <td>
+                    {% if arProgramacionPago.estadoPagado == 0 %}
+                        {% if arProgramacionPago.estadoGenerado == 1 %}
                             <button class="btn btn-default btn-xs" type="submit" name="OpPagar" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Pagar</button> 
                         {% else %}
                             NO
@@ -105,13 +112,7 @@
                         SI
                     {% endif %}
                 </td>                                
-                <td>
-                    {% if arProgramacionPago.estadoPagado == 0 %}
-                        {% if arProgramacionPago.estadoGenerado == 1 %}
-                            <button class="btn btn-default btn-xs" type="submit" name="OpLiquidar" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Liquidar</button> 
-                        {% endif %}
-                    {% endif %}                                        
-                </td> 
+                 
                 <td>
                     {% if arProgramacionPago.empleadosGenerados == 1 %}
                         <button class="btn btn-default btn-xs" type="submit" name="OpExcelDetalle" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Excel</button> 

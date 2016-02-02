@@ -104,7 +104,7 @@
                     </tr>
                     <tr>
                         <td class="titulo">HORARIO:</td>
-                        <td class="td-in-well">{{ arEmpleado.horarioRel.nombre|default('SIN HORARIO') }}</td>
+                        <td><a href="{{ path('brs_rhu_base_horario_listar') }}" target="_blanck" >{{ arEmpleado.horarioRel.nombre|default('SIN HORARIO')  }}</a></td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
                         <td class="titulo"></td>
@@ -128,6 +128,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#contrato" data-toggle="tab">Contratos</a></li>
             <li><a href="#credito" data-toggle="tab">Créditos</a></li>
+            <li><a href="#adicionales" data-toggle="tab">Ad. pago</a></li>
             <li><a href="#incapacidades" data-toggle="tab">Incapacidades</a></li>
             <li><a href="#licencias" data-toggle="tab">Licencias</a></li>
             <li><a href="#procesosDisciplinarios" data-toggle="tab">Procesos disciplinarios</a></li>
@@ -230,6 +231,41 @@
                 </div>
                 
             </div>
+                
+            <div class="tab-pane" id="adicionales">
+                <br />
+                <table  class="table table-striped table-bordered table-condensed table-hover">
+                    <tr>
+                        <th>{{ knp_pagination_sortable(arAdicionalesPago, 'CÓDIGO', 'CÓDIGO') }}</th>
+                        <th>CÓDIGO PROG PAGO</th>
+                        <th>CONCEPTO</th>
+                        <th>DETALLE</th>
+                        <th>CANTIDAD</th>
+                        <th style="text-align: right">VALOR</th>
+                        <th>PERMANENTE</th>
+                        <th>APLICA DÍA LAB</th>
+                        <th>PRESTACIONAL</th>
+                    </tr>
+                    {% for arAdicionalesPago in arAdicionalesPago %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arAdicionalesPago.codigoPagoAdicionalPk }}">{{ arAdicionalesPago.codigoPagoAdicionalPk }} </td>
+                            <td>{{ arAdicionalesPago.codigoProgramacionPagoFk  }}</td>
+                            <td>{{ arAdicionalesPago.pagoConceptoRel.nombre  }}</td>
+                            <td>{{ arAdicionalesPago.detalle  }}</td>
+                            <td>{{ arAdicionalesPago.cantidad }}</td>
+                            <td style="text-align: right">{{ arAdicionalesPago.valor | number_format(2, '.', ',') }}</td>
+                            <td {% if arAdicionalesPago.permanente == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
+                            <td {% if arAdicionalesPago.aplicaDiaLaborado == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
+                            <td {% if arAdicionalesPago.prestacional == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arAdicionalesPago) }}
+                </div>
+                
+            </div>
+                
             <div class="tab-pane" id="incapacidades">
                 <br />
                 <table class="table table-striped table-bordered table-condensed">

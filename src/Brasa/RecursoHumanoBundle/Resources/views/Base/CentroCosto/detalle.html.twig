@@ -50,8 +50,8 @@
                         <td class="td-in-well">{{ arCentrosCostos.porcentajeAdministracion }}
                         <td class="titulo">VALOR ADMINISTRACIÓN:</td>
                         <td class="td-in-well">{{ arCentrosCostos.valorAdministracion }}
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">GENERA SERVICIO POR COBRAR</td>
+                        <td class="td-in-well">{% if arCentrosCostos.generaServicioCobrar == 1 %} SI {% else %} NO {% endif%}</td>
                     </tr>
                     <tr>
                         <td class="titulo">ULTIMO PAGO:</td>

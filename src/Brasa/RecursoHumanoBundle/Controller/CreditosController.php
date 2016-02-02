@@ -302,8 +302,7 @@ class CreditosController extends Controller
                 $em->persist($arPagoCredito);
                 $em->persist($arCredito);
                 $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>opener.location.reload();</script>";
-                echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
 
         }

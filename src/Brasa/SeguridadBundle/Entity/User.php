@@ -13,10 +13,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, \Serializable
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
+    
     private $id;
 
     /**
@@ -74,6 +75,11 @@ class User implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="SegAccesoUsuario", mappedBy="accesoRel")
      */
     protected $accesoAccesoUsuarioRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="SegAccesoUsuario", mappedBy="usuarioRel")
+     */
+    protected $userAccesoUsuarioRel;
     
     
     public function __construct()
@@ -403,6 +409,8 @@ class User implements UserInterface, \Serializable
         $this->accesoAccesoUsuarioRel->removeElement($accesoAccesoUsuarioRel);
     }
 
+   
+
     /**
      * Get accesoAccesoUsuarioRel
      *
@@ -411,5 +419,39 @@ class User implements UserInterface, \Serializable
     public function getAccesoAccesoUsuarioRel()
     {
         return $this->accesoAccesoUsuarioRel;
+    }
+
+    /**
+     * Add userAccesoUsuarioRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\User $userAccesoUsuarioRel
+     *
+     * @return User
+     */
+    public function addUserAccesoUsuarioRel(\Brasa\SeguridadBundle\Entity\User $userAccesoUsuarioRel)
+    {
+        $this->userAccesoUsuarioRel[] = $userAccesoUsuarioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove userAccesoUsuarioRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\User $userAccesoUsuarioRel
+     */
+    public function removeUserAccesoUsuarioRel(\Brasa\SeguridadBundle\Entity\User $userAccesoUsuarioRel)
+    {
+        $this->userAccesoUsuarioRel->removeElement($userAccesoUsuarioRel);
+    }
+
+    /**
+     * Get userAccesoUsuarioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserAccesoUsuarioRel()
+    {
+        return $this->userAccesoUsuarioRel;
     }
 }

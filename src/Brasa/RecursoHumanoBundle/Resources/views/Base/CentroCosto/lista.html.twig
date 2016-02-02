@@ -37,6 +37,7 @@
                 <th>PAGO AUTOMATICO</th>
                 <th>HORA</th>
                 <th>DÍAS PAGOS</th>
+                <th>GENERA SERV. COBRAR</th>
                 <th>ABIERTO</th>
                 <th>ACTIVO</th>
                 <th></th>
@@ -55,6 +56,7 @@
                 <td>{% if arCentrosCostos.generarPagoAutomatico == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arCentrosCostos.horaPagoAutomatico |date("H:i")  }}</td>
                 <td>{{ arCentrosCostos.diasPago  }}</td>
+                <td>{% if arCentrosCostos.generaServicioCobrar == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCentrosCostos.pagoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCentrosCostos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_base_centros_costos_nuevo', { 'codigoCentroCosto':  arCentrosCostos.codigoCentroCostoPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                

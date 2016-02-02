@@ -46,6 +46,7 @@ class SegAccesoUsuario
 
     
 
+
     /**
      * Get codigoAccesoUsuarioPk
      *

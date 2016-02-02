@@ -751,38 +751,41 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $douAdministracion = ($douTotalEjercicio * $arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion()) / 100;            
                 } else {
                     $douAdministracion = $arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion();
-                }                        
-                $arServicioCobrar = new \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar();                        
-                $arServicioCobrar->setPagoRel($arPagoProcesar);
-                $arServicioCobrar->setCentroCostoRel($arPagoProcesar->getCentroCostoRel());
-                $arServicioCobrar->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
-                $arServicioCobrar->setProgramacionPagoRel($arPagoProcesar->getProgramacionPagoRel());
-                $arServicioCobrar->setFechaDesde($arPagoProcesar->getFechaDesde());
-                $arServicioCobrar->setFechaHasta($arPagoProcesar->getFechaHasta());
-                $arServicioCobrar->setVrDevengado($douDevengado);
-                $arServicioCobrar->setVrDeducciones($douDeducciones);
-                $douNeto = $douDevengado - $douDeducciones;
-                $arServicioCobrar->setVrNeto($douNeto);
-                $arServicioCobrar->setDiasPeriodo($arPagoProcesar->getDiasPeriodo());
-                $arServicioCobrar->setVrSalario($arPagoProcesar->getVrSalarioEmpleado());
-                $arServicioCobrar->setVrSalarioPeriodo($douSalarioPeriodo);                
-                
-                $arServicioCobrar->setVrAuxilioTransporte($douAuxilioTransporte);
-                $arServicioCobrar->setVrAuxilioTransporteCotizacion($douAuxilioTransporteCotizacion);
-                $arServicioCobrar->setVrAdicionalTiempo($douAdicionTiempo);
-                $arServicioCobrar->setVrAdicionalValor($douAdicionValor);
-                $arServicioCobrar->setVrArp($douArp);
-                $arServicioCobrar->setVrPension($douPension);
-                $arServicioCobrar->setVrEps($douSalud);
-                $arServicioCobrar->setVrCaja($douCaja);
-                $arServicioCobrar->setVrCesantias($douCesantias);
-                $arServicioCobrar->setVrVacaciones($douVacaciones);
-                $arServicioCobrar->setVrAdministracion($douAdministracion);
-                //Tambien llamado total ejercicio
-                $arServicioCobrar->setVrCosto($douTotalEjercicio);
-                $arServicioCobrar->setVrTotalCobrar($douTotalEjercicio + $douAdministracion);        
-                $arServicioCobrar->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
-                $em->persist($arServicioCobrar);                      
+                }
+                if ($arCentroCosto->getGeneraServicioCobrar() == 1){
+                    $arServicioCobrar = new \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar();                        
+                    $arServicioCobrar->setPagoRel($arPagoProcesar);
+                    $arServicioCobrar->setCentroCostoRel($arPagoProcesar->getCentroCostoRel());
+                    $arServicioCobrar->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
+                    $arServicioCobrar->setProgramacionPagoRel($arPagoProcesar->getProgramacionPagoRel());
+                    $arServicioCobrar->setFechaDesde($arPagoProcesar->getFechaDesde());
+                    $arServicioCobrar->setFechaHasta($arPagoProcesar->getFechaHasta());
+                    $arServicioCobrar->setVrDevengado($douDevengado);
+                    $arServicioCobrar->setVrDeducciones($douDeducciones);
+                    $douNeto = $douDevengado - $douDeducciones;
+                    $arServicioCobrar->setVrNeto($douNeto);
+                    $arServicioCobrar->setDiasPeriodo($arPagoProcesar->getDiasPeriodo());
+                    $arServicioCobrar->setVrSalario($arPagoProcesar->getVrSalarioEmpleado());
+                    $arServicioCobrar->setVrSalarioPeriodo($douSalarioPeriodo);                
+
+                    $arServicioCobrar->setVrAuxilioTransporte($douAuxilioTransporte);
+                    $arServicioCobrar->setVrAuxilioTransporteCotizacion($douAuxilioTransporteCotizacion);
+                    $arServicioCobrar->setVrAdicionalTiempo($douAdicionTiempo);
+                    $arServicioCobrar->setVrAdicionalValor($douAdicionValor);
+                    $arServicioCobrar->setVrArp($douArp);
+                    $arServicioCobrar->setVrPension($douPension);
+                    $arServicioCobrar->setVrEps($douSalud);
+                    $arServicioCobrar->setVrCaja($douCaja);
+                    $arServicioCobrar->setVrCesantias($douCesantias);
+                    $arServicioCobrar->setVrVacaciones($douVacaciones);
+                    $arServicioCobrar->setVrAdministracion($douAdministracion);
+                    //Tambien llamado total ejercicio
+                    $arServicioCobrar->setVrCosto($douTotalEjercicio);
+                    $arServicioCobrar->setVrTotalCobrar($douTotalEjercicio + $douAdministracion);        
+                    $arServicioCobrar->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
+                    $em->persist($arServicioCobrar);
+                }
+                                      
 
                 $arPagoProcesar->setNumero($em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->consecutivo(1));
                 $arPagoProcesar->setEstadoPagado(1);

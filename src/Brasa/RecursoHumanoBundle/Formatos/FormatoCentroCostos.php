@@ -22,14 +22,14 @@ class FormatoCentroCostos extends \FPDF_FPDF {
         $this->SetFont('Arial','B',12);
         //$this->Image('imagenes/logos/LogoCotrascal.jpg', 10, 10, 35, 17);        
         $this->SetXY(10, 15);
-        $this->Cell(275, 8, "LISTADO DE CENTROS DE COSTOS " , 1, 0, 'C', 1);
+        $this->Cell(283, 8, "LISTADO DE CENTROS DE COSTOS " , 1, 0, 'C', 1);
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(8);
-        $header = array('COD', 'NOMBRE', 'PERIODO', 'HASTA', 'PAGO AUTOMATICO', 'HORA', 'ABIERTO', 'ACTIVO');
+        $header = array(utf8_decode('CÓDIGO'), 'NOMBRE', 'PERIODO', 'HASTA', 'PAGO AUTOMATICO', 'HORA', 'ABIERTO', 'GENERA SERV COB','ACTIVO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -37,7 +37,7 @@ class FormatoCentroCostos extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 8);
 
         //creamos la cabecera de la tabla.
-        $w = array(8, 120, 30, 25, 32, 20, 20, 20);
+        $w = array(14, 100, 29, 21, 32, 16, 20, 31, 20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -57,10 +57,12 @@ class FormatoCentroCostos extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 8);
         foreach ($arCentroCostos as $arCentroCostos) {            
-            $pdf->Cell(8, 4, $arCentroCostos->getCodigoCentroCostoPk(), 1, 0, 'L');
-            $pdf->Cell(120, 4, utf8_decode($arCentroCostos->getNombre()), 1, 0, 'L');
-            $pdf->Cell(30, 4, $arCentroCostos->getPeriodoPagoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(25, 4, $arCentroCostos->getFechaUltimoPagoProgramado()->format('Y/m/d'), 1, 0, 'L');
+            $pdf->Cell(14, 4, $arCentroCostos->getCodigoCentroCostoPk(), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(100, 4, utf8_decode($arCentroCostos->getNombre()), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 8);
+            $pdf->Cell(29, 4, $arCentroCostos->getPeriodoPagoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(21, 4, $arCentroCostos->getFechaUltimoPagoProgramado()->format('Y/m/d'), 1, 0, 'L');
             if ($arCentroCostos->getGenerarPagoAutomatico() == 1) {    
                 $pdf->Cell(32, 4, "SI", 1, 0, 'L');
             }
@@ -69,7 +71,7 @@ class FormatoCentroCostos extends \FPDF_FPDF {
             }
             
             if ($arCentroCostos->getHoraPagoAutomatico() <> ""){
-                $pdf->Cell(20, 4, $arCentroCostos->getHoraPagoAutomatico()->format('H:i'), 1, 0, 'L');
+                $pdf->Cell(16, 4, $arCentroCostos->getHoraPagoAutomatico()->format('H:i'), 1, 0, 'L');
             }
             else {
                 $pdf->Cell(20, 4, "00:00", 1, 0, 'L');
@@ -79,6 +81,12 @@ class FormatoCentroCostos extends \FPDF_FPDF {
             }
             else {
                 $pdf->Cell(20, 4, "NO", 1, 0, 'L');
+            }
+            if ($arCentroCostos->getGeneraServicioCobrar() == 1) {    
+                $pdf->Cell(31, 4, "SI", 1, 0, 'L');
+            }
+            else {
+                $pdf->Cell(31, 4, "NO", 1, 0, 'L');
             }
             if ($arCentroCostos->getEstadoActivo() == 1) {    
                 $pdf->Cell(20, 4, "SI", 1, 0, 'L');

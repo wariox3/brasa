@@ -39,6 +39,8 @@ class CambioSalarioController extends Controller
                 $arEmpleadoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleadoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getEmpleadoRel());
                 $arEmpleadoActualizar->setVrSalario($form->get('salarioNuevo')->getData());
+                $arContrato->setVrSalario($form->get('salarioNuevo')->getData());
+                $arContrato->setVrSalarioPago($form->get('salarioNuevo')->getData());
                 $em->persist($arEmpleadoActualizar);
                 $em->persist($arCambioSalario);  
                 $em->flush();

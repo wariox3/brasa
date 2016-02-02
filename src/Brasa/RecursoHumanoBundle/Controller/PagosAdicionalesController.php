@@ -4,6 +4,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuAdicionalPagoType;
 
 class PagosAdicionalesController extends Controller
 {
@@ -290,5 +291,33 @@ class PagosAdicionalesController extends Controller
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()
             ));
-    }    
+    }
+
+    public function editarAction($codigoAdicionalPago) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arAdicionalPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        if ($codigoAdicionalPago != 0)
+        {
+            $arAdicionalPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoAdicionalPago);
+        }    
+        $form = $this->createForm(new RhuAdicionalPagoType(), $arAdicionalPago);
+        $form->handleRequest($request);
+        if ($form->isValid())
+        {
+            // guardar la tarea en la base de datos
+            
+            $arAdicionalPago = $form->getData();
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arAdicionalPago->getCodigoEmpleadoFk());
+            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arAdicionalPago->getCodigoPagoConceptoFk());
+            $arAdicionalPago->setEmpleadoRel($arEmpleado);
+            $arAdicionalPago->setPagoConceptoRel($arPagoConcepto);
+            $em->persist($arAdicionalPago);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:editar.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
 }
