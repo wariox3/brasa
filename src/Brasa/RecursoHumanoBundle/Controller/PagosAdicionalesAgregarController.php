@@ -9,6 +9,7 @@ class PagosAdicionalesAgregarController extends Controller
     public function tiempoAction($codigoProgramacionPago) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                
         $codigoCentroCosto = $arProgramacionPago->getCodigoCentroCostoFk();
         $arPagosConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
@@ -61,10 +62,12 @@ class PagosAdicionalesAgregarController extends Controller
     public function tiempoAdicionalAction() {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPagosConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
         $arPagosConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->findBy(array('tipoAdicional' => 4));                
         $form = $this->createFormBuilder()
-            ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardaryNuevo', 'submit', array('label'  => 'Guardar y nuevo',))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -76,7 +79,6 @@ class PagosAdicionalesAgregarController extends Controller
                 if ($arEmpleado == null){
                     $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 } else {
-                    if($form->get('BtnAgregar')->isClicked()) {
                         if (isset($arrControles['TxtHoras'])) {
                             $intIndice = 0;
                             foreach ($arrControles['LblCodigo'] as $intCodigo) {                        
@@ -89,14 +91,19 @@ class PagosAdicionalesAgregarController extends Controller
                                     $arPagoAdicional->setCantidad($intHoras);
                                     $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                            
                                     $arPagoAdicional->setTipoAdicional(4);
+                                    $arPagoAdicional->setpermanente(1);
                                     $em->persist($arPagoAdicional);                                
                                 }                        
                                 $intIndice++;
                             }
                         }                
                         $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
-                    }
+                        if($form->get('BtnGuardaryNuevo')->isClicked()) {
+                            return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_tiempoadicional'));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
+                        }
+                    
                 } 
             }
         }
@@ -197,7 +204,8 @@ class PagosAdicionalesAgregarController extends Controller
                 'required' => true))
             ->add('TxtValor', 'number', array('required' => true))                             
             ->add('TxtDetalle', 'text', array('required' => false))                             
-            ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardaryNuevo', 'submit', array('label'  => 'Guardar y nuevo',))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -209,9 +217,11 @@ class PagosAdicionalesAgregarController extends Controller
                 if ($arEmpleado == null){
                     $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 } else {
-                    if($form->get('BtnAgregar')->isClicked()) {
+                    
                         if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
                             $boolError = FALSE;
+                             $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                             $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
                             if($arPagoConcepto->getPrestacional() == 0 && $tipo == 1) {
                                 $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                                 $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
@@ -235,12 +245,17 @@ class PagosAdicionalesAgregarController extends Controller
                                 $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                    
                                 $arPagoAdicional->setPrestacional($arPagoConcepto->getPrestacional());
                                 $arPagoAdicional->setTipoAdicional($tipo);
+                                $arPagoAdicional->setpermanente(1);
                                 $em->persist($arPagoAdicional);                                                        
-                                $em->flush();                        
-                                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
+                                $em->flush();
+                            }
+                            if($form->get('BtnGuardaryNuevo')->isClicked()) {
+                                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_valoradicional', array('tipo' => $tipo) ));
+                            } else {
+                                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
                             }
                         }                                                                                                                                                       
-                    }
+                    
                 }
             }
         }

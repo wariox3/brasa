@@ -48,7 +48,8 @@
 
             <div class="modal-footer">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_lista') }}">Cancelar</a>
-                {{ form_widget(form.BtnAgregar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+                {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+                {{ form_widget(form.BtnGuardaryNuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
             </div>
             <br />
         {{ form_end(form) }}
