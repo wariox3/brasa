@@ -118,7 +118,7 @@ class FormatoFactura extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(14);
-        $header = array('CODIGO', 'SERVICIO', 'MES', 'DES', 'HAS', 'CANTIDAD', 'VALOR');
+        $header = array('CODIGO', 'PEDIDO', 'SERVICIO', 'MES', 'DES', 'HAS', 'CANTIDAD', 'VALOR');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -126,9 +126,9 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(15, 85, 30, 10, 10, 15,30);
+        $w = array(15, 40, 45, 30, 10, 10, 15,30);
         for ($i = 0; $i < count($header); $i++)
-            if ($i == 0 || $i == 1)
+            if ($i == 0 )
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
             else
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
@@ -147,7 +147,8 @@ class FormatoFactura extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         foreach ($arFacturaDetalles as $arFacturaDetalle) {            
             $pdf->Cell(15, 4, $arFacturaDetalle->getCodigoFacturaDetallePk(), 1, 0, 'L');
-            $pdf->Cell(85, 4, $arFacturaDetalle->getConceptoServicioRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(40, 4, $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getNumero(), 1, 0, 'L');
+            $pdf->Cell(45, 4, $arFacturaDetalle->getConceptoServicioRel()->getNombre(), 1, 0, 'L');
             $pdf->Cell(30, 4, $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('m'), 1, 0, 'L');
             $pdf->Cell(10, 4, $arFacturaDetalle->getPedidoDetalleRel()->getDiaDesde(), 1, 0, 'L');
             $pdf->Cell(10, 4, $arFacturaDetalle->getPedidoDetalleRel()->getDiaHasta(), 1, 0, 'L');            
@@ -160,16 +161,19 @@ class FormatoFactura extends \FPDF_FPDF {
 
     public function Footer() {        
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
-        $arFactura = self::$em->getRepository('BrasaTurnoBundle:TurFactura')->find(self::$codigoFactura);        
+        $arFactura = self::$em->getRepository('BrasaTurnoBundle:TurFactura')->find(self::$codigoFactura);    
+        $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);            
         $this->SetY(180);
         $this->line(10, $this->GetY() + 5, 205, $this->GetY() + 5);
 
         $this->SetFont('Arial', 'B', 7.5);
-        $this->ln(5);
+        $this->ln(7);
         $totales = array('SUBTOTAL: ' . " " . " ",
             'BASE AIU: ' . " " . " ",
             '(+)IVA: ' . " " . " ",
             '(+)RTE FUENTE: ' . " " . " ",
+            '(+)RTE IVA: ' . " " . " ",
             'TOTAL GENERAL: ' . " " . " "
         );
 
@@ -186,11 +190,12 @@ class FormatoFactura extends \FPDF_FPDF {
             number_format($arFactura->getVrBaseAIU(), 0, '.', ','),
             number_format($arFactura->getVrIva(), 0, '.', ','),
             number_format($arFactura->getVrRetencionFuente(), 0, '.', ','),
+            number_format($arFactura->getVrRetencionIva(), 0, '.', ','),
             number_format($arFactura->getVrTotal(), 0, '.', ',')
         );
 
         $this->SetFont('Arial', '', 7.5);
-        $this->SetXY(190, $this->GetY() - 32);
+        $this->SetXY(190, $this->GetY() - 36);
         $this->ln(12);
         for ($i = 0; $i < count($totales2); $i++) {
             $this->SetX(185);
@@ -218,25 +223,15 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->Text(12, 224, "SON : " . substr(strtoupper(self::$strLetras),0,96));
         $this->Ln();
 
-        $Text = array(
-            '* IVA REGIMEN COMUN ', 
-            '* NO SOMOS AUTORETENEDORES', 
-            '* NO SOMOS GRANDES CONTRIBUYENTES', 
-            '* CODIGO CIIU 4645 - CREE 0.3%', 
-            '* LA PRESENTE FACTURA PRESTA MERITO EJECUTIVO COMO TITULO VALOR', 
-            '  SEGUN LO ESTABLECIDO EN EL ART. 3 DE LA LEY 1231 DE 2008',
-            '*RESOLUCION DIAN DE AUTORIZACION PARA FACTURACION POR COMPUTADOR ',
-            '  No 110000535878 DESDE 2013/06/21 HASTA 2015/06/21. FACTURAS 0001 al 1000');
-        $this->SetFont('Arial', '', 6);
-        $this->GetY($this->SetY(223));
-
-        foreach ($Text as $col) {
-            $this->SetX(12);
-            $this->Text(12, $this->GetY() + 10, $col);
-            $this->Ln(2);
-        }        
+        //$Text = array($arConfiguracion->getInformacionLegalFactura());
         
+        $this->SetFont('Arial', '', 6);        
+        $this->GetY($this->SetY(228));
+        $this->SetX(10);
+        $this->MultiCell(90,3,$arConfiguracion->getInformacionLegalFactura());       
         
+        $this->GetY($this->SetY(235));
+        $this->SetX(10);
         $this->SetFont('Arial', 'B', 6);
         $this->Cell(0, 0, $this->line(100, $this->GetY() + 15, 150, $this->GetY() + 15) . $this->Text(100, $this->GetY() + 18, "AUTORIZADO"));
         $this->Cell(0, 0, $this->line(154, $this->GetY() + 15, 205, $this->GetY() + 15) . $this->Text(154, $this->GetY() + 18, "FIRMA DE RECIBIDO"));        
@@ -251,9 +246,9 @@ class FormatoFactura extends \FPDF_FPDF {
     
         $this->Ln(3);        
         $this->SetFont('Arial', 'B', 8);
-        $this->Text(30, $this->GetY($this->SetY(264)), 'REALIZAR PAGO EN LA CUENTA DE AHORROS BANCOLOMBIA NUMERO 00000000000 A NOMBRE DE SEGURIDAD PLAZAS LTDA');                
+        $this->Text(20, $this->GetY($this->SetY(264)), $arConfiguracion->getInformacionPagoFactura());                
         $this->SetFont('Arial', '', 7);
-        $this->Text(60, $this->GetY($this->SetY(267)), 'CRA 78 NUMERO 32D-37 MEDELLIN TEL 4124586  e-mail: facturacion@seguridadplazas.com');
+        $this->Text(60, $this->GetY($this->SetY(267)), $arConfiguracion->getInformacionContactoFactura());
         
         //Número de página
         $this->Text(190, 273, 'Pagina ' . $this->PageNo() . ' de {nb}');

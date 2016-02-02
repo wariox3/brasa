@@ -152,7 +152,7 @@ class ConsultasPedidosDetallesController extends Controller
                     ->setCellValue('AB' . $i, $arPedidoDetalle->getHorasNocturnas())
                     ->setCellValue('AC' . $i, $arPedidoDetalle->getDias())
                     ->setCellValue('AD' . $i, $arPedidoDetalle->getVrTotalDetalle())
-                    ->setCellValue('AE' . $i, $arPedidoDetalle->getVrTotalDetalle());
+                    ->setCellValue('AE' . $i, $arPedidoDetalle->getVrTotalDetallePendiente());
             if($arPedidoDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('I' . $i, $arPedidoDetalle->getPuestoRel()->getNombre());

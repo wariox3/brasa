@@ -3792,6 +3792,18 @@ insert into `tur_pedido_tipo` (`codigo_pedido_tipo_pk`, `nombre`) values('2','PR
 insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('1','PEDIDO','1');
 insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('2','FACTURA','1');
 
+insert into `tur_concepto_servicio` (`codigo_concepto_servicio_pk`, `nombre`, `horas`, `horas_diurnas`, `horas_nocturnas`, `vr_costo`) values('1','24 HORAS','24','16','8','0');
+insert into `tur_concepto_servicio` (`codigo_concepto_servicio_pk`, `nombre`, `horas`, `horas_diurnas`, `horas_nocturnas`, `vr_costo`) values('2','12 HORAS','12','12','0','0');
+
+insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `comentarios`, `descanso`) values('1','DIURNO','06:00:00','18:00:00','12','12','0','0',NULL,'0');
+insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `comentarios`, `descanso`) values('2','NOCTURNO','18:00:00','06:00:00','12','4','8','0',NULL,'0');
+insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `comentarios`, `descanso`) values('D','DESCANSO','00:00:00','00:00:00','0','0','0','0',NULL,'1');
+
+insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('1','FIJO');
+insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('2','APOYO');
+
+insert into `tur_configuracion` (`codigo_configuracion_pk`, `informacion_legal_factura`, `informacion_pago_factura`, `informacion_contacto_factura`) values('1','\"Esta factura de venta es un titulo valor negociable (Ley 1231 de 2008) y se asimila en sus efectos legales a una letra de cambio segun articulo 779 del Codigo de Comercio. Acepto el contenido y las condiciones estipuladas en esta factura de venta (Ley 1231/17 de julio de 2008). Se cobran intereses por mora a la tasa máxima legal vigente.\"\r\n* NO SOMOS GRANDES CONTRUBUYENTES NI RETENEDORES DEL IVA. COD ICA 302 TARIFA 3/1000','REALIZAR PAGO EN LA CUENTA CORRIENTE BANCOLOMBIA NUMERO 00000000000 A NOMBRE DE LA EMPRESA S.A.S','CRA 25 NUMERO 05D-37 MEDELLIN TEL 4440000 e-mail: empresa@gmail.com');
+
 /** Recurso humano **/
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('1','ADMINISTRATIVO');
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('2','OPERATIVO');
