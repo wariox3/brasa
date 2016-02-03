@@ -5248,10 +5248,17 @@ insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) va
 insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) values('2','INDUCCIÓN');
 insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) values('3','OTROS');
 
+insert into `rhu_permiso_tipo` (`codigo_permiso_tipo_pk`, `nombre`) values('1','CONSULTA ODONTOLOGIA');
+insert into `rhu_permiso_tipo` (`codigo_permiso_tipo_pk`, `nombre`) values('2','CONSULTA MEDICA');
+
 INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('2','ORGANIZACION MEDICA ODONTOLOGICA NACIONAL INTEGRADA SA','88888888','CL 33 74 E 56','222222222');
 INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('3','SALUD MEDICA ROTE','800980987','CARRERA 20 N 40-20','343444');
 INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('4','SALUD EN CASA','800145748','CARRERA 48 N 58-+58','4587458');
 INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('5','CONCASA','800000000','ASGDSAGDHAG','45654645645');
+
+insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_entidad_examen_fk`, `codigo_examen_tipo_fk`, `precio`) values('1','2','1','15000');
+insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_entidad_examen_fk`, `codigo_examen_tipo_fk`, `precio`) values('2','2','5','13000');
+insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_entidad_examen_fk`, `codigo_examen_tipo_fk`, `precio`) values('3','2','18','22000');
 
 INSERT INTO `rhu_sso_sucursal` (`codigo_sucursal_pk`, `nombre`, `codigo_interface`) values('1','MEDELLIN','1010');
 
