@@ -2,6 +2,8 @@ UPDATE rhu_examen SET codigo_factura_fk = NULL;
 UPDATE rhu_seleccion SET codigo_factura_fk = NULL;
 
 /*Turnos*/
+DELETE FROM tur_soporte_pago_detalle;
+DELETE FROM tur_soporte_pago;
 DELETE FROM tur_factura_detalle;
 DELETE FROM tur_factura;
 DELETE FROM tur_programacion_detalle;
