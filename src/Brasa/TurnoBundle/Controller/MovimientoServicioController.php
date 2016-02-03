@@ -308,7 +308,12 @@ class MovimientoServicioController extends Controller
             }
             if($form->get('BtnPlantillaActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
-                $this->actualizarDetallePlantilla($arrControles);
+                $controles = $request->request->get('form');
+                $intDiasSecuencia = $controles['TxtDiasSecuencia'];
+                $arServicioDetalle->setDiasSecuencia($intDiasSecuencia);
+                $em->persist($arServicioDetalle);
+                $em->flush();
+                $this->actualizarDetallePlantilla($arrControles);                
                 return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             }
             if($form->get('BtnPlantillaEliminar')->isClicked()) {   
@@ -327,6 +332,10 @@ class MovimientoServicioController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             }            
         }
+        $arPlantillaDetalles = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
+        if($arServicioDetalle->getPlantillaRel()) {            
+            $arPlantillaDetalles = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->findBy(array('codigoPlantillaFk' => $arServicioDetalle->getCodigoPlantillaFk()));
+        }        
         $strLista = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->listaDql($codigoServicioDetalle);
         $strListaPlantilla = $em->getRepository('BrasaTurnoBundle:TurServicioDetallePlantilla')->listaDql($codigoServicioDetalle);
         $arServicioDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);
@@ -335,6 +344,7 @@ class MovimientoServicioController extends Controller
             'arServicioDetalle' => $arServicioDetalle,
             'arServicioDetalleRecursos' => $arServicioDetalleRecursos,
             'arServicioDetallePlantilla' => $arServicioDetallePlantilla,
+            'arPlantillaDetalle' => $arPlantillaDetalles,
             'form' => $form->createView()));
     }    
     

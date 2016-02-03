@@ -461,11 +461,16 @@ class MovimientoPedidoController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
             }            
         }
+        $arPlantillaDetalles = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
+        if($arPedidoDetalle->getPlantillaRel()) {            
+            $arPlantillaDetalles = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->findBy(array('codigoPlantillaFk' => $arPedidoDetalle->getCodigoPlantillaFk()));
+        }
         $strLista = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->listaDql($codigoPedidoDetalle);
         $arPedidoDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);        
         return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleRecurso.html.twig', array(
             'arPedidoDetalle' => $arPedidoDetalle,
             'arPedidoDetalleRecursos' => $arPedidoDetalleRecursos,
+            'arPlantillaDetalle' => $arPlantillaDetalles,
             'form' => $form->createView()));
     }        
     

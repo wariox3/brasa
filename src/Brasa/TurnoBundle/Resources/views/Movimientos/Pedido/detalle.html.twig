@@ -181,7 +181,7 @@
                     <td>{% if arPedidoDetalle.codigoServicioDetalleFk is not null %} <a href="{{ path('brs_tur_servicio_detalle', { 'codigoServicio': arPedidoDetalle.servicioDetalleRel.codigoServicioFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.codigoServicioDetalleFk | default('')  }}</a></td>                    
                     <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
                     <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
-                    <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                                        
+                    <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                                        
                     <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
                 </tr>
             {% endfor %}
