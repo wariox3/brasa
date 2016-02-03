@@ -23,7 +23,6 @@ class RhuAdicionalPagoType extends AbstractType
             ))    
             ->add('cantidad', 'text', array('required' => true))    
             ->add('valor', 'text', array('required' => true))        
-            ->add('permanente', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('aplicaDiaLaborado', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('guardar', 'submit');            
     }

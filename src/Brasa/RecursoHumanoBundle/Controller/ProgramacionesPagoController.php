@@ -131,7 +131,6 @@ class ProgramacionesPagoController extends Controller
                 }
             }
 
-
             if($form->get('BtnEliminarEmpleados')->isClicked()) {
                 if($arProgramacionPago->getEstadoGenerado() == 0) {
                     $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
@@ -176,7 +175,7 @@ class ProgramacionesPagoController extends Controller
         $arProgramacionPagoDetalleSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
         $arProgramacionPagoDetalleSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->findAll();
         $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));        
+        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago, 'permanente' => 0));        
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');

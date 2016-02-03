@@ -13,12 +13,12 @@ class RhuPagoAdicionalRepository extends EntityRepository {
     
     public function listaDql($codigoProgramacionPago) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa WHERE pa.codigoProgramacionPagoFk =  " . $codigoProgramacionPago;
+        $dql   = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa WHERE pa.codigoProgramacionPagoFk =  " . $codigoProgramacionPago . " AND pa.permanente = 0";
         $dql .= " ORDER BY pa.codigoProgramacionPagoFk DESC";
         return $dql;
     } 
     
-    public function listaAdicionalesDql($strNombre = "", $strIdentificacion = "", $permanente = "") {        
+    public function listaAdicionalesDql($strNombre = "", $strIdentificacion = "", $aplicarDiaLaborado = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT pa,e FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa JOIN pa.empleadoRel e WHERE pa.codigoPagoAdicionalPk <> 0 AND pa.permanente = 1";   
         if($strNombre != "" ) {
@@ -27,11 +27,33 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
-        if($permanente == 1 ) {
-            $dql .= " AND pa.permanente = 1";
+        if($aplicarDiaLaborado == 1 ) {
+            $dql .= " AND pa.aplicaDiaLaborado = 1";
         }
-        if($permanente == 0 ) {
-            $dql .= " AND pa.permanente = 0";
+        if($aplicarDiaLaborado == 0 ) {
+            $dql .= " AND pa.aplicaDiaLaborado = 0";
+        }
+        return $dql;
+    }
+    
+    public function listaConsultaDql($strNombre = "", $strIdentificacion = "", $codigoCentroCosto = "", $aplicaDiaLaborado) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pa,e FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa JOIN pa.empleadoRel e WHERE pa.codigoPagoAdicionalPk <> 0 AND pa.permanente = 0";   
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        if($codigoCentroCosto != "" || $codigoCentroCosto != 0 ) {
+            $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
+        }
+        
+        if($aplicaDiaLaborado == 1 ) {
+            $dql .= " AND pa.aplicaDiaLaborado = 1";
+        }
+        if($aplicaDiaLaborado == 0 ) {
+            $dql .= " AND pa.aplicaDiaLaborado = 0";
         }
         return $dql;
     }

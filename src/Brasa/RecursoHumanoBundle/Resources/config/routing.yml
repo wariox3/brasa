@@ -160,7 +160,11 @@ brs_rhu_pagos_adicionales_agregar_tiempoadicional:
     
 brs_rhu_pago_adicional_editar:
     path:     /rhu/pago/adicional/editar/{codigoAdicionalPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:editar }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:editar }
+    
+brs_rhu_pago_adicional_editaradicional:
+    path:     /rhu/pago/adicional/editaradicional/{codigoAdicionalPago}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:editarAdicional }    
 
 brs_rhu_liquidaciones_lista:
     path:     /rhu/liquidaciones/lista
@@ -816,7 +820,11 @@ brs_rhu_consultas_control_acceso_visitantes:
     
 brs_rhu_consultas_permisos:    
     path:     /rhu/consultas/permisos
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasPermisos:lista }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasPermisos:lista }
+    
+brs_rhu_consultas_adicionales_pago:    
+    path:     /rhu/consultas/adicionales/pago
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasAdicionalesPago:lista }    
     
 brs_rhu_pago_examen_lista:
     path:     /rhu/pago/examen/lista

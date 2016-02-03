@@ -11,7 +11,7 @@ class PagosAdicionalesController extends Controller
     var $strDqlLista = "";   
     var $nombre = "";
     var $identificacion = "";
-    var $permanente = 2;
+    var $aplicarDiaLaborado = 2;
     
     /*public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -72,7 +72,7 @@ class PagosAdicionalesController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
                 }
             }
-            if($form->get('BtnConceptoPermanente')->isClicked()) {
+            /*if($form->get('BtnConceptoPermanente')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados as $codigoPagoAdicional) {
@@ -88,7 +88,7 @@ class PagosAdicionalesController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
                 }
-            }
+            }*/
             if($form->get('BtnAplicaDiaLaborado')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
@@ -130,19 +130,18 @@ class PagosAdicionalesController extends Controller
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaAdicionalesDql(                    
             $this->nombre,
             $this->identificacion,
-            $this->permanente);
+            $this->aplicarDiaLaborado);
     }
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();            
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->nombre, 'required' => false))
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificación','data' => $this->identificacion, 'required' => false))
+            //->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->nombre, 'required' => false))
+            //->add('TxtIdentificacion', 'text', array('label'  => 'Identificación','data' => $this->identificacion, 'required' => false))
             ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnConceptoPermanente', 'submit', array('label'  => 'Permanente',))
             ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))
-            ->add('permanente', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))                
+            ->add('aplicarDiaLaborado', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -150,10 +149,12 @@ class PagosAdicionalesController extends Controller
     }
 
     private function filtrarLista($form) {
+        $request = $this->getRequest();
+        $arrControles = $request->request->All();
         
-        $this->nombre = $form->get('TxtNombre')->getData();
-        $this->identificacion = $form->get('TxtIdentificacion')->getData();
-        $this->permanente = $form->get('permanente')->getData();
+        $this->nombre = $arrControles['txtNombreCorto'];
+        $this->identificacion = $arrControles['txtNumeroIdentificacion'];
+        $this->aplicarDiaLaborado = $form->get('aplicarDiaLaborado')->getData();
     }
 
     public function detalleAction($codigoProgramacionPago) {
@@ -165,7 +166,7 @@ class PagosAdicionalesController extends Controller
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $form = $this->createFormBuilder()
             ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnConceptoPermanente', 'submit', array('label'  => 'Permanente',))
+            
             ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))                
             ->getForm();
         $form->handleRequest($request);
@@ -427,6 +428,36 @@ class PagosAdicionalesController extends Controller
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:editar.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+    
+    public function editarAdicionalAction($codigoAdicionalPago) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arAdicionalPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        if ($codigoAdicionalPago != 0)
+        {
+            $arAdicionalPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoAdicionalPago);
+        }    
+        $form = $this->createForm(new RhuAdicionalPagoType(), $arAdicionalPago);
+        $form->handleRequest($request);
+        if ($form->isValid())
+        {
+            // guardar la tarea en la base de datos
+            
+            $arAdicionalPago = $form->getData();
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arAdicionalPago->getCodigoEmpleadoFk());
+            //$arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($form->get('pagoConceptoRel')->getData());
+            $arAdicionalPago->setEmpleadoRel($arEmpleado);
+            $arAdicionalPago->setPagoConceptoRel($form->get('pagoConceptoRel')->getData());
+            $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
+            $arAdicionalPago->setTipoAdicional($arPagoConcepto->getTipoAdicional());
+            $em->persist($arAdicionalPago);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:editarAdicional.html.twig', array(
             'form' => $form->createView(),
         ));
     }
