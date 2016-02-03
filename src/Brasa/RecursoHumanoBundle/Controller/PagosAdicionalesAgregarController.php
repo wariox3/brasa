@@ -79,6 +79,10 @@ class PagosAdicionalesAgregarController extends Controller
                 if ($arEmpleado == null){
                     $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 } else {
+                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findOneBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoActivo' => 1));
+                    if ($arContrato == null){
+                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                    } else {
                         if (isset($arrControles['TxtHoras'])) {
                             $intIndice = 0;
                             foreach ($arrControles['LblCodigo'] as $intCodigo) {                        
@@ -96,14 +100,14 @@ class PagosAdicionalesAgregarController extends Controller
                                 }                        
                                 $intIndice++;
                             }
-                        }                
+                        }
+                    }     
                         $em->flush();
                         if($form->get('BtnGuardaryNuevo')->isClicked()) {
                             return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_tiempoadicional'));
                         } else {
                             return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
                         }
-                    
                 } 
             }
         }
@@ -217,7 +221,10 @@ class PagosAdicionalesAgregarController extends Controller
                 if ($arEmpleado == null){
                     $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 } else {
-                    
+                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findOneBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoActivo' => 1));
+                    if ($arContrato == null){
+                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                    } else {
                         if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
                             $boolError = FALSE;
                              $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
@@ -254,8 +261,8 @@ class PagosAdicionalesAgregarController extends Controller
                             } else {
                                     return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
                             }
-                        }                                                                                                                                                       
-                    
+                        }
+                    }                                                                                                                                                      
                 }
             }
         }

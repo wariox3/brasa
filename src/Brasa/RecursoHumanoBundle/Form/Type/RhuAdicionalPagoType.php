@@ -11,11 +11,14 @@ class RhuAdicionalPagoType extends AbstractType
     {
 
         $builder
-
             ->add('pagoConceptoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('pc')
+                    ->where('pc.tipoAdicional <> 0')                    
+                    ->orderBy('pc.codigoPagoConceptoPk', 'ASC');},
                 'property' => 'nombre',
-            ))
+                'required' => true))    
             ->add('detalle', 'text', array('required' => true))    
             ->add('empleadoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
