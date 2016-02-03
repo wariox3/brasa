@@ -234,9 +234,26 @@ class PagosAdicionalesAgregarController extends Controller
                                 $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
                                 $floSalario = $arEmpleado->getVrSalario();
                                 $floVrDia = ($floSalario / 30);
-                                $floSalarioEmpleado = $floVrDia * $arProgramacionPago->getDias();
+                                $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());        
+                                $strPeriodoPago = $arCentroCosto->getPeriodoPagoRel()->getNombre();
+                                if ($strPeriodoPago == "MENSUAL"){
+                                    $intDias = 30;
+                                }
+                                if ($strPeriodoPago == "QUINCENAL"){
+                                    $intDias = 15;
+                                }
+                                if ($strPeriodoPago == "CATORCENAL"){
+                                    $intDias = 14;
+                                }
+                                if ($strPeriodoPago == "DECADAL"){
+                                    $intDias = 10;
+                                }
+                                if ($strPeriodoPago == "SEMANAL"){
+                                    $intDias = 7;
+                                }
+                                $floSalarioEmpleado = $floVrDia * $intDias;
                                 $floBonificacionMaxima = $floSalarioEmpleado * ($arConfiguracion->getPorcentajeBonificacionNoPrestacional() / 100);
-                                $floBonificacionNoPrestacional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->bonificacionNoPrestacional($arEmpleado->getCodigoEmpleadoPk(), $codigoProgramacionPago);                                
+                                $floBonificacionNoPrestacional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->bonificacionNoPrestacional($arEmpleado->getCodigoEmpleadoPk(), 0);                                
                                 $floBonificacion = $form->get('TxtValor')->getData();
                                 $floBonificacionTotal = $floBonificacionNoPrestacional+ $floBonificacion;
                                 if($floBonificacionTotal > $floBonificacionMaxima) {
