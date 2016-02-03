@@ -45,7 +45,10 @@ class TurFacturaRepository extends EntityRepository {
         }
         $floBaseAIU = ($floSubTotal * 10) / 100;
         $floIva = ($floBaseAIU * 16 ) / 100;
-        $floRetencionFuente = ($floBaseAIU * 2 ) / 100;
+        if($floBaseAIU >= 803000) {
+            $floRetencionFuente = ($floBaseAIU * 2 ) / 100;
+        }
+        
         $floTotal = $floSubTotal + $floIva + $floRetencionFuente;
         $arFactura->setVrBaseAIU($floBaseAIU);
         $arFactura->setVrSubtotal($floSubTotal);
