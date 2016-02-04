@@ -20,6 +20,8 @@ DELETE FROM tur_cotizacion_detalle;
 DELETE FROM tur_cotizacion;
 DELETE FROM tur_recurso;
 
+/*Turnos*/
+DELETE FROM rhu_permiso;
 DELETE FROM rhu_soporte_pago_horario;
 DELETE FROM rhu_horario_acceso;
 DELETE FROM rhu_desempeno_detalle;
