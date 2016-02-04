@@ -84,7 +84,12 @@ class PermisoController extends Controller
                         if($form->get('guardarnuevo')->isClicked()) {
                             return $this->redirect($this->generateUrl('brs_rhu_permiso_nuevo', array('codigoPermiso' => 0 )));
                         } else {
-                            return $this->redirect($this->generateUrl('brs_rhu_permiso_lista'));
+                            if ($codigoPermiso == 0){
+                                return $this->redirect($this->generateUrl('brs_rhu_permiso_detalle', array('codigoPermiso' => $arPermiso->getCodigoPermisoPk())));
+                            } else {
+                                return $this->redirect($this->generateUrl('brs_rhu_permiso_lista'));
+                            }
+                            
                         }
                     } else {
                         $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
@@ -189,6 +194,8 @@ class PermisoController extends Controller
     }
     
     private function formularioDetalle($ar) {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);               
