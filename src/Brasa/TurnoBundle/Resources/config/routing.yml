@@ -188,11 +188,7 @@ brs_tur_factura_detalle:
    
 brs_tur_factura_detalle_nuevo:
    path:     /tur/factura/detalle/nuevo/{codigoFactura}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalleNuevo }            
-    
-brs_tur_consultas_servicios:    
-    path:     /tur/consultas/servicios
-    defaults: { _controller: BrasaTurnoBundle:ConsultasServicios:lista }     
+   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalleNuevo }                    
 
 brs_tur_consultas_servicios_costos:    
     path:     /tur/consultas/servicios/costos
@@ -204,11 +200,7 @@ brs_tur_consultas_servicios_detalles:
 
 brs_tur_consultas_servicios_detalles_recursos:    
     path:     /tur/consultas/servicios/detalles/recursos
-    defaults: { _controller: BrasaTurnoBundle:ConsultasServiciosDetallesRecursos:lista }
-
-brs_tur_consultas_pedidos:    
-    path:     /tur/consultas/pedidos
-    defaults: { _controller: BrasaTurnoBundle:ConsultasPedidos:lista }     
+    defaults: { _controller: BrasaTurnoBundle:ConsultasServiciosDetallesRecursos:lista }    
 
 brs_tur_consultas_pedidos_detalles:    
     path:     /tur/consultas/pedidos/detalles

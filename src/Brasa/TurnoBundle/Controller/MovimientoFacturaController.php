@@ -66,16 +66,20 @@ class MovimientoFacturaController extends Controller
                         $arClienteDireccion = new \Brasa\TurnoBundle\Entity\TurClienteDireccion();
                         $arClienteDireccion = $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->find($arrControles['txtCodigoDireccion']);                
                         if(count($arClienteDireccion) > 0) {
-                            $arFactura->setClienteDireccionRel($arClienteDireccion);
-                            $dateFechaVence = $objFunciones->sumarDiasFecha($arCliente->getPlazoPago(), $arFactura->getFecha());
-                            $arFactura->setFechaVence($dateFechaVence);                            
-                            $em->persist($arFactura);
-                            $em->flush();
+                            if($arClienteDireccion->getCodigoClienteFk() == $arCliente->getCodigoClientePk()) {
+                                $arFactura->setClienteDireccionRel($arClienteDireccion);
+                                $dateFechaVence = $objFunciones->sumarDiasFecha($arCliente->getPlazoPago(), $arFactura->getFecha());
+                                $arFactura->setFechaVence($dateFechaVence);                            
+                                $em->persist($arFactura);
+                                $em->flush();
 
-                            if($form->get('guardarnuevo')->isClicked()) {
-                                return $this->redirect($this->generateUrl('brs_tur_factura_nuevo', array('codigoFactura' => 0 )));
+                                if($form->get('guardarnuevo')->isClicked()) {
+                                    return $this->redirect($this->generateUrl('brs_tur_factura_nuevo', array('codigoFactura' => 0 )));
+                                } else {
+                                    return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
+                                }                                
                             } else {
-                                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
+                                $objMensaje->Mensaje("error", "La direccion no pertenece al cliente", $this);
                             }                            
                         } else {
                             $objMensaje->Mensaje("error", "La direccion no existe", $this);
@@ -316,7 +320,7 @@ class MovimientoFacturaController extends Controller
         foreach ($arFacturas as $arFactura) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFactura->getCodigoFacturaPk())
-                    ->setCellValue('B' . $i, $arFactura->getTerceroRel()->getNombreCorto());
+                    ->setCellValue('B' . $i, $arFactura->getClienteRel()->getNombreCorto());
 
             $i++;
         }

@@ -3794,6 +3794,7 @@ insert into `tur_pedido_tipo` (`codigo_pedido_tipo_pk`, `nombre`) values('2','PR
 
 insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('1','PEDIDO','1');
 insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('2','FACTURA','1');
+insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('3','COTIZACION','1');
 
 insert into `tur_concepto_servicio` (`codigo_concepto_servicio_pk`, `nombre`, `horas`, `horas_diurnas`, `horas_nocturnas`, `vr_costo`) values('1','24 HORAS','24','16','8','0');
 insert into `tur_concepto_servicio` (`codigo_concepto_servicio_pk`, `nombre`, `horas`, `horas_diurnas`, `horas_nocturnas`, `vr_costo`) values('2','12 HORAS','12','12','0','0');

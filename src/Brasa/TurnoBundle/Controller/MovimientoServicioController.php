@@ -12,6 +12,7 @@ class MovimientoServicioController extends Controller
     var $codigoServicio = "";  
     var $codigoCliente = "";
     var $estadoAutorizado = "";
+    var $estadoCerrado = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -118,15 +119,7 @@ class MovimientoServicioController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
                 }
-            }   
-            if($form->get('BtnAprobar')->isClicked()) {            
-                if($arServicio->getEstadoAutorizado() == 1) {
-                    $arServicio->setEstadoAprobado(1);
-                    $em->persist($arServicio);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
-                }
-            }  
+            }    
             if($form->get('BtnCerrar')->isClicked()) {            
                 if($arServicio->getEstadoAutorizado() == 1) {
                     $arServicio->setEstadoCerrado(1);
@@ -386,12 +379,17 @@ class MovimientoServicioController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL($this->codigoServicio, $this->codigoCliente, $this->estadoAutorizado);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL(
+                $this->codigoServicio, 
+                $this->codigoCliente, 
+                $this->estadoAutorizado,
+                $this->estadoCerrado);
     }    
 
     private function filtrar ($form) {                
         $this->codigoServicio = $form->get('TxtCodigo')->getData();
         $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
+        $this->estadoCerrado = $form->get('estadoCerrado')->getData();
     }
 
     private function formularioFiltro() {
@@ -400,6 +398,7 @@ class MovimientoServicioController extends Controller
         $form = $this->createFormBuilder()
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio)) 
             ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))
+            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $this->estadoCerrado))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -409,16 +408,14 @@ class MovimientoServicioController extends Controller
 
     private function formularioDetalle($ar) {        
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);  
-        $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => true);  
-        $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => true);        
+        $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => true);          
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
         
         if($ar->getEstadoAutorizado() == 1) {            
-            $arrBotonAutorizar['disabled'] = true;            
-            $arrBotonAprobar['disabled'] = false;            
+            $arrBotonAutorizar['disabled'] = true;                        
             $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
             $arrBotonCerrar['disabled'] = false;  
@@ -426,20 +423,15 @@ class MovimientoServicioController extends Controller
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonImprimir['disabled'] = true;
         }
-        if($ar->getEstadoAprobado() == 1) {
-            $arrBotonDesAutorizar['disabled'] = true;            
-            $arrBotonAprobar['disabled'] = true;            
-        } 
+ 
         if($ar->getEstadoCerrado() == 1) {
-            $arrBotonDesAutorizar['disabled'] = true;            
-            $arrBotonAprobar['disabled'] = true;
+            $arrBotonDesAutorizar['disabled'] = true;                        
             $arrBotonCerrar['disabled'] = true;
         }         
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
-                    ->add('BtnCerrar', 'submit', $arrBotonCerrar)                 
-                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)                 
+                    ->add('BtnCerrar', 'submit', $arrBotonCerrar)                                     
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
@@ -485,18 +477,22 @@ class MovimientoServicioController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        $objPHPExcel->setActiveSheetIndex(0)
+        for($col = 'A'; $col !== 'H'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+        }     
+        for($col = 'D'; $col !== 'H'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }        
+               
+        $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'NÚMERO')
-                    ->setCellValue('D1', 'FECHA')
-                    ->setCellValue('E1', 'CLIENTE')
-                    ->setCellValue('F1', 'SECTOR')
-                    ->setCellValue('G1', 'PROGRAMADO')
-                    ->setCellValue('H1', 'HORAS')
-                    ->setCellValue('I1', 'H.DIURNAS')
-                    ->setCellValue('J1', 'H.NOCTURNAS')
-                    ->setCellValue('K1', 'VALOR');
+                    ->setCellValue('B1', 'CLIENTE')
+                    ->setCellValue('C1', 'SECTOR')                    
+                    ->setCellValue('D1', 'HORAS')
+                    ->setCellValue('E1', 'H.DIURNAS')
+                    ->setCellValue('F1', 'H.NOCTURNAS')
+                    ->setCellValue('G1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -505,17 +501,13 @@ class MovimientoServicioController extends Controller
 
         foreach ($arServicios as $arServicio) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arServicio->getCodigoServicioPk())
-                    ->setCellValue('B' . $i, $arServicio->getServicioTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arServicio->getNumero())
-                    ->setCellValue('D' . $i, $arServicio->getFecha()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arServicio->getClienteRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arServicio->getSectorRel()->getNombre())
-                    ->setCellValue('G' . $i, $arServicio->getEstadoProgramado()*1)
-                    ->setCellValue('H' . $i, $arServicio->getHoras())
-                    ->setCellValue('I' . $i, $arServicio->getHorasDiurnas())
-                    ->setCellValue('J' . $i, $arServicio->getHorasNocturnas())
-                    ->setCellValue('K' . $i, $arServicio->getVrTotal());
+                    ->setCellValue('A' . $i, $arServicio->getCodigoServicioPk())                                        
+                    ->setCellValue('B' . $i, $arServicio->getClienteRel()->getNombreCorto())
+                    ->setCellValue('C' . $i, $arServicio->getSectorRel()->getNombre())                    
+                    ->setCellValue('D' . $i, $arServicio->getHoras())
+                    ->setCellValue('E' . $i, $arServicio->getHorasDiurnas())
+                    ->setCellValue('F' . $i, $arServicio->getHorasNocturnas())
+                    ->setCellValue('G' . $i, $arServicio->getVrTotal());
 
             $i++;
         }

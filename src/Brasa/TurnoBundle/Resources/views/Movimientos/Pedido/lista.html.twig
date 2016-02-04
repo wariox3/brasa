@@ -47,12 +47,33 @@
                     </div>                    
                 </div>    
                 <div class="form-group form-group-sm">  
-                    <label for="form_TxtNumero" class="col-sm-2 control-label"></label>
-                    <div class="col-sm-4">                        
+                    <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
+                    <div class="col-sm-4">  
+                        {{ form_widget(form.fechaDesde) }}
                     </div>
                     <label for="form_estadoProgramado" class="col-sm-2 control-label">Programado:</label>
                     <div class="col-sm-4">                  
                         {{ form_widget(form.estadoProgramado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div>                    
+                <div class="form-group form-group-sm">  
+                    <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
+                    <div class="col-sm-4">   
+                        {{ form_widget(form.fechaHasta) }}
+                    </div>
+                    <label for="form_estadoFacturado" class="col-sm-2 control-label">Facturado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoFacturado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtNumero" class="col-sm-2 control-label">Filtrar por fecha:</label>
+                    <div class="col-sm-4"> 
+                        {{ form_widget(form.filtrarFecha) }}
+                    </div>
+                    <label for="form_estadoAnulado" class="col-sm-2 control-label">Anulado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoAnulado, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
                 </div>                    
                 <div class="form-group form-group-sm">
@@ -100,7 +121,7 @@
                 <td>{% if arPedidos.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arPedidos.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                
-                <td style="text-align: center"><a href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td style="text-align: center">{% if arPedidos.estadoAutorizado == 0 %}<a href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidos.codigoPedidoPk }}" /></td>
             </tr>

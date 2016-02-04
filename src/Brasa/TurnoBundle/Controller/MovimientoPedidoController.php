@@ -13,6 +13,11 @@ class MovimientoPedidoController extends Controller
     var $codigoCliente = "";
     var $estadoAutorizado = "";
     var $estadoProgramado = "";
+    var $estadoFacturado = "";
+    var $estadoAnulado = "";
+    var $fechaDesde = "";
+    var $fechaHasta = "";
+    var $filtrarFecha = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -56,13 +61,14 @@ class MovimientoPedidoController extends Controller
 
     public function nuevoAction($codigoPedido) {
         $request = $this->getRequest();
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $em = $this->getDoctrine()->getManager();
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
         if($codigoPedido != 0) {
             $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
         }else{
-            $arPedido->setFecha(new \DateTime('now'));
-            $arPedido->setFechaProgramacion(new \DateTime('now'));
+            $arPedido->setFecha(new \DateTime('now'));            
+            $arPedido->setFechaProgramacion(new \DateTime('now'));            
         }
         $form = $this->createForm(new TurPedidoType, $arPedido);
         $form->handleRequest($request);
@@ -510,24 +516,63 @@ class MovimientoPedidoController extends Controller
             'form' => $form->createView()));
     }                
     
-    private function lista() {
+    private function lista() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL($this->numeroPedido, $this->codigoCliente, $this->estadoAutorizado, $this->estadoProgramado);
+        $strFechaDesde = "";
+        $strFechaHasta = "";        
+        $filtrarFecha = $this->filtrarFecha;
+        if($filtrarFecha) {
+            $strFechaDesde = $this->fechaDesde;
+            $strFechaHasta = $this->fechaHasta;                    
+        }
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDQL(
+                $this->numeroPedido, 
+                $this->codigoCliente, 
+                $this->estadoAutorizado, 
+                $this->estadoProgramado,
+                $this->estadoFacturado,
+                $this->estadoAnulado,
+                $strFechaDesde,
+                $strFechaHasta);
     }    
 
     private function filtrar ($form) {                
         $this->numeroPedido = $form->get('TxtNumero')->getData();
         $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
         $this->estadoProgramado = $form->get('estadoProgramado')->getData();
+        $this->estadoFacturado = $form->get('estadoFacturado')->getData();
+        $this->estadoAnulado = $form->get('estadoAnulado')->getData();
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $this->fechaDesde = $dateFechaDesde->format('Y/m/d');
+        $this->fechaHasta = $dateFechaHasta->format('Y/m/d');   
+        $this->filtrarFecha = $form->get('filtrarFecha')->getData();
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = $this->getRequest()->getSession();        
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($this->fechaDesde != "") {
+            $strFechaDesde = $this->fechaDesde;
+        }
+        if($this->fechaHasta != "") {
+            $strFechaDesde = $this->fechaHasta;
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numeroPedido))
             ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))                
             ->add('estadoProgramado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PROGRAMADO', '0' => 'SIN PROGRAMAR'), 'data' => $this->estadoProgramado))                                
+            ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $this->estadoFacturado))                                
+            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $this->estadoAnulado))                                
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', 'checkbox', array('required'  => false))                 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -604,6 +649,7 @@ class MovimientoPedidoController extends Controller
     }    
     
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
@@ -617,18 +663,33 @@ class MovimientoPedidoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'S'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+        }     
+        for($col = 'M'; $col !== 'S'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
+        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'TIPO')
                     ->setCellValue('C1', 'NÚMERO')
                     ->setCellValue('D1', 'FECHA')
-                    ->setCellValue('E1', 'CLIENTE')
-                    ->setCellValue('F1', 'SECTOR')
-                    ->setCellValue('G1', 'PROGRAMADO')
-                    ->setCellValue('H1', 'HORAS')
-                    ->setCellValue('I1', 'H.DIURNAS')
-                    ->setCellValue('J1', 'H.NOCTURNAS')
-                    ->setCellValue('K1', 'VALOR');
+                    ->setCellValue('E1', 'AÑO')
+                    ->setCellValue('F1', 'MES')
+                    ->setCellValue('G1', 'CLIENTE')
+                    ->setCellValue('H1', 'SECTOR')
+                    ->setCellValue('I1', 'AUT')
+                    ->setCellValue('J1', 'PRO')
+                    ->setCellValue('K1', 'FAC')
+                    ->setCellValue('L1', 'ANU')
+                    ->setCellValue('M1', 'HORAS')
+                    ->setCellValue('N1', 'H.DIURNAS')
+                    ->setCellValue('O1', 'H.NOCTURNAS')
+                    ->setCellValue('P1', 'P.MINIMO')
+                    ->setCellValue('Q1', 'P.AJUSTADO')
+                    ->setCellValue('R1', 'TOTAL');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -641,13 +702,20 @@ class MovimientoPedidoController extends Controller
                     ->setCellValue('B' . $i, $arPedido->getPedidoTipoRel()->getNombre())
                     ->setCellValue('C' . $i, $arPedido->getNumero())
                     ->setCellValue('D' . $i, $arPedido->getFecha()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arPedido->getClienteRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arPedido->getSectorRel()->getNombre())
-                    ->setCellValue('G' . $i, $arPedido->getEstadoProgramado()*1)
-                    ->setCellValue('H' . $i, $arPedido->getHoras())
-                    ->setCellValue('I' . $i, $arPedido->getHorasDiurnas())
-                    ->setCellValue('J' . $i, $arPedido->getHorasNocturnas())
-                    ->setCellValue('K' . $i, $arPedido->getVrTotal());
+                    ->setCellValue('E' . $i, $arPedido->getFechaProgramacion()->format('Y'))
+                    ->setCellValue('F' . $i, $arPedido->getFechaProgramacion()->format('F'))                    
+                    ->setCellValue('G' . $i, $arPedido->getClienteRel()->getNombreCorto())
+                    ->setCellValue('H' . $i, $arPedido->getSectorRel()->getNombre())
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arPedido->getEstadoAutorizado()))
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arPedido->getEstadoProgramado()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arPedido->getEstadoFacturado()))
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arPedido->getEstadoAnulado()))
+                    ->setCellValue('M' . $i, $arPedido->getHoras())
+                    ->setCellValue('N' . $i, $arPedido->getHorasDiurnas())
+                    ->setCellValue('O' . $i, $arPedido->getHorasNocturnas())
+                    ->setCellValue('P' . $i, $arPedido->getVrTotalPrecioMinimo())
+                    ->setCellValue('Q' . $i, $arPedido->getVrTotalPrecioAjustado())
+                    ->setCellValue('R' . $i, $arPedido->getVrTotal());
 
             $i++;
         }

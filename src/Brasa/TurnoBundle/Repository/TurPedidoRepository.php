@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPedidoRepository extends EntityRepository {
     
-    public function listaDql($numeroPedido = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoProgramado = "") {
+    public function listaDql($numeroPedido = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoProgramado = "", $boolEstadoFacturado = "", $boolEstadoAnulado = "", $strFechaDesde = "", $strFechaHasta = "") {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.codigoPedidoPk <> 0";
         if($numeroPedido != "") {
             $dql .= " AND p.numero = " . $numeroPedido;  
@@ -25,6 +25,24 @@ class TurPedidoRepository extends EntityRepository {
         }
         if($boolEstadoProgramado == "0") {
             $dql .= " AND p.estadoProgramado = 0";
+        }    
+        if($boolEstadoFacturado == 1 ) {
+            $dql .= " AND p.estadoFacturado = 1";
+        }
+        if($boolEstadoFacturado == "0") {
+            $dql .= " AND p.estadoFacturado = 0";
+        }
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND p.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND p.estadoAnulado = 0";
+        }        
+        if($strFechaDesde != "") {
+            $dql .= " AND p.fechaProgramacion >= '" . $strFechaDesde . "'";
+        }        
+        if($strFechaHasta != "") {
+            $dql .= " AND p.fechaProgramacion <= '" . $strFechaHasta . "'";
         }        
         return $dql;
     }

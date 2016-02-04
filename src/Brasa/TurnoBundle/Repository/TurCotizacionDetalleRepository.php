@@ -27,9 +27,16 @@ class TurCotizacionDetalleRepository extends EntityRepository {
         
     }        
     
-    public function numeroRegistros($codigoCotizacion) {
+    public function numeroRegistros($codigo) {        
         $em = $this->getEntityManager();
-        $arCotizacionDetalles = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->findBy(array('codigoCotizacionFk' => $codigoCotizacion));
-        return count($arCotizacionDetalles);
+        $intNumeroRegistros = 0;
+        $dql   = "SELECT COUNT(cd.codigoCotizacionDetallePk) as numeroRegistros FROM BrasaTurnoBundle:TurCotizacionDetalle cd "
+                . "WHERE cd.codigoCotizacionFk = " . $codigo;
+        $query = $em->createQuery($dql);
+        $arrCotizacionDetalles = $query->getSingleResult(); 
+        if($arrCotizacionDetalles) {
+            $intNumeroRegistros = $arrCotizacionDetalles['numeroRegistros'];
+        }
+        return $intNumeroRegistros;
     }      
 }

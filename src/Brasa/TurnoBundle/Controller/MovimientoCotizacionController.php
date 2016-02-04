@@ -9,7 +9,9 @@ use Brasa\TurnoBundle\Form\Type\TurCotizacionOtroType;
 class MovimientoCotizacionController extends Controller
 {
     var $strListaDql = "";
-    var $codigoCotizacion = "";
+    var $numero = "";
+    var $codigoCliente = "";
+    var $estadoAutorizado = "";
 
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -18,7 +20,15 @@ class MovimientoCotizacionController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {            
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        if ($form->isValid()) {   
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {                
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
+                if($arCliente) {
+                    $this->codigoCliente = $arCliente->getCodigoClientePk();
+                }
+            }            
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurCotizacion')->eliminar($arrSeleccionados);
@@ -38,6 +48,7 @@ class MovimientoCotizacionController extends Controller
         $arCotizaciones = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Movimientos/Cotizacion:lista.html.twig', array(
             'arCotizaciones' => $arCotizaciones,
+            'arCliente' => $arCliente,
             'form' => $form->createView()));
     }
 
@@ -149,15 +160,16 @@ class MovimientoCotizacionController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->eliminarSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
                 return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
-            }            
+            }   
             if($form->get('BtnImprimir')->isClicked()) {
-                if($arCotizacion->getEstadoAutorizado() == 1) {
-                    $objCotizacion = new \Brasa\TurnoBundle\Formatos\FormatoCotizacion();
-                    $objCotizacion->Generar($this, $codigoCotizacion);
+                $strResultado = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->imprimir($codigoCotizacion);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
                 } else {
-                    $objMensaje->Mensaje("error", "No puede imprimir una cotizacion sin estar autorizada", $this);
-                }
-            }            
+                    $objCotizacion = new \Brasa\TurnoBundle\Formatos\FormatoCotizacion();
+                    $objCotizacion->Generar($this, $codigoCotizacion);                   
+                }                
+            }                        
         }
 
         $arCotizacionDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
@@ -241,20 +253,25 @@ class MovimientoCotizacionController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCotizacion')->listaDQL($this->codigoCotizacion);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCotizacion')->listaDQL(
+                $this->numero, 
+                $this->codigoCliente,
+                $this->estadoAutorizado);
     }
 
     private function filtrar ($form) {
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $this->codigoCotizacion = $form->get('TxtCodigo')->getData();
+        $this->numero = $form->get('TxtNumero')->getData();
+        $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroIdentificacion')))            
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numero))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -313,9 +330,27 @@ class MovimientoCotizacionController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'N'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+        }     
+        for($col = 'H'; $col !== 'N'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'CLIENTE');
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'NUMERO')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'VENCE')                
+                    ->setCellValue('E1', 'CLIENTE')
+                    ->setCellValue('F1', 'PROSPECTO')
+                    ->setCellValue('G1', 'SECTOR')
+                    ->setCellValue('H1', 'HORAS')
+                    ->setCellValue('I1', 'H.DIURNAS')
+                    ->setCellValue('J1', 'H.NOCTURNAS')
+                    ->setCellValue('K1', 'P.MINIMO')
+                    ->setCellValue('L1', 'P.AJUSTADO')
+                    ->setCellValue('M1', 'TOTAL');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -325,8 +360,24 @@ class MovimientoCotizacionController extends Controller
         foreach ($arCotizaciones as $arCotizacion) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCotizacion->getCodigoCotizacionPk())
-                    ->setCellValue('B' . $i, $arCotizacion->getTerceroRel()->getNombreCorto());
-
+                    ->setCellValue('B' . $i, $arCotizacion->getNumero())
+                    ->setCellValue('C' . $i, $arCotizacion->getFecha()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arCotizacion->getFechaVence()->format('Y/m/d'))
+                    ->setCellValue('G' . $i, $arCotizacion->getSectorRel()->getNombre())
+                    ->setCellValue('H' . $i, $arCotizacion->getHoras())
+                    ->setCellValue('I' . $i, $arCotizacion->getHorasDiurnas())
+                    ->setCellValue('J' . $i, $arCotizacion->getHorasNocturnas())
+                    ->setCellValue('K' . $i, $arCotizacion->getVrTotalPrecioMinimo())
+                    ->setCellValue('L' . $i, $arCotizacion->getVrTotalPrecioAjustado())
+                    ->setCellValue('M' . $i, $arCotizacion->getVrTotal());
+            if($arCotizacion->getClienteRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('E' . $i, $arCotizacion->getClienteRel()->getNombreCorto());
+            }
+            if($arCotizacion->getProspectoRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('F' . $i, $arCotizacion->getProspectoRel()->getNombreCorto());
+            }            
             $i++;
         }
 

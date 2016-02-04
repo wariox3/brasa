@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TurProgramacionRepository extends EntityRepository {
     
-    public function listaDQL($numeroProgramacion = "", $codigoCliente = "", $boolEstadoAutorizado = "", $strFechaDesde = "", $strFechaHasta = "") {
+    public function listaDQL($numeroProgramacion = "", $codigoCliente = "", $boolEstadoAutorizado = "", $strFechaDesde = "", $strFechaHasta = "", $boolEstadoAnulado = "") {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurProgramacion p WHERE p.codigoProgramacionPk <> 0";
         if($numeroProgramacion != "") {
             $dql .= " AND p.numero = " . $numeroProgramacion;  
@@ -20,6 +20,12 @@ class TurProgramacionRepository extends EntityRepository {
         if($boolEstadoAutorizado == "0") {
             $dql .= " AND p.estadoAutorizado = 0";
         } 
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND p.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND p.estadoAnulado = 0";
+        }        
         if($strFechaDesde != "") {
             $dql .= " AND p.fecha >= '" . $strFechaDesde . " 00:00:00'";
         }
@@ -261,4 +267,19 @@ class TurProgramacionRepository extends EntityRepository {
         }
         return $strResultados;
     }
+    
+    public function anular($codigoProgramacion) {
+        $em = $this->getEntityManager();                
+        $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);            
+        $strResultado = "";        
+        if($arProgramacion->getEstadoAutorizado() == 1 && $arProgramacion->getEstadoAnulado() == 0) {
+            $arProgramacion->setEstadoAnulado(1);
+            $em->persist($arProgramacion);
+            $em->flush();      
+                           
+        } else {
+            $strResultado = "La programacion debe estar autorizada y no puede estar previamente anulada";
+        }        
+        return $strResultado;
+    }     
 }

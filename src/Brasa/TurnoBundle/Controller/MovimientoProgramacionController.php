@@ -10,6 +10,7 @@ class MovimientoProgramacionController extends Controller
     var $numeroProgramacion = "";
     var $codigoCliente = "";
     var $estadoAutorizado = "";
+    var $estadoAnulado = "";
 
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -147,6 +148,13 @@ class MovimientoProgramacionController extends Controller
                 } else {
                     $objMensaje->Mensaje("error", "No puede imprimir sin estar autorizada", $this);
                 }
+            } 
+            if($form->get('BtnAnular')->isClicked()) {                                 
+                $strResultado = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->anular($codigoProgramacion);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }            
         }
         $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
@@ -238,12 +246,16 @@ class MovimientoProgramacionController extends Controller
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacion')->listaDQL(
-                $this->numeroProgramacion, $this->codigoCliente, $this->estadoAutorizado);
+                $this->numeroProgramacion, 
+                $this->codigoCliente, 
+                $this->estadoAutorizado, "", "",
+                $this->estadoAnulado);
     }
 
     private function filtrar ($form) {
         $this->numeroPedido = $form->get('TxtNumero')->getData();
         $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
+        $this->estadoAnulado = $form->get('estadoAnulado')->getData();
     }
 
     private function formularioFiltro() {
@@ -251,6 +263,7 @@ class MovimientoProgramacionController extends Controller
         $form = $this->createFormBuilder()
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numeroProgramacion))
             ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))                
+            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $this->estadoAnulado))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -261,6 +274,7 @@ class MovimientoProgramacionController extends Controller
     private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => true);
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
@@ -269,7 +283,14 @@ class MovimientoProgramacionController extends Controller
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = false;
             $arrBotonDetalleEliminar['disabled'] = true;
-            $arrBotonDetalleActualizar['disabled'] = true;        
+            $arrBotonDetalleActualizar['disabled'] = true;  
+            $arrBotonAnular['disabled'] = false; 
+            if($ar->getEstadoAnulado() == 1) {
+                $arrBotonDesAutorizar['disabled'] = true;
+                $arrBotonAnular['disabled'] = true;
+                $arrBotonAprobar['disabled'] = true;
+                
+            }            
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
@@ -283,6 +304,7 @@ class MovimientoProgramacionController extends Controller
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)  
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)                    
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->getForm();

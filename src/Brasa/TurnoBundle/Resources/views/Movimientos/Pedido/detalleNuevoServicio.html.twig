@@ -13,6 +13,7 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>COD</th>
+                <th>SER</th>
                 <th>PUESTO</th>
                 <th></th>
                 <th>SERVICIO</th>
@@ -22,7 +23,6 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>CANT</th>
-                <th>CANT.RE</th>
                 <th>LU</th>
                 <th>MA</th>
                 <th>MI</th>
@@ -41,6 +41,7 @@
             {% for arServicioDetalles in arServicioDetalles %}
             <tr>
                 <td>{{ arServicioDetalles.codigoServicioDetallePk  }}</td>
+                <td>{{ arServicioDetalles.codigoServicioFk }}</td>
                 <td>{{ arServicioDetalles.codigoPuestoFk }}</td>
                 <td>{{ arServicioDetalles.puestoRel.nombre | default('') }}</td> 
                 <td>{{ arServicioDetalles.conceptoServicioRel.nombre  }}</td>                    
@@ -50,7 +51,6 @@
                 <td>{{ arServicioDetalles.fechaDesde | date('Y/m/d') }}</td>    
                 <td>{{ arServicioDetalles.fechaHasta | date('Y/m/d') }}</td>    
                 <td>{{ arServicioDetalles.cantidad  }}</td>
-                <td>{{ arServicioDetalles.cantidadRecurso  }}</td>
                 <td>{% if arServicioDetalles.lunes == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arServicioDetalles.martes == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arServicioDetalles.miercoles == 1 %} SI {% else %} NO {% endif %}</td>

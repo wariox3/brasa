@@ -33,6 +33,11 @@ class Funciones {
         return $dateNuevaFecha;
     }
     
+    public function ultimoDiaMes($strAnio = "", $strMes = "") {
+        $strUltimoDiaMes = date("d",(mktime(0,0,0,$strMes+1,1,$strAnio)-1));
+        return $intUltimoDiaMes;
+    }
+    
     public static function devolverNumeroLetras($num, $fem = true, $dec = true) {
 
     //if (strlen($num) > 14) die("El n?mero introducido es demasiado grande");
@@ -361,7 +366,8 @@ class Funciones {
 
        return ucfirst($tex);
 
-    }     
+    }         
+    
 }
 ?>
 

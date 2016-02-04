@@ -82,7 +82,7 @@ class ConsultasPedidosDetallesController extends Controller
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
         for($col = 'AD'; $col !== 'AF'; $col++) {            
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')

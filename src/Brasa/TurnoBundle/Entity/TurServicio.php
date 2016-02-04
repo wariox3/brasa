@@ -30,12 +30,7 @@ class TurServicio
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = false;     
-    
-    /**     
-     * @ORM\Column(name="estado_aprobado", type="boolean")
-     */    
-    private $estadoAprobado = false;         
+    private $estadoAutorizado = false;                 
     
     /**     
      * @ORM\Column(name="estado_cerrado", type="boolean")
@@ -194,30 +189,6 @@ class TurServicio
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
-    }
-
-    /**
-     * Set estadoAprobado
-     *
-     * @param boolean $estadoAprobado
-     *
-     * @return TurServicio
-     */
-    public function setEstadoAprobado($estadoAprobado)
-    {
-        $this->estadoAprobado = $estadoAprobado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAprobado
-     *
-     * @return boolean
-     */
-    public function getEstadoAprobado()
-    {
-        return $this->estadoAprobado;
     }
 
     /**

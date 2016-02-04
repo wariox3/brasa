@@ -31,6 +31,8 @@ class TurFacturaRepository extends EntityRepository {
     
     public function liquidar($codigoFactura) {        
         $em = $this->getEntityManager();        
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();        
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura); 
         $floSubTotal = 0;
@@ -45,7 +47,7 @@ class TurFacturaRepository extends EntityRepository {
         }
         $floBaseAIU = ($floSubTotal * 10) / 100;
         $floIva = ($floBaseAIU * 16 ) / 100;
-        if($floBaseAIU >= 803000) {
+        if($floBaseAIU >= $arConfiguracion->getBaseRetencionFuente()) {
             $floRetencionFuente = ($floBaseAIU * 2 ) / 100;
         }
         

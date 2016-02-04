@@ -85,7 +85,7 @@ class ConsultasServiciosCostosController extends Controller
         }     
         for($col = 'Y'; $col !== 'AD'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
         
         $objPHPExcel->setActiveSheetIndex(0)

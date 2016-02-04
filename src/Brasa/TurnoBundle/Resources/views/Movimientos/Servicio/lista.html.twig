@@ -46,6 +46,16 @@
                         {{ form_widget(form.estadoAutorizado, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
                 </div>                    
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtCodigo" class="col-sm-2 control-label">Codigo:</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.TxtCodigo, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <label for="form_estadoCerrado" class="col-sm-2 control-label">Cerrado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoCerrado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div>                    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -62,6 +72,7 @@
                 <th>H.D</th>
                 <th>H.N</th>
                 <th>AUT</th>
+                <th>CER</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -75,6 +86,7 @@
                 <td style="text-align: right">{{ arServicios.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServicios.horasNocturnas | number_format(0, '.', ',') }}</td>
                 <td>{% if arServicios.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arServicios.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_servicio_nuevo', {'codigoServicio': arServicios.codigoServicioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_servicio_detalle', { 'codigoServicio': arServicios.codigoServicioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServicios.codigoServicioPk }}" /></td>

@@ -18,6 +18,11 @@ class TurCotizacion
     private $codigoCotizacionPk;         
     
     /**
+     * @ORM\Column(name="numero", type="integer")
+     */    
+    private $numero = 0;
+    
+    /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;    
@@ -696,5 +701,29 @@ class TurCotizacion
     public function getCotizacionesOtrosCotizacionRel()
     {
         return $this->cotizacionesOtrosCotizacionRel;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return TurCotizacion
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 }
