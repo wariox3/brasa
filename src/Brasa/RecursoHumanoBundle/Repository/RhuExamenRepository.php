@@ -78,6 +78,22 @@ class RhuExamenRepository extends EntityRepository {
             if(count($arExamenDetalles) <= 0) {
                 $arExamen->setEstadoAprobado(1);
                 $em->persist($arExamen);
+                //se crea el registro del empleado en requisitos si el examen fue aprobado satisfactoriamente
+                $arRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisito();
+                $arRequisito->setFecha(new \ DateTime("now"));
+                $arRequisito->setCargoRel($arExamen->getCargoRel());
+                $arRequisito->setNumeroIdentificacion($arExamen->getIdentificacion());
+                $arRequisito->setNombreCorto($arExamen->getNombreCorto());
+                $em->persist($arRequisito);
+                $arRequisitoConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
+                $arRequisitoConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findBy(array('general' => 1));
+                foreach ($arRequisitoConceptos as $arRequisitoConcepto) {
+                    $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
+                    $arRequisitoDetalle->setRequisitoRel($arRequisito);
+                    $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoConcepto);
+                    $arRequisitoDetalle->setTipo('GENERAL');
+                    $em->persist($arRequisitoDetalle);
+                }
                 $em->flush();
             } else {
                 $strRespuesta = "Todos los detalles del examen deben estar aprobados";

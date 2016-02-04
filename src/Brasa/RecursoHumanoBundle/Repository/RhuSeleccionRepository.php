@@ -128,6 +128,7 @@ class RhuSeleccionRepository extends EntityRepository {
                 $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
                 $arExamen->setFecha(new \ DateTime("now"));
                 $arExamen->setCentroCostoRel($arSeleccion->getCentroCostoRel());
+                $arExamen->setCargoRel($arSeleccion->getCargoRel());
                 $arExamen->setCiudadRel($arSeleccion->getCiudadRel());
                 $arExamen->setIdentificacion($arSeleccion->getNumeroIdentificacion());
                 $arExamen->setFechaNacimiento($arSeleccion->getFechaNacimiento());

@@ -55,6 +55,7 @@
                 <th>NOMBRE</th>                
                 <th>ENTIDAD</th>
                 <th>CENTRO COSTO</th>
+                <th>CARGO</th>
                 <th>PAGA EMPLEADO</th>
                 <th>TOTAL</th>
                 <th>CTR</th>
@@ -72,7 +73,8 @@
                 <td>{{ arExamenes.identificacion }}</td>
                 <td>{{ arExamenes.nombreCorto }}</td>                                
                 <td>{{ arExamenes.entidadExamenRel.nombre|default('SIN ENTIDAD')  }}</td>
-                <td>{{ arExamenes.centroCostoRel.nombre }}</td>               
+                <td>{{ arExamenes.centroCostoRel.nombre }}</td> 
+                <td>{{ arExamenes.cargoRel.nombre|default('SIN CARGO')  }}</td>
                 <td>{% if arExamenes.pagaEmpleado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arExamenes.vrTotal | number_format(0, '.', ',') }}</td>                
                 <td>{% if arExamenes.control == 1 %} SI {% else %} NO {% endif %}</td>

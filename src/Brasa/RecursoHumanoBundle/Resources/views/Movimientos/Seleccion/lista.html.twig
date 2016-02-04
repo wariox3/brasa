@@ -58,10 +58,11 @@
                 <th>{{ knp_pagination_sortable(arSelecciones, 'CÓDIGO', 's.codigoSeleccionPk') }}</th>
                 <th>FECHA</th>
                 <th>TIPO</th>
-                <th>REQUISITO</th>
+                <th>REQUISICIÓN</th>
                 <th>IDENTIFICACION</th>
                 <th>{{ knp_pagination_sortable(arSelecciones, 'NOMBRE', 's.nombreCorto') }}</th>
                 <th>CENTRO COSTO</th>
+                <th>CARGO</th>
                 <th>TELEFONO</th>
                 <th>CELULAR</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Pruebas presentadas">P.P</p></th>                
@@ -81,6 +82,7 @@
                 <td>{{ arSelecciones.numeroIdentificacion  }}</td>
                 <td>{{ arSelecciones.nombreCorto  }}</td>
                 <td>{{ arSelecciones.centroCostoRel.nombre  }}</td>
+                <td>{{ arSelecciones.cargoRel.nombre |default('')  }}</td>
                 <td>{{ arSelecciones.telefono }}</td>
                 <td>{{ arSelecciones.celular }}</td>
                 <td>{% if arSelecciones.presentaPruebas == 1 %} SI {% else %} NO {% endif %}</td>

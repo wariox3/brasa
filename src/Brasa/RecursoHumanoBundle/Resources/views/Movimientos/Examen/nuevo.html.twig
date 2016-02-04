@@ -30,6 +30,12 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
+                <label for="form_cargoRel" class="col-sm-3 control-label">Cargo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.cargoRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
                 <label for="form_fecha" class="col-sm-3 control-label">Fecha:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.fecha, { 'attr': {'class': 'form-control'} }) }}
@@ -65,12 +71,6 @@
                     {{ form_widget(form.codigoSexoFk, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>    
-            <div class="form-group form-group-sm">
-                <label for="form_cargoDescripcion" class="col-sm-3 control-label">Cargo:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.cargoDescripcion, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
-                </div>
-            </div>
             <div class="form-group form-group-sm">
                 <label for="form_pagaEmpleado" class="col-sm-3 control-label">Paga empleado:</label>
                 <div class="col-sm-9">

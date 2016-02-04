@@ -385,6 +385,8 @@ class SeleccionController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -398,56 +400,39 @@ class SeleccionController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'REQUISITO')
+                    ->setCellValue('C1', 'REQUISICIÓN')
                     ->setCellValue('D1', 'IDENTIFICACION')
                     ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'CENTRO_COSTOS')
-                    ->setCellValue('G1', 'TELEFONO')
-                    ->setCellValue('H1', 'CELULAR')
-                    ->setCellValue('I1', 'PRUEBAS_PRESENTADAS')
-                    ->setCellValue('J1', 'APROBADO')
-                    ->setCellValue('K1', 'REFERENCIAS_VERIFICADAS')
-                    ->setCellValue('L1', 'ABIERTO');
+                    ->setCellValue('F1', 'CENTRO COSTOS')
+                    ->setCellValue('G1', 'CARGO')
+                    ->setCellValue('H1', 'TELEFONO')
+                    ->setCellValue('I1', 'CELULAR')
+                    ->setCellValue('J1', 'PRUEBAS_PRESENTADAS')
+                    ->setCellValue('K1', 'APROBADO')
+                    ->setCellValue('L1', 'REFERENCIAS_VERIFICADAS')
+                    ->setCellValue('M1', 'ABIERTO');
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlSeleccionLista'));
         $arSelecciones = $query->getResult();
         foreach ($arSelecciones as $arSelecciones) {
-            if ($arSelecciones->getPresentaPruebas() == 1)
-            {
-                $presentarP = "SI";
-            }
-            else
-            {
-                $presentarP = "NO";
-            }
-            if ($arSelecciones->getEstadoAprobado() == 1)
-            {
-                $aprobado = "SI";
-            }
-            else
-            {
-                $aprobado = "NO";
-            }
-            if ($arSelecciones->getReferenciasVerificadas() == 1)
-            {
-                $referenciasV = "SI";
-            }
-            else
-            {
-                $referenciasV = "NO";
-            }
-            if ($arSelecciones->getEstadoCerrado() == 1)
-            {
-                $abierto = "SI";
-            }
-            else
-            {
-                $abierto = "NO";
-            }
+            
             if ($arSelecciones->getCodigoSeleccionRequisitoFk() == null)
             {
                 $seleccionRequisito = "";
@@ -464,12 +449,13 @@ class SeleccionController extends Controller
                     ->setCellValue('D' . $i, $arSelecciones->getNumeroIdentificacion())
                     ->setCellValue('E' . $i, $arSelecciones->getNombreCorto())
                     ->setCellValue('F' . $i, $arSelecciones->getCentroCostoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arSelecciones->getTelefono())
-                    ->setCellValue('H' . $i, $arSelecciones->getCelular())
-                    ->setCellValue('I' . $i, $presentarP)
-                    ->setCellValue('J' . $i, $aprobado)
-                    ->setCellValue('K' . $i, $referenciasV)
-                    ->setCellValue('L' . $i, $abierto);
+                    ->setCellValue('G' . $i, $arSelecciones->getCargoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arSelecciones->getTelefono())
+                    ->setCellValue('I' . $i, $arSelecciones->getCelular())
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arSelecciones->getPresentaPruebas()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arSelecciones->getEstadoAprobado()))
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arSelecciones->getReferenciasVerificadas()))
+                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arSelecciones->getEstadoCerrado()));
             $i++;
         }
 

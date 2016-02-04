@@ -41,28 +41,28 @@
                     <td class="td-in-well">{{ arExamen.nombreCorto }}</td>
                 </tr>
                 <tr>
-                    <td class="titulo">FECHA:</td>
-                    <td class="td-in-well">{{ arExamen.fecha | date('Y/m/d') }}</td>
+                    <td class="titulo">CARGO:</td>
+                    <td class="td-in-well">{{ arExamen.cargoRel.nombre }}</td>
                     <td class="titulo">APROBADO:</td>
                     <td class="td-in-well" {% if arExamen.estadoAprobado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                 </tr>
                 <tr>
-                    <td class="titulo">PAGA EMPLEADO</td>
-                    <td class="td-in-well" {% if arExamen.pagaEmpleado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
+                    <td class="titulo">FECHA:</td>
+                    <td class="td-in-well">{{ arExamen.fecha | date('Y/m/d') }}</td>
                     <td class="titulo">AUTORIZADO:</td>
                     <td class="td-in-well" {% if arExamen.estadoAutorizado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                 </tr>
                 <tr>
-                    <td class="titulo">CLASE:</td>
-                    <td class="td-in-well">{{ arExamen.examenClaseRel.nombre }}</td>
-                    <td class="titulo" >TOTAL:</td>
-                    <td align="right">{{ arExamen.vrTotal | number_format(0, '.', ',')}}</td>
+                    <td class="titulo">PAGA EMPLEADO</td>
+                    <td class="td-in-well" {% if arExamen.pagaEmpleado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
+                    <td class="titulo">CONTROL:</td>
+                    <td> {% if arExamen.control == 1 %}SI{% else %}NO{% endif %}</td>
                 </tr>
                 <tr>
-                    <td class="titulo">CONTROL</td>
-                    <td> {% if arExamen.control == 1 %}SI{% else %}NO{% endif %}</td>
-                    <td class="titulo" ></td>
-                    <td align="right"></td>
+                    <td class="titulo">CLASE:</td>
+                    <td class="td-in-well">{{ arExamen.examenClaseRel.nombre }}</td>
+                    <td class="titulo" >TOTAL</td>
+                    <td align="right">{{ arExamen.vrTotal | number_format(0, '.', ',')}}</td>
                 </tr>
             </table>
       </div>

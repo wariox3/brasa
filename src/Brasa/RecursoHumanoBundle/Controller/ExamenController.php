@@ -446,7 +446,7 @@ class ExamenController extends Controller
                     ->setCellValue('C' . $i, $arExamen->getNombreCorto())
                     ->setCellValue('D' . $i, $varEdad)
                     ->setCellValue('E' . $i, $arExamen->getCodigoSexoFk())
-                    ->setCellValue('F' . $i, $arExamen->getCargoDescripcion())
+                    ->setCellValue('F' . $i, $arExamen->getCargoRel()->getNombre())
                     ->setCellValue('G' . $i, $arExamen->getCentroCostoRel()->getNombre())
                     ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arExamen->getPagaEmpleado()))
                     ->setCellValue('I' . $i, $strNombreEntidad)
