@@ -111,7 +111,12 @@ class RhuExamen
     /**     
      * @ORM\Column(name="control", type="boolean")
      */    
-    private $control = 0;    
+    private $control = 0;
+
+    /**     
+     * @ORM\Column(name="paga_empleado", type="boolean")
+     */    
+    private $pagaEmpleado = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuExamenClase", inversedBy="examenesExamenClaseRel")
@@ -158,6 +163,9 @@ class RhuExamen
      * @ORM\OneToMany(targetEntity="RhuPagoExamenDetalle", mappedBy="examenRel")
      */
     protected $pagosExamenesDetallesExamenRel;
+    
+    
+    
     
     /**
      * Constructor
@@ -296,30 +304,6 @@ class RhuExamen
     public function getFecha()
     {
         return $this->fecha;
-    }
-
-    /**
-     * Set fechaVence
-     *
-     * @param \DateTime $fechaVence
-     *
-     * @return RhuExamen
-     */
-    public function setFechaVence($fechaVence)
-    {
-        $this->fechaVence = $fechaVence;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaVence
-     *
-     * @return \DateTime
-     */
-    public function getFechaVence()
-    {
-        return $this->fechaVence;
     }
 
     /**
@@ -635,6 +619,54 @@ class RhuExamen
     }
 
     /**
+     * Set control
+     *
+     * @param boolean $control
+     *
+     * @return RhuExamen
+     */
+    public function setControl($control)
+    {
+        $this->control = $control;
+
+        return $this;
+    }
+
+    /**
+     * Get control
+     *
+     * @return boolean
+     */
+    public function getControl()
+    {
+        return $this->control;
+    }
+
+    /**
+     * Set pagaEmpleado
+     *
+     * @param boolean $pagaEmpleado
+     *
+     * @return RhuExamen
+     */
+    public function setPagaEmpleado($pagaEmpleado)
+    {
+        $this->pagaEmpleado = $pagaEmpleado;
+
+        return $this;
+    }
+
+    /**
+     * Get pagaEmpleado
+     *
+     * @return boolean
+     */
+    public function getPagaEmpleado()
+    {
+        return $this->pagaEmpleado;
+    }
+
+    /**
      * Set examenClaseRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenClase $examenClaseRel
@@ -844,29 +876,5 @@ class RhuExamen
     public function getPagosExamenesDetallesExamenRel()
     {
         return $this->pagosExamenesDetallesExamenRel;
-    }
-
-    /**
-     * Set control
-     *
-     * @param boolean $control
-     *
-     * @return RhuExamen
-     */
-    public function setControl($control)
-    {
-        $this->control = $control;
-
-        return $this;
-    }
-
-    /**
-     * Get control
-     *
-     * @return boolean
-     */
-    public function getControl()
-    {
-        return $this->control;
     }
 }

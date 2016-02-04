@@ -32,6 +32,12 @@
                     <div class="col-sm-10">
                         {{ form_widget(form.estadoAprobado, { 'attr': {'class': 'form-control'} }) }}
                     </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="form_pagaEmpleado" class="col-sm-2 control-label">Paga empleado:</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.pagaEmpleado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
                 </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
@@ -48,7 +54,8 @@
                 <th>IDENTIFICACIÓN</th>
                 <th>NOMBRE</th>                
                 <th>ENTIDAD</th>
-                <th>C. COSTO</th>                
+                <th>CENTRO COSTO</th>
+                <th>PAGA EMPLEADO</th>
                 <th>TOTAL</th>
                 <th>CTR</th>
                 <th>AUT</th>
@@ -66,6 +73,7 @@
                 <td>{{ arExamenes.nombreCorto }}</td>                                
                 <td>{{ arExamenes.entidadExamenRel.nombre|default('SIN ENTIDAD')  }}</td>
                 <td>{{ arExamenes.centroCostoRel.nombre }}</td>               
+                <td>{% if arExamenes.pagaEmpleado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arExamenes.vrTotal | number_format(0, '.', ',') }}</td>                
                 <td>{% if arExamenes.control == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arExamenes.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>

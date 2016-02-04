@@ -31,6 +31,11 @@ class GenArchivo
      * @ORM\Column(name="archivo", type="string", length=50)
      */
     private $archivo;
+    
+    /**
+     * @ORM\Column(name="descripcion", type="string", length=70, nullable=true)
+     */
+    private $descripcion;
    
     /**
      * @ORM\ManyToOne(targetEntity="GenDirectorio", inversedBy="directoriosArchivoRel")
@@ -120,6 +125,30 @@ class GenArchivo
     public function getArchivo()
     {
         return $this->archivo;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return GenArchivo
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
     }
 
     /**

@@ -49,6 +49,7 @@
             <th>CÓDIGO</th>
             <th>NOMBRE</th>
             <th>TIPO ARCHIVO</th>
+            <th>DESCRIPCIÓN</th>
             <th></th>
             <th></th>
         </tr>
@@ -60,6 +61,7 @@
             </td>
             <td>{{ arArchivos.nombre }}</td>
             <td>{{ arArchivos.archivo }}</td>
+            <td>{{ arArchivos.descripcion }}</td>
             <td style="text-align: center"><a href="{{ path('brs_gen_utilidad_gestorarchivo_descargar_archivo', { 'codigoArchivo': arArchivos.codigoArchivoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_181_download_alt.png') }}" width=22 height=22></a></td>                        
             <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarArchivo[]" value="{{ arArchivos.codigoArchivoPk }}" /></td>
         </tr>

@@ -119,6 +119,7 @@ class DirectorioController extends Controller
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa'); 
         $form = $this->createFormBuilder()
+            ->add('descripcion', 'text', array('required' => false))    
             ->add('attachment', 'file') 
             ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
             ->getForm();
@@ -128,7 +129,8 @@ class DirectorioController extends Controller
                 $objArchivo = $form['attachment']->getData();
                 $arDirectorio = new \Brasa\GeneralBundle\Entity\GenDirectorio();
                 $arDirectorio = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->find($codigoDirectorioPadre);
-                $arArchivo = new \Brasa\GeneralBundle\Entity\GenArchivo();                    
+                $arArchivo = new \Brasa\GeneralBundle\Entity\GenArchivo();
+                $arArchivo->setDescripcion($form->get('descripcion')->getData());
                 $arArchivo->setNombre($objArchivo->getClientOriginalName());
                 $arArchivo->setArchivo($objArchivo->getClientMimeType());                               
                 $arArchivo->setDirectorioRel($arDirectorio);               

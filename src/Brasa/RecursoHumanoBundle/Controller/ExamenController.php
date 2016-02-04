@@ -277,7 +277,8 @@ class ExamenController extends Controller
         $this->strListaDql =  $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->listaDQL(
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroIdentificacion'),
-                $session->get('filtroAprobadoExamen')
+                $session->get('filtroAprobadoExamen'),
+                $session->get('filtroPagaEmpleado')
                 );
     }
 
@@ -288,6 +289,7 @@ class ExamenController extends Controller
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroAprobadoExamen', $form->get('estadoAprobado')->getData());
+        $session->set('filtroPagaEmpleado', $form->get('pagaEmpleado')->getData());
     }
     
     private function formularioFiltro() {
@@ -311,6 +313,7 @@ class ExamenController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoExamen')))
+            ->add('pagaEmpleado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroPagaEmpleado')))    
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -357,6 +360,7 @@ class ExamenController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -371,6 +375,24 @@ class ExamenController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
@@ -379,39 +401,22 @@ class ExamenController extends Controller
                     ->setCellValue('E1', 'SEXO')
                     ->setCellValue('F1', 'CARGO')
                     ->setCellValue('G1', 'CENTRO COSTOS')
-                    ->setCellValue('H1', 'ENTIDAD / LABORATORIO')
-                    ->setCellValue('I1', 'CIUDAD')
-                    ->setCellValue('J1', 'FECHA EXAMEN')
-                    ->setCellValue('K1', 'AÑO EXAMEN')
-                    ->setCellValue('L1', 'MES EXAMEN')
-                    ->setCellValue('M1', 'DIA EXAMEN')
-                    ->setCellValue('N1', 'TIPO EXAMEN')
-                    ->setCellValue('O1', 'TOTAL')
-                    ->setCellValue('P1', 'APROBADO')
-                    ->setCellValue('Q1', 'COMENTARIOS GENERALES')
-                    ->setCellValue('R1', 'EXAMEN 1')
-                    ->setCellValue('S1', 'ESTADO')
-                    ->setCellValue('T1', 'OBSERVACIONES')
-                    ->setCellValue('U1', 'EXAMEN 2')
-                    ->setCellValue('V1', 'ESTADO')
-                    ->setCellValue('W1', 'OBSERVACIONES')
-                    ->setCellValue('X1', 'EXAMEN 3')
-                    ->setCellValue('Y1', 'ESTADO')
-                    ->setCellValue('Z1', 'OBSERVACIONES')
-                    ->setCellValue('AA1', 'EXAMEN 4')
-                    ->setCellValue('AB1', 'ESTADO')
-                    ->setCellValue('AC1', 'OBSERVACIONES')
-                    ->setCellValue('AD1', 'EXAMEN 5')
-                    ->setCellValue('AE1', 'ESTADO')
-                    ->setCellValue('AF1', 'OBSERVACIONES')
-                    ->setCellValue('AG1', 'EXAMEN 6')
-                    ->setCellValue('AH1', 'ESTADO')
-                    ->setCellValue('AI1', 'OBSERVACIONES');
+                    ->setCellValue('H1', 'PAGA EMPLEADO')
+                    ->setCellValue('I1', 'ENTIDAD / LABORATORIO')
+                    ->setCellValue('J1', 'CIUDAD')
+                    ->setCellValue('K1', 'FECHA EXAMEN')
+                    ->setCellValue('L1', 'AÑO EXAMEN')
+                    ->setCellValue('M1', 'MES EXAMEN')
+                    ->setCellValue('N1', 'DIA EXAMEN')
+                    ->setCellValue('O1', 'TIPO EXAMEN')
+                    ->setCellValue('P1', 'TOTAL')
+                    ->setCellValue('Q1', 'APROBADO')
+                    ->setCellValue('R1', 'COMENTARIOS GENERALES');
 
         $i = 2;
         
         $query = $em->createQuery($this->strListaDql);
-                $arExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
+                $arExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
                 $arExamenes = $query->getResult();
                 
         foreach ($arExamenes as $arExamen) {
@@ -423,11 +428,7 @@ class ExamenController extends Controller
             if($arExamen->getEntidadExamenRel()) {
                 $strNombreEntidad = $arExamen->getEntidadExamenRel()->getNombre();
             }
-            if ($arExamen->getEstadoAprobado() == 1){
-                $aprobado = "SI";
-            } else {
-                $aprobado = "NO";
-            }
+            
             //Calculo edad
             $varFechaNacimientoAnio = $arExamen->getFechaNacimiento()->format('Y');
             $varFechaNacimientoMes =  $arExamen->getFechaNacimiento()->format('m');
@@ -447,16 +448,17 @@ class ExamenController extends Controller
                     ->setCellValue('E' . $i, $arExamen->getCodigoSexoFk())
                     ->setCellValue('F' . $i, $arExamen->getCargoDescripcion())
                     ->setCellValue('G' . $i, $arExamen->getCentroCostoRel()->getNombre())
-                    ->setCellValue('H' . $i, $strNombreEntidad)
-                    ->setCellValue('I' . $i, $arExamen->getCiudadRel()->getNombre())
-                    ->setCellValue('J' . $i, $arExamen->getFecha())
-                    ->setCellValue('K' . $i, $arExamen->getFecha()->format('Y'))
-                    ->setCellValue('L' . $i, $arExamen->getFecha()->format('m'))
-                    ->setCellValue('M' . $i, $arExamen->getFecha()->format('d'))
-                    ->setCellValue('N' . $i, $arExamen->getExamenClaseRel()->getNombre())
-                    ->setCellValue('O' . $i, $arExamen->getVrTotal())
-                    ->setCellValue('P' . $i, $aprobado)
-                    ->setCellValue('Q' . $i, $arExamen->getComentarios());
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arExamen->getPagaEmpleado()))
+                    ->setCellValue('I' . $i, $strNombreEntidad)
+                    ->setCellValue('J' . $i, $arExamen->getCiudadRel()->getNombre())
+                    ->setCellValue('K' . $i, $arExamen->getFecha())
+                    ->setCellValue('L' . $i, $arExamen->getFecha()->format('Y'))
+                    ->setCellValue('M' . $i, $arExamen->getFecha()->format('m'))
+                    ->setCellValue('N' . $i, $arExamen->getFecha()->format('d'))
+                    ->setCellValue('O' . $i, $arExamen->getExamenClaseRel()->getNombre())
+                    ->setCellValue('P' . $i, $arExamen->getVrTotal())
+                    ->setCellValue('Q' . $i, $objFunciones->devuelveBoolean($arExamen->getEstadoAprobado()))
+                    ->setCellValue('R' . $i, $arExamen->getComentarios());
                     $array = array();
                     foreach ($arDetalleExamen as $arDetalleExamen){
                         $array[] = $arDetalleExamen->getCodigoExamenTipoFk();

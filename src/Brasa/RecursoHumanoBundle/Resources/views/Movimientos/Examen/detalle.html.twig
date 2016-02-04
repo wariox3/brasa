@@ -47,8 +47,8 @@
                     <td class="td-in-well" {% if arExamen.estadoAprobado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                 </tr>
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">PAGA EMPLEADO</td>
+                    <td class="td-in-well" {% if arExamen.pagaEmpleado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                     <td class="titulo">AUTORIZADO:</td>
                     <td class="td-in-well" {% if arExamen.estadoAutorizado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                 </tr>

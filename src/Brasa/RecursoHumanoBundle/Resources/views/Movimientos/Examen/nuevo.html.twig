@@ -70,6 +70,12 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.cargoDescripcion, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_pagaEmpleado" class="col-sm-3 control-label">Paga empleado:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.pagaEmpleado, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
             </div>    
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
