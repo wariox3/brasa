@@ -24,6 +24,8 @@ class ConfiguracionController extends Controller
             ->add('informacionLegalFactura', 'textarea', array('data' => $arConfiguracion->getInformacionLegalFactura(), 'required' => false)) 
             ->add('informacionPagoFactura', 'textarea', array('data' => $arConfiguracion->getInformacionPagoFactura(), 'required' => false)) 
             ->add('informacionContactoFactura', 'textarea', array('data' => $arConfiguracion->getInformacionContactoFactura(), 'required' => false)) 
+            ->add('informacionResolucionDianFactura', 'textarea', array('data' => $arConfiguracion->getInformacionResolucionDianFactura(), 'required' => false)) 
+            ->add('informacionResolucionSupervigilanciaFactura', 'textarea', array('data' => $arConfiguracion->getInformacionResolucionSupervigilanciaFactura(), 'required' => false)) 
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -32,9 +34,13 @@ class ConfiguracionController extends Controller
             $strInformacionLegalFactura = $controles['informacionLegalFactura'];
             $strInformacionPagoFactura = $controles['informacionPagoFactura'];
             $strInformacionContactoFactura = $controles['informacionContactoFactura'];
+            $strInformacionResolucionDianFactura = $controles['informacionResolucionDianFactura'];
+            $strInformacionResolucionSupervigilanciaFactura = $controles['informacionResolucionSupervigilanciaFactura'];
             $arConfiguracion->setInformacionLegalFactura($strInformacionLegalFactura);
             $arConfiguracion->setInformacionPagoFactura($strInformacionPagoFactura);
             $arConfiguracion->setInformacionContactoFactura($strInformacionContactoFactura);
+            $arConfiguracion->setInformacionResolucionDianFactura($strInformacionResolucionDianFactura);
+            $arConfiguracion->setInformacionResolucionSupervigilanciaFactura($strInformacionResolucionSupervigilanciaFactura);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
             foreach ($arrControles['LblCodigo'] as $intCodigo) {

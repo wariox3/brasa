@@ -32,6 +32,16 @@ class TurConfiguracion
     private $informacionContactoFactura;    
     
     /**
+     * @ORM\Column(name="informacion_resolucion_dian_factura", type="text", nullable=true)
+     */    
+    private $informacionResolucionDianFactura;    
+    
+    /**
+     * @ORM\Column(name="informacion_resolucion_supervigilancia_factura", type="text", nullable=true)
+     */    
+    private $informacionResolucionSupervigilanciaFactura;    
+    
+    /**
      * Set codigoConfiguracionPk
      *
      * @param integer $codigoConfiguracionPk
@@ -125,5 +135,53 @@ class TurConfiguracion
     public function getInformacionContactoFactura()
     {
         return $this->informacionContactoFactura;
+    }
+
+    /**
+     * Set informacionResolucionDianFactura
+     *
+     * @param string $informacionResolucionDianFactura
+     *
+     * @return TurConfiguracion
+     */
+    public function setInformacionResolucionDianFactura($informacionResolucionDianFactura)
+    {
+        $this->informacionResolucionDianFactura = $informacionResolucionDianFactura;
+
+        return $this;
+    }
+
+    /**
+     * Get informacionResolucionDianFactura
+     *
+     * @return string
+     */
+    public function getInformacionResolucionDianFactura()
+    {
+        return $this->informacionResolucionDianFactura;
+    }
+
+    /**
+     * Set informacionResolucionSupervigilanciaFactura
+     *
+     * @param string $informacionResolucionSupervigilanciaFactura
+     *
+     * @return TurConfiguracion
+     */
+    public function setInformacionResolucionSupervigilanciaFactura($informacionResolucionSupervigilanciaFactura)
+    {
+        $this->informacionResolucionSupervigilanciaFactura = $informacionResolucionSupervigilanciaFactura;
+
+        return $this;
+    }
+
+    /**
+     * Get informacionResolucionSupervigilanciaFactura
+     *
+     * @return string
+     */
+    public function getInformacionResolucionSupervigilanciaFactura()
+    {
+        return $this->informacionResolucionSupervigilanciaFactura;
     }
 }

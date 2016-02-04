@@ -11,6 +11,9 @@ class MovimientoProgramacionController extends Controller
     var $codigoCliente = "";
     var $estadoAutorizado = "";
     var $estadoAnulado = "";
+    var $fechaDesde = "";
+    var $fechaHasta = "";
+    var $filtrarFecha = "";
 
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -245,10 +248,19 @@ class MovimientoProgramacionController extends Controller
 
     private function lista() {
         $em = $this->getDoctrine()->getManager();
+        $strFechaDesde = "";
+        $strFechaHasta = "";        
+        $filtrarFecha = $this->filtrarFecha;
+        if($filtrarFecha) {
+            $strFechaDesde = $this->fechaDesde;
+            $strFechaHasta = $this->fechaHasta;                    
+        }        
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacion')->listaDQL(
                 $this->numeroProgramacion, 
                 $this->codigoCliente, 
-                $this->estadoAutorizado, "", "",
+                $this->estadoAutorizado, 
+                $strFechaDesde, 
+                $strFechaHasta,
                 $this->estadoAnulado);
     }
 
@@ -256,14 +268,34 @@ class MovimientoProgramacionController extends Controller
         $this->numeroPedido = $form->get('TxtNumero')->getData();
         $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
         $this->estadoAnulado = $form->get('estadoAnulado')->getData();
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $this->fechaDesde = $dateFechaDesde->format('Y/m/d');
+        $this->fechaHasta = $dateFechaHasta->format('Y/m/d');   
+        $this->filtrarFecha = $form->get('filtrarFecha')->getData();        
     }
 
     private function formularioFiltro() {
         $session = $this->getRequest()->getSession();
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($this->fechaDesde != "") {
+            $strFechaDesde = $this->fechaDesde;
+        }
+        if($this->fechaHasta != "") {
+            $strFechaDesde = $this->fechaHasta;
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);        
         $form = $this->createFormBuilder()
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numeroProgramacion))
             ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))                
             ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $this->estadoAnulado))                
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', 'checkbox', array('required'  => false))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -312,6 +344,7 @@ class MovimientoProgramacionController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
@@ -323,9 +356,24 @@ class MovimientoProgramacionController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);        
+        for($col = 'A'; $col !== 'H'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+        }     
+        for($col = 'G'; $col !== 'H'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }        
+        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIG0')
-                    ->setCellValue('B1', 'CLIENTE');
+                    ->setCellValue('B1', 'AÑO')
+                    ->setCellValue('C1', 'MES')
+                    ->setCellValue('D1', 'CLIENTE')
+                    ->setCellValue('E1', 'AUT')
+                    ->setCellValue('F1', 'ANU')
+                    ->setCellValue('G1', 'HORAS');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -335,7 +383,12 @@ class MovimientoProgramacionController extends Controller
         foreach ($arProgramaciones as $arProgramacion) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arProgramacion->getCodigoProgramacionPk())
-                    ->setCellValue('B' . $i, $arProgramacion->getClienteRel()->getNombreCorto());
+                    ->setCellValue('B' . $i, $arProgramacion->getFecha()->format('Y'))
+                    ->setCellValue('C' . $i, $arProgramacion->getFecha()->format('F'))
+                    ->setCellValue('D' . $i, $arProgramacion->getClienteRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $objFunciones->devuelveBoolean($arProgramacion->getEstadoAutorizado()))
+                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arProgramacion->getEstadoAnulado()))
+                    ->setCellValue('G' . $i, $arProgramacion->getHoras());
 
             $i++;
         }
@@ -453,157 +506,188 @@ class MovimientoProgramacionController extends Controller
                 }
             }
             if($arrControles['TxtDia1'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia1($arrControles['TxtDia1'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia1'.$intCodigo]);
+                $arProgramacionDetalle->setDia1($strTurno);
             } else {
                 $arProgramacionDetalle->setDia1(null);
             }
             if($arrControles['TxtDia2'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia2($arrControles['TxtDia2'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia2'.$intCodigo]);
+                $arProgramacionDetalle->setDia2($strTurno);
             } else {
                 $arProgramacionDetalle->setDia2(null);
             }
             if($arrControles['TxtDia3'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia3($arrControles['TxtDia3'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia3'.$intCodigo]);
+                $arProgramacionDetalle->setDia3($strTurno);
             } else {
                 $arProgramacionDetalle->setDia3(null);
             }
             if($arrControles['TxtDia4'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia4($arrControles['TxtDia4'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia4'.$intCodigo]);
+                $arProgramacionDetalle->setDia4($strTurno);
             } else {
                 $arProgramacionDetalle->setDia4(null);
             }
             if($arrControles['TxtDia5'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia5($arrControles['TxtDia5'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia5'.$intCodigo]);
+                $arProgramacionDetalle->setDia5($strTurno);
             } else {
                 $arProgramacionDetalle->setDia5(null);
             }
             if($arrControles['TxtDia6'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia6($arrControles['TxtDia6'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia6'.$intCodigo]);
+                $arProgramacionDetalle->setDia6($strTurno);
             } else {
                 $arProgramacionDetalle->setDia6(null);
             }
             if($arrControles['TxtDia7'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia7($arrControles['TxtDia7'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia7'.$intCodigo]);
+                $arProgramacionDetalle->setDia7($strTurno);
             } else {
                 $arProgramacionDetalle->setDia7(null);
             }
             if($arrControles['TxtDia8'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia8($arrControles['TxtDia8'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia8'.$intCodigo]);
+                $arProgramacionDetalle->setDia8($strTurno);
             } else {
                 $arProgramacionDetalle->setDia8(null);
             }
             if($arrControles['TxtDia9'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia9($arrControles['TxtDia9'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia9'.$intCodigo]);
+                $arProgramacionDetalle->setDia9($strTurno);
             } else {
                 $arProgramacionDetalle->setDia9(null);
             }
             if($arrControles['TxtDia10'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia10($arrControles['TxtDia10'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia10'.$intCodigo]);
+                $arProgramacionDetalle->setDia10($strTurno);
             } else {
                 $arProgramacionDetalle->setDia10(null);
             }
             if($arrControles['TxtDia11'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia11($arrControles['TxtDia11'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia11'.$intCodigo]);
+                $arProgramacionDetalle->setDia11($strTurno);
             } else {
                 $arProgramacionDetalle->setDia11(null);
             }
             if($arrControles['TxtDia12'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia12($arrControles['TxtDia12'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia12'.$intCodigo]);
+                $arProgramacionDetalle->setDia12($strTurno);
             } else {
                 $arProgramacionDetalle->setDia12(null);
             }
             if($arrControles['TxtDia13'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia13($arrControles['TxtDia13'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia13'.$intCodigo]);
+                $arProgramacionDetalle->setDia13($strTurno);
             } else {
                 $arProgramacionDetalle->setDia13(null);
             }
             if($arrControles['TxtDia14'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia14($arrControles['TxtDia14'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia14'.$intCodigo]);
+                $arProgramacionDetalle->setDia14($strTurno);
             } else {
                 $arProgramacionDetalle->setDia14(null);
             }
             if($arrControles['TxtDia15'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia15($arrControles['TxtDia15'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia15'.$intCodigo]);
+                $arProgramacionDetalle->setDia15($strTurno);
             } else {
                 $arProgramacionDetalle->setDia15(null);
             }
             if($arrControles['TxtDia16'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia16($arrControles['TxtDia16'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia16'.$intCodigo]);
+                $arProgramacionDetalle->setDia16($strTurno);
             } else {
                 $arProgramacionDetalle->setDia16(null);
             }
             if($arrControles['TxtDia17'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia17($arrControles['TxtDia17'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia17'.$intCodigo]);
+                $arProgramacionDetalle->setDia17($strTurno);
             } else {
                 $arProgramacionDetalle->setDia17(null);
             }
             if($arrControles['TxtDia18'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia18($arrControles['TxtDia18'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia18'.$intCodigo]);
+                $arProgramacionDetalle->setDia18($strTurno);
             } else {
                 $arProgramacionDetalle->setDia18(null);
             }
             if($arrControles['TxtDia19'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia19($arrControles['TxtDia19'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia19'.$intCodigo]);
+                $arProgramacionDetalle->setDia19($strTurno);
             } else {
                 $arProgramacionDetalle->setDia19(null);
             }
             if($arrControles['TxtDia20'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia20($arrControles['TxtDia20'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia20'.$intCodigo]);
+                $arProgramacionDetalle->setDia20($strTurno);
             } else {
                 $arProgramacionDetalle->setDia20(null);
             }
             if($arrControles['TxtDia21'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia21($arrControles['TxtDia21'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia21'.$intCodigo]);
+                $arProgramacionDetalle->setDia21($strTurno);
             } else {
                 $arProgramacionDetalle->setDia21(null);
             }
             if($arrControles['TxtDia22'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia22($arrControles['TxtDia22'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia22'.$intCodigo]);
+                $arProgramacionDetalle->setDia22($strTurno);
             } else {
                 $arProgramacionDetalle->setDia22(null);
             }
             if($arrControles['TxtDia23'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia23($arrControles['TxtDia23'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia23'.$intCodigo]);
+                $arProgramacionDetalle->setDia23($strTurno);
             } else {
                 $arProgramacionDetalle->setDia23(null);
             }
             if($arrControles['TxtDia24'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia24($arrControles['TxtDia24'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia24'.$intCodigo]);
+                $arProgramacionDetalle->setDia24($strTurno);
             } else {
                 $arProgramacionDetalle->setDia24(null);
             }
             if($arrControles['TxtDia25'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia25($arrControles['TxtDia25'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia25'.$intCodigo]);
+                $arProgramacionDetalle->setDia25($strTurno);
             } else {
                 $arProgramacionDetalle->setDia25(null);
             }
             if($arrControles['TxtDia26'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia26($arrControles['TxtDia26'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia26'.$intCodigo]);
+                $arProgramacionDetalle->setDia26($strTurno);
             } else {
                 $arProgramacionDetalle->setDia26(null);
             }
             if($arrControles['TxtDia27'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia27($arrControles['TxtDia27'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia27'.$intCodigo]);
+                $arProgramacionDetalle->setDia27($strTurno);
             } else {
                 $arProgramacionDetalle->setDia27(null);
             }
             if($arrControles['TxtDia28'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia28($arrControles['TxtDia28'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia28'.$intCodigo]);
+                $arProgramacionDetalle->setDia28($strTurno);
             } else {
                 $arProgramacionDetalle->setDia28(null);
             }
             if($arrControles['TxtDia29'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia29($arrControles['TxtDia29'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia29'.$intCodigo]);
+                $arProgramacionDetalle->setDia29($strTurno);
             } else {
                 $arProgramacionDetalle->setDia29(null);
             }
             if($arrControles['TxtDia30'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia30($arrControles['TxtDia30'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia30'.$intCodigo]);
+                $arProgramacionDetalle->setDia30($strTurno);
             } else {
                 $arProgramacionDetalle->setDia30(null);
             }
             if($arrControles['TxtDia31'.$intCodigo] != '') {
-                $arProgramacionDetalle->setDia31($arrControles['TxtDia31'.$intCodigo]);
+                $strTurno = $this->validarTurno($arrControles['TxtDia31'.$intCodigo]);
+                $arProgramacionDetalle->setDia31($strTurno);
             } else {
                 $arProgramacionDetalle->setDia31(null);
             }
@@ -613,39 +697,19 @@ class MovimientoProgramacionController extends Controller
         $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
     }   
     
-    private function devuelveTurnosMes($arPlantillaDetalle) {
-        $arrTurnos = array(
-            '1' => $arPlantillaDetalle->getDia1(),
-            '2' => $arPlantillaDetalle->getDia2(),
-            '3' => $arPlantillaDetalle->getDia3(),
-            '4' => $arPlantillaDetalle->getDia4(),
-            '5' => $arPlantillaDetalle->getDia5(),
-            '6' => $arPlantillaDetalle->getDia6(),
-            '7' => $arPlantillaDetalle->getDia7(),
-            '8' => $arPlantillaDetalle->getDia8(),
-            '9' => $arPlantillaDetalle->getDia9(),
-            '10' => $arPlantillaDetalle->getDia10(),
-            '11' => $arPlantillaDetalle->getDia11(),
-            '12' => $arPlantillaDetalle->getDia12(),
-            '13' => $arPlantillaDetalle->getDia13(),
-            '14' => $arPlantillaDetalle->getDia14(),
-            '15' => $arPlantillaDetalle->getDia15(),
-            '16' => $arPlantillaDetalle->getDia16(),
-            '17' => $arPlantillaDetalle->getDia17(),
-            '18' => $arPlantillaDetalle->getDia18(),
-            '19' => $arPlantillaDetalle->getDia19(),
-            '20' => $arPlantillaDetalle->getDia20(),
-            '21' => $arPlantillaDetalle->getDia21(),
-            '22' => $arPlantillaDetalle->getDia22(),
-            '23' => $arPlantillaDetalle->getDia23(),
-            '24' => $arPlantillaDetalle->getDia24(),
-            '25' => $arPlantillaDetalle->getDia25(),
-            '26' => $arPlantillaDetalle->getDia26(),
-            '27' => $arPlantillaDetalle->getDia27(),
-            '28' => $arPlantillaDetalle->getDia28(),
-            '29' => $arPlantillaDetalle->getDia29(),
-            '30' => $arPlantillaDetalle->getDia30(),
-            '31' => $arPlantillaDetalle->getDia31(),);        
-        return $arrTurnos;
+    private function validarTurno($strTurno) {
+        $em = $this->getDoctrine()->getManager();
+        $strTurnoDevolver = NUll;
+        if($strTurno != "") {
+            $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
+            $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurno);            
+            if($arTurno) {
+                $strTurnoDevolver = $strTurno;
+            }
+        }
+        
+        return $strTurnoDevolver;
     }
+    
+   
 }

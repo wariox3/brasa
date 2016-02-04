@@ -146,6 +146,10 @@ brs_tur_pedido_detalle_nuevo_servicio:
    path:     /tur/pedido/detalle/nuevo/servicio/{codigoPedido}/{codigoPedidoDetalle}
    defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalleNuevoServicio } 
 
+brs_tur_pedido_detalle_resumen:
+   path:     /tur/pedido/detalle/resumen/{codigoPedidoDetalle}
+   defaults: { _controller: BrasaTurnoBundle:MovimientoPedido:detalleResumen }
+
 brs_tur_servicio_lista:
    path:     /tur/servicio/lista
    defaults: { _controller: BrasaTurnoBundle:MovimientoServicio:lista } 

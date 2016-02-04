@@ -197,6 +197,7 @@ class MovimientoPedidoController extends Controller
         if($codigoPedidoDetalle != 0) {
             $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
         } else {
+            $arPedidoDetalle->setFechaIniciaPlantilla($arPedido->getFechaProgramacion());
             $arPedidoDetalle->setPedidoRel($arPedido);
             $arPedidoDetalle->setCantidad(1);
             $arPedidoDetalle->setLunes(true);
@@ -515,6 +516,22 @@ class MovimientoPedidoController extends Controller
             'arPedidoDetalle' => $arPedidoDetalle,
             'form' => $form->createView()));
     }                
+    
+    public function detalleResumenAction($codigoPedidoDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();        
+        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
+        $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();       
+        $arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle));
+        $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();       
+        $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle));        
+        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleResumen.html.twig', array(
+                    'arPedidoDetalle' => $arPedidoDetalle,
+                    'arFacturaDetalles' => $arFacturaDetalles,
+                    'arProgramacionDetalles' => $arProgramacionDetalles
+                    ));
+    }    
     
     private function lista() {        
         $em = $this->getDoctrine()->getManager();

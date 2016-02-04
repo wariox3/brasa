@@ -30,7 +30,7 @@ class TurServicioDetalleType extends AbstractType
                 'class' => 'BrasaTurnoBundle:TurModalidadServicio',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ms')
-                    ->orderBy('ms.codigoModalidadServicioPk', 'ASC');},
+                    ->orderBy('ms.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                             
             ->add('cantidad', 'number')

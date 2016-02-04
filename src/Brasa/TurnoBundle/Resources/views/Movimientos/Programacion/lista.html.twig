@@ -47,13 +47,32 @@
                     </div>                    
                 </div> 
                 <div class="form-group form-group-sm">  
-                    <label for="form_TxtNumero" class="col-sm-2 control-label"></label>
-                    <div class="col-sm-4">
-                        
+                    <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
+                    <div class="col-sm-4">  
+                        {{ form_widget(form.fechaDesde) }}
                     </div>
                     <label for="form_estadoAnulado" class="col-sm-2 control-label">Anulado:</label>
                     <div class="col-sm-4">                  
                         {{ form_widget(form.estadoAnulado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div>  
+                <div class="form-group form-group-sm">  
+                    <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
+                    <div class="col-sm-4">   
+                        {{ form_widget(form.fechaHasta) }}
+                    </div>
+                    <label for="form_estadoFacturado" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                                         
+                    </div>                    
+                </div>  
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtNumero" class="col-sm-2 control-label">Filtrar por fecha:</label>
+                    <div class="col-sm-4"> 
+                        {{ form_widget(form.filtrarFecha) }}
+                    </div>
+                    <label for="form_estadoAnulado" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                  
+                        
                     </div>                    
                 </div>                    
                 <div class="form-group form-group-sm">

@@ -1,48 +1,59 @@
 <?php
+
 namespace Brasa\TurnoBundle\Formatos;
+
 class FormatoFactura extends \FPDF_FPDF {
+
     public static $em;
     public static $codigoFactura;
     public static $strLetras;
-    public function Generar($miThis, $codigoFactura) {                
-       
+
+    public function Generar($miThis, $codigoFactura) {
+
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoFactura = $codigoFactura;
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
-        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);        
-        $arrayNumero = explode(".", 0,2);
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
+        $arrayNumero = explode(".", 0, 2);
         $intCentavos = 0;
-        if(count($arrayNumero) > 1)
+        if (count($arrayNumero) > 1)
             $intCentavos = substr($arrayNumero[1], $arFactura->getVrTotal(), 2);
-        $strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getVrTotal()) . " con " . \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($intCentavos);        
+        $strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getVrTotal()) . " con " . \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($intCentavos);
         self::$strLetras = $strLetras;
-        ob_clean();        
+        ob_clean();
         $pdf = new FormatoFactura();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("Factura$codigoFactura.pdf", 'D');        
-        
-    } 
-    
+        $pdf->Output("Factura$codigoFactura.pdf", 'D');
+    }
+
     public function Header() {
         $this->GenerarEncabezadoFactura(self::$em);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arConfiguracionTurno = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
+        $arConfiguracionTurno = self::$em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura = self::$em->getRepository('BrasaTurnoBundle:TurFactura')->find(self::$codigoFactura);
+        $this->SetXY(10, 10);
+        $this->Cell(195, 268, '', 1, 0, 'L');
+
+        $this->SetFont('Arial', '', 7);
+        $this->SetXY(110, 75);
+        $this->MultiCell(140, 3, $arConfiguracionTurno->getInformacionResolucionDianFactura(), 0, 'L');
 
         $this->SetFont('Arial', 'B', 9);
-        
+
         $this->SetMargins(10, 1, 10);
         //$this->Rect(4, 40, 130, 20);
         $this->ln(1);
         $this->SetY(48);
         $this->SetFont('Arial', 'B', 10);
-        $this->Cell(10, 3, 'CLIENTE', 0, 0, 'L');    
+        $this->Cell(10, 3, 'CLIENTE', 0, 0, 'L');
         $this->SetY(50);
         $this->Ln();
         $this->Ln(1);
@@ -53,11 +64,11 @@ class FormatoFactura extends \FPDF_FPDF {
             $this->Ln(4);
         }
 
-        $Datos = array($arFactura->getClienteRel()->getNombreCorto(), 
-            $arFactura->getClienteRel()->getNit() . "-" . $arFactura->getClienteRel()->getDigitoVerificacion(), 
-            $arFactura->getClienteRel()->getTelefono(), 
-            $arFactura->getClienteRel()->getDireccion(), 
-            $arFactura->getClienteRel()->getSectorRel()->getNombre(), 
+        $Datos = array($arFactura->getClienteRel()->getNombreCorto(),
+            $arFactura->getClienteRel()->getNit() . "-" . $arFactura->getClienteRel()->getDigitoVerificacion(),
+            $arFactura->getClienteRel()->getTelefono(),
+            $arFactura->getClienteRel()->getDireccion(),
+            $arFactura->getClienteRel()->getSectorRel()->getNombre(),
             $arFactura->getClienteRel()->getEstrato());
         $this->SetFont('Arial', '', 8);
         $this->SetY(54);
@@ -67,13 +78,13 @@ class FormatoFactura extends \FPDF_FPDF {
             $this->Cell(50, 4, $col, 0, 'L');
             $this->Ln(4);
         }
-        
+
         //$this->SetMargins(4, 1, 10);
         //$this->Rect(135, 26, 73, 20);
         $this->ln(1);
         $this->SetY(27);
-        
-        $List1 = array('FACTURA DE VENTA','Fecha emision:','Fecha vencimiento:', 'Forma pago:', 'Plazo:', 'Soporte:');
+
+        $List1 = array('FACTURA DE VENTA', 'Fecha emision:', 'Fecha vencimiento:', 'Forma pago:', 'Plazo:', 'Soporte:');
         $this->SetFont('Arial', 'B', 8);
         foreach ($List1 as $col) {
             $this->SetX(150);
@@ -82,10 +93,10 @@ class FormatoFactura extends \FPDF_FPDF {
         }
 
         $List1 = array($arFactura->getNumero(),
-            $arFactura->getFecha()->format('Y-m-d'), 
-            $arFactura->getFechaVence()->format('Y-m-d'), 
-            $arFactura->getClienteRel()->getFormaPagoRel()->getNombre(), 
-            $arFactura->getClienteRel()->getPlazoPago(), 
+            $arFactura->getFecha()->format('Y-m-d'),
+            $arFactura->getFechaVence()->format('Y-m-d'),
+            $arFactura->getClienteRel()->getFormaPagoRel()->getNombre(),
+            $arFactura->getClienteRel()->getPlazoPago(),
             $arFactura->getSoporte());
         $this->SetFont('Arial', '', 8);
         $this->SetY(27);
@@ -95,9 +106,9 @@ class FormatoFactura extends \FPDF_FPDF {
             $this->Ln();
         }
         $this->SetY(48);
-        $arrayTexto = array($arFactura->getClienteDireccionRel()->getNombre(), 
-            $arFactura->getClienteDireccionRel()->getCiudadRel()->getNombre(), 
-            $arFactura->getClienteDireccionRel()->getDireccion(), 
+        $arrayTexto = array($arFactura->getClienteDireccionRel()->getNombre(),
+            $arFactura->getClienteDireccionRel()->getCiudadRel()->getNombre(),
+            $arFactura->getClienteDireccionRel()->getDireccion(),
             $arFactura->getClienteDireccionRel()->getBarrio());
         $this->SetX(110);
         $this->SetFont('Arial', 'B', 10);
@@ -111,14 +122,13 @@ class FormatoFactura extends \FPDF_FPDF {
             $this->Cell(10, 4, $col, 0, 0, 'L');
             $this->Ln();
         }
-        
+
         $this->EncabezadoDetalles();
-        
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(14);
-        $header = array('CODIGO', 'PEDIDO', 'SERVICIO', 'MES', 'DES', 'HAS', 'CANTIDAD', 'VALOR');
+        $header = array('CODIGO', 'DETALLE', 'PEDIDO', 'CANTIDAD', 'VALOR');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -126,9 +136,9 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(15, 40, 45, 30, 10, 10, 15,30);
+        $w = array(15, 125, 10, 15, 30);
         for ($i = 0; $i < count($header); $i++)
-            if ($i == 0 )
+            if ($i == 0)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
             else
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
@@ -145,25 +155,68 @@ class FormatoFactura extends \FPDF_FPDF {
         $arFacturaDetalles = self::$em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
-        foreach ($arFacturaDetalles as $arFacturaDetalle) {            
+        foreach ($arFacturaDetalles as $arFacturaDetalle) {
+            $strDetalle = "SERVICIO " . $arFacturaDetalle->getConceptoServicioRel()->getNombre() . " DESDE DIA " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaDesde()
+                    . " HASTA EL DIA " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaHasta() . " DE " .
+            $this->devuelveMes($arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('n'));
             $pdf->Cell(15, 4, $arFacturaDetalle->getCodigoFacturaDetallePk(), 1, 0, 'L');
-            $pdf->Cell(40, 4, $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getNumero(), 1, 0, 'L');
-            $pdf->Cell(45, 4, $arFacturaDetalle->getConceptoServicioRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(30, 4, $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('m'), 1, 0, 'L');
-            $pdf->Cell(10, 4, $arFacturaDetalle->getPedidoDetalleRel()->getDiaDesde(), 1, 0, 'L');
-            $pdf->Cell(10, 4, $arFacturaDetalle->getPedidoDetalleRel()->getDiaHasta(), 1, 0, 'L');            
-            $pdf->Cell(15, 4, number_format($arFacturaDetalle->getCantidad(), 0, '.', ','), 1, 0, 'R');                            
-            $pdf->Cell(30, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 1, 0, 'R');                
+            $pdf->Cell(125, 4, $strDetalle, 1, 0, 'L');
+            $pdf->Cell(10, 4, $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getNumero(), 1, 0, 'L');
+            $pdf->Cell(15, 4, number_format($arFacturaDetalle->getCantidad(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(30, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
     }
 
-    public function Footer() {        
+    public function devuelveMes($intMes) {
+        $strMes = "";
+        switch ($intMes) {
+            case 1:
+                $strMes = "ENERO";
+                break;
+            case 2:
+                $strMes = "FEBRERO";
+                break;
+            case 3:
+                $strMes = "MARZO";
+                break;
+            case 4:
+                $strMes = "ABRIL";
+                break;
+            case 5:
+                $strMes = "MAYO";
+                break;
+            case 6:
+                $strMes = "JUNIO";
+                break;
+            case 7:
+                $strMes = "JULIO";
+                break;
+            case 8:
+                $strMes = "AGOSTO";
+                break;
+            case 9:
+                $strMes = "SEPTIEMBRE";
+                break;
+            case 10:
+                $strMes = "OCTUBRE";
+                break;
+            case 11:
+                $strMes = "NOVIEMBRE";
+                break;
+            case 12:
+                $strMes = "DICIEMBRE";
+                break;
+        }
+        return $strMes;
+    }
+
+    public function Footer() {
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
-        $arFactura = self::$em->getRepository('BrasaTurnoBundle:TurFactura')->find(self::$codigoFactura);    
+        $arFactura = self::$em->getRepository('BrasaTurnoBundle:TurFactura')->find(self::$codigoFactura);
         $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
-        $arConfiguracion = self::$em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);            
+        $arConfiguracion = self::$em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
         $this->SetY(180);
         $this->line(10, $this->GetY() + 5, 205, $this->GetY() + 5);
 
@@ -212,29 +265,35 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->SetX(10);
         $this->SetFont('Arial', '', 8);
         $this->MultiCell(140, 3, $arFactura->getComentarios(), 0, 'L');
-        
-        $arrayNumero = explode(".", 0,2);
+
+        $arrayNumero = explode(".", 0, 2);
         $intCentavos = 0;
-        if(count($arrayNumero) > 1)
+        if (count($arrayNumero) > 1)
             $intCentavos = substr($arrayNumero[1], 0, 2);
         $strLetras = "";
         //$strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getVrTotal()) . " con " . \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($intCentavos);
         $this->SetFont('Arial', 'B', 6);
-        $this->Text(12, 224, "SON : " . substr(strtoupper(self::$strLetras),0,96));
+        $this->Text(12, 224, "SON : " . substr(strtoupper(self::$strLetras), 0, 96));
         $this->Ln();
 
         //$Text = array($arConfiguracion->getInformacionLegalFactura());
-        
-        $this->SetFont('Arial', '', 6);        
+
+        $this->SetFont('Arial', '', 6);
         $this->GetY($this->SetY(228));
         $this->SetX(10);
-        $this->MultiCell(90,3,$arConfiguracion->getInformacionLegalFactura());       
-        
+        $this->MultiCell(90, 3, $arConfiguracion->getInformacionLegalFactura());
+
+
+        $this->SetFont('Arial', '', 7);
+        $this->GetY($this->SetY(255));
+        $this->SetX(10);
+        $this->MultiCell(90, 3, $arConfiguracion->getInformacionResolucionSupervigilanciaFactura(), 0, 'L');
+
         $this->GetY($this->SetY(235));
         $this->SetX(10);
         $this->SetFont('Arial', 'B', 6);
         $this->Cell(0, 0, $this->line(100, $this->GetY() + 15, 150, $this->GetY() + 15) . $this->Text(100, $this->GetY() + 18, "AUTORIZADO"));
-        $this->Cell(0, 0, $this->line(154, $this->GetY() + 15, 205, $this->GetY() + 15) . $this->Text(154, $this->GetY() + 18, "FIRMA DE RECIBIDO"));        
+        $this->Cell(0, 0, $this->line(154, $this->GetY() + 15, 205, $this->GetY() + 15) . $this->Text(154, $this->GetY() + 18, "RECIBI (Nombre y firma)"));
 
         $this->line(10, 260, 205, 260);
         $this->SetFont('Arial', '', 7);
@@ -242,32 +301,33 @@ class FormatoFactura extends \FPDF_FPDF {
         $this->Ln();
         $this->line(10, 269, 205, 269);
 
-        
-    
-        $this->Ln(3);        
+
+
+        $this->Ln(3);
         $this->SetFont('Arial', 'B', 8);
-        $this->Text(20, $this->GetY($this->SetY(264)), $arConfiguracion->getInformacionPagoFactura());                
+        $this->Text(20, $this->GetY($this->SetY(264)), $arConfiguracion->getInformacionPagoFactura());
         $this->SetFont('Arial', '', 7);
         $this->Text(60, $this->GetY($this->SetY(267)), $arConfiguracion->getInformacionContactoFactura());
-        
+
         //Número de página
-        $this->Text(190, 273, 'Pagina ' . $this->PageNo() . ' de {nb}');
-    }    
-    
+        $this->Text(188, 273, 'Pagina ' . $this->PageNo() . ' de {nb}');
+    }
+
     public function GenerarEncabezadoFactura($em) {
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);          
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
 
         $this->SetFont('Arial', '', 5);
-        $this->Text(170, 10, date('d-m-Y H:i:s') . ' [sogaApp - turnos]');
+        $this->Text(188, 13, ' [sogaApp - turnos]');
         $this->Image('imagenes/logos/logo.jpg', 15, 15, 35, 17);
-        $this->ln(11);       
+        $this->ln(11);
         $this->SetFont('Arial', 'B', 12);
         $this->ln(5);
         $this->SetFont('Arial', 'B', 10);
-        $this->Text(21,35, "NIT " . $arConfiguracion->getNitEmpresa() . "-" . $arConfiguracion->getDigitoVerificacionEmpresa());
+        $this->Text(21, 35, "NIT " . $arConfiguracion->getNitEmpresa() . "-" . $arConfiguracion->getDigitoVerificacionEmpresa());
         $this->SetXY(258, 18);
-    }     
+    }
+
 }
 
 ?>

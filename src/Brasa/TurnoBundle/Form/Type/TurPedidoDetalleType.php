@@ -30,7 +30,7 @@ class TurPedidoDetalleType extends AbstractType
                 'class' => 'BrasaTurnoBundle:TurModalidadServicio',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ms')
-                    ->orderBy('ms.nombre', 'ASC');},
+                    ->orderBy('ms.nombre', 'DESC');},
                 'property' => 'nombre',
                 'required' => true))  
             ->add('periodoRel', 'entity', array(
