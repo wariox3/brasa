@@ -35,7 +35,12 @@ class RhuExamen
     /**
      * @ORM\Column(name="codigo_factura_fk", type="integer", nullable=true)
      */    
-    private $codigoFacturaFk;    
+    private $codigoFacturaFk;
+
+    /**
+     * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCargoFk;
     
     /**
      * @ORM\Column(name="fecha", type="date")
@@ -152,7 +157,14 @@ class RhuExamen
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="examenesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
-    protected $empleadoRel;    
+    protected $empleadoRel;
+
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="examenesCargoRel")
+     * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
+     */
+    protected $cargoRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuExamenDetalle", mappedBy="examenRel")
@@ -280,6 +292,30 @@ class RhuExamen
     public function getCodigoFacturaFk()
     {
         return $this->codigoFacturaFk;
+    }
+
+    /**
+     * Set codigoCargoFk
+     *
+     * @param integer $codigoCargoFk
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoCargoFk($codigoCargoFk)
+    {
+        $this->codigoCargoFk = $codigoCargoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCargoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCargoFk()
+    {
+        return $this->codigoCargoFk;
     }
 
     /**
@@ -808,6 +844,30 @@ class RhuExamen
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set cargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
+     *
+     * @return RhuExamen
+     */
+    public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
+    {
+        $this->cargoRel = $cargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargo
+     */
+    public function getCargoRel()
+    {
+        return $this->cargoRel;
     }
 
     /**

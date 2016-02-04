@@ -61,6 +61,18 @@ class RhuCargo
      * @ORM\OneToMany(targetEntity="RhuPermiso", mappedBy="cargoRel")
      */
     protected $permisosCargoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="cargoRel")
+     */
+    protected $examenesCargoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="cargoRel")
+     */
+    protected $seleccionesCargoRel;
+    
+    
     /**
      * Constructor
      */
@@ -74,6 +86,8 @@ class RhuCargo
         $this->desempenosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesRequisitosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->permisosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->examenesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -380,5 +394,73 @@ class RhuCargo
     public function getPermisosCargoRel()
     {
         return $this->permisosCargoRel;
+    }
+
+    /**
+     * Add examenesCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addExamenesCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCargoRel)
+    {
+        $this->examenesCargoRel[] = $examenesCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove examenesCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCargoRel
+     */
+    public function removeExamenesCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCargoRel)
+    {
+        $this->examenesCargoRel->removeElement($examenesCargoRel);
+    }
+
+    /**
+     * Get examenesCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExamenesCargoRel()
+    {
+        return $this->examenesCargoRel;
+    }
+
+    /**
+     * Add seleccionesCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addSeleccionesCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesCargoRel)
+    {
+        $this->seleccionesCargoRel[] = $seleccionesCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesCargoRel
+     */
+    public function removeSeleccionesCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesCargoRel)
+    {
+        $this->seleccionesCargoRel->removeElement($seleccionesCargoRel);
+    }
+
+    /**
+     * Get seleccionesCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesCargoRel()
+    {
+        return $this->seleccionesCargoRel;
     }
 }

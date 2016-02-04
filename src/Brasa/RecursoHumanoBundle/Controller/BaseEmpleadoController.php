@@ -365,6 +365,7 @@ class BaseEmpleadoController extends Controller
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
+            ->add('estadoContratado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO')))    
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -383,6 +384,7 @@ class BaseEmpleadoController extends Controller
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroEmpleadoActivo', $form->get('estadoActivo')->getData());
+        $session->set('filtroEmpleadoContratado', $form->get('estadoContratado')->getData());
     }
 
     private function listar() {
@@ -393,7 +395,8 @@ class BaseEmpleadoController extends Controller
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroEmpleadoActivo'),
                 $session->get('filtroIdentificacion'),
-                ""
+                "",
+                $session->get('filtroEmpleadoContratado')
                 );
     }
 

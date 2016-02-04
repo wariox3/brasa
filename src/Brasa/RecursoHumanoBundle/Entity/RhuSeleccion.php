@@ -132,6 +132,11 @@ class RhuSeleccion
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */
     private $codigoCentroCostoFk;
+    
+    /**
+     * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCargoFk;
 
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -187,6 +192,8 @@ class RhuSeleccion
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */
     private $estadoAutorizado = 0;
+    
+    
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionTipo", inversedBy="seleccionesSeleccionTipoRel")
@@ -248,6 +255,12 @@ class RhuSeleccion
      * @ORM\JoinColumn(name="codigo_factura_fk", referencedColumnName="codigo_factura_pk")
      */
     protected $facturaRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="seleccionesCargoRel")
+     * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
+     */
+    protected $cargoRel;
 
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionReferencia", mappedBy="seleccionRel")
@@ -263,8 +276,7 @@ class RhuSeleccion
      * @ORM\OneToMany(targetEntity="RhuSeleccionVisita", mappedBy="seleccionRel")
      */
     protected $seleccionesVisitasSeleccionRel;
-
-
+    
     
     /**
      * Constructor
@@ -839,6 +851,30 @@ class RhuSeleccion
     }
 
     /**
+     * Set codigoCargoFk
+     *
+     * @param integer $codigoCargoFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoCargoFk($codigoCargoFk)
+    {
+        $this->codigoCargoFk = $codigoCargoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCargoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCargoFk()
+    {
+        return $this->codigoCargoFk;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -1340,6 +1376,30 @@ class RhuSeleccion
     public function getFacturaRel()
     {
         return $this->facturaRel;
+    }
+
+    /**
+     * Set cargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
+    {
+        $this->cargoRel = $cargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargo
+     */
+    public function getCargoRel()
+    {
+        return $this->cargoRel;
     }
 
     /**

@@ -73,6 +73,13 @@ class RhuSeleccionType extends AbstractType
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
+            ->add('cargoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))
             ->add('nombre1', 'text', array('required' => true))
             ->add('nombre2', 'text', array('required' => false))

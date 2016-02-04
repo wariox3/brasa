@@ -116,6 +116,7 @@ class RhuSeleccionRepository extends EntityRepository {
                 $arSeleccion->setReferenciasVerificadas(1);
                 $arSeleccion->setEstadoAprobado(1);
                 $arSeleccion->setPresentaPruebas(1);
+                $arSeleccion->setEstadoCerrado(1);
 
                 //Se inserta la seleccion aprobada en la entidad examen
                 $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
