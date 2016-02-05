@@ -156,9 +156,9 @@ class FormatoFactura extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arFacturaDetalles as $arFacturaDetalle) {
-            $strDetalle = "SERVICIO " . $arFacturaDetalle->getConceptoServicioRel()->getNombre() . " DESDE DIA " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaDesde()
+            $strDetalle = "SERVICIO " . $arFacturaDetalle->getConceptoServicioRel()->getNombre() . " DESDE EL DIA " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaDesde()
                     . " HASTA EL DIA " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaHasta() . " DE " .
-            $this->devuelveMes($arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('n'));
+            $this->devuelveMes($arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('n')) . " " . $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('Y');
             $pdf->Cell(15, 4, $arFacturaDetalle->getCodigoFacturaDetallePk(), 1, 0, 'L');
             $pdf->Cell(125, 4, $strDetalle, 1, 0, 'L');
             $pdf->Cell(10, 4, $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getNumero(), 1, 0, 'L');
