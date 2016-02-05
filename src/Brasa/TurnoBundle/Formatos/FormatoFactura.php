@@ -19,7 +19,7 @@ class FormatoFactura extends \FPDF_FPDF {
         $intCentavos = 0;
         if (count($arrayNumero) > 1)
             $intCentavos = substr($arrayNumero[1], $arFactura->getVrTotal(), 2);
-        $strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getVrTotal()) . " con " . \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($intCentavos);
+        $strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getVrTotal());
         self::$strLetras = $strLetras;
         ob_clean();
         $pdf = new FormatoFactura();
