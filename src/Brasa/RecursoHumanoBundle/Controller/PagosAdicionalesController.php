@@ -402,64 +402,6 @@ class PagosAdicionalesController extends Controller
             'form' => $form->createView()
             ));
     }
-
-    public function editarAction($codigoAdicionalPago) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $arAdicionalPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        if ($codigoAdicionalPago != 0)
-        {
-            $arAdicionalPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoAdicionalPago);
-        }    
-        $form = $this->createForm(new RhuAdicionalPagoType(), $arAdicionalPago);
-        $form->handleRequest($request);
-        if ($form->isValid())
-        {
-            // guardar la tarea en la base de datos
-            
-            $arAdicionalPago = $form->getData();
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arAdicionalPago->getCodigoEmpleadoFk());
-            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arAdicionalPago->getCodigoPagoConceptoFk());
-            $arAdicionalPago->setEmpleadoRel($arEmpleado);
-            $arAdicionalPago->setPagoConceptoRel($arPagoConcepto);
-            $em->persist($arAdicionalPago);
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:editar.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-    
-    public function editarAdicionalAction($codigoAdicionalPago) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $arAdicionalPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        if ($codigoAdicionalPago != 0)
-        {
-            $arAdicionalPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoAdicionalPago);
-        }    
-        $form = $this->createForm(new RhuAdicionalPagoType(), $arAdicionalPago);
-        $form->handleRequest($request);
-        if ($form->isValid())
-        {
-            // guardar la tarea en la base de datos
-            
-            $arAdicionalPago = $form->getData();
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arAdicionalPago->getCodigoEmpleadoFk());
-            //$arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($form->get('pagoConceptoRel')->getData());
-            $arAdicionalPago->setEmpleadoRel($arEmpleado);
-            $arAdicionalPago->setPagoConceptoRel($form->get('pagoConceptoRel')->getData());
-            $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
-            $arAdicionalPago->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-            $em->persist($arAdicionalPago);
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:editarAdicional.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
     
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();

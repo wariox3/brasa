@@ -1,9 +1,9 @@
-{% extends '::base.html.twig' %}
+{% extends '::base_sin_menu.html.twig' %}
 {% block title %}Adicional al pago editar - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
-    <p class="description"><h3 >Agregar {% if tipo == 1 %}bonificación{% endif %}{% if tipo == 2 %}descuento{% endif %}{% if tipo == 3 %}comisión{% endif %}</h3></p>
+    <p class="description"><h3>Agregar concepto</h3></p>
     <div class="panel panel-default">
         <div class="panel-heading">Información general</div>
         <div class="panel-body">
@@ -20,9 +20,9 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_TxtValor" class="col-sm-3 control-label">Valor:</label>
+                <label for="form_TxtCantidad" class="col-sm-3 control-label">Cantidad:</label>
                 <div class="col-sm-9">
-                        {{ form_widget(form.TxtValor, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.TxtCantidad, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>    
             <div class="form-group form-group-sm">
@@ -30,19 +30,11 @@
                 <div class="col-sm-9">
                         {{ form_widget(form.TxtDetalle, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_aplicaDiaLaborado" class="col-sm-3 control-label">Aplica día:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.aplicaDiaLaborado, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control','autofocus':'autofocus'} }) }}
-                </div>
             </div>    
         </div>
     </div>            
     <div class="modal-footer">              
-        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_lista') }}">Cancelar</a>
-        {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
-        {{ form_widget(form.BtnGuardaryNuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}            
+        {{ form_widget(form.BtnAgregar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>    
     {{ form_end(form) }}
 </div>

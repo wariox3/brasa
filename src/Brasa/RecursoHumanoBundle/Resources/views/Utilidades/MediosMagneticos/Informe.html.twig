@@ -24,7 +24,7 @@
             <div class="form-group form-group-sm">
                 <label for="form_formatos" class="col-sm-2 control-label">Formatos:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(form.formatos, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                        {{ form_widget(form.formatos, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
             </div>      
         </div>

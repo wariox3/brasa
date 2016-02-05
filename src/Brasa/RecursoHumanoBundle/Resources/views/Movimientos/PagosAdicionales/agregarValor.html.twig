@@ -2,7 +2,7 @@
 {% block title %}Adicionales al pago agregar valor - Soga App{% endblock %}
 {% block content %}
     <div class="container">
-        <p class="description"><h3 >Agregar</h3></p>
+        <p class="description"><h3 >Agregar {% if tipo == 1 %}bonificación{% endif %}{% if tipo == 2 %}descuento{% endif %}{% if tipo == 3 %}comisión{% endif %}</h3></p>
         {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
             <div class="panel panel-default">
                 <div class="panel-heading">Datos empleado</div>

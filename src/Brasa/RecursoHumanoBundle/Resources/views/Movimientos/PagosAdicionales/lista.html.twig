@@ -78,7 +78,11 @@
                 <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
                 <td>{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>                        
                 <td>{% if arPagosAdicionales.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>                        
-                <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicionaleditar', { 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                {% if  arPagosAdicionales.tipoAdicional != 4 %}
+                    <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicionaleditar', { 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
+                {% else %}
+                    <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_agregar_tiempoadicionaleditar', { 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                {% endif %}
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}" /></td>
             </tr>
             {% endfor %}

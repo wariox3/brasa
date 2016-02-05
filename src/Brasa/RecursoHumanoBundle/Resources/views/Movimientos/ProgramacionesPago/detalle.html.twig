@@ -95,8 +95,12 @@
                     <td>{{ arPagosAdicionales.empleadoRel.nombreCorto }}</td>
                     <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>
                     <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>
-                    <td>{% if arPagosAdicionales.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>
-                    <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valoreditar', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}', 'EditarAdicionalPago', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                    <td>{% if arPagosAdicionales.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>                    
+                    {% if  arPagosAdicionales.tipoAdicional != 4 %}
+                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valoreditar', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}', 'EditarAdicionalPago', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                    {% else %}    
+                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_tiempoeditar', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}', 'EditarAdicionalPago', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                    {% endif %}
                     <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}" /></td>
                 </tr>
                 {% endfor %}

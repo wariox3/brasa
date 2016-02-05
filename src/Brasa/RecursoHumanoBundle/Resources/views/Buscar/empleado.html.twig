@@ -23,7 +23,7 @@
                 <div class="form-group form-group-sm">  
                     <label for="form_TxtNombre" class="col-sm-2 control-label">Nombre:</label>
                     <div class="col-sm-6">                  
-                        {{ form_widget(form.TxtNombre , { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.TxtNombre , { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                     </div>
                     <label for="form_TxtIdentificacion" class="col-sm-2 control-label">Identificación:</label>
                     <div class="col-sm-2">                  
@@ -32,7 +32,7 @@
                 </div>  
                      
                 <div class="form-group form-group-sm">  
-                    <label for="form_centroCostoRel" class="col-sm-2 control-label">C. Costo:</label>
+                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro Costo:</label>
                     <div class="col-sm-6">                  
                         {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>

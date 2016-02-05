@@ -144,7 +144,11 @@ brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle:
 
 brs_rhu_pagos_adicionales_agregar_tiempo:
     path:     /rhu/pagos/adicionales/agregar/tiempo/{codigoProgramacionPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempo }
+    
+brs_rhu_pagos_adicionales_agregar_tiempoeditar:
+    path:     /rhu/pagos/adicionales/agregar/tiempoeditar/{codigoProgramacionPago}/{tipo}/{codigoPagoAdicional}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempoEditar }    
 
 brs_rhu_pagos_adicionales_agregar_valor:
     path:     /rhu/pagos/adicionales/agregar/valor/{codigoProgramacionPago}/{tipo}
@@ -164,15 +168,11 @@ brs_rhu_pagos_adicionales_agregar_valoradicional:
     
 brs_rhu_pagos_adicionales_agregar_tiempoadicional:
     path:     /rhu/pagos/adicionales/agregar/tiempoadicional/
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempoAdicional }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempoAdicional } 
     
-brs_rhu_pago_adicional_editar:
-    path:     /rhu/pago/adicional/editar/{codigoAdicionalPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:editar }
-    
-brs_rhu_pago_adicional_editaradicional:
-    path:     /rhu/pago/adicional/editaradicional/{codigoAdicionalPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:editarAdicional }    
+brs_rhu_pagos_adicionales_agregar_tiempoadicionaleditar:
+    path:     /rhu/pagos/adicionales/agregar/tiempoadicionaleditar/{tipo}/{codigoPagoAdicional}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempoAdicionalEditar }    
 
 brs_rhu_liquidaciones_lista:
     path:     /rhu/liquidaciones/lista
