@@ -54,6 +54,11 @@
                         <tr>
                             <th>COD</th>                                
                             <th>NOMBRE</th>
+                            <th>TELEFONO</th>
+                            <th>CELULAR</th>
+                            <th>CONTACTO</th>
+                            <th>TEL.CONTACTO</th>
+                            <th>CEL.CONTACTO</th>
                             <th></th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
@@ -61,6 +66,11 @@
                             <tr>
                                 <td>{{ arPuestos.codigoPuestoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arPuestos.codigoPuestoPk }}"></td>                    
                                 <td>{{ arPuestos.nombre  }}</td>
+                                <td>{{ arPuestos.telefono  }}</td>
+                                <td>{{ arPuestos.celular  }}</td>
+                                <td>{{ arPuestos.contacto  }}</td>
+                                <td>{{ arPuestos.telefonoContacto  }}</td>
+                                <td>{{ arPuestos.celularContacto  }}</td>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_base_cliente_puesto_nuevo', {'codigoCliente': arCliente.codigoClientePk, 'codigoPuesto': arPuestos.codigoPuestoPk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                        
                                 <td><input type="checkbox" name="ChkSeleccionarPuesto[]" value="{{ arPuestos.codigoPuestoPk }}" /></td>
                             </tr>

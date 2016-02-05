@@ -20,8 +20,33 @@ class TurPuesto
     /**
      * @ORM\Column(name="nombre", type="string", length=50)
      */
-    private $nombre;  
+    private $nombre;      
+    
+    /**
+     * @ORM\Column(name="telefono", type="string", length=30, nullable=true)
+     */
+    private $telefono;     
+    
+    /**
+     * @ORM\Column(name="celular", type="string", length=30, nullable=true)
+     */
+    private $celular;     
+    
+    /**
+     * @ORM\Column(name="contacto", type="string", length=90, nullable=true)
+     */
+    private $contacto;    
 
+    /**
+     * @ORM\Column(name="telefono_contacto", type="string", length=30, nullable=true)
+     */
+    private $telefonoContacto;    
+
+    /**
+     * @ORM\Column(name="celular_contacto", type="string", length=30, nullable=true)
+     */
+    private $celularContacto;    
+    
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
@@ -59,6 +84,8 @@ class TurPuesto
     public function __construct()
     {
         $this->pedidosDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->programacionesDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -93,6 +120,126 @@ class TurPuesto
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return TurPuesto
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    /**
+     * Set celular
+     *
+     * @param string $celular
+     *
+     * @return TurPuesto
+     */
+    public function setCelular($celular)
+    {
+        $this->celular = $celular;
+
+        return $this;
+    }
+
+    /**
+     * Get celular
+     *
+     * @return string
+     */
+    public function getCelular()
+    {
+        return $this->celular;
+    }
+
+    /**
+     * Set contacto
+     *
+     * @param string $contacto
+     *
+     * @return TurPuesto
+     */
+    public function setContacto($contacto)
+    {
+        $this->contacto = $contacto;
+
+        return $this;
+    }
+
+    /**
+     * Get contacto
+     *
+     * @return string
+     */
+    public function getContacto()
+    {
+        return $this->contacto;
+    }
+
+    /**
+     * Set telefonoContacto
+     *
+     * @param string $telefonoContacto
+     *
+     * @return TurPuesto
+     */
+    public function setTelefonoContacto($telefonoContacto)
+    {
+        $this->telefonoContacto = $telefonoContacto;
+
+        return $this;
+    }
+
+    /**
+     * Get telefonoContacto
+     *
+     * @return string
+     */
+    public function getTelefonoContacto()
+    {
+        return $this->telefonoContacto;
+    }
+
+    /**
+     * Set celularContacto
+     *
+     * @param string $celularContacto
+     *
+     * @return TurPuesto
+     */
+    public function setCelularContacto($celularContacto)
+    {
+        $this->celularContacto = $celularContacto;
+
+        return $this;
+    }
+
+    /**
+     * Get celularContacto
+     *
+     * @return string
+     */
+    public function getCelularContacto()
+    {
+        return $this->celularContacto;
     }
 
     /**
@@ -202,40 +349,6 @@ class TurPuesto
     }
 
     /**
-     * Add programacionesDetallesPuestoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPuestoRel
-     *
-     * @return TurPuesto
-     */
-    public function addProgramacionesDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPuestoRel)
-    {
-        $this->programacionesDetallesPuestoRel[] = $programacionesDetallesPuestoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove programacionesDetallesPuestoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPuestoRel
-     */
-    public function removeProgramacionesDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPuestoRel)
-    {
-        $this->programacionesDetallesPuestoRel->removeElement($programacionesDetallesPuestoRel);
-    }
-
-    /**
-     * Get programacionesDetallesPuestoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProgramacionesDetallesPuestoRel()
-    {
-        return $this->programacionesDetallesPuestoRel;
-    }
-
-    /**
      * Add serviciosDetallesPuestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPuestoRel
@@ -267,5 +380,39 @@ class TurPuesto
     public function getServiciosDetallesPuestoRel()
     {
         return $this->serviciosDetallesPuestoRel;
+    }
+
+    /**
+     * Add programacionesDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addProgramacionesDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPuestoRel)
+    {
+        $this->programacionesDetallesPuestoRel[] = $programacionesDetallesPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove programacionesDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPuestoRel
+     */
+    public function removeProgramacionesDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPuestoRel)
+    {
+        $this->programacionesDetallesPuestoRel->removeElement($programacionesDetallesPuestoRel);
+    }
+
+    /**
+     * Get programacionesDetallesPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgramacionesDetallesPuestoRel()
+    {
+        return $this->programacionesDetallesPuestoRel;
     }
 }

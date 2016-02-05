@@ -18,19 +18,11 @@ class MovimientoTareaController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();        
-        if ($form->isValid()) { 
-            $arrControles = $request->request->All();
-            if($arrControles['txtNit'] != '') {                
-                $arCliente = $em->getRepository('BrasaGeneralBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
-                if($arCliente) {
-                    $this->codigoCliente = $arCliente->getCodigoClientePk();
-                }
-            }            
+        if ($form->isValid()) {            
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaGeneralBundle:GenTarea')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_pedido_lista'));                 
-                
+                return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));                                 
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -41,6 +33,17 @@ class MovimientoTareaController extends Controller
                 $this->lista();
                 $this->generarExcel();
             }
+            if($request->request->get('OpCerrar')) {
+                $codigo = $request->request->get('OpCerrar');
+                $arTarea = new \Brasa\GeneralBundle\Entity\GenTarea();
+                $arTarea = $em->getRepository('BrasaGeneralBundle:GenTarea')->find($codigo);
+                if($arTarea->getEstadoTerminado() == 0) {
+                    $arTarea->setEstadoTerminado(1);
+                    $em->persist($arTarea);
+                    $em->flush();
+                }
+                return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));
+            }             
         }
 
         $arTareas = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 50);
