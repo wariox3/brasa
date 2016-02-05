@@ -9,7 +9,7 @@ class MovimientoTareaController extends Controller
 {
     var $strListaDql = "";    
     var $estadoTerminado = "";
-
+    var $estadoAnulado = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -17,13 +17,10 @@ class MovimientoTareaController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
+        $this->estadoTerminado = 0;
+        $this->estadoAnulado = 0;
         $this->lista();        
         if ($form->isValid()) {            
-            if ($form->get('BtnEliminar')->isClicked()) {                
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaGeneralBundle:GenTarea')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));                                 
-            }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $this->lista();
@@ -38,12 +35,29 @@ class MovimientoTareaController extends Controller
                 $arTarea = new \Brasa\GeneralBundle\Entity\GenTarea();
                 $arTarea = $em->getRepository('BrasaGeneralBundle:GenTarea')->find($codigo);
                 if($arTarea->getEstadoTerminado() == 0) {
-                    $arTarea->setEstadoTerminado(1);
+                    $arUsuario = $this->getUser();
+                    $arTarea->setEstadoTerminado(1);                    
+                    $arTarea->setFechaTermina(new \DateTime('now'));
+                    $arTarea->setUsuarioTerminaFk($arUsuario->getUserName());                     
                     $em->persist($arTarea);
                     $em->flush();
                 }
                 return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));
-            }             
+            }
+            if($request->request->get('OpAnular')) {
+                $codigo = $request->request->get('OpAnular');
+                $arTarea = new \Brasa\GeneralBundle\Entity\GenTarea();
+                $arTarea = $em->getRepository('BrasaGeneralBundle:GenTarea')->find($codigo);
+                if($arTarea->getEstadoTerminado() == 0) {
+                    $arUsuario = $this->getUser();
+                    $arTarea->setEstadoAnulado(1);                    
+                    $arTarea->setFechaAnula(new \DateTime('now'));
+                    $arTarea->setUsuarioAnulaFk($arUsuario->getUserName());                     
+                    $em->persist($arTarea);
+                    $em->flush();
+                }
+                return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));
+            }            
         }
 
         $arTareas = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 50);
@@ -83,28 +97,22 @@ class MovimientoTareaController extends Controller
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaGeneralBundle:GenTarea')->listaDQL(
+                $this->estadoTerminado,
+                $this->estadoAnulado
         );
     }    
 
     private function filtrar ($form) {                
-        $this->numeroTarea = $form->get('TxtNumero')->getData();
-        $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
-        $this->estadoProgramado = $form->get('estadoProgramado')->getData();
-        $this->estadoFacturado = $form->get('estadoFacturado')->getData();
+        $this->estadoTerminado = $form->get('estadoTerminado')->getData();
         $this->estadoAnulado = $form->get('estadoAnulado')->getData();
-        $dateFechaDesde = $form->get('fechaDesde')->getData();
-        $dateFechaHasta = $form->get('fechaHasta')->getData();
-        $this->fechaDesde = $dateFechaDesde->format('Y/m/d');
-        $this->fechaHasta = $dateFechaHasta->format('Y/m/d');   
-        $this->filtrarFecha = $form->get('filtrarFecha')->getData();
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
         $form = $this->createFormBuilder()
-            ->add('estadoTerminado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'TERMINADA', '0' => 'SIN TERMINAR'), 'data' => $this->estadoTerminado))                
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('estadoTerminado', 'choice', array('choices'   => array('0' => 'SIN TERMINAR', '1' => 'TERMINADA', '2' => 'TODOS'), 'data' => $this->estadoTerminado))                
+            ->add('estadoAnulado', 'choice', array('choices'   => array('0' => 'SIN ANULAR', '2' => 'TODOS', '1' => 'ANULADAS'), 'data' => $this->estadoAnulado))                            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -126,33 +134,23 @@ class MovimientoTareaController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'S'; $col++) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+        for($col = 'A'; $col !== 'M'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                                       
         }     
-        for($col = 'M'; $col !== 'S'; $col++) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        }
         
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'NÚMERO')
-                    ->setCellValue('D1', 'FECHA')
-                    ->setCellValue('E1', 'AÑO')
-                    ->setCellValue('F1', 'MES')
-                    ->setCellValue('G1', 'CLIENTE')
-                    ->setCellValue('H1', 'SECTOR')
-                    ->setCellValue('I1', 'AUT')
-                    ->setCellValue('J1', 'PRO')
-                    ->setCellValue('K1', 'FAC')
-                    ->setCellValue('L1', 'ANU')
-                    ->setCellValue('M1', 'HORAS')
-                    ->setCellValue('N1', 'H.DIURNAS')
-                    ->setCellValue('O1', 'H.NOCTURNAS')
-                    ->setCellValue('P1', 'P.MINIMO')
-                    ->setCellValue('Q1', 'P.AJUSTADO')
-                    ->setCellValue('R1', 'TOTAL');
+                    ->setCellValue('B1', 'FECHA')
+                    ->setCellValue('C1', 'HORA')
+                    ->setCellValue('D1', 'ASUNTO')
+                    ->setCellValue('E1', 'COMENTARIOS')
+                    ->setCellValue('F1', 'USUARIO')
+                    ->setCellValue('G1', 'F.TERMINA')
+                    ->setCellValue('H1', 'U.TERMINA')
+                    ->setCellValue('I1', 'TERMINADO')
+                    ->setCellValue('J1', 'F.ANULA')
+                    ->setCellValue('K1', 'U.ANULA')
+                    ->setCellValue('L1', 'ANULADO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -162,24 +160,21 @@ class MovimientoTareaController extends Controller
         foreach ($arTareas as $arTarea) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arTarea->getCodigoTareaPk())
-                    ->setCellValue('B' . $i, $arTarea->getTareaTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arTarea->getNumero())
-                    ->setCellValue('D' . $i, $arTarea->getFecha()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arTarea->getFechaProgramacion()->format('Y'))
-                    ->setCellValue('F' . $i, $arTarea->getFechaProgramacion()->format('F'))                    
-                    ->setCellValue('G' . $i, $arTarea->getClienteRel()->getNombreCorto())
-                    ->setCellValue('H' . $i, $arTarea->getSectorRel()->getNombre())
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arTarea->getEstadoAutorizado()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arTarea->getEstadoProgramado()))
-                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arTarea->getEstadoFacturado()))
-                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arTarea->getEstadoAnulado()))
-                    ->setCellValue('M' . $i, $arTarea->getHoras())
-                    ->setCellValue('N' . $i, $arTarea->getHorasDiurnas())
-                    ->setCellValue('O' . $i, $arTarea->getHorasNocturnas())
-                    ->setCellValue('P' . $i, $arTarea->getVrTotalPrecioMinimo())
-                    ->setCellValue('Q' . $i, $arTarea->getVrTotalPrecioAjustado())
-                    ->setCellValue('R' . $i, $arTarea->getVrTotal());
-
+                    ->setCellValue('B' . $i, $arTarea->getFecha()->format('Y/m/d'))
+                    ->setCellValue('C' . $i, $arTarea->getHora()->format('H:i'))
+                    ->setCellValue('D' . $i, $arTarea->getAsunto())
+                    ->setCellValue('E' . $i, $arTarea->getComentarios())
+                    ->setCellValue('F' . $i, $arTarea->getUsuarioCreaFk())                    
+                    ->setCellValue('H' . $i, $arTarea->getUsuarioTerminaFk())
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arTarea->getEstadoTerminado()))                    
+                    ->setCellValue('K' . $i, $arTarea->getUsuarioAnulaFk())
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arTarea->getEstadoAnulado()));
+            if($arTarea->getFechaTermina()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $i, $arTarea->getFechaTermina()->format('Y/m/d'));
+            }
+            if($arTarea->getFechaAnula()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J' . $i, $arTarea->getFechaAnula()->format('Y/m/d'));
+            }            
             $i++;
         }
 

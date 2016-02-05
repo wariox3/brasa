@@ -28,6 +28,16 @@ class GenTarea
     private $hora;    
 
     /**
+     * @ORM\Column(name="fecha_termina", type="datetime", nullable=true)
+     */    
+    private $fechaTermina;    
+    
+    /**
+     * @ORM\Column(name="fecha_anula", type="datetime", nullable=true)
+     */    
+    private $fechaAnula;    
+    
+    /**
      * @ORM\Column(name="asunto", type="string", length=80, nullable=true)
      */    
     private $asunto;               
@@ -38,6 +48,11 @@ class GenTarea
     private $estadoTerminado = 0;  
     
     /**
+     * @ORM\Column(name="estado_anulado", type="boolean")
+     */    
+    private $estadoAnulado = 0;     
+    
+    /**
      * @ORM\Column(name="usuario_crea_fk", type="string", length=50, nullable=true)
      */    
     private $usuarioCreaFk;    
@@ -46,11 +61,17 @@ class GenTarea
      * @ORM\Column(name="usuario_termina_fk", type="string", length=50, nullable=true)
      */    
     private $usuarioTerminaFk;    
+
+    /**
+     * @ORM\Column(name="usuario_anula_fk", type="string", length=50, nullable=true)
+     */    
+    private $usuarioAnulaFk;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
      */    
     private $comentarios;           
+
 
 
 
@@ -113,6 +134,54 @@ class GenTarea
     }
 
     /**
+     * Set fechaTermina
+     *
+     * @param \DateTime $fechaTermina
+     *
+     * @return GenTarea
+     */
+    public function setFechaTermina($fechaTermina)
+    {
+        $this->fechaTermina = $fechaTermina;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaTermina
+     *
+     * @return \DateTime
+     */
+    public function getFechaTermina()
+    {
+        return $this->fechaTermina;
+    }
+
+    /**
+     * Set fechaAnula
+     *
+     * @param \DateTime $fechaAnula
+     *
+     * @return GenTarea
+     */
+    public function setFechaAnula($fechaAnula)
+    {
+        $this->fechaAnula = $fechaAnula;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaAnula
+     *
+     * @return \DateTime
+     */
+    public function getFechaAnula()
+    {
+        return $this->fechaAnula;
+    }
+
+    /**
      * Set asunto
      *
      * @param string $asunto
@@ -161,6 +230,30 @@ class GenTarea
     }
 
     /**
+     * Set estadoAnulado
+     *
+     * @param boolean $estadoAnulado
+     *
+     * @return GenTarea
+     */
+    public function setEstadoAnulado($estadoAnulado)
+    {
+        $this->estadoAnulado = $estadoAnulado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulado
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulado()
+    {
+        return $this->estadoAnulado;
+    }
+
+    /**
      * Set usuarioCreaFk
      *
      * @param string $usuarioCreaFk
@@ -206,6 +299,30 @@ class GenTarea
     public function getUsuarioTerminaFk()
     {
         return $this->usuarioTerminaFk;
+    }
+
+    /**
+     * Set usuarioAnulaFk
+     *
+     * @param string $usuarioAnulaFk
+     *
+     * @return GenTarea
+     */
+    public function setUsuarioAnulaFk($usuarioAnulaFk)
+    {
+        $this->usuarioAnulaFk = $usuarioAnulaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioAnulaFk
+     *
+     * @return string
+     */
+    public function getUsuarioAnulaFk()
+    {
+        return $this->usuarioAnulaFk;
     }
 
     /**

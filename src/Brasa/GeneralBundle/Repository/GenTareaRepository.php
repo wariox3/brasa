@@ -13,8 +13,33 @@ use Doctrine\ORM\EntityRepository;
 class GenTareaRepository extends EntityRepository
 {
     
-    public function listaDql() {
+    public function listaDql($boolEstadoTerminado = "", $boolEstadoAnulado = "") {
         $dql   = "SELECT t FROM BrasaGeneralBundle:GenTarea t WHERE t.codigoTareaPk <> 0";        
+        if($boolEstadoTerminado == 1 ) {
+            $dql .= " AND t.estadoTerminado = 1";
+        }
+        if($boolEstadoTerminado == "0") {
+            $dql .= " AND t.estadoTerminado = 0";
+        } 
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND t.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND t.estadoAnulado = 0";
+        }         
         return $dql;
+    }    
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {                
+                $arTarea = $em->getRepository('BrasaGeneralBundle:GenTarea')->find($codigo);
+                if($arTarea->getEstadoTerminado() == 0) {
+                    
+                }
+            }
+            $em->flush();
+        }
     }    
 }
