@@ -52,15 +52,20 @@ class BaseClienteController extends Controller
         $form = $this->createForm(new TurClienteType, $arCliente);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arCliente = $form->getData();                    
+            $arCliente = $form->getData();
+            $arClienteValidar = new \Brasa\TurnoBundle\Entity\TurCliente();
+            $arClienteValidar = $em->getRepository('BrasaTurnoBundle:TurCliente')->findBy(array('nit' => $arCliente->getNit()));
+            if(count($arClienteValidar) <= 0) {
                 $em->persist($arCliente);
                 $em->flush();            
-
                 if($form->get('guardarnuevo')->isClicked()) {
                     return $this->redirect($this->generateUrl('brs_tur_base_cliente_nuevo', array('codigoCliente' => 0 )));
                 } else {
                     return $this->redirect($this->generateUrl('brs_tur_base_cliente_lista'));
-                }                                                           
+                }                   
+            } else {
+                $objMensaje->Mensaje("error", "El cliente con ese nit ya existe", $this);
+            }                                                                            
 
         }
         return $this->render('BrasaTurnoBundle:Base/Cliente:nuevo.html.twig', array(

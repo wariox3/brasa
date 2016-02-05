@@ -1,5 +1,5 @@
 {% block stylesheets %}
-<link href="{{ asset('css/menu.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/menu.css') }}" rel="stylesheet" />
 {% endblock %}
 
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -228,7 +228,7 @@
                                 </li>
                             </ul>
                         </li>
-                        
+
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Turnos</a>
                             <ul class="dropdown-menu">
@@ -443,6 +443,17 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Movimientos <b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">General</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Tareas</a>
+                                    <ul class="dropdown-menu">                                        
+                                        <li><a href="{{ path('brs_gen_mov_tarea_lista') }}">Lista</a></li>
+                                    </ul>
+                                </li>                                 
+                            </ul>
+                        </li>                        
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
