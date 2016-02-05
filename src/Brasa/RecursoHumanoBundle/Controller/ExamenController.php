@@ -278,7 +278,7 @@ class ExamenController extends Controller
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroIdentificacion'),
                 $session->get('filtroAprobadoExamen'),
-                $session->get('filtroPagaEmpleado')
+                $session->get('filtroControlPago')
                 );
     }
 
@@ -289,7 +289,7 @@ class ExamenController extends Controller
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroAprobadoExamen', $form->get('estadoAprobado')->getData());
-        $session->set('filtroPagaEmpleado', $form->get('pagaEmpleado')->getData());
+        $session->set('filtroControlPago', $form->get('controlPago')->getData());
     }
     
     private function formularioFiltro() {
@@ -313,7 +313,7 @@ class ExamenController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoExamen')))
-            ->add('pagaEmpleado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroPagaEmpleado')))    
+            ->add('controlPago', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroControlPago')))    
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -448,7 +448,7 @@ class ExamenController extends Controller
                     ->setCellValue('E' . $i, $arExamen->getCodigoSexoFk())
                     ->setCellValue('F' . $i, $arExamen->getCargoRel()->getNombre())
                     ->setCellValue('G' . $i, $arExamen->getCentroCostoRel()->getNombre())
-                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arExamen->getPagaEmpleado()))
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arExamen->getControlPago()))
                     ->setCellValue('I' . $i, $strNombreEntidad)
                     ->setCellValue('J' . $i, $arExamen->getCiudadRel()->getNombre())
                     ->setCellValue('K' . $i, $arExamen->getFecha())

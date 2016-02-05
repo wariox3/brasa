@@ -156,6 +156,35 @@ class ProgramacionesPagoController extends Controller
                     $objMensaje->Mensaje("error", "No puede eliminar empleados cuando la programacion esta generada", $this);
                 }
             }
+            if($form->get('BtnRetirarConcepto')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        $em->remove($arPagoAdicional);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+                }
+            }
+            if($form->get('BtnAplicaDiaLaborado')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
+                            $arPagoAdicional->setAplicaDiaLaborado(0);
+                        } else {
+                            $arPagoAdicional->setAplicaDiaLaborado(1);
+                        }
+                        $em->persist($arPagoAdicional);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+                }
+            }
         }
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPago->getCodigoCentroCostoFk());
@@ -339,7 +368,9 @@ class ProgramacionesPagoController extends Controller
         }
         $form = $this->createFormBuilder()    
                     ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
-                    ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)            
+                    ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)
+                    ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
+                    ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))
                     ->getForm();  
         return $form;
     }    

@@ -119,9 +119,9 @@ class RhuExamen
     private $control = 0;
 
     /**     
-     * @ORM\Column(name="paga_empleado", type="boolean")
+     * @ORM\Column(name="control_pago", type="boolean")
      */    
-    private $pagaEmpleado = 0;
+    private $controlPago = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuExamenClase", inversedBy="examenesExamenClaseRel")
@@ -175,7 +175,6 @@ class RhuExamen
      * @ORM\OneToMany(targetEntity="RhuPagoExamenDetalle", mappedBy="examenRel")
      */
     protected $pagosExamenesDetallesExamenRel;
-    
     
     
     
@@ -679,27 +678,27 @@ class RhuExamen
     }
 
     /**
-     * Set pagaEmpleado
+     * Set controlPago
      *
-     * @param boolean $pagaEmpleado
+     * @param boolean $controlPago
      *
      * @return RhuExamen
      */
-    public function setPagaEmpleado($pagaEmpleado)
+    public function setControlPago($controlPago)
     {
-        $this->pagaEmpleado = $pagaEmpleado;
+        $this->controlPago = $controlPago;
 
         return $this;
     }
 
     /**
-     * Get pagaEmpleado
+     * Get controlPago
      *
      * @return boolean
      */
-    public function getPagaEmpleado()
+    public function getControlPago()
     {
-        return $this->pagaEmpleado;
+        return $this->controlPago;
     }
 
     /**
