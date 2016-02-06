@@ -359,4 +359,76 @@ class CtbRegistroRepository extends EntityRepository
         $arrayResultado = $query->getResult();
         return $arrayResultado;
     }
+    
+    public function contabilizarPagoNomina($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPago) {
+        $em = $this->getEntityManager();
+        $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+        $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigo));
+        foreach ($arPagoDetalles as $arPagoDetalle) {
+            $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk());                            
+            $arRegistro->setComprobanteRel($arComprobanteContable);
+            $arRegistro->setCentroCostoRel($arCentroCosto);
+            $arRegistro->setCuentaRel($arCuenta);
+            $arRegistro->setTerceroRel($arTercero);
+            $arRegistro->setNumero($arPago->getNumero());
+            $arRegistro->setNumeroReferencia($arPago->getNumero());
+            $arRegistro->setFecha($arPago->getFechaDesde());
+            if($arPagoDetalle->getPagoConceptoRel()->getTipoCuenta() == 1) {
+                $arRegistro->setDebito($arPagoDetalle->getVrPago());
+            } else {
+                $arRegistro->setCredito($arPagoDetalle->getVrPago());
+            }
+            $arRegistro->setDescripcionContable($arPagoDetalle->getPagoConceptoRel()->getNombre());
+            $em->persist($arRegistro);                                
+            //echo $arPagoDetalle->getCodigoPagoDetallePk() . "[" . $arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk() . "]" . "<br/>";
+        }                              
+        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('250501');                            
+        $arRegistro->setComprobanteRel($arComprobanteContable);
+        $arRegistro->setCentroCostoRel($arCentroCosto);
+        $arRegistro->setCuentaRel($arCuenta);
+        $arRegistro->setTerceroRel($arTercero);
+        $arRegistro->setNumero($arPago->getNumero());
+        $arRegistro->setNumeroReferencia($arPago->getNumero());
+        $arRegistro->setFecha($arPago->getFechaDesde());
+        $arRegistro->setCredito($arPago->getVrNeto() );                            
+        $arRegistro->setDescripcionContable('NOMINA POR PAGAR');
+        $em->persist($arRegistro);
+        $em->flush();
+    }
+    
+    public function contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle) {
+        $em = $this->getEntityManager();
+        //La cuenta
+        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('250501');                            
+        $arRegistro->setComprobanteRel($arComprobanteContable);
+        $arRegistro->setCentroCostoRel($arCentroCosto);
+        $arRegistro->setCuentaRel($arCuenta);
+        $arRegistro->setTerceroRel($arTercero);
+        $arRegistro->setNumero($arPagoBancoDetalle->getCodigoPagoBancoDetallePk());
+        $arRegistro->setNumeroReferencia($arPagoBancoDetalle->getPagoRel()->getNumero());                                
+        $arRegistro->setFecha($arPagoBancoDetalle->getPagoBancoRel()->getFechaAplicacion());
+        $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());                            
+        $arRegistro->setDescripcionContable('PAGO');                                
+        $em->persist($arRegistro);  
+
+        //Banco
+        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
+        $codigoCuenta = $arPagoBancoDetalle->getPagoBancoRel()->getCuentaRel()->getCodigoCuentaFk();
+        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuenta);                            
+        $arRegistro->setComprobanteRel($arComprobanteContable);
+        $arRegistro->setCentroCostoRel($arCentroCosto);
+        $arRegistro->setCuentaRel($arCuenta);
+        $arRegistro->setTerceroRel($arTercero);
+        $arRegistro->setNumero($arPagoBancoDetalle->getCodigoPagoBancoDetallePk());
+        $arRegistro->setNumeroReferencia($arPagoBancoDetalle->getPagoRel()->getNumero());                                
+        $arRegistro->setFecha($arPagoBancoDetalle->getPagoBancoRel()->getFechaAplicacion());
+        $arRegistro->setCredito($arPagoBancoDetalle->getVrPago());                            
+        $arRegistro->setDescripcionContable($arPagoBancoDetalle->getNombreCorto());
+        $em->persist($arRegistro);
+        $em->flush();
+    }
+    
 }

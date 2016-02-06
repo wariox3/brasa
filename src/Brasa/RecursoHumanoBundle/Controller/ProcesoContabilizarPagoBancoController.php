@@ -29,42 +29,33 @@ class ProcesoContabilizarPagoBancoController extends Controller
                     foreach ($arrSeleccionados AS $codigo) {                                     
                         $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
                         $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->find($codigo);
+                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPagoBancoDetalle->getCodigoPagoFk());
                         if($arPagoBancoDetalle->getEstadoContabilizado() == 0) {
                             $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPagoBancoDetalle->getNumeroIdentificacion()));
                             if(count($arTercero) > 0) {                              
-                                //La cuenta
-                                $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('250501');                            
-                                $arRegistro->setComprobanteRel($arComprobanteContable);
-                                $arRegistro->setCentroCostoRel($arCentroCosto);
-                                $arRegistro->setCuentaRel($arCuenta);
-                                $arRegistro->setTerceroRel($arTercero);
-                                $arRegistro->setNumero($arPagoBancoDetalle->getCodigoPagoBancoDetallePk());
-                                $arRegistro->setNumeroReferencia($arPagoBancoDetalle->getPagoRel()->getNumero());                                
-                                $arRegistro->setFecha($arPagoBancoDetalle->getPagoBancoRel()->getFechaAplicacion());
-                                $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());                            
-                                $arRegistro->setDescripcionContable('PAGO');                                
-                                $em->persist($arRegistro);  
-                                
-                                //Banco
-                                $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
-                                $codigoCuenta = $arPagoBancoDetalle->getPagoBancoRel()->getCuentaRel()->getCodigoCuentaFk();
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuenta);                            
-                                $arRegistro->setComprobanteRel($arComprobanteContable);
-                                $arRegistro->setCentroCostoRel($arCentroCosto);
-                                $arRegistro->setCuentaRel($arCuenta);
-                                $arRegistro->setTerceroRel($arTercero);
-                                $arRegistro->setNumero($arPagoBancoDetalle->getCodigoPagoBancoDetallePk());
-                                $arRegistro->setNumeroReferencia($arPagoBancoDetalle->getPagoRel()->getNumero());                                
-                                $arRegistro->setFecha($arPagoBancoDetalle->getPagoBancoRel()->getFechaAplicacion());
-                                $arRegistro->setCredito($arPagoBancoDetalle->getVrPago());                            
-                                $arRegistro->setDescripcionContable($arPagoBancoDetalle->getNombreCorto());
-                                $em->persist($arRegistro);  
-                                
+                                $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle);  
                                 $arPagoBancoDetalle->setEstadoContabilizado(1);
                                 $em->persist($arPagoBancoDetalle);  
                             }else {
-                                $objMensaje->Mensaje("error", "No existe el tercero", $this);
+                                //$objMensaje->Mensaje("error", "No existe el tercero", $this);
+                                $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
+                                $arTercero->setCiudadRel($arPago->getEmpleadoRel()->getCiudadRel());
+                                $arTercero->setTipoIdentificacionRel($arPago->getEmpleadoRel()->getTipoIdentificacionRel());
+                                $arTercero->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
+                                $arTercero->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
+                                $arTercero->setNombre1($arPago->getEmpleadoRel()->getNombre1());
+                                $arTercero->setNombre2($arPago->getEmpleadoRel()->getNombre2());
+                                $arTercero->setApellido1($arPago->getEmpleadoRel()->getApellido1());
+                                $arTercero->setApellido2($arPago->getEmpleadoRel()->getApellido2());
+                                $arTercero->setDireccion($arPago->getEmpleadoRel()->getDireccion());
+                                $arTercero->setTelefono($arPago->getEmpleadoRel()->getTelefono());
+                                $arTercero->setCelular($arPago->getEmpleadoRel()->getCelular());
+                                $arTercero->setEmail($arPago->getEmpleadoRel()->getCorreo());
+                                $em->persist($arTercero); 
+                                $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle);  
+                                $arPagoBancoDetalle->setEstadoContabilizado(1);
+                                $em->persist($arPagoBancoDetalle); 
                             }                                                   
                         }
                     }
