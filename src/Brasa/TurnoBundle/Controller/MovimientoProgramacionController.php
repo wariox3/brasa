@@ -25,12 +25,12 @@ class MovimientoProgramacionController extends Controller
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         if ($form->isValid()) {
             $arrControles = $request->request->All();
-            if($arrControles['txtNit'] != '') {                
+            if($arrControles['txtNit'] != '') {
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
                 if($arCliente) {
                     $this->codigoCliente = $arCliente->getCodigoClientePk();
                 }
-            }             
+            }
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurProgramacion')->eliminar($arrSeleccionados);
@@ -71,7 +71,7 @@ class MovimientoProgramacionController extends Controller
             $arrControles = $request->request->All();
             if($arrControles['txtNit'] != '') {
                 $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
-                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
                 if(count($arCliente) > 0) {
                     $arProgramacion->setClienteRel($arCliente);
                     $em->persist($arProgramacion);
@@ -110,10 +110,10 @@ class MovimientoProgramacionController extends Controller
                         $this->actualizarDetalle($arrControles, $codigoProgramacion);
                         $arProgramacion->setEstadoAutorizado(1);
                         $em->persist($arProgramacion);
-                        $em->flush();                        
+                        $em->flush();
                     } else {
                         $objMensaje->Mensaje('error', $strResultados, $this);
-                    }                                          
+                    }
                 }
                 return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
@@ -151,14 +151,14 @@ class MovimientoProgramacionController extends Controller
                 } else {
                     $objMensaje->Mensaje("error", "No puede imprimir sin estar autorizada", $this);
                 }
-            } 
-            if($form->get('BtnAnular')->isClicked()) {                                 
+            }
+            if($form->get('BtnAnular')->isClicked()) {
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->anular($codigoProgramacion);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
                 return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
-            }            
+            }
         }
         $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
         $arrDiaSemana = array();
@@ -188,10 +188,10 @@ class MovimientoProgramacionController extends Controller
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            if ($form->get('BtnGuardar')->isClicked()) {                
+            if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $arrControles = $request->request->All();
-                if(count($arrSeleccionados) > 0) {    
+                if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigo) {
                         $intCantidad = $arrControles['TxtCantidad'.$codigo];
                         for($i = 1; $i <= $intCantidad; $i++) {
@@ -200,7 +200,9 @@ class MovimientoProgramacionController extends Controller
                             $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                             $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                             $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
-                            $em->persist($arProgramacionDetalle);                           
+                            $arProgramacionDetalle->setAnio($arProgramacion->getFecha()->format('Y'));
+                            $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));
+                            $em->persist($arProgramacionDetalle);
                         }
                     }
                     $em->flush();
@@ -214,8 +216,8 @@ class MovimientoProgramacionController extends Controller
             'arProgramacion' => $arProgramacion,
             'arPedidosDetalle' => $arPedidosDetalle,
             'form' => $form->createView()));
-    }    
-    
+    }
+
     public function detalleNuevoPedidoAction($codigoProgramacion, $codigoProgramacionDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -226,12 +228,12 @@ class MovimientoProgramacionController extends Controller
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            if ($form->get('BtnGuardar')->isClicked()) {                
+            if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $arrControles = $request->request->All();
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigo) {
-                        $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($codigo, $arProgramacion);                        
+                        $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($codigo, $arProgramacion);
                     }
                     $em->flush();
                 }
@@ -249,17 +251,17 @@ class MovimientoProgramacionController extends Controller
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $strFechaDesde = "";
-        $strFechaHasta = "";        
+        $strFechaHasta = "";
         $filtrarFecha = $this->filtrarFecha;
         if($filtrarFecha) {
             $strFechaDesde = $this->fechaDesde;
-            $strFechaHasta = $this->fechaHasta;                    
-        }        
+            $strFechaHasta = $this->fechaHasta;
+        }
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacion')->listaDQL(
-                $this->numeroProgramacion, 
-                $this->codigoCliente, 
-                $this->estadoAutorizado, 
-                $strFechaDesde, 
+                $this->numeroProgramacion,
+                $this->codigoCliente,
+                $this->estadoAutorizado,
+                $strFechaDesde,
                 $strFechaHasta,
                 $this->estadoAnulado);
     }
@@ -271,8 +273,8 @@ class MovimientoProgramacionController extends Controller
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
         $this->fechaDesde = $dateFechaDesde->format('Y/m/d');
-        $this->fechaHasta = $dateFechaHasta->format('Y/m/d');   
-        $this->filtrarFecha = $form->get('filtrarFecha')->getData();        
+        $this->fechaHasta = $dateFechaHasta->format('Y/m/d');
+        $this->filtrarFecha = $form->get('filtrarFecha')->getData();
     }
 
     private function formularioFiltro() {
@@ -286,16 +288,16 @@ class MovimientoProgramacionController extends Controller
         }
         if($this->fechaHasta != "") {
             $strFechaDesde = $this->fechaHasta;
-        }    
+        }
         $dateFechaDesde = date_create($strFechaDesde);
-        $dateFechaHasta = date_create($strFechaHasta);        
+        $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numeroProgramacion))
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))                
-            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $this->estadoAnulado))                
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaDesde))                            
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaHasta))                
-            ->add('filtrarFecha', 'checkbox', array('required'  => false))                
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))
+            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $this->estadoAnulado))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaDesde))
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaHasta))
+            ->add('filtrarFecha', 'checkbox', array('required'  => false))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -306,23 +308,23 @@ class MovimientoProgramacionController extends Controller
     private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => true);
-        $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);        
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
-        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = false;
             $arrBotonDetalleEliminar['disabled'] = true;
-            $arrBotonDetalleActualizar['disabled'] = true;  
-            $arrBotonAnular['disabled'] = false; 
+            $arrBotonDetalleActualizar['disabled'] = true;
+            $arrBotonAnular['disabled'] = false;
             if($ar->getEstadoAnulado() == 1) {
                 $arrBotonDesAutorizar['disabled'] = true;
                 $arrBotonAnular['disabled'] = true;
                 $arrBotonAprobar['disabled'] = true;
-                
-            }            
+
+            }
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
@@ -336,8 +338,8 @@ class MovimientoProgramacionController extends Controller
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnAnular', 'submit', $arrBotonAnular)  
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)                    
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)
+                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->getForm();
         return $form;
@@ -356,16 +358,16 @@ class MovimientoProgramacionController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);        
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         for($col = 'A'; $col !== 'H'; $col++) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
-        }     
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+        }
         for($col = 'G'; $col !== 'H'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        }        
-        
+        }
+
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIG0')
                     ->setCellValue('B1', 'AÑO')
@@ -409,7 +411,7 @@ class MovimientoProgramacionController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }   
+    }
 
     private function aplicaPlantilla ($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle) {
         $boolResultado = FALSE;
@@ -695,21 +697,21 @@ class MovimientoProgramacionController extends Controller
         }
         $em->flush();
         $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
-    }   
-    
+    }
+
     private function validarTurno($strTurno) {
         $em = $this->getDoctrine()->getManager();
         $strTurnoDevolver = NUll;
         if($strTurno != "") {
             $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
-            $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurno);            
+            $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurno);
             if($arTurno) {
                 $strTurnoDevolver = $strTurno;
             }
         }
-        
+
         return $strTurnoDevolver;
     }
-    
-   
+
+
 }

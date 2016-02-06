@@ -218,6 +218,10 @@ brs_tur_consultas_recursos_programaciones:
     path:     /tur/consultas/recursos/programaciones
     defaults: { _controller: BrasaTurnoBundle:ConsultasRecursosProgramaciones:lista }     
     
+brs_tur_consultas_recursos_disponibles:    
+    path:     /tur/consultas/recursos/disponibles
+    defaults: { _controller: BrasaTurnoBundle:ConsultasRecursosDisponibles:lista }         
+    
 brs_tur_proceso_generar_soporte_pago:
     path:     /tur/proceso/generar/soporte/pago
     defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:generar }                  

@@ -3,7 +3,7 @@
 namespace Brasa\TurnoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-
+use Doctrine\ORM\Query\ResultSetMapping;
 class TurRecursoRepository extends EntityRepository {    
     
     public function ListaDql($strNombre = "", $strCodigo = "") {
@@ -18,6 +18,29 @@ class TurRecursoRepository extends EntityRepository {
         $dql .= " ORDER BY r.nombreCorto";
         return $dql;
     }            
+
+    public function disponibles($strDia = "", $strAnio = "", $strMes = "") {
+        $em = $this->getEntityManager();             
+        $strSql = "SELECT
+                    tur_recurso.codigo_recurso_pk as codigoRecursoPk,
+                    tur_recurso.nombre_corto as nombreCorto,
+                    tur_programacion_detalle.dia_$strDia as Dia$strDia,
+                    tur_turno.descanso as descanso,
+                    tur_turno.nombre as nombreTurno
+                    FROM
+                    tur_programacion_detalle
+                    RIGHT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk
+                    LEFT OUTER JOIN tur_turno ON tur_programacion_detalle.dia_$strDia = tur_turno.codigo_turno_pk     
+                    WHERE descanso = 1 OR dia_$strDia IS NULL AND tur_programacion_detalle.anio = $strAnio AND tur_programacion_detalle.mes = $strMes";                
+        
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($strSql);        
+        $statement->execute();
+        $results = $statement->fetchAll();        
+        
+        return $results;
+    }            
+    
     
     public function eliminar($arrSeleccionados) {
         $em = $this->getEntityManager();
