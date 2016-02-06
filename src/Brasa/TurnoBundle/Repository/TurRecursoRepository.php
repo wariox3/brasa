@@ -31,7 +31,7 @@ class TurRecursoRepository extends EntityRepository {
                     tur_programacion_detalle
                     RIGHT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk
                     LEFT OUTER JOIN tur_turno ON tur_programacion_detalle.dia_$strDia = tur_turno.codigo_turno_pk     
-                    WHERE descanso = 1 OR dia_$strDia IS NULL AND tur_programacion_detalle.anio = $strAnio AND tur_programacion_detalle.mes = $strMes";                
+                    WHERE (descanso = 1 AND tur_programacion_detalle.anio = $strAnio AND tur_programacion_detalle.mes = $strMes) OR dia_$strDia IS NULL";                
         
         $connection = $em->getConnection();
         $statement = $connection->prepare($strSql);        
