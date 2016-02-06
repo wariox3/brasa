@@ -125,15 +125,19 @@ class PagoExamenController extends Controller
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoExamen) {                    
-                        $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
-                        $arPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle();
-                        $arPagoExamenDetalle->setPagoExamenRel($arPagoExamen);
-                        $arPagoExamenDetalle->setExamenRel($arExamen);
-                        $arPagoExamenDetalle->setVrPrecio($arExamen->getVrTotal());                                                
-                        $em->persist($arPagoExamenDetalle); 
-                        $arExamen->setEstadoPagado(1);
-                        $em->persist($arExamen);
+                    foreach ($arrSeleccionados AS $codigoExamen) {
+                        $arPagoExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->findOneBy(array('codigoPagoExamenFk' => $codigoPagoExamen));
+                        if ($arPagoExamenDetalle == null){
+                            $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+                            $arPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle();
+                            $arPagoExamenDetalle->setPagoExamenRel($arPagoExamen);
+                            $arPagoExamenDetalle->setExamenRel($arExamen);
+                            $arPagoExamenDetalle->setVrPrecio($arExamen->getVrTotal());                                                
+                            $em->persist($arPagoExamenDetalle); 
+                            $arExamen->setEstadoPagado(1);
+                            $em->persist($arExamen);
+                        }
+                        
                     }
                     $em->flush();
                 }
