@@ -55,32 +55,37 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
         $this->SetXY(10, 40);
-        $this->SetFillColor(272, 272, 272); 
+        $this->SetFillColor(200, 200, 200); 
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
+        $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','',8);
         $this->Cell(30, 6, $arPagoExamen->getCodigoPagoExamenPk(), 1, 0, 'R', 1);
+        $this->SetFillColor(200, 200, 200);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "ENTIDAD:" , 1, 0, 'L', 1);
+        $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','',8);
         $this->Cell(100, 6, utf8_decode($arPagoExamen->getEntidadExamenRel()->getNombre()), 1, 0, 'L', 1);
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 5, utf8_decode("NÚMERO SOPORTE:") , 1, 0, 'L', 1);
+        $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','',8);
         $this->Cell(30, 5, $arPagoExamen->getNumeroSoporte() , 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 5, "TOTAL:" , 1, 0, 'R', 1);
+        $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','',8);
         $this->Cell(100, 5, number_format($arPagoExamen->getVrTotal(), 2, '.', ',') , 1, 0, 'R', 1);
-        $this->SetFont('Arial','B',8);
         $this->EncabezadoDetalles();
-        
     }
 
     public function EncabezadoDetalles() {
         $this->Ln(12);
-        $header = array(utf8_decode('CÓDIGO'), utf8_decode('IDENTIFICACIÓN'), 'NOMBRE', 'PRECIO');
+        $header = array(utf8_decode('CÓDIGO'), utf8_decode('IDENTIFICACIÓN'), 'NOMBRE', 'CP' ,'PRECIO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -88,7 +93,7 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 25, 130, 15);
+        $w = array(20, 25, 125,5, 15);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -109,10 +114,16 @@ class FormatoPagoExamenDetalle extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         $var = 0;
-        foreach ($arPagoExamenDetalles as $arPagoExamenDetalle) {            
+        foreach ($arPagoExamenDetalles as $arPagoExamenDetalle) {
+            if ($arPagoExamenDetalle->getExamenRel()->getControlPago() == 0){
+                $srtControlExamen = "NO";
+            } else {
+                $srtControlExamen = "SI";
+            }
             $pdf->Cell(20, 4, $arPagoExamenDetalle->getCodigoPagoExamenDetallePk(), 1, 0, 'L');
             $pdf->Cell(25, 4, $arPagoExamenDetalle->getExamenRel()->getIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(130, 4, utf8_decode($arPagoExamenDetalle->getExamenRel()->getNombreCorto()), 1, 0, 'L');
+            $pdf->Cell(125, 4, utf8_decode($arPagoExamenDetalle->getExamenRel()->getNombreCorto()), 1, 0, 'L');
+            $pdf->Cell(5, 4, $srtControlExamen, 1, 0, 'L');
             $pdf->Cell(15, 4, number_format($arPagoExamenDetalle->getVrPrecio(), 2, '.', ','), 1, 0, 'R');
             $var += $arPagoExamenDetalle->getVrPrecio();
             $pdf->Ln();
