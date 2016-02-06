@@ -361,14 +361,14 @@ class PagosAdicionalesAgregarController extends Controller
             ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
             ->getForm();
         $form->handleRequest($request);
-    
         if($form->isValid()) {            
             if($form->get('BtnAgregar')->isClicked()) {                
                 if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
                     $boolError = FALSE;
                     $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                     $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
-                    $arEmpleado = $form->get('empleadoRel')->getData();
+                    //$arEmpleado = $form->get('empleadoRel')->getData();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());                             
                     if($arPagoConcepto->getPrestacional() == 0 && $tipo == 1) {
                         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
