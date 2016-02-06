@@ -91,6 +91,8 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                     $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                     $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
                     $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                    $arProgramacionDetalle->setAnio($arProgramacion->getFecha()->format('Y'));
+                    $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));                    
                     $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
                     $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findOneBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));                
                     if(count($arPedidoDetalleRecurso) > 0) {
