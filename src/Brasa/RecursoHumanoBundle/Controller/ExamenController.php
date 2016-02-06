@@ -41,10 +41,13 @@ class ExamenController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         if($codigoExamen != 0) {
             $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
         }else{
-            $arExamen->setFecha(new \DateTime('now'));            
+            $arExamen->setFecha(new \DateTime('now'));
+            $arExamen->setControlPago($arConfiguracion->getControlPago());
         }        
         $form = $this->createForm(new RhuExamenType, $arExamen);
         $form->handleRequest($request);

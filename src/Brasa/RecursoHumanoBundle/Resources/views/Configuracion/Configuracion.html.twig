@@ -16,6 +16,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#configuracion" data-toggle="tab">Configuración</a></li>
             <li><a href="#consecutivo" data-toggle="tab">Consecutivo</a></li>
+            <li><a href="#seguridadsocial" data-toggle="tab">Seguridad social</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="configuracion">
@@ -160,7 +161,21 @@
                     </div>            
                 </div> 
             </div>
-                                           
+            <div class="tab-pane" id="seguridadsocial">
+                <div id="consecutivo" style="width: 100%">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Información de la seguridad social</div>
+                            <div class="panel-body">
+                                <div class="form-group form-group-sm">
+                                <label class="col-sm-3 control-label">Control pago:</label>
+                                <div class="col-sm-9">
+                                        {{ form_widget(formConfiguracion.controlPago, { 'attr': {'class': 'form-control'} }) }}
+                                </div>
+                            </div>
+                            </div>
+                    </div>            
+                </div> 
+            </div>                               
             <div class="modal-footer">      
                 {{ form_widget(formConfiguracion.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
             </div>                    

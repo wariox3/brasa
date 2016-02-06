@@ -116,6 +116,11 @@ class RhuConfiguracion
      */    
     private $codigoComprobantePagoBanco;
     
+    /**     
+     * @ORM\Column(name="control_pago", type="boolean")
+     */    
+    private $controlPago = 0;
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
@@ -627,6 +632,30 @@ class RhuConfiguracion
     public function getCodigoComprobantePagoBanco()
     {
         return $this->codigoComprobantePagoBanco;
+    }
+
+    /**
+     * Set controlPago
+     *
+     * @param boolean $controlPago
+     *
+     * @return RhuConfiguracion
+     */
+    public function setControlPago($controlPago)
+    {
+        $this->controlPago = $controlPago;
+
+        return $this;
+    }
+
+    /**
+     * Get controlPago
+     *
+     * @return boolean
+     */
+    public function getControlPago()
+    {
+        return $this->controlPago;
     }
 
     /**

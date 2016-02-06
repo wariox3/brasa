@@ -128,7 +128,11 @@ class ConfiguracionController extends Controller
             'property' => 'nombre',
             'required' => false);                   
         $arrayPropiedadesConceptoEntidadComprobanteBanco['data'] = $em->getReference("BrasaContabilidadBundle:CtbComprobante", $arConfiguracion->getCodigoComprobantePagoBanco());
-        
+        if ($arConfiguracion->getControlPago() == 1){
+            $srtControlPago = "SI";
+        } else {
+            $srtControlPago = "NO";
+        }
         $formConfiguracion = $this->createFormBuilder() 
             ->add('conceptoAuxilioTransporte', 'entity', $arrayPropiedadesConceptoAuxilioTransporte)    
             ->add('vrAuxilioTransporte', 'number', array('data' => $arConfiguracion->getVrAuxilioTransporte(), 'required' => true))
@@ -148,6 +152,7 @@ class ConfiguracionController extends Controller
             ->add('entidadExamenIngreso', 'entity', $arrayPropiedadesConceptoEntidadExamenIngreso, array('required' => true))        
             ->add('comprobantePagoNomina', 'entity', $arrayPropiedadesConceptoEntidadComprobanteNomina, array('required' => true))            
             ->add('comprobantePagoBanco', 'entity', $arrayPropiedadesConceptoEntidadComprobanteBanco, array('required' => true))            
+            ->add('controlPago', 'choice', array('choices'   => array($arConfiguracion->getControlPago() => $srtControlPago, '1' => 'SI', '0' => 'NO')))
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -171,6 +176,7 @@ class ConfiguracionController extends Controller
             $entidadExamenIngreso = $controles['entidadExamenIngreso'];
             $comprobantePagoNomina = $controles['comprobantePagoNomina'];
             $comprobantePagoBanco = $controles['comprobantePagoBanco'];
+            $controlPago = $controles['controlPago'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -190,6 +196,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoEntidadExamenIngreso($entidadExamenIngreso);
             $arConfiguracion->setCodigoComprobantePagoNomina($comprobantePagoNomina);
             $arConfiguracion->setCodigoComprobantepagoBanco($comprobantePagoBanco);
+            $arConfiguracion->setControlPago($controlPago);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
