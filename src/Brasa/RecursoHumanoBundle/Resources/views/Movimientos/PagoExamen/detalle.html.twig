@@ -63,7 +63,8 @@
                         <tr>
                             <th>CÓDIGO</th>
                             <th>IDENTIFICACIÓN</th>
-                            <th>NOMBRE</th>                
+                            <th>NOMBRE</th>
+                            <th>CP</th>
                             <th style="text-align: right">PRECIO</th>                
                             <th></th>
                         </tr>
@@ -71,7 +72,8 @@
                             <tr>
                                 <td>{{ arPagoExamenDetalle.codigoPagoExamenDetallePk  }}</td>
                                 <td>{{ arPagoExamenDetalle.examenRel.identificacion  }}</td>
-                                <td>{{ arPagoExamenDetalle.examenRel.nombreCorto  }}</td>                
+                                <td>{{ arPagoExamenDetalle.examenRel.nombreCorto  }}</td>
+                                <td>{% if arPagoExamenDetalle.examenRel.controlPago == 1 %}SI{% else %}NO{% endif %}</td>
                                 <td class="td-in-well" align="right">{{ arPagoExamenDetalle.vrPrecio | number_format(2, '.', ',') }}</td>
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoExamenDetalle.codigoPagoExamenDetallePk }}" /></td>
                             </tr>

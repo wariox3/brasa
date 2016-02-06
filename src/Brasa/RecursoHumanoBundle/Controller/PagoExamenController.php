@@ -136,8 +136,7 @@ class PagoExamenController extends Controller
                             $em->persist($arPagoExamenDetalle); 
                             $arExamen->setEstadoPagado(1);
                             $em->persist($arExamen);
-                        }
-                        
+                        }   
                     }
                     $em->flush();
                 }
