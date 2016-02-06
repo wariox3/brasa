@@ -23,8 +23,12 @@ brs_tur_base_recurso_detalle:
     defaults: { _controller: BrasaTurnoBundle:BaseRecurso:detalle }    
     
 brs_tur_base_recurso_nuevo:
-    path:     /tur/base/recurso/nuevo/{codigoRecurso}
+    path:     /tur/base/recurso/nuevo/{codigoRecurso}/{codigoEmpleado}
     defaults: { _controller: BrasaTurnoBundle:BaseRecurso:nuevo }
+
+brs_tur_base_recurso_nuevo_enlazar:
+    path:     /tur/base/recurso/nuevo/enlazar/
+    defaults: { _controller: BrasaTurnoBundle:BaseRecurso:enlazar } 
 
 brs_tur_base_concepto_servicio_lista:
     path:     /tur/base/concepto/servicio/lista

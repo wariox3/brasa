@@ -39,13 +39,33 @@ class BaseRecursoController extends Controller
             'form' => $form->createView()));
     }
 
-    public function nuevoAction($codigoRecurso = '') {
+    public function nuevoAction($codigoRecurso = '', $codigoEmpleado = '') {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
         if($codigoRecurso != '' && $codigoRecurso != '0') {
             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
+        } else {
+            if($codigoEmpleado != '' && $codigoEmpleado != '0') {
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);                
+                if($arEmpleado) {
+                    $arRecursoValidar = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));                 
+                    if(!$arRecursoValidar) {
+                        $arRecurso->setEmpleadoRel($arEmpleado);
+                        $arRecurso->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());
+                        $arRecurso->setNombreCorto($arEmpleado->getNombreCorto());
+                        $arRecurso->setTelefono($arEmpleado->getTelefono());
+                        $arRecurso->setCelular($arEmpleado->getCelular());
+                        $arRecurso->setDireccion($arEmpleado->getDireccion());
+                        $arRecurso->setCorreo($arEmpleado->getCorreo());
+                        $arRecurso->setFechaNacimiento($arEmpleado->getFechaNacimiento());
+                    }else {
+                        $objMensaje->Mensaje("error", "El recurso " . $arEmpleado->getNombreCorto() . " ya existe", $this);
+                    }                    
+                } 
+            }
         }        
         $form = $this->createForm(new TurRecursoType, $arRecurso);
         $form->handleRequest($request);
@@ -61,7 +81,7 @@ class BaseRecursoController extends Controller
                     $em->flush();            
 
                     if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_base_recurso_nuevo', array('codigoRecurso' => 0 )));
+                        return $this->redirect($this->generateUrl('brs_tur_base_recurso_nuevo', array('codigoRecurso' => 0, 'codigoEmpleado' => 0 )));
                     } else {
                         return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
                     }                    
@@ -195,6 +215,31 @@ class BaseRecursoController extends Controller
             'form' => $form->createView()));
     }   
     
+    public function enlazarAction() {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->formularioEnlazar();
+        $form->handleRequest($request);
+        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        if($form->isValid()) {
+            if($form->get('BtnFiltrar')->isClicked()) {     
+                $arCentroCosto = $form->get('centroCostoRel')->getData();
+                $codigoCentroCosto = "";
+                if($arCentroCosto) {
+                    $codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
+                }
+                $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL(
+                        $form->get('TxtNombreCorto')->getData(), 
+                        $codigoCentroCosto, 1,
+                        $form->get('TxtIdentificacion')->getData(), "", 1));
+                $arEmpleados = $query->getResult();                
+            }
+        }
+        return $this->render('BrasaTurnoBundle:Base/Recurso:enlazar.html.twig', array(
+            'arEmpleados' => $arEmpleados,
+            'form' => $form->createView()));
+    }    
+    
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
@@ -235,6 +280,24 @@ class BaseRecursoController extends Controller
         return $form;
     }
 
+    private function formularioEnlazar() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false))                
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))
+            ->add('TxtNombreCorto', 'text', array('label'  => 'Nombre'))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->getForm();
+        return $form;
+    }
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();

@@ -24,6 +24,8 @@ class TurRecursoRepository extends EntityRepository {
         $strSql = "SELECT
                     tur_recurso.codigo_recurso_pk as codigoRecursoPk,
                     tur_recurso.nombre_corto as nombreCorto,
+                    tur_recurso.telefono as telefono,
+                    tur_recurso.celular as celular,
                     tur_programacion_detalle.dia_$strDia as Dia$strDia,
                     tur_turno.descanso as descanso,
                     tur_turno.nombre as nombreTurno
@@ -39,8 +41,7 @@ class TurRecursoRepository extends EntityRepository {
         $results = $statement->fetchAll();        
         
         return $results;
-    }            
-    
+    }                
     
     public function eliminar($arrSeleccionados) {
         $em = $this->getEntityManager();

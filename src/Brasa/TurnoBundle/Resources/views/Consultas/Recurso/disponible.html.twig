@@ -32,12 +32,16 @@
             <tr>
                 <th>COD</th>
                 <th>NOMBRE</th>
+                <th>TELEFONO</th>
+                <th>CELULAR</th>
                 <th>TURNO</th>
             </tr>
             {% for arRecurso in arRecurso %}
                 <tr>
                     <td>{{ arRecurso.codigoRecursoPk  }}</td>                    
-                    <td>{{ arRecurso.nombreCorto  }}</td>                    
+                    <td>{{ arRecurso.nombreCorto  }}</td>
+                    <td>{{ arRecurso.telefono  }}</td>
+                    <td>{{ arRecurso.celular  }}</td>
                     <td>{{ arRecurso.nombreTurno  }}</td>                    
                 </tr>
             {% endfor %}

@@ -39,29 +39,47 @@
                 </div>                
             </div> 
             <div class="form-group form-group-sm">
-                <label for="form_apodo" class="col-sm-3 control-label">Apodo:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.apodo, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
-                </div>                
-            </div>                 
-            <div class="form-group form-group-sm">
                 <label for="form_recursoTipoRel" class="col-sm-3 control-label">Tipo:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.recursoTipoRel, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
             </div>                
             <div class="form-group form-group-sm">
-                <label for="form_pagoPromedio" class="col-sm-3 control-label">Pago promedio:</label>
+                <label for="form_apodo" class="col-sm-3 control-label">Apodo:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.pagoPromedio) }}                        
+                    {{ form_widget(form.apodo, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
+                </div>                
+            </div>      
+            <div class="form-group form-group-sm">
+                <label for="form_telefono" class="col-sm-3 control-label">Telefono:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.telefono, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_celular" class="col-sm-3 control-label">Celular:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.celular, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>  
+            <div class="form-group form-group-sm">
+                <label for="form_direccion" class="col-sm-3 control-label">Direccion:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.direccion, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
                 </div>                
             </div>                
             <div class="form-group form-group-sm">
-                <label for="form_pagoVariable" class="col-sm-3 control-label">Pago variable:</label>
+                <label for="form_correo" class="col-sm-3 control-label">Correo:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.pagoVariable) }}                        
+                    {{ form_widget(form.correo, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
                 </div>                
-            </div>                                
+            </div>   
+            <div class="form-group form-group-sm">
+                <label for="form_fechaNacimiento" class="col-sm-3 control-label">Fecha nacimiento:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.fechaNacimiento, {'attr': {'maxlength' : 10} }) }} 
+                </div>                
+            </div>                                                              
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">
@@ -71,7 +89,8 @@
         </div>
     </div>               
     <div class="modal-footer">
-        <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_lista') }}">Cancelar</a>        
+        <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_lista') }}">Cancelar</a>     
+        <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_nuevo_enlazar') }}">Enlazar de empleado</a>            
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
         {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>

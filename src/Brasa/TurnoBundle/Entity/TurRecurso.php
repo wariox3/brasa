@@ -18,6 +18,11 @@ class TurRecurso
     private $codigoRecursoPk;    
     
     /**
+     * @ORM\Column(name="codigo_recurso_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoRecursoTipoFk;    
+    
+    /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
     private $codigoEmpleadoFk;            
@@ -34,9 +39,34 @@ class TurRecurso
     private $nombreCorto;    
     
     /**
-     * @ORM\Column(name="codigo_recurso_tipo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
      */    
-    private $codigoRecursoTipoFk;    
+    private $telefono;    
+    
+    /**
+     * @ORM\Column(name="celular", type="string", length=20, nullable=true)
+     */    
+    private $celular; 
+    
+    /**
+     * @ORM\Column(name="direccion", type="string", length=30, nullable=true)
+     */    
+    private $direccion;
+    
+    /**
+     * @ORM\Column(name="correo", type="string", length=80, nullable=true)
+     */    
+    private $correo; 
+    
+    /**
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
+     */ 
+    private $fechaNacimiento;               
+    
+    /**
+     * @ORM\Column(name="ruta_foto", type="string", length=250, nullable=true)
+     */    
+    private $rutaFoto;    
     
     /**     
      * @ORM\Column(name="pago_promedio", type="boolean")
@@ -52,6 +82,11 @@ class TurRecurso
      * @ORM\Column(name="apodo", type="string", length=80, nullable=true)
      */    
     private $apodo;     
+    
+    /**     
+     * @ORM\Column(name="estado_activo", type="boolean")
+     */    
+    private $estadoActivo = true;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -95,8 +130,6 @@ class TurRecurso
      */
     protected $serviciosDetallesRecursosRecursoRel;     
     
-
-
     /**
      * Constructor
      */
@@ -117,6 +150,30 @@ class TurRecurso
     public function getCodigoRecursoPk()
     {
         return $this->codigoRecursoPk;
+    }
+
+    /**
+     * Set codigoRecursoTipoFk
+     *
+     * @param integer $codigoRecursoTipoFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoRecursoTipoFk($codigoRecursoTipoFk)
+    {
+        $this->codigoRecursoTipoFk = $codigoRecursoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRecursoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoRecursoTipoFk()
+    {
+        return $this->codigoRecursoTipoFk;
     }
 
     /**
@@ -192,27 +249,147 @@ class TurRecurso
     }
 
     /**
-     * Set codigoRecursoTipoFk
+     * Set telefono
      *
-     * @param integer $codigoRecursoTipoFk
+     * @param string $telefono
      *
      * @return TurRecurso
      */
-    public function setCodigoRecursoTipoFk($codigoRecursoTipoFk)
+    public function setTelefono($telefono)
     {
-        $this->codigoRecursoTipoFk = $codigoRecursoTipoFk;
+        $this->telefono = $telefono;
 
         return $this;
     }
 
     /**
-     * Get codigoRecursoTipoFk
+     * Get telefono
      *
-     * @return integer
+     * @return string
      */
-    public function getCodigoRecursoTipoFk()
+    public function getTelefono()
     {
-        return $this->codigoRecursoTipoFk;
+        return $this->telefono;
+    }
+
+    /**
+     * Set celular
+     *
+     * @param string $celular
+     *
+     * @return TurRecurso
+     */
+    public function setCelular($celular)
+    {
+        $this->celular = $celular;
+
+        return $this;
+    }
+
+    /**
+     * Get celular
+     *
+     * @return string
+     */
+    public function getCelular()
+    {
+        return $this->celular;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return TurRecurso
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * Set correo
+     *
+     * @param string $correo
+     *
+     * @return TurRecurso
+     */
+    public function setCorreo($correo)
+    {
+        $this->correo = $correo;
+
+        return $this;
+    }
+
+    /**
+     * Get correo
+     *
+     * @return string
+     */
+    public function getCorreo()
+    {
+        return $this->correo;
+    }
+
+    /**
+     * Set fechaNacimiento
+     *
+     * @param \DateTime $fechaNacimiento
+     *
+     * @return TurRecurso
+     */
+    public function setFechaNacimiento($fechaNacimiento)
+    {
+        $this->fechaNacimiento = $fechaNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaNacimiento
+     *
+     * @return \DateTime
+     */
+    public function getFechaNacimiento()
+    {
+        return $this->fechaNacimiento;
+    }
+
+    /**
+     * Set rutaFoto
+     *
+     * @param string $rutaFoto
+     *
+     * @return TurRecurso
+     */
+    public function setRutaFoto($rutaFoto)
+    {
+        $this->rutaFoto = $rutaFoto;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaFoto
+     *
+     * @return string
+     */
+    public function getRutaFoto()
+    {
+        return $this->rutaFoto;
     }
 
     /**
@@ -261,6 +438,54 @@ class TurRecurso
     public function getPagoVariable()
     {
         return $this->pagoVariable;
+    }
+
+    /**
+     * Set apodo
+     *
+     * @param string $apodo
+     *
+     * @return TurRecurso
+     */
+    public function setApodo($apodo)
+    {
+        $this->apodo = $apodo;
+
+        return $this;
+    }
+
+    /**
+     * Get apodo
+     *
+     * @return string
+     */
+    public function getApodo()
+    {
+        return $this->apodo;
+    }
+
+    /**
+     * Set estadoActivo
+     *
+     * @param boolean $estadoActivo
+     *
+     * @return TurRecurso
+     */
+    public function setEstadoActivo($estadoActivo)
+    {
+        $this->estadoActivo = $estadoActivo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoActivo
+     *
+     * @return boolean
+     */
+    public function getEstadoActivo()
+    {
+        return $this->estadoActivo;
     }
 
     /**
@@ -503,29 +728,5 @@ class TurRecurso
     public function getServiciosDetallesRecursosRecursoRel()
     {
         return $this->serviciosDetallesRecursosRecursoRel;
-    }
-
-    /**
-     * Set apodo
-     *
-     * @param string $apodo
-     *
-     * @return TurRecurso
-     */
-    public function setApodo($apodo)
-    {
-        $this->apodo = $apodo;
-
-        return $this;
-    }
-
-    /**
-     * Get apodo
-     *
-     * @return string
-     */
-    public function getApodo()
-    {
-        return $this->apodo;
     }
 }
