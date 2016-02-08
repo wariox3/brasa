@@ -11,15 +11,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class SegUsuarioPermisoEspecialRepository extends EntityRepository {
 
-    public function permisoEspecial($codigoUsuario, $codigoPermisoEspecial) {
+    public function permisoEspecial($codigoUsuario, $codigoPermisoEspecial, $arrRoles = NULL) {
         $em = $this->getEntityManager();
-        $boolPermiso = false;        
-        $arUsuarioPermisoEspecial = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findOneBy(array('codigoUsuarioFk' => $codigoUsuario, 'codigoPermisoEspecialFk' => $codigoPermisoEspecial));
-        if(count($arUsuarioPermisoEspecial) > 0) {
-            if($arUsuarioPermisoEspecial->getPermitir() == 1) {
-                $boolPermiso = true;
+        $boolAdministrador = false;
+        foreach ($arrRoles as $rol) {
+            if($rol == 'ROLE_ADMIN') {
+                $boolAdministrador = 1;
             }
-        }        
+        }
+        $boolPermiso = false;
+        if($boolAdministrador == 1) {
+          $boolPermiso = 1;  
+        } else {
+            $arUsuarioPermisoEspecial = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findOneBy(array('codigoUsuarioFk' => $codigoUsuario, 'codigoPermisoEspecialFk' => $codigoPermisoEspecial));
+            if(count($arUsuarioPermisoEspecial) > 0) {
+                if($arUsuarioPermisoEspecial->getPermitir() == 1) {
+                    $boolPermiso = true;
+                }
+            }            
+        }                        
         return $boolPermiso;        
     }
 }

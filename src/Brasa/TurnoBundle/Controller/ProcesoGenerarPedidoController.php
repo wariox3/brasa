@@ -9,10 +9,10 @@ class ProcesoGenerarPedidoController extends Controller
     var $strListaDql = "";
     
     public function listaAction() {
-        $em = $this->getDoctrine()->getManager();        
-        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser()->getId(), 3)) {
+        $em = $this->getDoctrine()->getManager();                     
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser()->getId(), 3, $this->getUser()->getRoles())) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
-        }
+        }                    
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
