@@ -534,4 +534,5 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         }
         return $strCodigoReal;
     }
+    
 }
