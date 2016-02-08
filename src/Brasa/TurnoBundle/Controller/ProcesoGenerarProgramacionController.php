@@ -9,6 +9,9 @@ class ProcesoGenerarProgramacionController extends Controller
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser()->getId(), 4)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }        
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
