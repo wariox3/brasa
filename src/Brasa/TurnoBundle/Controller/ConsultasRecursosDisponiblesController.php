@@ -16,6 +16,7 @@ class ConsultasRecursosDisponiblesController extends Controller
         $form->handleRequest($request);
         $this->lista();
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+        $arrDisponibles = array();
         $anio = "";
         $mes = "";
         if ($form->isValid()) {            
@@ -25,12 +26,56 @@ class ConsultasRecursosDisponiblesController extends Controller
                 $dateFecha = $form->get('fecha')->getData();    
                 $anio = $dateFecha->format('Y');
                 $mes = $dateFecha->format('m');
-                $arRecurso =  $em->getRepository('BrasaTurnoBundle:TurRecurso')->disponibles($dateFecha->format('j'), $dateFecha->format('Y'), $dateFecha->format('m'));                
+                $strDia = $dateFecha->format('j');
+                $connection = $em->getConnection();
+                
+                $arRecursos = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                $arRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findBy(array('estadoActivo' => 1));
+                foreach ($arRecursos as $arRecurso) {
+                    $strSql2 = "SELECT  
+                                        codigo_programacion_detalle_pk
+                                FROM
+                                        tur_programacion_detalle   
+                                LEFT JOIN tur_turno ON tur_programacion_detalle.dia_$strDia = tur_turno.codigo_turno_pk 
+                                WHERE codigo_recurso_fk = " . $arRecurso->getCodigoRecursoPk() . " AND tur_programacion_detalle.dia_$strDia IS NOT NULL  AND anio = $anio AND mes = $mes";                    
+                    $statement = $connection->prepare($strSql2);        
+                    $statement->execute();
+                    $resultados = $statement->fetchAll();
+                    if(!$resultados) {
+                        $arrDisponibles[] = array(
+                            'codigoRecursoPk' => $arRecurso->getCodigoRecursoPk(),
+                            'nombreCorto' => $arRecurso->getNombreCorto(),
+                            'telefono' => $arRecurso->getTelefono(),
+                            'celular' => $arRecurso->getCelular(),
+                            'nombreTurno' => ''                  
+                            );
+                    } else {
+                        $strSql2 = "SELECT  
+                                            codigo_programacion_detalle_pk
+                                    FROM
+                                            tur_programacion_detalle   
+                                    LEFT JOIN tur_turno ON tur_programacion_detalle.dia_$strDia = tur_turno.codigo_turno_pk 
+                                    WHERE codigo_recurso_fk = " . $arRecurso->getCodigoRecursoPk() . " AND tur_turno.descanso = 1 AND anio = $anio AND mes = $mes";                    
+                        $statement = $connection->prepare($strSql2);        
+                        $statement->execute();
+                        $resultados = $statement->fetchAll();                        
+                        if($resultados) {                        
+                            $arrDisponibles[] = array(
+                                'codigoRecursoPk' => $arRecurso->getCodigoRecursoPk(),
+                                'nombreCorto' => $arRecurso->getNombreCorto(),
+                                'telefono' => $arRecurso->getTelefono(),
+                                'celular' => $arRecurso->getCelular(),
+                                'nombreTurno' => 'DESCANSO'
+                                );                            
+                        }
+                    }
+                }
+                //$arRecurso =  $em->getRepository('BrasaTurnoBundle:TurRecurso')->disponibles($dateFecha->format('j'), $dateFecha->format('Y'), $dateFecha->format('m'));                
             }
         }
                 
         return $this->render('BrasaTurnoBundle:Consultas/Recurso:disponible.html.twig', array(
-            'arRecurso' => $arRecurso,
+            'arRecurso' => $arrDisponibles,
             'anio' => $anio,
             'mes' => $mes,
             'form' => $form->createView()));
