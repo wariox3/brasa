@@ -38,6 +38,7 @@
                 <th>HORA EMPLEADO</th>
                 <th>LLEGADA TARDE</th>
                 <th>DURACIÓN LLEG TARDE</th>
+                <th>ANULADO</th>
                 <th>COMENTARIOS</th>
             </tr>
             {% set contador = 1  %}
@@ -53,6 +54,7 @@
                 <td>{% if arHorarioAccesos.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arHorarioAccesos.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
                 <td>{% if arHorarioAccesos.llegadaTarde == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{{ arHorarioAccesos.duracionLlegadaTarde }}</td>
+                <td>{% if arHorarioAccesos.anulado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{{ arHorarioAccesos.comentarios  }}</td>
                 
             </tr>

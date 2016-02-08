@@ -35,7 +35,7 @@ class ControlAccesoEmpleadoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
                 }
                 $this->filtrarLista($form);
-                $this->listar();
+                //$this->listar();
             }
             
 
