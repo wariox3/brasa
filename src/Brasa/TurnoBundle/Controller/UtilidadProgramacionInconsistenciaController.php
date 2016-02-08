@@ -54,6 +54,21 @@ class UtilidadProgramacionInconsistenciaController extends Controller
                     }                        
                 }
                 $em->flush();
+                
+                $arRecursos = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                $arRecursos =  $em->getRepository('BrasaTurnoBundle:TurRecurso')->findBy(array('estadoActivo' => 1));                
+                foreach ($arRecursos as $arRecurso) {
+                    $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                    $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoRecursoFk' => $arRecurso->getCodigoRecursoPk(), 'anio' => $strAnio, 'mes' => $strMes));                
+                    if(count($arProgramacionDetalle) <= 0) {
+                        $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
+                        $arProgramacionInconsistencia->setInconsistencia('Recurso sin programacion en el mes');
+                        $arProgramacionInconsistencia->setDetalle("El recurso " . $arRecurso->getCodigoRecursoPk() . " " . $arRecurso->getNombreCorto() . " no registra programaciones para el mes");
+                        $em->persist($arProgramacionInconsistencia);                         
+                    }
+                }
+                $em->flush();
+                
                 return $this->redirect($this->generateUrl('brs_tur_utilidad_programacion_inconsistencias')); 
             } 
             if($form->get('BtnEliminar')->isClicked()) {            
