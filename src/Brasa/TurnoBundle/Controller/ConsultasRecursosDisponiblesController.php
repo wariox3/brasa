@@ -16,11 +16,15 @@ class ConsultasRecursosDisponiblesController extends Controller
         $form->handleRequest($request);
         $this->lista();
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+        $anio = "";
+        $mes = "";
         if ($form->isValid()) {            
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $this->lista();
-                $dateFecha = $form->get('fecha')->getData();               
+                $dateFecha = $form->get('fecha')->getData();    
+                $anio = $dateFecha->format('Y');
+                $mes = $dateFecha->format('m');
                 $arRecurso =  $em->getRepository('BrasaTurnoBundle:TurRecurso')->disponibles($dateFecha->format('j'), $dateFecha->format('Y'), $dateFecha->format('m'));                
             }
             if ($form->get('BtnExcel')->isClicked()) {
@@ -32,7 +36,17 @@ class ConsultasRecursosDisponiblesController extends Controller
                 
         return $this->render('BrasaTurnoBundle:Consultas/Recurso:disponible.html.twig', array(
             'arRecurso' => $arRecurso,
+            'anio' => $anio,
+            'mes' => $mes,
             'form' => $form->createView()));
+    }        
+    
+    public function programacionAction($anio, $mes, $codigoRecurso) {
+        $em = $this->getDoctrine()->getManager();        
+        $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+        $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $anio, 'mes' => $mes, 'codigoRecursoFk' => $codigoRecurso));                
+        return $this->render('BrasaTurnoBundle:Consultas/Recurso:disponibleProgramacion.html.twig', array(
+            'arProgramacionDetalle' => $arProgramacionDetalle));
     }        
     
     private function lista() {

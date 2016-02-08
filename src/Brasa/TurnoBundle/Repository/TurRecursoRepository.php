@@ -26,15 +26,22 @@ class TurRecursoRepository extends EntityRepository {
                     tur_recurso.nombre_corto as nombreCorto,
                     tur_recurso.telefono as telefono,
                     tur_recurso.celular as celular,
+                    tur_recurso.estado_activo as estadoActivo,
                     tur_programacion_detalle.dia_$strDia as Dia$strDia,
+                    tur_programacion_detalle.anio as anio,
+                    tur_programacion_detalle.mes as mes,
                     tur_turno.descanso as descanso,
                     tur_turno.nombre as nombreTurno
                     FROM
                     tur_programacion_detalle
                     RIGHT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk
                     LEFT OUTER JOIN tur_turno ON tur_programacion_detalle.dia_$strDia = tur_turno.codigo_turno_pk     
-                    WHERE (descanso = 1 AND tur_programacion_detalle.anio = $strAnio AND tur_programacion_detalle.mes = $strMes) OR dia_$strDia IS NULL";                
-        
+                    WHERE 
+                    (                           
+                        (tur_turno.descanso = 1 AND tur_programacion_detalle.anio = $strAnio AND tur_programacion_detalle.mes = $strMes) 
+                            OR                            
+                        dia_$strDia IS NULL                        
+                    ) AND tur_recurso.estado_activo = 1"; 
         $connection = $em->getConnection();
         $statement = $connection->prepare($strSql);        
         $statement->execute();

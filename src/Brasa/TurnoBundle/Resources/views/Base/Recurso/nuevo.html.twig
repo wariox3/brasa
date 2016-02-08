@@ -29,7 +29,8 @@
             <div class="form-group form-group-sm">
                 <label for="form_numeroIdentificacion" class="col-sm-3 control-label">Numero identificacion:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.numeroIdentificacion, { 'attr': {'class': 'form-control'} }) }}                        
+                    {{ form_widget(form.numeroIdentificacion, { 'attr': {'class': 'form-control'} }) }}     
+                    {{ form_errors(form.numeroIdentificacion)}}
                 </div>                
             </div>                          
             <div class="form-group form-group-sm">

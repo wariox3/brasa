@@ -19,9 +19,20 @@ class BaseRecursoController extends Controller
         $this->lista();
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if ($form->get('BtnEliminar')->isClicked()) {
+            if ($form->get('BtnActivarInactivar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurRecurso')->eliminar($arrSeleccionados);
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigo) {
+                        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigo);
+                        if($arRecurso->getEstadoActivo() == 1) {
+                            $arRecurso->setEstadoActivo(0);
+                        } else {
+                            $arRecurso->setEstadoActivo(1);
+                        }
+                        $em->persist($arRecurso);
+                        $em->flush();
+                    }
+                }                
                 return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
@@ -47,6 +58,7 @@ class BaseRecursoController extends Controller
         if($codigoRecurso != '' && $codigoRecurso != '0') {
             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
         } else {
+            $arRecurso->setEstadoActivo(1);
             if($codigoEmpleado != '' && $codigoEmpleado != '0') {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);                
@@ -144,37 +156,6 @@ class BaseRecursoController extends Controller
                 } else {
                     $objMensaje->Mensaje("error", "No puede imprimir una orden de examen sin estar autorizada", $this);
                 }
-            }
-            if($form->get('BtnEliminarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaTurnoBundle:TurRecurso')->liquidar($codigoRecurso);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));
-            }
-            if($form->get('BtnAprobarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));
-            }
-            if($form->get('BtnCerrarDetalle')->isClicked()) {
-                $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->cerrarDetallesSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));
-            }            
-            if ($form->get('BtnActualizarDetalle')->isClicked()) {
-                $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigo'] as $intCodigo) {                
-                    if($arrControles['TxtPrecio'.$intCodigo] != "" && $arrControles['TxtPrecio'.$intCodigo] != 0) {
-                        $arRecursoDetalle = new \Brasa\TurnoBundle\Entity\TurRecursoDetalle();
-                        $arRecursoDetalle = $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->find($intCodigo);                                        
-                        $floPrecio = $arrControles['TxtPrecio'.$intCodigo];
-                        $arRecursoDetalle->setValidarVencimiento($arrControles['cboValidarVencimiento'.$intCodigo]);
-                        $arRecursoDetalle->setFechaVence(date_create($arrControles['TxtVence'.$intCodigo]));
-                        $arRecursoDetalle->setVrPrecio($floPrecio);
-                        $em->persist($arRecursoDetalle);                        
-                    }
-                }
-                $em->flush();
-                $em->getRepository('BrasaTurnoBundle:TurRecurso')->liquidar($codigoRecurso);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));
             }            
         }
 
@@ -185,35 +166,7 @@ class BaseRecursoController extends Controller
                     'arRecursoDetalle' => $arRecursoDetalle,
                     'form' => $form->createView()
                     ));
-    }
-
-    public function detalleNuevoAction($codigoRecurso, $codigoRecursoDetalle = 0) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();        
-        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
-        $arRecursoDetalle = new \Brasa\TurnoBundle\Entity\TurRecursoDetalle();
-        if($codigoRecursoDetalle != 0) {
-            $arRecursoDetalle = $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->find($codigoRecursoDetalle);
-        }       
-        $form = $this->createForm(new TurRecursoDetalleType, $arRecursoDetalle);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arRecursoDetalle = $form->getData();            
-            $arRecursoDetalle->setProgramacionRel($arRecurso);
-            $em->persist($arRecursoDetalle);
-            $em->flush();            
-            
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle_nuevo', array('codigoProgramacion' => $codigoRecurso, 'codigoProgramacionDetalle' => 0 )));
-            } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }            
-        }
-        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
-            'arRecurso' => $arRecurso,
-            'form' => $form->createView()));
-    }   
+    }    
     
     public function enlazarAction() {
         $request = $this->getRequest();
@@ -258,7 +211,7 @@ class BaseRecursoController extends Controller
         $form = $this->createFormBuilder()            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
+            ->add('BtnActivarInactivar', 'submit', array('label'  => 'Activar / Inactivar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

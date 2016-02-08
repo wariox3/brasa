@@ -3,10 +3,13 @@
 namespace Brasa\TurnoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="tur_recurso")
  * @ORM\Entity(repositoryClass="Brasa\TurnoBundle\Repository\TurRecursoRepository")
+ * @DoctrineAssert\UniqueEntity(fields={"numeroIdentificacion"},message="Ya existe este número de identificación")
  */
 class TurRecurso
 {
@@ -28,9 +31,8 @@ class TurRecurso
     private $codigoEmpleadoFk;            
     
     /**
-     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
-     */
-         
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)     
+     */         
     private $numeroIdentificacion;    
     
     /**

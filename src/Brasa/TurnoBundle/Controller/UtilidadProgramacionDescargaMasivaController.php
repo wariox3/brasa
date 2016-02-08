@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
 
-class UtilidadProgramacionesDescargaMasivaController extends Controller
+class UtilidadProgramacionDescargaMasivaController extends Controller
 {
     var $strDqlLista = "";
     

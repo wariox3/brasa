@@ -16,7 +16,7 @@
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
                 <div class="form-group form-group-sm">
-                    <label for="form_TxtCodigo" class="col-sm-2 control-label">Codigo:</label>
+                    <label for="form_TxtCodigo" class="col-sm-2 control-label">Fecha:</label>
                     <div class="col-sm-10">
                         {{ form_widget(form.fecha) }}
                     </div>
@@ -35,6 +35,7 @@
                 <th>TELEFONO</th>
                 <th>CELULAR</th>
                 <th>TURNO</th>
+                <th></th>
             </tr>
             {% for arRecurso in arRecurso %}
                 <tr>
@@ -42,7 +43,8 @@
                     <td>{{ arRecurso.nombreCorto  }}</td>
                     <td>{{ arRecurso.telefono  }}</td>
                     <td>{{ arRecurso.celular  }}</td>
-                    <td>{{ arRecurso.nombreTurno  }}</td>                    
+                    <td>{{ arRecurso.nombreTurno  }}</td>
+                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_consultas_recursos_disponibles_programacion', { 'anio': anio, 'mes': mes, 'codigoRecurso': arRecurso.codigoRecursoPk }) }}', 'buscarCliente', 600, 900)">Ver programaciones</a></td>
                 </tr>
             {% endfor %}
         </table>
