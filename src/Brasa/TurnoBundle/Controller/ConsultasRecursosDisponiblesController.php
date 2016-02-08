@@ -27,11 +27,6 @@ class ConsultasRecursosDisponiblesController extends Controller
                 $mes = $dateFecha->format('m');
                 $arRecurso =  $em->getRepository('BrasaTurnoBundle:TurRecurso')->disponibles($dateFecha->format('j'), $dateFecha->format('Y'), $dateFecha->format('m'));                
             }
-            if ($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
-                $this->lista();
-                $this->generarExcel();
-            }
         }
                 
         return $this->render('BrasaTurnoBundle:Consultas/Recurso:disponible.html.twig', array(
@@ -62,8 +57,7 @@ class ConsultasRecursosDisponiblesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('fecha', 'date', array('format' => 'yyyyMMMMdd', 'data' => new \DateTime('now')))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('fecha', 'date', array('format' => 'yyyyMMMMdd', 'data' => new \DateTime('now')))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;

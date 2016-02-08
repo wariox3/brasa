@@ -41,7 +41,8 @@ class TurRecursoRepository extends EntityRepository {
                         (tur_turno.descanso = 1 AND tur_programacion_detalle.anio = $strAnio AND tur_programacion_detalle.mes = $strMes) 
                             OR                            
                         dia_$strDia IS NULL                        
-                    ) AND tur_recurso.estado_activo = 1"; 
+                    ) AND tur_recurso.estado_activo = 1 
+                ORDER BY tur_recurso.nombre_corto"; 
         $connection = $em->getConnection();
         $statement = $connection->prepare($strSql);        
         $statement->execute();
