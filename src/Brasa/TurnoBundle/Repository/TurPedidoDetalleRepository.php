@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPedidoDetalleRepository extends EntityRepository {
 
-    public function listaConsultaDql($codigoCliente = "", $boolEstadoProgramado = "", $boolEstadoFacturado = "") {
+    public function listaConsultaDql($codigoCliente = "", $boolEstadoProgramado = "", $boolEstadoFacturado = "", $boolEstadoAnulado = "") {
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p WHERE pd.codigoPedidoDetallePk <> 0 ";
         if($codigoCliente != "") {
             $dql .= " AND p.codigoClienteFk = " . $codigoCliente;  
@@ -25,6 +25,12 @@ class TurPedidoDetalleRepository extends EntityRepository {
         if($boolEstadoFacturado == "0") {
             $dql .= " AND pd.estadoFacturado = 0";
         }        
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND p.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND p.estadoAnulado = 0";
+        }         
         return $dql;
     }     
     

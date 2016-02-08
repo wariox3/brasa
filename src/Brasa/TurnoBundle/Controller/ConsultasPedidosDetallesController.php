@@ -10,11 +10,13 @@ class ConsultasPedidosDetallesController extends Controller
     var $codigoCliente = "";
     var $estadoProgramado = "";
     var $estadoFacturado = "";
+    var $estadoAnulado = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $this->estadoAnulado = 0;
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
@@ -41,13 +43,15 @@ class ConsultasPedidosDetallesController extends Controller
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaConsultaDql(
                 $this->codigoCliente,
                 $this->estadoProgramado,
-                $this->estadoFacturado);
+                $this->estadoFacturado,
+                $this->estadoAnulado);
     }
 
     private function filtrar ($form) {                
         $this->codigoPedido = $form->get('TxtCodigo')->getData();
         $this->estadoProgramado = $form->get('estadoProgramado')->getData();
         $this->estadoFacturado = $form->get('estadoFacturado')->getData();
+        $this->estadoAnulado = $form->get('estadoAnulado')->getData();
     }
 
     private function formularioFiltro() {
@@ -57,6 +61,7 @@ class ConsultasPedidosDetallesController extends Controller
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido))     
             ->add('estadoProgramado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PROGRAMADO', '0' => 'SIN PROGRAMAR'), 'data' => $this->estadoProgramado))                
             ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $this->estadoFacturado))                                
+            ->add('estadoAnulado', 'choice', array('choices'   => array('0' => 'SIN ANULAR','2' => 'TODOS', '1' => 'ANULADO'), 'data' => $this->estadoAnulado))                                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
