@@ -3824,7 +3824,7 @@ INSERT INTO `rhu_accidente_trabajo_tipo_control` (`codigo_accidente_trabajo_tipo
 INSERT INTO `rhu_accidente_trabajo_tipo_control` (`codigo_accidente_trabajo_tipo_control_pk`, `nombre`) VALUES('2','MEDIO');
 INSERT INTO `rhu_accidente_trabajo_tipo_control` (`codigo_accidente_trabajo_tipo_control_pk`, `nombre`) VALUES('3','PERSONA');
 
-insert into `rhu_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `comentarios`) values('','DIURNO',NULL,NULL,'0','0','0','0','0',NULL);
+insert into `rhu_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `comentarios`) values('D','DIURNO','08:00:00','17:00:00','8','0','0','0','0',NULL);
 
 INSERT INTO `rhu_banco` (`codigo_banco_pk`, `nombre`, `convenio_nomina`, `numero_digitos`, `codigo_general`, `nit`, `direccion`, `telefono`) values('1','BANCOLOMBIA','1','11','2323','890.903.93','CARRERA 20 N 40-20','3384244');
 

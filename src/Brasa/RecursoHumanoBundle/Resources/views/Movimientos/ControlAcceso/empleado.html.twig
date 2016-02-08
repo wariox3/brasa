@@ -61,6 +61,7 @@
                 <th>SALIDA ANTES</th>
                 <th>DURACIÓN SAL. ANTES</th>
                 <th>DURACIÓN REGISTRO</th>
+                <th>ANULADO</th>
                 <th>COMENTARIOS</th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center"></th>
@@ -81,6 +82,7 @@
                 <td>{% if arControlAccesoEmpleados.salidaAntes == 1 %}SI{% else %}NO{% endif %}</td>
                 <td>{{ arControlAccesoEmpleados.duracionSalidaAntes }}</td>
                 <td>{{ arControlAccesoEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>
+                <td>{% if arControlAccesoEmpleados.anulado == 1 %}SI{% else %}NO{% endif %}</td>
                 <td>{{ arControlAccesoEmpleados.comentarios  }}</td>
                 <td><a href="{{ path('brs_rhu_control_acceso_empleado_nuevo', { 'codigoControlAcceso': arControlAccesoEmpleados.codigoHorarioAccesoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arControlAccesoEmpleados.codigoHorarioAccesoPk }}" /></td>
@@ -100,7 +102,7 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
             <div class="btn-group">                
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>
         

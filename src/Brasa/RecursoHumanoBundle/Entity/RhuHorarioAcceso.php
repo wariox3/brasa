@@ -85,7 +85,12 @@ class RhuHorarioAcceso
     /**
      * @ORM\Column(name="hora_entrada_turno", type="time", nullable=true)
      */    
-    private $horaEntradaTurno;    
+    private $horaEntradaTurno;
+
+    /**     
+     * @ORM\Column(name="anulado", type="boolean")
+     */    
+    private $anulado = FALSE;
 
     /**
      * @ORM\Column(name="hora_salida_turno", type="time", nullable=true)
@@ -285,6 +290,30 @@ class RhuHorarioAcceso
     }
 
     /**
+     * Set duracionSalidaAntes
+     *
+     * @param string $duracionSalidaAntes
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setDuracionSalidaAntes($duracionSalidaAntes)
+    {
+        $this->duracionSalidaAntes = $duracionSalidaAntes;
+
+        return $this;
+    }
+
+    /**
+     * Get duracionSalidaAntes
+     *
+     * @return string
+     */
+    public function getDuracionSalidaAntes()
+    {
+        return $this->duracionSalidaAntes;
+    }
+
+    /**
      * Set estadoEntrada
      *
      * @param boolean $estadoEntrada
@@ -357,6 +386,30 @@ class RhuHorarioAcceso
     }
 
     /**
+     * Set salidaAntes
+     *
+     * @param boolean $salidaAntes
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setSalidaAntes($salidaAntes)
+    {
+        $this->salidaAntes = $salidaAntes;
+
+        return $this;
+    }
+
+    /**
+     * Get salidaAntes
+     *
+     * @return boolean
+     */
+    public function getSalidaAntes()
+    {
+        return $this->salidaAntes;
+    }
+
+    /**
      * Set horas
      *
      * @param integer $horas
@@ -402,6 +455,30 @@ class RhuHorarioAcceso
     public function getHoraEntradaTurno()
     {
         return $this->horaEntradaTurno;
+    }
+
+    /**
+     * Set anulado
+     *
+     * @param boolean $anulado
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setAnulado($anulado)
+    {
+        $this->anulado = $anulado;
+
+        return $this;
+    }
+
+    /**
+     * Get anulado
+     *
+     * @return boolean
+     */
+    public function getAnulado()
+    {
+        return $this->anulado;
     }
 
     /**
@@ -474,53 +551,5 @@ class RhuHorarioAcceso
     public function getTurnoRel()
     {
         return $this->turnoRel;
-    }
-
-    /**
-     * Set duracionSalidaAntes
-     *
-     * @param string $duracionSalidaAntes
-     *
-     * @return RhuHorarioAcceso
-     */
-    public function setDuracionSalidaAntes($duracionSalidaAntes)
-    {
-        $this->duracionSalidaAntes = $duracionSalidaAntes;
-
-        return $this;
-    }
-
-    /**
-     * Get duracionSalidaAntes
-     *
-     * @return string
-     */
-    public function getDuracionSalidaAntes()
-    {
-        return $this->duracionSalidaAntes;
-    }
-
-    /**
-     * Set salidaAntes
-     *
-     * @param boolean $salidaAntes
-     *
-     * @return RhuHorarioAcceso
-     */
-    public function setSalidaAntes($salidaAntes)
-    {
-        $this->salidaAntes = $salidaAntes;
-
-        return $this;
-    }
-
-    /**
-     * Get salidaAntes
-     *
-     * @return boolean
-     */
-    public function getSalidaAntes()
-    {
-        return $this->salidaAntes;
     }
 }

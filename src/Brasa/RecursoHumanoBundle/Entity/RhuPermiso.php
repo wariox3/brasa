@@ -86,6 +86,11 @@ class RhuPermiso
      * @ORM\Column(name="observaciones", type="string", length=250, nullable=true)
      */
     private $observaciones;
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
 
 
     /**
@@ -119,6 +124,7 @@ class RhuPermiso
     protected $centroCostoRel;
 
     
+
 
     /**
      * Get codigoPermisoPk
@@ -464,6 +470,30 @@ class RhuPermiso
     public function getObservaciones()
     {
         return $this->observaciones;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuPermiso
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 
     /**

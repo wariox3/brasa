@@ -21,12 +21,15 @@ class ControlAccesoEmpleadoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if ($form->get('BtnEliminar')->isClicked()) {
+            if ($form->get('BtnAnular')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoControlAccesoEmpleado) {
                         $arControlAccesoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
                         $arControlAccesoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoControlAccesoEmpleado);
-                        $em->remove($arControlAccesoEmpleado);
+                        //$em->remove($arControlAccesoEmpleado);
+                        $arControlAccesoEmpleado->setAnulado(1);
+                        $arControlAccesoEmpleado->setComentarios("REGISTRO ANULADO");
+                        $em->persist($arControlAccesoEmpleado);
                         $em->flush();
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
@@ -75,7 +78,7 @@ class ControlAccesoEmpleadoController extends Controller
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))    
+            ->add('BtnAnular', 'submit', array('label'  => 'Anular'))    
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
         return $form;
@@ -279,6 +282,7 @@ class ControlAccesoEmpleadoController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
@@ -297,7 +301,8 @@ class ControlAccesoEmpleadoController extends Controller
                     ->setCellValue('O1', 'SALIDA ANTES')
                     ->setCellValue('P1', 'DURACIÓN SALIDA ANTES')
                     ->setCellValue('Q1', 'DURACIÓN TOTAL REGISTRO')
-                    ->setCellValue('R1', 'COMENTARIOS');
+                    ->setCellValue('R1', 'ANULADO')
+                    ->setCellValue('S1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -347,8 +352,9 @@ class ControlAccesoEmpleadoController extends Controller
                 ->setCellValue('N' . $i, $timeHoraSalida)
                 ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arControlAccesoEmpleado->getSalidaAntes()))    
                 ->setCellValue('P' . $i, $duracionSalidaAntes)
-                ->setCellValue('Q' . $i, $arControlAccesoEmpleado->getDuracionRegistro())        
-                ->setCellValue('R' . $i, $arControlAccesoEmpleado->getComentarios());
+                ->setCellValue('Q' . $i, $arControlAccesoEmpleado->getDuracionRegistro())
+                ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arControlAccesoEmpleado->getAnulado()))    
+                ->setCellValue('S' . $i, $arControlAccesoEmpleado->getComentarios());
             $i++;
             $j++;
         }

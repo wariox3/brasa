@@ -24,6 +24,7 @@ DELETE FROM tur_recurso;
 DELETE FROM rhu_permiso;
 DELETE FROM rhu_soporte_pago_horario;
 DELETE FROM rhu_horario_acceso;
+DELETE FROM rhu_horario_periodo;
 DELETE FROM rhu_desempeno_detalle;
 DELETE FROM rhu_desempeno;
 DELETE FROM rhu_capacitacion_detalle;

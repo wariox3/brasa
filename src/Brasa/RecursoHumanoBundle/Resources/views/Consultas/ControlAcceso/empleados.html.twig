@@ -99,6 +99,7 @@
                     <th>SALIDA ANTES</th>
                     <th>DURACIÓN SAL. ANTES</th>
                     <th>DURACIÓN REGISTRO</th>
+                    <th>ANULADO</th>
                     <th>COMENTARIOS</th>
                 </tr>
             {% set contador = 1  %}
@@ -121,6 +122,7 @@
                 <td>{% if arControlAccesosEmpleados.salidaAntes == 1 %}SI{% else %}NO{% endif %}</td>
                 <td>{{ arControlAccesosEmpleados.duracionSalidaAntes }}</td>
                 <td>{{ arControlAccesosEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>
+                <td>{% if arControlAccesosEmpleados.anulado == 1 %}SI{% else %}NO{% endif %}</td>
                 <td>{{ arControlAccesosEmpleados.comentarios  }}</td>
             </tr>
             {% set contador = contador + 1  %}

@@ -52,6 +52,7 @@ class FormatoPermiso extends \FPDF_FPDF {
         $this->Cell(35, 8, utf8_decode("VERSIÓN: 01"), 1, 0, 'L', 1);
         //FILA 1
         $this->SetXY(7, 50);
+        $this->SetFillColor(200, 200, 200);
         $this->SetFont('Arial','B',7);
         $this->Cell(24, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
@@ -206,8 +207,10 @@ class FormatoPermiso extends \FPDF_FPDF {
         
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        
         $arPermiso = new \Brasa\RecursoHumanoBundle\Entity\RhuPermiso();
         $arPermiso = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPermiso')->find(self::$codigoPermiso);
+        $arUsers = self::$em->getRepository('BrasaSeguridadBundle:User')->find($arPermiso->getCodigoUsuario());
         $this->SetFont('Arial', 'B', 9);
         
         $this->Text(10, 120, "FIRMA: _____________________________________________");
@@ -216,8 +219,9 @@ class FormatoPermiso extends \FPDF_FPDF {
         $this->Text(105, 120, "FIRMA: _____________________________________________");
         $this->Text(105, 127, $arConfiguracion->getNombreEmpresa());
         $this->Text(105, 134, "NIT: ". $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa());
+        $this->Text(105, 140, $arUsers->getNombreCorto());
         $this->SetFont('Arial', '', 8);
-        $this->Text(170, 140, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        $this->Text(173, 143, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 

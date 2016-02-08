@@ -178,6 +178,7 @@ class ConsultasControlAccesosEmpleadosController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
@@ -196,7 +197,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                     ->setCellValue('O1', 'SALIDA ANTES')
                     ->setCellValue('P1', 'DURACIÓN SALIDA ANTES')
                     ->setCellValue('Q1', 'DURACIÓN TOTAL REGISTRO')
-                    ->setCellValue('R1', 'COMENTARIOS');
+                    ->setCellValue('R1', 'ANULADO')
+                    ->setCellValue('S1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -247,7 +249,8 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                 ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getSalidaAntes()))    
                 ->setCellValue('P' . $i, $duracionSalidaAntes)
                 ->setCellValue('Q' . $i, $arHorarioAcceso->getDuracionRegistro())        
-                ->setCellValue('R' . $i, $arHorarioAcceso->getComentarios());
+                ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arControlAccesoEmpleado->getAnulado()))    
+                ->setCellValue('S' . $i, $arControlAccesoEmpleado->getComentarios());
             $i++;
             $j++;
         }

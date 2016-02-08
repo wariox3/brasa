@@ -66,6 +66,7 @@ class PermisoController extends Controller
         $form = $this->createForm(new RhuPermisoType, $arPermiso);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arPermiso = $form->getData();
             if($arrControles['txtNumeroIdentificacion'] != '') {
@@ -79,6 +80,7 @@ class PermisoController extends Controller
                         $arPermiso->setCargoRel($arEmpleado->getCargoRel());
                         $srtTotalHoras = date_diff($arPermiso->getHoraLlegada(),$arPermiso->getHoraSalida());
                         $arPermiso->setHorasPermiso($srtTotalHoras->format('%H'));
+                        $arPermiso->setCodigoUsuario($arUsuario->getId());
                         $em->persist($arPermiso);
                         $em->flush();
                         if($form->get('guardarnuevo')->isClicked()) {
