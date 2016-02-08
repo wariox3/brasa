@@ -5265,9 +5265,10 @@ INSERT INTO `rhu_sso_sucursal` (`codigo_sucursal_pk`, `nombre`, `codigo_interfac
 
 /** Seguridad **/
 
-
-insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`) values('1','CREAR CONTRATOS DESPUES DE PAGADO EL PERIODO');
-insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`) values('2','VER SALARIO EMPLEADO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('1','Crear contratos despues de pagado el periodo','PROCESO','RECURSO HUMANO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('2','Ver salario en empleados','VER','RECURSO HUMANO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('3','Generar pedidos automaticos','PROCESO','TURNOS');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('4','Generar programaciones automaticas','PROCESO','TURNOS');
 
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_ADMIN','ADMINISTRADOR');
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_USER','USUARIO');

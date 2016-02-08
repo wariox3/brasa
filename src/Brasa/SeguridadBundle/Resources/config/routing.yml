@@ -30,4 +30,8 @@ brs_seg_todos_recuperar_clave:
     
 brs_seg_admin_usuario_cambiar_clave:
     pattern:   /admin/usuario/cambiar/calve/{codigoUsuario}
-    defaults:  { _controller: BrasaSeguridadBundle:SegUsuarios:cambiarClave }     
+    defaults:  { _controller: BrasaSeguridadBundle:SegUsuarios:cambiarClave } 
+    
+brs_seg_error_permiso_especial:
+    pattern:   /seg/error/permiso/especial
+    defaults:  { _controller: BrasaSeguridadBundle:SegAcceso:errorPermisoEspecial }     

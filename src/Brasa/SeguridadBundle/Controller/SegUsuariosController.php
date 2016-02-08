@@ -58,25 +58,25 @@ class SegUsuariosController extends Controller
     public function detalleAction($codigoUsuario) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+        $form = $this->createFormBuilder()            
             ->getForm();
         $form->handleRequest($request);
         
-        $arUsuario = new \Brasa\RecursoHumanoBundle\Entity\Us();
-        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
-        $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
-        $arCreditoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => $codigoCreditoFk));
+        $arUsuario = new \Brasa\SeguridadBundle\Entity\User();
+        $arUsuario = $em->getRepository('BrasaSeguridadBundle:User')->find($codigoUsuario);
         if($form->isValid()) {
-
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoDetalleCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleCredito();
                 $objFormatoDetalleCredito->Generar($this, $codigoCreditoFk);
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:detalle.html.twig', array(
-                    'arCreditoPago' => $arCreditoPago,
-                    'arCreditos' => $arCreditos,
+        $arPermisosDocumentos = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
+        $arPermisosEspeciales = new \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial();
+        $arPermisosEspeciales = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findBy(array('codigoUsuarioFk' => $codigoUsuario));
+        return $this->render('BrasaSeguridadBundle:Usuarios:detalle.html.twig', array(
+                    'arPermisosDocumentos' => $arPermisosDocumentos,
+                    'arPermisosEspeciales' => $arPermisosEspeciales,
+                    'arUsuario' => $arUsuario,
                     'form' => $form->createView()
                     ));
     }

@@ -13,8 +13,7 @@ class SegUsuarioPermisoEspecialRepository extends EntityRepository {
 
     public function permisoEspecial($codigoUsuario, $codigoPermisoEspecial) {
         $em = $this->getEntityManager();
-        $boolPermiso = false;
-        $arUsuarioPermisoEspecial = new \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial();
+        $boolPermiso = false;        
         $arUsuarioPermisoEspecial = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findOneBy(array('codigoUsuarioFk' => $codigoUsuario, 'codigoPermisoEspecialFk' => $codigoPermisoEspecial));
         if(count($arUsuarioPermisoEspecial) > 0) {
             if($arUsuarioPermisoEspecial->getPermitir() == 1) {
