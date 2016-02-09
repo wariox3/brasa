@@ -10,8 +10,12 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuSsoAporteRepository extends EntityRepository {
-    public function listaDQL($codigoPeriodoDetalle) {                    
-            $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuSsoAporte a WHERE a.codigoPeriodoDetalleFk = " . $codigoPeriodoDetalle;
+    
+    public function listaDQL($codigoPeriodoDetalle, $strCodigoCentroCosto) {                    
+            $dql   = "SELECT a, e FROM BrasaRecursoHumanoBundle:RhuSsoAporte a JOIN a.empleadoRel e WHERE a.codigoPeriodoDetalleFk = " . $codigoPeriodoDetalle;
+            if($strCodigoCentroCosto != "") {
+                $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+            }
             return $dql;
     }
     

@@ -20,7 +20,19 @@ class SegDocumento
     /**
      * @ORM\Column(name="nombre", type="string", length=50, nullable=true)
      */    
-    private $nombre;   
+    private $nombre;
+    
+    /**
+     * @ORM\Column(name="tipo", type="string", length=30, nullable=true)
+     */    
+    private $tipo;
+    
+    /**
+     * @ORM\Column(name="modulo", type="string", length=30, nullable=true)
+     */    
+    private $modulo;
+    
+
     
 
     /**
@@ -55,5 +67,53 @@ class SegDocumento
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return SegDocumento
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set modulo
+     *
+     * @param string $modulo
+     *
+     * @return SegDocumento
+     */
+    public function setModulo($modulo)
+    {
+        $this->modulo = $modulo;
+
+        return $this;
+    }
+
+    /**
+     * Get modulo
+     *
+     * @return string
+     */
+    public function getModulo()
+    {
+        return $this->modulo;
     }
 }

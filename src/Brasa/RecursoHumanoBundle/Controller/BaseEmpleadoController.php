@@ -17,10 +17,6 @@ class BaseEmpleadoController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
-        //inicio - acceso empleados
-        $arUsuario = $this->get('security.context')->getToken()->getUser();
-        $accesoEmpleado = $em->getRepository('BrasaSeguridadBundle:SegAccesoUsuario')->Acceso($arUsuario->getId(),1);
-        //fin - acceso empleados
         if($form->isValid()) {
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
@@ -61,7 +57,6 @@ class BaseEmpleadoController extends Controller
         $arEmpleados = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:lista.html.twig', array(
             'arEmpleados' => $arEmpleados,
-            'accesoEmpleado' => $accesoEmpleado,
             'form' => $form->createView()
             ));
     }
@@ -79,7 +74,7 @@ class BaseEmpleadoController extends Controller
         $form->handleRequest($request);
         //inicio - permiso para ver el salario del empleado
         $arUsuario = $this->get('security.context')->getToken()->getUser();
-        $permisoVerSalario = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),2);
+        $permisoVerSalario = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),2,$arUsuario->getRoles());
         //fin - permiso para ver el salario del empleado
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);

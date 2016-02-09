@@ -5279,9 +5279,6 @@ INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `emai
 INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('5','ADMINISTRADOR','ADMINISTRADOR','a0d365adb33e4d59b6a9c9af2639e2fb','VusE/ogCqpMWuaFE3rusp7Yx5nMK90tIMsa7dvgyD/NmwLkgc2nXuupaoBqsPt3shsB1UWqgRs/UFqioNrZbLg==','administrador@appsoga.com','1',NULL,'ROLE_ADMIN');
 INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('7','JUANDELAP','JUAN DE LA PEÑA','8834a99bd0913447212c1d1610ed0460','8A5rac6utPsxSL9fzp9NsURqcnBcTFPu7B5DFw+tPwfGJEpfBlHOYl2U+3WZVFdekJ7KyLPeXB1otCMW8uiJyw==','JUAN@HOTMAIL.COM','1',NULL,'ROLE_USER');
 
-insert into `seg_acceso` (`codigo_acceso_pk`, `nombre`) values('1','EMPLEADOS');
-insert into `seg_acceso` (`codigo_acceso_pk`, `nombre`) values('2','CONTRATOS');
-
 insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('1','1','1','1');
 insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('2','2','1','1');
 insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('3','5','1','1');
@@ -5289,12 +5286,6 @@ insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`
 insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('5','1','2','1');
 insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('6','5','2','1');
 
-insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('1','1','1','1');
-insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('2','2','1','1');
-insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('3','5','1','1');
-insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('4','1','2','1');
-insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('5','2','2','1');
-insert into `seg_acceso_usuario` (`codigo_acceso_usuario_pk`, `codigo_usuario_fk`, `codigo_acceso_fk`, `permitir`) values('6','5','2','1');
 
 CREATE TABLE `emp_users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,

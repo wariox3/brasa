@@ -71,15 +71,6 @@ class User implements UserInterface, \Serializable
      */
     protected $userUsuarioPermisoEspecialRel;
     
-    /**
-     * @ORM\OneToMany(targetEntity="SegAccesoUsuario", mappedBy="accesoRel")
-     */
-    protected $accesoAccesoUsuarioRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="SegAccesoUsuario", mappedBy="usuarioRel")
-     */
-    protected $userAccesoUsuarioRel;
     
     
     public function __construct()

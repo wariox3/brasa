@@ -9,7 +9,6 @@
     <div class="page-header">
         <h3>Lista contratos</h3>
     </div>
-    {% if accesoContrato == true %}
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}                
         <div class="panel panel-default">
@@ -111,8 +110,5 @@
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}
     {{ form_end(form) }}   
-    {% else %}
-        <div class="alert alert-warning" role="alert">El usuario no tiene acceso a contratos!</div>
-    {% endif %}
 </div>
 {% endblock %}

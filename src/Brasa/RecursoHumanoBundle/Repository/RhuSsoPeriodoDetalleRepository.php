@@ -17,7 +17,8 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         } 
     
     public function generar($codigoPeriodoDetalle) {
-        $em = $this->getEntityManager();        
+        $em = $this->getEntityManager();
+        set_time_limit(0);
         $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
         $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);        
         $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();

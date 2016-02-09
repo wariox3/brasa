@@ -1,0 +1,90 @@
+{% extends '::base_sin_menu.html.twig' %}
+{% block title %}Permiso documento detalle nuevo - Soga App{% endblock %}
+{% block content %}
+<div class="container">
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    <h3>Nuevo permiso documento</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">Información general</div>
+        <div class="panel-body">   
+            <div class="form-group form-group-sm">
+                <label for="form_documentoRel" class="col-sm-2 control-label">Permiso:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.documentoRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_ingreso" class="col-sm-2 control-label">Ingreso:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.ingreso, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_nuevo" class="col-sm-2 control-label">Nuevo:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.nuevo, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_editar" class="col-sm-2 control-label">Editar:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.editar, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_eliminar" class="col-sm-2 control-label">Eliminar:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.eliminar, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_autorizar" class="col-sm-2 control-label">Autorizar:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.autorizar, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_desautorizar" class="col-sm-2 control-label">Desautorizar:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.desautorizar, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_aprobar" class="col-sm-2 control-label">Aprobar:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.aprobar, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_desaprobar" class="col-sm-2 control-label">Desaprobar:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.desaprobar, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_anular" class="col-sm-2 control-label">Anular:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.anular, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_desanular" class="col-sm-2 control-label">Desanular:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.desanular, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_imprimir" class="col-sm-2 control-label">Imprimir:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.imprimir, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+        </div>
+    </div>                   
+    <div class="modal-footer">      
+            <a class="btn btn-default btn-sm" onclick="window.close()">Cancelar</a>        
+            {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
+    </div>    
+    {{ form_end(form) }}
+</div>
+{% endblock %}

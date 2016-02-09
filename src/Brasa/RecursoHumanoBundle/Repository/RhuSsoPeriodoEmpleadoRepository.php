@@ -11,10 +11,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
     
-    public function listaDql($codigoPeriodo, $codigoSucursal) {                    
-            $dql   = "SELECT pe FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe "
+    public function listaDql($codigoPeriodo, $codigoSucursal, $strCodigoCentroCosto ) {                    
+            $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
                     ."WHERE pe.codigoPeriodoFk = " . $codigoPeriodo . " "
                     . "AND pe.codigoSucursalFk = " . $codigoSucursal;
+            if($strCodigoCentroCosto != "") {
+                $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+            }
             return $dql;
         } 
         
