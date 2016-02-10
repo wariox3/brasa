@@ -222,7 +222,16 @@ class BaseClienteController extends Controller
                     ->setCellValue('D1', 'ESTRATO')
                     ->setCellValue('E1', 'CONTACTO')
                     ->setCellValue('F1', 'TELEFONO')
-                    ->setCellValue('G1', 'CELULAR');
+                    ->setCellValue('G1', 'CELULAR')
+                    ->setCellValue('H1', 'DIRECCION')
+                    ->setCellValue('I1', 'BARRIO')
+                    ->setCellValue('J1', 'CIUDAD')
+                    ->setCellValue('K1', 'FORMA PAGO')
+                    ->setCellValue('L1', 'PLAZO PAGO')
+                    ->setCellValue('M1', 'FINANCIERO')
+                    ->setCellValue('N1', 'CELULAR FINANCIERO')
+                    ->setCellValue('O1', 'GERENTE')
+                    ->setCellValue('P1', 'CELULAR GERENTE');
 
         $i = 2;
         
@@ -238,8 +247,16 @@ class BaseClienteController extends Controller
                     ->setCellValue('D' . $i, $arCliente->getEstrato())
                     ->setCellValue('E' . $i, $arCliente->getContacto())
                     ->setCellValue('F' . $i, $arCliente->getTelefonoContacto())
-                    ->setCellValue('G' . $i, $arCliente->getCelularContacto());
-                        
+                    ->setCellValue('G' . $i, $arCliente->getCelularContacto())
+                    ->setCellValue('H' . $i, $arCliente->getDireccion())
+                    ->setCellValue('I' . $i, $arCliente->getBarrio())
+                    ->setCellValue('J' . $i, $arCliente->getCiudadRel()->getNombre())
+                    ->setCellValue('K' . $i, $arCliente->getFormaPagoRel()->getNombre())
+                    ->setCellValue('L' . $i, $arCliente->getPlazoPago())
+                    ->setCellValue('M' . $i, $arCliente->getFinanciero())
+                    ->setCellValue('N' . $i, $arCliente->getCelularFinanciero())
+                    ->setCellValue('O' . $i, $arCliente->getGerente())
+                    ->setCellValue('P' . $i, $arCliente->getCelularGerente());                                    
             $i++;
         }
         

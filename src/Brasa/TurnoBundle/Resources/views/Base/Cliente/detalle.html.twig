@@ -26,15 +26,69 @@
                     <tr>
                         <td class="titulo">CODIGO:</td>
                         <td class="td-in-well">{{ arCliente.codigoClientePk }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">NIT:</td>
+                        <td class="td-in-well">{{ arCliente.nit }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">CLIENTE:</td>
                         <td class="td-in-well">{{ arCliente.nombreCorto }}</td>
+                        <td class="titulo">SECTOR:</td>
+                        <td>{{ arCliente.sectorRel.nombre }}</td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo">DIRECCION:</td>
+                        <td class="td-in-well">{{ arCliente.direccion }}</td>
+                        <td class="titulo">ESTRATO:</td>
+                        <td>{{ arCliente.estrato }}</td>
+                    </tr> 
+                    <tr>
+                        <td class="titulo">BARRIO:</td>
+                        <td class="td-in-well">{{ arCliente.barrio }}</td>
+                        <td class="titulo">FORMA PAGO:</td>
+                        <td>{{ arCliente.formaPagoRel.nombre }}</td>
+                    </tr> 
+                    <tr>
+                        <td class="titulo">CIUDAD:</td>
+                        <td class="td-in-well">{{ arCliente.ciudadRel.nombre }}</td>
+                        <td class="titulo">PLAZO PAGO:</td>
+                        <td>{{ arCliente.plazoPago }}</td>
+                    </tr> 
+                    <tr>
+                        <td class="titulo">TELEFONO:</td>
+                        <td class="td-in-well">{{ arCliente.telefono }}</td>
+                        <td class="titulo"></td>
+                        <td></td>
+                    </tr> 
+                    <tr>
+                        <td class="titulo">CELULAR:</td>
+                        <td class="td-in-well">{{ arCliente.celular }}</td>
                         <td class="titulo"></td>
                         <td align="right"></td>
-                    </tr>                
+                    </tr> 
+                    <tr>
+                        <td class="titulo">EMAIL:</td>
+                        <td class="td-in-well">{{ arCliente.email }}</td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>
+                    </tr>    
+                    <tr>
+                        <td class="titulo">GERENTE:</td>
+                        <td class="td-in-well">{{ arCliente.gerente }}</td>
+                        <td class="titulo">CELULAR</td>
+                        <td>{{ arCliente.celularGerente }}</td>
+                    </tr>    
+                    <tr>
+                        <td class="titulo">FINANCIERO:</td>
+                        <td class="td-in-well">{{ arCliente.financiero }}</td>
+                        <td class="titulo">CELULAR:</td>
+                        <td>{{ arCliente.celularFinanciero }}</td>
+                    </tr>  
+                    <tr>
+                        <td class="titulo">CONTACTO:</td>
+                        <td class="td-in-well">{{ arCliente.contacto }}</td>
+                        <td class="titulo">CELULAR:</td>
+                        <td>{{ arCliente.celularContacto }}</td>
+                    </tr>                    
                 </table>
             </div>
         </div>
