@@ -42,6 +42,7 @@ if ($arrRecursosSinProgramacion) {
     }
     $strMensaje .= "</table><br /><br />";    
     $strMensaje .= "Por favor no conteste este mensaje, para comunicarse con servicio al cliente marque 4448120 ext 131<br /><br />";    
+    $strMensaje = utf8_decode($strMensaje);
     $arrDirecciones = array();
     $arrDirecciones[] = array('direccion' => 'maestradaz3@gmail.com', 'nombre' => 'Turnos');   
     //echo $strMensaje;
