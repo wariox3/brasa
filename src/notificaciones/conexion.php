@@ -1,6 +1,6 @@
 <?php
     require_once('spyc/spyc.php');     
-    $data = Spyc::YAMLLoad('/var/www/html/brasa/app/config/parameters.yml'); 
+    $data = Spyc::YAMLLoad('/var/www/html/brasa/app/config/parameters.yml');
     $arrParametros = $data['parameters'];
     $servidor = $arrParametros['database_host'];
     $usuario = $arrParametros['database_user'];
