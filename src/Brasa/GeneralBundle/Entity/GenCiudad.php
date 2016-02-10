@@ -156,7 +156,11 @@ class GenCiudad
      */
     protected $turClientesDireccionesCiudadRel;    
    
-
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="ciudadRel")
+     */
+    protected $turClientesCiudadRel;
+    
     /**
      * Constructor
      */
@@ -1040,5 +1044,39 @@ class GenCiudad
     public function getTurClientesDireccionesCiudadRel()
     {
         return $this->turClientesDireccionesCiudadRel;
+    }
+
+    /**
+     * Add turClientesCiudadRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addTurClientesCiudadRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesCiudadRel)
+    {
+        $this->turClientesCiudadRel[] = $turClientesCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turClientesCiudadRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesCiudadRel
+     */
+    public function removeTurClientesCiudadRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesCiudadRel)
+    {
+        $this->turClientesCiudadRel->removeElement($turClientesCiudadRel);
+    }
+
+    /**
+     * Get turClientesCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurClientesCiudadRel()
+    {
+        return $this->turClientesCiudadRel;
     }
 }

@@ -62,31 +62,27 @@ class MovimientoFacturaController extends Controller
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
                     $arFactura->setClienteRel($arCliente);
-                    if($arrControles['txtCodigoDireccion'] != '') {
-                        $arClienteDireccion = new \Brasa\TurnoBundle\Entity\TurClienteDireccion();
+                    $arClienteDireccion = new \Brasa\TurnoBundle\Entity\TurClienteDireccion();
+                    if($arrControles['txtCodigoDireccion'] != '') {                        
                         $arClienteDireccion = $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->find($arrControles['txtCodigoDireccion']);                
                         if(count($arClienteDireccion) > 0) {
                             if($arClienteDireccion->getCodigoClienteFk() == $arCliente->getCodigoClientePk()) {
-                                $arFactura->setClienteDireccionRel($arClienteDireccion);
-                                $dateFechaVence = $objFunciones->sumarDiasFecha($arCliente->getPlazoPago(), $arFactura->getFecha());
-                                $arFactura->setFechaVence($dateFechaVence);                            
-                                $em->persist($arFactura);
-                                $em->flush();
-
-                                if($form->get('guardarnuevo')->isClicked()) {
-                                    return $this->redirect($this->generateUrl('brs_tur_factura_nuevo', array('codigoFactura' => 0 )));
-                                } else {
-                                    return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
-                                }                                
+                                $arFactura->setClienteDireccionRel($arClienteDireccion);                                
                             } else {
                                 $objMensaje->Mensaje("error", "La direccion no pertenece al cliente", $this);
                             }                            
-                        } else {
-                            $objMensaje->Mensaje("error", "La direccion no existe", $this);
-                        }
+                        }                        
+                    }
+                    $dateFechaVence = $objFunciones->sumarDiasFecha($arCliente->getPlazoPago(), $arFactura->getFecha());
+                    $arFactura->setFechaVence($dateFechaVence);                            
+                    $em->persist($arFactura);
+                    $em->flush();
+
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_tur_factura_nuevo', array('codigoFactura' => 0 )));
                     } else {
-                        $objMensaje->Mensaje("error", "Debe especificar una direccion", $this);
-                    }                       
+                        return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
+                    }                    
                 } else {
                     $objMensaje->Mensaje("error", "El tercero no existe", $this);
                 }                             

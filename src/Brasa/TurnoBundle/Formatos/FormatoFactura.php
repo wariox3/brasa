@@ -106,10 +106,18 @@ class FormatoFactura extends \FPDF_FPDF {
             $this->Ln();
         }
         $this->SetY(48);
-        $arrayTexto = array($arFactura->getClienteDireccionRel()->getNombre(),
-            $arFactura->getClienteDireccionRel()->getCiudadRel()->getNombre(),
-            $arFactura->getClienteDireccionRel()->getDireccion(),
-            $arFactura->getClienteDireccionRel()->getBarrio());
+        if($arFactura->getClienteDireccionRel()) {
+            $arrayTexto = array($arFactura->getClienteDireccionRel()->getNombre(),
+                $arFactura->getClienteDireccionRel()->getCiudadRel()->getNombre(),
+                $arFactura->getClienteDireccionRel()->getDireccion(),
+                $arFactura->getClienteDireccionRel()->getBarrio());            
+        } else {
+            $arrayTexto = array("PRINCIPAL",
+                $arFactura->getClienteRel()->getCiudadRel()->getNombre(),
+                $arFactura->getClienteRel()->getDireccion(),
+                $arFactura->getClienteRel()->getBarrio());                        
+        }
+        
         $this->SetX(110);
         $this->SetFont('Arial', 'B', 10);
         $this->Cell(10, 3, 'DIRECCION DE ENVIO', 0, 0, 'L');

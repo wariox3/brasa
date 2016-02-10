@@ -56,6 +56,16 @@ class TurCliente
      * @ORM\Column(name="direccion", type="string", length=120, nullable=true)
      */
     private $direccion;
+
+    /**
+     * @ORM\Column(name="barrio", type="string", length=120, nullable=true)
+     */
+    private $barrio;    
+    
+    /**
+     * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
+     */
+    private $codigoCiudadFk;         
     
     /**
      * @ORM\Column(name="telefono", type="string", length=30, nullable=true)
@@ -128,6 +138,12 @@ class TurCliente
      * @ORM\JoinColumn(name="codigo_forma_pago_fk", referencedColumnName="codigo_forma_pago_pk")
      */
     protected $formaPagoRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="turClientesCiudadRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurCotizacion", mappedBy="clienteRel")
@@ -953,5 +969,77 @@ class TurCliente
     public function getClientesDireccionesClienteRel()
     {
         return $this->clientesDireccionesClienteRel;
+    }
+
+    /**
+     * Set barrio
+     *
+     * @param string $barrio
+     *
+     * @return TurCliente
+     */
+    public function setBarrio($barrio)
+    {
+        $this->barrio = $barrio;
+
+        return $this;
+    }
+
+    /**
+     * Get barrio
+     *
+     * @return string
+     */
+    public function getBarrio()
+    {
+        return $this->barrio;
+    }
+
+    /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
+    }
+
+    /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return TurCliente
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
     }
 }
