@@ -9,7 +9,7 @@ class ProcesoGenerarProgramacionController extends Controller
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
-        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser()->getId(), 4)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 4)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $request = $this->getRequest();

@@ -11,19 +11,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class SegUsuarioPermisoEspecialRepository extends EntityRepository {
 
-    public function permisoEspecial($codigoUsuario, $codigoPermisoEspecial, $arrRoles = NULL) {
+    public function permisoEspecial($arUsuario, $codigoPermisoEspecial, $arrRoles = NULL) {        
         $em = $this->getEntityManager();
+        $arrRoles = $arUsuario->getRoles();
         $boolAdministrador = false;
-        foreach ($arrRoles as $rol) {
-            if($rol == 'ROLE_ADMIN') {
-                $boolAdministrador = 1;
-            }
+        if($arrRoles) {
+            foreach ($arrRoles as $rol) {
+                if($rol == 'ROLE_ADMIN') {
+                    $boolAdministrador = 1;
+                }
+            }            
         }
         $boolPermiso = false;
         if($boolAdministrador == 1) {
           $boolPermiso = 1;  
         } else {
-            $arUsuarioPermisoEspecial = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findOneBy(array('codigoUsuarioFk' => $codigoUsuario, 'codigoPermisoEspecialFk' => $codigoPermisoEspecial));
+            $arUsuarioPermisoEspecial = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findOneBy(array('codigoUsuarioFk' => $arUsuario->getId(), 'codigoPermisoEspecialFk' => $codigoPermisoEspecial));
             if(count($arUsuarioPermisoEspecial) > 0) {
                 if($arUsuarioPermisoEspecial->getPermitir() == 1) {
                     $boolPermiso = true;
