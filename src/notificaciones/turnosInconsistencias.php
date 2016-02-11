@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 include('mail.php');
+include('direcciones.php');
 include('conexion.php');
 $dateFecha = new DateTime('now');
 $strAnio = $dateFecha->format('Y');
@@ -43,9 +44,10 @@ if ($arrRecursosSinProgramacion) {
     $strMensaje .= "</table><br /><br />";    
     $strMensaje .= "Por favor no conteste este mensaje, para comunicarse con servicio al cliente marque 4448120 ext 131<br /><br />";    
     $strMensaje = utf8_decode($strMensaje);
-    $arrDirecciones = array();
-    $arrDirecciones[] = array('direccion' => 'maestradaz3@gmail.com', 'nombre' => 'Turnos');   
-    //echo $strMensaje;
-    enviarCorreo($strMensaje, $arrDirecciones,"Inconsistencias recursos [SogaApp-turnos]");
+    $arrDirecciones = direcciones('correo_turno_inconsistencia', $servidor);
+    if($arrDirecciones) {
+        //echo $strMensaje;
+        enviarCorreo($strMensaje, $arrDirecciones,"Inconsistencias recursos [SogaApp-turnos]");         
+    }
 }
 

@@ -17,6 +17,13 @@ class ConfiguracionGeneralController extends Controller
         $request = $this->getRequest();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arConfiguracionNotificaciones = new \Brasa\GeneralBundle\Entity\GenConfiguracionNotificaciones();
+        $arConfiguracionNotificaciones = $em->getRepository('BrasaGeneralBundle:GenConfiguracionNotificaciones')->find(1);
+        $formConfiguracionNotificaciones = $this->createFormBuilder() 
+            ->add('correoTurnoInconsistencia', 'text', array('data' => $arConfiguracionNotificaciones->getCorreoTurnoInconsistencia(), 'required' => false))
+            ->add('guardar', 'submit', array('label' => 'Actualizar'))            
+            ->getForm(); 
+        $formConfiguracionNotificaciones->handleRequest($request);
         $formConfiguracionGeneral = $this->createFormBuilder() 
             ->add('nitEmpresa', 'text', array('data' => $arConfiguracionGeneral->getNitEmpresa(), 'required' => true))
             ->add('digitoVerificacion', 'number', array('data' => $arConfiguracionGeneral->getDigitoVerificacionEmpresa(), 'required' => true))
@@ -84,8 +91,15 @@ class ConfiguracionGeneralController extends Controller
                 return $this->redirect($this->generateUrl('brs_gen_configuracion_general', array('codigoConfiguracionPk' => 1)));                
             }
         }
+        if ($formConfiguracionNotificaciones->isValid()) {            
+            $arConfiguracionNotificaciones->setCorreoTurnoInconsistencia($formConfiguracionNotificaciones->get('correoTurnoInconsistencia')->getData());
+            $em->persist($arConfiguracionNotificaciones);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_gen_configuracion_general', array('codigoConfiguracionPk' => 1)));                
+        }
         return $this->render('BrasaGeneralBundle:ConfiguracionGeneral:Configuracion.html.twig', array(
             'formConfiguracionGeneral' => $formConfiguracionGeneral->createView(),
+            'formConfiguracionNotificaciones' => $formConfiguracionNotificaciones->createView(),
         ));
     }
 

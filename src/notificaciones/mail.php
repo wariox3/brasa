@@ -14,7 +14,7 @@ function enviarCorreo($strMensaje = "", $arrDirecciones = "", $strAsunto = "") {
         $mail->AltBody = "";
         $mail->MsgHTML($strMensaje);        
         foreach ($arrDirecciones as $direccion) {
-            $mail->AddAddress($direccion['direccion'], $direccion['nombre']);
+            $mail->AddAddress($direccion['direccion'], '');
         }
         $mail->SMTPAuth = true;
         $mail->Username = "soganotificaciones@gmail.com";
