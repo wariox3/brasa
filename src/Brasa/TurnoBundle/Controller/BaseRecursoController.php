@@ -117,53 +117,15 @@ class BaseRecursoController extends Controller
         $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
         $form = $this->formularioDetalle($arRecurso);
         $form->handleRequest($request);
-        if($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnAutorizar')->isClicked()) {            
-                if($arRecurso->getEstadoAutorizado() == 0) {
-                    if($em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->numeroRegistros($codigoRecurso) > 0) {
-                        $arRecurso->setEstadoAutorizado(1);
-                        $em->persist($arRecurso);
-                        $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));                                                                        
-                    } else {
-                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al examen', $this);
-                    }                    
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));                                                
-            }
-            if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arRecurso->getEstadoAutorizado() == 1) {
-                    $arRecurso->setEstadoAutorizado(0);
-                    $em->persist($arRecurso);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));                                                
-                }
-            }
-            if ($form->get('BtnAprobar')->isClicked()) {                
-                $strRespuesta = $em->getRepository('BrasaTurnoBundle:TurRecurso')->aprobarExamen($codigoRecurso);
-                if($strRespuesta == ''){
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoRecurso)));                                                
-                }else {
-                  $objMensaje->Mensaje('error', $strRespuesta, $this);
-                }                 
-            }      
-            
+        if($form->isValid()) {                              
             if($form->get('BtnImprimir')->isClicked()) {
-                if($arRecurso->getEstadoAutorizado() == 1) {
-                    $objExamen = new \Brasa\TurnoBundle\Formatos\FormatoExamen();
-                    $objExamen->Generar($this, $codigoRecurso);
-                } else {
-                    $objMensaje->Mensaje("error", "No puede imprimir una orden de examen sin estar autorizada", $this);
-                }
             }            
         }
 
-        $arRecursoDetalle = new \Brasa\TurnoBundle\Entity\TurRecursoDetalle();
-        $arRecursoDetalle = $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->findBy(array ('codigoProgramacionFk' => $codigoRecurso));
-        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalle.html.twig', array(
-                    'arRecurso' => $arRecurso,
-                    'arRecursoDetalle' => $arRecursoDetalle,
+        //$arRecursoDetalle = new \Brasa\TurnoBundle\Entity\TurRecursoDetalle();
+        //$arRecursoDetalle = $em->getRepository('BrasaTurnoBundle:TurRecursoDetalle')->findBy(array ('codigoProgramacionFk' => $codigoRecurso));
+        return $this->render('BrasaTurnoBundle:Base/Recurso:detalle.html.twig', array(
+                    'arRecurso' => $arRecurso,                    
                     'form' => $form->createView()
                     ));
     }    
@@ -220,15 +182,8 @@ class BaseRecursoController extends Controller
     
     private function formularioDetalle($ar) {
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
-        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);        
-        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        if($ar->getEstadoAutorizado() == 1) {
-            $arrBotonDetalleActualizar['disabled'] = true;
-        }        
         $form = $this->createFormBuilder()    
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)    
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)                       
                     ->getForm();  
         return $form;
     }

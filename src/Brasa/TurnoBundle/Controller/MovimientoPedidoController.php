@@ -5,10 +5,10 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPedidoType;
 use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
-use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleRecursoType;
 class MovimientoPedidoController extends Controller
 {
-    var $strListaDql = "";    
+    var $strListaDql = ""; 
+    var $strListaDqlRecurso = "";
     var $numeroPedido = "";
     var $codigoCliente = "";
     var $estadoAutorizado = "";
@@ -18,6 +18,8 @@ class MovimientoPedidoController extends Controller
     var $fechaDesde = "";
     var $fechaHasta = "";
     var $filtrarFecha = "";
+    var $codigoRecurso = "";
+    var $nombreRecurso = "";    
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -484,38 +486,46 @@ class MovimientoPedidoController extends Controller
     public function detalleRecursoNuevoAction($codigoPedidoDetalle = 0) {
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
+        $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
-        $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
-        $form = $this->createForm(new TurPedidoDetalleRecursoType, $arPedidoDetalleRecurso);
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);        
+        $form = $this->createFormBuilder()
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->nombreRecurso))
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoRecurso))                            
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))                
+                
+            ->getForm();        
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arrControles = $request->request->All();
-            if($arrControles['txtNumeroIdentificacion'] != '') {
-                $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
-                if(count($arRecurso) > 0) {
-                    $arPedidoDetalleRecurso = $form->getData();
-                    $arPedidoDetalleRecurso->setPedidoDetalleRel($arPedidoDetalle);
-                    $arPedidoDetalleRecurso->setRecursoRel($arRecurso);
-                    $em->persist($arPedidoDetalleRecurso);
+        $this->listaRecurso();
+        if ($form->isValid()) {    
+            if($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigo) {
+                        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigo);
+                        $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
+                        $arPedidoDetalleRecurso->setPedidoDetalleRel($arPedidoDetalle);
+                        $arPedidoDetalleRecurso->setRecursoRel($arRecurso);
+                        $em->persist($arPedidoDetalleRecurso);
+                    }
                     $em->flush();
-
-                    if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso_nuevo', array('codigoPedidoDetalle' => $codigoPedidoDetalle )));
-                    } else {
-                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                    }                    
-                } else {
-                    $objMensaje->Mensaje("error", "El recurso no existe", $this);
-                }
-            }            
+                } 
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarRecurso($form);
+                $this->listaRecurso();
+            }                        
         }
+        $arRecurso = $paginator->paginate($em->createQuery($this->strListaDqlRecurso), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleRecursoNuevo.html.twig', array(
             'arPedidoDetalle' => $arPedidoDetalle,
+            'arRecursos' => $arRecurso,
             'form' => $form->createView()));
-    }                
+    }    
     
     public function detalleResumenAction($codigoPedidoDetalle) {
         $em = $this->getDoctrine()->getManager();
@@ -553,6 +563,14 @@ class MovimientoPedidoController extends Controller
                 $strFechaHasta);
     }    
 
+    private function listaRecurso() {        
+        $em = $this->getDoctrine()->getManager();
+        $this->strListaDqlRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
+                $this->nombreRecurso,                
+                $this->codigoRecurso   
+                ); 
+    }    
+    
     private function filtrar ($form) {                
         $this->numeroPedido = $form->get('TxtNumero')->getData();
         $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
@@ -566,6 +584,10 @@ class MovimientoPedidoController extends Controller
         $this->filtrarFecha = $form->get('filtrarFecha')->getData();
     }
 
+    private function filtrarRecurso($form) {       
+        $this->nombreRecurso = $form->get('TxtNombre')->getData();
+    }
+    
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        

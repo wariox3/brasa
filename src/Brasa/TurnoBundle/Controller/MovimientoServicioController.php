@@ -5,14 +5,16 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurServicioType;
 use Brasa\TurnoBundle\Form\Type\TurServicioDetalleType;
-use Brasa\TurnoBundle\Form\Type\TurServicioDetalleRecursoType;
 class MovimientoServicioController extends Controller
 {
-    var $strListaDql = "";    
+    var $strListaDql = "";
+    var $strListaDqlRecurso = "";
     var $codigoServicio = "";  
     var $codigoCliente = "";
     var $estadoAutorizado = "";
     var $estadoCerrado = "";
+    var $codigoRecurso = "";
+    var $nombreRecurso = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -140,12 +142,14 @@ class MovimientoServicioController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
-                if($arServicio->getEstadoAutorizado() == 1) {
+                /*if($arServicio->getEstadoAutorizado() == 1) {
                     $objServicio = new \Brasa\TurnoBundle\Formatos\FormatoServicio();
                     $objServicio->Generar($this, $codigoServicio);
                 } else {
                     $objMensaje->Mensaje("error", "No puede imprimir una cotizacion sin estar autorizada", $this);
                 }
+                 * 
+                 */
             }            
         }
 
@@ -344,36 +348,44 @@ class MovimientoServicioController extends Controller
     public function detalleRecursoNuevoAction($codigoServicioDetalle = 0) {
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
+        $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
-        $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
-        $arServicioDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
-        $form = $this->createForm(new TurServicioDetalleRecursoType, $arServicioDetalleRecurso);
+        $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);        
+        $form = $this->createFormBuilder()
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->nombreRecurso))
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoRecurso))                            
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))                
+                
+            ->getForm();        
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arrControles = $request->request->All();
-            if($arrControles['txtNumeroIdentificacion'] != '') {
-                $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
-                if(count($arRecurso) > 0) {
-                    $arServicioDetalleRecurso = $form->getData();
-                    $arServicioDetalleRecurso->setServicioDetalleRel($arServicioDetalle);
-                    $arServicioDetalleRecurso->setRecursoRel($arRecurso);
-                    $em->persist($arServicioDetalleRecurso);
+        $this->listaRecurso();
+        if ($form->isValid()) {    
+            if($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigo) {
+                        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigo);
+                        $arServicioDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
+                        $arServicioDetalleRecurso->setServicioDetalleRel($arServicioDetalle);
+                        $arServicioDetalleRecurso->setRecursoRel($arRecurso);
+                        $em->persist($arServicioDetalleRecurso);
+                    }
                     $em->flush();
-
-                    if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso_nuevo', array('codigoServicioDetalle' => $codigoServicioDetalle )));
-                    } else {
-                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                    }                    
-                } else {
-                    $objMensaje->Mensaje("error", "El recurso no existe", $this);
-                }
-            }            
+                } 
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarRecurso($form);
+                $this->listaRecurso();
+            }                        
         }
+        $arRecurso = $paginator->paginate($em->createQuery($this->strListaDqlRecurso), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleRecursoNuevo.html.twig', array(
             'arServicioDetalle' => $arServicioDetalle,
+            'arRecursos' => $arRecurso,
             'form' => $form->createView()));
     }    
     
@@ -386,12 +398,24 @@ class MovimientoServicioController extends Controller
                 $this->estadoCerrado);
     }    
 
+    private function listaRecurso() {        
+        $em = $this->getDoctrine()->getManager();
+        $this->strListaDqlRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
+                $this->nombreRecurso,                
+                $this->codigoRecurso   
+                ); 
+    }     
+    
     private function filtrar ($form) {                
         $this->codigoServicio = $form->get('TxtCodigo')->getData();
         $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
         $this->estadoCerrado = $form->get('estadoCerrado')->getData();
     }
 
+    private function filtrarRecurso($form) {       
+        $this->nombreRecurso = $form->get('TxtNombre')->getData();
+    }    
+    
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
