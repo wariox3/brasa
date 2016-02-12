@@ -92,6 +92,8 @@ class RhuExamenRepository extends EntityRepository {
                     $arRequisitoDetalle->setRequisitoRel($arRequisito);
                     $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoConcepto);
                     $arRequisitoDetalle->setTipo('GENERAL');
+                    $arRequisitoDetalle->setCantidad(1);
+                    $arRequisitoDetalle->setCantidadPendiente(1);
                     $em->persist($arRequisitoDetalle);
                 }
                 $em->flush();
