@@ -23,6 +23,11 @@ class TurSoportePagoDetalle
     private $codigoSoportePagoFk;    
     
     /**
+     * @ORM\Column(name="codigo_soporte_pago_periodo_fk", type="integer", nullable=true)
+     */    
+    private $codigoSoportePagoPeriodoFk;     
+    
+    /**
      * @ORM\Column(name="codigo_recurso_fk", type="integer", nullable=true)
      */    
     private $codigoRecursoFk;
@@ -98,15 +103,26 @@ class TurSoportePagoDetalle
     private $codigoTurnoFk;    
 
     /**
-     * @ORM\Column(name="codigo_programacion_detalle_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_programacion_detalle_fk", type="integer")
      */    
     private $codigoProgramacionDetalleFk;   
+    
+    /**
+     * @ORM\Column(name="codigo_pedido_detalle_fk", type="integer")
+     */    
+    private $codigoPedidoDetalleFk;       
     
     /**
      * @ORM\ManyToOne(targetEntity="TurSoportePago", inversedBy="soportesPagosDetallesSoportePagoRel")
      * @ORM\JoinColumn(name="codigo_soporte_pago_fk", referencedColumnName="codigo_soporte_pago_pk")
      */
     protected $soportePagoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurSoportePagoPeriodo", inversedBy="soportesPagosDetallesSoportePagoPeriodoRel")
+     * @ORM\JoinColumn(name="codigo_soporte_pago_periodo_fk", referencedColumnName="codigo_soporte_pago_periodo_pk")
+     */
+    protected $soportePagoPeriodoRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurRecurso", inversedBy="soportesPagosDetallesRecursoRel")
@@ -121,12 +137,17 @@ class TurSoportePagoDetalle
     protected $programacionDetalleRel;     
     
     /**
+     * @ORM\ManyToOne(targetEntity="TurPedidoDetalle", inversedBy="soportesPagosDetallesPedidoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_pedido_detalle_fk", referencedColumnName="codigo_pedido_detalle_pk")
+     */
+    protected $pedidoDetalleRel;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurTurno", inversedBy="soportesPagosDetallesTurnoRel")
      * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
      */
     protected $turnoRel;    
     
-
 
 
     /**
@@ -137,6 +158,54 @@ class TurSoportePagoDetalle
     public function getCodigoSoportePagoDetallePk()
     {
         return $this->codigoSoportePagoDetallePk;
+    }
+
+    /**
+     * Set codigoSoportePagoFk
+     *
+     * @param integer $codigoSoportePagoFk
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setCodigoSoportePagoFk($codigoSoportePagoFk)
+    {
+        $this->codigoSoportePagoFk = $codigoSoportePagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoFk()
+    {
+        return $this->codigoSoportePagoFk;
+    }
+
+    /**
+     * Set codigoSoportePagoPeriodoFk
+     *
+     * @param integer $codigoSoportePagoPeriodoFk
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setCodigoSoportePagoPeriodoFk($codigoSoportePagoPeriodoFk)
+    {
+        $this->codigoSoportePagoPeriodoFk = $codigoSoportePagoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoPeriodoFk()
+    {
+        return $this->codigoSoportePagoPeriodoFk;
     }
 
     /**
@@ -188,6 +257,78 @@ class TurSoportePagoDetalle
     }
 
     /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
+    }
+
+    /**
+     * Set descanso
+     *
+     * @param integer $descanso
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setDescanso($descanso)
+    {
+        $this->descanso = $descanso;
+
+        return $this;
+    }
+
+    /**
+     * Get descanso
+     *
+     * @return integer
+     */
+    public function getDescanso()
+    {
+        return $this->descanso;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
+    }
+
+    /**
      * Set horas
      *
      * @param integer $horas
@@ -233,6 +374,78 @@ class TurSoportePagoDetalle
     public function getHorasDiurnas()
     {
         return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNocturnas
+     *
+     * @param integer $horasNocturnas
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setHorasNocturnas($horasNocturnas)
+    {
+        $this->horasNocturnas = $horasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnas()
+    {
+        return $this->horasNocturnas;
+    }
+
+    /**
+     * Set horasFestivasDiurnas
+     *
+     * @param integer $horasFestivasDiurnas
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setHorasFestivasDiurnas($horasFestivasDiurnas)
+    {
+        $this->horasFestivasDiurnas = $horasFestivasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasFestivasDiurnas()
+    {
+        return $this->horasFestivasDiurnas;
+    }
+
+    /**
+     * Set horasFestivasNocturnas
+     *
+     * @param integer $horasFestivasNocturnas
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setHorasFestivasNocturnas($horasFestivasNocturnas)
+    {
+        $this->horasFestivasNocturnas = $horasFestivasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasFestivasNocturnas()
+    {
+        return $this->horasFestivasNocturnas;
     }
 
     /**
@@ -380,6 +593,78 @@ class TurSoportePagoDetalle
     }
 
     /**
+     * Set codigoPedidoDetalleFk
+     *
+     * @param integer $codigoPedidoDetalleFk
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setCodigoPedidoDetalleFk($codigoPedidoDetalleFk)
+    {
+        $this->codigoPedidoDetalleFk = $codigoPedidoDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPedidoDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoPedidoDetalleFk()
+    {
+        return $this->codigoPedidoDetalleFk;
+    }
+
+    /**
+     * Set soportePagoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportePagoRel
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setSoportePagoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportePagoRel = null)
+    {
+        $this->soportePagoRel = $soportePagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get soportePagoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSoportePago
+     */
+    public function getSoportePagoRel()
+    {
+        return $this->soportePagoRel;
+    }
+
+    /**
+     * Set soportePagoPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel = null)
+    {
+        $this->soportePagoPeriodoRel = $soportePagoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get soportePagoPeriodoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo
+     */
+    public function getSoportePagoPeriodoRel()
+    {
+        return $this->soportePagoPeriodoRel;
+    }
+
+    /**
      * Set recursoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursoRel
@@ -428,6 +713,30 @@ class TurSoportePagoDetalle
     }
 
     /**
+     * Set pedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel = null)
+    {
+        $this->pedidoDetalleRel = $pedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalle
+     */
+    public function getPedidoDetalleRel()
+    {
+        return $this->pedidoDetalleRel;
+    }
+
+    /**
      * Set turnoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
@@ -449,197 +758,5 @@ class TurSoportePagoDetalle
     public function getTurnoRel()
     {
         return $this->turnoRel;
-    }
-
-    /**
-     * Set codigoSoportePagoFk
-     *
-     * @param integer $codigoSoportePagoFk
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setCodigoSoportePagoFk($codigoSoportePagoFk)
-    {
-        $this->codigoSoportePagoFk = $codigoSoportePagoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSoportePagoFk
-     *
-     * @return integer
-     */
-    public function getCodigoSoportePagoFk()
-    {
-        return $this->codigoSoportePagoFk;
-    }
-
-    /**
-     * Set soportePagoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportePagoRel
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setSoportePagoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportePagoRel = null)
-    {
-        $this->soportePagoRel = $soportePagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get soportePagoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurSoportePago
-     */
-    public function getSoportePagoRel()
-    {
-        return $this->soportePagoRel;
-    }
-
-    /**
-     * Set estadoCerrado
-     *
-     * @param boolean $estadoCerrado
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setEstadoCerrado($estadoCerrado)
-    {
-        $this->estadoCerrado = $estadoCerrado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCerrado
-     *
-     * @return boolean
-     */
-    public function getEstadoCerrado()
-    {
-        return $this->estadoCerrado;
-    }
-
-    /**
-     * Set dias
-     *
-     * @param integer $dias
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setDias($dias)
-    {
-        $this->dias = $dias;
-
-        return $this;
-    }
-
-    /**
-     * Get dias
-     *
-     * @return integer
-     */
-    public function getDias()
-    {
-        return $this->dias;
-    }
-
-    /**
-     * Set horasNocturnas
-     *
-     * @param integer $horasNocturnas
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setHorasNocturnas($horasNocturnas)
-    {
-        $this->horasNocturnas = $horasNocturnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasNocturnas
-     *
-     * @return integer
-     */
-    public function getHorasNocturnas()
-    {
-        return $this->horasNocturnas;
-    }
-
-    /**
-     * Set horasFestivasDiurnas
-     *
-     * @param integer $horasFestivasDiurnas
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setHorasFestivasDiurnas($horasFestivasDiurnas)
-    {
-        $this->horasFestivasDiurnas = $horasFestivasDiurnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasFestivasDiurnas
-     *
-     * @return integer
-     */
-    public function getHorasFestivasDiurnas()
-    {
-        return $this->horasFestivasDiurnas;
-    }
-
-    /**
-     * Set horasFestivasNocturnas
-     *
-     * @param integer $horasFestivasNocturnas
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setHorasFestivasNocturnas($horasFestivasNocturnas)
-    {
-        $this->horasFestivasNocturnas = $horasFestivasNocturnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasFestivasNocturnas
-     *
-     * @return integer
-     */
-    public function getHorasFestivasNocturnas()
-    {
-        return $this->horasFestivasNocturnas;
-    }
-
-    /**
-     * Set descanso
-     *
-     * @param integer $descanso
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setDescanso($descanso)
-    {
-        $this->descanso = $descanso;
-
-        return $this;
-    }
-
-    /**
-     * Get descanso
-     *
-     * @return integer
-     */
-    public function getDescanso()
-    {
-        return $this->descanso;
     }
 }

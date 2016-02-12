@@ -6,8 +6,8 @@ use Doctrine\ORM\EntityRepository;
 
 class TurSoportePagoDetalleRepository extends EntityRepository {
     
-    public function listaDql() {
-        $dql   = "SELECT spd FROM BrasaTurnoBundle:TurSoportePagoDetalle spd WHERE spd.estadoCerrado = 0";
+    public function listaDql($codigoSoportePagoPeriodo = "") {
+        $dql   = "SELECT spd FROM BrasaTurnoBundle:TurSoportePagoDetalle spd WHERE spd.codigoSoportePagoPeriodoFk = " . $codigoSoportePagoPeriodo;
         return $dql;
     }
     

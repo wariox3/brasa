@@ -232,7 +232,15 @@ brs_tur_consultas_recursos_disponibles_programacion:
     
 brs_tur_proceso_generar_soporte_pago:
     path:     /tur/proceso/generar/soporte/pago
-    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:generar }                  
+    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:generar }
+    
+brs_tur_proceso_generar_soporte_pago_detalle:
+    path:     /tur/proceso/generar/soporte/pago/detalle/{codigoSoportePagoPeriodo}
+    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:detalle }    
+    
+brs_tur_proceso_generar_soporte_pago_nuevo:
+    path:     /tur/proceso/generar/soporte/pago/nuevo/{codigoSoportePagoPeriodo}
+    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:nuevo }    
     
 brs_tur_proceso_generar_programacion_lista:
     path:     /tur/proceso/generar/programacion/lista

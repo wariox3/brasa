@@ -235,6 +235,11 @@ class TurPedidoDetalle
     protected $facturasDetallesPedidoDetalleRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="pedidoDetalleRel")
+     */
+    protected $soportesPagosDetallesPedidoDetalleRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1290,5 +1295,39 @@ class TurPedidoDetalle
     public function getVrTotalDetallePendiente()
     {
         return $this->vrTotalDetallePendiente;
+    }
+
+    /**
+     * Add soportesPagosDetallesPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesPedidoDetalleRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function addSoportesPagosDetallesPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesPedidoDetalleRel)
+    {
+        $this->soportesPagosDetallesPedidoDetalleRel[] = $soportesPagosDetallesPedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosDetallesPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesPedidoDetalleRel
+     */
+    public function removeSoportesPagosDetallesPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesPedidoDetalleRel)
+    {
+        $this->soportesPagosDetallesPedidoDetalleRel->removeElement($soportesPagosDetallesPedidoDetalleRel);
+    }
+
+    /**
+     * Get soportesPagosDetallesPedidoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosDetallesPedidoDetalleRel()
+    {
+        return $this->soportesPagosDetallesPedidoDetalleRel;
     }
 }

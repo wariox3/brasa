@@ -12,12 +12,71 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
         $request = $this->getRequest();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();                
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-        $form = $this->createFormBuilder()            
-            ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
+        $form = $this->createFormBuilder()                        
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnCargar')->isClicked()) {
+            if($request->request->get('OpCargar')) {
+                $codigoSoportePagoPeriodo = $request->request->get('OpCargar');                
+                $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                       
+                $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
+                foreach ($arSoportesPago as $arSoportePago) {                    
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $arSoportePago->getRecursoRel()->getEmpleadoRel();
+                    $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                    $floVrDia = $arContrato->getVrSalario() / 30;
+                    $floVrHora = $floVrDia / 8;
+                    $intHoras = $arSoportePago->getHorasDiurnas();
+                    $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                    $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado);
+                    $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
+                    $arProgramacionPagoDetalle->setContratoRel($arContrato);
+                    $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
+                    $arProgramacionPagoDetalle->setFechaDesde($arSoportePago->getFechaDesde());
+                    $arProgramacionPagoDetalle->setFechaHasta($arSoportePago->getFechaHasta());
+                    $arProgramacionPagoDetalle->setFechaDesdePago($arSoportePago->getFechaDesde());
+                    $arProgramacionPagoDetalle->setFechaHastaPago($arSoportePago->getFechaHasta());
+                    $arProgramacionPagoDetalle->setHorasPeriodo($intHoras);
+                    $arProgramacionPagoDetalle->setHorasPeriodoReales($intHoras);
+                    $intDias = $arSoportePago->getDias()+$arSoportePago->getDescanso();
+                    $arProgramacionPagoDetalle->setDias($intDias);
+                    $arProgramacionPagoDetalle->setDiasReales($intDias);    
+                    $arProgramacionPagoDetalle->setFactorDia($arContrato->getFactorHorasDia());
+                    $arProgramacionPagoDetalle->setVrDia($floVrDia);
+                    $arProgramacionPagoDetalle->setVrHora($floVrHora);
+                    $em->persist($arProgramacionPagoDetalle);
+
+                    if($arSoportePago->getHorasNocturnas() > 0) {
+                        $this->insertarAdicionalPago($arProgramacionPago, 48, $arSoportePago->getHorasNocturnas(), $arEmpleado);
+                    }
+                    if($arSoportePago->getHorasFestivasDiurnas() > 0) {
+                        $this->insertarAdicionalPago($arProgramacionPago, 51, $arSoportePago->getHorasFestivasDiurnas(), $arEmpleado);
+                    }
+                    if($arSoportePago->getHorasFestivasNocturnas() > 0) {
+                        $this->insertarAdicionalPago($arProgramacionPago, 52, $arSoportePago->getHorasFestivasNocturnas(), $arEmpleado);
+                    }                    
+                    if($arSoportePago->getHorasExtrasOrdinariasDiurnas() > 0) {
+                        $this->insertarAdicionalPago($arProgramacionPago, 44, $arSoportePago->getHorasExtrasOrdinariasDiurnas(), $arEmpleado);
+                    }
+                    if($arSoportePago->getHorasExtrasOrdinariasNocturnas() > 0) {
+                        $this->insertarAdicionalPago($arProgramacionPago, 45, $arSoportePago->getHorasExtrasOrdinariasNocturnas(), $arEmpleado);
+                    }                    
+                    if($arSoportePago->getHorasExtrasFestivasDiurnas() > 0) {
+                        $this->insertarAdicionalPago($arProgramacionPago, 43, $arSoportePago->getHorasExtrasFestivasDiurnas(), $arEmpleado);
+                    }
+                    if($arSoportePago->getHorasExtrasFestivasNocturnas() > 0) {
+                        $this->insertarAdicionalPago($arProgramacionPago, 45, $arSoportePago->getHorasExtrasFestivasNocturnas(), $arEmpleado);
+                    }                    
+                }
+                $em->flush();
+                //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarProgramacionPagoDetallePorSede($codigoProgramacionPago);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                
+            }
+                
+                
+                
+            /*if($form->get('BtnCargar')->isClicked()) {
                 $query = $em->createQuery($em->getRepository('BrasaTurnoBundle:TurSoportePago')->listaDql());                                
                 $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                       
                 $arSoportesPago = $query->getResult();
@@ -73,9 +132,15 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                 $em->flush();
                 //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarProgramacionPagoDetallePorSede($codigoProgramacionPago);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
-            }                                   
-        }         
+              
+             
+            }*/                                   
+        }  
+        
+        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->findBy(array('estadoGenerado' => 1));
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:cargarSoporteTurno.html.twig', array(
+            'arSoportePagoPeriodos' => $arSoportePagoPeriodo,
             'form' => $form->createView()
             ));
     }

@@ -6,12 +6,12 @@ use Doctrine\ORM\EntityRepository;
 
 class TurSoportePagoRepository extends EntityRepository {
     
-    public function listaDql() {
-        $dql   = "SELECT sp FROM BrasaTurnoBundle:TurSoportePago sp WHERE sp.estadoCerrado = 0";
+    public function listaDql($codigoSoportePagoPeriodo = "") {
+        $dql   = "SELECT sp FROM BrasaTurnoBundle:TurSoportePago sp WHERE sp.codigoSoportePagoPeriodoFk = " . $codigoSoportePagoPeriodo;
         return $dql;
     }
     
-    public function resumen($dateFechaDesde, $dateFechaHasta) {
+    public function resumen($dateFechaDesde, $dateFechaHasta, $arSoportePagoPeriodo) {
         $em = $this->getEntityManager();
         $dql   = "SELECT spd.codigoRecursoFk, "
                 . "SUM(spd.descanso) as descanso, "
@@ -34,6 +34,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
             $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+            $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
             $arSoportePago->setRecursoRel($arRecurso);
             $arSoportePago->setFechaDesde($dateFechaDesde);
             $arSoportePago->setFechaHasta($dateFechaHasta);
