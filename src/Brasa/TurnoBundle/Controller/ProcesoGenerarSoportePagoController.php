@@ -26,7 +26,9 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($dateFechaDesde->format('Y-m-').'01', $dateFechaHasta->format('Y-m-').'31');
                 $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                 $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31");
-                foreach ($arProgramacionDetalles as $arProgramacionDetalle) {                                        
+                foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
+                    //$floVrSalario = $arProgramacionDetalle->getRecursoRel()->getEmpleadoRel()->getVrSalario();
+                    
                     for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {
                         $strFecha = $dateFechaDesde->format('Y/m/') . $i;
                         $dateFecha = date_create($strFecha);
@@ -106,9 +108,13 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $em->getConnection()->executeQuery($strSql);                
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
             }
-            if ($form->get('BtnEliminar')->isClicked()) {
-                  return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
-            }
+            if ($form->get('BtnEliminar')->isClicked()) {                
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
+                
+            }            
+            
         }
         $dql = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->listaDql();
         $arSoportePagoPeriodos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
@@ -166,6 +172,7 @@ class ProcesoGenerarSoportePagoController extends Controller
 
     private function formularioGenerar() {
         $form = $this->createFormBuilder()
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
             ->getForm();
         return $form;
     }

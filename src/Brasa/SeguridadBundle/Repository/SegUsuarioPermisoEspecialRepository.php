@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class SegUsuarioPermisoEspecialRepository extends EntityRepository {
 
-    public function permisoEspecial($arUsuario, $codigoPermisoEspecial, $arrRoles = NULL) {        
+    public function permisoEspecial($arUsuario, $codigoPermisoEspecial) {        
         $em = $this->getEntityManager();
         $arrRoles = $arUsuario->getRoles();
         $boolAdministrador = false;

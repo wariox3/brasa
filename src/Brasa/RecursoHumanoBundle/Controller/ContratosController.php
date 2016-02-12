@@ -145,7 +145,7 @@ class ContratosController extends Controller
                     $intEstado = 1;
                 } else{
                     if($boolValidarTipoContrato == TRUE) {
-                        if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),1,$arUsuario->getRoles())) {
+                        if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),1)) {
                             $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
                             $arContrato->setEmpleadoRel($arEmpleado);
                             $arContrato->setFechaHasta($form->get('fechaHasta')->getData());
@@ -204,7 +204,7 @@ class ContratosController extends Controller
                 }    
             } else{
                 if($boolValidarTipoContrato == TRUE) {
-                    if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),1,$arUsuario->getRoles())) {
+                    if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),1)) {
                         $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
                         $arContrato->setEmpleadoRel($arEmpleado);
                         $arContrato->setFechaHasta($form->get('fechaHasta')->getData());

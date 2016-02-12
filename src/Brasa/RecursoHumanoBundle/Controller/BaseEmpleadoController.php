@@ -72,9 +72,8 @@ class BaseEmpleadoController extends Controller
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
-        //inicio - permiso para ver el salario del empleado
-        $arUsuario = $this->get('security.context')->getToken()->getUser();
-        $permisoVerSalario = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($arUsuario->getId(),2,$arUsuario->getRoles());
+        //inicio - permiso para ver el salario del empleado        
+        $permisoVerSalario = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),2);
         //fin - permiso para ver el salario del empleado
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
