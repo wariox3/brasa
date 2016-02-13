@@ -26,9 +26,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($dateFechaDesde->format('Y-m-').'01', $dateFechaHasta->format('Y-m-').'31');
                 $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                 $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31");
-                foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
-                    //$floVrSalario = $arProgramacionDetalle->getRecursoRel()->getEmpleadoRel()->getVrSalario();
-                    
+                foreach ($arProgramacionDetalles as $arProgramacionDetalle) {                    
                     for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {
                         $strFecha = $dateFechaDesde->format('Y/m/') . $i;
                         $dateFecha = date_create($strFecha);

@@ -25,7 +25,7 @@ class TurSoportePago
     /**
      * @ORM\Column(name="codigo_recurso_fk", type="integer", nullable=true)
      */    
-    private $codigoRecursoFk;
+    private $codigoRecursoFk;    
     
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
@@ -36,6 +36,16 @@ class TurSoportePago
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
      */    
     private $fechaHasta;            
+    
+    /**
+     * @ORM\Column(name="codigo_contrato_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoFk;    
+    
+    /**
+     * @ORM\Column(name="vr_salario", type="float")
+     */    
+    private $vrSalario = 0;    
     
     /**     
      * @ORM\Column(name="estado_cerrado", type="boolean")
@@ -596,5 +606,53 @@ class TurSoportePago
     public function getSoportePagoPeriodoRel()
     {
         return $this->soportePagoPeriodoRel;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return TurSoportePago
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
+    }
+
+    /**
+     * Set vrSalario
+     *
+     * @param float $vrSalario
+     *
+     * @return TurSoportePago
+     */
+    public function setVrSalario($vrSalario)
+    {
+        $this->vrSalario = $vrSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalario
+     *
+     * @return float
+     */
+    public function getVrSalario()
+    {
+        return $this->vrSalario;
     }
 }

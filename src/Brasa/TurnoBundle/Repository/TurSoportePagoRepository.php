@@ -25,7 +25,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 . "SUM(spd.horasExtrasFestivasDiurnas) as horasExtrasFestivasDiurnas, "
                 . "SUM(spd.horasExtrasFestivasNocturnas) as horasExtrasFestivasNocturnas "
                 . "FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
-                . "WHERE spd.estadoCerrado = 0 "
+                . "WHERE spd.codigoSoportePagoPeriodoFk =  " . $arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk() . " "
                 . "GROUP BY spd.codigoRecursoFk" ;
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();        
@@ -33,6 +33,13 @@ class TurSoportePagoRepository extends EntityRepository {
             $codigoRecurso = $arrayResultado[$i]['codigoRecursoFk'];
             $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
+            
+            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+            $arEmpleado = $arRecurso->getEmpleadoRel();
+            if($arEmpleado->getEstadoContratoActivo()) {                        
+                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+            }            
             $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
             $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
             $arSoportePago->setRecursoRel($arRecurso);
@@ -48,6 +55,10 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setHorasExtrasOrdinariasNocturnas($arrayResultado[$i]['horasExtrasOrdinariasNocturnas']);
             $arSoportePago->setHorasExtrasFestivasDiurnas($arrayResultado[$i]['horasExtrasFestivasDiurnas']);
             $arSoportePago->setHorasExtrasFestivasNocturnas($arrayResultado[$i]['horasExtrasFestivasNocturnas']);
+            if($arContrato) {
+                $arSoportePago->setCodigoContratoFk($arContrato->getCodigoContratoPk());
+                $arSoportePago->setVrSalario($arContrato->getVrSalario());
+            }
             $em->persist($arSoportePago);            
         }
         $em->flush();

@@ -28,6 +28,8 @@
                 <th>HEON</th>
                 <th>HEFD</th>
                 <th>HEFN</th>
+                <th>CONTRATO</th>
+                <th>SALARIO</th>
             </tr>
             {% for arSoportesPagos in arSoportesPagos %}
             <tr>
@@ -45,6 +47,8 @@
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasOrdinariasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasNocturnas | number_format(0, '.', ',') }}</td>
+                <td>{{ arSoportesPagos.codigoContratoFk }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.vrSalario | number_format(0, '.', ',') }}</td>
             </tr>
 
             {% endfor %}

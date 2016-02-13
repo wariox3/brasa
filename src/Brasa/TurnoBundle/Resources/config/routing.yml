@@ -250,6 +250,10 @@ brs_tur_proceso_generar_pedido_lista:
     path:     /tur/proceso/generar/pedido/lista
     defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarPedido:lista }             
     
+brs_tur_proceso_cierre_mes:
+    path:     /tur/proceso/cierre/mes/
+    defaults: { _controller: BrasaTurnoBundle:ProcesoCierreMes:lista }     
+    
 brs_tur_utilidad_aplicar_novedad:    
     path:     /tur/utilidad/aplicar/novedad
     defaults: { _controller: BrasaTurnoBundle:UtilidadAplicarNovedad:lista }     
