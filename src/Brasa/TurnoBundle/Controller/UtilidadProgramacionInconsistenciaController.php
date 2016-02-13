@@ -25,18 +25,15 @@ class UtilidadProgramacionInconsistenciaController extends Controller
                 for($i = 1; $i <= 31; $i++) {
                     $strSql = "SELECT
                                 codigo_recurso_fk as codigoRecursoFk, 
-                                tur_recurso.nombre_corto as nombreCorto,  
-                                dia_$i as dia$i, 
-                                tur_turno.nombre as nombreTurno,
+                                tur_recurso.nombre_corto as nombreCorto,                                                                   
                                 COUNT(dia_$i) AS numero
                                 FROM
                                 tur_programacion_detalle
-                                LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk
-                                LEFT JOIN tur_turno ON tur_programacion_detalle.dia_$i = tur_turno.codigo_turno_pk
+                                LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk                                
                                 WHERE
                                 dia_$i IS NOT NULL AND anio = $strAnio AND mes = $strMes
                                 GROUP BY
-                                codigo_recurso_fk, dia_$i"; 
+                                codigo_recurso_fk"; 
                     $connection = $em->getConnection();
                     $statement = $connection->prepare($strSql);        
                     $statement->execute();
@@ -47,7 +44,7 @@ class UtilidadProgramacionInconsistenciaController extends Controller
                                 $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
                                 $arProgramacionInconsistencia->setInconsistencia('Asignacion doble de turno');
                                 $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
-                                        $registro['nombreCorto'] . " dia " . $i . " turno " . $registro['dia'.$i] . " " . $registro['nombreTurno']);
+                                        $registro['nombreCorto'] . " dia " . $i);
                                 $em->persist($arProgramacionInconsistencia);                                
                             }
                         }                        
