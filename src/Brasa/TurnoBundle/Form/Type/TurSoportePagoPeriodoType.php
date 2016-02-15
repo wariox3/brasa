@@ -9,6 +9,13 @@ class TurSoportePagoPeriodoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder       
+            ->add('centroCostoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurCentroCosto',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.codigoCentroCostoPk', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                 
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd'))
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd'))            
             ->add('guardar', 'submit');

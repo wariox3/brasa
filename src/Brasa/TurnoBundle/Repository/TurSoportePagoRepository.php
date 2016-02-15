@@ -13,6 +13,8 @@ class TurSoportePagoRepository extends EntityRepository {
     
     public function resumen($dateFechaDesde, $dateFechaHasta, $arSoportePagoPeriodo) {
         $em = $this->getEntityManager();
+        $arSoportePagoPeriodoActualizar = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo(); 
+        $arSoportePagoPeriodoActualizar = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk());
         $dql   = "SELECT spd.codigoRecursoFk, "
                 . "SUM(spd.descanso) as descanso, "
                 . "SUM(spd.dias) as dias, "
@@ -61,9 +63,19 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arSoportePago->setCodigoContratoFk($arContrato->getCodigoContratoPk());
                 $arSoportePago->setVrSalario($arContrato->getVrSalario());
             }
-            $em->persist($arSoportePago);            
+            $em->persist($arSoportePago);   
+            
         }
+        $arSoportePagoPeriodoActualizar->setRecursos($i);
+        $em->persist($arSoportePagoPeriodoActualizar);
         $em->flush();
+        $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk()));
+        foreach ($arSoportesPago as $arSoportePago) {
+            $strSql = "UPDATE tur_soporte_pago_detalle SET codigo_soporte_pago_fk = " . $arSoportePago->getCodigoSoportePagoPk() . " WHERE codigo_recurso_fk = " . $arSoportePago->getRecursoRel()->getCodigoRecursoPk();           
+            $em->getConnection()->executeQuery($strSql);            
+        }
+        
         return $arrayResultado;        
     }
 

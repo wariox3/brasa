@@ -6,8 +6,14 @@ use Doctrine\ORM\EntityRepository;
 
 class TurSoportePagoDetalleRepository extends EntityRepository {
     
-    public function listaDql($codigoSoportePagoPeriodo = "") {
-        $dql   = "SELECT spd FROM BrasaTurnoBundle:TurSoportePagoDetalle spd WHERE spd.codigoSoportePagoPeriodoFk = " . $codigoSoportePagoPeriodo;
+    public function listaDql($codigoSoportePagoPeriodo = "", $codigoSoportePago = "") {
+        $dql   = "SELECT spd FROM BrasaTurnoBundle:TurSoportePagoDetalle spd WHERE spd.codigoSoportePagoDetallePk <> 0";
+        if($codigoSoportePagoPeriodo != "") {
+            $dql .= " AND spd.codigoSoportePagoPeriodoFk = " . $codigoSoportePagoPeriodo;  
+        }
+        if($codigoSoportePago != "") {
+            $dql .= " AND spd.codigoSoportePagoFk = " . $codigoSoportePago;  
+        }        
         return $dql;
     }
     

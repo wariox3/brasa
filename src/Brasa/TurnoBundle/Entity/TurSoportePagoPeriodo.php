@@ -27,6 +27,16 @@ class TurSoportePagoPeriodo
      */    
     private $fechaHasta;            
     
+    /**
+     * @ORM\Column(name="recursos", type="integer")
+     */    
+    private $recursos = 0;    
+    
+    /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoFk;    
+    
     /**     
      * @ORM\Column(name="estado_generado", type="boolean")
      */    
@@ -37,6 +47,12 @@ class TurSoportePagoPeriodo
      */    
     private $estadoAprobado = false;     
 
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="soportesPagosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;     
+    
    /**
      * @ORM\OneToMany(targetEntity="TurSoportePago", mappedBy="soportePagoPeriodoRel")
      */
@@ -226,5 +242,77 @@ class TurSoportePagoPeriodo
     public function getSoportesPagosSoportePagoPeriodoRel()
     {
         return $this->soportesPagosSoportePagoPeriodoRel;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
+    }
+
+    /**
+     * Set recursos
+     *
+     * @param integer $recursos
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setRecursos($recursos)
+    {
+        $this->recursos = $recursos;
+
+        return $this;
+    }
+
+    /**
+     * Get recursos
+     *
+     * @return integer
+     */
+    public function getRecursos()
+    {
+        return $this->recursos;
     }
 }

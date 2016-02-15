@@ -25,7 +25,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $intDiaFinal = $dateFechaHasta->format('j');
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($dateFechaDesde->format('Y-m-').'01', $dateFechaHasta->format('Y-m-').'31');
                 $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-                $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31");
+                $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31", $arSoportePagoPeriodo->getCodigoCentroCostoFk());
                 foreach ($arProgramacionDetalles as $arProgramacionDetalle) {                    
                     for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {
                         $strFecha = $dateFechaDesde->format('Y/m/') . $i;
@@ -100,10 +100,10 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arSoportePagoPeriodo->setEstadoGenerado(0);
                 $em->persist($arSoportePagoPeriodo);
                 $em->flush();  
-                $strSql = "DELETE FROM tur_soporte_pago WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
-                $em->getConnection()->executeQuery($strSql);                 
                 $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
-                $em->getConnection()->executeQuery($strSql);                
+                $em->getConnection()->executeQuery($strSql);
+                $strSql = "DELETE FROM tur_soporte_pago WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
+                $em->getConnection()->executeQuery($strSql);                                                 
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
             }
             if ($form->get('BtnEliminar')->isClicked()) {                
@@ -130,16 +130,30 @@ class ProcesoGenerarSoportePagoController extends Controller
         $this->lista($codigoSoportePagoPeriodo);
         if ($form->isValid()) {
             if ($form->get('BtnExcel')->isClicked()) {
+                $this->listaDetalle("", $codigoSoportePagoPeriodo);
                 $this->generarExcel();
             }
         }
-        $arSoportesPago = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        $arSoportesPagoDetalle = $paginator->paginate($em->createQuery($this->strListaDqlDetalle), $request->query->get('page', 1), 20);        
+        $arSoportesPago = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);        
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:detalle.html.twig', array(            
             'arSoportesPagos' => $arSoportesPago,
-            'arSoportesPagosDetalles' => $arSoportesPagoDetalle,
             'form' => $form->createView()));
     }    
+
+    public function verAction($codigoSoportePago) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioVer();
+        $form->handleRequest($request);
+        $this->listaDetalle($codigoSoportePago, "");
+        if ($form->isValid()) {
+        }        
+        $arSoportesPagoDetalle = $paginator->paginate($em->createQuery($this->strListaDqlDetalle), $request->query->get('page', 1), 200);        
+        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:ver.html.twig', array(                        
+            'arSoportesPagosDetalles' => $arSoportesPagoDetalle,
+            'form' => $form->createView()));
+    }     
     
     public function nuevoAction($codigoSoportePagoPeriodo) {
         $request = $this->getRequest();
@@ -167,9 +181,13 @@ class ProcesoGenerarSoportePagoController extends Controller
     
     private function lista($codigoSoportePagoPeriodo) {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->listaDql($codigoSoportePagoPeriodo);
-        $this->strListaDqlDetalle =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->listaDql($codigoSoportePagoPeriodo);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->listaDql($codigoSoportePagoPeriodo);        
     }
+
+    private function listaDetalle($codigoSoportePago, $codigoSoportePagoPeriodo) {
+        $em = $this->getDoctrine()->getManager();        
+        $this->strListaDqlDetalle =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->listaDql($codigoSoportePagoPeriodo, $codigoSoportePago);
+    }    
 
     private function formularioGenerar() {
         $form = $this->createFormBuilder()
@@ -179,6 +197,13 @@ class ProcesoGenerarSoportePagoController extends Controller
     }
 
     private function formularioDetalle() {
+        $form = $this->createFormBuilder()
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
+            ->getForm();
+        return $form;
+    }
+    
+    private function formularioVer() {
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
             ->getForm();
@@ -378,6 +403,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                     ->setCellValue('N1', 'HEFN');
         
         $i = 2;
+        
         $query = $em->createQuery($this->strListaDqlDetalle);
         $arSoportesPagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
         $arSoportesPagoDetalle = $query->getResult();

@@ -26,6 +26,11 @@ class TurCentroCosto
      * @ORM\OneToMany(targetEntity="TurRecurso", mappedBy="centroCostoRel")
      */
     protected $recursosCentroCostoRel; 
+   
+    /**
+     * @ORM\OneToMany(targetEntity="TurCentroCosto", mappedBy="centroCostoRel")
+     */
+    protected $soportesPagosCentroCostoRel;     
     
     /**
      * Get codigoCentroCostoPk
@@ -100,5 +105,39 @@ class TurCentroCosto
     public function getRecursosCentroCostoRel()
     {
         return $this->recursosCentroCostoRel;
+    }
+
+    /**
+     * Add soportesPagosCentroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $soportesPagosCentroCostoRel
+     *
+     * @return TurCentroCosto
+     */
+    public function addSoportesPagosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $soportesPagosCentroCostoRel)
+    {
+        $this->soportesPagosCentroCostoRel[] = $soportesPagosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosCentroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $soportesPagosCentroCostoRel
+     */
+    public function removeSoportesPagosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $soportesPagosCentroCostoRel)
+    {
+        $this->soportesPagosCentroCostoRel->removeElement($soportesPagosCentroCostoRel);
+    }
+
+    /**
+     * Get soportesPagosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosCentroCostoRel()
+    {
+        return $this->soportesPagosCentroCostoRel;
     }
 }
