@@ -68,6 +68,30 @@ class SeguridadSocialPeriodosController extends Controller
         $form->handleRequest($request);
         $this->listarDetalle($codigoPeriodo);
         if($form->isValid()) {
+            if($request->request->get('OpEliminar')) {
+                $codigoPeriodo = $request->request->get('OpEliminar');
+                $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoPeriodoDetalle) {
+                        $arPeriodoDetalleEliminar = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+                        $arPeriodoDetalleEliminar =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
+                        if ($arPeriodoDetalleEliminar->getEstadoGenerado() == 1){
+                            $objMensaje->Mensaje("error", "No se puede eliminar el registro se encuentra generado", $this);
+                        } else {
+                            $arPeriodoEmpleadoEliminar = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+                            $arPeriodoEmpleadoEliminar =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));
+                            foreach ($arPeriodoEmpleadoEliminar AS $arPeriodoEmpleadoEliminar) {
+                                $em->remove($arPeriodoEmpleadoEliminar);
+                                $em->flush();
+                            }
+                            $em->remove($arPeriodoDetalleEliminar);
+                            $em->flush();
+                          }
+                            return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
+                    }
+                }
+            }
             if($request->request->get('OpGenerar')) {
                 $codigoPeriodoDetalle = $request->request->get('OpGenerar');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->generar($codigoPeriodoDetalle);
@@ -247,7 +271,6 @@ class SeguridadSocialPeriodosController extends Controller
             
             if($request->request->get('OpGenerarExcel')) {
                 $codigoPeriodoDetalle = $request->request->get('OpGenerarExcel');
-
                 $em = $this->getDoctrine()->getManager();        
                 $objPHPExcel = new \PHPExcel();
                  // Set document properties
@@ -387,6 +410,31 @@ class SeguridadSocialPeriodosController extends Controller
             'codigoPeriodo' => $codigoPeriodo,
             'form' => $form->createView()));
     }
+    
+    public function detalleNuevoAction($codigoPeriodo) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+        $form = $this->createFormBuilder()
+            ->add('sucursalRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSsoSucursal',
+                'property' => 'nombre',
+            ))
+            ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+            $arPeriodoDetalle->setSsoSucursalRel($form->get('sucursalRel')->getData());
+            $arPeriodoDetalle->setSsoPeriodoRel($arPeriodo);
+            $em->persist($arPeriodoDetalle);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+            return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:detalleNuevo.html.twig', array(
+            'form' => $form->createView()));
+    }
 
     public function detalleEmpleadosAction($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
@@ -395,9 +443,9 @@ class SeguridadSocialPeriodosController extends Controller
         $session = $this->getRequest()->getSession();
         $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
         $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
-        $form = $this->formularioDetalleEmpleado();
+        $form = $this->formularioDetalleEmpleado($arPeriodoDetalle);
         $form->handleRequest($request);
-        $this->listarEmpleados($arPeriodoDetalle->getCodigoPeriodoFk(), $arPeriodoDetalle->getCodigoSucursalFk());
+        $this->listarEmpleados($codigoPeriodoDetalle);
         if($form->isValid()) {
             /*if($form->get('BtnGenerar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -421,46 +469,33 @@ class SeguridadSocialPeriodosController extends Controller
             }
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarDetalleEmpleado($form);
-                $this->listarEmpleados($arPeriodoDetalle->getCodigoPeriodoFk(), $arPeriodoDetalle->getCodigoSucursalFk());
+                $this->listarEmpleados($codigoPeriodoDetalle);
+            }
+            if($form->get('BtnActualizarEmpleadoAporte')->isClicked()) {
+               $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
+            }
+            if ($form->get('BtnActualizarSalario')->isClicked()) {
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                foreach ($arrControles['LblCodigo'] as $intCodigo) {                
+                    if($arrControles['TxtSalario'.$intCodigo] != "" && $arrControles['TxtSalario'.$intCodigo] != 0) {
+                        $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+                        $arPeriodoEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($intCodigo);
+                        $floSalario = $arrControles['TxtSalario'.$intCodigo];
+                        $arPeriodoEmpleado->setVrSalario($floSalario);
+                        $em->persist($arPeriodoEmpleado);                        
+                    }
+                }
+                $em->flush();
+                
+                return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
             }
         }
-        $arSsoPeriodoEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaEmpleados), $request->query->get('page', 1), 50);
+        $arSsoPeriodoEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaEmpleados), $request->query->get('page', 1), 200);
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:empleados.html.twig', array(
             'arPeriodoDetalle' => $arPeriodoDetalle,
             'arPeriodoEmpleados' => $arSsoPeriodoEmpleados,
             'form' => $form->createView()));
-    }
-    
-    private function formularioDetalleEmpleado() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $arrayPropiedades = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'ELiminar',))
-            ->getForm();
-        return $form;
-    }
-    
-    private function filtrarDetalleEmpleado($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }
     
     public function detalleAportesAction($codigoPeriodoDetalle) {
@@ -505,6 +540,193 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
     
+    public function trasladarEmpleadosAction($codigoPeriodoDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
+        $form = $this->formularioTrasladarEmpleado();
+        $form->handleRequest($request);
+        $this->listarTrasladoEmpleados($codigoPeriodoDetalle);
+        if($form->isValid()) {
+            if($form->get('BtnTrasladar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoPeriodoDetalleEmpleadoPk) {
+                        $arPeriodoDetalleEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+                        $arPeriodoDetalleEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($codigoPeriodoDetalleEmpleadoPk);
+                        $arPeriodoDetalleEmpleado->setSsoPeriodoDetalleRel($arPeriodoDetalle);
+                        $em->persist($arPeriodoDetalleEmpleado);
+                    }
+                }
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarTrasladoEmpleado($form);
+                $this->listarTrasladoEmpleados($codigoPeriodoDetalle);
+            }
+        }
+        $arSsoTrasladoEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaEmpleados), $request->query->get('page', 1), 200);
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:trasladar.html.twig', array(
+            'arPeriodoDetalle' => $arPeriodoDetalle,
+            'arTrasladoEmpleados' => $arSsoTrasladoEmpleados,
+            'form' => $form->createView()));
+    }
+    
+    public function copiarEmpleadosAction($codigoPeriodoDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
+        $form = $this->formularioCopiarEmpleado();
+        $form->handleRequest($request);
+        $this->listarCopiarEmpleados($codigoPeriodoDetalle);
+        if($form->isValid()) {
+            if($form->get('BtnCopiar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoPeriodoDetalleEmpleadoPk) {
+                        $arPeriodoDetalleEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+                        $arPeriodoDetalleEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($codigoPeriodoDetalleEmpleadoPk);
+                        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+                        $arPeriodo =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($arPeriodoDetalleEmpleado->getCodigoPeriodoFk());
+                        $arSucursal = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal();
+                        $arSucursal =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoSucursal')->find($arPeriodoDetalleEmpleado->getCodigoSucursalFk());
+                        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                        $arEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPeriodoDetalleEmpleado->getCodigoEmpleadoFk());
+                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                        $arContrato =  $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arPeriodoDetalleEmpleado->getCodigoContratoFk());
+                        $arCopiarEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+                        $arCopiarEmpleado->setSsoPeriodoRel($arPeriodo);
+                        $arCopiarEmpleado->setSsoPeriodoDetalleRel($arPeriodoDetalle);
+                        $arCopiarEmpleado->setSsoSucursalRel($arSucursal);
+                        $arCopiarEmpleado->setEmpleadoRel($arEmpleado);
+                        $arCopiarEmpleado->setContratoRel($arContrato);
+                        $arCopiarEmpleado->setDias($arPeriodoDetalleEmpleado->getDias());
+                        $arCopiarEmpleado->setVrSalario($arPeriodoDetalleEmpleado->getVrSalario());
+                        $arCopiarEmpleado->setVrSuplementario($arPeriodoDetalleEmpleado->getVrSuplementario());
+                        $arCopiarEmpleado->setIngreso($arPeriodoDetalleEmpleado->getIngreso());
+                        $arCopiarEmpleado->setRetiro($arPeriodoDetalleEmpleado->getRetiro());
+                        $arCopiarEmpleado->setSalarioIntegral($arPeriodoDetalleEmpleado->getSalarioIntegral());
+                        $arCopiarEmpleado->setDiasLicencia($arPeriodoDetalleEmpleado->getDiasLicencia());
+                        $arCopiarEmpleado->setDiasIncapacidadGeneral($arPeriodoDetalleEmpleado->getDiasIncapacidadGeneral());
+                        $arCopiarEmpleado->setDiasLicenciaMaternidad($arPeriodoDetalleEmpleado->getDiasLicenciaMaternidad());
+                        $arCopiarEmpleado->setDiasIncapacidadLaboral($arPeriodoDetalleEmpleado->getDiasIncapacidadLaboral());
+                        $arCopiarEmpleado->setDiasVacaciones($arPeriodoDetalleEmpleado->getDiasVacaciones());
+                        $arCopiarEmpleado->setTarifaPension($arPeriodoDetalleEmpleado->getTarifaPension());
+                        $arCopiarEmpleado->setTarifaRiesgos($arPeriodoDetalleEmpleado->getTarifaRiesgos());
+                        $arCopiarEmpleado->setCodigoEntidadPensionPertenece($arPeriodoDetalleEmpleado->getCodigoEntidadPensionPertenece());
+                        $arCopiarEmpleado->setCodigoEntidadSaludPertenece($arPeriodoDetalleEmpleado->getCodigoEntidadSaludPertenece());
+                        $arCopiarEmpleado->setCodigoEntidadCajaPertenece($arPeriodoDetalleEmpleado->getCodigoEntidadCajaPertenece());
+                        
+                        $em->persist($arCopiarEmpleado);
+                    }
+                }
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarCopiarEmpleado($form);
+                $this->listarCopiarEmpleados($codigoPeriodoDetalle);
+            }
+        }
+        $arSsoCopiarEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaEmpleados), $request->query->get('page', 1), 200);
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:copiar.html.twig', array(
+            'arPeriodoDetalle' => $arPeriodoDetalle,
+            'arCopiarEmpleados' => $arSsoCopiarEmpleados,
+            'form' => $form->createView()));
+    }
+    
+    private function formularioDetalleEmpleado($ar) {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrBotonEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonActualizarDatos = array('label' => 'Actualizar datos', 'disabled' => false);        
+        $arrBotonActualizarSalario = array('label' => 'Actualizar salario', 'disabled' => false);        
+        if($ar->getEstadoGenerado() == 1) {            
+            $arrBotonEliminar['disabled'] = true;
+            $arrBotonActualizarDatos['disabled'] = true;            
+            $arrBotonActualizarSalario['disabled'] = true;
+        } 
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnActualizarEmpleadoAporte', 'submit', $arrBotonActualizarDatos)    
+            ->add('BtnActualizarSalario', 'submit', $arrBotonActualizarSalario)        
+            ->add('BtnEliminar', 'submit', $arrBotonEliminar)
+            ->getForm();
+        return $form;
+    }
+    
+    private function formularioTrasladarEmpleado() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnTrasladar', 'submit', array('label'  => 'Trasladar',))    
+            ->getForm();
+        return $form;
+    }
+    
+    private function formularioCopiarEmpleado() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnCopiar', 'submit', array('label'  => 'Copiar',))    
+            ->getForm();
+        return $form;
+    }
+    
     private function formularioDetalleAporte() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -525,9 +747,29 @@ class SeguridadSocialPeriodosController extends Controller
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'ELiminar',))
             ->getForm();
         return $form;
+    }
+    
+    private function filtrarDetalleEmpleado($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+    }
+    
+    private function filtrarTrasladoEmpleado($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+    }
+    
+    private function filtrarCopiarEmpleado($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }
     
     private function filtrarDetalleAporte($form) {
@@ -564,10 +806,22 @@ class SeguridadSocialPeriodosController extends Controller
         $this->strDqlListaDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->listaDQL($codigoPeriodo);
     }
 
-    private function listarEmpleados($codigoPeriodo, $codigoSucursal) {
+    private function listarEmpleados($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaDql($codigoPeriodo, $codigoSucursal, $session->get('filtroCodigoCentroCosto'));
+        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'));
+    }
+    
+    private function listarTrasladoEmpleados($codigoPeriodoDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaTrasladoDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'));
+    }
+    
+    private function listarCopiarEmpleados($codigoPeriodoDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaCopiarDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'));
     }
 
     private function listarDetalleAportes($codigoPeriodoDetalle) {

@@ -319,6 +319,7 @@ class ContratosController extends Controller
                         //Generar liquidacion
                         if($arContrato->getCodigoContratoTipoFk() != 4 && $arContrato->getCodigoContratoTipoFk() != 5) {
                             $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+                            $arLiquidacion->setFecha(new \DateTime('now'));
                             $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());
                             $arLiquidacion->setEmpleadoRel($arContrato->getEmpleadoRel());
                             $arLiquidacion->setContratoRel($arContrato);
@@ -332,7 +333,6 @@ class ContratosController extends Controller
                             $arLiquidacion->setLiquidarCesantias(1);
                             $arLiquidacion->setLiquidarPrima(1);
                             $arLiquidacion->setLiquidarVacaciones(1);
-                            //$arLiquidacion->setComentarios($formContrato->get('motivoRetiro')->getData());
                             $em->persist($arLiquidacion);
                             //Verificar creditos
                             $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();

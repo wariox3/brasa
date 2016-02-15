@@ -274,7 +274,7 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtRNFC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional(4);
+                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtRNFNC'.$intCodigo] != "" && $arrControles['TxtRNFNC'.$intCodigo] != 0) {
@@ -298,7 +298,7 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEFD'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional(4);
+                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtHEFN'.$intCodigo] != "" && $arrControles['TxtHEFN'.$intCodigo] != 0) {
@@ -310,7 +310,7 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEFN'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional(4);
+                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtHEOD'.$intCodigo] != "" && $arrControles['TxtHEOD'.$intCodigo] != 0) {
@@ -322,7 +322,7 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEOD'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional(4);
+                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtHEON'.$intCodigo] != "" && $arrControles['TxtHEON'.$intCodigo] != 0) {
@@ -334,7 +334,7 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEON'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional(4);
+                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtDC'.$intCodigo] != "" && $arrControles['TxtDC'.$intCodigo] != 0) {
@@ -346,7 +346,7 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtDC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional(4);
+                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtDNC'.$intCodigo] != "" && $arrControles['TxtDNC'.$intCodigo] != 0) {
@@ -358,7 +358,7 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtDNC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional(4);
+                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
                                 $em->persist($arPagoAdicional);
                             }
                             if($arrControles['TxtRN'.$intCodigo] != "" && $arrControles['TxtRN'.$intCodigo] != 0) {
@@ -370,7 +370,7 @@ class PagosAdicionalesController extends Controller
                                 $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtRN'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional(4);
+                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
                                 $em->persist($arPagoAdicional);
                             }
                         }

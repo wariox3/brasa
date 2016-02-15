@@ -62,13 +62,12 @@
                 <th style="text-align: right">C.C</th>
                 <th style="text-align: right">C.SN</th>
                 <th style="text-align: right">C.I</th>
-                <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arSsoAportes in arSsoAportes %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoAportes.codigoAportePk }}">{{ arSsoAportes.codigoAportePk }} </td>
                 <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_ss_resumen_pago', {'codigoPeriodoDetalle': arPeriodoDetalle.codigoPeriodoDetallePK, 'codigoEmpleado': arSsoAportes.codigoEmpleadoFK}) }}', 'resumenPagos', 600, 900)">{{ arSsoAportes.empleadoRel.numeroIdentificacion  }}</a></td>
-                <td>{{ arSsoAportes.empleadoRel.centroCostoRel.nombre  }}</td>
+                <td>{{ arSsoAportes.empleadoRel.centroCostoRel.nombre |default('')  }}</td>
                 <td>{{ arSsoAportes.codigoContratoFk  }}</td>
                 <td>{{ arSsoAportes.ingreso  }}</td>
                 <td>{{ arSsoAportes.retiro  }}</td>
@@ -103,7 +102,6 @@
                 <td style="text-align: right">{{ arSsoAportes.cotizacionCaja | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionSena | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionIcbf | number_format(0, '.', ',') }}</td>
-                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoAportes.codigoAportePk }}" /></td>
             </tr>
             {% endfor %}
         </table>
@@ -116,9 +114,6 @@
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_ss_periodo_detalle', { 'codigoPeriodo': arPeriodoDetalle.codigoPeriodoFk }) }}" style="float:left">Volver</a>
             </div>
         </div>
-        <div class="btn-group" style="float: right">
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
-        </div>    
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}
     {{ form_end(form) }}

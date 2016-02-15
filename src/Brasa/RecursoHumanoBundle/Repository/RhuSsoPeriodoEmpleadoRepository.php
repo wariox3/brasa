@@ -11,15 +11,32 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
     
-    public function listaDql($codigoPeriodo, $codigoSucursal, $strCodigoCentroCosto ) {                    
+    public function listaDql($codigoPeriodoDetalle, $strCodigoCentroCosto ) {                    
             $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
-                    ."WHERE pe.codigoPeriodoFk = " . $codigoPeriodo . " "
-                    . "AND pe.codigoSucursalFk = " . $codigoSucursal;
+                    ."WHERE pe.codigoPeriodoDetalleFk = " . $codigoPeriodoDetalle . " ";
             if($strCodigoCentroCosto != "") {
                 $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
             }
             return $dql;
-        } 
+    }
+    
+    public function listaTrasladoDql($codigoPeriodoDetalle, $strCodigoCentroCosto ) {                    
+            $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
+                    ."WHERE pe.codigoPeriodoDetalleFk <> " . $codigoPeriodoDetalle . " ";
+            if($strCodigoCentroCosto != "") {
+                $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+            }
+            return $dql;
+    }
+    
+    public function listaCopiarDql($codigoPeriodoDetalle, $strCodigoCentroCosto ) {                    
+            $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
+                    ."WHERE pe.codigoPeriodoDetalleFk <> " . $codigoPeriodoDetalle . " ";
+            if($strCodigoCentroCosto != "") {
+                $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+            }
+            return $dql;
+    }
         
     public function actualizar($codigoPeriodoDetalle) {
         $em = $this->getEntityManager();

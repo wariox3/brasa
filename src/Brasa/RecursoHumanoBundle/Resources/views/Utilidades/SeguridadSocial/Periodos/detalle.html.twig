@@ -23,7 +23,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
+                <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arSsoPeriodoDetalles in arSsoPeriodoDetalles %}
             <tr>
@@ -55,7 +55,7 @@
                 </td>
                 <td style="text-align: center">{% if arSsoPeriodoDetalles.estadoGenerado == 1 %}<a href="{{ path('brs_rhu_ss_periodo_detalle_aportes', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a>{% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_ss_periodo_detalle_empleados', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" ></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}" /></td>
+                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}" /></td>
             </tr>
             {% endfor %}
         </table>
@@ -70,9 +70,15 @@
         </div>
         <div class="btn-toolbar" style="float:right">
             <div class="btn-group">
-                <button class="btn btn-default btn-xs" type="submit" name="OpGenerarPagosExcel" value="{{ codigoPeriodo }}">Excel pagos periodo</button>
-                <button class="btn btn-default btn-xs" type="submit" name="OpGenerarPagosDetalleExcel" value="{{ codigoPeriodo }}">Excel pago detalles periodo</button>
-                <button class="btn btn-default btn-xs" type="submit" name="OpGenerarAportesExcel" value="{{ codigoPeriodo }}">Excel aportes periodo</button>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_nuevo', { 'codigoPeriodo': codigoPeriodo }) }}', 'AgregarNuevoDetalle', 600, 900)" style="float:left">Nuevo</a>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-default btn-sm" type="submit" name="OpGenerarPagosExcel" value="{{ codigoPeriodo }}">Excel pagos periodo</button>
+                <button class="btn btn-default btn-sm" type="submit" name="OpGenerarPagosDetalleExcel" value="{{ codigoPeriodo }}">Excel pago detalles periodo</button>
+                <button class="btn btn-default btn-sm" type="submit" name="OpGenerarAportesExcel" value="{{ codigoPeriodo }}">Excel aportes periodo</button>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-danger btn-sm" type="submit" name="OpEliminar" value="{{ codigoPeriodo }}">Eliminar</button>
             </div>
         </div>    
 

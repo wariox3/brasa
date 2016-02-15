@@ -23,10 +23,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);        
         $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
         $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($arPeriodoDetalle->getCodigoPeriodoFk());
-        $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
+        //$em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
         $i = 1;
         $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
-        $arPeriodoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk(), 'codigoSucursalFk' => $arPeriodoDetalle->getCodigoSucursalFk()));                
+        $arPeriodoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk(), 'codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));                
         foreach ($arPeriodoEmpleados as $arPeriodoEmpleado) {
             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPeriodoEmpleado->getCodigoEmpleadoFk());        

@@ -117,7 +117,7 @@
                         <a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_detalle_nuevo_comentario', { 'codigoExamenDetalle': arExamenDetalle.codigoExamenDetallePk }) }}', 'AgregarComentario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a>
                     {% endif %}
                 </td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}" /></td>
+                <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenDetalle.codigoExamenDetallePk }}" /></td>
             </tr>
             {% endfor %}
         </table>

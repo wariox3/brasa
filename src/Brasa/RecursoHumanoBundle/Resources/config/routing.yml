@@ -720,7 +720,11 @@ brs_rhu_ss_periodo_lista:
 
 brs_rhu_ss_periodo_detalle:
     path:     /rhu/seguridadsocial/periodo/detalle/{codigoPeriodo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalle }         
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalle }
+    
+brs_rhu_ss_periodo_detalle_nuevo:
+    path:     /rhu/seguridadsocial/periodo/detalle/nuevo/{codigoPeriodo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalleNuevo }    
 
 brs_rhu_ss_periodo_detalle_aportes:
     path:     /rhu/seguridadsocial/periodo/detalle/aportes/{codigoPeriodoDetalle}
@@ -732,7 +736,15 @@ brs_rhu_ss_resumen_pago:
 
 brs_rhu_ss_periodo_detalle_empleados:
     path:     /rhu/seguridadsocial/periodo/detalle/empleados/{codigoPeriodoDetalle}
-    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalleEmpleados }     
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:detalleEmpleados }
+    
+brs_rhu_ss_periodo_detalle_empleados_trasladar:
+    path:     /rhu/seguridadsocial/periodo/detalle/empleados/trasladar/{codigoPeriodoDetalle}
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:trasladarEmpleados }
+    
+brs_rhu_ss_periodo_detalle_empleados_copiar:
+    path:     /rhu/seguridadsocial/periodo/detalle/empleados/copiar/{codigoPeriodoDetalle}
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:copiarEmpleados }    
     
 brs_rhu_consultas_empleado:    
     path:     /rhu/consultas/empleado

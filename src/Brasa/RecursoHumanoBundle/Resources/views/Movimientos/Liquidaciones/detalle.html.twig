@@ -27,8 +27,8 @@
                     <tr>
                         <td class="titulo">CÓDIGO:</td>
                         <td class="td-in-well">{{ arLiquidacion.codigoLiquidacionPk }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">FECHA:</td>
+                        <td align="right">{{ arLiquidacion.fecha|date("Y/m/d") }}</td>
                         <td class="titulo">IBP:</td>
                         <td align="right">$ {{ arLiquidacion.vrIngresoBasePrestacion | number_format(0, '.', ',') }}</td>
                     </tr>

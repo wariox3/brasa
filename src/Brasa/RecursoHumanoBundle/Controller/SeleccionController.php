@@ -15,21 +15,13 @@ class SeleccionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $session = $this->getRequest()->getSession();
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->listar();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            /*if($form->get('BtnPruebasPresentadas')->isClicked()){
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->presentaPruebasSelecciones($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
-            }
-            if($form->get('BtnReferenciasVerificadas')->isClicked()){
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->referenciasVerificadsSelecciones($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));
-            }*/
-
             if($form->get('BtnEliminar')->isClicked()){
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $id) {
@@ -40,13 +32,19 @@ class SeleccionController extends Controller
                         $totalVisitas = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->devuelveNumeroVisitas($id);
                         if($totalReferencias == 0){
                             if($totalPruebas == 0){
-                                if($totalPruebas == 0){
+                                if($totalVisitas == 0){
                                     if ($arSelecciones->getEstadoCerrado() == 0 and $arSelecciones->getEstadoAutorizado()== 0 and $arSelecciones->getReferenciasVerificadas()== 0 and $arSelecciones->getPresentaPruebas()== 0){
                                          $em->remove($arSelecciones);
                                          $em->flush();
                                     }
-                                }
-                            }
+                                } else {
+                                    $objMensaje->Mensaje("error", "Tiene visitas creadas en esta selección", $this);
+                                  }
+                            } else {
+                                $objMensaje->Mensaje("error", "Tiene pruebas creadas en esta selección", $this);
+                              }
+                        } else {
+                            $objMensaje->Mensaje("error", "Tiene referencias creadas en esta selección", $this);
                         }
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_seleccion_lista'));

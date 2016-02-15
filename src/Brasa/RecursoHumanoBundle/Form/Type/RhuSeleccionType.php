@@ -27,7 +27,7 @@ class RhuSeleccionType extends AbstractType
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                
+                'required' => false))                
             ->add('tipoIdentificacionRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenTipoIdentificacion',
                 'query_builder' => function (EntityRepository $er) {
