@@ -242,12 +242,29 @@ class TurProgramacionRepository extends EntityRepository {
         return true;
     }        
     
-    public function eliminar($arrSeleccionados) {
+    public function eliminar($arrSeleccionados) {        
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
-                $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigo);
-                $em->remove($arProgramacion);
+                $booEliminar = TRUE;
+                $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => $codigo));
+                foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
+                    $intNumeroRegistros = 0;
+                    $dql   = "SELECT COUNT(spd.codigoSoportePagoDetallePk) as numeroRegistros FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
+                            . "WHERE spd.codigoProgramacionDetalleFk = " . $arProgramacionDetalle->getCodigoProgramacionDetallePk();
+                    $query = $em->createQuery($dql);
+                    $arrCotizacionDetalles = $query->getSingleResult(); 
+                    if($arrCotizacionDetalles['numeroRegistros'] > 0) {
+                       $booEliminar = FALSE;
+                    }                    
+                }
+                if($booEliminar) {
+                    $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigo);
+                    if($arProgramacion->getEstadoAnulado() == 1) {
+                        $em->remove($arProgramacion);                    
+                    }                    
+                }
             }
             $em->flush();
         }

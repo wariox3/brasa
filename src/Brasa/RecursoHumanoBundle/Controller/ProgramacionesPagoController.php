@@ -497,17 +497,14 @@ class ProgramacionesPagoController extends Controller
                 ->setCategory("Test result file");
             $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
             $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+            for($col = 'A'; $col !== 'L'; $col++) {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                  
+            }     
+            for($col = 'F'; $col !== 'L'; $col++) {
+                $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right'); 
+                $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+            } 
             $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A1', 'CÓDIGO')
                         ->setCellValue('B1', 'IDENTIFICACIÓN')
@@ -541,24 +538,7 @@ class ProgramacionesPagoController extends Controller
             }
 
             $objPHPExcel->getActiveSheet()->setTitle('Pagos');
-            $objPHPExcel->setActiveSheetIndex(0);
-            $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-            $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+            $objPHPExcel->setActiveSheetIndex(0);            
             $objPHPExcel->createSheet(2)->setTitle('PagosDetalle')
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'EMPLEADO')
@@ -598,7 +578,16 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('O' . $i, $arPagoDetalle->getVrIngresoBaseCotizacion());
                 $i++;
             }            
-            
+            $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+            $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);     
+            for($col = 'A'; $col !== 'P'; $col++) {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                  
+            }            
+            for($col = 'E'; $col !== 'P'; $col++) {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true); 
+                $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');                 
+                $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+            }            
             // Redirect output to a client’s web browser (Excel2007)
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="Pagos.xlsx"');

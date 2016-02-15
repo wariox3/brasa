@@ -129,6 +129,9 @@ class ProcesoGenerarSoportePagoController extends Controller
         $form->handleRequest($request);
         $this->lista($codigoSoportePagoPeriodo);
         if ($form->isValid()) {
+            if ($form->get('BtnExcel')->isClicked()) {
+                $this->generarExcel();
+            }
         }
         $arSoportesPago = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         $arSoportesPagoDetalle = $paginator->paginate($em->createQuery($this->strListaDqlDetalle), $request->query->get('page', 1), 20);        
@@ -188,13 +191,12 @@ class ProcesoGenerarSoportePagoController extends Controller
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
         $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
         $intDias = 0;
-        $intDescanso = 0;
 
         $intHoraInicio = $arTurno->getHoraDesde()->format('G');
         $intHoraFinal = $arTurno->getHoraHasta()->format('G');
         $diaSemana = $dateFecha->format('N');
         $diaSemana2 = $dateFecha2->format('N');
-        if($arTurno->getDescanso() == 1){
+        /*if($arTurno->getDescanso() == 1){
             $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
             $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
             $arSoportePagoDetalle->setRecursoRel($arProgramacionDetalle->getRecursoRel());
@@ -204,9 +206,8 @@ class ProcesoGenerarSoportePagoController extends Controller
             $arSoportePagoDetalle->setTurnoRel($arTurno);
             $arSoportePagoDetalle->setDescanso(1);
             $em->persist($arSoportePagoDetalle);            
-        }
-        if($arTurno->getNovedad() == 0 && $arTurno->getDescanso() == 0) {
-            
+        }*/
+        if($arTurno->getNovedad() == 0) {            
             $intDias += 1;
             if($diaSemana == 7) {
                 $boolFestivo = 1;
@@ -228,7 +229,7 @@ class ProcesoGenerarSoportePagoController extends Controller
             $arSoportePagoDetalle->setPedidoDetalleRel($arProgramacionDetalle->getPedidoDetalleRel());            
             $arSoportePagoDetalle->setFecha($dateFecha);
             $arSoportePagoDetalle->setTurnoRel($arTurno);
-            $arSoportePagoDetalle->setDescanso($intDescanso);
+            $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
             $arSoportePagoDetalle->setDias($intDias);
             $arSoportePagoDetalle->setHoras($arTurno->getHoras());        
             $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas']);
@@ -249,7 +250,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arSoportePagoDetalle->setPedidoDetalleRel($arProgramacionDetalle->getPedidoDetalleRel());
                 $arSoportePagoDetalle->setFecha($dateFecha2);
                 $arSoportePagoDetalle->setTurnoRel($arTurno);
-                $arSoportePagoDetalle->setDescanso($intDescanso);
+                $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
                 $arSoportePagoDetalle->setDias(0);
                 $arSoportePagoDetalle->setHoras($arTurno->getHoras());        
                 $arSoportePagoDetalle->setHorasDiurnas($arrHoras1['horasDiurnas']);

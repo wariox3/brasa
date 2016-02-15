@@ -20,6 +20,7 @@
                 <th>RECURSO</th>
                 <th>DIAS</th>
                 <th>DESCANSO</th>
+                <th>H</th>
                 <th>HD</th>
                 <th>HN</th>
                 <th>HFD</th>
@@ -39,6 +40,7 @@
                 <td>{{ arSoportesPagos.recursoRel.nombreCorto  }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.descanso | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasFestivasDiurnas | number_format(0, '.', ',') }}</td>
