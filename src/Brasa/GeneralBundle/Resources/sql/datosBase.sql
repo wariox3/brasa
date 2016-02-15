@@ -3806,6 +3806,8 @@ insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`
 insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('1','FIJO');
 insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('2','APOYO');
 
+insert into `tur_centro_costo` (`codigo_centro_costo_pk`, `nombre`) values('1','PRINCIPAL');
+
 /** Recurso humano **/
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('1','ADMINISTRATIVO');
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('2','OPERATIVO');

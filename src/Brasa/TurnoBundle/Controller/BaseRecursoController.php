@@ -9,6 +9,7 @@ class BaseRecursoController extends Controller
     var $strDqlLista = "";
     var $strCodigo = "";
     var $strNombre = "";
+    var $codigoCentroCosto = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -159,20 +160,40 @@ class BaseRecursoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
                 $this->strNombre,                
-                $this->strCodigo   
+                $this->strCodigo,
+                $this->codigoCentroCosto
                 ); 
     }
 
     private function filtrar ($form) {
+        $arCentroCosto = $form->get('centroCostoRel')->getData();
         $this->strCodigo = $form->get('TxtCodigo')->getData();
         $this->strNombre = $form->get('TxtNombre')->getData();
+        if($arCentroCosto) {
+            $this->codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
+        }
         $this->lista();
     }
     
     private function formularioFiltro() {
+        $arrayPropiedadesCentroCosto = array(
+                'class' => 'BrasaTurnoBundle:TurCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($this->codigoCentroCosto != "") {
+            $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaTurnoBundle:TurCentroCosto", $this->codigoCentroCosto);
+        }        
         $form = $this->createFormBuilder()            
+            ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                  
             ->add('BtnActivarInactivar', 'submit', array('label'  => 'Activar / Inactivar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -207,6 +228,7 @@ class BaseRecursoController extends Controller
     }
     
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -225,7 +247,9 @@ class BaseRecursoController extends Controller
                     ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'IDENTIFICACION')
                     ->setCellValue('C1', 'NOMBRE')
-                    ->setCellValue('D1', 'TIPO');
+                    ->setCellValue('D1', 'TIPO')
+                    ->setCellValue('E1', 'CENTRO COSTOS')
+                    ->setCellValue('F1', 'ACTIVO');
 
         $i = 2;
         
@@ -238,7 +262,9 @@ class BaseRecursoController extends Controller
                     ->setCellValue('A' . $i, $arRecurso->getCodigoRecursoPk())
                     ->setCellValue('B' . $i, $arRecurso->getNumeroIdentificacion())
                     ->setCellValue('C' . $i, $arRecurso->getNombreCorto())
-                    ->setCellValue('D' . $i, $arRecurso->getRecursoTipoRel()->getNombre());
+                    ->setCellValue('D' . $i, $arRecurso->getRecursoTipoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arRecurso->getCentroCostoRel()->getNombre())
+                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoActivo())) ;
                         
             $i++;
         }
