@@ -55,18 +55,26 @@ class RhuSsoPeriodoRepository extends EntityRepository {
         return true;
     }
     
-    /*public function desgenerar($codigoPeriodo) {
+    public function desgenerar($codigoPeriodo) {
         $em = $this->getEntityManager();
-        $strSql = "DELETE FROM rhu_sso_periodo_empleado WHERE codigo_periodo_fk = " . $codigoPeriodo;
-        $em->getConnection()->executeQuery($strSql); 
-        $strSql = "DELETE FROM rhu_sso_periodo_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;
-        $em->getConnection()->executeQuery($strSql);  
-        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
-        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
-        $arPeriodo->setEstadoGenerado(0);
-        $em->persist($arPeriodo);
-        $em->flush();
-        return true;
-    }  */  
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->findOneBy(array('codigoPeriodoFk' => $codigoPeriodo, 'estadoCerrado' => 1));
+        if ($arPeriodoDetalle == null){
+            $strSql = "DELETE FROM rhu_sso_aporte WHERE codigo_periodo_fk = " . $codigoPeriodo;
+            $em->getConnection()->executeQuery($strSql);
+            $strSql = "DELETE FROM rhu_sso_periodo_empleado WHERE codigo_periodo_fk = " . $codigoPeriodo;
+            $em->getConnection()->executeQuery($strSql); 
+            $strSql = "DELETE FROM rhu_sso_periodo_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;
+            $em->getConnection()->executeQuery($strSql);
+            $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+            $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+            $arPeriodo->setEstadoGenerado(0);
+            $em->persist($arPeriodo);
+            $em->flush();
+            return true;
+        } else {
+            return false;
+        }     
+    }  
     
 }

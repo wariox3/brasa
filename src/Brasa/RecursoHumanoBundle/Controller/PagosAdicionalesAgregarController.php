@@ -326,6 +326,7 @@ class PagosAdicionalesAgregarController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+        $codigoEmpleado = $arPagoAdicional->getCodigoEmpleadoFk();
         $codigoPagoConcepto = $arPagoAdicional->getCodigoPagoConceptoFk();
         $pagoConcepto = $arPagoAdicional->getPagoConceptoRel()->getNombre();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -335,10 +336,10 @@ class PagosAdicionalesAgregarController extends Controller
         $form = $this->createFormBuilder()
             ->add('empleadoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
-                'query_builder' => function (EntityRepository $er) use($codigoCentroCosto) {
+                'query_builder' => function (EntityRepository $er) use($codigoEmpleado) {
                     return $er->createQueryBuilder('e')
-                    ->where('e.codigoCentroCostoFk = :centroCosto AND e.estadoActivo = 1')
-                    ->setParameter('centroCosto', $codigoCentroCosto)
+                    ->where('e.codigoEmpleadoPk = :empleado')
+                    ->setParameter('empleado', $codigoEmpleado)
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
                 'disabled' => 'disabled',            
@@ -511,6 +512,7 @@ class PagosAdicionalesAgregarController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+        $codigoEmpleado = $arPagoAdicional->getCodigoEmpleadoFk();
         $codigoCentroCosto = $arPagoAdicional->getEmpleadoRel()->getCodigoCentroCostoFk();
         $codigoPagoConcepto = $arPagoAdicional->getCodigoPagoConceptoFk();
         $pagoConcepto = $arPagoAdicional->getPagoConceptoRel()->getNombre();
@@ -520,10 +522,10 @@ class PagosAdicionalesAgregarController extends Controller
         $form = $this->createFormBuilder() 
             ->add('empleadoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
-                'query_builder' => function (EntityRepository $er) use($codigoCentroCosto) {
+                'query_builder' => function (EntityRepository $er) use($codigoEmpleado) {
                     return $er->createQueryBuilder('e')
-                    ->where('e.codigoCentroCostoFk = :centroCosto AND e.estadoActivo = 1')
-                    ->setParameter('centroCosto', $codigoCentroCosto)
+                    ->where('e.codigoEmpleadoPk = :empleado')
+                    ->setParameter('empleado', $codigoEmpleado)
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
                 'required' => true))    

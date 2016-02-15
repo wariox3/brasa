@@ -4,6 +4,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuSsoPeriodoType;
 
 class SeguridadSocialPeriodosController extends Controller
 {
@@ -26,10 +27,13 @@ class SeguridadSocialPeriodosController extends Controller
                 $codigoPeriodo = $request->request->get('OpGenerar');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->generar($codigoPeriodo);
             }
-            /*if($request->request->get('OpDesgenerar')) {
+            if($request->request->get('OpDesgenerar')) {
                 $codigoPeriodo = $request->request->get('OpDesgenerar');
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->desgenerar($codigoPeriodo);
-            }*/
+                $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->desgenerar($codigoPeriodo);
+                if ($resultado == false){
+                    $objMensaje->Mensaje("error", "No se puede desgenerar el registro por que hay sucursal(es) generada(s) y cerrada(s)", $this);
+                }
+            }
             if($request->request->get('OpCerrar')) {
                 $codigoPeriodo = $request->request->get('OpCerrar');
                 //$em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->cerrar($codigoPeriodo);
@@ -56,6 +60,28 @@ class SeguridadSocialPeriodosController extends Controller
         $arSsoPeriodos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:lista.html.twig', array(
             'arSsoPeriodos' => $arSsoPeriodos,
+            'form' => $form->createView()));
+    }
+    
+    public function nuevoAction($codigoPeriodo) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+        if ($codigoPeriodo != 0)
+        {
+            $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+        }    
+        $form = $this->createForm(new RhuSsoPeriodoType(), $arPeriodo);
+        $form->handleRequest($request);
+        if ($form->isValid())
+        {
+            // guardar la tarea en la base de datos
+            $arPeriodo = $form->getData();
+            $em->persist($arPeriodo);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:nuevo.html.twig', array(
             'form' => $form->createView()));
     }
 
