@@ -98,6 +98,7 @@
     <div class="modal-footer">
         <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_lista') }}">Cancelar</a>     
         <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_nuevo_enlazar') }}">Enlazar de empleado</a>            
+        {{ form_widget(form.BtnActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}        
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
         {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>
