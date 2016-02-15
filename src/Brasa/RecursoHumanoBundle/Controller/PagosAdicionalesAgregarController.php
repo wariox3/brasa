@@ -472,9 +472,11 @@ class PagosAdicionalesAgregarController extends Controller
                                 $floBonificacionMaxima = $floSalarioEmpleado * ($arConfiguracion->getPorcentajeBonificacionNoPrestacional() / 100);
                                 $floBonificacionNoPrestacional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->bonificacionNoPrestacional($arEmpleado->getCodigoEmpleadoPk(), 0);                                
                                 $floBonificacion = $form->get('TxtValor')->getData();
-                                $floBonificacionTotal = $floBonificacionNoPrestacional+ $floBonificacion;
+                                $floBonificacionTotal = $floBonificacionNoPrestacional + $floBonificacion;
                                 if($floBonificacionTotal > $floBonificacionMaxima) {
-                                    echo "La bonificacion NO PRESTACIONAL no puede superar: " . $floBonificacionMaxima . " ya tiene bonificaciones por:" . $floBonificacionNoPrestacional;
+                                    //echo "La bonificacion NO PRESTACIONAL no puede superar: " . $floBonificacionMaxima . " ya tiene bonificaciones por:" . $floBonificacionNoPrestacional;
+                                    $objMensaje->Mensaje("error", "La bonificacion NO PRESTACIONAL no puede superar: " . $floBonificacionMaxima . " ya tiene bonificaciones por:" . $floBonificacionNoPrestacional, $this);
+                                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_valoradicional', array('tipo' => $tipo) ));
                                     $boolError = TRUE;
                                 }                                                                        
                             }
