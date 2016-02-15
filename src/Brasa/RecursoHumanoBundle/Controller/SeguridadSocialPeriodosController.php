@@ -56,6 +56,28 @@ class SeguridadSocialPeriodosController extends Controller
                     
                 }
             }
+            if($request->request->get('OpEliminar')) {
+                //$codigoPeriodo = $request->request->get('OpEliminar');
+                $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoPeriodo) {
+                        $arPeriodoEliminar = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+                        $arPeriodoEliminar =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+                        if ($arPeriodoEliminar->getEstadoCerrado() == 1){
+                            $objMensaje->Mensaje("error", "No se puede eliminar el registro se encuentra cerrado", $this);
+                        } else {
+                            if ($arPeriodoEliminar->getEstadoGenerado() == 1){
+                                $objMensaje->Mensaje("error", "Se debe desgenerar el registro para eliminarlo", $this);
+                            } else {
+                                $em->remove($arPeriodoEliminar);
+                                $em->flush();
+                              }        
+                         }
+                    }
+                }
+                return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_lista'));
+            }
         }
         $arSsoPeriodos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:lista.html.twig', array(

@@ -50,8 +50,8 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">            
             <tr>
                 <th>{{ knp_pagination_sortable(arIncapacidades, 'CÓDIGO', 'i.codigoIncapacidadPk') }}</th>
-                <th>NÚMERO INCAPACIDAD</th>
                 <th>NÚMERO EPS</th>
+                <th>EPS</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>                                                
                 <th>CENTRO COSTO</th>
@@ -67,8 +67,8 @@
             {% for arIncapacidades in arIncapacidades %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arIncapacidades.codigoIncapacidadPk }}">{{ arIncapacidades.codigoIncapacidadPk }} </td>
-                <td>{{ arIncapacidades.numero }}</td>
                 <td>{{ arIncapacidades.numeroEps }}</td>
+                <td>{{ arIncapacidades.entidadSaludRel.nombre }}</td>
                 <td>{{ arIncapacidades.empleadoRel.numeroIdentificacion }}</td>
                 <td>{{ arIncapacidades.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arIncapacidades.centroCostoRel.nombre |default('')  }}</td>

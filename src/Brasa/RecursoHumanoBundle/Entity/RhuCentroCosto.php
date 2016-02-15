@@ -227,6 +227,7 @@ class RhuCentroCosto
     protected $permisosCentroCostoRel;
     
     
+    
     /**
      * Constructor
      */
