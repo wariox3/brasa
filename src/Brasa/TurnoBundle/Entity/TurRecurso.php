@@ -26,6 +26,11 @@ class TurRecurso
     private $codigoRecursoTipoFk;    
     
     /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoFk;    
+    
+    /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
     private $codigoEmpleadoFk;            
@@ -106,6 +111,12 @@ class TurRecurso
      * @ORM\JoinColumn(name="codigo_recurso_tipo_fk", referencedColumnName="codigo_recurso_tipo_pk")
      */
     protected $recursoTipoRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="recursosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="recursoRel")
@@ -730,5 +741,53 @@ class TurRecurso
     public function getServiciosDetallesRecursosRecursoRel()
     {
         return $this->serviciosDetallesRecursosRecursoRel;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel
+     *
+     * @return TurRecurso
+     */
+    public function setCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
     }
 }

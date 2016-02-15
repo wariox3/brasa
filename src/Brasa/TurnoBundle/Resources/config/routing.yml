@@ -66,6 +66,14 @@ brs_tur_base_prospecto_nuevo:
     path:     /tur/base/prospecto/nuevo/{codigoProspecto}
     defaults: { _controller: BrasaTurnoBundle:BaseProspecto:nuevo }
 
+brs_tur_base_centro_costo_lista:
+    path:     /tur/base/centro/costo/lista
+    defaults: { _controller: BrasaTurnoBundle:BaseCentroCosto:lista }            
+    
+brs_tur_base_centro_costo_nuevo:
+    path:     /tur/base/centro/costo/nuevo/{codigoCentroCosto}
+    defaults: { _controller: BrasaTurnoBundle:BaseCentroCosto:nuevo }
+
 brs_tur_base_plantilla_lista:
     path:     /tur/base/plantilla/lista
     defaults: { _controller: BrasaTurnoBundle:BasePlantilla:lista }     

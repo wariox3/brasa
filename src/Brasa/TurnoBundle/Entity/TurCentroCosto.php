@@ -22,7 +22,11 @@ class TurCentroCosto
      */
     private $nombre;                         
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="TurRecurso", mappedBy="centroCostoRel")
+     */
+    protected $recursosCentroCostoRel; 
+    
     /**
      * Get codigoCentroCostoPk
      *
@@ -55,5 +59,46 @@ class TurCentroCosto
     public function getNombre()
     {
         return $this->nombre;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->recursosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add recursosCentroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursosCentroCostoRel
+     *
+     * @return TurCentroCosto
+     */
+    public function addRecursosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursosCentroCostoRel)
+    {
+        $this->recursosCentroCostoRel[] = $recursosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recursosCentroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursosCentroCostoRel
+     */
+    public function removeRecursosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursosCentroCostoRel)
+    {
+        $this->recursosCentroCostoRel->removeElement($recursosCentroCostoRel);
+    }
+
+    /**
+     * Get recursosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRecursosCentroCostoRel()
+    {
+        return $this->recursosCentroCostoRel;
     }
 }
