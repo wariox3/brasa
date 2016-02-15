@@ -324,20 +324,20 @@ class ProcesoGenerarSoportePagoController extends Controller
                     ->setCellValue('D1', 'HASTA')
                     ->setCellValue('E1', 'DÍAS')
                     ->setCellValue('F1', 'DESCANSO')
-                    ->setCellValue('G1', 'HD')
-                    ->setCellValue('H1', 'HN')
-                    ->setCellValue('I1', 'HFD')
-                    ->setCellValue('J1', 'HFN')                
-                    ->setCellValue('K1', 'HEOD')
-                    ->setCellValue('L1', 'HEON')
-                    ->setCellValue('M1', 'HEFD')
-                    ->setCellValue('N1', 'HEFN');
+                    ->setCellValue('G1', 'H')    
+                    ->setCellValue('H1', 'HD')
+                    ->setCellValue('I1', 'HN')
+                    ->setCellValue('J1', 'HFD')
+                    ->setCellValue('K1', 'HFN')                
+                    ->setCellValue('L1', 'HEOD')
+                    ->setCellValue('M1', 'HEON')
+                    ->setCellValue('N1', 'HEFD')
+                    ->setCellValue('O1', 'HEFN');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportesPago = $query->getResult();
-
         foreach ($arSoportesPago as $arSoportePago) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arSoportePago->getCodigoSoportePagoPk())
@@ -346,14 +346,15 @@ class ProcesoGenerarSoportePagoController extends Controller
                     ->setCellValue('D' . $i, $arSoportePago->getFechaHasta()->format('Y/m/d'))
                     ->setCellValue('E' . $i, $arSoportePago->getDias())
                     ->setCellValue('F' . $i, $arSoportePago->getDescanso())
-                    ->setCellValue('G' . $i, $arSoportePago->getHorasDiurnas())
-                    ->setCellValue('H' . $i, $arSoportePago->getHorasNocturnas())
-                    ->setCellValue('I' . $i, $arSoportePago->getHorasFestivasDiurnas())
-                    ->setCellValue('J' . $i, $arSoportePago->getHorasFestivasNocturnas())                    
-                    ->setCellValue('K' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnas())
-                    ->setCellValue('L' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnas())
-                    ->setCellValue('M' . $i, $arSoportePago->getHorasExtrasFestivasDiurnas())
-                    ->setCellValue('N' . $i, $arSoportePago->getHorasExtrasFestivasNocturnas());
+                    ->setCellValue('G' . $i, $arSoportePago->getHoras())
+                    ->setCellValue('H' . $i, $arSoportePago->getHorasDiurnas())
+                    ->setCellValue('I' . $i, $arSoportePago->getHorasNocturnas())
+                    ->setCellValue('J' . $i, $arSoportePago->getHorasFestivasDiurnas())
+                    ->setCellValue('K' . $i, $arSoportePago->getHorasFestivasNocturnas())                    
+                    ->setCellValue('L' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnas())
+                    ->setCellValue('M' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnas())
+                    ->setCellValue('N' . $i, $arSoportePago->getHorasExtrasFestivasDiurnas())
+                    ->setCellValue('O' . $i, $arSoportePago->getHorasExtrasFestivasNocturnas());
 
             $i++;
         }
